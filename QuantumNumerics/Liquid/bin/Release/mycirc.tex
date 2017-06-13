@@ -1,0 +1,120 @@
+\input{/Liquid/LiquidTikZ}
+\begin{document}
+\title{LiquidTikZ sample}
+\author{Liquid v1}
+
+\begin{figure*}
+\begin{tikzpicture}[scale=0.70,every node/.style={scale=0.70}]
+\matrix[matStyle] {
+  \point[0-0] & \gate[0-1]{X} & \ctrl[0-2] &  & \ctrl[0-4] &  &  &  &  &  & \ctrl[0-10] &  & \ctrl[0-12] & \gate[0-13]{X} & \gate[0-14]{X} &  &  &  &  &  &  &  &  &  &  & \point[0-25]  \\
+  \point[1-0] & \gate[1-1]{X} &  & \ctrl[1-3] &  & \ctrl[1-5] &  &  &  &  &  & \ctrl[1-11] &  & \ctrl[1-13] & \gate[1-14]{X} &  &  &  &  & \ctrl[1-19] &  & \ctrl[1-21] & \gate[1-22]{X} &  &  & \point[1-25]  \\
+  \point[2-0] & \gate[2-1]{X} &  &  &  &  & \ctrl[2-6] &  & \ctrl[2-8] &  &  &  &  &  & \ctrl[2-14] &  & \ctrl[2-16] & \gate[2-17]{X} & \gate[2-18]{X} &  &  &  &  &  &  & \point[2-25]  \\
+  \point[3-0] & \gate[3-1]{X} & \targ[3-2] & \ctrl[3-3] & \targ[3-4] & \ctrl[3-5] & \ctrl[3-6] &  & \ctrl[3-8] &  & \targ[3-10] & \ctrl[3-11] & \targ[3-12] & \ctrl[3-13] & \ctrl[3-14] &  & \ctrl[3-16] & \gate[3-17]{X} & \gate[3-18]{X} & \ctrl[3-19] &  & \ctrl[3-21] & \gate[3-22]{X} &  &  & \point[3-25]  \\
+  \point[4-0] &  & \ctrl[4-2] &  & \ctrl[4-4] &  & \targ[4-6] & \ctrl[4-7] & \targ[4-8] & \ctrl[4-9] & \ctrl[4-10] &  & \ctrl[4-12] &  & \targ[4-14] & \ctrl[4-15] & \targ[4-16] & \ctrl[4-17] & \gate[4-18]{X} &  & \ctrl[4-20] &  & \ctrl[4-22] & \gate[4-23]{X} & \gate[4-24]{X} & \ctrl[4-25]  \\
+  \point[5-0] &  &  &  &  &  &  & \targ[5-7] &  & \targ[5-9] &  &  &  &  &  & \targ[5-15] &  & \targ[5-17] &  &  & \targ[5-20] &  & \targ[5-22] &  &  & \targ[5-25]  \\
+  \point[6-0] &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & \point[6-25]  \\
+  \point[7-0] &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & \point[7-25]  \\
+  \point[8-0] &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & \point[8-25]  \\
+  \point[9-0] &  &  & \targ[9-3] &  & \targ[9-5] &  & \ctrl[9-7] &  & \ctrl[9-9] &  & \targ[9-11] &  & \targ[9-13] &  & \ctrl[9-15] &  & \ctrl[9-17] &  & \targ[9-19] & \ctrl[9-20] & \targ[9-21] & \ctrl[9-22] &  &  & \point[9-25]  \\
+   &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &   \\
+};
+% multigates go here
+% annotations go here
+% wires go here
+\begin{pgfonlayer}{background}
+\qw{0-0}{0-25} \qw{1-0}{1-25} \qw{2-0}{2-25} \qw{3-0}{3-25} \qw{4-0}{4-25} \qw{5-0}{5-25} 
+\qw{6-0}{6-25} \qw{7-0}{7-25} \qw{8-0}{8-25} \qw{9-0}{9-25} 
+\qwx{3-2}{4-2} \qwx{3-4}{4-4} \qwx{3-10}{4-10} \qwx{3-12}{4-12} \qwx{1-3}{9-3} \qwx{1-5}{9-5} 
+\qwx{1-11}{9-11} \qwx{1-13}{9-13} \qwx{1-19}{9-19} \qwx{1-21}{9-21} \qwx{2-6}{4-6} 
+\qwx{2-8}{4-8} \qwx{2-14}{4-14} \qwx{2-16}{4-16} \qwx{5-7}{9-7} \qwx{5-9}{9-9} \qwx{5-15}{9-15} 
+\qwx{5-17}{9-17} \qwx{4-20}{5-20} \qwx{4-22}{5-22} \qwx{4-25}{5-25} 
+\end{pgfonlayer}
+\end{tikzpicture}
+\begin{tikzpicture}[scale=0.70,every node/.style={scale=0.70}]
+\matrix[matStyle] {
+   & \point[0-26] &  & \ctrl[0-28] &  & \ctrl[0-30] &  &  &  &  &  & \ctrl[0-36] &  & \ctrl[0-38] & \gate[0-39]{X} & \gate[0-40]{X} &  &  &  &  & \ctrl[0-45] &  & \ctrl[0-47] &  &  & \ctrl[0-50] & \point[0-51]  \\
+   & \point[1-26] &  &  & \ctrl[1-29] &  & \ctrl[1-31] &  &  &  &  &  & \ctrl[1-37] &  & \ctrl[1-39] & \gate[1-40]{X} & \gate[1-41]{X} &  &  &  & \ctrl[1-45] &  & \ctrl[1-47] &  &  & \ctrl[1-50] & \point[1-51]  \\
+   & \point[2-26] &  &  &  &  &  & \ctrl[2-32] &  & \ctrl[2-34] &  &  &  &  &  & \ctrl[2-40] &  & \ctrl[2-42] & \gate[2-43]{X} & \gate[2-44]{X} &  &  &  &  &  &  & \point[2-51]  \\
+   & \point[3-26] &  & \ctrl[3-28] &  & \ctrl[3-30] &  & \targ[3-32] & \ctrl[3-33] & \targ[3-34] & \ctrl[3-35] & \ctrl[3-36] &  & \ctrl[3-38] &  & \targ[3-40] & \ctrl[3-41] & \targ[3-42] & \ctrl[3-43] & \gate[3-44]{X} &  & \ctrl[3-46] &  & \ctrl[3-48] &  &  & \ctrl[3-51]  \\
+   & \gate[4-26]{X} & \gate[4-27]{X} & \targ[4-28] & \ctrl[4-29] & \targ[4-30] & \ctrl[4-31] & \ctrl[4-32] &  & \ctrl[4-34] &  & \targ[4-36] & \ctrl[4-37] & \targ[4-38] & \ctrl[4-39] & \ctrl[4-40] &  & \ctrl[4-42] & \gate[4-43]{X} & \gate[4-44]{X} & \targ[4-45] & \ctrl[4-46] & \targ[4-47] & \ctrl[4-48] & \ctrl[4-49] & \targ[4-50] & \ctrl[4-51]  \\
+   & \ctrl[5-26] &  &  &  &  &  &  & \targ[5-33] &  & \targ[5-35] &  &  &  &  &  & \targ[5-41] &  & \targ[5-43] & \ctrl[5-44] & \ctrl[5-45] & \ctrl[5-46] &  &  & \targ[5-49] &  & \point[5-51]  \\
+   & \targ[6-26] &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & \targ[6-44] & \targ[6-45] &  &  &  &  &  & \point[6-51]  \\
+   & \point[7-26] &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & \targ[7-46] &  &  &  &  & \point[7-51]  \\
+   & \point[8-26] &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & \point[8-51]  \\
+   & \point[9-26] &  &  & \targ[9-29] &  & \targ[9-31] &  & \ctrl[9-33] &  & \ctrl[9-35] &  & \targ[9-37] &  & \targ[9-39] &  & \ctrl[9-41] &  & \ctrl[9-43] &  &  & \targ[9-46] &  & \targ[9-48] & \ctrl[9-49] &  & \targ[9-51]  \\
+   &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &   \\
+};
+% multigates go here
+% annotations go here
+% wires go here
+\begin{pgfonlayer}{background}
+\qw{0-26}{0-51} \qw{1-26}{1-51} \qw{2-26}{2-51} \qw{3-26}{3-51} \qw{4-26}{4-51} \qw{5-26}{5-51} 
+\qw{6-26}{6-51} \qw{7-26}{7-51} \qw{8-26}{8-51} \qw{9-26}{9-51} 
+\qwx{3-28}{4-28} \qwx{3-30}{4-30} \qwx{3-36}{4-36} \qwx{3-38}{4-38} \qwx{0-45}{4-45} 
+\qwxB{5-45}{6-45} \qwx{0-47}{4-47} \qwx{0-50}{4-50} \qwx{1-29}{9-29} \qwx{1-31}{9-31} 
+\qwx{1-37}{9-37} \qwx{1-39}{9-39} \qwx{2-32}{3-32} \qwx{2-34}{3-34} \qwx{2-40}{3-40} 
+\qwx{2-42}{3-42} \qwx{5-33}{9-33} \qwx{5-35}{9-35} \qwx{5-41}{9-41} \qwx{5-43}{9-43} 
+\qwx{3-46}{9-46} \qwxB{5-46}{7-46} \qwx{3-48}{9-48} \qwx{3-51}{9-51} \qwx{4-49}{5-49} 
+\qwx{5-26}{6-26} \qwx{5-44}{6-44} 
+\end{pgfonlayer}
+\end{tikzpicture}
+\begin{tikzpicture}[scale=0.70,every node/.style={scale=0.70}]
+\matrix[matStyle] {
+   & \ctrl[0-52] & \gate[0-53]{X} &  &  &  & \ctrl[0-57] &  & \ctrl[0-59] &  & \targ[0-61] & \ctrl[0-62] & \targ[0-63] & \ctrl[0-64] & \ctrl[0-65] &  & \ctrl[0-67] &  & \targ[0-69] & \ctrl[0-70] & \targ[0-71] & \ctrl[0-72] & \gate[0-73]{X} &  &  &  & \point[0-77]  \\
+   & \ctrl[1-52] & \gate[1-53]{X} &  &  &  & \ctrl[1-57] &  & \ctrl[1-59] &  &  &  &  &  & \ctrl[1-65] &  & \ctrl[1-67] & \gate[1-68]{X} &  &  &  &  &  & \ctrl[1-74] &  & \ctrl[1-76] & \point[1-77]  \\
+   & \point[2-52] &  &  &  &  &  & \ctrl[2-58] &  & \ctrl[2-60] &  &  &  &  &  & \ctrl[2-66] &  & \ctrl[2-68] & \gate[2-69]{X} & \gate[2-70]{X} &  &  &  & \ctrl[2-74] &  & \ctrl[2-76] & \point[2-77]  \\
+   & \point[3-52] & \ctrl[3-53] & \gate[3-54]{X} & \gate[3-55]{X} &  &  &  &  &  & \ctrl[3-61] &  & \ctrl[3-63] &  &  &  &  &  & \ctrl[3-69] &  & \ctrl[3-71] & \gate[3-72]{X} & \gate[3-73]{X} &  & \ctrl[3-75] &  & \ctrl[3-77]  \\
+   & \targ[4-52] & \ctrl[4-53] & \ctrl[4-54] & \gate[4-55]{X} & \gate[4-56]{X} & \targ[4-57] & \ctrl[4-58] & \targ[4-59] & \ctrl[4-60] & \ctrl[4-61] &  & \ctrl[4-63] &  & \targ[4-65] & \ctrl[4-66] & \targ[4-67] & \ctrl[4-68] & \ctrl[4-69] &  & \ctrl[4-71] & \gate[4-72]{X} & \gate[4-73]{X} & \targ[4-74] & \ctrl[4-75] & \targ[4-76] & \ctrl[4-77]  \\
+   & \point[5-52] &  & \targ[5-54] & \ctrl[5-55] & \ctrl[5-56] & \ctrl[5-57] &  &  &  &  & \targ[5-62] &  & \targ[5-64] &  &  &  &  &  & \targ[5-70] &  & \targ[5-72] & \ctrl[5-73] & \ctrl[5-74] &  &  & \point[5-77]  \\
+   & \point[6-52] &  &  & \targ[6-55] &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & \point[6-77]  \\
+   & \point[7-52] &  &  &  & \targ[7-56] & \targ[7-57] &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & \targ[7-73] &  &  &  & \point[7-77]  \\
+   & \point[8-52] &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & \point[8-77]  \\
+   & \point[9-52] & \targ[9-53] & \ctrl[9-54] &  &  &  & \targ[9-58] &  & \targ[9-60] &  & \ctrl[9-62] &  & \ctrl[9-64] &  & \targ[9-66] &  & \targ[9-68] &  & \ctrl[9-70] &  & \ctrl[9-72] &  & \targ[9-74] & \targ[9-75] &  & \targ[9-77]  \\
+   &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &   \\
+};
+% multigates go here
+% annotations go here
+% wires go here
+\begin{pgfonlayer}{background}
+\qw{0-52}{0-77} \qw{1-52}{1-77} \qw{2-52}{2-77} \qw{3-52}{3-77} \qw{4-52}{4-77} \qw{5-52}{5-77} 
+\qw{6-52}{6-77} \qw{7-52}{7-77} \qw{8-52}{8-77} \qw{9-52}{9-77} 
+\qwx{0-52}{4-52} \qwx{0-57}{4-57} \qwxB{5-57}{7-57} \qwx{0-59}{4-59} \qwx{5-62}{9-62} 
+\qwx{5-64}{9-64} \qwx{0-65}{4-65} \qwx{0-67}{4-67} \qwx{5-70}{9-70} \qwx{5-72}{9-72} 
+\qwx{1-74}{4-74} \qwxB{5-74}{9-74} \qwx{1-76}{4-76} \qwx{2-58}{9-58} \qwx{2-60}{9-60} 
+\qwx{2-66}{9-66} \qwx{2-68}{9-68} \qwx{3-53}{9-53} \qwx{0-61}{3-61} \qwx{0-63}{3-63} 
+\qwx{0-69}{3-69} \qwx{0-71}{3-71} \qwx{3-75}{9-75} \qwx{3-77}{9-77} \qwx{4-54}{5-54} 
+\qwx{5-55}{6-55} \qwx{5-56}{7-56} \qwx{5-73}{7-73} 
+\end{pgfonlayer}
+\end{tikzpicture}
+\begin{tikzpicture}[scale=0.70,every node/.style={scale=0.70}]
+\matrix[matStyle] {
+   & \point[0-78] &  &  &  &  &  &  &  &  &  &  &  &  & \ctrl[0-91] &  & \ctrl[0-93] &  &  & \ctrl[0-96] &  & \ctrl[0-98] & \gate[0-99]{X} &  &  & \point[0-102]  \\
+   & \point[1-78] & \ctrl[1-79] &  & \ctrl[1-81] & \gate[1-82]{X} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & \point[1-102]  \\
+   & \point[2-78] & \ctrl[2-79] &  & \ctrl[2-81] & \gate[2-82]{X} &  &  & \ctrl[2-85] &  & \ctrl[2-87] & \gate[2-88]{X} &  &  & \ctrl[2-91] &  & \ctrl[2-93] &  &  & \ctrl[2-96] &  & \ctrl[2-98] & \gate[2-99]{X} &  &  & \point[2-102]  \\
+   & \point[3-78] &  & \ctrl[3-80] &  & \ctrl[3-82] & \gate[3-83]{X} & \gate[3-84]{X} & \ctrl[3-85] &  & \ctrl[3-87] & \gate[3-88]{X} & \gate[3-89]{X} &  &  & \ctrl[3-92] &  & \ctrl[3-94] &  &  & \ctrl[3-97] &  & \ctrl[3-99] & \gate[3-100]{X} &  & \point[3-102]  \\
+   & \ctrl[4-78] & \targ[4-79] & \ctrl[4-80] & \targ[4-81] & \ctrl[4-82] & \ctrl[4-83] & \gate[4-84]{X} & \gate[4-85]{X} & \ctrl[4-86] &  & \ctrl[4-88] & \gate[4-89]{X} & \gate[4-90]{X} & \targ[4-91] & \ctrl[4-92] & \targ[4-93] & \ctrl[4-94] & \ctrl[4-95] & \targ[4-96] & \ctrl[4-97] & \targ[4-98] & \ctrl[4-99] & \ctrl[4-100] & \gate[4-101]{X} & \point[4-102]  \\
+   & \targ[5-78] &  &  &  &  & \targ[5-83] & \ctrl[5-84] &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & \point[5-102]  \\
+   & \point[6-78] &  &  &  &  &  &  &  & \targ[6-86] &  & \targ[6-88] &  &  &  &  &  &  &  &  &  &  &  &  &  & \point[6-102]  \\
+   & \point[7-78] &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & \point[7-102]  \\
+   & \point[8-78] &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & \targ[8-95] &  &  &  &  & \targ[8-100] &  & \point[8-102]  \\
+   & \ctrl[9-78] &  & \targ[9-80] &  & \targ[9-82] & \ctrl[9-83] & \targ[9-84] & \targ[9-85] & \ctrl[9-86] & \targ[9-87] & \ctrl[9-88] &  &  &  & \targ[9-92] &  & \targ[9-94] & \ctrl[9-95] &  & \targ[9-97] &  & \targ[9-99] & \ctrl[9-100] &  & \point[9-102]  \\
+   &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &   \\
+};
+% multigates go here
+% annotations go here
+% wires go here
+\begin{pgfonlayer}{background}
+\qw{0-78}{0-102} \qw{1-78}{1-102} \qw{2-78}{2-102} \qw{3-78}{3-102} \qw{4-78}{4-102} 
+\qw{5-78}{5-102} \qw{6-78}{6-102} \qw{7-78}{7-102} \qw{8-78}{8-102} \qw{9-78}{9-102} 
+
+\qwx{0-91}{4-91} \qwx{0-93}{4-93} \qwx{0-96}{4-96} \qwx{0-98}{4-98} \qwx{1-79}{4-79} 
+\qwx{1-81}{4-81} \qwx{2-85}{9-85} \qwx{2-87}{9-87} \qwx{3-80}{9-80} \qwx{3-82}{9-82} 
+\qwx{3-92}{9-92} \qwx{3-94}{9-94} \qwx{3-97}{9-97} \qwx{3-99}{9-99} \qwx{4-78}{5-78} 
+\qwx{4-83}{5-83} \qwx{4-86}{6-86} \qwx{4-88}{6-88} \qwx{4-95}{8-95} \qwx{4-100}{8-100} 
+\qwx{5-84}{9-84} 
+\end{pgfonlayer}
+\end{tikzpicture}
+\caption{\label{fig:mycirc} mycirc}
+\end{figure*}
+
+\end{document}

@@ -1,0 +1,67 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+<Ensemble Default="TAG">    Default TAG to execute
+    <Pars>                  Global Parameters
+        <Exe>path</Exe>     Full path to executable to load as service (readable from all machines)
+        <Host>host</Host>   Host to run service on (repeated)
+        <HPC                Parameters for HPC runs
+            NodeMin="1"     Min nodes available before starting
+            NodesMax="20"   Max nodes desired/needed
+            HeadNode="..."  Name of head node to submit jobs on
+            Working="..."   Network path to working directory (where logs go)
+        />
+    <TAG                    User name for a run (may be any legal tag)
+        Count="num"         Number of runs (tasks) desired
+        Script="path"       Full path to .fsx script to compile into a loadable DLL (optional)
+        Args="..."          Arguments to add to each <Cmd>. Format directives allowed        
+        >
+        <Cmd
+          Range="n,i,x"     Repeat from min=n with increment=i to max=x
+          Name="..."        Name to use in format directive
+        >
+        cmd-line            Comand line to execute (repeated). Re-used if less than Count
+                            Command line allows for format directives:
+                            %<typ>[<width>]%
+                                typ:    N=Name  attribute value
+                                        R=Range attribute value (current instance)
+                                        C=Count attribute value (current instance)
+                                width:  optional 1-9. Pads with leading underscores
+        </Cmd>
+-->
+<Ensemble Default="Hello">
+  <Pars>
+    <Exe>\\msrq\QuArC\Roz\martinro\Liquid\Liquid.exe</Exe>
+    <!-- MSRQ Job Templates:
+                Default:        Tasks are less than 1/2 hour, 222 nodes available 
+                LongRun:        Tasks are long running, 100 nodes available (use only however many you really need)
+                LargeStorage:   Extra local storage in D:\Scratch, 20 nodes available
+                LargeRAM:       3TB main memory machines, 2 nodes available
+                -->
+    <HPC NodesMin="1" NodesMax="222" HeadNode="gcr.redmond.corp.microsoft.com"
+         Template="QuArc" Working="\\msrq\QuArC\Roz\martinro\logs" />
+    <Host>gcr</Host>
+    <!-- <HPC NodesMin="1" NodesMax="222" HeadNode="msrq.redmond.corp.microsoft.com" 
+             Template="Default" Working="\\msrq\QuArC\Roz\wecker\logs" />
+        <Host>msrq</Host>
+        -->
+  </Pars>
+
+  <Hello Count="5" Args='/pfx "%N4%_%C2%|"'>
+    <Cmd Range="0,1,9" Name="HI">__show("Hello world number %C2% in range %R%")</Cmd>
+  </Hello>
+
+  <Teleport Count="5" Args='/pfx "%C2%|" /log "Tele%C2%.log" /con "Tele.log"'>
+    <Cmd>__Teleport()</Cmd>
+  </Teleport>
+
+  <Rnd Count='30' Args='/pfx ",%N%,%R3%," /log "Rnd_%C4%.log" /con NUL'>
+    <Cmd Range='0,1,9' Name='Rnd'>__Chem("?",1,8,28,2,0.0)</Cmd>
+    <Cmd Range='0,1,9' Name='Mag'>__Chem("?z",1,8,28,2,0.0)</Cmd>
+    <Cmd Range='0,1,9' Name='Drp'>__Chem("?Z",1,8,28,2,0.0)</Cmd>
+  </Rnd>
+
+  <Monty Count="1">
+    <Cmd> __RunLargeECCPointAdditionTests()</Cmd>
+  </Monty>
+
+</Ensemble>

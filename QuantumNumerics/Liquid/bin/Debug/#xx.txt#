@@ -1,0 +1,113 @@
+
+Windows IP Configuration
+
+   Host Name . . . . . . . . . . . . : martinroX1
+   Primary Dns Suffix  . . . . . . . : redmond.corp.microsoft.com
+   Node Type . . . . . . . . . . . . : Hybrid
+   IP Routing Enabled. . . . . . . . : No
+   WINS Proxy Enabled. . . . . . . . : No
+   DNS Suffix Search List. . . . . . : redmond.corp.microsoft.com
+                                       corp.microsoft.com
+
+Ethernet adapter vEthernet (vMagmaSwitch):
+
+   Connection-specific DNS Suffix  . : 
+   Description . . . . . . . . . . . : Hyper-V Virtual Ethernet Adapter
+   Physical Address. . . . . . . . . : 00-15-5D-00-01-03
+   DHCP Enabled. . . . . . . . . . . : Yes
+   Autoconfiguration Enabled . . . . : Yes
+   Link-local IPv6 Address . . . . . : fe80::1500:4e9b:eac1:1885%8(Preferred) 
+   IPv4 Address. . . . . . . . . . . : 192.168.0.1(Preferred) 
+   Subnet Mask . . . . . . . . . . . : 255.255.255.0
+   Default Gateway . . . . . . . . . : 
+   DHCPv6 IAID . . . . . . . . . . . : 620762461
+   DHCPv6 Client DUID. . . . . . . . : 00-01-00-01-19-B0-36-D2-8C-70-5A-C8-7F-0C
+   DNS Servers . . . . . . . . . . . : fec0:0:0:ffff::1%1
+                                       fec0:0:0:ffff::2%1
+                                       fec0:0:0:ffff::3%1
+   NetBIOS over Tcpip. . . . . . . . : Enabled
+
+Wireless LAN adapter Local Area Connection* 12:
+
+   Media State . . . . . . . . . . . : Media disconnected
+   Connection-specific DNS Suffix  . : 
+   Description . . . . . . . . . . . : Microsoft Hosted Network Virtual Adapter
+   Physical Address. . . . . . . . . : 8E-70-5A-C8-7F-0C
+   DHCP Enabled. . . . . . . . . . . : Yes
+   Autoconfiguration Enabled . . . . : Yes
+
+Wireless LAN adapter Local Area Connection* 13:
+
+   Media State . . . . . . . . . . . : Media disconnected
+   Connection-specific DNS Suffix  . : 
+   Description . . . . . . . . . . . : Microsoft Wi-Fi Direct Virtual Adapter
+   Physical Address. . . . . . . . . : 8C-70-5A-C8-7F-0D
+   DHCP Enabled. . . . . . . . . . . : Yes
+   Autoconfiguration Enabled . . . . : Yes
+
+Wireless LAN adapter Wi-Fi:
+
+   Connection-specific DNS Suffix  . : corp.microsoft.com
+   Description . . . . . . . . . . . : Intel(R) Centrino(R) Advanced-N 6205
+   Physical Address. . . . . . . . . : 8C-70-5A-C8-7F-0C
+   DHCP Enabled. . . . . . . . . . . : Yes
+   Autoconfiguration Enabled . . . . : Yes
+   IPv6 Address. . . . . . . . . . . : 2001:4898:e0:2061:cc17:23b0:4d89:c4a6(Preferred) 
+   Temporary IPv6 Address. . . . . . : 2001:4898:e0:2061:5962:e73d:b999:97b7(Preferred) 
+   Link-local IPv6 Address . . . . . : fe80::cc17:23b0:4d89:c4a6%18(Preferred) 
+   IPv4 Address. . . . . . . . . . . : 10.83.132.58(Preferred) 
+   Subnet Mask . . . . . . . . . . . : 255.255.254.0
+   Lease Obtained. . . . . . . . . . : Monday, August 8, 2016 9:48:07 AM
+   Lease Expires . . . . . . . . . . : Monday, August 8, 2016 1:03:08 PM
+   Default Gateway . . . . . . . . . : fe80::c60a:cbff:fec7:ec00%18
+                                       10.83.132.1
+   DHCP Server . . . . . . . . . . . : 10.222.118.112
+   DHCPv6 IAID . . . . . . . . . . . : 260862042
+   DHCPv6 Client DUID. . . . . . . . : 00-01-00-01-19-B0-36-D2-8C-70-5A-C8-7F-0C
+   DNS Servers . . . . . . . . . . . : 10.221.226.11
+                                       10.222.114.67
+                                       157.54.14.178
+   Primary WINS Server . . . . . . . : 157.54.14.179
+   Secondary WINS Server . . . . . . : 10.221.8.8
+   NetBIOS over Tcpip. . . . . . . . : Enabled
+
+Ethernet adapter Bluetooth Network Connection:
+
+   Media State . . . . . . . . . . . : Media disconnected
+   Connection-specific DNS Suffix  . : 
+   Description . . . . . . . . . . . : Bluetooth Device (Personal Area Network)
+   Physical Address. . . . . . . . . : F4-B7-E2-F6-CC-47
+   DHCP Enabled. . . . . . . . . . . : Yes
+   Autoconfiguration Enabled . . . . : Yes
+
+Tunnel adapter isatap.{339EC4B1-A395-455B-B7D6-17CBC080ABFC}:
+
+   Media State . . . . . . . . . . . : Media disconnected
+   Connection-specific DNS Suffix  . : 
+   Description . . . . . . . . . . . : Microsoft ISATAP Adapter
+   Physical Address. . . . . . . . . : 00-00-00-00-00-00-00-E0
+   DHCP Enabled. . . . . . . . . . . : No
+   Autoconfiguration Enabled . . . . : Yes
+
+Tunnel adapter isatap.corp.microsoft.com:
+
+   Media State . . . . . . . . . . . : Media disconnected
+   Connection-specific DNS Suffix  . : corp.microsoft.com
+   Description . . . . . . . . . . . : Microsoft ISATAP Adapter #2
+   Physical Address. . . . . . . . . : 00-00-00-00-00-00-00-E0
+   DHCP Enabled. . . . . . . . . . . : No
+   Autoconfiguration Enabled . . . . : Yes
+
+Tunnel adapter Teredo Tunneling Pseudo-Interface:
+
+   Connection-specific DNS Suffix  . : 
+   Description . . . . . . . . . . . : Microsoft Teredo Tunneling Adapter
+   Physical Address. . . . . . . . . : 00-00-00-00-00-00-00-E0
+   DHCP Enabled. . . . . . . . . . . : No
+   Autoconfiguration Enabled . . . . : Yes
+   IPv6 Address. . . . . . . . . . . : 2001:0:5ef5:79fb:af:199c:7c94:51b6(Preferred) 
+   Link-local IPv6 Address . . . . . : fe80::af:199c:7c94:51b6%12(Preferred) 
+   Default Gateway . . . . . . . . . : 
+   DHCPv6 IAID . . . . . . . . . . . : 805306368
+   DHCPv6 Client DUID. . . . . . . . : 00-01-00-01-19-B0-36-D2-8C-70-5A-C8-7F-0C
+   NetBIOS over Tcpip. . . . . . . . : Disabled
