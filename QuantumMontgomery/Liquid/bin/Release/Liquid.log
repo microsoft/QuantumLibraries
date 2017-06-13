@@ -1,0 +1,1168 @@
+0:0000.0/=============== Logging to: Liquid.log opened ================
+0:0000.0/Running "MontgomeryConstantPrime" circuit test for 3 * 7 mod 15
+0:0000.0/=====================================================
+0:0000.0/Toffoli network metrics: qubits=19, size=326, depth=318
+
+0:0000.0/Number of Toffoli gates = 326 
+0:0000.0/Number of qubits = 19
+0:0000.0/Toffoli network metrics: qubits=19, size=326, depth=318
+
+0:0000.0/Number of Toffoli gates = 326 
+0:0000.0/Number of qubits = 19
+0:0000.0/Toffoli network metrics: qubits=19, size=326, depth=318
+
+0:0000.0/Number of Toffoli gates = 326 
+0:0000.0/Number of qubits = 19
+0:0000.0/Toffoli network metrics: qubits=19, size=326, depth=318
+
+0:0000.0/Number of Toffoli gates = 326 
+0:0000.0/Number of qubits = 19
+0:0000.0/Test failed: n s1 s2 p = 3 3 7 15
+
+0:0000.0/Running "MontgomeryConstantPrime" circuit test for 3 * 7 mod 15
+0:0000.0/=====================================================
+0:0000.0/Toffoli network metrics: qubits=24, size=740, depth=708
+
+0:0000.0/Number of Toffoli gates = 740 
+0:0000.0/Number of qubits = 24
+0:0000.0/Toffoli network metrics: qubits=24, size=740, depth=708
+
+0:0000.0/Number of Toffoli gates = 740 
+0:0000.0/Number of qubits = 24
+0:0000.0/Toffoli network metrics: qubits=24, size=740, depth=708
+
+0:0000.0/Number of Toffoli gates = 740 
+0:0000.0/Number of qubits = 24
+0:0000.0/Toffoli network metrics: qubits=24, size=740, depth=708
+
+0:0000.0/Number of Toffoli gates = 740 
+0:0000.0/Number of qubits = 24
+0:0000.0/Test passed: n s1 s2 p = 4 3 7 15. Results: product decprod decs1 decs2 6 6 3 7
+
+0:0000.0/Running "MontgomeryConstantPrime" circuit test for 3 * 7 mod 15
+0:0000.0/=====================================================
+0:0000.0/Toffoli network metrics: qubits=29, size=1030, depth=980
+
+0:0000.0/Number of Toffoli gates = 1030 
+0:0000.0/Number of qubits = 29
+0:0000.0/Toffoli network metrics: qubits=29, size=1030, depth=980
+
+0:0000.0/Number of Toffoli gates = 1030 
+0:0000.0/Number of qubits = 29
+0:0000.0/Toffoli network metrics: qubits=29, size=1030, depth=980
+
+0:0000.0/Number of Toffoli gates = 1030 
+0:0000.0/Number of qubits = 29
+0:0000.0/Toffoli network metrics: qubits=29, size=1030, depth=980
+
+0:0000.0/Number of Toffoli gates = 1030 
+0:0000.0/Number of qubits = 29
+0:0000.0/Test passed: n s1 s2 p = 5 3 7 15. Results: product decprod decs1 decs2 3 9 9 11
+
+0:0000.0/Running "MontgomeryConstantPrime" circuit test for 3 * 7 mod 15
+0:0000.0/=====================================================
+0:0000.0/Toffoli network metrics: qubits=34, size=1440, depth=1382
+
+0:0000.0/Number of Toffoli gates = 1440 
+0:0000.0/Number of qubits = 34
+0:0000.0/Toffoli network metrics: qubits=34, size=1440, depth=1382
+
+0:0000.0/Number of Toffoli gates = 1440 
+0:0000.0/Number of qubits = 34
+0:0000.0/Toffoli network metrics: qubits=34, size=1440, depth=1382
+
+0:0000.0/Number of Toffoli gates = 1440 
+0:0000.0/Number of qubits = 34
+0:0000.0/Toffoli network metrics: qubits=34, size=1440, depth=1382
+
+0:0000.0/Number of Toffoli gates = 1440 
+0:0000.0/Number of qubits = 34
+0:0000.0/Test passed: n s1 s2 p = 6 3 7 15. Results: product decprod decs1 decs2 9 6 12 13
+
+0:0000.0/Running "MontgomeryConstantPrime" circuit test for 3 * 7 mod 15
+0:0000.0/=====================================================
+0:0000.0/Toffoli network metrics: qubits=39, size=2070, depth=1984
+
+0:0000.0/Number of Toffoli gates = 2070 
+0:0000.0/Number of qubits = 39
+0:0000.0/Toffoli network metrics: qubits=39, size=2070, depth=1984
+
+0:0000.0/Number of Toffoli gates = 2070 
+0:0000.0/Number of qubits = 39
+0:0000.0/Toffoli network metrics: qubits=39, size=2070, depth=1984
+
+0:0000.0/Number of Toffoli gates = 2070 
+0:0000.0/Number of qubits = 39
+0:0000.0/Toffoli network metrics: qubits=39, size=2070, depth=1984
+
+0:0000.0/Number of Toffoli gates = 2070 
+0:0000.0/Number of qubits = 39
+0:0000.0/Test passed: n s1 s2 p = 7 3 7 15. Results: product decprod decs1 decs2 12 9 6 14
+
+0:0000.0/Running "MontgomeryConstantPrime" circuit test for 3 * 7 mod 15
+0:0000.0/=====================================================
+0:0000.0/Toffoli network metrics: qubits=44, size=2744, depth=2634
+
+0:0000.0/Number of Toffoli gates = 2744 
+0:0000.0/Number of qubits = 44
+0:0000.0/Toffoli network metrics: qubits=44, size=2744, depth=2634
+
+0:0000.0/Number of Toffoli gates = 2744 
+0:0000.0/Number of qubits = 44
+0:0000.0/Toffoli network metrics: qubits=44, size=2744, depth=2634
+
+0:0000.0/Number of Toffoli gates = 2744 
+0:0000.0/Number of qubits = 44
+0:0000.0/Toffoli network metrics: qubits=44, size=2744, depth=2634
+
+0:0000.0/Number of Toffoli gates = 2744 
+0:0000.0/Number of qubits = 44
+0:0000.0/Test passed: n s1 s2 p = 8 3 7 15. Results: product decprod decs1 decs2 6 6 3 7
+
+0:0000.0/Running "MontgomeryConstantPrime" circuit test for 3 * 7 mod 15
+0:0000.0/=====================================================
+0:0000.0/Toffoli network metrics: qubits=49, size=3898, depth=3662
+
+0:0000.0/Number of Toffoli gates = 3898 
+0:0000.0/Number of qubits = 49
+0:0000.0/Toffoli network metrics: qubits=49, size=3898, depth=3662
+
+0:0000.0/Number of Toffoli gates = 3898 
+0:0000.0/Number of qubits = 49
+0:0000.0/Toffoli network metrics: qubits=49, size=3898, depth=3662
+
+0:0000.0/Number of Toffoli gates = 3898 
+0:0000.0/Number of qubits = 49
+0:0000.0/Toffoli network metrics: qubits=49, size=3898, depth=3662
+
+0:0000.0/Number of Toffoli gates = 3898 
+0:0000.0/Number of qubits = 49
+0:0000.0/Test passed: n s1 s2 p = 9 3 7 15. Results: product decprod decs1 decs2 3 9 9 11
+
+0:0000.0/Running "MontgomeryConstantPrime" circuit test for 3 * 7 mod 15
+0:0000.0/=====================================================
+0:0000.0/Toffoli network metrics: qubits=54, size=5120, depth=4830
+
+0:0000.0/Number of Toffoli gates = 5120 
+0:0000.0/Number of qubits = 54
+0:0000.0/Toffoli network metrics: qubits=54, size=5120, depth=4830
+
+0:0000.0/Number of Toffoli gates = 5120 
+0:0000.0/Number of qubits = 54
+0:0000.0/Toffoli network metrics: qubits=54, size=5120, depth=4830
+
+0:0000.0/Number of Toffoli gates = 5120 
+0:0000.0/Number of qubits = 54
+0:0000.0/Toffoli network metrics: qubits=54, size=5120, depth=4830
+
+0:0000.0/Number of Toffoli gates = 5120 
+0:0000.0/Number of qubits = 54
+0:0000.0/Test passed: n s1 s2 p = 10 3 7 15. Results: product decprod decs1 decs2 9 6 12 13
+
+0:0000.0/Running "MontgomeryConstantPrime" circuit test for 3 * 7 mod 15
+0:0000.0/=====================================================
+0:0000.0/Toffoli network metrics: qubits=59, size=6054, depth=5700
+
+0:0000.0/Number of Toffoli gates = 6054 
+0:0000.0/Number of qubits = 59
+0:0000.0/Toffoli network metrics: qubits=59, size=6054, depth=5700
+
+0:0000.0/Number of Toffoli gates = 6054 
+0:0000.0/Number of qubits = 59
+0:0000.0/Toffoli network metrics: qubits=59, size=6054, depth=5700
+
+0:0000.0/Number of Toffoli gates = 6054 
+0:0000.0/Number of qubits = 59
+0:0000.0/Toffoli network metrics: qubits=59, size=6054, depth=5700
+
+0:0000.0/Number of Toffoli gates = 6054 
+0:0000.0/Number of qubits = 59
+0:0000.0/Test passed: n s1 s2 p = 11 3 7 15. Results: product decprod decs1 decs2 12 9 6 14
+
+0:0000.0/Running "MontgomeryConstantPrime" circuit test for 3 * 7 mod 15
+0:0000.0/=====================================================
+0:0000.0/Toffoli network metrics: qubits=64, size=7152, depth=6746
+
+0:0000.0/Number of Toffoli gates = 7152 
+0:0000.0/Number of qubits = 64
+0:0000.0/Toffoli network metrics: qubits=64, size=7152, depth=6746
+
+0:0000.0/Number of Toffoli gates = 7152 
+0:0000.0/Number of qubits = 64
+0:0000.0/Toffoli network metrics: qubits=64, size=7152, depth=6746
+
+0:0000.0/Number of Toffoli gates = 7152 
+0:0000.0/Number of qubits = 64
+0:0000.0/Toffoli network metrics: qubits=64, size=7152, depth=6746
+
+0:0000.0/Number of Toffoli gates = 7152 
+0:0000.0/Number of qubits = 64
+0:0000.0/Test passed: n s1 s2 p = 12 3 7 15. Results: product decprod decs1 decs2 6 6 3 7
+
+0:0000.0/Running "MontgomeryConstantPrime" circuit test for 3 * 7 mod 15
+0:0000.0/=====================================================
+0:0000.0/Toffoli network metrics: qubits=69, size=8294, depth=7798
+
+0:0000.0/Number of Toffoli gates = 8294 
+0:0000.0/Number of qubits = 69
+0:0000.0/Toffoli network metrics: qubits=69, size=8294, depth=7798
+
+0:0000.0/Number of Toffoli gates = 8294 
+0:0000.0/Number of qubits = 69
+0:0000.0/Toffoli network metrics: qubits=69, size=8294, depth=7798
+
+0:0000.0/Number of Toffoli gates = 8294 
+0:0000.0/Number of qubits = 69
+0:0000.0/Toffoli network metrics: qubits=69, size=8294, depth=7798
+
+0:0000.0/Number of Toffoli gates = 8294 
+0:0000.0/Number of qubits = 69
+0:0000.0/Test passed: n s1 s2 p = 13 3 7 15. Results: product decprod decs1 decs2 3 9 9 11
+
+0:0000.0/Running "MontgomeryConstantPrime" circuit test for 3 * 7 mod 15
+0:0000.0/=====================================================
+0:0000.0/Toffoli network metrics: qubits=74, size=9528, depth=9000
+
+0:0000.0/Number of Toffoli gates = 9528 
+0:0000.0/Number of qubits = 74
+0:0000.0/Toffoli network metrics: qubits=74, size=9528, depth=9000
+
+0:0000.0/Number of Toffoli gates = 9528 
+0:0000.0/Number of qubits = 74
+0:0000.0/Toffoli network metrics: qubits=74, size=9528, depth=9000
+
+0:0000.0/Number of Toffoli gates = 9528 
+0:0000.0/Number of qubits = 74
+0:0000.0/Toffoli network metrics: qubits=74, size=9528, depth=9000
+
+0:0000.0/Number of Toffoli gates = 9528 
+0:0000.0/Number of qubits = 74
+0:0000.0/Test passed: n s1 s2 p = 14 3 7 15. Results: product decprod decs1 decs2 9 6 12 13
+
+0:0000.0/Running "MontgomeryConstantPrime" circuit test for 3 * 7 mod 15
+0:0000.0/=====================================================
+0:0000.0/Toffoli network metrics: qubits=79, size=11286, depth=10636
+
+0:0000.0/Number of Toffoli gates = 11286 
+0:0000.0/Number of qubits = 79
+0:0000.0/Toffoli network metrics: qubits=79, size=11286, depth=10636
+
+0:0000.0/Number of Toffoli gates = 11286 
+0:0000.0/Number of qubits = 79
+0:0000.0/Toffoli network metrics: qubits=79, size=11286, depth=10636
+
+0:0000.0/Number of Toffoli gates = 11286 
+0:0000.0/Number of qubits = 79
+0:0000.0/Toffoli network metrics: qubits=79, size=11286, depth=10636
+
+0:0000.0/Number of Toffoli gates = 11286 
+0:0000.0/Number of qubits = 79
+0:0000.0/Test passed: n s1 s2 p = 15 3 7 15. Results: product decprod decs1 decs2 12 9 6 14
+
+0:0000.0/Running "MontgomeryConstantPrime" circuit test for 3 * 7 mod 15
+0:0000.0/=====================================================
+0:0000.0/Toffoli network metrics: qubits=84, size=13048, depth=12316
+
+0:0000.0/Number of Toffoli gates = 13048 
+0:0000.0/Number of qubits = 84
+0:0000.0/Toffoli network metrics: qubits=84, size=13048, depth=12316
+
+0:0000.0/Number of Toffoli gates = 13048 
+0:0000.0/Number of qubits = 84
+0:0000.0/Toffoli network metrics: qubits=84, size=13048, depth=12316
+
+0:0000.0/Number of Toffoli gates = 13048 
+0:0000.0/Number of qubits = 84
+0:0000.0/Toffoli network metrics: qubits=84, size=13048, depth=12316
+
+0:0000.0/Number of Toffoli gates = 13048 
+0:0000.0/Number of qubits = 84
+0:0000.0/Test passed: n s1 s2 p = 16 3 7 15. Results: product decprod decs1 decs2 6 6 3 7
+
+0:0000.0/Running "MontgomeryConstantPrime" circuit test for 3 * 7 mod 15
+0:0000.0/=====================================================
+0:0000.0/Toffoli network metrics: qubits=89, size=14962, depth=14106
+
+0:0000.0/Number of Toffoli gates = 14962 
+0:0000.0/Number of qubits = 89
+0:0000.0/Toffoli network metrics: qubits=89, size=14962, depth=14106
+
+0:0000.0/Number of Toffoli gates = 14962 
+0:0000.0/Number of qubits = 89
+0:0000.0/Toffoli network metrics: qubits=89, size=14962, depth=14106
+
+0:0000.0/Number of Toffoli gates = 14962 
+0:0000.0/Number of qubits = 89
+0:0000.0/Toffoli network metrics: qubits=89, size=14962, depth=14106
+
+0:0000.0/Number of Toffoli gates = 14962 
+0:0000.0/Number of qubits = 89
+0:0000.0/Test passed: n s1 s2 p = 17 3 7 15. Results: product decprod decs1 decs2 3 9 9 11
+
+0:0000.0/Running "MontgomeryConstantPrime" circuit test for 3 * 7 mod 15
+0:0000.0/=====================================================
+0:0000.0/Toffoli network metrics: qubits=94, size=16992, depth=16086
+
+0:0000.0/Number of Toffoli gates = 16992 
+0:0000.0/Number of qubits = 94
+0:0000.0/Toffoli network metrics: qubits=94, size=16992, depth=16086
+
+0:0000.0/Number of Toffoli gates = 16992 
+0:0000.0/Number of qubits = 94
+0:0000.0/Toffoli network metrics: qubits=94, size=16992, depth=16086
+
+0:0000.0/Number of Toffoli gates = 16992 
+0:0000.0/Number of qubits = 94
+0:0000.0/Toffoli network metrics: qubits=94, size=16992, depth=16086
+
+0:0000.0/Number of Toffoli gates = 16992 
+0:0000.0/Number of qubits = 94
+0:0000.0/Test passed: n s1 s2 p = 18 3 7 15. Results: product decprod decs1 decs2 9 6 12 13
+
+0:0000.0/Running "MontgomeryConstantPrime" circuit test for 3 * 7 mod 15
+0:0000.0/=====================================================
+0:0000.1/Toffoli network metrics: qubits=99, size=19866, depth=18658
+
+0:0000.1/Number of Toffoli gates = 19866 
+0:0000.1/Number of qubits = 99
+0:0000.1/Toffoli network metrics: qubits=99, size=19866, depth=18658
+
+0:0000.1/Number of Toffoli gates = 19866 
+0:0000.1/Number of qubits = 99
+0:0000.1/Toffoli network metrics: qubits=99, size=19866, depth=18658
+
+0:0000.1/Number of Toffoli gates = 19866 
+0:0000.1/Number of qubits = 99
+0:0000.1/Toffoli network metrics: qubits=99, size=19866, depth=18658
+
+0:0000.1/Number of Toffoli gates = 19866 
+0:0000.1/Number of qubits = 99
+0:0000.1/Test passed: n s1 s2 p = 19 3 7 15. Results: product decprod decs1 decs2 12 9 6 14
+
+0:0000.1/Running "MontgomeryConstantPrime" circuit test for 3 * 7 mod 15
+0:0000.1/=====================================================
+0:0000.1/Toffoli network metrics: qubits=104, size=22768, depth=21290
+
+0:0000.1/Number of Toffoli gates = 22768 
+0:0000.1/Number of qubits = 104
+0:0000.1/Toffoli network metrics: qubits=104, size=22768, depth=21290
+
+0:0000.1/Number of Toffoli gates = 22768 
+0:0000.1/Number of qubits = 104
+0:0000.1/Toffoli network metrics: qubits=104, size=22768, depth=21290
+
+0:0000.1/Number of Toffoli gates = 22768 
+0:0000.1/Number of qubits = 104
+0:0000.1/Toffoli network metrics: qubits=104, size=22768, depth=21290
+
+0:0000.1/Number of Toffoli gates = 22768 
+0:0000.1/Number of qubits = 104
+0:0000.1/Test passed: n s1 s2 p = 20 3 7 15. Results: product decprod decs1 decs2 6 6 3 7
+
+0:0000.1/Running "MontgomeryConstantPrime" circuit test for 3 * 7 mod 15
+0:0000.1/=====================================================
+0:0000.1/Toffoli network metrics: qubits=109, size=25886, depth=24196
+
+0:0000.1/Number of Toffoli gates = 25886 
+0:0000.1/Number of qubits = 109
+0:0000.1/Toffoli network metrics: qubits=109, size=25886, depth=24196
+
+0:0000.1/Number of Toffoli gates = 25886 
+0:0000.1/Number of qubits = 109
+0:0000.1/Toffoli network metrics: qubits=109, size=25886, depth=24196
+
+0:0000.1/Number of Toffoli gates = 25886 
+0:0000.1/Number of qubits = 109
+0:0000.1/Toffoli network metrics: qubits=109, size=25886, depth=24196
+
+0:0000.1/Number of Toffoli gates = 25886 
+0:0000.1/Number of qubits = 109
+0:0000.1/Test passed: n s1 s2 p = 21 3 7 15. Results: product decprod decs1 decs2 3 9 9 11
+
+0:0000.1/Running "MontgomeryConstantPrime" circuit test for 3 * 7 mod 15
+0:0000.1/=====================================================
+0:0000.1/Toffoli network metrics: qubits=114, size=29176, depth=27354
+
+0:0000.1/Number of Toffoli gates = 29176 
+0:0000.1/Number of qubits = 114
+0:0000.1/Toffoli network metrics: qubits=114, size=29176, depth=27354
+
+0:0000.1/Number of Toffoli gates = 29176 
+0:0000.1/Number of qubits = 114
+0:0000.1/Toffoli network metrics: qubits=114, size=29176, depth=27354
+
+0:0000.1/Number of Toffoli gates = 29176 
+0:0000.1/Number of qubits = 114
+0:0000.1/Toffoli network metrics: qubits=114, size=29176, depth=27354
+
+0:0000.1/Number of Toffoli gates = 29176 
+0:0000.1/Number of qubits = 114
+0:0000.1/Test passed: n s1 s2 p = 22 3 7 15. Results: product decprod decs1 decs2 9 6 12 13
+
+0:0000.1/Running "MontgomeryConstantPrime" circuit test for 3 * 7 mod 15
+0:0000.1/=====================================================
+0:0000.1/Toffoli network metrics: qubits=119, size=31694, depth=29662
+
+0:0000.1/Number of Toffoli gates = 31694 
+0:0000.1/Number of qubits = 119
+0:0000.1/Toffoli network metrics: qubits=119, size=31694, depth=29662
+
+0:0000.1/Number of Toffoli gates = 31694 
+0:0000.1/Number of qubits = 119
+0:0000.1/Toffoli network metrics: qubits=119, size=31694, depth=29662
+
+0:0000.1/Number of Toffoli gates = 31694 
+0:0000.1/Number of qubits = 119
+0:0000.1/Toffoli network metrics: qubits=119, size=31694, depth=29662
+
+0:0000.1/Number of Toffoli gates = 31694 
+0:0000.1/Number of qubits = 119
+0:0000.1/Test passed: n s1 s2 p = 23 3 7 15. Results: product decprod decs1 decs2 12 9 6 14
+
+0:0000.1/Running "MontgomeryConstantPrime" circuit test for 3 * 7 mod 15
+0:0000.1/=====================================================
+0:0000.1/Toffoli network metrics: qubits=124, size=34512, depth=32298
+
+0:0000.1/Number of Toffoli gates = 34512 
+0:0000.1/Number of qubits = 124
+0:0000.1/Toffoli network metrics: qubits=124, size=34512, depth=32298
+
+0:0000.1/Number of Toffoli gates = 34512 
+0:0000.1/Number of qubits = 124
+0:0000.1/Toffoli network metrics: qubits=124, size=34512, depth=32298
+
+0:0000.1/Number of Toffoli gates = 34512 
+0:0000.1/Number of qubits = 124
+0:0000.1/Toffoli network metrics: qubits=124, size=34512, depth=32298
+
+0:0000.1/Number of Toffoli gates = 34512 
+0:0000.1/Number of qubits = 124
+0:0000.1/Test passed: n s1 s2 p = 24 3 7 15. Results: product decprod decs1 decs2 6 6 3 7
+
+0:0000.1/Running "MontgomeryConstantPrime" circuit test for 3 * 7 mod 15
+0:0000.1/=====================================================
+0:0000.1/Toffoli network metrics: qubits=129, size=37406, depth=34948
+
+0:0000.1/Number of Toffoli gates = 37406 
+0:0000.1/Number of qubits = 129
+0:0000.1/Toffoli network metrics: qubits=129, size=37406, depth=34948
+
+0:0000.1/Number of Toffoli gates = 37406 
+0:0000.1/Number of qubits = 129
+0:0000.1/Toffoli network metrics: qubits=129, size=37406, depth=34948
+
+0:0000.1/Number of Toffoli gates = 37406 
+0:0000.1/Number of qubits = 129
+0:0000.1/Toffoli network metrics: qubits=129, size=37406, depth=34948
+
+0:0000.1/Number of Toffoli gates = 37406 
+0:0000.1/Number of qubits = 129
+0:0000.1/Test passed: n s1 s2 p = 25 3 7 15. Results: product decprod decs1 decs2 3 9 9 11
+
+0:0000.1/Running "MontgomeryConstantPrime" circuit test for 3 * 7 mod 15
+0:0000.1/=====================================================
+0:0000.2/Toffoli network metrics: qubits=134, size=40424, depth=37822
+
+0:0000.2/Number of Toffoli gates = 40424 
+0:0000.2/Number of qubits = 134
+0:0000.2/Toffoli network metrics: qubits=134, size=40424, depth=37822
+
+0:0000.2/Number of Toffoli gates = 40424 
+0:0000.2/Number of qubits = 134
+0:0000.2/Toffoli network metrics: qubits=134, size=40424, depth=37822
+
+0:0000.2/Number of Toffoli gates = 40424 
+0:0000.2/Number of qubits = 134
+0:0000.2/Toffoli network metrics: qubits=134, size=40424, depth=37822
+
+0:0000.2/Number of Toffoli gates = 40424 
+0:0000.2/Number of qubits = 134
+0:0000.2/Test passed: n s1 s2 p = 26 3 7 15. Results: product decprod decs1 decs2 9 6 12 13
+
+0:0000.2/Running "MontgomeryConstantPrime" circuit test for 3 * 7 mod 15
+0:0000.2/=====================================================
+0:0000.2/Toffoli network metrics: qubits=139, size=43558, depth=40686
+
+0:0000.2/Number of Toffoli gates = 43558 
+0:0000.2/Number of qubits = 139
+0:0000.2/Toffoli network metrics: qubits=139, size=43558, depth=40686
+
+0:0000.2/Number of Toffoli gates = 43558 
+0:0000.2/Number of qubits = 139
+0:0000.2/Toffoli network metrics: qubits=139, size=43558, depth=40686
+
+0:0000.2/Number of Toffoli gates = 43558 
+0:0000.2/Number of qubits = 139
+0:0000.2/Toffoli network metrics: qubits=139, size=43558, depth=40686
+
+0:0000.2/Number of Toffoli gates = 43558 
+0:0000.2/Number of qubits = 139
+0:0000.2/Test passed: n s1 s2 p = 27 3 7 15. Results: product decprod decs1 decs2 12 9 6 14
+
+0:0000.2/Running "MontgomeryConstantPrime" circuit test for 3 * 7 mod 15
+0:0000.2/=====================================================
+0:0000.2/Toffoli network metrics: qubits=144, size=46808, depth=43718
+
+0:0000.2/Number of Toffoli gates = 46808 
+0:0000.2/Number of qubits = 144
+0:0000.2/Toffoli network metrics: qubits=144, size=46808, depth=43718
+
+0:0000.2/Number of Toffoli gates = 46808 
+0:0000.2/Number of qubits = 144
+0:0000.2/Toffoli network metrics: qubits=144, size=46808, depth=43718
+
+0:0000.2/Number of Toffoli gates = 46808 
+0:0000.2/Number of qubits = 144
+0:0000.2/Toffoli network metrics: qubits=144, size=46808, depth=43718
+
+0:0000.2/Number of Toffoli gates = 46808 
+0:0000.2/Number of qubits = 144
+0:0000.2/Test passed: n s1 s2 p = 28 3 7 15. Results: product decprod decs1 decs2 6 6 3 7
+
+0:0000.2/Running "MontgomeryConstantPrime" circuit test for 3 * 7 mod 15
+0:0000.2/=====================================================
+0:0000.2/Toffoli network metrics: qubits=149, size=50174, depth=46856
+
+0:0000.2/Number of Toffoli gates = 50174 
+0:0000.2/Number of qubits = 149
+0:0000.2/Toffoli network metrics: qubits=149, size=50174, depth=46856
+
+0:0000.2/Number of Toffoli gates = 50174 
+0:0000.2/Number of qubits = 149
+0:0000.2/Toffoli network metrics: qubits=149, size=50174, depth=46856
+
+0:0000.2/Number of Toffoli gates = 50174 
+0:0000.2/Number of qubits = 149
+0:0000.2/Toffoli network metrics: qubits=149, size=50174, depth=46856
+
+0:0000.2/Number of Toffoli gates = 50174 
+0:0000.2/Number of qubits = 149
+0:0000.2/Test passed: n s1 s2 p = 29 3 7 15. Results: product decprod decs1 decs2 3 9 9 11
+
+0:0000.2/Running "MontgomeryConstantPrime" circuit test for 3 * 7 mod 15
+0:0000.2/=====================================================
+0:0000.2/Toffoli network metrics: qubits=154, size=53656, depth=50232
+
+0:0000.2/Number of Toffoli gates = 53656 
+0:0000.2/Number of qubits = 154
+0:0000.2/Toffoli network metrics: qubits=154, size=53656, depth=50232
+
+0:0000.2/Number of Toffoli gates = 53656 
+0:0000.2/Number of qubits = 154
+0:0000.3/Toffoli network metrics: qubits=154, size=53656, depth=50232
+
+0:0000.3/Number of Toffoli gates = 53656 
+0:0000.3/Number of qubits = 154
+0:0000.3/Toffoli network metrics: qubits=154, size=53656, depth=50232
+
+0:0000.3/Number of Toffoli gates = 53656 
+0:0000.3/Number of qubits = 154
+0:0000.3/Test passed: n s1 s2 p = 30 3 7 15. Results: product decprod decs1 decs2 9 6 12 13
+
+0:0000.3/Running "MontgomeryConstantPrime" circuit test for 3 * 7 mod 15
+0:0000.3/=====================================================
+0:0000.3/Toffoli network metrics: qubits=159, size=58142, depth=54392
+
+0:0000.3/Number of Toffoli gates = 58142 
+0:0000.3/Number of qubits = 159
+0:0000.3/Toffoli network metrics: qubits=159, size=58142, depth=54392
+
+0:0000.3/Number of Toffoli gates = 58142 
+0:0000.3/Number of qubits = 159
+0:0000.3/Toffoli network metrics: qubits=159, size=58142, depth=54392
+
+0:0000.3/Number of Toffoli gates = 58142 
+0:0000.3/Number of qubits = 159
+0:0000.3/Toffoli network metrics: qubits=159, size=58142, depth=54392
+
+0:0000.3/Number of Toffoli gates = 58142 
+0:0000.3/Number of qubits = 159
+0:0000.3/Test passed: n s1 s2 p = 31 3 7 15. Results: product decprod decs1 decs2 12 9 6 14
+
+0:0000.3/Running "MontgomeryConstantPrime" circuit test for 3 * 7 mod 15
+0:0000.3/=====================================================
+0:0000.3/Toffoli network metrics: qubits=164, size=62536, depth=58528
+
+0:0000.3/Number of Toffoli gates = 62536 
+0:0000.3/Number of qubits = 164
+0:0000.3/Toffoli network metrics: qubits=164, size=62536, depth=58528
+
+0:0000.3/Number of Toffoli gates = 62536 
+0:0000.3/Number of qubits = 164
+0:0000.3/Toffoli network metrics: qubits=164, size=62536, depth=58528
+
+0:0000.3/Number of Toffoli gates = 62536 
+0:0000.3/Number of qubits = 164
+0:0000.3/Toffoli network metrics: qubits=164, size=62536, depth=58528
+
+0:0000.3/Number of Toffoli gates = 62536 
+0:0000.3/Number of qubits = 164
+0:0000.3/Test passed: n s1 s2 p = 32 3 7 15. Results: product decprod decs1 decs2 6 6 3 7
+
+0:0000.3/Running "MontgomeryConstantPrime" circuit test for 3 * 7 mod 15
+0:0000.3/=====================================================
+0:0000.3/Toffoli network metrics: qubits=169, size=67114, depth=62768
+
+0:0000.3/Number of Toffoli gates = 67114 
+0:0000.3/Number of qubits = 169
+0:0000.3/Toffoli network metrics: qubits=169, size=67114, depth=62768
+
+0:0000.3/Number of Toffoli gates = 67114 
+0:0000.3/Number of qubits = 169
+0:0000.3/Toffoli network metrics: qubits=169, size=67114, depth=62768
+
+0:0000.3/Number of Toffoli gates = 67114 
+0:0000.3/Number of qubits = 169
+0:0000.4/Toffoli network metrics: qubits=169, size=67114, depth=62768
+
+0:0000.4/Number of Toffoli gates = 67114 
+0:0000.4/Number of qubits = 169
+0:0000.4/Test passed: n s1 s2 p = 33 3 7 15. Results: product decprod decs1 decs2 3 9 9 11
+
+0:0000.4/Running "MontgomeryConstantPrime" circuit test for 3 * 7 mod 15
+0:0000.4/=====================================================
+0:0000.4/Toffoli network metrics: qubits=174, size=71840, depth=67288
+
+0:0000.4/Number of Toffoli gates = 71840 
+0:0000.4/Number of qubits = 174
+0:0000.4/Toffoli network metrics: qubits=174, size=71840, depth=67288
+
+0:0000.4/Number of Toffoli gates = 71840 
+0:0000.4/Number of qubits = 174
+0:0000.4/Toffoli network metrics: qubits=174, size=71840, depth=67288
+
+0:0000.4/Number of Toffoli gates = 71840 
+0:0000.4/Number of qubits = 174
+0:0000.4/Toffoli network metrics: qubits=174, size=71840, depth=67288
+
+0:0000.4/Number of Toffoli gates = 71840 
+0:0000.4/Number of qubits = 174
+0:0000.4/Test passed: n s1 s2 p = 34 3 7 15. Results: product decprod decs1 decs2 9 6 12 13
+
+0:0000.4/Running "MontgomeryConstantPrime" circuit test for 3 * 7 mod 15
+0:0000.4/=====================================================
+0:0000.4/Toffoli network metrics: qubits=179, size=76722, depth=71812
+
+0:0000.4/Number of Toffoli gates = 76722 
+0:0000.4/Number of qubits = 179
+0:0000.4/Toffoli network metrics: qubits=179, size=76722, depth=71812
+
+0:0000.4/Number of Toffoli gates = 76722 
+0:0000.4/Number of qubits = 179
+0:0000.4/Toffoli network metrics: qubits=179, size=76722, depth=71812
+
+0:0000.4/Number of Toffoli gates = 76722 
+0:0000.4/Number of qubits = 179
+0:0000.4/Toffoli network metrics: qubits=179, size=76722, depth=71812
+
+0:0000.4/Number of Toffoli gates = 76722 
+0:0000.4/Number of qubits = 179
+0:0000.4/Test passed: n s1 s2 p = 35 3 7 15. Results: product decprod decs1 decs2 12 9 6 14
+
+0:0000.4/Running "MontgomeryConstantPrime" circuit test for 3 * 7 mod 15
+0:0000.4/=====================================================
+0:0000.4/Toffoli network metrics: qubits=184, size=81760, depth=76560
+
+0:0000.4/Number of Toffoli gates = 81760 
+0:0000.4/Number of qubits = 184
+0:0000.4/Toffoli network metrics: qubits=184, size=81760, depth=76560
+
+0:0000.4/Number of Toffoli gates = 81760 
+0:0000.4/Number of qubits = 184
+0:0000.5/Toffoli network metrics: qubits=184, size=81760, depth=76560
+
+0:0000.5/Number of Toffoli gates = 81760 
+0:0000.5/Number of qubits = 184
+0:0000.5/Toffoli network metrics: qubits=184, size=81760, depth=76560
+
+0:0000.5/Number of Toffoli gates = 81760 
+0:0000.5/Number of qubits = 184
+0:0000.5/Test passed: n s1 s2 p = 36 3 7 15. Results: product decprod decs1 decs2 6 6 3 7
+
+0:0000.5/Running "MontgomeryConstantPrime" circuit test for 3 * 7 mod 15
+0:0000.5/=====================================================
+0:0000.5/Toffoli network metrics: qubits=189, size=86954, depth=81454
+
+0:0000.5/Number of Toffoli gates = 86954 
+0:0000.5/Number of qubits = 189
+0:0000.5/Toffoli network metrics: qubits=189, size=86954, depth=81454
+
+0:0000.5/Number of Toffoli gates = 86954 
+0:0000.5/Number of qubits = 189
+0:0000.5/Toffoli network metrics: qubits=189, size=86954, depth=81454
+
+0:0000.5/Number of Toffoli gates = 86954 
+0:0000.5/Number of qubits = 189
+0:0000.5/... compiling MB=      98 cache(6074971,16) GC:1924
+0:0000.5/Toffoli network metrics: qubits=189, size=86954, depth=81454
+
+0:0000.5/Number of Toffoli gates = 86954 
+0:0000.5/Number of qubits = 189
+0:0000.5/Test passed: n s1 s2 p = 37 3 7 15. Results: product decprod decs1 decs2 3 9 9 11
+
+0:0000.5/Running "MontgomeryConstantPrime" circuit test for 3 * 7 mod 15
+0:0000.5/=====================================================
+0:0000.5/Toffoli network metrics: qubits=194, size=92304, depth=86658
+
+0:0000.5/Number of Toffoli gates = 92304 
+0:0000.5/Number of qubits = 194
+0:0000.5/Toffoli network metrics: qubits=194, size=92304, depth=86658
+
+0:0000.5/Number of Toffoli gates = 92304 
+0:0000.5/Number of qubits = 194
+0:0000.5/Toffoli network metrics: qubits=194, size=92304, depth=86658
+
+0:0000.5/Number of Toffoli gates = 92304 
+0:0000.5/Number of qubits = 194
+0:0000.6/Toffoli network metrics: qubits=194, size=92304, depth=86658
+
+0:0000.6/Number of Toffoli gates = 92304 
+0:0000.6/Number of qubits = 194
+0:0000.6/Test passed: n s1 s2 p = 38 3 7 15. Results: product decprod decs1 decs2 9 6 12 13
+
+0:0000.6/Running "MontgomeryConstantPrime" circuit test for 3 * 7 mod 15
+0:0000.6/=====================================================
+0:0000.6/Toffoli network metrics: qubits=199, size=99250, depth=92884
+
+0:0000.6/Number of Toffoli gates = 99250 
+0:0000.6/Number of qubits = 199
+0:0000.6/Toffoli network metrics: qubits=199, size=99250, depth=92884
+
+0:0000.6/Number of Toffoli gates = 99250 
+0:0000.6/Number of qubits = 199
+0:0000.6/Toffoli network metrics: qubits=199, size=99250, depth=92884
+
+0:0000.6/Number of Toffoli gates = 99250 
+0:0000.6/Number of qubits = 199
+0:0000.6/Toffoli network metrics: qubits=199, size=99250, depth=92884
+
+0:0000.6/Number of Toffoli gates = 99250 
+0:0000.6/Number of qubits = 199
+0:0000.6/Test passed: n s1 s2 p = 39 3 7 15. Results: product decprod decs1 decs2 12 9 6 14
+
+0:0000.6/Running "MontgomeryConstantPrime" circuit test for 3 * 7 mod 15
+0:0000.6/=====================================================
+0:0000.6/Toffoli network metrics: qubits=204, size=106096, depth=99078
+
+0:0000.6/Number of Toffoli gates = 106096 
+0:0000.6/Number of qubits = 204
+0:0000.6/Toffoli network metrics: qubits=204, size=106096, depth=99078
+
+0:0000.6/Number of Toffoli gates = 106096 
+0:0000.6/Number of qubits = 204
+0:0000.7/Toffoli network metrics: qubits=204, size=106096, depth=99078
+
+0:0000.7/Number of Toffoli gates = 106096 
+0:0000.7/Number of qubits = 204
+0:0000.7/Toffoli network metrics: qubits=204, size=106096, depth=99078
+
+0:0000.7/Number of Toffoli gates = 106096 
+0:0000.7/Number of qubits = 204
+0:0000.7/Test passed: n s1 s2 p = 40 3 7 15. Results: product decprod decs1 decs2 6 6 3 7
+
+0:0000.7/Running "MontgomeryConstantPrime" circuit test for 3 * 7 mod 15
+0:0000.7/=====================================================
+0:0000.7/Toffoli network metrics: qubits=209, size=113190, depth=105400
+
+0:0000.7/Number of Toffoli gates = 113190 
+0:0000.7/Number of qubits = 209
+0:0000.7/Toffoli network metrics: qubits=209, size=113190, depth=105400
+
+0:0000.7/Number of Toffoli gates = 113190 
+0:0000.7/Number of qubits = 209
+0:0000.7/Toffoli network metrics: qubits=209, size=113190, depth=105400
+
+0:0000.7/Number of Toffoli gates = 113190 
+0:0000.7/Number of qubits = 209
+0:0000.7/Toffoli network metrics: qubits=209, size=113190, depth=105400
+
+0:0000.7/Number of Toffoli gates = 113190 
+0:0000.7/Number of qubits = 209
+0:0000.7/Test passed: n s1 s2 p = 41 3 7 15. Results: product decprod decs1 decs2 3 9 9 11
+
+0:0000.7/Running "MontgomeryConstantPrime" circuit test for 3 * 7 mod 15
+0:0000.7/=====================================================
+0:0000.8/Toffoli network metrics: qubits=214, size=120488, depth=112074
+
+0:0000.8/Number of Toffoli gates = 120488 
+0:0000.8/Number of qubits = 214
+0:0000.8/Toffoli network metrics: qubits=214, size=120488, depth=112074
+
+0:0000.8/Number of Toffoli gates = 120488 
+0:0000.8/Number of qubits = 214
+0:0000.8/Toffoli network metrics: qubits=214, size=120488, depth=112074
+
+0:0000.8/Number of Toffoli gates = 120488 
+0:0000.8/Number of qubits = 214
+0:0000.8/Toffoli network metrics: qubits=214, size=120488, depth=112074
+
+0:0000.8/Number of Toffoli gates = 120488 
+0:0000.8/Number of qubits = 214
+0:0000.8/Test passed: n s1 s2 p = 42 3 7 15. Results: product decprod decs1 decs2 9 6 12 13
+
+0:0000.8/Running "MontgomeryConstantPrime" circuit test for 3 * 7 mod 15
+0:0000.8/=====================================================
+0:0000.9/Toffoli network metrics: qubits=219, size=127998, depth=119024
+
+0:0000.9/Number of Toffoli gates = 127998 
+0:0000.9/Number of qubits = 219
+0:0000.9/Toffoli network metrics: qubits=219, size=127998, depth=119024
+
+0:0000.9/Number of Toffoli gates = 127998 
+0:0000.9/Number of qubits = 219
+0:0000.9/Toffoli network metrics: qubits=219, size=127998, depth=119024
+
+0:0000.9/Number of Toffoli gates = 127998 
+0:0000.9/Number of qubits = 219
+0:0000.9/Toffoli network metrics: qubits=219, size=127998, depth=119024
+
+0:0000.9/Number of Toffoli gates = 127998 
+0:0000.9/Number of qubits = 219
+0:0000.9/Test passed: n s1 s2 p = 43 3 7 15. Results: product decprod decs1 decs2 12 9 6 14
+
+0:0000.9/Running "MontgomeryConstantPrime" circuit test for 3 * 7 mod 15
+0:0000.9/=====================================================
+0:0001.0/Toffoli network metrics: qubits=224, size=135720, depth=126266
+
+0:0001.0/Number of Toffoli gates = 135720 
+0:0001.0/Number of qubits = 224
+0:0001.0/Toffoli network metrics: qubits=224, size=135720, depth=126266
+
+0:0001.0/Number of Toffoli gates = 135720 
+0:0001.0/Number of qubits = 224
+0:0001.0/... compiling MB=      99 cache(10384232,16) GC:1392
+0:0001.0/Toffoli network metrics: qubits=224, size=135720, depth=126266
+
+0:0001.0/Number of Toffoli gates = 135720 
+0:0001.0/Number of qubits = 224
+0:0001.0/Toffoli network metrics: qubits=224, size=135720, depth=126266
+
+0:0001.0/Number of Toffoli gates = 135720 
+0:0001.0/Number of qubits = 224
+0:0001.0/Test passed: n s1 s2 p = 44 3 7 15. Results: product decprod decs1 decs2 6 6 3 7
+
+0:0001.0/Running "MontgomeryConstantPrime" circuit test for 3 * 7 mod 15
+0:0001.0/=====================================================
+0:0001.1/Toffoli network metrics: qubits=229, size=143654, depth=133712
+
+0:0001.1/Number of Toffoli gates = 143654 
+0:0001.1/Number of qubits = 229
+0:0001.1/Toffoli network metrics: qubits=229, size=143654, depth=133712
+
+0:0001.1/Number of Toffoli gates = 143654 
+0:0001.1/Number of qubits = 229
+0:0001.1/Toffoli network metrics: qubits=229, size=143654, depth=133712
+
+0:0001.1/Number of Toffoli gates = 143654 
+0:0001.1/Number of qubits = 229
+0:0001.1/Toffoli network metrics: qubits=229, size=143654, depth=133712
+
+0:0001.1/Number of Toffoli gates = 143654 
+0:0001.1/Number of qubits = 229
+0:0001.1/Test passed: n s1 s2 p = 45 3 7 15. Results: product decprod decs1 decs2 3 9 9 11
+
+0:0001.1/Running "MontgomeryConstantPrime" circuit test for 3 * 7 mod 15
+0:0001.1/=====================================================
+0:0001.2/Toffoli network metrics: qubits=234, size=151800, depth=141546
+
+0:0001.2/Number of Toffoli gates = 151800 
+0:0001.2/Number of qubits = 234
+0:0001.2/Toffoli network metrics: qubits=234, size=151800, depth=141546
+
+0:0001.2/Number of Toffoli gates = 151800 
+0:0001.2/Number of qubits = 234
+0:0001.2/Toffoli network metrics: qubits=234, size=151800, depth=141546
+
+0:0001.2/Number of Toffoli gates = 151800 
+0:0001.2/Number of qubits = 234
+0:0001.2/Toffoli network metrics: qubits=234, size=151800, depth=141546
+
+0:0001.2/Number of Toffoli gates = 151800 
+0:0001.2/Number of qubits = 234
+0:0001.2/Test passed: n s1 s2 p = 46 3 7 15. Results: product decprod decs1 decs2 9 6 12 13
+
+0:0001.2/Running "MontgomeryConstantPrime" circuit test for 3 * 7 mod 15
+0:0001.2/=====================================================
+0:0001.2/Toffoli network metrics: qubits=239, size=158246, depth=147402
+
+0:0001.2/Number of Toffoli gates = 158246 
+0:0001.2/Number of qubits = 239
+0:0001.3/Toffoli network metrics: qubits=239, size=158246, depth=147402
+
+0:0001.3/Number of Toffoli gates = 158246 
+0:0001.3/Number of qubits = 239
+0:0001.3/Toffoli network metrics: qubits=239, size=158246, depth=147402
+
+0:0001.3/Number of Toffoli gates = 158246 
+0:0001.3/Number of qubits = 239
+0:0001.3/Toffoli network metrics: qubits=239, size=158246, depth=147402
+
+0:0001.3/Number of Toffoli gates = 158246 
+0:0001.3/Number of qubits = 239
+0:0001.3/Test passed: n s1 s2 p = 47 3 7 15. Results: product decprod decs1 decs2 12 9 6 14
+
+0:0001.3/Running "MontgomeryConstantPrime" circuit test for 3 * 7 mod 15
+0:0001.3/=====================================================
+0:0001.3/Toffoli network metrics: qubits=244, size=165216, depth=153854
+
+0:0001.3/Number of Toffoli gates = 165216 
+0:0001.3/Number of qubits = 244
+0:0001.4/Toffoli network metrics: qubits=244, size=165216, depth=153854
+
+0:0001.4/Number of Toffoli gates = 165216 
+0:0001.4/Number of qubits = 244
+0:0001.4/Toffoli network metrics: qubits=244, size=165216, depth=153854
+
+0:0001.4/Number of Toffoli gates = 165216 
+0:0001.4/Number of qubits = 244
+0:0001.4/Toffoli network metrics: qubits=244, size=165216, depth=153854
+
+0:0001.4/Number of Toffoli gates = 165216 
+0:0001.4/Number of qubits = 244
+0:0001.4/Test passed: n s1 s2 p = 48 3 7 15. Results: product decprod decs1 decs2 6 6 3 7
+
+0:0001.4/Running "MontgomeryConstantPrime" circuit test for 3 * 7 mod 15
+0:0001.4/=====================================================
+0:0001.4/Toffoli network metrics: qubits=249, size=172294, depth=160298
+
+0:0001.4/Number of Toffoli gates = 172294 
+0:0001.4/Number of qubits = 249
+0:0001.5/Toffoli network metrics: qubits=249, size=172294, depth=160298
+
+0:0001.5/Number of Toffoli gates = 172294 
+0:0001.5/Number of qubits = 249
+0:0001.5/Toffoli network metrics: qubits=249, size=172294, depth=160298
+
+0:0001.5/Number of Toffoli gates = 172294 
+0:0001.5/Number of qubits = 249
+0:0001.5/Toffoli network metrics: qubits=249, size=172294, depth=160298
+
+0:0001.5/Number of Toffoli gates = 172294 
+0:0001.5/Number of qubits = 249
+0:0001.5/Test passed: n s1 s2 p = 49 3 7 15. Results: product decprod decs1 decs2 3 9 9 11
+
+0:0001.5/Running "MontgomeryConstantPrime" circuit test for 3 * 7 mod 15
+0:0001.5/=====================================================
+0:0001.5/... compiling MB=     226 cache(15302271,16) GC:1592
+0:0001.5/Toffoli network metrics: qubits=254, size=179528, depth=167090
+
+0:0001.5/Number of Toffoli gates = 179528 
+0:0001.5/Number of qubits = 254
+0:0001.5/Toffoli network metrics: qubits=254, size=179528, depth=167090
+
+0:0001.5/Number of Toffoli gates = 179528 
+0:0001.5/Number of qubits = 254
+0:0001.6/Toffoli network metrics: qubits=254, size=179528, depth=167090
+
+0:0001.6/Number of Toffoli gates = 179528 
+0:0001.6/Number of qubits = 254
+0:0001.6/Toffoli network metrics: qubits=254, size=179528, depth=167090
+
+0:0001.6/Number of Toffoli gates = 179528 
+0:0001.6/Number of qubits = 254
+0:0001.6/Test passed: n s1 s2 p = 50 3 7 15. Results: product decprod decs1 decs2 9 6 12 13
+
+0:0001.6/Running "MontgomeryConstantPrime" circuit test for 3 * 7 mod 15
+0:0001.6/=====================================================
+0:0001.6/Toffoli network metrics: qubits=259, size=186910, depth=173810
+
+0:0001.6/Number of Toffoli gates = 186910 
+0:0001.6/Number of qubits = 259
+0:0001.6/Toffoli network metrics: qubits=259, size=186910, depth=173810
+
+0:0001.6/Number of Toffoli gates = 186910 
+0:0001.6/Number of qubits = 259
+0:0001.7/Toffoli network metrics: qubits=259, size=186910, depth=173810
+
+0:0001.7/Number of Toffoli gates = 186910 
+0:0001.7/Number of qubits = 259
+0:0001.7/Toffoli network metrics: qubits=259, size=186910, depth=173810
+
+0:0001.7/Number of Toffoli gates = 186910 
+0:0001.7/Number of qubits = 259
+0:0001.7/Test passed: n s1 s2 p = 51 3 7 15. Results: product decprod decs1 decs2 12 9 6 14
+
+0:0001.7/Running "MontgomeryConstantPrime" circuit test for 3 * 7 mod 15
+0:0001.7/=====================================================
+0:0001.7/Toffoli network metrics: qubits=264, size=194440, depth=180774
+
+0:0001.7/Number of Toffoli gates = 194440 
+0:0001.7/Number of qubits = 264
+0:0001.8/Toffoli network metrics: qubits=264, size=194440, depth=180774
+
+0:0001.8/Number of Toffoli gates = 194440 
+0:0001.8/Number of qubits = 264
+0:0001.8/Toffoli network metrics: qubits=264, size=194440, depth=180774
+
+0:0001.8/Number of Toffoli gates = 194440 
+0:0001.8/Number of qubits = 264
+0:0001.8/Toffoli network metrics: qubits=264, size=194440, depth=180774
+
+0:0001.8/Number of Toffoli gates = 194440 
+0:0001.8/Number of qubits = 264
+0:0001.8/Test passed: n s1 s2 p = 52 3 7 15. Results: product decprod decs1 decs2 6 6 3 7
+
+0:0001.8/Running "MontgomeryConstantPrime" circuit test for 3 * 7 mod 15
+0:0001.8/=====================================================
+0:0001.8/Toffoli network metrics: qubits=269, size=202118, depth=187872
+
+0:0001.8/Number of Toffoli gates = 202118 
+0:0001.8/Number of qubits = 269
+0:0001.9/Toffoli network metrics: qubits=269, size=202118, depth=187872
+
+0:0001.9/Number of Toffoli gates = 202118 
+0:0001.9/Number of qubits = 269
+0:0001.9/Toffoli network metrics: qubits=269, size=202118, depth=187872
+
+0:0001.9/Number of Toffoli gates = 202118 
+0:0001.9/Number of qubits = 269
+0:0001.9/Toffoli network metrics: qubits=269, size=202118, depth=187872
+
+0:0001.9/Number of Toffoli gates = 202118 
+0:0001.9/Number of qubits = 269
+0:0001.9/Test passed: n s1 s2 p = 53 3 7 15. Results: product decprod decs1 decs2 3 9 9 11
+
+0:0001.9/Running "MontgomeryConstantPrime" circuit test for 3 * 7 mod 15
+0:0001.9/=====================================================
+0:0002.0/Toffoli network metrics: qubits=274, size=209944, depth=195330
+
+0:0002.0/Number of Toffoli gates = 209944 
+0:0002.0/Number of qubits = 274
+0:0002.0/Toffoli network metrics: qubits=274, size=209944, depth=195330
+
+0:0002.0/Number of Toffoli gates = 209944 
+0:0002.0/Number of qubits = 274
+0:0002.0/... compiling MB=     119 cache(20435788,16) GC:1639
+0:0002.0/Toffoli network metrics: qubits=274, size=209944, depth=195330
+
+0:0002.0/Number of Toffoli gates = 209944 
+0:0002.0/Number of qubits = 274
+0:0002.0/Toffoli network metrics: qubits=274, size=209944, depth=195330
+
+0:0002.0/Number of Toffoli gates = 209944 
+0:0002.0/Number of qubits = 274
+0:0002.0/Test passed: n s1 s2 p = 54 3 7 15. Results: product decprod decs1 decs2 9 6 12 13
+
+0:0002.0/Running "MontgomeryConstantPrime" circuit test for 3 * 7 mod 15
+0:0002.0/=====================================================
+0:0002.1/Toffoli network metrics: qubits=279, size=217918, depth=202584
+
+0:0002.1/Number of Toffoli gates = 217918 
+0:0002.1/Number of qubits = 279
+0:0002.1/Toffoli network metrics: qubits=279, size=217918, depth=202584
+
+0:0002.1/Number of Toffoli gates = 217918 
+0:0002.1/Number of qubits = 279
+0:0002.1/Toffoli network metrics: qubits=279, size=217918, depth=202584
+
+0:0002.1/Number of Toffoli gates = 217918 
+0:0002.1/Number of qubits = 279
+0:0002.2/Toffoli network metrics: qubits=279, size=217918, depth=202584
+
+0:0002.2/Number of Toffoli gates = 217918 
+0:0002.2/Number of qubits = 279
+0:0002.2/Test passed: n s1 s2 p = 55 3 7 15. Results: product decprod decs1 decs2 12 9 6 14
+
+0:0002.2/Running "MontgomeryConstantPrime" circuit test for 3 * 7 mod 15
+0:0002.2/=====================================================
+0:0002.2/Toffoli network metrics: qubits=284, size=226040, depth=210090
+
+0:0002.2/Number of Toffoli gates = 226040 
+0:0002.2/Number of qubits = 284
+0:0002.2/Toffoli network metrics: qubits=284, size=226040, depth=210090
+
+0:0002.2/Number of Toffoli gates = 226040 
+0:0002.2/Number of qubits = 284
+0:0002.3/Toffoli network metrics: qubits=284, size=226040, depth=210090
+
+0:0002.3/Number of Toffoli gates = 226040 
+0:0002.3/Number of qubits = 284
+0:0002.3/Toffoli network metrics: qubits=284, size=226040, depth=210090
+
+0:0002.3/Number of Toffoli gates = 226040 
+0:0002.3/Number of qubits = 284
+0:0002.3/Test passed: n s1 s2 p = 56 3 7 15. Results: product decprod decs1 decs2 6 6 3 7
+
+0:0002.3/Running "MontgomeryConstantPrime" circuit test for 3 * 7 mod 15
+0:0002.3/=====================================================
+0:0002.3/Toffoli network metrics: qubits=289, size=234310, depth=217612
+
+0:0002.3/Number of Toffoli gates = 234310 
+0:0002.3/Number of qubits = 289
+0:0002.4/Toffoli network metrics: qubits=289, size=234310, depth=217612
+
+0:0002.4/Number of Toffoli gates = 234310 
+0:0002.4/Number of qubits = 289
+0:0002.4/Toffoli network metrics: qubits=289, size=234310, depth=217612
+
+0:0002.4/Number of Toffoli gates = 234310 
+0:0002.4/Number of qubits = 289
+0:0002.4/Toffoli network metrics: qubits=289, size=234310, depth=217612
+
+0:0002.4/Number of Toffoli gates = 234310 
+0:0002.4/Number of qubits = 289
+0:0002.4/Test passed: n s1 s2 p = 57 3 7 15. Results: product decprod decs1 decs2 3 9 9 11
+
+0:0002.4/Running "MontgomeryConstantPrime" circuit test for 3 * 7 mod 15
+0:0002.4/=====================================================
+0:0002.4/Toffoli network metrics: qubits=294, size=242728, depth=225506
+
+0:0002.4/Number of Toffoli gates = 242728 
+0:0002.4/Number of qubits = 294
+0:0002.5/Toffoli network metrics: qubits=294, size=242728, depth=225506
+
+0:0002.5/Number of Toffoli gates = 242728 
+0:0002.5/Number of qubits = 294
+0:0002.5/Toffoli network metrics: qubits=294, size=242728, depth=225506
+
+0:0002.5/Number of Toffoli gates = 242728 
+0:0002.5/Number of qubits = 294
+0:0002.5/... compiling MB=     192 cache(25652922,16) GC:1727
+0:0002.5/Toffoli network metrics: qubits=294, size=242728, depth=225506
+
+0:0002.5/Number of Toffoli gates = 242728 
+0:0002.5/Number of qubits = 294
+0:0002.5/Test passed: n s1 s2 p = 58 3 7 15. Results: product decprod decs1 decs2 9 6 12 13
+
+0:0002.5/Running "MontgomeryConstantPrime" circuit test for 3 * 7 mod 15
+0:0002.5/=====================================================
+0:0002.6/Toffoli network metrics: qubits=299, size=251294, depth=233416
+
+0:0002.6/Number of Toffoli gates = 251294 
+0:0002.6/Number of qubits = 299
+0:0002.6/Toffoli network metrics: qubits=299, size=251294, depth=233416
+
+0:0002.6/Number of Toffoli gates = 251294 
+0:0002.6/Number of qubits = 299
+0:0002.6/Toffoli network metrics: qubits=299, size=251294, depth=233416
+
+0:0002.6/Number of Toffoli gates = 251294 
+0:0002.6/Number of qubits = 299
+0:0002.7/Toffoli network metrics: qubits=299, size=251294, depth=233416
+
+0:0002.7/Number of Toffoli gates = 251294 
+0:0002.7/Number of qubits = 299
+0:0002.7/Test passed: n s1 s2 p = 59 3 7 15. Results: product decprod decs1 decs2 12 9 6 14
+
+0:0002.7/Running "MontgomeryConstantPrime" circuit test for 3 * 7 mod 15
+0:0002.7/=====================================================
+0:0002.7/Toffoli network metrics: qubits=304, size=260008, depth=241590
+
+0:0002.7/Number of Toffoli gates = 260008 
+0:0002.7/Number of qubits = 304
+0:0002.8/Toffoli network metrics: qubits=304, size=260008, depth=241590
+
+0:0002.8/Number of Toffoli gates = 260008 
+0:0002.8/Number of qubits = 304
+0:0002.8/Toffoli network metrics: qubits=304, size=260008, depth=241590
+
+0:0002.8/Number of Toffoli gates = 260008 
+0:0002.8/Number of qubits = 304
+0:0002.8/Toffoli network metrics: qubits=304, size=260008, depth=241590
+
+0:0002.8/Number of Toffoli gates = 260008 
+0:0002.8/Number of qubits = 304
+0:0002.8/Test passed: n s1 s2 p = 60 3 7 15. Results: product decprod decs1 decs2 6 6 3 7
+
+0:0002.8/Running "MontgomeryConstantPrime" circuit test for 3 * 7 mod 15
+0:0002.8/=====================================================
