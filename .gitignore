@@ -1,0 +1,27 @@
+# Git ignore file for the Solid project
+
+# Build artifacts
+bin/
+obj/
+Documentation/Help/
+packages/
+*.obj
+*.dll
+*.pdb
+*.exe
+*.chm
+*.html
+
+# test outputs
+TestResults/
+*.qxe
+
+# Random VS files
+*.suo
+*.vssscc
+*.vspscc
+UpgradeLog.htm
+
+# Random non-solution files
+~$Solid.docx
+.vscode
