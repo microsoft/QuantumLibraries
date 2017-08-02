@@ -1,8 +1,0 @@
-C:\Users\martinro\Source\Repos\QCordic\QuantumMontgomery\Pebbling\bin\Release\Pebbling.exe.config
-C:\Users\martinro\Source\Repos\QCordic\QuantumMontgomery\Pebbling\bin\Release\Pebbling.XML
-C:\Users\martinro\Source\Repos\QCordic\QuantumMontgomery\Pebbling\bin\Release\Pebbling.exe
-C:\Users\martinro\Source\Repos\QCordic\QuantumMontgomery\Pebbling\bin\Release\Pebbling.pdb
-C:\Users\martinro\Source\Repos\QCordic\QuantumMontgomery\Pebbling\bin\Release\FSharp.Core.dll
-C:\Users\martinro\Source\Repos\QCordic\QuantumMontgomery\Pebbling\bin\Release\FSharp.Core.xml
-C:\Users\martinro\Source\Repos\QCordic\QuantumMontgomery\Pebbling\obj\Release\Pebbling.exe
-C:\Users\martinro\Source\Repos\QCordic\QuantumMontgomery\Pebbling\obj\Release\Pebbling.pdb
