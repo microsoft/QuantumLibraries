@@ -23,6 +23,9 @@ This repo contains quantum circuit generator libraries for several intended targ
   - Other signal transforms (DCTs, DSTs, wavelets)
 - Data types (LIQUi|>): 
   - circuits to implement more advanced quantum data types such as sets
+- Patterns: 
+  - basic algorithmic patterns, including phase estimation (PE), amplitude amplification (AA), amplitude estimation (AE)
+    oblivious amplitude estimation (OAA), quantum rejection sampling (QRS), linear combination of unitaries (LCU)
 
 #Build and Test
 To build the VS project libs, go into the subfolder for each lib, open the .sln file and build the solution. Ideally, you want to build this with Target F# runtim (at least) F# 4.0 (FSharp.Core, 4.4.0.0) and Target Framework 4.6. 
