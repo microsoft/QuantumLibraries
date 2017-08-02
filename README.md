@@ -1,5 +1,5 @@
-Library development for LIQUi|> and Solid
-=========================================
+Library development for LIQUi|>, Solid, and Qb
+==============================================
 
 #Introduction 
 This repo contains quantum circuit generator libraries for several intended target uses. Currently supported are: 
