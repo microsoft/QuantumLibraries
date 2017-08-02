@@ -24,7 +24,7 @@ This repo contains quantum circuit generator libraries for several intended targ
 - Data types (LIQUi|>): 
   - circuits to implement more advanced quantum data types such as sets
 - Patterns: 
-  - basic algorithmic patterns, including phase estimation (PE), amplitude amplification (AA), amplitude estimation (AE)
+  - basic algorithmic patterns, including phase estimation (PE), amplitude amplification (AA), amplitude estimation (AE),
     oblivious amplitude estimation (OAA), quantum rejection sampling (QRS), linear combination of unitaries (LCU)
 
 #Build and Test
