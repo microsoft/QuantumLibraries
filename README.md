@@ -1,8 +1,8 @@
-Library development for LIQUi|>, Solid, and Qb
-==============================================
+Library and samples LIQUi|>, Solid, and Qb
+==========================================
 
 #Introduction 
-This repo contains quantum circuit generator libraries for several intended target uses. Currently supported are: 
+This repo contains quantum circuit generator libraries and samples for several intended target uses. Currently supported LIQUi|> libraries are: 
 - Basic circuits (LIQUi|>): 
   - basic tools for Toffoli gates (simulator, depth calculation, metrics)
   - multiply controlled gates
@@ -23,7 +23,7 @@ This repo contains quantum circuit generator libraries for several intended targ
   - Other signal transforms (DCTs, DSTs, wavelets)
 - Data types (LIQUi|>): 
   - circuits to implement more advanced quantum data types such as sets
-- Patterns: 
+- Patterns: (to be implemented)
   - basic algorithmic patterns, including phase estimation (PE), amplitude amplification (AA), amplitude estimation (AE),
     oblivious amplitude estimation (OAA), quantum rejection sampling (QRS), linear combination of unitaries (LCU)
 
