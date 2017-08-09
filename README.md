@@ -1,8 +1,48 @@
-Library and samples LIQUi|>, Solid, and Qb
-==========================================
+Library and samples in LIQUi|>, Solid, and Qb
+=============================================
 
-#Introduction 
-This repo contains quantum circuit generator libraries and samples for several intended target uses. Currently supported LIQUi|> libraries are: 
+#Qb libs and samples
+This repo contains Qb libraries and samples. The following are targets for December 2017: 
+
+Phase Estimation library
+Amplitude Estimation library
+Basic arithmetic library  
+
+Scenarios/Samples:
+Shor’s algorithm
+              End-to-end
+              Exact version TBD
+              Calls Phase estimation and basic arithmetic library
+
+Hamiltonian simulation
+              End-to-end
+              Trotter based.  Trotterization can be done inline (not in a library).
+              Calls Amplitude estimation and phase estimation libraries
+
+“Nielsen and Chuang” tutorial samples
+              Teleport
+                             EPR pair
+              Superdense coding
+              QFT as small code snippet
+              Grover’s algorithm
+                             Hard coded oracle example
+              Deutsch-Jozsa algorithm (for some hard coded oracle function f)
+              Hidden shift algorithm (for some hard coded oracle function f)
+              Basic phase estimation (to lead up to Shor and Ham. Sim.)
+              Basic error correction
+              Circuit identities
+                             Toffoli via Cliff + T
+                             Phase Toffoli via Cliff + T
+                             Multi-target CNOTs
+                             Measuring an operator 
+                             RUS circuit example
+              
+
+
+
+#LIQUi|> libs  
+This repo also contains LIQUi|> quantum circuit generator libraries and samples for several intended target uses that 
+extend the libraries already built-in to LIQi|>. These libraries are the following:
 - Basic circuits (LIQUi|>): 
   - basic tools for Toffoli gates (simulator, depth calculation, metrics)
   - multiply controlled gates
