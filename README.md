@@ -14,7 +14,7 @@ This repo contains Qb libraries and samples. The following are targets for Decem
     - calls Basic Arithmetic library
   - Hamiltonian simulation
     - Trotter based.  
-    - calls Phase Estimation
+    - calls Phase Estimation 
     - calls Basic Arithmetic library
   - “Nielsen and Chuang” tutorial samples
     - Teleport
