@@ -21,11 +21,9 @@ Hamiltonian simulation
 
 “Nielsen and Chuang” tutorial samples
               Teleport
-                             EPR pair
               Superdense coding
-              QFT as small code snippet
-              Grover’s algorithm
-                             Hard coded oracle example
+              QFT
+              Grover’s algorithm (for some hard coded oracle function f)
               Deutsch-Jozsa algorithm (for some hard coded oracle function f)
               Hidden shift algorithm (for some hard coded oracle function f)
               Basic phase estimation (to lead up to Shor and Ham. Sim.)
