@@ -3,18 +3,19 @@ Library and samples in LIQUi|>, Solid, and Qb
 
 #Qb libs and samples
 This repo contains Qb libraries and samples. The following are targets for December 2017: 
-
 - Libraries
   - Phase Estimation library
   - Amplitude Estimation library
   - Basic Arithmetic library  
-
 - Scenarios/Samples:
   -Shor’s algorithm
     - rotation based
-    - calls Phase Estimation and Basic Arithmetic library
+    - calls Phase Estimation
+    - calls Basic Arithmetic library
   - Hamiltonian simulation
     - Trotter based.  
+    - calls Phase Estimation
+    - calls Basic Arithmetic library
   - “Nielsen and Chuang” tutorial samples
     - Teleport
     - Superdense coding
