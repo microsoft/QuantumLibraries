@@ -3,34 +3,36 @@ Library and samples in LIQUi|>, Solid, and Qb
 
 #Qb libs and samples
 This repo contains Qb libraries and samples. The following are targets for December 2017: 
-- Libraries
-  - Phase Estimation library
+Libraries
+- Phase Estimation library
   - Amplitude Estimation library
   - Basic Arithmetic library  
-- Scenarios/Samples:
-  -Shor’s algorithm
-    - rotation based
-    - calls Phase Estimation
-    - calls Basic Arithmetic library
-  - Hamiltonian simulation
-    - Trotter based.  
-    - calls Phase Estimation 
-    - calls Basic Arithmetic library
-  - “Nielsen and Chuang” tutorial samples
-    - Teleport
-    - Superdense coding
-    - QFT (small code snippet)
-    - Grover’s algorithm (for some hard coded oracle function f)
-    - Deutsch-Jozsa algorithm (for some hard coded oracle function f)
-    - Hidden shift algorithm (for some hard coded oracle function f)
-    - Basic phase estimation (to lead up to Shor and Ham. Sim.)
-    - Basic error correction
-    - RUS circuit example
-    - Circuit identities
-      - Toffoli via Cliff + T
-      - Phase Toffoli via Cliff + T
-      - Multi-target CNOTs
-      - Measuring an operator 
+
+Scenarios/Samples:
+- Shor’s algorithm
+  - rotation based
+  - calls Phase Estimation
+  - calls Basic Arithmetic library
+- Hamiltonian simulation
+  - Trotter based.  
+  - calls Phase Estimation 
+  - calls Basic Arithmetic library
+- “Nielsen and Chuang” tutorial samples
+  - Teleport
+  - Superdense coding
+  - QFT (small code snippet)
+  - Grover’s algorithm (for some hard coded oracle function f)
+  - Deutsch-Jozsa algorithm (for some hard coded oracle function f)
+  - Hidden shift algorithm (for some hard coded oracle function f)
+  - Basic phase estimation (to lead up to Shor and Ham. Sim.)
+  - Basic error correction
+  - RUS circuit example
+  - Circuit identities
+    - Toffoli via Cliff + T
+    - Phase Toffoli via Cliff + T
+    - Multi-target NOTs
+    - Multi-controlled NOTs
+    - Measuring an operator 
               
 #LIQUi|> libs  
 This repo also contains LIQUi|> quantum circuit generator libraries and samples for several intended target uses that 
