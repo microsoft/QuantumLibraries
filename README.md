@@ -1,7 +1,7 @@
 Library and samples in LIQUi|>, Solid, and Qb
 
-#Qb libs and samples
---------------------
+Qb libs and samples
+-------------------
 
 This repo contains Qb libraries and samples. The following are targets for December 2017: 
 Libraries
