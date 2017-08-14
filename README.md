@@ -10,6 +10,7 @@ Libraries:
 - Phase Estimation library
 - Amplitude Estimation library
 - Basic Arithmetic library  
+
 Algorithms:
 - Shor’s algorithm
   - rotation based
@@ -19,6 +20,7 @@ Algorithms:
   - Trotter based.  
   - calls Phase Estimation 
   - calls Basic Arithmetic library
+
 “Nielsen and Chuang” tutorial samples:
   - Teleport
   - Superdense coding
