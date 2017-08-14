@@ -5,11 +5,11 @@ Qb libs and samples
 -------------------
 
 This repo contains Qb libraries, algorithms, and samples. The following are targets for December 2017: 
+
 Libraries:
 - Phase Estimation library
 - Amplitude Estimation library
 - Basic Arithmetic library  
-
 Algorithms:
 - Shor’s algorithm
   - rotation based
@@ -19,7 +19,6 @@ Algorithms:
   - Trotter based.  
   - calls Phase Estimation 
   - calls Basic Arithmetic library
-
 “Nielsen and Chuang” tutorial samples:
   - Teleport
   - Superdense coding
