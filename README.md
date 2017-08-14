@@ -36,8 +36,8 @@ Scenarios/Samples:
     - Multi-controlled NOTs
     - Measuring an operator 
               
-#LIQUi|> libs  
--------------
+LIQUi|> libs  
+------------
 
 This repo also contains LIQUi|> quantum circuit generator libraries and samples for several intended target uses that 
 extend the libraries already built-in to LIQi|>. These libraries are the following:
