@@ -7,8 +7,8 @@ Qb libs and samples
 This repo contains Qb libraries and samples. The following are targets for December 2017: 
 Libraries
 - Phase Estimation library
-  - Amplitude Estimation library
-  - Basic Arithmetic library  
+- Amplitude Estimation library
+- Basic Arithmetic library  
 
 Scenarios/Samples:
 - Shor’s algorithm
