@@ -1,7 +1,7 @@
 Library and samples in LIQUi|>, Solid, and Qb
 =============================================
 
-<h1>Qb libs and samples</h1>
+#Qb libs and samples
 This repo contains Qb libraries and samples. The following are targets for December 2017: 
 Libraries
 - Phase Estimation library
