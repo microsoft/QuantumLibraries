@@ -1,7 +1,8 @@
 Library and samples in LIQUi|>, Solid, and Qb
----------------------------------------------
 
 #Qb libs and samples
+--------------------
+
 This repo contains Qb libraries and samples. The following are targets for December 2017: 
 Libraries
 - Phase Estimation library
@@ -35,6 +36,8 @@ Scenarios/Samples:
     - Measuring an operator 
               
 #LIQUi|> libs  
+-------------
+
 This repo also contains LIQUi|> quantum circuit generator libraries and samples for several intended target uses that 
 extend the libraries already built-in to LIQi|>. These libraries are the following:
 - Basic circuits (LIQUi|>): 
