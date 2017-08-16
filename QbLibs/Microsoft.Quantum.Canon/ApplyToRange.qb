@@ -1,0 +1,12 @@
+// TODO: what does C♯/LINQ call the (0, arr[0]), (1, arr[1]), ... IEnumerator?
+//       we might should use same naming convention here.
+operation () ApplyToRange(((Int, Qubit) => ()) singleQubitOperation, Qubit[] register) {
+    body {
+        for (idxQubit in 0..length(register) - 1) {
+            singleQubitOperation(idxQubit, register[idxQubit])
+        }
+    }
+
+    adjoint auto
+    controlled auto
+}

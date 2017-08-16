@@ -1,0 +1,22 @@
+operation ((Qubit[]) => ()) OperationPow(((Qubit[]) => ()) oracle, Int power) {
+    body {
+        return OperationPowImpl(oracle, power, _)
+    }
+}
+
+operation () OperationPowImpl(((Qubit[]) => ()) oracle, Int power, Qubit[] target) {
+    body {
+        for (idxApplication in 0..power - 1) {
+            oracle(target)
+        }
+    }
+}
+
+// TODO: remove this. Included at the moment just to ensure correct parsing under
+//       syntax proposed in Solid#361.
+operation () Example(Qubit[] target) {
+    body {
+        let ((Qubit[]) => ()) powered = OperationPow(U, 12)
+        powered(target)
+    }
+}

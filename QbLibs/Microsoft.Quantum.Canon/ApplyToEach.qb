@@ -1,0 +1,10 @@
+operation () ApplyToEach(((Qubit) => ()) singleQubitOperation, Qubit[] register) {
+    body {
+        for (idxQubit in 0..length(register) - 1) {
+            singleQubitOperation(register[idxQubit])
+        }
+    }
+
+    adjoint auto
+    controlled auto
+}

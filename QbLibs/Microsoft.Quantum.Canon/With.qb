@@ -1,0 +1,13 @@
+operation () With(((Qubit[]) => ()) outerOperation, ((Qubit[]) => ()) innerOperation, Qubit[] target) {
+    body {  
+        outerOperation(target)
+        innerOperation(target)
+        adjoint outerOperation(target)
+    }
+
+    controlled(controlRegister) {
+        outerOperation(target)
+        controlled(controlRegister) innerOperation(target)
+        adjoint outerOperation(target)
+    }
+}

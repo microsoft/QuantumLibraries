@@ -1,0 +1,22 @@
+/// <summary>
+/// Increments a big-endian register representing an integer.
+/// </summary>
+/// <param name="register">Register to be incremented.</param>
+operation () Increment(BigEndian register) {
+    body {
+
+        // We don't actually care about keeping the UDT label once the
+        // typing constraint has been enforced by the compiler.
+        // Rather, we used the UDT to enforce that register[0]
+        // should be interpreted as the most significant bit of
+        // the register.
+        let Qubit[] bareRegister = register
+        // The following depends on operations as expressions.
+        // See Solid #365 for discussion.
+        // FIXME: need to turn QFT to a ((Qubit[]) => ()) operation
+        //        unless co- and contravariance applies to operation arguments.
+        With(QFT, ApplyToRange(R1Frac(_, length(register), _), _), bareRegister)
+        
+    }
+
+}
