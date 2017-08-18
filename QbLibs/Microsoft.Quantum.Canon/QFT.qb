@@ -12,7 +12,7 @@
 /// <remarks> AQFT requires Z-rotation gates of the form 2π/2ᵏ and Hadamard gates. The 
 /// input is assumed to be encoded in big endian, the output is return in little endian. 
 /// The approximation parameter a determines the pruning level of the Z-rotations, i.e., 
-/// a ∈ {0..n} and all Z-rotations 2π/2ᵏ where k≧a are removed from the QFT circuit. It
+/// a ∈ {0..n} and all Z-rotations 2π/2ᵏ where k>a are removed from the QFT circuit. It
 /// is known that for k >= log₂(n)+log₂(1/ε)+3 one can bound ||QFT-AQFT||<ε. 
 /// [ M. Roetteler, Th. Beth, Appl. Algebra Eng. Commun. Comput. 19(3): 177-193 (2008) ]
 /// [ D. Coppersmith, https://arxiv.org/abs/quant-ph/0201067 ]
