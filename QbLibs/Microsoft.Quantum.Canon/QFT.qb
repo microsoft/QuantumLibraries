@@ -52,6 +52,6 @@ operation () ApproximateQFT ( Int a, LittleEndian qs )
 operation () QFT ( LittleEndian qs ) 
 {
 	body {
-		AQFT(qs, length(qs))		
+		AQFT(length(qs), qs)
 	}
 }
