@@ -1,32 +1,8 @@
 // namespace Microsoft.Research.Qflat.CliffordTRzMachine
 // FIXME: uncomment when the namespace syntax is clarified
 
-/// <summary>
-/// Apply the Quantum Fourier Transform (QFT) to a quantum register. 
-/// </summary>
-/// </param name = "qs"> Qubit[] = quantum register. </param>
-/// <remarks> QFT requires Z-rotation gates of the form 2π/2ᵏ and Hadamard gates. The 
-/// input is assumed to be encoded in little endian, the output is returned in little endian. 
-/// <remarks>
-operation () QFT ( Qubit[] qs ) =
-{
-	body {
-		let n = length(qs)
-		if ( n == 0 )
-		{ 
-			fail 'function register qs requires at least 1 qubit.' 
-		}
-		for (i in 0..(n/2-1)) { // remove this loop for big endian -> little endian
-			SWAP (i, n-i-1)
-		}
-    	for (i in 0..n-1) {
-    		for (j in 0..(i-1)) {
-    			controlled([qs[i]]) RFrac(ZPauli, 1, 2^(i-j), qs[j])
-    			H(qs[i])
-			}
-		}
-	}
-}
+// open Endianness
+// FIXME: uncomment when the syntax to open modules is clarifiedn
 
 /// <summary>
 /// Apply the Approximate Quantum Fourier Transform (AQFT) to a quantum register. 
@@ -41,11 +17,10 @@ operation () QFT ( Qubit[] qs ) =
 /// [ M. Roetteler, Th. Beth, Appl. Algebra Eng. Commun. Comput. 19(3): 177-193 (2008) ]
 /// [ D. Coppersmith, https://arxiv.org/abs/quant-ph/0201067 ]
 /// <remarks>
-
-operation () ApproximateQFT ( Qubit[] qs, Int a ) =
+operation () ApproximateQFT ( Int a, LittleEndian qs ) 
 {
 	body {
-		let n = length(qs)
+		let Int n = length(qs)
 		if ( n == 0 )
 		{ 
 			fail 'function register qs requires at least 1 qubit.' 
@@ -54,17 +29,29 @@ operation () ApproximateQFT ( Qubit[] qs, Int a ) =
 		{
 			fail 'approximation parameter a must be in {0..n}'
 		}
-    	for (i in 0..(n/2-1)) { // remove this loop for big endian -> little endian
-		    SWAP (i, n-i-1)		    
-		}
-		for (i in 0..n-1) {
+    	Endianness.ReverseRegister(qs) // apply the bit reversal permutation
+    	for (i in 0..n-1) {
     		for (j in 0..(i-1)) {
     			if (i-j) < a ) 
 				{
-					controlled([qs[i]]) RFrac(ZPauli, 1, 2^(i-j), qs[j])	
-				}
-    			H(qs[i])
+					controlled([qs[i]]) R1Frac(ZPauli, 1, 2^(i-j), qs[j])	
+				}    			
 			}
+			H(qs[i])
 		}
+	}
+}
+
+/// <summary>
+/// Apply the Quantum Fourier Transform (QFT) to a quantum register. 
+/// </summary>
+/// </param name = "qs"> LittleEndian = quantum register. </param>
+/// <remarks> QFT requires Z-rotation gates of the form 2π/2ᵏ and Hadamard gates. The 
+/// input is assumed to be encoded in little endian, the output is returned in little endian. 
+/// <remarks>
+operation () QFT ( LittleEndian qs ) 
+{
+	body {
+		AQFT(qs, length(qs))		
 	}
 }
