@@ -1,0 +1,118 @@
+// Design notes:
+//     The APIs for the iterative and quantum phase estimation algorithms are
+//     parameterized in terms of discrete-time oracles as defined in the OracleTypes.qb
+//     source file. Constructing such oracle definitions can be done with operations
+//     acting on other operations, making heavy use of partial application internally.
+//
+// E.g.:
+//     let DiscreteOracle = OracleToDiscrete(U)
+//     DiscretePhaseEstimationIteration(oracle, pow, theta, eigenstate, control)
+//     let Result datum = Measure(control)
+//
+//     This design then enables providing more efficient implementations of U^m
+//     to be provided by the user for specific U, while providing a sensible
+//     "default" for operations which cannot be fast-forwarded by taking advantage
+//     of their definitions.
+//
+//     Finally, we also ensure that quantum arguments are placed last to follow
+//     standard conventions for partial application. In particular, this allows for
+//     the discrete and continuous phase estimation iterations to be used in
+//     an allocate-op-measure pattern; we may soon want to abstract that away.
+
+/// Performs a single iteration of an iterative (classically-controlled) phase
+/// estimation algorithm.
+/// <param name="oracle">Operation acting on an integer and a register,
+///     such that U^m is applied to the given register, where U is the unitary
+///     whose phase is to be estimated, and where m is the integer power
+///     given to the oracle.</param>
+/// <param name="eigenstate">Register containing an eigenstate of the given oracle.</param>
+/// <param name="power">Number of times to apply the given unitary oracle.</param>
+/// <param name="theta">Angle by which to invert the phase on the control qubit before
+///     acting on the eigenstate.</param>
+operation () DiscretePhaseEstimationIteration(DiscreteOracle oracle, Int power, Double theta, Qubit[] eigenstate, Qubit controlQubit) {
+    // NB: We accept the control qubit as input so that we can allow for this operation
+    //     to subject to the adjoint and control modifiers (that is, such that we do not need
+    //     a return statement, but rather *act* on the given qubits).
+    body {
+        // FIXME: See #459.
+        if ((power < 0)) {
+            fail 'Oracle power cannot be negative.'
+        }
+
+        // Find the actual inversion angle by rescaling with the power of the
+        // oracle.
+        let Double inversionAngle = -(theta * power)
+
+        // Prepare the control qubit.
+        H(controlQubit)
+        Rz(inversionAngle, controlQubit)
+
+        // TODO: should this be
+        //     controlled(oracle)([controlQubit], power, eigenstate),
+        // or
+        //     controlled(oracle(power, _))([controlQubit], eigenstate)?
+        controlled(oracle)([controlQubit], power, eigenstate)
+
+        // Return the control qubit to the appropriate measurement basis.
+        H(controlQubit)
+    }
+
+    adjoint auto
+    controlled auto
+}
+
+operation () ContinuousPhaseEstimationIteration(ContinuousOracle oracle, Double time, Double theta, Qubit[] eigenstate, Qubit controlQubit) {
+    body {
+        // FIXME: See #459.
+        if ((power < 0)) {
+            fail 'Oracle power cannot be negative.'
+        }
+
+        let Double inversionAngle = -(theta * time)
+
+        // Prepare the control qubit.
+        H(controlQubit)
+        Rz(inversionAngle, controlQubit)
+
+        controlled(oracle)([controlQubit], time, eigenstate)
+
+        // Return the control qubit to the appropriate measurement basis.
+        H(controlQubit)
+    }
+
+    adjoint auto
+    controlled auto
+}
+
+
+// NB: we take std.dev instead of variance here to avoid having to take a square root.
+// FIXME: this currently passes a double to the oracle, as is only appropriate for
+//        continuous-time oracles.
+operation (Double) RandomWalkPhaseEstimation(ContinuousOracle oracle, Qubit[] eigenstate, Qubit controlQubit, Double initialMean, Double initialStdDev, Int nMeasurements) {
+    body {
+        // sqrt((e - 1) / e)
+        let Double PREFACTOR = 0.79506009762065011
+        let Double INV_SQRT_E = 0.60653065971263342
+
+        if (nMeasurements == 0) {
+            return initialMean
+        }
+
+        let Double stdDev = initialStdDev * PREFACTOR
+        let Double ωInv = initialMean - stdDev
+        let Double t = 1 / stdDev
+
+        ContinousPhaseEstimationIteration(oracle, eigenstate, controlQubit, t, ωInv)
+        let Result datum = M(controlQubit)
+        if (datum == Zero) {
+            // TODO: double check sign here.
+            return RandomWalkPhaseEstimation(oracle, eigenstate, controlQubit, initialMean - stdDev * INV_SQRT_E, stdDev, nMeasurements - 1)
+        } else {
+            return RandomWalkPhaseEstimation(oracle, eigenstate, controlQubit, initialMean + stdDev * INV_SQRT_E, stdDev, nMeasurements - 1)
+        }
+
+    }
+
+    adjoint none
+    controlled none
+}

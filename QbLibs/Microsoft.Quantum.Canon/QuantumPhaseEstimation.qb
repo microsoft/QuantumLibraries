@@ -1,0 +1,30 @@
+/// <summary>
+///     Performs the quantum phase estimation algorithm for a given oracle U and eigenstate,
+///     reading the phase into a big-endian quantum register.
+/// </summary>
+/// <param name="oracle">An operation implementing U^m for given integer powers m.</param>
+/// <param name="eigenstate">A quantum register representing an eigenstate |φ〉 of U, U|φ〉 =
+///     e^{iφ} |φ〉 for φ ∈ [0, 2π) an unknown phase.</param>
+/// <param name="controlRegister">A big-endian representation integer register that can be used
+///     to control the provided oracle, and that will contain the a representation of φ following
+///     the application of this operation. The controlRegister is assumed to start in the initial
+///     state |00…0〉, where the length of the register indicates the desired precision.</param>
+operation () QuantumPhaseEstimation(DiscreteOracle oracle, Qubit[] eigenstate, BigEndian controlRegister) {
+    body {
+        let Qubit[] bareControlRegister = controlRegister
+        let nQubits = length(bareControlRegister)
+
+        ApplyToEach(H, bareControlRegister)
+
+        for (idxControlQubit in 0..(nQubits - 1)) {
+            let Qubit control = bareControlRegister[idxControlQubit]
+            let Int power = 2 ^ (nQubits - idxControlQubit - 1)
+            controlled(oracle)([control], power, eigenstate)
+        }
+
+        QFT(controlRegister)
+    }
+
+    adjoint auto
+    controlled auto
+}
