@@ -1,23 +1,23 @@
 // namespace Microsoft.Research.Qflat.CliffordTRzMachine
 // FIXME: uncomment when the namespace syntax is clarified
 
-// open Endianness
+// open Microsoft.Quantum.Canon.Endianness
 // FIXME: uncomment when the syntax to open modules is clarifiedn
 
 /// <summary>
 /// Apply the Approximate Quantum Fourier Transform (AQFT) to a quantum register. 
 /// </summary>
-/// </param name = "qs"> Qubit[] = quantum register. </param>
-/// </param name = "a"> Int = approximation parameter. </param>
+/// <param name = "a"> Int = approximation parameter. </param>
+/// <param name = "qs"> Qubit[] = quantum register. </param>
 /// <remarks> AQFT requires Z-rotation gates of the form 2π/2ᵏ and Hadamard gates. The 
-/// input is assumed to be encoded in big endian, the output is return in little endian. 
+/// input is assumed to be encoded in big endian.
 /// The approximation parameter a determines the pruning level of the Z-rotations, i.e., 
 /// a ∈ {0..n} and all Z-rotations 2π/2ᵏ where k>a are removed from the QFT circuit. It
 /// is known that for k >= log₂(n)+log₂(1/ε)+3 one can bound ||QFT-AQFT||<ε. 
 /// [ M. Roetteler, Th. Beth, Appl. Algebra Eng. Commun. Comput. 19(3): 177-193 (2008) ]
 /// [ D. Coppersmith, https://arxiv.org/abs/quant-ph/0201067 ]
 /// <remarks>
-operation () ApproximateQFT ( Int a, LittleEndian qs ) 
+operation () ApproximateQFT ( Int a, BigEndian qs ) 
 {
 	body {
 		let Int n = length(qs)
@@ -29,27 +29,32 @@ operation () ApproximateQFT ( Int a, LittleEndian qs )
 		{
 			fail 'approximation parameter a must be in {0..n}'
 		}
-    	Endianness.ReverseRegister(qs) // apply the bit reversal permutation
     	for (i in 0..n-1) {
     		for (j in 0..(i-1)) {
     			if (i-j) < a ) 
 				{
-					controlled([qs[i]]) R1Frac(ZPauli, 1, 2^(i-j), qs[j])	
+					controlled([qs[i]]) R1Frac(ZPauli, 1, i - j, qs[j])	
 				}    			
 			}
 			H(qs[i])
 		}
+
+		// Apply the bit reversal permutation to the quantum register as
+		// a side effect, such that we enforce the invariants specified
+		// by the BigEndian UDT.
+    	Endianness.SwapReverseRegister(qs) 
 	}
 }
 
 /// <summary>
-/// Apply the Quantum Fourier Transform (QFT) to a quantum register. 
+///     Performs the quantum Fourier transform on an quantum register
+///     register containing an integer in the big-endian representation.
 /// </summary>
-/// </param name = "qs"> LittleEndian = quantum register. </param>
-/// <remarks> QFT requires Z-rotation gates of the form 2π/2ᵏ and Hadamard gates. The 
-/// input is assumed to be encoded in little endian, the output is returned in little endian. 
+/// <param name = "qs">Quantum register on which to perform the QFT.</param>
 /// <remarks>
-operation () QFT ( LittleEndian qs ) 
+///     QFT requires Z-rotation gates of the form 2π/2ᵏ and Hadamard gates.
+/// </remarks>
+operation () QFT ( BigEndian qs ) 
 {
 	body {
 		AQFT(length(qs), qs)

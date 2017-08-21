@@ -1,3 +1,7 @@
+/// <summary>
+///     Reorders the qubits in a register to obtain a new
+///     qubit register.
+/// </summary>
 operation (Qubit[]) ReverseRegister(Qubit[] register) {
     body {
         // FIXME: not currently in spec, but still compiles.
@@ -10,6 +14,22 @@ operation (Qubit[]) ReverseRegister(Qubit[] register) {
 
         return reversed
     }
+
+    adjoint none
+    controlled none
+}
+
+/// <summary>
+///     Uses SWAP gates to reverse the order of the qubits in
+///     a register.
+/// </summary>
+operation () SwapReverseRegister(Qubit[] register) {
+    body {
+        // TODO
+    }
+
+    adjoint self
+    controlled auto
 }
 
 newtype (Qubit[]) LittleEndian

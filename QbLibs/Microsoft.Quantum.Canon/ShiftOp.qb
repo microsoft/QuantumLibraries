@@ -1,0 +1,103 @@
+// Design notes:
+//
+//     We want a single operation that either performs a cyclic shift
+//     or drops a qubit, depending on the value of an argument.
+//     The most natural means of doing so might be to have a Boolean
+//     argument, but that's not currently in the language (see Solid #406).
+//
+//     As a next best thing, we could use global constants to kluge together
+//     an enum-like concept, but that's also not in the language at the moment.
+//
+//     In lieu, we take an Int argument instead, and document the values we
+//     accept.
+
+/// <summary>
+///     Given an operation acting on a little-endian register
+///         |q₀ q₁ … qₙ〉,
+///     returns a new operation acting on the big end–shifted register
+///         |qₙ q₀ q₁ … qₙ₋₁〉,
+///     with qubit qₙ being dropped if the cyclic argument is 0.
+/// </summary>
+/// <param name="cyclic">Specifies if the shift is cyclic (1) or drops
+///     shifted qubits (0).</param>
+/// <param name="op">Operation whose action is to be shifted.</param>
+operation (((LittleEndian) => ())) BigShiftOpLE(Int cyclic, ((LittleEndian) => ()) op) {
+    body {
+        // TODO
+    }
+
+    adjoint auto
+    controlled auto
+}
+
+/// <summary>
+///     Given an operation acting on a little-endian register
+///         |q₀ q₁ … qₙ〉,
+///     returns a new operation acting on the little end–shifted register
+///         |q₁ … qₙ〉,
+///     with qubit q₀ being dropped being dropped if the cyclic argument is 0.
+/// </summary>
+operation (((LittleEndian) => ())) LittleShiftOpLE(Int cyclic, ((LittleEndian) => ()) op) {
+    body {
+        // TODO
+    }
+
+    adjoint auto
+    controlled auto
+}
+
+/// <summary>
+///     Given an operation acting on a little-endian register
+///         |qₙ qₙ₋₁ … q₀〉,
+///     returns a new operation acting on the big end–shifted register
+///         |qₙ₋₁ … q₀〉,
+///     with qubit qₙ being dropped being dropped if the cyclic argument is 0.
+/// </summary>
+operation (((BigEndian) => ())) BigShiftOpBE(Int cyclic, ((BigEndian) => ()) op) {
+    body {
+        // TODO
+    }
+
+    adjoint auto
+    controlled auto
+}
+
+/// <summary>
+///     Given an operation acting on a big-endian register
+///         |qₙ qₙ₋₁ … q₀〉,
+///     returns a new operation acting on the little end–shifted register
+///         |qₙ qₙ₋₁ … q₁〉,
+///     with qubit q₀ being dropped being dropped if the cyclic argument is 0.
+/// </summary>
+operation (((BigEndian) => ())) LittleShiftOpBE(Int cyclic, ((BigEndian) => ()) op) {
+    body {
+        // TODO
+    }
+
+    adjoint auto
+    controlled auto
+}
+
+// Design notes:
+//     We want to expose a signature of the form
+//         ((LittleEndian) => ()) => ((LittleEndian) => ())
+//     for each operation. With partial application, this is easiest to
+//     do by having an "impl" operation of the form
+//         (((LittleEndian) => ()), LittleEndian)
+//     that we partially apply on the second argument.
+//
+//     There are only two shifts (left and right),
+//     but they need to be exposed using both BE and LE types,
+//     each of which has different naming conventions.
+//     Depending on the variance rules in Solid #511, we may need to split
+//     the two "impl" operations into four to remove UDT labels.
+//     For example:
+
+operation () RightShiftOpImpl(Int cyclic, ((LittleEndian) => ()) op, LittleEndian target) {
+    body {
+        // TODO
+    }
+
+    adjoint auto
+    controlled auto
+}
