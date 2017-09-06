@@ -1,0 +1,34 @@
+// namespace Microsoft.Research.Samples
+// FIXME: uncomment when the namespace syntax is clarified
+
+/// <summary>
+/// Superdense coding transfers 2 classical bits by encoding them into 1 qubit, using 1 EPR pair (1e+1q=2c)
+/// </summary>
+/// <param name = "a"> Bool </param>
+/// <param name = "b"> Bool </param>
+/// <remarks> [ Nielsen & Chuang, CUP 2000, Section 2.3 ]
+/// </remarks>
+
+operation (Result, Result) SuperdenseCoding (Bool a, Bool b) {
+    body {
+        // Get a temporary register for the Bell pair
+        let ancillas = allocate qubits[2]
+        
+        // Create a Bell pair between the ancilla qubits
+        H(ancillas[0])
+        CNOT(ancillas[0], ancillas[1])
+
+        // Perform the superdense coding 
+        if a { Z ancillas[0] }
+        if b { X ancillas[0] }
+
+        // Rotate into Bell basis and perform measurement
+        CNOT(ancillas[0], ancillas[1])
+        H(ancillas[0])
+        let Result a_measured = M(ancillas[0])
+        let Result b_measured = M(ancillas[1])
+
+        // Return the result of the measurement
+        return (a_measured, b_measured)
+    }
+}
