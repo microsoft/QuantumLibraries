@@ -7,8 +7,8 @@
 /// <summary>
 /// Apply the Approximate Quantum Fourier Transform (AQFT) to a quantum register. 
 /// </summary>
-/// <param name = "a"> Int = approximation parameter. </param>
-/// <param name = "qs"> Qubit[] = quantum register. </param>
+/// <param name = "a"> approximation parameter. </param>
+/// <param name = "qs"> quantum register. </param>
 /// <remarks> AQFT requires Z-rotation gates of the form 2π/2ᵏ and Hadamard gates. The 
 /// input is assumed to be encoded in big endian.
 /// The approximation parameter a determines the pruning level of the Z-rotations, i.e., 
@@ -50,7 +50,7 @@ operation () ApproximateQFT ( Int a, BigEndian qs )
 ///     Performs the quantum Fourier transform on an quantum register
 ///     register containing an integer in the big-endian representation.
 /// </summary>
-/// <param name = "qs">Quantum register on which to perform the QFT.</param>
+/// <param name = "qs"> Quantum register on which to perform the QFT.</param>
 /// <remarks>
 ///     QFT requires Z-rotation gates of the form 2π/2ᵏ and Hadamard gates.
 /// </remarks>
