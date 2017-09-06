@@ -2,7 +2,7 @@
 // FIXME: uncomment when the namespace syntax is clarified
 
 /// <summary>
-/// Superdense coding transfers 2 classical bits by encoding them into 1 qubit, using 1 EPR pair (1e+1q=2c)
+/// Superdense coding transfers 2 classical bits by encoding them into 1 qubit, using 1 EPR pair ("2c=1q+1e")
 /// </summary>
 /// <param name = "a"> Bool </param>
 /// <param name = "b"> Bool </param>
