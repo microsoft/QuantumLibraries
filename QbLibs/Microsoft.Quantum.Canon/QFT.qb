@@ -16,7 +16,7 @@
 /// is known that for k >= log₂(n)+log₂(1/ε)+3 one can bound ||QFT-AQFT||<ε. 
 /// [ M. Roetteler, Th. Beth, Appl. Algebra Eng. Commun. Comput. 19(3): 177-193 (2008) ]
 /// [ D. Coppersmith, https://arxiv.org/abs/quant-ph/0201067 ]
-/// <remarks>
+/// </remarks>
 operation () ApproximateQFT ( Int a, BigEndian qs ) 
 {
 	body {
