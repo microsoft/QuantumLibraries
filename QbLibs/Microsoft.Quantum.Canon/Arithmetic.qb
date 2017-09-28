@@ -10,9 +10,10 @@
 /// </summary>
 /// <param name = "qs"> quantum register. </param>
 /// <param name = "s"> phase shift. </param>
-operation () DiagonalShift ( Int s, LittleEndian qs ) 
-{
-	// TODO: implement the diagonal shift circuit used in the Beauregard adder
+operation () DiagonalShift ( Int s, LittleEndian qs )  {
+	Body {
+		// TODO: implement the diagonal shift circuit used in the Beauregard adder
+	}
 }
 
 /// <summary>
@@ -20,10 +21,11 @@ operation () DiagonalShift ( Int s, LittleEndian qs )
 /// </summary>
 /// <param name = "qs"> quantum register. </param>
 /// <param name = "inc"> increment. </param>
-operation () IntegerIncrement ( Int inc, LittleEndian qs ) 
-{
-	// TODO: implement the Beauregard adder
-	// basic idea: QFT' DiagonalShift QFT = increment
+operation () IntegerIncrement ( Int inc, LittleEndian qs ) {
+	Body {
+		// TODO: implement the Beauregard adder
+		// basic idea: QFT' DiagonalShift QFT = increment
+	}
 }
 
 /// <summary>
@@ -32,8 +34,9 @@ operation () IntegerIncrement ( Int inc, LittleEndian qs )
 /// <param name = "qs"> quantum register. </param>
 /// <param name = "N"> modulus. </param>
 /// <param name = "inc"> increment. </param>
-operation () ModularIncrement ( Int N, Int inc, LittleEndian qs ) 
-{
-	// TODO: implement the Beauregard modular adder
-	// basic idea: https://arxiv.org/abs/quant-ph/0205095  (Section 2.2)
+operation () ModularIncrement ( Int N, Int inc, LittleEndian qs ) {
+	Body {
+		// TODO: implement the Beauregard modular adder
+		// basic idea: https://arxiv.org/abs/quant-ph/0205095  (Section 2.2)
+	}
 }

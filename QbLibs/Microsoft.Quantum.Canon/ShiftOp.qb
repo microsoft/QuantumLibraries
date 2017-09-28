@@ -1,3 +1,14 @@
+// NB: the following are stubs to allow this file to at least parse, even without
+//     defining the correct action of the operations.
+
+operation () LEStub(LittleEndian target) {
+    Body { }
+}
+
+operation () BEStub(BigEndian target) {
+    Body { }
+}
+
 // Design notes:
 //
 //     We want a single operation that either performs a cyclic shift
@@ -22,12 +33,9 @@
 ///     shifted qubits (0).</param>
 /// <param name="op">Operation whose action is to be shifted.</param>
 operation (((LittleEndian) => ())) BigShiftOpLE(Int cyclic, ((LittleEndian) => ()) op) {
-    body {
-        // TODO
+    Body {
+        return LEStub
     }
-
-    adjoint auto
-    controlled auto
 }
 
 /// <summary>
@@ -38,12 +46,9 @@ operation (((LittleEndian) => ())) BigShiftOpLE(Int cyclic, ((LittleEndian) => (
 ///     with qubit q₀ being dropped being dropped if the cyclic argument is 0.
 /// </summary>
 operation (((LittleEndian) => ())) LittleShiftOpLE(Int cyclic, ((LittleEndian) => ()) op) {
-    body {
-        // TODO
+    Body {
+        return LEStub
     }
-
-    adjoint auto
-    controlled auto
 }
 
 /// <summary>
@@ -54,12 +59,9 @@ operation (((LittleEndian) => ())) LittleShiftOpLE(Int cyclic, ((LittleEndian) =
 ///     with qubit qₙ being dropped being dropped if the cyclic argument is 0.
 /// </summary>
 operation (((BigEndian) => ())) BigShiftOpBE(Int cyclic, ((BigEndian) => ()) op) {
-    body {
-        // TODO
+    Body {
+        return BEStub
     }
-
-    adjoint auto
-    controlled auto
 }
 
 /// <summary>
@@ -70,12 +72,9 @@ operation (((BigEndian) => ())) BigShiftOpBE(Int cyclic, ((BigEndian) => ()) op)
 ///     with qubit q₀ being dropped being dropped if the cyclic argument is 0.
 /// </summary>
 operation (((BigEndian) => ())) LittleShiftOpBE(Int cyclic, ((BigEndian) => ()) op) {
-    body {
-        // TODO
+    Body {
+        return BEStub
     }
-
-    adjoint auto
-    controlled auto
 }
 
 // Design notes:
@@ -94,10 +93,7 @@ operation (((BigEndian) => ())) LittleShiftOpBE(Int cyclic, ((BigEndian) => ()) 
 //     For example:
 
 operation () RightShiftOpImpl(Int cyclic, ((LittleEndian) => ()) op, LittleEndian target) {
-    body {
+    Body {
         // TODO
     }
-
-    adjoint auto
-    controlled auto
 }

@@ -3,20 +3,16 @@
 ///     qubit register.
 /// </summary>
 operation (Qubit[]) ReverseRegister(Qubit[] register) {
-    body {
-        // FIXME: not currently in spec, but still compiles.
-        new Qubit[length(register)] reversed
+    Body {
+        mutable reversed = new Qubit[Length(register)]
 
-        for (idxQubit in 0..length(register) - 1) {
-            let Qubit thisQubit = register[idxQubit]
-            set reversed[idxQubit] <- thisQubit
+        for (idxQubit in 0..Length(register) - 1) {
+            let thisQubit = register[Length(register) - idxQubit + 1]
+            set reversed[idxQubit] = thisQubit
         }
 
         return reversed
     }
-
-    adjoint none
-    controlled none
 }
 
 /// <summary>
@@ -24,12 +20,13 @@ operation (Qubit[]) ReverseRegister(Qubit[] register) {
 ///     a register.
 /// </summary>
 operation () SwapReverseRegister(Qubit[] register) {
-    body {
+    Body {
         // TODO
     }
 
-    adjoint self
-    controlled auto
+    Adjoint self
+    Controlled auto
+    Controlled Adjoint auto
 }
 
 newtype (Qubit[]) LittleEndian
@@ -39,32 +36,18 @@ newtype (Qubit[]) BigEndian
 // specific user-defined types LE and BE so that we can partially apply
 // to obtain (LittleEndian => ()) instead of (Qubit[] => ()).
 
-// NB: If Q♭ supported co- and contravariance of operation
-//     types, we could handle both the little → big and
-//     big → little cases by writing an operation
-//     of the form ((Qubit[]) => ()) => ((Qubit[]) => ())
-//     and then writing two wrappers to handle the
-//     appropriate UDTs. (Though the types left of => would
-//     still be fun.)
-//
-//     In lieu of this, we can do some fun with using
-//     let to bind LittleEndian to Qubit[] then partially
-//     applying a call to ApplyReversedOp.
-
 operation () ApplyReversedOpLE((LittleEndian => ()) op, BigEndian register) {
-    body {
-        let Qubit[] bareRegister = register
-        let Qubit[] bareReversed = ReverseRegister(bareRegister)
-        let LittleEndian reversed = LittleEndian(bareReversed)
+    Body {
+        let bareReversed = ReverseRegister(register)
+        let reversed = LittleEndian(bareReversed)
         op(reversed)
     }
 }
 
 operation () ApplyReversedOpBE((BigEndian => ()) op, LittleEndian register) {
-    body {
-        let Qubit[] bareRegister = register
-        let Qubit[] bareReversed = ReverseRegister(bareRegister)
-        let BigEndian reversed = BigEndian(bareReversed)
+    Body {
+        let bareReversed = ReverseRegister(register)
+        let reversed = BigEndian(bareReversed)
         op(reversed)
     }
 }
@@ -72,13 +55,13 @@ operation () ApplyReversedOpBE((BigEndian => ()) op, LittleEndian register) {
 // We finish by providing two wrappers that partially
 // apply the two operations above for convenience.
 operation (BigEndian => ()) LittleOpToBigOp((LittleEndian => ())  op) {
-    body {
+    Body {
         return ApplyReversedOpLE(op, _)
     }
 }
 
 operation (LittleEndian => ()) BigOpToLittleOp((BigEndian => ())  op) {
-    body {
+    Body {
         return ApplyReversedOpBE(op, _)
     }
 }

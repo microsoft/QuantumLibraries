@@ -1,0 +1,30 @@
+newtype Qubit[] LogicalRegister
+newtype Result[] Syndrome
+newtype ((Syndrome) -> (Pauli[])) RecoveryFn
+// Design notes:
+//     These two types do not return (), such that instances of these types
+//     will not support autofunctors. This is inconvienent, but I think it's
+//     important to allow the generalization that physical and logical registers
+//     may have different numbers of qubits.
+
+/// <summary>
+///     Represents an operation which encodes a physical register into a
+///     logical register, using the provided scratch qubits.
+///
+///     The first argument is taken to be the physical register that will
+///     be encoded, while the second argument is taken to be the scratch
+///     register that will be used.
+/// </summary>
+newtype ((Qubit[], Qubit[]) => LogicalRegister) EncodeOp
+/// <summary>
+///     Represents an operation which decodes an encoded register into a
+///     physical register and the scratch qubits used to record a syndrome.
+///     
+///     The argument to a DecodeOp is the same as the return from an
+///     EncodeOp, and vice versa.
+/// </summary>
+newtype (LogicalRegister => (Qubit[], Qubit[])) DecodeOp
+newtype (LogicalRegister => Syndrome) SyndromeMeasOp
+
+newtype (EncodeOp, DecodeOp, SyndromeMeasOp) QECC
+newtype (EncodeOp, DecodeOp, SyndromeMeasOp, SyndromeMeasOp) CSS

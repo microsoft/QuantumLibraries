@@ -1,0 +1,5 @@
+
+// FIXME: make this a function!
+function Double Float(Int value) {
+    return 0.0
+}

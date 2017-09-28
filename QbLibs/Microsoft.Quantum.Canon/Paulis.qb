@@ -1,0 +1,80 @@
+
+/// <summary>
+///     Measures the given Pauli operator using an explicit scratch
+///     qubit to perform the measurement.
+/// </summary>
+operation Result MeasureWithScratch(Pauli[] pauli, Qubit[] target) {
+    Body {
+        mutable result = Zero
+
+        using (scratchRegister = Qubit[1]) {
+            let scratch = scratchRegister[0]
+
+            for (idxPauli in 0..(Length(pauli) - 1)) {
+                let P = pauli[idxPauli]
+                let src = [target[idxPauli]]
+                
+                // FIXME: change to elif.
+                if (P == Xpauli) {
+                    (Controlled(X))(src, scratch)
+                }
+                if (P == Ypauli) {
+                    (Controlled With1C(S, X, _))(src, scratch)
+                }
+                if (P == Zpauli) {
+                    (Controlled With1C(H, X, _))(src, scratch)
+                }
+            }
+
+            set result = M(scratch)
+        }
+
+        return result
+    }
+}
+
+operation () ApplyPauli(Pauli[] pauli, Qubit[] target) {
+    Body {
+        for (idxPauli in 0..(Length(pauli) - 1)) {
+            let P = pauli[idxPauli]
+            let targ = target[idxPauli]
+            
+            // FIXME: change to elif.
+            if (P == Xpauli) {
+                X(targ)
+            }
+            if (P == Ypauli) {
+                Y(targ)
+            }
+            if (P == Zpauli) {
+                Z(targ)
+            }
+        }
+    }
+}   
+
+operation Result[] MeasurePaulis(Pauli[][] paulis, Qubit[] target, ((Pauli[], Qubit[]) => (Result)) gadget) {
+    Body {
+        mutable results = new Result[Length(paulis)]
+
+        for (idxPauli in 0..(Length(paulis) - 1)) {
+            set results[idxPauli] = gadget(paulis[idxPauli], target)
+        }
+
+        return results
+    }
+}
+
+function Pauli[] EmbedPauli(Pauli pauli, Int location, Int n) {
+    mutable pauliArray = new Pauli[n]
+    for (index in 0..(n-1)) {
+        if (index == location) {
+            set pauliArray[index] = pauli
+        }
+        else {
+            set pauliArray[index] = Ipauli
+        }
+    }
+    return pauliArray
+}
+            

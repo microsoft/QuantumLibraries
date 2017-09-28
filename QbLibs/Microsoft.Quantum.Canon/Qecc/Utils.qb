@@ -1,0 +1,56 @@
+/// <summary>
+///     Given an array of results, represents the array by a single
+///     integer, with the 0th (leftmost) entry in the array being mapped
+///     the least significant bit. Thus, [One; Zero] is represented by
+///     1 and [Zero; One] by 2.
+/// </summary>
+function Int ResultAsInt(Result[] results) {
+    mutable n = 0
+    
+    for (idxResult in 0..(Length(results) - 1)) {
+        if (results[idxResult] == One) {
+            set n = n + 2 ^ idxResult
+        }
+    }
+
+    return n
+}
+    
+operation Syndrome MeasureStabilizerGenerators(Pauli[][] stabilizerGroup, LogicalRegister logicalRegister, ((Pauli[], Qubit[]) => (Result)) gadget) {
+    Body {
+        let results = MeasurePaulis(stabilizerGroup, logicalRegister, gadget)
+        return Syndrome(results)
+    }
+}
+
+operation () Recover(QECC code, RecoveryFn fn, LogicalRegister logicalRegister) {
+    Body {
+        let (encode, decode, syndMeas) = code
+        let syndrome = syndMeas(logicalRegister)
+        let recoveryOp = fn(syndrome)
+        ApplyPauli(recoveryOp, logicalRegister)
+    }
+}
+
+operation () RecoverCSS(CSS code, RecoveryFn fnX, RecoveryFn fnZ, LogicalRegister logicalRegister) {
+    Body {
+        let (encode, decode, syndMeasX, syndMeasZ) = code
+        let syndromeX = syndMeasX(logicalRegister)
+        let recoveryOpX = fnX(syndromeX)
+        ApplyPauli(recoveryOpX, logicalRegister)
+        let syndromeZ = syndMeasZ(logicalRegister)
+        let recoveryOpZ = fnZ(syndromeZ)
+        ApplyPauli(recoveryOpZ, logicalRegister)
+    }
+}
+
+function Pauli[] TableLookupRecoveryImpl(Pauli[][] table, Syndrome syndrome) {
+    return table[ResultAsInt(syndrome)]
+}
+
+function RecoveryFn TableLookupRecovery(Pauli[][] table) {
+    return RecoveryFn(TableLookupRecoveryImpl(table, _))
+}
+
+
+

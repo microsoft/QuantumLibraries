@@ -1,22 +1,41 @@
-operation ((Qubit[]) => ()) OperationPow(((Qubit[]) => ()) oracle, Int power) {
-    body {
-        return OperationPowImpl(oracle, power, _)
-    }
-}
-
 operation () OperationPowImpl(((Qubit[]) => ()) oracle, Int power, Qubit[] target) {
-    body {
+    Body {
         for (idxApplication in 0..power - 1) {
             oracle(target)
         }
     }
 }
 
+operation () OperationPowImplAC(((Qubit[]) => () : Controlled, Adjoint) oracle, Int power, Qubit[] target) {
+    Body {
+        for (idxApplication in 0..power - 1) {
+            oracle(target)
+        }
+    }
+
+    Adjoint auto
+    Controlled auto
+    Controlled Adjoint auto
+}
+
+operation ((Qubit[]) => ()) OperationPow(((Qubit[]) => ()) oracle, Int power) {
+    Body {
+        return OperationPowImpl(oracle, power, _)
+    }
+}
+
+operation () U(Qubit[] target) {
+    Body {
+        // TODO: this operation is a placeholder to allow the example below to parse / generate.
+        // Both should be removed at some point in favor of an example file.
+    }
+}
+
 // TODO: remove this. Included at the moment just to ensure correct parsing under
 //       syntax proposed in Solid#361.
 operation () Example(Qubit[] target) {
-    body {
-        let ((Qubit[]) => ()) powered = OperationPow(U, 12)
+    Body {
+        let powered = OperationPow(U, 12)
         powered(target)
     }
 }

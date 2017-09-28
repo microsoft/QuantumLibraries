@@ -1,13 +1,66 @@
-operation () With(((Qubit[]) => ()) outerOperation, ((Qubit[]) => ()) innerOperation, Qubit[] target) {
-    body {  
+
+operation () With(((Qubit[]) => () : Adjoint) outerOperation, ((Qubit[]) => ()) innerOperation, Qubit[] target) {
+    Body {  
         outerOperation(target)
         innerOperation(target)
-        adjoint outerOperation(target)
+        (Adjoint(outerOperation))(target)
+    }
+}
+
+
+
+operation () WithA(((Qubit[]) => () : Adjoint) outerOperation, ((Qubit[]) => () : Adjoint) innerOperation, Qubit[] target) {
+    Body {  
+        outerOperation(target)
+        innerOperation(target)
+        (Adjoint(outerOperation))(target)
     }
 
-    controlled(controlRegister) {
+    Adjoint auto
+}
+
+
+operation () WithC(((Qubit[]) => () : Adjoint) outerOperation, ((Qubit[]) => () : Controlled) innerOperation, Qubit[] target) {
+    Body {  
         outerOperation(target)
-        controlled(controlRegister) innerOperation(target)
-        adjoint outerOperation(target)
+        innerOperation(target)
+        (Adjoint(outerOperation))(target)
+    }
+
+    Controlled(controlRegister) {
+        outerOperation(target)
+        (Controlled(innerOperation))(controlRegister, target)
+        (Adjoint(outerOperation))(target)
+    }
+}
+
+operation () WithAC(((Qubit[]) => () : Adjoint) outerOperation, ((Qubit[]) => () : Adjoint, Controlled) innerOperation, Qubit[] target) {
+    Body {  
+        outerOperation(target)
+        innerOperation(target)
+        (Adjoint(outerOperation))(target)
+    }
+
+    Adjoint auto
+    Controlled(controlRegister) {
+        outerOperation(target)
+        (Controlled(innerOperation))(controlRegister, target)
+        (Adjoint(outerOperation))(target)
+    }
+    Controlled Adjoint auto
+}
+
+// TODO: move single-qubit version to With.qb along with arrays.
+operation () With1C(((Qubit) => () : Adjoint) outerOperation, ((Qubit) => () : Controlled) innerOperation, Qubit target) {
+    Body {  
+        outerOperation(target)
+        innerOperation(target)
+        (Adjoint(outerOperation))(target)
+    }
+
+    Controlled(controlRegister) {
+        outerOperation(target)
+        (Controlled(innerOperation))(controlRegister, target)
+        (Adjoint(outerOperation))(target)
     }
 }

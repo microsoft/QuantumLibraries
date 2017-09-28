@@ -1,3 +1,11 @@
+// FIXME: remove this stub once martinro/ branch lands.
+operation () QFT ( BigEndian qs ) {
+    Body {}
+    Adjoint auto
+    Controlled auto
+    Controlled Adjoint auto
+}
+
 /// <summary>
 ///     Performs the quantum phase estimation algorithm for a given oracle U and eigenstate,
 ///     reading the phase into a big-endian quantum register.
@@ -10,21 +18,21 @@
 ///     the application of this operation. The controlRegister is assumed to start in the initial
 ///     state |00…0〉, where the length of the register indicates the desired precision.</param>
 operation () QuantumPhaseEstimation(DiscreteOracle oracle, Qubit[] eigenstate, BigEndian controlRegister) {
-    body {
-        let Qubit[] bareControlRegister = controlRegister
-        let nQubits = length(bareControlRegister)
+    Body {
+        let nQubits = Length(controlRegister)
 
-        ApplyToEach(H, bareControlRegister)
+        ApplyToEachAC(H, controlRegister)
 
         for (idxControlQubit in 0..(nQubits - 1)) {
-            let Qubit control = bareControlRegister[idxControlQubit]
-            let Int power = 2 ^ (nQubits - idxControlQubit - 1)
-            controlled(oracle)([control], power, eigenstate)
+            let control = controlRegister[idxControlQubit]
+            let power = 2 ^ (nQubits - idxControlQubit - 1)
+            (Controlled oracle)([control], (power, eigenstate))
         }
 
         QFT(controlRegister)
     }
 
-    adjoint auto
-    controlled auto
+    Adjoint auto
+    Controlled auto
+    Controlled Adjoint auto
 }
