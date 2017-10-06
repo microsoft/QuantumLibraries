@@ -1,3 +1,4 @@
+﻿
 /// <summary>
 ///     Private operation used to implement both the bit flip encoder and decoder.
 /// 
@@ -8,7 +9,8 @@
 ///     will cause an X₁ error on the encoded qubit.
 /// <cite doi="10.1103/PhysRevA.85.044302" />
 /// </summary>
-operation () BFEncoderImpl(Bool coherentRecovery, Qubit[] data, Qubit[] scratch) {
+operation BFEncoderImpl(coherentRecovery : Bool, data : Qubit[], scratch : Qubit[])  : ()
+{
     Body {
         if (coherentRecovery) {
             (Controlled(X))(scratch, data[0])
@@ -24,7 +26,8 @@ operation () BFEncoderImpl(Bool coherentRecovery, Qubit[] data, Qubit[] scratch)
 ///     Encodes into the [3, 1, 3] / ⟦3, 1, 1⟧ bit-flip code.
 /// </summary>
 // TODO: document parameters
-operation (LogicalRegister) BitFlipEncoder(Qubit[] physRegister, Qubit[] auxQubits) {
+operation BitFlipEncoder(physRegister : Qubit[], auxQubits : Qubit[])  : LogicalRegister
+{
     Body {
         BFEncoderImpl(false, physRegister, auxQubits)
         
@@ -33,7 +36,8 @@ operation (LogicalRegister) BitFlipEncoder(Qubit[] physRegister, Qubit[] auxQubi
     }
 }
 
-operation (Qubit[], Qubit[]) BitFlipDecoder(LogicalRegister logicalRegister) {
+operation BitFlipDecoder( logicalRegister : LogicalRegister)  : (Qubit[], Qubit[])
+{
     Body {
         let physRegister = [logicalRegister[0]]
         let auxQubits = logicalRegister[1..2]
@@ -48,7 +52,8 @@ operation (Qubit[], Qubit[]) BitFlipDecoder(LogicalRegister logicalRegister) {
 ///     Returns a QECC value representing the ⟦3, 1, 1⟧ bit flip code encoder and
 ///     decoder with in-place syndrome measurement.
 /// </summary>
-operation QECC BitFlipCode() {
+operation  BitFlipCode()  : QECC
+{
     Body {
         let e = EncodeOp(BitFlipEncoder)
         let d = DecodeOp(BitFlipDecoder)
@@ -58,7 +63,8 @@ operation QECC BitFlipCode() {
     }
 }
 
-function RecoveryFn BitFlipRecoveryFn() {
+function  BitFlipRecoveryFn()  : RecoveryFn
+{
     return TableLookupRecovery([[Ipauli; Ipauli; Ipauli]; [Ipauli; Ipauli; Xpauli]; [Xpauli; Ipauli; Ipauli]; [Ipauli; Xpauli; Ipauli]])
 }
 
@@ -70,7 +76,8 @@ function RecoveryFn BitFlipRecoveryFn() {
 ///     and some qubit data to be protected, demonstrates the use of the code by causing and then
 ///     correcting a single error.
 /// </summary>
-operation () CodeExample(QECC code, Int nScratch, RecoveryFn fn, Qubit[] data) {
+operation CodeExample( code : QECC, nScratch : Int,  fn : RecoveryFn, data : Qubit[])  : ()
+{
     Body {
         let (encode, decode, syndMeas) = BitFlipCode()
         using (scratch = Qubit[nScratch]) {
@@ -87,7 +94,8 @@ operation () CodeExample(QECC code, Int nScratch, RecoveryFn fn, Qubit[] data) {
 /// <summary>
 ///     An example of how to call CodeExample with the bit flip code and the default recovery function.
 /// </summary>
-operation () BFExample() {
+operation BFExample()  : ()
+{
     Body {
         let code = BitFlipCode()
         let fn = BitFlipRecoveryFn()
@@ -97,3 +105,4 @@ operation () BFExample() {
         }
     }
 }
+

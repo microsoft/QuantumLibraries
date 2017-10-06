@@ -1,5 +1,7 @@
+﻿
 
-operation () With(((Qubit[]) => () : Adjoint) outerOperation, ((Qubit[]) => ()) innerOperation, Qubit[] target) {
+operation With(outerOperation : (Qubit[] => ():Adjoint), innerOperation : (Qubit[] => ()), target : Qubit[])  : ()
+{
     Body {  
         outerOperation(target)
         innerOperation(target)
@@ -9,7 +11,8 @@ operation () With(((Qubit[]) => () : Adjoint) outerOperation, ((Qubit[]) => ()) 
 
 
 
-operation () WithA(((Qubit[]) => () : Adjoint) outerOperation, ((Qubit[]) => () : Adjoint) innerOperation, Qubit[] target) {
+operation WithA(outerOperation : (Qubit[] => ():Adjoint), innerOperation : (Qubit[] => ():Adjoint), target : Qubit[])  : ()
+{
     Body {  
         outerOperation(target)
         innerOperation(target)
@@ -20,7 +23,8 @@ operation () WithA(((Qubit[]) => () : Adjoint) outerOperation, ((Qubit[]) => () 
 }
 
 
-operation () WithC(((Qubit[]) => () : Adjoint) outerOperation, ((Qubit[]) => () : Controlled) innerOperation, Qubit[] target) {
+operation WithC(outerOperation : (Qubit[] => ():Adjoint), innerOperation : (Qubit[] => ():Controlled), target : Qubit[])  : ()
+{
     Body {  
         outerOperation(target)
         innerOperation(target)
@@ -34,7 +38,8 @@ operation () WithC(((Qubit[]) => () : Adjoint) outerOperation, ((Qubit[]) => () 
     }
 }
 
-operation () WithAC(((Qubit[]) => () : Adjoint) outerOperation, ((Qubit[]) => () : Adjoint, Controlled) innerOperation, Qubit[] target) {
+operation WithAC(outerOperation : (Qubit[] => ():Adjoint), innerOperation : (Qubit[] => ():Adjoint,Controlled), target : Qubit[])  : ()
+{
     Body {  
         outerOperation(target)
         innerOperation(target)
@@ -51,7 +56,8 @@ operation () WithAC(((Qubit[]) => () : Adjoint) outerOperation, ((Qubit[]) => ()
 }
 
 // TODO: move single-qubit version to With.qb along with arrays.
-operation () With1C(((Qubit) => () : Adjoint) outerOperation, ((Qubit) => () : Controlled) innerOperation, Qubit target) {
+operation With1C(outerOperation : (Qubit => ():Adjoint), innerOperation : (Qubit => ():Controlled), target : Qubit)  : ()
+{
     Body {  
         outerOperation(target)
         innerOperation(target)

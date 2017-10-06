@@ -1,10 +1,12 @@
+﻿
 /// <summary>
 ///     Private operation used to implement both the Steane code encoder and decoder.
 /// </summary>
 /// <param name = "data"> an array holding 1 qubit which is the input qubit. </param> 
 /// <param name = "scratch"> an array holding 6 qubits which add redundancy. </param> 
 
-operation () SteaneCodeEncoderImpl(Qubit[] data, Qubit[] scratch) {
+operation SteaneCodeEncoderImpl(data : Qubit[], scratch : Qubit[])  : ()
+{
     Body {
         H(scratch[0])
         H(scratch[1])
@@ -34,18 +36,21 @@ operation () SteaneCodeEncoderImpl(Qubit[] data, Qubit[] scratch) {
 ///    information, see D. Gottesman, "Stabilizer Codes and Quantum Error Correction," Ph.D. Thesis, Caltech, 1997; 
 ///    https://arxiv.org/abs/quant-ph/9705052 
 /// </remark>
-function Pauli[] SteaneCodeRecoveryX(Syndrome syndrome) {
+function SteaneCodeRecoveryX( syndrome : Syndrome)  : Pauli[]
+{
     return EmbedPauli(Xpauli, ResultAsInt(syndrome), 7)
 }
 
-function Pauli[] SteaneCodeRecoveryZ(Syndrome syndrome) {
+function SteaneCodeRecoveryZ( syndrome : Syndrome)  : Pauli[]
+{
     return EmbedPauli(Zpauli, ResultAsInt(syndrome), 7)
 }
 
 /// <summary>
 ///     Encodes into the ⟦7, 1, 3⟧ Steane quantum code. 
 /// </summary>
-operation (LogicalRegister) SteaneCodeEncoder(Qubit[] physRegister, Qubit[] auxQubits) {
+operation SteaneCodeEncoder(physRegister : Qubit[], auxQubits : Qubit[])  : LogicalRegister
+{
     Body {
         SteaneCodeEncoderImpl(physRegister, auxQubits)
         
@@ -54,7 +59,8 @@ operation (LogicalRegister) SteaneCodeEncoder(Qubit[] physRegister, Qubit[] auxQ
     }
 }
 
-operation (Qubit[], Qubit[]) SteaneCodeDecoder(LogicalRegister logicalRegister) {
+operation SteaneCodeDecoder( logicalRegister : LogicalRegister)  : (Qubit[], Qubit[])
+{
     Body {
         let physRegister = [logicalRegister[0]]
         let auxQubits = logicalRegister[1..6]
@@ -69,7 +75,8 @@ operation (Qubit[], Qubit[]) SteaneCodeDecoder(LogicalRegister logicalRegister) 
 ///     Returns a CSS value representing the ⟦7, 1, 3⟧ Steane code encoder and
 ///     decoder with in-place syndrome measurement.
 /// </summary>
-operation CSS SteaneCode() {
+operation  SteaneCode()  : CSS
+{
     Body {
         let e = EncodeOp(SteaneCodeEncoder)
         let d = DecodeOp(SteaneCodeDecoder)
@@ -90,7 +97,8 @@ operation CSS SteaneCode() {
     }
 }
 
-operation () SteaneCodeExample(CSS code, Int nScratch, RecoveryFn fX, RecoveryFn fZ, Qubit[] data) {
+operation SteaneCodeExample( code : CSS, nScratch : Int,  fX : RecoveryFn,  fZ : RecoveryFn, data : Qubit[])  : ()
+{
     Body {
         let (encode, decode, syndMeasX, syndMeanZ) = SteaneCode()
         using (scratch = Qubit[nScratch]) {

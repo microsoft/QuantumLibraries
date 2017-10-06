@@ -1,3 +1,4 @@
+﻿
 // namespace Microsoft.Research.Qflat.CliffordTRzMachine
 // FIXME: uncomment when the namespace syntax is clarified
 
@@ -10,18 +11,20 @@
 /// </summary>
 /// <param name = "qs"> quantum register. </param>
 /// <param name = "s"> phase shift. </param>
-operation () DiagonalShift ( Int s, LittleEndian qs )  {
+operation DiagonalShift ( s : Int,  qs  : LittleEndian)   : ()
+{
 	Body {
 		// TODO: implement the diagonal shift circuit used in the Beauregard adder
 	}
 }
 
 /// <summary>
-/// Integer increment by a constant, based on phase rotations. This implements the unitary |x⟩↦|x+inc⟩.
+/// Integer increment by a constant, based on phase rotations. This implements the unitary |x??|x+inc?.
 /// </summary>
 /// <param name = "qs"> quantum register. </param>
 /// <param name = "inc"> increment. </param>
-operation () IntegerIncrement ( Int inc, LittleEndian qs ) {
+operation IntegerIncrement ( inc : Int,  qs  : LittleEndian)  : ()
+{
 	Body {
 		// TODO: implement the Beauregard adder
 		// basic idea: QFT' DiagonalShift QFT = increment
@@ -29,14 +32,16 @@ operation () IntegerIncrement ( Int inc, LittleEndian qs ) {
 }
 
 /// <summary>
-/// Integer increment by a constant, based on phase rotations. This implements the unitary |x⟩↦|(x+inc) mod N⟩.
+/// Integer increment by a constant, based on phase rotations. This implements the unitary |x??|(x+inc) mod N?.
 /// </summary>
 /// <param name = "qs"> quantum register. </param>
 /// <param name = "N"> modulus. </param>
 /// <param name = "inc"> increment. </param>
-operation () ModularIncrement ( Int N, Int inc, LittleEndian qs ) {
+operation ModularIncrement ( N : Int, inc : Int,  qs  : LittleEndian)  : ()
+{
 	Body {
 		// TODO: implement the Beauregard modular adder
 		// basic idea: https://arxiv.org/abs/quant-ph/0205095  (Section 2.2)
 	}
 }
+

@@ -1,4 +1,6 @@
-operation () OperationPowImpl(((Qubit[]) => ()) oracle, Int power, Qubit[] target) {
+﻿
+operation OperationPowImpl(oracle : (Qubit[] => ()), power : Int, target : Qubit[])  : ()
+{
     Body {
         for (idxApplication in 0..power - 1) {
             oracle(target)
@@ -6,7 +8,8 @@ operation () OperationPowImpl(((Qubit[]) => ()) oracle, Int power, Qubit[] targe
     }
 }
 
-operation () OperationPowImplAC(((Qubit[]) => () : Controlled, Adjoint) oracle, Int power, Qubit[] target) {
+operation OperationPowImplAC(oracle : (Qubit[] => ():Controlled,Adjoint), power : Int, target : Qubit[])  : ()
+{
     Body {
         for (idxApplication in 0..power - 1) {
             oracle(target)
@@ -18,13 +21,15 @@ operation () OperationPowImplAC(((Qubit[]) => () : Controlled, Adjoint) oracle, 
     Controlled Adjoint auto
 }
 
-operation ((Qubit[]) => ()) OperationPow(((Qubit[]) => ()) oracle, Int power) {
+operation OperationPow(oracle : (Qubit[] => ()), power : Int)  : (Qubit[] => ())
+{
     Body {
         return OperationPowImpl(oracle, power, _)
     }
 }
 
-operation () U(Qubit[] target) {
+operation U(target : Qubit[])  : ()
+{
     Body {
         // TODO: this operation is a placeholder to allow the example below to parse / generate.
         // Both should be removed at some point in favor of an example file.
@@ -33,9 +38,11 @@ operation () U(Qubit[] target) {
 
 // TODO: remove this. Included at the moment just to ensure correct parsing under
 //       syntax proposed in Solid#361.
-operation () Example(Qubit[] target) {
+operation Example(target : Qubit[])  : ()
+{
     Body {
         let powered = OperationPow(U, 12)
         powered(target)
     }
 }
+

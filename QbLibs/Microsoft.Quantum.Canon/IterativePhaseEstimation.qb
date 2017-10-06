@@ -1,3 +1,4 @@
+﻿
 // Design notes:
 //     The APIs for the iterative and quantum phase estimation algorithms are
 //     parameterized in terms of discrete-time oracles as defined in the OracleTypes.qb
@@ -29,7 +30,8 @@
 /// <param name="power">Number of times to apply the given unitary oracle.</param>
 /// <param name="theta">Angle by which to invert the phase on the control qubit before
 ///     acting on the eigenstate.</param>
-operation () DiscretePhaseEstimationIteration(DiscreteOracle oracle, Int power, Double theta, Qubit[] eigenstate, Qubit controlQubit) {
+operation DiscretePhaseEstimationIteration( oracle : DiscreteOracle, power : Int, theta : Double, eigenstate : Qubit[], controlQubit : Qubit)  : ()
+{
     // NB: We accept the control qubit as input so that we can allow for this operation
     //     to subject to the adjoint and control modifiers (that is, such that we do not need
     //     a return statement, but rather *act* on the given qubits).
@@ -61,7 +63,8 @@ operation () DiscretePhaseEstimationIteration(DiscreteOracle oracle, Int power, 
     Controlled Adjoint auto
 }
 
-operation () ContinuousPhaseEstimationIteration(ContinuousOracle oracle, Double time, Double theta, Qubit[] eigenstate, Qubit controlQubit) {
+operation ContinuousPhaseEstimationIteration( oracle : ContinuousOracle, time : Double, theta : Double, eigenstate : Qubit[], controlQubit : Qubit)  : ()
+{
     Body {
         if (time < 0.0) {
             // fail 'Oracle power cannot be negative.'
@@ -88,7 +91,8 @@ operation () ContinuousPhaseEstimationIteration(ContinuousOracle oracle, Double 
 // NB: we take std.dev instead of variance here to avoid having to take a square root.
 // FIXME: this currently passes a double to the oracle, as is only appropriate for
 //        continuous-time oracles.
-operation (Double) RandomWalkPhaseEstimation(ContinuousOracle oracle, Qubit[] eigenstate, Qubit controlQubit, Double initialMean, Double initialStdDev, Int nMeasurements) {
+operation RandomWalkPhaseEstimation( oracle : ContinuousOracle, eigenstate : Qubit[], controlQubit : Qubit, initialMean : Double, initialStdDev : Double, nMeasurements : Int)  : Double
+{
     Body {
         // sqrt((e - 1) / e)
         let PREFACTOR = 0.79506009762065011
@@ -113,3 +117,4 @@ operation (Double) RandomWalkPhaseEstimation(ContinuousOracle oracle, Qubit[] ei
 
     }
 }
+

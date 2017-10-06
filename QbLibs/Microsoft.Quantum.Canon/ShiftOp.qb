@@ -1,11 +1,14 @@
+﻿
 // NB: the following are stubs to allow this file to at least parse, even without
 //     defining the correct action of the operations.
 
-operation () LEStub(LittleEndian target) {
+operation LEStub( target : LittleEndian)  : ()
+{
     Body { }
 }
 
-operation () BEStub(BigEndian target) {
+operation BEStub( target : BigEndian)  : ()
+{
     Body { }
 }
 
@@ -24,15 +27,16 @@ operation () BEStub(BigEndian target) {
 
 /// <summary>
 ///     Given an operation acting on a little-endian register
-///         |q₀ q₁ … qₙ〉,
-///     returns a new operation acting on the big end–shifted register
-///         |qₙ q₀ q₁ … qₙ₋₁〉,
-///     with qubit qₙ being dropped if the cyclic argument is 0.
+///         |q0 q1 . q?>,
+///     returns a new operation acting on the big end-shifted register
+///         |q? q0 q1 . q??1>,
+///     with qubit q? being dropped if the cyclic argument is 0.
 /// </summary>
 /// <param name="cyclic">Specifies if the shift is cyclic (1) or drops
 ///     shifted qubits (0).</param>
 /// <param name="op">Operation whose action is to be shifted.</param>
-operation (((LittleEndian) => ())) BigShiftOpLE(Int cyclic, ((LittleEndian) => ()) op) {
+operation BigShiftOpLE(cyclic : Int, op : (LittleEndian => ()))  : (LittleEndian => ())
+{
     Body {
         return LEStub
     }
@@ -40,12 +44,13 @@ operation (((LittleEndian) => ())) BigShiftOpLE(Int cyclic, ((LittleEndian) => (
 
 /// <summary>
 ///     Given an operation acting on a little-endian register
-///         |q₀ q₁ … qₙ〉,
-///     returns a new operation acting on the little end–shifted register
-///         |q₁ … qₙ〉,
-///     with qubit q₀ being dropped being dropped if the cyclic argument is 0.
+///         |q0 q1 . q?>,
+///     returns a new operation acting on the little end-shifted register
+///         |q1 . q?>,
+///     with qubit q0 being dropped being dropped if the cyclic argument is 0.
 /// </summary>
-operation (((LittleEndian) => ())) LittleShiftOpLE(Int cyclic, ((LittleEndian) => ()) op) {
+operation LittleShiftOpLE(cyclic : Int, op : (LittleEndian => ()))  : (LittleEndian => ())
+{
     Body {
         return LEStub
     }
@@ -53,12 +58,13 @@ operation (((LittleEndian) => ())) LittleShiftOpLE(Int cyclic, ((LittleEndian) =
 
 /// <summary>
 ///     Given an operation acting on a little-endian register
-///         |qₙ qₙ₋₁ … q₀〉,
-///     returns a new operation acting on the big end–shifted register
-///         |qₙ₋₁ … q₀〉,
-///     with qubit qₙ being dropped being dropped if the cyclic argument is 0.
+///         |q? q??1 . q0>,
+///     returns a new operation acting on the big end-shifted register
+///         |q??1 . q0>,
+///     with qubit q? being dropped being dropped if the cyclic argument is 0.
 /// </summary>
-operation (((BigEndian) => ())) BigShiftOpBE(Int cyclic, ((BigEndian) => ()) op) {
+operation BigShiftOpBE(cyclic : Int, op : (BigEndian => ()))  : (BigEndian => ())
+{
     Body {
         return BEStub
     }
@@ -66,12 +72,13 @@ operation (((BigEndian) => ())) BigShiftOpBE(Int cyclic, ((BigEndian) => ()) op)
 
 /// <summary>
 ///     Given an operation acting on a big-endian register
-///         |qₙ qₙ₋₁ … q₀〉,
-///     returns a new operation acting on the little end–shifted register
-///         |qₙ qₙ₋₁ … q₁〉,
-///     with qubit q₀ being dropped being dropped if the cyclic argument is 0.
+///         |q? q??1 . q0>,
+///     returns a new operation acting on the little end-shifted register
+///         |q? q??1 . q1>,
+///     with qubit q0 being dropped being dropped if the cyclic argument is 0.
 /// </summary>
-operation (((BigEndian) => ())) LittleShiftOpBE(Int cyclic, ((BigEndian) => ()) op) {
+operation LittleShiftOpBE(cyclic : Int, op : (BigEndian => ()))  : (BigEndian => ())
+{
     Body {
         return BEStub
     }
@@ -92,8 +99,10 @@ operation (((BigEndian) => ())) LittleShiftOpBE(Int cyclic, ((BigEndian) => ()) 
 //     the two "impl" operations into four to remove UDT labels.
 //     For example:
 
-operation () RightShiftOpImpl(Int cyclic, ((LittleEndian) => ()) op, LittleEndian target) {
+operation RightShiftOpImpl(cyclic : Int, op : (LittleEndian => ()),  target : LittleEndian)  : ()
+{
     Body {
         // TODO
     }
 }
+
