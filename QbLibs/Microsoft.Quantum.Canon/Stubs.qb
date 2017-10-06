@@ -1,5 +1,8 @@
+﻿
 
 // FIXME: make this a function!
-function Double Float(Int value) {
+function Float(value : Int)  : Double
+{
     return 0.0
 }
+

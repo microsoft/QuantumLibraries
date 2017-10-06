@@ -1,9 +1,11 @@
+﻿
 
 /// <summary>
 ///     Measures the given Pauli operator using an explicit scratch
 ///     qubit to perform the measurement.
 /// </summary>
-operation Result MeasureWithScratch(Pauli[] pauli, Qubit[] target) {
+operation MeasureWithScratch(pauli : Pauli[], target : Qubit[])  : Result
+{
     Body {
         mutable result = Zero
 
@@ -33,7 +35,8 @@ operation Result MeasureWithScratch(Pauli[] pauli, Qubit[] target) {
     }
 }
 
-operation () ApplyPauli(Pauli[] pauli, Qubit[] target) {
+operation ApplyPauli(pauli : Pauli[], target : Qubit[])  : ()
+{
     Body {
         for (idxPauli in 0..(Length(pauli) - 1)) {
             let P = pauli[idxPauli]
@@ -53,7 +56,8 @@ operation () ApplyPauli(Pauli[] pauli, Qubit[] target) {
     }
 }   
 
-operation Result[] MeasurePaulis(Pauli[][] paulis, Qubit[] target, ((Pauli[], Qubit[]) => (Result)) gadget) {
+operation MeasurePaulis(paulis : Pauli[][], target : Qubit[], gadget : ((Pauli[], Qubit[]) => Result))  : Result[]
+{
     Body {
         mutable results = new Result[Length(paulis)]
 
@@ -65,7 +69,8 @@ operation Result[] MeasurePaulis(Pauli[][] paulis, Qubit[] target, ((Pauli[], Qu
     }
 }
 
-function Pauli[] EmbedPauli(Pauli pauli, Int location, Int n) {
+function EmbedPauli(pauli : Pauli, location : Int, n : Int)  : Pauli[]
+{
     mutable pauliArray = new Pauli[n]
     for (index in 0..(n-1)) {
         if (index == location) {

@@ -1,4 +1,6 @@
-operation () ApplyToEachAC(((Qubit) => () : Adjoint, Controlled) singleQubitOperation, Qubit[] register) {
+﻿
+operation ApplyToEachAC(singleQubitOperation : (Qubit => ():Adjoint,Controlled), register : Qubit[])  : ()
+{
     Body {
         for (idxQubit in 0..(Length(register) - 1)) {
             singleQubitOperation(register[idxQubit])
@@ -10,7 +12,8 @@ operation () ApplyToEachAC(((Qubit) => () : Adjoint, Controlled) singleQubitOper
     Controlled Adjoint auto
 }
 
-operation () ApplyToEachA(((Qubit) => () : Adjoint) singleQubitOperation, Qubit[] register) {
+operation ApplyToEachA(singleQubitOperation : (Qubit => ():Adjoint), register : Qubit[])  : ()
+{
     Body {
         for (idxQubit in 0..(Length(register) - 1)) {
             singleQubitOperation(register[idxQubit])
@@ -20,7 +23,8 @@ operation () ApplyToEachA(((Qubit) => () : Adjoint) singleQubitOperation, Qubit[
     Adjoint auto
 }
 
-operation () ApplyToEachC(((Qubit) => () : Controlled) singleQubitOperation, Qubit[] register) {
+operation ApplyToEachC(singleQubitOperation : (Qubit => ():Controlled), register : Qubit[])  : ()
+{
     Body {
         for (idxQubit in 0..(Length(register) - 1)) {
             singleQubitOperation(register[idxQubit])
@@ -30,11 +34,13 @@ operation () ApplyToEachC(((Qubit) => () : Controlled) singleQubitOperation, Qub
     Controlled auto
 }
 
-operation () ApplyToEach(((Qubit) => ()) singleQubitOperation, Qubit[] register) {
+operation ApplyToEach(singleQubitOperation : (Qubit => ()), register : Qubit[])  : ()
+{
     Body {
         for (idxQubit in 0..(Length(register) - 1)) {
             singleQubitOperation(register[idxQubit])
         }
     }
 }
+
 

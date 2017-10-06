@@ -1,5 +1,7 @@
+﻿
 // FIXME: remove this stub once martinro/ branch lands.
-operation () QFT ( BigEndian qs ) {
+operation QFT (  qs  : BigEndian)  : ()
+{
     Body {}
     Adjoint auto
     Controlled auto
@@ -11,13 +13,14 @@ operation () QFT ( BigEndian qs ) {
 ///     reading the phase into a big-endian quantum register.
 /// </summary>
 /// <param name="oracle">An operation implementing U^m for given integer powers m.</param>
-/// <param name="eigenstate">A quantum register representing an eigenstate |φ〉 of U, U|φ〉 =
-///     e^{iφ} |φ〉 for φ ∈ [0, 2π) an unknown phase.</param>
+/// <param name="eigenstate">A quantum register representing an eigenstate |φ> of U, U|φ> =
+///     e^{iφ} |φ> for φ ? [0, 2π) an unknown phase.</param>
 /// <param name="controlRegister">A big-endian representation integer register that can be used
 ///     to control the provided oracle, and that will contain the a representation of φ following
 ///     the application of this operation. The controlRegister is assumed to start in the initial
-///     state |00…0〉, where the length of the register indicates the desired precision.</param>
-operation () QuantumPhaseEstimation(DiscreteOracle oracle, Qubit[] eigenstate, BigEndian controlRegister) {
+///     state |00.0>, where the length of the register indicates the desired precision.</param>
+operation QuantumPhaseEstimation( oracle : DiscreteOracle, eigenstate : Qubit[],  controlRegister : BigEndian)  : ()
+{
     Body {
         let nQubits = Length(controlRegister)
 
@@ -36,3 +39,4 @@ operation () QuantumPhaseEstimation(DiscreteOracle oracle, Qubit[] eigenstate, B
     Controlled auto
     Controlled Adjoint auto
 }
+

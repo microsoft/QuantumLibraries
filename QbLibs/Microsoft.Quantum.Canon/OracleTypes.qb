@@ -1,14 +1,15 @@
+﻿
 /// <summary>
 ///     Represents a discrete-time oracle U^m for a fixed operation U
 ///     and a non-negative integer m.
 /// </summary>
-newtype ((Int, Qubit[]) => () : Adjoint, Controlled) DiscreteOracle
+newtype DiscreteOracle : ((Int, Qubit[]) => ():Adjoint,Controlled)
 
 /// <summary>
-///     Represents a continuous-time oracle U(δt) : |ψ(t)〉 ↦ |ψ(t + δt)〉 for all times t,
+///     Represents a continuous-time oracle U(δt) : |?(t)> ? |?(t + δt)> for all times t,
 ///     where U is a fixed operation, and where and δt is a non-negative real number.
 /// </summary>
-newtype ((Double, Qubit[]) => () : Adjoint, Controlled) ContinuousOracle
+newtype ContinuousOracle : ((Double, Qubit[]) => ():Adjoint,Controlled)
 
 // FIXME: Need a better name for this.
 /// <summary>
@@ -19,9 +20,11 @@ newtype ((Double, Qubit[]) => () : Adjoint, Controlled) ContinuousOracle
 /// </summary>
 /// <param name="blackBoxOracle">"Black-box" oracle to perform powers of as
 ///     a discrete-time oracle.</param>
-operation (DiscreteOracle) OracleToDiscrete(((Qubit[]) => () : Adjoint, Controlled) blackBoxOracle) {
+operation OracleToDiscrete(blackBoxOracle : (Qubit[] => ():Adjoint,Controlled))  : DiscreteOracle
+{
     Body {
         let oracle = DiscreteOracle(OperationPowImplAC(blackBoxOracle, _, _))
         return oracle
     }
 }
+

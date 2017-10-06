@@ -1,8 +1,10 @@
+﻿
 /// <summary>
 ///     Reorders the qubits in a register to obtain a new
 ///     qubit register.
 /// </summary>
-operation (Qubit[]) ReverseRegister(Qubit[] register) {
+operation ReverseRegister(register : Qubit[])  : Qubit[]
+{
     Body {
         mutable reversed = new Qubit[Length(register)]
 
@@ -19,7 +21,8 @@ operation (Qubit[]) ReverseRegister(Qubit[] register) {
 ///     Uses SWAP gates to reverse the order of the qubits in
 ///     a register.
 /// </summary>
-operation () SwapReverseRegister(Qubit[] register) {
+operation SwapReverseRegister(register : Qubit[])  : ()
+{
     Body {
         // TODO
     }
@@ -29,14 +32,15 @@ operation () SwapReverseRegister(Qubit[] register) {
     Controlled Adjoint auto
 }
 
-newtype (Qubit[]) LittleEndian
-newtype (Qubit[]) BigEndian
+newtype LittleEndian : Qubit[]
+newtype BigEndian : Qubit[]
 
 // The next two operations are just to specify the more
 // specific user-defined types LE and BE so that we can partially apply
 // to obtain (LittleEndian => ()) instead of (Qubit[] => ()).
 
-operation () ApplyReversedOpLE((LittleEndian => ()) op, BigEndian register) {
+operation ApplyReversedOpLE(op : (LittleEndian => ()),  register : BigEndian)  : ()
+{
     Body {
         let bareReversed = ReverseRegister(register)
         let reversed = LittleEndian(bareReversed)
@@ -44,7 +48,8 @@ operation () ApplyReversedOpLE((LittleEndian => ()) op, BigEndian register) {
     }
 }
 
-operation () ApplyReversedOpBE((BigEndian => ()) op, LittleEndian register) {
+operation ApplyReversedOpBE(op : (BigEndian => ()),  register : LittleEndian)  : ()
+{
     Body {
         let bareReversed = ReverseRegister(register)
         let reversed = BigEndian(bareReversed)
@@ -54,14 +59,17 @@ operation () ApplyReversedOpBE((BigEndian => ()) op, LittleEndian register) {
 
 // We finish by providing two wrappers that partially
 // apply the two operations above for convenience.
-operation (BigEndian => ()) LittleOpToBigOp((LittleEndian => ())  op) {
+operation LittleOpToBigOp(op : (LittleEndian => ()))  : (BigEndian => ())
+{
     Body {
         return ApplyReversedOpLE(op, _)
     }
 }
 
-operation (LittleEndian => ()) BigOpToLittleOp((BigEndian => ())  op) {
+operation BigOpToLittleOp(op : (BigEndian => ()))  : (LittleEndian => ())
+{
     Body {
         return ApplyReversedOpBE(op, _)
     }
 }
+
