@@ -245,6 +245,7 @@
     <None Include="ShiftOp.qb">
       <Generator>QbCodeGenerator</Generator>
     </None>
+    <None Include="test.qb" />
     <None Include="With.qb">
       <Generator>QbCodeGenerator</Generator>
       <LastGenOutput>With.g.cs</LastGenOutput>
