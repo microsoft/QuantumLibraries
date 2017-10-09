@@ -22,8 +22,6 @@
 // The operation AmpAmpObliviousByReflections calls AmpAmpObliviousByReflectionPhases with phases given by AmpAmpPhasesGrover
 // 
 
-// Major bug: oracle type should be OracleStateDeterministic, but this does not parse in qbc currently. So using explicit type ((Qubit[])=>():Adjoint,Controlled). Similarly for OracleState
-
 // TODO: Phases for fixed-point amplification
 // TODO: Example for Grover search on database -- requires reversible function for adding bitstrings
 // TODO: Unittests for amplitudeamplification routines
@@ -154,8 +152,7 @@ operation Identity2(qubitsA: Qubit[], qubitsB: Qubit[]) : (){
 }
 
 
-//oracle type should be OracleStateDeterministic, but this does not parse in qbc currently. So using explicit type ((Qubit[])=>():Adjoint,Controlled)
-operation ReflectionStartOracleStateDeterministic(phase: Double, oracle: ((Qubit[])=>():Adjoint,Controlled), qubitsSystem: Qubit[]): ()
+operation ReflectionStartOracleStateDeterministic(phase: Double, oracle: OracleStateDeterministic, qubitsSystem: Qubit[]): ()
 {
 	Body {
 		(Adjoint oracle)(qubitsSystem)
@@ -167,8 +164,7 @@ operation ReflectionStartOracleStateDeterministic(phase: Double, oracle: ((Qubit
 	Adjoint Controlled auto
 }
 
-//oracle type should be OracleState, but this does not parse in qbc currently. So using explicit type ((Qubit[])=>():Adjoint,Controlled)
-operation ReflectionStartOracleState(phase: Double, oracle: ((Qubit,Qubit[])=>():Adjoint,Controlled), qubitFlag: Qubit, qubitsSystem: Qubit[]): ()
+operation ReflectionStartOracleState(phase: Double, oracle: OracleState, qubitFlag: Qubit, qubitsSystem: Qubit[]): ()
 {
 	Body {
 		(Adjoint oracle)(qubitFlag, qubitsSystem)
@@ -226,7 +222,6 @@ operation AmpAmpObliviousByReflectionPhases(phases : AmpAmpReflectionPhases, ref
 
 //Assumes that qubitFlag is one of qubitsAncilla
 //Assumes that oracleSignal . oracleAncilla |0>_{a1}|0>_{a2}|system> = lambda|1>_{a1}|Phi>_{a2}U|system> + ...|0>_{a1}...
-//oracle type should be OracleStateDeterministic, but this does not parse in qbc currently. So using explicit type ((Qubit[])=>():Adjoint,Controlled)
 operation AmpAmpObliviousByOraclePhases(phases : AmpAmpReflectionPhases, oracleAncilla : OracleStateDeterministic, oracleSignal : OracleOblivious, qubitFlag : Qubit, qubitsAncilla: Qubit[], qubitsSystem: Qubit[]) : ()
 {
 	Body {
@@ -246,12 +241,12 @@ operation AmpAmpObliviousByOraclePhases(phases : AmpAmpReflectionPhases, oracleA
 operation AmpAmpByReflectionsPhases(phases : AmpAmpReflectionPhases, refStart : OracleReflection, refTarget : OracleReflection, qubitsStart: Qubit[]) : ()
 {
 	Body {
-		//Work around for passing empty qubit array using fact that Identity2 does nothing
-		let qubitsSystem = qubitsStart
+		//Pass empty qubit array using fact that Identity2 does nothing
+		let qubitEmpty = new Qubit[0]
 
 		let oracleSignal = OracleOblivious(Identity2)
 
-		AmpAmpObliviousByReflectionPhases(phases, refStart, refTarget, oracleSignal, qubitsStart, qubitsSystem) 
+		AmpAmpObliviousByReflectionPhases(phases, refStart, refTarget, oracleSignal, qubitsStart, qubitEmpty) 
 	}
 }
 
@@ -277,5 +272,14 @@ operation AmpAmpByOracle(iterations: Int, oracleStatePrep : OracleState, qubitFl
 		let phases = AmpAmpPhasesGrover(iterations)
 
 		AmpAmpByOraclePhases(phases, oracleStatePrep, qubitFlag, qubitsStart)
+	}
+}
+
+
+//Example: Grover search
+operation GroverSearch(iterations: Int, elements: Int, elementAddresses: Int[]) : ()
+{
+	Body{
+		//TODO needs adder circuit |z>|x> = |z \oplus elements[x]>|x>
 	}
 }

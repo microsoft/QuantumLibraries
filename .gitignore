@@ -326,3 +326,4 @@ __pycache__/
 *.btm.cs
 *.odx.cs
 *.xsd.cs
+/QbLibs/Microsoft.Quantum.Canon/QuantumPhaseEstimation - Copy.qb
