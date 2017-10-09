@@ -35,6 +35,7 @@ $qflatSources = @(
     "IterativePhaseEstimation.qb",
     # # "QFT.qb", # QFT commented out in lieu of merging in martinro/ branch.
     "QuantumPhaseEstimation.qb",
+    "AmplitudeAmplification.qb"
     "ShiftOp.qb",
     "With.qb",
 
