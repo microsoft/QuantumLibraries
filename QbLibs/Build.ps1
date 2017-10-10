@@ -28,7 +28,7 @@ $qflatSources = @(
     # so we include it first.
     "Endianness.qb",
 
-    "DataStructures/Stack.qb",
+    #"DataStructures/Stack.qb",
 
     # Similarly with OracleTypes.qb, save for that it depends on OperationPow.qb.
     "OperationPow.qb",
@@ -37,12 +37,18 @@ $qflatSources = @(
     "ApplyToEach.qb",
     "ApplyToRange.qb",
     "Arithmetic.qb",
-    "Bind.qb",
+    #"Bind.qb",
 
-    "IterativePhaseEstimation.qb",
+    "ControlledOnBitString.qb"
+
+    #"IterativePhaseEstimation.qb",
     # # "QFT.qb", # QFT commented out in lieu of merging in martinro/ branch.
-    "QuantumPhaseEstimation.qb",
-    "AmplitudeAmplification.qb"
+    #"QuantumPhaseEstimation.qb",
+    "AmplitudeAmplification/Types.qb"
+    "AmplitudeAmplification/Utils.qb"
+    "AmplitudeAmplification/AmplitudeAmplification.qb"
+    "AmplitudeAmplification/ExampleGrover.qb"
+    "AmplitudeAmplification/UnitTest.qb"
     "ShiftOp.qb",
     "With.qb",
 

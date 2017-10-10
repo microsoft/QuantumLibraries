@@ -178,6 +178,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="AmplitudeAmplification\ExampleGrover.qb" />
     <Compile Include="Endianness.g.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -211,6 +212,10 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <None Include="AmplitudeAmplification\AmplitudeAmplification.qb" />
+    <None Include="AmplitudeAmplification\Types.qb" />
+    <None Include="AmplitudeAmplification\UnitTest.qb" />
+    <None Include="AmplitudeAmplification\Utils.qb" />
     <None Include="app.config" />
     <None Include="ApplyToEach.qb">
       <Generator>QbCodeGenerator</Generator>
@@ -218,6 +223,7 @@
     <None Include="ApplyToRange.qb">
       <Generator>QbCodeGenerator</Generator>
     </None>
+    <None Include="ControlledOnBitString.qb" />
     <None Include="Endianness.qb">
       <Generator>QbCodeGenerator</Generator>
       <LastGenOutput>Endianness.g.cs</LastGenOutput>

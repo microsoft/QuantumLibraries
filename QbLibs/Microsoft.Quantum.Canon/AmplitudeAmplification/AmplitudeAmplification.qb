@@ -17,9 +17,9 @@
 // Note that amplitude amplification is a special case of oblivious amplitude amplifiction where "OracleOblivious" is the identity operator, and there are no system qubits i.e. "qubitsSystem" is empty.
 //		This is called through the operaton "AmpAmByReflectionPhases" and "AmpAmpByOraclePhases".
 //
-// The phases for partial reflections in the standard case of Grover search is provided by the function AmpAmpPhasesGrover
+// The phases for partial reflections in the standard case of Grover search is provided by the function AmpAmpPhasesStandard
 //		An example
-// The operation AmpAmpObliviousByReflections calls AmpAmpObliviousByReflectionPhases with phases given by AmpAmpPhasesGrover
+// The operation AmpAmpObliviousByReflections calls AmpAmpObliviousByReflectionPhases with phases given by AmpAmpPhasesStandard
 // 
 
 // TODO: Phases for fixed-point amplification
@@ -27,13 +27,7 @@
 // TODO: Unittests for amplitudeamplification routines
 // TODO: Amplitude estimation -- easiest way to is to use quantum phase estimation libary on Grover Iterate as the oracle
 
-function Pi() : Double {
-	return 3.141592653589793238462643383280
-}
 
-//phasesStart, phasesTarget
-newtype AmpAmpReflectionPhases : (Double[], Double[])
-newtype AmpAmpRotationPhases: (Double[])
 
 //We use the convention in "Hamiltonian Simulation by Uniform Spectral Amplification" [LowChuang2017] for relating single-qubit rotation phases to reflection operator phases
 function AmpAmpRotationToReflectionPhases( rotPhases : AmpAmpRotationPhases) : AmpAmpReflectionPhases
@@ -62,7 +56,7 @@ function AmpAmpRotationToReflectionPhases( rotPhases : AmpAmpRotationPhases) : A
 
 
 //All phases are Pi, except for the first reflection about start and the last reflection about target, which are 0.
-function AmpAmpPhasesGrover(iterations : Int) : AmpAmpReflectionPhases{
+function AmpAmpPhasesStandard(iterations : Int) : AmpAmpReflectionPhases{
 	mutable phasesTarget = new Double[iterations+1]
 	mutable phasesStart = new Double[iterations+1]
 		
@@ -100,62 +94,7 @@ function AmpAmpPhasesGrover(iterations : Int) : AmpAmpReflectionPhases{
 
 //}
 
-// Phase shift about |1...1><1...1|
-operation ReflectionAllOnes( phase: Double, qubits: Qubit[] ) : ()
-{
-	Body{
-		let nQubits = Length(qubits)
-		let qubitFlag = qubits[0]
-		let qubitsSystem = qubits[1..nQubits-1]
 
-		(Controlled R1(phase, _))(qubitsSystem, qubitFlag)
-
-	}
-
-	Adjoint auto
-    Controlled auto
-    Controlled Adjoint auto
-}
-
-// Phase shift about |0...0><0...0|
-operation ReflectionAllZero( phase: Double, qubits: Qubit[] ) : ()
-{
-	Body {
-
-		WithAC(ApplyToEachAC(X, _), ReflectionAllOnes(phase, _), qubits)
-
-	}
-
-	Adjoint auto
-    Controlled auto
-    Controlled Adjoint auto
-}
-
-
-// This oracle O = I - (1 - e^(- i ϕ)) |ψ><ψ| performs a partial reflection by phase ϕ about a single pure state |ψ>.
-// Note that when ϕ = π, O = I - 2 |ψ><ψ| is a reflection operator.
-newtype OracleReflection : ((Double, Qubit[]) => (): Adjoint,Controlled)
-//newtype OracleReflection : ((Double, Qubit[]) => ())
-
-///This oracle O|s>_a|ψ>_s = λ |t>_a U |ψ>_s + ... acts on the ancilla state |s>_a to implement the unitary U on any system state |ψ>_s with amplitude λ in the |t>_a basis.
-newtype OracleOblivious: ((Qubit[], Qubit[]) => (): Adjoint, Controlled)
-
-///This oracle O|0>_f|0>_s = λ |1>_f |ψ>_s + ... acts on the on computational basis state |0>_f|0>_s to create the state |ψ>_s with amplitude λ in the basis flagged by |1>_f
-newtype OracleState: ((Qubit, Qubit[]) => (): Adjoint, Controlled)
-
-///This oracle O|0> = acts on the on computational basis state |0> to create the state |ψ>.
-newtype OracleStateDeterministic: (Qubit[] => (): Adjoint, Controlled)
-
-operation Identity1(qubits: Qubit[]) : (){
-	Adjoint auto
-	Controlled auto
-	Adjoint Controlled auto
-}
-operation Identity2(qubitsA: Qubit[], qubitsB: Qubit[]) : (){
-	Adjoint auto
-	Controlled auto
-	Adjoint Controlled auto
-}
 
 
 operation ReflectionStartOracleStateDeterministic(phase: Double, oracle: OracleStateDeterministic, qubitsSystem: Qubit[]): ()
@@ -173,6 +112,7 @@ operation ReflectionStartOracleStateDeterministic(phase: Double, oracle: OracleS
 operation ReflectionStartOracleState(phase: Double, oracle: OracleState, qubitFlag: Qubit, qubitsSystem: Qubit[]): ()
 {
 	Body {
+		//let qubits = [qubitFlag] + qubitsSystem
 		(Adjoint oracle)(qubitFlag, qubitsSystem)
 		ReflectionAllZero(phase, qubitsSystem)
 		oracle(qubitFlag, qubitsSystem)
@@ -226,12 +166,12 @@ operation AmpAmpObliviousByReflectionPhases(phases : AmpAmpReflectionPhases, ref
 }
 
 
-//Assumes that qubitFlag is one of qubitsAncilla
 //Assumes that oracleSignal . oracleAncilla |0>_{a1}|0>_{a2}|system> = lambda|1>_{a1}|Phi>_{a2}U|system> + ...|0>_{a1}...
 operation AmpAmpObliviousByOraclePhases(phases : AmpAmpReflectionPhases, oracleAncilla : OracleStateDeterministic, oracleSignal : OracleOblivious, qubitFlag : Qubit, qubitsAncilla: Qubit[], qubitsSystem: Qubit[]) : ()
 {
 	Body {
 		//Assert that qubitsAncilla are in |0...0> state?
+		//let qubits = [qubitFlag] + qubitsAncilla
 		let refAncilla = OracleReflection(ReflectionStartOracleStateDeterministic(_, oracleAncilla, _))
 		let refTarget = OracleReflection(ReflectionTargetOracleState(_, qubitFlag, _))
 		
@@ -257,16 +197,16 @@ operation AmpAmpByReflectionsPhases(phases : AmpAmpReflectionPhases, refStart : 
 }
 
 
-//Assumes that qubitFlag is one of qubitsStart
 //Assumes that oracleState |0>_{a1}|0>_{a2}|system> = lambda|1>_{a1}|Phi>_{a2}U|system> + ...|0>_{a1}...
 operation AmpAmpByOraclePhases(phases : AmpAmpReflectionPhases, oracleStatePrep : OracleState, qubitFlag : Qubit, qubitsStart: Qubit[]) : ()
 {
 	Body {
 		//Assert that qubitsAncilla are in |0...0> state?
+		let qubits = [qubitFlag] + qubitsStart
 		let refStart = OracleReflection(ReflectionStartOracleState(_, oracleStatePrep, qubitFlag, _))
 		let refTarget = OracleReflection(ReflectionTargetOracleState(_, qubitFlag, _))
 		
-		AmpAmpByReflectionsPhases(phases, refStart, refTarget, qubitsStart)
+		AmpAmpByReflectionsPhases(phases, refStart, refTarget, qubits)
 	}
 }
 
@@ -275,17 +215,9 @@ operation AmpAmpByOraclePhases(phases : AmpAmpReflectionPhases, oracleStatePrep 
 operation AmpAmpByOracle(iterations: Int, oracleStatePrep : OracleState, qubitFlag : Qubit, qubitsStart: Qubit[]) : ()
 {
 	Body {
-		let phases = AmpAmpPhasesGrover(iterations)
+		let phases = AmpAmpPhasesStandard(iterations)
 
 		AmpAmpByOraclePhases(phases, oracleStatePrep, qubitFlag, qubitsStart)
 	}
 }
 
-
-//Example: Grover search
-operation GroverSearch(iterations: Int, elements: Int, elementAddresses: Int[]) : ()
-{
-	Body{
-		//TODO needs adder circuit |z>|x> = |z \oplus elements[x]>|x>
-	}
-}

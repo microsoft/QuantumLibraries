@@ -1,0 +1,82 @@
+﻿
+//Example: Grover search
+// This changes the type input to any single qubit operator from Qubit to Qubit[] where the Qubit[] is length 1.
+operation MultiQubitOracleFromSingleQubit(oracle: (Qubit => (): Adjoint, Controlled), qubits: Qubit[]) :()
+{
+	Body{
+		//FailOn(Length(qubits) > 1, "Number of qubits should be 1")
+		X(qubits[0])
+	}
+
+	Adjoint auto
+	Controlled auto
+	Adjoint Controlled auto
+}
+
+// This implements the oracle O|z>|k> = |z \oplus y_k>|k>, where y_k = 1 if k is in markedElements.
+operation GroverOracleFromInts(markedElements : Int[],  qubitFlag: Qubit, qubits: Qubit[]) : ()
+{
+	Body{
+		let nQubits = Length(qubits)
+		let nMarked = Length(markedElements)
+		for(idxMarked in 0..nMarked - 1){
+			// Ideally should use generics to avoid creating X that accepts qubit array
+			ControlledOnInt(markedElements[idxMarked], MultiQubitOracleFromSingleQubit(X,_), qubits, [qubitFlag])
+		}
+
+	}	
+
+	Adjoint auto
+	Controlled auto
+	Adjoint Controlled auto
+
+}
+
+//qubitFlag here is not assumed to be contained in qubits
+operation GroverOracleStatePrep(markedElements : Int[], qubitFlag: Qubit , qubitsDatabase: Qubit[]) : ()
+{
+	Body{
+		let nQubits = Length(qubitsDatabase)
+
+		ApplyToEachAC(H, qubitsDatabase)
+
+		GroverOracleFromInts(markedElements, qubitFlag, qubitsDatabase)
+
+	}
+
+	Adjoint auto
+	Controlled auto
+	Adjoint Controlled auto
+}
+
+//
+operation GroverSearch(iterations: Int, nQubits : Int, markedElements: Int[]) : ()
+{
+
+	Body{ 
+
+		using(qubits = Qubit[1 + nQubits]){
+			let qubitFlag = qubits[0]
+			let qubitsDatabase = qubits[1..nQubits - 1]
+
+			let oracleState = OracleState(GroverOracleStatePrep(markedElements, _, _))
+
+			AmpAmpByOracle(iterations, oracleState, qubitFlag, qubitsDatabase) 
+
+			//let result = MeasureWithScratch([Zpauli], [qubitFlag])
+
+			//Reset(qubitFlag)
+		}
+
+		//let result2 = new Result[1]
+
+		//return result2[0]
+
+		//using qubitsDatabase = Qubit[nQubits]
+		
+		//let oracleState = GroverOracleStatePrep(markedElements, _, _)
+		
+		//AmpAmpByOracle(iterations, oracleState, qubitFlag, qubitsDatabase) : ()
+
+	}
+}

@@ -1,0 +1,48 @@
+﻿
+function Pi() : Double {
+	return 3.141592653589793238462643383280
+}
+
+
+// Phase shift about |1...1><1...1|
+operation ReflectionAllOnes( phase: Double, qubits: Qubit[] ) : ()
+{
+	Body{
+		let nQubits = Length(qubits)
+		let qubitFlag = qubits[0]
+		let qubitsSystem = qubits[1..nQubits-1]
+
+		(Controlled R1(phase, _))(qubitsSystem, qubitFlag)
+
+	}
+
+	Adjoint auto
+    Controlled auto
+    Controlled Adjoint auto
+}
+
+// Phase shift about |0...0><0...0|
+operation ReflectionAllZero( phase: Double, qubits: Qubit[] ) : ()
+{
+	Body {
+
+		WithAC(ApplyToEachAC(X, _), ReflectionAllOnes(phase, _), qubits)
+
+	}
+
+	Adjoint auto
+    Controlled auto
+    Controlled Adjoint auto
+}
+
+
+operation Identity1(qubits: Qubit[]) : (){
+	Adjoint auto
+	Controlled auto
+	Adjoint Controlled auto
+}
+operation Identity2(qubitsA: Qubit[], qubitsB: Qubit[]) : (){
+	Adjoint auto
+	Controlled auto
+	Adjoint Controlled auto
+}

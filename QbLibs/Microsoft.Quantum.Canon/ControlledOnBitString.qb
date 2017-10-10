@@ -1,0 +1,75 @@
+﻿
+
+
+//Positive integer only
+// Converts integer to array of bits
+// Output in little endian
+function BitStringFromPositiveInt(number : Int, bits : Int) : Bool[]
+{
+	//FailOn(number > 2^bits - 1, "Number of output bits must be at least Log_2(integer-1).")
+
+	mutable outputBits = new Bool[bits]
+	mutable tempInt = number
+
+	for ( idxBit in 0..bits - 1 ){
+		if( tempInt % 2 == 0 ){
+			set outputBits[idxBit] = false
+		}
+		else{
+			set outputBits[idxBit] = true
+		}
+		set tempInt = tempInt/2
+	}
+
+	return outputBits
+
+}
+
+// Apply X operator on qubit if qubit is marked by 0 in corresponding bit array 
+operation PauliXFromBitString(bits : Bool[], qubits : Qubit[]) : ()
+{
+	Body{
+		let nBits = Length(bits)
+		//FailOn (nbits != Length(qubits), "Number of control bits must be equal to number of control qubits")
+
+		for(idxBit in 0..nBits - 1){
+			if(bits[idxBit] == false){
+				X(qubits[idxBit])
+			}
+		}
+	}
+	Adjoint auto
+	Controlled auto
+	Adjoint Controlled auto
+}
+
+
+// On input state that is a particular bitstring, apply operation . bit == True means control on 1
+operation ControlledOnBitString(bits : Bool[] , oracle: (Qubit[] => (): Adjoint, Controlled), qubitsTarget: Qubit[], qubitsControl : Qubit[]) : ()
+{
+	Body{
+
+		WithAC(PauliXFromBitString(bits, _), (Controlled oracle)(_, qubitsTarget), qubitsControl)
+		
+	}
+
+	Adjoint auto
+	Controlled auto
+	Adjoint Controlled auto
+}
+
+// On input state that is a particular bitstring, apply operation . bit == True means control on 1
+operation ControlledOnInt(numberState : Int , oracle: (Qubit[] => (): Adjoint, Controlled), qubitsTarget: Qubit[], qubitsControl : Qubit[]) : ()
+{
+	Body{
+
+		let bits = BitStringFromPositiveInt(numberState, Length(qubitsControl))
+
+		WithAC(PauliXFromBitString(bits, _), (Controlled oracle)(_, qubitsTarget), qubitsControl)
+		
+	}
+
+	Adjoint auto
+	Controlled auto
+	Adjoint Controlled auto
+}
