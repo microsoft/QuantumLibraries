@@ -27,22 +27,3 @@ operation OperationPow(oracle : (Qubit[] => ()), power : Int)  : (Qubit[] => ())
         return OperationPowImpl(oracle, power, _)
     }
 }
-
-operation U(target : Qubit[])  : ()
-{
-    Body {
-        // TODO: this operation is a placeholder to allow the example below to parse / generate.
-        // Both should be removed at some point in favor of an example file.
-    }
-}
-
-// TODO: remove this. Included at the moment just to ensure correct parsing under
-//       syntax proposed in Solid#361.
-operation Example(target : Qubit[])  : ()
-{
-    Body {
-        let powered = OperationPow(U, 12)
-        powered(target)
-    }
-}
-
