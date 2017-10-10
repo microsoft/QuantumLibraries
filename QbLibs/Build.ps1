@@ -18,52 +18,27 @@ if (-not (Get-Module -ListAvailable Invoke-MsBuild)) {
 Import-Module Invoke-MsBuild
 
 # Get a list of what we need to compile.
-# Unlike before, we manually specify since the order matters.
+# We do so by examining the *.csproj inside, looking for <None>
+# elements referencing *.qb files.
 $libDirectory = Join-Path $PSScriptRoot "Microsoft.Quantum.Canon"
-# FIXME: This is redundant with the sources in the csproj...!
-$qflatSources = @(
-    # Find and include the standard library.
-    (Find-QflatCompiler | Split-Path -Resolve | % { Join-Path $_ ..\..\..\..\Library\standard.qb } | Resolve-Path),
-    # Provide stubs for primitive operations.
-    "Stubs.qb",
+# Import the csproj as an XML document.
+$csproj = [xml](
+    Join-Path $libDirectory "Microsoft.Quantum.Canon.csproj" `
+    | ForEach-Object Get-Content)
+$qflatSources = $csproj.Project.ItemGroup `
+    | ForEach-Object { $_.None } `
+    | Select-Object -ExpandProperty Include `
+    | Where-Object { $_.EndsWith(".qb") } `
+    | Join-Path $libDirectory
 
-    # Provide definitions of the identity and nop.
-    "Identity.qb",
-
-    # Endianness.qb contains newtype declarations that are needed more broadly,
-    # so we include it first.
-    "Endianness.qb",
-
-    "DataStructures/Stack.qb",
-
-    # Similarly with OracleTypes.qb, save for that it depends on OperationPow.qb.
-    "OperationPow.qb",
-    "OracleTypes.qb",
-
-    "ApplyToEach.qb",
-    "ApplyToRange.qb",
-    "Arithmetic.qb",
-    "Bind.qb",
-
-    "IterativePhaseEstimation.qb",
-    "QFT.qb",
-    "QuantumPhaseEstimation.qb",
-    "ShiftOp.qb",
-    "With.qb",
-
-    "Paulis.qb",
-
-    # # QECC
-    "Qecc/Types.qb",
-    "Qecc/Utils.qb",
-    "Qecc/BitFlipCode.qb"
-) | ForEach-Object {
-    if (-not [System.IO.Path]::IsPathRooted($_)) {
-        Join-Path $libDirectory $_
-    } else {
-        $_
-    }
-}
+# Find and include the standard library.
+$qflatSources += @(
+     (Find-QflatCompiler `
+        | Split-Path -Resolve `
+        | ForEach-Object { Join-Path $_ ..\..\..\..\Library\standard.qb } `
+        | Resolve-Path
+    )
+)
 
 $qflatSources | ConvertFrom-Qflat -Verbose:$VerbosePreference
 if ($LASTEXITCODE -eq 0) {
