@@ -87,6 +87,16 @@ operation ContinuousPhaseEstimationIteration( oracle : ContinuousOracle, time : 
     Controlled Adjoint auto
 }
 
+operation PrepAndMeasurePhaseEstImpl(wInv : Double, t : Double, op : ((Double, Double, Qubit) => ())) : Result {
+    Body {
+        mutable datum = Zero
+        using (register = Qubit[1]) {
+            op(wInv, t, register[0])
+            set datum = M(register[0])
+        }
+        return datum
+    }
+}
 
 // NB: we take std.dev instead of variance here to avoid having to take a square root.
 // FIXME: this currently passes a double to the oracle, as is only appropriate for
@@ -94,27 +104,85 @@ operation ContinuousPhaseEstimationIteration( oracle : ContinuousOracle, time : 
 operation RandomWalkPhaseEstimation( oracle : ContinuousOracle, eigenstate : Qubit[], controlQubit : Qubit, initialMean : Double, initialStdDev : Double, nMeasurements : Int)  : Double
 {
     Body {
-        // sqrt((e - 1) / e)
         let PREFACTOR = 0.79506009762065011
         let INV_SQRT_E = 0.60653065971263342
-
-        if (nMeasurements == 0) {
-            return initialMean
-        }
-
-        let stdDev = initialStdDev * PREFACTOR
-        let ωInv = initialMean - stdDev
-        let t = 1.0 / stdDev
-
-        ContinuousPhaseEstimationIteration(oracle, t, ωInv, eigenstate, controlQubit)
-        let datum = M(controlQubit)
-        if (datum == Zero) {
-            // TODO: double check sign here.
-            return RandomWalkPhaseEstimation(oracle, eigenstate, controlQubit, initialMean - stdDev * INV_SQRT_E, stdDev, nMeasurements - 1)
-        } else {
-            return RandomWalkPhaseEstimation(oracle, eigenstate, controlQubit, initialMean + stdDev * INV_SQRT_E, stdDev, nMeasurements - 1)
-        }
-
+        let PI = 3.14159265359
+        
+        // FIXME: #666
+        let inner = ContinuousPhaseEstimationIteration(oracle, _, _, target, _)
+        let sampleOp = PrepAndMeasurePhaseEstImpl(_, _, inner)
+        
+        mutable dataRecord = StackNew(nMeasurements)
+        
+        mutable mu = 0.1
+        mutable sigma = 1.1
+        mutable datum = Zero
+        mutable nTotalMeasurements = 0
+        mutable nAcceptedMeasurements = 0
+        
+        set mu = 0.0
+        set sigma = 1.0
+        
+        repeat {
+            if (nTotalMeasurements >= maxMeasurements) {
+                return mu
+            }
+        
+            let wInv = mu - PI * sigma / 2.0
+            let t = 1.0 / sigma
+            
+            set datum = sampleOp(wInv, t)
+            set nTotalMeasurements = nTotalMeasurements + 1
+            
+            
+            if (datum == Zero) {
+                set mu = mu - sigma * INV_SQRT_E
+            } else {
+                set mu = mu + sigma * INV_SQRT_E
+            }                
+            set sigma = sigma * PREFACTOR
+            
+            set dataRecord = StackPush(dataRecord, datum)
+            
+            // Perform consistency check.
+            if (nTotalMeasurements >= maxMeasurements) {
+                return mu
+            }
+            mutable checkDatum = sampleOp(mu, 1.0 / sigma)
+            set nTotalMeasurements = nTotalMeasurements + 1
+            
+            if (checkDatum == One) {
+                repeat {
+                    for (idxUnwind in 0..(unwind - 1)) {
+                        
+                        set sigma = sigma / PREFACTOR
+                        
+                        if (StackLength(dataRecord) > 0) {
+                            let unwoundDatum = StackPeek(dataRecord)
+                            set dataRecord = StackPop(dataRecord)
+                            
+                            if (unwoundDatum == Zero) {
+                                set mu = mu + sigma * INV_SQRT_E
+                            } else {
+                                set mu = mu - sigma * INV_SQRT_E
+                            }
+                        }
+                    }
+                    
+                    if (nTotalMeasurements >= maxMeasurements) {
+                        return mu
+                    }
+                    set checkDatum = sampleOp(mu, 1.0 / sigma)
+                    set nTotalMeasurements = nTotalMeasurements + 1
+                    
+                } until (checkDatum == Zero) fixup {
+                }
+            }
+            
+            set nAcceptedMeasurements = nAcceptedMeasurements + 1
+        } until (nAcceptedMeasurements >= nMeasurements) fixup {}
+        
+        return mu
     }
 }
 
