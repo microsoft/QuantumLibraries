@@ -9,6 +9,10 @@
 ##
 
 Import-Module -Force .\Invoke-Qbc.psm1
+if (-not (Get-Module -ListAvailable Invoke-MsBuild)) {
+    Install-Module Invoke-MsBuild
+}
+Import-Module Invoke-MsBuild
 
 # Get a list of what we need to compile.
 # Unlike before, we manually specify since the order matters.
@@ -52,3 +56,4 @@ $qflatSources = @(
 }
 
 $qflatSources | ConvertFrom-Qflat
+Invoke-MsBuild (Resolve-Path .\QbLibs.sln) -ShowBuildOutputInCurrentWindow
