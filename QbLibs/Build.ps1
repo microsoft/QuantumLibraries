@@ -13,7 +13,10 @@ Import-Module -Force .\Invoke-Qbc.psm1
 # Get a list of what we need to compile.
 # Unlike before, we manually specify since the order matters.
 $libDirectory = Join-Path $PSScriptRoot "Microsoft.Quantum.Canon"
+# FIXME: This is redundant with the sources in the csproj...!
 $qflatSources = @(
+    # Find and include the standard library.
+    (Find-QflatCompiler | Split-Path -Resolve | % { Join-Path $_ ..\..\..\..\Library\standard.qb } | Resolve-Path),
     # Provide stubs for primitive operations.
     "Stubs.qb",
 
@@ -29,19 +32,23 @@ $qflatSources = @(
     "ApplyToRange.qb",
     "Arithmetic.qb",
     "IterativePhaseEstimation.qb",
-    # # "QFT.qb", # QFT commented out in lieu of merging in martinro/ branch.
+    "QFT.qb",
     "QuantumPhaseEstimation.qb",
     "ShiftOp.qb",
     "With.qb",
 
     "Paulis.qb",
-    
+
     # # QECC
     "Qecc/Types.qb",
     "Qecc/Utils.qb",
     "Qecc/BitFlipCode.qb"
 ) | ForEach-Object {
-    Join-Path $libDirectory $_
+    if (-not [System.IO.Path]::IsPathRooted($_)) {
+        Join-Path $libDirectory $_
+    } else {
+        $_
+    }
 }
 
-$qflatSources | ConvertFrom-Qflat -Verbose
+$qflatSources | ConvertFrom-Qflat
