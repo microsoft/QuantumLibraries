@@ -17,7 +17,7 @@
 // Note that amplitude amplification is a special case of oblivious amplitude amplifiction where "OracleOblivious" is the identity operator, and there are no system qubits i.e. "qubitsSystem" is empty.
 //		This is called through the operaton "AmpAmByReflectionPhases" and "AmpAmpByOraclePhases".
 //
-// The phases for partial reflections in the standard case of Grover search is provided by the operation AmpAmpPhasesGrover
+// The phases for partial reflections in the standard case of Grover search is provided by the function AmpAmpPhasesGrover
 //		An example
 // The operation AmpAmpObliviousByReflections calls AmpAmpObliviousByReflectionPhases with phases given by AmpAmpPhasesGrover
 // 
@@ -100,24 +100,30 @@ function AmpAmpPhasesGrover(iterations : Int) : AmpAmpReflectionPhases{
 
 //}
 
+// Phase shift about |1...1><1...1|
+operation ReflectionAllOnes( phase: Double, qubits: Qubit[] ) : ()
+{
+	Body{
+		let nQubits = Length(qubits)
+		let qubitFlag = qubits[0]
+		let qubitsSystem = qubits[1..nQubits-1]
+
+		(Controlled R1(phase, _))(qubitsSystem, qubitFlag)
+
+	}
+
+	Adjoint auto
+    Controlled auto
+    Controlled Adjoint auto
+}
 
 // Phase shift about |0...0><0...0|
 operation ReflectionAllZero( phase: Double, qubits: Qubit[] ) : ()
 {
 	Body {
-		let nQubits = Length(qubits)
-		let qubitFlag = qubits[0]
-		let qubitsSystem = qubits[1..nQubits-1]
 
-		for(idxQubit in 0..nQubits - 1){
-			X(qubits[idxQubit])
-		}
+		WithAC(ApplyToEachAC(X, _), ReflectionAllOnes(phase, _), qubits)
 
-		//(Controlled R1(phase, _))(qubitsSystem, qubitFlag) 
-
-		for(idxQubit in 0..nQubits - 1){
-			X(qubits[idxQubit])
-		}
 	}
 
 	Adjoint auto
