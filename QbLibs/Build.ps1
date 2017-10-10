@@ -24,6 +24,9 @@ $qflatSources = @(
     # Provide stubs for primitive operations.
     "Stubs.qb",
 
+    # Provide definitions of the identity and nop.
+    "Identity.qb",
+
     # Endianness.qb contains newtype declarations that are needed more broadly,
     # so we include it first.
     "Endianness.qb",
@@ -37,6 +40,8 @@ $qflatSources = @(
     "ApplyToEach.qb",
     "ApplyToRange.qb",
     "Arithmetic.qb",
+    "Bind.qb",
+
     "IterativePhaseEstimation.qb",
     "QFT.qb",
     "QuantumPhaseEstimation.qb",

@@ -1,0 +1,10 @@
+operation I(target : Qubit) : () {
+    Body {}
+    Adjoint self
+    Controlled auto
+    Controlled Adjoint auto
+}
+
+// function Identity(value : 'T) : 'T {
+//     return value
+// }
