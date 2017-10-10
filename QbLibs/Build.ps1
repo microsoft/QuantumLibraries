@@ -7,6 +7,9 @@
 #     PS> $Env:QFLAT_PATH = "<path to Compiler.exe>"
 #     PS> ./Build.ps1
 ##
+[CmdletBinding()]
+param(
+)
 
 Import-Module -Force .\Invoke-Qbc.psm1
 if (-not (Get-Module -ListAvailable Invoke-MsBuild)) {
@@ -62,5 +65,7 @@ $qflatSources = @(
     }
 }
 
-$qflatSources | ConvertFrom-Qflat
-Invoke-MsBuild (Resolve-Path .\QbLibs.sln) -ShowBuildOutputInCurrentWindow
+$qflatSources | ConvertFrom-Qflat -Verbose:$VerbosePreference
+if ($LASTEXITCODE -eq 0) {
+    Invoke-MsBuild (Resolve-Path .\QbLibs.sln) -ShowBuildOutputInCurrentWindow
+}
