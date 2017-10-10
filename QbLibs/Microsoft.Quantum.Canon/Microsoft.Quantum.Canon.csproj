@@ -219,6 +219,11 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>ApplyToRange.qb</DependentUpon>
+    </Compile>    
+    <Compile Include="AmplitudeAmplification.g.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AmplitudeAmplification.qb</DependentUpon>
     </Compile>
     <Compile Include="Arithmetic.g.cs">
       <AutoGen>True</AutoGen>
@@ -297,6 +302,10 @@
     <None Include="ApplyToEach.qb">
       <Generator>QbCodeGenerator</Generator>
       <LastGenOutput>ApplyToEach.g.cs</LastGenOutput>
+    </None>
+    <None Include="AmplitudeAmplification.qb">
+      <Generator>QbCodeGenerator</Generator>
+      <LastGenOutput>AmplitudeAmplification.g.cs</LastGenOutput>
     </None>
     <None Include="ApplyToRange.qb">
       <Generator>QbCodeGenerator</Generator>

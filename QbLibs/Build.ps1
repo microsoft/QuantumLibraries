@@ -24,12 +24,12 @@ $libDirectory = Join-Path $PSScriptRoot "Microsoft.Quantum.Canon"
 # Import the csproj as an XML document.
 $csproj = [xml](
     Join-Path $libDirectory "Microsoft.Quantum.Canon.csproj" `
-    | ForEach-Object Get-Content)
+    | ForEach-Object { Get-Content $_ })
 $qflatSources = $csproj.Project.ItemGroup `
     | ForEach-Object { $_.None } `
     | Select-Object -ExpandProperty Include `
     | Where-Object { $_.EndsWith(".qb") } `
-    | Join-Path $libDirectory
+    | ForEach-Object { Join-Path $libDirectory $_ }
 
 # Find and include the standard library.
 $qflatSources += @(
@@ -39,6 +39,10 @@ $qflatSources += @(
         | Resolve-Path
     )
 )
+
+"Compiling Q♭ sources:`n$(
+    "`n" -join ($qflatSources | ForEach-Object { "`t$_" })
+)" | Write-Verbose
 
 $qflatSources | ConvertFrom-Qflat -Verbose:$VerbosePreference
 if ($LASTEXITCODE -eq 0) {
