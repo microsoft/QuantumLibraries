@@ -17,24 +17,21 @@
 /// [ M. Roetteler, Th. Beth, Appl. Algebra Eng. Commun. Comput. 19(3): 177-193 (2008) ]
 /// [ D. Coppersmith, https://arxiv.org/abs/quant-ph/0201067 ]
 /// </remarks>
-operation () ApproximateQFT ( Int a, BigEndian qs ) 
+operation ApproximateQFT ( a : Int, qs : BigEndian ) : ()
 {
-	body {
-		let Int n = length(qs)
-		if ( n == 0 )
-		{ 
-			fail 'function register qs requires at least 1 qubit.' 
+	Body {
+		let n = Length(qs)
+		if ( n == 0 ) { 
+			fail "function register qs requires at least 1 qubit."
 		}
-		if ( a < 0 || a > n )
-		{
-			fail 'approximation parameter a must be in {0..n}'
+		if ( a < 0 || a > n ) {
+			fail "approximation parameter a must be in {0..n}"
 		}
     	for (i in 0..n-1) {
     		for (j in 0..(i-1)) {
-    			if (i-j) < a ) 
-				{
-					controlled([qs[i]]) R1Frac(ZPauli, 1, i - j, qs[j])	
-				}    			
+    			if (i-j) < a ) {
+					(Controlled R1Frac)([qs[i]], (1, i - j, qs[j]))
+				}
 			}
 			H(qs[i])
 		}
@@ -42,8 +39,12 @@ operation () ApproximateQFT ( Int a, BigEndian qs )
 		// Apply the bit reversal permutation to the quantum register as
 		// a side effect, such that we enforce the invariants specified
 		// by the BigEndian UDT.
-    	Endianness.SwapReverseRegister(qs) 
+    	SwapReverseRegister(qs)
 	}
+
+	Adjoint auto
+	Controlled auto
+	Controlled Adjoint auto
 }
 
 /// <summary>
@@ -54,9 +55,13 @@ operation () ApproximateQFT ( Int a, BigEndian qs )
 /// <remarks>
 ///     QFT requires Z-rotation gates of the form 2π/2ᵏ and Hadamard gates.
 /// </remarks>
-operation () QFT ( BigEndian qs ) 
+operation QFT ( qs : BigEndian ) : ()
 {
-	body {
+	Body {
 		AQFT(length(qs), qs)
 	}
+
+	Adjoint auto
+	Controlled auto
+	Controlled Adjoint auto
 }

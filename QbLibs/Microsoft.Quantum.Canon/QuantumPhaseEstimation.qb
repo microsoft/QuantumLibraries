@@ -1,14 +1,4 @@
-﻿
-// FIXME: remove this stub once martinro/ branch lands.
-operation QFT (  qs  : BigEndian)  : ()
-{
-    Body {}
-    Adjoint auto
-    Controlled auto
-    Controlled Adjoint auto
-}
-
-/// <summary>
+﻿/// <summary>
 ///     Performs the quantum phase estimation algorithm for a given oracle U and eigenstate,
 ///     reading the phase into a big-endian quantum register.
 /// </summary>
