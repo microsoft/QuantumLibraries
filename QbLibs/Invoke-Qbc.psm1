@@ -1,20 +1,3 @@
-function Split-Errors {
-    param(
-        [string[]] $Output,
-
-        [string[]] $SplitAt = @("The following", "FAILURE: parsing", "resulted in"),
-
-        [int] $Offset = 1
-    )
-
-    $LineNums = ($Output | Select-String $SplitAt -Context 0 | Select-Object -ExpandProperty LineNumber);
-    $LineNum = $LineNums[$LineNums.Length - 1];
-    $LineNum | write-host;
-
-    # We need an extra -1 in calculating $Offset to deal with that Select-String uses 1-based indexing.
-    ($Output[($LineNum + $Offset - 1)..$Output.Length] | % { "    " + $_ }) -join "`n"
-}
-
 function Find-QflatCompiler {
     [CmdletBinding()]
     param()
@@ -49,17 +32,11 @@ function Find-QflatCompiler {
 
 function Invoke-Qbc {
     param(
-        [string] $qbc,
-        [string[]] $sources,
-        [string] $target,
-        [switch] $ParseOnly = $false
+        [string] $Qbc,
+        [string[]] $Sources
     )
 
-    if ($ParseOnly) {
-        $output = & $qbc --operation parse --outputformat csharp --input @sources --outputfile $target 2>&1;
-    } else {
-        $output = & $qbc --operation generate --outputformat csharp --input @sources --outputfile $target 2>&1;
-    }
+    $output = & $qbc --input @sources 2>&1;
 
     $stdout = $output | Where-Object { $_ -is [string]};
     $stderr = $output | Where-Object { $_ -is [System.Management.Automation.ErrorRecord]};
@@ -75,48 +52,20 @@ function ConvertFrom-Qflat {
         DefaultParameterSetName="SingleFile"
     )]
     param(
-        [Parameter(Mandatory=$true, Position=1, ValueFromPipeline=$true, ParameterSetName="SingleFile")]
-        [Parameter(Mandatory=$true, Position=1, ValueFromPipeline=$true, ParameterSetName="Batch")]
-        [string[]] $FilePath,
-
-        [Parameter(ParameterSetName="SingleFile")]
-        [Parameter(ParameterSetName="Batch")]
-        [switch] $ParseOnly = $false,
-                
-        [Parameter(ParameterSetName="Batch")]
-        [switch] $Batch = $false,
-
-        [Parameter(Position=2, ParameterSetName="Batch")]
-        [string] $Target
+        [Parameter(Mandatory=$true, Position=1, ValueFromPipeline=$true)]
+        [string[]] $FilePath
     )
 
     begin {
         $qbc = Find-QflatCompiler;
-        $batchMode = $PSCmdlet.ParameterSetName -eq "Batch";
-
-        if ($batchMode) {
-            $batchFiles = @();
-        }
+        $paths = @()
     }
 
     process {
-        if ($batchMode) {
-            $batchFiles += $FilePath;
-        } else {
-            $FilePath | ForEach-Object {
-                $target = [IO.Path]::ChangeExtension($_, "g.cs")
-                Write-Debug "Generating code to $target."
-                Invoke-Qbc -qbc $qbc -sources @($_) -target $target -ParseOnly:$ParseOnly
-            }
-        }
+        $paths += @($FilePath)
     }
 
     end {
-        if ($batchMode) {
-            # TODO: deduplicate code here.
-            Write-Debug "Generating code to $Target."
-            Invoke-Qbc -qbc $qbc -sources $batchFiles -target $Target -ParseOnly:$ParseOnly
-        }
+        Invoke-Qbc -Qbc $qbc -Sources $paths
     }
-    
 }

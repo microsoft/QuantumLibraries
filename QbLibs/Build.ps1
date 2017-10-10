@@ -7,10 +7,6 @@
 #     PS> $Env:QFLAT_PATH = "<path to Compiler.exe>"
 #     PS> ./Build.ps1
 ##
-param(
-    [switch]
-    $ParseOnly = $false
-)
 
 Import-Module -Force .\Invoke-Qbc.psm1
 
@@ -48,4 +44,4 @@ $qflatSources = @(
     Join-Path $libDirectory $_
 }
 
-$qflatSources | ConvertFrom-Qflat -ParseOnly:$ParseOnly -Batch -Target Canon.g.cs
+$qflatSources | ConvertFrom-Qflat -Verbose
