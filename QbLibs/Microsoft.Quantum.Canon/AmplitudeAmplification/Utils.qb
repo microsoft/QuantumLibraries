@@ -1,4 +1,6 @@
-﻿
+﻿// Functions here may be commonly used in other libraries and could be made global.
+
+
 function Pi() : Double {
 	return 3.141592653589793238462643383280
 }
@@ -45,4 +47,24 @@ operation Identity2(qubitsA: Qubit[], qubitsB: Qubit[]) : (){
 	Adjoint auto
 	Controlled auto
 	Adjoint Controlled auto
+}
+
+function ArcTan(d : Double) : Double
+{
+}
+
+function Tan(d : Double) : Double
+{
+}
+
+function Sqrt(d : Double) : Double
+{
+}
+
+function Cosh(d : Double) : Double
+{
+}
+
+function ArcCosh(d : Double) : Double
+{
 }

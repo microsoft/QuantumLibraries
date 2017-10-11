@@ -1,9 +1,14 @@
 ﻿
 
 
-//Positive integer only
-// Converts integer to array of bits
-// Output in little endian
+/// <summary>
+/// Produces binary representation of positive integer in litle Endian format.
+/// </summary>
+/// <param name = "number"> Positive integer. </param>
+/// <param name = "bits"> Bits in binary representation of number. </param>
+/// <remarks> 
+/// The input "number" must be at most 2^bits -1.
+/// </remarks>
 function BitStringFromPositiveInt(number : Int, bits : Int) : Bool[]
 {
 	//FailOn(number > 2^bits - 1, "Number of output bits must be at least Log_2(integer-1).")
@@ -25,7 +30,14 @@ function BitStringFromPositiveInt(number : Int, bits : Int) : Bool[]
 
 }
 
-// Apply X operator on qubit if qubit is marked by 0 in corresponding bit array 
+/// <summary>
+/// Applies a Pauli X operator on the n^th qubit if the n^th bit of a Boolean array is false.
+/// </summary>
+/// <param name = "bits"> Boolean array </param>
+/// <param name = "qubits"> Quantum register </param>
+/// <remarks> 
+/// The boolean array and the quantum register must be of equal length.
+/// </remarks>
 operation PauliXFromBitString(bits : Bool[], qubits : Qubit[]) : ()
 {
 	Body{
@@ -44,7 +56,17 @@ operation PauliXFromBitString(bits : Bool[], qubits : Qubit[]) : ()
 }
 
 
-// On input state that is a particular bitstring, apply operation . bit == True means control on 1
+/// <summary>
+/// Applies a unitary operator on the target register if the control register state corresponds to a specified bit mask.
+/// </summary>
+/// <param name = "bits"> Boolean array </param>
+/// <param name = "oracle"> Unitary operator </param>
+/// <param name = "qubitsTarget"> Quantum register acted on by "oracle" </param>
+/// <param name = "qubitsControl"> Quantum register that controls application of "oracle" </param>
+/// <remarks> 
+/// The length of bits and qubitsTarget must be equal.
+/// For example, bits = [0,1,0,0,1] means that "oracle" is applied if and only if "qubitsTarget" is in the state |0>|1>|0>|0>|1>.
+/// </remarks>
 operation ControlledOnBitString(bits : Bool[] , oracle: (Qubit[] => (): Adjoint, Controlled), qubitsTarget: Qubit[], qubitsControl : Qubit[]) : ()
 {
 	Body{
@@ -58,7 +80,17 @@ operation ControlledOnBitString(bits : Bool[] , oracle: (Qubit[] => (): Adjoint,
 	Adjoint Controlled auto
 }
 
-// On input state that is a particular bitstring, apply operation . bit == True means control on 1
+/// <summary>
+/// Applies a unitary operator on the target register if the control register state corresponds to a specified positive integer.
+/// </summary>
+/// <param name = "numberState"> Positive integer </param>
+/// <param name = "oracle"> Unitary operator </param>
+/// <param name = "qubitsTarget"> Quantum register acted on by "oracle" </param>
+/// <param name = "qubitsControl"> Quantum register that controls application of "oracle" </param>
+/// <remarks> 
+/// "numberState" msut be at most 2^Length(qubitsTarget) - 1.
+/// For example, numberState = 537 means that "oracle" is applied if and only if "qubitsTarget" is in the state |537>.
+/// </remarks>
 operation ControlledOnInt(numberState : Int , oracle: (Qubit[] => (): Adjoint, Controlled), qubitsTarget: Qubit[], qubitsControl : Qubit[]) : ()
 {
 	Body{
