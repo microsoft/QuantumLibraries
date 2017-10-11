@@ -1,0 +1,22 @@
+// TODO: rename these to not have a person's name, that should be in
+//       documentation, not the name.
+operation SingleQubitNielsenBasis() : ((Qubit) => () : Adjoint)[] {
+    Body {
+        // FIXME: Identity takes an array?
+        return [Identity; X; H; HY]
+    }
+}
+
+// operation CartesianProductBasis(leftBasis : ((Qubit[]) => () : Adjoint))
+
+operation NielsenBasis(nQubits : Int) : ((Qubit[]) => () : Adjoint)[] {
+    Body {
+        // TODO
+    }
+}
+
+/// <summary>
+/// </summary>
+operation AssertUnitariesEqualInPlace(actual : (Qubit[] => ()), expected : (Qubit[] => () : Adjoint), nQubits : Int) : () {
+    
+}

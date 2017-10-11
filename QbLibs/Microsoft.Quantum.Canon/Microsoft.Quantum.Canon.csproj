@@ -230,6 +230,21 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Arithmetic.qb</DependentUpon>
     </Compile>
+    <Compile Include="Asserts\AssertOperationsEqualReferenced.g.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Asserts\AssertOperationsEqualReferenced.qb</DependentUpon>
+    </Compile>
+    <Compile Include="Asserts\AssertQubit.g.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Asserts\AssertQubit.qb</DependentUpon>
+    </Compile>
+    <Compile Include="Asserts\VerifyUnitary.g.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Asserts\VerifyUnitary.qb</DependentUpon>
+    </Compile>
     <Compile Include="Endianness.g.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -239,6 +254,11 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>IterativePhaseEstimation.qb</DependentUpon>
+    </Compile>
+    <Compile Include="Math\Types.g.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Math\Types.qb</DependentUpon>
     </Compile>
     <Compile Include="OracleTypes.g.cs">
       <AutoGen>True</AutoGen>
@@ -315,6 +335,18 @@
       <Generator>QbCodeGenerator</Generator>
       <LastGenOutput>Arithmetic.g.cs</LastGenOutput>
     </None>
+    <None Include="Asserts\AssertQubit.qb">
+      <Generator>QbCodeGenerator</Generator>
+      <LastGenOutput>Asserts\AssertQubit.g.cs</LastGenOutput>
+    </None>
+    <None Include="Asserts\AssertOperationsEqualReferenced.qb">
+      <Generator>QbCodeGenerator</Generator>
+      <LastGenOutput>Asserts\AssertOperationsEqualReferenced.g.cs</LastGenOutput>
+    </None>
+    <None Include="Asserts\VerifyUnitary.qb">
+      <Generator>QbCodeGenerator</Generator>
+      <LastGenOutput>Asserts\VerifyUnitary.g.cs</LastGenOutput>
+    </None>
     <None Include="Endianness.qb">
       <Generator>QbCodeGenerator</Generator>
       <LastGenOutput>Endianness.g.cs</LastGenOutput>
@@ -322,6 +354,10 @@
     <None Include="IterativePhaseEstimation.qb">
       <Generator>QbCodeGenerator</Generator>
       <LastGenOutput>IterativePhaseEstimation.g.cs</LastGenOutput>
+    </None>    
+    <None Include="Math\Types.qb">
+      <Generator>QbCodeGenerator</Generator>
+      <LastGenOutput>Math\Types.g.cs</LastGenOutput>
     </None>
     <None Include="OperationPow.qb">
       <Generator>QbCodeGenerator</Generator>
