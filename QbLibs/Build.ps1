@@ -32,17 +32,21 @@ $qflatSources = $csproj.Project.ItemGroup `
     | ForEach-Object { Join-Path $libDirectory $_ }
 
 # Find and include the standard library.
-$qflatSources += @(
-     (Find-QflatCompiler `
-        | Split-Path -Resolve `
-        | ForEach-Object { Join-Path $_ ..\..\..\..\Library\standard.qb } `
-        | Resolve-Path
-    )
-)
+# $qflatSources += @(
+#      (Find-QflatCompiler `
+#         | Split-Path -Resolve `
+#         | ForEach-Object { Join-Path $_ ..\..\..\..\Library\standard.qb } `
+#         | Resolve-Path
+#     )
+# )
 
-"Compiling Q♭ sources:`n$(
-    "`n" -join ($qflatSources | ForEach-Object { "`t$_" })
-)" | Write-Verbose
+# "Compiling Q♭ sources:`n$(
+#     "`n" -join ($qflatSources | ForEach-Object { "`t$_" })
+# )" | Write-Verbose
+
+# "Compiling Q♭ sources:`n$(
+#     $qflatSources
+# )" | Write-Verbose
 
 $qflatSources | ConvertFrom-Qflat -Verbose:$VerbosePreference
 if ($LASTEXITCODE -eq 0) {
