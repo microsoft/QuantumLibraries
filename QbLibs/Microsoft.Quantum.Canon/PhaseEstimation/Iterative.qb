@@ -101,12 +101,27 @@ operation PrepAndMeasurePhaseEstImpl(wInv : Double, t : Double, op : ((Double, D
 // NB: we take std.dev instead of variance here to avoid having to take a square root.
 // FIXME: this currently passes a double to the oracle, as is only appropriate for
 //        continuous-time oracles.
+/// <summary>
+///     Performs iterative phase estimation using a random walk to approximate
+///     Bayesian inference on the classical measurement results from a given
+///     oracle and eigenstate.
+/// </summary>
+/// <param name="oracle">
+///     An operation representing a unitary $U$ such that $U(t)\ket{\phi} = e^{i t \phi}\ket{\phi}$
+///     for a known eigenstate $\ket{\phi}$ and an unknown phase $\phi \in \mathbb{R}^+$.
+/// </param>
+/// <param name="eigenstate">A register in the state $\ket{\phi}$</param>.
+/// <param name="controlQubit">A single qubit initially in $\ket{0}$, suitale for controlling $U$.</param>
+/// <param name="initialMean">Mean of the initial normal prior distribution over $\phi$.</param>
+/// <param name="initialStdDev">Standard deviation of the initial normal prior distribution over $\phi$.</param>
+/// <param name="nMeasurements">Number of measurements to be accepted into the final posterior estimate.</param>
+// TODO: document return type.
 operation RandomWalkPhaseEstimation( oracle : ContinuousOracle, eigenstate : Qubit[], controlQubit : Qubit, initialMean : Double, initialStdDev : Double, nMeasurements : Int)  : Double
 {
     Body {
         let PREFACTOR = 0.79506009762065011
         let INV_SQRT_E = 0.60653065971263342
-        let PI = 3.14159265359
+        let PI = Pi()
         
         // FIXME: #666
         let inner = ContinuousPhaseEstimationIteration(oracle, _, _, target, _)

@@ -27,10 +27,6 @@
 // TODO: Unittests for amplitudeamplification routines
 // TODO: Amplitude estimation -- easiest way to is to use quantum phase estimation libary on Grover Iterate as the oracle
 
-function Pi() : Double {
-	return 3.141592653589793238462643383280
-}
-
 //phasesStart, phasesTarget
 newtype AmpAmpReflectionPhases = (Double[], Double[])
 newtype AmpAmpRotationPhases = (Double[])
@@ -59,7 +55,6 @@ function AmpAmpRotationToReflectionPhases( rotPhases : AmpAmpRotationPhases) : A
 
 	return AmpAmpReflectionPhases(phasesTarget, phasesStart)
 }
-
 
 //All phases are Pi, except for the first reflection about start and the last reflection about target, which are 0.
 function AmpAmpPhasesGrover(iterations : Int) : AmpAmpReflectionPhases{

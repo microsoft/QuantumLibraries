@@ -8,7 +8,6 @@
 ///    The particular encoder chosen was taken from the paper V. Kliunchnikov and D. Maslov, "Optimization of Clifford Circuits," 
 ///    Phys. Rev. Phys. Rev. A 88, 052307 (2013); https://arxiv.org/abs/1305.0810, Figure 4b) and requires a total of 11 gates.
 /// </remark>
-
 operation FiveQubitCodeEncoderImpl(data : Qubit[], scratch : Qubit[])  : ()
 {
     Body {
@@ -37,7 +36,6 @@ operation FiveQubitCodeEncoderImpl(data : Qubit[], scratch : Qubit[])  : ()
 ///    Z_1 (1,0,1,0); Z_2 (0,1,0,1); Z_3 (0,0,1,0); Z_4 (1,0,0,1); Z_5 (0,1,0,0) with Yi = Xi + Yi. Note that the 
 ///    ordering in the table lookup recovery is given by converting the bitvectors to integers (using little endian).
 /// </remark>
-
 function  FiveQubitCodeRecoveryFn()  : RecoveryFn
 {
     return TableLookupRecovery(
@@ -63,7 +61,9 @@ function  FiveQubitCodeRecoveryFn()  : RecoveryFn
 /// <summary>
 ///     Encodes into the ⟦5, 1, 3⟧ quantum code. 
 /// </summary>
-// TODO: document parameters
+/// <param name="physRegister">An array of qubits representing an unencoded state.</param>
+/// <param name="auxQubits">A register of auxillary qubits that will be used to represent the encoded state.</param>
+/// <seealso cref="FiveQubitCodeDecoder" />
 /// <remark> This code was found independently in the following two papers:
 ///    C. H. Bennett, D. DiVincenzo, J. A. Smolin and W. K. Wootters, "Mixed state entanglement and quantum error correction,"
 ///    Phys. Rev. A, 54 (1996) pp. 3824-3851; https://arxiv.org/abs/quant-ph/9604024 and
@@ -80,6 +80,7 @@ operation FiveQubitCodeEncoder(physRegister : Qubit[], auxQubits : Qubit[])  : L
     }
 }
 
+/// <seealso cref="FiveQubitCodeEndocer" />
 operation FiveQubitCodeDecoder( logicalRegister : LogicalRegister)  : (Qubit[], Qubit[])
 {
     Body {

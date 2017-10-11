@@ -4,7 +4,7 @@
 /// </summary>
 /// <param name="oracle">An operation implementing U^m for given integer powers m.</param>
 /// <param name="eigenstate">A quantum register representing an eigenstate |φ> of U, U|φ> =
-///     e^{iφ} |φ> for φ ? [0, 2π) an unknown phase.</param>
+///     e^{iφ} |φ> for φ ∈ [0, 2π) an unknown phase.</param>
 /// <param name="controlRegister">A big-endian representation integer register that can be used
 ///     to control the provided oracle, and that will contain the a representation of φ following
 ///     the application of this operation. The controlRegister is assumed to start in the initial

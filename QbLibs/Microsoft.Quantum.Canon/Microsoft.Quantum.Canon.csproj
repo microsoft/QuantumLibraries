@@ -210,16 +210,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ApplyToEach.g.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>ApplyToEach.qb</DependentUpon>
-    </Compile>
-    <Compile Include="ApplyToRange.g.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>ApplyToRange.qb</DependentUpon>
-    </Compile>    
     <Compile Include="AmplitudeAmplification.g.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -240,16 +230,15 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Paulis.qb</DependentUpon>
     </Compile>
+    <Compile Include="Math\Constants.g.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Math\Constants.qb</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QFT.g.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>QFT.qb</DependentUpon>
-    </Compile>
-    <Compile Include="QuantumPhaseEstimation.g.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>QuantumPhaseEstimation.qb</DependentUpon>
     </Compile>
     <Compile Include="ShiftOp.g.cs">
       <AutoGen>True</AutoGen>
@@ -261,25 +250,18 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Stubs.qb</DependentUpon>
     </Compile>
-    <Compile Include="With.g.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>With.qb</DependentUpon>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <None Include="ApplyToEach.qb">
+    <None Include="Combinators\ApplyToEach.qb">
       <Generator>QbCodeGenerator</Generator>
-      <LastGenOutput>ApplyToEach.g.cs</LastGenOutput>
     </None>
     <None Include="AmplitudeAmplification.qb">
       <Generator>QbCodeGenerator</Generator>
       <LastGenOutput>AmplitudeAmplification.g.cs</LastGenOutput>
     </None>
-    <None Include="ApplyToRange.qb">
+    <None Include="Combinators\ApplyToRange.qb">
       <Generator>QbCodeGenerator</Generator>
-      <LastGenOutput>ApplyToRange.g.cs</LastGenOutput>
     </None>
     <None Include="Arithmetic.qb">
       <Generator>QbCodeGenerator</Generator>
@@ -297,7 +279,10 @@
       <Generator>QbCodeGenerator</Generator>
       <LastGenOutput>Endianness.g.cs</LastGenOutput>
     </None>
-    <None Include="IterativePhaseEstimation.qb">
+    <None Include="Math\Constants.qb">
+      <Generator>QbCodeGenerator</Generator>
+    </None>
+    <None Include="PhaseEstimation\Iterative.qb">
       <Generator>QbCodeGenerator</Generator>
       <LastGenOutput>PhaseEstimation\Iterative.g.cs</LastGenOutput>
     </None>
@@ -305,13 +290,11 @@
       <Generator>QbCodeGenerator</Generator>
       <LastGenOutput>Math\Types.g.cs</LastGenOutput>
     </None>
-    <None Include="OperationPow.qb">
+    <None Include="Combinators\OperationPow.qb">
       <Generator>QbCodeGenerator</Generator>
-      <LastGenOutput>OperationPow.g.cs</LastGenOutput>
     </None>
-    <None Include="OracleTypes.qb">
+    <None Include="PhaseEstimation\Types.qb">
       <Generator>QbCodeGenerator</Generator>
-      <LastGenOutput>OracleTypes.g.cs</LastGenOutput>
     </None>
     <None Include="packages.config" />
     <None Include="Paulis.qb">
@@ -334,9 +317,8 @@
       <Generator>QbCodeGenerator</Generator>
       <LastGenOutput>QFT.g.cs</LastGenOutput>
     </None>
-    <None Include="QuantumPhaseEstimation.qb">
+    <None Include="PhaseEstimation\Quantum.qb">
       <Generator>QbCodeGenerator</Generator>
-      <LastGenOutput>QuantumPhaseEstimation.g.cs</LastGenOutput>
     </None>
     <None Include="ShiftOp.qb">
       <Generator>QbCodeGenerator</Generator>
@@ -346,9 +328,8 @@
       <Generator>QbCodeGenerator</Generator>
       <LastGenOutput>Stubs.g.cs</LastGenOutput>
     </None>
-    <None Include="With.qb">
+    <None Include="Combinators\With.qb">
       <Generator>QbCodeGenerator</Generator>
-      <LastGenOutput>With.g.cs</LastGenOutput>
     </None>
   </ItemGroup>
   <ItemGroup>
