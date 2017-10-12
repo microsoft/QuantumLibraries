@@ -21,7 +21,7 @@
 //operation () H (Qubit q){}
 //operation () R1Frac (Int i, Int j, Qubit q){ Controlled auto }
 
-operation Teleport (a: Int, qs : Qubit[]) : () {   
+operation ApproximateQFT (a: Int, qs : Qubit[]) : () {   
     Body {
         let n = Length(qs)
         for (i in 0..(n-1)) {
@@ -33,5 +33,27 @@ operation Teleport (a: Int, qs : Qubit[]) : () {
 			}
 		}
     }
+	
+	Adjoint auto
+	Controlled auto
+	Controlled Adjoint auto
 }
 
+/// <summary>
+///     Performs the quantum Fourier transform on an quantum register
+///     register containing an integer in the big-endian representation.
+/// </summary>
+/// <param name = "qs"> Quantum register on which to perform the QFT.</param>
+/// <remarks>
+///     QFT requires Z-rotation gates of the form 2π/2ᵏ and Hadamard gates.
+/// </remarks>
+operation QFT ( qs : BigEndian ) : ()
+{
+	Body {
+		ApproximateQFT(Length(qs), qs)
+	}
+
+	Adjoint auto
+	Controlled auto
+	Controlled Adjoint auto
+}

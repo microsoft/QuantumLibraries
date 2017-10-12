@@ -1,4 +1,4 @@
-newtype ResultStack : (Int,  Int, Result[])
+newtype ResultStack = (Int,  Int, Result[])
 
 function StackCapacity(stack : ResultStack) : Int {
     let (size, pos, data) = stack

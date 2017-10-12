@@ -45,6 +45,8 @@ function Invoke-Qbc {
     if ($LASTEXITCODE -ne 0) {
         Write-Error "Qbc.exe failed:`n$($stderr -join "`n")";
     }
+
+    $output | Write-Output;
 }
 
 function ConvertFrom-Qflat {
