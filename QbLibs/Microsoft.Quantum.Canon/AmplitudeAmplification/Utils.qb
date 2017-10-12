@@ -5,6 +5,36 @@ function Pi() : Double {
 	return 3.141592653589793238462643383280
 }
 
+//Generates a random number uniformly sampled in [0, 2^maxBits-1]
+function randomIntPow2 (maxBits : Int) : Int
+{
+   mutable number = 0
+  for( idxBit in 0..maxBits -1){
+        set number = number + (Random([0.5;0.5])) * 2 ^ idxBit
+    }
+    return number    
+}
+
+//Generates a random number uniformly sampled in [0, maxInt)
+function randomInt (maxInt : Int) : Int
+{
+	mutable nBits = 0
+	mutable output = 0
+	//set nBits = Float(maxInt)
+	set nBits = Ceil(Log(2.0,Float(maxInt)))
+	
+	// Should use repeat until success when implemented
+	for( samples in 0..100 ){
+		set output = randomIntPow2(nBits)
+		if(output < maxInt){
+			return output
+		}
+	}
+
+	return output / 2
+
+}
+
 
 // Phase shift about |1...1><1...1|
 operation ReflectionAllOnes( phase: Double, qubits: Qubit[] ) : ()
@@ -38,33 +68,3 @@ operation ReflectionAllZero( phase: Double, qubits: Qubit[] ) : ()
 }
 
 
-operation Identity1(qubits: Qubit[]) : (){
-	Adjoint auto
-	Controlled auto
-	Adjoint Controlled auto
-}
-operation Identity2(qubitsA: Qubit[], qubitsB: Qubit[]) : (){
-	Adjoint auto
-	Controlled auto
-	Adjoint Controlled auto
-}
-
-function ArcTan(d : Double) : Double
-{
-}
-
-function Tan(d : Double) : Double
-{
-}
-
-function Sqrt(d : Double) : Double
-{
-}
-
-function Cosh(d : Double) : Double
-{
-}
-
-function ArcCosh(d : Double) : Double
-{
-}

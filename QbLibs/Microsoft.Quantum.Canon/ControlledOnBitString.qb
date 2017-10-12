@@ -31,6 +31,53 @@ function BitStringFromPositiveInt(number : Int, bits : Int) : Bool[]
 }
 
 /// <summary>
+/// Produces a positive integer from a string of bits in in litle Endian format.
+/// </summary>
+/// <param name = "bits"> Bits in binary representation of number. </param>
+/// <remarks> 
+/// -
+/// </remarks>
+function PositiveIntFromBitString(bits : Bool[]) : Int
+{
+	mutable number = 0
+	let nBits = Length(bits) 
+
+	for ( idxBit in 0..nBits - 1 ){
+		if(bits[idxBit]){
+			set number = number + 2^idxBit  
+		}
+		
+	}
+
+	return number
+
+}
+
+/// <summary>
+/// Produces a positive integer from a string of Results in in litle Endian format.
+/// </summary>
+/// <param name = "results"> Results in binary representation of number. </param>
+/// <remarks> 
+/// -
+/// </remarks>
+function PositiveIntFromResultString(results :Result[]) : Int
+{
+	mutable number = 0
+	let nBits = Length(results) 
+
+	for ( idxBit in 0..nBits - 1 ){
+		if(results[idxBit] == One){
+			set number = number + 2^idxBit  
+		}
+		
+	}
+
+	return number
+
+}
+
+
+/// <summary>
 /// Applies a Pauli X operator on the n^th qubit if the n^th bit of a Boolean array is false.
 /// </summary>
 /// <param name = "bits"> Boolean array </param>

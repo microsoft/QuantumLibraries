@@ -214,7 +214,6 @@
   <ItemGroup>
     <None Include="AmplitudeAmplification\AmplitudeAmplification.qb" />
     <None Include="AmplitudeAmplification\Types.qb" />
-    <None Include="AmplitudeAmplification\UnitTest.qb" />
     <None Include="AmplitudeAmplification\Utils.qb" />
     <None Include="app.config" />
     <None Include="ApplyToEach.qb">
@@ -228,6 +227,7 @@
       <Generator>QbCodeGenerator</Generator>
       <LastGenOutput>Endianness.g.cs</LastGenOutput>
     </None>
+    <None Include="Identity.qb" />
     <None Include="IterativePhaseEstimation.qb">
       <Generator>QbCodeGenerator</Generator>
       <LastGenOutput>IterativePhaseEstimation.g.cs</LastGenOutput>
@@ -240,6 +240,7 @@
       <LastGenOutput>OracleTypes.g.cs</LastGenOutput>
     </None>
     <None Include="packages.config" />
+    <None Include="Paulis.qb" />
     <None Include="QFT.qb">
       <Generator>QbCodeGenerator</Generator>
       <LastGenOutput>QFT.g.cs</LastGenOutput>
@@ -251,6 +252,7 @@
     <None Include="ShiftOp.qb">
       <Generator>QbCodeGenerator</Generator>
     </None>
+    <None Include="Stubs.qb" />
     <None Include="With.qb">
       <Generator>QbCodeGenerator</Generator>
       <LastGenOutput>With.g.cs</LastGenOutput>

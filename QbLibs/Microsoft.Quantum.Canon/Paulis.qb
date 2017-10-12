@@ -166,3 +166,16 @@ operation Reset(target : Qubit) : () {
         I(target)
     }
 }
+
+/// <summary>
+///     Given an array of qubits, measure them and ensure they are in the |0〉 state
+///     such that they can be safely released.
+/// </summary>
+operation ResetAll(target : Qubit[]) : () 
+{
+    Body {
+		for(idxQubit in 0..Length(target)-1){
+			Reset(target[idxQubit])
+		}
+    }
+}

@@ -5,6 +5,19 @@ operation I(target : Qubit) : () {
     Controlled Adjoint auto
 }
 
+operation Identity1(qubits: Qubit[]) : (){
+	Adjoint auto
+	Controlled auto
+	Adjoint Controlled auto
+}
+operation Identity2(qubitsA: Qubit[], qubitsB: Qubit[]) : (){
+	Adjoint auto
+	Controlled auto
+	Adjoint Controlled auto
+}
+
+
+
 // function Identity(value : 'T) : 'T {
 //     return value
 // }

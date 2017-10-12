@@ -48,7 +48,7 @@ $qflatSources = @(
     "AmplitudeAmplification/Utils.qb"
     "AmplitudeAmplification/AmplitudeAmplification.qb"
     "AmplitudeAmplification/ExampleGrover.qb"
-    "AmplitudeAmplification/UnitTest.qb"
+
     "ShiftOp.qb",
     "With.qb",
 
