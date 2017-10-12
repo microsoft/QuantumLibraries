@@ -184,6 +184,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Endianness.qb</DependentUpon>
     </Compile>
+    <None Include="HamiltonianSimulation\HamiltonianSimulation.qb" />
     <Compile Include="IterativePhaseEstimation.g.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -227,6 +228,8 @@
       <Generator>QbCodeGenerator</Generator>
       <LastGenOutput>Endianness.g.cs</LastGenOutput>
     </None>
+    <None Include="HamiltonianSimulation\Types.qb" />
+    <None Include="HamiltonianSimulation\Utils.qb" />
     <None Include="Identity.qb" />
     <None Include="IterativePhaseEstimation.qb">
       <Generator>QbCodeGenerator</Generator>
