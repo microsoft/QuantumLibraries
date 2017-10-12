@@ -28,7 +28,7 @@ $qflatSources = @(
     # so we include it first.
     "Endianness.qb",
 
-    #"DataStructures/Stack.qb",
+    "DataStructures/Stack.qb",
 
     # Similarly with OracleTypes.qb, save for that it depends on OperationPow.qb.
     "OperationPow.qb",
@@ -37,7 +37,7 @@ $qflatSources = @(
     "ApplyToEach.qb",
     "ApplyToRange.qb",
     "Arithmetic.qb",
-    #"Bind.qb",
+    "Bind.qb",
 
     "ControlledOnBitString.qb"
 

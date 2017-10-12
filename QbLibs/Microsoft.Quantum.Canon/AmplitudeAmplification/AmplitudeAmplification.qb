@@ -26,7 +26,7 @@
 // TODO: Different parameter choice for fixed-point
 // TODO: Unittests for amplitudeamplification routines
 // TODO: Amplitude estimation -- easiest way to is to use quantum phase estimation libary on Grover Iterate as the oracle
-
+// TODO when Bug #692 is fixed: Make combinators for implementations
 
 /// <summary>
 /// Converts phases specified as single-qubit rotations to phases as partial reflections
@@ -136,6 +136,26 @@ operation ReflectionStartOracleStateDeterministic(phase: Double, oracle: OracleS
 	Adjoint Controlled auto
 }
 
+//TODO when Bug #692 is fixed: Make combinators for implementations
+operation ReflectionStartOracleStateDeterministicImpl(phase: Double, oracle: OracleStateDeterministic, qubitsSystem: Qubit[]): ()
+{
+	Body {
+		(Adjoint oracle)(qubitsSystem)
+		ReflectionAllZero(phase, qubitsSystem)
+		oracle(qubitsSystem)
+	}
+	Adjoint auto
+	Controlled auto
+	Adjoint Controlled auto
+}
+
+operation ReflectionStartOracleStateDeterministic2(oracle: OracleStateDeterministic): OracleReflection
+{
+	Body {
+		return OracleReflection(ReflectionStartOracleStateDeterministicImpl(_, oracle, _ ))
+	}
+}
+
 /// <summary>
 /// Constructs reflection about a some state |ψ> from the oracle of type "OracleState" where O|0>_f|0>_s = |ψ>_fs
 /// </summary>
@@ -222,6 +242,10 @@ operation AmpAmpObliviousByReflectionPhases(phases : AmpAmpReflectionPhases, ref
 			}
 		}
 	}
+
+	Adjoint auto
+	Controlled auto
+	Adjoint Controlled auto
 }
 
 
@@ -253,6 +277,10 @@ operation AmpAmpObliviousByOraclePhases(phases : AmpAmpReflectionPhases, oracleA
 		AmpAmpObliviousByReflectionPhases(phases, refAncilla, refTarget, oracleSignal, qubits, qubitsSystem)
 		
 	}
+
+	Adjoint auto
+	Controlled auto
+	Adjoint Controlled auto
 }
 
 /// <summary>
@@ -276,6 +304,10 @@ operation AmpAmpByReflectionsPhases(phases : AmpAmpReflectionPhases, refStart : 
 
 		AmpAmpObliviousByReflectionPhases(phases, refStart, refTarget, oracleSignal, qubitsStart, qubitEmpty) 
 	}
+
+	Adjoint auto
+	Controlled auto
+	Adjoint Controlled auto
 }
 
 /// <summary>
@@ -301,6 +333,10 @@ operation AmpAmpByOraclePhases(phases : AmpAmpReflectionPhases, oracleStatePrep 
 		
 		AmpAmpByReflectionsPhases(phases, refStart, refTarget, qubits)
 	}
+
+	Adjoint auto
+	Controlled auto
+	Adjoint Controlled auto
 }
 
 
@@ -325,5 +361,9 @@ operation AmpAmpByOracle(iterations: Int, oracleStatePrep : OracleState, qubitFl
 
 		AmpAmpByOraclePhases(phases, oracleStatePrep, qubitFlag, qubitsStart)
 	}
+
+	Adjoint auto
+	Controlled auto
+	Adjoint Controlled auto
 }
 

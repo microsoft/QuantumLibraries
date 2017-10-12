@@ -22,11 +22,9 @@ operation GroverOracleFromInts(markedElements : Int[],  qubitFlag: Qubit, qubits
 		}
 
 	}	
-
 	Adjoint auto
 	Controlled auto
 	Adjoint Controlled auto
-
 }
 
 
@@ -56,12 +54,24 @@ operation GroverOracleStatePrepImpl(markedElements : Int[], qubitFlag: Qubit , q
 	Controlled auto
 	Adjoint Controlled auto
 }
+
 operation GroverOracleStatePrep(markedElements : Int[]) : OracleState
 {
 	Body{
-		let oracle = OracleState(GroverOracleStatePrepImpl(markedElements, _, _))
-		return oracle
+		return OracleState(GroverOracleStatePrepImpl(markedElements, _, _))
 	}
+}
+
+
+operation GroverSearch2( markedElements: Int[], iterations: Int, qubitFlag: Qubit , qubitsDatabase: Qubit[]) : ()
+{
+	Body{ 
+		let oracle = OracleState(GroverOracleStatePrepImpl(markedElements, _, _))
+        AmpAmpByOracle(iterations, oracle, qubitFlag, qubitsDatabase) 
+	}
+	Adjoint auto
+	Controlled auto
+	Adjoint Controlled auto
 }
 
 
@@ -80,25 +90,11 @@ operation GroverSearch( markedElements: Int[], iterations: Int, qubitFlag: Qubit
 	Body{ 
         AmpAmpByOracle(iterations, GroverOracleStatePrep(markedElements), qubitFlag, qubitsDatabase) 
 	}
-	
 }
-
-
-operation GroverSearchImpl( markedElements: Int[], iterations: Int, qubitFlag: Qubit , qubitsDatabase: Qubit[]) : ()
-{
-	Body{   
-        AmpAmpByOracle(iterations, GroverOracleStatePrep(markedElements), qubitFlag, qubitsDatabase) 
-	}
-
-}
-//
-operation GroverSearch2( markedElements: Int[], iterations: Int) : ((Qubit, Qubit[]) => ())
-{
-	Body{   
-        return GroverSearchImpl(markedElements, iterations, _, _)
-	}
-}
-
+//FIXME Qb Bug #692
+//Adjoint auto
+//Controlled auto
+//Adjoint Controlled auto
 
 /// <summary>
 /// Grover search algorithm
@@ -189,4 +185,3 @@ operation GroverTest( maxMarkedElements : Int, maxGroverIterations : Int , maxQu
 		//
 	}
 }
-
