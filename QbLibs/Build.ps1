@@ -75,7 +75,7 @@ $qflatSources += @(
     "Arithmetic.qb",
     "Bind.qb",
 
-    "QFT4.qb",
+    "QFT.qb",
     "PhaseEstimation/Quantum.qb",
     "PhaseEstimation/Iterative.qb",
     # "AmplitudeAmplification.qb"

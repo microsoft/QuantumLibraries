@@ -1,5 +1,3 @@
-newtype BigEndian : Qubit[]
-
 /// <summary>
 /// 	Apply the Approximate Quantum Fourier Transform (AQFT) to a quantum register. 
 /// </summary>
