@@ -1,20 +1,10 @@
-﻿
-// FIXME: remove this stub once martinro/ branch lands.
-operation QFT (  qs  : BigEndian)  : ()
-{
-    Body {}
-    Adjoint auto
-    Controlled auto
-    Controlled Adjoint auto
-}
-
-/// <summary>
+﻿/// <summary>
 ///     Performs the quantum phase estimation algorithm for a given oracle U and eigenstate,
 ///     reading the phase into a big-endian quantum register.
 /// </summary>
 /// <param name="oracle">An operation implementing U^m for given integer powers m.</param>
 /// <param name="eigenstate">A quantum register representing an eigenstate |φ> of U, U|φ> =
-///     e^{iφ} |φ> for φ ? [0, 2π) an unknown phase.</param>
+///     e^{iφ} |φ> for φ ∈ [0, 2π) an unknown phase.</param>
 /// <param name="controlRegister">A big-endian representation integer register that can be used
 ///     to control the provided oracle, and that will contain the a representation of φ following
 ///     the application of this operation. The controlRegister is assumed to start in the initial
@@ -22,7 +12,9 @@ operation QFT (  qs  : BigEndian)  : ()
 operation QuantumPhaseEstimation( oracle : DiscreteOracle, eigenstate : Qubit[],  controlRegister : BigEndian)  : ()
 {
     Body {
-        let nQubits = Length(controlRegister)
+        // FIXME Solid #701: lengths of UDTs < T[] are not supported currently.
+        // let nQubits = Length(controlRegister)
+        let nQubits = 1
 
         ApplyToEachAC(H, controlRegister)
 

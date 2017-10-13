@@ -3,13 +3,13 @@
 ///     Represents a discrete-time oracle U^m for a fixed operation U
 ///     and a non-negative integer m.
 /// </summary>
-newtype DiscreteOracle : ((Int, Qubit[]) => ():Adjoint,Controlled)
+newtype DiscreteOracle = ((Int, Qubit[]) => ():Adjoint,Controlled)
 
 /// <summary>
 ///     Represents a continuous-time oracle U(δt) : |?(t)> ? |?(t + δt)> for all times t,
 ///     where U is a fixed operation, and where and δt is a non-negative real number.
 /// </summary>
-newtype ContinuousOracle : ((Double, Qubit[]) => ():Adjoint,Controlled)
+newtype ContinuousOracle = ((Double, Qubit[]) => ():Adjoint,Controlled)
 
 // FIXME: Need a better name for this.
 /// <summary>

@@ -32,8 +32,8 @@ operation SwapReverseRegister(register : Qubit[])  : ()
     Controlled Adjoint auto
 }
 
-newtype LittleEndian : Qubit[]
-newtype BigEndian : Qubit[]
+newtype LittleEndian = Qubit[]
+newtype BigEndian = Qubit[]
 
 // The next two operations are just to specify the more
 // specific user-defined types LE and BE so that we can partially apply
