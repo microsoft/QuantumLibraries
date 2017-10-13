@@ -123,7 +123,7 @@ operation RandomWalkPhaseEstimation( oracle : ContinuousOracle, eigenstate : Qub
     Body {
         let PREFACTOR = 0.79506009762065011
         let INV_SQRT_E = 0.60653065971263342
-        let PI = 3.1415
+        let PI = Pi()
         
         // FIXME: #666
         let inner = ContinuousPhaseEstimationIteration(oracle, _, _, eigenstate, _)

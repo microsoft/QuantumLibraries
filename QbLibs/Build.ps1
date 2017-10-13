@@ -51,6 +51,7 @@ $qflatSources += @(
     "Stubs.qb",
 
     "Math/Types.qb",
+    "Math/Constants.qb",
 
     # Diagnostics
     "Asserts/AssertQubit.qb",
