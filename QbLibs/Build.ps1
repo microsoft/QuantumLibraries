@@ -53,6 +53,7 @@ $qflatSources += @(
     "Math/Types.qb",
     "Math/Constants.qb"
 
+    "Combinators/Iter.qb",
     "Combinators/ApplyToEach.qb",
     "Combinators/ApplyToRange.qb",
 

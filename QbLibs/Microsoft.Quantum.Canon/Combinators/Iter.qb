@@ -1,24 +1,31 @@
-
 /// <seealso cref="Iter" />
-operation IterCA(op : ('T => ()), array : 'T[])  : ()
+operation IterCA<'T>(op : ('T => () : Controlled, Adjoint), array : 'T[])  : ()
 {
     Body {
         Iter(op, array)
     }
 
-    Adjoint auto
-    Controlled auto
-    Controlled Adjoint auto
+    Adjoint {
+        (Adjoint IterA)(op, array)
+    }
+    Controlled (controls) {
+        (Controlled IterC)(controls, (op, array))
+    }
+    Controlled Adjoint (controls) {
+        (Controlled IterC)(controls, (Adjoint op, array))
+    }
 }
 
 /// <seealso cref="Iter" />
-operation IterA<'T>(op : ('T => ()), array : 'T[])  : ()
+operation IterA<'T>(op : ('T => () : Adjoint), array : 'T[])  : ()
 {
     Body {
         Iter(op, array)
     }
 
-    Adjoint auto
+    Adjoint {
+        Iter(Adjoint op, array)
+    }
 }
 
 /// <seealso cref="Iter" />
@@ -28,7 +35,9 @@ operation IterC<'T>(op : ('T => () : Controlled), array : 'T[])  : ()
        Iter(op, array)
     }
 
-    Controlled auto
+    Controlled (controls) {
+        Iter((Controlled op)(controls, _), array)
+    }
 }
 
 /// <summary>
