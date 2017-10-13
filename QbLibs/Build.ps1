@@ -50,48 +50,48 @@ $qflatSources += @(
     # Provide stubs for primitive operations.
     "Stubs.qb",
 
-    "Math/Types.qb",
-    "Math/Constants.qb"
+    # "Math/Types.qb",
+    # "Math/Constants.qb"
 
-    "Enumeration/Iter.qb",
-    "Combinators/ApplyToRange.qb",
+    # "Enumeration/Iter.qb",
+    # "Combinators/ApplyToRange.qb",
 
-    # # Diagnostics
-    "Asserts/AssertQubit.qb",
-    "Asserts/AssertOperationsEqualReferenced.qb",
-    # # "Asserts/AssertUnitariesEqualInPlace.qb",
+    # # # Diagnostics
+    # "Asserts/AssertQubit.qb",
+    # "Asserts/AssertOperationsEqualReferenced.qb",
+    # # # "Asserts/AssertUnitariesEqualInPlace.qb",
 
-    # # Provide definitions of the identity and nop.
-    "Identity.qb",
+    # # # Provide definitions of the identity and nop.
+    # "Identity.qb",
 
-    # # Endianness.qb contains newtype declarations that are needed more broadly,
-    # # so we include it first.
-    "Endianness.qb",
+    # # # Endianness.qb contains newtype declarations that are needed more broadly,
+    # # # so we include it first.
+    # "Endianness.qb",
 
-    "DataStructures/Stack.qb",
+    # "DataStructures/Stack.qb",
 
     # # Similarly with OracleTypes.qb, save for that it depends on OperationPow.qb.
-    "Combinators/OperationPow.qb",
-    "PhaseEstimation/Types.qb",
+    "Combinators/OperationPow.qb"
+    # "PhaseEstimation/Types.qb",
 
-    "Arithmetic.qb",
-    "Bind.qb",
+    # "Arithmetic.qb",
+    # "Bind.qb",
 
-    "QFT.qb",
-    "PhaseEstimation/Quantum.qb",
-    "PhaseEstimation/Iterative.qb",
-    # "AmplitudeAmplification.qb"
-    "ShiftOp.qb",
-    "Combinators/With.qb",
+    # "QFT.qb",
+    # "PhaseEstimation/Quantum.qb",
+    # "PhaseEstimation/Iterative.qb",
+    # # "AmplitudeAmplification.qb"
+    # "ShiftOp.qb",
+    # "Combinators/With.qb",
 
-    "Paulis.qb",
+    # "Paulis.qb",
 
-    # # QECC
-    "Qecc/Types.qb",
-    "Qecc/Utils.qb",
-    "Qecc/BitFlipCode.qb",
-    "Qecc/5QubitCode.qb",
-    "Qecc/7QubitCode.qb"
+    # # # QECC
+    # "Qecc/Types.qb",
+    # "Qecc/Utils.qb",
+    # "Qecc/BitFlipCode.qb",
+    # "Qecc/5QubitCode.qb",
+    # "Qecc/7QubitCode.qb"
 ) | ForEach-Object {
     Join-Path $libDirectory $_
 }
