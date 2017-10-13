@@ -53,7 +53,7 @@ $qflatSources += @(
     "Math/Types.qb",
     "Math/Constants.qb"
 
-    "Combinators/Iter.qb",
+    "Enumeration/Iter.qb",
     "Combinators/ApplyToRange.qb",
 
     # # Diagnostics
