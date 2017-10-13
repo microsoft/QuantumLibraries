@@ -49,8 +49,8 @@ operation AssertOperationsEqualReferenced(actual : (Qubit[] => ()), expected : (
                 (Adjoint expected)(target)
                 (Adjoint PrepareEntangledState)(reference, target)
 
-                ApplyToEach(AssertQubit(Zero, _), reference)
-                ApplyToEach(AssertQubit(Zero, _), target)
+                // Iter(AssertQubit(Zero, _), reference)
+                // Iter(AssertQubit(Zero, _), target)
             }
         }
     }

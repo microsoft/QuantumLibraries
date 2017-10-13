@@ -16,7 +16,7 @@ operation QuantumPhaseEstimation( oracle : DiscreteOracle, eigenstate : Qubit[],
         // let nQubits = Length(controlRegister)
         let nQubits = 1
 
-        ApplyToEachAC(H, controlRegister)
+        IterCA(H, controlRegister)
 
         for (idxControlQubit in 0..(nQubits - 1)) {
             let control = controlRegister[idxControlQubit]
