@@ -1,29 +1,52 @@
 ﻿
-operation OperationPowImpl(oracle : (Qubit[] => ()), power : Int, target : Qubit[])  : ()
+operation OperationPowImpl<'T>(op : ('T => ()), power : Int, target : 'T)  : ()
 {
     Body {
         for (idxApplication in 0..power - 1) {
-            oracle(target)
+            op(target)
         }
     }
 }
 
-operation OperationPowImplAC(oracle : (Qubit[] => ():Controlled,Adjoint), power : Int, target : Qubit[])  : ()
+operation OperationPowImplA<'T>(op : ('T => () : Adjoint), power : Int, target : 'T)  : ()
 {
     Body {
-        for (idxApplication in 0..power - 1) {
-            oracle(target)
-        }
+        OperationPowImpl(op, power, target)
     }
 
-    Adjoint auto
-    Controlled auto
-    Controlled Adjoint auto
+    Adjoint {
+        OperationPowImplA(op, power, target)
+    }
 }
 
-operation OperationPow(oracle : (Qubit[] => ()), power : Int)  : (Qubit[] => ())
+operation OperationPowImplC<'T>(op : ('T => () : Controlled), power : Int, target : 'T)  : ()
 {
     Body {
-        return OperationPowImpl(oracle, power, _)
+        OperationPowImpl(op, power, target)
     }
+    Controlled (controls) {
+        (Controlled OperationPowImplC)(controls, (op, power, target))
+    }
+}
+
+operation OperationPowImplCA<'T>(op : ('T => ():Controlled, Adjoint), power : Int, target : 'T)  : ()
+{
+    Body {
+        OperationPowImpl(op, power, target)
+    }
+
+    Adjoint {
+        OperationPowImplA(op, power, target)
+    }
+    Controlled (controls) {
+        (Controlled OperationPowImplC)(controls, (op, power, target))
+    }
+    Controlled Adjoint (controls) {
+        (Controlled OperationPowImplC)(controls, (Adjoint op, power, target))
+    }
+}
+
+function OperationPow<'T>(op : ('T => ()), power : Int)  : ('T => ())
+{
+    return OperationPowImpl(op, power, _)
 }
