@@ -12,7 +12,9 @@
 operation QuantumPhaseEstimation( oracle : DiscreteOracle, eigenstate : Qubit[],  controlRegister : BigEndian)  : ()
 {
     Body {
-        let nQubits = Length(controlRegister)
+        // FIXME Solid #701: lengths of UDTs < T[] are not supported currently.
+        // let nQubits = Length(controlRegister)
+        let nQubits = 1
 
         ApplyToEachAC(H, controlRegister)
 

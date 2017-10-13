@@ -1,10 +1,10 @@
-operation I(target : Qubit) : () {
+operation I<'T>(target : 'T) : () {
     Body {}
     Adjoint self
     Controlled auto
     Controlled Adjoint auto
 }
 
-// function Identity(value : 'T) : 'T {
-//     return value
-// }
+function Identity<'T>(value : 'T) : 'T {
+    return value
+}

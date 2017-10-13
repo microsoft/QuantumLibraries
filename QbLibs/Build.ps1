@@ -51,28 +51,29 @@ $qflatSources += @(
     "Stubs.qb",
 
     "Math/Types.qb",
-    "Math/Constants.qb",
+    "Math/Constants.qb"
 
-    # Diagnostics
+    "Combinators/ApplyToEach.qb",
+    "Combinators/ApplyToRange.qb",
+
+    # # Diagnostics
     "Asserts/AssertQubit.qb",
     "Asserts/AssertOperationsEqualReferenced.qb",
-    # "Asserts/AssertUnitariesEqualInPlace.qb",
+    # # "Asserts/AssertUnitariesEqualInPlace.qb",
 
-    # Provide definitions of the identity and nop.
+    # # Provide definitions of the identity and nop.
     "Identity.qb",
 
-    # Endianness.qb contains newtype declarations that are needed more broadly,
-    # so we include it first.
+    # # Endianness.qb contains newtype declarations that are needed more broadly,
+    # # so we include it first.
     "Endianness.qb",
 
     "DataStructures/Stack.qb",
 
-    # Similarly with OracleTypes.qb, save for that it depends on OperationPow.qb.
+    # # Similarly with OracleTypes.qb, save for that it depends on OperationPow.qb.
     "Combinators/OperationPow.qb",
     "PhaseEstimation/Types.qb",
 
-    "Combinators/ApplyToEach.qb",
-    "Combinators/ApplyToRange.qb",
     "Arithmetic.qb",
     "Bind.qb",
 
@@ -84,7 +85,7 @@ $qflatSources += @(
     "Combinators/With.qb",
 
     "Paulis.qb",
-    
+
     # # QECC
     "Qecc/Types.qb",
     "Qecc/Utils.qb",
