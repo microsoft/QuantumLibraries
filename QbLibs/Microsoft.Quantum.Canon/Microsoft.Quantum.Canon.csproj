@@ -179,6 +179,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="AmplitudeAmplification\ExampleGrover.qb" />
+    <None Include="AmplitudeAmplification\ExampleAA.qb" />
     <Compile Include="Endianness.g.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -235,6 +236,7 @@
       <Generator>QbCodeGenerator</Generator>
       <LastGenOutput>IterativePhaseEstimation.g.cs</LastGenOutput>
     </None>
+    <None Include="Math\NativeStubs.qb" />
     <None Include="OperationPow.qb">
       <Generator>QbCodeGenerator</Generator>
     </None>
@@ -256,6 +258,7 @@
       <Generator>QbCodeGenerator</Generator>
     </None>
     <None Include="Stubs.qb" />
+    <None Include="TypeConversion.qb" />
     <None Include="With.qb">
       <Generator>QbCodeGenerator</Generator>
       <LastGenOutput>With.g.cs</LastGenOutput>

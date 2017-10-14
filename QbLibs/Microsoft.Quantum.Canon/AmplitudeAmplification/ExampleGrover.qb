@@ -18,7 +18,8 @@ operation GroverOracleFromInts(markedElements : Int[],  qubitFlag: Qubit, qubits
 		let nQubits = Length(qubitsDatabase)
 		let nMarked = Length(markedElements)
 		for(idxMarked in 0..nMarked - 1){
-			ControlledOnInt(markedElements[idxMarked], ApplyToEachAC(X, _), qubitsDatabase, [qubitFlag])
+			//Note: As X accepts a Qubit, and ControlledOnInt only accepts Qubit[], we use ApplyToEachAC(X, _) which accepts Qubit[] even though the target is only 1 Qubit.
+			(ControlledOnInt(markedElements[idxMarked], ApplyToEachAC(X, _)))(qubitsDatabase, [qubitFlag])
 		}
 
 	}	
@@ -115,7 +116,7 @@ operation GroverSearchMeasure( markedElements: Int[], iterations: Int, nQubits :
 		   ResetAll(qubits)
            
 		}
-		set foundIndex = PositiveIntFromResultString(bits)
+		set foundIndex = PositiveIntFromResultArr(bits)
         
         return (result, foundIndex)
 

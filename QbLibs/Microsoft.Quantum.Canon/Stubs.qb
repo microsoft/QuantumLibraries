@@ -12,51 +12,6 @@ function Random(value : Double[]) : Int
     return 0
 }
 
-function Log(base : Double, input: Double) : Double
-{
-    return 0.0
-}
-
-function Ceil(value: Double) : Int
-{
-    return 0
-}
-
-function ArcSin(d : Double) : Double
-{
-    return 0.0
-}
-
-function Sin(d : Double) : Double
-{
-    return 0.0
-}
-
-function ArcTan(d : Double) : Double
-{
-    return 0.0
-}
-
-function Tan(d : Double) : Double
-{
-    return 0.0
-}
-
-function Sqrt(d : Double) : Double
-{
-    return 0.0
-}
-
-function Cosh(d : Double) : Double
-{
-    return 0.0
-}
-
-function ArcCosh(d : Double) : Double
-{
-    return 0.0
-}
-
 
 operation MultiM(targets : Qubit[]) : Result[]
 {
@@ -65,3 +20,4 @@ operation MultiM(targets : Qubit[]) : Result[]
         return results
     }
 }
+

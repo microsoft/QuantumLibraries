@@ -20,6 +20,9 @@ $libDirectory = Join-Path $PSScriptRoot "Microsoft.Quantum.Canon"
 $qflatSources = @(
     # Provide stubs for primitive operations.
     "Stubs.qb",
+    "TypeConversion.qb",
+    "Math/NativeStubs.qb",
+
 
     # Provide definitions of the identity and nop.
     "Identity.qb",
@@ -38,7 +41,7 @@ $qflatSources = @(
     "ApplyToRange.qb",
     "Arithmetic.qb",
     "Bind.qb",
-
+    "Paulis.qb",
     "ControlledOnBitString.qb"
 
     #"IterativePhaseEstimation.qb",
@@ -52,7 +55,7 @@ $qflatSources = @(
     "ShiftOp.qb",
     "With.qb",
 
-    "Paulis.qb",
+  
     
     # # QECC
     "Qecc/Types.qb",
