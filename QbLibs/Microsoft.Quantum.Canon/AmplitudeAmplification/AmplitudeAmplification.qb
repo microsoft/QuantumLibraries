@@ -163,12 +163,14 @@ operation ReflectionStartOracleStateImpl(phase: Double, oracle: OracleState, qub
 	Adjoint Controlled auto
 }
 
+//FIXME QubitExclude not reversible so assume that Flagqubit is in the 0 index
 operation ReflectionStartOracleStateImpl2(phase: Double, idxQubitFlag : Int, oracle: OracleState, qubits: Qubit[]): ()
 {
 	Body{
+		let nQubits = Length(qubits)
 		let qubitFlag = qubits[idxQubitFlag]
 		//let qubitsSystem = QubitExclude([idxQubitFlag], qubits)
-		let qubitsSystem = qubits[1..3]
+		let qubitsSystem = qubits[1..nQubits-1]
 		ReflectionStartOracleStateImpl(phase, oracle, qubitFlag, qubitsSystem)
 	}
 	Adjoint auto

@@ -70,6 +70,7 @@ operation ReflectionAllZero( phase: Double, qubits: Qubit[] ) : ()
 
 //qubit array slicing by index
 // Number of qubits should be larger than largest value in indices
+// FIXME This needs to be Adjoint Controlled
 operation QubitSlice(indices : Int[], qubits : Qubit[]) : Qubit[] 
 {
     Body
@@ -82,12 +83,13 @@ operation QubitSlice(indices : Int[], qubits : Qubit[]) : Qubit[]
 
         return sliced
     }
-
 }
 
 
 //QubitExclude([idxQubitFlag], qubits)
 
+//QubitExclude([idxQubitFlag], qubits)
+// FIXME This needs to be Adjoint Controlled
 operation QubitExclude(remove : Int[], qubits : Qubit[]) : Qubit[] 
 {
     Body
@@ -102,13 +104,13 @@ operation QubitExclude(remove : Int[], qubits : Qubit[]) : Qubit[]
         mutable counter = 0
 
         for( idx in 0..nQubits - 1){
-            set arrayKeep[idx] = idx + 1
+            set arrayKeep[idx] = idx
         }
         for( idx in 0..nSliced - 1 ){
-            set arrayKeep[remove[idx]] = 0
+            set arrayKeep[remove[idx]] = -1
         }
         for( idx in 0..nQubits - 1 ){
-            if(arrayKeep[idx] > 0){
+            if(arrayKeep[idx] >= 0){
                 set sliced[counter] = qubits[arrayKeep[idx]]
                 set counter = counter + 1
             }
@@ -118,3 +120,4 @@ operation QubitExclude(remove : Int[], qubits : Qubit[]) : Qubit[]
     }
 
 }
+

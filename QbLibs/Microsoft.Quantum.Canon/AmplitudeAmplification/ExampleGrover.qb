@@ -175,3 +175,5 @@ operation GroverTest( maxMarkedElements : Int, maxGroverIterations : Int , maxQu
 		//
 	}
 }
+
+//Example Gover Hard-coded explicitly expand all gates?
