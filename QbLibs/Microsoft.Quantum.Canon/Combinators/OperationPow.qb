@@ -50,3 +50,18 @@ function OperationPow<'T>(op : ('T => ()), power : Int)  : ('T => ())
 {
     return OperationPowImpl(op, power, _)
 }
+
+function OperationPowA<'T>(op : ('T => () : Adjoint), power : Int)  : ('T => ())
+{
+    return OperationPowImplA(op, power, _)
+}
+
+function OperationPowC<'T>(op : ('T => () : Controlled), power : Int)  : ('T => ())
+{
+    return OperationPowImplC(op, power, _)
+}
+
+function OperationPowCA<'T>(op : ('T => () : Controlled, Adjoint), power : Int)  : ('T => ())
+{
+    return OperationPowImplCA(op, power, _)
+}
