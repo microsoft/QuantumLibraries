@@ -23,7 +23,8 @@ newtype ContinuousOracle = ((Double, Qubit[]) => ():Adjoint,Controlled)
 operation OracleToDiscrete(blackBoxOracle : (Qubit[] => ():Adjoint,Controlled))  : DiscreteOracle
 {
     Body {
-        let oracle = DiscreteOracle(OperationPowImplAC(blackBoxOracle, _, _))
+        let bareOracle = OperationPowImplCA(blackBoxOracle, _, _)
+        let oracle = DiscreteOracle(bareOracle)
         return oracle
     }
 }
