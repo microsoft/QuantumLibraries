@@ -383,3 +383,51 @@ operation AmpAmpByOracle(iterations: Int, oracleStatePrep : OracleState, qubitFl
 	Adjoint Controlled auto
 }
 
+/// <summary>
+/// Fixed-Point Amplitude Amplification algorithm
+/// </summary>
+/// qubitsStart must be in the |0..0> state
+operation AmpAmpRUSByOracle(oracleStatePrep : OracleState, qubitsStart: Qubit[]) : ()
+{
+	Body {
+		let queriesMax = 999 // Should be a power of 2
+		let successMin = 0.99
+		mutable finished = Zero
+		mutable exponentMax = 0
+		mutable exponentCurrent = 0
+		//FIXME use repeat until loop syntax
+		//Complexity: Let \theta = \mathcal{O}(\sqrt{lambda}) 
+		// Number of Measurements = O( Log^2(1/\theta) )
+		// Number of Queries = O(1/\theta)
+		
+		using( qubitFlag = Qubit[1] ){
+			repeat { 
+				if( 2^exponentMax > queriesMax ){
+					fail("Target state not found. Maximum number of queries exceeded.")
+				}
+				repeat { 
+					let queries = 2^exponentCurrent
+					let phases = AmpAmpPhasesFixedPoint( queries, successMin ) 
+					AmpAmpByOraclePhases(phases, oracleStatePrep, qubitFlag[0], qubitsStart)
+
+					set finished = M(qubitFlag[0])
+					set exponentCurrent = exponentCurrent + 1
+				} 
+				until(finished == One || exponentCurrent > exponentMax)
+				fixup {
+					// qubitFlag is already in Zero for fixup to apply
+					ResetAll(qubitsStart)
+				}
+			
+			set exponentCurrent = 0
+			set exponentMax = exponentMax + 1
+			} 
+			until(finished == One)
+			fixup {
+				ResetAll(qubitsStart)
+			}
+		}
+
+		//AmpAmpByOraclePhases(phases, oracleStatePrep, qubitFlag, qubitsStart)
+	}
+}
