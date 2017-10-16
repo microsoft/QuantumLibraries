@@ -162,7 +162,6 @@ operation ReflectionStartOracleStateImpl(phase: Double, oracle: OracleState, qub
 	Controlled auto
 	Adjoint Controlled auto
 }
-
 //FIXME QubitExclude not reversible so assume that Flagqubit is in the 0 index
 operation ReflectionStartOracleStateImpl2(phase: Double, idxQubitFlag : Int, oracle: OracleState, qubits: Qubit[]): ()
 {
@@ -388,7 +387,12 @@ operation AmpAmpByOracle(iterations: Int, oracleStatePrep : OracleState, qubitFl
 /// <summary>
 /// Fixed-Point Amplitude Amplification algorithm
 /// </summary>
-/// qubitsStart must be in the |0..0> state
+/// <param name = "oracleStatePrep"> Unitary oracle that prepares start state </param>
+/// <param name = "qubitsStart"> Qubit register </param>
+/// <remarks> 
+/// qubitsStart must be in the |0..0> state. This iterates over a number of queries in powers of 2 until queriesMax 
+/// is reached, or the target state is found.
+/// </remarks>
 operation AmpAmpRUSByOracle(oracleStatePrep : OracleState, qubitsStart: Qubit[]) : ()
 {
 	Body {
@@ -397,7 +401,7 @@ operation AmpAmpRUSByOracle(oracleStatePrep : OracleState, qubitsStart: Qubit[])
 		mutable finished = Zero
 		mutable exponentMax = 0
 		mutable exponentCurrent = 0
-		//FIXME use repeat until loop syntax
+
 		//Complexity: Let \theta = \mathcal{O}(\sqrt{lambda}) 
 		// Number of Measurements = O( Log^2(1/\theta) )
 		// Number of Queries = O(1/\theta)
