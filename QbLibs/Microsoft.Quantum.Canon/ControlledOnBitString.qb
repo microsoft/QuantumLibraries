@@ -1,108 +1,4 @@
 ﻿
-
-
-/// <summary>
-/// Produces binary representation of positive integer in litle Endian format.
-/// </summary>
-/// <param name = "number"> Positive integer. </param>
-/// <param name = "bits"> Bits in binary representation of number. </param>
-/// <remarks> 
-/// The input "number" must be at most 2^bits -1.
-/// </remarks>
-function BitStringFromPositiveInt(number : Int, bits : Int) : Bool[]
-{
-	//FailOn(number > 2^bits - 1, "Number of output bits must be at least Log_2(integer-1).")
-
-	mutable outputBits = new Bool[bits]
-	mutable tempInt = number
-
-	for ( idxBit in 0..bits - 1 ){
-		if( tempInt % 2 == 0 ){
-			set outputBits[idxBit] = false
-		}
-		else{
-			set outputBits[idxBit] = true
-		}
-		set tempInt = tempInt/2
-	}
-
-	return outputBits
-
-}
-
-/// <summary>
-/// Produces a positive integer from a string of bits in in litle Endian format.
-/// </summary>
-/// <param name = "bits"> Bits in binary representation of number. </param>
-/// <remarks> 
-/// -
-/// </remarks>
-function PositiveIntFromBitString(bits : Bool[]) : Int
-{
-	mutable number = 0
-	let nBits = Length(bits) 
-
-	for ( idxBit in 0..nBits - 1 ){
-		if(bits[idxBit]){
-			set number = number + 2^idxBit  
-		}
-		
-	}
-
-	return number
-
-}
-
-/// <summary>
-/// Produces a positive integer from a string of Results in in litle Endian format.
-/// </summary>
-/// <param name = "results"> Results in binary representation of number. </param>
-/// <remarks> 
-/// -
-/// </remarks>
-function PositiveIntFromResultString(results :Result[]) : Int
-{
-	mutable number = 0
-	let nBits = Length(results) 
-
-	for ( idxBit in 0..nBits - 1 ){
-		if(results[idxBit] == One){
-			set number = number + 2^idxBit  
-		}
-		
-	}
-
-	return number
-
-}
-
-
-/// <summary>
-/// Applies a Pauli X operator on the n^th qubit if the n^th bit of a Boolean array is false.
-/// </summary>
-/// <param name = "bits"> Boolean array </param>
-/// <param name = "qubits"> Quantum register </param>
-/// <remarks> 
-/// The boolean array and the quantum register must be of equal length.
-/// </remarks>
-operation PauliXFromBitString(bits : Bool[], qubits : Qubit[]) : ()
-{
-	Body{
-		let nBits = Length(bits)
-		//FailOn (nbits != Length(qubits), "Number of control bits must be equal to number of control qubits")
-
-		for(idxBit in 0..nBits - 1){
-			if(bits[idxBit] == false){
-				X(qubits[idxBit])
-			}
-		}
-	}
-	Adjoint auto
-	Controlled auto
-	Adjoint Controlled auto
-}
-
-
 /// <summary>
 /// Applies a unitary operator on the target register if the control register state corresponds to a specified bit mask.
 /// </summary>
@@ -112,19 +8,23 @@ operation PauliXFromBitString(bits : Bool[], qubits : Qubit[]) : ()
 /// <param name = "qubitsControl"> Quantum register that controls application of "oracle" </param>
 /// <remarks> 
 /// The length of bits and qubitsTarget must be equal.
-/// For example, bits = [0,1,0,0,1] means that "oracle" is applied if and only if "qubitsTarget" is in the state |0>|1>|0>|0>|1>.
+/// For example, bits = [0,1,0,0,1] means that "oracle" is applied if and only if "qubitsControl" is in the state |0>|1>|0>|0>|1>.
 /// </remarks>
-operation ControlledOnBitString(bits : Bool[] , oracle: (Qubit[] => (): Adjoint, Controlled), qubitsTarget: Qubit[], qubitsControl : Qubit[]) : ()
+//FIXME Make this generic in the oracle A, C, AC
+operation ControlledOnBitStringImpl(bits : Bool[] , oracle: (Qubit[] => (): Adjoint, Controlled), qubitsControl : Qubit[], qubitsTarget: Qubit[]) : ()
 {
 	Body{
-
-		WithAC(PauliXFromBitString(bits, _), (Controlled oracle)(_, qubitsTarget), qubitsControl)
+		WithAC(ApplyPauliFromBitString(Xpauli, false, bits, _), (Controlled oracle)(_, qubitsTarget), qubitsControl)
 		
 	}
 
 	Adjoint auto
 	Controlled auto
 	Adjoint Controlled auto
+}
+function ControlledOnBitString(bits : Bool[] , oracle: (Qubit[] => (): Adjoint, Controlled)) : ((Qubit[],Qubit[]) => (): Adjoint, Controlled)
+{
+	return ControlledOnBitStringImpl(bits, oracle, _, _)
 }
 
 /// <summary>
@@ -138,17 +38,22 @@ operation ControlledOnBitString(bits : Bool[] , oracle: (Qubit[] => (): Adjoint,
 /// "numberState" msut be at most 2^Length(qubitsTarget) - 1.
 /// For example, numberState = 537 means that "oracle" is applied if and only if "qubitsTarget" is in the state |537>.
 /// </remarks>
-operation ControlledOnInt(numberState : Int , oracle: (Qubit[] => (): Adjoint, Controlled), qubitsTarget: Qubit[], qubitsControl : Qubit[]) : ()
+//FIXME Make this generic in the oracle A, C, AC
+operation ControlledOnIntImpl(numberState : Int , oracle: (Qubit[] => (): Adjoint, Controlled), qubitsControl : Qubit[], qubitsTarget: Qubit[]) : ()
 {
 	Body{
 
-		let bits = BitStringFromPositiveInt(numberState, Length(qubitsControl))
+		let bits = BoolArrFromPositiveInt(numberState, Length(qubitsControl))
 
-		WithAC(PauliXFromBitString(bits, _), (Controlled oracle)(_, qubitsTarget), qubitsControl)
-		
+		(ControlledOnBitString(bits, oracle))(qubitsControl, qubitsTarget)
+
 	}
 
 	Adjoint auto
 	Controlled auto
 	Adjoint Controlled auto
+}
+function ControlledOnInt(numberState : Int , oracle: (Qubit[] => (): Adjoint, Controlled)) : ((Qubit[],Qubit[]) => (): Adjoint, Controlled)
+{
+	return ControlledOnIntImpl(numberState, oracle, _, _)
 }

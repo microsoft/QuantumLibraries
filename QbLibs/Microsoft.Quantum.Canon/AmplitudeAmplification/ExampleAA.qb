@@ -1,0 +1,54 @@
+﻿///Here we consider the smallest example of amplitude amplification
+///Suppose we have a single-qbuit oracle that prepares the state
+/// O |0> = \lambda |1> + \sqrt{1-|\lambda|^2} |0>
+/// The goal is to amplify the |1> state
+/// We can do this either by synthesizing the reflection about the start and target states ourselves,
+/// We can also do it by passing the oracle for state preparation
+ 
+operation ExampleStatePrepImpl( lambda : Double, qubitFlag : Qubit , qubitSystem : Qubit[] ) : ()
+{
+    Body
+    {
+        let rotAngle = 2.0 * ArcSin(lambda)
+        Ry(rotAngle, qubitFlag)
+    }
+
+    Adjoint auto
+    Controlled auto
+    Adjoint Controlled auto
+ 
+}
+function ExampleStatePrep( lambda : Double ) : OracleState
+{
+    return OracleState( ExampleStatePrepImpl (lambda, _, _) )
+ 
+}
+ 
+///In this mininal example, there are no system qubits, only a single flag qubit. 
+/// ExampleStatePrep is already of type  OracleState, so we call
+/// AmpAmpByOracle(iterations: Int, oracleStatePrep : OracleState, qubitFlag : Qubit, qubitsStart: Qubit[]) : ()
+operation ExampleAAbyOracle() : ()
+{
+    Body{
+        let lambda = 0.2
+        let iterations = 3
+        let oracleStatePrep = ExampleStatePrep(lambda)
+        using(qubits = Qubit[1]){
+            let qubitFlag = qubits[0]
+            let qubitsSystem = new Qubit[0]
+            AmpAmpByOracle(iterations, oracleStatePrep, qubitFlag, qubitsSystem)
+
+            let successAmplitude = Sin( Float(2*iterations + 1) * ArcSin( lambda ))
+
+            AssertProb([Zpauli], [qubitFlag], One, successAmplitude * successAmplitude, "Error: Success probability does not match theory", 1e-10)
+
+            Reset(qubitFlag)
+        }
+    }
+ 
+}
+
+
+/// thus we call the reflection operator
+// ReflectionTargetOracleState(idxQubitFlag : Int)
+/// ReflectionStartOracleState(idxQubitFlag : Int, oracle: OracleState)

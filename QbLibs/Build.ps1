@@ -20,44 +20,48 @@ $libDirectory = Join-Path $PSScriptRoot "Microsoft.Quantum.Canon"
 $qflatSources = @(
     # Provide stubs for primitive operations.
     "Stubs.qb",
+    "TypeConversion.qb",
+    "Math/NativeStubs.qb",
+
 
     # Provide definitions of the identity and nop.
     "Identity.qb",
 
     # Endianness.qb contains newtype declarations that are needed more broadly,
     # so we include it first.
-    "Endianness.qb",
+    #"Endianness.qb",
 
-    "DataStructures/Stack.qb",
+    #"DataStructures/Stack.qb",
 
     # Similarly with OracleTypes.qb, save for that it depends on OperationPow.qb.
-    "OperationPow.qb",
-    "OracleTypes.qb",
+    #"OperationPow.qb",
+    #"OracleTypes.qb",
 
     "ApplyToEach.qb",
-    "ApplyToRange.qb",
-    "Arithmetic.qb",
-    "Bind.qb",
-
-    "ControlledOnBitString.qb"
-
+    #"ApplyToRange.qb",
+    #"Arithmetic.qb",
+    #"Bind.qb",
+    "Paulis.qb",
+    "ControlledOnBitString.qb",
+    "With.qb",
     #"IterativePhaseEstimation.qb",
     # # "QFT.qb", # QFT commented out in lieu of merging in martinro/ branch.
     #"QuantumPhaseEstimation.qb",
-    "AmplitudeAmplification/Types.qb"
-    "AmplitudeAmplification/Utils.qb"
-    "AmplitudeAmplification/AmplitudeAmplification.qb"
+    "AmplitudeAmplification/Types.qb",
+    "AmplitudeAmplification/Utils.qb",
+    "AmplitudeAmplification/AmplitudeAmplification.qb",
+    "AmplitudeAmplification/ExampleAA.qb",
     "AmplitudeAmplification/ExampleGrover.qb"
 
-    "ShiftOp.qb",
-    "With.qb",
+    #"ShiftOp.qb",
 
-    "Paulis.qb",
+
+  
     
     # # QECC
-    "Qecc/Types.qb",
-    "Qecc/Utils.qb",
-    "Qecc/BitFlipCode.qb"
+    #"Qecc/Types.qb",
+    #"Qecc/Utils.qb",
+    #"Qecc/BitFlipCode.qb"
 ) | ForEach-Object {
     Join-Path $libDirectory $_
 }
