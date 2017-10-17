@@ -56,6 +56,8 @@ $qflatSources += @(
     "Enumeration/Iter.qb",
     "Combinators/ApplyToRange.qb",
 
+    "Arrays/Arrays.qb",
+
     # # # Diagnostics
     "Asserts/AssertQubit.qb",
     "Asserts/AssertOperationsEqualReferenced.qb",
