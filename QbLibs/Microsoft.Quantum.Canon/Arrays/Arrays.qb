@@ -24,3 +24,12 @@ function Slice<'T>(indices : Int[], array : 'T[]) : 'T[] {
 
     return newArray
 }
+
+
+function LookupImpl<'T>(array : 'T[], index : Int) : 'T {
+    return array[index]
+}
+
+function LookupFunction<'T>(array : 'T[]) : (Int -> 'T) {
+    return LookupImpl(array, _)
+}
