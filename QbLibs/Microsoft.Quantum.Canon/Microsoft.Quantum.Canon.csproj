@@ -279,6 +279,7 @@
       <Generator>QbCodeGenerator</Generator>
       <LastGenOutput>Endianness.g.cs</LastGenOutput>
     </None>
+    <None Include="HamSim\HamMinimal.qb" />
     <None Include="Math\Constants.qb">
       <Generator>QbCodeGenerator</Generator>
     </None>
@@ -336,5 +337,6 @@
     <Analyzer Include="..\packages\Microsoft.CodeAnalysis.Analyzers.1.1.0\analyzers\dotnet\cs\Microsoft.CodeAnalysis.Analyzers.dll" />
     <Analyzer Include="..\packages\Microsoft.CodeAnalysis.Analyzers.1.1.0\analyzers\dotnet\cs\Microsoft.CodeAnalysis.CSharp.Analyzers.dll" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

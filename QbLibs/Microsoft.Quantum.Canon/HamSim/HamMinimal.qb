@@ -1,0 +1,265 @@
+//This is an almost minimal example of Hamiltonian simulation
+//This includes basic features for trotterization and qubitization
+//Data is included for finding the ground state energies of the H2 molecule
+//Two approaches worked out -- one by QPE on Trotterization, and another by QPE on qubiterate.
+
+//Paulis in interaction and the qubits they act on
+newtype PauliString : (Pauli[], Int[])
+newtype HamPauli : (Double[], PauliString[])
+newtype TrotterPauli : (Double[], PauliString[])
+
+//Terms and coefficients from "Scalable Quantum Simulation of Molecular Energies" O'Malley et. al. https://arxiv.org/abs/1512.06860
+function HamH2Terms() : PauliString
+{
+    let nTerms = 5
+    mutable hamTerms = PauliString[nTerms]
+    set hamTerms[0] = PauliString(([Zpauli],[0]))
+    set hamTerms[1] = PauliString(([Zpauli],[1]))
+    set hamTerms[2] = PauliString(([Zpauli,Zpauli],[0,1]))
+    set hamTerms[3] = PauliString(([Ypauli,Ypauli],[0,1]))
+    set hamTerms[4] = PauliString(([Xpauli,Xpauli],[0,1]))
+
+    return hamTerms
+}
+function HamH2Coeff(idxBond : Int): Double[]
+{
+    let nTerms = 5
+    let nBondLengths = 54
+    mutable hamBondCoeff = new Double[nTerms][nBondLengths] 
+    let bondLength = [0.2; 0.25; 0.3; 0.35; 0.4; 0.45; 0.5; 0.55; 0.6; 0.65; 0.7; 0.75; 0.8; 0.85; 0.9; 0.95; 1; 1.05; 1.1; 1.15; 1.2; 1.25; 1.3; 1.35; 1.4; 1.45; 1.5; 1.55; 1.6; 1.65; 1.7; 1.75; 1.8; 1.85; 1.9; 1.95; 2; 2.05; 2.1; 2.15; 2.2; 2.25; 2.3; 2.35; 2.4; 2.45; 2.5; 2.55; 2.6; 2.65; 2.7; 2.75; 2.8; 2.85]
+    set hamBondCoeff[0]=[2.8489; 0.5678; -1.4508; 0.6799; 0.0791; 0.0791]
+    set hamBondCoeff[1]=[2.1868; 0.5449; -1.287; 0.6719; 0.0798; 0.0798]
+    set hamBondCoeff[2]=[1.7252; 0.5215; -1.1458; 0.6631; 0.0806; 0.0806]
+    set hamBondCoeff[3]=[1.3827; 0.4982; -1.0226; 0.6537; 0.0815; 0.0815]
+    set hamBondCoeff[4]=[-0.2047; 0.4754; -0.9145; 0.6438; 0.0825; 0.0825]
+    set hamBondCoeff[5]=[-0.2677; 0.4534; -0.8194; 0.6336; 0.0835; 0.0835]
+    set hamBondCoeff[6]=[-0.3202; 0.4325; -0.7355; 0.6233; 0.0846; 0.0846]
+    set hamBondCoeff[7]=[-0.3642; 0.4125; -0.6612; 0.6129; 0.0858; 0.0858]
+    set hamBondCoeff[8]=[-0.4012; 0.3937; -0.595; 0.6025; 0.087; 0.087]
+    set hamBondCoeff[9]=[-0.4323; 0.376; -0.5358; 0.5921; 0.0883; 0.0883]
+    set hamBondCoeff[10]=[-0.4584; 0.3593; -0.4826; 0.5818; 0.0896; 0.0896]
+    set hamBondCoeff[11]=[-0.4804; 0.3435; -0.4347; 0.5716; 0.091; 0.091]
+    set hamBondCoeff[12]=[-0.4989; 0.3288; -0.3915; 0.5616; 0.0925; 0.0925]
+    set hamBondCoeff[13]=[-0.5143; 0.3149; -0.3523; 0.5518; 0.0939; 0.0939]
+    set hamBondCoeff[14]=[-0.5271; 0.3018; -0.3168; 0.5421; 0.0954; 0.0954]
+    set hamBondCoeff[15]=[-0.5377; 0.2895; -0.2845; 0.5327; 0.097; 0.097]
+    set hamBondCoeff[16]=[-0.5463; 0.2779; -0.255; 0.5235; 0.0986; 0.0986]
+    set hamBondCoeff[17]=[-0.5533; 0.2669; -0.2282; 0.5146; 0.1002; 0.1002]
+    set hamBondCoeff[18]=[-0.5588; 0.2565; -0.2036; 0.5059; 0.1018; 0.1018]
+    set hamBondCoeff[19]=[-0.5631; 0.2467; -0.181; 0.4974; 0.1034; 0.1034]
+    set hamBondCoeff[20]=[-0.5663; 0.2374; -0.1603; 0.4892; 0.105; 0.105]
+    set hamBondCoeff[21]=[-0.5685; 0.2286; -0.1413; 0.4812; 0.1067; 0.1067]
+    set hamBondCoeff[22]=[-0.5699; 0.2203; -0.1238; 0.4735; 0.1083; 0.1083]
+    set hamBondCoeff[23]=[-0.5706; 0.2123; -0.1077; 0.466; 0.11; 0.11]
+    set hamBondCoeff[24]=[-0.5707; 0.2048; -0.0929; 0.4588; 0.1116; 0.1116]
+    set hamBondCoeff[25]=[-0.5702; 0.1976; -0.0792; 0.4518; 0.1133; 0.1133]
+    set hamBondCoeff[26]=[-0.5693; 0.1908; -0.0666; 0.4451; 0.1149; 0.1149]
+    set hamBondCoeff[27]=[-0.5679; 0.1843; -0.0549; 0.4386; 0.1165; 0.1165]
+    set hamBondCoeff[28]=[-0.5663; 0.1782; -0.0442; 0.4323; 0.1181; 0.1181]
+    set hamBondCoeff[29]=[-0.5643; 0.1723; -0.0342; 0.4262; 0.1196; 0.1196]
+    set hamBondCoeff[30]=[-0.5621; 0.1667; -0.0251; 0.4204; 0.1211; 0.1211]
+    set hamBondCoeff[31]=[-0.5597; 0.1615; -0.0166; 0.4148; 0.1226; 0.1226]
+    set hamBondCoeff[32]=[-0.5571; 0.1565; -0.0088; 0.4094; 0.1241; 0.1241]
+    set hamBondCoeff[33]=[-0.5544; 0.1517; -0.0015; 0.4042; 0.1256; 0.1256]
+    set hamBondCoeff[34]=[-0.5516; 0.1472; 0.0052; 0.3992; 0.127; 0.127]
+    set hamBondCoeff[35]=[-0.5488; 0.143; 0.0114; 0.3944; 0.1284; 0.1284]
+    set hamBondCoeff[36]=[-0.5458; 0.139; 0.0171; 0.3898; 0.1297; 0.1297]
+    set hamBondCoeff[37]=[-0.5429; 0.1352; 0.0223; 0.3853; 0.131; 0.131]
+    set hamBondCoeff[38]=[-0.5399; 0.1316; 0.0272; 0.3811; 0.1323; 0.1323]
+    set hamBondCoeff[39]=[-0.5369; 0.1282; 0.0317; 0.3769; 0.1335; 0.1335]
+    set hamBondCoeff[40]=[-0.5339; 0.1251; 0.0359; 0.373; 0.1347; 0.1347]
+    set hamBondCoeff[41]=[-0.531; 0.1221; 0.0397; 0.3692; 0.1359; 0.1359]
+    set hamBondCoeff[42]=[-0.528; 0.1193; 0.0432; 0.3655; 0.137; 0.137]
+    set hamBondCoeff[43]=[-0.5251; 0.1167; 0.0465; 0.362; 0.1381; 0.1381]
+    set hamBondCoeff[44]=[-0.5223; 0.1142; 0.0495; 0.3586; 0.1392; 0.1392]
+    set hamBondCoeff[45]=[-0.5195; 0.1119; 0.0523; 0.3553; 0.1402; 0.1402]
+    set hamBondCoeff[46]=[-0.5168; 0.1098; 0.0549; 0.3521; 0.1412; 0.1412]
+    set hamBondCoeff[47]=[-0.5141; 0.1078; 0.0572; 0.3491; 0.1422; 0.1422]
+    set hamBondCoeff[48]=[-0.5114; 0.1059; 0.0594; 0.3461; 0.1432; 0.1432]
+    set hamBondCoeff[49]=[-0.5089; 0.1042; 0.0614; 0.3433; 0.1441; 0.1441]
+    set hamBondCoeff[50]=[-0.5064; 0.1026; 0.0632; 0.3406; 0.145; 0.145]
+    set hamBondCoeff[51]=[-0.5039; 0.1011; 0.0649; 0.3379; 0.1458; 0.1458]
+    set hamBondCoeff[52]=[-0.5015; 0.0997; 0.0665; 0.3354; 0.1467; 0.1467]
+    set hamBondCoeff[53]=[-0.4992; 0.0984; 0.0679; 0.3329; 0.1475; 0.1475]
+    return hamBondCoeff[idxBond]
+}
+
+//retuns a Hamiltonian description of type HamPauli
+function HamH2(idxBond : Int) : HamPauli{
+    return HamPauli(hamBondCoeff[idxBond], HamPauliHamH2Terms())
+}
+
+//First-order Trotterization
+//Feed in Hamiltonian ; spits out description of gate sequence
+function TrotterOrder1(stepSize : Double, hamPauli : HamPauli ): TrotterPauli
+{
+    let (coeffs , pauliString) = hamPauli
+    let nCoeffs = Length(coeffs)
+    mutable rotAngles = Double[nCoeffs]
+    for(idxCoeff in 0..nCoeffs - 1){
+        set rotAngles = coeffs[idxCoeff] * stepSize
+    }
+
+
+    return TrotterPauli((rotAngles , pauliString))
+}
+
+//Second-order Trotterization
+//Should be 1st order trotter followed by reverse sequence. Need to check
+function TrotterOrder2(stepSize : Double, hamPauli : HamPauli ) : TrotterPauli
+{
+    let (rotAngles, pauliString) = TrotterOrder1(stepSize * 0.5, hamPauli)
+    let nRotAngles = Length(rotAngles)
+    return (rotAngles + rotAngles[(nRotangles-1)..-1..0], pauliString + pauliString[(nRotangles-1)..-1..0])
+
+
+
+}
+
+//Qubit slice is included in Aplitude Amplification
+//qubit array slicing by index
+// Number of qubits should be larger than largest value in indices
+// FIXME This needs to be Adjoint Controlled
+operation TEMPQubitSlice(indices : Int[], qubits : Qubit[]) : Qubit[] 
+{
+    Body
+    {   
+        let nSliced = Length(indices)
+        mutable sliced = new Qubit[nSliced]
+        for( idx in 0..nSliced - 1 ){
+            set sliced[idx] = qubits[indices[idx]]
+        }
+
+        return sliced
+    }
+}
+
+//Converts description of Trotter term to quantum gate
+operation ApplyPauliString(rotAngle : Double, pauliString : PauliString, qubits : Qubit[]) : ()
+{
+    body{
+        let (paulis, qubitIndices) = pauliString
+        Exp(paulis, rotAngle, TEMPQubitSlice(qubitIndices, qubits))
+    }
+}
+
+//Applies Trotter step by sequence of Trotter terms
+operation ApplyTrotterStep(trotterPauli : TrotterPauli, qubits : Qubit[]) : ()
+{
+    let (rotAngles, pauliString) = trotterPauli
+    let nRotAngles = Length(rotAngles)
+    for(idx in 0..nRotAngles){
+        ApplyPauliString(rotAngles[idx], pauliString[idx], qubits)
+    }
+}
+
+
+//Example find g.s. energy of H2
+operation ExampleH2(qubits : Qubit[]) : (){
+    let idxBond = 1
+    let trotterSequence = TrotterOrder2( 0.1, HamH2(idxBond) )
+
+    //Do QPE on ApplyTrotterStep( trotterSequence, qubits)
+}
+
+
+//Qubitization approach
+newtype UnitaryOperator : (Qubit[] => (), Adjoint, Controlled)
+newtype OracleLCUSelector : ((Qubit[], Qubit[]) => (), Adjoint, Controlled)
+newtype OracleLCUStatePrep : (Qubit[] => (), Adjoint, Controlled)
+
+//Need to write op for arbitrary state preparation of |0> -> a_1|0> + a_2|1> + a_3|2> +...
+operation LCUStatePrepImpl ( amplitude: Double[], qubits : Qubit[]) : (){
+    body{
+
+
+
+    }
+
+    Adjoint
+    Controlled
+}
+operation LCUStatePrep(amplitude : Double[]) : OracleLCUStatePrep
+{
+    return LCUStatePrepImpl(amplitude, _)
+}
+
+
+
+//Selector is multiply-controlled unitary multiplexor
+operation LCUSelectorImpl ( unitaryOperators :  UnitaryOperator[] , qubitsAncilla : Qubit[], qubitsSystem : Qubit[]  ): (){
+    body{
+        let nUnitaries = Length(unitaryOperators)
+        for(idxUnitary in 0..nUnitaries){
+            ControlledOnInt(idxUnitary , unitaryOperators[idxUnitary])(qubitsAncilla, qubitsSystem)
+        }
+    }
+}
+function LCUSelector ( unitaryOperators :  UnitaryOperator[] ) : OracleLCUSelector {
+    return LCUSelectorImpl(unitaryOperators, _, _)
+}
+
+//Example implementation of unitaryOperator given description as PauliString
+operation UnitaryOperatorFromPauliStringImpl ( pauliString: PauliString, qubits : Qubit[]) : (){
+    body{
+        let (paulis, qubitIndices) = pauliString
+        ApplyPauli(paulis, TEMPQubitSlice(qubitIndices, qubits))
+    }
+}
+function UnitaryOperatorFromPauliString( pauliString: PauliString) : UnitaryOperator
+{
+    return UnitaryOperatorFromPauliStringImpl ( pauliString,_)
+}
+
+//Selector for Paulistrings
+operation LCUSelectorPauliImpl ( pauliStrings : PauliString[] , qubitsAncilla : Qubit[], qubitsSystem : Qubit[] ) : ()
+{
+    body{
+        let nUnitaries = Length(pauliString)
+        mutable unitaries = new UnitaryOperator[nUnitaries]
+        for(idx in 0.. nUnitaries-1){
+            unitaries[idx] = UnitaryOperatorFromPauliString(pauliStrings[idx])
+        }
+        LCUSelector(unitaries , qubitsAncilla, qubitsSystem)
+    }
+}
+function LCUSelectorPauli ( pauliStrings : PauliString[] ) : OracleLCUSelector
+{
+    return LCUSelectorPauliImpl(pauliStrings, _, _)
+}
+
+//Qubitization creates quantum walk -- eigenphases related to eigenvalues of Hamiltonian like ArcSin[Hamiltonian/Normalization]
+//Note that 1 qubit less can be used if PauliStrings rather than arbitrary unitaries areused
+operation Qubitization( oracleLCUState : LCUStatePrep, oracleLCUSelect: LCUSelector , qubitQubitization : Qubit, qubitsAncilla : Qubit[], qubitsSystem : Qubit[] ) : ()
+{
+    body{
+        H(qubitQubitization)
+        oracleLCUState(qubitsAncilla)
+        (Controlled oracleLCUSelect)([qubitQubitization], qubitsAncilla, qubitsSystem)
+        X(qubitQubitization)
+        (Adjoint Controlled oracleLCUSelect)([qubitQubitization], qubitsAncilla, qubitsSystem)
+        (Adjoint oracleLCUState)(qubitsAncilla)
+        H(qubitQubitization)
+        ReflectionAllZero(Pi(), [qubitQubitization] + qubitsAncilla)
+    }
+}
+
+
+
+//Example find g.s. energy of H2
+operation ExampleH2ByLCU(qubitSystem : Qubit[]) : (){
+    let idxBond = 1
+    let (coeffs, paulis) = HamH2(idxBond)
+
+    //apply square root to all coeffs
+    mutable coeffsSqrt = coeffs 
+    nCoeffs = Length(coeffs)
+    let oracleLCUState = LCUStatePrep (coeffsSqrt)
+    let oracleLCUSelector = LCUSelectorPauli ( paulis)
+
+    using(qubitsExtra = Qubit[1+ nCoeffs]){
+
+        let qubiterate =  Qubitization(oracleLCUState, oracleLCUSelector, qubitsExtra[0], qubitsExtra[1..nCoeffs - 1], qubitsSystem)
+        //Perform QPE on qubiterate
+    }
+}
