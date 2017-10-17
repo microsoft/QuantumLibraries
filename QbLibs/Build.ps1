@@ -37,7 +37,12 @@ $qflatSources += @(
     # Diagnostics
     "Asserts/AssertQubit.qb",
     "Asserts/AssertOperationsEqualReferenced.qb",
-    "Asserts/AssertOperationsEqualInPlace.qb"
+    "Asserts/AssertOperationsEqualInPlace.qb",
+
+    # System evolution simulators
+    "Simulation/Types.qb",
+    "Simulation/Minimal.qb"
+
 
     # Provide definitions of the identity and nop.
     # "Identity.qb",
