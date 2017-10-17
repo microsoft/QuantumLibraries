@@ -7,7 +7,7 @@ function Reverse<'T>(array : 'T[]) : 'T[] {
     mutable newArray = new 'T[nElements]
 
     for (idxElement in 0..nElements - 1) {
-        newArray[nElements - idxElement - 1] = array[idxElement]
+        set newArray[nElements - idxElement - 1] = array[idxElement]
     }
 
     return newArray
@@ -19,7 +19,7 @@ function Slice<'T>(indices : Int[], array : 'T[]) : 'T[] {
     mutable newArray = new 'T[nElements]
 
     for (idxElement in 0..nElements - 1) {
-        newArray[idxElement] = array[indices[idxElement]]
+        set newArray[idxElement] = array[indices[idxElement]]
     }
 
     return newArray
