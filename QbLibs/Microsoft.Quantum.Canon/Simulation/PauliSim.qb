@@ -1,8 +1,10 @@
 // namespace Microsoft.Quantum.Canon
-operation PauliGateImpl(idxPauli : Int, idxs : Int[], angles : Double[], target : Qubit[]) : () {
+
+// FIXME: we probably need to pass nQubits along somewhere to do the conversion IntToPauli.
+// NB: the params argument is ignored, as we don't need it for the PauliGateSet.
+operation PauliGateImpl(idxPauli : Int, params : Double[], time : Dobule, target : Qubit[]) : () {
     Body {
-        let pauli = IntToPauli(idxPauli)
-        ApplyToSubregisterCA(Exp(pauli, angles[0], _), idxs, target)
+        Exp(let pauli = IntToPauli(idxPauli), time, _)
     }
 
     Adjoint auto
@@ -19,7 +21,7 @@ function PauliGenerator(terms : (Pauli[], Int[], Double)[]) : DynamicalGenerator
     mutable parsedTerms = new GeneratorTerm[Length(terms)]
     for (idxTerm in 0..Length(terms) - 1) {
         let (pauli, idxs, angle) = term
-        set parsedTerms[idxTerm] = GeneratorTerm(PauliToInt(pauli), idxs, [angle])
+        set parsedTerms[idxTerm] = GeneratorTerm(PauliToInt(pauli), idxs)
     }
     return DynamicalGenerator(PauliGateSet, parsedTerms)
 }

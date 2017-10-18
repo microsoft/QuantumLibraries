@@ -3,11 +3,14 @@
 /// summary:
 ///     Represents a set of gates that can be readily implemented and used
 ///     to implement simulation algorithms. Each set is described by a function
-///     from integers to operations parameterized by vectors of real numbers.
+///     from integers to operations parameterized by a real number representing
+///     time and a vectors of real numbers representing other generator parameters.
 ///     For instance, a function representing the use of Pauli rotations to
 ///     decompose simulations might map the integer 3 to
-///     `(angles, qubits) => Rz(angles[0], qubits)`.
-newtype GateSet = (Int -> ((Double[], Qubit[]) => () : Adjoint, Controlled))
+///     `(params, time, qubits) => Rz(time, qubits)`, with the `params` field
+///     being ignored, while another gate set might use `params` to indicate
+///     application of gates such as exp(-i [X cos φ + Y sin φ] t).
+newtype GateSet = (Int -> ((Double[], Double, Qubit[]) => () : Adjoint, Controlled))
 
 /// summary:
 ///     Represents a single term in the expansion of a dynamical generator
@@ -16,6 +19,11 @@ newtype GateSet = (Int -> ((Double[], Qubit[]) => () : Adjoint, Controlled))
 ///     indexes on which the given term acts, and the final argument is the set
 ///     of real numbers parameterizing the application of the corresponding
 ///     operation.
+///
+///     From the view of a GeneratorTerm, a Hamiltonian is an operation of
+///     the form (Double, Qubit[]) => () that applies $e^{-i H t}$ to the
+///     state of a given register.
+// FIXME: unify this and the GateSet representation above with ContinousOracle.
 newtype GeneratorTerm = (Int, Int[], Double[])
 
 /// summary:

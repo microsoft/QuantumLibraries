@@ -91,10 +91,11 @@ function HamH2(idxBond : Int) : HamPauli{
 
 //First-order Trotterization
 //Feed in Hamiltonian ; spits out description of gate sequence
-function TrotterOrder1(stepSize : Double, hamPauli : HamPauli ): TrotterPauli
+// TODO: With new types, should map DynamicalGenerator -> DynamicalGenerator[].
+function TrotterOrder1(stepSize : Double, generator : DynamicalGenerator ) : DynamicalGenerator[]
 {
-    let (coeffs , pauliString) = hamPauli
-    let nCoeffs = Length(coeffs)
+    let (gateSet, terms) = generator
+    let nTerms = Length(terms)
     mutable rotAngles = Double[nCoeffs]
     for(idxCoeff in 0..nCoeffs - 1){
         set rotAngles = coeffs[idxCoeff] * stepSize
@@ -116,43 +117,66 @@ function TrotterOrder2(stepSize : Double, hamPauli : HamPauli ) : TrotterPauli
 
 }
 
-//Qubit slice is included in Aplitude Amplification
-//qubit array slicing by index
-// Number of qubits should be larger than largest value in indices
-// FIXME This needs to be Adjoint Controlled
-operation TEMPQubitSlice(indices : Int[], qubits : Qubit[]) : Qubit[] 
-{
-    Body
-    {   
-        let nSliced = Length(indices)
-        mutable sliced = new Qubit[nSliced]
-        for( idx in 0..nSliced - 1 ){
-            set sliced[idx] = qubits[indices[idx]]
-        }
-
-        return sliced
+function DecomposeAsTimeSlices(stepSize : Double, generator : DynamicalGenerator, order : Int) : DynamicalGenerator[] {
+    if (order == 1) {
+        // NB: this function is now internally facing, thus we can use the name of the
+        //     decomposition that we are using without commiting the public API to
+        //     necessarily use Trotter decompositions.
+        return TrotterizeOrder1(stepSize, generator)
+    } elif (order == 2) {
+        return TrotterizeOrder2(stepSize, generator)
     }
 }
 
 //Converts description of Trotter term to quantum gate
 operation ApplyPauliString(rotAngle : Double, pauliString : PauliString, qubits : Qubit[]) : ()
 {
-    Body{
+    Body {
         let (paulis, qubitIndices) = pauliString
-        Exp(paulis, rotAngle, TEMPQubitSlice(qubitIndices, qubits))
+        Exp(paulis, rotAngle, QubitSlice(qubitIndices, qubits))
     }
 }
 
 //Applies Trotter step by sequence of Trotter terms
-operation ApplyTrotterStep(trotterPauli : TrotterPauli, qubits : Qubit[]) : ()
+// operation ApplyTrotterStep(trotterPauli : TrotterPauli, qubits : Qubit[]) : ()
+// {
+//     Body {
+//         let (rotAngles, pauliString) = trotterPauli
+//         let nRotAngles = Length(rotAngles)
+//         for(idx in 0..nRotAngles){
+//             ApplyPauliString(rotAngles[idx], pauliString[idx], qubits)
+//         }
+//     }
+// }
+
+operation ApplyGenerator(generator : DynamicalGenerator, time : Double, target : Qubit[]) : ()
 {
     Body {
-        let (rotAngles, pauliString) = trotterPauli
-        let nRotAngles = Length(rotAngles)
-        for(idx in 0..nRotAngles){
-            ApplyPauliString(rotAngles[idx], pauliString[idx], qubits)
+        let (gateSet, terms) = generator
+        for (idxTerm in 0..Length(terms) - 1) {
+            let (idxGate, idxsSubregister, params) = terms[idxTerm]
+            let gate = gateSet(idxGate)
+            ApplyToSubregisterImplCA(gate(params, time, _), idxsSubregister, target)
         }
     }
+
+    Adjoint auto
+    Controlled auto
+    Controlled Adjoint auto
+}
+
+operation ApplyGeneratorSequence(generators : DynamicalGenerator[], time : Double, target : Qubit[]) : () {
+    Body {
+        // FIXME: write as Iter on ApplyGenerator(_, time, target).
+        //        That takes generics as well.
+        for (idxGenerator in 0..Length(generators) - 1) {
+            ApplyGenerator(generators[idxGenerator], time, target)
+        }
+    }
+
+    Adjoint auto
+    Controlled auto
+    Controlled Adjoint auto
 }
 
 

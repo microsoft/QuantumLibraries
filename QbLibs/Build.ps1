@@ -30,7 +30,7 @@ $qflatSources += @(
     "Math/Constants.qb",
 
     "IterateThroughCartesianProduct.qb",
-    
+
     "Combinators/ApplyToEach.qb",
     "Combinators/ApplyToRange.qb",
     "Combinators/RestrictToSubregister.qb",
@@ -69,7 +69,7 @@ $qflatSources += @(
     # "Combinators/With.qb",
 
     # "Paulis.qb",
-    
+
     # # # QECC
     # "Qecc/Types.qb",
     # "Qecc/Utils.qb",
