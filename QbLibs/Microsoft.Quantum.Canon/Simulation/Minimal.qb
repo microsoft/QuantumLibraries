@@ -4,9 +4,9 @@
 //Two approaches worked out -- one by QPE on Trotterization, and another by QPE on qubiterate.
 
 //Paulis in interaction and the qubits they act on
-newtype PauliString : (Pauli[], Int[])
-newtype HamPauli : (Double[], PauliString[])
-newtype TrotterPauli : (Double[], PauliString[])
+newtype PauliString = (Pauli[], Int[])
+newtype HamPauli = (Double[], PauliString[])
+newtype TrotterPauli = (Double[], PauliString[])
 
 //Terms and coefficients from "Scalable Quantum Simulation of Molecular Energies" O'Malley et. al. https://arxiv.org/abs/1512.06860
 function HamH2Terms() : PauliString
@@ -137,7 +137,7 @@ operation TEMPQubitSlice(indices : Int[], qubits : Qubit[]) : Qubit[]
 //Converts description of Trotter term to quantum gate
 operation ApplyPauliString(rotAngle : Double, pauliString : PauliString, qubits : Qubit[]) : ()
 {
-    body{
+    Body{
         let (paulis, qubitIndices) = pauliString
         Exp(paulis, rotAngle, TEMPQubitSlice(qubitIndices, qubits))
     }
@@ -146,40 +146,44 @@ operation ApplyPauliString(rotAngle : Double, pauliString : PauliString, qubits 
 //Applies Trotter step by sequence of Trotter terms
 operation ApplyTrotterStep(trotterPauli : TrotterPauli, qubits : Qubit[]) : ()
 {
-    let (rotAngles, pauliString) = trotterPauli
-    let nRotAngles = Length(rotAngles)
-    for(idx in 0..nRotAngles){
-        ApplyPauliString(rotAngles[idx], pauliString[idx], qubits)
+    Body {
+        let (rotAngles, pauliString) = trotterPauli
+        let nRotAngles = Length(rotAngles)
+        for(idx in 0..nRotAngles){
+            ApplyPauliString(rotAngles[idx], pauliString[idx], qubits)
+        }
     }
 }
 
 
 //Example find g.s. energy of H2
 operation ExampleH2(qubits : Qubit[]) : (){
-    let idxBond = 1
-    let trotterSequence = TrotterOrder2( 0.1, HamH2(idxBond) )
+    Body {
+        let idxBond = 1
+        let trotterSequence = TrotterOrder2( 0.1, HamH2(idxBond) )
 
-    //Do QPE on ApplyTrotterStep( trotterSequence, qubits)
+        //Do QPE on ApplyTrotterStep( trotterSequence, qubits)
+    }
 }
 
 
 //Qubitization approach
-newtype UnitaryOperator : (Qubit[] => (), Adjoint, Controlled)
-newtype OracleLCUSelector : ((Qubit[], Qubit[]) => (), Adjoint, Controlled)
-newtype OracleLCUStatePrep : (Qubit[] => (), Adjoint, Controlled)
+newtype UnitaryOperator = (Qubit[] => () : Adjoint, Controlled)
+newtype OracleLCUSelector = ((Qubit[], Qubit[]) => () : Adjoint, Controlled)
+newtype OracleLCUStatePrep = (Qubit[] => () : Adjoint, Controlled)
 
 //Need to write op for arbitrary state preparation of |0> -> a_1|0> + a_2|1> + a_3|2> +...
 operation LCUStatePrepImpl ( amplitude: Double[], qubits : Qubit[]) : (){
-    body{
+    Body{
 
 
 
     }
 
-    Adjoint
-    Controlled
+    Adjoint auto
+    Controlled auto
 }
-operation LCUStatePrep(amplitude : Double[]) : OracleLCUStatePrep
+function LCUStatePrep(amplitude : Double[]) : OracleLCUStatePrep
 {
     return LCUStatePrepImpl(amplitude, _)
 }
@@ -188,7 +192,7 @@ operation LCUStatePrep(amplitude : Double[]) : OracleLCUStatePrep
 
 //Selector is multiply-controlled unitary multiplexor
 operation LCUSelectorImpl ( unitaryOperators :  UnitaryOperator[] , qubitsAncilla : Qubit[], qubitsSystem : Qubit[]  ): (){
-    body{
+    Body{
         let nUnitaries = Length(unitaryOperators)
         for(idxUnitary in 0..nUnitaries){
             ControlledOnInt(idxUnitary , unitaryOperators[idxUnitary])(qubitsAncilla, qubitsSystem)
@@ -201,7 +205,7 @@ function LCUSelector ( unitaryOperators :  UnitaryOperator[] ) : OracleLCUSelect
 
 //Example implementation of unitaryOperator given description as PauliString
 operation UnitaryOperatorFromPauliStringImpl ( pauliString: PauliString, qubits : Qubit[]) : (){
-    body{
+    Body{
         let (paulis, qubitIndices) = pauliString
         ApplyPauli(paulis, TEMPQubitSlice(qubitIndices, qubits))
     }
@@ -214,7 +218,7 @@ function UnitaryOperatorFromPauliString( pauliString: PauliString) : UnitaryOper
 //Selector for Paulistrings
 operation LCUSelectorPauliImpl ( pauliStrings : PauliString[] , qubitsAncilla : Qubit[], qubitsSystem : Qubit[] ) : ()
 {
-    body{
+    Body{
         let nUnitaries = Length(pauliString)
         mutable unitaries = new UnitaryOperator[nUnitaries]
         for(idx in 0.. nUnitaries-1){
@@ -230,14 +234,14 @@ function LCUSelectorPauli ( pauliStrings : PauliString[] ) : OracleLCUSelector
 
 //Qubitization creates quantum walk -- eigenphases related to eigenvalues of Hamiltonian like ArcSin[Hamiltonian/Normalization]
 //Note that 1 qubit less can be used if PauliStrings rather than arbitrary unitaries areused
-operation Qubitization( oracleLCUState : LCUStatePrep, oracleLCUSelect: LCUSelector , qubitQubitization : Qubit, qubitsAncilla : Qubit[], qubitsSystem : Qubit[] ) : ()
+operation Qubitization( oracleLCUState : OracleLCUStatePrep, oracleLCUSelect: OracleLCUSelector , qubitQubitization : Qubit, qubitsAncilla : Qubit[], qubitsSystem : Qubit[] ) : ()
 {
-    body{
+    Body{
         H(qubitQubitization)
         oracleLCUState(qubitsAncilla)
         (Controlled oracleLCUSelect)([qubitQubitization], qubitsAncilla, qubitsSystem)
         X(qubitQubitization)
-        (Adjoint Controlled oracleLCUSelect)([qubitQubitization], qubitsAncilla, qubitsSystem)
+        (Controlled Adjoint oracleLCUSelect)([qubitQubitization], qubitsAncilla, qubitsSystem)
         (Adjoint oracleLCUState)(qubitsAncilla)
         H(qubitQubitization)
         ReflectionAllZero(Pi(), [qubitQubitization] + qubitsAncilla)
@@ -248,18 +252,20 @@ operation Qubitization( oracleLCUState : LCUStatePrep, oracleLCUSelect: LCUSelec
 
 //Example find g.s. energy of H2
 operation ExampleH2ByLCU(qubitSystem : Qubit[]) : (){
-    let idxBond = 1
-    let (coeffs, paulis) = HamH2(idxBond)
+    Body {
+        let idxBond = 1
+        let (coeffs, paulis) = HamH2(idxBond)
 
-    //apply square root to all coeffs
-    mutable coeffsSqrt = coeffs 
-    nCoeffs = Length(coeffs)
-    let oracleLCUState = LCUStatePrep (coeffsSqrt)
-    let oracleLCUSelector = LCUSelectorPauli ( paulis)
+        //apply square root to all coeffs
+        mutable coeffsSqrt = coeffs 
+        nCoeffs = Length(coeffs)
+        let oracleLCUState = LCUStatePrep (coeffsSqrt)
+        let oracleLCUSelector = LCUSelectorPauli ( paulis)
 
-    using(qubitsExtra = Qubit[1+ nCoeffs]){
+        using(qubitsExtra = Qubit[1+ nCoeffs]){
 
-        let qubiterate =  Qubitization(oracleLCUState, oracleLCUSelector, qubitsExtra[0], qubitsExtra[1..nCoeffs - 1], qubitsSystem)
-        //Perform QPE on qubiterate
+            let qubiterate =  Qubitization(oracleLCUState, oracleLCUSelector, qubitsExtra[0], qubitsExtra[1..nCoeffs - 1], qubitsSystem)
+            //Perform QPE on qubiterate
+        }
     }
 }
