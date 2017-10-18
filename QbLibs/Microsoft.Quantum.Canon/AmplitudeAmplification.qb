@@ -27,13 +27,9 @@
 // TODO: Unittests for amplitudeamplification routines
 // TODO: Amplitude estimation -- easiest way to is to use quantum phase estimation libary on Grover Iterate as the oracle
 
-function Pi() : Double {
-	return 3.141592653589793238462643383280
-}
-
 //phasesStart, phasesTarget
-newtype AmpAmpReflectionPhases : (Double[], Double[])
-newtype AmpAmpRotationPhases: (Double[])
+newtype AmpAmpReflectionPhases = (Double[], Double[])
+newtype AmpAmpRotationPhases = (Double[])
 
 //We use the convention in "Hamiltonian Simulation by Uniform Spectral Amplification" [LowChuang2017] for relating single-qubit rotation phases to reflection operator phases
 function AmpAmpRotationToReflectionPhases( rotPhases : AmpAmpRotationPhases) : AmpAmpReflectionPhases
@@ -59,7 +55,6 @@ function AmpAmpRotationToReflectionPhases( rotPhases : AmpAmpRotationPhases) : A
 
 	return AmpAmpReflectionPhases(phasesTarget, phasesStart)
 }
-
 
 //All phases are Pi, except for the first reflection about start and the last reflection about target, which are 0.
 function AmpAmpPhasesGrover(iterations : Int) : AmpAmpReflectionPhases{
@@ -134,17 +129,17 @@ operation ReflectionAllZero( phase: Double, qubits: Qubit[] ) : ()
 
 // This oracle O = I - (1 - e^(- i ϕ)) |ψ><ψ| performs a partial reflection by phase ϕ about a single pure state |ψ>.
 // Note that when ϕ = π, O = I - 2 |ψ><ψ| is a reflection operator.
-newtype OracleReflection : ((Double, Qubit[]) => (): Adjoint,Controlled)
-//newtype OracleReflection : ((Double, Qubit[]) => ())
+newtype OracleReflection = ((Double, Qubit[]) => (): Adjoint,Controlled)
+//newtype OracleReflection = ((Double, Qubit[]) => ())
 
 ///This oracle O|s>_a|ψ>_s = λ |t>_a U |ψ>_s + ... acts on the ancilla state |s>_a to implement the unitary U on any system state |ψ>_s with amplitude λ in the |t>_a basis.
-newtype OracleOblivious: ((Qubit[], Qubit[]) => (): Adjoint, Controlled)
+newtype OracleOblivious = ((Qubit[], Qubit[]) => (): Adjoint, Controlled)
 
 ///This oracle O|0>_f|0>_s = λ |1>_f |ψ>_s + ... acts on the on computational basis state |0>_f|0>_s to create the state |ψ>_s with amplitude λ in the basis flagged by |1>_f
-newtype OracleState: ((Qubit, Qubit[]) => (): Adjoint, Controlled)
+newtype OracleState = ((Qubit, Qubit[]) => (): Adjoint, Controlled)
 
 ///This oracle O|0> = acts on the on computational basis state |0> to create the state |ψ>.
-newtype OracleStateDeterministic: (Qubit[] => (): Adjoint, Controlled)
+newtype OracleStateDeterministic = (Qubit[] => (): Adjoint, Controlled)
 
 operation Identity1(qubits: Qubit[]) : (){
 	Adjoint auto
