@@ -1,30 +1,32 @@
-﻿
-/// <summary>
-///     Represents a discrete-time oracle U^m for a fixed operation U
-///     and a non-negative integer m.
-/// </summary>
-newtype DiscreteOracle = ((Int, Qubit[]) => ():Adjoint,Controlled)
+﻿namespace Microsoft.Quantum.Canon {
 
-/// <summary>
-///     Represents a continuous-time oracle U(δt) : |?(t)> ? |?(t + δt)> for all times t,
-///     where U is a fixed operation, and where and δt is a non-negative real number.
-/// </summary>
-newtype ContinuousOracle = ((Double, Qubit[]) => ():Adjoint,Controlled)
+    /// <summary>
+    ///     Represents a discrete-time oracle U^m for a fixed operation U
+    ///     and a non-negative integer m.
+    /// </summary>
+    newtype DiscreteOracle = ((Int, Qubit[]) => ():Adjoint,Controlled)
 
-// FIXME: Need a better name for this.
-/// <summary>
-///      Given an operation representing a "black-box" oracle, implements
-///      a discrete-time oracle by repeating the given oracle multiple times.
-///      For example, OracleToDiscrete(U)(3, target) is equivalent to U(target)
-///      repeated three times.
-/// </summary>
-/// <param name="blackBoxOracle">"Black-box" oracle to perform powers of as
-///     a discrete-time oracle.</param>
-operation OracleToDiscrete(blackBoxOracle : (Qubit[] => ():Adjoint,Controlled))  : DiscreteOracle
-{
-    Body {
-        let oracle = DiscreteOracle(OperationPowImplAC(blackBoxOracle, _, _))
-        return oracle
+    /// <summary>
+    ///     Represents a continuous-time oracle U(δt) : |?(t)> ? |?(t + δt)> for all times t,
+    ///     where U is a fixed operation, and where and δt is a non-negative real number.
+    /// </summary>
+    newtype ContinuousOracle = ((Double, Qubit[]) => ():Adjoint,Controlled)
+
+    // FIXME: Need a better name for this.
+    /// <summary>
+    ///      Given an operation representing a "black-box" oracle, implements
+    ///      a discrete-time oracle by repeating the given oracle multiple times.
+    ///      For example, OracleToDiscrete(U)(3, target) is equivalent to U(target)
+    ///      repeated three times.
+    /// </summary>
+    /// <param name="blackBoxOracle">"Black-box" oracle to perform powers of as
+    ///     a discrete-time oracle.</param>
+    operation OracleToDiscrete(blackBoxOracle : (Qubit[] => ():Adjoint,Controlled))  : DiscreteOracle
+    {
+        Body {
+            let oracle = DiscreteOracle(OperationPowImplAC(blackBoxOracle, _, _))
+            return oracle
+        }
     }
-}
 
+}

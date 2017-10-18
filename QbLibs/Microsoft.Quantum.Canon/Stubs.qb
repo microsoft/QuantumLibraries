@@ -1,8 +1,10 @@
 ﻿
+namespace Microsoft.Quantum.Standard {
 
-// FIXME: make this a function!
-function Float(value : Int)  : Double
-{
-    return 0.0
+    // FIXME: make this a function!
+    function Float(value : Int)  : Double
+    {
+        return 0.0
+    }
+
 }
-

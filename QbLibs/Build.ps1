@@ -39,16 +39,16 @@ $qflatSources += @(
     "Asserts/AssertOperationsEqualReferenced.qb",
     "Asserts/AssertOperationsEqualInPlace.qb",
 
-    # Provide definitions of the identity and nop.
+    # # Provide definitions of the identity and nop.
     "Identity.qb",
 
-    # # Endianness.qb contains newtype declarations that are needed more broadly,
-    # # so we include it first.
+    # Endianness.qb contains newtype declarations that are needed more broadly,
+    # so we include it first.
     "Endianness.qb",
 
     "DataStructures/Stack.qb",
 
-    # # Similarly with OracleTypes.qb, save for that it depends on OperationPow.qb.
+    # Similarly with OracleTypes.qb, save for that it depends on OperationPow.qb.
     "Combinators/OperationPow.qb",
     "PhaseEstimation/Types.qb",
     "Arithmetic.qb",
@@ -63,7 +63,7 @@ $qflatSources += @(
 
     "Paulis.qb",
     
-    # # # QECC
+    # QECC
     "Qecc/Types.qb",
     "Qecc/Utils.qb",
     "Qecc/BitFlipCode.qb",
