@@ -34,7 +34,7 @@ namespace Microsoft.Quantum.Canon {
     operation IterC<'T>(op : ('T => () : Controlled), array : 'T[])  : ()
     {
         Body {
-        Iter(op, array)
+            Iter(op, array)
         }
 
         Controlled (controls) {
