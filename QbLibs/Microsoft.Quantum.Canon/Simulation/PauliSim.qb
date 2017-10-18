@@ -1,0 +1,29 @@
+// namespace Microsoft.Quantum.Canon
+
+// FIXME: we probably need to pass nQubits along somewhere to do the conversion IntToPauli.
+// We use the params vector to indicate the *scale* of a Pauli,
+// making it easier to represent H = α₁ P₁ + α₂ P₂ + ... as multiplying each time by
+// the corresponding α.
+operation PauliGateImpl(idxPauli : Int, params : Double[], time : Dobule, target : Qubit[]) : () {
+    Body {
+        Exp(IntToPauli(idxPauli), time * params[0], _)
+    }
+
+    Adjoint auto
+    Controlled auto
+    Controlled Adjoint auto
+}
+
+function PauliGateSet(idxPauli : Int) : GateSet {
+    return GateSet(PauliGateImpl(idxPauli, _, _, _))
+}
+
+function PauliGenerator(terms : (Pauli[], Int[], Double)[]) : DynamicalGenerator {
+    // FIXME: rewrite using Map.
+    mutable parsedTerms = new GeneratorTerm[Length(terms)]
+    for (idxTerm in 0..Length(terms) - 1) {
+        let (pauli, idxs, coefficient) = term
+        set parsedTerms[idxTerm] = GeneratorTerm(PauliToInt(pauli), idxs, [coefficient])
+    }
+    return DynamicalGenerator(PauliGateSet, parsedTerms)
+}

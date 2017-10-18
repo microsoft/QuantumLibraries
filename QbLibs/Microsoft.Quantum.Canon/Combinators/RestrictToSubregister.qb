@@ -1,0 +1,71 @@
+// namespace Microsoft.Quantum.Canon
+
+// FIXME: remove once generics code gen.
+// NB: copied from AmplitudeAmplification.qb as a temporary measure.
+function QubitSlice(indices : Int[], qubits : Qubit[]) : Qubit[] 
+{
+    let nSliced = Length(indices)
+    mutable sliced = new Qubit[nSliced]
+    for( idx in 0..nSliced - 1 ) {
+        set sliced[idx] = qubits[indices[idx]]
+    }
+
+    return sliced
+}
+
+operation ApplyToSubregister(op : (Qubit[] => ()), idxs : Int[], target : Qubit[]) : () {
+    Body {
+        // FIXME: change to Slice<Qubit[]> once generics code gen.
+        let subregister = QubitSlice(idxs, target)
+        op(subregister)
+    }
+}
+
+operation ApplyToSubregisterA(op : (Qubit[] => () : Adjoint), idxs : Int[], target : Qubit[]) : () {
+    Body {
+        ApplyToSubregister(op, idxs, target)
+    }
+    Adjoint {
+        ApplyToSubregister(Adjoint op, idxs, target)
+    }
+}
+
+operation ApplyToSubregisterC(op : (Qubit[] => () : Controlled), idxs : Int[], target : Qubit[]) : () {
+    Body {
+        ApplyToSubregister(op, idxs, target)
+    }
+    Controlled (controls) {
+        let cop = (Controlled op)
+        ApplyToSubregister(cop(controls, _), idxs, target)
+    }
+}
+
+operation ApplyToSubregisterCA(op : (Qubit[] => () : Controlled, Adjoint), idxs : Int[], target : Qubit[]) : () {
+    Body {
+        ApplyToSubregister(op, idxs, target)
+    }
+    Adjoint {
+        ApplyToSubregister(Adjoint op, idxs, target)
+    }
+    Controlled (controls) {
+        let cop = (Controlled op)
+        ApplyToSubregister(cop(controls, _), idxs, target)
+    }
+    Controlled Adjoint (controls) {
+        let cop = (Controlled Adjoint op)
+        ApplyToSubregister(cop(controls, _), idxs, target)
+    }
+}
+
+function RestrictToSubregister(op : (Qubit[] => ()), idxs : Int[]) : (Qubit[] => ()) {
+    return ApplyToSubregister(op, idxs, _)
+}
+function RestrictToSubregisterA(op : (Qubit[] => () : Adjoint), idxs : Int[]) : (Qubit[] => () : Adjoint) {
+    return ApplyToSubregisterA(op, idxs, _)
+}
+function RestrictToSubregisterC(op : (Qubit[] => () : Controlled), idxs : Int[]) : (Qubit[] => () : Controlled) {
+    return ApplyToSubregisterC(op, idxs, _)
+}
+function RestrictToSubregisterCA(op : (Qubit[] => () : Adjoint, Controlled), idxs : Int[]) : (Qubit[] => () : Adjoint, Controlled) {
+    return ApplyToSubregisterCA(op, idxs, _)
+}

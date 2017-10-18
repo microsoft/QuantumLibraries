@@ -4,9 +4,9 @@
 //Two approaches worked out -- one by QPE on Trotterization, and another by QPE on qubiterate.
 
 //Paulis in interaction and the qubits they act on
-newtype PauliString : (Pauli[], Int[])
-newtype HamPauli : (Double[], PauliString[])
-newtype TrotterPauli : (Double[], PauliString[])
+newtype PauliString = (Pauli[], Int[])
+newtype HamPauli = (Double[], PauliString[])
+newtype TrotterPauli = (Double[], PauliString[])
 
 //Terms and coefficients from "Scalable Quantum Simulation of Molecular Energies" O'Malley et. al. https://arxiv.org/abs/1512.06860
 function HamH2Terms() : PauliString
@@ -91,95 +91,109 @@ function HamH2(idxBond : Int) : HamPauli{
 
 //First-order Trotterization
 //Feed in Hamiltonian ; spits out description of gate sequence
-function TrotterOrder1(stepSize : Double, hamPauli : HamPauli ): TrotterPauli
+function TrotterOrder1(time : Double, generator : DynamicalGenerator ) : GeneratorSequence[]
 {
-    let (coeffs , pauliString) = hamPauli
-    let nCoeffs = Length(coeffs)
-    mutable rotAngles = Double[nCoeffs]
-    for(idxCoeff in 0..nCoeffs - 1){
-        set rotAngles = coeffs[idxCoeff] * stepSize
+    let (gateSet, terms) = generator
+    let nTerms = Length(terms)
+    let sequence = new (Int, Int[], Double, Double[])[nTerms]
+
+    for (idxTerm in 0..nTerms - 1){
+        let (idxGate, idxsSubregister, params) = terms[idxTerm]
+        set sequence[idxTerm] = (idxGate, idxsSubregister, time, params)
     }
 
 
-    return TrotterPauli((rotAngles , pauliString))
+    return GeneratorSequence(gateSet, sequence)
 }
 
 //Second-order Trotterization
 //Should be 1st order trotter followed by reverse sequence. Need to check
-function TrotterOrder2(stepSize : Double, hamPauli : HamPauli ) : TrotterPauli
+function TrotterOrder2(time : Double, generator : DynamicalGenerator ) : GeneratorSequence[]
 {
-    let (rotAngles, pauliString) = TrotterOrder1(stepSize * 0.5, hamPauli)
-    let nRotAngles = Length(rotAngles)
-    return (rotAngles + rotAngles[(nRotangles-1)..-1..0], pauliString + pauliString[(nRotangles-1)..-1..0])
+    let (gateSet, lowerOrderSequence) = TrotterOrder1(time * 0.5, generator)
+    let sequence = lowerOrderSequence + lowerOrderSequence[(Length(lowerOrderSequence))..-1..0]
 
-
-
+    return GeneratorSequence(gateSet, sequence)
 }
 
-//Qubit slice is included in Aplitude Amplification
-//qubit array slicing by index
-// Number of qubits should be larger than largest value in indices
-// FIXME This needs to be Adjoint Controlled
-operation TEMPQubitSlice(indices : Int[], qubits : Qubit[]) : Qubit[] 
-{
-    Body
-    {   
-        let nSliced = Length(indices)
-        mutable sliced = new Qubit[nSliced]
-        for( idx in 0..nSliced - 1 ){
-            set sliced[idx] = qubits[indices[idx]]
-        }
-
-        return sliced
+function DecomposeAsTimeSlices(stepSize : Double, generator : DynamicalGenerator, order : Int) : DynamicalGenerator[] {
+    if (order == 1) {
+        // NB: this function is now internally facing, thus we can use the name of the
+        //     decomposition that we are using without commiting the public API to
+        //     necessarily use Trotter decompositions.
+        return TrotterizeOrder1(stepSize, generator)
+    } elif (order == 2) {
+        return TrotterizeOrder2(stepSize, generator)
     }
 }
 
 //Converts description of Trotter term to quantum gate
 operation ApplyPauliString(rotAngle : Double, pauliString : PauliString, qubits : Qubit[]) : ()
 {
-    body{
+    Body {
         let (paulis, qubitIndices) = pauliString
-        Exp(paulis, rotAngle, TEMPQubitSlice(qubitIndices, qubits))
+        Exp(paulis, rotAngle, QubitSlice(qubitIndices, qubits))
     }
 }
 
 //Applies Trotter step by sequence of Trotter terms
-operation ApplyTrotterStep(trotterPauli : TrotterPauli, qubits : Qubit[]) : ()
-{
-    let (rotAngles, pauliString) = trotterPauli
-    let nRotAngles = Length(rotAngles)
-    for(idx in 0..nRotAngles){
-        ApplyPauliString(rotAngles[idx], pauliString[idx], qubits)
+// operation ApplyTrotterStep(trotterPauli : TrotterPauli, qubits : Qubit[]) : ()
+// {
+//     Body {
+//         let (rotAngles, pauliString) = trotterPauli
+//         let nRotAngles = Length(rotAngles)
+//         for(idx in 0..nRotAngles){
+//             ApplyPauliString(rotAngles[idx], pauliString[idx], qubits)
+//         }
+//     }
+// }
+
+operation ApplyGeneratorSequence(generators : GeneratorSequence, target : Qubit[]) : () {
+    Body {
+        // FIXME: write as Iter on ApplyGenerator(_, time, target).
+        //        That takes generics as well.
+        let (gateSet, terms) = generator
+        for (idxTerm in 0..Length(terms) - 1) {
+            let (idxGate, idxsSubregister, time, params) = terms[idxTerm]
+            let gate = gateSet(idxGate)
+            ApplyToSubregisterImplCA(gate(params, time, _), idxsSubregister, target)
+        }
     }
+
+    Adjoint auto
+    Controlled auto
+    Controlled Adjoint auto
 }
 
 
 //Example find g.s. energy of H2
 operation ExampleH2(qubits : Qubit[]) : (){
-    let idxBond = 1
-    let trotterSequence = TrotterOrder2( 0.1, HamH2(idxBond) )
+    Body {
+        let idxBond = 1
+        let trotterSequence = TrotterOrder2( 0.1, HamH2(idxBond) )
 
-    //Do QPE on ApplyTrotterStep( trotterSequence, qubits)
+        //Do QPE on ApplyTrotterStep( trotterSequence, qubits)
+    }
 }
 
 
 //Qubitization approach
-newtype UnitaryOperator : (Qubit[] => (), Adjoint, Controlled)
-newtype OracleLCUSelector : ((Qubit[], Qubit[]) => (), Adjoint, Controlled)
-newtype OracleLCUStatePrep : (Qubit[] => (), Adjoint, Controlled)
+newtype UnitaryOperator = (Qubit[] => () : Adjoint, Controlled)
+newtype OracleLCUSelector = ((Qubit[], Qubit[]) => () : Adjoint, Controlled)
+newtype OracleLCUStatePrep = (Qubit[] => () : Adjoint, Controlled)
 
 //Need to write op for arbitrary state preparation of |0> -> a_1|0> + a_2|1> + a_3|2> +...
 operation LCUStatePrepImpl ( amplitude: Double[], qubits : Qubit[]) : (){
-    body{
+    Body{
 
 
 
     }
 
-    Adjoint
-    Controlled
+    Adjoint auto
+    Controlled auto
 }
-operation LCUStatePrep(amplitude : Double[]) : OracleLCUStatePrep
+function LCUStatePrep(amplitude : Double[]) : OracleLCUStatePrep
 {
     return LCUStatePrepImpl(amplitude, _)
 }
@@ -188,7 +202,7 @@ operation LCUStatePrep(amplitude : Double[]) : OracleLCUStatePrep
 
 //Selector is multiply-controlled unitary multiplexor
 operation LCUSelectorImpl ( unitaryOperators :  UnitaryOperator[] , qubitsAncilla : Qubit[], qubitsSystem : Qubit[]  ): (){
-    body{
+    Body{
         let nUnitaries = Length(unitaryOperators)
         for(idxUnitary in 0..nUnitaries){
             ControlledOnInt(idxUnitary , unitaryOperators[idxUnitary])(qubitsAncilla, qubitsSystem)
@@ -201,7 +215,7 @@ function LCUSelector ( unitaryOperators :  UnitaryOperator[] ) : OracleLCUSelect
 
 //Example implementation of unitaryOperator given description as PauliString
 operation UnitaryOperatorFromPauliStringImpl ( pauliString: PauliString, qubits : Qubit[]) : (){
-    body{
+    Body{
         let (paulis, qubitIndices) = pauliString
         ApplyPauli(paulis, TEMPQubitSlice(qubitIndices, qubits))
     }
@@ -214,7 +228,7 @@ function UnitaryOperatorFromPauliString( pauliString: PauliString) : UnitaryOper
 //Selector for Paulistrings
 operation LCUSelectorPauliImpl ( pauliStrings : PauliString[] , qubitsAncilla : Qubit[], qubitsSystem : Qubit[] ) : ()
 {
-    body{
+    Body{
         let nUnitaries = Length(pauliString)
         mutable unitaries = new UnitaryOperator[nUnitaries]
         for(idx in 0.. nUnitaries-1){
@@ -230,14 +244,14 @@ function LCUSelectorPauli ( pauliStrings : PauliString[] ) : OracleLCUSelector
 
 //Qubitization creates quantum walk -- eigenphases related to eigenvalues of Hamiltonian like ArcSin[Hamiltonian/Normalization]
 //Note that 1 qubit less can be used if PauliStrings rather than arbitrary unitaries areused
-operation Qubitization( oracleLCUState : LCUStatePrep, oracleLCUSelect: LCUSelector , qubitQubitization : Qubit, qubitsAncilla : Qubit[], qubitsSystem : Qubit[] ) : ()
+operation Qubitization( oracleLCUState : OracleLCUStatePrep, oracleLCUSelect: OracleLCUSelector , qubitQubitization : Qubit, qubitsAncilla : Qubit[], qubitsSystem : Qubit[] ) : ()
 {
-    body{
+    Body{
         H(qubitQubitization)
         oracleLCUState(qubitsAncilla)
         (Controlled oracleLCUSelect)([qubitQubitization], qubitsAncilla, qubitsSystem)
         X(qubitQubitization)
-        (Adjoint Controlled oracleLCUSelect)([qubitQubitization], qubitsAncilla, qubitsSystem)
+        (Controlled Adjoint oracleLCUSelect)([qubitQubitization], qubitsAncilla, qubitsSystem)
         (Adjoint oracleLCUState)(qubitsAncilla)
         H(qubitQubitization)
         ReflectionAllZero(Pi(), [qubitQubitization] + qubitsAncilla)
@@ -248,18 +262,20 @@ operation Qubitization( oracleLCUState : LCUStatePrep, oracleLCUSelect: LCUSelec
 
 //Example find g.s. energy of H2
 operation ExampleH2ByLCU(qubitSystem : Qubit[]) : (){
-    let idxBond = 1
-    let (coeffs, paulis) = HamH2(idxBond)
+    Body {
+        let idxBond = 1
+        let (coeffs, paulis) = HamH2(idxBond)
 
-    //apply square root to all coeffs
-    mutable coeffsSqrt = coeffs 
-    nCoeffs = Length(coeffs)
-    let oracleLCUState = LCUStatePrep (coeffsSqrt)
-    let oracleLCUSelector = LCUSelectorPauli ( paulis)
+        //apply square root to all coeffs
+        mutable coeffsSqrt = coeffs 
+        nCoeffs = Length(coeffs)
+        let oracleLCUState = LCUStatePrep (coeffsSqrt)
+        let oracleLCUSelector = LCUSelectorPauli ( paulis)
 
-    using(qubitsExtra = Qubit[1+ nCoeffs]){
+        using(qubitsExtra = Qubit[1+ nCoeffs]){
 
-        let qubiterate =  Qubitization(oracleLCUState, oracleLCUSelector, qubitsExtra[0], qubitsExtra[1..nCoeffs - 1], qubitsSystem)
-        //Perform QPE on qubiterate
+            let qubiterate =  Qubitization(oracleLCUState, oracleLCUSelector, qubitsExtra[0], qubitsExtra[1..nCoeffs - 1], qubitsSystem)
+            //Perform QPE on qubiterate
+        }
     }
 }

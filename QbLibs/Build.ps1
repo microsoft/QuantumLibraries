@@ -30,14 +30,21 @@ $qflatSources += @(
     "Math/Constants.qb",
 
     "IterateThroughCartesianProduct.qb",
-    
+
     "Combinators/ApplyToEach.qb",
     "Combinators/ApplyToRange.qb",
+    "Combinators/RestrictToSubregister.qb",
 
     # Diagnostics
     "Asserts/AssertQubit.qb",
     "Asserts/AssertOperationsEqualReferenced.qb",
-    "Asserts/AssertOperationsEqualInPlace.qb"
+    "Asserts/AssertOperationsEqualInPlace.qb",
+
+    # System evolution simulators
+    "Simulation/Types.qb",
+    "Simulation/PauliSim.qb",
+    "Simulation/Minimal.qb"
+
 
     # Provide definitions of the identity and nop.
     # "Identity.qb",
@@ -62,7 +69,7 @@ $qflatSources += @(
     # "Combinators/With.qb",
 
     # "Paulis.qb",
-    
+
     # # # QECC
     # "Qecc/Types.qb",
     # "Qecc/Utils.qb",
