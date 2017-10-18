@@ -9,6 +9,9 @@
 ##
 [CmdletBinding()]
 param(
+    # This switch is off for now, since the solution doesn't yet build.
+    [switch]
+    $BuildSolution = $false
 )
 
 Import-Module -Force .\Invoke-Qbc.psm1
@@ -38,32 +41,26 @@ Import-Module Invoke-MsBuild
 # Unlike before, we manually specify since the order matters.
 $libDirectory = Join-Path $PSScriptRoot "Microsoft.Quantum.Canon"
 # Find and include the standard library.
-$qflatSources = @(
-    (Find-QflatCompiler `
-        | Split-Path -Resolve `
-        | ForEach-Object { Join-Path $_ ..\..\..\..\Library\standard.qb } `
-        | Resolve-Path
-    )
-)
+$qflatSources = @(Find-QflatPrelude)
 
 $qflatSources += @(
     # Provide stubs for primitive operations.
     "Stubs.qb",
 
     "Math/Types.qb",
-    "Math/Constants.qb"
+    "Math/Constants.qb",
 
-    "Enumeration/Iter.qb",
+    "IterateThroughCartesianProduct.qb",
+    
+    "Combinators/ApplyToEach.qb",
     "Combinators/ApplyToRange.qb",
 
-    "Arrays/Arrays.qb",
-
-    # # # Diagnostics
+    # Diagnostics
     "Asserts/AssertQubit.qb",
     "Asserts/AssertOperationsEqualReferenced.qb",
-    # "Asserts/AssertOperationsEqualInPlace.qb",
+    "Asserts/AssertOperationsEqualInPlace.qb",
 
-    # # # Provide definitions of the identity and nop.
+    # # Provide definitions of the identity and nop.
     "Identity.qb",
 
     # # # Endianness.qb contains newtype declarations that are needed more broadly,
@@ -72,34 +69,39 @@ $qflatSources += @(
 
     "DataStructures/Stack.qb",
 
-    # # Similarly with OracleTypes.qb, save for that it depends on OperationPow.qb.
+    # Similarly with OracleTypes.qb, save for that it depends on OperationPow.qb.
     "Combinators/OperationPow.qb",
-    "PhaseEstimation/Types.qb"
+    "PhaseEstimation/Types.qb",
+    "Arithmetic.qb",
+    "Bind.qb",
 
-    # "Arithmetic.qb",
-    # "Bind.qb"
-
-    # "QFT.qb",
-    # "PhaseEstimation/Quantum.qb"
-    # "PhaseEstimation/Iterative.qb"
+    "QFT.qb",
+    "PhaseEstimation/Quantum.qb",
+    "PhaseEstimation/Iterative.qb",
     # "AmplitudeAmplification.qb"
-    # "ShiftOp.qb",
-    # "Combinators/With.qb",
+    "ShiftOp.qb",
+    "Combinators/With.qb",
 
-    # "Paulis.qb"
-
-    # # # QECC
-    # "Qecc/Types.qb",
-    # "Qecc/Utils.qb",
-    # "Qecc/BitFlipCode.qb",
-    # "Qecc/5QubitCode.qb",
-    # "Qecc/7QubitCode.qb"
+    "Paulis.qb",
+    
+    # QECC
+    "Qecc/Types.qb",
+    "Qecc/Utils.qb",
+    "Qecc/BitFlipCode.qb",
+    "Qecc/5QubitCode.qb",
+    "Qecc/7QubitCode.qb"
 ) | ForEach-Object {
     Join-Path $libDirectory $_
 }
 
+$qflatSources | ConvertFrom-Qflat
 
-$qflatSources | ConvertFrom-Qflat -Verbose:$VerbosePreference
-if ($LASTEXITCODE -eq 0) {
-    # Invoke-MsBuild (Resolve-Path .\QbLibs.sln) -ShowBuildOutputInCurrentWindow
+if ($BuildSolution) {
+    if (-not (Get-Module -ListAvailable Invoke-MsBuild)) {
+        Install-Module Invoke-MsBuild
+    }
+    Import-Module Invoke-MsBuild
+    if ($LASTEXITCODE -eq 0) {
+        Invoke-MsBuild (Resolve-Path .\QbLibs.sln) -ShowBuildOutputInCurrentWindow
+    }
 }

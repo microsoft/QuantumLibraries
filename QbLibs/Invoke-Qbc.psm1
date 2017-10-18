@@ -29,7 +29,39 @@ function Find-QflatCompiler {
     $qbc | Write-Output;
 }
 
+function Find-QflatDependencies {
+    [CmdletBinding()]
+    param(
+        [string]
+        $Path
+    )
 
+    # Get a list of what we need to compile.
+    # We do so by examining the *.csproj inside, looking for <None>
+    # elements referencing *.qb files.
+    # TODO: move to use <Compile> items with a DependentOn instead.
+    # Import the csproj as an XML document.
+    $csproj = [xml](Get-Content $Path)
+    $csproj.Project.ItemGroup `
+        | ForEach-Object { $_.None } `
+        | Select-Object -ExpandProperty Include `
+        | Where-Object { $_.EndsWith(".qb") } `
+        | ForEach-Object { Join-Path $libDirectory $_ } `
+        | Write-Output
+
+}
+
+function Find-QflatPrelude {
+    [CmdletBinding()]
+    param()
+
+    Find-QflatCompiler `
+        | Split-Path -Resolve `
+        | ForEach-Object { Join-Path $_ ..\..\..\..\Library\standard.qb } `
+        | Resolve-Path `
+        | Write-Output
+    
+}
 function Invoke-Qbc {
     param(
         [string] $Qbc,

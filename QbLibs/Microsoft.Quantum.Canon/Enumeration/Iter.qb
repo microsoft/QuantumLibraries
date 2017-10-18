@@ -1,67 +1,71 @@
-/// <seealso cref="Iter" />
-operation IterCA<'T>(op : ('T => () : Controlled, Adjoint), array : 'T[])  : ()
-{
-    Body {
-        Iter(op, array)
-    }
+namespace Microsoft.Quantum.Canon {
 
-    Adjoint {
-        (Adjoint IterA)(op, array)
-    }
-    Controlled (controls) {
-        (Controlled IterC)(controls, (op, array))
-    }
-    Controlled Adjoint (controls) {
-        (Controlled IterC)(controls, (Adjoint op, array))
-    }
-}
+    /// <seealso cref="Iter" />
+    operation IterCA<'T>(op : ('T => () : Controlled, Adjoint), array : 'T[])  : ()
+    {
+        Body {
+            Iter(op, array)
+        }
 
-/// <seealso cref="Iter" />
-operation IterA<'T>(op : ('T => () : Adjoint), array : 'T[])  : ()
-{
-    Body {
-        Iter(op, array)
-    }
-
-    Adjoint {
-        Iter(Adjoint op, array)
-    }
-}
-
-/// <seealso cref="Iter" />
-operation IterC<'T>(op : ('T => () : Controlled), array : 'T[])  : ()
-{
-    Body {
-       Iter(op, array)
-    }
-
-    Controlled (controls) {
-        Iter((Controlled op)(controls, _), array)
-    }
-}
-
-/// <summary>
-///     Applies an operation to each element of an array.
-/// </summary>
-/// <param name="singleQubitOperation">Operation to apply to each qubit.</param>
-/// <param name="register">Array of qubits on which to apply the given operation.</param>
-/// <example>
-///     Prepare a three-qubit |+〉 state:
-///     <c>
-///         using (register = Qubit[3]) {
-///             Iter(H, register)
-///         }
-///     </c>
-/// </example>
-/// <seealso cref="IterA" />
-/// <seealso cref="IterC" />
-/// <seealso cref="IterCA" />
-operation Iter<'T>(op : ('T => ()), array : 'T[])  : ()
-{
-    Body {
-        let nElements = Length(array)
-        for (idxElement in 0..(nElements - 1)) {
-            op(array[idxElement])
+        Adjoint {
+            (Adjoint IterA)(op, array)
+        }
+        Controlled (controls) {
+            (Controlled IterC)(controls, (op, array))
+        }
+        Controlled Adjoint (controls) {
+            (Controlled IterC)(controls, (Adjoint op, array))
         }
     }
+
+    /// <seealso cref="Iter" />
+    operation IterA<'T>(op : ('T => () : Adjoint), array : 'T[])  : ()
+    {
+        Body {
+            Iter(op, array)
+        }
+
+        Adjoint {
+            Iter(Adjoint op, array)
+        }
+    }
+
+    /// <seealso cref="Iter" />
+    operation IterC<'T>(op : ('T => () : Controlled), array : 'T[])  : ()
+    {
+        Body {
+        Iter(op, array)
+        }
+
+        Controlled (controls) {
+            Iter((Controlled op)(controls, _), array)
+        }
+    }
+
+    /// <summary>
+    ///     Applies an operation to each element of an array.
+    /// </summary>
+    /// <param name="singleQubitOperation">Operation to apply to each qubit.</param>
+    /// <param name="register">Array of qubits on which to apply the given operation.</param>
+    /// <example>
+    ///     Prepare a three-qubit |+〉 state:
+    ///     <c>
+    ///         using (register = Qubit[3]) {
+    ///             Iter(H, register)
+    ///         }
+    ///     </c>
+    /// </example>
+    /// <seealso cref="IterA" />
+    /// <seealso cref="IterC" />
+    /// <seealso cref="IterCA" />
+    operation Iter<'T>(op : ('T => ()), array : 'T[])  : ()
+    {
+        Body {
+            let nElements = Length(array)
+            for (idxElement in 0..(nElements - 1)) {
+                op(array[idxElement])
+            }
+        }
+    }
+
 }
