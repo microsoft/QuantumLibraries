@@ -197,3 +197,30 @@ operation Reset(target : Qubit) : () {
         I(target)
     }
 }
+
+
+// TODO: document that this uses the ordering
+//       {II, XI, YI, ZI, IX, XX, YX, ZX, ...}.
+function PauliToInt(paulis : Pauli[])  : Int {
+    mutable n = 0
+    
+    for (idxPauli in 0..(Length(paulis) - 1)) {
+        let pauli = paulis[idxPauli]
+
+            if (pauli == Xpauli) {
+            set n = n + 4 ^ idxPauli
+        } elif (pauli == Ypauli) {
+            set n = n + 2 * {4 ^ idxPauli}
+        } elif (pauli == Zpauli) {
+            set n = n + 3 * (4 ^ idxPauli)
+        }
+
+    }
+
+    return n
+}
+
+// TODO: write this once we get bit-shift operators.
+function IntToPauli(idx : Int) : Pauli[] {
+    return [Ipauli]
+}
