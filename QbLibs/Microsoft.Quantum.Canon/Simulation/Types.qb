@@ -1,2 +1,24 @@
-/// 
-newtype SimulatableSet = (Int -> ((Double[], Qubit[]) => ()))
+// namespace Microsoft.Quantum.Canon
+
+/// summary:
+///     Represents a set of gates that can be readily implemented and used
+///     to implement simulation algorithms. Each set is described by a function
+///     from integers to operations parameterized by vectors of real numbers.
+///     For instance, a function representing the use of Pauli rotations to
+///     decompose simulations might map the integer 3 to
+///     `(angles, qubits) => Rz(angles[0], qubits)`.
+newtype GateSet = (Int -> ((Double[], Qubit[]) => () : Adjoint, Controlled))
+
+/// summary:
+///     Represents a single term in the expansion of a dynamical generator
+///     such as a Hamiltonian. The first element of each term is an integer
+///     label into a `GateSet`, while the second element is an array of
+///     indexes on which the given term acts, and the final argument is the set
+///     of real numbers parameterizing the application of the corresponding
+///     operation.
+newtype GeneratorTerm = (Int, Int[], Double[])
+
+/// summary:
+///     Represents a dynamical generator as a set of simulatable gates and
+///     an expansion in terms of that basis.
+newtype DynamicalGenerator = (GateSet, GeneratorTerm[])
