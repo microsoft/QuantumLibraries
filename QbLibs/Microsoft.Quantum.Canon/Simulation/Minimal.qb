@@ -91,30 +91,29 @@ function HamH2(idxBond : Int) : HamPauli{
 
 //First-order Trotterization
 //Feed in Hamiltonian ; spits out description of gate sequence
-// TODO: With new types, should map DynamicalGenerator -> DynamicalGenerator[].
-function TrotterOrder1(stepSize : Double, generator : DynamicalGenerator ) : DynamicalGenerator[]
+function TrotterOrder1(time : Double, generator : DynamicalGenerator ) : GeneratorSequence[]
 {
     let (gateSet, terms) = generator
     let nTerms = Length(terms)
-    mutable rotAngles = Double[nCoeffs]
-    for(idxCoeff in 0..nCoeffs - 1){
-        set rotAngles = coeffs[idxCoeff] * stepSize
+    let sequence = new (Int, Int[], Double, Double[])[nTerms]
+
+    for (idxTerm in 0..nTerms - 1){
+        let (idxGate, idxsSubregister, params) = terms[idxTerm]
+        set sequence[idxTerm] = (idxGate, idxsSubregister, time, params)
     }
 
 
-    return TrotterPauli((rotAngles , pauliString))
+    return GeneratorSequence(gateSet, sequence)
 }
 
 //Second-order Trotterization
 //Should be 1st order trotter followed by reverse sequence. Need to check
-function TrotterOrder2(stepSize : Double, hamPauli : HamPauli ) : TrotterPauli
+function TrotterOrder2(time : Double, generator : DynamicalGenerator ) : GeneratorSequence[]
 {
-    let (rotAngles, pauliString) = TrotterOrder1(stepSize * 0.5, hamPauli)
-    let nRotAngles = Length(rotAngles)
-    return (rotAngles + rotAngles[(nRotangles-1)..-1..0], pauliString + pauliString[(nRotangles-1)..-1..0])
+    let (gateSet, lowerOrderSequence) = TrotterOrder1(time * 0.5, generator)
+    let sequence = lowerOrderSequence + lowerOrderSequence[(Length(lowerOrderSequence))..-1..0]
 
-
-
+    return GeneratorSequence(gateSet, sequence)
 }
 
 function DecomposeAsTimeSlices(stepSize : Double, generator : DynamicalGenerator, order : Int) : DynamicalGenerator[] {
@@ -149,28 +148,15 @@ operation ApplyPauliString(rotAngle : Double, pauliString : PauliString, qubits 
 //     }
 // }
 
-operation ApplyGenerator(generator : DynamicalGenerator, time : Double, target : Qubit[]) : ()
-{
-    Body {
-        let (gateSet, terms) = generator
-        for (idxTerm in 0..Length(terms) - 1) {
-            let (idxGate, idxsSubregister, params) = terms[idxTerm]
-            let gate = gateSet(idxGate)
-            ApplyToSubregisterImplCA(gate(params, time, _), idxsSubregister, target)
-        }
-    }
-
-    Adjoint auto
-    Controlled auto
-    Controlled Adjoint auto
-}
-
-operation ApplyGeneratorSequence(generators : DynamicalGenerator[], time : Double, target : Qubit[]) : () {
+operation ApplyGeneratorSequence(generators : GeneratorSequence, target : Qubit[]) : () {
     Body {
         // FIXME: write as Iter on ApplyGenerator(_, time, target).
         //        That takes generics as well.
-        for (idxGenerator in 0..Length(generators) - 1) {
-            ApplyGenerator(generators[idxGenerator], time, target)
+        let (gateSet, terms) = generator
+        for (idxTerm in 0..Length(terms) - 1) {
+            let (idxGate, idxsSubregister, time, params) = terms[idxTerm]
+            let gate = gateSet(idxGate)
+            ApplyToSubregisterImplCA(gate(params, time, _), idxsSubregister, target)
         }
     }
 
