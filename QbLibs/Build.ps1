@@ -33,6 +33,7 @@ $qflatSources += @(
     
     "Combinators/ApplyToEach.qb",
     "Combinators/ApplyToRange.qb",
+    "Combinators/RestrictToSubregister.qb",
 
     # Diagnostics
     "Asserts/AssertQubit.qb",
@@ -41,6 +42,7 @@ $qflatSources += @(
 
     # System evolution simulators
     "Simulation/Types.qb",
+    "Simulation/PauliSim.qb",
     "Simulation/Minimal.qb"
 
 
