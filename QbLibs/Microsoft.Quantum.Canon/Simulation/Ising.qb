@@ -1,0 +1,66 @@
+// namespace Microsoft.Quantum.Canon
+
+operation CNOT ( q1 : Qubit, q2 : Qubit ) { 
+    Body { 
+        (controlled X)([q1], q2)
+    }    
+}
+
+operation ApplyJzz( q1 : Qubit, q2 : Qubit ) : () { 
+    Body {     
+        CNOT(q1, q2)
+        Rz(phi, q2)
+        CNOT(q1, q2)
+    }    
+}
+
+operation Ising (nsites : Int, time : Int, timestep : Int) { 
+    // allocate the qubits for the Ising chain
+    unsigned nsites = atoi(argv[1]);
+    using (qs = Qubit[nsites]) { 
+        // start from a ground state aligned in the x direction by applying a Hadamard gate to all qubits
+        for (i in 0..Length(qs)-1) { 
+            H(qs[i])
+        }
+        
+        // choose the runtime and Trotter time step
+        let nsteps = Floor(time / timestep)
+
+        // choose the couplings
+        let hx = 1.0   // transverse field
+        let hz = 0.5 // longitiduinal field
+        let J = 1.0   // Ising coupling
+
+    // evolve using a second order Trotter decomposition
+    for (idxIter = 0..nsteps / 2) {
+        // improve locality of qubit references for simulation by applying all terms locally
+        // before moving to the next qubit.
+        for (idxSite = 0..nsites) {
+            Rx(qs[r], hx * dt)
+            Rz(qs[r], hz * dt)
+            if (r + 1 < nsites) {
+                ApplyJzz(qs[r], qs[r + 1], J * dt)
+            }
+        }
+        for (inxSite = (nsites-1)..-1..0) { 
+            if (r + 1 < nsites) {
+                ApplyJzz(qs[r], qs[r + 1], J * dt)
+            }
+            Rz(qs[r], hz * dt)
+            Rx(qs[r], hx * dt)
+        }
+    }
+
+    mutable result = Result[]
+    for (idx = 0..Length(qs)-1) { 
+        set result[idx] = M(qs[idx])
+    }
+    return result
+}
+
+operation TestIsing () : Result[] { 
+    Body { 
+        return Ising(10, 1.0, 100)        
+    }
+}
+
