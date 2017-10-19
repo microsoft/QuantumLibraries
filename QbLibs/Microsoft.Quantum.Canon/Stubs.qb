@@ -26,7 +26,7 @@ function Min(value : Int[]) : Int
     let nTerms = Length(value)
     for(idx in 0..nTerms - 1)
     {
-        if (value[idx] < max){
+        if (value[idx] < min){
             set min = value[idx]
         }
     }
