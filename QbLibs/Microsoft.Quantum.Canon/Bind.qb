@@ -1,3 +1,5 @@
+//namespace Microsoft.Quantum.Canon
+
 operation Bind1Impl(operations : (Qubit => ())[], target : Qubit) : () {
     Body {
         for (idxOperation in 0..Length(operations) - 1) {

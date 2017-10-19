@@ -1,3 +1,5 @@
+//namespace Microsoft.Quantum.Canon
+
 /// <summary>
 ///     Returns the constant π.
 /// </summary>

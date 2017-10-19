@@ -1,22 +1,5 @@
-// stub of the operation to assert equality between two operations. To be removed later. 
-operation AssertOperationsEqualReferenced(actual : (Qubit[] => ()), expected : (Qubit[] => () : Adjoint), nQubits : Int) : () {}
+//namespace Microsoft.Quantum.Canon
 
-operation WithAC(outerOperation : (Qubit[] => ():Adjoint), innerOperation : (Qubit[] => ():Adjoint,Controlled), target : Qubit[])  : ()
-{
-    Body {  
-        outerOperation(target)
-        innerOperation(target)
-        (Adjoint(outerOperation))(target)
-    }
-
-    Adjoint auto
-    Controlled(controlRegister) {
-        outerOperation(target)
-        (Controlled(innerOperation))(controlRegister, target)
-        (Adjoint(outerOperation))(target)
-    }
-    Controlled Adjoint auto
-}
 
 /// <summary>
 /// Implementation of the 3 qubit Margolus gate over the Clifford+T gate set, according to Nielsen and Chuang

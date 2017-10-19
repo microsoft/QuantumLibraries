@@ -1,3 +1,5 @@
+//namespace Microsoft.Quantum.Canon
+
 newtype ResultStack = (Int,  Int, Result[])
 
 function StackCapacity(stack : ResultStack) : Int {

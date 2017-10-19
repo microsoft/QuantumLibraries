@@ -1,16 +1,4 @@
-// FIXME: remove this stub once multifile works
-operation ApplyToEachAC(singleQubitOperation : (Qubit => ():Adjoint,Controlled), register : Qubit[])  : ()
-{
-    Body {
-        for (idxQubit in 0..(Length(register) - 1)) {
-            singleQubitOperation(register[idxQubit])
-        }
-    }
-
-    Adjoint auto
-    Controlled auto
-    Controlled Adjoint auto
-}
+//namespace Microsoft.Quantum.Canon
 
 /// <summary>
 ///     Cascade of multiply-controlled NOT gate with one or more control qubit and multiple target qubits. 

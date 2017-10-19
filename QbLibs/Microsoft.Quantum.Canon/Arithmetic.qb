@@ -1,5 +1,4 @@
-﻿
-// namespace Microsoft.Research.Qflat.CliffordTRzMachine
+﻿//namespace Microsoft.Quantum.Canon
 // FIXME: uncomment when the namespace syntax is clarified
 
 // open Endianness
@@ -13,9 +12,9 @@
 /// <param name = "s"> phase shift. </param>
 operation DiagonalShift ( s : Int,  qs  : LittleEndian)   : ()
 {
-	Body {
-		// TODO: implement the diagonal shift circuit used in the Beauregard adder
-	}
+    Body {
+        // TODO: implement the diagonal shift circuit used in the Beauregard adder
+    }
 }
 
 /// <summary>
@@ -25,10 +24,10 @@ operation DiagonalShift ( s : Int,  qs  : LittleEndian)   : ()
 /// <param name = "inc"> increment. </param>
 operation IntegerIncrement ( inc : Int,  qs  : LittleEndian)  : ()
 {
-	Body {
-		// TODO: implement the Beauregard adder
-		// basic idea: QFT' DiagonalShift QFT = increment
-	}
+    Body {
+        // TODO: implement the Beauregard adder
+        // basic idea: QFT' DiagonalShift QFT = increment
+    }
 }
 
 /// <summary>
@@ -39,9 +38,9 @@ operation IntegerIncrement ( inc : Int,  qs  : LittleEndian)  : ()
 /// <param name = "inc"> increment. </param>
 operation ModularIncrement ( N : Int, inc : Int,  qs  : LittleEndian)  : ()
 {
-	Body {
-		// TODO: implement the Beauregard modular adder
-		// basic idea: https://arxiv.org/abs/quant-ph/0205095  (Section 2.2)
-	}
+    Body {
+        // TODO: implement the Beauregard modular adder
+        // basic idea: https://arxiv.org/abs/quant-ph/0205095  (Section 2.2)
+    }
 }
 

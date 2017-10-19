@@ -1,3 +1,5 @@
+//namespace Microsoft.Quantum.Canon
+
 /// <summary>
 /// Teleportation transfers 1 quantum bit by encoding it into 2 classical bits, using 1 EPR pair ("1q=2c+1e")
 /// </summary>
@@ -35,18 +37,18 @@ operation Teleportation (source : Qubit, target : Qubit) : () {
 
 operation TeleportationTest () : () {
     Body { 
-        using (qubits = Qubit[2]) { 
+        using (qubits1 = Qubit[2]) { 
             // create a |+> state in the first qubit
-            H(qubits[0])
-            Teleportation(qubits[0], qubits[1])
-            Assert([Xpauli], [qubits[1]], Zero, "Error: state after the teleportation must be |+> state]")
+            H(qubits1[0])
+            Teleportation(qubits1[0], qubits1[1])
+            Assert([Xpauli], [qubits1[1]], Zero, "Error: state after the teleportation must be |+> state]")
         }
-        using (qubits = Qubit[2]) { 
+        using (qubits2 = Qubit[2]) { 
             // create a |-> state in the first qubit
-            X(qubits[0])
-            H(qubits[0])
-            Teleportation(qubits[0], qubits[1])
-            Assert([Xpauli], [qubits[1]], One, "Error: state after the teleportation must be |-> state]")
+            X(qubits2[0])
+            H(qubits2[0])
+            Teleportation(qubits2[0], qubits2[1])
+            Assert([Xpauli], [qubits2[1]], One, "Error: state after the teleportation must be |-> state]")
         }
     }
 }
