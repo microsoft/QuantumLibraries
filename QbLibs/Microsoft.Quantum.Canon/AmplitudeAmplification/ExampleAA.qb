@@ -36,7 +36,7 @@ operation ExampleAAbyOracle() : ()
         using(qubits = Qubit[1]){
             let qubitFlag = qubits[0]
             let qubitsSystem = new Qubit[0]
-            AmpAmpByOracle(iterations, oracleStatePrep, qubitFlag, qubitsSystem)
+            AmpAmpByOracle(iterations, oracleStatePrep, 0, qubits)
 
             let successAmplitude = Sin( Float(2*iterations + 1) * ArcSin( lambda ))
 
@@ -47,8 +47,3 @@ operation ExampleAAbyOracle() : ()
     }
  
 }
-
-
-/// thus we call the reflection operator
-// ReflectionTargetOracleState(idxQubitFlag : Int)
-/// ReflectionStartOracleState(idxQubitFlag : Int, oracle: OracleState)

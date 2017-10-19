@@ -210,11 +210,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AmplitudeAmplification.g.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>AmplitudeAmplification.qb</DependentUpon>
-    </Compile>
     <Compile Include="Asserts\AssertOperationsEqualReferenced.g.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Asserts\AssertOperationsEqualReferenced.qb</DependentUpon>
@@ -255,10 +250,6 @@
     <None Include="app.config" />
     <None Include="Combinators\ApplyToEach.qb">
       <Generator>QbCodeGenerator</Generator>
-    </None>
-    <None Include="AmplitudeAmplification.qb">
-      <Generator>QbCodeGenerator</Generator>
-      <LastGenOutput>AmplitudeAmplification.g.cs</LastGenOutput>
     </None>
     <None Include="Combinators\ApplyToRange.qb">
       <Generator>QbCodeGenerator</Generator>

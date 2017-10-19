@@ -1,41 +1,6 @@
 ﻿// Functions here may be commonly used in other libraries and could be made global.
 
 
-function Pi() : Double {
-	return 3.141592653589793238462643383280
-}
-
-//Generates a random number uniformly sampled in [0, 2^maxBits-1]
-function randomIntPow2 (maxBits : Int) : Int
-{
-   mutable number = 0
-  for( idxBit in 0..maxBits -1){
-        set number = number + (Random([0.5;0.5])) * 2 ^ idxBit
-    }
-    return number    
-}
-
-//Generates a random number uniformly sampled in [0, maxInt)
-function randomInt (maxInt : Int) : Int
-{
-	mutable nBits = 0
-	mutable output = 0
-	//set nBits = Float(maxInt)
-	set nBits = Ceil(Log(2.0,Float(maxInt)))
-	
-	// Should use repeat until success when implemented
-	for( samples in 0..100 ){
-		set output = randomIntPow2(nBits)
-		if(output < maxInt){
-			return output
-		}
-	}
-
-	return output / 2
-
-}
-
-
 // Phase shift about |1...1><1...1|
 operation ReflectionAllOnes( phase: Double, qubits: Qubit[] ) : ()
 {
@@ -70,54 +35,43 @@ operation ReflectionAllZero( phase: Double, qubits: Qubit[] ) : ()
 
 //qubit array slicing by index
 // Number of qubits should be larger than largest value in indices
-// FIXME This needs to be Adjoint Controlled
-operation QubitSlice(indices : Int[], qubits : Qubit[]) : Qubit[] 
+function QubitSlice(indices : Int[], qubits : Qubit[]) : Qubit[] 
 {
-    Body
-    {   
-        let nSliced = Length(indices)
-        mutable sliced = new Qubit[nSliced]
-        for( idx in 0..nSliced - 1 ){
-            set sliced[idx] = qubits[indices[idx]]
-        }
-
-        return sliced
+    let nSliced = Length(indices)
+    mutable sliced = new Qubit[nSliced]
+    for( idx in 0..nSliced - 1 ){
+        set sliced[idx] = qubits[indices[idx]]
     }
+
+    return sliced
 }
 
 
 //QubitExclude([idxQubitFlag], qubits)
-
-//QubitExclude([idxQubitFlag], qubits)
-// FIXME This needs to be Adjoint Controlled
-operation QubitExclude(remove : Int[], qubits : Qubit[]) : Qubit[] 
+function QubitExclude(remove : Int[], qubits : Qubit[]) : Qubit[] 
 {
-    Body
-    {   
-        let nSliced = Length(remove)
-        let nQubits = Length(qubits)
-        //Would be better with sort function
-        //Or way to add elements to array
 
-        mutable arrayKeep = new Int[nQubits]
-        mutable sliced = new Qubit[nQubits - nSliced]
-        mutable counter = 0
+    let nSliced = Length(remove)
+    let nQubits = Length(qubits)
+    //Would be better with sort function
+    //Or way to add elements to array
 
-        for( idx in 0..nQubits - 1){
-            set arrayKeep[idx] = idx
-        }
-        for( idx in 0..nSliced - 1 ){
-            set arrayKeep[remove[idx]] = -1
-        }
-        for( idx in 0..nQubits - 1 ){
-            if(arrayKeep[idx] >= 0){
-                set sliced[counter] = qubits[arrayKeep[idx]]
-                set counter = counter + 1
-            }
-        }
+    mutable arrayKeep = new Int[nQubits]
+    mutable sliced = new Qubit[nQubits - nSliced]
+    mutable counter = 0
 
-        return sliced
+    for( idx in 0..nQubits - 1){
+        set arrayKeep[idx] = idx
+    }
+    for( idx in 0..nSliced - 1 ){
+        set arrayKeep[remove[idx]] = -1
+    }
+    for( idx in 0..nQubits - 1 ){
+        if(arrayKeep[idx] >= 0){
+            set sliced[counter] = qubits[arrayKeep[idx]]
+            set counter = counter + 1
+        }
     }
 
+    return sliced
 }
-
