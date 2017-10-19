@@ -1,4 +1,6 @@
-﻿// Overview of amplitude amplification library
+﻿//namespace Microsoft.Quantum.Canon
+
+// Overview of amplitude amplification library
 // Oblivious amplitude amplification with partial reflections is the most general form of amplitude amplification implemented here
 // This is called through the operation AmpAmpObliviousByReflectionPhases.
 //		This has two registers: "qubitsAncilla" and "qubitsSystem".

@@ -1,4 +1,6 @@
-﻿
+﻿//namespace Microsoft.Quantum.Canon
+
+
 /// <summary>
 /// Applies a unitary operator on the target register if the control register state corresponds to a specified bit mask.
 /// </summary>

@@ -25,9 +25,13 @@ $qflatSources = @(Find-QflatPrelude)
 $qflatSources += @(
     # Provide stubs for primitive operations.
     "Stubs.qb",
+    "TypeConversion.qb"
 
     "Math/Types.qb",
     "Math/Constants.qb",
+    "Math/NativeStubs.qb"
+    "Math/Random.qb",
+
 
     "IterateThroughCartesianProduct.qb",
     
@@ -55,6 +59,8 @@ $qflatSources += @(
     "Arithmetic.qb",
     "Bind.qb",
     "Paulis.qb",
+    "ControlledOnBitString.qb"
+
 
     "QFT.qb",
     "Teleportation.qb",
@@ -63,14 +69,23 @@ $qflatSources += @(
     "Superdense.qb",
     "PhaseEstimation/Quantum.qb",
     "PhaseEstimation/Iterative.qb",
-    #TODO Bug #727: "AmplitudeAmplification.qb",
-    
+    # # AmplitudeAmplification
+    "AmplitudeAmplification/Utils.qb"
+    "AmplitudeAmplification/Types.qb"
+    "AmplitudeAmplification/AmplitudeAmplification.qb"
+    "AmplitudeAmplification/ExampleGrover.qb"
+    "AmplitudeAmplification/ExampleAA.qb"   
+
     # # QECC
     "Qecc/Types.qb",
     "Qecc/Utils.qb",
     "Qecc/BitFlipCode.qb",
     "Qecc/5QubitCode.qb",
     "Qecc/7QubitCode.qb"
+
+
+
+
 ) | ForEach-Object {
     Join-Path $libDirectory $_
 }

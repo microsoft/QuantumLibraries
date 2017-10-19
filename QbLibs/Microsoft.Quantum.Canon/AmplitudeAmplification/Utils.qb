@@ -1,4 +1,6 @@
-﻿// Functions here may be commonly used in other libraries and could be made global.
+﻿//namespace Microsoft.Quantum.Canon
+
+// Functions here may be commonly used in other libraries and could be made global.
 
 
 // Phase shift about |1...1><1...1|
@@ -34,6 +36,7 @@ operation ReflectionAllZero( phase: Double, qubits: Qubit[] ) : ()
 
 
 //qubit array slicing by index
+//TODO replace with Slice in generics
 // Number of qubits should be larger than largest value in indices
 function QubitSlice(indices : Int[], qubits : Qubit[]) : Qubit[] 
 {
@@ -48,6 +51,7 @@ function QubitSlice(indices : Int[], qubits : Qubit[]) : Qubit[]
 
 
 //QubitExclude([idxQubitFlag], qubits)
+//TODO replace with Exclude in generics
 function QubitExclude(remove : Int[], qubits : Qubit[]) : Qubit[] 
 {
 

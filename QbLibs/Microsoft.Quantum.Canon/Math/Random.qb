@@ -1,3 +1,4 @@
+//namespace Microsoft.Quantum.Canon
 
 //Generates a random number uniformly sampled in [0, 2^maxBits-1]
 function randomIntPow2 (maxBits : Int) : Int

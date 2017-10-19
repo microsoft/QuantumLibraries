@@ -73,6 +73,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AmplitudeAmplification\AmplitudeAmplification.g.cs" />
+    <Compile Include="AmplitudeAmplification\ExampleAA.g.cs" />
+    <Compile Include="AmplitudeAmplification\ExampleGrover.g.cs" />
+    <Compile Include="AmplitudeAmplification\Types.g.cs" />
+    <Compile Include="AmplitudeAmplification\Utils.g.cs" />
     <Compile Include="Arithmetic.g.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -230,6 +235,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Toffoli.qb</DependentUpon>
     </Compile>
+    <None Include="TypeConversion.qb" />
     <QbCompile Include="RUS.qb">
       <Generator>QbCodeGenerator</Generator>
       <LastGenOutput>RUS.g.cs</LastGenOutput>
@@ -238,6 +244,14 @@
       <Generator>QbCodeGenerator</Generator>
       <LastGenOutput>MultiTargetCNOT.g.cs</LastGenOutput>
     </QbCompile>
+    <None Include="AmplitudeAmplification\AmplitudeAmplification.qb" />
+    <None Include="AmplitudeAmplification\ExampleAA.qb" />
+    <None Include="AmplitudeAmplification\ExampleGrover.qb" />
+    <None Include="AmplitudeAmplification\Types.qb" />
+    <None Include="AmplitudeAmplification\Utils.qb" />
+    <None Include="ControlledOnBitString.qb" />
+    <None Include="Math\NativeStubs.qb" />
+    <None Include="Math\Random.qb" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

@@ -1,4 +1,6 @@
-﻿/// <summary>
+﻿//namespace Microsoft.Quantum.Canon
+
+/// <summary>
 /// Represents a reflection oracle.
 /// </summary>
 /// <remarks> 

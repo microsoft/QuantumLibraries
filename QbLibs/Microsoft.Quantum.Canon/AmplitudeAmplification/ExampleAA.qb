@@ -1,4 +1,6 @@
-﻿///Here we consider the smallest example of amplitude amplification
+﻿//namespace Microsoft.Quantum.Canon
+
+///Here we consider the smallest example of amplitude amplification
 ///Suppose we have a single-qbuit oracle that prepares the state
 /// O |0> = \lambda |1> + \sqrt{1-|\lambda|^2} |0>
 /// The goal is to amplify the |1> state

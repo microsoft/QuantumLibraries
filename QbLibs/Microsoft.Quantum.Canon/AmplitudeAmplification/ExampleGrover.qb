@@ -1,4 +1,6 @@
-﻿/// Example: Quantum search of a database of N elements
+﻿//namespace Microsoft.Quantum.Canon
+
+/// Example: Quantum search of a database of N elements
 /// The quantum search algorithm queries a database of N elements to find one of its M marked elements using O(sqrt(M/N)). We will work through several examples here.
 
 /// The database is queried by an oracle D|z>|k> = |z \oplus x_k>|k>. Let |k>_d is an index to an element in the database of size N, let |z>_m indicate whether the k^th element is marked, and let x = x_0x_1...x_{N-1} be a binary string where x_k is 1 if the k^th element is marked and 0 otherwise.
