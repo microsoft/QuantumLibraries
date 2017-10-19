@@ -21,7 +21,7 @@ operation CNOT (source : Qubit, target : Qubit) : () {
     Controlled Adjoint auto 
 }
 
-operation CCNOT (source1 : Qubit, source2, Qubit, target : Qubit) : () { 
+operation CCNOT (source1 : Qubit, source2: Qubit, target : Qubit) : () { 
     Body{ 
         (Controllex X)([source1; source2], target)
     }
@@ -37,7 +37,7 @@ operation CCNOT (source1 : Qubit, source2, Qubit, target : Qubit) : () {
 ///     not assumed to be clean. </param> 
 /// <seealso cref="Tracer/Circuits/AndLadder/AndLadder" />
 
-operation MultiAndCascade ( controls : Qubits[], ancillas : Qubit[]) : () { 
+operation MultiAndCascade ( controls : Qubit[], ancillas : Qubit[]) : () { 
 	Body{
 		if( Length(controls) != Length(ancillas)+2 ) {
 			fail "number of ancillas must be two less than number of controls"
@@ -54,7 +54,8 @@ operation MultiAndCascade ( controls : Qubits[], ancillas : Qubit[]) : () {
 }
 
 
-let BuildCascade (xs:Qubits) (ys:Qubits) =
+operation BuildCascade (xs:Qubit[], ys:Qubit[]) : () {
+    Body { 
         let len = ys.Length-1
         for i in 1..len do 
             CCNOT [ys.[i]; xs.[i-1]; ys.[i-1]]
@@ -68,6 +69,8 @@ let BuildCascade (xs:Qubits) (ys:Qubits) =
         //CCNOT [xs.[len]; xs.[len+1]; xs.[len-1]]
         for i in len..(-1)..2 do 
             CCNOT [ys.[i]; xs.[i-1]; ys.[i-1]]
+    }
+}
 
 
 
@@ -75,10 +78,9 @@ operation MultiControlCNOTDirtyAncillas (controls : Qubit[], target : Qubit) : (
     Body { 
         let n = Length(controls)
         borrowing(ancillas=Qubit[n-X]) { 
-            
-            
             for (i in 1..Length(qs)-1) {
-            (Controlled X)([qs[0]], qs[i])
+                (Controlled X)([qs[0]], qs[i])
+            }
         }
     }
 }
@@ -89,50 +91,49 @@ operation MultiControlCNOTCleanAncillas (controls : Qubit[], target : Qubit) : (
         if (n < 2) { 
             fail "multi control CNOT needs at least 2 control qubits"
         }
-        using( ancillas=Qubit[n] ) { 
-            
-            
+        using( ancillas=Qubit[n] ) {
             for (i in 1..Length(qs)-1) {
-            (Controlled X)([qs[0]], qs[i])
+                (Controlled X)([qs[0]], qs[i])
+            }
         }
     }
 }
 
 
-
-{
-	Body
-	{
-		if(Length(controls) < 2 )
-		{
-			fail "function is defined for 2 or more controls"
-		}
-		using( ands = Qubit[ Length(controls) - 1 ] )
-		{
-			AndLadder(controls,ands)
-			MultiCX(ands[Length(ands)-1],targets)
-			(Adjoint(AndLadder))(controls,ands) 
-		}
-	}
-	Adjoint auto
-	Controlled( ctrls )
-	{
-		let c = controls + ctrls
-		if(Length(c) < 2 )
-		{
-			fail "function is defined for 2 or more controls"
-		}
-		using( ands = Qubit[ Length(c) - 1 ] )
-		{
-			AndLadder(c,ands)
-			MultiCX(ands[Length(ands)-1],targets)
-			(Adjoint(AndLadder))(c,ands) 
-		}
-		// 
-	}
-	Controlled Adjoint auto
-}
-
+// 
+// 
+// 	Body
+// 	{
+// 		if(Length(controls) < 2 )
+// 		{
+// 			fail "function is defined for 2 or more controls"
+// 		}
+// 		using( ands = Qubit[ Length(controls) - 1 ] )
+// 		{
+// 			AndLadder(controls,ands)
+// 			MultiCX(ands[Length(ands)-1],targets)
+// 			(Adjoint(AndLadder))(controls,ands) 
+// 		}
+// 	}
+// 	Adjoint auto
+// 	Controlled( ctrls )
+// 	{
+// 		let c = controls + ctrls
+// 		if(Length(c) < 2 )
+// 		{
+// 			fail "function is defined for 2 or more controls"
+// 		}
+// 		using( ands = Qubit[ Length(c) - 1 ] )
+// 		{
+// 			AndLadder(c,ands)
+// 			MultiCX(ands[Length(ands)-1],targets)
+// 			(Adjoint(AndLadder))(c,ands) 
+// 		}
+// 		// 
+// 	}
+// 	Controlled Adjoint auto
+// 
+// 
 
 operation MultiControlledMultiNot ( targets : Qubit[], controls  : Qubit[])
  : ()

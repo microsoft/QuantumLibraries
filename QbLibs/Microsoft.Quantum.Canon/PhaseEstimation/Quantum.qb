@@ -1,4 +1,6 @@
-﻿/// <summary>
+﻿//namespace Microsoft.Quantum.Canon
+
+/// <summary>
 ///     Performs the quantum phase estimation algorithm for a given oracle U and eigenstate,
 ///     reading the phase into a big-endian quantum register.
 /// </summary>

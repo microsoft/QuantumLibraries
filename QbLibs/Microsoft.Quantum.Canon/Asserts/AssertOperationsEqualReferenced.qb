@@ -1,3 +1,5 @@
+//namespace Microsoft.Quantum.Canon
+
 // TODO: move out somewhere, this is generically useful.
 operation PrepareEntangledState(left : Qubit[], right : Qubit[]) : () {
     Body {

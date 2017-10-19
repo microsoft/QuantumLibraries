@@ -1,4 +1,5 @@
-﻿
+﻿//namespace Microsoft.Quantum.Canon
+
 // Design notes:
 //     The APIs for the iterative and quantum phase estimation algorithms are
 //     parameterized in terms of discrete-time oracles as defined in the OracleTypes.qb

@@ -1,4 +1,5 @@
-﻿
+﻿//namespace Microsoft.Quantum.Canon
+
 /// <summary>
 ///     Reorders the qubits in a register to obtain a new
 ///     qubit register.

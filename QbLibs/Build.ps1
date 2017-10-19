@@ -33,6 +33,8 @@ $qflatSources += @(
     
     "Combinators/ApplyToEach.qb",
     "Combinators/ApplyToRange.qb",
+    "Combinators/OperationPow.qb",
+    "Combinators/With.qb",
 
     # Diagnostics
     "Asserts/AssertQubit.qb",
@@ -49,21 +51,21 @@ $qflatSources += @(
     "DataStructures/Stack.qb",
 
     # # Similarly with OracleTypes.qb, save for that it depends on OperationPow.qb.
-    "Combinators/OperationPow.qb",
     "PhaseEstimation/Types.qb",
     "Arithmetic.qb",
     "Bind.qb",
+    "Paulis.qb",
 
     "QFT.qb",
+    "Teleportation.qb",
+    "Toffoli.qb",
+    "ShiftOp.qb",
+    "Superdense.qb",
     "PhaseEstimation/Quantum.qb",
     "PhaseEstimation/Iterative.qb",
-    # "AmplitudeAmplification.qb"
-    "ShiftOp.qb",
-    "Combinators/With.qb",
-
-    "Paulis.qb",
+    #TODO Bug #727: "AmplitudeAmplification.qb",
     
-    # # # QECC
+    # # QECC
     "Qecc/Types.qb",
     "Qecc/Utils.qb",
     "Qecc/BitFlipCode.qb",

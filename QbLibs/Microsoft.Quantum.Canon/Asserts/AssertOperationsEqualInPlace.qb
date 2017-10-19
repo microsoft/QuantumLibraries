@@ -1,3 +1,5 @@
+//namespace Microsoft.Quantum.Canon
+
 ///<summary>
 /// Applies unitaries that map |0⟩⊗…⊗|0⟩ to |ψ_1⟩⊗…⊗|ψ_n⟩
 /// where |ψ_k⟩ depends on basis[k]. The correspondence between 

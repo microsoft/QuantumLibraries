@@ -68,17 +68,20 @@ function Invoke-Qbc {
         [string[]] $Sources
     )
 
-    $output = & $qbc --input @sources 2>&1;
+    "Invoking qbc for files: " + $paths
+    & $Qbc --input @sources;
+    # $output = & $qbc --input @sources;
 
-    $stdout = $output | Where-Object { $_ -is [string]};
-    $stderr = $output | Where-Object { $_ -is [System.Management.Automation.ErrorRecord]};
+    # $stdout = $output | Where-Object { $_ -is [string]};
+    # $stderr = $output | Where-Object { $_ -is [System.Management.Automation.ErrorRecord]};
 
-    Write-Verbose ($stdout -join "`n");
+    # Write-Verbose ($stdout -join "`n");
     if ($LASTEXITCODE -ne 0) {
         Write-Error "Qbc.exe failed:`n$($stderr -join "`n")";
+        exit $LASTEXITCODE
     }
 
-    $output | Write-Output;
+    #$output | Write-Output;
 }
 
 function ConvertFrom-Qflat {

@@ -1,15 +1,4 @@
-// stub for ApplytoEach -> FIXME: remove this after multi-file works
-
-operation ApplyToEachA(singleQubitOperation : (Qubit => ():Adjoint), register : Qubit[])  : ()
-{
-    Body {
-        for (idxQubit in 0..(Length(register) - 1)) {
-            singleQubitOperation(register[idxQubit])
-        }
-    }
-
-    Adjoint auto
-}
+//namespace Microsoft.Quantum.Canon
 
 /// <summary>
 ///     Returns Boolean value indicating whether all qubits of a register are in the 0 state, when measured in a specified single qubit Pauli basis. 
@@ -111,26 +100,26 @@ operation RUSTests () : () {
             RUScircuitV1(qubits[0])
             AssertProb([Zpauli], [qubits[0]], Zero, 0.5, "Error: state after applying the Z-rotation must give Zero state with probability 0.5", 1e-10)
         }
-        using (qubits = Qubit[1]) {
+        using (qubits2 = Qubit[1]) {
             // create a |-> state 
-            X(qubits[0])
-            H(qubits[0])
-            RUScircuitV1(qubits[0])
-            AssertProb([Zpauli], [qubits[0]], Zero,  0.5, "Error: state after applying the Z-rotation must give Zero state with probability 0.5", 1e-10)            
+            X(qubits2[0])
+            H(qubits2[0])
+            RUScircuitV1(qubits2[0])
+            AssertProb([Zpauli], [qubits2[0]], Zero,  0.5, "Error: state after applying the Z-rotation must give Zero state with probability 0.5", 1e-10)            
         }
         // Testing the Paetznick & Svore circuit for the V gate
-        using (qubits = Qubit[1]) {
+        using (qubits3 = Qubit[1]) {
             // create a |+> state 
-            H(qubits[0])
-            RUScircuitV2(qubits[0])
-            AssertProb([Zpauli], [qubits[0]], Zero, 0.5, "Error: state after applying the Z-rotation must give Zero state with probability 0.5", 1e-10)
+            H(qubits3[0])
+            RUScircuitV2(qubits3[0])
+            AssertProb([Zpauli], [qubits3[0]], Zero, 0.5, "Error: state after applying the Z-rotation must give Zero state with probability 0.5", 1e-10)
         }
-        using (qubits = Qubit[1]) {
+        using (qubits4 = Qubit[1]) {
             // create a |-> state 
-            X(qubits[0])
-            H(qubits[0])
-            RUScircuitV2(qubits[0])            
-            AssertProb([Zpauli], [qubits[0]], Zero, 0.5, "Error: state after applying the Z-rotation must give Zero state with probability 0.5", 1e-10)            
+            X(qubits4[0])
+            H(qubits4[0])
+            RUScircuitV2(qubits4[0])            
+            AssertProb([Zpauli], [qubits4[0]], Zero, 0.5, "Error: state after applying the Z-rotation must give Zero state with probability 0.5", 1e-10)            
         }
     }
 }

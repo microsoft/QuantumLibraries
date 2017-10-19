@@ -1,3 +1,5 @@
+//namespace Microsoft.Quantum.Canon
+
 /// <summary>
 /// Superdense coding transfers 2 classical bits by encoding them into 1 qubit, using 1 EPR pair ("2c=1q+1e")
 /// </summary>
