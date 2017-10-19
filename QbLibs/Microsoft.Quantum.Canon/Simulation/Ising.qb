@@ -1,0 +1,69 @@
+// namespace Microsoft.Quantum.Canon
+
+// apply a ZZ-term 
+operation ApplyJzz( phi : Double, q1 : Qubit, q2 : Qubit ) : () { 
+    Body {     
+        CNOT(q1, q2)
+        Rz(phi, q2)
+        CNOT(q1, q2)
+    }    
+}
+
+// stub for the floor function. FIXME: remove if Floor is supported in Solid standard lib.
+function floor (a : Double) : Int {}
+
+/// <summary> Simulate the time evolution of an Ising model under a transverse field </summary>
+/// <param name = "nsites"> Number of spins of the Ising model </param>
+/// <param name = "time"> Overall time of the simulation </param>
+/// <param name = "dt"> The length of a timestep of the simulation </param>
+operation Ising (nsites : Int, time : Double, dt : Double) : Result[] { 
+    Body {         
+        mutable result = new Result[nsites]
+        // allocate the qubits for the Ising chain
+        using (qs = Qubit[nsites]) { 
+            // start from a ground state aligned in the x direction by applying a Hadamard gate to all qubits
+            for (i in 0..Length(qs)-1) { 
+                H(qs[i])
+            }
+            
+            // choose the runtime and Trotter time step
+            let nsteps = floor(time / dt)
+
+            // choose the couplings
+            let hx = 1.0   // transverse field
+            let hz = 0.5 // longitiduinal field
+            let J = 1.0   // Ising coupling
+
+            // evolve using a second order Trotter decomposition
+            for (idxIter in 0..nsteps/2) {
+                // improve locality of qubit references for simulation by applying all terms locally
+                // before moving to the next qubit.
+                for (idxSite in 0..nsites) {
+                    Rx(hx * dt, qs[idxSite])
+                    Rz(hz * dt, qs[idxSite])
+                    if (idxSite + 1 < nsites) {
+                        ApplyJzz(J * dt, qs[idxSite], qs[idxSite + 1])
+                    }
+                }
+                for (idxSite in (nsites-1)..-1..0) {                 
+                    if (idxSite + 1 < nsites) {
+                        ApplyJzz(J * dt, qs[idxSite], qs[idxSite + 1])
+                    }
+                    Rz(hz * dt, qs[idxSite])
+                    Rx(hx * dt, qs[idxSite])
+                }
+            }
+            
+            for (idx in 0..Length(qs)-1) { 
+                set result[idx] = M(qs[idx])
+            }        
+        }
+        return result
+    }
+}
+
+operation TestIsing () : Result[] { 
+    Body { 
+        return Ising(10, 1.0, 100.0)                
+    }
+}
