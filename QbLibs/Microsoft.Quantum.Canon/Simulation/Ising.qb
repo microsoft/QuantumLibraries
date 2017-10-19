@@ -9,7 +9,7 @@ operation ApplyJzz( phi : Double, q1 : Qubit, q2 : Qubit ) : () {
     }    
 }
 
-// stub for the floor function 
+// stub for the floor function. FIXME: remove if Floor is supported in Solid standard lib.
 function floor (a : Double) : Int {}
 
 /// <summary> Simulate the time evolution of an Ising model under a transverse field </summary>
