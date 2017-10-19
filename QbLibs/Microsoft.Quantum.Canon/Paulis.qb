@@ -4,6 +4,11 @@
 ///     Measures the given Pauli operator using an explicit scratch
 ///     qubit to perform the measurement.
 /// </summary>
+/// <param name="pauli">
+///     A multi-qubit Pauli operator specified as an array of
+///     single-qubit Pauli operators.
+/// </param>
+/// <param name="target">Qubit register to be measured.</param>
 operation MeasureWithScratch(pauli : Pauli[], target : Qubit[])  : Result
 {
     Body {
@@ -35,6 +40,12 @@ operation MeasureWithScratch(pauli : Pauli[], target : Qubit[])  : Result
     }
 }
 
+/// <summary>
+///     Given a multi-qubit Pauli operator, applies the corresponding operation to
+///     a register.
+/// </summary>
+/// <param name="pauli">A multi-qubit Pauli operator represented as an array of single-qubit Pauli operators.</param>
+/// <param name="target">Register to apply the given Pauli operation on.</param>
 operation ApplyPauli(pauli : Pauli[], target : Qubit[])  : ()
 {
     Body {
@@ -88,6 +99,15 @@ operation ApplyPauliFromBitString(pauli : Pauli, bitApply: Bool, bits : Bool[], 
 	Adjoint Controlled auto
 }
 
+/// <summary>
+///     Given an array of multi-qubit Pauli operators, measures each using a specified measurement
+///     gadget, then returns the array of results.
+/// </summary>
+/// <param name="paulis">Array of multi-qubit Pauli operators to measure.</param>
+/// <param name="target">Register on which to measure the given operators.</param>
+/// <param name="gadget">Operation which performs the measurement of a given multi-qubit operator.</param>
+// FIXME: make qubit[] argument last.
+// FIXME: introduce MeasurementGadget UDT!!!
 operation MeasurePaulis(paulis : Pauli[][], target : Qubit[], gadget : ((Pauli[], Qubit[]) => Result))  : Result[]
 {
     Body {
@@ -101,6 +121,17 @@ operation MeasurePaulis(paulis : Pauli[][], target : Qubit[], gadget : ((Pauli[]
     }
 }
 
+/// <summary>
+///     Given a single-qubit Pauli operator and the index of a qubit,
+///     returns a multi-qubit Pauli operator with the given single-qubit
+///     operator at that index and <c>IPauli</c> at every other index.
+/// </summary>
+/// <example>
+///     To obtain the array <c>[Ipauli; Ipauli; Xpauli; Ipauli]</c>:
+///     <c>
+///         EmbedPauli(Xpauli, 2, 3)
+///     </c>
+/// </example>
 function EmbedPauli(pauli : Pauli, location : Int, n : Int)  : Pauli[]
 {
     mutable pauliArray = new Pauli[n]

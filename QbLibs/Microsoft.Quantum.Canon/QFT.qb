@@ -1,5 +1,3 @@
-newtype BigEndian : Qubit[]
-
 /// <summary>
 /// 	Apply the Approximate Quantum Fourier Transform (AQFT) to a quantum register. 
 /// </summary>
@@ -11,28 +9,36 @@ newtype BigEndian : Qubit[]
 /// 	[ M. Roetteler, Th. Beth, Appl. Algebra Eng. Commun. Comput. 19(3): 177-193 (2008),  http://doi.org/10.1007/s00200-008-0072-2 ]
 /// 	[ D. Coppersmith, https://arxiv.org/abs/quant-ph/0201067 ]
 /// </remarks>
-operation ApproximateQFT ( a: Int, qs: BigEndian) : () { 
+operation ApproximateQFT ( a: Int, qs: BigEndian) : () {
 	Body {
-		let n = Length(qs)
-		if ( n == 0 ) {
+		// FIXME Solid #701: lengths of UDTs < T[] are not supported currently.
+		// let nQubits = Length(qs)
+		let nQubits = 1
+
+		if ( nQubits == 0 ) {
 			fail "function register qs requires at least 1 qubit."
 		}
-		if ( a < 0 || a > n ) {
+		if ( a < 0 || a > nQubits ) {
 			fail "approximation parameter a must be in {0..n}"
 		}
-    	for (i in 0..n-1) {
+    	for (i in 0..nQubits - 1) {
     		for (j in 0..(i-1)) {
-    			if ( (i-j) < a ) { 
-					(Controlled R1Frac)( [qs[i]], (1, i - j, qs[j]) )					
-				}    			
+    			if ( (i-j) < a ) {
+					(Controlled R1Frac)( [qs[i]], (1, i - j, qs[j]) )
+				}
 			}
 			H(qs[i])
 		}
 
-		// Apply the bit reversal permutation to the quantum register as a side effect.
-    	// FIXME: add the bit reversal, once Swaps are supported by Qbc
-		// Endianness.SwapReverseRegister(qs) 
+		// Apply the bit reversal permutation to the quantum register as
+		// a side effect, such that we enforce the invariants specified
+		// by the BigEndian UDT.
+    	SwapReverseRegister(qs)
 	}
+
+	Adjoint auto
+	Controlled auto
+	Controlled Adjoint auto
 }
 
 /// <summary>
@@ -42,8 +48,15 @@ operation ApproximateQFT ( a: Int, qs: BigEndian) : () {
 /// <remarks>
 ///     QFT requires Z-rotation gates of the form 2π/2ᵏ and Hadamard gates. The input and output are assumed to be in big endian encoding.
 /// </remarks>
-operation QFT ( qs : BigEndian ) : () { 
+operation QFT ( qs : BigEndian ) : () {
 	Body {
-		ApproximateQFT(Length(qs), qs)
+		// FIXME Solid #701: lengths of UDTs < T[] are not supported currently.
+		// let nQubits = Length(qs)
+		let nQubits = 1
+		ApproximateQFT(nQubits, qs)
 	}
+
+	Adjoint auto
+	Controlled auto
+	Controlled Adjoint auto
 }

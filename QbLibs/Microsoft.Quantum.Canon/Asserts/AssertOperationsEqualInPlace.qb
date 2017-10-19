@@ -68,7 +68,7 @@ operation AssertEqualOnBasisVector( basis : Int[] , givenU : (Qubit[] => ()), ex
 /// Checks if the operation givenU is equal to the operation givenU on 
 /// the given input size and up to a given tolerance
 ///</summary>
-operation AssertEqualOperationsInPlace( inputSize : Int, givenU : (Qubit[] => ()), expectedU : (Qubit[] => () : Adjoint ), tolerance : Double ) : ()
+operation AssertOperationsEqualInPlace( inputSize : Int, givenU : (Qubit[] => ()), expectedU : (Qubit[] => () : Adjoint ), tolerance : Double ) : ()
 {
     Body
     {

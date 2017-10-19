@@ -1,4 +1,5 @@
 ﻿
+/// <seealso cref="ApplyToEach" />
 operation ApplyToEachAC(singleQubitOperation : (Qubit => ():Adjoint,Controlled), register : Qubit[])  : ()
 {
     Body {
@@ -12,6 +13,7 @@ operation ApplyToEachAC(singleQubitOperation : (Qubit => ():Adjoint,Controlled),
     Controlled Adjoint auto
 }
 
+/// <seealso cref="ApplyToEach" />
 operation ApplyToEachA(singleQubitOperation : (Qubit => ():Adjoint), register : Qubit[])  : ()
 {
     Body {
@@ -23,6 +25,7 @@ operation ApplyToEachA(singleQubitOperation : (Qubit => ():Adjoint), register : 
     Adjoint auto
 }
 
+/// <seealso cref="ApplyToEach" />
 operation ApplyToEachC(singleQubitOperation : (Qubit => ():Controlled), register : Qubit[])  : ()
 {
     Body {
@@ -34,6 +37,22 @@ operation ApplyToEachC(singleQubitOperation : (Qubit => ():Controlled), register
     Controlled auto
 }
 
+/// <summary>
+///     Applies a single-qubit operation to each qubit in a register.
+/// </summary>
+/// <param name="singleQubitOperation">Operation to apply to each qubit.</param>
+/// <param name="register">Array of qubits on which to apply the given operation.</param>
+/// <example>
+///     Prepare a three-qubit |+〉 state:
+///     <c>
+///         using (register = Qubit[3]) {
+///             ApplyToEach(H, register)
+///         }
+///     </c>
+/// </example>
+/// <seealso cref="ApplyToEachA" />
+/// <seealso cref="ApplyToEachC" />
+/// <seealso cref="ApplyToEachAC" />
 operation ApplyToEach(singleQubitOperation : (Qubit => ()), register : Qubit[])  : ()
 {
     Body {
