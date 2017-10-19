@@ -51,23 +51,23 @@ $qflatSources += @(
     "Math/Constants.qb",
 
     "IterateThroughCartesianProduct.qb",
-    
-    "Combinators/ApplyToEach.qb",
+
     "Combinators/ApplyToRange.qb",
+    "Enumeration/Iter.qb",
 
     # Diagnostics
     "Asserts/AssertQubit.qb",
     "Asserts/AssertOperationsEqualReferenced.qb",
     "Asserts/AssertOperationsEqualInPlace.qb",
 
-    # # Provide definitions of the identity and nop.
-    "Identity.qb",
+    # Provide definitions of the identity and nop.
+    "Identity.qb"
 
-    # # # Endianness.qb contains newtype declarations that are needed more broadly,
-    # # # so we include it first.
+    # Endianness.qb contains newtype declarations that are needed more broadly,
+    # so we include it first.
     "Endianness.qb",
 
-    "DataStructures/Stack.qb",
+    "DataStructures/Stack.qb"
 
     # Similarly with OracleTypes.qb, save for that it depends on OperationPow.qb.
     "Combinators/OperationPow.qb",
@@ -83,7 +83,7 @@ $qflatSources += @(
     "Combinators/With.qb",
 
     "Paulis.qb",
-    
+
     # QECC
     "Qecc/Types.qb",
     "Qecc/Utils.qb",

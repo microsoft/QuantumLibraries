@@ -1,5 +1,5 @@
 namespace Microsoft.Quantum.Canon {
-    open Microsoft.Quantum.Standard
+    open Microsoft.Quantum.Primitive
 
     // TODO: move out somewhere, this is generically useful.
     operation PrepareEntangledState(left : Qubit[], right : Qubit[]) : () {
@@ -45,15 +45,15 @@ namespace Microsoft.Quantum.Canon {
             // Prepare a reference register entangled with the target register.
             using (reference = Qubit[nQubits]) {
                 using (target = Qubit[nQubits]) {
-                    // FIXME: change to use With/Bind, but that depends on generics since the arguments take
-                    //        (Qubit[], Qubit[]), not Qubit[].
-                    PrepareEntangledState(reference, target)
-                    actual(target)
-                    (Adjoint expected)(target)
-                    (Adjoint PrepareEntangledState)(reference, target)
+                    // // FIXME: change to use With/Bind, but that depends on generics since the arguments take
+                    // //        (Qubit[], Qubit[]), not Qubit[].
+                    // PrepareEntangledState(reference, target)
+                    // actual(target)
+                    // (Adjoint expected)(target)
+                    // (Adjoint PrepareEntangledState)(reference, target)
 
-                    Iter(AssertQubit(Zero, _), reference)
-                    Iter(AssertQubit(Zero, _), target)
+                    // Iter(AssertQubit(Zero, _), reference)
+                    // Iter(AssertQubit(Zero, _), target)
                 }
             }
         }

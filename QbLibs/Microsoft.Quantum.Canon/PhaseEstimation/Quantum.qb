@@ -1,5 +1,5 @@
 ﻿namespace Microsoft.Quantum.Canon {
-    open Microsoft.Quantum.Standard
+    open Microsoft.Quantum.Primitive
 
     /// <summary>
     ///     Performs the quantum phase estimation algorithm for a given oracle U and eigenstate,

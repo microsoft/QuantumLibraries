@@ -1,5 +1,5 @@
 namespace Microsoft.Quantum.Canon {
-    open Microsoft.Quantum.Standard
+    open Microsoft.Quantum.Primitive
 
     /// <summary>
     ///     Private operation used to implement both the 5 qubit encoder and decoder.

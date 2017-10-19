@@ -1,5 +1,5 @@
 ﻿namespace Microsoft.Quantum.Canon {
-    open Microsoft.Quantum.Standard
+    open Microsoft.Quantum.Primitive
 
     // Design notes:
     //     The APIs for the iterative and quantum phase estimation algorithms are

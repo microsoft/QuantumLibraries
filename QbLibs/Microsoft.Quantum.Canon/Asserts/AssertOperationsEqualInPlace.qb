@@ -1,5 +1,5 @@
 namespace Microsoft.Quantum.Canon {
-    open Microsoft.Quantum.Standard
+    open Microsoft.Quantum.Primitive
 
     ///<summary>
     /// Applies unitaries that map |0⟩⊗…⊗|0⟩ to |ψ_1⟩⊗…⊗|ψ_n⟩

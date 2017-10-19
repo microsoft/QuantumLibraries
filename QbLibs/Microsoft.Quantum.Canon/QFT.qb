@@ -1,5 +1,5 @@
 namespace Microsoft.Quantum.Canon {
-	open Microsoft.Quantum.Standard
+	open Microsoft.Quantum.Primitive
 
 	/// <summary>
 	/// 	Apply the Approximate Quantum Fourier Transform (AQFT) to a quantum register. 

@@ -1,5 +1,5 @@
 namespace Microsoft.Quantum.Canon {
-    open Microsoft.Quantum.Standard
+    open Microsoft.Quantum.Primitive
 
     operation AssertQubit (expected: Result, q: Qubit) : ()
     {

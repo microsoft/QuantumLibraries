@@ -1,5 +1,5 @@
 ﻿namespace Microsoft.Quantum.Canon {
-    open Microsoft.Quantum.Standard
+    open Microsoft.Quantum.Primitive
 
     /// <summary>
     ///     Measures the given Pauli operator using an explicit scratch

@@ -1,5 +1,5 @@
 ﻿
-namespace Microsoft.Quantum.Standard {
+namespace Microsoft.Quantum.Primitive {
 
     // FIXME: make this a function!
     function Float(value : Int)  : Double
