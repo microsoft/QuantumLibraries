@@ -1,5 +1,6 @@
 // namespace Microsoft.Quantum.Canon
 
+// apply a ZZ-term 
 operation ApplyJzz( phi : Double, q1 : Qubit, q2 : Qubit ) : () { 
     Body {     
         CNOT(q1, q2)
@@ -8,6 +9,13 @@ operation ApplyJzz( phi : Double, q1 : Qubit, q2 : Qubit ) : () {
     }    
 }
 
+// stub for the floor function 
+function floor (a : Double) : Int {}
+
+/// <summary> Simulate the time evolution of an Ising model under a transverse field </summary>
+/// <param name = "nsites"> Number of spins of the Ising model </param>
+/// <param name = "time"> Overall time of the simulation </param>
+/// <param name = "dt"> The length of a timestep of the simulation </param>
 operation Ising (nsites : Int, time : Double, dt : Double) : Result[] { 
     Body {         
         mutable result = new Result[nsites]
@@ -19,33 +27,32 @@ operation Ising (nsites : Int, time : Double, dt : Double) : Result[] {
             }
             
             // choose the runtime and Trotter time step
-            let Int nsteps = time * dt
+            let nsteps = floor(time / dt)
 
             // choose the couplings
             let hx = 1.0   // transverse field
             let hz = 0.5 // longitiduinal field
             let J = 1.0   // Ising coupling
 
-//         // // evolve using a second order Trotter decomposition
-//         // for (idxIter = 0..nsteps / 2) {
-//         //     // improve locality of qubit references for simulation by applying all terms locally
-//         //     // before moving to the next qubit.
-//         //     for (idxSite = 0..nsites) {
-//         //         Rx(hx * dt, qs[idxSite])
-//         //         Rz(hz * dt, qs[idxSite])
-//         //         if (idxSite + 1 < nsites) {
-//         //             ApplyJzz(J * dt, qs[idxSite], qs[idxSite + 1])
-//         //         }
-//         //     }
-//         //     // for (inxSite = (nsites-1)..-1..0) { 
-//         //     //     if (r + 1 < nsites) {
-//         //     //         ApplyJzz(qs[r], qs[r + 1], J * dt)
-//         //     //     }
-//         //     //     Rz(qs[r], hz * dt)
-//         //     //     Rx(qs[r], hx * dt)
-//         //     // }
-//         // }
-
+            // evolve using a second order Trotter decomposition
+            for (idxIter in 0..nsteps/2) {
+                // improve locality of qubit references for simulation by applying all terms locally
+                // before moving to the next qubit.
+                for (idxSite in 0..nsites) {
+                    Rx(hx * dt, qs[idxSite])
+                    Rz(hz * dt, qs[idxSite])
+                    if (idxSite + 1 < nsites) {
+                        ApplyJzz(J * dt, qs[idxSite], qs[idxSite + 1])
+                    }
+                }
+                for (idxSite in (nsites-1)..-1..0) {                 
+                    if (idxSite + 1 < nsites) {
+                        ApplyJzz(J * dt, qs[idxSite], qs[idxSite + 1])
+                    }
+                    Rz(hz * dt, qs[idxSite])
+                    Rx(hx * dt, qs[idxSite])
+                }
+            }
             
             for (idx in 0..Length(qs)-1) { 
                 set result[idx] = M(qs[idx])
@@ -54,7 +61,6 @@ operation Ising (nsites : Int, time : Double, dt : Double) : Result[] {
         return result
     }
 }
-
 
 operation TestIsing () : Result[] { 
     Body { 
