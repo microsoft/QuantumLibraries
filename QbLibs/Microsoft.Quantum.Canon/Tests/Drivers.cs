@@ -24,7 +24,7 @@ namespace Microsoft.Quantum.Canon.Tests
         public void RUSDriver()
         {
             var sim = GetSimulator();
-            TeleportationTest.Run(sim);
+            RUSTests.Run(sim);
         }
 
         [TestMethod]
