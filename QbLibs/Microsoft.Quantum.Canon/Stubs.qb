@@ -6,3 +6,29 @@ function Float(value : Int)  : Double
     return 0.0
 }
 
+// use generics for Double, Bool, Result
+function Max(value : Int[]) : Int 
+{
+    mutable max = value[0]
+    let nTerms = Length(value)
+    for(idx in 0..nTerms - 1)
+    {
+        if (value[idx]> max){
+            set max = value[idx]
+        }
+    }
+    return max
+}
+
+function Min(value : Int[]) : Int 
+{
+    mutable min = value[0]
+    let nTerms = Length(value)
+    for(idx in 0..nTerms - 1)
+    {
+        if (value[idx] < max){
+            set min = value[idx]
+        }
+    }
+    return min
+}

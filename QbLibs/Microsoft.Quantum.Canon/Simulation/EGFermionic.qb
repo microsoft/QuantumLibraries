@@ -1,0 +1,90 @@
+/// Convention for GeneratorIndex = ((Int[],Double[]), Int[])
+/// We index annihilation operators as 0 and creation operators as 1.
+/// For instance, the Hermitian Fermionic string a_p^\dag a_q^\dag a_r a_s + Hermitian Conjugate
+/// would be indexed as a = [1,1,0,0].
+/// We do not use the Double[] for indexing Pauli strings e.g. b = new Double[0]
+/// We index the Fermionics that Fermionic strings act on with arrays of integers e.g. f = [p,q,e,s] 
+/// An example of a Fermionic string GeneratorIndex is thus ((a,b), q)
+
+/// Consider the Hamiltonian H = 0.1 (a_2^\dag) + 0.2 (a_0^\dag a_2) + h.c.
+/// Its GeneratorTerms are ([1],[]),[2]), 0.1),  (([1,0],[]),[0,2]), 0.2)
+/// 
+
+
+/// summary:
+///     Represents a dynamical generator as a set of simulatable gates and
+///     an expansion in terms of that basis.
+///     Last parameter for number of terms
+//Converts creation and annihilation operators to Pauli string
+function JordanWigner(generatorIndex : GeneratorIndex) : GeneratorIndex[] {
+    let (generatorIndex, idxFermions) = GeneratorIndex
+    let (idxCreationAnnihilation, unused) = generatorIndex
+    let nOperators = Length(idxCreationAnnihilation)
+    let e = new Double[0]
+    /// a_k^\dag + a_k
+    if(nOperators == 1){
+        let idxPauliString = new Int[idxFermions[0] + 1]
+        let idxQubits = new Int[idxFermions[0] + 1]
+        for(idxQubit in 0..idxFermiions[0] - 1){
+            set idxPauliString[idxQubit] = 3
+            set idxQubits[idxQubit] = idxQubit
+        }
+        set idxPauliString[idxFermions[0]] = 1
+        set idxQubits[idxFermions[0]] = idxFermions[0]
+
+        let generatorIndex0 = GeneratorIndex((idxPauliString, e), idxQubits)]
+
+        return [generatorIndex0]
+    }
+    /// a_j^\dag a_k + a_k^\dag a_j
+    if(nOperators == 2){
+        let idxQubitMax = Max(idxFermions)
+        let idxQubitMin = Min(idxFermions)
+        let nQubits = idxQubitMax - idxQubitMin + 1
+        let idxPauliString = new Int[nQubits]
+        let idxQubits = new Int[nQubits]
+        for(idxQubit in idxQubitMin + 1..idxQubitMax - 1){
+            set idxPauliString[idxQubit] = 3
+            set idxQubits[idxQubit] = idxQubit
+        }
+        set idxPauliString[idxQubitMin] = 1
+        set idxPauliString[idxQubitMax] = 1
+        set idxQubits[idxQubitMin] = idxQubitMin
+        set idxQubits[idxQubitMax] = idxQubitMax
+
+        let generatorIndex0 = GeneratorIndex((idxPauliString, e), idxQubits)]
+
+        set idxPauliString[idxQubitMin] = 2
+        set idxPauliString[idxQubitMax] = 2
+
+        let generatorIndex1 = GeneratorIndex((idxPauliString, e), idxQubits)]
+
+        return [generatorIndex0;generatorIndex1]
+    }
+    //Todo for 3 terms and 4 terms
+    else{
+        let generatorIndex = new GeneratorIndex[0]
+        return generatorIndex
+    }
+}
+
+// This calls EGPauli.qb to implement the Jordan-Wigner strings.
+function FermionicEvolutionSetImpl(FermionicEncoding : Int, generatorIndex : GeneratorIndex) : EvolutionUnitary
+{
+    ///Choose encoding from Fermionic operators to qubits. Defaults to Jordan-Wigner
+    if(FermionicEncoding == 0){
+        let generatorIndexArr = JordanWigner(GeneratorIndex)
+    }
+    else{
+        let generatorIndexArr = JordanWigner(GeneratorIndex)
+    }
+    nGeneratorIndex = Length(generatorIndexArr)
+    for(idxGeneratorIndex in 0..nGeneratorIndex-1){
+        PauliEvolutionSet(generatorIndexArr[idxGeneratorIndex])
+    }
+}
+
+function FermionicEvolutionSet(FermionicEncoding : Int) : EvolutionUnitary
+{
+    return FermionicEvolutionSetImpl(FermionicEncoding, _)
+}

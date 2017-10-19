@@ -220,7 +220,7 @@ function PauliToInt(paulis : Pauli[])  : Int {
     return n
 }
 
-// TODO: write this once we get bit-shift operators.
-function IntToPauli(idx : Int) : Pauli[] {
-    return [Ipauli]
+function IntToPauli(idx : Int) : Pauli {
+    let paulis = [Ipauli, Xpauli, Ypauli, Zpauli]
+    return paulis[idx]
 }
