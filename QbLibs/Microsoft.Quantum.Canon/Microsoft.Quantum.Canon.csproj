@@ -1,5 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\Microsoft.Quantum.Simulation.Simulators.0.5.6501.36153-alpha\build\Microsoft.Quantum.Simulation.Simulators.props" Condition="Exists('..\packages\Microsoft.Quantum.Simulation.Simulators.0.5.6501.36153-alpha\build\Microsoft.Quantum.Simulation.Simulators.props')" />
+  <Import Project="..\packages\MSTest.TestAdapter.1.2.0\build\net45\MSTest.TestAdapter.props" Condition="Exists('..\packages\MSTest.TestAdapter.1.2.0\build\net45\MSTest.TestAdapter.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -11,6 +13,14 @@
     <AssemblyName>Microsoft.Quantum.Canon</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">15.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+    <ReferencePath>$(ProgramFiles)\Common Files\microsoft shared\VSTT\$(VisualStudioVersion)\UITestExtensionPackages</ReferencePath>
+    <IsCodedUITest>False</IsCodedUITest>
+    <TestProjectType>UnitTest</TestProjectType>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -30,215 +40,169 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Argu, Version=3.7.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Argu.3.7.0\lib\net40\Argu.dll</HintPath>
+    <Reference Include="Microsoft.Quantum.Primitives, Version=0.5.6501.36124, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Quantum.Simulation.Simulators.0.5.6501.36153-alpha\lib\net461\Microsoft.Quantum.Primitives.dll</HintPath>
     </Reference>
-    <Reference Include="Esent.Interop, Version=1.9.4.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\ManagedEsent.1.9.4\lib\net40\Esent.Interop.dll</HintPath>
+    <Reference Include="Microsoft.Quantum.Simulation.Core, Version=0.5.6501.36119, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Quantum.Simulation.Simulators.0.5.6501.36153-alpha\lib\net461\Microsoft.Quantum.Simulation.Core.dll</HintPath>
     </Reference>
-    <Reference Include="FParsec, Version=1.0.0.0, Culture=neutral, PublicKeyToken=40ccfc0a09edbb5d, processorArchitecture=MSIL">
-      <HintPath>..\packages\FParsec.1.0.3\lib\net40-client\FParsec.dll</HintPath>
+    <Reference Include="Microsoft.Quantum.Simulation.Simulators, Version=0.5.6501.36153, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Quantum.Simulation.Simulators.0.5.6501.36153-alpha\lib\net461\Microsoft.Quantum.Simulation.Simulators.dll</HintPath>
     </Reference>
-    <Reference Include="FParsecCS, Version=1.0.0.0, Culture=neutral, PublicKeyToken=40ccfc0a09edbb5d, processorArchitecture=MSIL">
-      <HintPath>..\packages\FParsec.1.0.3\lib\net40-client\FParsecCS.dll</HintPath>
+    <Reference Include="Microsoft.Quantum.Simulation.Tracer, Version=0.5.6501.36131, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Quantum.Simulation.Simulators.0.5.6501.36153-alpha\lib\net461\Microsoft.Quantum.Simulation.Tracer.dll</HintPath>
     </Reference>
-    <Reference Include="FSharp.Core, Version=4.4.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\FSharp.Core.4.2.3\lib\net45\FSharp.Core.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Microsoft.VisualStudio.TestPlatform.TestFramework, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\MSTest.TestFramework.1.2.0\lib\net45\Microsoft.VisualStudio.TestPlatform.TestFramework.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.CodeAnalysis, Version=2.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.CodeAnalysis.Common.2.3.2\lib\netstandard1.3\Microsoft.CodeAnalysis.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.CodeAnalysis.CSharp, Version=2.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.CodeAnalysis.CSharp.2.3.2\lib\netstandard1.3\Microsoft.CodeAnalysis.CSharp.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.CodeAnalysis.CSharp.Workspaces, Version=2.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.CodeAnalysis.CSharp.Workspaces.2.3.2\lib\netstandard1.3\Microsoft.CodeAnalysis.CSharp.Workspaces.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.CodeAnalysis.Workspaces, Version=2.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.CodeAnalysis.Workspaces.Common.2.3.2\lib\net46\Microsoft.CodeAnalysis.Workspaces.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.CodeAnalysis.Workspaces.Desktop, Version=2.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.CodeAnalysis.Workspaces.Common.2.3.2\lib\net46\Microsoft.CodeAnalysis.Workspaces.Desktop.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Quantum.Compiler, Version=0.1.6491.27564, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Quantum.Compiler.0.1.6491.27568-alpha\lib\net461\Microsoft.Quantum.Compiler.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Quantum.Compiler.RoslynWrapper, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Quantum.Compiler.0.1.6491.27568-alpha\lib\net461\Microsoft.Quantum.Compiler.RoslynWrapper.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Quantum.Primitives, Version=0.1.6492.27576, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Quantum.Simulation.Simulators.0.1.6492.27580-alpha\lib\net452\Microsoft.Quantum.Primitives.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Quantum.Simulation.Core, Version=0.1.6492.27574, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Quantum.Simulation.Simulators.0.1.6492.27580-alpha\lib\net452\Microsoft.Quantum.Simulation.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Quantum.Simulation.Simulators, Version=0.1.6492.27580, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Quantum.Simulation.Simulators.0.1.6492.27580-alpha\lib\net452\Microsoft.Quantum.Simulation.Simulators.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Quantum.Simulation.Tracer, Version=0.1.6492.27578, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Quantum.Simulation.Simulators.0.1.6492.27580-alpha\lib\net452\Microsoft.Quantum.Simulation.Tracer.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Win32.Primitives, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Win32.Primitives.4.0.1\lib\net46\Microsoft.Win32.Primitives.dll</HintPath>
-    </Reference>
-    <Reference Include="Qbc, Version=0.1.6491.27568, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Quantum.Compiler.0.1.6491.27568-alpha\lib\net461\Qbc.exe</HintPath>
+    <Reference Include="Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\MSTest.TestFramework.1.2.0\lib\net45\Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions.dll</HintPath>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.AppContext, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.AppContext.4.3.0\lib\net46\System.AppContext.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Collections.Immutable, Version=1.2.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Collections.Immutable.1.3.1\lib\portable-net45+win8+wp8+wpa81\System.Collections.Immutable.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="System.ComponentModel.Composition" />
-    <Reference Include="System.Composition.AttributedModel, Version=1.0.32.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Composition.AttributedModel.1.1.0\lib\netstandard2.0\System.Composition.AttributedModel.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Composition.Convention, Version=1.0.32.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Composition.Convention.1.1.0\lib\netstandard2.0\System.Composition.Convention.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Composition.Hosting, Version=1.0.32.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Composition.Hosting.1.1.0\lib\netstandard2.0\System.Composition.Hosting.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Composition.Runtime, Version=1.0.32.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Composition.Runtime.1.1.0\lib\netstandard2.0\System.Composition.Runtime.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Composition.TypedParts, Version=1.0.32.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Composition.TypedParts.1.1.0\lib\netstandard2.0\System.Composition.TypedParts.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Console">
-      <HintPath>..\packages\System.Console.4.3.0\lib\net46\System.Console.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="System.Core" />
-    <Reference Include="System.Diagnostics.DiagnosticSource, Version=4.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Diagnostics.DiagnosticSource.4.0.0\lib\net46\System.Diagnostics.DiagnosticSource.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Diagnostics.FileVersionInfo">
-      <HintPath>..\packages\System.Diagnostics.FileVersionInfo.4.3.0\lib\net46\System.Diagnostics.FileVersionInfo.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Diagnostics.StackTrace">
-      <HintPath>..\packages\System.Diagnostics.StackTrace.4.3.0\lib\net46\System.Diagnostics.StackTrace.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Globalization.Calendars, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Globalization.Calendars.4.0.1\lib\net46\System.Globalization.Calendars.dll</HintPath>
-    </Reference>
-    <Reference Include="System.IO.Compression">
-      <HintPath>..\packages\System.IO.Compression.4.3.0\lib\net46\System.IO.Compression.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="System.IO.Compression.FileSystem" />
-    <Reference Include="System.IO.Compression.ZipFile, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.IO.Compression.ZipFile.4.0.1\lib\net46\System.IO.Compression.ZipFile.dll</HintPath>
-    </Reference>
-    <Reference Include="System.IO.FileSystem">
-      <HintPath>..\packages\System.IO.FileSystem.4.3.0\lib\net46\System.IO.FileSystem.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.IO.FileSystem.Primitives">
-      <HintPath>..\packages\System.IO.FileSystem.Primitives.4.3.0\lib\net46\System.IO.FileSystem.Primitives.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Net.Http, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Net.Http.4.1.0\lib\net46\System.Net.Http.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Net.Sockets, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Net.Sockets.4.1.0\lib\net46\System.Net.Sockets.dll</HintPath>
-    </Reference>
     <Reference Include="System.Numerics" />
-    <Reference Include="System.Reflection.Metadata, Version=1.4.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Reflection.Metadata.1.4.2\lib\portable-net45+win8\System.Reflection.Metadata.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Runtime.InteropServices.RuntimeInformation, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Runtime.InteropServices.RuntimeInformation.4.0.0\lib\net45\System.Runtime.InteropServices.RuntimeInformation.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Security.Cryptography.Algorithms">
-      <HintPath>..\packages\System.Security.Cryptography.Algorithms.4.3.0\lib\net461\System.Security.Cryptography.Algorithms.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Security.Cryptography.Encoding">
-      <HintPath>..\packages\System.Security.Cryptography.Encoding.4.3.0\lib\net46\System.Security.Cryptography.Encoding.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Security.Cryptography.Primitives">
-      <HintPath>..\packages\System.Security.Cryptography.Primitives.4.3.0\lib\net46\System.Security.Cryptography.Primitives.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Security.Cryptography.X509Certificates">
-      <HintPath>..\packages\System.Security.Cryptography.X509Certificates.4.3.0\lib\net461\System.Security.Cryptography.X509Certificates.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Text.Encoding.CodePages, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Text.Encoding.CodePages.4.3.0\lib\net46\System.Text.Encoding.CodePages.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Threading.Thread">
-      <HintPath>..\packages\System.Threading.Thread.4.3.0\lib\net46\System.Threading.Thread.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Threading.ThreadPool, Version=4.0.10.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Threading.ThreadPool.4.0.10\lib\net46\System.Threading.ThreadPool.dll</HintPath>
-    </Reference>
-    <Reference Include="System.ValueTuple">
+    <Reference Include="System.ValueTuple, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.ValueTuple.4.4.0\lib\net461\System.ValueTuple.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="System.Xml.ReaderWriter">
-      <HintPath>..\packages\System.Xml.ReaderWriter.4.3.0\lib\net46\System.Xml.ReaderWriter.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Xml.XmlDocument">
-      <HintPath>..\packages\System.Xml.XmlDocument.4.3.0\lib\net46\System.Xml.XmlDocument.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Xml.XPath">
-      <HintPath>..\packages\System.Xml.XPath.4.3.0\lib\net46\System.Xml.XPath.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Xml.XPath.XDocument">
-      <HintPath>..\packages\System.Xml.XPath.XDocument.4.3.0\lib\net46\System.Xml.XPath.XDocument.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AmplitudeAmplification.g.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>AmplitudeAmplification.qb</DependentUpon>
-    </Compile>
-    <Compile Include="Asserts\AssertOperationsEqualReferenced.g.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Asserts\AssertOperationsEqualReferenced.qb</DependentUpon>
-    </Compile>
     <Compile Include="Arithmetic.g.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Arithmetic.qb</DependentUpon>
+    </Compile>
+    <Compile Include="Asserts\AssertOperationsEqualInPlace.g.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AssertOperationsEqualInPlace.qb</DependentUpon>
+    </Compile>
+    <Compile Include="Asserts\AssertOperationsEqualReferenced.g.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AssertOperationsEqualReferenced.qb</DependentUpon>
+    </Compile>
+    <Compile Include="Asserts\AssertQubit.g.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AssertQubit.qb</DependentUpon>
+    </Compile>
+    <Compile Include="Combinators\ApplyToEach.g.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ApplyToEach.qb</DependentUpon>
+    </Compile>
+    <Compile Include="Combinators\ApplyToRange.g.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ApplyToRange.qb</DependentUpon>
+    </Compile>
+    <Compile Include="Combinators\OperationPow.g.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>OperationPow.qb</DependentUpon>
+    </Compile>
+    <Compile Include="Combinators\With.g.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>With.qb</DependentUpon>
+    </Compile>
+    <Compile Include="DataStructures\Stack.g.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Stack.qb</DependentUpon>
     </Compile>
     <Compile Include="Endianness.g.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Endianness.qb</DependentUpon>
     </Compile>
+    <Compile Include="Identity.g.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Identity.qb</DependentUpon>
+    </Compile>
+    <Compile Include="IterateThroughCartesianProduct.g.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>IterateThroughCartesianProduct.qb</DependentUpon>
+    </Compile>
+    <Compile Include="Math\Constants.g.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Constants.qb</DependentUpon>
+    </Compile>
+    <Compile Include="Math\Types.g.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Types.qb</DependentUpon>
+    </Compile>
+    <Compile Include="MultiTargetCNOT.g.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MultiTargetCNOT.qb</DependentUpon>
+    </Compile>
     <Compile Include="Paulis.g.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Paulis.qb</DependentUpon>
     </Compile>
+    <Compile Include="PhaseEstimation\Iterative.g.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Iterative.qb</DependentUpon>
+    </Compile>
+    <Compile Include="PhaseEstimation\Quantum.g.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Quantum.qb</DependentUpon>
+    </Compile>
+    <Compile Include="PhaseEstimation\Types.g.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Types.qb</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Qecc\5QubitCode.g.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>5QubitCode.qb</DependentUpon>
+    </Compile>
+    <Compile Include="Qecc\7QubitCode.g.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>7QubitCode.qb</DependentUpon>
+    </Compile>
+    <Compile Include="Qecc\BitFlipCode.g.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>BitFlipCode.qb</DependentUpon>
+    </Compile>
+    <Compile Include="Qecc\Types.g.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Types.qb</DependentUpon>
+    </Compile>
+    <Compile Include="Qecc\Utils.g.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Utils.qb</DependentUpon>
+    </Compile>
     <Compile Include="QFT.g.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>QFT.qb</DependentUpon>
+    </Compile>
+    <Compile Include="RUS.g.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>RUS.qb</DependentUpon>
     </Compile>
     <Compile Include="ShiftOp.g.cs">
       <AutoGen>True</AutoGen>
@@ -250,93 +214,161 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Stubs.qb</DependentUpon>
     </Compile>
+    <Compile Include="Superdense.g.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Superdense.qb</DependentUpon>
+    </Compile>
+    <Compile Include="Teleportation.g.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Teleportation.qb</DependentUpon>
+    </Compile>
+    <Compile Include="Tests\Drivers.cs" />
+    <Compile Include="Toffoli.g.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Toffoli.qb</DependentUpon>
+    </Compile>
+    <QbCompile Include="RUS.qb">
+      <Generator>QbCodeGenerator</Generator>
+      <LastGenOutput>RUS.g.cs</LastGenOutput>
+    </QbCompile>
+    <QbCompile Include="MultiTargetCNOT.qb">
+      <Generator>QbCodeGenerator</Generator>
+      <LastGenOutput>MultiTargetCNOT.g.cs</LastGenOutput>
+    </QbCompile>
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <None Include="Combinators\ApplyToEach.qb">
+    <QbCompile Include="Asserts\AssertOperationsEqualInPlace.qb">
       <Generator>QbCodeGenerator</Generator>
-    </None>
-    <None Include="AmplitudeAmplification.qb">
+      <LastGenOutput>AssertOperationsEqualInPlace.g.cs</LastGenOutput>
+    </QbCompile>
+    <QbCompile Include="Combinators\ApplyToEach.qb">
       <Generator>QbCodeGenerator</Generator>
-      <LastGenOutput>AmplitudeAmplification.g.cs</LastGenOutput>
-    </None>
-    <None Include="Combinators\ApplyToRange.qb">
+      <LastGenOutput>ApplyToEach.g.cs</LastGenOutput>
+    </QbCompile>
+    <QbCompile Include="Combinators\ApplyToRange.qb">
       <Generator>QbCodeGenerator</Generator>
-    </None>
-    <None Include="Arithmetic.qb">
+      <LastGenOutput>ApplyToRange.g.cs</LastGenOutput>
+    </QbCompile>
+    <QbCompile Include="Arithmetic.qb">
       <Generator>QbCodeGenerator</Generator>
       <LastGenOutput>Arithmetic.g.cs</LastGenOutput>
-    </None>
-    <None Include="Asserts\AssertQubit.qb">
+    </QbCompile>
+    <QbCompile Include="Asserts\AssertQubit.qb">
       <Generator>QbCodeGenerator</Generator>
-      <LastGenOutput>Asserts\AssertQubit.g.cs</LastGenOutput>
-    </None>
-    <None Include="Asserts\AssertOperationsEqualReferenced.qb">
+      <LastGenOutput>AssertQubit.g.cs</LastGenOutput>
+    </QbCompile>
+    <QbCompile Include="Asserts\AssertOperationsEqualReferenced.qb">
       <Generator>QbCodeGenerator</Generator>
-      <LastGenOutput>Asserts\AssertOperationsEqualReferenced.g.cs</LastGenOutput>
-    </None>
-    <None Include="Endianness.qb">
+      <LastGenOutput>AssertOperationsEqualReferenced1.g.cs</LastGenOutput>
+    </QbCompile>
+    <QbCompile Include="DataStructures\Stack.qb">
+      <Generator>QbCodeGenerator</Generator>
+      <LastGenOutput>Stack.g.cs</LastGenOutput>
+    </QbCompile>
+    <QbCompile Include="Endianness.qb">
       <Generator>QbCodeGenerator</Generator>
       <LastGenOutput>Endianness.g.cs</LastGenOutput>
-    </None>
-    <None Include="HamSim\HamMinimal.qb" />
-    <None Include="Math\Constants.qb">
+    </QbCompile>
+    <QbCompile Include="Identity.qb">
       <Generator>QbCodeGenerator</Generator>
-    </None>
-    <None Include="PhaseEstimation\Iterative.qb">
+      <LastGenOutput>Identity.g.cs</LastGenOutput>
+    </QbCompile>
+    <QbCompile Include="IterateThroughCartesianProduct.qb">
       <Generator>QbCodeGenerator</Generator>
-      <LastGenOutput>PhaseEstimation\Iterative.g.cs</LastGenOutput>
-    </None>
-    <None Include="Math\Types.qb">
+      <LastGenOutput>IterateThroughCartesianProduct.g.cs</LastGenOutput>
+    </QbCompile>
+    <QbCompile Include="Math\Constants.qb">
       <Generator>QbCodeGenerator</Generator>
-      <LastGenOutput>Math\Types.g.cs</LastGenOutput>
-    </None>
-    <None Include="Combinators\OperationPow.qb">
+      <LastGenOutput>Constants.g.cs</LastGenOutput>
+    </QbCompile>
+    <QbCompile Include="PhaseEstimation\Iterative.qb">
       <Generator>QbCodeGenerator</Generator>
-    </None>
-    <None Include="PhaseEstimation\Types.qb">
+      <LastGenOutput>Iterative.g.cs</LastGenOutput>
+    </QbCompile>
+    <QbCompile Include="Math\Types.qb">
       <Generator>QbCodeGenerator</Generator>
-    </None>
-    <None Include="packages.config" />
-    <None Include="Paulis.qb">
+      <LastGenOutput>Types.g.cs</LastGenOutput>
+    </QbCompile>
+    <QbCompile Include="Combinators\OperationPow.qb">
+      <Generator>QbCodeGenerator</Generator>
+      <LastGenOutput>OperationPow.g.cs</LastGenOutput>
+    </QbCompile>
+    <QbCompile Include="PhaseEstimation\Types.qb">
+      <Generator>QbCodeGenerator</Generator>
+      <LastGenOutput>Types.g.cs</LastGenOutput>
+    </QbCompile>
+    <QbCompile Include="Paulis.qb">
       <Generator>QbCodeGenerator</Generator>
       <LastGenOutput>Paulis.g.cs</LastGenOutput>
-    </None>
-    <None Include="Qecc\BitFlipCode.qb">
+    </QbCompile>
+    <QbCompile Include="Qecc\5QubitCode.qb">
       <Generator>QbCodeGenerator</Generator>
-      <LastGenOutput>Qecc\BitFlipCode.g.cs</LastGenOutput>
-    </None>
-    <None Include="Qecc\Types.qb">
+      <LastGenOutput>5QubitCode.g.cs</LastGenOutput>
+    </QbCompile>
+    <QbCompile Include="Qecc\7QubitCode.qb">
       <Generator>QbCodeGenerator</Generator>
-      <LastGenOutput>Qecc\Types.g.cs</LastGenOutput>
-    </None>
-    <None Include="Qecc\Utils.qb">
+      <LastGenOutput>7QubitCode.g.cs</LastGenOutput>
+    </QbCompile>
+    <QbCompile Include="Qecc\BitFlipCode.qb">
       <Generator>QbCodeGenerator</Generator>
-      <LastGenOutput>Qecc\Utils.g.cs</LastGenOutput>
-    </None>
-    <None Include="QFT.qb">
+      <LastGenOutput>BitFlipCode.g.cs</LastGenOutput>
+    </QbCompile>
+    <QbCompile Include="Qecc\Types.qb">
+      <Generator>QbCodeGenerator</Generator>
+      <LastGenOutput>Types.g.cs</LastGenOutput>
+    </QbCompile>
+    <QbCompile Include="Qecc\Utils.qb">
+      <Generator>QbCodeGenerator</Generator>
+      <LastGenOutput>Utils.g.cs</LastGenOutput>
+    </QbCompile>
+    <QbCompile Include="QFT.qb">
       <Generator>QbCodeGenerator</Generator>
       <LastGenOutput>QFT.g.cs</LastGenOutput>
-    </None>
-    <None Include="PhaseEstimation\Quantum.qb">
+    </QbCompile>
+    <QbCompile Include="PhaseEstimation\Quantum.qb">
       <Generator>QbCodeGenerator</Generator>
-    </None>
-    <None Include="ShiftOp.qb">
+      <LastGenOutput>Quantum.g.cs</LastGenOutput>
+    </QbCompile>
+    <QbCompile Include="ShiftOp.qb">
       <Generator>QbCodeGenerator</Generator>
       <LastGenOutput>ShiftOp.g.cs</LastGenOutput>
-    </None>
-    <None Include="Stubs.qb">
+    </QbCompile>
+    <QbCompile Include="Stubs.qb">
       <Generator>QbCodeGenerator</Generator>
       <LastGenOutput>Stubs.g.cs</LastGenOutput>
-    </None>
-    <None Include="Combinators\With.qb">
+    </QbCompile>
+    <QbCompile Include="Combinators\With.qb">
       <Generator>QbCodeGenerator</Generator>
-    </None>
+      <LastGenOutput>With.g.cs</LastGenOutput>
+    </QbCompile>
+    <QbCompile Include="Superdense.qb">
+      <Generator>QbCodeGenerator</Generator>
+      <LastGenOutput>Superdense.g.cs</LastGenOutput>
+    </QbCompile>
+    <QbCompile Include="Teleportation.qb">
+      <Generator>QbCodeGenerator</Generator>
+      <LastGenOutput>Teleportation.g.cs</LastGenOutput>
+    </QbCompile>
+    <QbCompile Include="Toffoli.qb">
+      <Generator>QbCodeGenerator</Generator>
+      <LastGenOutput>Toffoli.g.cs</LastGenOutput>
+    </QbCompile>
   </ItemGroup>
-  <ItemGroup>
-    <Analyzer Include="..\packages\Microsoft.CodeAnalysis.Analyzers.1.1.0\analyzers\dotnet\cs\Microsoft.CodeAnalysis.Analyzers.dll" />
-    <Analyzer Include="..\packages\Microsoft.CodeAnalysis.Analyzers.1.1.0\analyzers\dotnet\cs\Microsoft.CodeAnalysis.CSharp.Analyzers.dll" />
-  </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\MSTest.TestAdapter.1.2.0\build\net45\MSTest.TestAdapter.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\MSTest.TestAdapter.1.2.0\build\net45\MSTest.TestAdapter.props'))" />
+    <Error Condition="!Exists('..\packages\MSTest.TestAdapter.1.2.0\build\net45\MSTest.TestAdapter.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\MSTest.TestAdapter.1.2.0\build\net45\MSTest.TestAdapter.targets'))" />
+    <Error Condition="!Exists('..\packages\Microsoft.Quantum.Simulation.Simulators.0.5.6501.36153-alpha\build\Microsoft.Quantum.Simulation.Simulators.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Quantum.Simulation.Simulators.0.5.6501.36153-alpha\build\Microsoft.Quantum.Simulation.Simulators.props'))" />
+    <Error Condition="!Exists('..\packages\Microsoft.Quantum.Simulation.Simulators.0.5.6501.36153-alpha\build\Microsoft.Quantum.Simulation.Simulators.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Quantum.Simulation.Simulators.0.5.6501.36153-alpha\build\Microsoft.Quantum.Simulation.Simulators.targets'))" />
+  </Target>
+  <Import Project="..\packages\MSTest.TestAdapter.1.2.0\build\net45\MSTest.TestAdapter.targets" Condition="Exists('..\packages\MSTest.TestAdapter.1.2.0\build\net45\MSTest.TestAdapter.targets')" />
+  <Import Project="..\packages\Microsoft.Quantum.Simulation.Simulators.0.5.6501.36153-alpha\build\Microsoft.Quantum.Simulation.Simulators.targets" Condition="Exists('..\packages\Microsoft.Quantum.Simulation.Simulators.0.5.6501.36153-alpha\build\Microsoft.Quantum.Simulation.Simulators.targets')" />
 </Project>

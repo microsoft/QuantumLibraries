@@ -1,4 +1,5 @@
-﻿
+﻿//namespace Microsoft.Quantum.Canon
+
 /// <summary>
 ///     Private operation used to implement both the Steane code encoder and decoder.
 /// </summary>

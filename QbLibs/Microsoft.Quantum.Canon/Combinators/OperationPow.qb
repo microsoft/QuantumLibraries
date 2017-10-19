@@ -1,4 +1,5 @@
-﻿
+﻿//namespace Microsoft.Quantum.Canon
+
 operation OperationPowImpl(oracle : (Qubit[] => ()), power : Int, target : Qubit[])  : ()
 {
     Body {

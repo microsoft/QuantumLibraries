@@ -1,4 +1,5 @@
-//namespace Microsoft.Quantum.Simulation.Simulators.Tests.Circuits
+//namespace Microsoft.Quantum.Canon
+
 operation AssertQubit (expected: Result, q: Qubit) : ()
 {
     Body 

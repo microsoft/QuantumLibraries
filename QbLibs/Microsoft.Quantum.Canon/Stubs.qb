@@ -1,4 +1,5 @@
-﻿
+﻿//namespace Microsoft.Quantum.Canon
+
 
 // FIXME: make this a function!
 function Float(value : Int)  : Double

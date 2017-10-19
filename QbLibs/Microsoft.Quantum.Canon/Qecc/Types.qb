@@ -1,4 +1,5 @@
-﻿
+﻿//namespace Microsoft.Quantum.Canon
+
 newtype LogicalRegister = Qubit[]
 newtype Syndrome = Result[]
 newtype RecoveryFn = (Syndrome -> Pauli[])
