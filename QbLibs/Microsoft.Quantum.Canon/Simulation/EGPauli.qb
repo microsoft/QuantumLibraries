@@ -28,6 +28,11 @@
 /// Its GeneratorTerms are (([1],[]),[0]), 0.1),  (([1],[]),[1]), 0.2),  (([3],[2]),[0,1]), 0.3)
 /// 
 
+function IntToPauli(idx : Int) : Pauli {
+    let paulis = [Ipauli; Xpauli; Ypauli; Zpauli]
+    return paulis[idx]
+}
+
 /// summary:
 ///     Represents a dynamical generator as a set of simulatable gates and
 ///     an expansion in terms of that basis.

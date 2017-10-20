@@ -211,7 +211,7 @@ function PauliToInt(paulis : Pauli[])  : Int {
             if (pauli == Xpauli) {
             set n = n + 4 ^ idxPauli
         } elif (pauli == Ypauli) {
-            set n = n + 2 * {4 ^ idxPauli}
+            set n = n + 2 * (4 ^ idxPauli)
         } elif (pauli == Zpauli) {
             set n = n + 3 * (4 ^ idxPauli)
         }
@@ -219,9 +219,4 @@ function PauliToInt(paulis : Pauli[])  : Int {
     }
 
     return n
-}
-
-function IntToPauli(idx : Int) : Pauli {
-    let paulis = [Ipauli, Xpauli, Ypauli, Zpauli]
-    return paulis[idx]
 }

@@ -34,6 +34,7 @@ $qflatSources += @(
     "Combinators/ApplyToEach.qb",
     "Combinators/ApplyToRange.qb",
     "Combinators/RestrictToSubregister.qb",
+    "Combinators/With.qb",
 
     # Diagnostics
     "Asserts/AssertQubit.qb",
@@ -41,41 +42,41 @@ $qflatSources += @(
     "Asserts/AssertOperationsEqualInPlace.qb",
 
     # System evolution simulators
-    "Simulation/Types.qb",
-    "Simulation/PauliSim.qb",
-    "Simulation/Minimal.qb"
+    #"Simulation/Types.qb",
+    #"Simulation/PauliSim.qb",
+    #"Simulation/Minimal.qb"
 
 
     # Provide definitions of the identity and nop.
-    "Identity.qb",
+    "Identity.qb"
 
     # # Endianness.qb contains newtype declarations that are needed more broadly,
     # # so we include it first.
-    "Endianness.qb",
+    #"Endianness.qb",
 
-    "DataStructures/Stack.qb",
+    #"DataStructures/Stack.qb",
 
     # # Similarly with OracleTypes.qb, save for that it depends on OperationPow.qb.
-    "PhaseEstimation/Types.qb",
-    "Arithmetic.qb",
-    "Bind.qb",
-    "Paulis.qb",
+    #"PhaseEstimation/Types.qb",
+    #"Arithmetic.qb",
+    #"Bind.qb",
+    "Paulis.qb"
 
-    "QFT.qb",
-    "Teleportation.qb",
-    "Toffoli.qb",
-    "ShiftOp.qb",
-    "Superdense.qb",
-    "PhaseEstimation/Quantum.qb",
-    "PhaseEstimation/Iterative.qb",
+    #"QFT.qb",
+    #"Teleportation.qb",
+    #"Toffoli.qb",
+    #"ShiftOp.qb",
+    #"Superdense.qb",
+    #"PhaseEstimation/Quantum.qb",
+    #"PhaseEstimation/Iterative.qb",
     #TODO Bug #727: "AmplitudeAmplification.qb",
     
     # # QECC
-    "Qecc/Types.qb",
-    "Qecc/Utils.qb",
-    "Qecc/BitFlipCode.qb",
-    "Qecc/5QubitCode.qb",
-    "Qecc/7QubitCode.qb"
+    #"Qecc/Types.qb",
+    #"Qecc/Utils.qb",
+    #"Qecc/BitFlipCode.qb",
+    #"Qecc/5QubitCode.qb",
+    #"Qecc/7QubitCode.qb"
 ) | ForEach-Object {
     Join-Path $libDirectory $_
 }
