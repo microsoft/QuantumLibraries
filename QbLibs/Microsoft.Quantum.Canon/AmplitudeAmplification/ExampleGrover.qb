@@ -242,7 +242,7 @@ operation GroverTest( maxMarkedElements : Int, maxGroverIterations : Int , maxQu
 		mutable nIterations = 0
 		mutable nQubits = 0
 		mutable markedElements = new Int[maxMarkedElements]
-		mutable successAmplitude = 0.0
+		mutable successAmplitude = Float(0)
 		for(idxRepeat in 0..nRepeats - 1)
 		{
 			set nMarked = randomInt(maxMarkedElements) + 1

@@ -1,7 +1,7 @@
 ﻿//namespace Microsoft.Quantum.Canon
 
 //To be replaced in the simulator with native operations that we’ll write once we can mix C♯ and Q♭ in the same project more easily.
-function Log(base : Double, input: Double) : Double
+function Log(b : Double, input: Double) : Double
 {
     return 0.0
 }
