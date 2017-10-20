@@ -1,114 +1,117 @@
-﻿//namespace Microsoft.Quantum.Canon
+﻿namespace Microsoft.Quantum.Canon {
+    open Microsoft.Quantum.Primitive
 
-/// <summary>
-///     Private operation used to implement both the Steane code encoder and decoder.
-/// </summary>
-/// <param name = "data"> an array holding 1 qubit which is the input qubit. </param> 
-/// <param name = "scratch"> an array holding 6 qubits which add redundancy. </param> 
+    /// <summary>
+    ///     Private operation used to implement both the Steane code encoder and decoder.
+    /// </summary>
+    /// <param name = "data"> an array holding 1 qubit which is the input qubit. </param> 
+    /// <param name = "scratch"> an array holding 6 qubits which add redundancy. </param> 
 
-operation SteaneCodeEncoderImpl(data : Qubit[], scratch : Qubit[])  : ()
-{
-    Body {
-        H(scratch[0])
-        H(scratch[1])
-        H(scratch[2])
-        (Controlled(X))(data,scratch[3])
-        (Controlled(X))(data,scratch[4])
-        (Controlled(X))([scratch[2]], scratch[3])
-        (Controlled(X))([scratch[2]], scratch[4])
-        (Controlled(X))([scratch[2]], scratch[5])
-        (Controlled(X))([scratch[1]], data[0])
-        (Controlled(X))([scratch[1]], scratch[3])
-        (Controlled(X))([scratch[1]], scratch[5])
-        (Controlled(X))([scratch[0]], data[0])
-        (Controlled(X))([scratch[0]], scratch[4])
-        (Controlled(X))([scratch[0]], scratch[5])
+    operation SteaneCodeEncoderImpl(data : Qubit[], scratch : Qubit[])  : ()
+    {
+        Body {
+            H(scratch[0])
+            H(scratch[1])
+            H(scratch[2])
+            (Controlled(X))(data,scratch[3])
+            (Controlled(X))(data,scratch[4])
+            (Controlled(X))([scratch[2]], scratch[3])
+            (Controlled(X))([scratch[2]], scratch[4])
+            (Controlled(X))([scratch[2]], scratch[5])
+            (Controlled(X))([scratch[1]], data[0])
+            (Controlled(X))([scratch[1]], scratch[3])
+            (Controlled(X))([scratch[1]], scratch[5])
+            (Controlled(X))([scratch[0]], data[0])
+            (Controlled(X))([scratch[0]], scratch[4])
+            (Controlled(X))([scratch[0]], scratch[5])
+        }
+
+        Adjoint auto
     }
 
-    Adjoint auto
-}
-
-/// <summary>
-///     Decoder for the ⟦7, 1, 3⟧ Steane quantum code.
-/// </summary>
-/// <remark> The chosen decoder uses the CSS code property of the ⟦7, 1, 3⟧ Steane code, i.e., it corrects X errors 
-///    and Z errors separately. A property of the code is that the location of the X, respectively, Z correction 
-///    to be applied is the 3-bit encoding of the X, repsectively, Z syndrome when considered an integer. For more 
-///    information, see D. Gottesman, "Stabilizer Codes and Quantum Error Correction," Ph.D. Thesis, Caltech, 1997; 
-///    https://arxiv.org/abs/quant-ph/9705052 
-/// </remark>
-function SteaneCodeRecoveryX( syndrome : Syndrome)  : Pauli[]
-{
-    return EmbedPauli(Xpauli, ResultAsInt(syndrome), 7)
-}
-
-function SteaneCodeRecoveryZ( syndrome : Syndrome)  : Pauli[]
-{
-    return EmbedPauli(Zpauli, ResultAsInt(syndrome), 7)
-}
-
-/// <summary>
-///     Encodes into the ⟦7, 1, 3⟧ Steane quantum code. 
-/// </summary>
-operation SteaneCodeEncoder(physRegister : Qubit[], auxQubits : Qubit[])  : LogicalRegister
-{
-    Body {
-        SteaneCodeEncoderImpl(physRegister, auxQubits)
-        
-        let logicalRegister = LogicalRegister(physRegister + auxQubits)
-        return logicalRegister
+    /// <summary>
+    ///     Decoder for the ⟦7, 1, 3⟧ Steane quantum code.
+    /// </summary>
+    /// <remark> The chosen decoder uses the CSS code property of the ⟦7, 1, 3⟧ Steane code, i.e., it corrects X errors 
+    ///    and Z errors separately. A property of the code is that the location of the X, respectively, Z correction 
+    ///    to be applied is the 3-bit encoding of the X, repsectively, Z syndrome when considered an integer. For more 
+    ///    information, see D. Gottesman, "Stabilizer Codes and Quantum Error Correction," Ph.D. Thesis, Caltech, 1997; 
+    ///    https://arxiv.org/abs/quant-ph/9705052 
+    /// </remark>
+    function SteaneCodeRecoveryX( syndrome : Syndrome)  : Pauli[]
+    {
+        return EmbedPauli(Xpauli, ResultAsInt(syndrome), 7)
     }
-}
 
-operation SteaneCodeDecoder( logicalRegister : LogicalRegister)  : (Qubit[], Qubit[])
-{
-    Body {
-        let physRegister = [logicalRegister[0]]
-        let auxQubits = logicalRegister[1..6]
-
-        (Adjoint SteaneCodeEncoderImpl)(physRegister, auxQubits)
-
-        return (physRegister, auxQubits)
+    function SteaneCodeRecoveryZ( syndrome : Syndrome)  : Pauli[]
+    {
+        return EmbedPauli(Zpauli, ResultAsInt(syndrome), 7)
     }
-}
 
-/// <summary>
-///     Returns a CSS value representing the ⟦7, 1, 3⟧ Steane code encoder and
-///     decoder with in-place syndrome measurement.
-/// </summary>
-operation  SteaneCode()  : CSS
-{
-    Body {
-        let e = EncodeOp(SteaneCodeEncoder)
-        let d = DecodeOp(SteaneCodeDecoder)
-        let sx = SyndromeMeasOp(MeasureStabilizerGenerators(
-                    [ [ Xpauli; Ipauli; Xpauli; Ipauli; Xpauli; Ipauli; Xpauli ];
-                      [ Ipauli; Xpauli; Xpauli; Ipauli; Ipauli; Xpauli; Xpauli ];
-                      [ Ipauli; Ipauli; Ipauli; Xpauli; Xpauli; Xpauli; Xpauli ] ],
-                    _, MeasureWithScratch)
-                )
-        let sz = SyndromeMeasOp(MeasureStabilizerGenerators(
-                    [ [ Zpauli; Ipauli; Zpauli; Ipauli; Zpauli; Ipauli; Zpauli ];
-                      [ Ipauli; Zpauli; Zpauli; Ipauli; Ipauli; Zpauli; Zpauli ];
-                      [ Ipauli; Ipauli; Ipauli; Zpauli; Zpauli; Zpauli; Zpauli ] ],                    
-                    _, MeasureWithScratch)
-                )
-        let code = CSS(e, d, sx, sz)
-        return code
-    }
-}
-
-operation SteaneCodeExample( code : CSS, nScratch : Int,  fX : RecoveryFn,  fZ : RecoveryFn, data : Qubit[])  : ()
-{
-    Body {
-        let (encode, decode, syndMeasX, syndMeanZ) = SteaneCode()
-        using (scratch = Qubit[nScratch]) {
-            let logicalRegister = encode(data, scratch)
-            // Cause an error.
-            X(logicalRegister[0])
-            RecoverCSS(code, fX, fZ, logicalRegister)
-            let decodedRegisters = decode(logicalRegister)
-            // TODO: assert that we corrected OK here.
+    /// <summary>
+    ///     Encodes into the ⟦7, 1, 3⟧ Steane quantum code. 
+    /// </summary>
+    operation SteaneCodeEncoder(physRegister : Qubit[], auxQubits : Qubit[])  : LogicalRegister
+    {
+        Body {
+            SteaneCodeEncoderImpl(physRegister, auxQubits)
+            
+            let logicalRegister = LogicalRegister(physRegister + auxQubits)
+            return logicalRegister
         }
     }
+
+    operation SteaneCodeDecoder( logicalRegister : LogicalRegister)  : (Qubit[], Qubit[])
+    {
+        Body {
+            let physRegister = [logicalRegister[0]]
+            let auxQubits = logicalRegister[1..6]
+
+            (Adjoint SteaneCodeEncoderImpl)(physRegister, auxQubits)
+
+            return (physRegister, auxQubits)
+        }
+    }
+
+    /// <summary>
+    ///     Returns a CSS value representing the ⟦7, 1, 3⟧ Steane code encoder and
+    ///     decoder with in-place syndrome measurement.
+    /// </summary>
+    operation  SteaneCode()  : CSS
+    {
+        Body {
+            let e = EncodeOp(SteaneCodeEncoder)
+            let d = DecodeOp(SteaneCodeDecoder)
+            let sx = SyndromeMeasOp(MeasureStabilizerGenerators(
+                        [ [ Xpauli; Ipauli; Xpauli; Ipauli; Xpauli; Ipauli; Xpauli ];
+                        [ Ipauli; Xpauli; Xpauli; Ipauli; Ipauli; Xpauli; Xpauli ];
+                        [ Ipauli; Ipauli; Ipauli; Xpauli; Xpauli; Xpauli; Xpauli ] ],
+                        _, MeasureWithScratch)
+                    )
+            let sz = SyndromeMeasOp(MeasureStabilizerGenerators(
+                        [ [ Zpauli; Ipauli; Zpauli; Ipauli; Zpauli; Ipauli; Zpauli ];
+                        [ Ipauli; Zpauli; Zpauli; Ipauli; Ipauli; Zpauli; Zpauli ];
+                        [ Ipauli; Ipauli; Ipauli; Zpauli; Zpauli; Zpauli; Zpauli ] ],                    
+                        _, MeasureWithScratch)
+                    )
+            let code = CSS(e, d, sx, sz)
+            return code
+        }
+    }
+
+    operation SteaneCodeExample( code : CSS, nScratch : Int,  fX : RecoveryFn,  fZ : RecoveryFn, data : Qubit[])  : ()
+    {
+        Body {
+            let (encode, decode, syndMeasX, syndMeanZ) = SteaneCode()
+            using (scratch = Qubit[nScratch]) {
+                let logicalRegister = encode(data, scratch)
+                // Cause an error.
+                X(logicalRegister[0])
+                RecoverCSS(code, fX, fZ, logicalRegister)
+                let decodedRegisters = decode(logicalRegister)
+                // TODO: assert that we corrected OK here.
+            }
+        }
+    }
+    
 }

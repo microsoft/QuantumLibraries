@@ -1,117 +1,119 @@
-﻿//namespace Microsoft.Quantum.Canon
+namespace Microsoft.Quantum.Canon {
+    open Microsoft.Quantum.Primitive
 
-/// <summary>
-///     Private operation used to implement both the 5 qubit encoder and decoder.
-/// </summary>
-/// <param name = "data"> an array holding 1 qubit which is the input qubit. </param> 
-/// <param name = "scratch"> an array holding 4 qubits which add redundancy. </param> 
-/// <remark>
-///    The particular encoder chosen was taken from the paper V. Kliunchnikov and D. Maslov, "Optimization of Clifford Circuits," 
-///    Phys. Rev. Phys. Rev. A 88, 052307 (2013); https://arxiv.org/abs/1305.0810, Figure 4b) and requires a total of 11 gates.
-/// </remark>
-operation FiveQubitCodeEncoderImpl(data : Qubit[], scratch : Qubit[])  : ()
-{
-    Body {
-        (Controlled(X))(data, scratch[1])
-        H(data[0])
-        H(scratch[0])
-        (Controlled(X))(data, scratch[2])
-        (Controlled(X))([scratch[0]], data[0])
-        (Controlled(X))(data, scratch[1])
-        (Controlled(X))([scratch[0]], scratch[3])
-        H(scratch[0])
-        H(data[0])
-        (Controlled(X))([scratch[0]], scratch[2])
-        (Controlled(X))(data, scratch[3])        
+    /// <summary>
+    ///     Private operation used to implement both the 5 qubit encoder and decoder.
+    /// </summary>
+    /// <param name = "data"> an array holding 1 qubit which is the input qubit. </param> 
+    /// <param name = "scratch"> an array holding 4 qubits which add redundancy. </param> 
+    /// <remark>
+    ///    The particular encoder chosen was taken from the paper V. Kliunchnikov and D. Maslov, "Optimization of Clifford Circuits," 
+    ///    Phys. Rev. Phys. Rev. A 88, 052307 (2013); https://arxiv.org/abs/1305.0810, Figure 4b) and requires a total of 11 gates.
+    /// </remark>
+    operation FiveQubitCodeEncoderImpl(data : Qubit[], scratch : Qubit[])  : ()
+    {
+        Body {
+            (Controlled(X))(data, scratch[1])
+            H(data[0])
+            H(scratch[0])
+            (Controlled(X))(data, scratch[2])
+            (Controlled(X))([scratch[0]], data[0])
+            (Controlled(X))(data, scratch[1])
+            (Controlled(X))([scratch[0]], scratch[3])
+            H(scratch[0])
+            H(data[0])
+            (Controlled(X))([scratch[0]], scratch[2])
+            (Controlled(X))(data, scratch[3])        
+        }
+
+        Adjoint auto
     }
 
-    Adjoint auto
-}
-
-/// <summary>
-///     Table lookup decoder for the ⟦5, 1, 3⟧ quantum code.
-/// </summary>
-/// <remark> By iterating over all errors of weight 1, we obtain a total of 3*5=15 possible non-trivial syndromes. 
-///    Together with the identity, a table of error and corresponding syndrom is built up. For the 5qubit code  
-///    this table is given by: X_1 (0,0,0,1); X_2 (1,0,0,0); X_3 (1,1,0,0); X_4 (0,1,1,0); X_5 (0,0,1,1), 
-///    Z_1 (1,0,1,0); Z_2 (0,1,0,1); Z_3 (0,0,1,0); Z_4 (1,0,0,1); Z_5 (0,1,0,0) with Yi = Xi + Yi. Note that the 
-///    ordering in the table lookup recovery is given by converting the bitvectors to integers (using little endian).
-/// </remark>
-function  FiveQubitCodeRecoveryFn()  : RecoveryFn
-{
-    return TableLookupRecovery(
-        [ [Ipauli; Ipauli; Ipauli; Ipauli; Ipauli]; 
-          [Ipauli; Xpauli; Ipauli; Ipauli; Ipauli]; 
-          [Ipauli; Ipauli; Ipauli; Ipauli; Zpauli]; 
-          [Ipauli; Ipauli; Xpauli; Ipauli; Ipauli]; 
-          [Ipauli; Ipauli; Zpauli; Ipauli; Ipauli]; 
-          [Zpauli; Ipauli; Ipauli; Ipauli; Ipauli]; 
-          [Ipauli; Ipauli; Ipauli; Xpauli; Ipauli]; 
-          [Ipauli; Ipauli; Ypauli; Ipauli; Ipauli]; 
-          [Xpauli; Ipauli; Ipauli; Ipauli; Ipauli]; 
-          [Ipauli; Ipauli; Ipauli; Zpauli; Ipauli]; 
-          [Ipauli; Zpauli; Ipauli; Ipauli; Ipauli]; 
-          [Ipauli; Ypauli; Ipauli; Ipauli; Ipauli]; 
-          [Ipauli; Ipauli; Ipauli; Ipauli; Xpauli]; 
-          [Ypauli; Ipauli; Ipauli; Ipauli; Ipauli]; 
-          [Ipauli; Ipauli; Ipauli; Ipauli; Ypauli]; 
-          [Ipauli; Ipauli; Ipauli; Ypauli; Ipauli] ]
-    )
-}
-
-/// <summary>
-///     Encodes into the ⟦5, 1, 3⟧ quantum code. 
-/// </summary>
-/// <param name="physRegister">An array of qubits representing an unencoded state.</param>
-/// <param name="auxQubits">A register of auxillary qubits that will be used to represent the encoded state.</param>
-/// <seealso cref="FiveQubitCodeDecoder" />
-/// <remark> This code was found independently in the following two papers:
-///    C. H. Bennett, D. DiVincenzo, J. A. Smolin and W. K. Wootters, "Mixed state entanglement and quantum error correction,"
-///    Phys. Rev. A, 54 (1996) pp. 3824-3851; https://arxiv.org/abs/quant-ph/9604024 and
-///    R. La?amme, C. Miquel, J. P. Paz and W. H. Zurek, "Perfect quantum error correction code," 
-///    Phys. Rev. Lett. 77 (1996) pp. 198-201; https://arxiv.org/abs/quant-ph/9602019
-/// </remark>
-operation FiveQubitCodeEncoder(physRegister : Qubit[], auxQubits : Qubit[])  : LogicalRegister
-{
-    Body {
-        FiveQubitCodeEncoderImpl(physRegister, auxQubits)
-        
-        let logicalRegister = LogicalRegister(physRegister + auxQubits)
-        return logicalRegister
+    /// <summary>
+    ///     Table lookup decoder for the ⟦5, 1, 3⟧ quantum code.
+    /// </summary>
+    /// <remark> By iterating over all errors of weight 1, we obtain a total of 3*5=15 possible non-trivial syndromes. 
+    ///    Together with the identity, a table of error and corresponding syndrom is built up. For the 5qubit code  
+    ///    this table is given by: X_1 (0,0,0,1); X_2 (1,0,0,0); X_3 (1,1,0,0); X_4 (0,1,1,0); X_5 (0,0,1,1), 
+    ///    Z_1 (1,0,1,0); Z_2 (0,1,0,1); Z_3 (0,0,1,0); Z_4 (1,0,0,1); Z_5 (0,1,0,0) with Yi = Xi + Yi. Note that the 
+    ///    ordering in the table lookup recovery is given by converting the bitvectors to integers (using little endian).
+    /// </remark>
+    function  FiveQubitCodeRecoveryFn()  : RecoveryFn
+    {
+        return TableLookupRecovery(
+            [ [Ipauli; Ipauli; Ipauli; Ipauli; Ipauli]; 
+            [Ipauli; Xpauli; Ipauli; Ipauli; Ipauli]; 
+            [Ipauli; Ipauli; Ipauli; Ipauli; Zpauli]; 
+            [Ipauli; Ipauli; Xpauli; Ipauli; Ipauli]; 
+            [Ipauli; Ipauli; Zpauli; Ipauli; Ipauli]; 
+            [Zpauli; Ipauli; Ipauli; Ipauli; Ipauli]; 
+            [Ipauli; Ipauli; Ipauli; Xpauli; Ipauli]; 
+            [Ipauli; Ipauli; Ypauli; Ipauli; Ipauli]; 
+            [Xpauli; Ipauli; Ipauli; Ipauli; Ipauli]; 
+            [Ipauli; Ipauli; Ipauli; Zpauli; Ipauli]; 
+            [Ipauli; Zpauli; Ipauli; Ipauli; Ipauli]; 
+            [Ipauli; Ypauli; Ipauli; Ipauli; Ipauli]; 
+            [Ipauli; Ipauli; Ipauli; Ipauli; Xpauli]; 
+            [Ypauli; Ipauli; Ipauli; Ipauli; Ipauli]; 
+            [Ipauli; Ipauli; Ipauli; Ipauli; Ypauli]; 
+            [Ipauli; Ipauli; Ipauli; Ypauli; Ipauli] ]
+        )
     }
-}
 
-/// <seealso cref="FiveQubitCodeEndocer" />
-operation FiveQubitCodeDecoder( logicalRegister : LogicalRegister)  : (Qubit[], Qubit[])
-{
-    Body {
-        let physRegister = [logicalRegister[0]]
-        let auxQubits = logicalRegister[1..4]
-
-        (Adjoint FiveQubitCodeEncoderImpl)(physRegister, auxQubits)
-
-        return (physRegister, auxQubits)
+    /// <summary>
+    ///     Encodes into the ⟦5, 1, 3⟧ quantum code. 
+    /// </summary>
+    /// <param name="physRegister">An array of qubits representing an unencoded state.</param>
+    /// <param name="auxQubits">A register of auxillary qubits that will be used to represent the encoded state.</param>
+    /// <seealso cref="FiveQubitCodeDecoder" />
+    /// <remark> This code was found independently in the following two papers:
+    ///    C. H. Bennett, D. DiVincenzo, J. A. Smolin and W. K. Wootters, "Mixed state entanglement and quantum error correction,"
+    ///    Phys. Rev. A, 54 (1996) pp. 3824-3851; https://arxiv.org/abs/quant-ph/9604024 and
+    ///    R. La?amme, C. Miquel, J. P. Paz and W. H. Zurek, "Perfect quantum error correction code," 
+    ///    Phys. Rev. Lett. 77 (1996) pp. 198-201; https://arxiv.org/abs/quant-ph/9602019
+    /// </remark>
+    operation FiveQubitCodeEncoder(physRegister : Qubit[], auxQubits : Qubit[])  : LogicalRegister
+    {
+        Body {
+            FiveQubitCodeEncoderImpl(physRegister, auxQubits)
+            
+            let logicalRegister = LogicalRegister(physRegister + auxQubits)
+            return logicalRegister
+        }
     }
-}
 
-/// <summary>
-///     Returns a QECC value representing the ⟦5, 1, 3⟧ code encoder and
-///     decoder with in-place syndrome measurement.
-/// </summary>
-operation  FiveQubitCode()  : QECC
-{
-    Body {
-        let e = EncodeOp(FiveQubitCodeEncoder)
-        let d = DecodeOp(FiveQubitCodeDecoder)
-        let s = SyndromeMeasOp(MeasureStabilizerGenerators(
-                    [ [ Xpauli; Zpauli; Zpauli; Xpauli; Ipauli ]; 
-                      [ Ipauli; Xpauli; Zpauli; Zpauli; Xpauli ];
-                      [ Xpauli; Ipauli; Xpauli; Zpauli; Zpauli ];
-                      [ Zpauli; Xpauli; Ipauli; Xpauli; Zpauli ] ],
-                    _, MeasureWithScratch)
-                )
-        let code = QECC(e, d, s)
-        return code
+    /// <seealso cref="FiveQubitCodeEndocer" />
+    operation FiveQubitCodeDecoder( logicalRegister : LogicalRegister)  : (Qubit[], Qubit[])
+    {
+        Body {
+            let physRegister = [logicalRegister[0]]
+            let auxQubits = logicalRegister[1..4]
+
+            (Adjoint FiveQubitCodeEncoderImpl)(physRegister, auxQubits)
+
+            return (physRegister, auxQubits)
+        }
     }
-}
 
+    /// <summary>
+    ///     Returns a QECC value representing the ⟦5, 1, 3⟧ code encoder and
+    ///     decoder with in-place syndrome measurement.
+    /// </summary>
+    operation  FiveQubitCode()  : QECC
+    {
+        Body {
+            let e = EncodeOp(FiveQubitCodeEncoder)
+            let d = DecodeOp(FiveQubitCodeDecoder)
+            let s = SyndromeMeasOp(MeasureStabilizerGenerators(
+                        [ [ Xpauli; Zpauli; Zpauli; Xpauli; Ipauli ]; 
+                        [ Ipauli; Xpauli; Zpauli; Zpauli; Xpauli ];
+                        [ Xpauli; Ipauli; Xpauli; Zpauli; Zpauli ];
+                        [ Zpauli; Xpauli; Ipauli; Xpauli; Zpauli ] ],
+                        _, MeasureWithScratch)
+                    )
+            let code = QECC(e, d, s)
+            return code
+        }
+    }
+
+}

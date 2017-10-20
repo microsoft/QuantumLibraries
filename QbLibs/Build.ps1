@@ -15,6 +15,27 @@ param(
 )
 
 Import-Module -Force .\Invoke-Qbc.psm1
+if (-not (Get-Module -ListAvailable Invoke-MsBuild)) {
+    Install-Module Invoke-MsBuild
+}
+Import-Module Invoke-MsBuild
+
+# FIXME: we'll want to do the following to use Visual Studio support.
+
+# # Get a list of what we need to compile.
+# # We do so by examining the *.csproj inside, looking for <None>
+# # elements referencing *.qb files.
+# $libDirectory = Join-Path $PSScriptRoot "Microsoft.Quantum.Canon"
+# # Import the csproj as an XML document.
+# $csproj = [xml](
+#     Join-Path $libDirectory "Microsoft.Quantum.Canon.csproj" `
+#     | ForEach-Object { Get-Content $_ })
+# $qflatSources = $csproj.Project.ItemGroup `
+#     | ForEach-Object { $_.None } `
+#     | Select-Object -ExpandProperty Include `
+#     | Where-Object { $_.EndsWith(".qb") } `
+#     | Where-Object { $_.StartsWith("Phase") } `
+#     | ForEach-Object { Join-Path $libDirectory $_ }
 
 # Get a list of what we need to compile.
 # Unlike before, we manually specify since the order matters.
@@ -24,70 +45,51 @@ $qflatSources = @(Find-QflatPrelude)
 
 $qflatSources += @(
     # Provide stubs for primitive operations.
+    "Stubs.qb",
 
-    #"Math/NativeStubs.qb"
+    "Math/Types.qb",
+    "Math/Constants.qb",
 
-    #"Combinators/RestrictToSubregister.qb"
+    "IterateThroughCartesianProduct.qb",
 
-    "DataStructures/Pairs.qb"
-
-    #"Simulation/Types.qb"
-    #"Simulation/SimulationTechniques.qb"
-    #"Simulation/EvolutionSetPauli.qb"
-    #"Simulation/EvolutionSetFermionic.qb"
-    #"Stubs.qb",
-
-    #"Math/Types.qb",
-    #"Math/Constants.qb",
-
-    #"IterateThroughCartesianProduct.qb",
-
-    #"Combinators/ApplyToEach.qb",
-    #"Combinators/ApplyToRange.qb",
-    #"Combinators/RestrictToSubregister.qb",
-    #"Combinators/With.qb",
+    "Combinators/ApplyToRange.qb",
+    "Enumeration/Iter.qb",
 
     # Diagnostics
-    #"Asserts/AssertQubit.qb",
-    #"Asserts/AssertOperationsEqualReferenced.qb",
-    #"Asserts/AssertOperationsEqualInPlace.qb",
-
-    # System evolution simulators
-    #"Simulation/Types.qb",
-    #"Simulation/PauliSim.qb",
-    #"Simulation/Minimal.qb"
-
+    "Asserts/AssertQubit.qb",
+    "Asserts/AssertOperationsEqualReferenced.qb",
+    "Asserts/AssertOperationsEqualInPlace.qb",
 
     # Provide definitions of the identity and nop.
-    ##"Identity.qb"
+    "Identity.qb"
 
-    # # Endianness.qb contains newtype declarations that are needed more broadly,
-    # # so we include it first.
-    #"Endianness.qb",
+    # Endianness.qb contains newtype declarations that are needed more broadly,
+    # so we include it first.
+    "Endianness.qb",
 
-    #"DataStructures/Stack.qb",
+    "DataStructures/Stack.qb"
 
-    # # Similarly with OracleTypes.qb, save for that it depends on OperationPow.qb.
-    #"PhaseEstimation/Types.qb",
-    #"Arithmetic.qb",
-    #"Bind.qb",
-    #"Paulis.qb"
+    # Similarly with OracleTypes.qb, save for that it depends on OperationPow.qb.
+    "Combinators/OperationPow.qb",
+    "PhaseEstimation/Types.qb",
+    "Arithmetic.qb",
+    "Bind.qb",
 
-    #"QFT.qb",
-    #"Teleportation.qb",
-    #"Toffoli.qb",
-    #"ShiftOp.qb",
-    #"Superdense.qb",
-    #"PhaseEstimation/Quantum.qb",
-    #"PhaseEstimation/Iterative.qb",
-    #TODO Bug #727: "AmplitudeAmplification.qb",
-    
-    # # QECC
-    #"Qecc/Types.qb",
-    #"Qecc/Utils.qb",
-    #"Qecc/BitFlipCode.qb",
-    #"Qecc/5QubitCode.qb",
-    #"Qecc/7QubitCode.qb"
+    "QFT.qb",
+    "PhaseEstimation/Quantum.qb",
+    "PhaseEstimation/Iterative.qb",
+    # "AmplitudeAmplification.qb"
+    "ShiftOp.qb",
+    "Combinators/With.qb",
+
+    "Paulis.qb",
+
+    # QECC
+    "Qecc/Types.qb",
+    "Qecc/Utils.qb",
+    "Qecc/BitFlipCode.qb",
+    "Qecc/5QubitCode.qb",
+    "Qecc/7QubitCode.qb"
 ) | ForEach-Object {
     Join-Path $libDirectory $_
 }

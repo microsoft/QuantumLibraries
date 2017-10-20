@@ -1,206 +1,208 @@
-﻿//namespace Microsoft.Quantum.Canon
+﻿namespace Microsoft.Quantum.Canon {
+    open Microsoft.Quantum.Primitive
 
-// Design notes:
-//     The APIs for the iterative and quantum phase estimation algorithms are
-//     parameterized in terms of discrete-time oracles as defined in the OracleTypes.qb
-//     source file. Constructing such oracle definitions can be done with operations
-//     acting on other operations, making heavy use of partial application internally.
-//
-// E.g.:
-//     let DiscreteOracle = OracleToDiscrete(U)
-//     DiscretePhaseEstimationIteration(oracle, pow, theta, eigenstate, control)
-//     let Result datum = Measure(control)
-//
-//     This design then enables providing more efficient implementations of U^m
-//     to be provided by the user for specific U, while providing a sensible
-//     "default" for operations which cannot be fast-forwarded by taking advantage
-//     of their definitions.
-//
-//     Finally, we also ensure that quantum arguments are placed last to follow
-//     standard conventions for partial application. In particular, this allows for
-//     the discrete and continuous phase estimation iterations to be used in
-//     an allocate-op-measure pattern; we may soon want to abstract that away.
+    // Design notes:
+    //     The APIs for the iterative and quantum phase estimation algorithms are
+    //     parameterized in terms of discrete-time oracles as defined in the OracleTypes.qb
+    //     source file. Constructing such oracle definitions can be done with operations
+    //     acting on other operations, making heavy use of partial application internally.
+    //
+    // E.g.:
+    //     let DiscreteOracle = OracleToDiscrete(U)
+    //     DiscretePhaseEstimationIteration(oracle, pow, theta, eigenstate, control)
+    //     let Result datum = Measure(control)
+    //
+    //     This design then enables providing more efficient implementations of U^m
+    //     to be provided by the user for specific U, while providing a sensible
+    //     "default" for operations which cannot be fast-forwarded by taking advantage
+    //     of their definitions.
+    //
+    //     Finally, we also ensure that quantum arguments are placed last to follow
+    //     standard conventions for partial application. In particular, this allows for
+    //     the discrete and continuous phase estimation iterations to be used in
+    //     an allocate-op-measure pattern; we may soon want to abstract that away.
 
-/// Performs a single iteration of an iterative (classically-controlled) phase
-/// estimation algorithm.
-/// <param name="oracle">Operation acting on an integer and a register,
-///     such that U^m is applied to the given register, where U is the unitary
-///     whose phase is to be estimated, and where m is the integer power
-///     given to the oracle.</param>
-/// <param name="eigenstate">Register containing an eigenstate of the given oracle.</param>
-/// <param name="power">Number of times to apply the given unitary oracle.</param>
-/// <param name="theta">Angle by which to invert the phase on the control qubit before
-///     acting on the eigenstate.</param>
-operation DiscretePhaseEstimationIteration( oracle : DiscreteOracle, power : Int, theta : Double, eigenstate : Qubit[], controlQubit : Qubit)  : ()
-{
-    // NB: We accept the control qubit as input so that we can allow for this operation
-    //     to subject to the adjoint and control modifiers (that is, such that we do not need
-    //     a return statement, but rather *act* on the given qubits).
-    Body {
-        // if (power < 0) {
-            // fail 'Oracle power cannot be negative.'
-        // }
+    /// Performs a single iteration of an iterative (classically-controlled) phase
+    /// estimation algorithm.
+    /// <param name="oracle">Operation acting on an integer and a register,
+    ///     such that U^m is applied to the given register, where U is the unitary
+    ///     whose phase is to be estimated, and where m is the integer power
+    ///     given to the oracle.</param>
+    /// <param name="eigenstate">Register containing an eigenstate of the given oracle.</param>
+    /// <param name="power">Number of times to apply the given unitary oracle.</param>
+    /// <param name="theta">Angle by which to invert the phase on the control qubit before
+    ///     acting on the eigenstate.</param>
+    operation DiscretePhaseEstimationIteration( oracle : DiscreteOracle, power : Int, theta : Double, eigenstate : Qubit[], controlQubit : Qubit)  : ()
+    {
+        // NB: We accept the control qubit as input so that we can allow for this operation
+        //     to subject to the adjoint and control modifiers (that is, such that we do not need
+        //     a return statement, but rather *act* on the given qubits).
+        Body {
+            // if (power < 0) {
+                // fail 'Oracle power cannot be negative.'
+            // }
 
-        // Find the actual inversion angle by rescaling with the power of the
-        // oracle.
-        let inversionAngle = -theta * Float(power)
-        
-        // Prepare the control qubit.
-        H(controlQubit)
-        Rz(inversionAngle, controlQubit)
+            // Find the actual inversion angle by rescaling with the power of the
+            // oracle.
+            let inversionAngle = -theta * Float(power)
+            
+            // Prepare the control qubit.
+            H(controlQubit)
+            Rz(inversionAngle, controlQubit)
 
-        // TODO: should this be
-        //     controlled(oracle)([controlQubit], power, eigenstate),
-        // or
-        //     controlled(oracle(power, _))([controlQubit], eigenstate)?
-        (Controlled oracle)([controlQubit], (power, eigenstate))
+            // TODO: should this be
+            //     controlled(oracle)([controlQubit], power, eigenstate),
+            // or
+            //     controlled(oracle(power, _))([controlQubit], eigenstate)?
+            (Controlled oracle)([controlQubit], (power, eigenstate))
 
-        // Return the control qubit to the appropriate measurement basis.
-        H(controlQubit)
-    }
-
-    Adjoint auto
-    Controlled auto
-    Controlled Adjoint auto
-}
-
-operation ContinuousPhaseEstimationIteration( oracle : ContinuousOracle, time : Double, theta : Double, eigenstate : Qubit[], controlQubit : Qubit)  : ()
-{
-    Body {
-        if (time < 0.0) {
-            // fail 'Oracle power cannot be negative.'
+            // Return the control qubit to the appropriate measurement basis.
+            H(controlQubit)
         }
 
-        let inversionAngle = -(theta * time)
-
-        // Prepare the control qubit.
-        H(controlQubit)
-        Rz(inversionAngle, controlQubit)
-
-        (Controlled oracle)([controlQubit], (time, eigenstate))
-
-        // Return the control qubit to the appropriate measurement basis.
-        H(controlQubit)
+        Adjoint auto
+        Controlled auto
+        Controlled Adjoint auto
     }
 
-    Adjoint auto
-    Controlled auto
-    Controlled Adjoint auto
-}
+    operation ContinuousPhaseEstimationIteration( oracle : ContinuousOracle, time : Double, theta : Double, eigenstate : Qubit[], controlQubit : Qubit)  : ()
+    {
+        Body {
+            if (time < 0.0) {
+                // fail 'Oracle power cannot be negative.'
+            }
 
-operation PrepAndMeasurePhaseEstImpl(wInv : Double, t : Double, op : ((Double, Double, Qubit) => ())) : Result {
-    Body {
-        mutable datum = Zero
-        using (register = Qubit[1]) {
-            op(wInv, t, register[0])
-            set datum = M(register[0])
+            let inversionAngle = -(theta * time)
+
+            // Prepare the control qubit.
+            H(controlQubit)
+            Rz(inversionAngle, controlQubit)
+
+            (Controlled oracle)([controlQubit], (time, eigenstate))
+
+            // Return the control qubit to the appropriate measurement basis.
+            H(controlQubit)
         }
-        return datum
-    }
-}
 
-// NB: we take std.dev instead of variance here to avoid having to take a square root.
-// FIXME: this currently passes a double to the oracle, as is only appropriate for
-//        continuous-time oracles.
-/// <summary>
-///     Performs iterative phase estimation using a random walk to approximate
-///     Bayesian inference on the classical measurement results from a given
-///     oracle and eigenstate.
-/// </summary>
-/// <param name="oracle">
-///     An operation representing a unitary $U$ such that $U(t)\ket{\phi} = e^{i t \phi}\ket{\phi}$
-///     for a known eigenstate $\ket{\phi}$ and an unknown phase $\phi \in \mathbb{R}^+$.
-/// </param>
-/// <param name="eigenstate">A register in the state $\ket{\phi}$</param>.
-/// <param name="controlQubit">A single qubit initially in $\ket{0}$, suitale for controlling $U$.</param>
-/// <param name="initialMean">Mean of the initial normal prior distribution over $\phi$.</param>
-/// <param name="initialStdDev">Standard deviation of the initial normal prior distribution over $\phi$.</param>
-/// <param name="nMeasurements">Number of measurements to be accepted into the final posterior estimate.</param>
-/// <param name="maxMeasurements">Total number of measurements than can be taken before the operation is considered to have failed.</param>
-/// <param name="unwind">Number of results to forget when consistency checks fail.</param>
-// TODO: document return type.
-operation RandomWalkPhaseEstimation( oracle : ContinuousOracle, eigenstate : Qubit[], controlQubit : Qubit, initialMean : Double, initialStdDev : Double, nMeasurements : Int, maxMeasurements : Int, unwind : Int)  : Double
-{
-    Body {
-        let PREFACTOR = 0.79506009762065011
-        let INV_SQRT_E = 0.60653065971263342
-        let PI = Pi()
-        
-        // FIXME: #666
-        let inner = ContinuousPhaseEstimationIteration(oracle, _, _, eigenstate, _)
-        let sampleOp = PrepAndMeasurePhaseEstImpl(_, _, inner)
-        
-        mutable dataRecord = StackNew(nMeasurements)
-        
-        mutable mu = 0.1
-        mutable sigma = 1.1
-        mutable datum = Zero
-        mutable nTotalMeasurements = 0
-        mutable nAcceptedMeasurements = 0
-        
-        set mu = 0.0
-        set sigma = 1.0
-        
-        repeat {
-            if (nTotalMeasurements >= maxMeasurements) {
-                return mu
+        Adjoint auto
+        Controlled auto
+        Controlled Adjoint auto
+    }
+
+    operation PrepAndMeasurePhaseEstImpl(wInv : Double, t : Double, op : ((Double, Double, Qubit) => ())) : Result {
+        Body {
+            mutable datum = Zero
+            using (register = Qubit[1]) {
+                op(wInv, t, register[0])
+                set datum = M(register[0])
             }
-        
-            let wInv = mu - PI * sigma / 2.0
-            let t = 1.0 / sigma
+            return datum
+        }
+    }
+
+    // NB: we take std.dev instead of variance here to avoid having to take a square root.
+    // FIXME: this currently passes a double to the oracle, as is only appropriate for
+    //        continuous-time oracles.
+    /// <summary>
+    ///     Performs iterative phase estimation using a random walk to approximate
+    ///     Bayesian inference on the classical measurement results from a given
+    ///     oracle and eigenstate.
+    /// </summary>
+    /// <param name="oracle">
+    ///     An operation representing a unitary $U$ such that $U(t)\ket{\phi} = e^{i t \phi}\ket{\phi}$
+    ///     for a known eigenstate $\ket{\phi}$ and an unknown phase $\phi \in \mathbb{R}^+$.
+    /// </param>
+    /// <param name="eigenstate">A register in the state $\ket{\phi}$</param>.
+    /// <param name="controlQubit">A single qubit initially in $\ket{0}$, suitale for controlling $U$.</param>
+    /// <param name="initialMean">Mean of the initial normal prior distribution over $\phi$.</param>
+    /// <param name="initialStdDev">Standard deviation of the initial normal prior distribution over $\phi$.</param>
+    /// <param name="nMeasurements">Number of measurements to be accepted into the final posterior estimate.</param>
+    /// <param name="maxMeasurements">Total number of measurements than can be taken before the operation is considered to have failed.</param>
+    /// <param name="unwind">Number of results to forget when consistency checks fail.</param>
+    // TODO: document return type.
+    operation RandomWalkPhaseEstimation( oracle : ContinuousOracle, eigenstate : Qubit[], controlQubit : Qubit, initialMean : Double, initialStdDev : Double, nMeasurements : Int, maxMeasurements : Int, unwind : Int)  : Double
+    {
+        Body {
+            let PREFACTOR = 0.79506009762065011
+            let INV_SQRT_E = 0.60653065971263342
+            let PI = Pi()
             
-            set datum = sampleOp(wInv, t)
-            set nTotalMeasurements = nTotalMeasurements + 1
+            // FIXME: #666
+            let inner = ContinuousPhaseEstimationIteration(oracle, _, _, eigenstate, _)
+            let sampleOp = PrepAndMeasurePhaseEstImpl(_, _, inner)
             
+            mutable dataRecord = StackNew(nMeasurements)
             
-            if (datum == Zero) {
-                set mu = mu - sigma * INV_SQRT_E
-            } else {
-                set mu = mu + sigma * INV_SQRT_E
-            }                
-            set sigma = sigma * PREFACTOR
+            mutable mu = 0.1
+            mutable sigma = 1.1
+            mutable datum = Zero
+            mutable nTotalMeasurements = 0
+            mutable nAcceptedMeasurements = 0
             
-            set dataRecord = StackPush(dataRecord, datum)
+            set mu = 0.0
+            set sigma = 1.0
             
-            // Perform consistency check.
-            if (nTotalMeasurements >= maxMeasurements) {
-                return mu
-            }
-            mutable checkDatum = sampleOp(mu, 1.0 / sigma)
-            set nTotalMeasurements = nTotalMeasurements + 1
+            repeat {
+                if (nTotalMeasurements >= maxMeasurements) {
+                    return mu
+                }
             
-            if (checkDatum == One) {
-                repeat {
-                    for (idxUnwind in 0..(unwind - 1)) {
-                        
-                        set sigma = sigma / PREFACTOR
-                        
-                        if (StackLength(dataRecord) > 0) {
-                            let unwoundDatum = StackPeek(dataRecord)
-                            set dataRecord = StackPop(dataRecord)
+                let wInv = mu - PI * sigma / 2.0
+                let t = 1.0 / sigma
+                
+                set datum = sampleOp(wInv, t)
+                set nTotalMeasurements = nTotalMeasurements + 1
+                
+                
+                if (datum == Zero) {
+                    set mu = mu - sigma * INV_SQRT_E
+                } else {
+                    set mu = mu + sigma * INV_SQRT_E
+                }                
+                set sigma = sigma * PREFACTOR
+                
+                set dataRecord = StackPush(dataRecord, datum)
+                
+                // Perform consistency check.
+                if (nTotalMeasurements >= maxMeasurements) {
+                    return mu
+                }
+                mutable checkDatum = sampleOp(mu, 1.0 / sigma)
+                set nTotalMeasurements = nTotalMeasurements + 1
+                
+                if (checkDatum == One) {
+                    repeat {
+                        for (idxUnwind in 0..(unwind - 1)) {
                             
-                            if (unwoundDatum == Zero) {
-                                set mu = mu + sigma * INV_SQRT_E
-                            } else {
-                                set mu = mu - sigma * INV_SQRT_E
+                            set sigma = sigma / PREFACTOR
+                            
+                            if (StackLength(dataRecord) > 0) {
+                                let unwoundDatum = StackPeek(dataRecord)
+                                set dataRecord = StackPop(dataRecord)
+                                
+                                if (unwoundDatum == Zero) {
+                                    set mu = mu + sigma * INV_SQRT_E
+                                } else {
+                                    set mu = mu - sigma * INV_SQRT_E
+                                }
                             }
                         }
+                        
+                        if (nTotalMeasurements >= maxMeasurements) {
+                            return mu
+                        }
+                        set checkDatum = sampleOp(mu, 1.0 / sigma)
+                        set nTotalMeasurements = nTotalMeasurements + 1
+                        
+                    } until (checkDatum == Zero) fixup {
                     }
-                    
-                    if (nTotalMeasurements >= maxMeasurements) {
-                        return mu
-                    }
-                    set checkDatum = sampleOp(mu, 1.0 / sigma)
-                    set nTotalMeasurements = nTotalMeasurements + 1
-                    
-                } until (checkDatum == Zero) fixup {
                 }
-            }
+                
+                set nAcceptedMeasurements = nAcceptedMeasurements + 1
+            } until (nAcceptedMeasurements >= nMeasurements) fixup {}
             
-            set nAcceptedMeasurements = nAcceptedMeasurements + 1
-        } until (nAcceptedMeasurements >= nMeasurements) fixup {}
-        
-        return mu
+            return mu
+        }
     }
-}
 
+}

@@ -1,73 +1,74 @@
-﻿//namespace Microsoft.Quantum.Canon
+﻿namespace Microsoft.Quantum.Canon {
 
-
-operation With(outerOperation : (Qubit[] => ():Adjoint), innerOperation : (Qubit[] => ()), target : Qubit[])  : ()
-{
-    Body {  
-        outerOperation(target)
-        innerOperation(target)
-        (Adjoint(outerOperation))(target)
-    }
-}
-
-
-
-operation WithA(outerOperation : (Qubit[] => ():Adjoint), innerOperation : (Qubit[] => ():Adjoint), target : Qubit[])  : ()
-{
-    Body {  
-        outerOperation(target)
-        innerOperation(target)
-        (Adjoint(outerOperation))(target)
+    operation With(outerOperation : (Qubit[] => ():Adjoint), innerOperation : (Qubit[] => ()), target : Qubit[])  : ()
+    {
+        Body {  
+            outerOperation(target)
+            innerOperation(target)
+            (Adjoint(outerOperation))(target)
+        }
     }
 
-    Adjoint auto
-}
 
 
-operation WithC(outerOperation : (Qubit[] => ():Adjoint), innerOperation : (Qubit[] => ():Controlled), target : Qubit[])  : ()
-{
-    Body {  
-        outerOperation(target)
-        innerOperation(target)
-        (Adjoint(outerOperation))(target)
+    operation WithA(outerOperation : (Qubit[] => ():Adjoint), innerOperation : (Qubit[] => ():Adjoint), target : Qubit[])  : ()
+    {
+        Body {  
+            outerOperation(target)
+            innerOperation(target)
+            (Adjoint(outerOperation))(target)
+        }
+
+        Adjoint auto
     }
 
-    Controlled(controlRegister) {
-        outerOperation(target)
-        (Controlled(innerOperation))(controlRegister, target)
-        (Adjoint(outerOperation))(target)
-    }
-}
 
-operation WithAC(outerOperation : (Qubit[] => ():Adjoint), innerOperation : (Qubit[] => ():Adjoint,Controlled), target : Qubit[])  : ()
-{
-    Body {  
-        outerOperation(target)
-        innerOperation(target)
-        (Adjoint(outerOperation))(target)
-    }
+    operation WithC(outerOperation : (Qubit[] => ():Adjoint), innerOperation : (Qubit[] => ():Controlled), target : Qubit[])  : ()
+    {
+        Body {  
+            outerOperation(target)
+            innerOperation(target)
+            (Adjoint(outerOperation))(target)
+        }
 
-    Adjoint auto
-    Controlled(controlRegister) {
-        outerOperation(target)
-        (Controlled(innerOperation))(controlRegister, target)
-        (Adjoint(outerOperation))(target)
-    }
-    Controlled Adjoint auto
-}
-
-// TODO: move single-qubit version to With.qb along with arrays.
-operation With1C(outerOperation : (Qubit => ():Adjoint), innerOperation : (Qubit => ():Controlled), target : Qubit)  : ()
-{
-    Body {  
-        outerOperation(target)
-        innerOperation(target)
-        (Adjoint(outerOperation))(target)
+        Controlled(controlRegister) {
+            outerOperation(target)
+            (Controlled(innerOperation))(controlRegister, target)
+            (Adjoint(outerOperation))(target)
+        }
     }
 
-    Controlled(controlRegister) {
-        outerOperation(target)
-        (Controlled(innerOperation))(controlRegister, target)
-        (Adjoint(outerOperation))(target)
+    operation WithAC(outerOperation : (Qubit[] => ():Adjoint), innerOperation : (Qubit[] => ():Adjoint,Controlled), target : Qubit[])  : ()
+    {
+        Body {  
+            outerOperation(target)
+            innerOperation(target)
+            (Adjoint(outerOperation))(target)
+        }
+
+        Adjoint auto
+        Controlled(controlRegister) {
+            outerOperation(target)
+            (Controlled(innerOperation))(controlRegister, target)
+            (Adjoint(outerOperation))(target)
+        }
+        Controlled Adjoint auto
     }
+
+    // TODO: move single-qubit version to With.qb along with arrays.
+    operation With1C(outerOperation : (Qubit => ():Adjoint), innerOperation : (Qubit => ():Controlled), target : Qubit)  : ()
+    {
+        Body {  
+            outerOperation(target)
+            innerOperation(target)
+            (Adjoint(outerOperation))(target)
+        }
+
+        Controlled(controlRegister) {
+            outerOperation(target)
+            (Controlled(innerOperation))(controlRegister, target)
+            (Adjoint(outerOperation))(target)
+        }
+    }
+
 }
