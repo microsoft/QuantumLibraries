@@ -24,22 +24,33 @@ $qflatSources = @(Find-QflatPrelude)
 
 $qflatSources += @(
     # Provide stubs for primitive operations.
-    "Stubs.qb",
 
-    "Math/Types.qb",
-    "Math/Constants.qb",
+    #"Math/NativeStubs.qb"
 
-    "IterateThroughCartesianProduct.qb",
+    #"Combinators/RestrictToSubregister.qb"
 
-    "Combinators/ApplyToEach.qb",
-    "Combinators/ApplyToRange.qb",
-    "Combinators/RestrictToSubregister.qb",
-    "Combinators/With.qb",
+    "DataStructures/Pairs.qb"
+
+    #"Simulation/Types.qb"
+    #"Simulation/SimulationTechniques.qb"
+    #"Simulation/EvolutionSetPauli.qb"
+    #"Simulation/EvolutionSetFermionic.qb"
+    #"Stubs.qb",
+
+    #"Math/Types.qb",
+    #"Math/Constants.qb",
+
+    #"IterateThroughCartesianProduct.qb",
+
+    #"Combinators/ApplyToEach.qb",
+    #"Combinators/ApplyToRange.qb",
+    #"Combinators/RestrictToSubregister.qb",
+    #"Combinators/With.qb",
 
     # Diagnostics
-    "Asserts/AssertQubit.qb",
-    "Asserts/AssertOperationsEqualReferenced.qb",
-    "Asserts/AssertOperationsEqualInPlace.qb",
+    #"Asserts/AssertQubit.qb",
+    #"Asserts/AssertOperationsEqualReferenced.qb",
+    #"Asserts/AssertOperationsEqualInPlace.qb",
 
     # System evolution simulators
     #"Simulation/Types.qb",
@@ -48,7 +59,7 @@ $qflatSources += @(
 
 
     # Provide definitions of the identity and nop.
-    "Identity.qb"
+    ##"Identity.qb"
 
     # # Endianness.qb contains newtype declarations that are needed more broadly,
     # # so we include it first.
@@ -60,7 +71,7 @@ $qflatSources += @(
     #"PhaseEstimation/Types.qb",
     #"Arithmetic.qb",
     #"Bind.qb",
-    "Paulis.qb"
+    #"Paulis.qb"
 
     #"QFT.qb",
     #"Teleportation.qb",

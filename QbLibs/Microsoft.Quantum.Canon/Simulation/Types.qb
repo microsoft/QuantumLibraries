@@ -28,8 +28,9 @@ newtype GeneratorTerm = (GeneratorIndex, Double)
 ///     of GeneratorTerms. We iterate over this collection using a single-index
 ///     integer, and the size of the collection is assumed to be known.
 // FIXME: unify this and the GateSet representation above with ContinousOracle.
+// TODO first int is the number of terms
 
-newtype GeneratorSystem = (Int -> GeneratorTerm)
+newtype GeneratorSystem = (Int, (Int -> GeneratorTerm))
 
 /// summary:
 ///     Represents a unitary time-evolution operator. The first parameter is
@@ -49,4 +50,4 @@ newtype EvolutionSet = (GeneratorIndex -> EvolutionUnitary)
 ///     Represents a dynamical generator as a set of simulatable gates and
 ///     an expansion in terms of that basis.
 ///     Last parameter for number of terms
-newtype EvolutionGenerator = (EvolutionSet, GeneratorSystem, Int)
+newtype EvolutionGenerator = (EvolutionSet, GeneratorSystem)

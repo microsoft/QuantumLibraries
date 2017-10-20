@@ -1,22 +1,5 @@
 // namespace Microsoft.Quantum.Canon
 
-///     `(params, time, qubits) => Rz(time, qubits)`, with the `params` field
-///     being ignored, while another gate set might use `params` to indicate
-///     application of gates such as exp(-i [X cos φ + Y sin φ] t).
-
-/// summary:
-///     Represents a single term in the expansion of a dynamical generator
-///     such as a Hamiltonian. The first element of each term is an integer
-///     label into a `GateSet`, while the second element is an array of
-///     indexes on which the given term acts, and the final argument is the set
-///     of real numbers parameterizing the application of the corresponding
-///     operation.
-///
-///     From the view of a GeneratorTerm, a Hamiltonian is an operation of
-///     the form (Double, Qubit[]) => () that applies $e^{-i H t}$ to the
-///     state of a given register.
-// FIXME: unify this and the GateSet representation above with ContinousOracle.
-
 /// Convention for GeneratorIndex = ((Int[],Double[]), Int[])
 /// We index single Paulis as 0 for I, 1 for X, 2 for Y, 3 for Z.
 /// We index Pauli strings with arrays of integers e.g. a = [3;1;1;2] for ZXXY.
@@ -28,9 +11,19 @@
 /// Its GeneratorTerms are (([1],[]),[0]), 0.1),  (([1],[]),[1]), 0.2),  (([3],[2]),[0,1]), 0.3)
 /// 
 
+/// This converts an array of ints to an array of Paulis
 function IntToPauli(idx : Int) : Pauli {
     let paulis = [Ipauli; Xpauli; Ypauli; Zpauli]
     return paulis[idx]
+}
+function IntsToPaulis(ints : Int[]) : Pauli[] {
+    let nInts = Length(ints)
+    mutable paulis = new Pauli[nInts]
+    for(idxInt in 0..nInts){
+        set paulis[idxInt] = IntToPauli(ints[idxInt])
+    }  
+
+    return paulis
 }
 
 /// summary:
@@ -40,11 +33,11 @@ function IntToPauli(idx : Int) : Pauli {
 operation PauliEvolutionSetImpl(generatorIndex : GeneratorIndex, delta : Double, qubits: Qubit[]) : ()
 {
     Body{
-        let (generatorIndex, idxQubits) = GeneratorIndex
-        let (idxPaulis, unused) = generatorIndex
-        let pauliString = IntToPauli(idxPaulis)
+        let (idxGen, idxQubits) = generatorIndex
+        let (idxPaulis, unused) = idxGen
+        let pauliString = IntsToPaulis(idxPaulis)
         let op = Exp(pauliString, delta, _)
-        RestrictToSubregisterCA(op, idxQubits)(qubits)
+        (RestrictToSubregisterCA(op, idxQubits))(qubits)
     }
     Adjoint auto
     Controlled auto

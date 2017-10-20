@@ -1,0 +1,75 @@
+//namespace Microsoft.Quantum.Canon
+
+//To be replaced in the simulator with native operations that we’ll write once we can mix C♯ and Q♭ in the same project more easily.
+function Log(b : Double, input: Double) : Double
+{
+    return 0.0
+}
+
+function Ceil(value: Double) : Int
+{
+    return 0
+}
+
+function ArcSin(d : Double) : Double
+{
+    return 0.0
+}
+
+function Sin(d : Double) : Double
+{
+    return 0.0
+}
+
+function ArcTan(d : Double) : Double
+{
+    return 0.0
+}
+
+function Tan(d : Double) : Double
+{
+    return 0.0
+}
+
+function Sqrt(d : Double) : Double
+{
+    return 0.0
+}
+
+function Cosh(d : Double) : Double
+{
+    return 0.0
+}
+
+function ArcCosh(d : Double) : Double
+{
+    return 0.0
+}
+
+
+// use generics for Double, Bool, Result
+function Max(value : Int[]) : Int 
+{
+    mutable max = value[0]
+    let nTerms = Length(value)
+    for(idx in 0..nTerms - 1)
+    {
+        if (value[idx]> max){
+            set max = value[idx]
+        }
+    }
+    return max
+}
+
+function Min(value : Int[]) : Int 
+{
+    mutable min = value[0]
+    let nTerms = Length(value)
+    for(idx in 0..nTerms - 1)
+    {
+        if (value[idx] < min){
+            set min = value[idx]
+        }
+    }
+    return min
+}
