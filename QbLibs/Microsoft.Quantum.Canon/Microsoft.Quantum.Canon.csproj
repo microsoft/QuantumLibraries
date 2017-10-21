@@ -1,7 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="..\packages\Microsoft.Quantum.Simulation.Simulators.0.5.6501.36153-alpha\build\Microsoft.Quantum.Simulation.Simulators.props" Condition="Exists('..\packages\Microsoft.Quantum.Simulation.Simulators.0.5.6501.36153-alpha\build\Microsoft.Quantum.Simulation.Simulators.props')" />
-  <Import Project="..\packages\MSTest.TestAdapter.1.2.0\build\net45\MSTest.TestAdapter.props" Condition="Exists('..\packages\MSTest.TestAdapter.1.2.0\build\net45\MSTest.TestAdapter.props')" />
+  <Import Project="..\packages\Microsoft.Quantum.Simulation.Simulators.0.6.6502.40796-alpha\build\Microsoft.Quantum.Simulation.Simulators.props" Condition="Exists('..\packages\Microsoft.Quantum.Simulation.Simulators.0.6.6502.40796-alpha\build\Microsoft.Quantum.Simulation.Simulators.props')" />
+  <Import Project="..\packages\xunit.runner.visualstudio.2.3.1-rc2-build3844\build\net20\xunit.runner.visualstudio.props" Condition="Exists('..\packages\xunit.runner.visualstudio.2.3.1-rc2-build3844\build\net20\xunit.runner.visualstudio.props')" />
+  <Import Project="..\packages\xunit.runner.msbuild.2.3.1-rc2-build3844\build\net452\xunit.runner.msbuild.props" Condition="Exists('..\packages\xunit.runner.msbuild.2.3.1-rc2-build3844\build\net452\xunit.runner.msbuild.props')" />
+  <Import Project="..\packages\xunit.core.2.3.1-rc2-build3844\build\xunit.core.props" Condition="Exists('..\packages\xunit.core.2.3.1-rc2-build3844\build\xunit.core.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -30,6 +32,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -40,23 +43,17 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.Quantum.Primitives, Version=0.5.6501.36124, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Quantum.Simulation.Simulators.0.5.6501.36153-alpha\lib\net461\Microsoft.Quantum.Primitives.dll</HintPath>
+    <Reference Include="Microsoft.Quantum.Primitives, Version=0.6.6502.40766, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Quantum.Simulation.Simulators.0.6.6502.40796-alpha\lib\net461\Microsoft.Quantum.Primitives.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Quantum.Simulation.Core, Version=0.5.6501.36119, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Quantum.Simulation.Simulators.0.5.6501.36153-alpha\lib\net461\Microsoft.Quantum.Simulation.Core.dll</HintPath>
+    <Reference Include="Microsoft.Quantum.Simulation.Core, Version=0.6.6502.40761, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Quantum.Simulation.Simulators.0.6.6502.40796-alpha\lib\net461\Microsoft.Quantum.Simulation.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Quantum.Simulation.Simulators, Version=0.5.6501.36153, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Quantum.Simulation.Simulators.0.5.6501.36153-alpha\lib\net461\Microsoft.Quantum.Simulation.Simulators.dll</HintPath>
+    <Reference Include="Microsoft.Quantum.Simulation.Simulators, Version=0.6.6502.40796, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Quantum.Simulation.Simulators.0.6.6502.40796-alpha\lib\net461\Microsoft.Quantum.Simulation.Simulators.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Quantum.Simulation.Tracer, Version=0.5.6501.36131, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Quantum.Simulation.Simulators.0.5.6501.36153-alpha\lib\net461\Microsoft.Quantum.Simulation.Tracer.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.VisualStudio.TestPlatform.TestFramework, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\MSTest.TestFramework.1.2.0\lib\net45\Microsoft.VisualStudio.TestPlatform.TestFramework.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\MSTest.TestFramework.1.2.0\lib\net45\Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions.dll</HintPath>
+    <Reference Include="Microsoft.Quantum.Simulation.Tracer, Version=0.6.6502.40774, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Quantum.Simulation.Simulators.0.6.6502.40796-alpha\lib\net461\Microsoft.Quantum.Simulation.Tracer.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
@@ -71,6 +68,18 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="xunit.abstractions, Version=2.0.0.0, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
+      <HintPath>..\packages\xunit.abstractions.2.0.1\lib\net35\xunit.abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="xunit.assert, Version=2.3.1.3844, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
+      <HintPath>..\packages\xunit.assert.2.3.1-rc2-build3844\lib\netstandard1.1\xunit.assert.dll</HintPath>
+    </Reference>
+    <Reference Include="xunit.core, Version=2.3.1.3844, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
+      <HintPath>..\packages\xunit.extensibility.core.2.3.1-rc2-build3844\lib\netstandard1.1\xunit.core.dll</HintPath>
+    </Reference>
+    <Reference Include="xunit.execution.desktop, Version=2.3.1.3844, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
+      <HintPath>..\packages\xunit.extensibility.execution.2.3.1-rc2-build3844\lib\net452\xunit.execution.desktop.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Arithmetic.g.cs">
@@ -224,12 +233,22 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Teleportation.qb</DependentUpon>
     </Compile>
+    <Compile Include="Tests\AssertTests.g.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AssertTests.qb</DependentUpon>
+    </Compile>
     <Compile Include="Tests\Drivers.cs" />
+    <Compile Include="Tests\OperationTestData.cs" />
     <Compile Include="Toffoli.g.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Toffoli.qb</DependentUpon>
     </Compile>
+    <QbCompile Include="Tests\AssertTests.qb">
+      <Generator>QbCodeGenerator</Generator>
+      <LastGenOutput>AssertTests.g.cs</LastGenOutput>
+    </QbCompile>
     <QbCompile Include="RUS.qb">
       <Generator>QbCodeGenerator</Generator>
       <LastGenOutput>RUS.g.cs</LastGenOutput>
@@ -238,6 +257,9 @@
       <Generator>QbCodeGenerator</Generator>
       <LastGenOutput>MultiTargetCNOT.g.cs</LastGenOutput>
     </QbCompile>
+    <None Include="Bind.qb">
+      <LastGenOutput>Bind.g.cs</LastGenOutput>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -359,16 +381,23 @@
       <LastGenOutput>Toffoli.g.cs</LastGenOutput>
     </QbCompile>
   </ItemGroup>
+  <ItemGroup>
+    <Analyzer Include="..\packages\xunit.analyzers.0.7.0\analyzers\dotnet\cs\xunit.analyzers.dll" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\packages\MSTest.TestAdapter.1.2.0\build\net45\MSTest.TestAdapter.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\MSTest.TestAdapter.1.2.0\build\net45\MSTest.TestAdapter.props'))" />
-    <Error Condition="!Exists('..\packages\MSTest.TestAdapter.1.2.0\build\net45\MSTest.TestAdapter.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\MSTest.TestAdapter.1.2.0\build\net45\MSTest.TestAdapter.targets'))" />
-    <Error Condition="!Exists('..\packages\Microsoft.Quantum.Simulation.Simulators.0.5.6501.36153-alpha\build\Microsoft.Quantum.Simulation.Simulators.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Quantum.Simulation.Simulators.0.5.6501.36153-alpha\build\Microsoft.Quantum.Simulation.Simulators.props'))" />
-    <Error Condition="!Exists('..\packages\Microsoft.Quantum.Simulation.Simulators.0.5.6501.36153-alpha\build\Microsoft.Quantum.Simulation.Simulators.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Quantum.Simulation.Simulators.0.5.6501.36153-alpha\build\Microsoft.Quantum.Simulation.Simulators.targets'))" />
+    <Error Condition="!Exists('..\packages\xunit.core.2.3.1-rc2-build3844\build\xunit.core.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\xunit.core.2.3.1-rc2-build3844\build\xunit.core.props'))" />
+    <Error Condition="!Exists('..\packages\xunit.core.2.3.1-rc2-build3844\build\xunit.core.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\xunit.core.2.3.1-rc2-build3844\build\xunit.core.targets'))" />
+    <Error Condition="!Exists('..\packages\xunit.runner.msbuild.2.3.1-rc2-build3844\build\net452\xunit.runner.msbuild.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\xunit.runner.msbuild.2.3.1-rc2-build3844\build\net452\xunit.runner.msbuild.props'))" />
+    <Error Condition="!Exists('..\packages\xunit.runner.msbuild.2.3.1-rc2-build3844\build\net452\xunit.runner.msbuild.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\xunit.runner.msbuild.2.3.1-rc2-build3844\build\net452\xunit.runner.msbuild.targets'))" />
+    <Error Condition="!Exists('..\packages\xunit.runner.visualstudio.2.3.1-rc2-build3844\build\net20\xunit.runner.visualstudio.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\xunit.runner.visualstudio.2.3.1-rc2-build3844\build\net20\xunit.runner.visualstudio.props'))" />
+    <Error Condition="!Exists('..\packages\Microsoft.Quantum.Simulation.Simulators.0.6.6502.40796-alpha\build\Microsoft.Quantum.Simulation.Simulators.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Quantum.Simulation.Simulators.0.6.6502.40796-alpha\build\Microsoft.Quantum.Simulation.Simulators.props'))" />
+    <Error Condition="!Exists('..\packages\Microsoft.Quantum.Simulation.Simulators.0.6.6502.40796-alpha\build\Microsoft.Quantum.Simulation.Simulators.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Quantum.Simulation.Simulators.0.6.6502.40796-alpha\build\Microsoft.Quantum.Simulation.Simulators.targets'))" />
   </Target>
-  <Import Project="..\packages\MSTest.TestAdapter.1.2.0\build\net45\MSTest.TestAdapter.targets" Condition="Exists('..\packages\MSTest.TestAdapter.1.2.0\build\net45\MSTest.TestAdapter.targets')" />
-  <Import Project="..\packages\Microsoft.Quantum.Simulation.Simulators.0.5.6501.36153-alpha\build\Microsoft.Quantum.Simulation.Simulators.targets" Condition="Exists('..\packages\Microsoft.Quantum.Simulation.Simulators.0.5.6501.36153-alpha\build\Microsoft.Quantum.Simulation.Simulators.targets')" />
+  <Import Project="..\packages\xunit.core.2.3.1-rc2-build3844\build\xunit.core.targets" Condition="Exists('..\packages\xunit.core.2.3.1-rc2-build3844\build\xunit.core.targets')" />
+  <Import Project="..\packages\xunit.runner.msbuild.2.3.1-rc2-build3844\build\net452\xunit.runner.msbuild.targets" Condition="Exists('..\packages\xunit.runner.msbuild.2.3.1-rc2-build3844\build\net452\xunit.runner.msbuild.targets')" />
+  <Import Project="..\packages\Microsoft.Quantum.Simulation.Simulators.0.6.6502.40796-alpha\build\Microsoft.Quantum.Simulation.Simulators.targets" Condition="Exists('..\packages\Microsoft.Quantum.Simulation.Simulators.0.6.6502.40796-alpha\build\Microsoft.Quantum.Simulation.Simulators.targets')" />
 </Project>

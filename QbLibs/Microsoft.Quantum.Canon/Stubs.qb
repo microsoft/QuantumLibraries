@@ -1,9 +1,9 @@
-﻿//namespace Microsoft.Quantum.Canon
+namespace Microsoft.Quantum.Primitive {
 
+    // FIXME: make this a function!
+    function Float(value : Int)  : Double
+    {
+        return 0.0
+    }
 
-// FIXME: make this a function!
-function Float(value : Int)  : Double
-{
-    return 0.0
 }
-

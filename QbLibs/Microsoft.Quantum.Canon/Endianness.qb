@@ -1,76 +1,77 @@
-﻿//namespace Microsoft.Quantum.Canon
+namespace Microsoft.Quantum.Canon {
 
-/// <summary>
-///     Reorders the qubits in a register to obtain a new
-///     qubit register.
-/// </summary>
-operation ReverseRegister(register : Qubit[])  : Qubit[]
-{
-    Body {
-        mutable reversed = new Qubit[Length(register)]
+    /// <summary>
+    ///     Reorders the qubits in a register to obtain a new
+    ///     qubit register.
+    /// </summary>
+    operation ReverseRegister(register : Qubit[])  : Qubit[]
+    {
+        Body {
+            mutable reversed = new Qubit[Length(register)]
 
-        for (idxQubit in 0..Length(register) - 1) {
-            let thisQubit = register[Length(register) - idxQubit + 1]
-            set reversed[idxQubit] = thisQubit
+            for (idxQubit in 0..Length(register) - 1) {
+                let thisQubit = register[Length(register) - idxQubit + 1]
+                set reversed[idxQubit] = thisQubit
+            }
+
+            return reversed
+        }
+    }
+
+    /// <summary>
+    ///     Uses SWAP gates to reverse the order of the qubits in
+    ///     a register.
+    /// </summary>
+    operation SwapReverseRegister(register : Qubit[])  : ()
+    {
+        Body {
+            // TODO
         }
 
-        return reversed
-    }
-}
-
-/// <summary>
-///     Uses SWAP gates to reverse the order of the qubits in
-///     a register.
-/// </summary>
-operation SwapReverseRegister(register : Qubit[])  : ()
-{
-    Body {
-        // TODO
+        Adjoint self
+        Controlled auto
+        Controlled Adjoint auto
     }
 
-    Adjoint self
-    Controlled auto
-    Controlled Adjoint auto
-}
+    newtype LittleEndian = Qubit[]
+    newtype BigEndian = Qubit[]
 
-newtype LittleEndian = Qubit[]
-newtype BigEndian = Qubit[]
+    // The next two operations are just to specify the more
+    // specific user-defined types LE and BE so that we can partially apply
+    // to obtain (LittleEndian => ()) instead of (Qubit[] => ()).
 
-// The next two operations are just to specify the more
-// specific user-defined types LE and BE so that we can partially apply
-// to obtain (LittleEndian => ()) instead of (Qubit[] => ()).
-
-operation ApplyReversedOpLE(op : (LittleEndian => ()),  register : BigEndian)  : ()
-{
-    Body {
-        let bareReversed = ReverseRegister(register)
-        let reversed = LittleEndian(bareReversed)
-        op(reversed)
+    operation ApplyReversedOpLE(op : (LittleEndian => ()),  register : BigEndian)  : ()
+    {
+        Body {
+            let bareReversed = ReverseRegister(register)
+            let reversed = LittleEndian(bareReversed)
+            op(reversed)
+        }
     }
-}
 
-operation ApplyReversedOpBE(op : (BigEndian => ()),  register : LittleEndian)  : ()
-{
-    Body {
-        let bareReversed = ReverseRegister(register)
-        let reversed = BigEndian(bareReversed)
-        op(reversed)
+    operation ApplyReversedOpBE(op : (BigEndian => ()),  register : LittleEndian)  : ()
+    {
+        Body {
+            let bareReversed = ReverseRegister(register)
+            let reversed = BigEndian(bareReversed)
+            op(reversed)
+        }
     }
-}
 
-// We finish by providing two wrappers that partially
-// apply the two operations above for convenience.
-operation LittleOpToBigOp(op : (LittleEndian => ()))  : (BigEndian => ())
-{
-    Body {
-        return ApplyReversedOpLE(op, _)
+    // We finish by providing two wrappers that partially
+    // apply the two operations above for convenience.
+    operation LittleOpToBigOp(op : (LittleEndian => ()))  : (BigEndian => ())
+    {
+        Body {
+            return ApplyReversedOpLE(op, _)
+        }
     }
-}
 
-operation BigOpToLittleOp(op : (BigEndian => ()))  : (LittleEndian => ())
-{
-    Body {
-        return ApplyReversedOpBE(op, _)
+    operation BigOpToLittleOp(op : (BigEndian => ()))  : (LittleEndian => ())
+    {
+        Body {
+            return ApplyReversedOpBE(op, _)
+        }
     }
-}
 
+}

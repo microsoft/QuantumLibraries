@@ -1,12 +1,14 @@
-//namespace Microsoft.Quantum.Canon
+namespace Microsoft.Quantum.Canon {
 
-operation I(target : Qubit) : () {
-    Body {}
-    Adjoint self
-    Controlled auto
-    Controlled Adjoint auto
+    operation I(target : Qubit) : () {
+        Body {}
+        Adjoint self
+        Controlled auto
+        Controlled Adjoint auto
+    }
+
+    // function Identity(value : 'T) : 'T {
+    //     return value
+    // }
+
 }
-
-// function Identity(value : 'T) : 'T {
-//     return value
-// }

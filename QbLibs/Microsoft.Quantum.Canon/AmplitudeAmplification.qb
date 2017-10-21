@@ -117,7 +117,7 @@ operation ReflectionAllZero( phase: Double, qubits: Qubit[] ) : ()
 {
 	Body {
 
-		WithAC(ApplyToEachAC(X, _), ReflectionAllOnes(phase, _), qubits)
+		WithCA(ApplyToEachAC(X, _), ReflectionAllOnes(phase, _), qubits)
 
 	}
 
