@@ -5,7 +5,7 @@ namespace Microsoft.Quantum.Canon {
         return fst
     }
 
-    function Snd<'T, 'U>(pair : ('T, 'U)) : 'T {
+    function Snd<'T, 'U>(pair : ('T, 'U)) : 'U {
         let (fst, snd) = pair
         return snd
     }

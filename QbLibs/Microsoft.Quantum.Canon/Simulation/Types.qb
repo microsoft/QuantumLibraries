@@ -1,4 +1,4 @@
-// namespace Microsoft.Quantum.Canon
+namespace Microsoft.Quantum.Canon{
 
 
 /// summary:
@@ -51,3 +51,7 @@ newtype EvolutionSet = (GeneratorIndex -> EvolutionUnitary)
 ///     an expansion in terms of that basis.
 ///     Last parameter for number of terms
 newtype EvolutionGenerator = (EvolutionSet, GeneratorSystem)
+
+newtype TrotterForm = (Int, ((Int, Double, Qubit[]) => () : Adjoint, Controlled))
+
+}

@@ -1,14 +1,17 @@
+namespace Microsoft.Quantum.Canon {
+    open Microsoft.Quantum.Primitive
 
 //Terms and coefficients from "Scalable Quantum Simulation of Molecular Energies" O'Malley et. al. https://arxiv.org/abs/1512.06860
 //H2 molecule a_0 ZI + a_1 IZ + a_2 ZZ + a_3 YY + a_3 XX
 
 //This function takes in an index "idxBond" for the bond length and returns coefficients of the H2 Hamiltonian.
+
 function H2Coeff(idxBond : Int): Double[]
 {
     let nTerms = 5
     let nBondLengths = 54
-    let hamBondCoeff = new Double[nTerms][nBondLengths] 
-    let bondLength = [0.2; 0.25; 0.3; 0.35; 0.4; 0.45; 0.5; 0.55; 0.6; 0.65; 0.7; 0.75; 0.8; 0.85; 0.9; 0.95; 1; 1.05; 1.1; 1.15; 1.2; 1.25; 1.3; 1.35; 1.4; 1.45; 1.5; 1.55; 1.6; 1.65; 1.7; 1.75; 1.8; 1.85; 1.9; 1.95; 2; 2.05; 2.1; 2.15; 2.2; 2.25; 2.3; 2.35; 2.4; 2.45; 2.5; 2.55; 2.6; 2.65; 2.7; 2.75; 2.8; 2.85]
+    mutable hamBondCoeff = new Double[][nBondLengths]
+    let bondLength = [0.2; 0.25; 0.3; 0.35; 0.4; 0.45; 0.5; 0.55; 0.6; 0.65; 0.7; 0.75; 0.8; 0.85; 0.9; 0.95; 1.0; 1.05; 1.1; 1.15; 1.2; 1.25; 1.3; 1.35; 1.4; 1.45; 1.5; 1.55; 1.6; 1.65; 1.7; 1.75; 1.8; 1.85; 1.9; 1.95; 2.0; 2.05; 2.1; 2.15; 2.2; 2.25; 2.3; 2.35; 2.4; 2.45; 2.5; 2.55; 2.6; 2.65; 2.7; 2.75; 2.8; 2.85]
     set hamBondCoeff[0]=[2.8489; 0.5678; -1.4508; 0.6799; 0.0791; 0.0791]
     set hamBondCoeff[1]=[2.1868; 0.5449; -1.287; 0.6719; 0.0798; 0.0798]
     set hamBondCoeff[2]=[1.7252; 0.5215; -1.1458; 0.6631; 0.0806; 0.0806]
@@ -65,14 +68,15 @@ function H2Coeff(idxBond : Int): Double[]
     set hamBondCoeff[53]=[-0.4992; 0.0984; 0.0679; 0.3329; 0.1475; 0.1475]
     return hamBondCoeff[idxBond]
 }
+
 //This function takes in an index "idxHamiltonian" and returns a description of a term in the H2 Hamiltonian.
 function H2Terms(idxHamiltonian : Int) : (Int[], Int[])
 {
     //This is how a user might input the raw data
-    let hamiltonianTerms = [([3], [0]),  ([3],[1]), ([3;3],[0;1])), ([2;2],[0;1])), ([1;1],[0;1]))]
+    //([3], [0]);  ([3],[1]); ([3;3],[0;1])); ([2;2],[0;1])); ([1;1],[0;1]))
+    let hamiltonianTerms = [([3], [0]);  ([3],[1]); ([3;3],[0;1]); ([2;2],[0;1]); ([1;1],[0;1])]
     return hamiltonianTerms[idxHamiltonian]
 }
-
 
 
 // Using the Trotterization library directly
@@ -80,27 +84,31 @@ operation H2TrotterUnitariesImpl(idxBondLength : Int, idxHamiltonian: Int, stepS
 {
     Body{
         let (idxPauliString, idxQubits) = H2Terms(idxHamiltonian)
-        let coeff = H2Coeff(idxBondLength)[idxHamiltonian]
-        let pauliString = IntToPauli(idxPauliString)
+        let coeff = (H2Coeff(idxBondLength))[idxHamiltonian]
+        let pauliString = IntsToPaulis(idxPauliString)
         let op = Exp(pauliString, stepSize * coeff, _)
-        RestrictToSubregisterCA(op, idxQubits)(qubits)
+        (RestrictToSubregisterCA(op, idxQubits))(qubits)
     }
     Adjoint auto
     Controlled auto
     Controlled Adjoint auto
+
+
+
+
 }
-function H2TrotterUnitaries(idxBondLength : Int) : ((Int, Double, Qubit[]) => () : Adjoint, Controlled)
+function H2TrotterUnitaries(idxBondLength : Int) : (Int, ((Int, Double, Qubit[]) => () : Adjoint, Controlled))
 {
-    H2TrotterUnitariesImpl(idxBondLength, _, _, _)
+    let nterms = 5
+    return (nterms, H2TrotterUnitariesImpl(idxBondLength, _, _, _))
 }
 
-operation H2TrotterStepA(idxBondLength : Int, trotterOrder: Int, trotterStepSize: Double): (Qubit[] => ())
+function H2TrotterStepA(idxBondLength : Int, trotterOrder: Int, trotterStepSize: Double): (Qubit[] => (): Adjoint, Controlled)
 {
-    Body{
-        let nTerms = 5
-        let op = H2TrotterUnitaries(idxBondLength)
-        (TrotterCA(op,nTerms,trotterOrder))(trotterStepSize, _)
+    let op = H2TrotterUnitaries(idxBondLength)
+    return (DecomposeIntoTimeStepsCA(op,trotterOrder))(trotterStepSize, _)
 }
+
 
 // Using the Hamiltonian representation library
 function H2GeneratorSystemImpl(idxBondLength : Int, idxHamiltonian : Int) : GeneratorTerm
@@ -108,37 +116,33 @@ function H2GeneratorSystemImpl(idxBondLength : Int, idxHamiltonian : Int) : Gene
     //Pass empty double as Pauli set not indexed by continuous parameters
     let e = new Double[0]
     let (idxPauliString, idxQubits) = H2Terms(idxHamiltonian)
-    let coefficient = H2Coeff(idxBond)
+    let coefficient = (H2Coeff(idxBondLength))[idxHamiltonian]
     let generatorIndex = GeneratorIndex((idxPauliString,e), idxQubits)
     return GeneratorTerm(generatorIndex, coefficient)
 }
 
 function H2GeneratorSystem(idxBondLength : Int) : GeneratorSystem 
 {
-    return GeneratorSystem(H2GeneratorSystemImpl(idxBondLength, _))
+    let nTerms = 5
+    return GeneratorSystem(nTerms, H2GeneratorSystemImpl(idxBondLength, _))
 }
 
 function H2EvolutionGenerator(idxBondLength : Int) : EvolutionGenerator
 {
-    let nTerms = 5
     let generatorSystem = H2GeneratorSystem(idxBondLength)
-    let evolutionSet = PauliEvolutionSet
-    return EvolutionGenerator(evolutionSet, generatorSystem, nTerms)
+    let evolutionSet = PauliEvolutionSet()
+    return EvolutionGenerator(evolutionSet, generatorSystem)
 }
 
 
-operation H2TrotterStepB(idxBondLength : Int, trotterOrder: Int, trotterStepSize: Double): (Qubit[] => ())
+function H2TrotterStepB(idxBondLength : Int, trotterOrder: Int, trotterStepSize: Double): (Qubit[] => ())
 {
-    Body{
-        let evolutionGenerator = H2EvolutionGenerator(idxBondLength)
-        let (evolutionSet, generatorSystem, nTerms) = evolutionGenerator
-        let op = ApplyEvolution(evolutionGenerator)
-        (TrotterCA(op,nTerms,trotterOrder))(trotterStepSize, _)
+    let evolutionGenerator = H2EvolutionGenerator(idxBondLength)
+    return TrotterStep(evolutionGenerator, trotterOrder, trotterStepSize)
 }
-
 
 //Example find g.s. energy of H2
-operation ExampleH2(qubits : Qubit[]) : (){
+operation ExampleH2() : (){
     Body {
         let nTerms = 5
         let idxBondLength = 0
@@ -149,11 +153,11 @@ operation ExampleH2(qubits : Qubit[]) : (){
             
             //QPE on
             trotterStep(qubits)
-            ResetAll(qubits)
+            //ResetAll(qubits)
         }
     }
 }
 
-
+}
 
 

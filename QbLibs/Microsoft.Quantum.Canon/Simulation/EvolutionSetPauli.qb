@@ -1,5 +1,5 @@
-// namespace Microsoft.Quantum.Canon
-
+namespace Microsoft.Quantum.Canon {
+    open Microsoft.Quantum.Primitive
 /// Convention for GeneratorIndex = ((Int[],Double[]), Int[])
 /// We index single Paulis as 0 for I, 1 for X, 2 for Y, 3 for Z.
 /// We index Pauli strings with arrays of integers e.g. a = [3;1;1;2] for ZXXY.
@@ -30,7 +30,7 @@ function IntsToPaulis(ints : Int[]) : Pauli[] {
 ///     Represents a dynamical generator as a set of simulatable gates and
 ///     an expansion in terms of that basis.
 ///     Las parameter for number of terms
-operation PauliEvolutionSetImpl(generatorIndex : GeneratorIndex, delta : Double, qubits: Qubit[]) : ()
+operation PauliEvolutionImpl(generatorIndex : GeneratorIndex, delta : Double, qubits: Qubit[]) : ()
 {
     Body{
         let (idxGen, idxQubits) = generatorIndex
@@ -43,8 +43,14 @@ operation PauliEvolutionSetImpl(generatorIndex : GeneratorIndex, delta : Double,
     Controlled auto
     Controlled Adjoint auto
 }
-function PauliEvolutionSet(generatorIndex : GeneratorIndex) : EvolutionUnitary
+function PauliEvolutionFunction(generatorIndex : GeneratorIndex) : EvolutionUnitary
 {
-    return EvolutionUnitary(PauliEvolutionSetImpl(generatorIndex, _, _))
+    return EvolutionUnitary(PauliEvolutionImpl(generatorIndex, _, _))
 }
 
+function PauliEvolutionSet() : EvolutionSet
+{
+    return EvolutionSet(PauliEvolutionFunction)
+}
+
+}

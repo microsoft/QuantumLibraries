@@ -1,9 +1,9 @@
-// namespace Microsoft.Quantum.Canon
-
+namespace Microsoft.Quantum.Canon {
+    open Microsoft.Quantum.Primitive
 //Ising model without using any libraries
 
 // apply a ZZ-term 
-operation ApplyJzz( phi : Double, q1 : Qubit, q2 : Qubit ) : () { 
+operation ApplyZZ( phi : Double, q1 : Qubit, q2 : Qubit ) : () { 
     Body {     
         CNOT(q1, q2)
         Rz(phi, q2)
@@ -44,12 +44,12 @@ operation Ising (nsites : Int, time : Double, dt : Double) : Result[] {
                     Rx(hx * dt, qs[idxSite])
                     Rz(hz * dt, qs[idxSite])
                     if (idxSite + 1 < nsites) {
-                        ApplyJzz(J * dt, qs[idxSite], qs[idxSite + 1])
+                        ApplyZZ(J * dt, qs[idxSite], qs[idxSite + 1])
                     }
                 }
                 for (idxSite in (nsites-1)..-1..0) {                 
                     if (idxSite + 1 < nsites) {
-                        ApplyJzz(J * dt, qs[idxSite], qs[idxSite + 1])
+                        ApplyZZ(J * dt, qs[idxSite], qs[idxSite + 1])
                     }
                     Rz(hz * dt, qs[idxSite])
                     Rx(hx * dt, qs[idxSite])
@@ -70,6 +70,9 @@ operation TestIsing () : Result[] {
     }
 }
 
+
+
+
 // Ising model using the Trotterization library directly
 // idxHamiltonian is in [0, nsites - 1]
 operation IsingTrotterUnitariesImpl(nsites : Int, hx : Double, hz: Double, jC: Double, idxHamiltonian: Int, stepSize : Double, qubits : Qubit[]) : ()
@@ -79,82 +82,16 @@ operation IsingTrotterUnitariesImpl(nsites : Int, hx : Double, hz: Double, jC: D
         // when idxHamiltonian is in [0, nsites - 2], apply Ising coupling "jC"
         //TODO Need to separate Rx out as it does not commute
         Rx(hx * stepSize, qubits[idxHamiltonian])
-        Rz(hy * stepSize, qubits[idxHamiltonian])
+        Rz(hz * stepSize, qubits[idxHamiltonian])
         if(idxHamiltonian < nsites -1){
-            Exp([Zpauli, Zpauli],  jC * stepSize, qubits[idxHamiltonian..idxHamiltonian + 1])
+            //Exp(pauliString, delta, _)
+            Exp([Zpauli, Zpauli],  stepSize, qubits)
         }
     }
     Adjoint auto
     Controlled auto
     Controlled Adjoint auto
 }
-function IsingTrotterUnitaries(nsites : Int, hx : Double, hz: Double, jC: Double) : ((Int, Double, Qubit[]) => () : Adjoint, Controlled)
-{
-    IsingTrotterUnitariesImpl(nsite, hx, hy, jC, _, _, _)
+
+
 }
-
-operation IsingTrotterStepA(nsites : Int, hx : Double, hz: Double, jC: Double, trotterOrder: Int, trotterStepSize: Double): (Qubit[] => ())
-{
-    Body{
-        let op =  IsingTrotterUnitaries(nsite, hx, hy, jC)
-        (TrotterCA(op,nsites,trotterOrder))(trotterStepSize, _)
-}
-
-// Ising model using the Hamiltonian representation library
-// idxHamiltonian is in [0, 3 * nsites - 2]
-function IsingGeneratorSystemImpl(nsites : Int, hx : Double, hz: Double, jC: Double, idxHamiltonian : Int) : GeneratorTerm
-{
-    // when idxHamiltonian is in [0, nsites - 1], apply transverse field "hx"
-    // when idxHamiltonian is in [nsites, 2 * nsites - 1], apply longitudinal field "hz"
-    // when idxHamiltonian is in [2 * nsites, 3 * nsites - 2], apply Ising coupling "jC"
-        let e = new Double[0]
-
-        if(idxHamiltonian <= nsites - 1){
-            let idxPauliString = [1]
-            let idxQubits = [idxHamiltonian]
-            let coeff = hx
-        }
-        if(idxHamiltonian <= 2 * nsites - 1){
-            let idxPauliString = [3]
-            let idxQubits = [idxHamiltonian % nsites]
-            let coeff = hz
-        }
-        if(idxHamiltonian < nsites - 2){
-            let idxPauliString = [3,3]
-            let idxQubits = [idxHamiltonian % nsites, idxHamiltonian +1 % nsites]
-            let coeff = hz
-        }
-        else{
-            let idxPauliString = new Int[0]
-            let idxQubits = new Int[0]
-            let coeff = 0.0
-        }
-        let generatorIndex = GeneratorIndex((idxPauliString,e),idxQubits)
-        let generatorTerm = GeneratorTerm(generatorIndex, coeff)
-        return generatorTerm
-}
-
-function  IsingGeneratorSystem(nsites : Int, hx : Double, hz: Double, jC: Double) : GeneratorSystem 
-{
-    return GeneratorSystem(H2GeneratorSystemImpl(nsites, hx, hz, jC, _))
-}
-
-function IsingEvolutionGenerator(nsites : Int, hx : Double, hz: Double, jC: Double) : EvolutionGenerator
-{
-    let nTerms = 3 * nsites - 1
-    let generatorSystem = IsingGeneratorSystem(nsites, hx, hz, jC)
-    let evolutionSet = PauliEvolutionSet
-    return EvolutionGenerator(evolutionSet, generatorSystem, nTerms)
-}
-
-
-operation IsingTrotterStepB(nsites : Int, hx : Double, hz: Double, jC: Double, trotterOrder: Int, trotterStepSize: Double): (Qubit[] => ())
-{
-    Body{
-        let evolutionGenerator = IsingEvolutionGenerator(nsites, hx, hz, jC)
-        let (evolutionSet, generatorSystem, nTerms) = evolutionGenerator
-        let op = ApplyEvolution(evolutionGenerator)
-        (TrotterCA(op,nTerms,trotterOrder))(trotterStepSize, _)
-}
-
-

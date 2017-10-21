@@ -1,4 +1,6 @@
-
+namespace Microsoft.Quantum.Canon {
+    open Microsoft.Quantum.Primitive
+    
 //For Trotterization
 operation ApplyEvolutionImpl(evolutionGenerator: EvolutionGenerator, idx : Int, stepsize: Double, qubits: Qubit[]) : () {
     Body{
@@ -7,10 +9,32 @@ operation ApplyEvolutionImpl(evolutionGenerator: EvolutionGenerator, idx : Int, 
         let (generatorIndex, coefficient) = generatorSystemFunction(idx)
         (evolutionSet(generatorIndex))(coefficient * stepsize, qubits)
     }
+    Adjoint auto
+    Controlled auto
+    Controlled Adjoint auto
 }
-function ApplyEvolution(evolutionGenerator: EvolutionGenerator) : ((Int, Double, Qubit[]) => ())
+
+function TrotterStep(evolutionGenerator: EvolutionGenerator, trotterOrder: Int, trotterStepSize: Double) : (Qubit[] => () :  Adjoint, Controlled)
 {
-    return ApplyEvolutionImpl(evolutionGenerator, _, _, _)
+    let (evolutionSet, generatorSystem) = evolutionGenerator
+    let (nTerms, generatorSystemFunction) = generatorSystem
+    let trotterForm = (nTerms, ApplyEvolutionImpl(evolutionGenerator, _, _, _))
+    return (DecomposeIntoTimeStepsCA(trotterForm,trotterOrder))(trotterStepSize, _)
+}
+
+
+//For adiabatic state preparation
+operation Schedule(trotterSlice : ((Double, Double, Qubit[]) => ()), timeSteps : Int, qubits: Qubit[]) : (){
+    Body{
+        let timeStep = Float(1) / Float(timeSteps)
+        for(idxStep in 0..timeSteps - 1){
+            let time = timeStep * Float(idxStep) 
+            trotterSlice(time, timeStep, qubits)
+        }
+    }
 }
 
 //For LCU
+
+}
+

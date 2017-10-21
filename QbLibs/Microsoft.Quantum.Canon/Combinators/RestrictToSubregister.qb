@@ -1,4 +1,4 @@
-// namespace Microsoft.Quantum.Canon
+namespace Microsoft.Quantum.Canon {
 
 // FIXME: remove once generics code gen.
 // NB: copied from AmplitudeAmplification.qb as a temporary measure.
@@ -68,4 +68,6 @@ function RestrictToSubregisterC(op : (Qubit[] => () : Controlled), idxs : Int[])
 }
 function RestrictToSubregisterCA(op : (Qubit[] => () : Adjoint, Controlled), idxs : Int[]) : (Qubit[] => () : Adjoint, Controlled) {
     return ApplyToSubregisterCA(op, idxs, _)
+}
+
 }

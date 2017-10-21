@@ -1,3 +1,5 @@
+namespace Microsoft.Quantum.Canon {
+    open Microsoft.Quantum.Primitive
 /// Convention for GeneratorIndex = ((Int[],Double[]), Int[])
 /// We index annihilation operators as 0 and creation operators as 1.
 /// For instance, the Hermitian Fermionic string a_p^\dag a_q^\dag a_r a_s + Hermitian Conjugate
@@ -99,7 +101,9 @@ function FermionicEvolutionSetImpl2(FermionicEncoding : Int, generatorIndex : Ge
     return EvolutionUnitary(FermionicEvolutionSetImpl(FermionicEncoding, generatorIndex, _, _))
 }
 
-//function FermionicEvolutionSetImpl(FermionicEncoding : Int) : (GeneratorIndex -> EvolutionUnitary)
-//{
- //   return FermionicEvolutionSetImpl2(FermionicEncoding,_)
-//}
+function FermionicEvolutionSet(FermionicEncoding : Int) : (GeneratorIndex -> EvolutionUnitary)
+{
+    return FermionicEvolutionSetImpl2(FermionicEncoding,_)
+}
+
+}

@@ -1,0 +1,33 @@
+namespace Microsoft.Quantum.Canon {
+    // Needed for range accessors.
+    open Microsoft.Quantum.Primitive
+
+
+    /// <summary>
+    ///     Applies an operation to each element of an array.
+    /// </summary>
+    /// <param name="singleQubitOperation">Operation to apply to each qubit.</param>
+    /// <param name="register">Array of qubits on which to apply the given operation.</param>
+    /// <example>
+    ///     Prepare a three-qubit |+〉 state:
+    ///     <c>
+    ///         using (register = Qubit[3]) {
+    ///             Iter(H, register)
+    ///         }
+    ///     </c>
+    /// </example>
+    /// <seealso cref="IterA" />
+    /// <seealso cref="IterC" />
+    /// <seealso cref="IterCA" />
+    function Iter<'T>(op : ('T => ()), array : 'T[])  : ()
+    {
+        let nElements = Length(array)
+        for (idxElement in 0..(nElements - 1)) {
+            op(array[idxElement])
+        }
+    }
+    
+
+ 
+
+}
