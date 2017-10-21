@@ -1,81 +1,84 @@
-﻿//namespace Microsoft.Quantum.Canon
+﻿namespace Microsoft.Quantum.Canon {
+	open Microsoft.Quantum.Primitive
 
 // Functions here may be commonly used in other libraries and could be made global.
 
 
-// Phase shift about |1...1><1...1|
-operation ReflectionAllOnes( phase: Double, qubits: Qubit[] ) : ()
-{
-	Body{
+	// Phase shift about |1...1><1...1|
+	operation ReflectionAllOnes( phase: Double, qubits: Qubit[] ) : ()
+	{
+		Body{
+			let nQubits = Length(qubits)
+			let qubitFlag = qubits[0]
+			let qubitsSystem = qubits[1..nQubits-1]
+
+			(Controlled R1(phase, _))(qubitsSystem, qubitFlag)
+
+		}
+
+		Adjoint auto
+		Controlled auto
+		Controlled Adjoint auto
+	}
+
+	// Phase shift about |0...0><0...0|
+	operation ReflectionAllZero( phase: Double, qubits: Qubit[] ) : ()
+	{
+		Body {
+
+			WithAC(ApplyToEachAC(X, _), ReflectionAllOnes(phase, _), qubits)
+
+		}
+
+		Adjoint auto
+		Controlled auto
+		Controlled Adjoint auto
+	}
+
+
+	//qubit array slicing by index
+	//TODO replace with Slice in generics
+	// Number of qubits should be larger than largest value in indices
+	function QubitSlice(indices : Int[], qubits : Qubit[]) : Qubit[] 
+	{
+		let nSliced = Length(indices)
+		mutable sliced = new Qubit[nSliced]
+		for( idx in 0..nSliced - 1 ){
+			set sliced[idx] = qubits[indices[idx]]
+		}
+
+		return sliced
+	}
+
+
+	//QubitExclude([idxQubitFlag], qubits)
+	//TODO replace with Exclude in generics
+	function QubitExclude(remove : Int[], qubits : Qubit[]) : Qubit[] 
+	{
+
+		let nSliced = Length(remove)
 		let nQubits = Length(qubits)
-		let qubitFlag = qubits[0]
-		let qubitsSystem = qubits[1..nQubits-1]
+		//Would be better with sort function
+		//Or way to add elements to array
 
-		(Controlled R1(phase, _))(qubitsSystem, qubitFlag)
+		mutable arrayKeep = new Int[nQubits]
+		mutable sliced = new Qubit[nQubits - nSliced]
+		mutable counter = 0
 
+		for( idx in 0..nQubits - 1){
+			set arrayKeep[idx] = idx
+		}
+		for( idx in 0..nSliced - 1 ){
+			set arrayKeep[remove[idx]] = -1
+		}
+		for( idx in 0..nQubits - 1 ){
+			if(arrayKeep[idx] >= 0){
+				set sliced[counter] = qubits[arrayKeep[idx]]
+				set counter = counter + 1
+			}
+		}
+
+		return sliced
 	}
 
-	Adjoint auto
-    Controlled auto
-    Controlled Adjoint auto
-}
-
-// Phase shift about |0...0><0...0|
-operation ReflectionAllZero( phase: Double, qubits: Qubit[] ) : ()
-{
-	Body {
-
-		WithAC(ApplyToEachAC(X, _), ReflectionAllOnes(phase, _), qubits)
-
-	}
-
-	Adjoint auto
-    Controlled auto
-    Controlled Adjoint auto
-}
-
-
-//qubit array slicing by index
-//TODO replace with Slice in generics
-// Number of qubits should be larger than largest value in indices
-function QubitSlice(indices : Int[], qubits : Qubit[]) : Qubit[] 
-{
-    let nSliced = Length(indices)
-    mutable sliced = new Qubit[nSliced]
-    for( idx in 0..nSliced - 1 ){
-        set sliced[idx] = qubits[indices[idx]]
-    }
-
-    return sliced
-}
-
-
-//QubitExclude([idxQubitFlag], qubits)
-//TODO replace with Exclude in generics
-function QubitExclude(remove : Int[], qubits : Qubit[]) : Qubit[] 
-{
-
-    let nSliced = Length(remove)
-    let nQubits = Length(qubits)
-    //Would be better with sort function
-    //Or way to add elements to array
-
-    mutable arrayKeep = new Int[nQubits]
-    mutable sliced = new Qubit[nQubits - nSliced]
-    mutable counter = 0
-
-    for( idx in 0..nQubits - 1){
-        set arrayKeep[idx] = idx
-    }
-    for( idx in 0..nSliced - 1 ){
-        set arrayKeep[remove[idx]] = -1
-    }
-    for( idx in 0..nQubits - 1 ){
-        if(arrayKeep[idx] >= 0){
-            set sliced[counter] = qubits[arrayKeep[idx]]
-            set counter = counter + 1
-        }
-    }
-
-    return sliced
 }

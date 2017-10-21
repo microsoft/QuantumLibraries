@@ -98,11 +98,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Utils.qb</DependentUpon>
     </Compile>
-    <Compile Include="Arithmetic.g.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Arithmetic.qb</DependentUpon>
-    </Compile>
     <Compile Include="Asserts\AssertOperationsEqualInPlace.g.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -123,11 +118,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>ApplyToEach.qb</DependentUpon>
     </Compile>
-    <Compile Include="Combinators\ApplyToRange.g.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>ApplyToRange.qb</DependentUpon>
-    </Compile>
     <Compile Include="Combinators\OperationPow.g.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -143,25 +133,10 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>ControlledOnBitString.qb</DependentUpon>
     </Compile>
-    <Compile Include="DataStructures\Stack.g.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Stack.qb</DependentUpon>
-    </Compile>
-    <Compile Include="Endianness.g.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Endianness.qb</DependentUpon>
-    </Compile>
     <Compile Include="Identity.g.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Identity.qb</DependentUpon>
-    </Compile>
-    <Compile Include="IterateThroughCartesianProduct.g.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>IterateThroughCartesianProduct.qb</DependentUpon>
     </Compile>
     <Compile Include="Math\Constants.g.cs">
       <AutoGen>True</AutoGen>
@@ -183,93 +158,27 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Types.qb</DependentUpon>
     </Compile>
-    <Compile Include="MultiTargetCNOT.g.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>MultiTargetCNOT.qb</DependentUpon>
-    </Compile>
     <Compile Include="Paulis.g.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Paulis.qb</DependentUpon>
     </Compile>
-    <Compile Include="PhaseEstimation\Iterative.g.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Iterative.qb</DependentUpon>
-    </Compile>
-    <Compile Include="PhaseEstimation\Quantum.g.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Quantum.qb</DependentUpon>
-    </Compile>
-    <Compile Include="PhaseEstimation\Types.g.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Types.qb</DependentUpon>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Qecc\5QubitCode.g.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>5QubitCode.qb</DependentUpon>
-    </Compile>
-    <Compile Include="Qecc\7QubitCode.g.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>7QubitCode.qb</DependentUpon>
-    </Compile>
-    <Compile Include="Qecc\BitFlipCode.g.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>BitFlipCode.qb</DependentUpon>
-    </Compile>
-    <Compile Include="Qecc\Types.g.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Types.qb</DependentUpon>
-    </Compile>
-    <Compile Include="Qecc\Utils.g.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Utils.qb</DependentUpon>
-    </Compile>
-    <Compile Include="QFT.g.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>QFT.qb</DependentUpon>
-    </Compile>
-    <Compile Include="RUS.g.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>RUS.qb</DependentUpon>
-    </Compile>
-    <Compile Include="ShiftOp.g.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>ShiftOp.qb</DependentUpon>
-    </Compile>
     <Compile Include="Stubs.g.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Stubs.qb</DependentUpon>
     </Compile>
-    <Compile Include="Superdense.g.cs">
+    <Compile Include="Testing.g.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>Superdense.qb</DependentUpon>
-    </Compile>
-    <Compile Include="Teleportation.g.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Teleportation.qb</DependentUpon>
+      <DependentUpon>Testing.qb</DependentUpon>
     </Compile>
     <Compile Include="Tests\Drivers.cs" />
-    <Compile Include="Toffoli.g.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Toffoli.qb</DependentUpon>
-    </Compile>
+    <QbCompile Include="Testing.qb">
+      <Generator>QbCodeGenerator</Generator>
+      <LastGenOutput>Testing.g.cs</LastGenOutput>
+    </QbCompile>
     <Compile Include="TypeConversion.g.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -278,14 +187,6 @@
     <QbCompile Include="TypeConversion.qb">
       <Generator>QbCodeGenerator</Generator>
       <LastGenOutput>TypeConversion.g.cs</LastGenOutput>
-    </QbCompile>
-    <QbCompile Include="RUS.qb">
-      <Generator>QbCodeGenerator</Generator>
-      <LastGenOutput>RUS.g.cs</LastGenOutput>
-    </QbCompile>
-    <QbCompile Include="MultiTargetCNOT.qb">
-      <Generator>QbCodeGenerator</Generator>
-      <LastGenOutput>MultiTargetCNOT.g.cs</LastGenOutput>
     </QbCompile>
     <QbCompile Include="AmplitudeAmplification\AmplitudeAmplification.qb">
       <Generator>QbCodeGenerator</Generator>
@@ -335,10 +236,6 @@
       <Generator>QbCodeGenerator</Generator>
       <LastGenOutput>ApplyToRange.g.cs</LastGenOutput>
     </QbCompile>
-    <QbCompile Include="Arithmetic.qb">
-      <Generator>QbCodeGenerator</Generator>
-      <LastGenOutput>Arithmetic.g.cs</LastGenOutput>
-    </QbCompile>
     <QbCompile Include="Asserts\AssertQubit.qb">
       <Generator>QbCodeGenerator</Generator>
       <LastGenOutput>AssertQubit.g.cs</LastGenOutput>
@@ -347,29 +244,13 @@
       <Generator>QbCodeGenerator</Generator>
       <LastGenOutput>AssertOperationsEqualReferenced.g.cs</LastGenOutput>
     </QbCompile>
-    <QbCompile Include="DataStructures\Stack.qb">
-      <Generator>QbCodeGenerator</Generator>
-      <LastGenOutput>Stack.g.cs</LastGenOutput>
-    </QbCompile>
-    <QbCompile Include="Endianness.qb">
-      <Generator>QbCodeGenerator</Generator>
-      <LastGenOutput>Endianness.g.cs</LastGenOutput>
-    </QbCompile>
     <QbCompile Include="Identity.qb">
       <Generator>QbCodeGenerator</Generator>
       <LastGenOutput>Identity.g.cs</LastGenOutput>
     </QbCompile>
-    <QbCompile Include="IterateThroughCartesianProduct.qb">
-      <Generator>QbCodeGenerator</Generator>
-      <LastGenOutput>IterateThroughCartesianProduct.g.cs</LastGenOutput>
-    </QbCompile>
     <QbCompile Include="Math\Constants.qb">
       <Generator>QbCodeGenerator</Generator>
       <LastGenOutput>Constants.g.cs</LastGenOutput>
-    </QbCompile>
-    <QbCompile Include="PhaseEstimation\Iterative.qb">
-      <Generator>QbCodeGenerator</Generator>
-      <LastGenOutput>Iterative.g.cs</LastGenOutput>
     </QbCompile>
     <QbCompile Include="Math\Types.qb">
       <Generator>QbCodeGenerator</Generator>
@@ -379,45 +260,9 @@
       <Generator>QbCodeGenerator</Generator>
       <LastGenOutput>OperationPow.g.cs</LastGenOutput>
     </QbCompile>
-    <QbCompile Include="PhaseEstimation\Types.qb">
-      <Generator>QbCodeGenerator</Generator>
-      <LastGenOutput>Types.g.cs</LastGenOutput>
-    </QbCompile>
     <QbCompile Include="Paulis.qb">
       <Generator>QbCodeGenerator</Generator>
       <LastGenOutput>Paulis.g.cs</LastGenOutput>
-    </QbCompile>
-    <QbCompile Include="Qecc\5QubitCode.qb">
-      <Generator>QbCodeGenerator</Generator>
-      <LastGenOutput>5QubitCode.g.cs</LastGenOutput>
-    </QbCompile>
-    <QbCompile Include="Qecc\7QubitCode.qb">
-      <Generator>QbCodeGenerator</Generator>
-      <LastGenOutput>7QubitCode.g.cs</LastGenOutput>
-    </QbCompile>
-    <QbCompile Include="Qecc\BitFlipCode.qb">
-      <Generator>QbCodeGenerator</Generator>
-      <LastGenOutput>BitFlipCode.g.cs</LastGenOutput>
-    </QbCompile>
-    <QbCompile Include="Qecc\Types.qb">
-      <Generator>QbCodeGenerator</Generator>
-      <LastGenOutput>Types.g.cs</LastGenOutput>
-    </QbCompile>
-    <QbCompile Include="Qecc\Utils.qb">
-      <Generator>QbCodeGenerator</Generator>
-      <LastGenOutput>Utils.g.cs</LastGenOutput>
-    </QbCompile>
-    <QbCompile Include="QFT.qb">
-      <Generator>QbCodeGenerator</Generator>
-      <LastGenOutput>QFT.g.cs</LastGenOutput>
-    </QbCompile>
-    <QbCompile Include="PhaseEstimation\Quantum.qb">
-      <Generator>QbCodeGenerator</Generator>
-      <LastGenOutput>Quantum.g.cs</LastGenOutput>
-    </QbCompile>
-    <QbCompile Include="ShiftOp.qb">
-      <Generator>QbCodeGenerator</Generator>
-      <LastGenOutput>ShiftOp.g.cs</LastGenOutput>
     </QbCompile>
     <QbCompile Include="Stubs.qb">
       <Generator>QbCodeGenerator</Generator>
@@ -426,18 +271,6 @@
     <QbCompile Include="Combinators\With.qb">
       <Generator>QbCodeGenerator</Generator>
       <LastGenOutput>With.g.cs</LastGenOutput>
-    </QbCompile>
-    <QbCompile Include="Superdense.qb">
-      <Generator>QbCodeGenerator</Generator>
-      <LastGenOutput>Superdense.g.cs</LastGenOutput>
-    </QbCompile>
-    <QbCompile Include="Teleportation.qb">
-      <Generator>QbCodeGenerator</Generator>
-      <LastGenOutput>Teleportation.g.cs</LastGenOutput>
-    </QbCompile>
-    <QbCompile Include="Toffoli.qb">
-      <Generator>QbCodeGenerator</Generator>
-      <LastGenOutput>Toffoli.g.cs</LastGenOutput>
     </QbCompile>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

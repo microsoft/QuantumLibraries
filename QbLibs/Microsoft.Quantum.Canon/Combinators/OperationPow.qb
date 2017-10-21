@@ -1,4 +1,4 @@
-﻿//namespace Microsoft.Quantum.Canon
+﻿namespace Microsoft.Quantum.Canon {
 
 operation OperationPowImpl(oracle : (Qubit[] => ()), power : Int, target : Qubit[])  : ()
 {
@@ -27,4 +27,6 @@ operation OperationPow(oracle : (Qubit[] => ()), power : Int)  : (Qubit[] => ())
     Body {
         return OperationPowImpl(oracle, power, _)
     }
+}
+
 }

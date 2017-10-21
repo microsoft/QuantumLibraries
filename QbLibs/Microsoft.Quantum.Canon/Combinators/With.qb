@@ -1,4 +1,4 @@
-﻿//namespace Microsoft.Quantum.Canon
+﻿namespace Microsoft.Quantum.Canon {
 
 
 operation With(outerOperation : (Qubit[] => ():Adjoint), innerOperation : (Qubit[] => ()), target : Qubit[])  : ()
@@ -70,4 +70,6 @@ operation With1C(outerOperation : (Qubit => ():Adjoint), innerOperation : (Qubit
         (Controlled(innerOperation))(controlRegister, target)
         (Adjoint(outerOperation))(target)
     }
+}
+
 }

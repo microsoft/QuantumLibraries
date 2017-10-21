@@ -1,74 +1,77 @@
-﻿//namespace Microsoft.Quantum.Canon
+﻿namespace Microsoft.Quantum.Canon {
+	open Microsoft.Quantum.Primitive
 
-/// <summary>
-/// Represents a reflection oracle.
-/// </summary>
-/// <remarks> 
-/// This oracle O = I - (1 - e^(- i ϕ)) |ψ><ψ| performs a partial reflection by phase ϕ about a single pure state |ψ>. 
-/// The first parameter is ϕ. The second parameter is the qubit register of  |ψ>.
-/// </remarks>
-newtype OracleReflection = ((Double, Qubit[]) => (): Adjoint,Controlled)
+	/// <summary>
+	/// Represents a reflection oracle.
+	/// </summary>
+	/// <remarks> 
+	/// This oracle O = I - (1 - e^(- i ϕ)) |ψ><ψ| performs a partial reflection by phase ϕ about a single pure state |ψ>. 
+	/// The first parameter is ϕ. The second parameter is the qubit register of  |ψ>.
+	/// </remarks>
+	newtype OracleReflection = ((Double, Qubit[]) => (): Adjoint,Controlled)
 
-///This oracle O|s>_a|ψ>_s = λ |t>_a U |ψ>_s + ... acts on the ancilla state |s>_a to implement the unitary U on any system state |ψ>_s with amplitude λ in the |t>_a basis.
+	///This oracle O|s>_a|ψ>_s = λ |t>_a U |ψ>_s + ... acts on the ancilla state |s>_a to implement the unitary U on any system state |ψ>_s with amplitude λ in the |t>_a basis.
 
-/// <summary>
-/// Represents an oracle for oblivious amplitude amplification.
-/// </summary>
-/// <remarks> 
-/// This oracle defined by O|s>_a|ψ>_s = λ |t>_a U |ψ>_s + ... acts on the ancilla state |s>_a to implement the unitary U on any system state |ψ>_s with amplitude λ in the |t>_a basis.
-/// The first parameter is the qubit register of |s>_a. The second parameter is the qubit register of |ψ>_s.
-/// </remarks>
-newtype OracleOblivious = ((Qubit[], Qubit[]) => (): Adjoint, Controlled)
+	/// <summary>
+	/// Represents an oracle for oblivious amplitude amplification.
+	/// </summary>
+	/// <remarks> 
+	/// This oracle defined by O|s>_a|ψ>_s = λ |t>_a U |ψ>_s + ... acts on the ancilla state |s>_a to implement the unitary U on any system state |ψ>_s with amplitude λ in the |t>_a basis.
+	/// The first parameter is the qubit register of |s>_a. The second parameter is the qubit register of |ψ>_s.
+	/// </remarks>
+	newtype OracleOblivious = ((Qubit[], Qubit[]) => (): Adjoint, Controlled)
 
-/// <summary>
-/// Represents an oracle for state preparation.
-/// </summary>
-/// <remarks> 
-///This oracle defined by O|0>_f|0>_s = λ |1>_f |ψ>_s + ... acts on the on computational basis state |0>_f|0>_s to create the system state |ψ>_s with amplitude λ in the basis flagged by |1>_f.
-/// The first parameter is the qubit register of |0>_f. The second parameter is the qubit register of |0>_s.
-/// </remarks>
-newtype OracleState = ((Qubit, Qubit[]) => (): Adjoint, Controlled)
+	/// <summary>
+	/// Represents an oracle for state preparation.
+	/// </summary>
+	/// <remarks> 
+	///This oracle defined by O|0>_f|0>_s = λ |1>_f |ψ>_s + ... acts on the on computational basis state |0>_f|0>_s to create the system state |ψ>_s with amplitude λ in the basis flagged by |1>_f.
+	/// The first parameter is the qubit register of |0>_f. The second parameter is the qubit register of |0>_s.
+	/// </remarks>
+	newtype OracleState = ((Qubit, Qubit[]) => (): Adjoint, Controlled)
 
-/// <summary>
-/// Represents an oracle for deterministic state preparation.
-/// </summary>
-/// <remarks> 
-///This oracle defined by O|0> = |ψ> acts on the on computational basis state |0> to create the state |ψ>.
-/// The first parameter is the qubit register of |ψ>.
-/// </remarks>
-newtype OracleStateDeterministic = (Qubit[] => (): Adjoint, Controlled)
+	/// <summary>
+	/// Represents an oracle for deterministic state preparation.
+	/// </summary>
+	/// <remarks> 
+	///This oracle defined by O|0> = |ψ> acts on the on computational basis state |0> to create the state |ψ>.
+	/// The first parameter is the qubit register of |ψ>.
+	/// </remarks>
+	newtype OracleStateDeterministic = (Qubit[] => (): Adjoint, Controlled)
 
 
-/// <summary>
-/// Phases for a sequence of partial reflections in amplitude amplification.
-/// </summary>
-/// <remarks> 
-/// The first parameter is an array of phases for reflection about the start state. The second parameter is an array of phases for reflection about the target state.
-/// Both arrays must be of equal length. Note that in many cases, the first phase about the start state and last phase about the target state introduces a global phase shift and may be set to 0. 
-/// </remarks>
-newtype AmpAmpReflectionPhases = (Double[], Double[])
+	/// <summary>
+	/// Phases for a sequence of partial reflections in amplitude amplification.
+	/// </summary>
+	/// <remarks> 
+	/// The first parameter is an array of phases for reflection about the start state. The second parameter is an array of phases for reflection about the target state.
+	/// Both arrays must be of equal length. Note that in many cases, the first phase about the start state and last phase about the target state introduces a global phase shift and may be set to 0. 
+	/// </remarks>
+	newtype AmpAmpReflectionPhases = (Double[], Double[])
 
-/// <summary>
-/// Phases for a sequence of single-qubit rotations in amplitude amplification.
-/// </summary>
-/// <remarks> 
-/// The first parameter is an array of phases for reflections, expressed as a product of single-qubit rotations.
-/// [ G.H. Low, I. L. Chuang, https://arxiv.org/abs/1707.05391].
-/// </remarks>
-newtype AmpAmpRotationPhases = (Double[])
+	/// <summary>
+	/// Phases for a sequence of single-qubit rotations in amplitude amplification.
+	/// </summary>
+	/// <remarks> 
+	/// The first parameter is an array of phases for reflections, expressed as a product of single-qubit rotations.
+	/// [ G.H. Low, I. L. Chuang, https://arxiv.org/abs/1707.05391].
+	/// </remarks>
+	newtype AmpAmpRotationPhases = (Double[])
 
-/// <summary>
-/// Applies an "OracleState" type by passing in all qubits and an index to the flag qubit.
-/// </summary>
-/// <param name = "oracle"> Oracle of type "OracleState" </param>
-/// <param name = "idxFlag"> index to flag qubit of "oracle" </param>
-/// <param name = "qubits"> All qubits acted on by "oracle" </param>
-operation OracleStateIdxFlag(idxFlag : Int, oracle : OracleState, qubits: Qubit[]): ()
-{
-    Body{
-        oracle(qubits[idxFlag],  QubitExclude([idxFlag], qubits))
-    }
-    Adjoint auto
-    Controlled auto
-    Controlled Adjoint auto
+	/// <summary>
+	/// Applies an "OracleState" type by passing in all qubits and an index to the flag qubit.
+	/// </summary>
+	/// <param name = "oracle"> Oracle of type "OracleState" </param>
+	/// <param name = "idxFlag"> index to flag qubit of "oracle" </param>
+	/// <param name = "qubits"> All qubits acted on by "oracle" </param>
+	operation OracleStateIdxFlag(idxFlag : Int, oracle : OracleState, qubits: Qubit[]): ()
+	{
+		Body{
+			oracle(qubits[idxFlag],  QubitExclude([idxFlag], qubits))
+		}
+		Adjoint auto
+		Controlled auto
+		Controlled Adjoint auto
+	}
+
 }

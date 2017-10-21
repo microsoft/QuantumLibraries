@@ -1,5 +1,5 @@
-﻿//namespace Microsoft.Quantum.Canon
-
+﻿namespace Microsoft.Quantum.Canon {
+	open Microsoft.Quantum.Primitive
 
 /// <summary>
 ///     Measures the given Pauli operator using an explicit scratch
@@ -240,4 +240,7 @@ operation ResetAll(target : Qubit[]) : ()
     Body {
         ApplyToEach(Reset, target)
     }
+}
+
+
 }

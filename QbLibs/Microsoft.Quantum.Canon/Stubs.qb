@@ -1,4 +1,4 @@
-﻿//namespace Microsoft.Quantum.Canon
+﻿namespace Microsoft.Quantum.Canon {
 
 // FIXME: make this a function!
 // Perhaps ToDouble as Float usually refers to single-precision, and we cannot overload Double()?
@@ -19,4 +19,6 @@ operation MultiM(targets : Qubit[]) : Result[]
         mutable results = new Result[Length(targets)]
         return results
     }
+}
+
 }

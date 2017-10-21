@@ -1,5 +1,5 @@
-﻿//namespace Microsoft.Quantum.Canon
-
+﻿namespace Microsoft.Quantum.Canon {
+	open Microsoft.Quantum.Primitive
 
 /// <summary>
 /// Applies a unitary operator on the target register if the control register state corresponds to a specified bit mask.
@@ -58,4 +58,6 @@ operation ControlledOnIntImpl(numberState : Int , oracle: (Qubit[] => (): Adjoin
 function ControlledOnInt(numberState : Int , oracle: (Qubit[] => (): Adjoint, Controlled)) : ((Qubit[],Qubit[]) => (): Adjoint, Controlled)
 {
 	return ControlledOnIntImpl(numberState, oracle, _, _)
+}
+
 }

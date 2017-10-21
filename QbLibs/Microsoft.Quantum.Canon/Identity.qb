@@ -1,4 +1,4 @@
-//namespace Microsoft.Quantum.Canon
+namespace Microsoft.Quantum.Canon {
 
 operation I(target : Qubit) : () {
     Body {}
@@ -23,3 +23,5 @@ operation Identity2(qubitsA: Qubit[], qubitsB: Qubit[]) : (){
 // function Identity(value : 'T) : 'T {
 //     return value
 // }
+
+}

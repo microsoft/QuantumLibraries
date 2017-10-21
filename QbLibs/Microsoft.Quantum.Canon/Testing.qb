@@ -1,0 +1,49 @@
+﻿namespace Microsoft.Quantum.Canon {
+	open Microsoft.Quantum.Primitive
+
+		operation test123() : (){
+			Body{
+				using(qubits = Qubit[1]){
+					AssertQubit(One, qubits[0])
+				}
+			}
+		}
+
+		operation test234(): Result{
+			Body{
+				mutable result = One
+				using(qubits = Qubit[2]){
+					//AssertProb([Zpauli], qubits, Zero, 1.0, "Qubit Zero probability on X basis failed", 1.0)
+					set result = M(qubits[0])
+				}
+				return result
+			}
+		}
+
+			operation EmptyTest() : () {
+			Body {
+
+			}
+		}
+
+		operation PreparationTest() : () {
+			Body {
+				//    using (qubits = Qubit[1]) {
+				//        AssertProb([Zpauli], [qubits[0]], Zero, 1.0, "Freshly prepared qubit was not in |0〉 state.", 1e-10)
+				//    }
+			}
+		}
+
+		operation OperationTestShouldFail() : () {
+			Body {
+				fail "OK"
+
+			}
+		}
+
+		function FunctionTestShouldFail() : () {
+			fail "OK"
+
+		}
+
+	}

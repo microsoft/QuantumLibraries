@@ -1,4 +1,4 @@
-﻿//namespace Microsoft.Quantum.Canon
+﻿namespace Microsoft.Quantum.Canon {
 
 // TODO: what does C♯/LINQ call the (0, arr[0]), (1, arr[1]), ... IEnumerator?
 //       we might should use same naming convention here.
@@ -15,3 +15,5 @@ operation ApplyToRangeAC(singleQubitOperation : ((Int, Qubit) => ():Adjoint,Cont
     Controlled Adjoint auto
 }
 
+
+}

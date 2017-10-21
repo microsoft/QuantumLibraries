@@ -1,4 +1,5 @@
-//namespace Microsoft.Quantum.Canon
+namespace Microsoft.Quantum.Canon {
+	open Microsoft.Quantum.Primitive
 
 ///<summary>
 /// Applies unitaries that map |0⟩⊗…⊗|0⟩ to |ψ_1⟩⊗…⊗|ψ_n⟩
@@ -70,11 +71,14 @@ operation AssertEqualOnBasisVector( basis : Int[] , givenU : (Qubit[] => ()), ex
 /// Checks if the operation givenU is equal to the operation givenU on 
 /// the given input size and up to a given tolerance
 ///</summary>
+
 operation AssertOperationsEqualInPlace( inputSize : Int, givenU : (Qubit[] => ()), expectedU : (Qubit[] => () : Adjoint ), tolerance : Double ) : ()
 {
     Body
     {
         let checkOperation = AssertEqualOnBasisVector( _, givenU, expectedU, tolerance )
-        IterateThroughCartesianPower(inputSize,4,checkOperation)
+        ///IterateThroughCartesianPower(inputSize,4,checkOperation)
     }
+}
+
 }

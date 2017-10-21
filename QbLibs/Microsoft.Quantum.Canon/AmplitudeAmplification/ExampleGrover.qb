@@ -1,276 +1,278 @@
-﻿//namespace Microsoft.Quantum.Canon
+﻿namespace Microsoft.Quantum.Canon {
+		open Microsoft.Quantum.Primitive
+	/// Example: Quantum search of a database of N elements
+	/// The quantum search algorithm queries a database of N elements to find one of its M marked elements using O(sqrt(M/N)). We will work through several examples here.
 
-/// Example: Quantum search of a database of N elements
-/// The quantum search algorithm queries a database of N elements to find one of its M marked elements using O(sqrt(M/N)). We will work through several examples here.
+	/// The database is queried by an oracle D|z>|k> = |z \oplus x_k>|k>. Let |k>_d is an index to an element in the database of size N, let |z>_m indicate whether the k^th element is marked, and let x = x_0x_1...x_{N-1} be a binary string where x_k is 1 if the k^th element is marked and 0 otherwise.
 
-/// The database is queried by an oracle D|z>|k> = |z \oplus x_k>|k>. Let |k>_d is an index to an element in the database of size N, let |z>_m indicate whether the k^th element is marked, and let x = x_0x_1...x_{N-1} be a binary string where x_k is 1 if the k^th element is marked and 0 otherwise.
-
-/// We work out the first example in full, without using any libraries. We hard-code this query O to a database of size N = 2^n, where there are n qubits, and the marked element is always indexed by k=N-1.
-operation OracleDatabase(qubitMarked: Qubit, qubitsDatabase: Qubit[]) : (){
-	Body{
-		/// This only flips the state of the flag qubit when |k>_d = |1...1> in binary, or k = 2^n-1
-		(Controlled X)(qubitsDatabase, qubitMarked)
-	}
-	Adjoint auto
-}
-
-/// Quantum search requires a uniform superposition of states over all indices |u> = (|0>+|1>+...+|N-1>)/sqrt{N}. Given an initial state of zeros |0...0>, this may be prepared by the unitary U, which applies the Hadamard gate on all qubits.
-operation OracleUniformSuperposition(qubitsDatabase: Qubit[]) : (){
-	Body{
-		let nQubits = Length(qubitsDatabase)
-		for (idxQubit in 0..nQubits - 1) {
-            H(qubitsDatabase[idxQubit])
-        }
-	}
-	Adjoint auto
-}
-
-/// Applying our database oracle to thie state |0>|u> creates the start state |s> = D|0>|u> = DU|0>|0> = |1>|N-1>/sqrt{N} + |0>(|0>+|1>+...+|N-2>)/sqrt{N}. Let us call this DU the state preparation oracle
-operation OracleStatePreparation(qubitMarked: Qubit, qubitsDatabase: Qubit[]) : (){
-	Body{
-		OracleUniformSuperposition(qubitsDatabase)
-		OracleDatabase(qubitMarked, qubitsDatabase)
-	}
-	Adjoint auto
-}
-
-/// Quantum search requires reflections about the marked state and the start state. We now implement these reflections
-/// This reflects about the marked state
-operation ReflectionMarked(qubitMarked : Qubit) : (){
-	Body{
-		R1(Pi(), qubitMarked)
-	}
-}
-/// This reflects about the all zero string
-operation ReflectionZero(qubits : Qubit[]) : (){
-	Body{
-		let nQubits = Length(qubits)
-		for(idxQubit in 0..nQubits-1){
-			X(qubits[idxQubit])
+	/// We work out the first example in full, without using any libraries. We hard-code this query O to a database of size N = 2^n, where there are n qubits, and the marked element is always indexed by k=N-1.
+	operation OracleDatabase(qubitMarked: Qubit, qubitsDatabase: Qubit[]) : (){
+		Body{
+			/// This only flips the state of the flag qubit when |k>_d = |1...1> in binary, or k = 2^n-1
+			(Controlled X)(qubitsDatabase, qubitMarked)
 		}
-		(Controlled Z)(qubits[1..nQubits-1], qubits[0])
-		for(idxQubit in 0..nQubits-1){
-			X(qubits[idxQubit])
-		}
+		Adjoint auto
 	}
-}
-/// This reflects about the start state
-operation ReflectionStart(qubitMarked : Qubit, qubitsDatabase: Qubit[]) : (){
-	Body{
-		(Adjoint OracleStatePreparation)(qubitMarked,qubitsDatabase)
-		ReflectionZero([qubitMarked] + qubitsDatabase)
-		OracleStatePreparation(qubitMarked,qubitsDatabase)
-	}
-}
 
-/// The marked state is amplified by a sequence of these reflections acting on the start state.
-operation QuantumSearch(nIterations : Int, qubitMarked : Qubit, qubitsDatabase: Qubit[]) : (){
-	Body{
-		OracleStatePreparation(qubitMarked,qubitsDatabase)
-		for(idx in 0..nIterations){
-			ReflectionMarked(qubitMarked)
-			ReflectionStart(qubitMarked,qubitsDatabase)
-		}
-	}
-}
-
-/// We now apply this algorithm, and measure to obtain the database element index, which should be the |1...1> string. This succeeds with probability sin^2((2*nIterations+1) arcsin(1/sqrt{2^nDatabaseQubits}))
-operation ApplyQuantumSearch(nIterations : Int, nDatabaseQubits : Int) : (Result, Result[]){
-	Body{
-		mutable resultSuccess = Zero
-		mutable resultElement = new Result[nDatabaseQubits]
-		using(qubits = Qubit[nDatabaseQubits+1]){
-			let qubitMarked = qubits[0]
-			let qubitDatabase = qubits[1..nDatabaseQubits]
-			QuantumSearch(nIterations, qubitMarked, qubitDatabase)
-
-			set resultSuccess = M(qubitMarked)
-			set resultElement = MultiM(qubitDatabase)
-
-			if(resultSuccess == One){
-				X(qubitMarked)
+	/// Quantum search requires a uniform superposition of states over all indices |u> = (|0>+|1>+...+|N-1>)/sqrt{N}. Given an initial state of zeros |0...0>, this may be prepared by the unitary U, which applies the Hadamard gate on all qubits.
+	operation OracleUniformSuperposition(qubitsDatabase: Qubit[]) : (){
+		Body{
+			let nQubits = Length(qubitsDatabase)
+			for (idxQubit in 0..nQubits - 1) {
+				H(qubitsDatabase[idxQubit])
 			}
-			for(idxResult in 0..nDatabaseQubits-1){
+		}
+		Adjoint auto
+	}
+
+	/// Applying our database oracle to thie state |0>|u> creates the start state |s> = D|0>|u> = DU|0>|0> = |1>|N-1>/sqrt{N} + |0>(|0>+|1>+...+|N-2>)/sqrt{N}. Let us call this DU the state preparation oracle
+	operation OracleStatePreparation(qubitMarked: Qubit, qubitsDatabase: Qubit[]) : (){
+		Body{
+			OracleUniformSuperposition(qubitsDatabase)
+			OracleDatabase(qubitMarked, qubitsDatabase)
+		}
+		Adjoint auto
+	}
+
+	/// Quantum search requires reflections about the marked state and the start state. We now implement these reflections
+	/// This reflects about the marked state
+	operation ReflectionMarked(qubitMarked : Qubit) : (){
+		Body{
+			R1(Pi(), qubitMarked)
+		}
+	}
+	/// This reflects about the all zero string
+	operation ReflectionZero(qubits : Qubit[]) : (){
+		Body{
+			let nQubits = Length(qubits)
+			for(idxQubit in 0..nQubits-1){
+				X(qubits[idxQubit])
+			}
+			(Controlled Z)(qubits[1..nQubits-1], qubits[0])
+			for(idxQubit in 0..nQubits-1){
+				X(qubits[idxQubit])
+			}
+		}
+	}
+	/// This reflects about the start state
+	operation ReflectionStart(qubitMarked : Qubit, qubitsDatabase: Qubit[]) : (){
+		Body{
+			(Adjoint OracleStatePreparation)(qubitMarked,qubitsDatabase)
+			ReflectionZero([qubitMarked] + qubitsDatabase)
+			OracleStatePreparation(qubitMarked,qubitsDatabase)
+		}
+	}
+
+	/// The marked state is amplified by a sequence of these reflections acting on the start state.
+	operation QuantumSearch(nIterations : Int, qubitMarked : Qubit, qubitsDatabase: Qubit[]) : (){
+		Body{
+			OracleStatePreparation(qubitMarked,qubitsDatabase)
+			for(idx in 0..nIterations){
+				ReflectionMarked(qubitMarked)
+				ReflectionStart(qubitMarked,qubitsDatabase)
+			}
+		}
+	}
+
+	/// We now apply this algorithm, and measure to obtain the database element index, which should be the |1...1> string. This succeeds with probability sin^2((2*nIterations+1) arcsin(1/sqrt{2^nDatabaseQubits}))
+	operation ApplyQuantumSearch(nIterations : Int, nDatabaseQubits : Int) : (Result, Result[]){
+		Body{
+			mutable resultSuccess = Zero
+			mutable resultElement = new Result[nDatabaseQubits]
+			using(qubits = Qubit[nDatabaseQubits+1]){
+				let qubitMarked = qubits[0]
+				let qubitDatabase = qubits[1..nDatabaseQubits]
+				QuantumSearch(nIterations, qubitMarked, qubitDatabase)
+
+				set resultSuccess = M(qubitMarked)
+				set resultElement = MultiM(qubitDatabase)
+
 				if(resultSuccess == One){
-					X(qubitDatabase[idxResult])
+					X(qubitMarked)
+				}
+				for(idxResult in 0..nDatabaseQubits-1){
+					if(resultSuccess == One){
+						X(qubitDatabase[idxResult])
+					}
 				}
 			}
+			return (resultSuccess, resultElement)
 		}
-		return (resultSuccess, resultElement)
-	}
-}
-
-/// Our second example makes full use of the amplitude amplification library, and other supporting libraries.
-
-/// <summary>
-/// Grover oracle from classical database
-/// </summary>
-/// <param name = "markedElements"> Indices to marked elements in database </param>
-/// <param name = "qubitFlag"> Flag qubit </param>
-/// <param name = "qubitsDatabase"> Database qubit register </param>
-/// <remarks> 
-/// This implements the oracle O|z>|k> = |z \oplus x_k>|k> used in the Grover search algorithm.
-/// Given a database with N = 2^n elements, n is the size of the database qubit register.
-/// Let x = x_0x_1...x_{N-1} be a binary string of N elements. Then x_k is 1 if k is in "markedElements" and 0 otherwise.
-/// </remarks>
-operation GroverOracleFromInts(markedElements : Int[],  qubitFlag: Qubit, qubitsDatabase: Qubit[]) : ()
-{
-	Body{
-		let nQubits = Length(qubitsDatabase)
-		let nMarked = Length(markedElements)
-		for(idxMarked in 0..nMarked - 1){
-			//Note: As X accepts a Qubit, and ControlledOnInt only accepts Qubit[], we use ApplyToEachAC(X, _) which accepts Qubit[] even though the target is only 1 Qubit.
-			(ControlledOnInt(markedElements[idxMarked], ApplyToEachAC(X, _)))(qubitsDatabase, [qubitFlag])
-		}
-
-	}	
-	Adjoint auto
-	Controlled auto
-	Adjoint Controlled auto
-}
-
-
-/// <summary>
-/// State preparation of marked stated from Grover oracle
-/// </summary>
-/// <param name = "markedElements"> Indices to marked elements in database </param>
-/// <param name = "qubitFlag"> Flag qubit </param>
-/// <param name = "qubitsDatabase"> Database qubit register </param>
-/// <remarks> 
-/// This implements an oracle that prepares the start state O|0>_f|0>_d = |s>_fd = \sqrt{M/N}|1>_f|marked>_d + ... |0>_f|unmarked>_d.
-/// M is the length of "markedElements"
-/// N is 2^n, where n is the number of database qubits.
-/// </remarks>
-operation GroverOracleStatePrepImpl(markedElements : Int[], qubitFlag: Qubit , qubitsDatabase: Qubit[]) : ()
-{
-	Body{
-		let nQubits = Length(qubitsDatabase)
-
-		ApplyToEachAC(H, qubitsDatabase)
-
-		GroverOracleFromInts(markedElements, qubitFlag, qubitsDatabase)
-
 	}
 
-	Adjoint auto
-	Controlled auto
-	Adjoint Controlled auto
-}
+	/// Our second example makes full use of the amplitude amplification library, and other supporting libraries.
 
-function GroverOracleStatePrep(markedElements : Int[]) : OracleState
-{
-	return OracleState(GroverOracleStatePrepImpl(markedElements, _, _))
-}
-
-/// <summary>
-/// Grover search algorithm
-/// </summary>
-/// <param name = "markedElements"> Indices to marked elements in database </param>
-/// <param name = "iterations"> Number of applications of Grover iterate </param>
-/// <param name = "idxQubitFlag"> Index to Flag qubit </param>
-/// <param name = "qubits"> Database and Flag register </param>
-/// <remarks> 
-/// On input |0>_f|0>_d, this prepares the state |1>_f|marked>_d with amplitude Sin((2*iterations + 1) ArcSin(Sqrt(M/N))).
-/// </remarks>
-operation GroverSearch( markedElements: Int[], iterations: Int, idxQubitFlag: Int , qubits: Qubit[]) : ()
-{
-	Body{ 
-        AmpAmpByOracle(iterations, GroverOracleStatePrep(markedElements), idxQubitFlag, qubits) 
-	}
-
-	Adjoint auto
-	Controlled auto
-	Adjoint Controlled auto
-}
-
-/// <summary>
-/// Grover search algorithm
-/// </summary>
-/// <param name = "markedElements"> Indices to marked elements in database </param>
-/// <param name = "iterations"> Number of applications of Grover iterate </param>
-/// <param name = "nQubits"> Number of database qubits </param>
-/// <remarks> 
-/// This prepares the state |1>_f|marked>_d with amplitude Sin((2*iterations + 1) ArcSin(Sqrt(M/N))), measures all registers, and returns the value of the flag qubit and the value of the database register as an integer.
-/// 2^qubitsDatabase should be larger than the largest integer in "markedElements"
-/// </remarks>
-operation GroverSearchMeasure( markedElements: Int[], iterations: Int, nQubits : Int) : (Result, Int)
-{
-    Body{ 
-
-        mutable result = Zero
-        mutable bits  = new Result[nQubits]
-		mutable foundIndex = 0
-
-		using(qubits = Qubit[1 + nQubits]){
-			let qubitFlag = qubits[0]
-			let idxQubitFlag = 0
-			let qubitsDatabase = qubits[1..nQubits - 1]
-
-			GroverSearch(markedElements, iterations, idxQubitFlag, qubits) 
-
-			set result = M(qubitFlag)
-			set bits = MultiM(qubitsDatabase)
-
-		   ResetAll(qubits)
-           
-		}
-		set foundIndex = PositiveIntFromResultArr(bits)
-        
-        return (result, foundIndex)
-
-	}
-}
-
-/// <summary>
-/// Test random instances of Grover search
-/// </summary>
-/// <param name = "maxMarkedElements"> Maximum number of marked elements in database </param>
-/// <param name = "maxGroverIterations"> Maximum number of applications of Grover iterate </param>
-/// <param name = "maxQubits"> Maximum number of database qubits </param>
-/// <remarks> 
-/// This generates 100 random instances of Grover search, each time by choosing a random number of database qubits n, a random number of marked elements M <= N = 2^maxQubits, and a random number of Grover iterations 
-/// The success probability of measuring the flag qubit in the |1>_f state is compared to the theory of
-/// Sin((2*iterations + 1) ArcSin(Sqrt(M/N)))^2
-/// </remarks>
-operation GroverTest( maxMarkedElements : Int, maxGroverIterations : Int , maxQubits: Int) :()
-{
-	Body {
-		
-		let nRepeats = 100
-		mutable nElements = 0
-		mutable nMarked = 0
-		mutable nIterations = 0
-		mutable nQubits = 0
-		mutable markedElements = new Int[maxMarkedElements]
-		mutable successAmplitude = Float(0)
-		for(idxRepeat in 0..nRepeats - 1)
-		{
-			set nMarked = randomInt(maxMarkedElements) + 1
-			set nIterations = randomInt(maxGroverIterations) + 1
-			set nQubits = randomInt(maxQubits) + 1
-			set nElements = 2^nQubits - 1
-			for(idxElement in 0..nMarked - 1){
-				set markedElements[idxElement] = randomInt(nElements)
+	/// <summary>
+	/// Grover oracle from classical database
+	/// </summary>
+	/// <param name = "markedElements"> Indices to marked elements in database </param>
+	/// <param name = "qubitFlag"> Flag qubit </param>
+	/// <param name = "qubitsDatabase"> Database qubit register </param>
+	/// <remarks> 
+	/// This implements the oracle O|z>|k> = |z \oplus x_k>|k> used in the Grover search algorithm.
+	/// Given a database with N = 2^n elements, n is the size of the database qubit register.
+	/// Let x = x_0x_1...x_{N-1} be a binary string of N elements. Then x_k is 1 if k is in "markedElements" and 0 otherwise.
+	/// </remarks>
+	operation GroverOracleFromInts(markedElements : Int[],  qubitFlag: Qubit, qubitsDatabase: Qubit[]) : ()
+	{
+		Body{
+			let nQubits = Length(qubitsDatabase)
+			let nMarked = Length(markedElements)
+			for(idxMarked in 0..nMarked - 1){
+				//Note: As X accepts a Qubit, and ControlledOnInt only accepts Qubit[], we use ApplyToEachAC(X, _) which accepts Qubit[] even though the target is only 1 Qubit.
+				(ControlledOnInt(markedElements[idxMarked], ApplyToEachAC(X, _)))(qubitsDatabase, [qubitFlag])
 			}
 
-			set successAmplitude = Sin( Float(2*nIterations + 1) * ArcSin( Sqrt(Float(nMarked) / Float(nElements)) ))
+		}	
+		Adjoint auto
+		Controlled auto
+		Adjoint Controlled auto
+	}
+
+
+	/// <summary>
+	/// State preparation of marked stated from Grover oracle
+	/// </summary>
+	/// <param name = "markedElements"> Indices to marked elements in database </param>
+	/// <param name = "qubitFlag"> Flag qubit </param>
+	/// <param name = "qubitsDatabase"> Database qubit register </param>
+	/// <remarks> 
+	/// This implements an oracle that prepares the start state O|0>_f|0>_d = |s>_fd = \sqrt{M/N}|1>_f|marked>_d + ... |0>_f|unmarked>_d.
+	/// M is the length of "markedElements"
+	/// N is 2^n, where n is the number of database qubits.
+	/// </remarks>
+	operation GroverOracleStatePrepImpl(markedElements : Int[], qubitFlag: Qubit , qubitsDatabase: Qubit[]) : ()
+	{
+		Body{
+			let nQubits = Length(qubitsDatabase)
+
+			ApplyToEachAC(H, qubitsDatabase)
+
+			GroverOracleFromInts(markedElements, qubitFlag, qubitsDatabase)
+
+		}
+
+		Adjoint auto
+		Controlled auto
+		Adjoint Controlled auto
+	}
+
+	function GroverOracleStatePrep(markedElements : Int[]) : OracleState
+	{
+		return OracleState(GroverOracleStatePrepImpl(markedElements, _, _))
+	}
+
+	/// <summary>
+	/// Grover search algorithm
+	/// </summary>
+	/// <param name = "markedElements"> Indices to marked elements in database </param>
+	/// <param name = "iterations"> Number of applications of Grover iterate </param>
+	/// <param name = "idxQubitFlag"> Index to Flag qubit </param>
+	/// <param name = "qubits"> Database and Flag register </param>
+	/// <remarks> 
+	/// On input |0>_f|0>_d, this prepares the state |1>_f|marked>_d with amplitude Sin((2*iterations + 1) ArcSin(Sqrt(M/N))).
+	/// </remarks>
+	operation GroverSearch( markedElements: Int[], iterations: Int, idxQubitFlag: Int , qubits: Qubit[]) : ()
+	{
+		Body{ 
+			AmpAmpByOracle(iterations, GroverOracleStatePrep(markedElements), idxQubitFlag, qubits) 
+		}
+
+		Adjoint auto
+		Controlled auto
+		Adjoint Controlled auto
+	}
+
+	/// <summary>
+	/// Grover search algorithm
+	/// </summary>
+	/// <param name = "markedElements"> Indices to marked elements in database </param>
+	/// <param name = "iterations"> Number of applications of Grover iterate </param>
+	/// <param name = "nQubits"> Number of database qubits </param>
+	/// <remarks> 
+	/// This prepares the state |1>_f|marked>_d with amplitude Sin((2*iterations + 1) ArcSin(Sqrt(M/N))), measures all registers, and returns the value of the flag qubit and the value of the database register as an integer.
+	/// 2^qubitsDatabase should be larger than the largest integer in "markedElements"
+	/// </remarks>
+	operation GroverSearchMeasure( markedElements: Int[], iterations: Int, nQubits : Int) : (Result, Int)
+	{
+		Body{ 
+
+			mutable result = Zero
+			mutable bits  = new Result[nQubits]
+			mutable foundIndex = 0
 
 			using(qubits = Qubit[1 + nQubits]){
 				let qubitFlag = qubits[0]
 				let idxQubitFlag = 0
 				let qubitsDatabase = qubits[1..nQubits - 1]
 
-				GroverSearch(markedElements[0..nMarked-1], nIterations, idxQubitFlag, qubits) 
+				GroverSearch(markedElements, iterations, idxQubitFlag, qubits) 
 
-				AssertProb([Zpauli], [qubitFlag], One, successAmplitude * successAmplitude, "Error: Success probability does not match theory", 1e-10)
+				set result = M(qubitFlag)
+				set bits = MultiM(qubitsDatabase)
 
-
-				ResetAll(qubits)
+			   ResetAll(qubits)
+           
 			}
+			set foundIndex = PositiveIntFromResultArr(bits)
+        
+			return (result, foundIndex)
 
 		}
-
-
-		//
 	}
+
+	/// <summary>
+	/// Test random instances of Grover search
+	/// </summary>
+	/// <param name = "maxMarkedElements"> Maximum number of marked elements in database </param>
+	/// <param name = "maxGroverIterations"> Maximum number of applications of Grover iterate </param>
+	/// <param name = "maxQubits"> Maximum number of database qubits </param>
+	/// <remarks> 
+	/// This generates 100 random instances of Grover search, each time by choosing a random number of database qubits n, a random number of marked elements M <= N = 2^maxQubits, and a random number of Grover iterations 
+	/// The success probability of measuring the flag qubit in the |1>_f state is compared to the theory of
+	/// Sin((2*iterations + 1) ArcSin(Sqrt(M/N)))^2
+	/// </remarks>
+	operation GroverTest( maxMarkedElements : Int, maxGroverIterations : Int , maxQubits: Int) :()
+	{
+		Body {
+		
+			let nRepeats = 100
+			mutable nElements = 0
+			mutable nMarked = 0
+			mutable nIterations = 0
+			mutable nQubits = 0
+			mutable markedElements = new Int[maxMarkedElements]
+			mutable successAmplitude = Float(0)
+			for(idxRepeat in 0..nRepeats - 1)
+			{
+				set nMarked = randomInt(maxMarkedElements) + 1
+				set nIterations = randomInt(maxGroverIterations) + 1
+				set nQubits = randomInt(maxQubits) + 1
+				set nElements = 2^nQubits - 1
+				for(idxElement in 0..nMarked - 1){
+					set markedElements[idxElement] = randomInt(nElements)
+				}
+
+				set successAmplitude = Sin( Float(2*nIterations + 1) * ArcSin( Sqrt(Float(nMarked) / Float(nElements)) ))
+
+				using(qubits = Qubit[1 + nQubits]){
+					let qubitFlag = qubits[0]
+					let idxQubitFlag = 0
+					let qubitsDatabase = qubits[1..nQubits - 1]
+
+					GroverSearch(markedElements[0..nMarked-1], nIterations, idxQubitFlag, qubits) 
+
+					AssertProb([Zpauli], [qubitFlag], One, successAmplitude * successAmplitude, "Error: Success probability does not match theory", 1e-10)
+
+
+					ResetAll(qubits)
+				}
+
+			}
+
+
+			//
+		}
+	}
+
 }
