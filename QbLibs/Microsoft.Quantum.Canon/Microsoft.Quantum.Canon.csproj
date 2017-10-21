@@ -102,6 +102,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>AssertQubit.qb</DependentUpon>
     </Compile>
+    <Compile Include="Asserts\ClassicalAsserts.g.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ClassicalAsserts.qb</DependentUpon>
+    </Compile>
     <Compile Include="Combinators\ApplyToEach.g.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -146,6 +151,12 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Constants.qb</DependentUpon>
+    </Compile>
+    <Compile Include="Math\Native.cs" />
+    <Compile Include="Math\NativeStubs.g.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>NativeStubs.qb</DependentUpon>
     </Compile>
     <Compile Include="Math\Types.g.cs">
       <AutoGen>True</AutoGen>
@@ -238,8 +249,10 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>AssertTests.qb</DependentUpon>
     </Compile>
-    <Compile Include="Tests\Drivers.cs" />
-    <Compile Include="Tests\OperationTestData.cs" />
+    <Compile Include="Tests\NativeOperationTests.cs" />
+    <Compile Include="Tests\OperationDrivers.cs" />
+    <Compile Include="Tests\DataAttributes.cs" />
+    <Compile Include="Tests\TestBase.cs" />
     <Compile Include="Toffoli.g.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -257,9 +270,17 @@
       <Generator>QbCodeGenerator</Generator>
       <LastGenOutput>MultiTargetCNOT.g.cs</LastGenOutput>
     </QbCompile>
+    <QbCompile Include="Asserts\ClassicalAsserts.qb">
+      <Generator>QbCodeGenerator</Generator>
+      <LastGenOutput>ClassicalAsserts.g.cs</LastGenOutput>
+    </QbCompile>
     <None Include="Bind.qb">
       <LastGenOutput>Bind.g.cs</LastGenOutput>
     </None>
+    <QbCompile Include="Math\NativeStubs.qb">
+      <Generator>QbCodeGenerator</Generator>
+      <LastGenOutput>NativeStubs.g.cs</LastGenOutput>
+    </QbCompile>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

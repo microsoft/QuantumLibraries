@@ -28,6 +28,10 @@
 		fail "OK"
 	}
 
+	function AssertEqualTestShouldFail() : () {
+		AssertAlmostEqual(1.0, 0.0)
+	}
+
 	/// summary:
 	///     Tests whether common builtin operations are self adjoint.
 	///     These tests are already performed in Solid itself, such that

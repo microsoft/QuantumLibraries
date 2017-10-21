@@ -14,20 +14,13 @@ using System.Threading;
 
 namespace Microsoft.Quantum.Canon.Tests
 {
-    public class Drivers
+    public class OperationDrivers : TestBase
     {
+        private ITestOutputHelper TestOutputHelper;
 
-        private readonly ITestOutputHelper TestOutputHelper;
-        public Drivers(ITestOutputHelper testOutputHelper)
+        public OperationDrivers(ITestOutputHelper testOutputHelper)
         {
             TestOutputHelper = testOutputHelper;
-        }
-
-
-
-        public static IOperationFactory GetSimulator()
-        {
-            return new QuantumSimulator();
         }
         
         [Theory(DisplayName ="OperationTest")]
