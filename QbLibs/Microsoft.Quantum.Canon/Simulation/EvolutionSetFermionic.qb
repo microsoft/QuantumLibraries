@@ -12,6 +12,7 @@ namespace Microsoft.Quantum.Canon {
 /// Its GeneratorTerms are (([1],[]),[2]), 0.1),  (([1,0],[]),[0,2]), 0.2)
 /// 
 
+/// TODO Implement liquid PP | PQ | PQQP | PQQR | PQRS
 
 /// summary:
 ///     Represents a dynamical generator as a set of simulatable gates and
@@ -23,7 +24,7 @@ function JordanWigner(generatorIndex : GeneratorIndex) : GeneratorIndex[] {
     let (idxCreationAnnihilation, unused) = idxGen
     let nOperators = Length(idxCreationAnnihilation)
     let e = new Double[0]
-    /// a_k^\dag + a_k
+    /// Single-site a_k^\dag + a_k
     if(nOperators == 1){
         mutable idxPauliString = new Int[idxFermions[0] + 1]
         mutable idxQubits = new Int[idxFermions[0] + 1]
@@ -38,8 +39,8 @@ function JordanWigner(generatorIndex : GeneratorIndex) : GeneratorIndex[] {
 
         return [generatorIndex0]
     }
-    /// a_j^\dag a_k + a_k^\dag a_j
-    if(nOperators == 2){
+    /// PP | PQ a_p^\dag a_q + a_q^\dag a_p
+    elif(nOperators == 2){
         let idxQubitMax = Max(idxFermions)
         let idxQubitMin = Min(idxFermions)
         let nQubits = idxQubitMax - idxQubitMin + 1
@@ -62,6 +63,11 @@ function JordanWigner(generatorIndex : GeneratorIndex) : GeneratorIndex[] {
         let generatorIndex1 = GeneratorIndex((idxPauliString, e), idxQubits)
 
         return [generatorIndex0;generatorIndex1]
+    }
+    //PQQP | PQQR | PQRS
+    elif(nOperators == 4){
+        
+
     }
     else{
         //Todo for 3 terms and 4 terms
