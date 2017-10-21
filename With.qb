@@ -1,0 +1,87 @@
+namespace Microsoft.Quantum.Canon {
+	open Microsoft.Quantum.Primitive
+
+    operation With(outerOperation : (Qubit[] => ():Adjoint), innerOperation : (Qubit[] => ()), target : Qubit[])  : ()
+    {
+        Body {  
+            outerOperation(target)
+            innerOperation(target)
+            (Adjoint(outerOperation))(target)
+        }
+    }
+
+
+
+    operation WithA(outerOperation : (Qubit[] => ():Adjoint), innerOperation : (Qubit[] => ():Adjoint), target : Qubit[])  : ()
+    {
+        Body {  
+            outerOperation(target)
+            innerOperation(target)
+            (Adjoint(outerOperation))(target)
+        }
+
+        Adjoint auto
+    }
+
+
+    operation WithC(outerOperation : (Qubit[] => ():Adjoint), innerOperation : (Qubit[] => ():Controlled), target : Qubit[])  : ()
+    {
+        Body {  
+            outerOperation(target)
+            innerOperation(target)
+            (Adjoint(outerOperation))(target)
+        }
+
+        Controlled(controlRegister) {
+            outerOperation(target)
+            (Controlled(innerOperation))(controlRegister, target)
+            (Adjoint(outerOperation))(target)
+        }
+    }
+
+    operation WithCA(outerOperation : (Qubit[] => ():Adjoint), innerOperation : (Qubit[] => ():Adjoint,Controlled), target : Qubit[])  : ()
+    {
+        Body {  
+            outerOperation(target)
+            innerOperation(target)
+            (Adjoint(outerOperation))(target)
+        }
+
+        Adjoint auto
+        Controlled(controlRegister) {
+            outerOperation(target)
+            (Controlled(innerOperation))(controlRegister, target)
+            (Adjoint(outerOperation))(target)
+        }
+        Controlled Adjoint auto
+    }
+
+    operation With1(outerOperation : (Qubit => ():Adjoint), innerOperation : (Qubit => ()), target : Qubit)  : ()
+    {
+        Body {  
+            outerOperation(target)
+            innerOperation(target)
+            (Adjoint(outerOperation))(target)
+        }
+    }
+
+    operation With1C(outerOperation : (Qubit => ():Adjoint), innerOperation : (Qubit => ():Controlled), target : Qubit)  : ()
+    {
+        Body {  
+            With1(outerOperation, innerOperation, target)
+        }
+
+        Controlled(controlRegister) {
+            With1(outerOperation, (Controlled innerOperation)(controlRegister, _), target)
+        }
+    }
+
+    operation WithTest() : () {
+        Body {
+            let actual = With1(H, X, _)
+            let expected = Z
+
+            AssertOperationsEqualReferenced(ApplyToEach(actual, _), ApplyToEachA(expected, _), 4)
+    	}
+    }
+}

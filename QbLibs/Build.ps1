@@ -50,6 +50,7 @@ $qflatSources += @(
     "Math/NativeStubs.qb"
 
     "Combinators/RestrictToSubregister.qb"
+    "Combinators/ApplyToEach.qb"
 
     "DataStructures/Pairs.qb"
     

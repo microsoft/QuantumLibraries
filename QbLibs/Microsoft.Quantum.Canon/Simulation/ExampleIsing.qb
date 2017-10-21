@@ -1,97 +1,256 @@
 namespace Microsoft.Quantum.Canon {
     open Microsoft.Quantum.Primitive
-//Ising model without using any libraries
+    //Ising model without using any libraries
 
-// apply a ZZ-term 
-operation ApplyZZ( phi : Double, q1 : Qubit, q2 : Qubit ) : () { 
-    Body {     
-        CNOT(q1, q2)
-        Rz(phi, q2)
-        CNOT(q1, q2)
-    }    
-}
+    // apply a ZZ-term 
+    operation ApplyZZ( phi : Double, q1 : Qubit, q2 : Qubit ) : () { 
+        Body {     
+            CNOT(q1, q2)
+            Rz(phi, q2)
+            CNOT(q1, q2)
+        }    
+    }
 
-// stub for the floor function. FIXME: remove if Floor is supported in Solid standard lib.
-function floor (a : Double) : Int {}
+    // stub for the floor function. FIXME: remove if Floor is supported in Solid standard lib.
+    function floor (a : Double) : Int {}
 
-/// <summary> Simulate the time evolution of an Ising model under a transverse field </summary>
-/// <param name = "nsites"> Number of spins of the Ising model </param>
-/// <param name = "time"> Overall time of the simulation </param>
-/// <param name = "dt"> The length of a timestep of the simulation </param>
-operation Ising (nsites : Int, time : Double, dt : Double) : Result[] { 
-    Body {         
-        mutable result = new Result[nsites]
-        // allocate the qubits for the Ising chain
-        using (qs = Qubit[nsites]) { 
-            // start from a ground state aligned in the x direction by applying a Hadamard gate to all qubits
-            for (i in 0..Length(qs)-1) { 
-                H(qs[i])
-            }
-            
-            // choose the runtime and Trotter time step
-            let nsteps = floor(time / dt)
+    /// <summary> Simulate the time evolution of an Ising model under a transverse field </summary>
+    /// <param name = "nSites"> Number of spins of the Ising model </param>
+    /// <param name = "time"> Overall time of the simulation </param>
+    /// <param name = "dt"> The length of a timestep of the simulation </param>
+    operation Ising (nSites : Int, time : Double, dt : Double) : Result[] { 
+        Body {         
+            mutable result = new Result[nSites]
+            // allocate the qubits for the Ising chain
+            using (qs = Qubit[nSites]) { 
+                // start from a ground state aligned in the x direction by applying a Hadamard gate to all qubits
+                for (i in 0..Length(qs)-1) { 
+                    H(qs[i])
+                }
+                
+                // choose the runtime and Trotter time step
+                let nsteps = floor(time / dt)
 
-            // choose the couplings
-            let hx = 1.0   // transverse field
-            let hz = 0.5 // longitiduinal field
-            let J = 1.0   // Ising coupling
+                // choose the couplings
+                let hx = 1.0   // transverse field
+                let hz = 0.5 // longitiduinal field
+                let J = 1.0   // Ising coupling
 
-            // evolve using a second order Trotter decomposition
-            for (idxIter in 0..nsteps/2) {
-                // improve locality of qubit references for simulation by applying all terms locally
-                // before moving to the next qubit.
-                for (idxSite in 0..nsites) {
-                    Rx(hx * dt, qs[idxSite])
-                    Rz(hz * dt, qs[idxSite])
-                    if (idxSite + 1 < nsites) {
-                        ApplyZZ(J * dt, qs[idxSite], qs[idxSite + 1])
+                // evolve using a second order Trotter decomposition
+                for (idxIter in 0..nsteps/2) {
+                    // improve locality of qubit references for simulation by applying all terms locally
+                    // before moving to the next qubit.
+                    for (idxSite in 0..nSites) {
+                        Rx(hx * dt, qs[idxSite])
+                        Rz(hz * dt, qs[idxSite])
+                        if (idxSite + 1 < nSites) {
+                            ApplyZZ(J * dt, qs[idxSite], qs[idxSite + 1])
+                        }
+                    }
+                    for (idxSite in (nSites-1)..-1..0) {                 
+                        if (idxSite + 1 < nSites) {
+                            ApplyZZ(J * dt, qs[idxSite], qs[idxSite + 1])
+                        }
+                        Rz(hz * dt, qs[idxSite])
+                        Rx(hx * dt, qs[idxSite])
                     }
                 }
-                for (idxSite in (nsites-1)..-1..0) {                 
-                    if (idxSite + 1 < nsites) {
-                        ApplyZZ(J * dt, qs[idxSite], qs[idxSite + 1])
-                    }
-                    Rz(hz * dt, qs[idxSite])
-                    Rx(hx * dt, qs[idxSite])
-                }
+                
+                for (idx in 0..Length(qs)-1) { 
+                    set result[idx] = M(qs[idx])
+                }        
             }
-            
-            for (idx in 0..Length(qs)-1) { 
-                set result[idx] = M(qs[idx])
-            }        
-        }
-        return result
-    }
-}
-
-operation TestIsing () : Result[] { 
-    Body { 
-        return Ising(10, 1.0, 100.0)                
-    }
-}
-
-
-
-
-// Ising model using the Trotterization library directly
-// idxHamiltonian is in [0, nsites - 1]
-operation IsingTrotterUnitariesImpl(nsites : Int, hx : Double, hz: Double, jC: Double, idxHamiltonian: Int, stepSize : Double, qubits : Qubit[]) : ()
-{
-    Body{
-        // when idxHamiltonian is in [0, nsites - 1], apply transverse field "hx" and longitudinal field "hy"
-        // when idxHamiltonian is in [0, nsites - 2], apply Ising coupling "jC"
-        //TODO Need to separate Rx out as it does not commute
-        Rx(hx * stepSize, qubits[idxHamiltonian])
-        Rz(hz * stepSize, qubits[idxHamiltonian])
-        if(idxHamiltonian < nsites -1){
-            //Exp(pauliString, delta, _)
-            Exp([Zpauli, Zpauli],  stepSize, qubits)
+            return result
         }
     }
-    Adjoint auto
-    Controlled auto
-    Controlled Adjoint auto
-}
+
+    operation TestIsing () : Result[] { 
+        Body { 
+            return Ising(10, 1.0, 100.0)                
+        }
+    }
 
 
+
+
+    // Ising model using the Trotterization library directly
+    // idxHamiltonian is in [0, nSites - 1]
+    operation IsingTrotterUnitariesImpl(nSites : Int, hx : Double, hz: Double, jC: Double, idxHamiltonian: Int, stepSize : Double, qubits : Qubit[]) : ()
+    {
+        Body{
+            // when idxHamiltonian is in [0, nSites - 1], apply transverse field "hx"
+            // when idxHamiltonian is in [nSites, 2 * nSites - 1], apply and longitudinal field "hz"
+            // when idxHamiltonian is in [2 * nSites, 3 * nSites - 2], apply Ising coupling "jC"
+            //TODO Need to separate Rx out as it does not commute
+            if(idxHamiltonian <= nSites - 1){
+                Rx(hx * stepSize, qubits[idxHamiltonian])
+            }
+            elif(idxHamiltonian <= 2 * nSites - 1){
+                Rz(hz * stepSize, qubits[idxHamiltonian])
+            }
+            else{
+                Exp([Zpauli; Zpauli],  stepSize, qubits)
+            }
+        }
+        Adjoint auto
+        Controlled auto
+        Controlled Adjoint auto
+    }
+
+    function IsingTrotterUnitaries(nSites : Int, hx : Double, hz: Double, jC: Double) : (Int, ((Int, Double, Qubit[]) => () : Adjoint, Controlled))
+    {
+        let nTerms = 3 * nSites - 1
+        return (nTerms, IsingTrotterUnitariesImpl(nSites, hx, hz, jC, _, _, _))
+    }
+
+    operation IsingTrotterStepA(nSites : Int, hx : Double, hz: Double, jC: Double, trotterOrder: Int, trotterStepSize: Double) : (Qubit[] => ())
+    {
+        Body{
+            let op = IsingTrotterUnitaries(nSites, hx, hz, jC)
+            return (DecomposeIntoTimeStepsCA(op,trotterOrder))(trotterStepSize, _)
+        }
+    }
+
+
+    // Ising model using the Hamiltonian representation library
+    // idxHamiltonian is in [0, 3 * nSites - 2]
+    function IsingGeneratorTerm(nSites : Int, hx : Double, hz: Double, jC: Double, idxHamiltonian : Int) : GeneratorTerm
+    {
+        // when idxHamiltonian is in [0, nSites - 1], apply transverse field "hx"
+        // when idxHamiltonian is in [nSites, 2 * nSites - 1], apply longitudinal field "hz"
+        // when idxHamiltonian is in [2 * nSites, 3 * nSites - 2], apply Ising coupling "jC"
+            let e = new Double[0]
+            mutable idxPauliString = new Int[0]
+            mutable idxQubits = new Int[0]
+            mutable coeff = Float(0)
+
+            if(idxHamiltonian <= nSites - 1){
+                set idxPauliString = [1]
+                set idxQubits = [idxHamiltonian]
+                set coeff = hx
+            }
+            elif(idxHamiltonian <= 2 * nSites - 1){
+                set idxPauliString = [3]
+                set idxQubits = [idxHamiltonian % nSites]
+                set coeff = hz
+            }
+            elif(idxHamiltonian < nSites - 2){
+                set idxPauliString = [3; 3]
+                set idxQubits = [idxHamiltonian % nSites; idxHamiltonian +1 % nSites]
+                set coeff = jC
+            }
+
+            let generatorIndex = GeneratorIndex((idxPauliString,e),idxQubits)
+            let generatorTerm = GeneratorTerm(generatorIndex, coeff)
+            return generatorTerm
+    }
+
+    function  IsingGeneratorSystem(nSites : Int, hx : Double, hz: Double, jC: Double) : GeneratorSystem 
+    {
+        let nTerms = 3 * nSites - 1
+        return GeneratorSystem(nTerms, IsingGeneratorTerm(nSites, hx, hz, jC, _))
+    }
+
+    function IsingEvolutionGenerator(nSites : Int, hx : Double, hz: Double, jC: Double) : EvolutionGenerator
+    {
+        let generatorSystem = IsingGeneratorSystem(nSites, hx, hz, jC)
+        let evolutionSet = PauliEvolutionSet()
+        return EvolutionGenerator(evolutionSet, generatorSystem)
+    }
+
+
+    operation IsingTrotterStepB(nSites : Int, hx : Double, hz: Double, jC: Double, trotterOrder: Int, trotterStepSize: Double): (Qubit[] => ())
+    {
+        Body{
+            let evolutionGenerator = IsingEvolutionGenerator(nSites, hx, hz, jC)
+            return TrotterStep(evolutionGenerator, trotterOrder, trotterStepSize)
+        }
+    }
+
+/// Tests
+/// Adiabatic state preparation
+    // time goes from 0 to 1.0
+    // jC goes from 0.0 to 0.5
+    operation IsingScheduleImpl(nSites : Int, trotterOrder: Int, time : Double, stepSize: Double, qubits: Qubit[]) : ()
+    {
+        Body{
+           (IsingTrotterStepB(nSites, 1.0 - time, 0.0, 0.5 * time, trotterOrder, stepSize))(qubits)
+        }
+    }
+    //Assume qubits start in |0...0> state
+    operation IsingAdiabaticStatePrep(nSites : Int, trotterOrder: Int, timeSteps: Int, qubits: Qubit[]) : ()
+    {
+        Body{
+            ApplyToEachAC(H, qubits)
+            let trotterSlice = IsingScheduleImpl(nSites, trotterOrder, _, _, _)
+            Schedule(trotterSlice, timeSteps, qubits) 
+        }
+
+    }
+
+/// D-wave 2D all to all
+
+    // Ising model using the Hamiltonian representation library
+    // idxHamiltonian is in [0, 3 * nSites - 2]
+    function Ising2DGeneratorTerm(nSitesLengths : Int[], hx : Double, jCArr: (Int[],Int[], Double)[], idxHamiltonian : Int) : GeneratorTerm
+    {
+        let nSitesX = nSitesLengths[0]
+        let nSitesY = nSitesLengths[1]
+        let nSites = nSitesX * nSitesY
+        let nCouplings = Length(jCArr)
+        // when idxHamiltonian is in [0, nSites - 1], apply transverse field "hx"
+        // when idxHamiltonian is in [nSites, nSites + nCouplings - 1], apply Ising couplings jCArr
+            let e = new Double[0]
+            mutable idxPauliString = new Int[0]
+            mutable idxQubits = new Int[0]
+            mutable coeff = Float(0)
+
+            if(idxHamiltonian <= nSites - 1){
+                set idxPauliString = [1]
+                set idxQubits = [idxHamiltonian]
+                set coeff = hx
+            }
+            elif(idxHamiltonian <= nSites + nCouplings - 1){
+                let (xyA, xyB, coeffTemp) = jCArr[idxHamiltonian % nSites]
+                let idxSiteA = xyA[0] + xyA[1] * nSitesX
+                let idxSiteB = xyB[0] + xyB[1] * nSitesX
+                set idxPauliString = [3; 3]
+                set idxQubits = [idxSiteA; idxSiteB]
+                set coeff = coeffTemp
+            }
+
+            let generatorIndex = GeneratorIndex((idxPauliString,e),idxQubits)
+            let generatorTerm = GeneratorTerm(generatorIndex, coeff)
+            return generatorTerm
+    }
+
+    function  Ising2DGeneratorSystem(nSitesLengths : Int[], hx : Double, jCArr: (Int[],Int[], Double)[]) : GeneratorSystem 
+    {
+        let nSitesX = nSitesLengths[0]
+        let nSitesY = nSitesLengths[1]
+        let nSites = nSitesX * nSitesY
+        let nCouplings = Length(jCArr)
+        let nTerms = nSites + nCouplings
+        return GeneratorSystem(nTerms, Ising2DGeneratorTerm(nSitesLengths, hx, jCArr, _))
+    }
+
+    function Ising2DEvolutionGenerator(nSitesLengths : Int[], hx : Double, jCArr: (Int[],Int[], Double)[]) : EvolutionGenerator
+    {
+        let generatorSystem = Ising2DGeneratorSystem(nSitesLengths, hx, jCArr)
+        let evolutionSet = PauliEvolutionSet()
+        return EvolutionGenerator(evolutionSet, generatorSystem)
+    }
+
+
+    operation Ising2DTrotterStepB(nSitesLengths : Int[], hx : Double, jCArr: (Int[],Int[], Double)[], trotterOrder: Int, trotterStepSize: Double): (Qubit[] => ())
+    {
+        Body{
+            let evolutionGenerator = Ising2DEvolutionGenerator(nSitesLengths, hx, jCArr)
+            return TrotterStep(evolutionGenerator, trotterOrder, trotterStepSize)
+        }
+    }
+
+    /// Test random couplings in +- 1 and do adiabatic ramp
+
 }
+

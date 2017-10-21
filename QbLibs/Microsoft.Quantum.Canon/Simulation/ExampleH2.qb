@@ -111,7 +111,7 @@ function H2TrotterStepA(idxBondLength : Int, trotterOrder: Int, trotterStepSize:
 
 
 // Using the Hamiltonian representation library
-function H2GeneratorSystemImpl(idxBondLength : Int, idxHamiltonian : Int) : GeneratorTerm
+function H2GeneratorTerm(idxBondLength : Int, idxHamiltonian : Int) : GeneratorTerm
 {
     //Pass empty double as Pauli set not indexed by continuous parameters
     let e = new Double[0]
@@ -124,7 +124,7 @@ function H2GeneratorSystemImpl(idxBondLength : Int, idxHamiltonian : Int) : Gene
 function H2GeneratorSystem(idxBondLength : Int) : GeneratorSystem 
 {
     let nTerms = 5
-    return GeneratorSystem(nTerms, H2GeneratorSystemImpl(idxBondLength, _))
+    return GeneratorSystem(nTerms, H2GeneratorTerm(idxBondLength, _))
 }
 
 function H2EvolutionGenerator(idxBondLength : Int) : EvolutionGenerator
