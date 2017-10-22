@@ -88,9 +88,9 @@
       <DependentUpon>AmplitudeAmplification.qb</DependentUpon>
     </Compile>
     <Compile Include="AmplitudeAmplification\ExampleAA.g.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
       <DependentUpon>ExampleAA.qb</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
     </Compile>
     <Compile Include="AmplitudeAmplification\ExampleGrover.g.cs">
       <DependentUpon>ExampleGrover.qb</DependentUpon>

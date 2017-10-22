@@ -49,7 +49,7 @@
 						let oracleState = ExampleStatePrep(lambda)
 						
 
-						AmpAmpByOracle(nIterations, oracleState, idxFlag, qubitsStart)
+						(AmpAmpByOracle(nIterations, oracleState, idxFlag))( qubitsStart)
 						
 						let successAmplitude = Sin( ToDouble(2 * nIterations + 1) * rotAngle )
 						let successProbability = successAmplitude * successAmplitude
@@ -79,7 +79,7 @@
 						let oracleAncilla = OracleStateDeterministic(Exp([Ypauli], rotAngle * 0.5, _))
 						let oracleSignal = OracleOblivious(Identity2(_,_))
 
-						AmpAmpObliviousByOraclePhases(phases, oracleAncilla, oracleSignal, idxFlag, qubitsAncilla, qubitsSystem)
+						(AmpAmpObliviousByOraclePhases(phases, oracleAncilla, oracleSignal, idxFlag))(qubitsAncilla, qubitsSystem)
 				
 						let successAmplitude = Sin( ToDouble(2 * nIterations + 1) * rotAngle * 0.5 )
 						let successProbability = successAmplitude * successAmplitude

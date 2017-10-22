@@ -131,7 +131,7 @@
 	/// See [Dominic W. Berry, Andrew M. Childs, Richard Cleve, Robin Kothari, Rolando D. Somma, https://arxiv.org/abs/1312.1414] for standard version.
 	/// See [G.H. Low, I.L. Chuang, https://arxiv.org/abs/1610.06546] for generalization to partial reflections.
 	/// </remarks>
-	operation AmpAmpObliviousByReflectionPhases(phases : AmpAmpReflectionPhases, refAncilla : OracleReflection, refTarget : OracleReflection, oracleSignal : OracleOblivious, qubitsAncilla: Qubit[], qubitsSystem: Qubit[]) : ()
+	operation _AmpAmpObliviousByReflectionPhases(phases : AmpAmpReflectionPhases, refAncilla : OracleReflection, refTarget : OracleReflection, oracleSignal : OracleOblivious, qubitsAncilla: Qubit[], qubitsSystem: Qubit[]) : ()
 	{
 		Body {
 			let (phasesAncilla, phasesTarget) = phases
@@ -167,6 +167,10 @@
 		Controlled auto
 		Adjoint Controlled auto
 	}
+    function AmpAmpObliviousByReflectionPhases(phases : AmpAmpReflectionPhases, refAncilla : OracleReflection, refTarget : OracleReflection, oracleSignal : OracleOblivious) : ((Qubit[], Qubit[]) => () : Adjoint, Controlled)
+	{
+        return _AmpAmpObliviousByReflectionPhases(phases, refAncilla, refTarget, oracleSignal, _, _) 
+    }
 
 
 	/// <summary>
@@ -186,22 +190,13 @@
 	/// In most cases, "qubitFlag" and "qubitsAncilla" is initialized in the state |0>_f|0>_a.
 	/// </remarks>
   
-	operation AmpAmpObliviousByOraclePhases(phases : AmpAmpReflectionPhases, oracleAncilla : OracleStateDeterministic, oracleSignal : OracleOblivious, idxQubitFlag : Int, qubitsAncilla: Qubit[], qubitsSystem: Qubit[]) : ()
+	function AmpAmpObliviousByOraclePhases(phases : AmpAmpReflectionPhases, oracleAncilla : OracleStateDeterministic, oracleSignal : OracleOblivious, idxQubitFlag : Int) : ((Qubit[], Qubit[]) => () : Adjoint, Controlled)
 	{
-		Body {
-			//Assert that qubitsAncilla are in |0...0> state?
-			let qubitFlag = qubitsAncilla[idxQubitFlag]
-			let refAncilla = ReflectionStart()
-			let refTarget = ReflectionTargetOracleState(idxQubitFlag)
-			let oracleObliviousNew = OracleObliviousFromOracleStateDeterministic(oracleAncilla, oracleSignal)
+		let refAncilla = ReflectionStart()
+		let refTarget = ReflectionTargetOracleState(idxQubitFlag)
+		let oracleObliviousNew = OracleObliviousFromOracleStateDeterministic(oracleAncilla, oracleSignal)
 
-			AmpAmpObliviousByReflectionPhases(phases, refAncilla, refTarget, oracleObliviousNew, qubitsAncilla, qubitsSystem)
-		
-		}
-
-		Adjoint auto
-		Controlled auto
-		Adjoint Controlled auto
+		return AmpAmpObliviousByReflectionPhases(phases, refAncilla, refTarget, oracleObliviousNew)
 	}
 	/// <summary>
 	/// Amplitude amplification by partial reflections.
@@ -214,20 +209,15 @@
 	/// Amplitude amplification is a special case of oblivous amplitude amplification where there are no system qubits and the oblivious oracle is set to identity.
 	/// In most cases, "qubitsStart" is initialized in the state |start>_a, which is the -1 eigenstate of "refStart"
 	/// </remarks>
-	operation AmpAmpByReflectionsPhases(phases : AmpAmpReflectionPhases, refStart : OracleReflection, refTarget : OracleReflection, qubitsStart: Qubit[]) : ()
+	function AmpAmpByReflectionsPhases(phases : AmpAmpReflectionPhases, refStart : OracleReflection, refTarget : OracleReflection) :  (Qubit[] => () : Adjoint, Controlled)
 	{
-		Body {
-			//Pass empty qubit array using fact that Identity2 does nothing
-			let qubitEmpty = new Qubit[0]
+		
+		//Pass empty qubit array using fact that Identity2 does nothing
+		let qubitEmpty = new Qubit[0]
 
-			let oracleSignal = OracleOblivious(Identity2)
+		let oracleSignal = OracleOblivious(Identity2)
 
-			AmpAmpObliviousByReflectionPhases(phases, refStart, refTarget, oracleSignal, qubitsStart, qubitEmpty) 
-		}
-
-		Adjoint auto
-		Controlled auto
-		Adjoint Controlled auto
+		return (AmpAmpObliviousByReflectionPhases(phases, refStart, refTarget, oracleSignal))(_, qubitEmpty)
 	}
 
 	/// <summary>
@@ -243,20 +233,16 @@
 	/// It is assumed that oracleStatePrep|0>_f|0>_s = λ|1>_f|target>__s + sqrt{1-|λ|^2}|0>_f...
 	/// In most cases, "qubitFlag" and "qubitsAncilla" is initialized in the state |0>_f|0>_a.
 	/// </remarks>
-	operation AmpAmpByOraclePhases(phases : AmpAmpReflectionPhases, oracleState : OracleState, idxQubitFlag : Int, qubitsStart: Qubit[]) : ()
+	function AmpAmpByOraclePhases(phases : AmpAmpReflectionPhases, oracleState : OracleState, idxQubitFlag : Int) :  (Qubit[] => () : Adjoint, Controlled)
 	{
-		Body {
-            let qubitEmpty = new Qubit[0]
-            let oracleSignal = OracleOblivious(Identity2)
-            let oracleAncilla = OracleStateDeterministicFromOracleState(idxQubitFlag, oracleState)
+		
+        let qubitEmpty = new Qubit[0]
+        let oracleSignal = OracleOblivious(Identity2)
+        let oracleAncilla = OracleStateDeterministicFromOracleState(idxQubitFlag, oracleState)
 	
-		    AmpAmpObliviousByOraclePhases(phases, oracleAncilla, oracleSignal, idxQubitFlag, qubitsStart, qubitEmpty)
+		return (AmpAmpObliviousByOraclePhases(phases, oracleAncilla, oracleSignal, idxQubitFlag))(_, qubitEmpty)
 
-		}
-
-		Adjoint auto
-		Controlled auto
-		Adjoint Controlled auto
+	
 	}
 
 
@@ -279,20 +265,11 @@
 	/// In most cases, "qubitFlag" and "qubitsAncilla" is initialized in the state |0>_f|0>_a.
 	/// [G. Brassard, P. Hoyer, M. Mosca, A. Tapp, https://arxiv.org/abs/quant-ph/0005055]
 	/// </remarks>
-
-    
-	operation AmpAmpByOracle(iterations: Int, oracleState : OracleState, idxQubitFlag : Int, qubitsStart: Qubit[]) : ()
-	{
-		Body {
-			let phases = AmpAmpPhasesStandard(iterations)
-
-			AmpAmpByOraclePhases(phases, oracleState, idxQubitFlag, qubitsStart)
-		}
-
-		Adjoint auto
-		Controlled auto
-		Adjoint Controlled auto
-	}
+    function AmpAmpByOracle(iterations: Int, oracleState : OracleState, idxQubitFlag : Int) : (Qubit[] => () : Adjoint, Controlled)
+    {
+        let phases = AmpAmpPhasesStandard(iterations)
+        return AmpAmpByOraclePhases(phases, oracleState, idxQubitFlag)
+    }
 
 	/// <summary>
 	/// Fixed-Point Amplitude Amplification algorithm 
@@ -327,7 +304,7 @@
 					repeat { 
 						let queries = 2^exponentCurrent
 						let phases = AmpAmpPhasesFixedPoint( queries, successMin ) 
-						AmpAmpByOraclePhases(phases, oracleStatePrep, idxQubitFlag, qubits)
+						(AmpAmpByOraclePhases(phases, oracleStatePrep, idxQubitFlag))(qubits)
 
 						set finished = M(qubitFlag[0])
 						set exponentCurrent = exponentCurrent + 1

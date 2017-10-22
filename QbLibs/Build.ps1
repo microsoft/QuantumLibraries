@@ -64,6 +64,10 @@ $qflatSources += @(
     # # AmplitudeAmplification
     "AmplitudeAmplification/Utils.qb"
     "AmplitudeAmplification/Types.qb"
+    "AmplitudeAmplification/AmplitudeAmplification.qb"
+    
+    #"AmplitudeAmplification/ExampleGrover.qb"
+    #"AmplitudeAmplification/ExampleAA.qb"   
 
 ) | ForEach-Object {
     Join-Path $libDirectory $_

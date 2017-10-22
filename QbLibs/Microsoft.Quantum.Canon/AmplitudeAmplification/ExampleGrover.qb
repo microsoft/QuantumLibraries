@@ -239,15 +239,9 @@
 	/// <remarks> 
 	/// On input |0>_f|0>_d, this prepares the state |1>_f|marked>_d with amplitude Sin((2*iterations + 1) ArcSin(Sqrt(M/N))).
 	/// </remarks>
-	operation GroverSearch( markedElements: Int[], iterations: Int, idxQubitFlag: Int , qubitsStart: Qubit[]) : ()
+	function GroverSearch( markedElements: Int[], iterations: Int, idxQubitFlag: Int) : (Qubit[] => () : Adjoint, Controlled)
 	{
-		Body{ 
-			AmpAmpByOracle(iterations, GroverOracleStatePrep(markedElements), idxQubitFlag, qubitsStart) 
-		}
-
-		Adjoint auto
-		Controlled auto
-		Adjoint Controlled auto
+		return AmpAmpByOracle(iterations, GroverOracleStatePrep(markedElements), idxQubitFlag) 
 	}
     
 
@@ -267,7 +261,7 @@
                         let markedElements = [1;4;9]
                         let nMarkedElements = Length(markedElements)
 						
-						GroverSearch( markedElements, nIterations, 0 , qubits)
+						(GroverSearch( markedElements, nIterations, 0 ))( qubits)
 
 						let successAmplitude = Sin( ToDouble(2*nIterations + 1) * ArcSin( Sqrt(ToDouble(nMarkedElements) / ToDouble(2^nDatabaseQubits))  ))
 						let successProbability = successAmplitude * successAmplitude
