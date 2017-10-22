@@ -82,6 +82,31 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AmplitudeAmplification\AmplitudeAmplification.g.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AmplitudeAmplification.qb</DependentUpon>
+    </Compile>
+    <Compile Include="AmplitudeAmplification\ExampleAA.g.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ExampleAA.qb</DependentUpon>
+    </Compile>
+    <Compile Include="AmplitudeAmplification\ExampleGrover.g.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ExampleGrover.qb</DependentUpon>
+    </Compile>
+    <Compile Include="AmplitudeAmplification\Types.g.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Types.qb</DependentUpon>
+    </Compile>
+    <Compile Include="AmplitudeAmplification\Utils.g.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Utils.qb</DependentUpon>
+    </Compile>
     <Compile Include="Arithmetic.g.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -127,6 +152,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>With.qb</DependentUpon>
     </Compile>
+    <Compile Include="ControlledOnBitString.g.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ControlledOnBitString.qb</DependentUpon>
+    </Compile>
     <Compile Include="DataStructures\Stack.g.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -157,6 +187,11 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>NativeStubs.qb</DependentUpon>
+    </Compile>
+    <Compile Include="Math\Random.g.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Random.qb</DependentUpon>
     </Compile>
     <Compile Include="Math\Types.g.cs">
       <AutoGen>True</AutoGen>
@@ -258,6 +293,39 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Toffoli.qb</DependentUpon>
     </Compile>
+    <Compile Include="TypeConversion.g.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>TypeConversion.qb</DependentUpon>
+    </Compile>
+    <QbCompile Include="AmplitudeAmplification\AmplitudeAmplification.qb">
+      <Generator>QbCodeGenerator</Generator>
+      <LastGenOutput>AmplitudeAmplification.g.cs</LastGenOutput>
+    </QbCompile>
+    <QbCompile Include="AmplitudeAmplification\ExampleAA.qb">
+      <Generator>QbCodeGenerator</Generator>
+      <LastGenOutput>ExampleAA.g.cs</LastGenOutput>
+    </QbCompile>
+    <QbCompile Include="AmplitudeAmplification\ExampleGrover.qb">
+      <Generator>QbCodeGenerator</Generator>
+      <LastGenOutput>ExampleGrover.g.cs</LastGenOutput>
+    </QbCompile>
+    <QbCompile Include="AmplitudeAmplification\Types.qb">
+      <Generator>QbCodeGenerator</Generator>
+      <LastGenOutput>Types.g.cs</LastGenOutput>
+    </QbCompile>
+    <QbCompile Include="AmplitudeAmplification\Utils.qb">
+      <Generator>QbCodeGenerator</Generator>
+      <LastGenOutput>Utils.g.cs</LastGenOutput>
+    </QbCompile>
+    <QbCompile Include="Math\Random.qb">
+      <Generator>QbCodeGenerator</Generator>
+      <LastGenOutput>Random.g.cs</LastGenOutput>
+    </QbCompile>
+    <QbCompile Include="TypeConversion.qb">
+      <Generator>QbCodeGenerator</Generator>
+      <LastGenOutput>TypeConversion.g.cs</LastGenOutput>
+    </QbCompile>
     <QbCompile Include="Tests\AssertTests.qb">
       <Generator>QbCodeGenerator</Generator>
       <LastGenOutput>AssertTests.g.cs</LastGenOutput>
@@ -280,6 +348,10 @@
     <QbCompile Include="Math\NativeStubs.qb">
       <Generator>QbCodeGenerator</Generator>
       <LastGenOutput>NativeStubs.g.cs</LastGenOutput>
+    </QbCompile>
+    <QbCompile Include="ControlledOnBitString.qb">
+      <Generator>QbCodeGenerator</Generator>
+      <LastGenOutput>ControlledOnBitString.g.cs</LastGenOutput>
     </QbCompile>
     <None Include="packages.config" />
   </ItemGroup>

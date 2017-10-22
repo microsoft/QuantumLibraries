@@ -40,6 +40,7 @@ $qflatSources += @(
     "Asserts/AssertQubit.qb",
     "Asserts/AssertOperationsEqualReferenced.qb",
     "Asserts/AssertOperationsEqualInPlace.qb",
+	"Asserts/ClassicalAsserts.qb"
 
     # # Provide definitions of the identity and nop.
     "Identity.qb",
@@ -48,30 +49,26 @@ $qflatSources += @(
     # so we include it first.
     "Endianness.qb",
 
-    "DataStructures/Stack.qb",
+    "TypeConversion.qb"
 
-    # Similarly with OracleTypes.qb, save for that it depends on OperationPow.qb.
-    "Combinators/OperationPow.qb",
-    "PhaseEstimation/Types.qb",
-    "Arithmetic.qb",
-    "Bind.qb",
-    "Paulis.qb",
+ 
+    "Math/NativeStubs.qb"
+    "Math/Random.qb"
 
-    "QFT.qb",
-    "Teleportation.qb",
-    "Toffoli.qb",
-    "ShiftOp.qb",
-    "Superdense.qb",
-    "PhaseEstimation/Quantum.qb",
-    "PhaseEstimation/Iterative.qb",
-    #TODO Bug #727: "AmplitudeAmplification.qb",
     
-    # QECC
-    "Qecc/Types.qb",
-    "Qecc/Utils.qb",
-    "Qecc/BitFlipCode.qb",
-    "Qecc/5QubitCode.qb",
-    "Qecc/7QubitCode.qb"
+
+
+    "Paulis.qb",
+    "ControlledOnBitString.qb"
+
+    # # AmplitudeAmplification
+    "AmplitudeAmplification/Utils.qb"
+    "AmplitudeAmplification/Types.qb"
+    "AmplitudeAmplification/AmplitudeAmplification.qb"
+    
+    "AmplitudeAmplification/ExampleGrover.qb"
+    "AmplitudeAmplification/ExampleAA.qb"   
+
 ) | ForEach-Object {
     Join-Path $libDirectory $_
 }

@@ -26,7 +26,7 @@
 	{
 		Body {
 
-			WithAC(ApplyToEachAC(X, _), ReflectionAllOnes(phase, _), qubits)
+			WithCA(ApplyToEachAC(X, _), ReflectionAllOnes(phase, _), qubits)
 
 		}
 

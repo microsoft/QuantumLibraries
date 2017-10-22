@@ -5,7 +5,7 @@ function randomIntPow2 (maxBits : Int) : Int
 {
    mutable number = 0
   for( idxBit in 0..maxBits -1){
-        set number = number + (Random([0.5;0.5])) * 2 ^ idxBit
+        set number = number + (RandomTMP([0.5;0.5])) * 2 ^ idxBit
     }
     return number    
 }

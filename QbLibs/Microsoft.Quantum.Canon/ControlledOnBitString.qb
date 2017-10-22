@@ -16,7 +16,7 @@
 operation ControlledOnBitStringImpl(bits : Bool[] , oracle: (Qubit[] => (): Adjoint, Controlled), qubitsControl : Qubit[], qubitsTarget: Qubit[]) : ()
 {
 	Body{
-		WithAC(ApplyPauliFromBitString(Xpauli, false, bits, _), (Controlled oracle)(_, qubitsTarget), qubitsControl)
+		WithCA(ApplyPauliFromBitString(Xpauli, false, bits, _), (Controlled oracle)(_, qubitsTarget), qubitsControl)
 		
 	}
 

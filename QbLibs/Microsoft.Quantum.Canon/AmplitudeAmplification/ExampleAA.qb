@@ -30,7 +30,7 @@
 	///In this mininal example, there are no system qubits, only a single flag qubit. 
 	/// ExampleStatePrep is already of type  OracleState, so we call
 	/// AmpAmpByOracle(iterations: Int, oracleStatePrep : OracleState, qubitFlag : Qubit, qubitsStart: Qubit[]) : ()
-	operation ExampleAAbyOracle() : ()
+	operation AATest() : ()
 	{
 		Body{
 			let lambda = 0.2

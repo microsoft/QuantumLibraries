@@ -129,7 +129,7 @@
 	operation ReflectionStartOracleStateDeterministicImpl(phase: Double, oracle: OracleStateDeterministic, qubitsSystem: Qubit[]): ()
 	{
 		Body {
-			WithAC((Adjoint oracle), ReflectionAllZero(phase, _), qubitsSystem)
+			WithCA((Adjoint oracle), ReflectionAllZero(phase, _), qubitsSystem)
 		}
 		Adjoint auto
 		Controlled auto

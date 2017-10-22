@@ -7,7 +7,7 @@ function Float(value : Int)  : Double
     return 0.0
 }
 
-function Random(value : Double[]) : Int
+function RandomTMP(value : Double[]) : Int
 {
     return 0
 }
