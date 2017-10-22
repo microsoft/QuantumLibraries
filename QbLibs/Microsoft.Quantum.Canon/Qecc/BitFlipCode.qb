@@ -1,4 +1,4 @@
-﻿namespace Microsoft.Quantum.Canon {
+namespace Microsoft.Quantum.Canon {
     open Microsoft.Quantum.Primitive
 
     /// <summary>

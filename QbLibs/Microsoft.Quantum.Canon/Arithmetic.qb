@@ -1,11 +1,4 @@
-﻿namespace Microsoft.Quantum.Canon {
-
-	// namespace Microsoft.Research.Qflat.CliffordTRzMachine
-	// FIXME: uncomment when the namespace syntax is clarified
-
-	// open Endianness
-	// open QFT
-	// FIXME: uncomment when the syntax to open modules is clarified
+namespace Microsoft.Quantum.Canon {
 
 	/// <summary>
 	/// Diagonal shift circuit. This implements the diagonal unitary diag(exp(2πisk/2ⁿ):k=0,...,2ⁿ-1).

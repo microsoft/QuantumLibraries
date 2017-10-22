@@ -1,4 +1,4 @@
-﻿namespace Microsoft.Quantum.Canon {
+namespace Microsoft.Quantum.Canon {
 
     // NB: the following are stubs to allow this file to at least parse, even without
     //     defining the correct action of the operations.

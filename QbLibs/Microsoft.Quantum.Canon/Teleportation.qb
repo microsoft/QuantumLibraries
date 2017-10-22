@@ -1,54 +1,69 @@
-//namespace Microsoft.Quantum.Canon
+namespace Microsoft.Quantum.Canon {
+    open Microsoft.Quantum.Primitive
 
-/// <summary>
-/// Teleportation transfers 1 quantum bit by encoding it into 2 classical bits, using 1 EPR pair ("1q=2c+1e")
-/// </summary>
-/// <param name = "source"> A single qubit that is in an unknown state and which gets teleported. </param>
-/// <param name = "target"> A single qubit that is initially zero and which holds the state of source at the end of the protocol. </param>
-/// <remarks>  The circuit first creates an EPR pair between the target qubit and an ancilla qubit that gets allocated inside the 
-///     function. Then a Bell measurement between the source qubit and one half of the EPR pair is performed. Finally, depending 
-///     on the 4 possible outcomes of the Bell measurement, a correction is performed to restore the state in the target qubit.
-///     [ Nielsen & Chuang, CUP 2000, Section 1.3.6, http://doi.org/10.1017/CBO9780511976667 ]
-/// </remarks>
+    /// <summary>
+    /// Teleportation transfers 1 quantum bit by encoding it into 2 classical bits, using 1 EPR pair ("1q=2c+1e").
+    /// Always returns source qubit to |0>
+    /// </summary>
+    /// <param name = "source"> A single qubit that is in an unknown state and which gets teleported. </param>
+    /// <param name = "target"> A single qubit that is initially zero and which holds the state of source at the end of the protocol. </param>
+    /// <remarks>  The circuit first creates an EPR pair between the target qubit and an ancilla qubit that gets allocated inside the 
+    ///     function. Then a Bell measurement between the source qubit and one half of the EPR pair is performed. Finally, depending 
+    ///     on the 4 possible outcomes of the Bell measurement, a correction is performed to restore the state in the target qubit.
+    ///     [ Nielsen & Chuang, CUP 2000, Section 1.3.6, http://doi.org/10.1017/CBO9780511976667 ]
+    /// </remarks>
 
-operation Teleportation (source : Qubit, target : Qubit) : () {
-    Body {
-        // Get a temporary qubit for the Bell pair
-        using (ancillaRegister = Qubit[1]) {
-            let ancilla = ancillaRegister[0]
-        
-            // Create a Bell pair between the temporary qubit and the target
-            Assert([Zpauli], [target], Zero, "Error: target qubit must be initialized in zero state")
-            H(ancilla)
-            CNOT(ancilla, target)
-            Assert([Zpauli; Zpauli], [ancilla; target], Zero, "Error: EPR state must be eigenstate of ZZ")
-            Assert([Xpauli; Xpauli], [ancilla; target], Zero, "Error: EPR state must be eigenstate of XX")
-        
-            // Perform the Bell measurement and the correction necessary to reconstruct the input state as the target state
-            CNOT(source, ancilla)
-            H(source)
-            AssertProb([Zpauli], [source], Zero, 0.5, "Error: All outcomes of the Bell measurement must be equally likely", 1e-10)
-            AssertProb([Zpauli], [ancilla], Zero, 0.5, "Error: All outcomes of the Bell measurement must be equally likely", 1e-10)  
-            if ( M(source) == One ) { X(target) }
-            if ( M(ancilla) == One ) { Z(target) }
+    operation Teleportation (source : Qubit, target : Qubit) : () {
+        Body {
+            // Get a temporary qubit for the Bell pair
+            using (ancillaRegister = Qubit[1]) {
+                let ancilla = ancillaRegister[0]
+            
+                // Create a Bell pair between the temporary qubit and the target
+                Assert([Zpauli], [target], Zero, "Error: target qubit must be initialized in zero state")
+                H(ancilla)
+                CNOT(ancilla, target)
+                Assert([Zpauli; Zpauli], [ancilla; target], Zero, "Error: EPR state must be eigenstate of ZZ")
+                Assert([Xpauli; Xpauli], [ancilla; target], Zero, "Error: EPR state must be eigenstate of XX")
+            
+                // Perform the Bell measurement and the correction necessary to reconstruct the input state as the target state
+                CNOT(source, ancilla)
+                H(source)
+                AssertProb([Zpauli], [source], Zero, 0.5, "Error: All outcomes of the Bell measurement must be equally likely", 1e-5)
+                AssertProb([Zpauli], [ancilla], Zero, 0.5, "Error: All outcomes of the Bell measurement must be equally likely", 1e-5)  
+                // Note that MResetZ makes sure that source is returned to zero state
+                if ( MResetZ(source) == One ) {
+                    Z(target)
+                }
+                // Note that MResetZ makes sure that ancilla is returned to zero state
+                if ( MResetZ(ancilla) == One ) {
+                    X(target)
+                }
+            }
         }
     }
-}
 
-operation TeleportationTest () : () {
-    Body { 
-        using (qubits1 = Qubit[2]) { 
-            // create a |+> state in the first qubit
-            H(qubits1[0])
-            Teleportation(qubits1[0], qubits1[1])
-            Assert([Xpauli], [qubits1[1]], Zero, "Error: state after the teleportation must be |+> state]")
-        }
-        using (qubits2 = Qubit[2]) { 
-            // create a |-> state in the first qubit
-            X(qubits2[0])
-            H(qubits2[0])
-            Teleportation(qubits2[0], qubits2[1])
-            Assert([Xpauli], [qubits2[1]], One, "Error: state after the teleportation must be |-> state]")
+    // given that the Teleportation circuit is correct this operation must be an identity
+    operation TeleportationIdentityTestHelper ( arg : Qubit[] ) : () {
+        Body {
+            AssertIntEqual(Length(arg),1, "Helper is defined only of single qubit input")
+            using ( anc = Qubit[1] )
+            {
+                Teleportation(arg[0], anc[0])
+                SWAP(arg[0],anc[0])
+            }
         }
     }
+
+    operation TeleportationTest () : () {
+        Body {
+            // given that there is randomness involved in the Teleportation, repeat the tests several times.
+            for( i in 1 .. 8 )
+            {
+                AssertOperationsEqualInPlace(TeleportationIdentityTestHelper,IdentityTestHelper, 1)
+                AssertOperationsEqualReferenced(TeleportationIdentityTestHelper,IdentityTestHelper, 1)
+            }
+        }
+    }
+
 }

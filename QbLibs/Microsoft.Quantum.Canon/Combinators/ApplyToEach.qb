@@ -1,4 +1,4 @@
-﻿namespace Microsoft.Quantum.Canon {
+namespace Microsoft.Quantum.Canon {
 
     /// <seealso cref="ApplyToEach" />
     operation ApplyToEachAC(singleQubitOperation : (Qubit => ():Adjoint,Controlled), register : Qubit[])  : ()
@@ -62,6 +62,5 @@
             }
         }
     }
-
 
 }

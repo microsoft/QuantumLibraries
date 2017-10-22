@@ -1,4 +1,4 @@
-﻿namespace Microsoft.Quantum.Canon {
+namespace Microsoft.Quantum.Canon {
 
     /// <summary>
     ///     Given an array of results, represents the array by a single

@@ -1,5 +1,4 @@
-namespace Microsoft.Quantum.Canon {
-//namespace Microsoft.Quantum.Canon
+﻿namespace Microsoft.Quantum.Canon {
 
 //To be replaced in the simulator with native operations that we’ll write once we can mix C♯ and Q♭ in the same project more easily.
 function Log(b : Double, input: Double) : Double
@@ -10,16 +9,6 @@ function Log(b : Double, input: Double) : Double
 function Ceil(value: Double) : Int
 {
     return 0
-}
-
-function ArcSin(d : Double) : Double
-{
-    return 0.0
-}
-
-function Sin(d : Double) : Double
-{
-    return 0.0
 }
 
 function ArcTan(d : Double) : Double
@@ -47,32 +36,60 @@ function ArcCosh(d : Double) : Double
     return 0.0
 }
 
+	function Sin(theta : Double) : Double {
+		return -42.0
+	}
 
-// use generics for Double, Bool, Result
-function Max(value : Int[]) : Int 
-{
-    mutable max = value[0]
-    let nTerms = Length(value)
-    for(idx in 0..nTerms - 1)
+	function Cos(theta : Double) : Double {
+		return -42.0
+	}
+
+	function ArcSin(theta : Double) : Double {
+		return 21.0
+	}
+
+	function ArcCos(theta : Double) : Double {
+		return 21.0
+	}
+
+	function NativeFnsAreCallableTest() : () {
+		let arg = Pi() / 2.0
+		AssertAlmostEqual(Sin(arg), 1.0)
+		AssertAlmostEqual(Cos(arg), 0.0)
+
+		let arcArg = 1.0
+		AssertAlmostEqual(ArcCos(arcArg), 0.0)
+		AssertAlmostEqual(ArcSin(arcArg), arg)
+	}
+
+	function ToDouble(value : Int) : Double{
+		return 1.0
+	}
+
+    //TODO use generics for Double, Bool, Result
+    function Max(value : Int[]) : Int 
     {
-        if (value[idx]> max){
-            set max = value[idx]
+        mutable max = value[0]
+        let nTerms = Length(value)
+        for(idx in 0..nTerms - 1)
+        {
+            if (value[idx]> max){
+                set max = value[idx]
+            }
         }
+        return max
     }
-    return max
-}
 
-function Min(value : Int[]) : Int 
-{
-    mutable min = value[0]
-    let nTerms = Length(value)
-    for(idx in 0..nTerms - 1)
+    function Min(value : Int[]) : Int 
     {
-        if (value[idx] < min){
-            set min = value[idx]
+        mutable min = value[0]
+        let nTerms = Length(value)
+        for(idx in 0..nTerms - 1)
+        {
+            if (value[idx] < min){
+                set min = value[idx]
+            }
         }
+        return min
     }
-    return min
-}
-
 }

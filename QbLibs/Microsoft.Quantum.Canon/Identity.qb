@@ -1,21 +1,33 @@
 namespace Microsoft.Quantum.Canon {
 
-    operation I(target : Qubit) : () {
-        Body {}
-        Adjoint self
-        Controlled auto
-        Controlled Adjoint auto
-    }
+	operation I(target : Qubit) : () {
+		Body {}
+		Adjoint self
+		Controlled auto
+		Controlled Adjoint auto
+	}
 
-    operation NoOp<'T>(target : 'T) : () {
-        Body {}
-        Adjoint self
-        Controlled auto
-        Controlled Adjoint auto
-    }
+	operation Identity1(qubits: Qubit[]) : (){
+		Body {
 
-    function Identity<'T>(value : 'T) : 'T {
-        return value
-    }
+		}
+		Adjoint auto
+		Controlled auto
+		Adjoint Controlled auto
+	}
+	operation Identity2(qubitsA: Qubit[], qubitsB: Qubit[]) : (){
+		Body {
+
+		}
+		Adjoint auto
+		Controlled auto
+		Adjoint Controlled auto
+	}
+
+
+
+	// function Identity(value : 'T) : 'T {
+	//     return value
+	// }
 
 }

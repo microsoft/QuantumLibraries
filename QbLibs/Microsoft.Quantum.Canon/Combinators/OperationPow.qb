@@ -1,70 +1,32 @@
 namespace Microsoft.Quantum.Canon {
 
-    operation OperationPowImpl<'T>(op : ('T => ()), power : Int, target : 'T)  : ()
+    operation OperationPowImpl(oracle : (Qubit[] => ()), power : Int, target : Qubit[])  : ()
     {
         Body {
             for (idxApplication in 0..power - 1) {
-                op(target)
+                oracle(target)
             }
         }
     }
 
-    operation OperationPowImplA<'T>(op : ('T => () : Adjoint), power : Int, target : 'T)  : ()
+    operation OperationPowImplAC(oracle : (Qubit[] => ():Controlled,Adjoint), power : Int, target : Qubit[])  : ()
     {
         Body {
-            OperationPowImpl(op, power, target)
+            for (idxApplication in 0..power - 1) {
+                oracle(target)
+            }
         }
 
-        Adjoint {
-            OperationPowImplA(op, power, target)
-        }
+        Adjoint auto
+        Controlled auto
+        Controlled Adjoint auto
     }
 
-    operation OperationPowImplC<'T>(op : ('T => () : Controlled), power : Int, target : 'T)  : ()
+    operation OperationPow(oracle : (Qubit[] => ()), power : Int)  : (Qubit[] => ())
     {
         Body {
-            OperationPowImpl(op, power, target)
-        }
-        Controlled (controls) {
-            (Controlled OperationPowImplC)(controls, (op, power, target))
+            return OperationPowImpl(oracle, power, _)
         }
     }
 
-    operation OperationPowImplCA<'T>(op : ('T => ():Controlled, Adjoint), power : Int, target : 'T)  : ()
-    {
-        Body {
-            OperationPowImpl(op, power, target)
-        }
-
-        Adjoint {
-            OperationPowImplA(op, power, target)
-        }
-        Controlled (controls) {
-            (Controlled OperationPowImplC)(controls, (op, power, target))
-        }
-        Controlled Adjoint (controls) {
-            (Controlled OperationPowImplC)(controls, (Adjoint op, power, target))
-        }
-    }
-
-    function OperationPow<'T>(op : ('T => ()), power : Int)  : ('T => ())
-    {
-        return OperationPowImpl(op, power, _)
-    }
-
-    function OperationPowA<'T>(op : ('T => () : Adjoint), power : Int)  : ('T => ())
-    {
-        return OperationPowImplA(op, power, _)
-    }
-
-    function OperationPowC<'T>(op : ('T => () : Controlled), power : Int)  : ('T => ())
-    {
-        return OperationPowImplC(op, power, _)
-    }
-
-    function OperationPowCA<'T>(op : ('T => () : Controlled, Adjoint), power : Int)  : ('T => ())
-    {
-        return OperationPowImplCA(op, power, _)
-    }
-    
 }
