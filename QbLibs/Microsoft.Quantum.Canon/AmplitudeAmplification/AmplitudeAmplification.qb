@@ -226,7 +226,7 @@
 		Body {
             let qubitEmpty = new Qubit[0]
             let oracleSignal = OracleOblivious(Identity2)
-            let oracleAncilla = OracleOracleStateDeterministicFromOracleState(oracleState, idxQubitFlag)
+            let oracleAncilla = OracleStateDeterministicFromOracleState(idxQubitFlag, oracleState)
 	
 		    AmpAmpObliviousByOraclePhases(phases, oracleAncilla, oracleSignal, idxQubitFlag, qubitsStart, qubitEmpty)
 

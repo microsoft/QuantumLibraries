@@ -8,12 +8,12 @@
 	/// We can do this either by synthesizing the reflection about the start and target states ourselves,
 	/// We can also do it by passing the oracle for state preparation
  
-	operation ExampleStatePrepImpl( lambda : Double, qubitFlag : Qubit , qubitSystem : Qubit[] ) : ()
+	operation ExampleStatePrepImpl( lambda : Double, idxQubitFlag : Int , qubitStart : Qubit[] ) : ()
 	{
 		Body
 		{
 			let rotAngle = 2.0 * ArcSin(lambda)
-			Ry(rotAngle, qubitFlag)
+			Ry(rotAngle, qubitStart[idxQubitFlag])
 		}
 
 		Adjoint auto
@@ -27,31 +27,39 @@
  
 	}
  
-	///In this mininal example, there are no system qubits, only a single flag qubit. 
+	///In this minimal example, there are no system qubits, only a single flag qubit. 
 	/// ExampleStatePrep is already of type  OracleState, so we call
-	/// AmpAmpByOracle(iterations: Int, oracleStatePrep : OracleState, qubitFlag : Qubit, qubitsStart: Qubit[]) : ()
-	operation AATest() : ()
+	/// AmpAmpByOracle(iterations: Int, oracleState : OracleState, idxQubitFlag : Int qubitsStart: Qubit[]) : ()
+    operation AmpAmpByOracleTest() : ()
 	{
 		Body{
-			let lambda = 0.2
-			let iterations = 3
-			let oracleStatePrep = ExampleStatePrep(lambda)
+			
 			using(qubits = Qubit[1]){
-				let qubitFlag = qubits[0]
-				let qubitsSystem = new Qubit[0]
-				//AmpAmpByOracle(iterations, oracleStatePrep, 0, qubits)
-
-				let successAmplitude = Sin( ToDouble(2 * iterations + 1) * ArcSin( lambda ))
-				let successProbability = successAmplitude * successAmplitude
-				AssertProb([Zpauli], [qubitFlag], Zero, successProbability, "Error: Success probability does not match theory", 1e-10)
+				ResetAll(qubits)
+				for(nIterations in 0..5){
 
 
-				//AssertProb([Zpauli], [qubitFlag], One, successAmplitude * successAmplitude, "Error: Success probability does not match theory", 1e-1)
+					for(idx in 1..20){
+						let lambda = ToDouble(idx) / 20.0
+                        let rotAngle = ArcSin(lambda)
+						let idxFlag = 0
+						let qubitsStart = qubits
 
-				Reset(qubitFlag)
+
+						let oracleState = ExampleStatePrep(lambda)
+						
+
+						AmpAmpByOracle(nIterations, oracleState, idxFlag, qubitsStart)
+						
+						let successAmplitude = Sin( ToDouble(2 * nIterations + 1) * rotAngle )
+						let successProbability = successAmplitude * successAmplitude
+						AssertProb([Zpauli], [qubitsStart[idxFlag]], One, successProbability, "Error: Success probability does not match theory", 1e-10)
+
+						ResetAll(qubits)
+					}
+				}
 			}
 		}
- 
 	}
 
 	operation AmpAmpObliviousByOraclePhasesTest() : ()
@@ -72,7 +80,6 @@
 						let oracleSignal = OracleOblivious(Identity2(_,_))
 
 						AmpAmpObliviousByOraclePhases(phases, oracleAncilla, oracleSignal, idxFlag, qubitsAncilla, qubitsSystem)
-						//AmpAmpObliviousByReflectionPhases(phases, refAncilla , refTarget, oracleSignal, [qubitFlag], qubitSystem)
 				
 						let successAmplitude = Sin( ToDouble(2 * nIterations + 1) * rotAngle * 0.5 )
 						let successProbability = successAmplitude * successAmplitude
@@ -85,38 +92,7 @@
 		}
 	}
 
-    operation AmpAmpByOracleTest() : ()
-	{
-		Body{
-			
-			using(qubits = Qubit[1]){
-				ResetAll(qubits)
-				for(nIterations in 0..5){
-
-
-					for(idx in 0..20){
-						let rotAngle = ToDouble(idx) * Pi() / 20.0
-						let idxFlag = 0
-						let qubitsStart = qubits
-
-
-						//let oracleState = OracleStateDeterministic(Exp([Ypauli], rotAngle * 0.5, _))
-						
-
-						//AmpAmpByOracle(nIterations, oracleState, idxFlag, qubitsStart)
-						
-						let successAmplitude = Sin( ToDouble(2 * nIterations + 1) * rotAngle * 0.5 )
-						let successProbability = successAmplitude * successAmplitude
-						AssertProb([Zpauli], [qubitsStart[idxFlag]], One, successProbability, "Error: Success probability does not match theory", 1e-10)
-
-						ResetAll(qubits)
-					}
-				}
-			}
-		}
-	}
-
-	operation ReflectionTargetOracleStateTest(): ()
+	operation AmpAmpReflectionTargetOracleStateTest(): ()
 	{
 		Body{
 			using(qubits = Qubit[1]){
@@ -126,7 +102,7 @@
 					let refTarget = ReflectionTargetOracleState(0)
 
 					let success = Cos(0.5 * rotangle) * Cos(0.5 * rotangle)
-					///AssertAlmostEqual(success, 0.5)
+
 					H(qubits[0])
 					refTarget(rotangle,qubits)
 					AssertProb([Xpauli], qubits, Zero, success, "Error: Success probability does not match theory", 1e-10)

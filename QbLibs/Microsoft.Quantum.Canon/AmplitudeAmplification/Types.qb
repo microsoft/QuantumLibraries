@@ -28,7 +28,7 @@
 	///This oracle defined by O|0>_f|0>_s = λ |1>_f |ψ>_s + ... acts on the on computational basis state |0>_f|0>_s to create the system state |ψ>_s with amplitude λ in the basis flagged by |1>_f.
 	/// The first parameter is the qubit register of |0>_f. The second parameter is the qubit register of |0>_s.
 	/// </remarks>
-	newtype OracleState = ((Qubit, Qubit[]) => (): Adjoint, Controlled)
+	newtype OracleState = ((Int, Qubit[]) => (): Adjoint, Controlled)
 
 	/// <summary>
 	/// Represents an oracle for deterministic state preparation.
@@ -64,15 +64,7 @@
 	/// <param name = "oracle"> Oracle of type "OracleState" </param>
 	/// <param name = "idxFlag"> index to flag qubit of "oracle" </param>
 	/// <param name = "qubits"> All qubits acted on by "oracle" </param>
-	operation OracleStateIdxFlag(idxFlag : Int, oracle : OracleState, qubits: Qubit[]): ()
-	{
-		Body{
-			oracle(qubits[idxFlag],  QubitExclude([idxFlag], qubits))
-		}
-		Adjoint auto
-		Controlled auto
-		Controlled Adjoint auto
-	}
+
 
     operation _OracleObliviousFromOracleStateDeterministic(oracleAncilla : OracleStateDeterministic, oracleSignal : OracleOblivious, qubitsAncilla: Qubit[], qubitsSystem: Qubit[]) : (){
 		Body{
@@ -89,21 +81,31 @@
 	}
 
     
-    operation _OracleOracleStateDeterministicFromOracleState(oracleState : OracleState, idxQubitFlag: Int, qubitsAncilla: Qubit[]) : (){
+    operation _OracleStateDeterministicFromOracleState(idxQubitFlag: Int, oracleState : OracleState, qubitsStart: Qubit[]) : (){
 		Body{
-            let qubitFlag = qubitsAncilla[idxQubitFlag]
-            let qubitsTarget = QubitExclude([idxQubitFlag],qubitsAncilla)
-			oracleState(qubitFlag, qubitsTarget)
+			oracleState(idxQubitFlag, qubitsStart)
 		}
 		Adjoint auto
 		Controlled auto
 		Adjoint Controlled auto
 	}
 
-	function OracleOracleStateDeterministicFromOracleState(oracleState : OracleState, idxQubitFlag: Int) : OracleStateDeterministic{
-		return OracleStateDeterministic(_OracleOracleStateDeterministicFromOracleState(oracleState, idxQubitFlag,_))
+	function OracleStateDeterministicFromOracleState(idxQubitFlag: Int, oracleState : OracleState) : OracleStateDeterministic{
+		return OracleStateDeterministic(_OracleStateDeterministicFromOracleState(idxQubitFlag, oracleState,_))
 	}
 
+    operation _OracleStateFromOracleStateDeterministic(idxQubitFlag : Int, oracleStateDeterministic : OracleStateDeterministic, qubits: Qubit[]): ()
+	{
+		Body{
+			oracleStateDeterministic(qubits)
+		}
+		Adjoint auto
+		Controlled auto
+		Controlled Adjoint auto
+	}
+    function OracleStateFromOracleStateDeterministic(oracleStateDeterministic : OracleStateDeterministic) : OracleState {
+		return OracleState(_OracleStateFromOracleStateDeterministic(_, oracleStateDeterministic,_))
+	}
 
     operation _ReflectionStart(phase: Double, qubits: Qubit[] ) : () {
 		Body{
@@ -153,8 +155,8 @@
 	operation ReflectionStartOracleStateImpl(phase: Double, idxQubitFlag : Int, oracle: OracleState, qubits: Qubit[]): ()
 	{
 		Body{
-			let op = OracleStateDeterministic(OracleStateIdxFlag(idxQubitFlag, oracle, _))
-			(ReflectionStartOracleStateDeterministic(op))(phase, qubits)
+			//let op = OracleStateDeterministic(OracleStateIdxFlag(idxQubitFlag, oracle, _))
+			//(ReflectionStartOracleStateDeterministic(op))(phase, qubits)
 		}
 		Adjoint auto
 		Controlled auto
