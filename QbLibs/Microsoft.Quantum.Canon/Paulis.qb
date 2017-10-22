@@ -1,45 +1,45 @@
 ﻿namespace Microsoft.Quantum.Canon {
 	open Microsoft.Quantum.Primitive
 
-/// <summary>
-///     Measures the given Pauli operator using an explicit scratch
-///     qubit to perform the measurement.
-/// </summary>
-/// <param name="pauli">
-///     A multi-qubit Pauli operator specified as an array of
-///     single-qubit Pauli operators.
-/// </param>
-/// <param name="target">Qubit register to be measured.</param>
-operation MeasureWithScratch(pauli : Pauli[], target : Qubit[])  : Result
-{
-    Body {
-        mutable result = Zero
+    /// <summary>
+    ///     Measures the given Pauli operator using an explicit scratch
+    ///     qubit to perform the measurement.
+    /// </summary>
+    /// <param name="pauli">
+    ///     A multi-qubit Pauli operator specified as an array of
+    ///     single-qubit Pauli operators.
+    /// </param>
+    /// <param name="target">Qubit register to be measured.</param>
+    operation MeasureWithScratch(pauli : Pauli[], target : Qubit[])  : Result
+    {
+        Body {
+            mutable result = Zero
 
-        using (scratchRegister = Qubit[1]) {
-            let scratch = scratchRegister[0]
+            using (scratchRegister = Qubit[1]) {
+                let scratch = scratchRegister[0]
 
-            for (idxPauli in 0..(Length(pauli) - 1)) {
-                let P = pauli[idxPauli]
-                let src = [target[idxPauli]]
-                
-                // FIXME: change to elif.
-                if (P == Xpauli) {
-                    (Controlled(X))(src, scratch)
+                for (idxPauli in 0..(Length(pauli) - 1)) {
+                    let P = pauli[idxPauli]
+                    let src = [target[idxPauli]]
+
+                    // FIXME: change to elif.
+                    if (P == Xpauli) {
+                        (Controlled X)(src, scratch)
+                    }
+                    if (P == Ypauli) {
+                        (Controlled With1C(S, X, _))(src, scratch)
+                    }
+                    if (P == Zpauli) {
+                        (Controlled With1C(H, X, _))(src, scratch)
+                    }
                 }
-                if (P == Ypauli) {
-                    (Controlled With1C(S, X, _))(src, scratch)
-                }
-                if (P == Zpauli) {
-                    (Controlled With1C(H, X, _))(src, scratch)
-                }
+
+                set result = M(scratch)
             }
 
-            set result = M(scratch)
+            return result
         }
-
-        return result
     }
-}
 
 /// <summary>
 ///     Given a multi-qubit Pauli operator, applies the corresponding operation to
@@ -100,122 +100,122 @@ operation ApplyPauliFromBitString(pauli : Pauli, bitApply: Bool, bits : Bool[], 
 	Adjoint Controlled auto
 }
 
-/// <summary>
-///     Given an array of multi-qubit Pauli operators, measures each using a specified measurement
-///     gadget, then returns the array of results.
-/// </summary>
-/// <param name="paulis">Array of multi-qubit Pauli operators to measure.</param>
-/// <param name="target">Register on which to measure the given operators.</param>
-/// <param name="gadget">Operation which performs the measurement of a given multi-qubit operator.</param>
-// FIXME: make qubit[] argument last.
-// FIXME: introduce MeasurementGadget UDT!!!
-operation MeasurePaulis(paulis : Pauli[][], target : Qubit[], gadget : ((Pauli[], Qubit[]) => Result))  : Result[]
-{
-    Body {
-        mutable results = new Result[Length(paulis)]
+    /// <summary>
+    ///     Given an array of multi-qubit Pauli operators, measures each using a specified measurement
+    ///     gadget, then returns the array of results.
+    /// </summary>
+    /// <param name="paulis">Array of multi-qubit Pauli operators to measure.</param>
+    /// <param name="target">Register on which to measure the given operators.</param>
+    /// <param name="gadget">Operation which performs the measurement of a given multi-qubit operator.</param>
+    // FIXME: make qubit[] argument last.
+    // FIXME: introduce MeasurementGadget UDT!!!
+    operation MeasurePaulis(paulis : Pauli[][], target : Qubit[], gadget : ((Pauli[], Qubit[]) => Result))  : Result[]
+    {
+        Body {
+            mutable results = new Result[Length(paulis)]
 
-        for (idxPauli in 0..(Length(paulis) - 1)) {
-            set results[idxPauli] = gadget(paulis[idxPauli], target)
-        }
+            for (idxPauli in 0..(Length(paulis) - 1)) {
+                set results[idxPauli] = gadget(paulis[idxPauli], target)
+            }
 
-        return results
-    }
-}
-
-/// <summary>
-///     Given a single-qubit Pauli operator and the index of a qubit,
-///     returns a multi-qubit Pauli operator with the given single-qubit
-///     operator at that index and <c>IPauli</c> at every other index.
-/// </summary>
-/// <example>
-///     To obtain the array <c>[Ipauli; Ipauli; Xpauli; Ipauli]</c>:
-///     <c>
-///         EmbedPauli(Xpauli, 2, 3)
-///     </c>
-/// </example>
-function EmbedPauli(pauli : Pauli, location : Int, n : Int)  : Pauli[]
-{
-    mutable pauliArray = new Pauli[n]
-    for (index in 0..(n-1)) {
-        if (index == location) {
-            set pauliArray[index] = pauli
-        }
-        else {
-            set pauliArray[index] = Ipauli
+            return results
         }
     }
-    return pauliArray
-}
 
-    
-// NB: This operation is intended to be private to Paulis.qb.
-operation BasisChangeZtoY(target : Qubit) : () {
-    Body {
-        H(target)
-        S(target)
-    }
-    Adjoint auto
-    Controlled auto
-    Controlled Adjoint auto
-}
-
-// FIXME: these are currently redundant as heck.
-
-/// <summary>
-///     Measures a single qubit in the Z basis and ensures that it
-///     is in the |0〉 state following the measurement.
-/// </summary>
-operation MResetZ(target : Qubit) : Result {
-    Body {
-        let result = M(target)
-        if (result == One) {
-            // Recall that the +1 eigenspace of a measurement operator corresponds to
-            // the Result case Zero. Thus, if we see a One case, we must reset the state 
-            // have +1 eigenvalue.
-            X(target)
+    /// <summary>
+    ///     Given a single-qubit Pauli operator and the index of a qubit,
+    ///     returns a multi-qubit Pauli operator with the given single-qubit
+    ///     operator at that index and <c>IPauli</c> at every other index.
+    /// </summary>
+    /// <example>
+    ///     To obtain the array <c>[Ipauli; Ipauli; Xpauli; Ipauli]</c>:
+    ///     <c>
+    ///         EmbedPauli(Xpauli, 2, 3)
+    ///     </c>
+    /// </example>
+    function EmbedPauli(pauli : Pauli, location : Int, n : Int)  : Pauli[]
+    {
+        mutable pauliArray = new Pauli[n]
+        for (index in 0..(n-1)) {
+            if (index == location) {
+                set pauliArray[index] = pauli
+            }
+            else {
+                set pauliArray[index] = Ipauli
+            }
         }
-        return result
+        return pauliArray
     }
-}
 
-/// <summary>
-///     Measures a single qubit in the X basis and ensures that it
-///     is in the |0〉 state following the measurement.
-/// </summary>
-operation MResetX(target : Qubit) : Result {
-    Body {
-        let result = Measure([Xpauli], [target])
-        // We must return the qubit to the Z basis as well.
-        H(target)
-        if (result == One) {
-            // Recall that the +1 eigenspace of a measurement operator corresponds to
-            // the Result case Zero. Thus, if we see a One case, we must reset the state 
-            // have +1 eigenvalue.
-            X(target)
-        }
-        return result
-    }
-}
-
-/// <summary>
-///     Measures a single qubit in the X basis and ensures that it
-///     is in the |0〉 state following the measurement.
-/// </summary>
-operation MResetY(target : Qubit) : Result {
-    Body {
-        let result = Measure([Ypauli], [target])
-        // We must return the qubit to the Z basis as well.
         
-        (Adjoint BasisChangeZtoY)(target)
-        if (result == One) {
-            // Recall that the +1 eigenspace of a measurement operator corresponds to
-            // the Result case Zero. Thus, if we see a One case, we must reset the state 
-            // have +1 eigenvalue.
-            X(target)
+    // NB: This operation is intended to be private to Paulis.qb.
+    operation BasisChangeZtoY(target : Qubit) : () {
+        Body {
+            H(target)
+            S(target)
         }
-        return result
+        Adjoint auto
+        Controlled auto
+        Controlled Adjoint auto
     }
-}
+
+    // FIXME: these are currently redundant as heck.
+
+    /// <summary>
+    ///     Measures a single qubit in the Z basis and ensures that it
+    ///     is in the |0〉 state following the measurement.
+    /// </summary>
+    operation MResetZ(target : Qubit) : Result {
+        Body {
+            let result = M(target)
+            if (result == One) {
+                // Recall that the +1 eigenspace of a measurement operator corresponds to
+                // the Result case Zero. Thus, if we see a One case, we must reset the state 
+                // have +1 eigenvalue.
+                X(target)
+            }
+            return result
+        }
+    }
+
+    /// <summary>
+    ///     Measures a single qubit in the X basis and ensures that it
+    ///     is in the |0〉 state following the measurement.
+    /// </summary>
+    operation MResetX(target : Qubit) : Result {
+        Body {
+            let result = Measure([Xpauli], [target])
+            // We must return the qubit to the Z basis as well.
+            H(target)
+            if (result == One) {
+                // Recall that the +1 eigenspace of a measurement operator corresponds to
+                // the Result case Zero. Thus, if we see a One case, we must reset the state 
+                // have +1 eigenvalue.
+                X(target)
+            }
+            return result
+        }
+    }
+
+    /// <summary>
+    ///     Measures a single qubit in the X basis and ensures that it
+    ///     is in the |0〉 state following the measurement.
+    /// </summary>
+    operation MResetY(target : Qubit) : Result {
+        Body {
+            let result = Measure([Ypauli], [target])
+            // We must return the qubit to the Z basis as well.
+            
+            (Adjoint BasisChangeZtoY)(target)
+            if (result == One) {
+                // Recall that the +1 eigenspace of a measurement operator corresponds to
+                // the Result case Zero. Thus, if we see a One case, we must reset the state 
+                // have +1 eigenvalue.
+                X(target)
+            }
+            return result
+        }
+    }
 
 /// <summary>
 ///     Given a single qubit, measures it and ensures it is in the |0〉 state

@@ -47,3 +47,30 @@ function ArcCosh(d : Double) : Double
 }
 
 }
+namespace Microsoft.Quantum.Canon {
+	function Sin(theta : Double) : Double {
+		return -42.0
+	}
+
+	function Cos(theta : Double) : Double {
+		return -42.0
+	}
+
+	function ArcSin(theta : Double) : Double {
+		return 21.0
+	}
+
+	function ArcCos(theta : Double) : Double {
+		return 21.0
+	}
+
+	function NativeFnsAreCallableTest() : () {
+		let arg = Pi() / 2.0
+		AssertAlmostEqual(Sin(arg), 1.0)
+		AssertAlmostEqual(Cos(arg), 0.0)
+
+		let arcArg = 1.0
+		AssertAlmostEqual(ArcCos(arcArg), 0.0)
+		AssertAlmostEqual(ArcSin(arcArg), arg)
+	}
+}

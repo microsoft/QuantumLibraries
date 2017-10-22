@@ -1,32 +1,32 @@
-﻿namespace Microsoft.Quantum.Canon {
+namespace Microsoft.Quantum.Canon {
 
-operation OperationPowImpl(oracle : (Qubit[] => ()), power : Int, target : Qubit[])  : ()
-{
-    Body {
-        for (idxApplication in 0..power - 1) {
-            oracle(target)
-        }
-    }
-}
-
-operation OperationPowImplAC(oracle : (Qubit[] => ():Controlled,Adjoint), power : Int, target : Qubit[])  : ()
-{
-    Body {
-        for (idxApplication in 0..power - 1) {
-            oracle(target)
+    operation OperationPowImpl(oracle : (Qubit[] => ()), power : Int, target : Qubit[])  : ()
+    {
+        Body {
+            for (idxApplication in 0..power - 1) {
+                oracle(target)
+            }
         }
     }
 
-    Adjoint auto
-    Controlled auto
-    Controlled Adjoint auto
-}
+    operation OperationPowImplAC(oracle : (Qubit[] => ():Controlled,Adjoint), power : Int, target : Qubit[])  : ()
+    {
+        Body {
+            for (idxApplication in 0..power - 1) {
+                oracle(target)
+            }
+        }
 
-operation OperationPow(oracle : (Qubit[] => ()), power : Int)  : (Qubit[] => ())
-{
-    Body {
-        return OperationPowImpl(oracle, power, _)
+        Adjoint auto
+        Controlled auto
+        Controlled Adjoint auto
     }
-}
+
+    operation OperationPow(oracle : (Qubit[] => ()), power : Int)  : (Qubit[] => ())
+    {
+        Body {
+            return OperationPowImpl(oracle, power, _)
+        }
+    }
 
 }
