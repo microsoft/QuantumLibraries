@@ -26,7 +26,11 @@ namespace Microsoft.Quantum.Canon {
                     fail "Invlaid values in the stateIds array. Must be between 0 and 3"
                 }
 
-                if( id == 1 )
+                if( id == 0 )
+                {
+                    I(qubits[i])
+                }
+                elif( id == 1 )
                 {
                     X(qubits[i])
                 }
@@ -55,6 +59,10 @@ namespace Microsoft.Quantum.Canon {
         {
             using( qubits = Qubit[Length(basis)] )
             {
+                for( i in 0 .. Length(basis) - 1 )
+                {
+                    AssertProb([Zpauli],[qubits[i]],Zero,1.0,"Expecting qubits to be all zero at the beginning", tolerance)
+                }
                 FlipToBasis(qubits,basis)
                 givenU(qubits)
                 (Adjoint(expectedU))(qubits)
@@ -67,17 +75,46 @@ namespace Microsoft.Quantum.Canon {
         }
     }
 
+    ///<summary> 
+    /// Test helper to be used with AssertOperationsEqualInPlace and AssertOperationsEqualReferenced 
+    /// if one needs to check that the operation is identity
+    ///</summary>
+    operation IdentityTestHelper( q : Qubit[] ) : ()
+    {
+        Body {}
+        Adjoint auto
+        Controlled auto
+        Controlled Adjoint auto
+    }
+
     ///<summary>
     /// Checks if the operation givenU is equal to the operation givenU on 
     /// the given input size and up to a given tolerance
     ///</summary>
-    operation AssertOperationsEqualInPlace( inputSize : Int, givenU : (Qubit[] => ()), expectedU : (Qubit[] => () : Adjoint ), tolerance : Double ) : ()
+    operation AssertOperationsEqualInPlace( givenU : (Qubit[] => ()), expectedU : (Qubit[] => () : Adjoint ), inputSize : Int ) : ()
     {
         Body
         {
+            let tolerance = 1e-5
             let checkOperation = AssertEqualOnBasisVector( _, givenU, expectedU, tolerance )
             IterateThroughCartesianPower(inputSize,4,checkOperation)
         }
-}
+    }
+
+    ///<summary>
+    /// Checks if the operation givenU is equal to the operation givenU on 
+    /// the given input size and up to a given tolerance 
+    /// by checking action of the operations only on the vectors from computational basis. 
+    /// This is necessary, but not sufficient condition for the equality of two unitaries.
+    ///</summary>
+    operation AssertOperationsEqualInPlaceCompBasis( givenU : (Qubit[] => ()), expectedU : (Qubit[] => () : Adjoint ), inputSize : Int ) : ()
+    {
+        Body
+        {
+            let tolerance = 1e-5
+            let checkOperation = AssertEqualOnBasisVector( _, givenU, expectedU, tolerance )
+            IterateThroughCartesianPower(inputSize,2,checkOperation)
+        }
+    }
 
 }

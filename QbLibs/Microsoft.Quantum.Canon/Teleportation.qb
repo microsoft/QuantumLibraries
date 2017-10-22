@@ -29,14 +29,28 @@ namespace Microsoft.Quantum.Canon {
                 // Perform the Bell measurement and the correction necessary to reconstruct the input state as the target state
                 CNOT(source, ancilla)
                 H(source)
-                AssertProb([Zpauli], [source], Zero, 0.5, "Error: All outcomes of the Bell measurement must be equally likely", 1e-10)
-                AssertProb([Zpauli], [ancilla], Zero, 0.5, "Error: All outcomes of the Bell measurement must be equally likely", 1e-10)  
+                AssertProb([Zpauli], [source], Zero, 0.5, "Error: All outcomes of the Bell measurement must be equally likely", 1e-5)
+                AssertProb([Zpauli], [ancilla], Zero, 0.5, "Error: All outcomes of the Bell measurement must be equally likely", 1e-5)  
+                // Note that MResetZ makes sure that source is returned to zero state
                 if ( MResetZ(source) == One ) {
                     Z(target)
                 }
+                // Note that MResetZ makes sure that ancilla is returned to zero state
                 if ( MResetZ(ancilla) == One ) {
                     X(target)
                 }
+            }
+        }
+    }
+
+    // given that the Teleportation circuit is correct this operation must be an identity
+    operation TeleportationIdentityTestHelper ( arg : Qubit[] ) : () {
+        Body {
+            AssertIntEqual(Length(arg),1, "Helper is defined only of single qubit input")
+            using ( anc = Qubit[1] )
+            {
+                Teleportation(arg[0], anc[0])
+                SWAP(arg[0],anc[0])
             }
         }
     }
@@ -46,21 +60,8 @@ namespace Microsoft.Quantum.Canon {
             // given that there is randomness involved in the Teleportation, repeat the tests several times.
             for( i in 1 .. 8 )
             {
-                using (qubits1 = Qubit[2]) { 
-                    // create a |+> state in the first qubit
-                    H(qubits1[0])
-                    Teleportation(qubits1[0], qubits1[1])
-                    Assert([Xpauli], [qubits1[1]], Zero, "Error: state after the teleportation must be |+> state]")
-                    ApplyToEach(Reset,qubits1)
-                }
-                using (qubits2 = Qubit[2]) { 
-                    // create a |-> state in the first qubit
-                    X(qubits2[0])
-                    H(qubits2[0])
-                    Teleportation(qubits2[0], qubits2[1])
-                    Assert([Xpauli], [qubits2[1]], One, "Error: state after the teleportation must be |-> state]")
-                    ApplyToEach(Reset,qubits2)
-                }
+                AssertOperationsEqualInPlace(TeleportationIdentityTestHelper,IdentityTestHelper, 1)
+                AssertOperationsEqualReferenced(TeleportationIdentityTestHelper,IdentityTestHelper, 1)
             }
         }
     }

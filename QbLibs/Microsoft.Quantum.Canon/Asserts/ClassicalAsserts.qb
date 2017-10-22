@@ -8,5 +8,12 @@
 			fail "Assertion failed."
 		}
 	}
+
+    function AssertIntEqual ( actual : Int, expected : Int, message : String ) : () {
+        if( actual != expected )
+        {
+            fail message
+        }
+    }
 	
 }
