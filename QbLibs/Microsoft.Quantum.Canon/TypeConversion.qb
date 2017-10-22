@@ -104,5 +104,16 @@
 		return PositiveIntFromBoolArr(BoolArrFromResultArr(results))
 	}
 
+	function BoolArrFromPositiveIntTest() : (){
+		for(number in 0..100){
+			let bits = BoolArrFromPositiveInt(number,9)
+			let inte = PositiveIntFromBoolArr(bits)
+			AssertIntEqual(inte, number)
+		}
+
+		let bits70 = [false;true;true;false;false;false;true;false]
+		let number70 = PositiveIntFromBoolArr(bits70)
+		AssertIntEqual(70, number70)
+	}
 
 }

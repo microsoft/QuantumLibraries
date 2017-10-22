@@ -24,7 +24,7 @@ $qflatSources = @(Find-QflatPrelude)
 
 $qflatSources += @(
     # Provide stubs for primitive operations.
-    "Stubs.qb",
+    "Stubs.qb"
 
     "Math/Types.qb",
     "Math/Constants.qb",
@@ -43,7 +43,7 @@ $qflatSources += @(
 	"Asserts/ClassicalAsserts.qb"
 
     # # Provide definitions of the identity and nop.
-    "Identity.qb",
+    "Identity.qb"
 
     # Endianness.qb contains newtype declarations that are needed more broadly,
     # so we include it first.
@@ -66,7 +66,7 @@ $qflatSources += @(
     "AmplitudeAmplification/Types.qb"
     "AmplitudeAmplification/AmplitudeAmplification.qb"
     
-    "AmplitudeAmplification/ExampleGrover.qb"
+    #"AmplitudeAmplification/ExampleGrover.qb"
     "AmplitudeAmplification/ExampleAA.qb"   
 
 ) | ForEach-Object {

@@ -92,11 +92,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>ExampleAA.qb</DependentUpon>
     </Compile>
-    <Compile Include="AmplitudeAmplification\ExampleGrover.g.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>ExampleGrover.qb</DependentUpon>
-    </Compile>
     <Compile Include="AmplitudeAmplification\Types.g.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -306,10 +301,6 @@
       <Generator>QbCodeGenerator</Generator>
       <LastGenOutput>ExampleAA.g.cs</LastGenOutput>
     </QbCompile>
-    <QbCompile Include="AmplitudeAmplification\ExampleGrover.qb">
-      <Generator>QbCodeGenerator</Generator>
-      <LastGenOutput>ExampleGrover.g.cs</LastGenOutput>
-    </QbCompile>
     <QbCompile Include="AmplitudeAmplification\Types.qb">
       <Generator>QbCodeGenerator</Generator>
       <LastGenOutput>Types.g.cs</LastGenOutput>
@@ -342,6 +333,10 @@
       <Generator>QbCodeGenerator</Generator>
       <LastGenOutput>ClassicalAsserts.g.cs</LastGenOutput>
     </QbCompile>
+    <None Include="AmplitudeAmplification\AATests.qb">
+      <Generator>QbCodeGenerator</Generator>
+      <LastGenOutput>AATests.g.cs</LastGenOutput>
+    </None>
     <None Include="Bind.qb">
       <LastGenOutput>Bind.g.cs</LastGenOutput>
     </None>

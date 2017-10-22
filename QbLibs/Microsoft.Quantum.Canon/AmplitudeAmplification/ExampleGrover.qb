@@ -14,6 +14,7 @@
 		Adjoint auto
 	}
 
+
 	/// Quantum search requires a uniform superposition of states over all indices |u> = (|0>+|1>+...+|N-1>)/sqrt{N}. Given an initial state of zeros |0...0>, this may be prepared by the unitary U, which applies the Hadamard gate on all qubits.
 	operation OracleUniformSuperposition(qubitsDatabase: Qubit[]) : (){
 		Body{
@@ -67,7 +68,7 @@
 	operation QuantumSearch(nIterations : Int, qubitMarked : Qubit, qubitsDatabase: Qubit[]) : (){
 		Body{
 			OracleStatePreparation(qubitMarked,qubitsDatabase)
-			for(idx in 0..nIterations){
+			for(idx in 0..nIterations-1){
 				ReflectionMarked(qubitMarked)
 				ReflectionStart(qubitMarked,qubitsDatabase)
 			}
@@ -97,6 +98,95 @@
 				}
 			}
 			return (resultSuccess, resultElement)
+		}
+	}
+
+	operation OracleStatePreparationTest(): (){
+		Body{
+			
+			for(nDatabaseQubits in 0..5){
+			
+				using(qubits = Qubit[nDatabaseQubits+1]){
+					ResetAll(qubits)
+
+
+					let qubitMarked = qubits[0]
+					let qubitsDatabase = qubits[1..nDatabaseQubits]
+
+					let successAmplitude =  1.0 / Sqrt(ToDouble(2^nDatabaseQubits))
+					let successProbability = successAmplitude * successAmplitude
+
+					OracleStatePreparation(qubitMarked, qubitsDatabase)
+
+
+					AssertProb([Zpauli], [qubitMarked], One, successProbability, "Error: Success probability does not match theory", 1e-10)
+
+					ResetAll(qubits)
+				}
+			}
+		}
+	}
+
+	operation GroverHardCodedTest() : (){
+		Body{
+
+			for(nDatabaseQubits in 0..5){
+				for(nIterations in 0..5){
+					using(qubits = Qubit[nDatabaseQubits+1]){
+						ResetAll(qubits)
+
+						let qubitMarked = qubits[0]
+						let qubitDatabase = qubits[1..nDatabaseQubits]
+						QuantumSearch(nIterations, qubitMarked, qubitDatabase)
+
+						let successAmplitude = Sin( ToDouble(2*nIterations + 1) * ArcSin( 1.0 / Sqrt(ToDouble(2^nDatabaseQubits))  ))
+						let successProbability = successAmplitude * successAmplitude
+
+						//Sqrt( ToDouble( 2^nDatabaseQubits) )
+
+						//AssertAlmostEqual(successProbability, 0.00390625)
+						//AssertAlmostEqual(successProbability,Sqrt(successProbability))
+						AssertProb([Zpauli], [qubitMarked], One, successProbability, "Error: Success probability does not match theory", 1e-10)
+
+						let result = M(qubitMarked)
+						if(result == One){
+							let results = MultiM(qubitDatabase)
+							for(idxResult in 0..nDatabaseQubits-1){
+								if(results[idxResult] == Zero){
+									fail "Found state should be 1..1 string."
+								}
+							}
+						}
+
+						ResetAll(qubits)
+					}
+				}
+			}
+		}
+	}
+
+	operation RotationTest() : (){
+		Body{
+			
+			using(qubits = Qubit[1]){
+
+
+				let q = qubits[0]
+				Reset(q)
+				AssertProb([Zpauli], qubits, Zero, 1.0, "Qubit should be in |0> state", 1e-10)
+
+				let rotangle = 0.348123/2.0
+				H(q)
+
+				AssertProb([Xpauli], qubits, Zero, 1.0, "Qubit should be in |+> state", 1e-10)
+
+				Rz(rotangle, q)
+				let success = Cos(0.5 * rotangle) * Cos(0.5 * rotangle)
+				///AssertAlmostEqual(success, 0.5)
+				AssertProb([Xpauli], qubits, Zero, success, "Error: Success probability does not match theory", 1e-10)
+
+				Reset(q)
+			}
 		}
 	}
 
@@ -272,6 +362,45 @@
 
 
 			//
+		}
+	}
+
+	operation Grover2Test() : (){
+		Body{
+
+			for(nDatabaseQubits in 1..5){
+				for(nIterations in 0..5){
+					using(qubits = Qubit[nDatabaseQubits+1]){
+						ResetAll(qubits)
+
+						let qubitMarked = qubits[0]
+						let qubitDatabase = qubits[1..nDatabaseQubits]
+						
+						GroverSearch( [1], nIterations, 0 , qubits)
+
+						let successAmplitude = Sin( ToDouble(2*nIterations + 1) * ArcSin( 1.0 / Sqrt(ToDouble(2^nDatabaseQubits))  ))
+						let successProbability = successAmplitude * successAmplitude
+
+						//Sqrt( ToDouble( 2^nDatabaseQubits) )
+
+						//AssertAlmostEqual(successProbability, 0.00390625)
+						//AssertAlmostEqual(successProbability,Sqrt(successProbability))
+						AssertProb([Zpauli], [qubitMarked], One, successProbability, "Error: Success probability does not match theory", 1e-10)
+
+						let result = M(qubitMarked)
+						if(result == One){
+							let results = MultiM(qubitDatabase)
+							for(idxResult in 0..nDatabaseQubits-1){
+								if(results[idxResult] == Zero){
+									fail "Found state should be 1..1 string."
+								}
+							}
+						}
+
+						ResetAll(qubits)
+					}
+				}
+			}
 		}
 	}
 

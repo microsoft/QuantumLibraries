@@ -1,24 +1,30 @@
 ﻿namespace Microsoft.Quantum.Canon {
+	open Microsoft.Quantum.Primitive
 
-// FIXME: make this a function!
-// Perhaps ToDouble as Float usually refers to single-precision, and we cannot overload Double()?
-function Float(value : Int)  : Double
-{
-    return 0.0
-}
+	// FIXME: make this a function!
+	// Perhaps ToDouble as Float usually refers to single-precision, and we cannot overload Double()?
+	function Float(value : Int)  : Double
+	{
+		return 0.0
+	}
 
-function RandomTMP(value : Double[]) : Int
-{
-    return 0
-}
+	function RandomTMP(value : Double[]) : Int
+	{
+		return 0
+	}
 
 
-operation MultiM(targets : Qubit[]) : Result[]
-{
-    Body{
-        mutable results = new Result[Length(targets)]
-        return results
-    }
-}
+	operation MultiM(targets : Qubit[]) : Result[]
+	{
+		Body{
+			mutable results = new Result[Length(targets)]
+			for(idxQubit in 0..Length(targets)-1){
+				set results[idxQubit] = M(targets[idxQubit])
+			}
+			return results
+		}
+	}
+
+
 
 }

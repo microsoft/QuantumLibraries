@@ -74,4 +74,119 @@
 		Controlled Adjoint auto
 	}
 
+    operation _OracleObliviousFromOracleStateDeterministic(oracleAncilla : OracleStateDeterministic, oracleSignal : OracleOblivious, qubitsAncilla: Qubit[], qubitsSystem: Qubit[]) : (){
+		Body{
+				oracleAncilla(qubitsAncilla)
+				oracleSignal(qubitsAncilla, qubitsSystem)
+		}
+		Adjoint auto
+		Controlled auto
+		Adjoint Controlled auto
+	}
+
+	function OracleObliviousFromOracleStateDeterministic(oracleAncilla : OracleStateDeterministic, oracleSignal : OracleOblivious) : OracleOblivious{
+		return OracleOblivious(_OracleObliviousFromOracleStateDeterministic(oracleAncilla, oracleSignal,_,_))
+	}
+
+    
+    operation _OracleOracleStateDeterministicFromOracleState(oracleState : OracleState, idxQubitFlag: Int, qubitsAncilla: Qubit[]) : (){
+		Body{
+            let qubitFlag = qubitsAncilla[idxQubitFlag]
+            let qubitsTarget = QubitExclude([idxQubitFlag],qubitsAncilla)
+			oracleState(qubitFlag, qubitsTarget)
+		}
+		Adjoint auto
+		Controlled auto
+		Adjoint Controlled auto
+	}
+
+	function OracleOracleStateDeterministicFromOracleState(oracleState : OracleState, idxQubitFlag: Int) : OracleStateDeterministic{
+		return OracleStateDeterministic(_OracleOracleStateDeterministicFromOracleState(oracleState, idxQubitFlag,_))
+	}
+
+
+    operation _ReflectionStart(phase: Double, qubits: Qubit[] ) : () {
+		Body{
+			ReflectionAllZero( phase, qubits )
+		}
+		Adjoint auto
+		Controlled auto
+		Adjoint Controlled auto
+	}
+	function ReflectionStart() : OracleReflection {
+		return OracleReflection(_ReflectionStart( _, _ ))
+	}
+
+	/// <summary>
+	/// Constructs reflection about a some state |ψ> from the oracle of type "OracleStateDeterministic" where O|0> = |ψ>
+	/// </summary>
+	/// <param name = "phase"> Phase of partial reflection </param>
+	/// <param name = "oracle"> Oracle of type "OracleStateDeterministic" </param>
+	/// <param name = "qubitsSystem"> Qubits acted on by "oracle" </param>
+	/// <remarks> 
+	/// -
+	/// </remarks>
+	operation ReflectionStartOracleStateDeterministicImpl(phase: Double, oracle: OracleStateDeterministic, qubitsSystem: Qubit[]): ()
+	{
+		Body {
+			WithCA((Adjoint oracle), ReflectionAllZero(phase, _), qubitsSystem)
+		}
+		Adjoint auto
+		Controlled auto
+		Adjoint Controlled auto
+	}
+	function ReflectionStartOracleStateDeterministic(oracle: OracleStateDeterministic): OracleReflection
+	{
+		return OracleReflection(ReflectionStartOracleStateDeterministicImpl(_, oracle, _ ))
+	}
+
+	/// <summary>
+	/// Constructs reflection about a some state |ψ> from the oracle of type "OracleState" where O|0>_f|0>_s = |ψ>_fs
+	/// </summary>
+	/// <param name = "phase"> Phase of partial reflection </param>
+	/// <param name = "oracle"> Oracle of type "OracleState" </param>
+	/// <param name = "qubitsFlag"> Flag qubit of "oracle" </param>
+	/// <param name = "qubitsSystem"> All other qubits acted on by "oracle" </param>
+	/// <remarks> 
+	/// -
+	/// </remarks>
+	operation ReflectionStartOracleStateImpl(phase: Double, idxQubitFlag : Int, oracle: OracleState, qubits: Qubit[]): ()
+	{
+		Body{
+			let op = OracleStateDeterministic(OracleStateIdxFlag(idxQubitFlag, oracle, _))
+			(ReflectionStartOracleStateDeterministic(op))(phase, qubits)
+		}
+		Adjoint auto
+		Controlled auto
+		Adjoint Controlled auto
+	}
+	function ReflectionStartOracleState(idxQubitFlag : Int, oracle: OracleState): OracleReflection
+	{
+		return OracleReflection(ReflectionStartOracleStateImpl( _ , idxQubitFlag , oracle , _ ))
+	}
+
+	/// <summary>
+	/// Constructs reflection about the target state uniquely marked by the flag qubit state |1>_f, prepared the oracle of type "OracleState"
+	/// </summary>
+	/// <param name = "phase"> Phase of partial reflection </param>
+	/// <param name = "qubitsFlag"> Flag qubit of oracle </param>
+	/// <param name = "qubitsSystem"> All other qubits acted on by oracle </param>
+	/// <remarks> 
+	/// -
+	/// </remarks>
+	operation ReflectionTargetOracleStateImpl(phase: Double, idxQubitFlag : Int, qubits: Qubit[]): ()
+	{
+		Body {
+			R1(phase, qubits[idxQubitFlag])
+		}
+
+		Adjoint auto
+		Controlled auto
+		Adjoint Controlled auto
+	}
+	function ReflectionTargetOracleState(idxQubitFlag : Int): OracleReflection
+	{
+		return OracleReflection(ReflectionTargetOracleStateImpl( _ , idxQubitFlag , _ ))
+	}
+
 }

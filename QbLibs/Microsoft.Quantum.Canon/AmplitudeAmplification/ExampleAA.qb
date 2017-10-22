@@ -39,16 +39,101 @@
 			using(qubits = Qubit[1]){
 				let qubitFlag = qubits[0]
 				let qubitsSystem = new Qubit[0]
-				AmpAmpByOracle(iterations, oracleStatePrep, 0, qubits)
+				//AmpAmpByOracle(iterations, oracleStatePrep, 0, qubits)
 
-				let successAmplitude = Sin( Float(2*iterations + 1) * ArcSin( lambda ))
+				let successAmplitude = Sin( ToDouble(2 * iterations + 1) * ArcSin( lambda ))
+				let successProbability = successAmplitude * successAmplitude
+				AssertProb([Zpauli], [qubitFlag], Zero, successProbability, "Error: Success probability does not match theory", 1e-10)
 
-				AssertProb([Zpauli], [qubitFlag], One, successAmplitude * successAmplitude, "Error: Success probability does not match theory", 1e-10)
+
+				//AssertProb([Zpauli], [qubitFlag], One, successAmplitude * successAmplitude, "Error: Success probability does not match theory", 1e-1)
 
 				Reset(qubitFlag)
 			}
 		}
  
+	}
+
+	operation AmpAmpObliviousByOraclePhasesTest() : ()
+	{
+		Body{
+			
+			using(qubits = Qubit[1]){
+				ResetAll(qubits)
+				for(nIterations in 0..5){
+					let phases = AmpAmpPhasesStandard(nIterations)
+					for(idx in 0..20){
+						let rotAngle = ToDouble(idx) * Pi() / 20.0
+						let idxFlag = 0
+						let qubitsAncilla = qubits
+						let qubitsSystem = new Qubit[0]
+
+						let oracleAncilla = OracleStateDeterministic(Exp([Ypauli], rotAngle * 0.5, _))
+						let oracleSignal = OracleOblivious(Identity2(_,_))
+
+						AmpAmpObliviousByOraclePhases(phases, oracleAncilla, oracleSignal, idxFlag, qubitsAncilla, qubitsSystem)
+						//AmpAmpObliviousByReflectionPhases(phases, refAncilla , refTarget, oracleSignal, [qubitFlag], qubitSystem)
+				
+						let successAmplitude = Sin( ToDouble(2 * nIterations + 1) * rotAngle * 0.5 )
+						let successProbability = successAmplitude * successAmplitude
+						AssertProb([Zpauli], [qubitsAncilla[idxFlag]], One, successProbability, "Error: Success probability does not match theory", 1e-10)
+
+						ResetAll(qubits)
+					}
+				}
+			}
+		}
+	}
+
+    operation AmpAmpByOracleTest() : ()
+	{
+		Body{
+			
+			using(qubits = Qubit[1]){
+				ResetAll(qubits)
+				for(nIterations in 0..5){
+
+
+					for(idx in 0..20){
+						let rotAngle = ToDouble(idx) * Pi() / 20.0
+						let idxFlag = 0
+						let qubitsStart = qubits
+
+
+						//let oracleState = OracleStateDeterministic(Exp([Ypauli], rotAngle * 0.5, _))
+						
+
+						//AmpAmpByOracle(nIterations, oracleState, idxFlag, qubitsStart)
+						
+						let successAmplitude = Sin( ToDouble(2 * nIterations + 1) * rotAngle * 0.5 )
+						let successProbability = successAmplitude * successAmplitude
+						AssertProb([Zpauli], [qubitsStart[idxFlag]], One, successProbability, "Error: Success probability does not match theory", 1e-10)
+
+						ResetAll(qubits)
+					}
+				}
+			}
+		}
+	}
+
+	operation ReflectionTargetOracleStateTest(): ()
+	{
+		Body{
+			using(qubits = Qubit[1]){
+				ResetAll(qubits)
+				for(idx in 0..20){
+					let rotangle = ToDouble(idx) * Pi() / 20.0
+					let refTarget = ReflectionTargetOracleState(0)
+
+					let success = Cos(0.5 * rotangle) * Cos(0.5 * rotangle)
+					///AssertAlmostEqual(success, 0.5)
+					H(qubits[0])
+					refTarget(rotangle,qubits)
+					AssertProb([Xpauli], qubits, Zero, success, "Error: Success probability does not match theory", 1e-10)
+					ResetAll(qubits)
+				}
+			}
+		}
 	}
 
 }

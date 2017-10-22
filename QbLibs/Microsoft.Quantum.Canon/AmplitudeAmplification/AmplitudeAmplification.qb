@@ -59,7 +59,7 @@
 		set phasesTarget[nPhasesRef-1] = rotPhases[2*nPhasesRef-2] - 0.5 * Pi()
 		set phasesStart[nPhasesRef-1] = rotPhases[2*nPhasesRef-3] - rotPhases[2*nPhasesRef-2] + Pi()
 
-		return AmpAmpReflectionPhases(phasesTarget, phasesStart)
+		return AmpAmpReflectionPhases(phasesStart, phasesTarget)
 	}
 
 
@@ -82,7 +82,7 @@
 		set phasesTarget[iterations] = 0.0
 		set phasesStart[0] = 0.0
 
-		return AmpAmpReflectionPhases(phasesTarget, phasesStart)
+		return AmpAmpReflectionPhases(phasesStart, phasesTarget)
 	}
 
 
@@ -116,78 +116,7 @@
 	}
 
 
-
-	/// <summary>
-	/// Constructs reflection about a some state |ψ> from the oracle of type "OracleStateDeterministic" where O|0> = |ψ>
-	/// </summary>
-	/// <param name = "phase"> Phase of partial reflection </param>
-	/// <param name = "oracle"> Oracle of type "OracleStateDeterministic" </param>
-	/// <param name = "qubitsSystem"> Qubits acted on by "oracle" </param>
-	/// <remarks> 
-	/// -
-	/// </remarks>
-	operation ReflectionStartOracleStateDeterministicImpl(phase: Double, oracle: OracleStateDeterministic, qubitsSystem: Qubit[]): ()
-	{
-		Body {
-			WithCA((Adjoint oracle), ReflectionAllZero(phase, _), qubitsSystem)
-		}
-		Adjoint auto
-		Controlled auto
-		Adjoint Controlled auto
-	}
-	function ReflectionStartOracleStateDeterministic(oracle: OracleStateDeterministic): OracleReflection
-	{
-		return OracleReflection(ReflectionStartOracleStateDeterministicImpl(_, oracle, _ ))
-	}
-
-	/// <summary>
-	/// Constructs reflection about a some state |ψ> from the oracle of type "OracleState" where O|0>_f|0>_s = |ψ>_fs
-	/// </summary>
-	/// <param name = "phase"> Phase of partial reflection </param>
-	/// <param name = "oracle"> Oracle of type "OracleState" </param>
-	/// <param name = "qubitsFlag"> Flag qubit of "oracle" </param>
-	/// <param name = "qubitsSystem"> All other qubits acted on by "oracle" </param>
-	/// <remarks> 
-	/// -
-	/// </remarks>
-	operation ReflectionStartOracleStateImpl(phase: Double, idxQubitFlag : Int, oracle: OracleState, qubits: Qubit[]): ()
-	{
-		Body{
-			let op = OracleStateDeterministic(OracleStateIdxFlag(idxQubitFlag, oracle, _))
-			(ReflectionStartOracleStateDeterministic(op))(phase, qubits)
-		}
-		Adjoint auto
-		Controlled auto
-		Adjoint Controlled auto
-	}
-	function ReflectionStartOracleState(idxQubitFlag : Int, oracle: OracleState): OracleReflection
-	{
-		return OracleReflection(ReflectionStartOracleStateImpl( _ , idxQubitFlag , oracle , _ ))
-	}
-
-	/// <summary>
-	/// Constructs reflection about the target state uniquely marked by the flag qubit state |1>_f, prepared the oracle of type "OracleState"
-	/// </summary>
-	/// <param name = "phase"> Phase of partial reflection </param>
-	/// <param name = "qubitsFlag"> Flag qubit of oracle </param>
-	/// <param name = "qubitsSystem"> All other qubits acted on by oracle </param>
-	/// <remarks> 
-	/// -
-	/// </remarks>
-	operation ReflectionTargetOracleStateImpl(phase: Double, idxQubitFlag : Int, qubits: Qubit[]): ()
-	{
-		Body {
-			R1(phase, qubits[idxQubitFlag])
-		}
-
-		Adjoint auto
-		Controlled auto
-		Adjoint Controlled auto
-	}
-	function ReflectionTargetOracleState(idxQubitFlag : Int): OracleReflection
-	{
-		return OracleReflection(ReflectionTargetOracleStateImpl( _ , idxQubitFlag , _ ))
-	}
+	
 
 	/// <summary>
 	/// Oblivious amplitude amplification by specifying partial reflections.
@@ -210,25 +139,31 @@
 	{
 		Body {
 			let (phasesAncilla, phasesTarget) = phases
-			let nphases = Length(phasesTarget)
+			let nphases = 2 * Length(phasesTarget)
 
 			//FailOn(nphases != Length(phasesAncilla), "Phase array lengths not equal.")
-		
-			for (idxPhases in 0..nphases - 1){
-				if(phasesAncilla[idxPhases] != 0.0) {
-					refAncilla(phasesAncilla[idxPhases], qubitsAncilla)
-				}
+	
+			if(phasesAncilla[0] != 0.0) {
+				refAncilla(phasesAncilla[0], qubitsAncilla)
+			}
+	
+			for (idxPhases in 1..nphases - 1){
+				let idxPhaseAncilla = (idxPhases / 2)
+				let idxPhaseTarget = idxPhases / 2
 
-				if(idxPhases%2 == 0){
+				if(idxPhases%2 == 1){
 					oracleSignal(qubitsAncilla, qubitsSystem)
+					if(phasesTarget[idxPhaseTarget] != 0.0) {
+						refTarget(phasesTarget[idxPhaseTarget], qubitsAncilla)
+					}
 				}
 				else{
 					(Adjoint oracleSignal)(qubitsAncilla, qubitsSystem)
+					if(phasesAncilla[idxPhaseAncilla] != 0.0) {
+						refAncilla(phasesAncilla[idxPhaseAncilla], qubitsAncilla)
+					}
 				}
-			
-				if(phasesTarget[idxPhases] != 0.0) {
-					refTarget(phasesTarget[idxPhases], qubitsAncilla)
-				}
+
 			}
 		}
 
@@ -254,17 +189,17 @@
 	/// It is assumed that oracleSignal|start>_fa|ψ>_s = λ|1>_f|anything>_a U|ψ>_s + sqrt{1-|λ|^2}|0>_f...
 	/// In most cases, "qubitFlag" and "qubitsAncilla" is initialized in the state |0>_f|0>_a.
 	/// </remarks>
-	operation AmpAmpObliviousByOraclePhases(phases : AmpAmpReflectionPhases, oracleAncilla : OracleStateDeterministic, oracleSignal : OracleOblivious, qubitFlag : Qubit, qubitsAncilla: Qubit[], qubitsSystem: Qubit[]) : ()
+
+	operation AmpAmpObliviousByOraclePhases(phases : AmpAmpReflectionPhases, oracleAncilla : OracleStateDeterministic, oracleSignal : OracleOblivious, idxQubitFlag : Int, qubitsAncilla: Qubit[], qubitsSystem: Qubit[]) : ()
 	{
 		Body {
 			//Assert that qubitsAncilla are in |0...0> state?
-			let qubits = [qubitFlag] + qubitsAncilla
-			let idxQubitFlag = 0
-			let refAncilla = ReflectionStartOracleStateDeterministic(oracleAncilla)
+			let qubitFlag = qubitsAncilla[idxQubitFlag]
+			let refAncilla = ReflectionStart()
 			let refTarget = ReflectionTargetOracleState(idxQubitFlag)
-		
+			let oracleObliviousNew = OracleObliviousFromOracleStateDeterministic(oracleAncilla, oracleSignal)
 
-			AmpAmpObliviousByReflectionPhases(phases, refAncilla, refTarget, oracleSignal, qubits, qubitsSystem)
+			AmpAmpObliviousByReflectionPhases(phases, refAncilla, refTarget, oracleObliviousNew, qubitsAncilla, qubitsSystem)
 		
 		}
 
@@ -272,6 +207,36 @@
 		Controlled auto
 		Adjoint Controlled auto
 	}
+
+	/// <summary>
+	/// Amplitude amplification by oracles for partial reflections.
+	/// </summary>
+	/// <param name = "phases"> Phases of partial reflections </param>
+	/// <param name = "oracleStatePrep"> Unitary oracle that prepares start state </param>
+	/// <param name = "idxQubitFlag"> Index to Flag qubit </param>
+	/// <param name = "qubits"> Start state register </param>
+	/// <remarks> 
+	/// This imposes stricter conditions on form of the start and target states than in "AmpAmpByReflectionPhases".
+	/// It is assumed that the target state is marked by |1>_f.
+	/// It is assumed that oracleStatePrep|0>_f|0>_s = λ|1>_f|target>__s + sqrt{1-|λ|^2}|0>_f...
+	/// In most cases, "qubitFlag" and "qubitsAncilla" is initialized in the state |0>_f|0>_a.
+	/// </remarks>
+	operation AmpAmpByOraclePhases(phases : AmpAmpReflectionPhases, oracleState : OracleState, idxQubitFlag : Int, qubitsStart: Qubit[]) : ()
+	{
+		Body {
+            let qubitEmpty = new Qubit[0]
+            let oracleSignal = OracleOblivious(Identity2)
+            let oracleAncilla = OracleOracleStateDeterministicFromOracleState(oracleState, idxQubitFlag)
+	
+		    AmpAmpObliviousByOraclePhases(phases, oracleAncilla, oracleSignal, idxQubitFlag, qubitsStart, qubitEmpty)
+
+		}
+
+		Adjoint auto
+		Controlled auto
+		Adjoint Controlled auto
+	}
+
 
 	/// <summary>
 	/// Amplitude amplification by partial reflections.
@@ -300,33 +265,7 @@
 		Adjoint Controlled auto
 	}
 
-	/// <summary>
-	/// Amplitude amplification by oracles for partial reflections.
-	/// </summary>
-	/// <param name = "phases"> Phases of partial reflections </param>
-	/// <param name = "oracleStatePrep"> Unitary oracle that prepares start state </param>
-	/// <param name = "idxQubitFlag"> Index to Flag qubit </param>
-	/// <param name = "qubits"> Start state register </param>
-	/// <remarks> 
-	/// This imposes stricter conditions on form of the start and target states than in "AmpAmpByReflectionPhases".
-	/// It is assumed that the target state is marked by |1>_f.
-	/// It is assumed that oracleStatePrep|0>_f|0>_s = λ|1>_f|target>__s + sqrt{1-|λ|^2}|0>_f...
-	/// In most cases, "qubitFlag" and "qubitsAncilla" is initialized in the state |0>_f|0>_a.
-	/// </remarks>
-	operation AmpAmpByOraclePhases(phases : AmpAmpReflectionPhases, oracleStatePrep : OracleState, idxQubitFlag : Int, qubits: Qubit[]) : ()
-	{
-		Body {
-			//Assert that qubitsAncilla are in |0...0> state?
-			let refStart = ReflectionStartOracleState(idxQubitFlag, oracleStatePrep)
-			let refTarget = ReflectionTargetOracleState(idxQubitFlag)
-		
-			AmpAmpByReflectionsPhases(phases, refStart, refTarget, qubits)
-		}
 
-		Adjoint auto
-		Controlled auto
-		Adjoint Controlled auto
-	}
 
 
 	/// <summary>
@@ -343,12 +282,14 @@
 	/// In most cases, "qubitFlag" and "qubitsAncilla" is initialized in the state |0>_f|0>_a.
 	/// [G. Brassard, P. Hoyer, M. Mosca, A. Tapp, https://arxiv.org/abs/quant-ph/0005055]
 	/// </remarks>
-	operation AmpAmpByOracle(iterations: Int, oracleStatePrep : OracleState, idxQubitFlag : Int, qubits: Qubit[]) : ()
+
+    
+	operation AmpAmpByOracle(iterations: Int, oracleState : OracleState, idxQubitFlag : Int, qubitsStart: Qubit[]) : ()
 	{
 		Body {
 			let phases = AmpAmpPhasesStandard(iterations)
 
-			AmpAmpByOraclePhases(phases, oracleStatePrep, idxQubitFlag, qubits)
+			AmpAmpByOraclePhases(phases, oracleState, idxQubitFlag, qubitsStart)
 		}
 
 		Adjoint auto

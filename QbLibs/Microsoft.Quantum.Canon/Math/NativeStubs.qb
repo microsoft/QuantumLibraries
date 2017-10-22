@@ -61,4 +61,8 @@ function ArcCosh(d : Double) : Double
 		AssertAlmostEqual(ArcCos(arcArg), 0.0)
 		AssertAlmostEqual(ArcSin(arcArg), arg)
 	}
+
+	function ToDouble(value : Int) : Double{
+		return 1.0
+	}
 }

@@ -8,5 +8,13 @@
 			fail "Assertion failed."
 		}
 	}
+
+	function AssertIntEqual(actual : Int, expected : Int) : () {
+		let delta = actual - expected
+		if (delta != 0) {
+			// TODO: use string interpolation here.
+			fail "Assertion failed."
+		}
+	}
 	
 }
