@@ -13,12 +13,15 @@ namespace Microsoft.Quantum.Canon {
             mutable finished = false
             repeat
             {
-                op(arr)
+                if( !finished )
+                {
+                    op(arr)
+                }
             }
             until(finished)
             fixup
             {
-                //computes the next element in the cartesian product
+                //computes the next element in the Cartesian product
                 set arr[0] = arr[0] + 1
                 for( i in 0 .. Length(arr) -2 )
                 {
