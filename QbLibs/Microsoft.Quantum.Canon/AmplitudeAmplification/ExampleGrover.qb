@@ -101,6 +101,7 @@
 		}
 	}
 
+    /// Here we test whether our hard coded-oracle is marking the right fraction of bits
 	operation OracleStatePreparationTest(): (){
 		Body{
 			
@@ -127,6 +128,9 @@
 		}
 	}
 
+    /// Here we perform quantum search using a varying number of iterations on
+    /// a a database of varying size. Whenever the flag qubit indicates success, 
+    /// we check that the index of the marked element matches our expectations.
 	operation GroverHardCodedTest() : (){
 		Body{
 
@@ -142,10 +146,6 @@
 						let successAmplitude = Sin( ToDouble(2*nIterations + 1) * ArcSin( 1.0 / Sqrt(ToDouble(2^nDatabaseQubits))  ))
 						let successProbability = successAmplitude * successAmplitude
 
-						//Sqrt( ToDouble( 2^nDatabaseQubits) )
-
-						//AssertAlmostEqual(successProbability, 0.00390625)
-						//AssertAlmostEqual(successProbability,Sqrt(successProbability))
 						AssertProb([Zpauli], [qubitMarked], One, successProbability, "Error: Success probability does not match theory", 1e-10)
 
 						let result = M(qubitMarked)
@@ -165,30 +165,7 @@
 		}
 	}
 
-	operation RotationTest() : (){
-		Body{
-			
-			using(qubits = Qubit[1]){
 
-
-				let q = qubits[0]
-				Reset(q)
-				AssertProb([Zpauli], qubits, Zero, 1.0, "Qubit should be in |0> state", 1e-10)
-
-				let rotangle = 0.348123/2.0
-				H(q)
-
-				AssertProb([Xpauli], qubits, Zero, 1.0, "Qubit should be in |+> state", 1e-10)
-
-				Rz(rotangle, q)
-				let success = Cos(0.5 * rotangle) * Cos(0.5 * rotangle)
-				///AssertAlmostEqual(success, 0.5)
-				AssertProb([Xpauli], qubits, Zero, success, "Error: Success probability does not match theory", 1e-10)
-
-				Reset(q)
-			}
-		}
-	}
 
 	/// Our second example makes full use of the amplitude amplification library, and other supporting libraries.
 
@@ -246,7 +223,7 @@
 		Controlled auto
 		Adjoint Controlled auto
 	}
-
+    /// This constructs an oracle of type OracleState from _GroverOracleStatePrep.
 	function GroverOracleStatePrep(markedElements : Int[]) : OracleState
 	{
 		return OracleState(_GroverOracleStatePrep(markedElements, _, _))
@@ -272,31 +249,11 @@
 		Controlled auto
 		Adjoint Controlled auto
 	}
+    
 
-	/// <summary>
-	/// Grover search algorithm
-	/// </summary>
-	/// <param name = "markedElements"> Indices to marked elements in database </param>
-	/// <param name = "iterations"> Number of applications of Grover iterate </param>
-	/// <param name = "nQubits"> Number of database qubits </param>
-	/// <remarks> 
-	/// This prepares the state |1>_f|marked>_d with amplitude Sin((2*iterations + 1) ArcSin(Sqrt(M/N))), measures all registers, and returns the value of the flag qubit and the value of the database register as an integer.
-	/// 2^qubitsDatabase should be larger than the largest integer in "markedElements"
-	/// </remarks>
-
-
-	/// <summary>
-	/// Test random instances of Grover search
-	/// </summary>
-	/// <param name = "maxMarkedElements"> Maximum number of marked elements in database </param>
-	/// <param name = "maxGroverIterations"> Maximum number of applications of Grover iterate </param>
-	/// <param name = "maxQubits"> Maximum number of database qubits </param>
-	/// <remarks> 
-	/// This generates 100 random instances of Grover search, each time by choosing a random number of database qubits n, a random number of marked elements M <= N = 2^maxQubits, and a random number of Grover iterations 
-	/// The success probability of measuring the flag qubit in the |1>_f state is compared to the theory of
-	/// Sin((2*iterations + 1) ArcSin(Sqrt(M/N)))^2
-	/// </remarks>
-
+    /// Here we perform quantum search using a varying number of iterations on
+    /// a a database of varying size. Whenever the flag qubit indicates success, 
+    /// we check that the index of the marked element matches our expectations.
 	operation GroverTest() : (){
 		Body{
 
