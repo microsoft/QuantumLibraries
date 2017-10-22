@@ -11,16 +11,6 @@ function Ceil(value: Double) : Int
     return 0
 }
 
-function ArcSin(d : Double) : Double
-{
-    return 0.0
-}
-
-function Sin(d : Double) : Double
-{
-    return 0.0
-}
-
 function ArcTan(d : Double) : Double
 {
     return 0.0
@@ -46,8 +36,6 @@ function ArcCosh(d : Double) : Double
     return 0.0
 }
 
-}
-namespace Microsoft.Quantum.Canon {
 	function Sin(theta : Double) : Double {
 		return -42.0
 	}
