@@ -16,7 +16,7 @@ function randomInt (maxInt : Int) : Int
 	mutable nBits = 0
 	mutable output = 0
 	//set nBits = Float(maxInt)
-	set nBits = Ceil(Log(2.0,Float(maxInt)))
+	set nBits = Ceiling(Log(2.0,Float(maxInt)))
 	
 	// Should use repeat until success when implemented
 	for( samples in 0..100 ){

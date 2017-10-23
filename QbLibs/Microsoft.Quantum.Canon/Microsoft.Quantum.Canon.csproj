@@ -83,9 +83,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AmplitudeAmplification\AmplitudeAmplification.g.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
       <DependentUpon>AmplitudeAmplification.qb</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
     </Compile>
     <Compile Include="AmplitudeAmplification\ExampleAA.g.cs">
       <DependentUpon>ExampleAA.qb</DependentUpon>
@@ -98,14 +98,14 @@
       <AutoGen>True</AutoGen>
     </Compile>
     <Compile Include="AmplitudeAmplification\Types.g.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
       <DependentUpon>Types.qb</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
     </Compile>
     <Compile Include="AmplitudeAmplification\Utils.g.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
       <DependentUpon>Utils.qb</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
     </Compile>
     <Compile Include="Arithmetic.g.cs">
       <AutoGen>True</AutoGen>
@@ -218,15 +218,15 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Iterative.qb</DependentUpon>
     </Compile>
-    <Compile Include="PhaseEstimation\Robust.g.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Robust.qb</DependentUpon>
-    </Compile>
     <Compile Include="PhaseEstimation\Quantum.g.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Quantum.qb</DependentUpon>
+    </Compile>
+    <Compile Include="PhaseEstimation\Robust.g.cs">
+      <DependentUpon>Robust.qb</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
     </Compile>
     <Compile Include="PhaseEstimation\Types.g.cs">
       <AutoGen>True</AutoGen>
@@ -275,19 +275,19 @@
       <DependentUpon>ShiftOp.qb</DependentUpon>
     </Compile>
     <Compile Include="Simulation\EvolutionSetPauli.g.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
       <DependentUpon>EvolutionSetPauli.qb</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
     </Compile>
     <Compile Include="Simulation\Tests.g.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
       <DependentUpon>Tests.qb</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
     </Compile>
     <Compile Include="Simulation\Trotter.g.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
       <DependentUpon>Trotter.qb</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
     </Compile>
     <Compile Include="Simulation\Types.g.cs">
       <AutoGen>True</AutoGen>
@@ -328,18 +328,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>TypeConversion.qb</DependentUpon>
     </Compile>
-    <QbCompile Include="PhaseEstimation\Robust.qb">
-      <Generator>QbCodeGenerator</Generator>
-      <LastGenOutput>Robust.g.cs</LastGenOutput>
-    </QbCompile>
-    <QbCompile Include="Simulation\Trotter.qb">
-      <Generator>QbCodeGenerator</Generator>
-      <LastGenOutput>Trotter.g.cs</LastGenOutput>
-    </QbCompile>
-    <QbCompile Include="Simulation\Tests.qb">
-      <Generator>QbCodeGenerator</Generator>
-      <LastGenOutput>Tests.g.cs</LastGenOutput>
-    </QbCompile>
     <QbCompile Include="AmplitudeAmplification\AmplitudeAmplification.qb">
       <Generator>QbCodeGenerator</Generator>
       <LastGenOutput>AmplitudeAmplification.g.cs</LastGenOutput>
@@ -364,9 +352,21 @@
       <Generator>QbCodeGenerator</Generator>
       <LastGenOutput>Random.g.cs</LastGenOutput>
     </QbCompile>
+    <QbCompile Include="PhaseEstimation\Robust.qb">
+      <Generator>QbCodeGenerator</Generator>
+      <LastGenOutput>Robust.g.cs</LastGenOutput>
+    </QbCompile>
     <QbCompile Include="Simulation\EvolutionSetPauli.qb">
       <Generator>QbCodeGenerator</Generator>
       <LastGenOutput>EvolutionSetPauli.g.cs</LastGenOutput>
+    </QbCompile>
+    <QbCompile Include="Simulation\Tests.qb">
+      <Generator>QbCodeGenerator</Generator>
+      <LastGenOutput>Tests.g.cs</LastGenOutput>
+    </QbCompile>
+    <QbCompile Include="Simulation\Trotter.qb">
+      <Generator>QbCodeGenerator</Generator>
+      <LastGenOutput>Trotter.g.cs</LastGenOutput>
     </QbCompile>
     <QbCompile Include="Simulation\Types.qb">
       <Generator>QbCodeGenerator</Generator>

@@ -151,4 +151,29 @@ namespace Microsoft.Quantum.Canon.Native
     }
 
 
+    public class ArcTan2 : Microsoft.Quantum.Canon.ArcTan2
+    {
+
+        public ArcTan2(IOperationFactory m) : base(m) { }
+
+        public override Func<(double, double), double> Body =>
+            (args) =>
+                System.Math.Atan2(args.Item1, args.Item2);
+
+    }
+
+
+    public class Ceiling : Microsoft.Quantum.Canon.Ceiling
+    {
+
+        public Ceiling(IOperationFactory m) : base(m) { }
+
+        public override Func<double, long> Body =>
+            (theta) =>
+                // FIXME: add range checking!
+                (long)System.Math.Ceiling(theta);
+
+    }
+
+
 }

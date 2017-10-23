@@ -6,7 +6,7 @@ function Log(b : Double, input: Double) : Double
     return 0.0
 }
 
-function Ceil(value: Double) : Int
+function Ceiling(value: Double) : Int
 {
     return 0
 }
