@@ -284,11 +284,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>ExampleH2.qb</DependentUpon>
     </Compile>
-    <Compile Include="Simulation\ExampleIsing.g.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>ExampleIsing.qb</DependentUpon>
-    </Compile>
     <Compile Include="Simulation\SimulationTechniques.g.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -343,10 +338,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>TypeConversion.qb</DependentUpon>
     </Compile>
-    <QbCompile Include="Simulation\ExampleIsing.qb">
-      <Generator>QbCodeGenerator</Generator>
-      <LastGenOutput>ExampleIsing.g.cs</LastGenOutput>
-    </QbCompile>
     <QbCompile Include="Simulation\ExampleH2.qb">
       <Generator>QbCodeGenerator</Generator>
       <LastGenOutput>ExampleH2.g.cs</LastGenOutput>

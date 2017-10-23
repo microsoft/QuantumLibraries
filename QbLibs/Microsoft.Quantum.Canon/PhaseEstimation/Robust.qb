@@ -2,13 +2,16 @@ namespace Microsoft.Quantum.Canon {
     open Microsoft.Quantum.Primitive
 
     /// <summary>
-    ///     Performs the robust quantum phase estimation algorithm for a given oracle U and eigenstate,
-    ///     and provides a single real-valued estimate of the phase
+    ///     Performs the robust non-terative quantum phase estimation algorithm for a given oracle U and eigenstate,
+    ///     and provides a single real-valued estimate of the phase with variance scaling at the Heisenberg limit
     /// </summary>
     /// <param name="oracle">An operation implementing U^m for given integer powers m.</param>
     /// <param name="eigenstate">A quantum register representing an eigenstate |φ> of U, U|φ> =
     ///     e^{iφ} |φ> for φ ∈ [0, 2π) an unknown phase.</param>
-    /// <param name="bitsPrecision"> This provides an estimate of φ with standard deviation σ <= 2π / 2^bitsPrecision using Queries < 10.7 Pi/ σ.</param>
+    /// <param name="bitsPrecision"> This provides an estimate of φ with 
+    /// standard deviation σ <= 2π / 2^bitsPrecision using Queries scaling like σ <= 10.7 Pi/ Queries.
+    /// From Cramer-Rao lower bounds, the standard deviation also satisfies σ >= 2.0 Pi / Queries
+    ///</param>
     /// <remarks>
     /// Robust Calibration of a Universal Single-Qubit Gate-Set via Robust Phase Estimation
     /// Shelby Kimmel, Guang Hao Low, Theodore J. Yoder
