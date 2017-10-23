@@ -36,6 +36,10 @@ function ArcCosh(d : Double) : Double
     return 0.0
 }
 
+function ArcTan2(d: Double, e: Double) : Double{
+    return 0.0
+}
+
 	function Sin(theta : Double) : Double {
 		return -42.0
 	}

@@ -1,0 +1,122 @@
+﻿namespace Microsoft.Quantum.Canon {
+    open Microsoft.Quantum.Primitive
+/// This contains unit tests for the Simulation library
+
+    /// Test of Trotterization and EvolutionSetPauli
+
+    operation slice(qubits : Qubit[], step: Double) : (){
+        Body{
+            //let qubit = QubitSlice([0;1],qubits)
+            Exp([Ipauli], step, [qubits[0]])
+        }
+        Adjoint auto
+    }
+
+    function SinSquared(theta:Double) : Double{
+        let amp = Sin(theta)
+        let prob = amp * amp
+        return prob
+    }
+
+    operation EvolutionSetPauliTest() : () {
+        Body{
+
+            let step = 0.12483
+            let e = [1.0]
+
+            let ops = [(([1],e),[0]); (([2],e),[0]); (([0;3],e),[0;1]); (([1;3],e),[0;1]); (([2;3],e),[1;0]); (([1],[-2.0]),[1]);  (([2;3;1;1],e),[3;6;4;1])]
+            let opsTarget = [[Xpauli]; [Ypauli]; [Ipauli;Zpauli]; [Xpauli;Zpauli]; [Zpauli;Ypauli]; [Ipauli;Xpauli]; [Ipauli;Xpauli;Ipauli;Ypauli;Xpauli;Ipauli;Zpauli]]
+
+            for(idxOp in 6..6){
+                let op = ops[idxOp]
+                let opTarget = opsTarget[idxOp]
+                let (idxGen,idxQubits) = op
+                let (idxPaulis, idxDoubles) = idxGen
+
+                let multiplier = idxDoubles[0]
+                 
+                let generatorIndex = GeneratorIndex(idxGen,idxQubits)
+                let nQubits = Length(opTarget)
+                
+                
+                let opA = (PauliEvolutionFunction(generatorIndex))(step, _)
+                let opB = Exp(opTarget, step, _)
+                //AssertOperationsEqualReferenced(opA, opB, nQubits) 
+
+                //using(qubits2 = Qubit[2]){
+                    //ResetAll(qubits2)
+                //    opB(qubits2)
+                 //   opA(qubits2)
+                    //AssertProb([Zpauli], [qubits2[1]], Zero, 1.0, "Fail [Ipauli;Xpauli] [0;1]",  1e-10)
+                 //   ResetAll(qubits2)
+                //}
+                
+                //let opC = Exp([Ipauli; Ipauli], 0.9 * step, _)
+                ///slice(_,step)
+                //let opD = Exp([Ipauli; Ipauli], step, _)
+                //AssertOperationsEqualReferenced(opC, opD, 2) 
+            }
+            using(qubits = Qubit[7]){
+                ResetAll(qubits)
+
+                let amp = Sin(step)
+                let prob = amp * amp
+
+                //It appears that single-qubit paulis only have have double the coefficient
+
+                Exp([Xpauli], 0.5 * step, qubits[0..0])
+                Exp([Xpauli], -0.5 * step, [qubits[0]])
+                AssertProb([Zpauli], [qubits[0]], Zero, 1.0, "Fail [Xpauli] [0]",  1e-10)
+
+                Exp([Xpauli; Ipauli], 1.0 * step, qubits[0..1])
+                Exp([Xpauli], 0.5 * step, [qubits[0]])
+                AssertProb([Zpauli], [qubits[0]], Zero, 1.0, "Fail [Xpauli;Ipauli] [0;1]",  1e-10)
+
+                Exp([Ipauli; Xpauli], 1.0 * step, qubits[0..1])
+                Exp([Xpauli], 0.5 * step, [qubits[1]])
+                AssertProb([Zpauli], [qubits[1]], Zero, 1.0, "Fail [Ipauli; Xpauli] [0;1]",  1e-10)
+
+                //Exp([Ipauli; Ipauli; Xpauli], 2.0 * step, qubits[0..2])
+                Exp([Xpauli], 1.0 * step, qubits[2..2])
+                AssertProb([Zpauli], [qubits[2]], One, SinSquared(1.0*step), "Fail [Xpauli] [2]",  1e-10)
+
+                ResetAll(qubits)
+
+                Exp([Xpauli], 1.0 * step, qubits[0..0])
+                AssertProb([Zpauli], [qubits[0]], One, SinSquared(1.0*step), "Fail [Xpauli] [0]",  1e-10)
+
+                ResetAll(qubits)
+
+                Exp([Xpauli;Ipauli], 1.0 * step, qubits[0..1])
+                AssertProb([Zpauli], [qubits[0]], One, SinSquared(0.5*step), "Fail [Xpauli;Ipauli] [0;1]",  1e-10)
+
+                ResetAll(qubits)
+
+                Exp([Ipauli;Xpauli], 1.0 * step, qubits[0..1])
+                AssertProb([Zpauli], [qubits[1]], One, SinSquared(0.5*step), "Fail [Ipauli;Xpauli] [0;1]",  1e-10)
+
+                ResetAll(qubits)
+
+                Exp([Ypauli;Xpauli], 1.0 * step, QubitSlice([2;0],qubits))
+                Exp([Xpauli;Ipauli;Ypauli], -1.0 * step, qubits[0..2])
+                AssertProb([Zpauli], [qubits[1]], One, SinSquared(0.0*step), "Fail [Ipauli;Xpauli] [0;1]",  1e-10)
+
+                ResetAll(qubits)
+
+                Exp([Ypauli;Zpauli;Xpauli;Xpauli], 1.0 * step, QubitSlice([3;6;4;1],qubits))
+                Exp([Ipauli;Xpauli;Ipauli;Ypauli;Xpauli;Ipauli;Zpauli], -1.0 * step, qubits[0..6])
+                AssertProb([Zpauli], [qubits[0]], One, SinSquared(0.0*step), "Fail [Ipauli;Xpauli;Ipauli;Ypauli;Xpauli;Ipauli;Zpauli] [0]",  1e-10)
+                AssertProb([Zpauli], [qubits[1]], One, SinSquared(0.0*step), "Fail [Ipauli;Xpauli;Ipauli;Ypauli;Xpauli;Ipauli;Zpauli] [1]",  1e-10)
+                AssertProb([Zpauli], [qubits[2]], One, SinSquared(0.0*step), "Fail [Ipauli;Xpauli;Ipauli;Ypauli;Xpauli;Ipauli;Zpauli] [2]",  1e-10)
+                AssertProb([Zpauli], [qubits[3]], One, SinSquared(0.0*step), "Fail [Ipauli;Xpauli;Ipauli;Ypauli;Xpauli;Ipauli;Zpauli] [3]",  1e-10)
+                AssertProb([Zpauli], [qubits[4]], One, SinSquared(0.0*step), "Fail [Ipauli;Xpauli;Ipauli;Ypauli;Xpauli;Ipauli;Zpauli] [4]",  1e-10)
+                AssertProb([Zpauli], [qubits[5]], One, SinSquared(0.0*step), "Fail [Ipauli;Xpauli;Ipauli;Ypauli;Xpauli;Ipauli;Zpauli] [5]",  1e-10)
+                AssertProb([Zpauli], [qubits[6]], One, SinSquared(0.0*step), "Fail [Ipauli;Xpauli;Ipauli;Ypauli;Xpauli;Ipauli;Zpauli] [6]",  1e-10)
+                ResetAll(qubits)
+
+            }
+        }
+    }
+
+}
+

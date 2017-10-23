@@ -1,57 +1,61 @@
 namespace Microsoft.Quantum.Canon{
 
 
-/// summary:
-///     Represents a single primitive term in the set of all dynamical generators, e.g.
-///     Hermitian operators, for which there exists a map from that generator 
-///     to time-evolution by that that generator, through "EvolutionSet". The first element 
-///     (Int[], Double[]) is indexes that single term -- For instance, the Pauli string
-///     XXY would be indexed by ([1,1,2], []) -- note that if Double[] is not required
-///     to index the term, an empty new Double[0] may be passed into it. Alternatively, 
-///     Hamiltonians parameterized by a continuous variable, such as X cos φ + Y sin φ,
-///     might for instance be represented by ([], [φ]). he second
-///     element indexes the subsystem on which the generator acts on -- e.g. the 
-///     Pauli string X_2 X_5 Y_9 acting on qubits 2, 5, 9 acts on the qubit subsystem
-///     [2, 5, 9]. 
-newtype GeneratorIndex = ((Int[],Double[]), Int[])
+    /// summary:
+    ///     Represents a single primitive term in the set of all dynamical generators, e.g.
+    ///     Hermitian operators, for which there exists a map from that generator 
+    ///     to time-evolution by that that generator, through "EvolutionSet". The first element 
+    ///     (Int[], Double[]) is indexes that single term -- For instance, the Pauli string
+    ///     XXY would be indexed by ([1,1,2], []) -- note that if Double[] is not required
+    ///     to index the term, an empty new Double[0] may be passed into it. Alternatively, 
+    ///     Hamiltonians parameterized by a continuous variable, such as X cos φ + Y sin φ,
+    ///     might for instance be represented by ([], [φ]). he second
+    ///     element indexes the subsystem on which the generator acts on -- e.g. the 
+    ///     Pauli string X_2 X_5 Y_9 acting on qubits 2, 5, 9 acts on the qubit subsystem
+    ///     [2, 5, 9]. 
+    newtype GeneratorIndex = ((Int[],Double[]), Int[])
 
-/// summary:
-///     Represents a single term in an expansion of a dynamical generator,
-///     such as a Hamiltonian, that is a linear combination of primitive dynamic 
-///     generators e.g. Hermitian operators. The first element of each term is a
-///     GeneratorIndex into an "EvolutionSet", while the second element is a real
-///     number representing the coefficient of the primitive dynamic generator.
-newtype GeneratorTerm = (GeneratorIndex, Double)
+    /// summary:
+    ///     Represents a single term in an expansion of a dynamical generator,
+    ///     such as a Hamiltonian, that is a linear combination of primitive dynamic 
+    ///     generators e.g. Hermitian operators. The first element of each term is a
+    ///     GeneratorIndex into an "EvolutionSet", while the second element is a real
+    ///     number representing the coefficient of the primitive dynamic generator.
+    //newtype GeneratorTerm = (GeneratorIndex, Double)
+    newtype GeneratorTerm = (GeneratorIndex, Double)
 
-/// summary:
-///     From the view of a GeneratorSystem, a description of a Hamiltonian is collection
-///     of GeneratorTerms. We iterate over this collection using a single-index
-///     integer, and the size of the collection is assumed to be known.
-// FIXME: unify this and the GateSet representation above with ContinousOracle.
-// TODO first int is the number of terms
+    /// summary:
+    ///     From the view of a GeneratorSystem, a description of a Hamiltonian is collection
+    ///     of GeneratorTerms. We iterate over this collection using a single-index
+    ///     integer, and the size of the collection is assumed to be known.
+    // FIXME: unify this and the GateSet representation above with ContinousOracle.
+    // TODO first int is the number of terms
 
-newtype GeneratorSystem = (Int, (Int -> GeneratorTerm))
+    newtype GeneratorSystem = (Int, (Int -> GeneratorTerm))
 
-/// summary:
-///     Represents a unitary time-evolution operator. The first parameter is
-///     is duration of time-evoltion, and the second parameter is the qubit 
-///     register acted upon by the unitary
-newtype EvolutionUnitary = ((Double, Qubit[]) => () : Adjoint, Controlled)
+    /// summary:
+    ///     Represents a unitary time-evolution operator. The first parameter is
+    ///     is duration of time-evoltion, and the second parameter is the qubit 
+    ///     register acted upon by the unitary
+    newtype EvolutionUnitary = ((Double, Qubit[]) => () : Adjoint, Controlled)
 
-/// summary:
-///     Represents a set of gates that can be readily implemented and used
-///     to implement simulation algorithms. Elements in the set are indexed 
-///     by a "GeneratorIndex", and each set is described by a function
-///     from "GeneratorIndex" to "EvolutionUnitary", which are operations 
-///     parameterized by a real number representing time
-newtype EvolutionSet = (GeneratorIndex -> EvolutionUnitary)
+    /// summary:
+    ///     Represents a set of gates that can be readily implemented and used
+    ///     to implement simulation algorithms. Elements in the set are indexed 
+    ///     by a "GeneratorIndex", and each set is described by a function
+    ///     from "GeneratorIndex" to "EvolutionUnitary", which are operations 
+    ///     parameterized by a real number representing time
+    newtype EvolutionSet = (GeneratorIndex -> EvolutionUnitary)
 
-/// summary:
-///     Represents a dynamical generator as a set of simulatable gates and
-///     an expansion in terms of that basis.
-///     Last parameter for number of terms
-newtype EvolutionGenerator = (EvolutionSet, GeneratorSystem)
+    /// summary:
+    ///     Represents a dynamical generator as a set of simulatable gates and
+    ///     an expansion in terms of that basis.
+    ///     Last parameter for number of terms
+    //newtype EvolutionGenerator = (EvolutionSet, GeneratorSystem)
+    newtype EvolutionGenerator = ((GeneratorIndex -> EvolutionUnitary), (Int, (Int -> GeneratorTerm)))
 
-newtype TrotterForm = (Int, ((Int, Double, Qubit[]) => () : Adjoint, Controlled))
+    newtype TrotterForm = (Int, ((Int, Double, Qubit[]) => () : Adjoint, Controlled))
+
+    newtype EvolutionUnitaryTimeDependent = ((Double, Double, Qubit[]) => () : Adjoint, Controlled)
 
 }

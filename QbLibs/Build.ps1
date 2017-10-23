@@ -52,18 +52,19 @@ $qflatSources += @(
     "Combinators/RestrictToSubregister.qb"
     "Combinators/ApplyToEach.qb"
 
-    "DataStructures/Pairs.qb"
+    #"DataStructures/Pairs.qb"
     
-    "Enumeration/Iter.qb"
-    "Enumeration/Trotter.qb"
+    #"Enumeration/Iter.qb"
+    #"Enumeration/Trotter.qb"
 
     "Simulation/Types.qb"
+    "Simulation/Trotter.qb"
     "Simulation/SimulationTechniques.qb"
     "Simulation/EvolutionSetPauli.qb"
     #"Simulation/EvolutionSetFermionic.qb"
 
-    "Simulation/ExampleH2.qb"
-    "Simulation/ExampleIsing.qb"
+    #"Simulation/ExampleH2.qb"
+    #"Simulation/ExampleIsing.qb"
 
     #"Simulation/Schedule.qb"
 

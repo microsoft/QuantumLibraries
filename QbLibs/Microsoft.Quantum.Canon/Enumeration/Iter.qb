@@ -3,7 +3,7 @@ namespace Microsoft.Quantum.Canon {
     open Microsoft.Quantum.Primitive
 
     /// <seealso cref="Iter" />
-    operation IterCA<'T>(op : ('T => () : Controlled, Adjoint), array : 'T[])  : ()
+    //operation IterCA<'T>(op : ('T => () : Controlled, Adjoint), array : 'T[])  : ()
     {
         Body {
             Iter(op, array)

@@ -1,162 +1,186 @@
 namespace Microsoft.Quantum.Canon {
     open Microsoft.Quantum.Primitive
 
-//Terms and coefficients from "Scalable Quantum Simulation of Molecular Energies" O'Malley et. al. https://arxiv.org/abs/1512.06860
-//H2 molecule a_0 ZI + a_1 IZ + a_2 ZZ + a_3 YY + a_3 XX
+    //Terms and coefficients from "Scalable Quantum Simulation of Molecular Energies" O'Malley et. al. https://arxiv.org/abs/1512.06860
+    //H2 molecule a_0 ZI + a_1 IZ + a_2 ZZ + a_3 YY + a_3 XX
 
-//This function takes in an index "idxBond" for the bond length and returns coefficients of the H2 Hamiltonian.
+    //This function takes in an index "idxBond" for the bond length and returns coefficients of the H2 Hamiltonian.
 
-function H2Coeff(idxBond : Int): Double[]
-{
-    let nTerms = 5
-    let nBondLengths = 54
-    mutable hamBondCoeff = new Double[][nBondLengths]
-    let bondLength = [0.2; 0.25; 0.3; 0.35; 0.4; 0.45; 0.5; 0.55; 0.6; 0.65; 0.7; 0.75; 0.8; 0.85; 0.9; 0.95; 1.0; 1.05; 1.1; 1.15; 1.2; 1.25; 1.3; 1.35; 1.4; 1.45; 1.5; 1.55; 1.6; 1.65; 1.7; 1.75; 1.8; 1.85; 1.9; 1.95; 2.0; 2.05; 2.1; 2.15; 2.2; 2.25; 2.3; 2.35; 2.4; 2.45; 2.5; 2.55; 2.6; 2.65; 2.7; 2.75; 2.8; 2.85]
-    set hamBondCoeff[0]=[2.8489; 0.5678; -1.4508; 0.6799; 0.0791; 0.0791]
-    set hamBondCoeff[1]=[2.1868; 0.5449; -1.287; 0.6719; 0.0798; 0.0798]
-    set hamBondCoeff[2]=[1.7252; 0.5215; -1.1458; 0.6631; 0.0806; 0.0806]
-    set hamBondCoeff[3]=[1.3827; 0.4982; -1.0226; 0.6537; 0.0815; 0.0815]
-    set hamBondCoeff[4]=[-0.2047; 0.4754; -0.9145; 0.6438; 0.0825; 0.0825]
-    set hamBondCoeff[5]=[-0.2677; 0.4534; -0.8194; 0.6336; 0.0835; 0.0835]
-    set hamBondCoeff[6]=[-0.3202; 0.4325; -0.7355; 0.6233; 0.0846; 0.0846]
-    set hamBondCoeff[7]=[-0.3642; 0.4125; -0.6612; 0.6129; 0.0858; 0.0858]
-    set hamBondCoeff[8]=[-0.4012; 0.3937; -0.595; 0.6025; 0.087; 0.087]
-    set hamBondCoeff[9]=[-0.4323; 0.376; -0.5358; 0.5921; 0.0883; 0.0883]
-    set hamBondCoeff[10]=[-0.4584; 0.3593; -0.4826; 0.5818; 0.0896; 0.0896]
-    set hamBondCoeff[11]=[-0.4804; 0.3435; -0.4347; 0.5716; 0.091; 0.091]
-    set hamBondCoeff[12]=[-0.4989; 0.3288; -0.3915; 0.5616; 0.0925; 0.0925]
-    set hamBondCoeff[13]=[-0.5143; 0.3149; -0.3523; 0.5518; 0.0939; 0.0939]
-    set hamBondCoeff[14]=[-0.5271; 0.3018; -0.3168; 0.5421; 0.0954; 0.0954]
-    set hamBondCoeff[15]=[-0.5377; 0.2895; -0.2845; 0.5327; 0.097; 0.097]
-    set hamBondCoeff[16]=[-0.5463; 0.2779; -0.255; 0.5235; 0.0986; 0.0986]
-    set hamBondCoeff[17]=[-0.5533; 0.2669; -0.2282; 0.5146; 0.1002; 0.1002]
-    set hamBondCoeff[18]=[-0.5588; 0.2565; -0.2036; 0.5059; 0.1018; 0.1018]
-    set hamBondCoeff[19]=[-0.5631; 0.2467; -0.181; 0.4974; 0.1034; 0.1034]
-    set hamBondCoeff[20]=[-0.5663; 0.2374; -0.1603; 0.4892; 0.105; 0.105]
-    set hamBondCoeff[21]=[-0.5685; 0.2286; -0.1413; 0.4812; 0.1067; 0.1067]
-    set hamBondCoeff[22]=[-0.5699; 0.2203; -0.1238; 0.4735; 0.1083; 0.1083]
-    set hamBondCoeff[23]=[-0.5706; 0.2123; -0.1077; 0.466; 0.11; 0.11]
-    set hamBondCoeff[24]=[-0.5707; 0.2048; -0.0929; 0.4588; 0.1116; 0.1116]
-    set hamBondCoeff[25]=[-0.5702; 0.1976; -0.0792; 0.4518; 0.1133; 0.1133]
-    set hamBondCoeff[26]=[-0.5693; 0.1908; -0.0666; 0.4451; 0.1149; 0.1149]
-    set hamBondCoeff[27]=[-0.5679; 0.1843; -0.0549; 0.4386; 0.1165; 0.1165]
-    set hamBondCoeff[28]=[-0.5663; 0.1782; -0.0442; 0.4323; 0.1181; 0.1181]
-    set hamBondCoeff[29]=[-0.5643; 0.1723; -0.0342; 0.4262; 0.1196; 0.1196]
-    set hamBondCoeff[30]=[-0.5621; 0.1667; -0.0251; 0.4204; 0.1211; 0.1211]
-    set hamBondCoeff[31]=[-0.5597; 0.1615; -0.0166; 0.4148; 0.1226; 0.1226]
-    set hamBondCoeff[32]=[-0.5571; 0.1565; -0.0088; 0.4094; 0.1241; 0.1241]
-    set hamBondCoeff[33]=[-0.5544; 0.1517; -0.0015; 0.4042; 0.1256; 0.1256]
-    set hamBondCoeff[34]=[-0.5516; 0.1472; 0.0052; 0.3992; 0.127; 0.127]
-    set hamBondCoeff[35]=[-0.5488; 0.143; 0.0114; 0.3944; 0.1284; 0.1284]
-    set hamBondCoeff[36]=[-0.5458; 0.139; 0.0171; 0.3898; 0.1297; 0.1297]
-    set hamBondCoeff[37]=[-0.5429; 0.1352; 0.0223; 0.3853; 0.131; 0.131]
-    set hamBondCoeff[38]=[-0.5399; 0.1316; 0.0272; 0.3811; 0.1323; 0.1323]
-    set hamBondCoeff[39]=[-0.5369; 0.1282; 0.0317; 0.3769; 0.1335; 0.1335]
-    set hamBondCoeff[40]=[-0.5339; 0.1251; 0.0359; 0.373; 0.1347; 0.1347]
-    set hamBondCoeff[41]=[-0.531; 0.1221; 0.0397; 0.3692; 0.1359; 0.1359]
-    set hamBondCoeff[42]=[-0.528; 0.1193; 0.0432; 0.3655; 0.137; 0.137]
-    set hamBondCoeff[43]=[-0.5251; 0.1167; 0.0465; 0.362; 0.1381; 0.1381]
-    set hamBondCoeff[44]=[-0.5223; 0.1142; 0.0495; 0.3586; 0.1392; 0.1392]
-    set hamBondCoeff[45]=[-0.5195; 0.1119; 0.0523; 0.3553; 0.1402; 0.1402]
-    set hamBondCoeff[46]=[-0.5168; 0.1098; 0.0549; 0.3521; 0.1412; 0.1412]
-    set hamBondCoeff[47]=[-0.5141; 0.1078; 0.0572; 0.3491; 0.1422; 0.1422]
-    set hamBondCoeff[48]=[-0.5114; 0.1059; 0.0594; 0.3461; 0.1432; 0.1432]
-    set hamBondCoeff[49]=[-0.5089; 0.1042; 0.0614; 0.3433; 0.1441; 0.1441]
-    set hamBondCoeff[50]=[-0.5064; 0.1026; 0.0632; 0.3406; 0.145; 0.145]
-    set hamBondCoeff[51]=[-0.5039; 0.1011; 0.0649; 0.3379; 0.1458; 0.1458]
-    set hamBondCoeff[52]=[-0.5015; 0.0997; 0.0665; 0.3354; 0.1467; 0.1467]
-    set hamBondCoeff[53]=[-0.4992; 0.0984; 0.0679; 0.3329; 0.1475; 0.1475]
-    return hamBondCoeff[idxBond]
-}
-
-//This function takes in an index "idxHamiltonian" and returns a description of a term in the H2 Hamiltonian.
-function H2Terms(idxHamiltonian : Int) : (Int[], Int[])
-{
-    //This is how a user might input the raw data
-    //([3], [0]);  ([3],[1]); ([3;3],[0;1])); ([2;2],[0;1])); ([1;1],[0;1]))
-    let hamiltonianTerms = [([3], [0]);  ([3],[1]); ([3;3],[0;1]); ([2;2],[0;1]); ([1;1],[0;1])]
-    return hamiltonianTerms[idxHamiltonian]
-}
-
-
-// Using the Trotterization library directly
-operation H2TrotterUnitariesImpl(idxBondLength : Int, idxHamiltonian: Int, stepSize : Double, qubits : Qubit[]) : ()
-{
-    Body{
-        let (idxPauliString, idxQubits) = H2Terms(idxHamiltonian)
-        let coeff = (H2Coeff(idxBondLength))[idxHamiltonian]
-        let pauliString = IntsToPaulis(idxPauliString)
-        let op = Exp(pauliString, stepSize * coeff, _)
-        (RestrictToSubregisterCA(op, idxQubits))(qubits)
-    }
-    Adjoint auto
-    Controlled auto
-    Controlled Adjoint auto
-
-
-
-
-}
-function H2TrotterUnitaries(idxBondLength : Int) : (Int, ((Int, Double, Qubit[]) => () : Adjoint, Controlled))
-{
-    let nterms = 5
-    return (nterms, H2TrotterUnitariesImpl(idxBondLength, _, _, _))
-}
-
-function H2TrotterStepA(idxBondLength : Int, trotterOrder: Int, trotterStepSize: Double): (Qubit[] => (): Adjoint, Controlled)
-{
-    let op = H2TrotterUnitaries(idxBondLength)
-    return (DecomposeIntoTimeStepsCA(op,trotterOrder))(trotterStepSize, _)
-}
-
-
-// Using the Hamiltonian representation library
-function H2GeneratorTerm(idxBondLength : Int, idxHamiltonian : Int) : GeneratorTerm
-{
-    //Pass empty double as Pauli set not indexed by continuous parameters
-    let e = new Double[0]
-    let (idxPauliString, idxQubits) = H2Terms(idxHamiltonian)
-    let coefficient = (H2Coeff(idxBondLength))[idxHamiltonian]
-    let generatorIndex = GeneratorIndex((idxPauliString,e), idxQubits)
-    return GeneratorTerm(generatorIndex, coefficient)
-}
-
-function H2GeneratorSystem(idxBondLength : Int) : GeneratorSystem 
-{
-    let nTerms = 5
-    return GeneratorSystem(nTerms, H2GeneratorTerm(idxBondLength, _))
-}
-
-function H2EvolutionGenerator(idxBondLength : Int) : EvolutionGenerator
-{
-    let generatorSystem = H2GeneratorSystem(idxBondLength)
-    let evolutionSet = PauliEvolutionSet()
-    return EvolutionGenerator(evolutionSet, generatorSystem)
-}
-
-
-function H2TrotterStepB(idxBondLength : Int, trotterOrder: Int, trotterStepSize: Double): (Qubit[] => ())
-{
-    let evolutionGenerator = H2EvolutionGenerator(idxBondLength)
-    return TrotterStep(evolutionGenerator, trotterOrder, trotterStepSize)
-}
-
-//Example find g.s. energy of H2
-operation ExampleH2() : (){
-    Body {
+    function H2Coeff(idxBond : Int) : Double[]
+    {
         let nTerms = 5
-        let idxBondLength = 0
-        let trotterOrder = 2
-        let trotterStepSize = 0.1
-        let trotterStep = H2TrotterStepB(idxBondLength, trotterOrder, trotterStepSize)
-        using(qubits = Qubit[nTerms]){
+        let nBondLengths = 54
+        mutable hamBondCoeff = new Double[][nBondLengths]
+        let bondLength = [0.2; 0.25; 0.3; 0.35; 0.4; 0.45; 0.5; 0.55; 0.6; 0.65; 0.7; 0.75; 0.8; 0.85; 0.9; 0.95; 1.0; 1.05; 1.1; 1.15; 1.2; 1.25; 1.3; 1.35; 1.4; 1.45; 1.5; 1.55; 1.6; 1.65; 1.7; 1.75; 1.8; 1.85; 1.9; 1.95; 2.0; 2.05; 2.1; 2.15; 2.2; 2.25; 2.3; 2.35; 2.4; 2.45; 2.5; 2.55; 2.6; 2.65; 2.7; 2.75; 2.8; 2.85]
+        set hamBondCoeff[0]=[2.8489; 0.5678; -1.4508; 0.6799; 0.0791; 0.0791]
+        set hamBondCoeff[1]=[2.1868; 0.5449; -1.287; 0.6719; 0.0798; 0.0798]
+        set hamBondCoeff[2]=[1.7252; 0.5215; -1.1458; 0.6631; 0.0806; 0.0806]
+        set hamBondCoeff[3]=[1.3827; 0.4982; -1.0226; 0.6537; 0.0815; 0.0815]
+        set hamBondCoeff[4]=[-0.2047; 0.4754; -0.9145; 0.6438; 0.0825; 0.0825]
+        set hamBondCoeff[5]=[-0.2677; 0.4534; -0.8194; 0.6336; 0.0835; 0.0835]
+        set hamBondCoeff[6]=[-0.3202; 0.4325; -0.7355; 0.6233; 0.0846; 0.0846]
+        set hamBondCoeff[7]=[-0.3642; 0.4125; -0.6612; 0.6129; 0.0858; 0.0858]
+        set hamBondCoeff[8]=[-0.4012; 0.3937; -0.595; 0.6025; 0.087; 0.087]
+        set hamBondCoeff[9]=[-0.4323; 0.376; -0.5358; 0.5921; 0.0883; 0.0883]
+        set hamBondCoeff[10]=[-0.4584; 0.3593; -0.4826; 0.5818; 0.0896; 0.0896]
+        set hamBondCoeff[11]=[-0.4804; 0.3435; -0.4347; 0.5716; 0.091; 0.091]
+        set hamBondCoeff[12]=[-0.4989; 0.3288; -0.3915; 0.5616; 0.0925; 0.0925]
+        set hamBondCoeff[13]=[-0.5143; 0.3149; -0.3523; 0.5518; 0.0939; 0.0939]
+        set hamBondCoeff[14]=[-0.5271; 0.3018; -0.3168; 0.5421; 0.0954; 0.0954]
+        set hamBondCoeff[15]=[-0.5377; 0.2895; -0.2845; 0.5327; 0.097; 0.097]
+        set hamBondCoeff[16]=[-0.5463; 0.2779; -0.255; 0.5235; 0.0986; 0.0986]
+        set hamBondCoeff[17]=[-0.5533; 0.2669; -0.2282; 0.5146; 0.1002; 0.1002]
+        set hamBondCoeff[18]=[-0.5588; 0.2565; -0.2036; 0.5059; 0.1018; 0.1018]
+        set hamBondCoeff[19]=[-0.5631; 0.2467; -0.181; 0.4974; 0.1034; 0.1034]
+        set hamBondCoeff[20]=[-0.5663; 0.2374; -0.1603; 0.4892; 0.105; 0.105]
+        set hamBondCoeff[21]=[-0.5685; 0.2286; -0.1413; 0.4812; 0.1067; 0.1067]
+        set hamBondCoeff[22]=[-0.5699; 0.2203; -0.1238; 0.4735; 0.1083; 0.1083]
+        set hamBondCoeff[23]=[-0.5706; 0.2123; -0.1077; 0.466; 0.11; 0.11]
+        set hamBondCoeff[24]=[-0.5707; 0.2048; -0.0929; 0.4588; 0.1116; 0.1116]
+        set hamBondCoeff[25]=[-0.5702; 0.1976; -0.0792; 0.4518; 0.1133; 0.1133]
+        set hamBondCoeff[26]=[-0.5693; 0.1908; -0.0666; 0.4451; 0.1149; 0.1149]
+        set hamBondCoeff[27]=[-0.5679; 0.1843; -0.0549; 0.4386; 0.1165; 0.1165]
+        set hamBondCoeff[28]=[-0.5663; 0.1782; -0.0442; 0.4323; 0.1181; 0.1181]
+        set hamBondCoeff[29]=[-0.5643; 0.1723; -0.0342; 0.4262; 0.1196; 0.1196]
+        set hamBondCoeff[30]=[-0.5621; 0.1667; -0.0251; 0.4204; 0.1211; 0.1211]
+        set hamBondCoeff[31]=[-0.5597; 0.1615; -0.0166; 0.4148; 0.1226; 0.1226]
+        set hamBondCoeff[32]=[-0.5571; 0.1565; -0.0088; 0.4094; 0.1241; 0.1241]
+        set hamBondCoeff[33]=[-0.5544; 0.1517; -0.0015; 0.4042; 0.1256; 0.1256]
+        set hamBondCoeff[34]=[-0.5516; 0.1472; 0.0052; 0.3992; 0.127; 0.127]
+        set hamBondCoeff[35]=[-0.5488; 0.143; 0.0114; 0.3944; 0.1284; 0.1284]
+        set hamBondCoeff[36]=[-0.5458; 0.139; 0.0171; 0.3898; 0.1297; 0.1297]
+        set hamBondCoeff[37]=[-0.5429; 0.1352; 0.0223; 0.3853; 0.131; 0.131]
+        set hamBondCoeff[38]=[-0.5399; 0.1316; 0.0272; 0.3811; 0.1323; 0.1323]
+        set hamBondCoeff[39]=[-0.5369; 0.1282; 0.0317; 0.3769; 0.1335; 0.1335]
+        set hamBondCoeff[40]=[-0.5339; 0.1251; 0.0359; 0.373; 0.1347; 0.1347]
+        set hamBondCoeff[41]=[-0.531; 0.1221; 0.0397; 0.3692; 0.1359; 0.1359]
+        set hamBondCoeff[42]=[-0.528; 0.1193; 0.0432; 0.3655; 0.137; 0.137]
+        set hamBondCoeff[43]=[-0.5251; 0.1167; 0.0465; 0.362; 0.1381; 0.1381]
+        set hamBondCoeff[44]=[-0.5223; 0.1142; 0.0495; 0.3586; 0.1392; 0.1392]
+        set hamBondCoeff[45]=[-0.5195; 0.1119; 0.0523; 0.3553; 0.1402; 0.1402]
+        set hamBondCoeff[46]=[-0.5168; 0.1098; 0.0549; 0.3521; 0.1412; 0.1412]
+        set hamBondCoeff[47]=[-0.5141; 0.1078; 0.0572; 0.3491; 0.1422; 0.1422]
+        set hamBondCoeff[48]=[-0.5114; 0.1059; 0.0594; 0.3461; 0.1432; 0.1432]
+        set hamBondCoeff[49]=[-0.5089; 0.1042; 0.0614; 0.3433; 0.1441; 0.1441]
+        set hamBondCoeff[50]=[-0.5064; 0.1026; 0.0632; 0.3406; 0.145; 0.145]
+        set hamBondCoeff[51]=[-0.5039; 0.1011; 0.0649; 0.3379; 0.1458; 0.1458]
+        set hamBondCoeff[52]=[-0.5015; 0.0997; 0.0665; 0.3354; 0.1467; 0.1467]
+        set hamBondCoeff[53]=[-0.4992; 0.0984; 0.0679; 0.3329; 0.1475; 0.1475]
+        return hamBondCoeff[idxBond]
+    }
+
+    //This function takes in an index "idxHamiltonian" and returns a description of a term in the H2 Hamiltonian.
+    function H2Terms(idxHamiltonian : Int) : (Int[], Int[])
+    {
+        //This is how a user might input the raw data
+        let hamiltonianTerms = [([3], [0]);  ([3],[1]); ([3;3],[0;1]); ([2;2],[0;1]); ([1;1],[0;1])]
+        return hamiltonianTerms[idxHamiltonian]
+    }
+
+
+    // Using the Trotterization library directly
+    operation H2TrotterUnitariesImpl(idxBondLength : Int, idxHamiltonian: Int, stepSize : Double, qubits : Qubit[]) : ()
+    {
+        Body{
+            let (idxPauliString, idxQubits) = H2Terms(idxHamiltonian)
+            let coeff = (H2Coeff(idxBondLength))[idxHamiltonian]
+            let pauliString = IntsToPaulis(idxPauliString)
+            let op = Exp(pauliString, stepSize * coeff, _)
+            (RestrictToSubregisterCA(op, idxQubits))(qubits)
+        }
+        Adjoint auto
+        Controlled auto
+        Controlled Adjoint auto
+
+
+
+
+    }
+    function H2TrotterUnitaries(idxBondLength : Int) : (Int, ((Int, Double, Qubit[]) => () : Adjoint, Controlled))
+    {
+        let nterms = 5
+        return (nterms, H2TrotterUnitariesImpl(idxBondLength, _, _, _))
+    }
+
+    function H2TrotterStepA(idxBondLength : Int, trotterOrder: Int, trotterStepSize: Double): (Qubit[] => (): Adjoint, Controlled)
+    {
+        let op = H2TrotterUnitaries(idxBondLength)
+        return (DecomposeIntoTimeStepsCA(op,trotterOrder))(trotterStepSize, _)
+    }
+
+
+    // Using the Hamiltonian representation library
+    function H2GeneratorTerm(idxBondLength : Int, idxHamiltonian : Int) : GeneratorTerm
+    {
+        //Pass empty double as Pauli set not indexed by continuous parameters
+        let e = new Double[0]
+        let (idxPauliString, idxQubits) = H2Terms(idxHamiltonian)
+        let coefficient = (H2Coeff(idxBondLength))[idxHamiltonian]
+        let generatorIndex = GeneratorIndex((idxPauliString,e), idxQubits)
+        return GeneratorTerm(generatorIndex, coefficient)
+    }
+
+    function H2GeneratorSystem(idxBondLength : Int) : GeneratorSystem 
+    {
+        let nTerms = 5
+        return GeneratorSystem(nTerms, H2GeneratorTerm(idxBondLength, _))
+    }
+
+    function H2EvolutionGenerator(idxBondLength : Int) : EvolutionGenerator
+    {
+        let generatorSystem = H2GeneratorSystem(idxBondLength)
+        let evolutionSet = PauliEvolutionSet()
+        return EvolutionGenerator(evolutionSet, generatorSystem)
+    }
+
+
+    function H2TrotterStepB(idxBondLength : Int, trotterOrder: Int, trotterStepSize: Double): (Qubit[] => ())
+    {
+        let evolutionGenerator = H2EvolutionGenerator(idxBondLength)
+        return TrotterStep(evolutionGenerator, trotterOrder, trotterStepSize)
+    }
+
+    //Example find g.s. energy of H2
+    operation ExampleH2() : (){
+        Body {
+            let nTerms = 5
+            let idxBondLength = 0
+            let trotterOrder = 2
+            let trotterStepSize = 0.1
+            let trotterStep = H2TrotterStepB(idxBondLength, trotterOrder, trotterStepSize)
+            using(qubits = Qubit[nTerms]){
             
-            //QPE on
-            trotterStep(qubits)
-            //ResetAll(qubits)
+                //QPE on
+                trotterStep(qubits)
+                //ResetAll(qubits)
+            }
         }
     }
-}
+
+    operation H2Test() : (){
+        Body{
+            using(qubits = Qubit[2]){
+                ResetAll(qubits)
+                (H2TrotterStepB(0, 1, 0.1))(qubits)
+                ResetAll(qubits)
+            }
+        }
+    }
+
+
+
+    //Due to UDTs not propagating in multifiles properly, we must instantiate elements in an EvolutionSet.
+    //FIXME remove when Bug 781 is resolved
+    operation  BUG781WorkAroundA(idx : GeneratorIndex, delta : Double, qubits: Qubit[]) : ()    {
+        Body{}
+        Adjoint auto
+        Controlled auto
+        Controlled Adjoint auto
+    }
+    function BUG781WorkAroundB(idx : GeneratorIndex) : EvolutionUnitary    {
+        return EvolutionUnitary(BUG781WorkAroundA(idx, _,_))
+    }
+
 
 }
 

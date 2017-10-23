@@ -4,53 +4,54 @@ namespace Microsoft.Quantum.Canon {
 /// We index single Paulis as 0 for I, 1 for X, 2 for Y, 3 for Z.
 /// We index Pauli strings with arrays of integers e.g. a = [3;1;1;2] for ZXXY.
 /// We do not use the Double[] for indexing Pauli strings e.g. b = new Double[0]
-/// We index the qubits that Pauli strings act on with arrays of integers e.g. q = [2,4,5,8] for Z_2 X_4 X_5, Y_8 
+/// We index the qubits that Pauli strings act on with arrays of integers e.g. q = [2;4;5;8] for Z_2 X_4 X_5, Y_8 
 /// An example of a Pauli string GeneratorIndex is thus ((a,b), q)
 
 /// Consider the Hamiltonian H = 0.1 XI + 0.2 IX + 0.3 ZY
-/// Its GeneratorTerms are (([1],[]),[0]), 0.1),  (([1],[]),[1]), 0.2),  (([3],[2]),[0,1]), 0.3)
+/// Its GeneratorTerms are (([1],b),[0]), 0.1),  (([1],b),[1]), 0.2),  (([3;2],b),[0;1]), 0.3)
 /// 
 
-/// This converts an array of ints to an array of Paulis
-function IntToPauli(idx : Int) : Pauli {
-    let paulis = [Ipauli; Xpauli; Ypauli; Zpauli]
-    return paulis[idx]
-}
-function IntsToPaulis(ints : Int[]) : Pauli[] {
-    let nInts = Length(ints)
-    mutable paulis = new Pauli[nInts]
-    for(idxInt in 0..nInts){
-        set paulis[idxInt] = IntToPauli(ints[idxInt])
-    }  
-
-    return paulis
-}
-
-/// summary:
-///     Represents a dynamical generator as a set of simulatable gates and
-///     an expansion in terms of that basis.
-///     Las parameter for number of terms
-operation PauliEvolutionImpl(generatorIndex : GeneratorIndex, delta : Double, qubits: Qubit[]) : ()
-{
-    Body{
-        let (idxGen, idxQubits) = generatorIndex
-        let (idxPaulis, unused) = idxGen
-        let pauliString = IntsToPaulis(idxPaulis)
-        let op = Exp(pauliString, delta, _)
-        (RestrictToSubregisterCA(op, idxQubits))(qubits)
+    /// This converts an array of ints to an array of Paulis
+    function IntToPauli(idx : Int) : Pauli {
+        let paulis = [Ipauli; Xpauli; Ypauli; Zpauli]
+        return paulis[idx]
     }
-    Adjoint auto
-    Controlled auto
-    Controlled Adjoint auto
-}
-function PauliEvolutionFunction(generatorIndex : GeneratorIndex) : EvolutionUnitary
-{
-    return EvolutionUnitary(PauliEvolutionImpl(generatorIndex, _, _))
-}
+    function IntsToPaulis(ints : Int[]) : Pauli[] {
+        let nInts = Length(ints)
+        mutable paulis = new Pauli[nInts]
+        for(idxInt in 0..nInts-1){
+            set paulis[idxInt] = IntToPauli(ints[idxInt])
+        }  
 
-function PauliEvolutionSet() : EvolutionSet
-{
-    return EvolutionSet(PauliEvolutionFunction)
-}
+        return paulis
+    }
+
+    /// summary:
+    ///     Represents a dynamical generator as a set of simulatable gates and
+    ///     an expansion in terms of that basis.
+    ///     Las parameter for number of terms
+    operation PauliEvolutionImpl(generatorIndex : GeneratorIndex, delta : Double, qubits: Qubit[]) : ()
+    {
+        Body{
+            let (idxGen, idxQubits) = generatorIndex
+            let (idxPaulis, unused) = idxGen
+            let pauliString = IntsToPaulis(idxPaulis)
+            let op = Exp(pauliString, delta, _)
+            (RestrictToSubregisterCA(op, idxQubits))(qubits)
+        }
+        Adjoint auto
+        Controlled auto
+        Controlled Adjoint auto
+    }
+    function PauliEvolutionFunction(generatorIndex : GeneratorIndex) : EvolutionUnitary
+    {
+        return EvolutionUnitary(PauliEvolutionImpl(generatorIndex, _, _))
+    }
+
+    function PauliEvolutionSet() : EvolutionSet
+    {
+        return EvolutionSet(PauliEvolutionFunction)
+    }
+
 
 }

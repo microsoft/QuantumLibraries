@@ -9,6 +9,15 @@ namespace Microsoft.Quantum.Canon {
         }
     }
 
+    operation AssertQubitTol (expected: Result, tolerance: Double, q: Qubit) : ()
+    {
+        Body 
+        {
+            AssertProb([Zpauli], [q], expected,  1.0, "Qubit One probability on Z basis failed",  tolerance)
+        }
+    }
+    
+
     /// <summary>
     ///     Asserts that the qubit given by register is in the state described by 
     ///     complex vector |ψ⟩ = (a,b). First element of the tuples representing a,b

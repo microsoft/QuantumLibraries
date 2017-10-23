@@ -1,0 +1,65 @@
+namespace Microsoft.Quantum.Canon {
+    open Microsoft.Quantum.Primitive
+
+    /// <summary>
+    ///     Performs the robust quantum phase estimation algorithm for a given oracle U and eigenstate,
+    ///     and provides a single real-valued estimate of the phase
+    /// </summary>
+    /// <param name="oracle">An operation implementing U^m for given integer powers m.</param>
+    /// <param name="eigenstate">A quantum register representing an eigenstate |φ> of U, U|φ> =
+    ///     e^{iφ} |φ> for φ ∈ [0, 2π) an unknown phase.</param>
+    /// <param name="bitsPrecision"> This provides an estimate of φ with standard deviation at most 2π / 2^bitsPrecision.</param>
+    /// <remarks>
+    /// Robust Calibration of a Universal Single-Qubit Gate-Set via Robust Phase Estimation
+    /// Shelby Kimmel, Guang Hao Low, Theodore J. Yoder
+    /// https://arxiv.org/abs/1502.02677
+    /// </remarks>
+    operation RobustQuantumPhaseEstimation( oracle : DiscreteOracle, eigenstate : Qubit[], bitsPrecision : Int)  : Double
+    {
+        Body {
+            let alpha = 2.5
+            let beta = 0.5
+            mutable thetaEst = ToDouble(0)
+            using(qubitAncilla = Qubit[1]){
+                let q = qubitAncilla[0]
+
+                for(exponent in 0..bitsPrecision-1){
+                    
+
+                    let power = 2 ^ (exponent)
+                    let repeats = Ceiling(alpha * ToDouble(bitsPrecision - 1 - j) + beta)
+
+                    mutable pZero = ToDouble(0)
+                    mutable pPlus = ToDouble(0)
+
+                    for (rep in 0..repeats-1){
+                        Reset(q)
+                        H(q)
+                        (Controlled oracle)([q], (power, eigenstate))
+                        Rz( - thetaEst, q)
+                        H(q)
+                        let result = M(q)
+                        if(result == Zero){
+                            set pZero = pZero + 1.0
+                        }
+                        Reset(q)
+                        H(q)
+                        (Controlled oracle)([q], (power, eigenstate))
+                        Rz(-Pi() / 2.0 - thetaEst, q)
+                        H(q)
+                        let result = M(q)
+                        if(result == Zero){
+                            set pPlus = pPlus + 1.0
+                        }
+                    }
+                    let thetaDelta = ArcTan2(2.0 * pPlus - 1.0, .0 * pZero - 1.0)
+                    set thetaEst = thetaEst + thetaDelta / ToDouble(power)
+                }
+            }
+            return thetaEst
+        }
+        Adjoint auto
+        Controlled auto
+        Controlled Adjoint auto
+    }
+}

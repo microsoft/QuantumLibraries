@@ -44,7 +44,9 @@ namespace Microsoft.Quantum.Canon {
         Body {
             // Prepare a reference register entangled with the target register.
             using (reference = Qubit[nQubits]) {
+                ResetAll(reference)
                 using (target = Qubit[nQubits]) {
+                    ResetAll(target)
                     // FIXME: change to use With/Bind, but that depends on generics since the arguments take
                     //        (Qubit[], Qubit[]), not Qubit[].
                     PrepareEntangledState(reference, target)
@@ -52,9 +54,16 @@ namespace Microsoft.Quantum.Canon {
                     (Adjoint expected)(target)
                     (Adjoint PrepareEntangledState)(reference, target)
 
+                    ///ApplyToEach(AssertQubitTol(Zero, 1e-5, _), reference)
+                    ///ApplyToEach(AssertQubitTol(Zero, 1e-1, _), target)
+
                     ApplyToEach(AssertQubit(Zero, _), reference)
                     ApplyToEach(AssertQubit(Zero, _), target)
+                 
+
+                    ResetAll(target)
                 }
+                ResetAll(reference)
             }
         }
     }

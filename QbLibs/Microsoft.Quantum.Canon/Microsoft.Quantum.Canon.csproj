@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="..\packages\Microsoft.Quantum.Simulation.Simulators.0.6.6502.40796-alpha\build\Microsoft.Quantum.Simulation.Simulators.props" Condition="Exists('..\packages\Microsoft.Quantum.Simulation.Simulators.0.6.6502.40796-alpha\build\Microsoft.Quantum.Simulation.Simulators.props')" />
+  <Import Project="..\packages\Microsoft.Quantum.Simulation.Simulators.0.6.6504.5977-alpha\build\Microsoft.Quantum.Simulation.Simulators.props" Condition="Exists('..\packages\Microsoft.Quantum.Simulation.Simulators.0.6.6504.5977-alpha\build\Microsoft.Quantum.Simulation.Simulators.props')" />
   <Import Project="..\packages\xunit.runner.visualstudio.2.3.1-rc2-build3844\build\net20\xunit.runner.visualstudio.props" Condition="Exists('..\packages\xunit.runner.visualstudio.2.3.1-rc2-build3844\build\net20\xunit.runner.visualstudio.props')" />
   <Import Project="..\packages\xunit.runner.msbuild.2.3.1-rc2-build3844\build\net452\xunit.runner.msbuild.props" Condition="Exists('..\packages\xunit.runner.msbuild.2.3.1-rc2-build3844\build\net452\xunit.runner.msbuild.props')" />
   <Import Project="..\packages\xunit.core.2.3.1-rc2-build3844\build\xunit.core.props" Condition="Exists('..\packages\xunit.core.2.3.1-rc2-build3844\build\xunit.core.props')" />
@@ -43,17 +43,17 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.Quantum.Primitives, Version=0.6.6502.40766, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Quantum.Simulation.Simulators.0.6.6502.40796-alpha\lib\net461\Microsoft.Quantum.Primitives.dll</HintPath>
+    <Reference Include="Microsoft.Quantum.Primitives, Version=0.6.6504.5946, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Quantum.Simulation.Simulators.0.6.6504.5977-alpha\lib\net461\Microsoft.Quantum.Primitives.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Quantum.Simulation.Core, Version=0.6.6502.40761, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Quantum.Simulation.Simulators.0.6.6502.40796-alpha\lib\net461\Microsoft.Quantum.Simulation.Core.dll</HintPath>
+    <Reference Include="Microsoft.Quantum.Simulation.Core, Version=0.6.6504.5942, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Quantum.Simulation.Simulators.0.6.6504.5977-alpha\lib\net461\Microsoft.Quantum.Simulation.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Quantum.Simulation.Simulators, Version=0.6.6502.40796, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Quantum.Simulation.Simulators.0.6.6502.40796-alpha\lib\net461\Microsoft.Quantum.Simulation.Simulators.dll</HintPath>
+    <Reference Include="Microsoft.Quantum.Simulation.Simulators, Version=0.6.6504.5977, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Quantum.Simulation.Simulators.0.6.6504.5977-alpha\lib\net461\Microsoft.Quantum.Simulation.Simulators.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Quantum.Simulation.Tracer, Version=0.6.6502.40774, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Quantum.Simulation.Simulators.0.6.6502.40796-alpha\lib\net461\Microsoft.Quantum.Simulation.Tracer.dll</HintPath>
+    <Reference Include="Microsoft.Quantum.Simulation.Tracer, Version=0.6.6504.5954, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Quantum.Simulation.Simulators.0.6.6504.5977-alpha\lib\net461\Microsoft.Quantum.Simulation.Tracer.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
@@ -112,11 +112,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Arithmetic.qb</DependentUpon>
     </Compile>
-    <Compile Include="Arrays\Arrays.g.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Arrays.qb</DependentUpon>
-    </Compile>
     <Compile Include="Asserts\AssertOperationsEqualInPlace.g.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -152,6 +147,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>OperationPow.qb</DependentUpon>
     </Compile>
+    <Compile Include="Combinators\RestrictToSubregister.g.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>RestrictToSubregister.qb</DependentUpon>
+    </Compile>
     <Compile Include="Combinators\With.g.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -171,21 +171,6 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Endianness.qb</DependentUpon>
-    </Compile>
-    <Compile Include="Enumeration\Iter.g.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Iter.qb</DependentUpon>
-    </Compile>
-    <Compile Include="Enumeration\Iter2.g.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Iter2.qb</DependentUpon>
-    </Compile>
-    <Compile Include="Enumeration\Trotter.g.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Trotter.qb</DependentUpon>
     </Compile>
     <Compile Include="Identity.g.cs">
       <AutoGen>True</AutoGen>
@@ -232,6 +217,11 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Iterative.qb</DependentUpon>
+    </Compile>
+    <Compile Include="PhaseEstimation\Robust.g.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Robust.qb</DependentUpon>
     </Compile>
     <Compile Include="PhaseEstimation\Quantum.g.cs">
       <AutoGen>True</AutoGen>
@@ -284,6 +274,26 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>ShiftOp.qb</DependentUpon>
     </Compile>
+    <Compile Include="Simulation\EvolutionSetPauli.g.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>EvolutionSetPauli.qb</DependentUpon>
+    </Compile>
+    <Compile Include="Simulation\Tests.g.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Tests.qb</DependentUpon>
+    </Compile>
+    <Compile Include="Simulation\Trotter.g.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Trotter.qb</DependentUpon>
+    </Compile>
+    <Compile Include="Simulation\Types.g.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Types.qb</DependentUpon>
+    </Compile>
     <Compile Include="Stubs.g.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -318,6 +328,18 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>TypeConversion.qb</DependentUpon>
     </Compile>
+    <QbCompile Include="PhaseEstimation\Robust.qb">
+      <Generator>QbCodeGenerator</Generator>
+      <LastGenOutput>Robust.g.cs</LastGenOutput>
+    </QbCompile>
+    <QbCompile Include="Simulation\Trotter.qb">
+      <Generator>QbCodeGenerator</Generator>
+      <LastGenOutput>Trotter.g.cs</LastGenOutput>
+    </QbCompile>
+    <QbCompile Include="Simulation\Tests.qb">
+      <Generator>QbCodeGenerator</Generator>
+      <LastGenOutput>Tests.g.cs</LastGenOutput>
+    </QbCompile>
     <QbCompile Include="AmplitudeAmplification\AmplitudeAmplification.qb">
       <Generator>QbCodeGenerator</Generator>
       <LastGenOutput>AmplitudeAmplification.g.cs</LastGenOutput>
@@ -341,6 +363,14 @@
     <QbCompile Include="Math\Random.qb">
       <Generator>QbCodeGenerator</Generator>
       <LastGenOutput>Random.g.cs</LastGenOutput>
+    </QbCompile>
+    <QbCompile Include="Simulation\EvolutionSetPauli.qb">
+      <Generator>QbCodeGenerator</Generator>
+      <LastGenOutput>EvolutionSetPauli.g.cs</LastGenOutput>
+    </QbCompile>
+    <QbCompile Include="Simulation\Types.qb">
+      <Generator>QbCodeGenerator</Generator>
+      <LastGenOutput>Types.g.cs</LastGenOutput>
     </QbCompile>
     <QbCompile Include="TypeConversion.qb">
       <Generator>QbCodeGenerator</Generator>
@@ -373,7 +403,10 @@
       <Generator>QbCodeGenerator</Generator>
       <LastGenOutput>ControlledOnBitString.g.cs</LastGenOutput>
     </QbCompile>
-    <None Include="Combinators\RestrictToSubregister.qb" />
+    <QbCompile Include="Combinators\RestrictToSubregister.qb">
+      <Generator>QbCodeGenerator</Generator>
+      <LastGenOutput>RestrictToSubregister.g.cs</LastGenOutput>
+    </QbCompile>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -400,7 +433,7 @@
     </QbCompile>
     <QbCompile Include="Asserts\AssertOperationsEqualReferenced.qb">
       <Generator>QbCodeGenerator</Generator>
-      <LastGenOutput>AssertOperationsEqualReferenced1.g.cs</LastGenOutput>
+      <LastGenOutput>AssertOperationsEqualReferenced.g.cs</LastGenOutput>
     </QbCompile>
     <QbCompile Include="DataStructures\Stack.qb">
       <Generator>QbCodeGenerator</Generator>
@@ -512,10 +545,10 @@
     <Error Condition="!Exists('..\packages\xunit.runner.msbuild.2.3.1-rc2-build3844\build\net452\xunit.runner.msbuild.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\xunit.runner.msbuild.2.3.1-rc2-build3844\build\net452\xunit.runner.msbuild.props'))" />
     <Error Condition="!Exists('..\packages\xunit.runner.msbuild.2.3.1-rc2-build3844\build\net452\xunit.runner.msbuild.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\xunit.runner.msbuild.2.3.1-rc2-build3844\build\net452\xunit.runner.msbuild.targets'))" />
     <Error Condition="!Exists('..\packages\xunit.runner.visualstudio.2.3.1-rc2-build3844\build\net20\xunit.runner.visualstudio.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\xunit.runner.visualstudio.2.3.1-rc2-build3844\build\net20\xunit.runner.visualstudio.props'))" />
-    <Error Condition="!Exists('..\packages\Microsoft.Quantum.Simulation.Simulators.0.6.6502.40796-alpha\build\Microsoft.Quantum.Simulation.Simulators.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Quantum.Simulation.Simulators.0.6.6502.40796-alpha\build\Microsoft.Quantum.Simulation.Simulators.props'))" />
-    <Error Condition="!Exists('..\packages\Microsoft.Quantum.Simulation.Simulators.0.6.6502.40796-alpha\build\Microsoft.Quantum.Simulation.Simulators.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Quantum.Simulation.Simulators.0.6.6502.40796-alpha\build\Microsoft.Quantum.Simulation.Simulators.targets'))" />
+    <Error Condition="!Exists('..\packages\Microsoft.Quantum.Simulation.Simulators.0.6.6504.5977-alpha\build\Microsoft.Quantum.Simulation.Simulators.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Quantum.Simulation.Simulators.0.6.6504.5977-alpha\build\Microsoft.Quantum.Simulation.Simulators.props'))" />
+    <Error Condition="!Exists('..\packages\Microsoft.Quantum.Simulation.Simulators.0.6.6504.5977-alpha\build\Microsoft.Quantum.Simulation.Simulators.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Quantum.Simulation.Simulators.0.6.6504.5977-alpha\build\Microsoft.Quantum.Simulation.Simulators.targets'))" />
   </Target>
   <Import Project="..\packages\xunit.core.2.3.1-rc2-build3844\build\xunit.core.targets" Condition="Exists('..\packages\xunit.core.2.3.1-rc2-build3844\build\xunit.core.targets')" />
   <Import Project="..\packages\xunit.runner.msbuild.2.3.1-rc2-build3844\build\net452\xunit.runner.msbuild.targets" Condition="Exists('..\packages\xunit.runner.msbuild.2.3.1-rc2-build3844\build\net452\xunit.runner.msbuild.targets')" />
-  <Import Project="..\packages\Microsoft.Quantum.Simulation.Simulators.0.6.6502.40796-alpha\build\Microsoft.Quantum.Simulation.Simulators.targets" Condition="Exists('..\packages\Microsoft.Quantum.Simulation.Simulators.0.6.6502.40796-alpha\build\Microsoft.Quantum.Simulation.Simulators.targets')" />
+  <Import Project="..\packages\Microsoft.Quantum.Simulation.Simulators.0.6.6504.5977-alpha\build\Microsoft.Quantum.Simulation.Simulators.targets" Condition="Exists('..\packages\Microsoft.Quantum.Simulation.Simulators.0.6.6504.5977-alpha\build\Microsoft.Quantum.Simulation.Simulators.targets')" />
 </Project>
