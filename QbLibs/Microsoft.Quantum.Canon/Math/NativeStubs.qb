@@ -1,4 +1,75 @@
 ﻿namespace Microsoft.Quantum.Canon {
+
+	// NB: we use the single-argument form to match .NET conventions.
+	//     if we get overloading, we can specify the (Double, Double)
+	//     version as well.
+	function Log(input: Double) : Double
+	{
+		return 0.0
+	}
+
+	function Ceiling(value: Double) : Int
+	{
+		return 0
+	}
+
+	function Floor(value: Double) : Int
+	{
+		return 0
+	}
+
+	function ArcTan(d : Double) : Double
+	{
+		return 0.0
+	}
+
+	function ArcTan2(y : Double, x : Double) : Double
+	{
+		return 0.0
+	}
+
+	function Tan(d : Double) : Double
+	{
+		return 0.0
+	}
+
+	function Sqrt(d : Double) : Double
+	{
+		return 0.0
+	}
+
+	function Cosh(d : Double) : Double
+	{
+		return 0.0
+	}
+
+	function Sinh(d : Double) : Double
+	{
+		return 0.0
+	}
+
+	function Tanh(d : Double) : Double {
+		return 0.0
+	}
+
+	// FIXME: Move out of stubs, since we can define in terms of other
+	//        callables.
+	// NB: .NET's Math library does not provide hyperbolic arcfunctions.
+	function ArcCosh(x : Double) : Double
+	{
+		return Log(x + Sqrt(x * x - 1.0)) 
+	}
+
+	function ArcSinh(x : Double) : Double
+	{
+		return Log(x + Sqrt(x * x + 1.0)) 
+	}
+
+	function ArcTanh(x : Double) : Double
+	{
+		return Log((1.0 + x) / (1.0 - x)) * 0.5
+	}
+
 	function Sin(theta : Double) : Double {
 		return -42.0
 	}
@@ -15,6 +86,10 @@
 		return 21.0
 	}
 
+	function ToDouble(value : Int) : Double{
+		return 1.0
+	}
+	
 	function NativeFnsAreCallableTest() : () {
 		let arg = Pi() / 2.0
 		AssertAlmostEqual(Sin(arg), 1.0)
@@ -24,4 +99,5 @@
 		AssertAlmostEqual(ArcCos(arcArg), 0.0)
 		AssertAlmostEqual(ArcSin(arcArg), arg)
 	}
+
 }
