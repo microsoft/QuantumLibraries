@@ -56,6 +56,21 @@ namespace Microsoft.Quantum.Canon{
 
     newtype TrotterForm = (Int, ((Int, Double, Qubit[]) => () : Adjoint, Controlled))
 
-    newtype EvolutionUnitaryTimeDependent = ((Double, Double, Qubit[]) => () : Adjoint, Controlled)
+    /// Time depenent evolution for adiabatic state preparation
+    newtype EvolutionTimeDependent = ((Double, Double, Qubit[]) => () : Adjoint, Controlled)
+
+    operation _IdentityEvolutionTimeDependent(v1 : Double, v2: Double, q:Qubit[]) : ()
+    {
+        Body{
+        
+        }
+        Adjoint auto
+        Controlled auto
+        Controlled Adjoint auto
+    }
+    function IdentityEvolutionTimeDependent() : EvolutionTimeDependent
+    {
+        return  EvolutionTimeDependent(_IdentityEvolutionTimeDependent(_,_,_))
+    }
 
 }

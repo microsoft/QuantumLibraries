@@ -118,5 +118,18 @@
         }
     }
 
+    //Converts a real value to a probability
+    operation ReadReal(value: Double) : () {
+        Body{
+            let angle = 2.0*ArcSin(Sqrt(value))
+            using(q=Qubit[1]){
+                Rx(angle,q[0])
+                AssertProb([Zpauli], q, One, ToDouble(0), "Output value", 1e-10)
+
+                Reset(q[0])
+            }
+        }
+    }
+
 }
 

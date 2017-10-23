@@ -22,7 +22,7 @@ namespace Microsoft.Quantum.Canon {
 
 
     //Applies a sequence of TrotterStep according to a schedule, e.g. for adiabatic state preparation
-    operation Schedule(evolutionUnitaryTimeDependent : EvolutionUnitaryTimeDependent, timeSteps : Int, qubits: Qubit[]) : (){
+    operation Schedule(evolutionUnitaryTimeDependent : EvolutionTimeDependent, timeSteps : Int, qubits: Qubit[]) : (){
         Body{
             let timeStep = Float(1) / Float(timeSteps)
             for(idxStep in 0..timeSteps - 1){
@@ -30,8 +30,61 @@ namespace Microsoft.Quantum.Canon {
                 evolutionUnitaryTimeDependent(time, timeStep, qubits)
             }
         }
+        Adjoint auto
+        Controlled auto
+        Controlled Adjoint auto
+    }
+   
+
+
+    //State prep + Adiabatic state prep + energy estimation
+    operation AdiabaticStateEnergyPrepare(bitsPrecision : Int,
+                                        timeSteps : Int, 
+                                        statePrepUnitary: (Qubit[] => ()),
+                                        evoUnitary : EvolutionTimeDependent, 
+                                        qpeUnitary: (Qubit[] => () :  Adjoint, Controlled),
+                                        qubits: Qubit[]) : Double
+    {
+        Body{
+            statePrepUnitary(qubits)
+            Schedule(evoUnitary, timeSteps, qubits)
+            let phaseEst = RobustQuantumPhaseEstimation(bitsPrecision, OracleToDiscrete(qpeUnitary), qubits)
+            return phaseEst
+
+        }
     }
 
+    //Qubits + State prep + Adiabatic state prep + energy estimation
+    operation AdiabaticStateEnergyEstimate(nQubits : Int, 
+                                        bitsPrecision : Int,
+                                        timeSteps : Int, 
+                                        statePrepUnitary: (Qubit[] => () ),
+                                        evoUnitary : EvolutionTimeDependent, 
+                                        qpeUnitary: (Qubit[] => () :  Adjoint, Controlled)) : Double
+    {
+        Body{
+            mutable phaseEst = ToDouble(0)
+            using(qubits = Qubit[nQubits]){
+                ResetAll(qubits)
+                set phaseEst = AdiabaticStateEnergyPrepare(bitsPrecision,timeSteps,statePrepUnitary,evoUnitary,qpeUnitary,qubits)
+                ResetAll(qubits)
+            }
+            return phaseEst
+
+        }
+    }
+
+    //Qubits + State Prep +  quantum phase estimation
+    operation EstimateEnergy(nQubits : Int, 
+                            bitsPrecision : Int,
+                            statePrepUnitary: (Qubit[] => () ), 
+                            qpeUnitary: (Qubit[] => () :  Adjoint, Controlled)) : Double
+    {
+         Body{
+            let phaseEst = AdiabaticStateEnergyEstimate(nQubits,bitsPrecision, 0, statePrepUnitary, IdentityEvolutionTimeDependent(), qpeUnitary)
+            return phaseEst
+        }   
+    }
 //For LCU
 
 }

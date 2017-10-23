@@ -8,17 +8,18 @@ namespace Microsoft.Quantum.Canon {
     /// <param name="oracle">An operation implementing U^m for given integer powers m.</param>
     /// <param name="eigenstate">A quantum register representing an eigenstate |φ> of U, U|φ> =
     ///     e^{iφ} |φ> for φ ∈ [0, 2π) an unknown phase.</param>
-    /// <param name="bitsPrecision"> This provides an estimate of φ with standard deviation at most 2π / 2^bitsPrecision.</param>
+    /// <param name="bitsPrecision"> This provides an estimate of φ with standard deviation σ <= 2π / 2^bitsPrecision using Queries < 10.7 Pi/ σ.</param>
     /// <remarks>
     /// Robust Calibration of a Universal Single-Qubit Gate-Set via Robust Phase Estimation
     /// Shelby Kimmel, Guang Hao Low, Theodore J. Yoder
     /// https://arxiv.org/abs/1502.02677
     /// </remarks>
-    operation RobustQuantumPhaseEstimation( oracle : DiscreteOracle, eigenstate : Qubit[], bitsPrecision : Int)  : Double
+    ///FIXME Non-adaptive version requires Modulo for real numbers
+    operation RobustQuantumPhaseEstimation(bitsPrecision : Int, oracle : DiscreteOracle, eigenstate : Qubit[])  : Double
     {
         Body {
-            let alpha = 3.0
-            let beta = 1.0
+            let alpha = 2.5
+            let beta = 0.5
             mutable thetaEst = ToDouble(0)
             using(qubitAncilla = Qubit[1]){
                 let q = qubitAncilla[0]
@@ -27,7 +28,10 @@ namespace Microsoft.Quantum.Canon {
                     
 
                     let power = 2 ^ (exponent)
-                    let repeats = Ceiling(alpha * ToDouble(bitsPrecision - exponent) + beta)
+                    mutable repeats = Ceiling(alpha * ToDouble(bitsPrecision - exponent) + beta)
+                    if(repeats % 2 == 1){
+                        set repeats = repeats + 1
+                    }
 
                     mutable pZero = ToDouble(0)
                     mutable pPlus = ToDouble(0)
@@ -52,6 +56,10 @@ namespace Microsoft.Quantum.Canon {
                             set pPlus = pPlus + 1.0
                         }
                     }
+                    ///For non-adative, remove thetaEst * ToDouble(power) and
+                    /// delta = Mod[ArcTan2(pPlus - ToDouble(repeats) / 2.0,  pZero - ToDouble(repeats) / 2.0), 2 Pi(), -Pi()]
+                    /// thetaEst = theteaEst + delta / power
+
                     let thetaDelta = ArcTan2(pPlus - ToDouble(repeats) / 2.0,  pZero - ToDouble(repeats) / 2.0)
                     set thetaEst = thetaEst + thetaDelta / ToDouble(power)
                 }
@@ -74,10 +82,11 @@ namespace Microsoft.Quantum.Canon {
     operation RobustQuantumPhaseEstimationTest() : (){
         Body{
             let phaseSet = 1.34545
+            let bitsPrecision = 10
             let op = DiscreteOracle(RobustQuantumPhaseEstimationTestOp(phaseSet * 1.0, _, _))
             using(q= Qubit[1]){
             
-                let phaseEst = RobustQuantumPhaseEstimation(op, q, 10)
+                let phaseEst = RobustQuantumPhaseEstimation(bitsPrecision, op, q)
 
 
                 Rx(phaseSet - phaseEst, q[0])

@@ -83,13 +83,15 @@ namespace Microsoft.Quantum.Canon {
             // when idxHamiltonian is in [2 * nSites, 3 * nSites - 2], apply Ising coupling "jC"
             //TODO Need to separate Rx out as it does not commute
             if(idxHamiltonian <= nSites - 1){
-                Rx(hx * stepSize, qubits[idxHamiltonian])
+                Exp([Xpauli], hx * stepSize, [qubits[idxHamiltonian]])
+                //Rx(hx * stepSize, qubits[idxHamiltonian])
             }
             elif(idxHamiltonian <= 2 * nSites - 1){
-                Rz(hz * stepSize, qubits[idxHamiltonian])
+                Exp([Zpauli], hz * stepSize, [qubits[idxHamiltonian % nSites]])
+                //Rz(hz * stepSize, qubits[idxHamiltonian % nSites])
             }
             else{
-                Exp([Zpauli; Zpauli],  stepSize, qubits)
+                Exp([Zpauli; Zpauli],  jC * stepSize, qubits[(idxHamiltonian % nSites)..(idxHamiltonian + 1) % nSites])
             }
         }
         Adjoint auto
@@ -134,9 +136,9 @@ namespace Microsoft.Quantum.Canon {
                 set idxQubits = [idxHamiltonian % nSites]
                 set coeff = hz
             }
-            elif(idxHamiltonian < nSites - 2){
+            else{
                 set idxPauliString = [3; 3]
-                set idxQubits = [idxHamiltonian % nSites; idxHamiltonian +1 % nSites]
+                set idxQubits = [idxHamiltonian % nSites; (idxHamiltonian +1) % nSites]
                 set coeff = jC
             }
 
@@ -159,33 +161,74 @@ namespace Microsoft.Quantum.Canon {
     }
 
 
-    operation IsingTrotterStepB(nSites : Int, hx : Double, hz: Double, jC: Double, trotterOrder: Int, trotterStepSize: Double): (Qubit[] => ())
+    function IsingTrotterStepB(nSites : Int, hx : Double, hz: Double, jC: Double, trotterOrder: Int, trotterStepSize: Double): (Qubit[] => () : Adjoint, Controlled)
     {
-        Body{
-            let evolutionGenerator = IsingEvolutionGenerator(nSites, hx, hz, jC)
-            return TrotterStep(evolutionGenerator, trotterOrder, trotterStepSize)
-        }
+        let evolutionGenerator = IsingEvolutionGenerator(nSites, hx, hz, jC)
+        return TrotterStep(evolutionGenerator, trotterOrder, trotterStepSize)
     }
 
 /// Tests
-/// Adiabatic state preparation
+/// Adiabatic state preparation followed by phase estimation and measurement of sites
     // time goes from 0 to 1.0
     // jC goes from 0.0 to 0.5
-    operation IsingScheduleImpl(nSites : Int, trotterOrder: Int, time : Double, stepSize: Double, qubits: Qubit[]) : ()
+    operation _IsingSchedule(nSites : Int, trotterOrder: Int, time : Double, stepSize: Double, qubits: Qubit[]) : ()
     {
         Body{
-           (IsingTrotterStepB(nSites, 1.0 - time, 0.0, 0.5 * time, trotterOrder, stepSize))(qubits)
+            let hx = 1.0 - time
+            let hz = ToDouble(0)
+            let jC = 0.5 * time
+           (IsingTrotterStepB(nSites, hx, hz, jC, trotterOrder, stepSize))(qubits)
         }
+        Adjoint auto
+        Controlled auto
+        Controlled Adjoint auto
     }
-    //Assume qubits start in |0...0> state
-    operation IsingAdiabaticStatePrep(nSites : Int, trotterOrder: Int, timeSteps: Int, qubits: Qubit[]) : ()
-    {
+    operation _IsingStatePrep(qubits : Qubit[]) : (){
         Body{
             ApplyToEachAC(H, qubits)
-            let trotterSlice = IsingScheduleImpl(nSites, trotterOrder, _, _, _)
-            Schedule(trotterSlice, timeSteps, qubits) 
         }
+    }
+    operation IsingEstimate(nSites : Int, bitsPrecision : Int, trotterOrder : Int, timeSteps : Int, qpeStepSize:Double) : (Double, Result[]){
+        Body{
+            let statePrepUnitary = _IsingStatePrep
+            let evolutionTimeDependent = EvolutionTimeDependent(_IsingSchedule(nSites, trotterOrder, _, _, _))
+            let qpeUnitary = _IsingSchedule(nSites, trotterOrder, 1.0, qpeStepSize, _)
+            mutable phaseEst = 0.1
+            mutable results = new Result[nSites]
+            using(qubits = Qubit[nSites]){
+                set phaseEst = AdiabaticStateEnergyPrepare(bitsPrecision, timeSteps, statePrepUnitary, evolutionTimeDependent, qpeUnitary, qubits) / qpeStepSize
+                set results = MultiM(qubits)
+            }
+            return (phaseEst, results)
+           
+        }
+    }
+    operation IsingTest() : (){
+        Body{
+            let nSites = 4
+            let hx = 0.2
+            let hz = 0.1
+            let jC = 0.4
+            let trotterOrder = 1
+            let trotterStepSize = 0.1
+            let opA = IsingTrotterStepA(nSites, hx, hz, jC, trotterOrder, trotterStepSize)
+            let opB = IsingTrotterStepB(nSites, hx, hz, jC, trotterOrder, trotterStepSize)
+            AssertOperationsEqualReferenced(opA, opB, nSites)
+        }
+    }
+    operation IsingEnergyTest() : (){
+        Body{
+            let nSites = 4
+            let trotterOrder = 1
+            let trotterStepSize = 0.1
+            let bitsPrecision = 6
+            let timeSteps = 2
+            let qpeStepSize = 0.1
 
+            let (phaseEst, results) = IsingEstimate(nSites, bitsPrecision, trotterOrder, timeSteps, qpeStepSize)
+
+            ReadReal(phaseEst)
+        }
     }
 
 /// D-wave 2D all to all
@@ -252,5 +295,10 @@ namespace Microsoft.Quantum.Canon {
 
     /// Test random couplings in +- 1 and do adiabatic ramp
 
+
+    //Due to UDTs not propagating in multifiles properly, we must instantiate elements in an EvolutionSet.
+    function BUG781WorkAroundB_0(idx : GeneratorIndex) : EvolutionUnitary    {
+        return EvolutionUnitary(BUG781WorkAroundA(idx, _,_))
+    }
 }
 

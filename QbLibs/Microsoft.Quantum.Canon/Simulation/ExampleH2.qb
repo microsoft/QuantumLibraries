@@ -68,7 +68,11 @@ namespace Microsoft.Quantum.Canon {
         set hamBondCoeff[53]=[-0.4992; 0.0984; 0.0679; 0.3329; 0.1475; 0.1475]
         return hamBondCoeff[idxBond]
     }
-
+    function H2IdentityCoeff(idxBond : Int) : Double
+    {
+        let coeffIdentity = [2.8489;2.1868;1.7252;1.3827;1.1182;0.9083;0.7381;0.5979;0.4808;0.3819;0.2976;0.2252;0.1626;0.1083;0.0609;0.0193;-0.0172;-0.0493;-0.0778;-0.1029;-0.1253;-0.1452;-0.1629;-0.1786;-0.1927;-0.2053;-0.2165;-0.2265;-0.2355;-0.2436;-0.2508;-0.2573;-0.2632;-0.2684;-0.2731;-0.2774;-0.2812;-0.2847;-0.2879;-0.2908;-0.2934;-0.2958;-0.298;-0.3;-0.3018;-0.3035;-0.3051;-0.3066;-0.3079;-0.3092;-0.3104;-0.3115;-0.3125;-0.3135]
+        return coeffIdentity[idxBond]
+    }
     //This function takes in an index "idxHamiltonian" and returns a description of a term in the H2 Hamiltonian.
     function H2Terms(idxHamiltonian : Int) : (Int[], Int[])
     {
@@ -91,10 +95,6 @@ namespace Microsoft.Quantum.Canon {
         Adjoint auto
         Controlled auto
         Controlled Adjoint auto
-
-
-
-
     }
     function H2TrotterUnitaries(idxBondLength : Int) : (Int, ((Int, Double, Qubit[]) => () : Adjoint, Controlled))
     {
@@ -134,38 +134,41 @@ namespace Microsoft.Quantum.Canon {
     }
 
 
-    function H2TrotterStepB(idxBondLength : Int, trotterOrder: Int, trotterStepSize: Double): (Qubit[] => ())
+    function H2TrotterStepB(idxBondLength : Int, trotterOrder: Int, trotterStepSize: Double): (Qubit[] => () : Adjoint, Controlled)
     {
         let evolutionGenerator = H2EvolutionGenerator(idxBondLength)
         return TrotterStep(evolutionGenerator, trotterOrder, trotterStepSize)
     }
 
+    //Example find energies of H2
+    operation _H2StatePrep(q : Qubit[]) : () 
+    {
+        Body{
+            X(q[1])       
+        }
+    }
+    function H2StatePrep() : (Qubit[] => () )
+    {
+        return _H2StatePrep
+    }
     //Example find g.s. energy of H2
-    operation ExampleH2() : (){
+    //TODO integrate with C# classical loop over bondLengths to print out energies
+    operation H2EstimateEnergy(idxBondLength: Int, trotterStepSize: Double, bitsPrecision: Int) : Double
+    {
         Body {
-            let nTerms = 5
-            let idxBondLength = 0
+            let nQubits = 2
+            //let idxBondLength = 0
             let trotterOrder = 2
-            let trotterStepSize = 0.1
+            //let trotterStepSize = 0.1
             let trotterStep = H2TrotterStepB(idxBondLength, trotterOrder, trotterStepSize)
-            using(qubits = Qubit[nTerms]){
+            //let bitsPrecision = 5
             
-                //QPE on
-                trotterStep(qubits)
-                //ResetAll(qubits)
-            }
+            let EnergyEstimate = EstimateEnergy(nQubits, bitsPrecision, H2StatePrep(),trotterStep) / trotterStepSize + H2IdentityCoeff(idxBondLength)
+            return EnergyEstimate
         }
     }
 
-    operation H2Test() : (){
-        Body{
-            using(qubits = Qubit[2]){
-                ResetAll(qubits)
-                (H2TrotterStepB(0, 1, 0.1))(qubits)
-                ResetAll(qubits)
-            }
-        }
-    }
+
 
 
 
