@@ -1,9 +1,12 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26730.16
+VisualStudioVersion = 15.0.26730.10
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.Quantum.Canon", "Microsoft.Quantum.Canon\Microsoft.Quantum.Canon.csproj", "{2A1B0D78-2CE6-44DB-BFA1-3575F3C36321}"
+	ProjectSection(ProjectDependencies) = postProject
+		{FC4A8309-CB71-4ECA-AFD7-F3663BC2AC5E} = {FC4A8309-CB71-4ECA-AFD7-F3663BC2AC5E}
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{42CD4F35-2B36-4FE8-89C6-D4813F78822C}"
 	ProjectSection(SolutionItems) = preProject
@@ -11,6 +14,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Invoke-Qbc.psm1 = Invoke-Qbc.psm1
 		README.md = README.md
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.Quantum.Testing", "Microsoft.Quantum.Testing\Microsoft.Quantum.Testing.csproj", "{FC4A8309-CB71-4ECA-AFD7-F3663BC2AC5E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -40,6 +45,10 @@ Global
 		{2A1B0D78-2CE6-44DB-BFA1-3575F3C36321}.Release|x64.Build.0 = Release|Any CPU
 		{2A1B0D78-2CE6-44DB-BFA1-3575F3C36321}.Release|x86.ActiveCfg = Release|Any CPU
 		{2A1B0D78-2CE6-44DB-BFA1-3575F3C36321}.Release|x86.Build.0 = Release|Any CPU
+		{FC4A8309-CB71-4ECA-AFD7-F3663BC2AC5E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FC4A8309-CB71-4ECA-AFD7-F3663BC2AC5E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FC4A8309-CB71-4ECA-AFD7-F3663BC2AC5E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FC4A8309-CB71-4ECA-AFD7-F3663BC2AC5E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

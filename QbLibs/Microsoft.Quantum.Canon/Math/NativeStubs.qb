@@ -1,36 +1,74 @@
 ﻿namespace Microsoft.Quantum.Canon {
 
-//To be replaced in the simulator with native operations that we’ll write once we can mix C♯ and Q♭ in the same project more easily.
-function Log(b : Double, input: Double) : Double
-{
-}
+	// NB: we use the single-argument form to match .NET conventions.
+	//     if we get overloading, we can specify the (Double, Double)
+	//     version as well.
+	function Log(input: Double) : Double
+	{
+		return 0.0
+	}
 
-function Ceiling(value: Double) : Int
-{
-}
+	function Ceiling(value: Double) : Int
+	{
+		return 0
+	}
 
-function ArcTan(d : Double) : Double
-{
-}
+	function Floor(value: Double) : Int
+	{
+		return 0
+	}
 
-function Tan(d : Double) : Double
-{
-}
+	function ArcTan(d : Double) : Double
+	{
+		return 0.0
+	}
 
-function Sqrt(d : Double) : Double
-{
-}
+	function ArcTan2(y : Double, x : Double) : Double
+	{
+		return 0.0
+	}
 
-function Cosh(d : Double) : Double
-{
-}
+	function Tan(d : Double) : Double
+	{
+		return 0.0
+	}
 
-function ArcCosh(d : Double) : Double
-{
-}
+	function Sqrt(d : Double) : Double
+	{
+		return 0.0
+	}
 
-function ArcTan2(d: Double, e: Double) : Double{
-}
+	function Cosh(d : Double) : Double
+	{
+		return 0.0
+	}
+
+	function Sinh(d : Double) : Double
+	{
+		return 0.0
+	}
+
+	function Tanh(d : Double) : Double {
+		return 0.0
+	}
+
+	// FIXME: Move out of stubs, since we can define in terms of other
+	//        callables.
+	// NB: .NET's Math library does not provide hyperbolic arcfunctions.
+	function ArcCosh(x : Double) : Double
+	{
+		return Log(x + Sqrt(x * x - 1.0)) 
+	}
+
+	function ArcSinh(x : Double) : Double
+	{
+		return Log(x + Sqrt(x * x + 1.0)) 
+	}
+
+	function ArcTanh(x : Double) : Double
+	{
+		return Log((1.0 + x) / (1.0 - x)) * 0.5
+	}
 
 	function Sin(theta : Double) : Double {
 	}
@@ -44,6 +82,10 @@ function ArcTan2(d: Double, e: Double) : Double{
 	function ArcCos(theta : Double) : Double {
 	}
 
+	function ToDouble(value : Int) : Double{
+		return 1.0
+	}
+	
 	function NativeFnsAreCallableTest() : () {
 		let arg = Pi() / 2.0
 		AssertAlmostEqual(Sin(arg), 1.0)
@@ -54,8 +96,6 @@ function ArcTan2(d: Double, e: Double) : Double{
 		AssertAlmostEqual(ArcSin(arcArg), arg)
 	}
 
-	function ToDouble(value : Int) : Double{
-	}
 
     //TODO use generics for Double, Bool, Result
     function Max(value : Int[]) : Int 

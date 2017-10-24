@@ -325,8 +325,8 @@
       <DependentUpon>AssertTests.qb</DependentUpon>
     </Compile>
     <Compile Include="Tests\NativeOperationTests.cs" />
-    <Compile Include="Tests\OperationDrivers.cs" />
     <Compile Include="Tests\DataAttributes.cs" />
+    <Compile Include="Tests\SimulatorTestTargets.cs" />
     <Compile Include="Tests\TestBase.cs" />
     <Compile Include="Toffoli.g.cs">
       <AutoGen>True</AutoGen>
@@ -552,6 +552,10 @@
   <ItemGroup>
     <Folder Include="Arrays\" />
     <Folder Include="Enumeration\" />
+    <ProjectReference Include="..\Microsoft.Quantum.Testing\Microsoft.Quantum.Testing.csproj">
+      <Project>{fc4a8309-cb71-4eca-afd7-f3663bc2ac5e}</Project>
+      <Name>Microsoft.Quantum.Testing</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

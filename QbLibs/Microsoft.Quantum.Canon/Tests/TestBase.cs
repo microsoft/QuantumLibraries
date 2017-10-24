@@ -48,7 +48,7 @@ namespace Microsoft.Quantum.Canon.Tests
                     key => (left[key], right[key])
                 );
 
-        private static void RegisterNativeCanonOperations(SimulatorBase simulator)
+        private static void RegisterNativeCanonOperations(AbstractFactory<Operation> simulator)
         {
             // Find anything in the Native namespace.
             var nativeOperationTypes = GetOperationTypesByNamespace("Microsoft.Quantum.Canon.Native");

@@ -10,40 +10,8 @@ using Xunit.Sdk;
 
 namespace Microsoft.Quantum.Canon.Tests
 {
-    
-    class OperationDataAttribute : DataAttribute
-    {
-
-        private String Suffix;
-
-        public OperationDataAttribute(String suffix = "Test")
-        {
-            Suffix = suffix;
-        }
-
-        public IEnumerable<TypeInfo> GetOperationTypes()
-        {
-            // Get a list of all types defined in this assembly.
-            var ourTypes =
-                from definedType in Assembly.GetExecutingAssembly().DefinedTypes
-                where definedType.Name.EndsWith(Suffix)
-                where typeof(Operation).IsAssignableFrom(definedType)
-                select definedType;
-            return ourTypes.ToList();
-        }
-
-        public override IEnumerable<object[]> GetData(MethodInfo testMethod)
-        {
-            foreach (var typeInfo in this.GetOperationTypes())
-            {
-                yield return new[] { typeInfo.Name as object, typeInfo };
-            }
-        }
-    }
-
     class RandomDoubleDataAttribute : DataAttribute
     {
-
         private int NSamples;
         private Random RandomGenerator;
         private Double Min, Max;
