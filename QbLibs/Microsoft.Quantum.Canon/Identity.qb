@@ -7,7 +7,7 @@ namespace Microsoft.Quantum.Canon {
 		Controlled Adjoint auto
 	}
 
-	operation Identity1(qubits: Qubit[]) : (){
+	operation NoOp(qubits: Qubit[]) : (){
 		Body {
 
 		}
@@ -15,7 +15,7 @@ namespace Microsoft.Quantum.Canon {
 		Controlled auto
 		Adjoint Controlled auto
 	}
-	operation Identity2(qubitsA: Qubit[], qubitsB: Qubit[]) : (){
+	operation NoOp2(qubitsA: Qubit[], qubitsB: Qubit[]) : (){
 		Body {
 
 		}
@@ -23,11 +23,5 @@ namespace Microsoft.Quantum.Canon {
 		Controlled auto
 		Adjoint Controlled auto
 	}
-
-
-
-	// function Identity(value : 'T) : 'T {
-	//     return value
-	// }
 
 }

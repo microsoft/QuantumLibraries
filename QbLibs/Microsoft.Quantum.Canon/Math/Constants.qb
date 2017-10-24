@@ -7,4 +7,8 @@ namespace Microsoft.Quantum.Canon {
 		return 3.141592653589793238462643383280
 	}
 
+	function LogOf2() : Double {
+		return 0.6931471805599453
+	}
+
 }

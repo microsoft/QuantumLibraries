@@ -41,64 +41,63 @@
         }
     }
 
-/// <summary>
-///     Given a multi-qubit Pauli operator, applies the corresponding operation to
-///     a register.
-/// </summary>
-/// <param name="pauli">A multi-qubit Pauli operator represented as an array of single-qubit Pauli operators.</param>
-/// <param name="target">Register to apply the given Pauli operation on.</param>
-operation ApplyPauli(pauli : Pauli[], target : Qubit[])  : ()
-{
-    Body {
-        for (idxPauli in 0..(Length(pauli) - 1)) {
-            let P = pauli[idxPauli]
-            let targ = target[idxPauli]
-            
-            // FIXME: change to elif.
-            if (P == Xpauli) {
-                X(targ)
-            }
-            if (P == Ypauli) {
-                Y(targ)
-            }
-            if (P == Zpauli) {
-                Z(targ)
+    /// <summary>
+    ///     Given a multi-qubit Pauli operator, applies the corresponding operation to
+    ///     a register.
+    /// </summary>
+    /// <param name="pauli">A multi-qubit Pauli operator represented as an array of single-qubit Pauli operators.</param>
+    /// <param name="target">Register to apply the given Pauli operation on.</param>
+    operation ApplyPauli(pauli : Pauli[], target : Qubit[])  : ()
+    {
+        Body {
+            for (idxPauli in 0..(Length(pauli) - 1)) {
+                let P = pauli[idxPauli]
+                let targ = target[idxPauli]
+                
+                // FIXME: change to elif.
+                if (P == Xpauli) {
+                    X(targ)
+                }
+                if (P == Ypauli) {
+                    Y(targ)
+                }
+                if (P == Zpauli) {
+                    Z(targ)
+                }
             }
         }
+
+        Adjoint auto
+        Controlled auto
+        Adjoint Controlled auto
+    }   
+
+    /// <summary>
+    /// Applies a Pauli operator on the n^th qubit if the n^th bit of a Boolean array is true.
+    /// </summary>
+    /// <param name = "pauli"> Pauli to apply </param>
+    /// <param name = "bitApply"> apply Pauli if bit is this value </param>
+    /// <param name = "bits"> Boolean array </param>
+    /// <param name = "qubits"> Quantum register </param>
+    /// <remarks> 
+    /// The boolean array and the quantum register must be of equal length.
+    /// </remarks>
+    operation ApplyPauliFromBitString(pauli : Pauli, bitApply: Bool, bits : Bool[], qubits : Qubit[]) : ()
+    {
+        Body {
+            let nBits = Length(bits)
+            //FailOn (nbits != Length(qubits), "Number of control bits must be equal to number of control qubits")
+
+            for(idxBit in 0..nBits - 1) {
+                if(bits[idxBit] == bitApply) {
+                    ApplyPauli([pauli], [qubits[idxBit]])
+                }
+            }
+        }
+        Adjoint auto
+        Controlled auto
+        Adjoint Controlled auto
     }
-
-    Adjoint auto
-	Controlled auto
-	Adjoint Controlled auto
-}   
-
-
-/// <summary>
-/// Applies a Pauli operator on the n^th qubit if the n^th bit of a Boolean array is true.
-/// </summary>
-/// <param name = "pauli"> Pauli to apply </param>
-/// <param name = "bitApply"> apply Pauli if bit is this value </param>
-/// <param name = "bits"> Boolean array </param>
-/// <param name = "qubits"> Quantum register </param>
-/// <remarks> 
-/// The boolean array and the quantum register must be of equal length.
-/// </remarks>
-operation ApplyPauliFromBitString(pauli : Pauli, bitApply: Bool, bits : Bool[], qubits : Qubit[]) : ()
-{
-	Body{
-		let nBits = Length(bits)
-		//FailOn (nbits != Length(qubits), "Number of control bits must be equal to number of control qubits")
-
-		for(idxBit in 0..nBits - 1){
-			if(bits[idxBit] == bitApply){
-				ApplyPauli([pauli], [qubits[idxBit]])
-			}
-		}
-	}
-	Adjoint auto
-	Controlled auto
-	Adjoint Controlled auto
-}
 
     /// <summary>
     ///     Given an array of multi-qubit Pauli operators, measures each using a specified measurement

@@ -8,12 +8,6 @@
 		return 0.0
 	}
 
-	function RandomTMP(value : Double[]) : Int
-	{
-		return 0
-	}
-
-
 	operation MultiM(targets : Qubit[]) : Result[]
 	{
 		Body{
@@ -24,7 +18,5 @@
 			return results
 		}
 	}
-
-
 
 }
