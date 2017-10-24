@@ -24,7 +24,11 @@ module H2PlottingDemo =
 
         let estAtBondLength idx =
             // TODO: repeat and take lowest.
-            H2EstimateEnergyRPE.Body.Invoke (struct (idx, int64 8, 0.5))
+            [0..3]
+            |> Seq.map (fun idxRep ->
+                    H2EstimateEnergyRPE.Body.Invoke (struct (idx, int64 6, float 1))
+                )
+            |> Seq.min
 
         let bondLengths =
             H2BondLengths.Body.Invoke QVoid.Instance
@@ -33,6 +37,10 @@ module H2PlottingDemo =
             [0..53] // fixme: change to 53
             |> Seq.map (int64 >> estAtBondLength)
             |> Seq.zip bondLengths
+            |> Seq.map(fun (bondLen, est) -> 
+                    printfn "%A %A" bondLen est;
+                    est
+                )
 
         data
 
