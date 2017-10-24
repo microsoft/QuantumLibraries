@@ -1,7 +1,7 @@
 ﻿namespace Microsoft.Quantum.Examples
 
 open System
-open System.Windows
+open System.Windows.Forms
 open System.Windows.Controls
 open System.Windows.Markup
 open FsXaml
@@ -44,6 +44,10 @@ end
 module H2PlottingDemo =
     open Microsoft.Quantum.Simulation.Simulators
     open Microsoft.Quantum.Canon
+    open FSharp.Charting
+    open FSharp.Control
+    open System.Reactive.Linq
+    open FSharp.Charting
 
     type MainWindow = XAML<"MainWindow.xaml">
 
@@ -59,10 +63,13 @@ module H2PlottingDemo =
             // TODO: repeat and take lowest.
             H2EstimateEnergy.Body.Invoke (struct (idx, 0.5, int64 8))
 
-        [0..10] // fixme: change to 53
+        let data =
+            [0..10] // fixme: change to 53
             |> Seq.map (int64 >> estAtBondLength)
-            |> Seq.mapi (fun idx est -> DataPoint(float idx, est))
-            |> List.ofSeq
+            |> Seq.mapi (fun idx est -> (float idx, est))
+
+        data
+            
 
             ////H2EstimateEnergy(idxBondLength: Int, trotterStepSize: Double, bitsPrecision: Int)
             //for (int idxBondLength = 0; idxBondLength < 54; idxBondLength++)
@@ -84,10 +91,20 @@ module H2PlottingDemo =
     [<STAThread>]
     [<EntryPoint>]
     let main argv = 
-        let mainWindow = MainWindow()
+        // FIXME: convert to XAML
+        Application.EnableVisualStyles()
+        Application.SetCompatibleTextRenderingDefault false
+        
+        let form = new Form(Visible = true, Width=800, Height=600)
+        let ests = estimateEnergies
+        let chart = Chart.Line ests
+        chart.ShowChart()
+        Application.Run form
+        0
+        //let mainWindow = MainWindow()
  
-        let ctx = mainWindow.DataContext
+        //let ctx = mainWindow.DataContext
         //ctx.
-        let application = new Application()
-        application.Run(mainWindow)
+        //let application = new Application()
+        //application.Run(mainWindow)
 
