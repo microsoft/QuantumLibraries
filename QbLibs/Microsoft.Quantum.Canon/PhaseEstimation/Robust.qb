@@ -40,7 +40,7 @@ namespace Microsoft.Quantum.Canon {
                     mutable pZero = ToDouble(0)
                     mutable pPlus = ToDouble(0)
 
-                    for (rep in 0..repeats-1) {
+                    for (rep in 0..nRepeats-1) {
                         // FIXME: Write this in terms of the existing PhaseEstimationIteration
                         //        to allow for generaliztion over PE algorithms.
                         //        This requires figuring out how to separate |+〉 and |0〉 exps.
@@ -67,7 +67,7 @@ namespace Microsoft.Quantum.Canon {
                     // delta = Mod[ArcTan2(pPlus - ToDouble(repeats) / 2.0,  pZero - ToDouble(repeats) / 2.0), 2 Pi(), -Pi()]
                     // thetaEst = theteaEst + delta / power
 
-                    let thetaDelta = ArcTan2(pPlus - ToDouble(repeats) / 2.0,  pZero - ToDouble(repeats) / 2.0)
+                    let thetaDelta = ArcTan2(pPlus - ToDouble(nRepeats) / 2.0,  pZero - ToDouble(nRepeats) / 2.0)
                     set thetaEst = thetaEst + thetaDelta / ToDouble(power)
                 }
                 Reset(q)
