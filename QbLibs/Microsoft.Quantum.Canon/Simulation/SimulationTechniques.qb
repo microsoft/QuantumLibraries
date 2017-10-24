@@ -22,10 +22,10 @@ namespace Microsoft.Quantum.Canon {
 
 
     //Applies a sequence of TrotterStep according to a schedule, e.g. for adiabatic state preparation
-    operation Schedule(evolutionSchedule : EvolutionSchedule, timeSteps : Int, qubits: Qubit[]) : (){
+    operation ApplyEvolutionSchedule(evolutionSchedule : EvolutionSchedule, nTimeSteps : Int, qubits: Qubit[]) : (){
         Body{
-            let timeStep = Float(1) / Float(timeSteps)
-            for(idxStep in 0..timeSteps - 1){
+            let timeStep = Float(1) / Float(nTimeSteps)
+            for(idxStep in 0..nTimeSteps - 1){
                 let time = timeStep * Float(idxStep) 
                 evolutionSchedule(time, timeStep, qubits)
             }
@@ -39,15 +39,15 @@ namespace Microsoft.Quantum.Canon {
 
     //State prep + Adiabatic state prep + energy estimation
     operation AdiabaticStateEnergyPrepare(bitsPrecision : Int,
-                                        timeSteps : Int, 
-                                        statePrepUnitary: (Qubit[] => ()),
-                                        evoSchedule : EvolutionSchedule, 
-                                        qpeUnitary: (Qubit[] => () :  Adjoint, Controlled),
-                                        qubits: Qubit[]) : Double
+                                          timeSteps : Int, 
+                                          statePrepUnitary: (Qubit[] => ()),
+                                          evoSchedule : EvolutionSchedule, 
+                                          qpeUnitary: (Qubit[] => () :  Adjoint, Controlled),
+                                          qubits: Qubit[]) : Double
     {
-        Body{
+        Body {
             statePrepUnitary(qubits)
-            Schedule(evoSchedule, timeSteps, qubits)
+            ApplyEvolutionSchedule(evoSchedule, timeSteps, qubits)
             let phaseEst = RobustQuantumPhaseEstimation(bitsPrecision, OracleToDiscrete(qpeUnitary), qubits)
             return phaseEst
 
@@ -56,11 +56,11 @@ namespace Microsoft.Quantum.Canon {
 
     //Qubits + State prep + Adiabatic state prep + energy estimation
     operation AdiabaticStateEnergyEstimate(nQubits : Int, 
-                                        bitsPrecision : Int,
-                                        timeSteps : Int, 
-                                        statePrepUnitary: (Qubit[] => () ),
-                                        evoSchedule : EvolutionSchedule, 
-                                        qpeUnitary: (Qubit[] => () :  Adjoint, Controlled)) : Double
+                                           bitsPrecision : Int,
+                                           timeSteps : Int, 
+                                           statePrepUnitary: (Qubit[] => () ),
+                                           evoSchedule : EvolutionSchedule, 
+                                           qpeUnitary: (Qubit[] => () :  Adjoint, Controlled)) : Double
     {
         Body{
             mutable phaseEst = ToDouble(0)
