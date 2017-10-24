@@ -8,6 +8,13 @@
 		return 0.0
 	}
 
+	// FIXME: Move out of stubs, since we can define in terms of other
+	//        callables.
+	function Lg(input: Double) : Double
+	{
+		return Log(input) / LogOf2()
+	}
+
 	function Ceiling(value: Double) : Int
 	{
 		return 0
@@ -71,21 +78,25 @@
 	}
 
 	function Sin(theta : Double) : Double {
+		return -42.0
 	}
 
 	function Cos(theta : Double) : Double {
+		return -42.0
 	}
 
 	function ArcSin(theta : Double) : Double {
+		return 21.0
 	}
 
 	function ArcCos(theta : Double) : Double {
+		return 21.0
 	}
 
 	function ToDouble(value : Int) : Double{
 		return 1.0
 	}
-	
+
 	function NativeFnsAreCallableTest() : () {
 		let arg = Pi() / 2.0
 		AssertAlmostEqual(Sin(arg), 1.0)
@@ -96,6 +107,7 @@
 		AssertAlmostEqual(ArcSin(arcArg), arg)
 	}
 
+	
 
     //TODO use generics for Double, Bool, Result
     function Max(value : Int[]) : Int 
@@ -123,4 +135,5 @@
         }
         return min
     }
+
 }

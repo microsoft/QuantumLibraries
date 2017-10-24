@@ -1,33 +1,57 @@
 namespace Microsoft.Quantum.Canon {
+	open Microsoft.Quantum.Primitive
 
-//Generates a random number uniformly sampled in [0, 2^maxBits-1]
-function randomIntPow2 (maxBits : Int) : Int
-{
-   mutable number = 0
-  for( idxBit in 0..maxBits -1){
-        set number = number + (RandomTMP([0.5;0.5])) * 2 ^ idxBit
-    }
-    return number    
-}
+	// DESIGN NOTES:
+	//     Q♭ functions *CANNOT* have side effects. Since random sampling is a side
+	//     effect, this immediately implies that any random number generation is modeled
+	//     as an operation. That in turn implies that random number generation calls inside
+	//     another operation will break adjointability and controllability.
 
-//Generates a random number uniformly sampled in [0, maxInt)
-function randomInt (maxInt : Int) : Int
-{
-	mutable nBits = 0
-	mutable output = 0
-	//set nBits = Float(maxInt)
-	set nBits = Ceiling(Log(2.0,Float(maxInt)))
-	
-	// Should use repeat until success when implemented
-	for( samples in 0..100 ){
-		set output = randomIntPow2(nBits)
-		if(output < maxInt){
-			return output
+	/// summary:
+	///     Generates a random number uniformly sampled in [0, 2^maxBits-1].
+	operation RandomIntPow2 (maxBits : Int) : Int
+	{
+		Body {
+			mutable number = 0
+			for( idxBit in 0..maxBits - 1 ) {
+				let bit = random([0.5; 0.5])
+				set number = number + bit * 2 ^ idxBit
+			}
+			return number
 		}
 	}
 
-	return output / 2
+	/// summary:
+	///     Generates a random number uniformly sampled in [0, maxInt).
+	operation RandomInt (maxInt : Int) : Int
+	{
+		Body {
+			mutable nBits = 0
+			mutable output = 0
+			set nBits = Ceiling(Lg(ToDouble(maxInt)))
 
-}
+			repeat {
+				set output = RandomIntPow2(nBits)
+			} until(output < maxInt) fixup {}
+
+			return output
+		}
+
+	}
+
+	operation RandomTest() : () {
+		Body {
+			let randPrim = random([0.5; 0.5])
+			let randIntPow2 = RandomIntPow2(7)
+			if ((randIntPow2 > 127) || (randIntPow2 < 0)) {
+				fail "RandomIntPow2 returned an integer outside the allowed range."
+			}
+			let randomInt = RandomInt(45)
+			if ((randomInt > 45) || (randomInt < 0)) {
+				fail "RandomInt returned an integer outside the allowed range."
+			}
+			return ()
+		}
+	}
 
 }
