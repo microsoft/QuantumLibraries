@@ -3,57 +3,45 @@
 //To be replaced in the simulator with native operations that we’ll write once we can mix C♯ and Q♭ in the same project more easily.
 function Log(b : Double, input: Double) : Double
 {
-    return 0.0
 }
 
 function Ceiling(value: Double) : Int
 {
-    return 0
 }
 
 function ArcTan(d : Double) : Double
 {
-    return 0.0
 }
 
 function Tan(d : Double) : Double
 {
-    return 0.0
 }
 
 function Sqrt(d : Double) : Double
 {
-    return 0.0
 }
 
 function Cosh(d : Double) : Double
 {
-    return 0.0
 }
 
 function ArcCosh(d : Double) : Double
 {
-    return 0.0
 }
 
 function ArcTan2(d: Double, e: Double) : Double{
-    return 0.0
 }
 
 	function Sin(theta : Double) : Double {
-		return -42.0
 	}
 
 	function Cos(theta : Double) : Double {
-		return -42.0
 	}
 
 	function ArcSin(theta : Double) : Double {
-		return 21.0
 	}
 
 	function ArcCos(theta : Double) : Double {
-		return 21.0
 	}
 
 	function NativeFnsAreCallableTest() : () {
@@ -67,7 +55,6 @@ function ArcTan2(d: Double, e: Double) : Double{
 	}
 
 	function ToDouble(value : Int) : Double{
-		return 1.0
 	}
 
     //TODO use generics for Double, Bool, Result

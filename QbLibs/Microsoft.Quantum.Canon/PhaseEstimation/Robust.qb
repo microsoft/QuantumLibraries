@@ -82,27 +82,64 @@ namespace Microsoft.Quantum.Canon {
         Controlled Adjoint auto
     }
 
-    operation RobustQuantumPhaseEstimationTest() : (){
+    operation RobustQuantumPhaseEstimationTest2() : Double {
         Body{
-            let phaseSet = 1.34545
+            let phaseSet = 0.34545
+            mutable phaseEst = 0.123
             let bitsPrecision = 10
-            let op = DiscreteOracle(RobustQuantumPhaseEstimationTestOp(phaseSet * 1.0, _, _))
+            let op = DiscreteOracle(RobustQuantumPhaseEstimationTestOp(phaseSet, _, _))
             using(q= Qubit[1]){
             
-                let phaseEst = RobustQuantumPhaseEstimation(bitsPrecision, op, q)
+                set phaseEst = RobustQuantumPhaseEstimation(bitsPrecision, op, q)
 
+                Reset(q[0])
 
-                Rx(phaseSet - phaseEst, q[0])
+                //Rx(phaseSet , q[0])
             
-                let prob = Sin((phaseEst-phaseSet) * 0.5) * Sin((phaseEst-phaseSet) * 0.5)
+                //let prob = Sin((phaseEst-phaseSet) * 0.5) * Sin((phaseEst-phaseSet) * 0.5)
 
-                AssertProb([Zpauli], [q[0]], Zero, 1.0, "Phase error large",  1e-5)
 
+                //AssertProb([Zpauli], [q[0]], One, 0.123, "Phase error large",  1e-10)
+
+                //ReadReal(phaseEst)
 
                 Reset(q[0])
 
 
             }
+            
+            let output2 = 10.0 * phaseEst
+
+            return output2
+
+        }
+    }
+
+    function testMutable() : Double{
+        mutable var = 10.0
+        return var
+    }
+
+  
+
+    operation RobustQuantumPhaseEstimationDemo(phaseSet : Double, bitsPrecision: Int) : Double{
+        Body{
+            let op = DiscreteOracle(RobustQuantumPhaseEstimationTestOp(phaseSet, _, _))
+            mutable phaseEst = ToDouble(0)
+            using(q= Qubit[1]){
+                set phaseEst = RobustQuantumPhaseEstimation(bitsPrecision, op, q)
+                Reset(q[0])
+            }
+            return phaseEst
+        }
+    }
+
+    operation RobustQuantumPhaseEstimationTest() : () {
+        Body{
+            let phaseSet = 0.34545
+            let bitsPrecision = 10
+            let phaseEst = RobustQuantumPhaseEstimationDemo(phaseSet, bitsPrecision)
+            ReadReal(phaseEst)
         }
     }
 

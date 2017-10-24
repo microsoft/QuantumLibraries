@@ -66,7 +66,8 @@ namespace Microsoft.Quantum.Canon {
         set hamBondCoeff[51]=[-0.5039; 0.1011; 0.0649; 0.3379; 0.1458; 0.1458]
         set hamBondCoeff[52]=[-0.5015; 0.0997; 0.0665; 0.3354; 0.1467; 0.1467]
         set hamBondCoeff[53]=[-0.4992; 0.0984; 0.0679; 0.3329; 0.1475; 0.1475]
-        return hamBondCoeff[idxBond]
+        let hamBondout = hamBondCoeff[idxBond]
+        return hamBondout[1..5]
     }
     function H2IdentityCoeff(idxBond : Int) : Double
     {
@@ -158,18 +159,15 @@ namespace Microsoft.Quantum.Canon {
         Body {
             let nQubits = 2
             //let idxBondLength = 0
-            let trotterOrder = 2
+            let trotterOrder = 1
             //let trotterStepSize = 0.1
             let trotterStep = H2TrotterStepB(idxBondLength, trotterOrder, trotterStepSize)
             //let bitsPrecision = 5
             
-            let EnergyEstimate = EstimateEnergy(nQubits, bitsPrecision, H2StatePrep(),trotterStep) / trotterStepSize + H2IdentityCoeff(idxBondLength)
+            let EnergyEstimate = EstimateEnergy(nQubits, bitsPrecision, H2StatePrep(), trotterStep) / trotterStepSize + H2IdentityCoeff(idxBondLength)
             return EnergyEstimate
         }
     }
-
-
-
 
 
     //Due to UDTs not propagating in multifiles properly, we must instantiate elements in an EvolutionSet.

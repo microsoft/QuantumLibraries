@@ -67,14 +67,20 @@
                 Exp([Xpauli], 0.5 * step, qubits[0..0])
                 Exp([Xpauli], -0.5 * step, [qubits[0]])
                 AssertProb([Zpauli], [qubits[0]], Zero, 1.0, "Fail [Xpauli] [0]",  1e-10)
+                
+                ResetAll(qubits)
 
                 Exp([Xpauli; Ipauli], 1.0 * step, qubits[0..1])
                 Exp([Xpauli], 0.5 * step, [qubits[0]])
                 AssertProb([Zpauli], [qubits[0]], Zero, 1.0, "Fail [Xpauli;Ipauli] [0;1]",  1e-10)
 
+                ResetAll(qubits)
+
                 Exp([Ipauli; Xpauli], 1.0 * step, qubits[0..1])
                 Exp([Xpauli], 0.5 * step, [qubits[1]])
                 AssertProb([Zpauli], [qubits[1]], Zero, 1.0, "Fail [Ipauli; Xpauli] [0;1]",  1e-10)
+
+                ResetAll(qubits)
 
                 //Exp([Ipauli; Ipauli; Xpauli], 2.0 * step, qubits[0..2])
                 Exp([Xpauli], 1.0 * step, qubits[2..2])
