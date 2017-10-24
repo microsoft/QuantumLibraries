@@ -13,13 +13,13 @@ namespace Microsoft.Quantum.Canon.Tests
     class RandomDoubleDataAttribute : DataAttribute
     {
         private int NSamples;
-        private Random Random;
+        private Random RandomGenerator;
         private Double Min, Max;
 
         public RandomDoubleDataAttribute(int nSamples = 20, int seed = 0, Double min = 0, Double max = 1)
         {
             NSamples = nSamples;
-            Random = new Random(seed);
+            RandomGenerator = new Random(seed); 
             Min = min;
             Max = max;
         }
@@ -28,7 +28,7 @@ namespace Microsoft.Quantum.Canon.Tests
         {
             foreach (var idxSample in Enumerable.Range(0, NSamples))
             {
-                yield return new[] { Min + (Max - Min) * Random.NextDouble() as object };
+                yield return new[] { Min + (Max - Min) * RandomGenerator.NextDouble() as object }; 
             }
         }
     }

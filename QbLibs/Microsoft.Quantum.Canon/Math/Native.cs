@@ -173,4 +173,5 @@ namespace Microsoft.Quantum.Canon.Native
                 (double) arg;
 
     }
+
 }

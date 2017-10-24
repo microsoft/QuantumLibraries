@@ -1,0 +1,200 @@
+﻿namespace Microsoft.Quantum.Canon {
+	open Microsoft.Quantum.Primitive
+
+// Functions here may be commonly used in other libraries and could be made global.
+
+
+	// Phase shift about |1...1><1...1|
+	operation ReflectionAllOnes( phase: Double, qubits: Qubit[] ) : ()
+	{
+		Body{
+			let nQubits = Length(qubits)
+			let flagQubit = qubits[0]
+			let systemRegister = qubits[1..nQubits-1]
+
+			(Controlled R1(phase, _))(systemRegister, flagQubit)
+
+		}
+
+		Adjoint auto
+		Controlled auto
+		Controlled Adjoint auto
+	}
+
+	// Phase shift about |0...0><0...0|
+	operation ReflectionAllZero( phase: Double, qubits: Qubit[] ) : ()
+	{
+		Body {
+
+			WithCA(ApplyToEachAC(X, _), ReflectionAllOnes(phase, _), qubits)
+
+		}
+
+		Adjoint auto
+		Controlled auto
+		Controlled Adjoint auto
+	}
+
+
+	//qubit array slicing by index
+	//TODO replace with Slice in generics
+	// Number of qubits should be larger than largest value in indices
+	function QubitSlice(indices : Int[], qubits : Qubit[]) : Qubit[] 
+	{
+		let nSliced = Length(indices)
+		mutable sliced = new Qubit[nSliced]
+		for( idx in 0..nSliced - 1 ){
+			set sliced[idx] = qubits[indices[idx]]
+		}
+
+		return sliced
+	}
+
+
+	//QubitExclude([idxFlagQubit], qubits)
+	//TODO replace with Exclude in generics
+	function QubitExclude(remove : Int[], qubits : Qubit[]) : Qubit[] 
+	{
+
+		let nSliced = Length(remove)
+		let nQubits = Length(qubits)
+		//Would be better with sort function
+		//Or way to add elements to array
+
+		mutable arrayKeep = new Int[nQubits]
+		mutable sliced = new Qubit[nQubits - nSliced]
+		mutable counter = 0
+
+		for( idx in 0..nQubits - 1){
+			set arrayKeep[idx] = idx
+		}
+		for( idx in 0..nSliced - 1 ){
+			set arrayKeep[remove[idx]] = -1
+		}
+		for( idx in 0..nQubits - 1 ){
+			if(arrayKeep[idx] >= 0){
+				set sliced[counter] = qubits[arrayKeep[idx]]
+				set counter = counter + 1
+			}
+		}
+
+		return sliced
+	}
+
+	/// <summary>
+	/// Combines the oracles DeterministicStateOracle and ObliviousOracle
+	/// </summary>
+    operation _ObliviousOracleFromDeterministicStateOracle(ancillaOracle : DeterministicStateOracle, signalOracle : ObliviousOracle, ancillaRegister: Qubit[], systemRegister: Qubit[]) : (){
+		Body{
+				ancillaOracle(ancillaRegister)
+				signalOracle(ancillaRegister, systemRegister)
+		}
+		Adjoint auto
+		Controlled auto
+		Adjoint Controlled auto
+	}
+
+	function ObliviousOracleFromDeterministicStateOracle(ancillaOracle : DeterministicStateOracle, signalOracle : ObliviousOracle) : ObliviousOracle{
+		return ObliviousOracle(_ObliviousOracleFromDeterministicStateOracle(ancillaOracle, signalOracle,_,_))
+	}
+
+    /// <summary>
+	/// Converts an oracle of type StateOracle to DeterministicStateOracle
+	/// </summary>
+    operation _DeterministicStateOracleFromStateOracle(idxFlagQubit: Int, stateOracle : StateOracle, startQubits: Qubit[]) : (){
+		Body{
+			stateOracle(idxFlagQubit, startQubits)
+		}
+		Adjoint auto
+		Controlled auto
+		Adjoint Controlled auto
+	}
+
+	function DeterministicStateOracleFromStateOracle(idxFlagQubit: Int, stateOracle : StateOracle) : DeterministicStateOracle{
+		return DeterministicStateOracle(_DeterministicStateOracleFromStateOracle(idxFlagQubit, stateOracle,_))
+	}
+
+    /// <summary>
+	/// Converts an oracle of type DeterministicStateOracle to StateOracle
+	/// </summary>
+    operation _StateOracleFromDeterministicStateOracle(idxFlagQubit : Int, oracleStateDeterministic : DeterministicStateOracle, qubits: Qubit[]): ()
+	{
+		Body{
+			oracleStateDeterministic(qubits)
+		}
+		Adjoint auto
+		Controlled auto
+		Controlled Adjoint auto
+	}
+    function StateOracleFromDeterministicStateOracle(oracleStateDeterministic : DeterministicStateOracle) : StateOracle {
+		return StateOracle(_StateOracleFromDeterministicStateOracle(_, oracleStateDeterministic,_))
+	}
+
+    /// <summary>
+	/// Constructs a reflection about the all-zero string |0...0>, which is the typical input state to amplitude amplification.
+	/// </summary>
+	/// <param name = "phase"> Phase of partial reflection </param>
+	/// <param name = "qubits"> Qubits of all-zero string </param>
+	/// <remarks> 
+	/// -
+	/// </remarks>
+    operation _ReflectionStart(phase: Double, qubits: Qubit[] ) : () {
+		Body{
+			ReflectionAllZero( phase, qubits )
+		}
+		Adjoint auto
+		Controlled auto
+		Adjoint Controlled auto
+	}
+	function ReflectionStart() : ReflectionOracle {
+		return ReflectionOracle(_ReflectionStart( _, _ ))
+	}
+
+	/// <summary>
+	/// Constructs reflection about a some state |ψ> from the oracle of type "DeterministicStateOracle" where O|0> = |ψ>
+	/// </summary>
+	/// <param name = "phase"> Phase of partial reflection </param>
+	/// <param name = "oracle"> Oracle of type "DeterministicStateOracle" </param>
+	/// <param name = "systemRegister"> Qubits acted on by "oracle" </param>
+	/// <remarks> 
+	/// -
+	/// </remarks>
+	operation ReflectionOracleFromDeterministicStateOracleImpl(phase: Double, oracle: DeterministicStateOracle, systemRegister: Qubit[]): ()
+	{
+		Body {
+			WithCA((Adjoint oracle), ReflectionAllZero(phase, _), systemRegister)
+		}
+		Adjoint auto
+		Controlled auto
+		Adjoint Controlled auto
+	}
+	function ReflectionOracleFromDeterministicStateOracle(oracle: DeterministicStateOracle): ReflectionOracle
+	{
+		return ReflectionOracle(ReflectionOracleFromDeterministicStateOracleImpl(_, oracle, _ ))
+	}
+
+	/// <summary>
+	/// Constructs reflection about the target state uniquely marked by the flag qubit state |1>_f, prepared the oracle of type "StateOracle"
+	/// </summary>
+	/// <param name = "phase"> Phase of partial reflection </param>
+	/// <param name = "idxFlagQubit"> Index to flag qubit of oracle </param>
+	/// <param name = "systemRegister"> All other qubits acted on by oracle </param>
+	/// <remarks> 
+	/// -
+	/// </remarks>
+	operation TargetStateReflectionOracleImpl(phase: Double, idxFlagQubit : Int, qubits: Qubit[]): ()
+	{
+		Body {
+			R1(phase, qubits[idxFlagQubit])
+		}
+
+		Adjoint auto
+		Controlled auto
+		Adjoint Controlled auto
+	}
+	function TargetStateReflectionOracle(idxFlagQubit : Int): ReflectionOracle
+	{
+		return ReflectionOracle(TargetStateReflectionOracleImpl( _ , idxFlagQubit , _ ))
+	}
+
+}
