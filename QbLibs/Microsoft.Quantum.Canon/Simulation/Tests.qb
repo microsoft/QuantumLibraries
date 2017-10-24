@@ -1,6 +1,45 @@
 ﻿namespace Microsoft.Quantum.Canon {
     open Microsoft.Quantum.Primitive
-/// This contains unit tests for the Simulation library
+    /// This contains unit tests for the Simulation library
+
+    // Due to UDTs not propagating in multifiles properly, we must instantiate an EvolutionSet.
+    // FIXME remove when Bug 781 is resolved
+    operation BUG781WorkAroundA(idx : GeneratorIndex, delta : Double, qubits: Qubit[]) : ()    {
+        Body{}
+        Adjoint auto
+        Controlled auto
+        Controlled Adjoint auto
+    }
+    function BUG781WorkAroundB(idx : GeneratorIndex) : EvolutionUnitary    {
+        return EvolutionUnitary(BUG781WorkAroundA(idx, _, _))
+    }
+    function BUG781WorkAroundC() : EvolutionSet    {
+        return EvolutionSet(BUG781WorkAroundB)
+    }
+
+    // Using the Hamiltonian representation library
+    function HamiltonianGeneratorTerm(idxHamiltonian : Int) : GeneratorTerm
+    {
+        // Pass empty double as Pauli set not indexed by continuous parameters
+        let e = new Double[0]
+        let coefficient = 0.5
+        let generatorIndex = GeneratorIndex(([1;2;3],e), [1;2;3])
+        return GeneratorTerm(generatorIndex, coefficient)
+    }
+
+    function HamiltonianGeneratorSystem() : GeneratorSystem
+    {
+        let nTerms = 5
+        return GeneratorSystem(nTerms, HamiltonianGeneratorTerm)
+    }
+
+    function HamiltonianEvolutionGenerator() : EvolutionGenerator
+    {
+        let generatorSystem = HamiltonianGeneratorSystem()
+        let evolutionSet = PauliEvolutionSet()
+        return EvolutionGenerator(evolutionSet, generatorSystem)
+
+    }
 
     /// Test of Trotterization and EvolutionSetPauli
 
@@ -125,6 +164,8 @@
     }
 
     //Converts a real value to a probability
+    // FIXME: document this operation, rename to make it clear what it does,
+    //        and move it to where it needs to be.
     operation ReadReal(value: Double) : () {
         Body{
             let angle = 2.0*ArcSin(Sqrt(value))
