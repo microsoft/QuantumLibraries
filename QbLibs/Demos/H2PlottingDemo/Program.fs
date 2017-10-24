@@ -19,12 +19,12 @@ module H2PlottingDemo =
         qsim.Register(typeof<Microsoft.Quantum.Canon.ArcTan2>, typeof<Microsoft.Quantum.Canon.Native.ArcTan2>)
         qsim.Register(typeof<Microsoft.Quantum.Canon.ToDouble>, typeof<Microsoft.Quantum.Canon.Native.ToDouble>);
 
-        let H2EstimateEnergy = qsim.Get(typeof<H2EstimateEnergy>) :?> H2EstimateEnergy
+        let H2EstimateEnergyRPE = qsim.Get(typeof<H2EstimateEnergyRPE>) :?> H2EstimateEnergyRPE
         let H2BondLengths = qsim.Get(typeof<H2BondLengths>) :?> H2BondLengths
 
         let estAtBondLength idx =
             // TODO: repeat and take lowest.
-            H2EstimateEnergy.Body.Invoke (struct (idx, 0.5, int64 8))
+            H2EstimateEnergyRPE.Body.Invoke (struct (idx, int64 8, 0.5))
 
         let bondLengths =
             H2BondLengths.Body.Invoke QVoid.Instance

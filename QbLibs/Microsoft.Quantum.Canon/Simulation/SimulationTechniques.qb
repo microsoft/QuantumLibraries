@@ -1,6 +1,6 @@
 namespace Microsoft.Quantum.Canon {
     
-    /// Convert the description of dynamics in the Hamiltonian to a form compatible with the Trotterization library
+    
     operation _TrotterStep(evolutionGenerator: EvolutionGenerator, idx : Int, stepsize: Double, qubits: Qubit[]) : () {
         Body{
             let (evolutionSet, generatorSystem) = evolutionGenerator
@@ -12,6 +12,9 @@ namespace Microsoft.Quantum.Canon {
         Controlled auto
         Controlled Adjoint auto
     }
+
+    /// summary:
+    ///     Convert the description of dynamics in the Hamiltonian to a form compatible with the Trotterization library.
     function TrotterStep(evolutionGenerator: EvolutionGenerator, trotterOrder: Int, trotterStepSize: Double) : (Qubit[] => () :  Adjoint, Controlled)
     {
         let (evolutionSet, generatorSystem) = evolutionGenerator
@@ -21,7 +24,8 @@ namespace Microsoft.Quantum.Canon {
     }
 
 
-    //Applies a sequence of TrotterStep according to a schedule, e.g. for adiabatic state preparation
+    /// summary:
+    ///     Applies a sequence of TrotterStep according to a schedule, e.g. for adiabatic state preparation.
     operation ApplyEvolutionSchedule(evolutionSchedule : EvolutionSchedule, nTimeSteps : Int, qubits: Qubit[]) : (){
         Body{
             let timeStep = Float(1) / Float(nTimeSteps)
@@ -34,21 +38,20 @@ namespace Microsoft.Quantum.Canon {
         Controlled auto
         Controlled Adjoint auto
     }
-   
 
-
-    //State prep + Adiabatic state prep + energy estimation
-    operation AdiabaticStateEnergyPrepare(bitsPrecision : Int,
-                                          timeSteps : Int, 
+    /// summary:
+    ///     Performs state preparation, and adiabatic state preparation, and phase est.
+    operation AdiabaticStateEnergyPrepare(timeSteps : Int,
                                           statePrepUnitary: (Qubit[] => ()),
-                                          evoSchedule : EvolutionSchedule, 
+                                          evoSchedule : EvolutionSchedule,
                                           qpeUnitary: (Qubit[] => () :  Adjoint, Controlled),
+                                          phaseEstAlgorithm : ((DiscreteOracle, Qubit[]) => Double),
                                           qubits: Qubit[]) : Double
     {
         Body {
             statePrepUnitary(qubits)
             ApplyEvolutionSchedule(evoSchedule, timeSteps, qubits)
-            let phaseEst = RobustPhaseEstimation(bitsPrecision, OracleToDiscrete(qpeUnitary), qubits)
+            let phaseEst = phaseEstAlgorithm(OracleToDiscrete(qpeUnitary), qubits)
             return phaseEst
 
         }
@@ -56,17 +59,23 @@ namespace Microsoft.Quantum.Canon {
 
     //Qubits + State prep + Adiabatic state prep + energy estimation
     operation AdiabaticStateEnergyEstimate(nQubits : Int, 
-                                           bitsPrecision : Int,
                                            timeSteps : Int, 
                                            statePrepUnitary: (Qubit[] => () ),
                                            evoSchedule : EvolutionSchedule, 
-                                           qpeUnitary: (Qubit[] => () :  Adjoint, Controlled)) : Double
+                                           qpeUnitary: (Qubit[] => () :  Adjoint, Controlled),
+                                           phaseEstAlgorithm : ((DiscreteOracle, Qubit[]) => Double)) : Double
     {
-        Body{
+        Body {
             mutable phaseEst = ToDouble(0)
             using(qubits = Qubit[nQubits]){
                 ResetAll(qubits)
-                set phaseEst = AdiabaticStateEnergyPrepare(bitsPrecision,timeSteps,statePrepUnitary,evoSchedule,qpeUnitary,qubits)
+                set phaseEst = AdiabaticStateEnergyPrepare(
+                    timeSteps,
+                    statePrepUnitary,
+                    evoSchedule,
+                    qpeUnitary,
+                    phaseEstAlgorithm,
+                    qubits)
                 ResetAll(qubits)
             }
             return phaseEst
@@ -75,15 +84,15 @@ namespace Microsoft.Quantum.Canon {
     }
 
     //Qubits + State Prep +  quantum phase estimation
-    operation EstimateEnergy(nQubits : Int, 
-                            bitsPrecision : Int,
-                            statePrepUnitary: (Qubit[] => () ), 
-                            qpeUnitary: (Qubit[] => () :  Adjoint, Controlled)) : Double
+    operation EstimateEnergy(nQubits : Int,
+                             statePrepUnitary: (Qubit[] => () ),
+                             qpeUnitary: (Qubit[] => () :  Adjoint, Controlled),
+                             phaseEstAlgorithm : ((DiscreteOracle, Qubit[]) => Double)) : Double
     {
-         Body{
-            let phaseEst = AdiabaticStateEnergyEstimate(nQubits,bitsPrecision, 0, statePrepUnitary, IdentityEvolutionSchedule(), qpeUnitary)
+         Body {
+            let phaseEst = AdiabaticStateEnergyEstimate(nQubits, 0, statePrepUnitary, IdentityEvolutionSchedule(), qpeUnitary, phaseEstAlgorithm)
             return phaseEst
-        }   
+        }
     }
 //For LCU
 

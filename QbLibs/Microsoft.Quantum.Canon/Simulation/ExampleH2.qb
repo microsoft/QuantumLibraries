@@ -16,7 +16,6 @@ namespace Microsoft.Quantum.Canon {
         let nBondLengths = 54
         // FIXME: Remove mutability here.
         mutable hamBondCoeff = new Double[][nBondLengths]
-        let bondLengths = H2BondLengths()
 
         set hamBondCoeff[0]=[2.8489; 0.5678; -1.4508; 0.6799; 0.0791; 0.0791]
         set hamBondCoeff[1]=[2.1868; 0.5449; -1.287; 0.6719; 0.0798; 0.0798]
@@ -72,6 +71,7 @@ namespace Microsoft.Quantum.Canon {
         set hamBondCoeff[51]=[-0.5039; 0.1011; 0.0649; 0.3379; 0.1458; 0.1458]
         set hamBondCoeff[52]=[-0.5015; 0.0997; 0.0665; 0.3354; 0.1467; 0.1467]
         set hamBondCoeff[53]=[-0.4992; 0.0984; 0.0679; 0.3329; 0.1475; 0.1475]
+        // FIXME: use lookup function construction here.
         let hamBondout = hamBondCoeff[idxBond]
         return hamBondout[1..5]
     }
@@ -148,10 +148,10 @@ namespace Microsoft.Quantum.Canon {
     }
 
     //Example find energies of H2
-    operation _H2StatePrep(q : Qubit[]) : () 
+    operation _H2StatePrep(q : Qubit[]) : ()
     {
         Body{
-            X(q[1])       
+            X(q[1])
         }
     }
     function H2StatePrep() : (Qubit[] => () )
@@ -160,26 +160,39 @@ namespace Microsoft.Quantum.Canon {
     }
     //Example find g.s. energy of H2
     //TODO integrate with C# classical loop over bondLengths to print out energies
-    operation H2EstimateEnergy(idxBondLength: Int, trotterStepSize: Double, bitsPrecision: Int) : Double
+    operation H2EstimateEnergy(
+            idxBondLength: Int, trotterStepSize: Double,
+            phaseEstAlgorithm : ((DiscreteOracle, Qubit[]) => Double)
+        ) : Double
     {
         Body {
             let nQubits = 2
-            //let idxBondLength = 0
             let trotterOrder = 1
-            //let trotterStepSize = 0.1
             let trotterStep = H2TrotterStepB(idxBondLength, trotterOrder, trotterStepSize)
-            //let bitsPrecision = 5
-            
-            let EnergyEstimate = EstimateEnergy(nQubits, bitsPrecision, H2StatePrep(), trotterStep) / trotterStepSize + H2IdentityCoeff(idxBondLength)
-            return EnergyEstimate
+
+            return EstimateEnergy(nQubits, H2StatePrep(), trotterStep, phaseEstAlgorithm) / trotterStepSize + H2IdentityCoeff(idxBondLength)
         }
     }
 
 
+    // FIXME: remove these once it's easier to call from external with partially applied
+    //        callables.
+    operation H2EstimateEnergyRPE(idxBondLength: Int, nBitsPrecision : Int, trotterStepSize: Double) : Double
+    {
+        Body {
+            return H2EstimateEnergy(
+                idxBondLength,
+                trotterStepSize,
+                RobustPhaseEstimation(nBitsPrecision, _, _)
+            )
+        }
+    }
+
     //Due to UDTs not propagating in multifiles properly, we must instantiate elements in an EvolutionSet.
     //FIXME remove when Bug 781 is resolved
-    operation  BUG781WorkAroundE(idx : GeneratorIndex, delta : Double, qubits: Qubit[]) : ()    {
-        Body{}
+    operation  BUG781WorkAroundE(idx : GeneratorIndex, delta : Double, qubits: Qubit[]) : () {
+        Body{
+		}
         Adjoint auto
         Controlled auto
         Controlled Adjoint auto
