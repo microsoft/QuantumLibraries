@@ -172,14 +172,14 @@ namespace Microsoft.Quantum.Canon {
 
     //Due to UDTs not propagating in multifiles properly, we must instantiate elements in an EvolutionSet.
     //FIXME remove when Bug 781 is resolved
-    operation  BUG781WorkAroundA(idx : GeneratorIndex, delta : Double, qubits: Qubit[]) : ()    {
+    operation  BUG781WorkAroundE(idx : GeneratorIndex, delta : Double, qubits: Qubit[]) : ()    {
         Body{}
         Adjoint auto
         Controlled auto
         Controlled Adjoint auto
     }
-    function BUG781WorkAroundB(idx : GeneratorIndex) : EvolutionUnitary    {
-        return EvolutionUnitary(BUG781WorkAroundA(idx, _,_))
+    function BUG781WorkAroundD(idx : GeneratorIndex) : EvolutionUnitary    {
+        return EvolutionUnitary(BUG781WorkAroundE(idx, _,_))
     }
 
 

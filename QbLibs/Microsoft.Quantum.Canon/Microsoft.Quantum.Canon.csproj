@@ -317,6 +317,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Quantum.qb</DependentUpon>
     </Compile>
+    <Compile Include="PhaseEstimation\RandomWalk.g.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>RandomWalk.qb</DependentUpon>
+    </Compile>
     <Compile Include="PhaseEstimation\Robust.g.cs">
       <DependentUpon>Robust.qb</DependentUpon>
       <DesignTime>True</DesignTime>
@@ -432,6 +437,10 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>TypeConversion.qb</DependentUpon>
     </Compile>
+    <QbCompile Include="PhaseEstimation\RandomWalk.qb">
+      <Generator>QbCodeGenerator</Generator>
+      <LastGenOutput>RandomWalk.g.cs</LastGenOutput>
+    </QbCompile>
     <QbCompile Include="Simulation\ExampleH2.qb">
       <Generator>QbCodeGenerator</Generator>
       <LastGenOutput>ExampleH2.g.cs</LastGenOutput>

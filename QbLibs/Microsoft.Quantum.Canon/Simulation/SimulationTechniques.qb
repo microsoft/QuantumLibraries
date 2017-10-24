@@ -48,7 +48,7 @@ namespace Microsoft.Quantum.Canon {
         Body {
             statePrepUnitary(qubits)
             ApplyEvolutionSchedule(evoSchedule, timeSteps, qubits)
-            let phaseEst = RobustQuantumPhaseEstimation(bitsPrecision, OracleToDiscrete(qpeUnitary), qubits)
+            let phaseEst = RobustPhaseEstimation(bitsPrecision, OracleToDiscrete(qpeUnitary), qubits)
             return phaseEst
 
         }
