@@ -4,52 +4,14 @@ open System
 open System.Windows.Forms
 open System.Windows.Controls
 open System.Windows.Markup
-open FsXaml
-open OxyPlot
-open System.ComponentModel
-
-type MainViewModel() = class
-    let mutable title = "H₂ Simulation"
-    let mutable points = [
-        DataPoint(0.0, 4.0)
-        DataPoint(10.0, 13.0)
-        DataPoint(20.0, 15.0)
-        DataPoint(30.0, 16.0)
-        DataPoint(40.0, 12.0)
-        DataPoint(50.0, 12.0)
-    ]
-    let propertyChanged = new Event<_, _>()
-    interface INotifyPropertyChanged with
-        [<CLIEvent>]
-        member this.PropertyChanged = propertyChanged.Publish
-
-    member this.Title
-        with get() =
-            title
-        and private set(value) =
-            title <- value
-            propertyChanged.Trigger(this, PropertyChangedEventArgs("Title"))
-
-    member this.Points
-        with get() =
-            points
-        and set(value) =
-            points <- value
-            propertyChanged.Trigger(this, PropertyChangedEventArgs("Points"))
-
-        
-end
-
 
 module H2PlottingDemo =
     open Microsoft.Quantum.Simulation.Simulators
     open Microsoft.Quantum.Canon
     open FSharp.Charting
     open FSharp.Control
-    open System.Reactive.Linq
     open FSharp.Charting
-
-    type MainWindow = XAML<"MainWindow.xaml">
+    open Microsoft.Quantum.Simulation.Core
 
     let estimateEnergies =
         let qsim = QuantumSimulator()
@@ -58,53 +20,31 @@ module H2PlottingDemo =
         qsim.Register(typeof<Microsoft.Quantum.Canon.ToDouble>, typeof<Microsoft.Quantum.Canon.Native.ToDouble>);
 
         let H2EstimateEnergy = qsim.Get(typeof<H2EstimateEnergy>) :?> H2EstimateEnergy
+        let H2BondLengths = qsim.Get(typeof<H2BondLengths>) :?> H2BondLengths
 
         let estAtBondLength idx =
             // TODO: repeat and take lowest.
             H2EstimateEnergy.Body.Invoke (struct (idx, 0.5, int64 8))
 
+        let bondLengths =
+            H2BondLengths.Body.Invoke QVoid.Instance
+
         let data =
-            [0..10] // fixme: change to 53
+            [0..53] // fixme: change to 53
             |> Seq.map (int64 >> estAtBondLength)
-            |> Seq.mapi (fun idx est -> (float idx, est))
+            |> Seq.zip bondLengths
 
         data
-            
-
-            ////H2EstimateEnergy(idxBondLength: Int, trotterStepSize: Double, bitsPrecision: Int)
-            //for (int idxBondLength = 0; idxBondLength < 54; idxBondLength++)
-            //{
-            //    //var phaseSet = 0.34545;
-            //    //Repeat 3 times, take lowest energy
-            //    var phaseEst = (double)0.0;
-            //    for (int rep = 0; rep < 3; rep++)
-            //    {
-            //        phaseEst =  Math.Min(phaseEst, H2EstimateEnergy.Run(qsim, idxBondLength, 0.5, 8).Result);
-            //    }
-            //    Console.WriteLine("Estimated energy in Hartrees is : {0}", phaseEst);
-            //}
-            
-
-            ////PlotModel.InvalidatePlot(true)
-            //Console.ReadLine();
 
     [<STAThread>]
     [<EntryPoint>]
     let main argv = 
-        // FIXME: convert to XAML
         Application.EnableVisualStyles()
         Application.SetCompatibleTextRenderingDefault false
         
-        let form = new Form(Visible = true, Width=800, Height=600)
-        let ests = estimateEnergies
-        let chart = Chart.Line ests
+        let chart =
+            estimateEnergies
+            |> Chart.Line
         chart.ShowChart()
-        Application.Run form
+            |> Application.Run
         0
-        //let mainWindow = MainWindow()
- 
-        //let ctx = mainWindow.DataContext
-        //ctx.
-        //let application = new Application()
-        //application.Run(mainWindow)
-
