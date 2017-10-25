@@ -266,42 +266,23 @@
         }
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    //Due to UDTs not propagating in multifiles properly, we must instantiate elements in an EvolutionSet.
-    //FIXME remove when Bug 781 is resolved
-    operation  BUG781WorkAroundE(idx : GeneratorIndex, delta : Double, qubits: Qubit[]) : () {
+	/////////////////////////////////////////////////////////////////////////////
+	// Appendix /////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////////////
+	
+    /// summary:
+	///     Demonstration of the Impl pattern on a no-op.
+    operation NoOperationImpl(idx : GeneratorIndex, delta : Double, qubits: Qubit[]) : () {
         Body{
 		}
         Adjoint auto
         Controlled auto
         Controlled Adjoint auto
     }
-    function BUG781WorkAroundD(idx : GeneratorIndex) : EvolutionUnitary    {
-        return EvolutionUnitary(BUG781WorkAroundE(idx, _,_))
-    }
 
+    function NoOperation(idx : GeneratorIndex) : EvolutionUnitary    {
+        return EvolutionUnitary(NoOperationImpl(idx, _,_))
+    }
 
 }
 
