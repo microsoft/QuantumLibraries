@@ -12,6 +12,12 @@ module H2PlottingDemo =
     open FSharp.Control
     open FSharp.Charting
     open Microsoft.Quantum.Simulation.Core
+    open FSharp.Control.Reactive
+    open Microsoft.FSharp.Core
+    open Microsoft.FSharp.Collections
+    open System.Reactive
+    open System.Windows
+    open FSharp.Charting.ChartTypes
 
     let estimateEnergies =
         let qsim = QuantumSimulator()
@@ -23,7 +29,6 @@ module H2PlottingDemo =
         let H2BondLengths = qsim.Get(typeof<H2BondLengths>) :?> H2BondLengths
 
         let estAtBondLength idx =
-            // TODO: repeat and take lowest.
             [0..3]
             |> Seq.map (fun idxRep ->
                     H2EstimateEnergyRPE.Body.Invoke (struct (idx, int64 6, float 1))
@@ -34,25 +39,30 @@ module H2PlottingDemo =
             H2BondLengths.Body.Invoke QVoid.Instance
 
         let data =
-            [0..53] // fixme: change to 53
-            |> Seq.map (int64 >> estAtBondLength)
-            |> Seq.zip bondLengths
-            |> Seq.map(fun (bondLen, est) -> 
-                    printfn "%A %A" bondLen est;
-                    est
-                )
-
+            asyncSeq {
+                for idxBond in [0..53] do
+                printfn "!"
+                yield bondLengths.[idxBond], (int64 >> estAtBondLength) idxBond
+            }
+            
         data
-
+        
     [<STAThread>]
     [<EntryPoint>]
     let main argv = 
-        Application.EnableVisualStyles()
-        Application.SetCompatibleTextRenderingDefault false
-        
-        let chart =
-            estimateEnergies
-            |> Chart.Line
-        chart.ShowChart()
-            |> Application.Run
+        let window = Window()
+        window.Loaded.Add <| fun eventArgs ->
+            
+            let chart =
+                estimateEnergies
+                |> AsyncSeq.toObservable
+                |> LiveChart.LineIncremental
+                |> ChartControl
+            
+            let integrationHost = new Forms.Integration.WindowsFormsHost(Child = chart)
+            
+            window.Content <- integrationHost
+
+        Application().Run(window)
+            |> ignore
         0

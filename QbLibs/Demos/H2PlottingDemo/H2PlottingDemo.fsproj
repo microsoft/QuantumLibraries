@@ -67,6 +67,12 @@
     <Reference Include="FSharp.Charting">
       <HintPath>..\..\packages\FSharp.Charting.0.91.1\lib\net45\FSharp.Charting.dll</HintPath>
     </Reference>
+    <Reference Include="FSharp.Control.AsyncSeq">
+      <HintPath>..\..\packages\FSharp.Control.AsyncSeq.2.0.16\lib\net45\FSharp.Control.AsyncSeq.dll</HintPath>
+    </Reference>
+    <Reference Include="FSharp.Control.Reactive">
+      <HintPath>..\..\packages\FSharp.Control.Reactive.3.5.0\lib\net45\FSharp.Control.Reactive.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Quantum.Primitives">
       <HintPath>..\..\packages\Microsoft.Quantum.Simulation.Simulators.0.6.6505.2537-alpha\lib\net461\Microsoft.Quantum.Primitives.dll</HintPath>
     </Reference>
@@ -137,6 +143,21 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Numerics" />
+    <Reference Include="System.Reactive.Core">
+      <HintPath>..\..\packages\System.Reactive.Core.3.0.0\lib\net46\System.Reactive.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Reactive.Interfaces">
+      <HintPath>..\..\packages\System.Reactive.Interfaces.3.0.0\lib\net45\System.Reactive.Interfaces.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Reactive.Linq">
+      <HintPath>..\..\packages\System.Reactive.Linq.3.0.0\lib\net46\System.Reactive.Linq.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Reactive.PlatformServices">
+      <HintPath>..\..\packages\System.Reactive.PlatformServices.3.0.0\lib\net46\System.Reactive.PlatformServices.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Reactive.Windows.Threading">
+      <HintPath>..\..\packages\System.Reactive.Windows.Threading.3.0.0\lib\net45\System.Reactive.Windows.Threading.dll</HintPath>
+    </Reference>
     <Reference Include="System.Runtime.InteropServices.RuntimeInformation">
       <HintPath>..\..\packages\System.Runtime.InteropServices.RuntimeInformation.4.3.0\lib\net45\System.Runtime.InteropServices.RuntimeInformation.dll</HintPath>
     </Reference>
@@ -174,6 +195,7 @@
       <Project>{2a1b0d78-2ce6-44db-bfa1-3575f3c36321}</Project>
       <Private>True</Private>
     </ProjectReference>
+    <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
