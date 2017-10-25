@@ -19,11 +19,16 @@ module H2PlottingDemo =
     open System.Windows
     open FSharp.Charting.ChartTypes
 
-    let estimateEnergies =
-        let qsim = QuantumSimulator()
+    let registerCallables (qsim : AbstractFactory<Operation>) =        
         qsim.Register(typeof<Microsoft.Quantum.Canon.Ceiling>, typeof<Microsoft.Quantum.Canon.Native.Ceiling>)
         qsim.Register(typeof<Microsoft.Quantum.Canon.ArcTan2>, typeof<Microsoft.Quantum.Canon.Native.ArcTan2>)
         qsim.Register(typeof<Microsoft.Quantum.Canon.ToDouble>, typeof<Microsoft.Quantum.Canon.Native.ToDouble>);
+
+    
+
+    let estimateEnergies =
+        let qsim = QuantumSimulator()
+        registerCallables qsim
 
         let H2EstimateEnergyRPE = qsim.Get(typeof<H2EstimateEnergyRPE>) :?> H2EstimateEnergyRPE
         let H2BondLengths = qsim.Get(typeof<H2BondLengths>) :?> H2BondLengths
@@ -41,7 +46,6 @@ module H2PlottingDemo =
         let data =
             asyncSeq {
                 for idxBond in [0..53] do
-                printfn "!"
                 yield bondLengths.[idxBond], (int64 >> estAtBondLength) idxBond
             }
             
@@ -57,6 +61,10 @@ module H2PlottingDemo =
                 estimateEnergies
                 |> AsyncSeq.toObservable
                 |> LiveChart.LineIncremental
+                |> fun chart ->
+                    chart
+                        .WithXAxis(Title = "Bond Length")
+                        .WithYAxis(Title = "Est. GS Energy (Ha)")
                 |> ChartControl
             
             let integrationHost = new Forms.Integration.WindowsFormsHost(Child = chart)
