@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="..\packages\Microsoft.Quantum.Simulation.Simulators.0.6.6502.40796-alpha\build\Microsoft.Quantum.Simulation.Simulators.props" Condition="Exists('..\packages\Microsoft.Quantum.Simulation.Simulators.0.6.6502.40796-alpha\build\Microsoft.Quantum.Simulation.Simulators.props')" />
+  <Import Project="..\packages\Microsoft.Quantum.Simulation.Simulators.0.6.6508.10610-alpha\build\Microsoft.Quantum.Simulation.Simulators.props" Condition="Exists('..\packages\Microsoft.Quantum.Simulation.Simulators.0.6.6508.10610-alpha\build\Microsoft.Quantum.Simulation.Simulators.props')" />
   <Import Project="..\packages\xunit.core.2.3.1-rc2-build3844\build\xunit.core.props" Condition="Exists('..\packages\xunit.core.2.3.1-rc2-build3844\build\xunit.core.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -34,17 +34,17 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.Quantum.Primitives, Version=0.6.6502.40766, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Quantum.Simulation.Simulators.0.6.6502.40796-alpha\lib\net461\Microsoft.Quantum.Primitives.dll</HintPath>
+    <Reference Include="Microsoft.Quantum.Primitives, Version=0.6.6508.10604, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Quantum.Simulation.Simulators.0.6.6508.10610-alpha\lib\net461\Microsoft.Quantum.Primitives.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Quantum.Simulation.Core, Version=0.6.6502.40761, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Quantum.Simulation.Simulators.0.6.6502.40796-alpha\lib\net461\Microsoft.Quantum.Simulation.Core.dll</HintPath>
+    <Reference Include="Microsoft.Quantum.Simulation.Core, Version=0.6.6508.10601, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Quantum.Simulation.Simulators.0.6.6508.10610-alpha\lib\net461\Microsoft.Quantum.Simulation.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Quantum.Simulation.Simulators, Version=0.6.6502.40796, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Quantum.Simulation.Simulators.0.6.6502.40796-alpha\lib\net461\Microsoft.Quantum.Simulation.Simulators.dll</HintPath>
+    <Reference Include="Microsoft.Quantum.Simulation.Simulators, Version=0.6.6508.10610, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Quantum.Simulation.Simulators.0.6.6508.10610-alpha\lib\net461\Microsoft.Quantum.Simulation.Simulators.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Quantum.Simulation.Tracer, Version=0.6.6502.40774, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Quantum.Simulation.Simulators.0.6.6502.40796-alpha\lib\net461\Microsoft.Quantum.Simulation.Tracer.dll</HintPath>
+    <Reference Include="Microsoft.Quantum.Simulation.Tracer, Version=0.6.6508.10609, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Quantum.Simulation.Simulators.0.6.6508.10610-alpha\lib\net461\Microsoft.Quantum.Simulation.Tracer.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -81,9 +81,9 @@
     </PropertyGroup>
     <Error Condition="!Exists('..\packages\xunit.core.2.3.1-rc2-build3844\build\xunit.core.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\xunit.core.2.3.1-rc2-build3844\build\xunit.core.props'))" />
     <Error Condition="!Exists('..\packages\xunit.core.2.3.1-rc2-build3844\build\xunit.core.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\xunit.core.2.3.1-rc2-build3844\build\xunit.core.targets'))" />
-    <Error Condition="!Exists('..\packages\Microsoft.Quantum.Simulation.Simulators.0.6.6502.40796-alpha\build\Microsoft.Quantum.Simulation.Simulators.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Quantum.Simulation.Simulators.0.6.6502.40796-alpha\build\Microsoft.Quantum.Simulation.Simulators.props'))" />
-    <Error Condition="!Exists('..\packages\Microsoft.Quantum.Simulation.Simulators.0.6.6502.40796-alpha\build\Microsoft.Quantum.Simulation.Simulators.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Quantum.Simulation.Simulators.0.6.6502.40796-alpha\build\Microsoft.Quantum.Simulation.Simulators.targets'))" />
+    <Error Condition="!Exists('..\packages\Microsoft.Quantum.Simulation.Simulators.0.6.6508.10610-alpha\build\Microsoft.Quantum.Simulation.Simulators.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Quantum.Simulation.Simulators.0.6.6508.10610-alpha\build\Microsoft.Quantum.Simulation.Simulators.props'))" />
+    <Error Condition="!Exists('..\packages\Microsoft.Quantum.Simulation.Simulators.0.6.6508.10610-alpha\build\Microsoft.Quantum.Simulation.Simulators.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Quantum.Simulation.Simulators.0.6.6508.10610-alpha\build\Microsoft.Quantum.Simulation.Simulators.targets'))" />
   </Target>
   <Import Project="..\packages\xunit.core.2.3.1-rc2-build3844\build\xunit.core.targets" Condition="Exists('..\packages\xunit.core.2.3.1-rc2-build3844\build\xunit.core.targets')" />
-  <Import Project="..\packages\Microsoft.Quantum.Simulation.Simulators.0.6.6502.40796-alpha\build\Microsoft.Quantum.Simulation.Simulators.targets" Condition="Exists('..\packages\Microsoft.Quantum.Simulation.Simulators.0.6.6502.40796-alpha\build\Microsoft.Quantum.Simulation.Simulators.targets')" />
+  <Import Project="..\packages\Microsoft.Quantum.Simulation.Simulators.0.6.6508.10610-alpha\build\Microsoft.Quantum.Simulation.Simulators.targets" Condition="Exists('..\packages\Microsoft.Quantum.Simulation.Simulators.0.6.6508.10610-alpha\build\Microsoft.Quantum.Simulation.Simulators.targets')" />
 </Project>
