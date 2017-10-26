@@ -36,8 +36,16 @@ namespace Microsoft.Quantum.Canon {
             let (idxGen, idxQubits) = generatorIndex
             let (idxPaulis, unused) = idxGen
             let pauliString = IntsToPaulis(idxPaulis)
-            let op = Exp(pauliString, delta, _)
+			if(Length(idxPaulis)>1){
+				let op = Exp(pauliString,1.0 * delta, _)
+            
             (RestrictToSubregisterCA(op, idxQubits))(qubits)
+			}
+			else{
+            let op = Exp(pauliString, -1.0 * delta, _)
+			
+            (RestrictToSubregisterCA(op, idxQubits))(qubits)
+			}
         }
         Adjoint auto
         Controlled auto
