@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26730.10
+VisualStudioVersion = 15.0.26730.16
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.Quantum.Canon", "Microsoft.Quantum.Canon\Microsoft.Quantum.Canon.csproj", "{2A1B0D78-2CE6-44DB-BFA1-3575F3C36321}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -20,10 +20,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Demos", "Demos", "{D245DA0C
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "H2PlottingDemo", "Demos\H2PlottingDemo\H2PlottingDemo.fsproj", "{73DE9730-9C8B-415F-9016-EB414CE1B3C7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TeleportDemo", "Demos\TeleportDemo\TeleportDemo.csproj", "{B88BE160-367F-43F1-BB56-8E21972D43D4}"
+EndProject
 Global
-	GlobalSection(Performance) = preSolution
-		HasPerformanceSessions = true
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Debug|ARM = Debug|ARM
@@ -83,15 +82,35 @@ Global
 		{73DE9730-9C8B-415F-9016-EB414CE1B3C7}.Release|x64.Build.0 = Release|Any CPU
 		{73DE9730-9C8B-415F-9016-EB414CE1B3C7}.Release|x86.ActiveCfg = Release|Any CPU
 		{73DE9730-9C8B-415F-9016-EB414CE1B3C7}.Release|x86.Build.0 = Release|Any CPU
+		{B88BE160-367F-43F1-BB56-8E21972D43D4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B88BE160-367F-43F1-BB56-8E21972D43D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B88BE160-367F-43F1-BB56-8E21972D43D4}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{B88BE160-367F-43F1-BB56-8E21972D43D4}.Debug|ARM.Build.0 = Debug|Any CPU
+		{B88BE160-367F-43F1-BB56-8E21972D43D4}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{B88BE160-367F-43F1-BB56-8E21972D43D4}.Debug|x64.Build.0 = Debug|Any CPU
+		{B88BE160-367F-43F1-BB56-8E21972D43D4}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{B88BE160-367F-43F1-BB56-8E21972D43D4}.Debug|x86.Build.0 = Debug|Any CPU
+		{B88BE160-367F-43F1-BB56-8E21972D43D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B88BE160-367F-43F1-BB56-8E21972D43D4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B88BE160-367F-43F1-BB56-8E21972D43D4}.Release|ARM.ActiveCfg = Release|Any CPU
+		{B88BE160-367F-43F1-BB56-8E21972D43D4}.Release|ARM.Build.0 = Release|Any CPU
+		{B88BE160-367F-43F1-BB56-8E21972D43D4}.Release|x64.ActiveCfg = Release|Any CPU
+		{B88BE160-367F-43F1-BB56-8E21972D43D4}.Release|x64.Build.0 = Release|Any CPU
+		{B88BE160-367F-43F1-BB56-8E21972D43D4}.Release|x86.ActiveCfg = Release|Any CPU
+		{B88BE160-367F-43F1-BB56-8E21972D43D4}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{73DE9730-9C8B-415F-9016-EB414CE1B3C7} = {D245DA0C-10F4-43C6-A140-72E18A138028}
+		{B88BE160-367F-43F1-BB56-8E21972D43D4} = {D245DA0C-10F4-43C6-A140-72E18A138028}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {8D6F3814-057A-4BA9-AB77-B336E30B24C2}
+	EndGlobalSection
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
 	EndGlobalSection
 	GlobalSection(Performance) = preSolution
 		HasPerformanceSessions = true

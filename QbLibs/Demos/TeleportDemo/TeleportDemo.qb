@@ -1,6 +1,10 @@
 ﻿namespace Microsoft.Quantum.Examples.TeleportDemo {
 	open Microsoft.Quantum.Primitive
 
+	operation Log(msg: String) : () {
+		Body {}
+	}
+
 	operation Teleport (message : Bool) : Bool {
         Body {
 			mutable measurement = false
@@ -28,6 +32,8 @@
 
 				// Check what message was sent.
 				if (M(target) == One) { set measurement = true }
+
+				Log("foo")
             }
 
 			return measurement
