@@ -114,11 +114,45 @@
                 AssertProb([Zpauli], [qubits[0]], Zero, 1.0, "Fail [Xpauli;Ipauli] [0;1]",  1e-10)
 
                 ResetAll(qubits)
-				Exp([Xpauli; Xpauli], 1.0 * step, qubits[0..1])
-              
-                AssertProb([Zpauli], [qubits[0]], One, SinSquared(step), "Fail [Xpauli;Ipauli] [0;1]",  1e-10)
+				Exp([Xpauli; Xpauli], 1.0 * step, qubits[0..1])              
+                AssertProb([Zpauli], [qubits[0]], One, SinSquared(step), "Fail [Xpauli;Xpauli] [0;1]",  1e-10)
 				ResetAll(qubits)
-				
+
+                //FIXME this should succed with prob SinSquared(1.0 * step)
+                H(qubits[0])
+                Exp([Zpauli; Zpauli], 1.0 * step, qubits[0..1])  
+                H(qubits[0])
+                AssertProb([Zpauli], [qubits[0]], One, SinSquared(0.5 * step), "Fail [Zpauli;Zpauli] [0;1]",  1e-10)
+                ResetAll(qubits)
+	
+                //FIXME this should succed with prob SinSquared(1.0 * step)
+                H(qubits[0])
+                Exp([Zpauli; Zpauli; Zpauli], 1.0 * step, qubits[0..2])  
+                H(qubits[0])
+                AssertProb([Zpauli], [qubits[0]], One, SinSquared(0.5 * step), "Fail [Zpauli;Zpauli;Zpauli] [0;1;2]",  1e-10)
+                ResetAll(qubits)
+
+                H(qubits[0])
+                Exp([Zpauli; Zpauli; Zpauli; Xpauli], 1.0 * step, qubits[0..3])  
+                H(qubits[0])
+                AssertProb([Zpauli], [qubits[0]], One, SinSquared( step), "Fail [Zpauli;Zpauli;Zpauli;Xpauli] [0;1;2]",  1e-10)
+                ResetAll(qubits)
+                                
+                H(qubits[0])
+                Exp([Zpauli; Xpauli;Zpauli], 1.0 * step, qubits[0..2])  
+                H(qubits[0])
+                AssertProb([Zpauli], [qubits[0]], One, SinSquared(1.0 * step), "Fail [Zpauli;Xpauli;Zpauli] [0;1;2]",  1e-10)
+                ResetAll(qubits)
+                                
+                H(qubits[0])
+                Exp([Zpauli; Xpauli;Xpauli], 1.0 * step, qubits[0..2])  
+                H(qubits[0])
+                AssertProb([Zpauli], [qubits[0]], One, SinSquared(1.0 * step), "Fail [Zpauli;Xpauli;Xpauli] [0;1;2]",  1e-10)
+                ResetAll(qubits)
+
+                Exp([Xpauli; Zpauli;Zpauli], 1.0 * step, qubits[0..2])  
+                AssertProb([Zpauli], [qubits[0]], One, SinSquared(1.0 * step), "Fail [Xpauli;Zpauli;Zpauli] [0;1;2]",  1e-10)
+                ResetAll(qubits)
                 
                 Exp([Ipauli; Xpauli], 1.0 * step, qubits[0..1])
                 Exp([Xpauli], -step, [qubits[1]])
