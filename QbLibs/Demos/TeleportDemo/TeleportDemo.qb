@@ -1,0 +1,45 @@
+﻿namespace Microsoft.Quantum.Examples.TeleportDemo {
+	open Microsoft.Quantum.Primitive
+
+	operation Teleport (message : Bool) : Bool {
+        Body {
+			mutable measurement = false
+
+            // Get a temporary qubit for the Bell pair
+            using (register = Qubit[3]) {
+				let source = register[0]
+				let target = register[1]
+                let ancilla = register[2]
+
+				if (message) {
+					X(source)
+				}
+            
+                // Create a Bell pair between the temporary qubit and the target
+                H(ancilla)
+                CNOT(ancilla, target)
+            
+                // Perform the Bell measurement and the correction necessary to reconstruct the input state as the target state
+                CNOT(source, ancilla)
+                H(source)
+
+                // Note that MResetZ makes sure that source is returned to zero state
+                if (M(source) == One) {
+                    Z(target)
+                }
+
+                // Note that MResetZ makes sure that ancilla is returned to zero state
+				if (M(ancilla) == One) {
+                    X(target)
+                }
+
+				if (M(target) == One) {
+					set measurement = true
+				}
+
+            }
+
+			return measurement
+		}
+	}
+}
