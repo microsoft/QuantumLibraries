@@ -210,8 +210,35 @@
                 AssertProb([Zpauli], [qubits[6]], One, SinSquared(0.0*step), "Fail [Ipauli;Xpauli;Ipauli;Ypauli;Xpauli;Ipauli;Zpauli] [6]",  1e-10)
                 ResetAll(qubits)
 
-               
+                H(qubits[0])
+                Exp([Zpauli], ToDouble(1), [qubits[0]])
+                Exp([Xpauli], ToDouble(1), [qubits[0]])
+                AssertProb([Zpauli], [qubits[0]], One, 0.0865891, "Fail Sign H. Z . X",  1e-4)
                 
+                // This will not catch a sign error if both Assert ZZ and Exp ZZ have the wrong sign
+                ResetAll(qubits)
+                H(qubits[0])
+                H(qubits[1])
+                Exp([Zpauli;Zpauli], ToDouble(1), qubits[0..1])
+                Exp([Xpauli], ToDouble(1), [qubits[0]])
+                AssertProb([Zpauli;Zpauli], qubits[0..1], One, 0.0865891, "Fail Sign HH. ZZ . X",  1e-4)
+
+                // This will not catch a sign error if both Assert ZZ and Exp XX have the wrong sign                
+                ResetAll(qubits)
+                Exp([Xpauli;Xpauli], ToDouble(1), qubits[0..1])
+                Exp([Zpauli], ToDouble(1), [qubits[0]])
+                H(qubits[0])
+                H(qubits[1])
+                AssertProb([Zpauli;Zpauli], qubits[0..1], One, 0.0865891, "Fail Sign  XX . Z . HH",  1e-4)
+ 
+                // This should catch a sign error if both Assert Z and Exp ZZ have different signs
+                ResetAll(qubits)
+                Exp([Ypauli], ToDouble(1), [qubits[0]])
+                Exp([Zpauli;Zpauli], ToDouble(1), qubits[0..1])
+                Exp([Xpauli], ToDouble(1), [qubits[0]])
+                AssertProb([Zpauli], qubits[0..0], One, 0.789324, "Fail Sign Y. ZZ . X",  1e-4)
+                
+
 
             }
         }
