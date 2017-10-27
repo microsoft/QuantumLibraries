@@ -36,7 +36,7 @@ module H2PlottingDemo =
         let estAtBondLength idx =
             [0..3]
             |> Seq.map (fun idxRep ->
-                    H2EstimateEnergyRPE.Body.Invoke (struct (idx, int64 6, float 1))
+                    H2EstimateEnergyRPE.Body.Invoke (struct (idx, int64 8, float 1.0))
                 )
             |> Seq.min
 
