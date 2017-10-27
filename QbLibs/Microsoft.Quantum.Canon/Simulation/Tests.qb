@@ -75,10 +75,24 @@
     /// summary:
     ///     Applies Exp(…) to states for which its action is known a priori
     ///     and asserts that the correct result is obtained.
-    operation ExpKnownStateTest() : () {
+    operation ExpZKnownStateTest() : () {
         Body {
             // exp{+i π Z / 3} |+〉
             ExpKnownStateTestHelper(Zpauli, Pi() / 3.0, (Complex(0.35355339059327384, 0.6123724356957946), Complex(0.35355339059327384, -0.6123724356957946)), H)
+        }
+    }
+
+    operation ExpXKnownStateTest() : () {
+        Body {
+            // exp{+i π X / 3} |0〉
+            ExpKnownStateTestHelper(Xpauli, Pi() / 3.0, (Complex(0.5, 0.0), Complex(0.0, 0.8660254037844387)), I)
+        }
+    }
+
+    operation ExpYKnownStateTest() : () {
+        Body {
+            // exp{+i π Y / 3} |0〉
+            ExpKnownStateTestHelper(Ypauli, Pi() / 3.0, (Complex(0.5, 0.0), Complex(-0.8660254037844387, 0.0)), I)
         }
     }
 
