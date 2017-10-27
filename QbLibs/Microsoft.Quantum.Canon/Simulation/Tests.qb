@@ -96,6 +96,60 @@
         }
     }
 
+    /// summary:
+    ///     Conditioned on the state |+0〉, evolving under H = ZZ and H = ZI
+    ///     should give the same final state. This test checks that condition.
+    operation ExpZZMatchesExpZTest() : () {
+        Body {
+            using (register = Qubit[2]) {
+                let ket0 = (Complex(1.0, 0.0), Complex(0.0, 0.0))
+                let angle = Pi() * 5.0 / 7.0
+                H(register[0])
+                Exp([Zpauli; Zpauli], angle, register)
+                Exp([Zpauli; Ipauli], -angle, register)
+                H(register[0])
+                ApplyToEach(AssertQubitState(ket0, _, 1e-5), register)
+            }
+        }
+    }
+
+    /// summary:
+    ///     Checks whether evolution under ZZ agrees with evolution
+    ///     under XI up to appropriate Hadamard applications.
+    operation ExpZZMatchesExpXTest() : () {
+        Body {
+            using (register = Qubit[2]) {
+                let ket0 = (Complex(1.0, 0.0), Complex(0.0, 0.0))
+                let angle = Pi() * 5.0 / 7.0
+                H(register[0])
+                Exp([Zpauli; Zpauli], angle, register)
+                H(register[0])
+                Exp([Xpauli; Ipauli], -angle, register)
+                ApplyToEach(AssertQubitState(ket0, _, 1e-5), register)
+            }
+        }
+    }
+    
+
+    /// summary:
+    ///     Checks whether evolution under XX agrees with evolution
+    ///     under ZI up to appropriate Hadamard applications.
+    operation ExpXXMatchesExpZTest() : () {
+        Body {
+            using (register = Qubit[2]) {
+                let ket0 = (Complex(1.0, 0.0), Complex(0.0, 0.0))
+                let angle = Pi() * 5.0 / 7.0
+                H(register[1])
+                Exp([Xpauli; Xpauli], angle, register)
+                H(register[1])
+                H(register[0])
+                Exp([Zpauli; Ipauli], -angle, register)
+                H(register[0])
+                ApplyToEach(AssertQubitState(ket0, _, 1e-5), register)
+            }
+        }
+    }
+
     operation EvolutionSetPauliTest() : () {
         Body {
 
