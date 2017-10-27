@@ -9,7 +9,7 @@
     // Terms and coefficients from "Scalable Quantum Simulation of Molecular Energies,"
     // O'Malley et. al. https://arxiv.org/abs/1512.06860.
     
-    // H ≔ a₀ ZI + a₁ IZ + a₂ ZZ + a₃ YY + a₄ XX
+    // H ≔ a II + b₀ ZI + b₁ IZ + b₂ ZZ + b₃ YY + b₄ XX
 
 	/////////////////////////////////////////////////////////////////////////////
 	// Hamiltonian Definition ///////////////////////////////////////////////////

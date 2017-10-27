@@ -129,7 +129,7 @@ module H2PlottingDemo =
                         .WithXAxis(Title = "BOND LENGTH", TitleFontName="Segoe UI Semibold", TitleFontSize = 24.0)
                         .WithYAxis(Title = "ENERGY", TitleFontName="Segoe UI Semibold", TitleFontSize = 24.0)
                         .WithLegend(FontSize = 24.0, FontName = "Segoe UI")
-                        .WithTitle("H₂ Ground State Energy", FontName="Segoe UI", FontSize = 24.0)
+                        .WithTitle("H₂", FontName="Segoe UI", FontSize = 24.0)
                 |> ChartControl
             
             let integrationHost = new Forms.Integration.WindowsFormsHost(Child = chart)
