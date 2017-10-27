@@ -1,0 +1,42 @@
+﻿namespace Microsoft.Quantum.Examples.TeleportDemo {
+	open Microsoft.Quantum.Primitive
+
+	operation Log(msg: String) : () {
+		Body {}
+	}
+
+	operation Teleport (message : Bool) : Bool {
+        Body {
+			mutable measurement = false
+
+            using (register = Qubit[3]) {
+				// Ask for some qubits that we can use to teleport.
+				let source = register[0]
+				let target = register[1]
+                let ancilla = register[2]
+
+				// Encode the message we want to send.
+				if (message) { X(source) }
+            
+                // Create some entanglement that we can use to send our message.
+                H(ancilla)
+                CNOT(ancilla, target)
+            
+                // Move our message into the entangled pair.
+                CNOT(source, ancilla)
+                H(source)
+
+                // Measure out the entanglement.
+                if (M(source) == One)  { Z(target) }
+				if (M(ancilla) == One) { X(target) }
+
+				// Check what message was sent.
+				if (M(target) == One) { set measurement = true }
+
+				Log("foo")
+            }
+
+			return measurement
+		}
+	}
+}

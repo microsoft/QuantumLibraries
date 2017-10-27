@@ -58,7 +58,7 @@
     }
 
     operation EvolutionSetPauliTest() : () {
-        Body{
+        Body {
 
             let step = 0.12483
             let e = [1.0]
