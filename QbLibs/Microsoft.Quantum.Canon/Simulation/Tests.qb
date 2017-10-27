@@ -51,10 +51,35 @@
         Adjoint auto
     }
 
-    function SinSquared(theta:Double) : Double{
+    function SinSquared(theta : Double) : Double {
         let amp = Sin(theta)
         let prob = amp * amp
         return prob
+    }
+
+    operation ExpKnownStateTestHelper(pauli : Pauli, angle : Double, expected : (Complex, Complex), preparation : (Qubit => ())) : () {
+    
+        Body {
+            using (register = Qubit[1]) {
+                let qubit = register[0]
+
+                preparation(qubit)
+                Exp([pauli], angle, register)
+                AssertQubitState(expected, qubit, 1e-5)
+                Reset(qubit)
+            }
+        }
+
+    }
+
+    /// summary:
+    ///     Applies Exp(…) to states for which its action is known a priori
+    ///     and asserts that the correct result is obtained.
+    operation ExpKnownStateTest() : () {
+        Body {
+            // exp{+i π Z / 3} |+〉
+            ExpKnownStateTestHelper(Zpauli, Pi() / 3.0, (Complex(0.35355339059327384, 0.6123724356957946), Complex(0.35355339059327384, -0.6123724356957946)), H)
+        }
     }
 
     operation EvolutionSetPauliTest() : () {
