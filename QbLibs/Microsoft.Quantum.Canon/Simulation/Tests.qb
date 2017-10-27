@@ -263,12 +263,33 @@
                 Exp([Xpauli], ToDouble(1), [qubits[0]])
                 AssertProb([Zpauli], qubits[0..0], One, 0.789324, "Fail Sign Y. ZZ . X",  1e-4)
                 
-
+                ResetAll(qubits)
 
             }
         }
     }
 
+    operation ZZequalXX(qubits : Qubit[], gate: Int): (){
+        Body{
+            if(gate == 0){
+                H(qubits[0])
+                H(qubits[1])
+                Exp([Zpauli;Zpauli], ToDouble(1), qubits[0..1])
+                H(qubits[0])
+                H(qubits[1])
+            }
+            else{
+                Exp([Xpauli;Xpauli], ToDouble(1), qubits[0..1])
+            }
+        }
+ 
+        Adjoint auto
+    }
+    operation ZZequalXXTest(): (){
+        Body{
+        AssertOperationsEqualReferenced(ZZequalXX(_,0),ZZequalXX(_,1), 2)
+        }
+    }
     //Converts a real value to a probability
     // FIXME: document this operation, rename to make it clear what it does,
     //        and move it to where it needs to be.
