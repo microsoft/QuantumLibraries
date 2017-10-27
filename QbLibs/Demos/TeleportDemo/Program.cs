@@ -10,10 +10,11 @@ namespace Microsoft.Quantum.Examples.TeleportDemo
             var sim = new QuantumSimulator();
             var rand = new System.Random();
 
-            foreach (var idxRun in Enumerable.Range(0, 10)) {
-                var message = rand.Next(2) == 0;
-                var task = Teleport.Run(sim, message);
-                System.Console.WriteLine($"{message} =====> {task.GetAwaiter().GetResult()}\n");
+            foreach (var idxRun in Enumerable.Range(0, 8)) {
+                var sent = rand.Next(2) == 0;
+                var recieved = Teleport.Run(sim, sent).Result;
+                System.Console.WriteLine($"Round {idxRun}:\tSent {sent},\tgot {recieved}.");
+                System.Console.WriteLine(sent == recieved ? "Teleportation successful!!\n" : "\n");
             }
 
             System.Console.ReadLine();

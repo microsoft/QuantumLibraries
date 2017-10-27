@@ -126,8 +126,8 @@ module H2PlottingDemo =
                 Chart.Combine([estEnergyChart; theoryChart])
                 |> fun chart ->
                     chart
-                        .WithXAxis(Title = "Bond Length", TitleFontName="Segoe UI", TitleFontSize = 24.0)
-                        .WithYAxis(Title = "GS Energy (Ha)", TitleFontName="Segoe UI", TitleFontSize = 24.0)
+                        .WithXAxis(Title = "BOND LENGTH", TitleFontName="Segoe UI Semibold", TitleFontSize = 24.0)
+                        .WithYAxis(Title = "ENERGY", TitleFontName="Segoe UI Semibold", TitleFontSize = 24.0)
                         .WithLegend(FontSize = 24.0, FontName = "Segoe UI")
                         .WithTitle("H₂ Ground State Energy", FontName="Segoe UI", FontSize = 24.0)
                 |> ChartControl
