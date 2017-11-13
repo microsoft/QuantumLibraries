@@ -1,4 +1,7 @@
-﻿namespace Microsoft.Quantum.Examples.Teleportation {
+// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License.
+
+namespace Microsoft.Quantum.Examples.Teleportation {
 	open Microsoft.Quantum.Primitive;
 
     //////////////////////////////////////////////////////////////////////////
@@ -14,7 +17,7 @@
     // We approach teleportation in two steps. First, we define how to
     // teleport the state of a qubit to another qubit. To do so, we define
     // teleportation as an operation, one of the fundamental building blocks
-    // of a Q♯ program.
+    // of a Q? program.
 
     // Most operations which act on qubits to modify their state in some way
     // will not return any useful information to the caller. We represent this
@@ -30,7 +33,7 @@
     /// ## msg
     /// A qubit whose state we wish to send.
     /// ## there
-    /// A qubit intitially in the |0〉 state that we want to send
+    /// A qubit intitially in the |0> state that we want to send
     /// the state of msg to.
 	operation Teleport(msg : Qubit, there : Qubit) : () {
         body {
@@ -65,7 +68,7 @@
     /// # Input
     /// ## message
     /// If `true`, the source qubit (`here`) is prepared in the
-    /// |1〉 state, otherwise the source qubit is prepared in |0〉.
+    /// |1> state, otherwise the source qubit is prepared in |0>.
     ///
     /// ## Output
     /// The result of a Z-basis measurement on the teleported qubit,
@@ -94,12 +97,12 @@
 	}
 
     /// # Summary
-    /// Uses teleportation to send a qubit in the state R_x(φ) |0〉
-    /// for some φ ∈ [0, 2π), and fails if the state is not sent successfully.
+    /// Uses teleportation to send a qubit in the state R_x(f) |0>
+    /// for some f ? [0, 2p), and fails if the state is not sent successfully.
     ///
     /// # Input
     /// ## message
-    /// An angle φ by which the inititial state |0〉 is to be rotated before sending.
+    /// An angle f by which the inititial state |0> is to be rotated before sending.
     ///
     /// The result of a Z-basis measurement on the teleported qubit,
     /// represented as a Bool.

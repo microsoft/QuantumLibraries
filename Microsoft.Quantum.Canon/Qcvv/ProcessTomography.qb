@@ -1,4 +1,7 @@
-﻿namespace Microsoft.Quantum.Canon {
+// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License.
+
+namespace Microsoft.Quantum.Canon {
     open Microsoft.Quantum.Primitive;
     open Microsoft.Quantum.Extensions.Convert;
     open Microsoft.Quantum.Extensions.Math;
@@ -60,8 +63,8 @@
 
     /// summary:
     ///     Given two registers, prepares the maximally entangled state
-    ///     |β₀₀〉〈β₀₀| between each pair of qubits on the respective registers,
-    ///     assuming that each register starts in the |0…0〉 state.
+    ///     |�00><�00| between each pair of qubits on the respective registers,
+    ///     assuming that each register starts in the |0�0> state.
     operation PrepareEntangledState(left : Qubit[], right : Qubit[]) : () {
         body {
             if (Length(left) != Length(right)) {
@@ -80,7 +83,7 @@
     }
 
     /// summary:
-    ///     Prepares the Choi–Jamiłkowski state for a given operation onto given reference
+    ///     Prepares the Choi�Jamilkowski state for a given operation onto given reference
     ///     and target registers.
     operation PrepareChoiStateCA(op : (Qubit[] => () : Controlled, Adjoint), reference : Qubit[], target : Qubit[]) : () {
         body {

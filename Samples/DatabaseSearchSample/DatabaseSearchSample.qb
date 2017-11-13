@@ -1,4 +1,7 @@
-﻿namespace Microsoft.Quantum.Samples.DatabaseSearch {
+// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License.
+
+namespace Microsoft.Quantum.Samples.DatabaseSearch {
     open Microsoft.Quantum.Primitive;
     open Microsoft.Quantum.Extensions.Convert;
     open Microsoft.Quantum.Extensions.Math;
@@ -16,12 +19,12 @@
 
     // We will model the database by an oracle D that acts to map indices
     // to a flag indicating whether a given index is marked. In particular,
-    // let |z〉 be a single-qubit computational basis state (that is, either
-    // |0〉 or |1〉, and let |k〉 be a state representing an index k ∈ {0, 1, 
-    // …, N }. Then
-    //     D |z〉 |k〉 = |z ⊕ x_k〉 |k〉,
-    // where x = x₀ x₁ … x_{N - 1} is a binary string such that x_k is 1
-    // if and only if the kth item is marked, and where ⊕ is the classical
+    // let |z> be a single-qubit computational basis state (that is, either
+    // |0> or |1>, and let |k> be a state representing an index k ? {0, 1, 
+    // �, N }. Then
+    //     D |z> |k> = |z ? x_k> |k>,
+    // where x = x0 x1 � x_{N - 1} is a binary string such that x_k is 1
+    // if and only if the kth item is marked, and where ? is the classical
     // exclusive OR gate. Note that given this definition, we know how D
     // transforms arbitrary states by linearity.
 
@@ -272,7 +275,7 @@
     /// - idxFlagQubit: Index into the given register of the qubit to be used as a flag.
     /// - qubits: A register for the database and the flag qubit.
     /// remarks: 
-    ///     On input |0〉_f|0〉_d, this prepares the state |1〉_f|marked〉_d with amplitude Sin((2*nIterations + 1) ArcSin(Sqrt(M/N))).
+    ///     On input |0>_f|0>_d, this prepares the state |1>_f|marked>_d with amplitude Sin((2*nIterations + 1) ArcSin(Sqrt(M/N))).
     function GroverSearch( markedElements: Int[], nIterations: Int, idxFlagQubit: Int) : (Qubit[] => () : Adjoint, Controlled)
     {
         return AmpAmpByOracle(nIterations, GroverStatePrepOracle(markedElements), idxFlagQubit);

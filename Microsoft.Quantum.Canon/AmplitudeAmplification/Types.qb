@@ -1,25 +1,28 @@
-﻿namespace Microsoft.Quantum.Canon {
+// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License.
+
+namespace Microsoft.Quantum.Canon {
 	open Microsoft.Quantum.Primitive;
 
 	/// summary:
 	///     Represents a reflection oracle.
 	/// remarks:
-	///     This oracle O = I - (1 - e^(- i ϕ)) |ψ〉〈ψ| performs a partial
-	///     reflection by a phase ϕ about a single pure state |ψ〉.
+	///     This oracle O = I - (1 - e^(- i ?)) |?><?| performs a partial
+	///     reflection by a phase ? about a single pure state |?>.
 	/// params:
 	/// - The operation implementing the given reflection.
-	///     - The phase ϕ by which to rotate the reflected subspace.
-	///     - The qubit register on which to perform the given reflection〉.
+	///     - The phase ? by which to rotate the reflected subspace.
+	///     - The qubit register on which to perform the given reflection>.
 	newtype ReflectionOracle = ((Double, Qubit[]) => (): Adjoint, Controlled);
 
-	///This oracle O|s>_a|ψ>_s = λ |t>_a U |ψ>_s + ... acts on the ancilla state |s>_a to implement the unitary U on any system state |ψ>_s with amplitude λ in the |t>_a basis.
+	///This oracle O|s>_a|?>_s = ? |t>_a U |?>_s + ... acts on the ancilla state |s>_a to implement the unitary U on any system state |?>_s with amplitude ? in the |t>_a basis.
 
 	/// <summary>
 	/// Represents an oracle for oblivious amplitude amplification.
 	/// </summary>
 	/// <remarks> 
-	/// This oracle defined by O|s>_a|ψ>_s = λ |t>_a U |ψ>_s + ... acts on the ancilla state |s>_a to implement the unitary U on any system state |ψ>_s with amplitude λ in the |t>_a basis.
-	/// The first parameter is the qubit register of |s>_a. The second parameter is the qubit register of |ψ>_s.
+	/// This oracle defined by O|s>_a|?>_s = ? |t>_a U |?>_s + ... acts on the ancilla state |s>_a to implement the unitary U on any system state |?>_s with amplitude ? in the |t>_a basis.
+	/// The first parameter is the qubit register of |s>_a. The second parameter is the qubit register of |?>_s.
 	/// </remarks>
 	newtype ObliviousOracle = ((Qubit[], Qubit[]) => (): Adjoint, Controlled);
 
@@ -27,7 +30,7 @@
 	/// Represents an oracle for state preparation.
 	/// </summary>
 	/// <remarks> 
-	///This oracle defined by O|0>_f|0>_s = λ |1>_f |ψ>_s + ... acts on the on computational basis state |0>_f|0>_s to create the system state |ψ>_s with amplitude λ in the basis flagged by |1>_f.
+	///This oracle defined by O|0>_f|0>_s = ? |1>_f |?>_s + ... acts on the on computational basis state |0>_f|0>_s to create the system state |?>_s with amplitude ? in the basis flagged by |1>_f.
 	/// The first parameter is an index to the qubit register of |0>_f. The second parameter encompassed both registers.
 	/// </remarks>
 	newtype StateOracle = ((Int, Qubit[]) => (): Adjoint, Controlled);
@@ -36,8 +39,8 @@
 	/// Represents an oracle for deterministic state preparation.
 	/// </summary>
 	/// <remarks> 
-	///This oracle defined by O|0> = |ψ> acts on the on computational basis state |0> to create the state |ψ>.
-	/// The first parameter is the qubit register of |ψ>.
+	///This oracle defined by O|0> = |?> acts on the on computational basis state |0> to create the state |?>.
+	/// The first parameter is the qubit register of |?>.
 	/// </remarks>
 	newtype DeterministicStateOracle = (Qubit[] => (): Adjoint, Controlled);
 

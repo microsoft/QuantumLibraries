@@ -1,4 +1,7 @@
-﻿namespace Microsoft.Quantum.Canon {
+// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License.
+
+namespace Microsoft.Quantum.Canon {
     open Microsoft.Quantum.Primitive;
 
 	/////////////////////////////////////////////////////////////////////////////
@@ -9,7 +12,7 @@
     // Terms and coefficients from "Scalable Quantum Simulation of Molecular Energies,"
     // O'Malley et. al. https://arxiv.org/abs/1512.06860.
     
-    // H ≔ a II + b₀ ZI + b₁ IZ + b₂ ZZ + b₃ YY + b₄ XX
+    // H ? a II + b0 ZI + b1 IZ + b2 ZZ + b3 YY + b4 XX
 
 	/////////////////////////////////////////////////////////////////////////////
 	// Hamiltonian Definition ///////////////////////////////////////////////////
@@ -91,11 +94,11 @@
 
     /// summary:
 	///     Given an index, returns a description of the correponding
-	///     term in the Hamiltonian for H₂. Each term is described by
+	///     term in the Hamiltonian for H2. Each term is described by
 	///     a pair of integer arrays representing a sparse Pauli operator.
 	/// example:
 	///		```
-	///         // Returns ([3], [0]), to represent H₀ ≔ Z₀.
+	///         // Returns ([3], [0]), to represent H0 ? Z0.
 	///         let (idxsPaulis, idxsQubits) = H2Terms(0)
 	///     ```
     function H2Terms(idxHamiltonian : Int) : (Int[], Int[])
@@ -166,7 +169,7 @@
 	// sparse-Pauli representation into the appropriate decomposition.
 
     /// summary:
-	///     Represents a term in the H₂ Hamiltonian for a particular bond
+	///     Represents a term in the H2 Hamiltonian for a particular bond
 	///     length using the GeneratorTerm type from Canon.
     function H2GeneratorIndex(idxBondLength : Int, idxHamiltonian : Int) : GeneratorIndex
     {
@@ -189,7 +192,7 @@
     }
 
 	/// summary:
-	///     We finish our description of the H₂ Hamiltonian for a
+	///     We finish our description of the H2 Hamiltonian for a
 	///     given bond length by specifying that we wish to use
 	///     the above description with the PauliEvolutionSet.
 	///
@@ -204,7 +207,7 @@
 	/// summary:
 	///     We now provide Canon's Hamiltonian simulation
 	///     functions with the above representaiton to automatically
-	///     decompose the H₂ Hamiltonian into an appropriate operation
+	///     decompose the H2 Hamiltonian into an appropriate operation
 	///     that we can apply to qubits as we please.
     operation H2TrotterStep(idxBondLength : Int, trotterOrder: Int, trotterStepSize: Double, qubits: Qubit[]): () {
         body {
@@ -217,8 +220,8 @@
     }
 
     /// summary:
-	///     Prepares the an approximation to the H₂ ground state,
-	///     assuming an initial state of |00〉.
+	///     Prepares the an approximation to the H2 ground state,
+	///     assuming an initial state of |00>.
     operation H2StatePrep(q : Qubit[]) : ()
     {
         body {

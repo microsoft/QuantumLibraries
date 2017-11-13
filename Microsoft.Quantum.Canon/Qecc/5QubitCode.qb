@@ -1,4 +1,7 @@
-﻿namespace Microsoft.Quantum.Canon {
+// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License.
+
+namespace Microsoft.Quantum.Canon {
     open Microsoft.Quantum.Primitive;
 
     /// <summary>
@@ -35,7 +38,7 @@
     }
 
     /// <summary>
-    ///     Table lookup decoder for the ⟦5, 1, 3⟧ quantum code.
+    ///     Table lookup decoder for the ?5, 1, 3? quantum code.
     /// </summary>
     /// <remark> By iterating over all errors of weight 1, we obtain a total of 3*5=15 possible non-trivial syndromes. 
     ///    Together with the identity, a table of error and corresponding syndrom is built up. For the 5qubit code  
@@ -66,7 +69,7 @@
     }
 
     /// <summary>
-    ///     Encodes into the ⟦5, 1, 3⟧ quantum code. 
+    ///     Encodes into the ?5, 1, 3? quantum code. 
     /// </summary>
     /// <param name="physRegister">An array of qubits representing an unencoded state.</param>
     /// <param name="auxQubits">A register of auxillary qubits that will be used to represent the encoded state.</param>
@@ -101,7 +104,7 @@
     }
 
     /// <summary>
-    ///     Returns a QECC value representing the ⟦5, 1, 3⟧ code encoder and
+    ///     Returns a QECC value representing the ?5, 1, 3? code encoder and
     ///     decoder with in-place syndrome measurement.
     /// </summary>
     operation  FiveQubitCode()  : QECC

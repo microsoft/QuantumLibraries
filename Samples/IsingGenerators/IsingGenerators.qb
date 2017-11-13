@@ -1,4 +1,7 @@
-﻿namespace Microsoft.Quantum.Samples.Ising {
+// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License.
+
+namespace Microsoft.Quantum.Samples.Ising {
     open Microsoft.Quantum.Extensions.Convert;
     open Microsoft.Quantum.Primitive;
     open Microsoft.Quantum.Canon;
@@ -15,8 +18,8 @@
     
     // We will begin by constructing a representation of the 1D transverse
     // Ising model Hamiltonian,
-    //     H = - J₀ Z₀ Z₁ + J₁ Z₁ Z₂ + … - hₓ (X₀ + X₁ + …),
-    // where {Jᵢ} are nearest-neighbor couplings, and where hₓ is a
+    //     H = - J0 Z0 Z1 + J1 Z1 Z2 + � - h? (X0 + X1 + �),
+    // where {J?} are nearest-neighbor couplings, and where h? is a
     // transverse field.
 
     // Since this Hamiltonian is naturally expressed in the Pauli basis,

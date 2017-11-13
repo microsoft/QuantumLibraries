@@ -1,4 +1,7 @@
-﻿namespace Microsoft.Quantum.Canon {
+// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License.
+
+namespace Microsoft.Quantum.Canon {
 	open Microsoft.Quantum.Primitive;
 
 	// Functions here may be commonly used in other libraries and could be made global.
@@ -107,7 +110,7 @@
 	}
 
 	/// <summary>
-	/// Constructs reflection about a some state |ψ> from the oracle of type "DeterministicStateOracle" where O|0> = |ψ>
+	/// Constructs reflection about a some state |?> from the oracle of type "DeterministicStateOracle" where O|0> = |?>
 	/// </summary>
 	/// <param name = "phase"> Phase of partial reflection </param>
 	/// <param name = "oracle"> Oracle of type "DeterministicStateOracle" </param>

@@ -1,4 +1,7 @@
-﻿// One aspect at a time in each example. Keep it focused on one message. e.g. Ising for different coupling. Ising for different annealing times. Ising for different representation
+// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License.
+
+// One aspect at a time in each example. Keep it focused on one message. e.g. Ising for different coupling. Ising for different annealing times. Ising for different representation
 
 namespace Microsoft.Quantum.Samples.SimpleIsing {
     open Microsoft.Quantum.Primitive;
@@ -21,9 +24,9 @@ namespace Microsoft.Quantum.Samples.SimpleIsing {
     // In this example, we will show how to simulate the time evolution of
     // an Ising model under a transverse field,
     //
-    //     H(s) ≔ s [J Σ'ᵢⱼ Zᵢ Zⱼ + hz Σᵢ Zᵢ] + (1 - s) + hx Σᵢ Xᵢ
+    //     H(s) ? s [J S'?? Z? Z? + hz S? Z?] + (1 - s) + hx S? X?
     //
-    // where the primed summation Σ' is taken only over nearest-neighbors,
+    // where the primed summation S' is taken only over nearest-neighbors,
     // and where s is a parameter in the interval [0, 1] that controls the
     // sweep to the final Hamiltonian.
 
@@ -31,11 +34,11 @@ namespace Microsoft.Quantum.Samples.SimpleIsing {
     //        Rz and Exp!
 
     // We do so by first defining an operation which will rotate a pair of
-    // qubits (q₁, q₂) by an angle φ around ZZ,
+    // qubits (q1, q2) by an angle f around ZZ,
     //
-    //    U(φ) = e^{i φ Z₁ Z₂}.
+    //    U(f) = e^{i f Z1 Z2}.
     //
-    // In terms of the primitive gates defined by Q♭, we can write
+    // In terms of the primitive gates defined by Q?, we can write
     // this by conjugating an Rz rotation by CNOTs. Later, we will see
     // how this can be written more compactly using operations and functions
     // from the canon, and how to use other primitive operations to
@@ -65,8 +68,8 @@ namespace Microsoft.Quantum.Samples.SimpleIsing {
     }
 
     // With this operation in place, we can now decompose evolution
-    // under the full Hamiltonian H given above using the Trotter–Suzuki
-    // decomposition. For simplicity, we'll use the first-oder Trotter–Suzuki
+    // under the full Hamiltonian H given above using the Trotter�Suzuki
+    // decomposition. For simplicity, we'll use the first-oder Trotter�Suzuki
     // decomposition; higher orders can be written easily using the flow control
     // and generator representation operations provided with the canon.
 
@@ -100,10 +103,10 @@ namespace Microsoft.Quantum.Samples.SimpleIsing {
             // block needs freshly initialized qubits.
             using (qs = Qubit[nSites]) {
 
-                // Each new qubit starts off in the |0〉 state, so we
+                // Each new qubit starts off in the |0> state, so we
                 // apply the Hadamard gate, represented by the
                 // Microsoft.Quantum.Primitive.H operation, in order to
-                // prepare an initial state |+〉 for each qubit.
+                // prepare an initial state |+> for each qubit.
                 // That is, we align all of the initial states with the
                 // X operator.
                 for (idxQubit in 0..Length(qs) - 1) {
@@ -124,7 +127,7 @@ namespace Microsoft.Quantum.Samples.SimpleIsing {
                 let J = 1.0;
 
                 // Having defined everything that we need, we can now proceed
-                // to perform the actual Trotter–Suzuki decomposition and evolve
+                // to perform the actual Trotter�Suzuki decomposition and evolve
                 // according to the Ising model Hamiltonian.
 
                 // We do so by iterating over the number of time steps, and
@@ -139,12 +142,12 @@ namespace Microsoft.Quantum.Samples.SimpleIsing {
                     // we apply all terms locally before proceeding to the next
                     // site.
                     for (idxSite in 0..nSites - 1) {
-                        // Evolve under the transverse field for φx ≔ (1 - s) hx dt.
+                        // Evolve under the transverse field for fx ? (1 - s) hx dt.
                         Rx(2.0 * (1.0 - sweepParameter) * hx * dt, qs[idxSite]);
-                        // Evolve under the longitiduinal field for φz ≔ s hz dt.
+                        // Evolve under the longitiduinal field for fz ? s hz dt.
                         Rz(2.0 * sweepParameter * hz * dt, qs[idxSite]);
                         // If we aren't the last qubit, evolve under the Ising
-                        // coupling for φJ ≔ s J dt.
+                        // coupling for fJ ? s J dt.
                         if (idxSite < nSites - 2) {
                             ApplyZZ(sweepParameter * J * dt, qs[idxSite], qs[idxSite + 1]);
                         }
@@ -157,9 +160,9 @@ namespace Microsoft.Quantum.Samples.SimpleIsing {
                 // return the results.
                 for (idxQubit in 0..Length(qs) - 1) {
                     set result[idxQubit] = M(qs[idxQubit]);
-                    // If we observed that we were in the |1〉 state, the
+                    // If we observed that we were in the |1> state, the
                     // -1 eigenstate of Z, then we need to flip it back to
-                    // a |0〉 state before releasing.
+                    // a |0> state before releasing.
                     if (result[idxQubit] == One){
                         X(qs[idxQubit]);
                     }

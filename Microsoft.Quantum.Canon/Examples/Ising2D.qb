@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License.
+
 // FIXME: WIP for Ising All to all coupling model 
 // ONe aspect at a time in each example. Keep it focused on one message. e.g. Ising for different coupling. Ising for different annealing times. Ising for different representation
 namespace Microsoft.Quantum.Canon {

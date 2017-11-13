@@ -1,4 +1,7 @@
-﻿namespace Microsoft.Quantum.Canon {
+// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License.
+
+namespace Microsoft.Quantum.Canon {
 
     /// <summary>
     ///     Represents a discrete-time oracle U^m for a fixed operation U
@@ -7,8 +10,8 @@
     newtype DiscreteOracle = ((Int, Qubit[]) => ():Adjoint,Controlled);
 
     /// <summary>
-    ///     Represents a continuous-time oracle U(δt) : |?(t)> ? |?(t + δt)> for all times t,
-    ///     where U is a fixed operation, and where and δt is a non-negative real number.
+    ///     Represents a continuous-time oracle U(dt) : |?(t)> ? |?(t + dt)> for all times t,
+    ///     where U is a fixed operation, and where and dt is a non-negative real number.
     /// </summary>
     newtype ContinuousOracle = ((Double, Qubit[]) => ():Adjoint,Controlled);
 
