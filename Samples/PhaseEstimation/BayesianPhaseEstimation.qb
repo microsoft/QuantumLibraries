@@ -1,0 +1,114 @@
+﻿namespace Microsoft.Quantum.Samples.PhaseEstimation {
+    open Microsoft.Quantum.Primitive;
+    open Microsoft.Quantum.Canon;
+
+    //////////////////////////////////////////////////////////////////////////
+    // Introduction //////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////
+
+    // This sample introduces quantum and iterative phase estimation, as well
+    // as the algorithms for processing the results of iterative phase
+    // estimation that are provided with Q#.
+        
+    // In phase estimation, one is concerned with learning the *eigenvalues*
+    // of a unitary operator U. In particular, suppose that U is unknown, but
+    // that we have access to U as an oracle. That is, we can call U as an
+    // operation on a register of our choice, but cannot introspect into its
+    // source code. Suppose as well that we also have access to an operation
+    // which prepares a state |φ〉 such that U|φ〉 = e^{i φ} |φ〉 for some φ
+    // that we would like to learn. Given these resources, we can learn φ by
+    // applying either quantum or iterative phase estimation.
+    
+    //////////////////////////////////////////////////////////////////////////
+    // Iterative Phase Estimation ////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////
+
+    // We will begin with the iterative case, in which one learns φ by using
+    // a single additional qubit to turn phase estimation into a classical
+    // statistical problem.
+    
+    // TODO: ascii art of the IPE circuit?
+    
+    // Given an operation representing U and an operation representing
+    // preparation of |φ〉, we can implement each step of iterative phase estimation
+    // by preparing a control qubit in the |+〉 state, controlling the application
+    // of U^m for some m : Int, and then measuring the control qubit in the X
+    // basis.
+
+    // In practice, it can help dramatically improve numerical stability of
+    // some algorithms if we also rotate the control qubit before using it
+    // to control U. We thus include an additional input element to allow
+    // for this.
+
+    // The final measurement from a single step follows a sinuosidal
+    // *likelihood function*, such that iterative phase estimation is readily
+    // amenable to analysis by well-known methods such as Bayesian inference,
+    // as we will detail below. For now, we define the phase estimation step
+    // itself.
+
+    // TODO: double check factors of two in the likelihood below.
+    /// # Summary
+    /// Performs a single step of iterative phase estimation for a
+    /// given oracle.
+    ///
+    /// # Input
+    /// ## power
+    /// Number of times to apply the oracle $U$.
+    /// ## inversionAngle
+    /// Angle by which to rotate the control register before applying the
+    /// oracle $U$.
+    /// ## oracle
+    /// Operation representing the unknown $U$ whose phase is to be estimated.
+    /// ## eigenstate
+    /// A register initially in a state |φ〉 such that U|φ〉 = e^{i power φ}|φ〉.
+    ///
+    /// # Output
+    /// A measurement result with probability
+    /// $$
+    ///     \Pr(\texttt{Zero} | \phi; \texttt{power}, \texttt{inversionAngle}) =
+    ///         \cos^2([\phi - \texttt{inversionAngle] \texttt{power} / 2).
+    /// $$
+    operation IterativePhaseEstimationStep(
+            power : Int, inversionAngle : Double,
+            oracle : (Qubit[] => () : Controlled),
+            eigenstate : Qubit[]
+        ) : Result
+    {
+
+        body {
+            // Allocate a mutable variable to hold the result of the final
+            // measurement, since we cannot return from within a using block.
+            mutable result = Zero;
+
+            // Allocate an additional qubit to use as the control register.
+            using (controlRegister = Qubit[1]) {
+                // Prepare the desired control state
+                // (|0〉 + e^{-i power inversionAngle} |1〉) / sqrt{2}.
+                H(controlRegister[0]);
+                Rz(inversionAngle, controlRegister[0]);
+
+                // Apply U^m controlled on this state.
+                for (idxApplication in 0..power - 1) {
+                    (Controlled oracle)(controlRegister, eigenstate);
+                }
+
+                // Measure the control register
+                // in the X basis and record the result.
+                set result = Measure([PauliX], controlRegister);
+            }
+
+            return result;
+        }
+    }
+
+
+
+
+    operation PhaseEstimationSample () : ()
+    {
+        body
+        {
+            
+        }
+    }
+}
