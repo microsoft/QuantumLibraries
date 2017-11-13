@@ -1,1 +1,0 @@
-Get-ChildItem -Recurse -Include *.qb | Rename-Item -NewName { $_.Name.replace(".qb",".qs") }
