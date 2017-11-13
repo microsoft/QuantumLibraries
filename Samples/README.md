@@ -1,5 +1,5 @@
 ﻿---
-title: "Q♭ Examples"
+title: "Q♯ Examples"
 ---
 
 This folder contains a number of different Visual Studio projects demonstrating different parts of the Q♯ language and quantum programming concepts.
