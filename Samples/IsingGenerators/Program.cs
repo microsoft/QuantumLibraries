@@ -1,4 +1,7 @@
-﻿// Intent: Let users construct generators for the Ising Hamiltonian and print them out in c#
+// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License.
+
+// Intent: Let users construct generators for the Ising Hamiltonian and print them out in c#
 
 using System;
 using System.Collections.Generic;

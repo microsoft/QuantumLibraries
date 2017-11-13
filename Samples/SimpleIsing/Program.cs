@@ -1,4 +1,7 @@
-﻿using System;
+// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License.
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,7 +19,7 @@ namespace Microsoft.Quantum.Samples.SimpleIsing
 
             #region Basic Definitions
 
-            // We start by loading the simulator that we will use to run our Q♭ operations.
+            // We start by loading the simulator that we will use to run our Q? operations.
             var qsim = new QuantumSimulator();
 
             // For this example, we'll consider a chain of five sites, each one of which
@@ -29,7 +32,7 @@ namespace Microsoft.Quantum.Samples.SimpleIsing
 
             // Finally, we'll then decompose the time evolution down into small steps.
             // During each step, we'll perform each term in the Hamiltonian individually.
-            // By the Trotter–Suzuki decomposition (also implemented in the canon), this
+            // By the Trotter�Suzuki decomposition (also implemented in the canon), this
             // approximates the complete Hamiltonian for the entire sweep time.
             //
             // If we choose the evolution time carefully, we should prepare the ground
@@ -44,7 +47,7 @@ namespace Microsoft.Quantum.Samples.SimpleIsing
 
             #endregion
 
-            #region Calling into Q♭
+            #region Calling into Q?
 
             // Now that we've defined everything we need, let's proceed to
             // actually call the simulator. Since there's a finite chance of successfully
@@ -60,11 +63,11 @@ namespace Microsoft.Quantum.Samples.SimpleIsing
                 // Since this method is asynchronous, we need to explicitly wait for the result back
                 // from the simulator. We do this by getting the Result property. To turn the result
                 // back into a conventional .NET array, we finish by calling ToArray().
-                // FIXME: using a lambda to turn everything into a C♯ int is ugly, but we don't
+                // FIXME: using a lambda to turn everything into a C? int is ugly, but we don't
                 //        have a better way right now.
                 var data = task.Result.ToArray().Select((result) => result == Result.One ? 1 : 0);
 
-                // We can now compute the magnetization entirely in C♯ code, since data is
+                // We can now compute the magnetization entirely in C? code, since data is
                 // an array of the classical measurement results observed back from our simulation.
                 var magnetization = data.Sum();
 

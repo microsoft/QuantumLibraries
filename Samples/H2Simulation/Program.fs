@@ -1,4 +1,7 @@
-﻿namespace Microsoft.Quantum.Examples.H2Simulation
+// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License.
+
+namespace Microsoft.Quantum.Examples.H2Simulation
 
 open System
 open System.Windows
@@ -16,24 +19,24 @@ open FSharp.Control
 open FSharp.Charting.ChartTypes
 
 module H2PlottingDemo =
-    // We begin by making an instance of the simulator that we will use to run our Q♭ code.
+    // We begin by making an instance of the simulator that we will use to run our Q? code.
     let qsim = new QuantumSimulator()
     
-    // Next, we give F♯ names to each operation defined in Q♭.
+    // Next, we give F? names to each operation defined in Q?.
     // In doing so, we ask the simulator to give us each operation
     // so that it has an opportunity to override operation definitions.
     let H2EstimateEnergyRPE = qsim.Get<ICallable, H2EstimateEnergyRPE>() :?> H2EstimateEnergyRPE
     let H2BondLengths = qsim.Get<ICallable, H2BondLengths>() :?> H2BondLengths
     
-    // To call a Q♭ operation that takes unit `()` as its input, we need to grab
+    // To call a Q? operation that takes unit `()` as its input, we need to grab
     // the QVoid.Instance value.
-    // FIXME: add an F♯-specific module with definitions like qunit.
+    // FIXME: add an F?-specific module with definitions like qunit.
     let bondLengths =
         H2BondLengths.Body.Invoke QVoid.Instance
 
-    // In Q♯, we defined the operation that performs the actual estimation;
+    // In Q?, we defined the operation that performs the actual estimation;
     // we can call it here, giving a structure tuple that corresponds to the
-    // C♯ ValueTuple that it takes as its input. Since the Q♯ operation
+    // C? ValueTuple that it takes as its input. Since the Q? operation
     // has type (idxBondLength : Int, nBitsPrecision : Int, trotterStepSize : Double) => (Double),
     // we pass the index along with that we want six bits of precision and
     // step size of 1.
@@ -85,7 +88,7 @@ module H2PlottingDemo =
                         .WithMarkers(Size=12, Style=MarkerStyle.Circle)
 
             // For comparison, we also include the exact values obtained
-            // by diagonalizing the H₂ Hamiltonian at each bond length.
+            // by diagonalizing the H2 Hamiltonian at each bond length.
             // Please see README.md for a description of how these
             // values were calculated.
             let theoryChart =
@@ -117,7 +120,7 @@ module H2PlottingDemo =
                         .WithXAxis(Title = "BOND LENGTH", TitleFontName="Segoe UI Semibold", TitleFontSize = 24.0)
                         .WithYAxis(Title = "ENERGY", TitleFontName="Segoe UI Semibold", TitleFontSize = 24.0)
                         .WithLegend(FontSize = 24.0, FontName = "Segoe UI")
-                        .WithTitle("H₂", FontName="Segoe UI", FontSize = 24.0)
+                        .WithTitle("H2", FontName="Segoe UI", FontSize = 24.0)
                 |> ChartControl
 
             // Since FSharp.Charting uses Windows.Forms instead of the Windows Presentation
