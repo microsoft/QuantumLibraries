@@ -1,0 +1,17 @@
+﻿namespace Microsoft.Quantum.Samples.IntegerFactorization {
+    open Microsoft.Quantum.Primitive;
+    open Microsoft.Quantum.Canon;
+    open Microsoft.Quantum.Extensions.Math;
+
+    //////////////////////////////////////////////////////////////////////////
+    // Introduction //////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////
+
+    operation Operation () : ()
+    {
+        body
+        {
+            
+        }
+    }
+}
