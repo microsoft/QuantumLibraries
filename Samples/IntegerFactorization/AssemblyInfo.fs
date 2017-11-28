@@ -1,4 +1,7 @@
-﻿namespace IntegerFactorization.AssemblyInfo
+﻿// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License.
+
+namespace IntegerFactorization.AssemblyInfo
 
 open System.Reflection
 open System.Runtime.CompilerServices

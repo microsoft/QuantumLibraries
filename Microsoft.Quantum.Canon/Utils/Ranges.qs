@@ -1,4 +1,7 @@
-﻿namespace Microsoft.Quantum.Canon {
+﻿// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License.
+
+namespace Microsoft.Quantum.Canon {
     function IntAbs (input : Int) : Int{ 
         mutable tmp = 0;
         if (input < 0) { 

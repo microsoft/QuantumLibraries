@@ -1,4 +1,7 @@
-﻿namespace Microsoft.Quantum.Canon {
+﻿// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License.
+
+namespace Microsoft.Quantum.Canon {
 
     function CurryOpImpl<'T, 'U>(op : (('T, 'U) => ()), arg1 : 'T) : ('U => ()) {
         return op(arg1, _);

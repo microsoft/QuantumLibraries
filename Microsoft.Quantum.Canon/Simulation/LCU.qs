@@ -1,3 +1,6 @@
+﻿// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License.
+
 // FIXME: This file is still a work in progress, and should not yet be included
 //        in builds.
 namespace Microsoft.Quantum.Canon {

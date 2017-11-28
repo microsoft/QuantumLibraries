@@ -1,4 +1,7 @@
-﻿namespace H2PlottingDemo.AssemblyInfo
+﻿// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License.
+
+namespace H2PlottingDemo.AssemblyInfo
 
 open System.Reflection
 open System.Runtime.CompilerServices

@@ -1,3 +1,6 @@
+﻿// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License.
+
 // note that this library is still work in progress. More arithmetic to be added. 
 // FIXME: complete the tests for this library 
 

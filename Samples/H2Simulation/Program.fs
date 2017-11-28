@@ -1,4 +1,7 @@
-﻿namespace Microsoft.Quantum.Examples.H2Simulation
+﻿// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License.
+
+namespace Microsoft.Quantum.Examples.H2Simulation
 
 open System
 open System.Windows

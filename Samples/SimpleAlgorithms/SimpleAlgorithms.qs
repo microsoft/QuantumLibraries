@@ -1,4 +1,7 @@
-﻿namespace Microsoft.Quantum.Samples.SimpleAlgorithms {
+﻿// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License.
+
+namespace Microsoft.Quantum.Samples.SimpleAlgorithms {
     // Including the namespace Primitive gives access to basic operations such as the 
     // Hadamard gates, CNOT gates, etc. that are useful for defining circuits. The 
     // implementation of these operations is dependent on the targeted machine. 

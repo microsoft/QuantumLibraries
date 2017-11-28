@@ -1,4 +1,7 @@
-﻿// note that this sample is still work in progress: Build Action is set to None until 
+﻿// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License.
+
+// note that this sample is still work in progress: Build Action is set to None until 
 // this harness for the Shor.qs Q# piece is completed. 
 // FIXME: complete this sample
 

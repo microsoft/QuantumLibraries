@@ -1,3 +1,6 @@
+﻿// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License.
+
 namespace Microsoft.Quantum.Canon {
     /// # Summary 
     /// The `Filter` function takes an array and a predicate that is defined 

@@ -1,4 +1,7 @@
-﻿namespace Microsoft.Quantum.Canon {
+﻿// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License.
+
+namespace Microsoft.Quantum.Canon {
     // TODO: remove references to qubits in doc comments.
     // TODO: remove references to 1 in comments (Bind ← Bind1).
     // TODO: update to DFM styled ///.

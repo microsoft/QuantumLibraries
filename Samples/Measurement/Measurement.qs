@@ -1,4 +1,7 @@
-﻿namespace Microsoft.Quantum.Samples.Measurement {
+﻿// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License.
+
+namespace Microsoft.Quantum.Samples.Measurement {
     open Microsoft.Quantum.Primitive;
     open Microsoft.Quantum.Canon;
 

@@ -1,4 +1,7 @@
-﻿namespace Microsoft.Quantum.Samples.SimpleIsing {
+﻿// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License.
+
+namespace Microsoft.Quantum.Samples.SimpleIsing {
     open Microsoft.Quantum.Primitive;
     open Microsoft.Quantum.Extensions.Math; // Needed for Floor.
     open Microsoft.Quantum.Extensions.Convert; // Needed to ToDouble.

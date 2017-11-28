@@ -1,4 +1,7 @@
-﻿namespace Microsoft.Quantum.Canon
+﻿// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License.
+
+namespace Microsoft.Quantum.Canon
 {
     /// # Summary 
     /// Applies an operation to a given partition of the register into two parts

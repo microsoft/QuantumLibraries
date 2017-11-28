@@ -1,3 +1,6 @@
+ï»¿// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License.
+
 namespace Microsoft.Quantum.Canon {
     open Microsoft.Quantum.Extensions.Math;
     
@@ -122,7 +125,7 @@ namespace Microsoft.Quantum.Canon {
 
     /// # Summary
     /// Implementation of multiple Trotter steps to approximate a unitary 
-    /// operator that solves the time-dependent Schrödinger equation at time 
+    /// operator that solves the time-dependent Schrï¿½dinger equation at time 
     /// $t$. 
     ///
     /// # Input
@@ -161,7 +164,7 @@ namespace Microsoft.Quantum.Canon {
     /// # Summary
     /// `TimeDependentSimulationAlgorithm` function that uses a Trotter-Suzuki 
     /// decomposition to approximate a unitary operator that solves the 
-    /// time-dependent Schrödinger equation at time $t$. 
+    /// time-dependent Schrï¿½dinger equation at time $t$. 
     ///
     /// # Input
     /// ## trotterStepSize

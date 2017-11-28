@@ -1,4 +1,7 @@
-﻿using Microsoft.Quantum.Simulation.Simulators;
+﻿// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License.
+
+using Microsoft.Quantum.Simulation.Simulators;
 using System;
 using System.Collections.Generic;
 using System.Linq;

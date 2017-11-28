@@ -1,4 +1,7 @@
-﻿namespace Microsoft.Quantum.Canon {
+﻿// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License.
+
+namespace Microsoft.Quantum.Canon {
 
     /// # Summary
     /// Asserts that a classical floating point variable has the expected value up to a given

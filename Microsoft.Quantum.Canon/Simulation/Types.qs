@@ -1,4 +1,7 @@
-﻿namespace Microsoft.Quantum.Canon {
+﻿// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License.
+
+namespace Microsoft.Quantum.Canon {
 
     // For an overview of the simulation library, see [Hamiltonian 
     // Simulation](applications#hamiltonian-simulation)

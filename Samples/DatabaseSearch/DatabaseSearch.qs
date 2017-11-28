@@ -1,4 +1,7 @@
-﻿namespace Microsoft.Quantum.Samples.DatabaseSearch {
+﻿// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License.
+
+namespace Microsoft.Quantum.Samples.DatabaseSearch {
     open Microsoft.Quantum.Primitive;
     open Microsoft.Quantum.Extensions.Convert;
     open Microsoft.Quantum.Extensions.Math;

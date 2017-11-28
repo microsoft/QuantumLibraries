@@ -1,3 +1,6 @@
+﻿// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License.
+
 namespace Microsoft.Quantum.Canon {
     /// # Summary 
     /// The `Slice` function takes an array and a list of locations and 
