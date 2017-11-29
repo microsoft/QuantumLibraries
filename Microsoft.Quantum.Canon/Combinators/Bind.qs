@@ -2,10 +2,9 @@
 // Licensed under the MIT License.
 
 namespace Microsoft.Quantum.Canon {
-    // TODO: remove references to qubits in doc comments.
-    // TODO: remove references to 1 in comments (Bind ← Bind1).
-    // TODO: update to DFM styled ///.
 
+    /// # See Also
+    /// - @"microsoft.quantum.canon.bind"
     operation BindImpl<'T>(operations : ('T => ())[], target : 'T) : () {
         body {
             for (idxOperation in 0..Length(operations) - 1) {
@@ -16,16 +15,37 @@ namespace Microsoft.Quantum.Canon {
     }
 
     /// # Summary
-    /// Given an array of operations acting on a single qubit,
+    /// Given an array of operations acting on a single input,
     /// produces a new operation that
     /// performs each given operation in sequence.
     ///
-    /// ## Remark
-    /// See Bind1A, Bind1C, and Bind1AC functor variants.
+    /// # Input
+    /// ## operations
+    /// A sequence of operations to be performed on a given input.
+    ///
+    /// # Output
+    /// A new operation that performs each given operation in sequence
+    /// on its input.
+    ///
+    /// # Example
+    /// The following are equivalent:
+    /// ```Q#
+    /// let bound = Bind([U; V]);
+    /// bound(x);
+    ///
+    /// U(x); V(x);
+    /// ```
+    ///
+    /// # See Also
+    /// - @"microsoft.quantum.canon.bindc"
+    /// - @"microsoft.quantum.canon.binda"
+    /// - @"microsoft.quantum.canon.bindca"
     function Bind<'T>(operations : ('T => ())[]) : ('T => ()) {
         return BindImpl(operations, _);
     }
 
+    /// # See Also
+    /// - @"microsoft.quantum.canon.binda"
     operation BindAImpl<'T>(operations : ('T => () : Adjoint)[], target : 'T) : () {
         body {
             BindImpl(operations, target);
@@ -40,17 +60,14 @@ namespace Microsoft.Quantum.Canon {
         }
     }
 
-    /// # Summary
-    /// Given an array of operations acting on a single qubit,
-    /// produces a new operation that
-    /// performs each given operation in sequence.
-    ///
-    /// # Remarks
-    /// See Bind1, Bind1C, and Bind1AC functor variants.
+    /// # See Also
+    /// - @"microsoft.quantum.canon.bind"
     function BindA<'T>(operations : ('T => () : Adjoint)[]) : ('T => () : Adjoint) {
         return BindAImpl(operations, _);
     }
 
+    /// # See Also
+    /// - @"microsoft.quantum.canon.bindc"
     operation BindCImpl<'T>(operations : ('T => () : Controlled)[], target : 'T) : () {
         body {
             BindImpl(operations, target);
@@ -64,18 +81,15 @@ namespace Microsoft.Quantum.Canon {
         }
     }
 
-    /// # Summary
-    /// Given an array of operations acting on a single qubit,
-    /// produces a new operation that
-    /// performs each given operation in sequence.
-    ///
-    /// # Remarks
-    /// See Bind1, Bind1A, and Bind1AC functor variants.
+    /// # See Also
+    /// - @"microsoft.quantum.canon.bind"
     function BindC<'T>(operations : ('T => () : Controlled)[]) : ('T => () : Controlled) {
         return BindCImpl(operations, _);
     }
 
-    operation BindACImpl<'T>(operations : ('T => () : Adjoint, Controlled)[], target : 'T) : () {
+    /// # See Also
+    /// - @"microsoft.quantum.canon.bindca"
+    operation BindCAImpl<'T>(operations : ('T => () : Adjoint, Controlled)[], target : 'T) : () {
         body {
             BindImpl(operations, target);
         }
@@ -95,15 +109,10 @@ namespace Microsoft.Quantum.Canon {
         }
     }
 
-    /// # Summary
-    /// Given an array of operations acting on a single qubit,
-    /// produces a new operation that
-    /// performs each given operation in sequence.
-    ///
-    /// # Remarks
-    /// See Bind1, Bind1A, and Bind1AC functor variants.
-    function BindAC<'T>(operations : ('T => () : Adjoint, Controlled)[]) : ('T => () : Adjoint, Controlled) {
-        return BindACImpl(operations, _);
+    /// # See Also
+    /// - @"microsoft.quantum.canon.bind"
+    function BindCA<'T>(operations : ('T => () : Adjoint, Controlled)[]) : ('T => () : Adjoint, Controlled) {
+        return BindCAImpl(operations, _);
     }
 
 }

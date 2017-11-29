@@ -96,36 +96,6 @@ namespace Microsoft.Quantum.Canon {
         }
     }
 
-    operation Pi4YInjectionTest():()
-    {
-        body {
-            using (anc = Qubit[2]) {
-                // magic state in anc[1]
-                Ry( PI() / 4.0, anc[1]);
-                InjectPi4YRotation( anc[0], anc[1] );
-
-                // For test, we bring the data qubit anc[0] to the original state.
-                Ry(-PI() / 4.0, anc[0]);
-
-                // So, the data must be in Zero.
-                AssertQubit(Zero, anc[0] );
-                ResetAll(anc);
-            }
-            using (anc2 = Qubit[2]) {
-                // magic state in anc[1]
-                Ry( PI() / 4.0, anc2[1]);
-                (Adjoint InjectPi4YRotation)( anc2[0], anc2[1] );
-
-                // For test, we bring the data qubit anc[0] to the original state.
-                Ry( PI() / 4.0, anc2[0]);
-
-                // So, the data must be in Zero.
-                AssertQubit(Zero, anc2[0] );
-                ResetAll(anc2);
-            }
-        }
-    }
-
     // TODO: define magic states here.
     // TODO: define what happens to the other fourteen qubits.
     /// # Summary

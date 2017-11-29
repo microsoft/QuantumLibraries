@@ -46,9 +46,23 @@ namespace Microsoft.Quantum.Tests {
 			let ops = [I; X; Y; Z; H];
 			for (idxOp in 0..Length(ops) - 1) {
 				AssertOperationsEqualReferenced(ApplyToEach(ops[idxOp], _), ApplyToEachA(ops[idxOp], _), 3);
-				// FIXME: #780.
-				// let arr = [ops[idxOp]; Adjoint ops[idxOp]]
-				// AssertOperationsEqualReferenced(ApplyToEach(Bind1A(arr), _), ApplyToEachA(I, _), 3)
+			}
+		}
+	}
+
+	/// # Summary
+	/// Performs the same test as SelfAdjointOperationsTest,
+	/// but using Bind to gather the self-adjoint operations.
+	///
+	/// # Remarks
+	/// Marked as ex-fail due to known issues with Bind.
+	operation BindSelfAdjointOperationsTestExFail() : () {
+		body {
+			let ops = [I; X; Y; Z; H];
+			for (idxOp in 0..Length(ops) - 1) {
+				let arr = [ops[idxOp]; Adjoint ops[idxOp]];
+				let bound = BindCA(arr);
+				AssertOperationsEqualReferenced(ApplyToEachCA(BindCA(arr), _), ApplyToEachA(I, _), 3);
 			}
 		}
 	}

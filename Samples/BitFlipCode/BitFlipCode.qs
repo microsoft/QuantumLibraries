@@ -74,7 +74,7 @@ namespace Microsoft.Quantum.Samples.BitFlipCode {
             // partially applied with the data qubit, to represent
             // a "CNOT-ladder." In this case, the line below
             // applies CNOT₀₁ · CNOT₀₂.
-            ApplyToEachAC(CNOT(data, _), auxillaryQubits);
+            ApplyToEachCA(CNOT(data, _), auxillaryQubits);
         }
 
         // Since decoding is the adjoint of encoding, we must

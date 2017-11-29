@@ -89,8 +89,8 @@
   <ItemGroup>
     <QsharpCompile Include="Arrays\Arrays.qs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <QsharpIgnore Include="Examples\Ising2D.qs" />
     <QsharpCompile Include="Arithmetic\Arithmetic.qs" />
+    <QsharpCompile Include="Combinators\ApplyToEachIndex.qs" />
     <QsharpCompile Include="Utils\Predicates.qs" />
     <QsharpCompile Include="DataStructures\Pairs.qs" />
     <QsharpCompile Include="Enumeration\Filter.qs" />
@@ -106,7 +106,6 @@
     <QsharpCompile Include="Combinators\ApplyToPartition.qs" />
     <QsharpIgnore Include="Simulation\FermionicEvolutionSet.qs" />
     <QsharpIgnore Include="Simulation\LCU.qs" />
-    <QsharpIgnore Include="Examples\Ising_5_Critial_Phase_Estimation.qs" />
     <QsharpCompile Include="Examples\ExampleH2.qs" />
     <QsharpCompile Include="Simulation\Algorithms.qs" />
     <QsharpCompile Include="Simulation\PauliEvolutionSet.qs" />
@@ -114,7 +113,6 @@
     <QsharpCompile Include="Simulation\Types.qs" />
     <QsharpCompile Include="PhaseEstimation\RandomWalk.qs" />
     <QsharpCompile Include="AmplitudeAmplification\AmplitudeAmplification.qs" />
-    <QsharpCompile Include="Examples\ExampleAA.qs" />
     <QsharpCompile Include="AmplitudeAmplification\Types.qs" />
     <QsharpCompile Include="AmplitudeAmplification\Utils.qs" />
     <QsharpCompile Include="Math\Random.qs" />
@@ -128,13 +126,13 @@
     <QsharpCompile Include="Utils\ControlledOnBitString.qs" />
     <QsharpCompile Include="Combinators\RestrictToSubregister.qs" />
     <QsharpCompile Include="Math\Functions.qs" />
+    <None Include="Microsoft.Quantum.Canon.nuspec" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
     <QsharpCompile Include="Asserts\AssertOperationsEqualInPlace.qs" />
     <QsharpCompile Include="Combinators\ApplyToEach.qs" />
-    <QsharpCompile Include="Combinators\ApplyToRange.qs" />
     <QsharpCompile Include="Asserts\AssertQubit.qs" />
     <QsharpCompile Include="Asserts\AssertOperationsEqualReferenced.qs" />
     <QsharpCompile Include="DataStructures\Stack.qs" />

@@ -103,8 +103,8 @@ namespace Microsoft.Quantum.Samples.UnitTesting {
     operation UpToPhaseCCNOT2InnerCircuit (qs : Qubit[]) : () {
         body { 
             AssertIntEqual( Length(qs), 4, "4 qubits are expected");
-            ApplyToEachAC(T,qs[0..1]);
-            ApplyToEachAC((Adjoint T),qs[2..3]);
+            ApplyToEachCA(T,qs[0..1]);
+            ApplyToEachCA((Adjoint T),qs[2..3]);
         }
         adjoint auto    
         controlled auto
@@ -256,8 +256,8 @@ namespace Microsoft.Quantum.Samples.UnitTesting {
     operation TDepthOneCCNOTInnerCircuit (qs:Qubit[]) : () {
         body { 
             AssertIntEqual( Length(qs), 7, "7 qubits are expected");
-            ApplyToEachAC((Adjoint T),qs[0..2]);
-            ApplyToEachAC(T,qs[3..6]);
+            ApplyToEachCA((Adjoint T),qs[0..2]);
+            ApplyToEachCA(T,qs[3..6]);
         }
         adjoint auto    
         controlled auto

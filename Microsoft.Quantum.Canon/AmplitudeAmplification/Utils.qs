@@ -28,7 +28,7 @@ namespace Microsoft.Quantum.Canon {
     {
 	    body {
 
-		    WithCA(ApplyToEachAC(X, _), RAll1(phase, _), qubits);
+		    WithCA(ApplyToEachCA(X, _), RAll1(phase, _), qubits);
 
 	    }
 

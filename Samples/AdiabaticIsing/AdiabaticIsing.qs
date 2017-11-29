@@ -92,7 +92,7 @@ namespace Microsoft.Quantum.Samples.Ising {
     /// Qubit register encoding the Ising model quantum state.
     operation Ising1DStatePrep(qubits : Qubit[]) : () {
         body{
-            ApplyToEachAC(H, qubits);
+            ApplyToEachCA(H, qubits);
         }
         adjoint auto
         controlled auto

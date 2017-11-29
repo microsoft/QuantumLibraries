@@ -26,7 +26,7 @@ namespace Microsoft.Quantum.Canon {
             // let nQubits = Length(controlRegister)
             let nQubits = 1;
 
-            ApplyToEachAC(H, controlRegister);
+            ApplyToEachCA(H, controlRegister);
 
             for (idxControlQubit in 0..(nQubits - 1)) {
                 let control = controlRegister[idxControlQubit];

@@ -1,11 +1,13 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-namespace Microsoft.Quantum.Canon {
-	open Microsoft.Quantum.Primitive;
+namespace Microsoft.Quantum.Tests {
+    open Microsoft.Quantum.Primitive;
+    open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Extensions.Convert;
     open Microsoft.Quantum.Extensions.Math;
 
+    
 	///Here we consider the smallest example of amplitude amplification
 	///Suppose we have a single-qubit oracle that prepares the state
 	/// O |0> = \lambda |1> + \sqrt{1-|\lambda|^2} |0>

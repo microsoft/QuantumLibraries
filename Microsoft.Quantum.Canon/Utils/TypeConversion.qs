@@ -106,17 +106,4 @@ namespace Microsoft.Quantum.Canon {
     {
         return PositiveIntFromBoolArr(BoolArrFromResultArr(results));
     }
-
-    function BoolArrFromPositiveIntTest() : (){
-        for (number in 0..100) {
-            let bits = BoolArrFromPositiveInt(number, 9);
-            let inte = PositiveIntFromBoolArr(bits);
-            AssertIntEqual(inte, number, "Integer converted to bit string and back should be identical");
-        }
-
-        let bits70 = [false; true; true; false; false; false; true; false];
-        let number70 = PositiveIntFromBoolArr(bits70);
-        AssertIntEqual(70, number70, "Integer from 01000110 in little Endian should be 70");
-    }
-
 }

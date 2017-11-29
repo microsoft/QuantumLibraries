@@ -231,7 +231,70 @@ namespace Microsoft.Quantum.Tests {
         }
     }
 
+    operation SteaneCodeEncoderTest():()
+    {
+        body {
+            using ( aux = Qubit[7] ) {
+                SteaneCodeEncoderImpl(aux[0..0], aux[1..6]);
+                if( MeasureWithScratch( [ PauliX; PauliI; PauliX; PauliI; PauliX; PauliI; PauliX ],
+                            aux[0..6]) == One ){
+                                fail "Steane code first X stabilizer";
+                }
+                if( MeasureWithScratch([ PauliI; PauliX; PauliX; PauliI; PauliI; PauliX; PauliX ],
+                            aux[0..6]) == One ){
+                                fail "Steane code second X stabilizer";
+                }
+                if( MeasureWithScratch( [ PauliI; PauliI; PauliI; PauliX; PauliX; PauliX; PauliX ],
+                            aux[0..6]) == One ){
+                                fail "Steane code third X stabilizer";
+                }
+                if( MeasureWithScratch( [ PauliZ; PauliI; PauliZ; PauliI; PauliZ; PauliI; PauliZ ],
+                            aux[0..6]) == One ){
+                                fail "Steane code first Z stabilizer";
+                }
+                if( MeasureWithScratch([ PauliI; PauliZ; PauliZ; PauliI; PauliI; PauliZ; PauliZ ],
+                            aux[0..6]) == One ){
+                                fail "Steane code second Z stabilizer";
+                }
+                if( MeasureWithScratch( [ PauliI; PauliI; PauliI; PauliZ; PauliZ; PauliZ; PauliZ ],
+                            aux[0..6]) == One ){
+                                fail "Steane code third Z stabilizer";
+                }
+
+                ResetAll(aux);
+            }
+        }
+    }
     
+    operation Pi4YInjectionTest() : ()
+    {
+        body {
+            using (anc = Qubit[2]) {
+                // magic state in anc[1]
+                Ry( PI() / 4.0, anc[1]);
+                InjectPi4YRotation( anc[0], anc[1] );
+
+                // For test, we bring the data qubit anc[0] to the original state.
+                Ry(-PI() / 4.0, anc[0]);
+
+                // So, the data must be in Zero.
+                AssertQubit(Zero, anc[0] );
+                ResetAll(anc);
+            }
+            using (anc2 = Qubit[2]) {
+                // magic state in anc[1]
+                Ry( PI() / 4.0, anc2[1]);
+                (Adjoint InjectPi4YRotation)( anc2[0], anc2[1] );
+
+                // For test, we bring the data qubit anc[0] to the original state.
+                Ry( PI() / 4.0, anc2[0]);
+
+                // So, the data must be in Zero.
+                AssertQubit(Zero, anc2[0] );
+                ResetAll(anc2);
+            }
+        }
+    }
 
     /// # Summary
     /// Applies logical operators before and after the encoding circuit,

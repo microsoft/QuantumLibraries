@@ -440,9 +440,9 @@ namespace Microsoft.Quantum.Samples.DatabaseSearch {
             let nMarked = Length(markedElements);
             for (idxMarked in 0..nMarked - 1) {
                 // Note: As X accepts a Qubit, and ControlledOnInt only 
-                // accepts Qubit[], we use ApplyToEachAC(X, _) which accepts 
+                // accepts Qubit[], we use ApplyToEachCA(X, _) which accepts 
                 // Qubit[] even though the target is only 1 Qubit.
-                (ControlledOnInt(markedElements[idxMarked], ApplyToEachAC(X, _)))(databaseRegister, [markedQubit]);
+                (ControlledOnInt(markedElements[idxMarked], ApplyToEachCA(X, _)))(databaseRegister, [markedQubit]);
             }
 
         }	
@@ -480,7 +480,7 @@ namespace Microsoft.Quantum.Samples.DatabaseSearch {
             let databaseRegister = QubitExclude([idxMarkedQubit], startQubits);
 
             // Apply oracle `U`
-            ApplyToEachAC(H, databaseRegister);
+            ApplyToEachCA(H, databaseRegister);
 
             // Apply oracle `D`
             DatabaseOracleFromInts(markedElements, flagQubit, databaseRegister);

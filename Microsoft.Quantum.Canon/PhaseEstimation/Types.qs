@@ -30,7 +30,7 @@ namespace Microsoft.Quantum.Canon {
     operation OracleToDiscrete(blackBoxOracle : (Qubit[] => (): Adjoint, Controlled))  : DiscreteOracle
     {
         body {
-            let oracle = DiscreteOracle(OperationPowImplAC(blackBoxOracle, _, _));
+            let oracle = DiscreteOracle(OperationPowImplCA(blackBoxOracle, _, _));
             return oracle;
         }
     }

@@ -6,9 +6,18 @@ namespace Microsoft.Quantum.Canon {
     open Microsoft.Quantum.Extensions.Convert;
     open Microsoft.Quantum.Extensions.Math;
 
-    operation MeasureAllZeroState(register : Qubit[]) : Result {
+    /// # Summary
+    /// Measures $Z \otimes Z \otimes \cdots \otimes Z$ on
+    /// a given register.
+    ///
+    /// # Input
+    /// ## register
+    /// The register to be measured.
+    ///
+    /// # Output
+    /// The result of measuring $Z \otimes Z \otimes \cdots \otimes Z$.
+    operation MeasureAllZ(register : Qubit[]) : Result {
         body {
-            // TODO: extract this into its own function.
             let nQubits = Length(register);
             mutable allZMeasurement = new Pauli[nQubits];
             for (idxQubit in 0..nQubits - 1) {
@@ -19,24 +28,109 @@ namespace Microsoft.Quantum.Canon {
         }
     }
 
+    /// # Summary
+    /// Measures the identity operator $\boldone$ on a register
+    /// of qubits.
+    ///
+    /// # Input
+    /// ## register
+    /// The register to be measured.
+    ///
+    /// # Output
+    /// The result value `Zero`.
+    ///
+    /// # Remarks
+    /// Since $\boldone$ has only the eigenvalue $1$, and does not
+    /// have a negative eigenvalue, this operation always returns
+    /// `Zero`, corresponding to the eigenvalue $+1 = (-1)^0$,
+    /// and does not cause a collapse of the state of `register`.
+    ///
+    /// On its own, this operation is not useful, but is helpful
+    /// in the context of process tomography, as it provides
+    /// information about the trace preservation of a quantum process.
+    /// In particular, a target machine with lossy measurement should
+    /// replace this operation by an actual measurement of $\boldone$.
     operation MeasureIdentity(register : Qubit[]) : Result {
         body {
             return Zero;
         }
     }
 
+    /// # Summary
+    /// Given a qubit, prepares that qubit in the maximally mixed
+    /// state $\boldone / 2$ by applying the depolarizing channel
+    /// $$
+    /// \begin{align}
+    ///     \Omega(\rho) \mathrel{:=} \frac{1}{4} \sum_{\mu \in \{0, 1, 2, 3\}} \sigma\_{\mu} \rho \sigma\_{\mu}^{\dagger},
+    /// \end{align}
+    /// $$
+    /// where $\sigma\_i$ is the $i$th Pauli operator, and where
+    /// $\rho$ is a density operator representing a mixed state.
+    ///
+    /// # Input
+    /// ## qubit
+    /// A qubit whose state is to be depolarized in the manner
+    /// described above.
+    ///
+    /// # Remarks
+    /// The mixed state $\boldone / 2$ describing the result of
+    /// applying this operation to a state implicitly describes
+    /// an expectation value over random choices made in this operation.
+    /// Thus, for any single application, this operation maps pure states
+    /// to pure states, but it acts as described in expectation.
+    /// In particular, this operation can be used in process tomography
+    /// to measure the *non-unital* components of a channel.
     operation PrepareSingleQubitIdentity(qubit : Qubit) : () {
         body {
             ApplyPauli([RandomSingleQubitPauli()], [qubit]);
         }
     }
 
+    /// # Summary
+    /// Given a register, prepares that register in the maximally mixed
+    /// state $\boldone / 2^N$ by applying the complete depolarizing
+    /// channel to each qubit, where $N$ is the length of the register.
+    ///
+    /// # Input
+    /// ## register
+    /// A register whose state is to be depolarized in the manner
+    /// described above.
+    ///
+    /// # See Also
+    /// - @"microsoft.quantum.canon.preparesinglequbitidentity"
     operation PrepareIdentity(register : Qubit[]) : () {
         body {
             ApplyToEach(PrepareSingleQubitIdentity, register);
         }
     }
 
+    /// # Summary
+    /// Given a preparation and measurement, estimates the frequency
+    /// with which that measurement suceeds (returns `Zero`) by
+    /// performing a given number of trials.
+    ///
+    /// # Input
+    /// ## preparation
+    /// An operation $P$ that prepares a given state $\rho$ on
+    /// its input register.
+    /// ## measurement
+    /// An operation $M$ representing the measurement of interest.
+    /// ## nQubits
+    /// The number of qubits on which the preparation and measurement
+    /// each act.
+    /// ## nMeasurements
+    /// The number of times that the measurement should be performed
+    /// in order to estimate the frequency of interest.
+    ///
+    /// # Output
+    /// An estimate $\hat{p}$ of the frequency with which
+    /// $M(P(\ket{00 \cdots 0}\bra{00 \cdots 0}))$ returns `Zero`,
+    /// obtained using the unbiased binomial estimator $\hat{p} =
+    /// n\_{\uparrow} / n\_{\text{measurements}}$, where $n\_{\uparrow}$ is
+    /// the number of `Zero` results observed.
+    ///
+    /// This is particularly important on target machines which respect
+    /// physical limitations, such that probabilities cannot be measured.
     operation EstimateFrequency(preparation : (Qubit[] => ()), measurement : (Qubit[] => Result), nQubits : Int, nMeasurements : Int) : Double {
         body {
             mutable nUp = 0;
@@ -85,6 +179,69 @@ namespace Microsoft.Quantum.Canon {
     /// # Summary
     /// Prepares the Choi–Jamiłkowski state for a given operation onto given reference
     /// and target registers.
+    ///
+    /// # Input
+    /// ## op
+    /// Operation $\Lambda$ whose Choi–Jamiłkowski state $J(\Lambda) / 2^N$
+    /// is to be prepared, where $N$ is the number of qubits on which
+    /// `op` acts.
+    /// # reference
+    /// A register of qubits starting in the $\ket{00\cdots 0}$ state
+    /// to be used as a reference for the action of `op`.
+    /// # target
+    /// A register of qubits initially in the $\ket{00\cdots 0}$ state
+    /// on which `op` is to be applied.
+    ///
+    /// # Remarks
+    /// The Choi–Jamiłkowski state $J(\Lambda)$ of a quantum process is
+    /// defined as
+    /// $$
+    /// \begin{align}
+    ///     J(\Lambda) \mathrel{:=} (\boldone \otimes \Lambda)
+    ///     (|\boldone\rangle\!\rangle\langle\!\langle\boldone|),
+    /// \end{align}
+    /// $$
+    /// where $|X\rangle\!\rangle$ is the *vectorization* of a matrix $X$
+    /// in the column-stacking convention. Learning a classical description
+    /// of this state provides full information about the effect of $\Lambda$
+    /// acting on arbitrary input states, and forms the foundation of
+    /// *quantum process tomography*.
+    ///
+    /// # See Also
+    /// - @"microsoft.quantum.canon.preparechoistatec"
+    /// - @"microsoft.quantum.canon.preparechoistatea"
+    /// - @"microsoft.quantum.canon.preparechoistateca"
+    operation PrepareChoiState(op : (Qubit[] => ()), reference : Qubit[], target : Qubit[]) : () {
+        body {
+            PrepareEntangledState(reference, target);
+            op(target);
+        }
+    }
+
+    /// # See Also
+    /// - @"microsoft.quantum.canon.preparechoistate"
+    operation PrepareChoiStateC(op : (Qubit[] => () : Controlled, Adjoint), reference : Qubit[], target : Qubit[]) : () {
+        body {
+            PrepareEntangledState(reference, target);
+            op(target);
+        }
+
+        controlled auto
+    }
+    
+    /// # See Also
+    /// - @"microsoft.quantum.canon.preparechoistate"
+    operation PrepareChoiStateA(op : (Qubit[] => () : Adjoint), reference : Qubit[], target : Qubit[]) : () {
+        body {
+            PrepareEntangledState(reference, target);
+            op(target);
+        }
+
+        adjoint auto
+    }
+    
+    /// # See Also
+    /// - @"microsoft.quantum.canon.preparechoistate"
     operation PrepareChoiStateCA(op : (Qubit[] => () : Controlled, Adjoint), reference : Qubit[], target : Qubit[]) : () {
         body {
             PrepareEntangledState(reference, target);

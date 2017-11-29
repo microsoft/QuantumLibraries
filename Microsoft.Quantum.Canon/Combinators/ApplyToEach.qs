@@ -5,11 +5,11 @@ namespace Microsoft.Quantum.Canon {
 
     /// # See Also
     /// - @"microsoft.quantum.canon.ApplyToEach"
-    operation ApplyToEachAC<'T>(singleQubitOperation : ('T => () : Adjoint, Controlled), register : 'T[])  : ()
+    operation ApplyToEachCA<'T>(singleElementOperation : ('T => () : Adjoint, Controlled), register : 'T[])  : ()
     {
         body {
             for (idxQubit in 0..(Length(register) - 1)) {
-                singleQubitOperation(register[idxQubit]);
+                singleElementOperation(register[idxQubit]);
             }
         }
 
@@ -20,11 +20,11 @@ namespace Microsoft.Quantum.Canon {
 
     /// # See Also
     /// - @"microsoft.quantum.canon.ApplyToEach"
-    operation ApplyToEachA<'T>(singleQubitOperation : ('T => ():Adjoint), register : 'T[])  : ()
+    operation ApplyToEachA<'T>(singleElementOperation : ('T => ():Adjoint), register : 'T[])  : ()
     {
         body {
             for (idxQubit in 0..(Length(register) - 1)) {
-                singleQubitOperation(register[idxQubit]);
+                singleElementOperation(register[idxQubit]);
             }
         }
 
@@ -33,11 +33,11 @@ namespace Microsoft.Quantum.Canon {
 
     /// # See Also
     /// - @"microsoft.quantum.canon.ApplyToEach"
-    operation ApplyToEachC<'T>(singleQubitOperation : ('T => ():Controlled), register : 'T[])  : ()
+    operation ApplyToEachC<'T>(singleElementOperation : ('T => ():Controlled), register : 'T[])  : ()
     {
         body {
             for (idxQubit in 0..(Length(register) - 1)) {
-                singleQubitOperation(register[idxQubit]);
+                singleElementOperation(register[idxQubit]);
             }
         }
 
@@ -45,10 +45,10 @@ namespace Microsoft.Quantum.Canon {
     }
 
     /// # Summary
-    /// Applies a single-qubit operation to each qubit in a register.
+    /// Applies a single-qubit operation to each element in a register.
     ///
     /// # Input
-    /// ## singleQubitOperation
+    /// ## singleElementOperation
     /// Operation to apply to each qubit.
     /// ## register
     /// Array of qubits on which to apply the given operation.
@@ -65,12 +65,12 @@ namespace Microsoft.Quantum.Canon {
     /// # See Also
     /// - @"microsoft.quantum.canon.ApplyToEachA"
     /// - @"microsoft.quantum.canon.ApplyToEachC"
-    /// - @"microsoft.quantum.canon.ApplyToEachAC"
-    operation ApplyToEach<'T>(singleQubitOperation : ('T => ()), register : 'T[])  : ()
+    /// - @"microsoft.quantum.canon.ApplyToEachCA"
+    operation ApplyToEach<'T>(singleElementOperation : ('T => ()), register : 'T[])  : ()
     {
         body {
             for (idxQubit in 0..(Length(register) - 1)) {
-                singleQubitOperation(register[idxQubit]);
+                singleElementOperation(register[idxQubit]);
             }
         }
     }

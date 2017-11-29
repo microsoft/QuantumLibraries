@@ -31,41 +31,6 @@ namespace Microsoft.Quantum.Canon {
         adjoint auto
     }
 
-    operation SteaneCodeEncoderTest():()
-    {
-        body {
-            using ( aux = Qubit[7] ) {
-                SteaneCodeEncoderImpl(aux[0..0], aux[1..6]);
-                if( MeasureWithScratch( [ PauliX; PauliI; PauliX; PauliI; PauliX; PauliI; PauliX ],
-                            aux[0..6]) == One ){
-                                fail "Steane code first X stabilizer";
-                }
-                if( MeasureWithScratch([ PauliI; PauliX; PauliX; PauliI; PauliI; PauliX; PauliX ],
-                            aux[0..6]) == One ){
-                                fail "Steane code second X stabilizer";
-                }
-                if( MeasureWithScratch( [ PauliI; PauliI; PauliI; PauliX; PauliX; PauliX; PauliX ],
-                            aux[0..6]) == One ){
-                                fail "Steane code third X stabilizer";
-                }
-                if( MeasureWithScratch( [ PauliZ; PauliI; PauliZ; PauliI; PauliZ; PauliI; PauliZ ],
-                            aux[0..6]) == One ){
-                                fail "Steane code first Z stabilizer";
-                }
-                if( MeasureWithScratch([ PauliI; PauliZ; PauliZ; PauliI; PauliI; PauliZ; PauliZ ],
-                            aux[0..6]) == One ){
-                                fail "Steane code second Z stabilizer";
-                }
-                if( MeasureWithScratch( [ PauliI; PauliI; PauliI; PauliZ; PauliZ; PauliZ; PauliZ ],
-                            aux[0..6]) == One ){
-                                fail "Steane code third Z stabilizer";
-                }
-
-                ResetAll(aux);
-            }
-        }
-    }
-
     /// # Summary
     /// Decoder for the ⟦7, 1, 3⟧ Steane quantum code.
     /// 
