@@ -34,26 +34,36 @@ namespace Microsoft.Quantum.Samples.UnitTesting
         [OperationDriver]
         public void QuantumSimulatorTarget(TestOperation operationDescription)
         {
-            using (var sim = new QuantumSimulator())
+            try
             {
-                // Frequently tests include measurement and randomness. 
-                // To reproduce the failed test it is useful to record seed that has been used 
-                // for the random number generator inside the simulator.
-                output.WriteLine($"The seed used for this test is {sim.Seed}");
-                Debug.WriteLine($"The seed used for this test is {sim.Seed}");
+                using (var sim = new QuantumSimulator())
+                {
+                    // Frequently tests include measurement and randomness. 
+                    // To reproduce the failed test it is useful to record seed that has been used 
+                    // for the random number generator inside the simulator.
+                    output.WriteLine($"The seed used for this test is {sim.Seed}");
+                    Debug.WriteLine($"The seed used for this test is {sim.Seed}");
 
-                // This ensures that when the test is run in Debug mode, all message logged in 
-                // Q# by calling Microsoft.Quantum.Primitives.Message show-up 
-                // in Debug output 
-                sim.OnLog += (string message) => { Debug.WriteLine(message); };
+                    // This ensures that when the test is run in Debug mode, all message logged in 
+                    // Q# by calling Microsoft.Quantum.Primitives.Message show-up 
+                    // in Debug output 
+                    sim.OnLog += (string message) => { Debug.WriteLine(message); };
 
-                // this ensures that all message logged in Q# by calling
-                // Microsoft.Quantum.Primitives.Message show-up 
-                // in test output 
-                sim.OnLog += (string message) => { output.WriteLine(message); };
-                
-                // Executes operation described by operationDescription on a QuantumSimulator
-                operationDescription.TestOperationRunner(sim);
+                    // this ensures that all message logged in Q# by calling
+                    // Microsoft.Quantum.Primitives.Message show-up 
+                    // in test output 
+                    sim.OnLog += (string message) => { output.WriteLine(message); };
+
+                    // Executes operation described by operationDescription on a QuantumSimulator
+                    operationDescription.TestOperationRunner(sim);
+                }
+            }
+            catch (System.BadImageFormatException e)
+            {
+                throw new System.BadImageFormatException($"Could not load Quantum Simulator. If you are running tests using Visual Studio 2017, " +
+                    $"this problem can be fixed by using menu Test > Test Settings > Default Processor Architecture " +
+                    $"and switching to X64 instead of X86. Alternatively, press Ctrl+Q and type `Default Processor Architecture`. If you are running from command line using " +
+                    $"vstest.console.exe use command line option /Platform:x64.", e);
             }
         }
     }

@@ -75,4 +75,13 @@ namespace Microsoft.Quantum.Canon {
         }
     }
 
+    /// # See Also
+    /// - @"microsoft.quantum.canon.ApplyToEach"
+    function ApplyToEachF<'T>( func : ('T -> () ), array : 'T[])  : ()
+    {
+        for ( idx in 0..(Length(array) - 1)) {
+            func(array[idx]);
+        }
+    }
+
 }

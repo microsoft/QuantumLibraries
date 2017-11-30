@@ -3,6 +3,7 @@
 
 namespace Microsoft.Quantum.Canon {
     open Microsoft.Quantum.Canon;
+    open Microsoft.Quantum.Primitive;
     open Microsoft.Quantum.Extensions.Math;
 
 	function NativeFnsAreCallableTest() : () {
@@ -20,4 +21,18 @@ namespace Microsoft.Quantum.Canon {
         AssertAlmostEqual(RealMod(0.5 * PI(), 2.0 * PI(), -PI() / 2.0), 0.5 * PI());
     }
 
+    function ExtendedGCDTestHelper(  a : Int , b : Int, gcd : Int ) : () {
+        Message($"Testing {a}, {b}, {gcd} ");
+        let (u,v) = ExtendedGCD(a,b);
+        let expected = AbsI(gcd);
+        let actual = AbsI(u*a+v*b);
+        AssertIntEqual( expected, actual,
+            $"Expected absolute value of gcd to be {expected}, got {actual}");
+    }
+
+    function ExtendedGCDTest() : ()
+    {
+        let testTuples = [ (1,1,1); (1,-1,1); (-1,1,1); (-1,-1,1); (5,7,1); (-5,7,1); (3,15,3) ];
+        ApplyToEachF(ExtendedGCDTestHelper, testTuples );
+    }
 }

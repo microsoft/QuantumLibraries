@@ -51,11 +51,14 @@ namespace Microsoft.Quantum.Canon {
     /// Positive integer.
     /// ## bits
     /// Bits in binary representation of number.
+    /// 
     /// # Remarks
-    /// The input "number" must be at most 2^bits -1.
+    /// The input `number` must be at most 2^bits -1.
     function BoolArrFromPositiveInt(number : Int, bits : Int) : Bool[]
     {
-        //FailOn(number > 2^bits - 1, "Number of output bits must be at least Log_2(integer-1).")
+        AssertBoolEqual(
+            (number >= 0) && ( number < 2^bits ), true, 
+            "`number` must be between 0 and 2^`bits` - 1" );
 
         mutable outputBits = new Bool[bits];
         mutable tempInt = number;
@@ -71,7 +74,6 @@ namespace Microsoft.Quantum.Canon {
         }
 
         return outputBits;
-
     }
 
     /// # Summary
@@ -82,6 +84,10 @@ namespace Microsoft.Quantum.Canon {
     /// Bits in binary representation of number.
     function PositiveIntFromBoolArr(bits : Bool[]) : Int
     {
+        AssertBoolEqual(
+            Length(bits) < 64, true, 
+            "`Length(bits)` must be less than 64" );
+
         mutable number = 0;
         let nBits = Length(bits) ;
 
@@ -89,11 +95,8 @@ namespace Microsoft.Quantum.Canon {
             if (bits[idxBit]) {
                 set number = number + 2 ^ idxBit;
             }
-        
         }
-
         return number;
-
     }
 
     /// # Summary
@@ -105,5 +108,12 @@ namespace Microsoft.Quantum.Canon {
     function PositiveIntFromResultArr(results :Result[]) : Int
     {
         return PositiveIntFromBoolArr(BoolArrFromResultArr(results));
+    }
+
+    /// # Summary 
+    /// Used to cast UDTs that are derived from type Qubit[] down to Qubit[].
+    /// Handy when used with generic functions like Head and Tail.
+    function AsQubitArray( arr : Qubit[] ) : Qubit[] {
+        return arr;
     }
 }

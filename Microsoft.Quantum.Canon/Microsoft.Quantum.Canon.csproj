@@ -152,7 +152,6 @@
     <QsharpCompile Include="Qecc\Utils.qs" />
     <QsharpCompile Include="QFT.qs" />
     <QsharpCompile Include="PhaseEstimation\Quantum.qs" />
-    <QsharpCompile Include="ShiftOp.qs" />
     <QsharpCompile Include="Stubs.qs" />
     <QsharpCompile Include="Combinators\With.qs" />
     <QsharpCompile Include="Qecc\KnillDistill.qs" />

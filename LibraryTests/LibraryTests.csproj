@@ -93,8 +93,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <QsharpCompile Include="ArithmeticTests.qs" />
     <QsharpCompile Include="AmplitudeAmplificationTests.qs" />
-    <None Include="ArithmeticTests.qs" />
     <QsharpCompile Include="PauliTests.qs" />
     <QsharpCompile Include="Samples\SimpleAlgorithmsTests.qs" />
     <QsharpCompile Include="PairTests.qs" />

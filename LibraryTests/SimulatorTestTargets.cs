@@ -1,12 +1,12 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-using Microsoft.Quantum.Simulation.XUnit;
 using Microsoft.Quantum.Simulation.Core;
-using Xunit;
 using Microsoft.Quantum.Simulation.Simulators;
-using System.Diagnostics;
+using Microsoft.Quantum.Simulation.XUnit;
 using System.Collections.Generic;
+using System.Diagnostics;
+using Xunit;
 
 namespace Microsoft.Quantum.Tests
 {
@@ -34,25 +34,35 @@ namespace Microsoft.Quantum.Tests
             // It is convenient to store seed for test that can fail with small probability
             uint? seed = RetriveStoredSeed(opData);
 
-            using (var sim = new QuantumSimulator(randomNumberGeneratorSeed: seed))
+            try
             {
-                // Frequently tests include measurement and randomness. 
-                // To reproduce the failed test it is useful to record seed that has been used 
-                // for the random number generator inside the simulator.
-                LogSimulatorSeed(opData, sim);
+                using (var sim = new QuantumSimulator(randomNumberGeneratorSeed: seed))
+                {
+                    // Frequently tests include measurement and randomness. 
+                    // To reproduce the failed test it is useful to record seed that has been used 
+                    // for the random number generator inside the simulator.
+                    LogSimulatorSeed(opData, sim);
 
-                // This ensures that when the test is run in Debug mode, all message logged in 
-                // Q# by calling Microsoft.Quantum.Primitives.Message show-up 
-                // in Debug output 
-                sim.OnLog += (string message) => { Debug.WriteLine(message); };
+                    // This ensures that when the test is run in Debug mode, all message logged in 
+                    // Q# by calling Microsoft.Quantum.Primitives.Message show-up 
+                    // in Debug output 
+                    sim.OnLog += (string message) => { Debug.WriteLine(message); };
 
-                // this ensures that all message logged in Q# by calling
-                // Microsoft.Quantum.Primitives.Message show-up 
-                // in test output 
-                sim.OnLog += (string message) => { output.WriteLine(message); };
+                    // this ensures that all message logged in Q# by calling
+                    // Microsoft.Quantum.Primitives.Message show-up 
+                    // in test output 
+                    sim.OnLog += (string message) => { output.WriteLine(message); };
 
-                // executes operation
-                opData.TestOperationRunner(sim);
+                    // executes operation
+                    opData.TestOperationRunner(sim);
+                }
+            }
+            catch( System.BadImageFormatException e )
+            {
+                throw new System.BadImageFormatException($"Could not load Quantum Simulator. If you are running tests using Visual Studio 2017, " +
+                    $"this problem can be fixed by using menu Test > Test Settings > Default Processor Architecture " +
+                    $"and switching to X64 instead of X86. Alternatively, press Ctrl+Q and type `Default Processor Architecture`. If you are running from command line using " +
+                    $"vstest.console.exe use command line option /Platform:x64.", e );
             }
         }
 

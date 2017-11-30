@@ -14,11 +14,11 @@ namespace Microsoft.Quantum.Canon {
     ///
     /// # Output
     /// The base-2 logarithm $y = \log_2(x)$ such that $x = 2^y$.
-	function Lg(input: Double) : Double
-	{
-		// Fully-qualified name is required because Log also appears in Primitives
-		return Microsoft.Quantum.Extensions.Math.Log(input) / LogOf2();
-	}
+    function Lg(input: Double) : Double
+    {
+        // Fully-qualified name is required because Log also appears in Primitives
+        return Microsoft.Quantum.Extensions.Math.Log(input) / LogOf2();
+    }
 
     // TODO: rewrite in terms of Fold(PairwiseMax, INTEGER_MIN(), _).
     /// # Summary
@@ -111,13 +111,13 @@ namespace Microsoft.Quantum.Canon {
     ///
     /// # Output
     /// A real number $y$ such that $x = \cosh(y)$.
-	function ArcCosh(x : Double) : Double
-	{
-		// Fully-qualified name is required because Log also appears in Primitives
-		return Microsoft.Quantum.Extensions.Math.Log(x + Sqrt(x * x - 1.0));
-	}
+    function ArcCosh(x : Double) : Double
+    {
+        // Fully-qualified name is required because Log also appears in Primitives
+        return Microsoft.Quantum.Extensions.Math.Log(x + Sqrt(x * x - 1.0));
+    }
 
-	/// # Summary
+    /// # Summary
     /// Computes the inverse hyperbolic secant of a number.
     ///
     /// # Input
@@ -126,13 +126,13 @@ namespace Microsoft.Quantum.Canon {
     ///
     /// # Output
     /// A real number $y$ such that $x = \sech(y)$.
-	function ArcSinh(x : Double) : Double
-	{
-		// Fully-qualified name is required because Log also appears in Primitives
-		return Microsoft.Quantum.Extensions.Math.Log(x + Sqrt(x * x + 1.0));
-	}
+    function ArcSinh(x : Double) : Double
+    {
+        // Fully-qualified name is required because Log also appears in Primitives
+        return Microsoft.Quantum.Extensions.Math.Log(x + Sqrt(x * x + 1.0));
+    }
 
-	/// # Summary
+    /// # Summary
     /// Computes the inverse hyperbolic tangent of a number.
     ///
     /// # Input
@@ -141,10 +141,121 @@ namespace Microsoft.Quantum.Canon {
     ///
     /// # Output
     /// A real number $y$ such that $x = \tanh(y)$.
-	function ArcTanh(x : Double) : Double
-	{
-		// Fully-qualified name is required because Log also appears in Primitives
-		return Microsoft.Quantum.Extensions.Math.Log((1.0 + x) / (1.0 - x)) * 0.5;
-	}
+    function ArcTanh(x : Double) : Double
+    {
+        // Fully-qualified name is required because Log also appears in Primitives
+        return Microsoft.Quantum.Extensions.Math.Log((1.0 + x) / (1.0 - x)) * 0.5;
+    }
 
+    /// # Summary
+    /// Computes canonical residue of `value` modulo `modulus`. 
+    /// # Input 
+    /// ## value 
+    /// the value of which residue is computed 
+    /// ## modulus 
+    /// the modulus by which residues are take, must be positive
+    /// # Output 
+    /// Integer r between 0 and `modulus` - 1 such that value - r is divisible by modulus
+    /// 
+    /// # Remarks 
+    /// This function behaves the way a mathematician would expect Mod function to behave, 
+    /// as opposed to how operator `%` is behaving in C# and Q#. 
+    function Modulus( value : Int , modulus : Int ) : Int 
+    {
+        AssertBoolEqual( modulus > 0, true, "`modulus` must be positive" );
+        let r = value % modulus;
+        if( r < 0 ) { 
+            return r + modulus;
+        } else {
+            return r;
+        }
+    }
+
+    /// # Summary 
+    /// Let us denote expBase by x, power by p and modulus by N. 
+    /// The function returns xᵖ mod N . 
+    /// We assume that N,x are positive and power is non-negative.
+    function ExpMod( expBase : Int,  power : Int, modulus : Int ) : Int {
+        
+        AssertBoolEqual( power >= 0, true, "`power` must be non-negative" );
+        AssertBoolEqual( modulus > 0, true, "`modulus` must be positive" );
+        AssertBoolEqual( expBase > 0, true, "`expBase` must be positive" );
+
+        mutable res = 1;
+        let expBaseMod = expBase % modulus;
+        for( i in 1 .. power )
+        {
+            set res = (res * expBaseMod) % modulus;
+        }
+        return res;
+    }
+
+    /// # Summary 
+    /// Computes tuple (u,v) such that u⋅a + v⋅b = GCD(a,b), where GCD is a  
+    /// greatest common divisor of a and b. The GCD is always positive.
+    /// 
+    /// # Input 
+    /// ## a 
+    /// the first number of which extended greatest common divisor is being computed
+    /// ## b
+    /// the second number of which extended greatest common divisor is being computed
+    /// 
+    /// # Output 
+    /// Tuple (u,v) with properties u⋅a + v⋅b = GCD(a,b)
+    ///
+    /// # References 
+    /// - This implementation is according to https://en.wikipedia.org/wiki/Extended_Euclidean_algorithm
+    function ExtendedGCD( a : Int, b : Int ) : (Int,Int) { 
+        let signA = SignI(a);
+        let signB = SignI(b);
+        mutable s = (1, 0);
+        mutable t = (0, 1);
+        mutable r = (a*signA, b*signB);
+        repeat {}
+        until( Snd(r) == 0 )
+        fixup {
+            let quotient = Fst(r) / Snd(r);
+            set r = ( Snd(r), Fst(r) - quotient * Snd(r) ); 
+            set s = ( Snd(s), Fst(s) - quotient * Snd(s) ); 
+            set t = ( Snd(t), Fst(t) - quotient * Snd(t) ); 
+        }
+        return (Fst(s)*signA,Fst(t)*signB);
+    }
+
+    /// # Summary 
+    /// Returns  true if a and b are co-prime and false otherwise
+    ///
+    /// # Input 
+    /// ## a 
+    /// the first number of which co-primality is being tested
+    /// ## b
+    /// the second number of which co-primality is being tested
+    /// 
+    /// # Output 
+    /// True, if a and b are co-prime (e.g. their greatest common divisor is 1 ), 
+    /// and false otherwise
+    function IsCoprime( a : Int, b : Int ) : Bool {
+        let (u,v) = ExtendedGCD(a,b);
+        return u*a + v*b == 1;
+    }
+
+    /// # Summary 
+    /// Returns b such that `a`⋅b = 1 (mod `modulus`)
+    /// 
+    /// # Input 
+    /// ## a 
+    /// The number being inverted
+    /// ## modulus
+    /// The modulus according to which the numbers are inverted
+    /// 
+    /// # Output 
+    /// Integer b such that a⋅`b` = 1 (mod `modulus`)
+    function InverseMod( a : Int, modulus : Int ) : Int {
+        let (u,v) = ExtendedGCD(a,modulus);
+        let gcd = u*a + v*modulus;
+        AssertBoolEqual(
+            gcd == 1,
+            true, "`a` and `modulus` must be co-prime" );
+        return Modulus(u,modulus);
+    }
 }

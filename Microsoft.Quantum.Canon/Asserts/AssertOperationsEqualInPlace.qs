@@ -86,20 +86,30 @@ namespace Microsoft.Quantum.Canon {
         {
             using( qubits = Qubit[Length(basis)] )
             {
-                for( i in 0 .. Length(basis) - 1 )
-                {
-                    AssertProb([PauliZ],[qubits[i]],Zero,1.0,"Expecting qubits to be all zero at the beginning", tolerance);
-                }
+                AssertAllZero( "Expecting qubits to be all zero at the beginning", qubits, tolerance );
                 FlipToBasis(qubits,basis);
                 givenU(qubits);
                 (Adjoint(expectedU))(qubits);
                 (Adjoint(FlipToBasis))(qubits, basis);
-                for( i in 0 .. Length(basis) - 1 )
-                {
-                    AssertProb([PauliZ],[qubits[i]],Zero,1.0,"State must be |0⟩ if givenU is equal to expectedU", tolerance);
-                }
+                AssertAllZero( "State must be |0⟩ if givenU is equal to expectedU", qubits, tolerance );
+            }
+        }
+    }
 
-                ResetAll(qubits);
+    /// # Summary 
+    /// Assert that given qubits are all in |0⟩ state
+    /// 
+    /// # Input 
+    /// ## message
+    /// The message to be emited if assertion fails
+    /// ## target
+    /// Qubits that are asserted to be in |0⟩ state
+    /// ## tolerance
+    /// Accuracy with which the state should be in |0⟩ state
+    operation AssertAllZero( message : String, target : Qubit[], tolerance : Double ) : () {
+        body {
+            for( i in 0 .. Length(target) - 1 ) {
+                AssertProb([PauliZ],[target[i]],Zero,1.0, message, tolerance);
             }
         }
     }
