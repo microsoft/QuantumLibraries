@@ -62,12 +62,6 @@ namespace Microsoft.Quantum.Canon {
         }
     }
 
-    /// # Summary 
-    /// Little-endian unsigned integers in QFT basis. 
-    /// For example, if |x⟩ is little-endian encoding of integer x in computational basis, 
-    /// then QFTLE|x⟩ is encoding of x in QFT basis. 
-    newtype PhaseLittleEndian = (Qubit[]);
-
     /// # Summary
     /// Unsigned integer increment by an integer constant, based on phase rotations.
     /// Suppose `target` encodes unsigned integer x in little-endian encoding and 
@@ -146,7 +140,7 @@ namespace Microsoft.Quantum.Canon {
     /// Controlled version of the operation ignores controls
     operation AssertLessThanPhaseLE( value : Int ,  number : PhaseLittleEndian  ) : () {
         body{
-            let inner = WithA( (Adjoint QFTLE), AssertHighestBit(One,_), _ );
+            let inner = ApplyLEOperationOnPhaseLEA( AssertHighestBit(One,_), _ );
             WithA( (Adjoint IntegerIncrementPhaseLE)(value,_), inner, number );
         }
         adjoint self
@@ -177,7 +171,7 @@ namespace Microsoft.Quantum.Canon {
     operation IntegerIncrementLE(increment : Int, target : LittleEndian ) : () { 
         body {
             let inner = IntegerIncrementPhaseLE(increment, _);
-            WithCA(QFTLE,inner,target);
+            ApplyPhaseLEOperationOnLECA(inner, target);
         }
         adjoint auto
         controlled auto
@@ -194,7 +188,7 @@ namespace Microsoft.Quantum.Canon {
             let inner = ModularIncrementPhaseLE(increment, modulus, _);
             using ( ancilla = Qubit[1] ) {
                 let extraZeroBit = ancilla[0];
-                WithCA(QFTLE,inner,target + [extraZeroBit]);    
+                ApplyPhaseLEOperationOnLECA(inner, LittleEndian(target + [extraZeroBit]));
             }
         }
         adjoint auto
@@ -251,7 +245,7 @@ namespace Microsoft.Quantum.Canon {
 
             if( EnableExtraAssertsForArithmetic() ) {
                 // assert that the highest bit is zero, by switching to computational basis
-                WithA( (Adjoint QFTLE), AssertHighestBit(Zero,_), target);
+                ApplyLEOperationOnPhaseLEA(AssertHighestBit(Zero,_), target );
                 // check that the input is less than modulus
                 AssertLessThanPhaseLE(modulus, target);
             }
@@ -259,7 +253,7 @@ namespace Microsoft.Quantum.Canon {
             using( ancilla = Qubit[1] ) {
                 let lessThanModulusFlag = ancilla[0];
                 let copyMostSignificantBitPhaseLE = 
-                    WithA((Adjoint QFTLE), CopyMostSignificantBitLE(_,lessThanModulusFlag),_);
+                    ApplyLEOperationOnPhaseLEA(CopyMostSignificantBitLE(_,lessThanModulusFlag),_);
                 // lets track the state of target register through the computation 
                 IntegerIncrementPhaseLE(increment,target);
                 // the state is |x+a⟩ in QFT basis 
@@ -286,7 +280,7 @@ namespace Microsoft.Quantum.Canon {
 
             if( EnableExtraAssertsForArithmetic() ) {
                 // assert that the highest bit is zero, by switching to computational basis
-                WithA( (Adjoint QFTLE), AssertHighestBit(Zero,_), target);
+                ApplyLEOperationOnPhaseLEA(AssertHighestBit(Zero,_), target );
                 // check that the input is less than modulus
                 AssertLessThanPhaseLE(modulus, target);
             }
@@ -296,7 +290,7 @@ namespace Microsoft.Quantum.Canon {
             using( ancilla = Qubit[1] ) {
                 let lessThanModulusFlag = ancilla[0];
                 let copyMostSignificantBitPhaseLE = 
-                    WithA((Adjoint QFTLE), CopyMostSignificantBitLE(_,lessThanModulusFlag),_);
+                    ApplyLEOperationOnPhaseLEA(CopyMostSignificantBitLE(_,lessThanModulusFlag),_);
                 // lets track the state of target register through the computation 
                 (Controlled IntegerIncrementPhaseLE)(controls,(increment,target));
                 // the state is |x+a⟩ in QFT basis 
@@ -336,7 +330,7 @@ namespace Microsoft.Quantum.Canon {
             let inner = ModularAddProductPhaseLE(constMultiplier, modulus, multiplier, _ );
             using ( ancilla = Qubit[1] ) {
                 let extraZeroBit = ancilla[0];
-                WithCA(QFTLE,inner,summand + [extraZeroBit]);    
+                ApplyPhaseLEOperationOnLECA(inner, LittleEndian(summand + [extraZeroBit]));    
             }
         }
         adjoint auto
@@ -372,7 +366,7 @@ namespace Microsoft.Quantum.Canon {
 
             if( EnableExtraAssertsForArithmetic() ) {
                 // assert that the highest bit is zero, by switching to computational basis
-                WithCA( (Adjoint QFTLE), AssertHighestBit(Zero,_), phaseSummand);
+                ApplyLEOperationOnPhaseLECA(AssertHighestBit(Zero,_), phaseSummand );
                 // check that the input is less than modulus
                 AssertLessThanPhaseLE(modulus, phaseSummand);
             }
@@ -456,5 +450,6 @@ namespace Microsoft.Quantum.Canon {
         controlled auto
         controlled adjoint auto
     }
+
 }
 

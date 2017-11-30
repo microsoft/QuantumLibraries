@@ -136,7 +136,7 @@
     <QsharpCompile Include="Asserts\AssertQubit.qs" />
     <QsharpCompile Include="Asserts\AssertOperationsEqualReferenced.qs" />
     <QsharpCompile Include="DataStructures\Stack.qs" />
-    <QsharpCompile Include="Endianness.qs" />
+    <QsharpCompile Include="UnsignedIntegers.qs" />
     <QsharpCompile Include="Identity.qs" />
     <QsharpCompile Include="IterateThroughCartesianProduct.qs" />
     <QsharpCompile Include="Math\Constants.qs" />
