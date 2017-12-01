@@ -33,8 +33,8 @@ namespace Microsoft.Quantum.Canon {
             // Prepare a reference register entangled with the target register.
             using (reference = Qubit[nQubits]) {
                 using (target = Qubit[nQubits]) {
-                    // FIXME: change to use PrepareChoiState/With/Bind, but that depends on generics since the arguments take
-                    //        (Qubit[], Qubit[]), not Qubit[].
+                    // NB: this does not use With as that requires Bind,
+                    //     which is not currently working due to known issues.
                     PrepareEntangledState(reference, target);
                     actual(target);
                     (Adjoint expected)(target);

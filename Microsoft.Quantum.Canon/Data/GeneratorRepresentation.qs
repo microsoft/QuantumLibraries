@@ -32,7 +32,6 @@ namespace Microsoft.Quantum.Canon {
     /// - @"microsoft.quantum.canon.fermionicevolutionset"
     newtype GeneratorIndex = ((Int[], Double[]), Int[]);
 
-    // FIXME: unify this and the GateSet representation above with ContinousOracle.
     /// # Summary
     /// From the view of a GeneratorSystem, a description of a Hamiltonian
     //  is a collection of GeneratorTerms. We iterate over this

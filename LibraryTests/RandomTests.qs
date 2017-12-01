@@ -5,8 +5,6 @@ namespace Microsoft.Quantum.Tests {
     open Microsoft.Quantum.Primitive;
     open Microsoft.Quantum.Canon;
 
-    // FIXME: check let randPrim = Random([0.5; 0.5]);
-
     /// # Summary
     /// Checks that @"microsoft.quantum.canon.randomint" obeys ranges.
 	operation RandomIntRangeTest() : () {

@@ -27,9 +27,9 @@ namespace Microsoft.Quantum.Samples.UnitTesting {
             for(idxIteration in 1 .. 8)
             {
                 AssertOperationsEqualInPlace(
-                    TeleportationIdentityTestHelper, IdentityTestHelper, 1);
+                    TeleportationIdentityTestHelper, NoOp, 1);
                 AssertOperationsEqualReferenced(
-                    TeleportationIdentityTestHelper, IdentityTestHelper, 1);
+                    TeleportationIdentityTestHelper, NoOp, 1);
             }
         }
     }

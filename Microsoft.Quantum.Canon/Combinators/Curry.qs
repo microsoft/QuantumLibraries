@@ -25,13 +25,71 @@ namespace Microsoft.Quantum.Canon {
     /// The following are equivalent:
     /// ```qsharp
     /// op(x, y);
-    /// 
+    ///
     /// let curried = CurryOp(op);
     /// let partial = curried(x);
     /// partial(y);
     /// ```
     function CurryOp<'T, 'U>(op : (('T, 'U) => ())) : ('T -> ('U => ())) {
         return CurryOpImpl(op, _);
+    }
+
+    operation UncurryOpImpl<'T, 'U>(curriedOp : ('T -> ('U => ())), first : 'T, second : 'U) : () {
+        body {
+            let innerOp = curriedOp(first);
+            innerOp(second);
+        }
+    }
+
+    /// # Summary
+    /// Given a function which returns operations,
+    /// returns a new operation which takes both inputs
+    /// as a tuple.
+    ///
+    /// # Input
+    /// ## curriedOp
+    /// A function which returns operations.
+    ///
+    /// # Output
+    /// A new operation `op` such that `op(t, u)` is equivalent
+    /// to `(curriedOp(t))(u)`.
+    ///
+    /// # See Also
+    /// - @"microsoft.quantum.canon.uncurryopc"
+    /// - @"microsoft.quantum.canon.uncurryopa"
+    /// - @"microsoft.quantum.canon.uncurryopca"
+    function UncurryOp<'T, 'U>(curriedOp : ('T -> ('U => ()))) : (('T, 'U) => ()) {
+        return UncurryOpImpl(curriedOp, _, _);
+    }
+
+    operation UncurryOpCImpl<'T, 'U>(curriedOp : ('T -> ('U => () : Controlled)), first : 'T, second : 'U) : () {
+        body {
+            let innerOp = curriedOp(first);
+            innerOp(second);
+        }
+
+        controlled auto
+    }
+
+    /// # See Also
+    /// - @"microsoft.quantum.canon.uncurryop"
+    function UncurryOpC<'T, 'U>(curriedOp : ('T -> ('U => () : Controlled))) : (('T, 'U) => () : Controlled) {
+        return UncurryOpCImpl(curriedOp, _, _);
+    }
+
+    operation UncurryOpAImpl<'T, 'U>(curriedOp : ('T -> ('U => () : Adjoint)), first : 'T, second : 'U) : () {
+        body {
+            let innerOp = curriedOp(first);
+            innerOp(second);
+        }
+
+        adjoint auto
+    }
+
+    /// # See Also
+    /// - @"microsoft.quantum.canon.uncurryop"
+    function UncurryOpA<'T, 'U>(curriedOp : ('T -> ('U => () : Adjoint))) : (('T, 'U) => () : Adjoint) {
+        return UncurryOpAImpl(curriedOp, _, _);
     }
 
     operation UncurryOpCAImpl<'T, 'U>(curriedOp : ('T -> ('U => () : Controlled, Adjoint)), first : 'T, second : 'U) : () {
@@ -45,10 +103,10 @@ namespace Microsoft.Quantum.Canon {
         controlled adjoint auto
     }
 
+    /// # See Also
+    /// - @"microsoft.quantum.canon.uncurryop"
     function UncurryOpCA<'T, 'U>(curriedOp : ('T -> ('U => () : Controlled, Adjoint))) : (('T, 'U) => () : Controlled, Adjoint) {
         return UncurryOpCAImpl(curriedOp, _, _);
     }
-
-    // TODO: functor variants of the above
 
 }

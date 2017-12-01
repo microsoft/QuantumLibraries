@@ -6,24 +6,24 @@ namespace Microsoft.Quantum.Canon {
 
     /// # Summary 
     /// If true, enables extra asserts that are expensive, but useful to debug the use of 
-    /// the arithmetic functions
+    /// the arithmetic functions.
     ///
-    /// # Remark
+    /// # Remarks
     /// This function allows to configure the behaviour of the library. 
     function EnableExtraAssertsForArithmetic() : Bool {
         return true;
     }
-    
-    /// # Summary 
+
+    /// # Summary
     /// Let us denote `value` by a and let y be an unsigned integer encoded in `target`,
     /// then `InPlaceXorLE` performs an operation given by the following map:
-    /// |y⟩ ↦ |y⊕a⟩ , where ⊕ stands for bitwise exclusive or 
+    /// |y⟩ ↦ |y⊕a⟩ , where ⊕ is the bitwise exclusive OR operator.
     ///
     /// # Input
     /// ## value
-    /// An integer which is assumed to be non-negative. 
-    /// ## target 
-    /// A quantum register which is used to store `value` in little-endian encoding. 
+    /// An integer which is assumed to be non-negative.
+    /// ## target
+    /// A quantum register which is used to store `value` in little-endian encoding.
     operation InPlaceXorLE(value : Int, target : LittleEndian) : () {
         body {
             let bitrepresentation = BoolArrFromPositiveInt(value, Length(target));

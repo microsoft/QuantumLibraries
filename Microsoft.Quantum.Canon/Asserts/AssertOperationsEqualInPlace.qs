@@ -115,21 +115,6 @@ namespace Microsoft.Quantum.Canon {
     }
 
     /// # Summary
-    /// Test helper to be used with AssertOperationsEqualInPlace and AssertOperationsEqualReferenced 
-    /// if one needs to check that the operation is identity.
-    ///
-    /// # Input
-    /// ## q
-    /// Qubit register to be operated upon.
-    operation IdentityTestHelper( q : Qubit[] ) : ()
-    {
-        body {}
-        adjoint auto
-        controlled auto
-        controlled adjoint auto
-    }
-
-    /// # Summary
     /// Checks if the operation givenU is equal to the operation expectedU on
     /// the given input size.
     ///

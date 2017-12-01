@@ -3,6 +3,8 @@
 
 namespace Microsoft.Quantum.Canon {
 
+	/// # Summary
+	/// Performs the identity operation (no-op) on a single qubit.
 	operation I(target : Qubit) : () {
 		body {}
 		adjoint self
@@ -10,18 +12,19 @@ namespace Microsoft.Quantum.Canon {
 		controlled adjoint auto
 	}
 
-	operation NoOp(qubits: Qubit[]) : (){
-		body {
-
-		}
+	/// # Summary
+	/// Performs the identity operation (no-op) on a register of qubits.
+	operation NoOp(qubits: Qubit[]) : () {
+		body {}
 		adjoint auto
 		controlled auto
 		adjoint controlled auto
 	}
-	operation NoOp2(qubitsA: Qubit[], qubitsB: Qubit[]) : (){
-		body {
 
-		}
+	/// # Summary
+	/// Performs the identity operation (no-op) on two registers of qubits.
+	operation NoOp2(qubitsA: Qubit[], qubitsB: Qubit[]) : (){
+		body {}
 		adjoint auto
 		controlled auto
 		adjoint controlled auto
@@ -29,6 +32,10 @@ namespace Microsoft.Quantum.Canon {
 
 	/// # Summary
 	/// Ignores the output of an operation or function.
+	///
+	/// # Input
+	/// ## value
+	/// A value to be ignored.
 	function Ignore<'T>(value : 'T) : () {
 		return ();
 	}

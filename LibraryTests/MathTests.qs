@@ -6,15 +6,15 @@ namespace Microsoft.Quantum.Canon {
     open Microsoft.Quantum.Primitive;
     open Microsoft.Quantum.Extensions.Math;
 
-	function NativeFnsAreCallableTest() : () {
-		let arg = PI() / 2.0;
-		AssertAlmostEqual(Sin(arg), 1.0);
-		AssertAlmostEqual(Cos(arg), 0.0);
+    function NativeFnsAreCallableTest() : () {
+        let arg = PI() / 2.0;
+        AssertAlmostEqual(Sin(arg), 1.0);
+        AssertAlmostEqual(Cos(arg), 0.0);
 
-		let arcArg = 1.0;
-		AssertAlmostEqual(ArcCos(arcArg), 0.0);
-		AssertAlmostEqual(ArcSin(arcArg), arg);
-	}
+        let arcArg = 1.0;
+        AssertAlmostEqual(ArcCos(arcArg), 0.0);
+        AssertAlmostEqual(ArcSin(arcArg), arg);
+    }
 
     function RealModTest() : () {
         AssertAlmostEqual(RealMod(5.5 * PI(), 2.0 * PI(), 0.0), 1.5 * PI());
@@ -41,6 +41,6 @@ namespace Microsoft.Quantum.Canon {
     function ExtendedGCDTest() : ()
     {
         let testTuples = [ (1,1,1); (1,-1,1); (-1,1,1); (-1,-1,1); (5,7,1); (-5,7,1); (3,15,3) ];
-        ApplyToEachF(ExtendedGCDTestHelper, testTuples );
+        Ignore(Map(ExtendedGCDTestHelper, testTuples));
     }
 }

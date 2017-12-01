@@ -60,17 +60,45 @@ namespace Microsoft.Quantum.Canon {
     }
 
     /// # Summary
-    /// InjectPi4YRotation needs a magic state 
-    /// $\cos\frac{\pi}{8} \ket{0} + \sin \frac{\pi}{8} \ket{1}$.
-    /// The magic state required is the same for the Adjoint,
-    /// that implements $-\pi/4$ $Y$-rotation.
+    /// Performs a $\pi / 4$ rotation about $Y$ by consuming a magic
+    /// state; that is, a copy of the state
+    /// $$
+    /// \begin{align}
+    ///     \cos\frac{\pi}{8} \ket{0} + \sin \frac{\pi}{8} \ket{1}.
+    /// \end{align}
+    /// $$.
+    ///
+    /// # Input
+    /// ## data
+    /// A qubit to be rotated about $Y$ by $\pi / 4$.
+    ///
+    /// ## magic
+    /// A qubit initially in the magic state. Following application
+    /// of this operation, `magic` is returned to the $\ket{0}$ state.
+    ///
+    /// # Remarks
+    /// The following are equivalent:
+    /// ```Q#
+    /// Ry(PI() / 4.0, data);
+    ///
+    /// using (magicRegister = Qubit[1]) {
+    ///     let magic = magicRegister[0];
+    ///     Ry(PI() / 4.0, magic);
+    ///     InjectPi4YRotation(data, magic);
+    ///     Reset(magic);
+    /// }
+    /// ```
+    ///
+    /// This operation supports the `Adjoint` functor, in which
+    /// case the same magic state is consumed, but the effect
+    /// on the data qubit is a $-\pi/4$ $Y$-rotation.
     operation InjectPi4YRotation(data: Qubit, magic: Qubit) : ()
     {
         body {
             (Adjoint S)(data);
             CNOT(magic, data);
             S(data);
-            let r = Measure([PauliY], [magic]);
+            let r = MResetY(magic);
             if ( r == One ) {
                 // The following five gates is equal to	Ry( Pi()/2.0, data)
                 // up to global phase.
@@ -85,7 +113,7 @@ namespace Microsoft.Quantum.Canon {
             (Adjoint S)(data);
             CNOT(magic, data);
             S(data);
-            let r = Measure([PauliY], [magic]);
+            let r = MResetY(magic);
             if ( r == Zero ) {
                 S(data);
                 H(data);
@@ -96,18 +124,21 @@ namespace Microsoft.Quantum.Canon {
         }
     }
 
-    // TODO: define magic states here.
-    // TODO: define what happens to the other fourteen qubits.
     /// # Summary
-    /// Given 15 approximate copies of a magic state, yields
-    /// one higher-quality copy.
+    /// Given 15 approximate copies of a magic state
+    /// $$
+    /// \begin{align}
+    ///     \cos\frac{\pi}{8} \ket{0} + \sin \frac{\pi}{8} \ket{1}.
+    /// \end{align},
+    /// $$ yields one higher-quality copy.
     ///
     /// # Input
     /// ## roughMagic
     /// A register of fifteen qubits containing approximate copies
     /// of a magic state. Following application of this distillation
-    /// procedure, ``roughMagic[0]` will contain one higher-quality
-    /// copy.
+    /// procedure, `roughMagic[0]` will contain one higher-quality
+    /// copy, and the rest of the register will be reset to the
+    /// $\ket{00\cdots 0}$ state.
     ///
     /// # Output
     /// If `true`, then the procedure succeeded and the higher-quality
@@ -137,7 +168,7 @@ namespace Microsoft.Quantum.Canon {
                     CNOT(code[idx], anc);
                     InjectPi4YRotation(code[idx], roughMagic[idx + 7]);
                 }
-                let (logicalQubit, xsyn, zsyn) = 
+                let (logicalQubit, xsyn, zsyn) =
                     _ExtractLogicalQubitFromSteaneCode(LogicalRegister(code));
                 let m = M(anc);
                 if( xsyn == -1 && zsyn == -1 && m == Zero ) {
@@ -151,5 +182,4 @@ namespace Microsoft.Quantum.Canon {
         }
     }
 
-    
 }

@@ -259,33 +259,47 @@ namespace Microsoft.Quantum.Tests {
             }
         }
     }
-    
+
     operation Pi4YInjectionTest() : ()
     {
         body {
             using (anc = Qubit[2]) {
                 // magic state in anc[1]
                 Ry( PI() / 4.0, anc[1]);
-                InjectPi4YRotation( anc[0], anc[1] );
 
-                // For test, we bring the data qubit anc[0] to the original state.
-                Ry(-PI() / 4.0, anc[0]);
+                let expected = ApplyToEachA(Ry(PI() / 4.0, _), _);
+                let actual = ApplyToEach(InjectPi4YRotation(_, anc[1]), _);
 
-                // So, the data must be in Zero.
-                AssertQubit(Zero, anc[0] );
-                ResetAll(anc);
+                AssertOperationsEqualReferenced(actual, expected, 1);
+
+                // NB: we explicitly do not reset the
+                //     qubit containing the magic state,
+                //     so as to test whether the injection
+                //     correctly reset for us.
+                Assert([PauliZ], [anc[1]], Zero, "Magic state was not reset to |0〉.");
+                Reset(anc[0]);
             }
-            using (anc2 = Qubit[2]) {
+        }
+    }
+
+    operation Pi4YInjectionAdjointTest() : ()
+    {
+        body {
+            using (anc = Qubit[2]) {
                 // magic state in anc[1]
-                Ry( PI() / 4.0, anc2[1]);
-                (Adjoint InjectPi4YRotation)( anc2[0], anc2[1] );
+                Ry( PI() / 4.0, anc[1]);
 
-                // For test, we bring the data qubit anc[0] to the original state.
-                Ry( PI() / 4.0, anc2[0]);
+                let expected = ApplyToEachA(Ry(-PI() / 4.0, _), _);
+                let actual = ApplyToEach((Adjoint InjectPi4YRotation)(_, anc[1]), _);
 
-                // So, the data must be in Zero.
-                AssertQubit(Zero, anc2[0] );
-                ResetAll(anc2);
+                AssertOperationsEqualReferenced(actual, expected, 1);
+
+                // NB: we explicitly do not reset the
+                //     qubit containing the magic state,
+                //     so as to test whether the injection
+                //     correctly reset for us.
+                Assert([PauliZ], [anc[1]], Zero, "Magic state was not reset to |0〉.");
+                Reset(anc[0]);
             }
         }
     }
@@ -346,18 +360,41 @@ namespace Microsoft.Quantum.Tests {
         }
     }
 
+    operation KnillDistillationNoErrorTest() : ()
+    {
+        body {
+            using (register = Qubit[15]) {
+                // Prepare the perfect magic states.
+                ApplyToEach( Ry(PI () /4.0, _), register );
+                let accept = KnillDistill( register );
+
+                Ry( -PI() / 4.0, register[0] );
+                AssertBoolEqual( true, accept, "Distillation failure");
+                ApplyToEach(AssertQubit(Zero, _), register);
+
+                // NB: no need to reset, we just asserted everything
+                //     was returned to |0〉.
+            }
+        }
+    }
+
+    /// # Summary
     /// Tests if the distillation routine works as intended.
 	/// This protocol is supposed to catch any weight 2 errors
 	/// on the input magic states, assuming perfect Cliffords.
 	/// Here we do not attempt to correct detected errors,
 	/// since corrections would make the output magic state
 	/// less accurate, compared to post-selection on zero syndrome.
-    operation KDTest():()
+    operation KDTest() : ()
     {
         body {
             using (rm = Qubit[15]) {
                 ApplyToEach( Ry(PI () /4.0, _), rm );
                 let acc = KnillDistill( rm );
+                // Check that the rough magic states were
+                // successfully reset to |0〉.
+                ApplyToEach(AssertQubit(Zero, _), Rest(rm));
+
                 Ry( -PI() / 4.0, rm[0] );
                 AssertBoolEqual( true, acc, "Distillation failure");
                 AssertQubit( Zero, rm[0] );
@@ -368,6 +405,9 @@ namespace Microsoft.Quantum.Tests {
                     ApplyToEach( Ry(PI () /4.0, _), rm );
                     Y( rm[idx] );
                     let acc1 = KnillDistill( rm );
+                    // Check that the rough magic states were
+                    // successfully reset to |0〉.
+                    ApplyToEach(AssertQubit(Zero, _), Rest(rm));
                     AssertBoolEqual( false, acc1, "Distillation missed an error");
                 }
 
@@ -379,6 +419,9 @@ namespace Microsoft.Quantum.Tests {
                     Y( rm[idxFirst] );
                     Y( rm[idxSecond] );
                     let acc1 = KnillDistill( rm );
+                    // Check that the rough magic states were
+                    // successfully reset to |0〉.
+                    ApplyToEach(AssertQubit(Zero, _), Rest(rm));
                     AssertBoolEqual( false, acc1, "Distillation missed a pair error");
                   }
                 }

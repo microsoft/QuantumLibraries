@@ -28,9 +28,19 @@ namespace Microsoft.Quantum.Canon {
         adjoint auto
     }
 
-    // TODO: document parameters
     /// # Summary
     /// Encodes into the [3, 1, 3] / ⟦3, 1, 1⟧ bit-flip code.
+    ///
+    /// # Input
+    /// ## physRegister
+    /// A register of physical qubits representing the data to be protected.
+    /// ## auxQubits
+    /// A register of auxillary qubits initially in the $\ket{00}$ state to be
+    /// used in encoding the data to be protected.
+    ///
+    /// # Output
+    /// The physical and auxillary qubits used in encoding, represented as a
+    /// logical register.
     operation BitFlipEncoder(physRegister : Qubit[], auxQubits : Qubit[])  : LogicalRegister
     {
         body {
@@ -41,7 +51,17 @@ namespace Microsoft.Quantum.Canon {
         }
     }
 
-    operation BitFlipDecoder( logicalRegister : LogicalRegister)  : (Qubit[], Qubit[])
+    /// # Summary
+    /// Decodes from the [3, 1, 3] / ⟦3, 1, 1⟧ bit-flip code.
+    ///
+    /// # Input
+    /// ## logicalRegister
+    /// A code block of the bit-flip code.
+    ///
+    /// # Output
+    /// A tuple of the data encoded into the logical register, and the auxillary
+    /// qubits used to represent the syndrome.
+    operation BitFlipDecoder(logicalRegister : LogicalRegister)  : (Qubit[], Qubit[])
     {
         body {
             let physRegister = [logicalRegister[0]];
