@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 namespace Microsoft.Quantum.Canon {
+    open Microsoft.Quantum.Primitive;
 
     /// # Summary
     /// Given an array of results, represents the array by a single
@@ -45,9 +46,11 @@ namespace Microsoft.Quantum.Canon {
             let (encode, decode, syndMeasX, syndMeasZ) = code;
             let syndromeX = syndMeasX(logicalRegister);
             let recoveryOpX = fnX(syndromeX);
+            Message($"X: {syndromeX} → {recoveryOpX}");
             ApplyPauli(recoveryOpX, logicalRegister);
             let syndromeZ = syndMeasZ(logicalRegister);
             let recoveryOpZ = fnZ(syndromeZ);
+            Message($"Z: {syndromeZ} → {recoveryOpZ}");
             ApplyPauli(recoveryOpZ, logicalRegister);
         }
     }

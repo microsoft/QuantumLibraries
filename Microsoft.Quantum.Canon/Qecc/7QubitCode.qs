@@ -42,12 +42,20 @@ namespace Microsoft.Quantum.Canon {
     /// https://arxiv.org/abs/quant-ph/9705052
     function SteaneCodeRecoveryX( syndrome : Syndrome)  : Pauli[]
     {
-        return EmbedPauli(PauliX, ResultAsInt(syndrome), 7);
+        let idxQubit = ResultAsInt(syndrome);
+        if (idxQubit == 0) {
+            return ConstantArray(7, PauliI);
+        }
+        return EmbedPauli(PauliZ, idxQubit - 1, 7);
     }
 
     function SteaneCodeRecoveryZ( syndrome : Syndrome)  : Pauli[]
     {
-        return EmbedPauli(PauliZ, ResultAsInt(syndrome), 7);
+        let idxQubit = ResultAsInt(syndrome);
+        if (idxQubit == 0) {
+            return ConstantArray(7, PauliI);
+        }
+        return EmbedPauli(PauliX, idxQubit - 1, 7);
     }
 
     function SteaneCodeRecoveryFns() : (RecoveryFn, RecoveryFn) {

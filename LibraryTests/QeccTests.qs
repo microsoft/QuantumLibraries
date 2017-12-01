@@ -396,6 +396,7 @@ namespace Microsoft.Quantum.Tests {
             using (scratch = Qubit[nScratch]) {
                 let logicalRegister = encode(data, scratch);
                 // Cause an error.
+                Message($"Applying error {error}.");
                 error(logicalRegister);
                 RecoverCSS(code, fnX, fnZ, logicalRegister);
                 let (decodedData, decodedScratch) = decode(logicalRegister);
@@ -420,7 +421,7 @@ namespace Microsoft.Quantum.Tests {
     /// # Summary
     /// Ensures that the 7-qubit Steane code can correct an arbitrary
     /// single-qubit error.
-    operation SteaneCodeTestExFail()  : ()
+    operation SteaneCodeTest()  : ()
     {
         body {
             let code = SteaneCode();
