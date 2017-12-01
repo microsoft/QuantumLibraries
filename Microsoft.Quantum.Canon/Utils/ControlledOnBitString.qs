@@ -20,7 +20,7 @@ namespace Microsoft.Quantum.Canon {
     /// # Remarks 
     /// The length of `bits` and `controlRegister` must be equal.
     /// For example, `bits = [0;1;0;0;1]` means that `oracle` is applied if and only if `controlRegister`" is in the state $\ket{0}\ket{1}\ket{0}\ket{0}\ket{1}$.
-    operation ControlledOnBitStringImpl(bits : Bool[] , oracle: (Qubit[] => (): Adjoint, Controlled), controlRegister : Qubit[], targetRegister: Qubit[]) : ()
+    operation ControlledOnBitStringImpl<'T>(bits : Bool[] , oracle: ('T => (): Adjoint, Controlled), controlRegister : Qubit[], targetRegister: 'T) : ()
     {
 	    body{
 		    WithCA(ApplyPauliFromBitString(PauliX, false, bits, _), (Controlled oracle)(_, targetRegister), controlRegister);
@@ -45,7 +45,7 @@ namespace Microsoft.Quantum.Canon {
     ///
     /// # Remarks 
     /// Obtained by partial application of @"microsoft.quantum.canon.ControlledOnBitStringImpl".
-    function ControlledOnBitString(bits : Bool[] , oracle: (Qubit[] => (): Adjoint, Controlled)) : ((Qubit[],Qubit[]) => (): Adjoint, Controlled)
+    function ControlledOnBitString<'T>(bits : Bool[] , oracle: ('T => (): Adjoint, Controlled)) : ((Qubit[],'T) => (): Adjoint, Controlled)
     {
 	    return ControlledOnBitStringImpl(bits, oracle, _, _);
     }
@@ -66,7 +66,7 @@ namespace Microsoft.Quantum.Canon {
     /// # Remarks 
     /// `numberState` must be at most $2^\texttt{Length(controlRegister)} - 1$.
     /// For example, `numberState = 537` means that `oracle` is applied if and only if `controlRegister` is in the state $\ket{537}$.
-    operation ControlledOnIntImpl(numberState : Int , oracle: (Qubit[] => (): Adjoint, Controlled), controlRegister : Qubit[], targetRegister: Qubit[]) : ()
+    operation ControlledOnIntImpl<'T>(numberState : Int , oracle: ('T => (): Adjoint, Controlled), controlRegister : Qubit[], targetRegister: 'T) : ()
     {
 	    body {
 
@@ -95,7 +95,7 @@ namespace Microsoft.Quantum.Canon {
     ///
     /// # Remarks 
     /// Obtained by partial application of @"microsoft.quantum.canon.ControlledOnIntImpl".
-    function ControlledOnInt(numberState : Int , oracle: (Qubit[] => (): Adjoint, Controlled)) : ((Qubit[],Qubit[]) => (): Adjoint, Controlled)
+    function ControlledOnInt<'T>(numberState : Int , oracle: ('T => (): Adjoint, Controlled)) : ((Qubit[],'T) => (): Adjoint, Controlled)
     {
 	    return ControlledOnIntImpl(numberState, oracle, _, _);
     }
