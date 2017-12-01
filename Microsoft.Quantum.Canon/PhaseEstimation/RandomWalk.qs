@@ -6,9 +6,6 @@ namespace Microsoft.Quantum.Canon {
     open Microsoft.Quantum.Extensions.Math;
 
     // NB: we take std.dev instead of variance here to avoid having to take a square root.
-    // FIXME: this currently passes a double to the oracle, as is only appropriate for
-    //        continuous-time oracles.
-    // TODO: document return type.
     /// # Summary
     /// Performs iterative phase estimation using a random walk to approximate
     /// Bayesian inference on the classical measurement results from a given
@@ -30,6 +27,10 @@ namespace Microsoft.Quantum.Canon {
     /// Total number of measurements than can be taken before the operation is considered to have failed.
     /// ## unwind
     /// Number of results to forget when consistency checks fail.
+    ///
+    /// # Output
+    /// The final estimate $\hat{\phi} \mathrel{:=} \expect[\phi]$ , where
+    /// the expectation is over the posterior given all accepted data.
     operation RandomWalkPhaseEstimation(
             initialMean : Double, initialStdDev : Double, nMeasurements : Int, maxMeasurements : Int, unwind : Int,
             oracle : ContinuousOracle, eigenstate : Qubit[]

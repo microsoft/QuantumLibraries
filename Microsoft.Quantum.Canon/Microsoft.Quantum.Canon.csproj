@@ -90,6 +90,7 @@
     <QsharpCompile Include="Arrays\Arrays.qs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <QsharpCompile Include="Arithmetic\Arithmetic.qs" />
+    <QsharpCompile Include="Enumeration\Trotter.qs" />
     <QsharpCompile Include="Combinators\ApplyToEachIndex.qs" />
     <QsharpCompile Include="Utils\Predicates.qs" />
     <QsharpCompile Include="DataStructures\Pairs.qs" />
@@ -117,7 +118,6 @@
     <QsharpCompile Include="AmplitudeAmplification\Utils.qs" />
     <QsharpCompile Include="Math\Random.qs" />
     <QsharpCompile Include="PhaseEstimation\Robust.qs" />
-    <QsharpCompile Include="Enumeration\TrotterNoGenerics.qs" />
     <QsharpCompile Include="Data\GeneratorRepresentation.qs" />
     <QsharpCompile Include="Utils\Ranges.qs" />
     <QsharpCompile Include="Utils\TypeConversion.qs" />
@@ -152,7 +152,6 @@
     <QsharpCompile Include="Qecc\Utils.qs" />
     <QsharpCompile Include="QFT.qs" />
     <QsharpCompile Include="PhaseEstimation\Quantum.qs" />
-    <QsharpCompile Include="Stubs.qs" />
     <QsharpCompile Include="Combinators\With.qs" />
     <QsharpCompile Include="Qecc\KnillDistill.qs" />
   </ItemGroup>

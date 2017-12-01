@@ -4,7 +4,27 @@
 namespace Microsoft.Quantum.Canon {
 	open Microsoft.Quantum.Primitive;
 
-    operation With(outerOperation : (Qubit[] => ():Adjoint), innerOperation : (Qubit[] => ()), target : Qubit[])  : ()
+    /// # Summary
+    /// Given operations implementing operators $U$ and $V$, performs the
+    /// operation $UVU^{\dagger}$ on a target. That is, this operation
+    /// conjugates $V$ with $U$.
+    ///
+    /// # Input
+    /// ## outerOperation
+    /// The operation $U$ that should be used to conjugate $V$.
+    /// ## innerOperation
+    /// The operation $V$ being conjugated.
+    ///
+    /// # Remarks
+    /// The outer operation is always assumed to be adjointable, but does not
+    /// need to be controllable in order for the combined operation to be
+    /// controllable.
+    ///
+    /// # See Also
+    /// - @"microsoft.quantum.canon.withc"
+    /// - @"microsoft.quantum.canon.witha"
+    /// - @"microsoft.quantum.canon.withca"
+    operation With<'T>(outerOperation : ('T => ():Adjoint), innerOperation : ('T => ()), target : 'T)  : ()
     {
         body {  
             outerOperation(target);
@@ -13,9 +33,9 @@ namespace Microsoft.Quantum.Canon {
         }
     }
 
-
-
-    operation WithA(outerOperation : (Qubit[] => ():Adjoint), innerOperation : (Qubit[] => ():Adjoint), target : Qubit[])  : ()
+    /// # See Also
+    /// - @"microsoft.quantum.canon.with"
+    operation WithA<'T>(outerOperation : ('T => ():Adjoint), innerOperation : ('T => ():Adjoint), target : 'T)  : ()
     {
         body {  
             outerOperation(target);
@@ -27,9 +47,11 @@ namespace Microsoft.Quantum.Canon {
     }
 
 
-    operation WithC(outerOperation : (Qubit[] => ():Adjoint), innerOperation : (Qubit[] => ():Controlled), target : Qubit[])  : ()
+    /// # See Also
+    /// - @"microsoft.quantum.canon.with"
+    operation WithC<'T>(outerOperation : ('T => ():Adjoint), innerOperation : ('T => ():Controlled), target : 'T)  : ()
     {
-        body {  
+        body {
             outerOperation(target);
             innerOperation(target);
             (Adjoint(outerOperation))(target);
@@ -42,9 +64,11 @@ namespace Microsoft.Quantum.Canon {
         }
     }
 
-    operation WithCA(outerOperation : (Qubit[] => ():Adjoint), innerOperation : (Qubit[] => ():Adjoint,Controlled), target : Qubit[])  : ()
+    /// # See Also
+    /// - @"microsoft.quantum.canon.with"
+    operation WithCA<'T>(outerOperation : ('T => ():Adjoint), innerOperation : ('T => ():Adjoint,Controlled), target : 'T)  : ()
     {
-        body {  
+        body {
             outerOperation(target);
             innerOperation(target);
             (Adjoint(outerOperation))(target);
@@ -57,26 +81,6 @@ namespace Microsoft.Quantum.Canon {
             (Adjoint(outerOperation))(target);
         }
         controlled adjoint auto
-    }
-
-    operation With1(outerOperation : (Qubit => ():Adjoint), innerOperation : (Qubit => ()), target : Qubit)  : ()
-    {
-        body {  
-            outerOperation(target);
-            innerOperation(target);
-            (Adjoint(outerOperation))(target);
-        }
-    }
-
-    operation With1C(outerOperation : (Qubit => ():Adjoint), innerOperation : (Qubit => ():Controlled), target : Qubit)  : ()
-    {
-        body {  
-            With1(outerOperation, innerOperation, target);
-        }
-
-        controlled(controlRegister) {
-            With1(outerOperation, (Controlled innerOperation)(controlRegister, _), target);
-        }
     }
 
 }

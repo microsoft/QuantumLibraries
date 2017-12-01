@@ -3,6 +3,7 @@
 
 namespace Microsoft.Quantum.Canon {
     open Microsoft.Quantum.Primitive;
+    open Microsoft.Quantum.Extensions.Convert;
 
     // Design notes:
     //     The APIs for the iterative and quantum phase estimation algorithms are
@@ -11,9 +12,9 @@ namespace Microsoft.Quantum.Canon {
     //     acting on other operations, making heavy use of partial application internally.
     //
     // E.g.:
-    //     let DiscreteOracle = OracleToDiscrete(U)
-    //     DiscretePhaseEstimationIteration(oracle, pow, theta, eigenstate, control)
-    //     let Result datum = Measure(control)
+    //     let DiscreteOracle = OracleToDiscrete(U);
+    //     DiscretePhaseEstimationIteration(oracle, pow, theta, eigenstate, control);
+    //     let datum = M(control);
     //
     //     This design then enables providing more efficient implementations of U^m
     //     to be provided by the user for specific U, while providing a sensible
@@ -25,38 +26,37 @@ namespace Microsoft.Quantum.Canon {
     //     the discrete and continuous phase estimation iterations to be used in
     //     an allocate-op-measure pattern; we may soon want to abstract that away.
 
+    /// # Summary
     /// Performs a single iteration of an iterative (classically-controlled) phase
     /// estimation algorithm.
-    /// <param name="oracle">Operation acting on an integer and a register,
-    ///     such that U^m is applied to the given register, where U is the unitary
-    ///     whose phase is to be estimated, and where m is the integer power
-    ///     given to the oracle.</param>
-    /// <param name="eigenstate">Register containing an eigenstate of the given oracle.</param>
-    /// <param name="power">Number of times to apply the given unitary oracle.</param>
-    /// <param name="theta">Angle by which to invert the phase on the control qubit before
-    ///     acting on the eigenstate.</param>
+    ///
+    /// # Input
+    /// ## oracle
+    /// Operation acting on an integer and a register,
+    /// such that $U^m$ is applied to the given register, where $U$ is the unitary
+    /// whose phase is to be estimated, and where m is the integer power
+    /// given to the oracle
+    /// ## eigenstate
+    /// Register containing an eigenstate of the given oracle.
+    /// ## power
+    /// Number of times to apply the given unitary oracle.
+    /// ## theta
+    /// Angle by which to invert the phase on the control qubit before
+    /// acting on the eigenstate.
     operation DiscretePhaseEstimationIteration( oracle : DiscreteOracle, power : Int, theta : Double, eigenstate : Qubit[], controlQubit : Qubit)  : ()
     {
         // NB: We accept the control qubit as input so that we can allow for this operation
         //     to subject to the adjoint and control modifiers (that is, such that we do not need
         //     a return statement, but rather *act* on the given qubits).
         body {
-            // if (power < 0) {
-                // fail 'Oracle power cannot be negative.'
-            // }
-
             // Find the actual inversion angle by rescaling with the power of the
             // oracle.
-            let inversionAngle = -theta * Float(power);
-            
+            let inversionAngle = -theta * ToDouble(power);
+
             // Prepare the control qubit.
             H(controlQubit);
             Rz(inversionAngle, controlQubit);
 
-            // TODO: should this be
-            //     controlled(oracle)([controlQubit], power, eigenstate),
-            // or
-            //     controlled(oracle(power, _))([controlQubit], eigenstate)?
             (Controlled oracle)([controlQubit], (power, eigenstate));
 
             // Return the control qubit to the appropriate measurement basis.
@@ -71,10 +71,6 @@ namespace Microsoft.Quantum.Canon {
     operation ContinuousPhaseEstimationIteration( oracle : ContinuousOracle, time : Double, theta : Double, eigenstate : Qubit[], controlQubit : Qubit)  : ()
     {
         body {
-            if (time < 0.0) {
-                // fail 'Oracle power cannot be negative.'
-            }
-
             let inversionAngle = -(theta * time);
 
             // Prepare the control qubit.

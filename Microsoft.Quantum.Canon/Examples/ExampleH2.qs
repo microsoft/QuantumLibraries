@@ -160,7 +160,7 @@ namespace Microsoft.Quantum.Canon {
     function H2TrotterStepManual(idxBondLength : Int, trotterOrder: Int, trotterStepSize: Double): (Qubit[] => (): Adjoint, Controlled)
     {
         let op = H2TrotterUnitaries(idxBondLength);
-        return (DecomposeIntoTimeStepsCA(op,trotterOrder))(trotterStepSize, _);
+        return (DecomposeIntoTimeStepsCA(op, trotterOrder))(trotterStepSize, _);
     }
 
     //////////////////////////////////////////////////////////////////////////

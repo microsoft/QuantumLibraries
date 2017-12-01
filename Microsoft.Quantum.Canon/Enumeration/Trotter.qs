@@ -3,51 +3,119 @@
 
 namespace Microsoft.Quantum.Canon {
 
-    // FIXME: the names of these functions are not compliant with the style guide.
-    // FIXME: define recursively instead of special casing to first, second, and fourth.
-    //TODO revert to generics
-
-    operation Trotter1ImplCA<'T>(evolutionGenerator : (Int, ((Int, Double, Qubit[]) => () : Adjoint, Controlled)), stepSize : Double, target : Qubit[]) : () {
-        Body {
-            let (nSteps, op) = evolutionGenerator
+    /// # Summary
+    /// Implementation of the first-order Trotter–Suzuki integrator.
+    ///
+    /// # Type Parameters
+    /// ## 'T
+    /// The type which each time step should act upon; typically, either
+    /// `Qubit[]` or `Qubit`.
+    ///
+    /// # Input
+    /// ### nSteps
+    /// The number of operations to be decomposed into time steps.
+    /// ### op
+    /// An operation which accepts an index input (type `Int`) and a time
+    /// input (type `Double`) for decomposition.
+    /// ## stepSize
+    /// Multiplier on size of each step of the simulation.
+    ///
+    /// # Remarks
+    /// ## Example
+    /// The following are equivalent:
+    /// ```Q#
+    /// op(0, deltaT, target);
+    /// op(1, deltaT, target);
+    ///
+    /// Trotter1ImplCA((2, op), deltaT, target);
+    /// ```
+    operation Trotter1ImplCA<'T>((nSteps : Int, op : ((Int, Double, 'T) => () : Adjoint, Controlled)), stepSize : Double, target : 'T) : () {
+        body {
             for(idx in 0..nSteps-1){
-                op(idx, stepSize, target)
+                op(idx, stepSize, target);
             }
         }
-        Adjoint auto
-        Controlled auto
-        Controlled Adjoint auto
+        adjoint auto
+        controlled auto
+        controlled adjoint auto
     }
 
-    operation Trotter2ImplCA<'T>(evolutionGenerator : (Int, ((Int, Double, Qubit[]) => () : Adjoint, Controlled)), stepSize : Double, target : Qubit[]) : () {
-        Body {
-            let (nSteps, op) = evolutionGenerator
+    /// # Summary
+    /// Implementation of the second-order Trotter–Suzuki integrator.
+    ///
+    /// # Type Parameters
+    /// ## 'T
+    /// The type which each time step should act upon; typically, either
+    /// `Qubit[]` or `Qubit`.
+    ///
+    /// # Input
+    /// ### nSteps
+    /// The number of operations to be decomposed into time steps.
+    /// ### op
+    /// An operation which accepts an index input (type `Int`) and a time
+    /// input (type `Double`) for decomposition.
+    /// ## stepSize
+    /// Multiplier on size of each step of the simulation.
+    ///
+    /// # Remarks
+    /// ## Example
+    /// The following are equivalent:
+    /// ```Q#
+    /// op(0, deltaT / 2.0, target);
+    /// op(1, deltaT / 2.0, target);
+    /// op(1, deltaT / 2.0, target);
+    /// op(0, deltaT / 2.0, target);
+    ///
+    /// Trotter2ImplCA((2, op), deltaT, target);
+    /// ```
+    operation Trotter2ImplCA<'T>((nSteps : Int, op : ((Int, Double, 'T) => () : Adjoint, Controlled)), stepSize : Double, target : 'T) : () {
+        body {
             for(idx in 0..nSteps-1){
-                op(idx, stepSize * 0.5, target)
+                op(idx, stepSize * 0.5, target);
             }
-            for(idx in (nSteps-1)..-1..0){
-                op(idx, stepSize * 0.5, target)
+            for(idx in (nSteps-1)..(-1)..0){
+                op(idx, stepSize * 0.5, target);
             }
         }
-        Adjoint auto
-        Controlled auto
-        Controlled Adjoint auto
+        adjoint auto
+        controlled auto
+        controlled adjoint auto
     }
 
-    function DecomposeIntoTimeStepsCA<'T>(evolutionGenerator : (Int, ((Int, Double, Qubit[]) => () : Adjoint, Controlled)), order : Int) : ((Double, Qubit[]) => () : Adjoint, Controlled) {
-        if (order == 1) {
-            return Trotter1ImplCA(evolutionGenerator, _, _)
-        } elif (order == 2) {
-            return Trotter2ImplCA(evolutionGenerator, _, _)
+    /// # Summary
+    /// Returns an operation implementing the Trotter–Suzuki integrator for
+    /// a given operation.
+    ///
+    /// # Type Parameters
+    /// ## 'T
+    /// The type which each time step should act upon; typically, either
+    /// `Qubit[]` or `Qubit`.
+    ///
+    /// # Input
+    /// ### nSteps
+    /// The number of operations to be decomposed into time steps.
+    /// ### op
+    /// An operation which accepts an index input (type `Int`) and a time
+    /// input (type `Double`) for decomposition.
+    /// ## trotterOrder
+    /// Selects the order of the Trotter–Suzuki integrator to be used.
+    /// Order 1 and 2 are currently supported.
+    ///
+    /// # Output
+    /// Returns a unitary implementing the Trotter–Suzuki integrator, where
+    /// the first parameter `Double` is the integration step size, and the
+    /// second parameter is the target acted upon.
+    function DecomposeIntoTimeStepsCA<'T>((nSteps : Int, op : ((Int, Double, 'T) => () : Adjoint, Controlled)), trotterOrder : Int) : ((Double, 'T) => () : Adjoint, Controlled) {
+        if (trotterOrder == 1) {
+            return Trotter1ImplCA((nSteps, op), _, _);
+        } elif (trotterOrder == 2) {
+            return Trotter2ImplCA((nSteps, op), _, _);
         } else {
-            fail "Order $order not yet supported."
+            fail "Order $order not yet supported.";
         }
 
-        // FIXME: needed so we have a return value of the right type in all cases, but
-        //        this line is unreachable and should be removed.
-        return Trotter1ImplCA(evolutionGenerator, _, _)
+        // Needed so we have a return value of the right type in all cases, but
+        //        this line is unreachable.
+        return Trotter1ImplCA((nSteps, op), _, _);
     }
-
-    // TODO: write variants of the above that do not assume adjoint and controlled.
-
 }

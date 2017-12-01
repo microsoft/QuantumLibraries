@@ -4,6 +4,7 @@
 namespace Microsoft.Quantum.Samples.Hubbard {
     open Microsoft.Quantum.Primitive;
     open Microsoft.Quantum.Canon;
+    open Microsoft.Quantum.Extensions.Convert;
 
     //////////////////////////////////////////////////////////////////////////
     // Introduction //////////////////////////////////////////////////////////
@@ -307,7 +308,7 @@ namespace Microsoft.Quantum.Samples.Hubbard {
             let qpeOracle = OracleToDiscrete(HubbardTrotterEvolution(nSites, tCoefficient, uCoefficient, trotterOrder, trotterStepSize));
 
             // This stores the output of phase estimation.
-            mutable energyEst = Float(0);
+            mutable energyEst = 0.0;
 
             using(qubits = Qubit[nQubits]){
                 // This prepares the antiferromagnetic initial state
@@ -325,9 +326,9 @@ namespace Microsoft.Quantum.Samples.Hubbard {
                 set energyEst = RobustPhaseEstimation(bitsPrecision, qpeOracle, qubits) / trotterStepSize;
 
                 // We add the contribution of the global phase here
-                set energyEst = energyEst + Float(nSites) * uCoefficient * 0.25;
+                set energyEst = energyEst + ToDouble(nSites) * uCoefficient * 0.25;
 
-                // We must reset all qubits to the |0> state before releasing them.
+                // We must reset all qubits to the |0〉 state before releasing them.
                 ResetAll(qubits);
  
             }

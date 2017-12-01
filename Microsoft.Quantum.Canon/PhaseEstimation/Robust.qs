@@ -24,7 +24,7 @@ namespace Microsoft.Quantum.Canon {
     /// In the limit of a large number of queries, Cramer-Rao lower bounds
     /// for the standard deviation of the estimate of $\phi$ satisfy
     /// $\sigma \ge 2 \pi / \text{# of queries}$.
-    /// 
+    ///
     /// # References
     /// - Robust Calibration of a Universal Single-Qubit Gate-Set via Robust Phase Estimation
     ///   Shelby Kimmel, Guang Hao Low, Theodore J. Yoder
@@ -54,7 +54,7 @@ namespace Microsoft.Quantum.Canon {
                     for (idxRep in 0..nRepeats-1) {
                         for (idxExperiment in 0..1) {
                             // Divide rotation by power to cancel the multiplication by power in DiscretePhaseEstimationIteration
-                            let rotation = PI() * Float(idxExperiment) / 2.0 / Float(power);
+                            let rotation = PI() * ToDouble(idxExperiment) / 2.0 / ToDouble(power);
                             DiscretePhaseEstimationIteration(oracle , power , rotation, eigenstate, q);
                             let result = M(q);
 

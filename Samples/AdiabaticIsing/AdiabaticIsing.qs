@@ -233,7 +233,7 @@ namespace Microsoft.Quantum.Samples.Ising {
     /// of the Ising model. 
     operation Ising1DAdiabaticAndMeasureManual(nSites : Int, hXInitial: Double, jFinal:Double, adiabaticTime: Double, trotterStepSize: Double, trotterOrder: Int) : Result[]{
         body{
-            let hXFinal = Float(0);
+            let hXFinal = 0.0;
             mutable results = new Result[nSites];
             using (qubits = Qubit[nSites]) {
                 // This creates the ground state of the initial Hamiltonian.

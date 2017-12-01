@@ -70,7 +70,6 @@ namespace Microsoft.Quantum.Canon {
     function StackPush(stack : ResultStack, datum : Result) : ResultStack {
         let (size, pos, data) = stack;
         if (pos == size) {
-            // TODO: grow stack.
             fail "Stack is full.";
         }
         

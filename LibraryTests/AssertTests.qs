@@ -36,6 +36,18 @@ namespace Microsoft.Quantum.Tests {
 		AssertAlmostEqual(1.0, 0.0);
 	}
 
+    function AssertBoolArrayEqualTestShouldFail() : () {
+        AssertBoolArrayEqual([true; false], [false; true], "OK");
+    }
+
+    function AssertBoolEqualTestShouldFail() : () {
+        AssertBoolEqual(true, false, "OK");
+    }
+
+    function AssertIntEqualTestShouldFail() : () {
+        AssertIntEqual(12, 42, "OK");
+    }
+
 	/// # Summary
 	/// Tests whether common builtin operations are self adjoint.
 	/// These tests are already performed in Solid itself, such that

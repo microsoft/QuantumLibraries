@@ -34,6 +34,21 @@ namespace Microsoft.Quantum.Canon {
         return CurryOpImpl(op, _);
     }
 
+    operation UncurryOpCAImpl<'T, 'U>(curriedOp : ('T -> ('U => () : Controlled, Adjoint)), first : 'T, second : 'U) : () {
+        body {
+            let innerOp = curriedOp(first);
+            innerOp(second);
+        }
+
+        adjoint auto
+        controlled auto
+        controlled adjoint auto
+    }
+
+    function UncurryOpCA<'T, 'U>(curriedOp : ('T -> ('U => () : Controlled, Adjoint))) : (('T, 'U) => () : Controlled, Adjoint) {
+        return UncurryOpCAImpl(curriedOp, _, _);
+    }
+
     // TODO: functor variants of the above
 
 }

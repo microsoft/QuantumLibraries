@@ -20,7 +20,6 @@ namespace Microsoft.Quantum.Canon {
         return Microsoft.Quantum.Extensions.Math.Log(input) / LogOf2();
     }
 
-    // TODO: rewrite in terms of Fold(PairwiseMax, INTEGER_MIN(), _).
     /// # Summary
     /// Given an array of integers, returns the largest element.
     ///
@@ -36,7 +35,7 @@ namespace Microsoft.Quantum.Canon {
         let nTerms = Length(values);
         for(idx in 0..nTerms - 1)
         {
-            if (values[idx]> max){
+            if (values[idx] > max) {
                 set max = values[idx];
             }
         }

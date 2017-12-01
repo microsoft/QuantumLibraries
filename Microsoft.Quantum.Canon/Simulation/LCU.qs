@@ -50,7 +50,7 @@ namespace Microsoft.Quantum.Canon {
     operation UnitaryOperatorFromPauliStringImpl ( pauliString: PauliString, qubits : Qubit[]) : (){
         body{
             let (paulis, qubitIndices) = pauliString
-            ApplyPauli(paulis, TEMPQubitSlice(qubitIndices, qubits))
+            ApplyPauli(paulis, Subarray(qubitIndices, qubits))
         }
     }
     function UnitaryOperatorFromPauliString( pauliString: PauliString) : UnitaryOperator

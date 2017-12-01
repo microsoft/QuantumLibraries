@@ -27,4 +27,10 @@ namespace Microsoft.Quantum.Canon {
 		adjoint controlled auto
 	}
 
+	/// # Summary
+	/// Ignores the output of an operation or function.
+	function Ignore<'T>(value : 'T) : () {
+		return ();
+	}
+
 }

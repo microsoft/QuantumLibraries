@@ -22,9 +22,7 @@ namespace Microsoft.Quantum.Canon {
     operation QuantumPhaseEstimation( oracle : DiscreteOracle, eigenstate : Qubit[],  controlRegister : BigEndian)  : ()
     {
         body {
-            // FIXME Solid #701: lengths of UDTs < T[] are not supported currently.
-            // let nQubits = Length(controlRegister)
-            let nQubits = 1;
+            let nQubits = Length(controlRegister);
 
             ApplyToEachCA(H, controlRegister);
 

@@ -6,8 +6,9 @@ namespace Microsoft.Quantum.Tests {
     open Microsoft.Quantum.Extensions.Math;
     open Microsoft.Quantum.Canon;
 
-    // FIXME: These tests need to be generalized to allow for unit testing CSS
-    //        codes as well.
+    // NB: These tests need to be generalized to allow for unit testing CSS
+    //     codes as well. Since the recovery functions look different for CSS
+    //     codes, we must test the Steane code more manually.
 
     operation QeccTestCaseImpl( code : QECC, nScratch : Int,  fn : RecoveryFn, error : (Qubit[] => ()), data : Qubit[])  : ()
     {
@@ -34,59 +35,52 @@ namespace Microsoft.Quantum.Tests {
         }
     }
 
-    /// remarks:
-    ///     This is a function which curries over all but the error to be applied,
-    ///     and does not explicitly refer to qubits in any way.
-    ///     Thus, the result of evaluating this function is an operation that can
-    ///     be passed to Iter<(Qubit[] => ())> in order to test a *collection* of
-    ///     errors in a compact way.
+    /// # Remarks
+    /// This is a function which curries over all but the error to be applied,
+    /// and does not explicitly refer to qubits in any way.
+    /// Thus, the result of evaluating this function is an operation that can
+    /// be passed to ApplyToEach<(Qubit[] => ())> in order to test a *collection* of
+    /// errors in a compact way.
     function AssertCodeCorrectsError(code : QECC, nLogical : Int, nScratch : Int, fn : RecoveryFn) : ((Qubit[] => ()) => ()) {
         return AssertCodeCorrectsErrorImpl(code, nLogical, nScratch, fn, _);
     }
 
 
-    /// summary:
-    ///     Ensures that the bit flip code can correct a single arbitrary
-    ///     bit-flip ($X$) error.
+    /// # Summary
+    /// Ensures that the bit flip code can correct a single arbitrary
+    /// bit-flip ($X$) error.
     operation BitFlipTest()  : ()
     {
         body {
             let code = BitFlipCode();
             let fn = BitFlipRecoveryFn();
-            // FIXME: Workaround for nested partials.
-            // FIXME: Write in terms of generics and Map/Iter.
-            let X0 = ApplyPauli([PauliX; PauliI; PauliI], _);
-            let X1 = ApplyPauli([PauliI; PauliX; PauliI], _);
-            let X2 = ApplyPauli([PauliI; PauliI; PauliX], _);
+            let errors = Map(CurryOp(ApplyPauli), [
+                [PauliX; PauliI; PauliI];
+                [PauliI; PauliX; PauliI];
+                [PauliI; PauliI; PauliX]
+            ]);
 
-            // FIXME: Iter and Map through QeccTestCase.
             let assertionGenerator = AssertCodeCorrectsError(code, 1, 2, fn);
 
             assertionGenerator(NoOp);
-            assertionGenerator(X0);
-            assertionGenerator(X1);
-            assertionGenerator(X2);
+            ApplyToEach(assertionGenerator, errors);
         }
     }
 
-    /// summary:
-    ///     Ensures that the 5-qubit perfect code can correct an arbitrary
-    ///     single-qubit error.
+    /// # Summary
+    /// Ensures that the 5-qubit perfect code can correct an arbitrary
+    /// single-qubit error.
     operation FiveQubitCodeTest()  : ()
     {
         body {
             let code = FiveQubitCode();
             let fn = FiveQubitCodeRecoveryFn();
 
-            // FIXME: Iter and Map through QeccTestCase.
             let assertionGenerator = AssertCodeCorrectsError(code, 1, 4, fn);
-            let wt1Paulis = WeightOnePaulis(5);
+            let errors = Map(CurryOp(ApplyPauli), WeightOnePaulis(5));
 
             assertionGenerator(NoOp);
-            for (idxError in 0..Length(wt1Paulis) - 1) {
-                assertionGenerator(ApplyPauli(wt1Paulis[idxError], _));
-            }
-
+            ApplyToEach(assertionGenerator, errors);
         }
     }
 
@@ -391,6 +385,52 @@ namespace Microsoft.Quantum.Tests {
 
                 ResetAll(rm);
             }
+        }
+    }
+
+    
+    operation CSSTestCaseImpl( code : CSS, nScratch : Int, fnX : RecoveryFn, fnZ : RecoveryFn, error : (Qubit[] => ()), data : Qubit[])  : ()
+    {
+        body {
+            let (encode, decode, syndMeasX, syndMeasZ) = code;
+            using (scratch = Qubit[nScratch]) {
+                let logicalRegister = encode(data, scratch);
+                // Cause an error.
+                error(logicalRegister);
+                RecoverCSS(code, fnX, fnZ, logicalRegister);
+                let (decodedData, decodedScratch) = decode(logicalRegister);
+                ApplyToEach(Reset, decodedScratch);
+            }
+        }
+    }
+
+    function CSSTestCase(code : CSS, nScratch : Int, fnX : RecoveryFn, fnZ : RecoveryFn, error : (Qubit[] => ())) : (Qubit[] => ()) {
+        return CSSTestCaseImpl(code, nScratch, fnX, fnZ, error, _);
+    }
+
+    operation AssertCSSCodeCorrectsErrorImpl(code : CSS, nLogical : Int, nScratch : Int, fnX : RecoveryFn, fnZ : RecoveryFn, error : (Qubit[] => ())) : () {
+        body {
+            AssertOperationsEqualReferenced(CSSTestCase(code, nScratch, fnX, fnZ, error), NoOp, nLogical);
+        }
+    }
+    function AssertCSSCodeCorrectsError(code : CSS, nLogical : Int, nScratch : Int, fnX : RecoveryFn, fnZ : RecoveryFn) : ((Qubit[] => ()) => ()) {
+        return AssertCSSCodeCorrectsErrorImpl(code, nLogical, nScratch, fnX, fnZ, _);
+    }
+
+    /// # Summary
+    /// Ensures that the 7-qubit Steane code can correct an arbitrary
+    /// single-qubit error.
+    operation SteaneCodeTestExFail()  : ()
+    {
+        body {
+            let code = SteaneCode();
+            let (fnX, fnZ) = SteaneCodeRecoveryFns();
+
+            let assertionGenerator = AssertCSSCodeCorrectsError(code, 1, 6, fnX, fnZ);
+            let errors = Map(CurryOp(ApplyPauli), WeightOnePaulis(7));
+
+            assertionGenerator(NoOp);
+            ApplyToEach(assertionGenerator, errors);
         }
     }
 

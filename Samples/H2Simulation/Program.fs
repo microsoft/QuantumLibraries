@@ -19,18 +19,17 @@ open FSharp.Control
 open FSharp.Charting.ChartTypes
 
 module H2PlottingDemo =
-    // We begin by making an instance of the simulator that we will use to run our Q♭ code.
+    // We begin by making an instance of the simulator that we will use to run our Q♯ code.
     let qsim = new QuantumSimulator()
-    
-    // Next, we give F♯ names to each operation defined in Q♭.
+
+    // Next, we give F♯ names to each operation defined in Q♯.
     // In doing so, we ask the simulator to give us each operation
     // so that it has an opportunity to override operation definitions.
     let H2EstimateEnergyRPE = qsim.Get<ICallable, H2EstimateEnergyRPE>() :?> H2EstimateEnergyRPE
     let H2BondLengths = qsim.Get<ICallable, H2BondLengths>() :?> H2BondLengths
-    
-    // To call a Q♭ operation that takes unit `()` as its input, we need to grab
+
+    // To call a Q♯ operation that takes unit `()` as its input, we need to grab
     // the QVoid.Instance value.
-    // FIXME: add an F♯-specific module with definitions like qunit.
     let bondLengths =
         H2BondLengths.Body.Invoke QVoid.Instance
 

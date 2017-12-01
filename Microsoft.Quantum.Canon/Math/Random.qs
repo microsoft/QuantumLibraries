@@ -7,7 +7,7 @@ namespace Microsoft.Quantum.Canon {
     open Microsoft.Quantum.Extensions.Math;
 
 	// DESIGN NOTES:
-	//     Q♭ functions *CANNOT* have side effects. Since random sampling is a side
+	//     Q# functions *CANNOT* have side effects. Since random sampling is a side
 	//     effect, this immediately implies that any random number generation is modeled
 	//     as an operation. That in turn implies that random number generation calls inside
 	//     another operation will break adjointability and controllability.

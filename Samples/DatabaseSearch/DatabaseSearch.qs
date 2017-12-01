@@ -477,7 +477,7 @@ namespace Microsoft.Quantum.Samples.DatabaseSearch {
     {
         body {
             let flagQubit = startQubits[idxMarkedQubit];
-            let databaseRegister = QubitExclude([idxMarkedQubit], startQubits);
+            let databaseRegister = Exclude([idxMarkedQubit], startQubits);
 
             // Apply oracle `U`
             ApplyToEachCA(H, databaseRegister);

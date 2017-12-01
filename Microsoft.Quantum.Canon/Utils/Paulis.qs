@@ -141,8 +141,6 @@ namespace Microsoft.Quantum.Canon {
     /// # Output
     /// The array of results obtained from measuring each element of `paulis`
     /// on `target`.
-    // FIXME: make qubit[] argument last.
-    // FIXME: introduce MeasurementGadget UDT!!!
     operation MeasurePaulis(paulis : Pauli[][], target : Qubit[], gadget : ((Pauli[], Qubit[]) => Result))  : Result[]
     {
         body {
@@ -227,7 +225,16 @@ namespace Microsoft.Quantum.Canon {
         controlled adjoint auto
     }
 
-    // FIXME: these are currently redundant as heck.
+    operation MultiM(targets : Qubit[]) : Result[]
+    {
+        body{
+            mutable results = new Result[Length(targets)];
+            for(idxQubit in 0..Length(targets)-1){
+                set results[idxQubit] = M(targets[idxQubit]);
+            }
+            return results;
+        }
+    }
 
     /// # Summary
     /// Measures a single qubit in the $Z$ basis and ensures that it
@@ -312,11 +319,7 @@ namespace Microsoft.Quantum.Canon {
     /// A qubit whose state is to be reset to $\ket{0}$.
     operation Reset(target : Qubit) : () {
         body {
-            let ignore = MResetZ(target);
-            // Note that since operations cannot end with a let statement,
-            // and since MResetZ returns a Result instead of (), we must do
-            // *something* here. Thus, we do a nop.
-            I(target);
+            Ignore(MResetZ(target));
         }
     }
 
@@ -334,5 +337,15 @@ namespace Microsoft.Quantum.Canon {
         }
     }
 
+    operation HY(target : Qubit) : () {
+        body {
+            H(target);
+            S(target);
+        }
+
+        adjoint auto
+        controlled auto
+        controlled adjoint auto
+    }
 
 }

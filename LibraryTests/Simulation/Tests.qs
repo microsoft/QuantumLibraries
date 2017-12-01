@@ -46,12 +46,6 @@ namespace Microsoft.Quantum.Tests {
             using (register = Qubit[1]) {
                 let qubit = register[0];
 
-                // FIXME: qubits that are improperly deallocated can leak non-|0〉 states.
-                //        That causes this test to fail, so we patch as a kludge to make
-                //        sure unrelated test failures do not propagage to cause a failure
-                //        here as well.
-                Reset(qubit);
-
                 preparation(qubit);
                 Exp([pauli], angle, register);
                 AssertQubitState(expected, qubit, 1e-5);
@@ -275,13 +269,13 @@ namespace Microsoft.Quantum.Tests {
 
                 ResetAll(qubits);
 
-                Exp([PauliY;PauliX], 1.0 * step, QubitSlice([2;0],qubits));
+                Exp([PauliY;PauliX], 1.0 * step, Subarray([2;0],qubits));
                 Exp([PauliX;PauliI;PauliY], -1.0 * step, qubits[0..2]);
                 AssertProb([PauliZ], [qubits[1]], One, SinSquared(0.0*step), "Fail [PauliI;PauliX] [0;1]",  1e-10);
 
                 ResetAll(qubits);
 
-                Exp([PauliY;PauliZ;PauliX;PauliX], 1.0 * step, QubitSlice([3;6;4;1],qubits));
+                Exp([PauliY;PauliZ;PauliX;PauliX], 1.0 * step, Subarray([3;6;4;1],qubits));
                 Exp([PauliI;PauliX;PauliI;PauliY;PauliX;PauliI;PauliZ], -1.0 * step, qubits[0..6]);
                 AssertProb([PauliZ], [qubits[0]], One, SinSquared(0.0*step), "Fail [PauliI;PauliX;PauliI;PauliY;PauliX;PauliI;PauliZ] [0]",  1e-10);
                 AssertProb([PauliZ], [qubits[1]], One, SinSquared(0.0*step), "Fail [PauliI;PauliX;PauliI;PauliY;PauliX;PauliI;PauliZ] [1]",  1e-10);
@@ -401,20 +395,6 @@ namespace Microsoft.Quantum.Tests {
             // NB: We do things in the reverse order to ensure that everything
             //     continues to agree even in the presence of Adjoint.
             AssertOperationsEqualReferenced(ExpTestHelper(_, 1), ExpTestHelper(_, 0), 2);
-        }
-    }
-    // for debugging only: Converts a real value to a probability
-    // FIXME: document this operation, rename to make it clear what it does,
-    //        and move it to where it needs to be.
-    operation ReadReal(value: Double) : () {
-        body{
-            let angle = 2.0*ArcSin(Sqrt(value));
-            using(q=Qubit[1]){
-                Rx(angle,q[0]);
-                AssertProb([PauliZ], q, One, 0.456, "Output value", 1e-10);
-
-                Reset(q[0]);
-            }
         }
     }
 

@@ -35,7 +35,6 @@ namespace Microsoft.Quantum.Tests {
     }
 
     
-    // FIXME: check if this is still used anywhere.
     operation RobustPhaseEstimationDemo(phaseSet : Double, bitsPrecision: Int) : Double{
         body {
             let op = DiscreteOracle(RobustPhaseEstimationTestOp(phaseSet, _, _));
@@ -55,7 +54,7 @@ namespace Microsoft.Quantum.Tests {
             let bitsPrecision = 10;
 
             for (idxTest in 0..9) {
-                let phaseSet = 2.0 * PI() * Float(idxTest - 5) / 12.0;
+                let phaseSet = 2.0 * PI() * ToDouble(idxTest - 5) / 12.0;
                 let phaseEst = RobustPhaseEstimationDemo(phaseSet, bitsPrecision);
                 AssertAlmostEqualTol(phaseEst, phaseSet, 1e-2);
             }

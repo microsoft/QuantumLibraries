@@ -5,6 +5,7 @@ namespace Microsoft.Quantum.Samples.PhaseEstimation {
     open Microsoft.Quantum.Primitive;
     open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Extensions.Math;
+    open Microsoft.Quantum.Extensions.Convert;
 
     //////////////////////////////////////////////////////////////////////////
     // Introduction //////////////////////////////////////////////////////////
@@ -172,11 +173,10 @@ namespace Microsoft.Quantum.Samples.PhaseEstimation {
                 // We use |φ〉 = |1〉 as our eigenstate of H = φ Z.
                 X(eigenstate[0]);
 
-                
                 // We can now make a for loop over times and samples to
                 // estimate the likelihood at each time.
                 for (idxTime in 0..nTimes - 1) {
-                    let time = dt * Float(idxTime);
+                    let time = dt * ToDouble(idxTime);
                     mutable nOnesObserved = 0;
 
                     for (idxSample in 0..nSamples - 1) {
@@ -188,7 +188,7 @@ namespace Microsoft.Quantum.Samples.PhaseEstimation {
                         }
                     }
 
-                    let obs = Float(nOnesObserved) / Float(nSamples);
+                    let obs = ToDouble(nOnesObserved) / ToDouble(nSamples);
                     let mean = PowD(Sin((eigenphase - inversionAngle) * time / 2.0), 2.0);
 
                     Message($"Observed {obs} at {time}, expected {mean}.");
@@ -222,7 +222,7 @@ namespace Microsoft.Quantum.Samples.PhaseEstimation {
     // We will use an explicit grid method, in which we discretize the prior
     // and posterior at each φ, effectively replacing the integrals above
     // with the trapezoidal rule.
-    
+
     // To select the experiment times {t₀, t₁, ...} that we perform our
     // phase estimation iterations at, we follow the recommendations of
     // Ferrie et al. (https://arxiv.org/abs/1110.3067) and choose
@@ -245,12 +245,12 @@ namespace Microsoft.Quantum.Samples.PhaseEstimation {
     /// An approximation of ∫_I f(x) dx, where I is the interval [x₀, xₘ],
     /// and where m is the length of `xs`.
     function Integrate(xs : Double[], ys : Double[]) : Double {
-        mutable sum = Float(0);
+        mutable sum = 0.0;
         for (idxPoint in 0..Length(xs) - 2) {
             let trapezoidalHeight = (ys[idxPoint + 1] + ys[idxPoint]) * 0.5;
             let trapezoidalBase = xs[idxPoint + 1] - xs[idxPoint];
             set sum = sum + trapezoidalBase * trapezoidalHeight;
-        } 
+        }
 
         return sum;
     }
@@ -300,14 +300,14 @@ namespace Microsoft.Quantum.Samples.PhaseEstimation {
         body {
             // Initialize a grid for the prior and posterior discretization.
             // We'll choose the grid to be uniform.
-            let dPhase = 1.0 / Float(nGridPoints - 1);
-            let maxTime = Float(100);
+            let dPhase = 1.0 / ToDouble(nGridPoints - 1);
+            let maxTime = 100.0;
 
             mutable phases = new Double[nGridPoints];
             mutable prior = new Double[nGridPoints];
 
             for (idxGridPoint in 0..nGridPoints - 1) {
-                set phases[idxGridPoint] = dPhase * Float(idxGridPoint);
+                set phases[idxGridPoint] = dPhase * ToDouble(idxGridPoint);
                 set prior[idxGridPoint] = 1.0;
             }
 
@@ -323,10 +323,10 @@ namespace Microsoft.Quantum.Samples.PhaseEstimation {
                 // Pick an evolution time and perturbation angle at random.
                 // To do so, we use the RandomReal operation from the canon,
                 // asking for 16 bits of randomness.
-                let time = PowD(Float(9) / Float(8), Float(idxMeasurement));
+                let time = PowD(9.0 / 8.0, ToDouble(idxMeasurement));
 
                 // Similarly, we pick a perturbation angle to invert by.
-                let inversionAngle = Float(1) * RandomReal(16) * 0.02;
+                let inversionAngle = RandomReal(16) * 0.02;
 
                 // Now we actually perform the measurement.
                 let sample = IterativePhaseEstimationStep(
@@ -411,7 +411,7 @@ namespace Microsoft.Quantum.Samples.PhaseEstimation {
         body
         {
             let oracle = ExpOracle(eigenphase, _, _);
-            mutable est = Float(0);
+            mutable est = 0.0;
             using (eigenstate = Qubit[1]) {
                 X(eigenstate[0]);
                 set est = BayesianPhaseEstimation(20001, 60, oracle, eigenstate);
@@ -433,7 +433,7 @@ namespace Microsoft.Quantum.Samples.PhaseEstimation {
     operation BayesianPhaseEstimationCanonSample(eigenphase : Double) : Double {
         body {
            let oracle = ContinuousOracle(ExpOracle(eigenphase, _, _));
-           mutable est = Float(0);
+           mutable est = 0.0;
            using (eigenstate = Qubit[1]) {
                 X(eigenstate[0]);
                 set est = RandomWalkPhaseEstimation(0.0, 1.0, 61, 100000, 0, oracle, eigenstate);

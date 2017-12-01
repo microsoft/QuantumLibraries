@@ -42,19 +42,6 @@ namespace Microsoft.Quantum.Canon {
     }
 
     /// # Summary
-    /// Creates an array of given length with all elements equal to given value.
-    // FIXME: Make generic, move to Arrays.qs.
-    function MakeConstArray( length : Int, value : Int ) : Int[]
-    {
-        mutable arr = new Int[length];
-        for( i in 0 .. length - 1 )
-        {
-            set arr[i] = value;
-        }
-        return arr;
-    }
-
-    /// # Summary
     /// Iterates a variable, say arr, through Cartesian product 
     /// [ 0, bound - 1 ] × [ 0, bound - 1 ] × [ 0, bound - 1 ]
     /// and calls op(arr) for every element of the Cartesian product
@@ -62,7 +49,7 @@ namespace Microsoft.Quantum.Canon {
     {
         body
         {
-            IterateThroughCartesianProduct(MakeConstArray(power, bound), op);
+            IterateThroughCartesianProduct(ConstantArray(power, bound), op);
         }
     }
 

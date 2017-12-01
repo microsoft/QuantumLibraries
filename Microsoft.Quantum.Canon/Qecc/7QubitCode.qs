@@ -50,6 +50,10 @@ namespace Microsoft.Quantum.Canon {
         return EmbedPauli(PauliZ, ResultAsInt(syndrome), 7);
     }
 
+    function SteaneCodeRecoveryFns() : (RecoveryFn, RecoveryFn) {
+        return (RecoveryFn(SteaneCodeRecoveryX), RecoveryFn(SteaneCodeRecoveryZ));
+    }
+
     /// # Summary
     /// Encodes into the ⟦7, 1, 3⟧ Steane quantum code.
     operation SteaneCodeEncoder(physRegister : Qubit[], auxQubits : Qubit[])  : LogicalRegister
@@ -99,19 +103,5 @@ namespace Microsoft.Quantum.Canon {
         }
     }
 
-    operation SteaneCodeExample( code : CSS, nScratch : Int,  fX : RecoveryFn,  fZ : RecoveryFn, data : Qubit[])  : ()
-    {
-        body {
-            let (encode, decode, syndMeasX, syndMeanZ) = SteaneCode();
-            using (scratch = Qubit[nScratch]) {
-                let logicalRegister = encode(data, scratch);
-                // Cause an error.
-                X(logicalRegister[0]);
-                RecoverCSS(code, fX, fZ, logicalRegister);
-                let decodedRegisters = decode(logicalRegister);
-                // TODO: assert that we corrected OK here.
-            }
-        }
-    }
 
 }

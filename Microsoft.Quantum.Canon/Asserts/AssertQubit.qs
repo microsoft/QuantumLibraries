@@ -45,12 +45,12 @@ namespace Microsoft.Quantum.Canon {
     ///   states rather than only Z eigenstates.
     operation AssertQubitTol (expected: Result, tolerance: Double, q: Qubit) : ()
     {
-        body 
+        body
         {
             AssertProb([PauliZ], [q], expected,  1.0, "Qubit One probability on Z basis failed",  tolerance);
         }
     }
-    
+
 
     /// # Summary
     /// Asserts that the qubit given by register is in the state described by

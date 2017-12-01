@@ -106,6 +106,7 @@
     <QsharpCompile Include="ArrayTests.qs" />
     <QsharpCompile Include="MeasurementTests.qs" />
     <QsharpCompile Include="ApplyMultiControlledTests.qs" />
+    <QsharpCompile Include="EnumerationTests.qs" />
     <None Include="packages.config" />
     <QsharpCompile Include="QcvvTests.qs" />
     <QsharpCompile Include="AssertTests.qs" />

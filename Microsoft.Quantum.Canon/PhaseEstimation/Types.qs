@@ -15,7 +15,6 @@ namespace Microsoft.Quantum.Canon {
     /// and $\delta t$ is a non-negative real number.
     newtype ContinuousOracle = ((Double, Qubit[]) => ():Adjoint,Controlled);
 
-    // FIXME: Need a better name for this.
     /// # Summary
     /// Given an operation representing a "black-box" oracle, implements
     /// a discrete-time oracle by repeating the given oracle multiple times.

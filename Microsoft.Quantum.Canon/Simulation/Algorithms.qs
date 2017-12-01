@@ -3,6 +3,7 @@
 
 namespace Microsoft.Quantum.Canon {
     open Microsoft.Quantum.Extensions.Math;
+    open Microsoft.Quantum.Extensions.Convert;
     
     // A simulation technique converts an EvolutionGenerator to time evolution
     // by the encoded system for some time step
@@ -34,7 +35,7 @@ namespace Microsoft.Quantum.Canon {
 
     /// # Summary
     /// Implements a single time-step of time-evolution by the system 
-    /// described in an `EvolutionGenerator` using a Trotter-Suzuki 
+    /// described in an `EvolutionGenerator` using a Trotter–Suzuki 
     /// decomposition.
     ///
     /// # Input
@@ -88,7 +89,7 @@ namespace Microsoft.Quantum.Canon {
                                                 qubits:Qubit[]) : () {
         body{
             let nTimeSlices = Ceiling(maxTime / trotterStepSize);
-            let resizedTrotterStepSize = maxTime / Float(nTimeSlices);
+            let resizedTrotterStepSize = maxTime / ToDouble(nTimeSlices);
             for (idxTimeSlice in 0..nTimeSlices-1) {
                 (TrotterStep(evolutionGenerator, trotterOrder, resizedTrotterStepSize))(qubits);
             }
@@ -146,9 +147,9 @@ namespace Microsoft.Quantum.Canon {
                                                             qubits:Qubit[]) : () {
         body {
             let nTimeSlices = Ceiling(maxTime / trotterStepSize);
-            let resizedTrotterStepSize = maxTime / Float(nTimeSlices);
+            let resizedTrotterStepSize = maxTime / ToDouble(nTimeSlices);
             for(idxTimeSlice in 0..nTimeSlices-1){
-                let schedule = Float(idxTimeSlice) / Float(nTimeSlices);
+                let schedule = ToDouble(idxTimeSlice) / ToDouble(nTimeSlices);
                 let (evolutionSet, generatorSystemTimeDependent) = evolutionSchedule;
                 let generatorSystem = generatorSystemTimeDependent(schedule);
                 let evolutionGenerator = EvolutionGenerator(evolutionSet, generatorSystem);

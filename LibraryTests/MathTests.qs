@@ -21,6 +21,14 @@ namespace Microsoft.Quantum.Canon {
         AssertAlmostEqual(RealMod(0.5 * PI(), 2.0 * PI(), -PI() / 2.0), 0.5 * PI());
     }
 
+    function ArcHyperbolicFnsTest() : () {
+        // These tests were generated using NumPy's implementations
+        // of the inverse hyperbolic functions.
+        AssertAlmostEqual(ArcTanh(0.3), 0.30951960420311175);
+        AssertAlmostEqual(ArcCosh(1.3), 0.75643291085695963);
+        AssertAlmostEqual(ArcSinh(-0.7), -0.65266656608235574);
+    }
+
     function ExtendedGCDTestHelper(  a : Int , b : Int, gcd : Int ) : () {
         Message($"Testing {a}, {b}, {gcd} ");
         let (u,v) = ExtendedGCD(a,b);

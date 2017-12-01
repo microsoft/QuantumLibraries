@@ -18,9 +18,7 @@ namespace Microsoft.Quantum.Canon {
     /// Absolute tolerance on the difference between actual and expected.
     function AssertAlmostEqualTol(actual : Double, expected : Double, tolerance : Double) : () {
         let delta = actual - expected;
-        // TODO: rewrite using Abs.
         if (delta > tolerance || delta < -tolerance) {
-            // TODO: use string interpolation here.
             fail $"Assertion failed.\n\tExpected: {expected}.\n\tActual:   {actual}";
         }
     }
@@ -42,8 +40,6 @@ namespace Microsoft.Quantum.Canon {
     function AssertAlmostEqual(actual : Double, expected : Double) : () {
         AssertAlmostEqualTol(actual, expected, 1e-10);
     }
-
-    // FIXME: the following asserts should be made generic if possible.
 
     /// # Summary
     /// Asserts that a classical Int variable has the expected value.
@@ -82,15 +78,25 @@ namespace Microsoft.Quantum.Canon {
         }
     }
 
-	function AssertBoolArrayEqual ( actual : Bool[], expected : Bool[], message : String ) : () {
-		let n = Length(actual); 
-		if (n != Length(expected)) {
-			fail message;
-		}	
-		for (idx in 0..(n-1)) {
-			if( actual[idx] != expected[idx] ) {
-				fail message;
-			}
+    /// # Summary
+    /// Asserts that two arrays of boolean values are equal.
+    ///
+    /// # Input
+    /// ## actual
+    /// The array that is produced by a test case of interest.
+    /// ## expected
+    /// The array that is expected from a test case of interest.
+    /// ## message
+    /// A message to be printed if the arrays are not equal.
+    function AssertBoolArrayEqual ( actual : Bool[], expected : Bool[], message : String ) : () {
+        let n = Length(actual); 
+        if (n != Length(expected)) {
+            fail message;
+        }
+        for (idx in 0..(n-1)) {
+            if( actual[idx] != expected[idx] ) {
+                fail message;
+            }
         }
     }
 

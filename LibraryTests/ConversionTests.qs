@@ -5,19 +5,10 @@ namespace Microsoft.Quantum.Tests {
     open Microsoft.Quantum.Canon;    
 
     function ResultAsIntTest() : () {
-        // FIXME: Write new Assert for ints, or better yet, use generics.
-        if (ResultAsInt([Zero; Zero]) != 0) {
-            fail "Expected 0.";
-        }
-        if (ResultAsInt([One; Zero]) != 1) {
-            fail "Expected 1.";
-        }
-        if (ResultAsInt([Zero; One]) != 2) {
-            fail "Expected 2.";
-        }
-        if (ResultAsInt([One; One]) != 3) {
-            fail "Expected 3.";
-        }
+        AssertIntEqual(ResultAsInt([Zero; Zero]), 0, "Expected [Zero; Zero] to be represented by 0.");
+        AssertIntEqual(ResultAsInt([One;  Zero]), 1, "Expected [One; Zero] to be represented by 1.");
+        AssertIntEqual(ResultAsInt([Zero; One]),  2, "Expected [Zero; One] to be represented by 2.");
+        AssertIntEqual(ResultAsInt([One;  One]),  3, "Expected [One; One] to be represented by 3.");
     }
    
 

@@ -33,7 +33,6 @@ namespace Microsoft.Quantum.Canon {
     newtype GeneratorIndex = ((Int[], Double[]), Int[]);
 
     // FIXME: unify this and the GateSet representation above with ContinousOracle.
-    // FIXME: add an example using lookupfunction.
     /// # Summary
     /// From the view of a GeneratorSystem, a description of a Hamiltonian
     //  is a collection of GeneratorTerms. We iterate over this
@@ -97,7 +96,7 @@ namespace Microsoft.Quantum.Canon {
     /// A generator index representing evolution under the Hamiltonian
     /// $H = 0$.
     function IdentityGeneratorIndex(idxTerm : Int) : GeneratorIndex {
-        return GeneratorIndex(([0], [Float(0)]),[0]);
+        return GeneratorIndex(([0], [0.0]),[0]);
     }
 
     /// # Summary

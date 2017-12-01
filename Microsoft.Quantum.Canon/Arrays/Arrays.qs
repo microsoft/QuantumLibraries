@@ -47,35 +47,21 @@ namespace Microsoft.Quantum.Canon {
     }
 
     /// # Summary
-    /// Indexes an array by another array representing a permutation.
+    /// Creates an array that is equal to an input array except that the last array
+    /// element is dropped.
     ///
     /// # Type Parameters
     /// ## 'T
-    /// The type of the elements of the array being permuted.
+    /// The type of the array elements.
     ///
     /// # Input
-    /// ## indices
-    /// An array containing indices into `array`.
     /// ## array
-    /// An array to be permuted.
+    /// An array whose fisrt to second-to-last elements are to form the output array.
     ///
     /// # Output
-    /// A new array `out` such that `out[idx] == array[indices[idx]]`.
-    ///
-    /// # Remarks
-    /// If `Length(indices) < Lenth(array)`, this function will return a
-    /// subset of `array`. On the other hand, if `indices` contains repeated
-    /// elements, the corresponding elements of `array` will likewise be
-    /// repeated.
-    function Permute<'T>(indices : Int[], array : 'T[]) : 'T[] {
-        let nElements = Length(indices);
-        mutable newArray = new 'T[nElements];
-
-        for (idxElement in 0..nElements - 1) {
-            set newArray[idxElement] = array[indices[idxElement]];
-        }
-
-        return newArray;
+    /// An array containing the elements `array[0..Length(array) - 2]`.
+    function Most<'T>(array : 'T[]) : 'T[] {
+        return array[0..Length(array) - 2];
     }
 
     function LookupImpl<'T>(array : 'T[], index : Int) : 'T {
@@ -153,9 +139,9 @@ namespace Microsoft.Quantum.Canon {
 
     }
 
-    /// # Summary 
-    /// Returns the last element of the array. 
-    /// 
+    /// # Summary
+    /// Returns the last element of the array.
+    ///
     /// # Type Parameters
     /// ## 'A
     /// The type of the array elements.
@@ -163,7 +149,7 @@ namespace Microsoft.Quantum.Canon {
     /// # Input
     /// ## array
     /// Array of which the last element is taken. Array must have length at least 1.
-    /// 
+    ///
     /// # Output
     /// The last element of the array.
     function Tail<'A> ( array : 'A[] ) : 'A {
@@ -171,9 +157,9 @@ namespace Microsoft.Quantum.Canon {
         return array[Length(array) - 1];
     }
 
-    /// # Summary 
+    /// # Summary
     /// Returns the first element of the array.
-    /// 
+    ///
     /// # Type Parameters
     /// ## 'A
     /// The type of the array elements.
@@ -181,11 +167,89 @@ namespace Microsoft.Quantum.Canon {
     /// # Input
     /// ## array
     /// Array of which the first element is taken. Array must have length at least 1.
-    /// 
+    ///
     /// # Output
     /// The first element of the array.
     function Head<'A> ( array : 'A[] ) : 'A {
         AssertBoolEqual(Length(array) > 0, true, "Array must be of the length at least 1" );
         return array[0];
     }
+
+    /// # Summary
+    /// Creates an array of given length with all elements equal to given value.
+    ///
+    /// # Input
+    /// ## length
+    /// Length of the new array.
+    /// ## value
+    /// A value that will be contained at each index of the new array.
+    ///
+    /// # Output
+    /// A new array of length `length`, such that every element is `value`.
+    function ConstantArray<'T>( length : Int, value : 'T ) : 'T[]
+    {
+        mutable arr = new 'T[length];
+        for( i in 0 .. length - 1 )
+        {
+            set arr[i] = value;
+        }
+        return arr;
+    }
+
+    /// # Summary
+    /// Returns an array containing the elements of another array,
+    /// excluding elements at a given list of indices.
+    ///
+    /// # Type Parameters
+    /// ## 'T
+    /// The type of the array elements.
+    ///
+    /// # Input
+    /// ## remove
+    /// An array of indices denoting which elements should be excluded
+    /// from the output.
+    /// ## array
+    /// Array of which the values in the output array are taken.
+    ///
+    /// # Output
+    /// An array `output` such that `output[0]` first element
+    /// of `array` whose index does not appear in `remove`,
+    /// such that `output[1]` is the second such element, and so
+    /// forth.
+    ///
+    /// # Example
+    /// ```Q#
+    /// let array = [10; 11; 12; 13; 14; 15];
+    /// // The following line returns [10; 12; 15].
+    /// let subarray = Exclude([1; 3; 4], array);
+    /// ```
+    function Exclude<'T>(remove : Int[], array : 'T[]) : 'T[] 
+	{
+
+		let nSliced = Length(remove);
+		let nElements = Length(array);
+		//Would be better with sort function
+		//Or way to add elements to array
+
+		mutable arrayKeep = new Int[nElements];
+		mutable sliced = new 'T[nElements - nSliced];
+		mutable counter = 0;
+
+		for ( idx in 0..nElements - 1) {
+			set arrayKeep[idx] = idx;
+		}
+		for ( idx in 0..nSliced - 1 ) {
+			set arrayKeep[remove[idx]] = -1;
+		}
+		for ( idx in 0..nElements - 1 ) {
+			if(arrayKeep[idx] >= 0){
+				set sliced[counter] = array[arrayKeep[idx]];
+				set counter = counter + 1;
+			}
+		}
+
+		return sliced;
+	}
+
+
 }

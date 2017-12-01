@@ -48,7 +48,7 @@ namespace Microsoft.Quantum.Samples.Ising {
             // The Hamiltonian used for phase estimation here is the Ising
             // model defined previously at the schedule parameter s = 1.
             let hXInitial = hXFinal;
-            let schedule = Float(1);
+            let schedule = 1.0;
             // We use a Trotter-Suzuki `SimulationAlgorithm` to implement the 
             // Trotter step of size `qpeStepSize`.
             let trotterOrder = 1;
@@ -120,7 +120,7 @@ namespace Microsoft.Quantum.Samples.Ising {
             let adiabaticEvolution = IsingAdiabaticEvolutionManual(nSites, hXInitial, hXFinal, jFinal, adiabaticTime, trotterStepSize, trotterOrder);
 
             // Allocate variables that store the output.
-            mutable phaseEst = Float(0);
+            mutable phaseEst = 0.0;
             mutable results = new Result[nSites];
 
             // Allocate clean qubits for the computation.
