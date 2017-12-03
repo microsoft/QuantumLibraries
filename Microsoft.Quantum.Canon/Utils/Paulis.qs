@@ -107,7 +107,7 @@ namespace Microsoft.Quantum.Canon {
     /// ## qubits
     /// Quantum register to which a Pauli operator is to be applied.
     ///
-    /// # Remark
+    /// # Remarks
     /// The Boolean array and the quantum register must be of equal length.
     function PauliFromBitString(pauli : Pauli, bitApply: Bool, bits : Bool[]) : Pauli[] {
         let nBits = Length(bits);
@@ -138,7 +138,7 @@ namespace Microsoft.Quantum.Canon {
     /// ## qubits
     /// Quantum register to which a Pauli operator is to be applied.
     ///
-    /// # Remark
+    /// # Remarks
     /// The Boolean array and the quantum register must be of equal length.
     operation ApplyPauliFromBitString(pauli : Pauli, bitApply: Bool, bits : Bool[], qubits : Qubit[]) : ()
     {

@@ -29,8 +29,8 @@ namespace Microsoft.Quantum.Canon {
     /// Applies an operation that takes little-endian input to a register encoding 
     /// an unsigned integer using big-endian format.
     /// 
-    /// # Input 
-    /// ## op 
+    /// # Input
+    /// ## op
     /// Operation that acts on little-endian register
     /// ## register
     /// big-endian register to be transformed

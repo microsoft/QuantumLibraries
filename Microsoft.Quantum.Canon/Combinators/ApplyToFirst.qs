@@ -21,7 +21,7 @@ namespace Microsoft.Quantum.Canon {
     }
 
     /// # See Also
-    /// @"Microsoft.Quantum.Canon.ApplyToFirstQubit"
+    /// - Microsoft.Quantum.Canon.ApplyToFirstQubit
     operation ApplyToFirstQubitA( op : (Qubit => () : Adjoint), register : Qubit[] ) : () {
         body {
             op(register[0]);
@@ -30,7 +30,7 @@ namespace Microsoft.Quantum.Canon {
     }
 
     /// # See Also
-    /// @"Microsoft.Quantum.Canon.ApplyToFirstQubit"
+    /// - Microsoft.Quantum.Canon.ApplyToFirstQubit
     operation ApplyToFirstQubitC( op : (Qubit => () : Controlled), register : Qubit[] ) : () {
         body {
             op(register[0]);
@@ -39,7 +39,7 @@ namespace Microsoft.Quantum.Canon {
     }
 
     /// # See Also
-    /// @"Microsoft.Quantum.Canon.ApplyToFirstQubit"
+    /// - Microsoft.Quantum.Canon.ApplyToFirstQubit
     operation ApplyToFirstQubitCA( op : (Qubit => () : Adjoint, Controlled), register : Qubit[] ) : () {
         body {
             op(register[0]);
@@ -55,7 +55,7 @@ namespace Microsoft.Quantum.Canon {
     /// # Input
     /// ## op
     /// An operation to be applied to the first two qubits
-    /// ## register 
+    /// ## register
     /// Qubit array to the first two qubits of which the operation is applied.
     ///
     /// # Remarks
@@ -70,7 +70,7 @@ namespace Microsoft.Quantum.Canon {
     }
 
     /// # See Also
-    /// @"Microsoft.Quantum.Canon.ApplyToFirstTwoQubits"
+    /// - Microsoft.Quantum.Canon.ApplyToFirstTwoQubits
     operation ApplyToFirstTwoQubitsA( op : ((Qubit,Qubit) => () : Adjoint ), register : Qubit[] ) : () {
         body {
             op(register[0],register[1]);
@@ -79,7 +79,7 @@ namespace Microsoft.Quantum.Canon {
     }
 
     /// # See Also
-    /// @"Microsoft.Quantum.Canon.ApplyToFirstTwoQubits"
+    /// - Microsoft.Quantum.Canon.ApplyToFirstTwoQubits
     operation ApplyToFirstTwoQubitsC( op : ((Qubit,Qubit) => () : Controlled ), register : Qubit[] ) : () {
         body {
             op(register[0],register[1]);
@@ -88,7 +88,7 @@ namespace Microsoft.Quantum.Canon {
     }
 
     /// # See Also
-    /// @"Microsoft.Quantum.Canon.ApplyToFirstTwoQubits"
+    /// - Microsoft.Quantum.Canon.ApplyToFirstTwoQubits
     operation ApplyToFirstTwoQubitsCA( op : ((Qubit,Qubit) => () : Adjoint, Controlled ), register : Qubit[] ) : () {
         body {
             op(register[0],register[1]);
@@ -118,7 +118,7 @@ namespace Microsoft.Quantum.Canon {
     }
 
     /// # See Also
-    /// @"Microsoft.Quantum.Canon.ApplyToFirstThreeQubits"
+    /// - Microsoft.Quantum.Canon.ApplyToFirstThreeQubits
     operation ApplyToFirstThreeQubitsA( op : ((Qubit,Qubit,Qubit) => () : Adjoint), register : Qubit[] ) : () {
         body {
             op(register[0],register[1],register[2]);
@@ -127,7 +127,7 @@ namespace Microsoft.Quantum.Canon {
     }
 
     /// # See Also
-    /// @"Microsoft.Quantum.Canon.ApplyToFirstThreeQubits"
+    /// - Microsoft.Quantum.Canon.ApplyToFirstThreeQubits
     operation ApplyToFirstThreeQubitsC( op : ((Qubit,Qubit,Qubit) => () : Controlled), register : Qubit[] ) : () {
         body {
             op(register[0],register[1],register[2]);
@@ -136,7 +136,7 @@ namespace Microsoft.Quantum.Canon {
     }
 
     /// # See Also
-    /// @"Microsoft.Quantum.Canon.ApplyToFirstThreeQubits"
+    /// - Microsoft.Quantum.Canon.ApplyToFirstThreeQubits
     operation ApplyToFirstThreeQubitsCA( op : ((Qubit,Qubit,Qubit) => () : Adjoint, Controlled), register : Qubit[] ) : () {
         body {
             op(register[0],register[1],register[2]);

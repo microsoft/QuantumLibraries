@@ -74,21 +74,22 @@ namespace Microsoft.Quantum.Canon {
     /// ## target
     /// Quantum register encoding an integer using little-endian encoding in QFT basis.
     /// ## increment
-    /// The integer by which the `target` is incremented by
-    /// 
-    /// # See Also 
+    /// The integer by which the `target` is incremented by.
+    ///
+    /// # See Also
     /// - @"microsoft.quantum.primitive.integerincrementle"
-    /// - See the figure on 
-    ///   [ Page 6 of arXiv:quant-ph/0008033v1 ](https://arxiv.org/pdf/quant-ph/0008033.pdf#page=6)
-    ///   for the circuit diagram and explanation 
-    /// 
-    /// # References 
+    ///
+    /// # References
     /// - [ *Thomas G. Draper*,
     ///      arXiv:quant-ph/0008033](https://arxiv.org/pdf/quant-ph/0008033v1.pdf)
     /// 
     /// # Remarks 
     /// Note that we have simplified the circuit because the increment is a classical constant,
     /// not a quantum register.
+    ///
+    /// See the figure on
+    /// [ Page 6 of arXiv:quant-ph/0008033v1 ](https://arxiv.org/pdf/quant-ph/0008033.pdf#page=6)
+    /// for the circuit diagram and explanation.
     operation IntegerIncrementPhaseLE(increment : Int, target : PhaseLittleEndian ) : () { 
         body {
             let d = Length(target);

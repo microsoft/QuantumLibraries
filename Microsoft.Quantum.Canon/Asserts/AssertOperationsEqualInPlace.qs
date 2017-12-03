@@ -99,7 +99,7 @@ namespace Microsoft.Quantum.Canon {
     /// # Summary 
     /// Assert that given qubits are all in |0⟩ state
     /// 
-    /// # Input 
+    /// # Input
     /// ## message
     /// The message to be emited if assertion fails
     /// ## target

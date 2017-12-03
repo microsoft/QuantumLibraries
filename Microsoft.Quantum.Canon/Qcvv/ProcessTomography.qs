@@ -185,10 +185,10 @@ namespace Microsoft.Quantum.Canon {
     /// Operation $\Lambda$ whose Choi–Jamiłkowski state $J(\Lambda) / 2^N$
     /// is to be prepared, where $N$ is the number of qubits on which
     /// `op` acts.
-    /// # reference
+    /// ## reference
     /// A register of qubits starting in the $\ket{00\cdots 0}$ state
     /// to be used as a reference for the action of `op`.
-    /// # target
+    /// ## target
     /// A register of qubits initially in the $\ket{00\cdots 0}$ state
     /// on which `op` is to be applied.
     ///

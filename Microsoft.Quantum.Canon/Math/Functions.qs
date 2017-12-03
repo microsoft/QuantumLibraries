@@ -147,19 +147,19 @@ namespace Microsoft.Quantum.Canon {
     }
 
     /// # Summary
-    /// Computes canonical residue of `value` modulo `modulus`. 
-    /// # Input 
-    /// ## value 
-    /// the value of which residue is computed 
-    /// ## modulus 
+    /// Computes canonical residue of `value` modulo `modulus`.
+    /// # Input
+    /// ## value
+    /// the value of which residue is computed
+    /// ## modulus
     /// the modulus by which residues are take, must be positive
-    /// # Output 
+    /// # Output
     /// Integer r between 0 and `modulus` - 1 such that value - r is divisible by modulus
-    /// 
-    /// # Remarks 
-    /// This function behaves the way a mathematician would expect Mod function to behave, 
-    /// as opposed to how operator `%` is behaving in C# and Q#. 
-    function Modulus( value : Int , modulus : Int ) : Int 
+    ///
+    /// # Remarks
+    /// This function behaves the way a mathematician would expect Mod function to behave,
+    /// as opposed to how operator `%` is behaving in C# and Q#.
+    function Modulus( value : Int , modulus : Int ) : Int
     {
         AssertBoolEqual( modulus > 0, true, "`modulus` must be positive" );
         let r = value % modulus;
@@ -193,16 +193,16 @@ namespace Microsoft.Quantum.Canon {
     /// Computes tuple (u,v) such that u⋅a + v⋅b = GCD(a,b), where GCD is a  
     /// greatest common divisor of a and b. The GCD is always positive.
     /// 
-    /// # Input 
-    /// ## a 
+    /// # Input
+    /// ## a
     /// the first number of which extended greatest common divisor is being computed
     /// ## b
     /// the second number of which extended greatest common divisor is being computed
     /// 
-    /// # Output 
+    /// # Output
     /// Tuple (u,v) with properties u⋅a + v⋅b = GCD(a,b)
     ///
-    /// # References 
+    /// # References
     /// - This implementation is according to https://en.wikipedia.org/wiki/Extended_Euclidean_algorithm
     function ExtendedGCD( a : Int, b : Int ) : (Int,Int) { 
         let signA = SignI(a);
@@ -221,33 +221,33 @@ namespace Microsoft.Quantum.Canon {
         return (Fst(s)*signA,Fst(t)*signB);
     }
 
-    /// # Summary 
-    /// Returns  true if a and b are co-prime and false otherwise
+    /// # Summary
+    /// Returns true if a and b are co-prime and false otherwise.
     ///
-    /// # Input 
-    /// ## a 
+    /// # Input
+    /// ## a
     /// the first number of which co-primality is being tested
     /// ## b
     /// the second number of which co-primality is being tested
-    /// 
-    /// # Output 
-    /// True, if a and b are co-prime (e.g. their greatest common divisor is 1 ), 
+    ///
+    /// # Output
+    /// True, if a and b are co-prime (e.g. their greatest common divisor is 1 ),
     /// and false otherwise
     function IsCoprime( a : Int, b : Int ) : Bool {
         let (u,v) = ExtendedGCD(a,b);
         return u*a + v*b == 1;
     }
 
-    /// # Summary 
+    /// # Summary
     /// Returns b such that `a`⋅b = 1 (mod `modulus`)
-    /// 
-    /// # Input 
-    /// ## a 
+    ///
+    /// # Input
+    /// ## a
     /// The number being inverted
     /// ## modulus
     /// The modulus according to which the numbers are inverted
-    /// 
-    /// # Output 
+    ///
+    /// # Output
     /// Integer b such that a⋅`b` = 1 (mod `modulus`)
     function InverseMod( a : Int, modulus : Int ) : Int {
         let (u,v) = ExtendedGCD(a,modulus);

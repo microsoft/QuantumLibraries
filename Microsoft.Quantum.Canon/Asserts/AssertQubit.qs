@@ -40,9 +40,12 @@ namespace Microsoft.Quantum.Canon {
     /// ## q
     /// The qubit whose state is asserted.
     ///
-    /// # See also
-    /// - @"Microsoft.Quantum.Canon.AssertQubitState" allows for asserting arbitrary qubit
-    ///   states rather than only Z eigenstates.
+    /// # See Also
+    /// - Microsoft.Quantum.Canon.AssertQubitState
+    ///
+    /// # Remarks
+    /// @"Microsoft.Quantum.Canon.AssertQubitState" allows for asserting
+    /// arbitrary qubit states rather than only $Z$ eigenstates.
     operation AssertQubitTol (expected: Result, tolerance: Double, q: Qubit) : ()
     {
         body

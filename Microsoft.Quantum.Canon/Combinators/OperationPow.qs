@@ -51,6 +51,7 @@ namespace Microsoft.Quantum.Canon {
     /// Given an operation representing a gate $U$, returns a new operation
     /// $U^m$ for a power $m$.
     ///
+    /// # Input
     /// ## oracle
     /// An operation $U$ representing the gate to be repeated.
     /// ## power
