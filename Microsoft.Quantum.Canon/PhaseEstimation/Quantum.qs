@@ -19,10 +19,17 @@ namespace Microsoft.Quantum.Canon {
     /// to control the provided oracle, and that will contain the a representation of φ following
     /// the application of this operation. The controlRegister is assumed to start in the initial
     /// state |00.0>, where the length of the register indicates the desired precision.
-    operation QuantumPhaseEstimation( oracle : DiscreteOracle, eigenstate : Qubit[],  controlRegister : BigEndian)  : ()
+    operation QuantumPhaseEstimation(
+		      oracle : DiscreteOracle, 
+			  eigenstate : Qubit[],
+			  controlRegister : BigEndian) : ()
     {
         body {
             let nQubits = Length(controlRegister);
+
+			AssertAllZero(
+				"`controlRegister` is expected to be in |0⟩⊗…⊗|0⟩",
+				controlRegister, 1e-10);
 
             ApplyToEachCA(H, controlRegister);
 
@@ -34,10 +41,8 @@ namespace Microsoft.Quantum.Canon {
 
             QFT(controlRegister);
         }
-
-        adjoint auto
-        controlled auto
-        controlled adjoint auto
+		adjoint auto
+		controlled auto
+		controlled adjoint auto
     }
-
 }

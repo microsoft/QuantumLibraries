@@ -112,6 +112,9 @@ namespace Microsoft.Quantum.Canon {
                 AssertProb([PauliZ],[target[i]],Zero,1.0, message, tolerance);
             }
         }
+		adjoint self
+		controlled ( ctrls ) { AssertAllZero(message,target,tolerance); }
+		controlled adjoint auto
     }
 
     /// # Summary

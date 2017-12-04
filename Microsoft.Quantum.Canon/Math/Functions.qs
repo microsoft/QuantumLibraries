@@ -174,6 +174,9 @@ namespace Microsoft.Quantum.Canon {
     /// Let us denote expBase by x, power by p and modulus by N. 
     /// The function returns xᵖ mod N . 
     /// We assume that N,x are positive and power is non-negative.
+    /// 
+    /// # Remarks 
+    /// Takes time proportional to the number of bits in `power`, not the power itself
     function ExpMod( expBase : Int,  power : Int, modulus : Int ) : Int {
         
         AssertBoolEqual( power >= 0, true, "`power` must be non-negative" );
@@ -181,10 +184,19 @@ namespace Microsoft.Quantum.Canon {
         AssertBoolEqual( expBase > 0, true, "`expBase` must be positive" );
 
         mutable res = 1;
+        mutable expPow2mod = expBase;
+        // express p as bit-string pₙ … p₀ 
+        let powerBitExpansion = BoolArrFromPositiveInt(power,BitSize(power));
         let expBaseMod = expBase % modulus;
-        for( i in 1 .. power )
+
+        for( k in 0 .. Length(powerBitExpansion) - 1 )
         {
-            set res = (res * expBaseMod) % modulus;
+            if( powerBitExpansion[k] ) {
+                // if bit pₖ is 1, multiply res by expBase^(2ᵏ) (mod `modulus`)
+                set res = (res * expPow2mod) % modulus;
+            }
+            // update value of expBase^(2ᵏ) (mod `modulus`)
+            set expPow2mod = expPow2mod * expPow2mod % modulus;
         }
         return res;
     }
@@ -221,8 +233,67 @@ namespace Microsoft.Quantum.Canon {
         return (Fst(s)*signA,Fst(t)*signB);
     }
 
-    /// # Summary
-    /// Returns true if a and b are co-prime and false otherwise.
+    /// # Summary 
+    /// Represents an integer of the form p/q. Integer p is 
+    /// the first element of the tuple and q is the second element 
+    /// of the tuple. 
+    newtype Fraction = (Int,Int);
+
+    /// # Summary 
+    /// Computes greatest common divisor of a and b. The GCD is always positive.
+    /// 
+    /// # Input 
+    /// ## a 
+    /// the first number of which extended greatest common divisor is being computed
+    /// ## b
+    /// the second number of which extended greatest common divisor is being computed
+    /// 
+    /// # Output 
+    /// Greatest common divisor of a and b
+    function GCD( a : Int, b : Int ) : Int { 
+        let (u,v) = ExtendedGCD(a,b);
+        return u*a + v*b;
+    }
+
+    /// # Summary 
+    /// Finds a continued fraction convergent closest to `fraction` 
+    /// with the denominator less or equal to `denominatorBound` 
+    /// 
+    /// # Input 
+    /// 
+    /// 
+    /// # Output 
+    /// Continued fraction closest to `fraction` 
+    /// with the denominator less or equal to `denominatorBound` 
+    function ContinuedFractionConvergent ( fraction : Fraction, denominatorBound : Int  )
+        : Fraction {
+
+        AssertBoolEqual(denominatorBound > 0, true, "Denominator bound must be positive" );
+
+        let (a,b) = fraction;
+        let signA = SignI(a);
+        let signB = SignI(b);
+        mutable s = (1, 0);
+        mutable t = (0, 1);
+        mutable r = (a*signA, b*signB);
+        repeat {}
+        until( Snd(r) == 0 || AbsI(Snd(s)) > denominatorBound )
+        fixup {
+            let quotient = Fst(r) / Snd(r);
+            set r = ( Snd(r), Fst(r) - quotient * Snd(r) ); 
+            set s = ( Snd(s), Fst(s) - quotient * Snd(s) ); 
+            set t = ( Snd(t), Fst(t) - quotient * Snd(t) ); 
+        }
+
+        if( Snd(r) == 0  && AbsI(Snd(s)) <= denominatorBound ) {
+            return Fraction(-Snd(t)*signB, Snd(s)*signA);
+        }
+
+        return Fraction(-Fst(t)*signB, Fst(s)*signA);
+    }
+
+    /// # Summary 
+    /// Returns  true if a and b are co-prime and false otherwise.
     ///
     /// # Input
     /// ## a
@@ -256,5 +327,28 @@ namespace Microsoft.Quantum.Canon {
             gcd == 1,
             true, "`a` and `modulus` must be co-prime" );
         return Modulus(u,modulus);
+    }
+
+    /// # Summary 
+    /// For non-negative integer `a` returns the smallest n such 
+    /// that a < 2ⁿ .
+    /// 
+    /// # Input 
+    /// ## a 
+    /// The integer bit-size of which is computed.
+    /// 
+    /// # Output 
+    /// The bit-size of `a` 
+    function BitSize( a : Int ) : Int {
+        AssertBoolEqual(a >= 0 , true, "`a` must be non-negative");
+        mutable bitsize = 0;
+        mutable val = a;
+        repeat{}
+        until( val == 0 )
+        fixup { 
+            set bitsize = bitsize + 1;
+            set val = val / 2;
+        }
+        return bitsize;
     }
 }

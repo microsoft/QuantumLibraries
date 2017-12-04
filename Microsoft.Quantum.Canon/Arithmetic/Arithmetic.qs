@@ -9,9 +9,9 @@ namespace Microsoft.Quantum.Canon {
     /// the arithmetic functions.
     ///
     /// # Remarks
-    /// This function allows to configure the behaviour of the library. 
-    function EnableExtraAssertsForArithmetic() : Bool {
-        return true;
+    /// This function allows to configure the behavior of the library. 
+    function _EnableExtraAssertsForArithmetic() : Bool {
+        return false;
     }
 
     /// # Summary
@@ -52,6 +52,9 @@ namespace Microsoft.Quantum.Canon {
     /// 
     /// # Remarks 
     /// Ensures that the register is set to 0.
+	///
+	/// # See Also 
+	/// - @"microsoft.quantum.canon.measureintegerbe"
     operation MeasureInteger( target : LittleEndian) : Int {
         body {
             mutable results = new Result[Length(target)]; 
@@ -59,6 +62,21 @@ namespace Microsoft.Quantum.Canon {
                 set results[idx] = MResetZ(target[idx]);
             }
             return PositiveIntFromResultArr(results);
+        }
+    }
+
+	/// # Summary 
+	/// Version of MeasureInteger for BigEndian register
+	///
+	/// # See Also 
+	/// - @"microsoft.quantum.canon.measureinteger"
+	operation MeasureIntegerBE( target : BigEndian) : Int {
+        body {
+            mutable results = new Result[Length(target)]; 
+            for (idx in 0..Length(target)-1) { 
+                set results[idx] = MResetZ(target[idx]);
+            }
+            return PositiveIntFromResultArr(Reverse(results));
         }
     }
 
@@ -244,7 +262,7 @@ namespace Microsoft.Quantum.Canon {
                 "`multiplier` must be big enough to fit integers modulo `modulus`" +
                 "with highest bit set to 0" );
 
-            if( EnableExtraAssertsForArithmetic() ) {
+            if( _EnableExtraAssertsForArithmetic() ) {
                 // assert that the highest bit is zero, by switching to computational basis
                 ApplyLEOperationOnPhaseLEA(AssertHighestBit(Zero,_), target );
                 // check that the input is less than modulus
@@ -279,7 +297,7 @@ namespace Microsoft.Quantum.Canon {
                 "`multiplier` must be big enough to fit integers modulo `modulus`" +
                 "with highest bit set to 0" );
 
-            if( EnableExtraAssertsForArithmetic() ) {
+            if( _EnableExtraAssertsForArithmetic() ) {
                 // assert that the highest bit is zero, by switching to computational basis
                 ApplyLEOperationOnPhaseLEA(AssertHighestBit(Zero,_), target );
                 // check that the input is less than modulus
@@ -365,7 +383,7 @@ namespace Microsoft.Quantum.Canon {
                 ( constMultiplier >= 0 ) && ( constMultiplier < modulus ),
                 true, "`constMultiplier` must be between 0 and `modulus`-1" );
 
-            if( EnableExtraAssertsForArithmetic() ) {
+            if( _EnableExtraAssertsForArithmetic() ) {
                 // assert that the highest bit is zero, by switching to computational basis
                 ApplyLEOperationOnPhaseLECA(AssertHighestBit(Zero,_), phaseSummand );
                 // check that the input is less than modulus
