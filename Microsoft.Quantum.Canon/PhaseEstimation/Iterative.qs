@@ -43,7 +43,7 @@ namespace Microsoft.Quantum.Canon {
     /// ## theta
     /// Angle by which to invert the phase on the control qubit before
     /// acting on the eigenstate.
-    operation DiscretePhaseEstimationIteration( oracle : DiscreteOracle, power : Int, theta : Double, eigenstate : Qubit[], controlQubit : Qubit)  : ()
+    operation DiscretePhaseEstimationIteration( oracle : DiscreteOracle, power : Int, theta : Double, eigenstate : Qubit[], controlQubit : Qubit) : ()
     {
         // NB: We accept the control qubit as input so that we can allow for this operation
         //     to subject to the adjoint and control modifiers (that is, such that we do not need

@@ -201,22 +201,22 @@ namespace Microsoft.Quantum.Canon {
         return res;
     }
 
-    /// # Summary 
-    /// Computes tuple (u,v) such that u⋅a + v⋅b = GCD(a,b), where GCD is a  
+    /// # Summary
+    /// Computes tuple (u,v) such that u⋅a + v⋅b = GCD(a,b), where GCD is a
     /// greatest common divisor of a and b. The GCD is always positive.
-    /// 
+    ///
     /// # Input
     /// ## a
     /// the first number of which extended greatest common divisor is being computed
     /// ## b
     /// the second number of which extended greatest common divisor is being computed
-    /// 
+    ///
     /// # Output
     /// Tuple (u,v) with properties u⋅a + v⋅b = GCD(a,b)
     ///
     /// # References
     /// - This implementation is according to https://en.wikipedia.org/wiki/Extended_Euclidean_algorithm
-    function ExtendedGCD( a : Int, b : Int ) : (Int,Int) { 
+    function ExtendedGCD( a : Int, b : Int ) : (Int, Int) {
         let signA = SignI(a);
         let signB = SignI(b);
         mutable s = (1, 0);
@@ -226,29 +226,29 @@ namespace Microsoft.Quantum.Canon {
         until( Snd(r) == 0 )
         fixup {
             let quotient = Fst(r) / Snd(r);
-            set r = ( Snd(r), Fst(r) - quotient * Snd(r) ); 
-            set s = ( Snd(s), Fst(s) - quotient * Snd(s) ); 
-            set t = ( Snd(t), Fst(t) - quotient * Snd(t) ); 
+            set r = ( Snd(r), Fst(r) - quotient * Snd(r) );
+            set s = ( Snd(s), Fst(s) - quotient * Snd(s) );
+            set t = ( Snd(t), Fst(t) - quotient * Snd(t) );
         }
         return (Fst(s)*signA,Fst(t)*signB);
     }
 
-    /// # Summary 
-    /// Represents an integer of the form p/q. Integer p is 
-    /// the first element of the tuple and q is the second element 
-    /// of the tuple. 
+    /// # Summary
+    /// Represents an integer of the form p/q. Integer p is
+    /// the first element of the tuple and q is the second element
+    /// of the tuple.
     newtype Fraction = (Int,Int);
 
-    /// # Summary 
+    /// # Summary
     /// Computes greatest common divisor of a and b. The GCD is always positive.
-    /// 
-    /// # Input 
-    /// ## a 
+    ///
+    /// # Input
+    /// ## a
     /// the first number of which extended greatest common divisor is being computed
     /// ## b
     /// the second number of which extended greatest common divisor is being computed
-    /// 
-    /// # Output 
+    ///
+    /// # Output
     /// Greatest common divisor of a and b
     function GCD( a : Int, b : Int ) : Int { 
         let (u,v) = ExtendedGCD(a,b);
@@ -329,16 +329,16 @@ namespace Microsoft.Quantum.Canon {
         return Modulus(u,modulus);
     }
 
-    /// # Summary 
-    /// For non-negative integer `a` returns the smallest n such 
+    /// # Summary
+    /// For non-negative integer `a` returns the smallest n such
     /// that a < 2ⁿ .
-    /// 
-    /// # Input 
-    /// ## a 
+    ///
+    /// # Input
+    /// ## a
     /// The integer bit-size of which is computed.
-    /// 
-    /// # Output 
-    /// The bit-size of `a` 
+    ///
+    /// # Output
+    /// The bit-size of `a`
     function BitSize( a : Int ) : Int {
         AssertBoolEqual(a >= 0 , true, "`a` must be non-negative");
         mutable bitsize = 0;

@@ -38,23 +38,23 @@ namespace Microsoft.Quantum.Canon {
         adjoint controlled auto
     }
 
-    /// # Summary 
-    /// `MeasureInteger` reads out the content of a quantum register and converts 
-    /// it to an integer of type `Int`. The measurement is performed with respect 
+    /// # Summary
+    /// `MeasureInteger` reads out the content of a quantum register and converts
+    /// it to an integer of type `Int`. The measurement is performed with respect
     /// to the standard computational basis, i.e., the eigenbasis of `PauliZ`.
     ///
     /// # Input
-    /// ## target 
-    /// A quantum register which is assumed to be in little endian encoding. 
+    /// ## target
+    /// A quantum register which is assumed to be in little endian encoding.
     ///
     /// # Output
     /// An unsigned integer that contains the measured value of `target`.
-    /// 
-    /// # Remarks 
+    ///
+    /// # Remarks
     /// Ensures that the register is set to 0.
 	///
-	/// # See Also 
-	/// - @"microsoft.quantum.canon.measureintegerbe"
+	/// # See Also
+	/// - Microsoft.Quantum.Canon.MeasureIntegerBE
     operation MeasureInteger( target : LittleEndian) : Int {
         body {
             mutable results = new Result[Length(target)]; 
@@ -65,11 +65,11 @@ namespace Microsoft.Quantum.Canon {
         }
     }
 
-	/// # Summary 
+	/// # Summary
 	/// Version of MeasureInteger for BigEndian register
 	///
-	/// # See Also 
-	/// - @"microsoft.quantum.canon.measureinteger"
+	/// # See Also
+	/// - Microsoft.Quantum.Canon.MeasureInteger
 	operation MeasureIntegerBE( target : BigEndian) : Int {
         body {
             mutable results = new Result[Length(target)]; 
@@ -100,8 +100,8 @@ namespace Microsoft.Quantum.Canon {
     /// # References
     /// - [ *Thomas G. Draper*,
     ///      arXiv:quant-ph/0008033](https://arxiv.org/pdf/quant-ph/0008033v1.pdf)
-    /// 
-    /// # Remarks 
+    ///
+    /// # Remarks
     /// Note that we have simplified the circuit because the increment is a classical constant,
     /// not a quantum register.
     ///
@@ -123,13 +123,13 @@ namespace Microsoft.Quantum.Canon {
 
     /// # Summary
     /// Asserts that the highest bit of an unsigned integer has given value
-    /// 
-    /// # Input 
+    ///
+    /// # Input
     /// ## value
     /// The value of the highest bit being asserted
     /// ## number
     /// Unsigned integer of which the highest bit is checked
-    /// 
+    ///
     /// # Remarks
     /// Controlled version of the operation ignores controls
     operation AssertHighestBit( value : Result,  number : LittleEndian  ) : () {
@@ -148,13 +148,13 @@ namespace Microsoft.Quantum.Canon {
 
     /// # Summary
     /// Asserts that the `number` encoded in PhaseLittleEndian is less than `value`
-    /// 
-    /// # Input 
+    ///
+    /// # Input
     /// ## value
-    /// `number` must be less than this 
+    /// `number` must be less than this
     /// ## number
     /// Unsigned integer which is compared to `value`
-    /// 
+    ///
     /// # Remarks
     /// Controlled version of the operation ignores controls
     operation AssertLessThanPhaseLE( value : Int ,  number : PhaseLittleEndian  ) : () {
@@ -215,15 +215,15 @@ namespace Microsoft.Quantum.Canon {
         adjoint controlled auto
     }
 
-    /// # Summary 
+    /// # Summary
     /// Copies the most significant bit of `from` into target
-    /// 
-    /// # Input 
+    ///
+    /// # Input
     /// ## from
     /// The unsigned integer from which the highest bit is copied from.
     /// the integer is encoded in little-endian format.
     /// ## target
-    /// The qubit in which the highest bit is being copied. The bit encoding is 
+    /// The qubit in which the highest bit is being copied. The bit encoding is
     /// in computational basis.
     operation CopyMostSignificantBitLE(
         from : LittleEndian,
@@ -237,27 +237,28 @@ namespace Microsoft.Quantum.Canon {
     }
 
 
-    /// # Summary 
+    /// # Summary
     /// Let us denote `increment` by a, `modulus` by N and integer encoded in `target` by y
     /// Then the operation performs the following transformation: 
     /// |y⟩ ↦ |y+a (mod N)⟩
     /// Integers are encoded in little-endian format in QFT basis
-    /// 
-    /// # See Also 
-    /// - For the circuit diagram and explanation see Figure 5 on [Page 5
-    ///        of arXiv:quant-ph/0205095v3](https://arxiv.org/pdf/quant-ph/0205095v3.pdf#page=5)
-    /// - @"microsoft.quantum.primitive.modularincrementle"
-    /// 
-    /// # Remarks 
+    ///
+    /// # See Also
+    /// - Microsoft.Quantum.Primitive.ModularIncrementLE
+    ///
+    /// # Remarks
     /// Assumes that `target` has the highest bit set to 0.
     /// Also assumes that the value of target is less than N.
+    ///
+    /// For the circuit diagram and explanation see Figure 5 on [Page 5
+    /// of arXiv:quant-ph/0205095v3](https://arxiv.org/pdf/quant-ph/0205095v3.pdf#page=5).
     operation ModularIncrementPhaseLE(
-              increment : Int, 
-              modulus : Int,  
+              increment : Int,
+              modulus : Int,
               target : PhaseLittleEndian) : () {
         body {
-        
-            AssertBoolEqual( 
+
+            AssertBoolEqual(
                 modulus <= 2 ^ (Length(target)-1), true,
                 "`multiplier` must be big enough to fit integers modulo `modulus`" +
                 "with highest bit set to 0" );
@@ -333,8 +334,8 @@ namespace Microsoft.Quantum.Canon {
     /// Let us denote modulus by N, constMultiplier by a, multiplier by x  
     /// and summand by y, then this operation is given by map 
     /// |x⟩|b⟩ ↦ |x⟩| (b + a⋅x) (mod N) ⟩
-    /// 
-    /// # See Also
+    ///
+    /// # Remarks
     /// - For the circuit diagram and explanation see Figure 6 on [Page 7
     ///        of arXiv:quant-ph/0205095v3](https://arxiv.org/pdf/quant-ph/0205095v3.pdf#page=7)
     /// - This operation corresponds to CMULT(a)MOD(N) in
@@ -408,7 +409,7 @@ namespace Microsoft.Quantum.Canon {
     /// computational basis:
     /// |y⟩ ↦ |a⋅y (mod N) ⟩, for all y between 0 and N - 1 
     /// 
-    /// # Input 
+    /// # Input
     /// ## constMultiplier
     /// Constant by which multiplier is being multiplied. Must be co-prime to modulus.
     /// ## modulus
@@ -416,8 +417,8 @@ namespace Microsoft.Quantum.Canon {
     /// ## multiplier
     /// The number being multiplied by a constant.
     /// This is an array of qubits representing integer in little-endian bit order.
-    /// 
-    /// # See Also
+    ///
+    /// # Remarks
     /// - For the circuit diagram and explanation see Figure 7 on [Page 8
     ///        of arXiv:quant-ph/0205095v3](https://arxiv.org/pdf/quant-ph/0205095v3.pdf#page=8)
     /// - This operation corresponds to Uₐ in 
@@ -458,7 +459,7 @@ namespace Microsoft.Quantum.Canon {
                 // now the joint state is |x⋅a(mod N)⟩|x⟩
 
                 let inverseMod = InverseMod( constMultiplier, modulus );
-                
+
                 // note that the operation below implements the following map:
                 // |x⟩|y⟩ ↦ |x⟩|y - a⁻¹⋅x (mod N)⟩
                 (Adjoint ModularAddProductLE)( inverseMod, modulus, multiplier, summandLE );

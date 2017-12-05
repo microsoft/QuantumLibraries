@@ -25,17 +25,17 @@ namespace Microsoft.Quantum.Canon {
     /// then QFTLE|x⟩ is encoding of x in QFT basis. 
     newtype PhaseLittleEndian = (Qubit[]);
 
-    /// # Summary 
+    /// # Summary
     /// Applies an operation that takes little-endian input to a register encoding 
     /// an unsigned integer using big-endian format.
-    /// 
+    ///
     /// # Input
     /// ## op
     /// Operation that acts on little-endian register
     /// ## register
     /// big-endian register to be transformed
-    /// 
-    /// # See Also 
+    ///
+    /// # See Also
     /// - @"microsoft.quantum.canon.applyreversedoplittleendiana"
     /// - @"microsoft.quantum.canon.applyreversedoplittleendianc"
     /// - @"microsoft.quantum.canon.applyreversedoplittleendianca"
@@ -94,17 +94,17 @@ namespace Microsoft.Quantum.Canon {
         controlled adjoint auto
     }
 
-    /// # Summary 
-    /// Applies an operation that takes big-endian input to a register encoding 
+    /// # Summary
+    /// Applies an operation that takes big-endian input to a register encoding
     /// an unsigned integer using little-endian format.
     ///
-    /// # Input 
-    /// ## op 
+    /// # Input
+    /// ## op
     /// Operation that acts on big-endian register
     /// ## register
     /// little-endian register to be transformed
-    /// 
-    /// # See Also 
+    ///
+    /// # See Also
     /// - @"microsoft.quantum.canon.applyreversedopbigendiana"
     /// - @"microsoft.quantum.canon.applyreversedopbigendianc"
     /// - @"microsoft.quantum.canon.applyreversedopbigendianca"
@@ -119,7 +119,7 @@ namespace Microsoft.Quantum.Canon {
         }
     }
 
-    /// # See Also 
+    /// # See Also
     /// - @"microsoft.quantum.canon.applyreversedopbigendian"
     operation ApplyReversedOpBigEndianA(
               op : (BigEndian => () : Adjoint),
@@ -166,8 +166,8 @@ namespace Microsoft.Quantum.Canon {
     /// # Summary
     /// Uses SWAP gates to reverse the order of the qubits in
     /// a register.
-    /// 
-    /// # Input 
+    ///
+    /// # Input
     /// ## register
     /// The qubits order of which should be reversed using SWAP gates
     operation SwapReverseRegister(register : Qubit[])  : ()
@@ -184,16 +184,16 @@ namespace Microsoft.Quantum.Canon {
         controlled adjoint auto
     }
 
-    /// # Summary 
+    /// # Summary
     /// Applies an operation that takes PhaseLittleEndian input on LittleEndian target
-    /// 
-    /// # Input 
-    /// ## op 
+    ///
+    /// # Input
+    /// ## op
     /// Operation to be applied
-    /// ## target 
+    /// ## target
     /// The register to which the operation is applied
-    /// 
-    /// # See Also 
+    ///
+    /// # See Also
     /// - @"microsoft.quantum.canon.applyphaseleoperationonlea"
     /// - @"microsoft.quantum.canon.applyphaseleoperationonlec"
     /// - @"microsoft.quantum.canon.applyphaseleoperationonleca"
@@ -206,7 +206,7 @@ namespace Microsoft.Quantum.Canon {
         }
     }
     
-    /// # See Also 
+    /// # See Also
     /// - @"microsoft.quantum.canon.applyphaseleoperationonle"
     operation ApplyPhaseLEOperationOnLEA( op : (PhaseLittleEndian => () : Adjoint), target : LittleEndian ) : () {
         body {
@@ -254,16 +254,16 @@ namespace Microsoft.Quantum.Canon {
         controlled adjoint auto
     }
 
-    /// # Summary 
+    /// # Summary
     /// Applies an operation that takes PhaseLittleEndian input on LittleEndian target
-    /// 
-    /// # Input 
-    /// ## op 
+    ///
+    /// # Input
+    /// ## op
     /// Operation to be applied
-    /// ## target 
+    /// ## target
     /// The register to which the operation is applied
-    /// 
-    /// # See Also 
+    ///
+    /// # See Also
     /// - @"microsoft.quantum.canon.applyleoperationonphaselea"
     /// - @"microsoft.quantum.canon.applyleoperationonphaselec"
     /// - @"microsoft.quantum.canon.applyleoperationonphaseleca"
