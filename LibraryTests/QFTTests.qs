@@ -14,6 +14,7 @@
             AssertIntEqual(Length(target), 1, "`Length(target)` must be 1" );
             H(target[0]);
         }
+        adjoint auto
     }
 
     /// # Summary 
@@ -27,6 +28,7 @@
             H(q2);
             SWAP(q1,q2);
         }
+        adjoint auto
     }
 
     /// # Summary 
@@ -43,6 +45,7 @@
             H(q3);
             SWAP(q1,q3);
         }
+        adjoint auto
     }
 
     /// # Summary 
@@ -64,6 +67,14 @@
             SWAP(q1,q4);
             SWAP(q2,q3);
         }
+        adjoint auto
+    }
+
+    operation ApplyBEToRegisterA( op : ( BigEndian => () : Adjoint), target : Qubit[] ) : () {
+        body { 
+            op(BigEndian(target));
+        }
+        adjoint auto
     }
 
     /// # Summary 
@@ -72,7 +83,7 @@
         body {
             let testFunctions = [ QFT1; QFT2; QFT3; QFT4 ];
             for( i in 0 .. Length(testFunctions) - 1 ) {
-                AssertOperationsEqualReferenced(testFunctions[i],QFT,i + 1);
+                AssertOperationsEqualReferenced(ApplyBEToRegisterA(testFunctions[i],_),ApplyBEToRegisterA(QFT,_),i + 1);
             }
         }
     }
