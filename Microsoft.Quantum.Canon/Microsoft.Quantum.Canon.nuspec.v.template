@@ -2,13 +2,13 @@
 <package >
   <metadata>
     <id>Microsoft.Quantum.Canon</id>
-    <version>$version$-alpha</version>
+    <version>#NUGET_VERSION#</version>
     <title>$title$</title>
-    <authors>Microsoft QuArC</authors>
-    <owners>Microsoft QuArC</owners>
+    <authors>QuantumEngineering</authors>
+    <owners>QuantumEngineering</owners>
     <licenseUrl>https://github.com/Microsoft/Quantum/raw/master/LICENSE</licenseUrl>
     <projectUrl>https://github.com/Microsoft/Quantum</projectUrl>
-    <!--<iconUrl>http://ICON_URL_HERE_OR_DELETE_THIS_LINE</iconUrl>-->
+    <iconUrl>https://secure.gravatar.com/avatar/bd1f02955b2853ba0a3b1cdc2434e8ec.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Microsoft's Quantum Core Libraries.</description>
     <!--<releaseNotes>Summary of changes made in this release of the package.</releaseNotes>-->
