@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26730.10
+VisualStudioVersion = 15.0.27004.2010
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.Quantum.Canon", "Microsoft.Quantum.Canon\Microsoft.Quantum.Canon.csproj", "{2A1B0D78-2CE6-44DB-BFA1-3575F3C36321}"
 EndProject
@@ -51,13 +51,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BitFlipCode", "Samples\BitF
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Measurement", "Samples\Measurement\Measurement.csproj", "{ECC1DAB3-CCEF-47ED-BFBE-44E273C60776}"
 EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "IntegerFactorization", "Samples\IntegerFactorization\IntegerFactorization.fsproj", "{02275D6A-C9A6-463F-BB70-4801FAB570A0}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IsingTrotterSample", "Samples\IsingTrotterEvolution\IsingTrotterSample.csproj", "{F210681B-3E3D-4ED3-A0B5-B90CB4A64C93}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HubbardSimulationSample", "Samples\HubbardSimulation\HubbardSimulationSample.csproj", "{8C771873-E2F2-440B-A2C3-CAD38AA5A6F7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntegerFactorizationWithCanon", "Samples\IntegerFactorizationWithCanon\IntegerFactorizationWithCanon.csproj", "{7D655364-1C17-488E-8E9A-01A04C5898CD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntegerFactorization", "Samples\IntegerFactorization\IntegerFactorization.csproj", "{7D655364-1C17-488E-8E9A-01A04C5898CD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -295,22 +293,6 @@ Global
 		{ECC1DAB3-CCEF-47ED-BFBE-44E273C60776}.Release|x64.Build.0 = Release|Any CPU
 		{ECC1DAB3-CCEF-47ED-BFBE-44E273C60776}.Release|x86.ActiveCfg = Release|Any CPU
 		{ECC1DAB3-CCEF-47ED-BFBE-44E273C60776}.Release|x86.Build.0 = Release|Any CPU
-		{02275D6A-C9A6-463F-BB70-4801FAB570A0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{02275D6A-C9A6-463F-BB70-4801FAB570A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{02275D6A-C9A6-463F-BB70-4801FAB570A0}.Debug|ARM.ActiveCfg = Debug|Any CPU
-		{02275D6A-C9A6-463F-BB70-4801FAB570A0}.Debug|ARM.Build.0 = Debug|Any CPU
-		{02275D6A-C9A6-463F-BB70-4801FAB570A0}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{02275D6A-C9A6-463F-BB70-4801FAB570A0}.Debug|x64.Build.0 = Debug|Any CPU
-		{02275D6A-C9A6-463F-BB70-4801FAB570A0}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{02275D6A-C9A6-463F-BB70-4801FAB570A0}.Debug|x86.Build.0 = Debug|Any CPU
-		{02275D6A-C9A6-463F-BB70-4801FAB570A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{02275D6A-C9A6-463F-BB70-4801FAB570A0}.Release|Any CPU.Build.0 = Release|Any CPU
-		{02275D6A-C9A6-463F-BB70-4801FAB570A0}.Release|ARM.ActiveCfg = Release|Any CPU
-		{02275D6A-C9A6-463F-BB70-4801FAB570A0}.Release|ARM.Build.0 = Release|Any CPU
-		{02275D6A-C9A6-463F-BB70-4801FAB570A0}.Release|x64.ActiveCfg = Release|Any CPU
-		{02275D6A-C9A6-463F-BB70-4801FAB570A0}.Release|x64.Build.0 = Release|Any CPU
-		{02275D6A-C9A6-463F-BB70-4801FAB570A0}.Release|x86.ActiveCfg = Release|Any CPU
-		{02275D6A-C9A6-463F-BB70-4801FAB570A0}.Release|x86.Build.0 = Release|Any CPU
 		{F210681B-3E3D-4ED3-A0B5-B90CB4A64C93}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{F210681B-3E3D-4ED3-A0B5-B90CB4A64C93}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F210681B-3E3D-4ED3-A0B5-B90CB4A64C93}.Debug|ARM.ActiveCfg = Debug|Any CPU
@@ -381,7 +363,6 @@ Global
 		{2606956D-E795-4EA5-957A-C41A9A79CAA9} = {AEEA483D-7AA4-4B61-A989-ADAAC8C84458}
 		{72B1648C-83B0-4BBD-A877-CC651B587689} = {AEEA483D-7AA4-4B61-A989-ADAAC8C84458}
 		{ECC1DAB3-CCEF-47ED-BFBE-44E273C60776} = {87B15726-C98C-4D4D-A959-CC57D6B10789}
-		{02275D6A-C9A6-463F-BB70-4801FAB570A0} = {3065C0E5-A209-4688-93DB-6BD85127D7B8}
 		{F210681B-3E3D-4ED3-A0B5-B90CB4A64C93} = {6E6063FB-43EB-41D1-B095-4701A5D966BF}
 		{8C771873-E2F2-440B-A2C3-CAD38AA5A6F7} = {AB49B48F-9250-4076-A939-CFB24D09C8A7}
 		{7D655364-1C17-488E-8E9A-01A04C5898CD} = {3065C0E5-A209-4688-93DB-6BD85127D7B8}
