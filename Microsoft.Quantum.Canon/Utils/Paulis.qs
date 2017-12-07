@@ -130,16 +130,17 @@ namespace Microsoft.Quantum.Canon {
     ///
     /// # Input
     /// ## pauli
-    /// Pauli operator to apply to qubits where `bitsApply == bits[idx]`.
+    /// Pauli operator to apply to `qubits[idx]` where `bitsApply == bits[idx]`
     /// ## bitApply
-    /// apply Pauli if bit is this value.
+    /// apply Pauli if bit is this value
     /// ## bits
-    /// Boolean array.
+    /// Boolean register specifying which corresponding qubit in `qubits` should be operated on
     /// ## qubits
-    /// Quantum register to which a Pauli operator is to be applied.
+    /// Quantum register on which to selectively apply the specified Pauli operator
     ///
     /// # Remarks
-    /// The Boolean array and the quantum register must be of equal length.
+    /// The Boolean array and the quantum register must be of equal length
+    ///
     operation ApplyPauliFromBitString(pauli : Pauli, bitApply: Bool, bits : Bool[], qubits : Qubit[]) : ()
     {
         body {

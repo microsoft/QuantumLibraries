@@ -11,16 +11,20 @@ namespace Microsoft.Quantum.Canon {
     /// ## a
     /// approximation parameter which determines at which level the controlled Z-rotations that 
     /// occur in the QFT circuit are pruned.
-    /// ## qs
-    /// quantum register of n qubits to which the approximate quantum Fourier transform is applied.
     ///
-    /// # Remarks
-    /// AQFT requires Z-rotation gates of the form 2π/2ᵏ and Hadamard gates. The input and output
-    /// are assumed to be encoded in big endian encoding. 
     /// The approximation parameter a determines the pruning level of the Z-rotations, i.e.,
     /// a ∈ {0..n} and all Z-rotations 2π/2ᵏ where k>a are 
     /// removed from the QFT circuit. It is known that for k >= log₂(n)+log₂(1/ε)+3 
     /// one can bound ||QFT-AQFT||<ε. 
+
+    /// ## qs
+    /// quantum register of n qubits to which the Approximate Quantum Fourier Transform is applied.
+    ///
+    /// # Remarks
+    /// AQFT requires Z-rotation gates of the form 2π/2ᵏ and Hadamard gates.
+    ///
+    /// The input and output are assumed to be encoded in big endian encoding.
+    ///
     /// 
     /// # References 
     /// - [ *M. Roetteler, Th. Beth*,
@@ -57,12 +61,12 @@ namespace Microsoft.Quantum.Canon {
     }
 
     /// # Summary
-    /// Performs the quantum Fourier transform on an quantum register containing an 
+    /// Performs the Quantum Fourier Transform on a quantum register containing an
     /// integer in the big-endian representation.
     ///
     /// # Input
     /// ## qs
-    /// quantum register of n qubits to which the quantum Fourier transform is applied
+    /// Quantum register to which the Quantum Fourier Transform is applied
     ///
     /// # Remarks
     /// The input and output are assumed to be in big endian encoding.
@@ -80,17 +84,22 @@ namespace Microsoft.Quantum.Canon {
     }
 
     /// # Summary
-    /// Little-endian version of QFT. 
+    /// Performs the Quantum Fourier Transform on a quantum register containing an
+    /// integer in the little-endian representation.
     ///
     /// # Input
-    /// ## target 
-    /// Quantum register to which Fourier transform is applied
+    /// ## qs
+    /// Quantum register to which the Quantum Fourier Transform is applied
+    ///
+    /// # Remarks
+    /// The input and output are assumed to be in little endian encoding.
+    ///
     ///
     /// # See Also
     /// - @"microsoft.quantum.canon.qft"
-    operation QFTLE( target : LittleEndian ) : () {
+    operation QFTLE ( qs : LittleEndian ) : () {
         body {
-            ApplyReversedOpBigEndianCA(QFT,target);
+            ApplyReversedOpBigEndianCA(QFT, qs);
         }
         adjoint auto
         controlled auto

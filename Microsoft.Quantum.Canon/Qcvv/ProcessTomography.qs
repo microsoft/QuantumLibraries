@@ -159,6 +159,12 @@ namespace Microsoft.Quantum.Canon {
     /// Given two registers, prepares the maximally entangled state
     /// $\bra{\beta_{00}}\ket{\beta_{00}}$ between each pair of qubits on the respective registers,
     /// assuming that each register starts in the $\ket{0\cdots 0}$ state.
+    ///
+    /// # Input
+    /// ## left
+    /// A qubit array in the $\ket{0\cdots 0}$ state
+    /// ## right
+    /// A qubit array in the $\ket{0\cdots 0}$ state
     operation PrepareEntangledState(left : Qubit[], right : Qubit[]) : () {
         body {
             if (Length(left) != Length(right)) {
@@ -218,9 +224,12 @@ namespace Microsoft.Quantum.Canon {
         }
     }
 
+    /// # Summary
+    /// Prepares the Choi–Jamiłkowski state for a given operation with a controlled variant onto given reference
+    /// and target registers.
     /// # See Also
     /// - @"microsoft.quantum.canon.preparechoistate"
-    operation PrepareChoiStateC(op : (Qubit[] => () : Controlled, Adjoint), reference : Qubit[], target : Qubit[]) : () {
+    operation PrepareChoiStateC(op : (Qubit[] => () : Controlled), reference : Qubit[], target : Qubit[]) : () {
         body {
             PrepareEntangledState(reference, target);
             op(target);
@@ -229,6 +238,9 @@ namespace Microsoft.Quantum.Canon {
         controlled auto
     }
     
+    /// # Summary
+    /// Prepares the Choi–Jamiłkowski state for a given operation with an adjoint variant onto given reference
+    /// and target registers.
     /// # See Also
     /// - @"microsoft.quantum.canon.preparechoistate"
     operation PrepareChoiStateA(op : (Qubit[] => () : Adjoint), reference : Qubit[], target : Qubit[]) : () {
@@ -239,7 +251,10 @@ namespace Microsoft.Quantum.Canon {
 
         adjoint auto
     }
-    
+
+    /// # Summary
+    /// Prepares the Choi–Jamiłkowski state for a given operation with both controlled and adjoint variants onto given reference
+    /// and target registers. 
     /// # See Also
     /// - @"microsoft.quantum.canon.preparechoistate"
     operation PrepareChoiStateCA(op : (Qubit[] => () : Controlled, Adjoint), reference : Qubit[], target : Qubit[]) : () {

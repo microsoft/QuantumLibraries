@@ -16,16 +16,18 @@ namespace Microsoft.Quantum.Canon {
     newtype ContinuousOracle = ((Double, Qubit[]) => ():Adjoint,Controlled);
 
     /// # Summary
-    /// Given an operation representing a "black-box" oracle, implements
-    /// a discrete-time oracle by repeating the given oracle multiple times.
+    /// Given an operation representing a "black-box" oracle, returns a discrete-time oracle 
+    /// which represents the "black-box" oracle repeated multiple times.
     ///
     /// # Input
     /// ## blackBoxOracle
-    /// "Black-box" oracle to perform powers of as a discrete-time oracle.
+    /// The operation to be exponentiated
+    ///
+    /// # Output
+    /// An operation partially applied over the "black-box" oracle representing the discrete-time oracle 
     ///
     /// # Example
-    /// `OracleToDiscrete(U)(3, target)` is equivalent to `U(target)`
-    /// repeated three times.
+    /// `OracleToDiscrete(U)(3, target)` is equivalent to `U(target)` repeated three times.
     operation OracleToDiscrete(blackBoxOracle : (Qubit[] => (): Adjoint, Controlled))  : DiscreteOracle
     {
         body {
