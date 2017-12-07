@@ -124,7 +124,7 @@ namespace Microsoft.Quantum.Canon {
     /// A real number $x$.
     ///
     /// # Output
-    /// A real number $y$ such that $x = \sech(y)$.
+    /// A real number $y$ such that $x = \operatorname{sinh}(y)$.
     function ArcSinh(x : Double) : Double
     {
         // Fully-qualified name is required because Log also appears in Primitives
