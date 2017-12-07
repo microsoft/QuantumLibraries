@@ -19,13 +19,13 @@ namespace Microsoft.Quantum.Samples.SimpleIsing
 
             #region Basic Definitions
 
-            // We start by loading the simulator that we will use to run our Q♭ operations.
+            // We start by loading the simulator that we will use to run our Q# operations.
             var qsim = new QuantumSimulator();
 
             // For this example, we'll consider a chain of twelve sites, each one of which
             // is simulated using a single qubit.
             var nSites = 12;
-            
+
             // We'll sweep from the transverse to the final Hamiltonian in time t = 10.0,
             // where the units are implicitly fixed by the units of the Hamiltonian itself.
             var sweepTime = 10.0;
@@ -47,7 +47,7 @@ namespace Microsoft.Quantum.Samples.SimpleIsing
 
             #endregion
 
-            #region Calling into Q♭
+            #region Calling into Q#
 
             // Now that we've defined everything we need, let's proceed to
             // actually call the simulator. Since there's a finite chance of successfully
@@ -60,19 +60,21 @@ namespace Microsoft.Quantum.Samples.SimpleIsing
                 // an argument, along with all the arguments defined by the operation itself.
                 var task = Ising.Run(qsim, nSites, sweepTime, timeStep);
 
-                // Since this method is asynchronous, we need to explicitly wait for the result back
-                // from the simulator. We do this by getting the Result property. To turn the result
-                // back into a conventional .NET array, we finish by calling ToArray().
-                // FIXME: using a lambda to turn everything into a C# int is ugly, but we don't
-                //        have a better way right now.
+                // Since this method is asynchronous, we need to explicitly
+                // wait for the result back from the simulator. We do this by
+                // getting the Result property. To turn the result back into a
+                // conventional .NET array, we finish by calling ToArray() and
+                // using a C# lambda function to convert each Result into a
+                // floating point number representing the observed spin.
                 var data = task.Result.ToArray().Select((result) => result == Result.One ? 0.5 : -0.5);
 
-                // We can now compute the magnetization entirely in C# code, since data is
-                // an array of the classical measurement results observed back from our simulation.
+                // We can now compute the magnetization entirely in C# code,
+                // since data is an array of the classical measurement results
+                // observed back from our simulation.
                 var magnetization = data.Sum();
 
                 Console.WriteLine($"Magnetization observed in attempt {idxAttempt}: {magnetization}");
-                
+
             }
 
             #endregion

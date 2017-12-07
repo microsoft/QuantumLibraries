@@ -1,5 +1,5 @@
 ---
-title: "Q♭ Libraries Style Guide"
+title: "Q# Libraries Style Guide"
 ---
 
 ## General Conventions ##

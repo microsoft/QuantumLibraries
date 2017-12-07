@@ -184,16 +184,6 @@ namespace Microsoft.Quantum.Tests
             }
         }
 
-        // FIXME: there has to be a cleaner way of doing this.
-        [OperationDriver(TestNamespace = "Microsoft.Quantum.Samples.DatabaseSearch", AssemblyName ="DatabaseSearchSample")]
-        public void DatabaseSearchTarget(TestOperation opData)
-        {
-            using (var sim = new QuantumSimulator(throwOnReleasingQubitsNotInZeroState: true))
-            {
-                opData.TestOperationRunner(sim);
-            }
-        }
-
         /// <summary>
         /// Logs the seed used for the test run
         /// </summary>

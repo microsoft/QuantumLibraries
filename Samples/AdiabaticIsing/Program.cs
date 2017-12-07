@@ -33,8 +33,8 @@ namespace Microsoft.Quantum.Samples.Ising
             // For now, we also use this coefficient for coupling between sites.
             var jCCoeff = 1.0;
 
-            // As we are using a Trotter-Suzuki decomposition as our simulation algorithm,
-            // we will need to pick a timestep for the simulation, and the order of the 
+            // As we are using a Trotter–Suzuki decomposition as our simulation algorithm,
+            // we will need to pick a timestep for the simulation, and the order of the
             // integrator. The optimal timestep needs to be determined empirically, and
             // we find that the following choice works well enough.
             var trotterStepSize = 0.1;
@@ -45,7 +45,7 @@ namespace Microsoft.Quantum.Samples.Ising
             // Hamiltonian. For the uniform Ising model, the ground state of the target
             // Hamiltonian should have all spins pointing in the same direction. If we
             // interpolate between these Hamiltonians slowly enough, the initial ground
-            // state will continuously deform into the ground state of the target 
+            // state will continuously deform into the ground state of the target
             // Hamiltonian
 
             // Let us consider the situation where we interpolate between these Hamiltonians

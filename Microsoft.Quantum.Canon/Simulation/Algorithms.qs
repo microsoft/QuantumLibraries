@@ -51,7 +51,7 @@ namespace Microsoft.Quantum.Canon {
     /// for duration `trotterStepSize`.
     ///
     /// # Remarks
-    /// For more on the Trotter-Suzuki decomposition, see
+    /// For more on the Trotter–Suzuki decomposition, see
     /// [Time-Ordered Composition](xref:microsoft.quantum.concepts.control-flow#time-ordered-composition).
     function TrotterStep(evolutionGenerator: EvolutionGenerator, trotterOrder: Int, trotterStepSize: Double) : (Qubit[] => () :  Adjoint, Controlled)
     {
@@ -102,7 +102,7 @@ namespace Microsoft.Quantum.Canon {
     }
 
     /// # Summary
-    /// `SimulationAlgorithm` function that uses a Trotter-Suzuki 
+    /// `SimulationAlgorithm` function that uses a Trotter–Suzuki 
     /// decomposition to approximate the time-evolution operator $e^{-i H t}$.
     ///
     /// # Input
@@ -164,7 +164,7 @@ namespace Microsoft.Quantum.Canon {
     }
 
     /// # Summary
-    /// `TimeDependentSimulationAlgorithm` function that uses a Trotter-Suzuki 
+    /// `TimeDependentSimulationAlgorithm` function that uses a Trotter–Suzuki 
     /// decomposition to approximate a unitary operator that solves the 
     /// time-dependent Schr�dinger equation at time $t$. 
     ///

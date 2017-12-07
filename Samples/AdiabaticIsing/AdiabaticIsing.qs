@@ -176,7 +176,7 @@ namespace Microsoft.Quantum.Samples.Ising {
     }
 
     /// # Summary
-    /// We make a choice of the Trotter-Suzuki decomposition as our
+    /// We make a choice of the Trotter–Suzuki decomposition as our
     /// `TimeDependentSimulationAlgorithm` for implementing time-dependent
     /// evolution. We also use partial application over the qubit register
     /// to return a unitary operation.
@@ -195,7 +195,7 @@ namespace Microsoft.Quantum.Samples.Ising {
     /// ## trotterStepSize
     /// Time simulated by each step of simulation algorithm.
     /// ## trotterOrder
-    /// Order of Trotter-Suzuki integrator.
+    /// Order of Trotter–Suzuki integrator.
     ///
     /// # Output
     /// A unitary operator implementing time-dependent evolution by the
@@ -226,7 +226,7 @@ namespace Microsoft.Quantum.Samples.Ising {
     /// ## trotterStepSize
     /// Time simulated by each step of simulation algorithm.
     /// ## trotterOrder
-    /// Order of Trotter-Suzuki integrator.
+    /// Order of Trotter–Suzuki integrator.
     ///
     /// # Output
     /// A `Result[]` storing the outcome of Z basis measurements on each site
@@ -302,7 +302,7 @@ namespace Microsoft.Quantum.Samples.Ising {
     /// ## trotterStepSize
     /// Time simulated by each step of simulation algorithm.
     /// ## trotterOrder
-    /// Order of Trotter-Suzuki integrator.
+    /// Order of Trotter–Suzuki integrator.
     /// ## hXCoupling
     /// Function returning coefficients `hₖ` for each site.
     /// ## jCoupling
@@ -319,7 +319,7 @@ namespace Microsoft.Quantum.Samples.Ising {
         // This is the final Hamiltonian
         let end = EndEvoGen(nSites, jCoupling);
         
-        // We choose the time-dependent Trotter-Suzuki decomposition as
+        // We choose the time-dependent Trotter–Suzuki decomposition as
         // our similation algorithm.
         let timeDependentSimulationAlgorithm = TimeDependentTrotterSimulationAlgorithm(trotterStepSize, trotterOrder);
         
@@ -345,7 +345,7 @@ namespace Microsoft.Quantum.Samples.Ising {
     /// ## trotterStepSize
     /// Time simulated by each step of simulation algorithm.
     /// ## trotterOrder
-    /// Order of Trotter-Suzuki integrator.
+    /// Order of Trotter–Suzuki integrator.
     ///
     /// # Output
     /// A `Result[]` storing the outcome of Z basis measurements on each site

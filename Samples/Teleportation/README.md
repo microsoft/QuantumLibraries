@@ -15,5 +15,5 @@ Press Start in Visual Studio to run the example.
 
 - `TeleportationExample/`
   - `TeleportationExample.csproj`: Main C# project for the example.
-  - `TeleportationExample.qs`: Q♭ code defining how to teleport qubit states.
-  - `Program.cs`: C# code to call the operations defined in Q♭.
+  - `TeleportationExample.qs`: Q# code defining how to teleport qubit states.
+  - `Program.cs`: C# code to call the operations defined in Q#.

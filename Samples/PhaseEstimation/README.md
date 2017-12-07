@@ -15,7 +15,7 @@ Press Start in Visual Studio to run the sample.
 
 - `PhaseEstimation/`
   - `PhaseEstimationSample.csproj`: Main C# project for the example.
-  - `Program.cs`: C# code to call the operations defined in Q♭.
+  - `Program.cs`: C# code to call the operations defined in Q#.
 
 ### References ###
 

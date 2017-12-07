@@ -49,7 +49,7 @@ namespace Microsoft.Quantum.Samples.Ising {
             // model defined previously at the schedule parameter s = 1.
             let hXInitial = hXFinal;
             let schedule = 1.0;
-            // We use a Trotter-Suzuki `SimulationAlgorithm` to implement the 
+            // We use a Trotter–Suzuki `SimulationAlgorithm` to implement the 
             // Trotter step of size `qpeStepSize`.
             let trotterOrder = 1;
             let simulationAlgorithm = TrotterSimulationAlgorithm(qpeStepSize, trotterOrder);
@@ -94,7 +94,7 @@ namespace Microsoft.Quantum.Samples.Ising {
     /// ## trotterStepSize
     /// Time simulated by each step of simulation algorithm.
     /// ## trotterOrder
-    /// Order of Trotter-Suzuki integrator.
+    /// Order of Trotter–Suzuki integrator.
     /// ## qpeStepSize
     /// Size of Trotter step in simulation algorithm.
     /// ## nBitsPrecision
@@ -172,7 +172,7 @@ namespace Microsoft.Quantum.Samples.Ising {
     /// ## trotterStepSize
     /// Time simulated by each step of simulation algorithm.
     /// ## trotterOrder
-    /// Order of Trotter-Suzuki integrator.
+    /// Order of Trotter–Suzuki integrator.
     /// ## qpeStepSize
     /// Size of Trotter step in simulation algorithm.
     /// ## nBitsPrecision

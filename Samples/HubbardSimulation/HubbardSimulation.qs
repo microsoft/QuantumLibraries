@@ -24,7 +24,7 @@ namespace Microsoft.Quantum.Samples.Hubbard {
     // We do so in terms of the primitive gates defined by Q#. This requires
     // us to choose an encoding of Fermionic operators into qubits, and we 
     // apply the Jordan-Wigner transformation for this task. We then use the
-    // Trotter-Suziki control sequence to approximate time-evolution by this 
+    // Trotter–Suzuki control sequence to approximate time-evolution by this 
     // Hamiltonian. This time-evolution is used to estimate the ground state 
     // energy at half-filling.
 
@@ -222,7 +222,7 @@ namespace Microsoft.Quantum.Samples.Hubbard {
         adjoint controlled auto
     }
 
-    // We will simulate time-evolution using the Trotter-Suzuki family of 
+    // We will simulate time-evolution using the Trotter–Suzuki family of 
     // integrators. For example, given a matrix A + B that is a sum of 
     // non-commuting terms A and B, the first-order integrator approximates 
     // e^{(A + B)t} by decomposing into the product of 2r exponentials
@@ -244,7 +244,7 @@ namespace Microsoft.Quantum.Samples.Hubbard {
     // controlled by an integer index to the desired unitary, and a
     // real parameter for the step size t / r.
 
-    // We now invoke the Trotter-Suzuki control structure. This requires two 
+    // We now invoke the Trotter–Suzuki control structure. This requires two 
     // additional parameters -- the trotterOrder, which determines the order 
     // the Trotter decompositions, and the trotterStepSize, which determines 
     // the duration of time-evolution of a single Trotter step.
@@ -301,7 +301,7 @@ namespace Microsoft.Quantum.Samples.Hubbard {
             // Fermion sites * number of spin indices.
             let nQubits = 2 * nSites;
 
-            // Let us use the first-order Trotter-Suziki decomposition.
+            // Let us use the first-order Trotter–Suzuki decomposition.
             let trotterOrder = 1;
 
             // The input to phase estimation requires a DiscreteOracle type.
