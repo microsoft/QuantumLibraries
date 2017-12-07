@@ -388,12 +388,12 @@ namespace Microsoft.Quantum.Canon {
     ///
     /// # Input
     /// ## statePrepOracle
-    /// Unitary oracle that prepares start state 
+    /// Unitary oracle that prepares the start state.
     /// ## startQubits
     /// Qubit register 
     ///
     /// # Remarks
-    /// startQubits must be in the $\ket{0 \cdots 0}$ state. This iterates over a number of queries in powers of $2$ until `queriesMax` 
+    /// The startQubits must be in the $\ket{0 \cdots 0}$ state. This operation iterates over a number of queries in powers of $2$ until either a maximal number of queries
     /// is reached, or the target state is found.
     operation AmpAmpRUSByOracle(statePrepOracle : StateOracle, startQubits: Qubit[]) : ()
     {

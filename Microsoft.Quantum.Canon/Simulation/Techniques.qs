@@ -50,10 +50,10 @@ namespace Microsoft.Quantum.Canon {
     /// generator.
     /// ## adiabaticUnitary
     /// An oracle representing the adiabatic evolution algorithm to be used
-    /// to implement the sweep to the final state of the algorithm.
+    /// to implement the sweeps to the final state of the algorithm.
     /// ## qpeUnitary
-    /// An oracle representing a unitary operator $U$ representing evolution
-    /// for time $\delta t$ under a dynamical generator with ground state
+    /// An oracle representing a unitary operator $U$ representing the evolution
+    /// for a time $\delta t$ under a dynamical generator with ground state
     /// $\ket{\phi}$ and ground state energy $E = \phi\,\delta t$.
     /// ## phaseEstAlgorithm
     /// An operation that performs phase estimation on a given unitary operation.
@@ -64,7 +64,7 @@ namespace Microsoft.Quantum.Canon {
     ///
     /// # Output
     /// An estimate $\hat{\phi}$ of the ground state energy $\phi$
-    /// of the ground state energy of the generator represented by $U$.
+    /// of the generator represented by $U$.
     operation AdiabaticStateEnergyUnitary(  statePrepUnitary: (Qubit[] => ()),
                                             adiabaticUnitary: (Qubit[] => ()),
                                             qpeUnitary: (Qubit[] => () :  Adjoint, Controlled),
@@ -84,16 +84,16 @@ namespace Microsoft.Quantum.Canon {
     ///
     /// # Input
     /// ## nQubits
-    /// Number of qubits used to perform simulation.
+    /// Number of qubits used for the simulation.
     /// ## statePrepUnitary
     /// An oracle representing state preparation for the initial dynamical
     /// generator.
     /// ## adiabaticUnitary
     /// An oracle representing the adiabatic evolution algorithm to be used
-    /// to implement the sweep to the final state of the algorithm.
+    /// to implement the sweeps to the final state of the algorithm.
     /// ## qpeUnitary
-    /// An oracle representing a unitary operator $U$ representing evolution
-    /// for time $\delta t$ under a dynamical generator with ground state
+    /// An oracle representing a unitary operator $U$ representing the evolution
+    /// for a time $\delta t$ under a dynamical generator with ground state
     /// $\ket{\phi}$ and ground state energy $E = \phi\,\delta t$.
     /// ## phaseEstAlgorithm
     /// An operation that performs phase estimation on a given unitary operation.
@@ -102,7 +102,7 @@ namespace Microsoft.Quantum.Canon {
     ///
     /// # Output
     /// An estimate $\hat{\phi}$ of the ground state energy $\phi$
-    /// of the ground state energy of the generator represented by $U$.
+    /// of the generator represented by $U$.
     operation AdiabaticStateEnergyEstimate( nQubits : Int, 
                                             statePrepUnitary: (Qubit[] => ()),
                                             adiabaticUnitary: (Qubit[] => ()),
