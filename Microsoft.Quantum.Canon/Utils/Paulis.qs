@@ -69,6 +69,16 @@ namespace Microsoft.Quantum.Canon {
     /// A multi-qubit Pauli operator represented as an array of single-qubit Pauli operators.
     /// ## target
     /// Register to apply the given Pauli operation on.
+    ///
+    /// # Example
+    /// The following are equivalent:
+    /// ```Q#
+    /// ApplyPauli([PauliY; PauliZ; PauliX], target);
+    ///
+    /// Y(target[0]);
+    /// Z(target[1]);
+    /// X(target[2]);
+    /// ```
     operation ApplyPauli(pauli : Pauli[], target : Qubit[])  : ()
     {
         body {

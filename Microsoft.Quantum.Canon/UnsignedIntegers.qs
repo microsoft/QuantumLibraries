@@ -31,14 +31,14 @@ namespace Microsoft.Quantum.Canon {
     ///
     /// # Input
     /// ## op
-    /// Operation that acts on little-endian register
+    /// Operation that acts on a little-endian register.
     /// ## register
-    /// big-endian register to be transformed
+    /// A big-endian register to be transformed.
     ///
     /// # See Also
-    /// - @"microsoft.quantum.canon.applyreversedoplittleendiana"
-    /// - @"microsoft.quantum.canon.applyreversedoplittleendianc"
-    /// - @"microsoft.quantum.canon.applyreversedoplittleendianca"
+    /// - Microsoft.Quantum.Canon.ApplyReversedOpLittlEndianA
+    /// - Microsoft.Quantum.Canon.ApplyReversedOpLittlEndianC
+    /// - Microsoft.Quantum.Canon.ApplyReversedOpLittlEndianCA
     operation ApplyReversedOpLittleEndian( 
               op : (LittleEndian => ()),
               register : BigEndian)  : ()
@@ -50,6 +50,11 @@ namespace Microsoft.Quantum.Canon {
         }
     }
 
+    /// # Summary
+    /// Applies an operation that takes little-endian input and that supports
+    /// the adjoint functor to a register encoding 
+    /// an unsigned integer using big-endian format.
+    ///
     /// # See Also 
     /// - @"microsoft.quantum.canon.applyreversedoplittleendian"
     operation ApplyReversedOpLittleEndianA( 
@@ -64,6 +69,11 @@ namespace Microsoft.Quantum.Canon {
         adjoint auto
     }
 
+    /// # Summary
+    /// Applies an operation that takes little-endian input and that supports
+    /// the controlled functor to a register encoding 
+    /// an unsigned integer using big-endian format.
+    ///
     /// # See Also 
     /// - @"microsoft.quantum.canon.applyreversedoplittleendian"
     operation ApplyReversedOpLittleEndianC(
@@ -78,6 +88,11 @@ namespace Microsoft.Quantum.Canon {
         controlled auto
     }
 
+    /// # Summary
+    /// Applies an operation that takes little-endian input and that supports
+    /// the controlled and adjoint functors to a register encoding 
+    /// an unsigned integer using big-endian format.
+    ///
     /// # See Also 
     /// - @"microsoft.quantum.canon.applyreversedoplittleendian"
     operation ApplyReversedOpLittleEndianCA(
@@ -185,18 +200,25 @@ namespace Microsoft.Quantum.Canon {
     }
 
     /// # Summary
-    /// Applies an operation that takes PhaseLittleEndian input on LittleEndian target
+    /// Applies an operation that takes a
+    /// <xref:microsoft.quantum.canon.littleendian> register as input
+    /// on a target register of type <xref:microsoft.quanutm.canon.phaselittleendian>.
     ///
     /// # Input
     /// ## op
-    /// Operation to be applied
+    /// The operation to be applied.
     /// ## target
-    /// The register to which the operation is applied
+    /// The register to which the operation is applied.
+    ///
+    /// # Remarks
+    /// The register is transformed to `PhaseLittleEndian` by the use of
+    /// <xref:microsoft.quantum.canon.qftle> and is then returned to
+    /// its original representation after application of `op`.
     ///
     /// # See Also
-    /// - @"microsoft.quantum.canon.applyphaseleoperationonlea"
-    /// - @"microsoft.quantum.canon.applyphaseleoperationonlec"
-    /// - @"microsoft.quantum.canon.applyphaseleoperationonleca"
+    /// - Microsoft.Quantum.Canon.ApplyPhaseLEOperationonLEA
+    /// - Microsoft.Quantum.Canon.ApplyPhaseLEOperationonLEA
+    /// - Microsoft.Quantum.Canon.ApplyPhaseLEOperationonLECA
     operation ApplyPhaseLEOperationOnLE( op : (PhaseLittleEndian => ()), target : LittleEndian ) : () {
         body {
             QFTLE(target);
@@ -255,18 +277,25 @@ namespace Microsoft.Quantum.Canon {
     }
 
     /// # Summary
-    /// Applies an operation that takes PhaseLittleEndian input on LittleEndian target
+    /// Applies an operation that takes a
+    /// <xref:microsoft.quantum.canon.phaselittleendian> register as input
+    /// on a target register of type <xref:microsoft.quanutm.canon.littleendian>.
     ///
     /// # Input
     /// ## op
-    /// Operation to be applied
+    /// The operation to be applied.
     /// ## target
-    /// The register to which the operation is applied
+    /// The register to which the operation is applied.
+    ///
+    /// # Remarks
+    /// The register is transformed to `LittleEndian` by the use of
+    /// <xref:microsoft.quantum.canon.qftle> and is then returned to
+    /// its original representation after application of `op`.
     ///
     /// # See Also
-    /// - @"microsoft.quantum.canon.applyleoperationonphaselea"
-    /// - @"microsoft.quantum.canon.applyleoperationonphaselec"
-    /// - @"microsoft.quantum.canon.applyleoperationonphaseleca"
+    /// - Microsoft.Quantum.Canon.ApplyLEOperationonPhaseLEA
+    /// - Microsoft.Quantum.Canon.ApplyLEOperationonPhaseLEA
+    /// - Microsoft.Quantum.Canon.ApplyLEOperationonPhaseLECA
     operation ApplyLEOperationOnPhaseLE( op : (LittleEndian => ()), target : PhaseLittleEndian ) : () {
         body {
             let targetLE = LittleEndian(target);
@@ -274,8 +303,8 @@ namespace Microsoft.Quantum.Canon {
         }
     }
 
-    /// # See Also 
-    /// - @"microsoft.quantum.canon.applyleoperationonphasele"
+    /// # See Also
+    /// - Microsoft.Quantum.Canon.ApplyLEOperationonPhaseLE
     operation ApplyLEOperationOnPhaseLEA( op : (LittleEndian => () : Adjoint), target : PhaseLittleEndian ) : () {
         body {
             let targetLE = LittleEndian(target);
@@ -284,8 +313,8 @@ namespace Microsoft.Quantum.Canon {
         adjoint auto
     }
 
-    /// # See Also 
-    /// - @"microsoft.quantum.canon.applyleoperationonphasele"
+    /// # See Also
+    /// - Microsoft.Quantum.Canon.ApplyLEOperationonPhaseLE
     operation ApplyLEOperationOnPhaseLEC( op : (LittleEndian => () : Controlled), target : PhaseLittleEndian ) : () {
         body {
             let targetLE = LittleEndian(target);
@@ -294,8 +323,8 @@ namespace Microsoft.Quantum.Canon {
         controlled auto
     }
 
-    /// # See Also 
-    /// - @"microsoft.quantum.canon.applyleoperationonphasele"
+    /// # See Also
+    /// - Microsoft.Quantum.Canon.ApplyLEOperationonPhaseLE
     operation ApplyLEOperationOnPhaseLECA( op : (LittleEndian => () : Controlled, Adjoint ), target : PhaseLittleEndian ) : () {
         body {
             let targetLE = LittleEndian(target);

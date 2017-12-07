@@ -23,7 +23,21 @@ namespace Microsoft.Quantum.Canon {
     }
 
     /// # Summary
-    /// This performs a phase shift operation about the state $\ket{0\cdots 0}\bra{0\cdots 0}$.
+    /// This performs a phase shift operation about the state $\ket{0\cdots 0}\bra{0\cdots 0}$,
+    /// $$
+    /// \begin{align}
+    ///     \ket{0\cdots 0} \mapsto e^{i \theta} \ket{0\cdots 0}.
+    /// \end{align}
+    /// $$
+    ///
+    /// # Input
+    /// ## phase
+    /// The phase $\theta$ assigned to the state $\ket{0\cdots 0}$.
+    /// ## qubits
+    /// The register whose state is to be rotated.
+    ///
+    /// # See Also
+    /// - Microsoft.Quantum.Canon.RAll1
     operation RAll0( phase: Double, qubits: Qubit[] ) : ()
     {
 	    body {

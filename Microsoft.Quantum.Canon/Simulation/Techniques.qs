@@ -25,12 +25,12 @@ namespace Microsoft.Quantum.Canon {
     /// If the interpolation time is chosen to meet the adiabatic conditions,
     /// then this function returns an operation which performs adiabatic
     /// state preparation for the final dynamical generator.
-    function InterpolatedEvolution( inerpolationTime: Double, 
+    function InterpolatedEvolution( inerpolationTime: Double,
                                     evolutionGeneratorStart: EvolutionGenerator,
                                     evolutionGeneratorEnd: EvolutionGenerator,
-                                    timeDependentSimulationAlgorithm: TimeDependentSimulationAlgorithm) 
+                                    timeDependentSimulationAlgorithm: TimeDependentSimulationAlgorithm)
                                     : (Qubit[] => () : Adjoint, Controlled) {
-    
+
         //   evolutionSetStart and evolutionSetEnd must be identical
         let (evolutionSetStart, generatorSystemStart) = evolutionGeneratorStart;
         let (evolutionSetEnd, generatorSystemEnd) = evolutionGeneratorEnd;
@@ -52,9 +52,9 @@ namespace Microsoft.Quantum.Canon {
     /// An oracle representing the adiabatic evolution algorithm to be used
     /// to implement the sweeps to the final state of the algorithm.
     /// ## qpeUnitary
-    /// An oracle representing a unitary operator $U$ representing the evolution
-    /// for a time $\delta t$ under a dynamical generator with ground state
-    /// $\ket{\phi}$ and ground state energy $E = \phi\,\delta t$.
+    /// An oracle representing a unitary operator $U$ representing evolution
+    /// for time $\delta t$ under a dynamical generator with ground state
+    /// $\ket{\phi}$ and ground state energy $E = \phi\\,\delta t$.
     /// ## phaseEstAlgorithm
     /// An operation that performs phase estimation on a given unitary operation.
     /// See [iterative phase estimation](../libraries/characterization#iterative-phase-estimation)
@@ -92,9 +92,9 @@ namespace Microsoft.Quantum.Canon {
     /// An oracle representing the adiabatic evolution algorithm to be used
     /// to implement the sweeps to the final state of the algorithm.
     /// ## qpeUnitary
-    /// An oracle representing a unitary operator $U$ representing the evolution
-    /// for a time $\delta t$ under a dynamical generator with ground state
-    /// $\ket{\phi}$ and ground state energy $E = \phi\,\delta t$.
+    /// An oracle representing a unitary operator $U$ representing evolution
+    /// for time $\delta t$ under a dynamical generator with ground state
+    /// $\ket{\phi}$ and ground state energy $E = \phi\\,\delta t$.
     /// ## phaseEstAlgorithm
     /// An operation that performs phase estimation on a given unitary operation.
     /// See [iterative phase estimation](../libraries/characterization#iterative-phase-estimation)
@@ -131,7 +131,7 @@ namespace Microsoft.Quantum.Canon {
     /// ## qpeUnitary
     /// An oracle representing a unitary operator $U$ representing evolution
     /// for time $\delta t$ under a dynamical generator with ground state
-    /// $\ket{\phi}$ and ground state energy $E = \phi\,\delta t$.
+    /// $\ket{\phi}$ and ground state energy $E = \phi\\,\delta t$.
     /// ## phaseEstAlgorithm
     /// An operation that performs phase estimation on a given unitary operation.
     /// See [iterative phase estimation](../libraries/characterization#iterative-phase-estimation)
