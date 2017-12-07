@@ -13,7 +13,7 @@
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <TargetFSharpCoreVersion>4.4.1.0</TargetFSharpCoreVersion>
-    <Name>H2_Plotting</Name>
+    <Name>H2SimulationSampleGUI</Name>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
   </PropertyGroup>
@@ -108,6 +108,11 @@
     <ProjectReference Include="..\..\Microsoft.Quantum.Canon\Microsoft.Quantum.Canon.csproj">
       <Name>Microsoft.Quantum.Canon</Name>
       <Project>{2a1b0d78-2ce6-44db-bfa1-3575f3c36321}</Project>
+      <Private>True</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\H2SimulationCmdLine\H2SimulationSampleCmdLine.csproj">
+      <Name>H2SimulationSampleCmdLine</Name>
+      <Project>{35967b2f-472a-4647-bbf8-4128838d354a}</Project>
       <Private>True</Private>
     </ProjectReference>
   </ItemGroup>

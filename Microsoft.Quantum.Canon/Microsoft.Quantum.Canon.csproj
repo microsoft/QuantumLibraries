@@ -107,7 +107,6 @@
     <QsharpCompile Include="Combinators\ApplyToPartition.qs" />
     <QsharpIgnore Include="Simulation\FermionicEvolutionSet.qs" />
     <QsharpIgnore Include="Simulation\LCU.qs" />
-    <QsharpCompile Include="Examples\ExampleH2.qs" />
     <QsharpCompile Include="Simulation\Algorithms.qs" />
     <QsharpCompile Include="Simulation\PauliEvolutionSet.qs" />
     <QsharpCompile Include="Simulation\Techniques.qs" />

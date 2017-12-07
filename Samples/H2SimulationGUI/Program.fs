@@ -1,14 +1,13 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-namespace Microsoft.Quantum.Examples.H2Simulation
+namespace Microsoft.Quantum.Samples.H2Simulation
 
 open System
 open System.Windows
 open System.Windows.Controls
 
 open Microsoft.Quantum.Simulation.Simulators
-open Microsoft.Quantum.Canon
 open Microsoft.Quantum.Simulation.Core
 
 open Microsoft.FSharp.Core
@@ -19,51 +18,52 @@ open FSharp.Control
 open FSharp.Charting.ChartTypes
 
 module H2PlottingDemo =
-    // We begin by making an instance of the simulator that we will use to run our Q♯ code.
-    let qsim = new QuantumSimulator()
 
-    // Next, we give F♯ names to each operation defined in Q♯.
-    // In doing so, we ask the simulator to give us each operation
-    // so that it has an opportunity to override operation definitions.
-    let H2EstimateEnergyRPE = qsim.Get<ICallable, H2EstimateEnergyRPE>() :?> H2EstimateEnergyRPE
-    let H2BondLengths = qsim.Get<ICallable, H2BondLengths>() :?> H2BondLengths
-
-    // To call a Q♯ operation that takes unit `()` as its input, we need to grab
-    // the QVoid.Instance value.
-    let bondLengths =
-        H2BondLengths.Body.Invoke QVoid.Instance
-
-    // In Q♯, we defined the operation that performs the actual estimation;
-    // we can call it here, giving a structure tuple that corresponds to the
-    // C♯ ValueTuple that it takes as its input. Since the Q♯ operation
-    // has type (idxBondLength : Int, nBitsPrecision : Int, trotterStepSize : Double) => (Double),
-    // we pass the index along with that we want six bits of precision and
-    // step size of 1.
-    //
-    // The result of calling H2EstimateEnergyRPE is a Double, so we can minimize over
-    // that to deal with the possibility that we accidently entered into the excited
-    // state instead of the ground state of interest.
-
-    let estAtBondLength idx =
-        [0..2]
-        |> Seq.map (fun idxRep ->
-                H2EstimateEnergyRPE.Body.Invoke (struct (idx, int64 6, float 1))
-            )
-        |> Seq.min
-
-    // So that the above computation can proceed without blocking the GUI thread,
-    // we use FSharp.Control.AsyncSeq to create a workflow in which energies
-    // are calculated for each energy in turn as an asynchronous sequence.
-    let estimateEnergies =
-        asyncSeq {
-            for idxBond in [0..53] do
-            yield bondLengths.[idxBond], (int64 >> estAtBondLength) idxBond
-        }
-
-    // We're now equipped to define the GUI itself.
     [<STAThread>]
     [<EntryPoint>]
     let main argv =
+        // We begin by making an instance of the simulator that we will use to run our Q♯ code.
+        use qsim = new QuantumSimulator()
+
+        // Next, we give F♯ names to each operation defined in Q♯.
+        // In doing so, we ask the simulator to give us each operation
+        // so that it has an opportunity to override operation definitions.
+        let H2EstimateEnergyRPE = qsim.Get<H2EstimateEnergyRPE, H2EstimateEnergyRPE>()
+        let H2BondLengths = qsim.Get<H2BondLengths, H2BondLengths>()
+
+        // To call a Q♯ operation that takes unit `()` as its input, we need to grab
+        // the QVoid.Instance value.
+        let bondLengths =
+            H2BondLengths.Body.Invoke QVoid.Instance
+
+        // In Q♯, we defined the operation that performs the actual estimation;
+        // we can call it here, giving a structure tuple that corresponds to the
+        // C♯ ValueTuple that it takes as its input. Since the Q♯ operation
+        // has type (idxBondLength : Int, nBitsPrecision : Int, trotterStepSize : Double) => (Double),
+        // we pass the index along with that we want six bits of precision and
+        // step size of 1.
+        //
+        // The result of calling H2EstimateEnergyRPE is a Double, so we can minimize over
+        // that to deal with the possibility that we accidently entered into the excited
+        // state instead of the ground state of interest.
+
+        let estAtBondLength idx =
+            [0..2]
+            |> Seq.map (fun idxRep ->
+                    H2EstimateEnergyRPE.Body.Invoke (struct (idx, int64 6, float 1))
+                )
+            |> Seq.min
+
+        // So that the above computation can proceed without blocking the GUI thread,
+        // we use FSharp.Control.AsyncSeq to create a workflow in which energies
+        // are calculated for each energy in turn as an asynchronous sequence.
+        let estimateEnergies =
+            asyncSeq {
+                for idxBond in [0..53] do
+                yield bondLengths.[idxBond], (int64 >> estAtBondLength) idxBond
+            }
+
+        // We're now equipped to define the GUI itself.
 
         // First we create a blank window, and attach our plotting routines
         // to its Loaded event. If we try to define the plot before then,
