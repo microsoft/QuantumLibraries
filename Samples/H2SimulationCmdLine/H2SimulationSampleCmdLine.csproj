@@ -14,6 +14,8 @@
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Prefer32Bit>false</Prefer32Bit>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -36,22 +38,22 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.Quantum.MetaData">
+    <Reference Include="Microsoft.Quantum.MetaData, Version=0.0.1712.519, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Microsoft.Quantum.Development.Kit.0.0.1712.519-preview\lib\net461\Microsoft.Quantum.MetaData.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Quantum.Primitives">
+    <Reference Include="Microsoft.Quantum.Primitives, Version=0.0.1712.519, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Microsoft.Quantum.Development.Kit.0.0.1712.519-preview\lib\net461\Microsoft.Quantum.Primitives.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Quantum.Simulation.Common">
+    <Reference Include="Microsoft.Quantum.Simulation.Common, Version=0.0.1712.519, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Microsoft.Quantum.Development.Kit.0.0.1712.519-preview\lib\net461\Microsoft.Quantum.Simulation.Common.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Quantum.Simulation.Core">
+    <Reference Include="Microsoft.Quantum.Simulation.Core, Version=0.0.1712.519, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Microsoft.Quantum.Development.Kit.0.0.1712.519-preview\lib\net461\Microsoft.Quantum.Simulation.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Quantum.Simulation.QCTraceSimulatorRuntime">
+    <Reference Include="Microsoft.Quantum.Simulation.QCTraceSimulatorRuntime, Version=0.0.1712.519, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Microsoft.Quantum.Development.Kit.0.0.1712.519-preview\lib\net461\Microsoft.Quantum.Simulation.QCTraceSimulatorRuntime.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Quantum.Simulation.Simulators">
+    <Reference Include="Microsoft.Quantum.Simulation.Simulators, Version=0.0.1712.519, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Microsoft.Quantum.Development.Kit.0.0.1712.519-preview\lib\net461\Microsoft.Quantum.Simulation.Simulators.dll</HintPath>
     </Reference>
     <Reference Include="System" />
