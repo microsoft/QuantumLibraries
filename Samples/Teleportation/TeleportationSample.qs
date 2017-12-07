@@ -22,7 +22,7 @@ namespace Microsoft.Quantum.Examples.Teleportation {
     // We approach teleportation in two steps. First, we define how to
     // teleport the state of a qubit to another qubit. To do so, we define
     // teleportation as an operation, one of the fundamental building blocks
-    // of a Q♯ program.
+    // of a Q# program.
 
     // Most operations which act on qubits to modify their state in some way
     // will not return any useful information to the caller. We represent this

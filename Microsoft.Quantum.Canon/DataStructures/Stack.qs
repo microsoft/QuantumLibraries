@@ -74,7 +74,7 @@ namespace Microsoft.Quantum.Canon {
         }
         
         // FIXME: implies an O(n) copy!
-        //        This could be fixed by using a native C♯ operation to
+        //        This could be fixed by using a native C# operation to
         //        wrap ImmutableStack<T>.
         // See also: https://msdn.microsoft.com/en-us/library/dn467197(v=vs.111).aspx
         mutable newData = data;

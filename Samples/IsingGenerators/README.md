@@ -14,6 +14,6 @@ Press Start in Visual Studio to run the sample.
 ### Manifest ###
 
 - `IsingGenerators/`
-  - `IsingGeneratorsSample.csproj`: Main C♯ project for the sample.
-  - `IsingGenerators.qs`: Q♯ code implementing quantum operations for this sample.
-  - `Program.cs`: C♯ code to interact with and print out results of the Q♯ operations for this sample.
+  - `IsingGeneratorsSample.csproj`: Main C# project for the sample.
+  - `IsingGenerators.qs`: Q# code implementing quantum operations for this sample.
+  - `Program.cs`: C# code to interact with and print out results of the Q# operations for this sample.

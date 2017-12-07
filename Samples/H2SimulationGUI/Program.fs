@@ -22,23 +22,23 @@ module H2PlottingDemo =
     [<STAThread>]
     [<EntryPoint>]
     let main argv =
-        // We begin by making an instance of the simulator that we will use to run our Q♯ code.
+        // We begin by making an instance of the simulator that we will use to run our Q# code.
         use qsim = new QuantumSimulator()
 
-        // Next, we give F♯ names to each operation defined in Q♯.
+        // Next, we give F# names to each operation defined in Q#.
         // In doing so, we ask the simulator to give us each operation
         // so that it has an opportunity to override operation definitions.
         let H2EstimateEnergyRPE = qsim.Get<H2EstimateEnergyRPE, H2EstimateEnergyRPE>()
         let H2BondLengths = qsim.Get<H2BondLengths, H2BondLengths>()
 
-        // To call a Q♯ operation that takes unit `()` as its input, we need to grab
+        // To call a Q# operation that takes unit `()` as its input, we need to grab
         // the QVoid.Instance value.
         let bondLengths =
             H2BondLengths.Body.Invoke QVoid.Instance
 
-        // In Q♯, we defined the operation that performs the actual estimation;
+        // In Q#, we defined the operation that performs the actual estimation;
         // we can call it here, giving a structure tuple that corresponds to the
-        // C♯ ValueTuple that it takes as its input. Since the Q♯ operation
+        // C# ValueTuple that it takes as its input. Since the Q# operation
         // has type (idxBondLength : Int, nBitsPrecision : Int, trotterStepSize : Double) => (Double),
         // we pass the index along with that we want six bits of precision and
         // step size of 1.

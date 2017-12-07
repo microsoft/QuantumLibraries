@@ -17,12 +17,12 @@ namespace Microsoft.Quantum.Samples.H2Simulation
         static void Main(string[] args)
         {
 
-            // We begin by making an instance of the simulator that we will use to run our Q♯ code.
+            // We begin by making an instance of the simulator that we will use to run our Q# code.
             using (var qsim = new QuantumSimulator()) {
 
                 #region Basic Definitions
 
-                // Next, we give C♯ names to each operation defined in Q♯.
+                // Next, we give C# names to each operation defined in Q#.
                 // In doing so, we ask the simulator to give us each operation
                 // so that it has an opportunity to override operation definitions.
                 var H2EstimateEnergyRPE = qsim.Get<H2EstimateEnergyRPE, H2EstimateEnergyRPE>();
@@ -30,15 +30,15 @@ namespace Microsoft.Quantum.Samples.H2Simulation
 
                 #endregion
 
-                #region Calling into Q♯
+                #region Calling into Q#
 
-                // To call a Q♯ operation that takes unit `()` as its input, we need to grab
+                // To call a Q# operation that takes unit `()` as its input, we need to grab
                 // the QVoid.Instance value.
                 var bondLengths = H2BondLengths.Body.Invoke(QVoid.Instance);
 
-                // In Q♯, we defined the operation that performs the actual estimation;
+                // In Q#, we defined the operation that performs the actual estimation;
                 // we can call it here, giving a structure tuple that corresponds to the
-                // C♯ ValueTuple that it takes as its input. Since the Q♯ operation
+                // C# ValueTuple that it takes as its input. Since the Q# operation
                 // has type (idxBondLength : Int, nBitsPrecision : Int, trotterStepSize : Double) => (Double),
                 // we pass the index along with that we want six bits of precision and
                 // step size of 1.
@@ -51,7 +51,7 @@ namespace Microsoft.Quantum.Samples.H2Simulation
                     select H2EstimateEnergyRPE.Body.Invoke((idx, 6, 1.0))
                 );
 
-                // We are now equipped to run the Q♯ simulation at each bond length
+                // We are now equipped to run the Q# simulation at each bond length
                 // and print the answers out to the console.
                 foreach (var idxBond in Enumerable.Range(0, 54))
                 {

@@ -14,6 +14,6 @@ Press Start in Visual Studio to run the sample.
 ### Manifest ###
 
 - `SimpleIsing/`
-  - `SimpleIsingSample.csproj`: Main C♯ project for the sample.
-  - `SimpleIsing.qs`: Q♯ code implementing quantum operations for this sample.
-  - `Program.cs`: C♯ code to interact with and print out results of the Q♯ operations for this sample.
+  - `SimpleIsingSample.csproj`: Main C# project for the sample.
+  - `SimpleIsing.qs`: Q# code implementing quantum operations for this sample.
+  - `Program.cs`: C# code to interact with and print out results of the Q# operations for this sample.

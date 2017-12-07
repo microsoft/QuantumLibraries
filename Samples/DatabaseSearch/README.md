@@ -14,6 +14,6 @@ Press Start in Visual Studio to run the sample.
 ### Manifest ###
 
 - `DatabaseSearch/`
-  - `DatabaseSearchSample.csproj`: Main C♯ project for the sample.
-  - `DatabaseSearch.qs`: Q♯ code implementing quantum operations for this sample.
-  - `Program.cs`: C♯ code to interact with and print out results of the Q♯ operations for this sample.
+  - `DatabaseSearchSample.csproj`: Main C# project for the sample.
+  - `DatabaseSearch.qs`: Q# code implementing quantum operations for this sample.
+  - `Program.cs`: C# code to interact with and print out results of the Q# operations for this sample.

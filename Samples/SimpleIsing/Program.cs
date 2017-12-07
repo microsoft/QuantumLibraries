@@ -63,11 +63,11 @@ namespace Microsoft.Quantum.Samples.SimpleIsing
                 // Since this method is asynchronous, we need to explicitly wait for the result back
                 // from the simulator. We do this by getting the Result property. To turn the result
                 // back into a conventional .NET array, we finish by calling ToArray().
-                // FIXME: using a lambda to turn everything into a C♯ int is ugly, but we don't
+                // FIXME: using a lambda to turn everything into a C# int is ugly, but we don't
                 //        have a better way right now.
                 var data = task.Result.ToArray().Select((result) => result == Result.One ? 0.5 : -0.5);
 
-                // We can now compute the magnetization entirely in C♯ code, since data is
+                // We can now compute the magnetization entirely in C# code, since data is
                 // an array of the classical measurement results observed back from our simulation.
                 var magnetization = data.Sum();
 

@@ -83,7 +83,7 @@ namespace Microsoft.Quantum.Samples.Ising
                     // back into a conventional .NET array, we finish by calling ToArray().
                     var data = task.Result.ToArray();
 
-                    // We can now compute the magnetization entirely in C♯ code, since data is
+                    // We can now compute the magnetization entirely in C# code, since data is
                     // an array of the classical measurement results observed back from our simulation.
                     for (int i = 0; i < nSites; i++)
                     {

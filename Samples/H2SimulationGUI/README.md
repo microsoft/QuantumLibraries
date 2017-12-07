@@ -15,12 +15,12 @@ Press Start in Visual Studio to run the sample.
 ### Manifest ###
 
 - `H2SimulationGUI/`
-  - `H2SimulationSample.fsproj`: Main F♯ project for the Sample.
-  - `Program.fs`: F♯ code to interact with the Hamiltonian simulation operations provided in the canon and to plot the results.
+  - `H2SimulationSample.fsproj`: Main F# project for the Sample.
+  - `Program.fs`: F# code to interact with the Hamiltonian simulation operations provided in the canon and to plot the results.
 
 ## Theory ##
 
-The F♯ program provided with this sample compares the results of the simulation to exactly diagonalizing the Hamiltonian for each bond length.
+The F# program provided with this sample compares the results of the simulation to exactly diagonalizing the Hamiltonian for each bond length.
 
 ### References ###
 

@@ -14,6 +14,6 @@ Press Start in Visual Studio to run the example.
 ### Manifest ###
 
 - `TeleportationExample/`
-  - `TeleportationExample.csproj`: Main C♯ project for the example.
+  - `TeleportationExample.csproj`: Main C# project for the example.
   - `TeleportationExample.qs`: Q♭ code defining how to teleport qubit states.
-  - `Program.cs`: C♯ code to call the operations defined in Q♭.
+  - `Program.cs`: C# code to call the operations defined in Q♭.
