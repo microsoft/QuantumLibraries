@@ -54,7 +54,7 @@ namespace Microsoft.Quantum.Canon {
     /// Ensures that the register is set to 0.
 	///
 	/// # See Also
-	/// - Microsoft.Quantum.Canon.MeasureIntegerBE
+	/// - @"Microsoft.Quantum.Canon.MeasureIntegerBE"
     operation MeasureInteger( target : LittleEndian) : Int {
         body {
             mutable results = new Result[Length(target)]; 
@@ -69,7 +69,7 @@ namespace Microsoft.Quantum.Canon {
 	/// Version of MeasureInteger for BigEndian register
 	///
 	/// # See Also
-	/// - Microsoft.Quantum.Canon.MeasureInteger
+	/// - @"Microsoft.Quantum.Canon.MeasureInteger"
 	operation MeasureIntegerBE( target : BigEndian) : Int {
         body {
             mutable results = new Result[Length(target)]; 
@@ -95,7 +95,7 @@ namespace Microsoft.Quantum.Canon {
     /// The integer by which the `target` is incremented by.
     ///
     /// # See Also
-    /// - @"microsoft.quantum.primitive.integerincrementle"
+    /// - @"Microsoft.Quantum.Primitive.IntegerIncrementLE"
     ///
     /// # References
     /// - [ *Thomas G. Draper*,
@@ -186,7 +186,7 @@ namespace Microsoft.Quantum.Canon {
     /// The integer by which the `target` is incremented by
     /// 
     /// # See Also 
-    /// - @"microsoft.quantum.primitive.integerincrementphasele"
+    /// - @"Microsoft.Quantum.Primitive.IntegerIncrementPhaseLE"
     operation IntegerIncrementLE(increment : Int, target : LittleEndian ) : () { 
         body {
             let inner = IntegerIncrementPhaseLE(increment, _);
@@ -198,7 +198,7 @@ namespace Microsoft.Quantum.Canon {
     }
 
     /// # See Also
-    /// - @"microsoft.quantum.primitive.modularincrementphasele"
+    /// - @"Microsoft.Quantum.Primitive.ModularIncrementPhaseLE"
     /// 
     /// # Remarks 
     /// Assumes that the value of target is less than N
@@ -244,7 +244,7 @@ namespace Microsoft.Quantum.Canon {
     /// Integers are encoded in little-endian format in QFT basis
     ///
     /// # See Also
-    /// - Microsoft.Quantum.Primitive.ModularIncrementLE
+    /// - @"Microsoft.Quantum.Primitive.ModularIncrementLE"
     ///
     /// # Remarks
     /// Assumes that `target` has the highest bit set to 0.
@@ -363,7 +363,7 @@ namespace Microsoft.Quantum.Canon {
     /// integers in QFT basis
     /// 
     /// # See Also 
-    /// - @"microsoft.quantum.canon.modularaddproductle"
+    /// - @"Microsoft.Quantum.Canon.ModularAddProductLE"
     /// 
     /// # Remarks 
     /// Assumes that `phaseSummand` has the highest bit set to 0.

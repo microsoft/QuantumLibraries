@@ -22,6 +22,22 @@ namespace Microsoft.Quantum.Canon {
         return n;
     }
 
+	/// # Summary
+	/// Measures the given set of generators of a stabilizer group.
+	/// # Input
+	/// ## stabilizerGroup
+	/// An array of multiqubit Pauli operators. 
+	/// For example, `stabilizerGroup[0]` is a list of single-qubit Pauli matrices,
+	/// the tensor product of which is a stabilizer generator.
+	/// ## logicalRegister
+	/// An array of qubits where the stabilizer code is defined.
+	/// ## gadget
+	/// An operation that specifies how to measure a multiqubit Pauli operator.
+	/// # Output
+	/// The result of measurements.
+	/// # Remarks
+	/// This does not checks if the given set of generators are commuting.
+	/// If they are not commuting, the result of measurements may be arbitrary.
     operation  MeasureStabilizerGenerators(stabilizerGroup : Pauli[][],  logicalRegister : LogicalRegister, gadget : ((Pauli[], Qubit[]) => Result))  : Syndrome
     {
         body {

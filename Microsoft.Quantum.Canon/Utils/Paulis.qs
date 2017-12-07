@@ -257,6 +257,13 @@ namespace Microsoft.Quantum.Canon {
         controlled adjoint auto
     }
 
+    /// # Summary
+    /// Measures each qubit in a given array in the standard basis.
+    /// # Input
+    /// ## targets
+    /// An array of qubits to be measured.
+    /// # Output
+    /// An array of measurement results.
     operation MultiM(targets : Qubit[]) : Result[]
     {
         body{
@@ -269,8 +276,9 @@ namespace Microsoft.Quantum.Canon {
     }
 
     /// # Summary
-    /// Measures a single qubit in the $Z$ basis and ensures that it
-    /// is in the $\ket{0}$ state following the measurement.
+    /// Measures a single qubit in the $Z$ basis, 
+    /// and resets it to the standard basis state
+    /// $\ket{0}$ following the measurement.
     ///
     /// # Input
     /// ## target
@@ -292,8 +300,9 @@ namespace Microsoft.Quantum.Canon {
     }
 
     /// # Summary
-    /// Measures a single qubit in the $X$ basis and ensures that it
-    /// is in the $\ket{0}$ state following the measurement.
+    /// Measures a single qubit in the $X$ basis, 
+    /// and resets it to the standard basis state
+    /// $\ket{0}$ following the measurement.
     ///
     /// # Input
     /// ## target
@@ -317,8 +326,9 @@ namespace Microsoft.Quantum.Canon {
     }
 
     /// # Summary
-    /// Measures a single qubit in the $Y$ basis and ensures that it
-    /// is in the $\ket{0}$ state following the measurement.
+    /// Measures a single qubit in the $Y$ basis, 
+    /// and resets it to the standard basis state
+    /// $\ket{0}$ following the measurement.
     ///
     /// # Input
     /// ## target
