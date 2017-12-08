@@ -2,7 +2,7 @@
 title: "Phase Estimation Sample"
 ---
 
-## Quantum and Iterative Phase Estimation ##
+# Quantum and Iterative Phase Estimation #
 
 TODO: big strength is that we give a variety of phase estimation algs.
 

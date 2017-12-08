@@ -38,7 +38,7 @@ namespace Microsoft.Quantum.Examples.Teleportation {
     /// ## msg
     /// A qubit whose state we wish to send.
     /// ## there
-    /// A qubit intitially in the |0〉 state that we want to send
+    /// A qubit initially in the |0〉 state that we want to send
     /// the state of msg to.
     operation Teleport(msg : Qubit, there : Qubit) : () {
         body {
@@ -122,7 +122,7 @@ namespace Microsoft.Quantum.Examples.Teleportation {
     // ● "Super dense coding".  Given an EPR state |β〉 shared between the source and target
     //   qubits, the source can encode two classical bits a,b by applying Z^b X^a to its half
     //   of |β〉. Both bits can be recovered on the target by measurement in the Bell basis.
-    //   For details refer to discussion and code in Quantum.Canon Superdense.qs.
+    //   For details refer to discussion and code in Unit Testing Sample, in file SuperdenseCoding.qs.
     //////////////////////////////////////////////////////////////////////////
 
 }

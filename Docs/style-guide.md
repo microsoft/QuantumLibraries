@@ -1,16 +1,14 @@
----
-title: "Q# Libraries Style Guide"
----
-
+# Q# Style Guide #
 ## General Conventions ##
 
-- The conventions listed here are suggestions only, and should likely be disregarded when they would result in less readable of useful code.
+- The conventions listed here are suggestions only, and should likely be disregarded when they would result in less readable or useful code.
   Put differently, disregarding conventions should always be an intentional decision to produce more useful code, and not an accident.
 
 ## Naming Conventions ##
 
 - Avoid using people's names in operation and function names where reasonable.
-  Consider using names that describe the implemented functionality; e.g. `CCNOT` versus `Toffoli` or `CSWAP` versus `Fredikin `.
+  Consider using names that describe the implemented functionality;
+  e.g. `CCNOT` versus `Toffoli` or `CSWAP` versus `Fredikin `.
   In sample code, consider using names that are familiar to the community reading each particular example, even if that would otherwise run counter to these suggestions.
   **NB:** names should still appear in documentation comments.
 - If an operation or function is not intended for direct use, but rather should be used by a matching callable which acts by partial application, consider using a name ending with `Impl` for the callable that is partially applied.
@@ -30,33 +28,37 @@ title: "Q# Libraries Style Guide"
 
 ## Argument Conventions ##
 
-The argument ordering conventions here largely derive from thinking of partial application as a generalization of currying ($f(x, y) \equiv f(x)(y)$).
+The argument ordering conventions here largely derive from thinking of partial application as a generalization of currying 𝑓(𝑥, 𝑦) ≡ 𝑓(𝑥)(𝑦).
 Thus, partially applying the first arguments should result in a callable that is useful in its own right whenever that is reasonable.
 Following this principle, consider using the following order of arguments:
 
 - Classical non-callable arguments such as angles, vectors of powers, etc.
 - Callable arguments (functions and arguments).
-  If both functions and operations are taken as arugments, consider placing operations after functions.
+  If both functions and operations are taken as arguments, consider placing operations after functions.
 - Collections acted upon by callable arguments in a similar way to `Map`, `Iter`, `Enumerate`, and `Fold`.
 - Qubit arguments used as controls.
 - Qubit arguments used as targets.
 
 Thus, an operation `Op` which takes an angle, passes it to `Rz` modified by an array of different scaling factors, and then controls the resulting operation would be called in the following fashion:
 
-```qflat
-operation Op(angle : Double, callable : (Qubit => () : Controlled), scaleFactors : Double[], controlQubit : Qubit, targetQubits : Qubit[]) : ()
+```qsharp
+operation Op(
+          angle : Double,
+          callable : (Qubit => () : Controlled),
+          scaleFactors : Double[],
+          controlQubit : Qubit,
+          targetQubits : Qubit[]) : ()
 ```
 
 If an operation or function acts similarly to a keyword functor or a prelude callable, strongly consider following the convention set by the prelude, even if it would otherwise contravene a rule here.
 For instance, a function which applies the `Controlled` functor should take an operation and return an operation that has an array of control qubits as its first argument and all remaining arguments as a tuple:
 
-```qflat
+```qsharp
 operation ControlledLike<'T>(op : ('T => () : Controlled)) : ((Qubit[], ('T)) => () : Controlled)
 ```
 
 ## Whitespace and Delimiter Conventions ##
 
-- **TODO:** which line should braces be on?
 - Use four spaces instead of tabs for portability.
   For instance, in VS Code:
   ```json
@@ -66,26 +68,13 @@ operation ControlledLike<'T>(op : ('T => () : Controlled)) : ((Qubit[], ('T)) =>
 
 ## Documentation Conventions ##
 
-**TODO:** parts of this section may still change going forward!
+- Each function, operation, and user-defined type should be immediately preceded by a documentation comment containing a summary, remarks, links to papers and external documentation, descriptions of parameters and return types as appropriate.
 
-- Each function, operation, and user-defined type should be immediately preceeded by a documentation comment containing a summary, remarks, links to papers and external documentation, descriptions of parameters and return types as appropriate.
-  Documentation comments are denoted by lines starting with `///`, and are formatted as YAML documents, with string values being formatted as GitHub-Flavored Markdown (GFM).
-- Indentation is significant within both YAML and GFM, so please ensure that all indentation follows the suggestions above.
+- When documenting a pair of callables including an `Impl` or a private method, document the public-facing callable more completely, and use a `See Also` tag from the private-facing callable.
 
-Example:
-```csharp
-/// summary:
-///     This block should contain a user-readable description of the
-///     symbol being defined.
-/// params:
-///     first: Short description of the parameter named `first`.
-...
-```
-
-- When documenting a pair of callables including an `Impl` or a private method, document the public-facing callable more completely, and use a `seealso` tag from the private-facing callable.
+- Document operations and functions related by the functor variants by duplicating content as appropriate and by using the `See Also` tag to denote related callables.
 
 ## Other Conventions ##
 
 - Line wrap at 79 characters where reasonable.
-  **NB:** for files such as Markdown-formatted prose that can safely wrap, consider using the one line per sentence rule instead, as this can help reduce insiginificant changes during diffing.
-  **TODO:** this depends on more stable parser support for multi-line statements, and thus should not yet be implemented.
+  **NB:** for files such as Markdown-formatted prose that can safely wrap, consider using the one line per sentence rule instead, as this can help reduce insignificant changes during diffing.
