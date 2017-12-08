@@ -27,6 +27,10 @@ namespace Microsoft.Quantum.Canon {
     /// A new operation that performs each given operation in sequence
     /// on its input.
     ///
+    /// # Type Parameters
+    /// ## 'T 
+    /// The target on which each of the operations in the array act.
+    ///
     /// # Example
     /// The following are equivalent:
     /// ```Q#
@@ -60,6 +64,33 @@ namespace Microsoft.Quantum.Canon {
         }
     }
 
+    /// # Summary
+    /// Given an array of operations acting on a single input,
+    /// produces a new operation that
+    /// performs each given operation in sequence.
+    /// The modifier 'A' indicates that all operations in the array are adjointable.
+    ///
+    /// # Input
+    /// ## operations
+    /// A sequence of operations to be performed on a given input.
+    ///
+    /// # Output
+    /// A new operation that performs each given operation in sequence
+    /// on its input.
+    ///
+    /// # Type Parameters
+    /// ## 'T 
+    /// The target on which each of the operations in the array act.
+    ///
+    /// # Example
+    /// The following are equivalent:
+    /// ```Q#
+    /// let bound = Bind([U; V]);
+    /// bound(x);
+    ///
+    /// U(x); V(x);
+    /// ```
+    ///
     /// # See Also
     /// - @"microsoft.quantum.canon.bind"
     function BindA<'T>(operations : ('T => () : Adjoint)[]) : ('T => () : Adjoint) {
@@ -80,7 +111,34 @@ namespace Microsoft.Quantum.Canon {
             }
         }
     }
-
+    
+    /// # Summary
+    /// Given an array of operations acting on a single input,
+    /// produces a new operation that
+    /// performs each given operation in sequence.
+    /// The modifier 'C' indicates that all operations in the array are controllable. 
+    ///
+    /// # Input
+    /// ## operations
+    /// A sequence of operations to be performed on a given input.
+    ///
+    /// # Output
+    /// A new operation that performs each given operation in sequence
+    /// on its input.
+    ///
+    /// # Type Parameters
+    /// ## 'T 
+    /// The target on which each of the operations in the array act.
+    ///
+    /// # Example
+    /// The following are equivalent:
+    /// ```Q#
+    /// let bound = Bind([U; V]);
+    /// bound(x);
+    ///
+    /// U(x); V(x);
+    /// ```
+    ///
     /// # See Also
     /// - @"microsoft.quantum.canon.bind"
     function BindC<'T>(operations : ('T => () : Controlled)[]) : ('T => () : Controlled) {
@@ -109,6 +167,34 @@ namespace Microsoft.Quantum.Canon {
         }
     }
 
+    /// # Summary
+    /// Given an array of operations acting on a single input,
+    /// produces a new operation that
+    /// performs each given operation in sequence.
+    /// The modifier 'CA' indicates that all operations in the array are adjointable
+    /// and controllable.
+    ///
+    /// # Input
+    /// ## operations
+    /// A sequence of operations to be performed on a given input.
+    ///
+    /// # Output
+    /// A new operation that performs each given operation in sequence
+    /// on its input.
+    ///
+    /// # Type Parameters
+    /// ## 'T 
+    /// The target on which each of the operations in the array act.
+    ///
+    /// # Example
+    /// The following are equivalent:
+    /// ```Q#
+    /// let bound = Bind([U; V]);
+    /// bound(x);
+    ///
+    /// U(x); V(x);
+    /// ```
+    ///
     /// # See Also
     /// - @"microsoft.quantum.canon.bind"
     function BindCA<'T>(operations : ('T => () : Adjoint, Controlled)[]) : ('T => () : Adjoint, Controlled) {

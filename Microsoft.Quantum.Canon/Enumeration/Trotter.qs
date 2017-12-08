@@ -16,10 +16,12 @@ namespace Microsoft.Quantum.Canon {
     /// The number of operations to be decomposed into time steps.
     /// ### op
     /// An operation which accepts an index input (type `Int`) and a time
-    /// input (type `Double`) for decomposition.
+    /// input (type `Double`) and a quantum register (type `'T`) for decomposition.
     /// ## stepSize
     /// Multiplier on size of each step of the simulation.
-    ///
+    /// ## target
+	/// A quantum register on which the operations act.
+	///
     /// # Remarks
     /// ## Example
     /// The following are equivalent:
@@ -53,10 +55,12 @@ namespace Microsoft.Quantum.Canon {
     /// The number of operations to be decomposed into time steps.
     /// ### op
     /// An operation which accepts an index input (type `Int`) and a time
-    /// input (type `Double`) for decomposition.
+    /// input (type `Double`) and a quantum register (type `'T`) for decomposition.
     /// ## stepSize
     /// Multiplier on size of each step of the simulation.
-    ///
+    /// ## target
+	/// A quantum register on which the operations act.
+	///
     /// # Remarks
     /// ## Example
     /// The following are equivalent:

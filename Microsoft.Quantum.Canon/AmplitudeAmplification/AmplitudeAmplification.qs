@@ -154,7 +154,7 @@ namespace Microsoft.Quantum.Canon {
     ///
     /// # Remarks
     /// We use the phases in "Fixed-Point Amplitude Amplification with
-    /// an Optimal Number of Queires" [YoderLowChuang2014, https://arxiv.org/abs/1409.3305].
+    /// an Optimal Number of Queries" [YoderLowChuang2014, https://arxiv.org/abs/1409.3305].
     /// See also "Methodology of composite quantum gates" [LowYoderChuang2016, https://arxiv.org/abs/1603.03996]
     /// for phases in the "AmpAmpRotationPhases" format.
     function AmpAmpPhasesFixedPoint( nQueries: Int, successMin: Double ) : AmpAmpReflectionPhases

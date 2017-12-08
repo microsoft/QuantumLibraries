@@ -60,6 +60,10 @@ namespace Microsoft.Quantum.Canon {
     /// # Output
     /// A new operation representing $U^m$, where $m = \texttt{power}$.
     ///
+    /// # Type Parameters
+    /// ## 'T 
+    /// The type of the operation to be powered. 
+    ///
     /// # See Also
     /// - @"microsoft.quantum.canon.operationpowc"
     /// - @"microsoft.quantum.canon.operationpowa"
@@ -69,6 +73,24 @@ namespace Microsoft.Quantum.Canon {
         return OperationPowImpl(oracle, power, _);
     }
 
+    /// # Summary
+    /// Given an operation representing a gate $U$, returns a new operation
+    /// $U^m$ for a power $m$.
+    /// The modifier 'C' indicates that the operation is controllable.
+    ///
+    /// # Input
+    /// ## oracle
+    /// An operation $U$ representing the gate to be repeated.
+    /// ## power
+    /// The number of times that $U$ is to be repeated.
+    ///
+    /// # Output
+    /// A new operation representing $U^m$, where $m = \texttt{power}$.
+    ///
+    /// # Type Parameters
+    /// ## 'T 
+    /// The type of the operation to be powered. 
+    ///
     /// # See Also
     /// - @"microsoft.quantum.canon.operationpow"
     function OperationPowC<'T>(oracle : ('T => () : Controlled), power : Int)  : ('T => () : Controlled)
@@ -76,6 +98,24 @@ namespace Microsoft.Quantum.Canon {
         return OperationPowImplC(oracle, power, _);
     }
 
+    /// # Summary
+    /// Given an operation representing a gate $U$, returns a new operation
+    /// $U^m$ for a power $m$.
+    /// The modifier 'A' indicates that the operation is adjointable. 
+    ///
+    /// # Input
+    /// ## oracle
+    /// An operation $U$ representing the gate to be repeated.
+    /// ## power
+    /// The number of times that $U$ is to be repeated.
+    ///
+    /// # Output
+    /// A new operation representing $U^m$, where $m = \texttt{power}$.
+    ///
+    /// # Type Parameters
+    /// ## 'T 
+    /// The type of the operation to be powered. 
+    ///
     /// # See Also
     /// - @"microsoft.quantum.canon.operationpow"
     function OperationPowA<'T>(oracle : ('T => () : Adjoint), power : Int)  : ('T => () : Adjoint)
@@ -83,6 +123,24 @@ namespace Microsoft.Quantum.Canon {
         return OperationPowImplA(oracle, power, _);
     }
 
+    /// # Summary
+    /// Given an operation representing a gate $U$, returns a new operation
+    /// $U^m$ for a power $m$.
+    /// The modifier 'CA' indicates that the operation is controllable and adjointable.
+    ///
+    /// # Input
+    /// ## oracle
+    /// An operation $U$ representing the gate to be repeated.
+    /// ## power
+    /// The number of times that $U$ is to be repeated.
+    ///
+    /// # Output
+    /// A new operation representing $U^m$, where $m = \texttt{power}$.
+    ///
+    /// # Type Parameters
+    /// ## 'T 
+    /// The type of the operation to be powered. 
+    ///
     /// # See Also
     /// - @"microsoft.quantum.canon.operationpow"
     function OperationPowCA<'T>(oracle : ('T => () : Controlled, Adjoint), power : Int)  : ('T => () : Controlled, Adjoint)

@@ -21,6 +21,12 @@ namespace Microsoft.Quantum.Canon {
     /// an operation which accepts as its input the second element of the
     /// original operation's input.
     ///
+    /// # Type Parameters
+    /// ## 'T 
+    /// The type of the first component of a function defined on pairs. 
+    /// ## 'U
+    /// The type of the second component of a function defined on pairs. 
+    ///
     /// # Remarks
     /// The following are equivalent:
     /// ```qsharp
@@ -54,6 +60,11 @@ namespace Microsoft.Quantum.Canon {
     /// A new operation `op` such that `op(t, u)` is equivalent
     /// to `(curriedOp(t))(u)`.
     ///
+    /// # Type Parameters
+    /// ## 'T 
+    /// The type of the first argument of a curried function.
+    /// ## 'U
+    /// The type of the second argument of a curried function.
     /// # See Also
     /// - @"microsoft.quantum.canon.uncurryopc"
     /// - @"microsoft.quantum.canon.uncurryopa"
@@ -71,6 +82,26 @@ namespace Microsoft.Quantum.Canon {
         controlled auto
     }
 
+    /// # Summary
+    /// Given a function which returns operations,
+    /// returns a new operation which takes both inputs
+    /// as a tuple.
+    /// The modifier 'C' indicates that the operations are controllable.
+    ///
+    /// # Input
+    /// ## curriedOp
+    /// A function which returns operations.
+    ///
+    /// # Output
+    /// A new operation `op` such that `op(t, u)` is equivalent
+    /// to `(curriedOp(t))(u)`.
+    ///
+    /// # Type Parameters
+    /// ## 'T 
+    /// The type of the first argument of a curried function.
+    /// ## 'U
+    /// The type of the second argument of a curried function.
+    ///
     /// # See Also
     /// - @"microsoft.quantum.canon.uncurryop"
     function UncurryOpC<'T, 'U>(curriedOp : ('T -> ('U => () : Controlled))) : (('T, 'U) => () : Controlled) {
@@ -86,6 +117,26 @@ namespace Microsoft.Quantum.Canon {
         adjoint auto
     }
 
+    /// # Summary
+    /// Given a function which returns operations,
+    /// returns a new operation which takes both inputs
+    /// as a tuple.
+    /// The modifier 'A' indicates that the operations are adjointable.
+    ///
+    /// # Input
+    /// ## curriedOp
+    /// A function which returns operations.
+    ///
+    /// # Output
+    /// A new operation `op` such that `op(t, u)` is equivalent
+    /// to `(curriedOp(t))(u)`.
+    ///
+    /// # Type Parameters
+    /// ## 'T 
+    /// The type of the first argument of a curried function.
+    /// ## 'U
+    /// The type of the second argument of a curried function.
+    ///
     /// # See Also
     /// - @"microsoft.quantum.canon.uncurryop"
     function UncurryOpA<'T, 'U>(curriedOp : ('T -> ('U => () : Adjoint))) : (('T, 'U) => () : Adjoint) {
@@ -103,6 +154,26 @@ namespace Microsoft.Quantum.Canon {
         controlled adjoint auto
     }
 
+    /// # Summary
+    /// Given a function which returns operations,
+    /// returns a new operation which takes both inputs
+    /// as a tuple.
+    /// The modifier 'CA' indicates that the operations are controllable and adjointable.
+    ///
+    /// # Input
+    /// ## curriedOp
+    /// A function which returns operations.
+    ///
+    /// # Output
+    /// A new operation `op` such that `op(t, u)` is equivalent
+    /// to `(curriedOp(t))(u)`.
+    ///
+    /// # Type Parameters
+    /// ## 'T 
+    /// The type of the first argument of a curried function.
+    /// ## 'U
+    /// The type of the second argument of a curried function.
+    ///
     /// # See Also
     /// - @"microsoft.quantum.canon.uncurryop"
     function UncurryOpCA<'T, 'U>(curriedOp : ('T -> ('U => () : Controlled, Adjoint))) : (('T, 'U) => () : Controlled, Adjoint) {

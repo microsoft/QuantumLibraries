@@ -14,11 +14,12 @@ namespace Microsoft.Quantum.Canon
     /// # Summary
     /// Applies a multiply controlled version of singly controlled
     /// operation.
+    /// The modifier 'C' indicates that the single-qubit operation is controllable.
     ///
     /// # Input
     /// ## singlyControlledOp
     /// An operation controlled on a single qubit.
-    /// The first qubit in the argument of the operation
+    /// The first qubit in the argument of the operation is
     /// assumed to be a control and the rest are assumed to be target qubits.
     /// `ApplyMultiControlled` always calls `singlyControlledOp` with an argument of
     /// length at least 1.
@@ -38,6 +39,9 @@ namespace Microsoft.Quantum.Canon
     /// # References
     /// - [ *Michael A. Nielsen , Isaac L. Chuang*,
     ///     Quantum Computation and Quantum Information ](http://doi.org/10.1017/CBO9780511976667)
+    ///
+    /// # See Also
+    /// - @"microsoft.quantum.canon.applymulticontrolledc"
     operation ApplyMultiControlledC (
         singlyControlledOp : ( Qubit[] => () ),
         ccnot : CCNOTop,
@@ -62,8 +66,38 @@ namespace Microsoft.Quantum.Canon
         }
     }
 
+    /// # Summary
+    /// Applies a multiply controlled version of singly controlled
+    /// operation.
+    /// The modifier 'CA' indicates that the single-qubit operation is controllable
+    /// and adjointable.
+    ///
+    /// # Input
+    /// ## singlyControlledOp
+    /// An operation controlled on a single qubit.
+    /// The first qubit in the argument of the operation
+    /// assumed to be a control and the rest are assumed to be target qubits.
+    /// `ApplyMultiControlled` always calls `singlyControlledOp` with an argument of
+    /// length at least 1.
+    /// ## ccnot
+    /// The controlled-controlled-NOT gate to use for the construction.
+    /// ## controls
+    /// The qubits that `singlyControlledOp` is to be controlled on.
+    /// The length of `controls` must be at least 1.
+    /// ## targets
+    /// The target qubits that `singlyControlledOp` acts upon.
+    ///
+    /// # Remarks
+    /// This operation uses only clean ancilla qubits.
+    ///
+    /// For the explanation and circuit diagram see Figure 4.10, Section 4.3 in Nielsen & Chuang
+    ///
+    /// # References
+    /// - [ *Michael A. Nielsen , Isaac L. Chuang*,
+    ///     Quantum Computation and Quantum Information ](http://doi.org/10.1017/CBO9780511976667)
+    ///
     /// # See Also
-    /// - @"Microsoft.Quantum.Canon.ApplyMultiControlledCA"
+    /// - @"microsoft.quantum.canon.applymulticontrolledca"
     operation ApplyMultiControlledCA (
         singlyControlledOp : ( Qubit[] => () : Adjoint ),
         ccnot : CCNOTop,
@@ -126,16 +160,16 @@ namespace Microsoft.Quantum.Canon
     ///   and <xref:microsoft.quantum.canon.applymulticontrolledca>.
     /// - For the explanation and circuit diagram see Figure 4.10, Section 4.3 in Nielsen & Chuang.
     operation AndLadder ( ccnot : CCNOTop, controls : Qubit[], targets  : Qubit[]) : () {
-		body{
+        body{
             AssertBoolEqual( Length(controls) == Length(targets) + 1, true,
                 "Length(controls) must be equal to Length(target) + 1" );
             AssertBoolEqual( Length(controls) >= 2, true,
                 "The operation is not defined for less than 2 controls" );
-			ccnot(controls[0], controls[1], targets[0]);
-			for ( k in 1 .. Length(targets)- 1 ) {
-				ccnot(controls[k + 1],targets[k - 1],targets[k]);
-			}
-		}
-		adjoint auto
-	}
+            ccnot(controls[0], controls[1], targets[0]);
+            for ( k in 1 .. Length(targets)- 1 ) {
+                ccnot(controls[k + 1],targets[k - 1],targets[k]);
+            }
+        }
+        adjoint auto
+    }
 }

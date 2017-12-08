@@ -12,11 +12,15 @@ namespace Microsoft.Quantum.Canon {
     /// ## register
     /// Array of qubits on which to apply the given operation.
     ///
+    /// # Type Parameters
+    /// ## 'T
+    /// The target on which each of the operations acts. 
+    ///
     /// # See Also
-    /// - @"microsoft.quantum.canon.ApplyToEach"
-    /// - @"microsoft.quantum.canon.ApplyToEachIndexA"
-    /// - @"microsoft.quantum.canon.ApplyToEachIndexC"
-    /// - @"microsoft.quantum.canon.ApplyToEachIndexCA"
+    /// - @"microsoft.quantum.canon.applytoeach"
+    /// - @"microsoft.quantum.canon.applytoeachindexa"
+    /// - @"microsoft.quantum.canon.applytoeachindexc"
+    /// - @"microsoft.quantum.canon.applytoeachindexca"
     operation ApplyToEachIndex<'T>(singleElementOperation : ((Int, 'T) => ()), register : 'T[])  : ()
     {
         body {
@@ -26,6 +30,20 @@ namespace Microsoft.Quantum.Canon {
         }
     }
 
+    /// # Summary
+    /// Applies a single-qubit operation to each indexed element in a register.
+    /// The modifier 'C' indicates that the single-qubit operation is controllable.
+    ///
+    /// # Input
+    /// ## singleElementOperation
+    /// Operation to apply to each qubit.
+    /// ## register
+    /// Array of qubits on which to apply the given operation.
+    ///
+    /// # Type Parameters
+    /// ## 'T
+    /// The target on which each of the operations acts. 
+    ///
     /// # See Also
     /// - @"microsoft.quantum.canon.applytoeachindex"
     operation ApplyToEachIndexC<'T>(singleElementOperation : ((Int, 'T) => () : Controlled), register : 'T[])  : ()
@@ -39,6 +57,20 @@ namespace Microsoft.Quantum.Canon {
         controlled auto
     }
 
+    /// # Summary
+    /// Applies a single-qubit operation to each indexed element in a register.
+    /// The modifier 'A' indicates that the single-qubit operation is adjointable.
+    ///
+    /// # Input
+    /// ## singleElementOperation
+    /// Operation to apply to each qubit.
+    /// ## register
+    /// Array of qubits on which to apply the given operation.
+    ///
+    /// # Type Parameters
+    /// ## 'T
+    /// The target on which each of the operations acts. 
+    ///
     /// # See Also
     /// - @"microsoft.quantum.canon.applytoeachindex"
     operation ApplyToEachIndexA<'T>(singleElementOperation : ((Int, 'T) => () : Adjoint), register : 'T[])  : ()
@@ -52,6 +84,21 @@ namespace Microsoft.Quantum.Canon {
         adjoint auto
     }
 
+    /// # Summary
+    /// Applies a single-qubit operation to each indexed element in a register.
+    /// The modifier 'CA' indicates that the single-qubit operation is adjointable
+    /// and controllable.
+    ///
+    /// # Input
+    /// ## singleElementOperation
+    /// Operation to apply to each qubit.
+    /// ## register
+    /// Array of qubits on which to apply the given operation.
+    ///
+    /// # Type Parameters
+    /// ## 'T
+    /// The target on which each of the operations acts. 
+    ///
     /// # See Also
     /// - @"microsoft.quantum.canon.applytoeachindex"
     operation ApplyToEachIndexCA<'T>(singleElementOperation : ((Int, 'T) => () : Adjoint,Controlled), register : 'T[])  : ()
