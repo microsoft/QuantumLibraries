@@ -16,20 +16,20 @@ namespace Microsoft.Quantum.Canon {
     ///
     /// # Type Parameters
     /// ## 'T
-    /// The target on which the operation acts. 
+    /// The target on which the operation acts.
     ///
     /// # Remarks
     /// ## Example
-    /// Prepare a three-qubit $\ket{+} state:
-    /// ```qsharp
-    ///     using (register = Qubit[3]) {
-    ///         ApplyToEach(H, register);
-    ///     }
+    /// Prepare a three-qubit $\ket{+}$ state:
+    /// ```Q#
+    /// using (register = Qubit[3]) {
+    ///     ApplyToEach(H, register);
+    /// }
     /// ```
     ///
     /// # See Also
-    /// - @"microsoft.quantum.canon.applytoeach"
-    operation ApplyToEachCA<'T>(singleElementOperation : ('T => () : Adjoint, Controlled), register : 'T[])  : ()
+    /// - Microsoft.Quantum.Canon.ApplyToEach
+   operation ApplyToEachCA<'T>(singleElementOperation : ('T => () : Adjoint, Controlled), register : 'T[])  : ()
     {
         body {
             for (idxQubit in 0..(Length(register) - 1)) {
@@ -54,19 +54,19 @@ namespace Microsoft.Quantum.Canon {
     ///
     /// # Type Parameters
     /// ## 'T
-    /// The target on which the operation acts. 
+    /// The target on which the operation acts.
     ///
     /// # Remarks
     /// ## Example
-    /// Prepare a three-qubit $\ket{+} state:
-    /// ```qsharp
-    ///     using (register = Qubit[3]) {
-    ///         ApplyToEach(H, register);
-    ///     }
+    /// Prepare a three-qubit $\ket{+}$ state:
+    /// ```Q#
+    /// using (register = Qubit[3]) {
+    ///     ApplyToEach(H, register);
+    /// }
     /// ```
     ///
     /// # See Also
-    /// - @"microsoft.quantum.canon.applytoeach"
+    /// - Microsoft.Quantum.Canon.ApplyToEach
     operation ApplyToEachA<'T>(singleElementOperation : ('T => ():Adjoint), register : 'T[])  : ()
     {
         body {
@@ -90,19 +90,19 @@ namespace Microsoft.Quantum.Canon {
     ///
     /// # Type Parameters
     /// ## 'T
-    /// The target on which the operation acts. 
+    /// The target on which the operation acts.
     ///
     /// # Remarks
     /// ## Example
-    /// Prepare a three-qubit $\ket{+} state:
-    /// ```qsharp
-    ///     using (register = Qubit[3]) {
-    ///         ApplyToEach(H, register);
-    ///     }
+    /// Prepare a three-qubit $\ket{+}$ state:
+    /// ```Q#
+    /// using (register = Qubit[3]) {
+    ///     ApplyToEach(H, register);
+    /// }
     /// ```
     ///
     /// # See Also
-    /// - @"microsoft.quantum.canon.applytoeach"
+    /// - Microsoft.Quantum.Canon.ApplyToEach
     operation ApplyToEachC<'T>(singleElementOperation : ('T => ():Controlled), register : 'T[])  : ()
     {
         body {
@@ -125,21 +125,21 @@ namespace Microsoft.Quantum.Canon {
     ///
     /// # Type Parameters
     /// ## 'T
-    /// The target on which the operation acts. 
+    /// The target on which the operation acts.
     ///
     /// # Remarks
     /// ## Example
-    /// Prepare a three-qubit $\ket{+} state:
-    /// ```qsharp
-    ///     using (register = Qubit[3]) {
-    ///         ApplyToEach(H, register);
-    ///     }
+    /// Prepare a three-qubit $\ket{+}$ state:
+    /// ```Q#
+    /// using (register = Qubit[3]) {
+    ///     ApplyToEach(H, register);
+    /// }
     /// ```
     ///
     /// # See Also
-    /// - @"microsoft.quantum.canon.applytoeacha"
-    /// - @"microsoft.quantum.canon.applytoeachc"
-    /// - @"microsoft.quantum.canon.applytoeachca"
+    /// - Microsoft.Quantum.Canon.ApplyToEachC
+    /// - Microsoft.Quantum.Canon.ApplyToEachA
+    /// - Microsoft.Quantum.Canon.ApplyToEachCA
     operation ApplyToEach<'T>(singleElementOperation : ('T => ()), register : 'T[])  : ()
     {
         body {
