@@ -23,7 +23,11 @@ namespace Microsoft.Quantum.Canon {
 	///
 	/// # Output
 	/// An integer $x$ uniformly at random from the given interval;
-	/// that is, with $\Pr(x) = \frac{1}{2^{\texttt{maxBits}}$.
+    /// that is, with $\Pr(x) = \frac{1}{2^{\texttt{maxBits}}}$.
+    ///       
+    /// # Remarks
+    /// This function calls <xref:microsoft.quantum.primitive.random>, so
+    /// its randomess depends on the implementation of `Random`.
 	operation RandomIntPow2 (maxBits : Int) : Int
 	{
 		body {
@@ -54,6 +58,10 @@ namespace Microsoft.Quantum.Canon {
 	/// a uniform distribution whose maximum is a power of two,
 	/// and thus may not make a constant number of calls to the
 	/// underlying source of random classical bits.
+    ///
+    /// # Remarks
+    /// This function calls <xref:microsoft.quantum.primitive.random>, so
+    /// its randomess depends on the implementation of `Random`.
 	operation RandomInt (maxInt : Int) : Int
 	{
 		body {
@@ -70,11 +78,8 @@ namespace Microsoft.Quantum.Canon {
 
 	}
 
-	// Generates a random real number in [0, 1].
-	// TODO: ensure that this is the correct distribution. Floating point
-	//       randomness is subtle.
 	/// # Summary
-	/// Returns a random real number in the interval $[0, 1]$.
+	/// Returns a random real number in the interval $[0, 1)$.
 	///
 	/// # Input
 	/// ## bitsRandom
@@ -85,6 +90,10 @@ namespace Microsoft.Quantum.Canon {
 	/// A real number $x = k / 2^{\texttt{bitsRandom} - 1}$ for an integer
 	/// $k$ sampled from the interval $[0, 2^{\texttt{bitsRandom}})$
 	/// with probability $\Pr(k) = 1 / 2^{\texttt{bitsRandom}}$.
+    ///
+    /// # Remarks
+    /// This function calls <xref:microsoft.quantum.primitive.random>, so
+    /// its randomess depends on the implementation of `Random`.
 	operation RandomReal (bitsRandom : Int) : Double {
 		body {
 			if (bitsRandom < 1) {

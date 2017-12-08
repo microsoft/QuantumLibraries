@@ -29,7 +29,7 @@ namespace Microsoft.Quantum.Canon {
     ///
     /// # See Also
     /// - @"microsoft.quantum.canon.paulievolutionset"
-    /// - @"microsoft.quantum.canon.fermionicevolutionset"
+    /// - @"microsoft.quantum.canon.evolutionset"
     newtype GeneratorIndex = ((Int[], Double[]), Int[]);
 
     /// # Summary
@@ -145,6 +145,9 @@ namespace Microsoft.Quantum.Canon {
     ///
     /// # Output
     /// The number of terms in a `GeneratorSystem`.
+    ///
+    /// # See Also
+    /// - @"microsoft.quantum.canon.generatorsystem"
     function GetGeneratorSystemNTerms(generatorSystem : GeneratorSystem) : Int {
         let (nTerms, generatorIndexFunction) = generatorSystem;
         return nTerms;
@@ -159,6 +162,10 @@ namespace Microsoft.Quantum.Canon {
     ///
     /// # Output
     /// An function that indexes each `GeneratorIndex` term in a Hamiltonian.
+    ///
+    /// # See Also
+    /// - @"microsoft.quantum.canon.generatorindex"
+    /// - @"microsoft.quantum.canon.generatorsystem"
     function GetGeneratorSystemFunction(generatorSystem : GeneratorSystem) : (Int -> GeneratorIndex) {
         let (nTerms, generatorIndexFunction) = generatorSystem;
         return generatorIndexFunction;
@@ -185,6 +192,9 @@ namespace Microsoft.Quantum.Canon {
     /// let ((idxPaulis, idxDoubles), idxQubits) = MultiplyGeneratorIndex(multipler, gen);
     /// // idxDoubles[0] == multipler * coeff;
     /// ```
+    ///
+    /// # See Also
+    /// - @"microsoft.quantum.canon.generatorindex"
     function MultiplyGeneratorIndex(multiplier: Double, generatorIndex : GeneratorIndex) : GeneratorIndex {
         let ((idxTerms, idxDoubles), idxSystems) = generatorIndex;
         mutable idxDoublesOut = idxDoubles;
@@ -214,6 +224,9 @@ namespace Microsoft.Quantum.Canon {
     /// # Output
     /// A `GeneratorSystem` representing a system with coefficients a factor
     /// `multiplier` larger.
+    ///
+    /// # See Also
+    /// - @"microsoft.quantum.canon.GeneratorSystem"
     function MultiplyGeneratorSystem(multiplier: Double, generatorSystem : GeneratorSystem) : GeneratorSystem {
         let nTerms =  GetGeneratorSystemNTerms(generatorSystem);
         return GeneratorSystem(nTerms, _MultiplyGeneratorSystem(multiplier, _, generatorSystem));
@@ -250,6 +263,9 @@ namespace Microsoft.Quantum.Canon {
     /// # Output
     /// A `GeneratorSystem` representing a system that is the sum of the
     /// input generator systems.
+    ///
+    /// # See Also
+    /// - @"microsoft.quantum.canon.GeneratorSystem"
     function AddGeneratorSystems(generatorSystemA: GeneratorSystem, generatorSystemB: GeneratorSystem) : GeneratorSystem {
         let nTermsA = GetGeneratorSystemNTerms(generatorSystemA);
         let nTermsB = GetGeneratorSystemNTerms(generatorSystemB);
@@ -277,6 +293,9 @@ namespace Microsoft.Quantum.Canon {
     /// A `GeneratorSystem` representing a system that is the sum of the
     /// input generator systems, with weight $(1-s)$ on `generatorSystemStart`
     /// and weight $s$ on `generatorSystemEnd`.
+    ///
+    /// # See Also
+    /// - @"microsoft.quantum.canon.GeneratorSystem"
     function InterpolateGeneratorSystemsImpl(schedule: Double, generatorSystemStart: GeneratorSystem, generatorSystemEnd: GeneratorSystem) : GeneratorSystem
     {
         let sysStart = MultiplyGeneratorSystem((1.0 - schedule), generatorSystemStart);
@@ -299,6 +318,10 @@ namespace Microsoft.Quantum.Canon {
     /// A `TimeDependentGeneratorSystem` representing a system that is the 
     /// sum of the input generator systems, with weight $(1-s)$ on 
     /// `generatorSystemStart` and weight $s$ on `generatorSystemEnd`.
+    ///
+    /// # See Also
+    /// - @"microsoft.quantum.canon.GeneratorSystem"
+    /// - @"microsoft.quantum.canon.TimeDependentGeneratorSystem"
     function InterpolateGeneratorSystems(generatorSystemStart: GeneratorSystem, generatorSystemEnd: GeneratorSystem) : TimeDependentGeneratorSystem
     {
         return TimeDependentGeneratorSystem(InterpolateGeneratorSystemsImpl(_, generatorSystemStart, generatorSystemEnd));

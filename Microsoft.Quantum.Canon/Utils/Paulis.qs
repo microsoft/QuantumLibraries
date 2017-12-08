@@ -51,6 +51,13 @@ namespace Microsoft.Quantum.Canon {
     /// # Summary
     /// Returns one of the single-qubit Pauli operators uniformly
     /// at random.
+    ///
+    /// # Output
+    /// A `Pauli` operator that is one of `[PauliI; PauliX; PauliY; PauliZ]`.
+    ///
+    /// # Remarks
+    /// This function calls <xref:microsoft.quantum.primitive.random>, so
+    /// its randomess depends on the implementation of `Random`.
     operation RandomSingleQubitPauli() : Pauli {
         body {
             let probs = [0.5; 0.5; 0.5; 0.5];
@@ -257,7 +264,7 @@ namespace Microsoft.Quantum.Canon {
     }
 
     // NB: This operation is intended to be private to Paulis.qs.
-    operation BasisChangeZtoY(target : Qubit) : () {
+    operation _BasisChangeZtoY(target : Qubit) : () {
         body {
             H(target);
             S(target);
@@ -351,7 +358,7 @@ namespace Microsoft.Quantum.Canon {
             let result = Measure([PauliY], [target]);
             // We must return the qubit to the Z basis as well.
 
-            (Adjoint BasisChangeZtoY)(target);
+            (Adjoint _BasisChangeZtoY)(target);
             if (result == One) {
                 // Recall that the +1 eigenspace of a measurement operator corresponds to
                 // the Result case Zero. Thus, if we see a One case, we must reset the state 

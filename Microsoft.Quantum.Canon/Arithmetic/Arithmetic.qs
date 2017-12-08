@@ -147,16 +147,16 @@ namespace Microsoft.Quantum.Canon {
     }
 
     /// # Summary
-    /// Asserts that the `number` encoded in PhaseLittleEndian is less than `value`
+    /// Asserts that the `number` encoded in PhaseLittleEndian is less than `value`.
     ///
     /// # Input
     /// ## value
-    /// `number` must be less than this
+    /// `number` must be less than this.
     /// ## number
-    /// Unsigned integer which is compared to `value`
+    /// Unsigned integer which is compared to `value`.
     ///
     /// # Remarks
-    /// Controlled version of the operation ignores controls
+    /// Controlled version of the operation ignores controls.
     operation AssertLessThanPhaseLE( value : Int ,  number : PhaseLittleEndian  ) : () {
         body{
             let inner = ApplyLEOperationOnPhaseLEA( AssertHighestBit(One,_), _ );
@@ -197,11 +197,27 @@ namespace Microsoft.Quantum.Canon {
         adjoint controlled auto
     }
 
+    /// # Summary
+    /// Let us denote `increment` by a, `modulus` by N and integer encoded in `target` by y
+    /// Then the operation performs the following transformation: 
+    /// |y⟩ ↦ |y+a (mod N)⟩
+    /// Integers are encoded in little-endian format.
+    ///
+    /// # Input
+    /// ## increment
+    /// Integer increment a to be added to y.
+    /// ## modulus
+    /// Integer N that mods y + a. 
+    /// ## target
+    /// Integer y in `LittleEndian` format that `increment` a is added to.
+    ///
     /// # See Also
     /// - @"Microsoft.Quantum.Primitive.ModularIncrementPhaseLE"
     /// 
     /// # Remarks 
-    /// Assumes that the value of target is less than N
+    /// Assumes that the value of target is less than N. Note that 
+    /// <xref:microsoft.quantum.primitive.modularincrementphasele> implements
+    /// the same operation, but in the `PhaseLittleEndian` basis.
     operation ModularIncrementLE( increment : Int, modulus : Int,  target : LittleEndian) : () {
         body {
             let inner = ModularIncrementPhaseLE(increment, modulus, _);
@@ -225,6 +241,9 @@ namespace Microsoft.Quantum.Canon {
     /// ## target
     /// The qubit in which the highest bit is being copied. The bit encoding is
     /// in computational basis.
+    ///
+    /// # See Also
+    /// - @"microsoft.quantum.primitive.littleendian"
     operation CopyMostSignificantBitLE(
         from : LittleEndian,
         target : Qubit

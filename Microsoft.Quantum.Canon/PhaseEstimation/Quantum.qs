@@ -5,15 +5,15 @@ namespace Microsoft.Quantum.Canon {
     open Microsoft.Quantum.Primitive;
 
     /// # Summary
-    /// Performs the quantum phase estimation algorithm for a given oracle U and eigenstate,
+    /// Performs the quantum phase estimation algorithm for a given oracle U and targetState,
     /// reading the phase into a big-endian quantum register.
     ///
     /// # Input
     /// ## oracle
     /// An operation implementing U^m for given integer powers m.
-    /// ## eigenstate
-    /// A quantum register representing an eigenstate |φ> of U, U|φ> =
-    /// e^{iφ} |φ> for φ ∈ [0, 2π) an unknown phase.
+    /// ## targetState
+    /// A quantum register representing the state |φ〉 acted on by U. If |φ〉 is an
+    /// eigenstate of U, U|φ〉 = e^{iφ} |φ〉 for φ ∈ [0, 2π) an unknown phase.
     /// ## controlRegister
     /// A big-endian representation integer register that can be used
     /// to control the provided oracle, and that will contain the a representation of φ following
@@ -21,7 +21,7 @@ namespace Microsoft.Quantum.Canon {
     /// state |00.0>, where the length of the register indicates the desired precision.
     operation QuantumPhaseEstimation(
 		      oracle : DiscreteOracle, 
-			  eigenstate : Qubit[],
+			  targetState : Qubit[],
 			  controlRegister : BigEndian) : ()
     {
         body {
@@ -36,7 +36,7 @@ namespace Microsoft.Quantum.Canon {
             for (idxControlQubit in 0..(nQubits - 1)) {
                 let control = controlRegister[idxControlQubit];
                 let power = 2 ^ (nQubits - idxControlQubit - 1);
-                (Controlled oracle)([control], (power, eigenstate));
+                (Controlled oracle)([control], (power, targetState));
             }
 
             QFT(controlRegister);

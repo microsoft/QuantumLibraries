@@ -12,10 +12,11 @@ namespace Microsoft.Quantum.Canon {
     ///
     /// # Input
     /// ## oracle
-    /// An operation implementing $U^m$ for given integer powers $m$.
-    /// ## eigenstate
-    /// A quantum register representing an eigenstate $\ket{\phi}$ of $U$, where $U\ket{\phi} =
-    /// e^{i\phi} \ket{\phi}$ for $\phi\in(-\pi,\pi]$ an unknown phase.
+    /// An operation implementing $U^m$ for given integer powers $m$. 
+    /// ## targetState
+    /// A quantum register that $U$ acts on. If it stores an eigenstate 
+    /// $\ket{\phi}$ of $U$, then $U\ket{\phi} = e^{i\phi} \ket{\phi}$
+    /// for $\phi\in(-\pi,\pi]$ an unknown phase.
     /// ## bitsPrecision
     /// This provides an estimate of $\phi$ with standard deviation
     /// $\sigma \le 2\pi / 2^\text{bitsPrecision}$ using a number of queries scaling like $\sigma \le 10.7 \pi / \text{# of queries}$.
@@ -29,7 +30,7 @@ namespace Microsoft.Quantum.Canon {
     /// - Robust Calibration of a Universal Single-Qubit Gate-Set via Robust Phase Estimation
     ///   Shelby Kimmel, Guang Hao Low, Theodore J. Yoder
     ///   https://arxiv.org/abs/1502.02677
-    operation RobustPhaseEstimation(bitsPrecision : Int, oracle : DiscreteOracle, eigenstate : Qubit[])  : Double
+    operation RobustPhaseEstimation(bitsPrecision : Int, oracle : DiscreteOracle, targetState : Qubit[])  : Double
     {
         body {
             let alpha = 2.5;
@@ -55,7 +56,7 @@ namespace Microsoft.Quantum.Canon {
                         for (idxExperiment in 0..1) {
                             // Divide rotation by power to cancel the multiplication by power in DiscretePhaseEstimationIteration
                             let rotation = PI() * ToDouble(idxExperiment) / 2.0 / ToDouble(power);
-                            DiscretePhaseEstimationIteration(oracle , power , rotation, eigenstate, q);
+                            DiscretePhaseEstimationIteration(oracle , power , rotation, targetState, q);
                             let result = M(q);
 
                             if (result== Zero) {
@@ -77,18 +78,6 @@ namespace Microsoft.Quantum.Canon {
             }
             return thetaEst;
         }
-    }
-
-    // Test is WIP
-    operation RobustPhaseEstimationTestOp(phase: Double, power: Int, qubits : Qubit[]) : (){
-        body {
-            //Rz(- 2.0* phase * ToDouble(power), qubits[0])
-            Exp([PauliZ], phase * ToDouble(power), qubits);
-            //Exp([PauliI], phase * ToDouble(power), qubits);
-        }
-        adjoint auto
-        controlled auto
-        controlled adjoint auto
     }
 
 }

@@ -41,6 +41,9 @@ namespace Microsoft.Quantum.Canon {
     /// # Output
     /// The physical and auxillary qubits used in encoding, represented as a
     /// logical register.
+    ///
+    /// # See Also
+    /// - Microsoft.Quantum.Canon.LogicalRegister
     operation BitFlipEncoder(physRegister : Qubit[], auxQubits : Qubit[])  : LogicalRegister
     {
         body {
@@ -61,6 +64,10 @@ namespace Microsoft.Quantum.Canon {
     /// # Output
     /// A tuple of the data encoded into the logical register, and the auxillary
     /// qubits used to represent the syndrome.
+    ///
+    /// # See Also
+    /// - Microsoft.Quantum.Canon.LogicalRegister
+    /// - Microsoft.Quantum.Canon.BitFlipEncoder
     operation BitFlipDecoder(logicalRegister : LogicalRegister)  : (Qubit[], Qubit[])
     {
         body {
@@ -76,6 +83,10 @@ namespace Microsoft.Quantum.Canon {
     /// # Summary
     /// Returns a QECC value representing the ⟦3, 1, 1⟧ bit flip code encoder and
     /// decoder with in-place syndrome measurement.
+    ///
+    /// # Output
+    /// Returns an implementation of a quantum error correction code by 
+    /// specifying a `QECC` type.
     operation  BitFlipCode()  : QECC
     {
         body {
@@ -90,6 +101,17 @@ namespace Microsoft.Quantum.Canon {
         }
     }
 
+    /// # Summary
+    /// Function for recovery Pauli operations for given symdrome measurement
+    /// by table lookup for the ⟦3, 1, 1⟧ bit flip code.
+    ///
+    /// # Output
+    /// Function of type `RecoveryFn` that takes a syndrome measurement 
+    /// `Result[]` and returns the `Pauli[]` operations that corrects the 
+    /// detected error.
+    ///
+    /// # See Also
+    /// - Microsoft.Quantum.Canon.RecoveryFn
     function BitFlipRecoveryFn()  : RecoveryFn
     {
         return TableLookupRecovery([

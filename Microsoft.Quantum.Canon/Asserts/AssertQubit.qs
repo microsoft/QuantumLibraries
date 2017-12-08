@@ -5,18 +5,18 @@ namespace Microsoft.Quantum.Canon {
     open Microsoft.Quantum.Primitive;
 
     /// # Summary
-    /// Asserts that the qubit q is in the expected eigenstate of the Pauli Z operator.
+    /// Asserts that the qubit `q` is in the expected eigenstate of the Pauli $Z$ operator.
     ///
     /// # Input
     /// ## expected
-    /// Which state the qubit is expected to be in: Zero or One.
+    /// Which state the qubit is expected to be in: `Zero` or `One`.
     ///
     /// ## q
     /// The qubit whose state is asserted.
     ///
     /// # Remarks
-    /// This is equivalent to @"Microsoft.Quantum.Canon.AssertQubitTol" with hardcoded
-    /// tolerance=1e-5.
+    /// This is equivalent to <xref:microsoft.quantum.canon.assertqubittol> with hardcoded
+    /// `tolerance=1e-5`.
     operation AssertQubit (expected: Result, q: Qubit) : ()
     {
         body 
@@ -26,12 +26,12 @@ namespace Microsoft.Quantum.Canon {
     }
 
     /// # Summary
-    /// Asserts that the qubit q is in the expected eigenstate of the Pauli Z operator up to
+    /// Asserts that the qubit `q` is in the expected eigenstate of the Pauli $Z$ operator up to
     /// a given tolerance.
     ///
     /// # Input
     /// ## expected
-    /// Which state the qubit is expected to be in: Zero or One.
+    /// Which state the qubit is expected to be in: `Zero` or `One`.
     ///
     /// ## tolerance
     /// Tolerance on the probability of a measurement of the qubit returning the expected
@@ -44,7 +44,7 @@ namespace Microsoft.Quantum.Canon {
     /// - Microsoft.Quantum.Canon.AssertQubitState
     ///
     /// # Remarks
-    /// @"Microsoft.Quantum.Canon.AssertQubitState" allows for asserting
+    /// <xref:microsoft.quantum.canon.assertqubitstate> allows for asserting
     /// arbitrary qubit states rather than only $Z$ eigenstates.
     operation AssertQubitTol (expected: Result, tolerance: Double, q: Qubit) : ()
     {
@@ -57,7 +57,7 @@ namespace Microsoft.Quantum.Canon {
 
     /// # Summary
     /// Asserts that the qubit given by register is in the state described by
-    /// complex vector, $\ket{\psi} = \begin{bmatrix}a & b\end{\bmatrix}^{\mathrm{T}}$.
+    /// complex vector, $\ket{\psi} = \begin{bmatrix}a & b\end{bmatrix}^{\mathrm{T}}$.
     /// The first element of the tuples representing each of $a$, $b$
     /// is the real part of the complex number, while the second one is the imaginary part.
     /// The last argument defines the tolerance with which assertion is made.
@@ -99,7 +99,7 @@ namespace Microsoft.Quantum.Canon {
     ///
     /// The tolerance is
     /// the $L\_{\infty}$ distance between 3 dimensional real vector (x₂,x₃,x₄) defined by
-    /// $\bra{\psi}\ket{\psi} = x\_1 I + x\_2 X + x\_3 Y + x\_4 Z$ and real vector (y₂,y₃,y₄) defined by
+    /// $\langle\psi|\psi\rangle = x\_1 I + x\_2 X + x\_3 Y + x\_4 Z$ and real vector (y₂,y₃,y₄) defined by
     /// ρ = y₁I + y₂X + y₃Y + y₄Z where ρ is the density matrix corresponding to the state of the register.
     /// This is only true under the assumption that Tr(ρ) and Tr(|ψ⟩⟨ψ|) are both 1 (e.g. x₁ = 1/2, y₁ = 1/2).
     /// If this is not the case, the function asserts that l∞ distance between

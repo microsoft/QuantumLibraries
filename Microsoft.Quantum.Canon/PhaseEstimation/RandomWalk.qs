@@ -14,9 +14,9 @@ namespace Microsoft.Quantum.Canon {
     /// # Input
     /// ## oracle
     /// An operation representing a unitary $U$ such that $U(t)\ket{\phi} = e^{i t \phi}\ket{\phi}$
-    /// for a known eigenstate $\ket{\phi}$ and an unknown phase $\phi \in \mathbb{R}^+$.
-    /// ## eigenstate
-    /// A register in the state $\ket{\phi}$.
+    /// for eigenstates $\ket{\phi}$ with unknown phase $\phi \in \mathbb{R}^+$.
+    /// ## targetState
+    /// A register that $U$ acts on.
     /// ## initialMean
     /// Mean of the initial normal prior distribution over $\phi$.
     /// ## initialStdDev
@@ -33,14 +33,14 @@ namespace Microsoft.Quantum.Canon {
     /// the expectation is over the posterior given all accepted data.
     operation RandomWalkPhaseEstimation(
             initialMean : Double, initialStdDev : Double, nMeasurements : Int, maxMeasurements : Int, unwind : Int,
-            oracle : ContinuousOracle, eigenstate : Qubit[]
+            oracle : ContinuousOracle, targetState : Qubit[]
         )  : Double
     {
         body {
             let PREFACTOR = 0.79506009762065011;
             let INV_SQRT_E = 0.60653065971263342;
 
-            let inner = ContinuousPhaseEstimationIteration(oracle, _, _, eigenstate, _);
+            let inner = ContinuousPhaseEstimationIteration(oracle, _, _, targetState, _);
             let sampleOp = PrepAndMeasurePhaseEstImpl(_, _, inner);
 
             mutable dataRecord = StackNew(nMeasurements);

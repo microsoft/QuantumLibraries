@@ -150,11 +150,11 @@ namespace Microsoft.Quantum.Canon {
     /// Computes canonical residue of `value` modulo `modulus`.
     /// # Input
     /// ## value
-    /// the value of which residue is computed
+    /// The value of which residue is computed
     /// ## modulus
-    /// the modulus by which residues are take, must be positive
+    /// The modulus by which residues are take, must be positive
     /// # Output
-    /// Integer r between 0 and `modulus` - 1 such that value - r is divisible by modulus
+    /// Integer r between 0 and `modulus - 1' such that `value - r' is divisible by modulus
     ///
     /// # Remarks
     /// This function behaves the way a mathematician would expect Mod function to behave,

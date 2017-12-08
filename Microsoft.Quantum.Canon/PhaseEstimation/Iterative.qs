@@ -13,7 +13,7 @@ namespace Microsoft.Quantum.Canon {
     //
     // E.g.:
     //     let DiscreteOracle = OracleToDiscrete(U);
-    //     DiscretePhaseEstimationIteration(oracle, pow, theta, eigenstate, control);
+    //     DiscretePhaseEstimationIteration(oracle, pow, theta, targetState, control);
     //     let datum = M(control);
     //
     //     This design then enables providing more efficient implementations of U^m
@@ -28,22 +28,22 @@ namespace Microsoft.Quantum.Canon {
 
     /// # Summary
     /// Performs a single iteration of an iterative (classically-controlled) phase
-    /// estimation algorithm.
+    /// estimation algorithm using integer powers of a unitary oracle.
     ///
     /// # Input
     /// ## oracle
     /// Operation acting on an integer and a register,
     /// such that $U^m$ is applied to the given register, where $U$ is the unitary
-    /// whose phase is to be estimated, and where m is the integer power
+    /// whose phase is to be estimated, and where $m$ is the integer power
     /// given to the oracle
-    /// ## eigenstate
-    /// Register containing an eigenstate of the given oracle.
     /// ## power
     /// Number of times to apply the given unitary oracle.
     /// ## theta
     /// Angle by which to invert the phase on the control qubit before
-    /// acting on the eigenstate.
-    operation DiscretePhaseEstimationIteration( oracle : DiscreteOracle, power : Int, theta : Double, eigenstate : Qubit[], controlQubit : Qubit) : ()
+    /// acting on the target state.
+    /// ## targetState
+    /// Register of state acted upon by the given unitary oracle.
+    operation DiscretePhaseEstimationIteration( oracle : DiscreteOracle, power : Int, theta : Double, targetState : Qubit[], controlQubit : Qubit) : ()
     {
         // NB: We accept the control qubit as input so that we can allow for this operation
         //     to subject to the adjoint and control modifiers (that is, such that we do not need
@@ -57,7 +57,7 @@ namespace Microsoft.Quantum.Canon {
             H(controlQubit);
             Rz(inversionAngle, controlQubit);
 
-            (Controlled oracle)([controlQubit], (power, eigenstate));
+            (Controlled oracle)([controlQubit], (power, targetState));
 
             // Return the control qubit to the appropriate measurement basis.
             H(controlQubit);
@@ -68,7 +68,24 @@ namespace Microsoft.Quantum.Canon {
         controlled adjoint auto
     }
 
-    operation ContinuousPhaseEstimationIteration( oracle : ContinuousOracle, time : Double, theta : Double, eigenstate : Qubit[], controlQubit : Qubit)  : ()
+    /// # Summary
+    /// Performs a single iteration of an iterative (classically-controlled) phase
+    /// estimation algorithm using arbitrary real powers of a unitary oracle.
+    ///
+    /// # Input
+    /// ## oracle
+    /// Operation acting on a double $t$ and a register,
+    /// such that $U^t$ is applied to the given register, where $U$ is the unitary
+    /// whose phase is to be estimated, and where $t$ is the integer power
+    /// given to the oracle
+    /// ## time
+    /// Number of times to apply the given unitary oracle.
+    /// ## theta
+    /// Angle by which to invert the phase on the control qubit before
+    /// acting on the target state.
+    /// ## targetState
+    /// Register of state acted upon by the given unitary oracle.
+    operation ContinuousPhaseEstimationIteration( oracle : ContinuousOracle, time : Double, theta : Double, targetState : Qubit[], controlQubit : Qubit)  : ()
     {
         body {
             let inversionAngle = -(theta * time);
@@ -77,7 +94,7 @@ namespace Microsoft.Quantum.Canon {
             H(controlQubit);
             Rz(inversionAngle, controlQubit);
 
-            (Controlled oracle)([controlQubit], (time, eigenstate));
+            (Controlled oracle)([controlQubit], (time, targetState));
 
             // Return the control qubit to the appropriate measurement basis.
             H(controlQubit);

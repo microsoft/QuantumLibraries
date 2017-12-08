@@ -212,7 +212,7 @@ namespace Microsoft.Quantum.Canon {
     /// Array of which the values in the output array are taken.
     ///
     /// # Output
-    /// An array `output` such that `output[0]` first element
+    /// An array `output` such that `output[0]` is the first element
     /// of `array` whose index does not appear in `remove`,
     /// such that `output[1]` is the second such element, and so
     /// forth.

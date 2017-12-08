@@ -41,8 +41,11 @@ namespace Microsoft.Quantum.Canon {
 
 
     /// # Summary
-    /// Performs state preparation, and adiabatic state preparation, and phase
-    /// estimation.
+    /// Convenience function that performs state preparation by applying a 
+    /// `statePrepUnitary` on the input state, followed by adiabatic state 
+    /// preparation using a `adiabaticUnitary`, and finally phase estimation 
+    /// with respect to `qpeUnitary`on the resulting state using a 
+    /// `phaseEstAlgorithm`.
     ///
     /// # Input
     /// ## statePrepUnitary
@@ -79,8 +82,11 @@ namespace Microsoft.Quantum.Canon {
     }
 
     /// # Summary
-    /// Allocates qubits, performs state preparation, adiabatic state 
-    /// preparation, and phase estimation. 
+    /// Convenience function that performs state preparation by applying a 
+    /// `statePrepUnitary` on an automatically allocated input state 
+    /// $\ket{0...0}$, followed by adiabatic state preparation using a 
+    /// `adiabaticUnitary`, and finally phase estimation with respect to 
+    /// `qpeUnitary`on the resulting state using a `phaseEstAlgorithm`.
     ///
     /// # Input
     /// ## nQubits
@@ -120,7 +126,10 @@ namespace Microsoft.Quantum.Canon {
     }
 
     /// # Summary
-    /// Allocates qubits, performs state preparation, and phase estimation. 
+    /// Convenience function that performs state preparation by applying a 
+    /// `statePrepUnitary` on an automatically allocated input state 
+    /// phase estimation with respect to `qpeUnitary`on the resulting state 
+    /// using a `phaseEstAlgorithm`.
     ///
     /// # Input
     /// ## nQubits

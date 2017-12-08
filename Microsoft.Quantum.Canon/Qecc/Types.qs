@@ -3,9 +3,21 @@
 
 namespace Microsoft.Quantum.Canon {
 
+    /// # Summary
+    /// Type for register of physical qubits `Qubit[]` that encode the 
+    /// logical qubits.
     newtype LogicalRegister = Qubit[];
+
+    /// # Summary
+    /// Type for measurement results `Result[]` that specify an error syndrome
+    /// of a quantum code.
     newtype Syndrome = Result[];
+
+    /// # Summary
+    /// Type for function that maps an error syndrome to a sequence of `Pauli[]`
+    /// operations that correct the detected error.
     newtype RecoveryFn = (Syndrome -> Pauli[]);
+
     // Design notes:
     //     These two types do not return (), such that instances of these types
     //     will not support autofunctors. This is inconvienent, but I think it's
@@ -43,6 +55,16 @@ namespace Microsoft.Quantum.Canon {
     ///             [PauliI; PauliZ; PauliZ]
     ///         ], _, MeasureWithScratch));
     /// ```
+    ///
+    /// # Remarks
+    /// The signature `(LogicalRegister => Syndrome)` represents an operation 
+    /// that acts jointly on the qubits in `LogicalRegister` and some ancilla
+    /// qubits followed by a measurements of the ancilla to extract a `Syndrome
+    /// type represting the `Result[]` of these measurements.
+    ///
+    /// # See Also
+    /// - Microsoft.Quantum.Canon.LogicalRegister
+    /// - Microsoft.Quantum.Canon.Syndrome
     newtype SyndromeMeasOp = (LogicalRegister => Syndrome);
 
     /// # Summary

@@ -34,10 +34,20 @@ namespace Microsoft.Quantum.Tests {
         }
     }
 
-    
-    operation RobustPhaseEstimationDemo(phaseSet : Double, bitsPrecision: Int) : Double{
+    operation _RobustPhaseEstimationTestOp(phase: Double, power: Int, qubits : Qubit[]) : (){
         body {
-            let op = DiscreteOracle(RobustPhaseEstimationTestOp(phaseSet, _, _));
+            //Rz(- 2.0* phase * ToDouble(power), qubits[0])
+            Exp([PauliZ], phase * ToDouble(power), qubits);
+            //Exp([PauliI], phase * ToDouble(power), qubits);
+        }
+        adjoint auto
+        controlled auto
+        controlled adjoint auto
+    }
+    
+    operation RobustPhaseEstimationDemoImpl(phaseSet : Double, bitsPrecision: Int) : Double{
+        body {
+            let op = DiscreteOracle(_RobustPhaseEstimationTestOp(phaseSet, _, _));
             mutable phaseEst = ToDouble(0);
             using (q = Qubit[1]) {
                 set phaseEst = RobustPhaseEstimation(bitsPrecision, op, q);
@@ -55,7 +65,7 @@ namespace Microsoft.Quantum.Tests {
 
             for (idxTest in 0..9) {
                 let phaseSet = 2.0 * PI() * ToDouble(idxTest - 5) / 12.0;
-                let phaseEst = RobustPhaseEstimationDemo(phaseSet, bitsPrecision);
+                let phaseEst = RobustPhaseEstimationDemoImpl(phaseSet, bitsPrecision);
                 AssertAlmostEqualTol(phaseEst, phaseSet, 1e-2);
             }
         }

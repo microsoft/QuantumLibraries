@@ -11,13 +11,10 @@ namespace Microsoft.Quantum.Canon {
     ///
     /// The correspondence between 
     /// value of `basis[k]` and $\ket{\psi_k}$ is the following:
-    ///
-    /// | `basis[k]` | $\ket{\psi_k}$ |
-    /// |===|===|
-    /// | 0 | $\ket{0}$ |
-    /// | 1 | $\ket{1}$ |
-    /// | 2 | $\ket{+}$ |
-    /// | 3 | $\ket{i}$ ( +1 eigenstate of Pauli Y ) |
+    /// - `basis[k]=0` $\rightarrow \ket{0}$. 
+    /// - `basis[k]=1` $\rightarrow \ket{1}$. 
+    /// - `basis[k]=2` $\rightarrow \ket{+}$.
+    /// - `basis[k]=3` $\rightarrow \ket{i}$ ( +1 eigenstate of Pauli Y ).
     ///
     /// # Input
     /// ## qubits
@@ -64,19 +61,19 @@ namespace Microsoft.Quantum.Canon {
     }
 
     /// # Summary
-    /// Checks if the result of applying two operations givenU and expectedU to
+    /// Checks if the result of applying two operations `givenU` and `expectedU` to
     /// a basis state is the same. The basis state is described by `basis` parameter. 
-    /// See @"Microsoft.Quantum.Canon.FlipToBasis" function for more details on this
+    /// See <xref:microsoft.quantum.canon.fliptobasis> function for more details on this
     /// description.
     ///
     /// # Input
     /// ## basis
     /// Basis state specified by a single-qubit basis state ID (0 <= id <= 3) for each of
-    /// n qubits.
+    /// $n$ qubits.
     /// ## givenU
-    /// Operation on n qubits to be checked.
+    /// Operation on $n$ qubits to be checked.
     /// ## expectedU
-    /// Reference operation on n qubits that givenU is to be compared against.
+    /// Reference operation on $n$ qubits that givenU is to be compared against.
     /// ## tolerance
     /// Tolerance for the comparison of probabilities between the two operations'
     /// outcomes.
@@ -97,15 +94,15 @@ namespace Microsoft.Quantum.Canon {
     }
 
     /// # Summary 
-    /// Assert that given qubits are all in |0⟩ state
+    /// Assert that given qubits are all in $\ket{0}$ state
     /// 
     /// # Input
     /// ## message
     /// The message to be emited if assertion fails
     /// ## target
-    /// Qubits that are asserted to be in |0⟩ state
+    /// Qubits that are asserted to be in $\ket{0}$ state
     /// ## tolerance
-    /// Accuracy with which the state should be in |0⟩ state
+    /// Accuracy with which the state should be in $\ket{0}$ state
     operation AssertAllZero( message : String, target : Qubit[], tolerance : Double ) : () {
         body {
             for( i in 0 .. Length(target) - 1 ) {
@@ -118,16 +115,16 @@ namespace Microsoft.Quantum.Canon {
     }
 
     /// # Summary
-    /// Checks if the operation givenU is equal to the operation expectedU on
+    /// Checks if the operation `givenU` is equal to the operation expectedU on
     /// the given input size.
     ///
     /// # Input
     /// ## givenU
-    /// Operation on n qubits to be checked.
+    /// Operation on $n$ qubits to be checked.
     /// ## expectedU
-    /// Reference operation on n qubits that givenU is to be compared against.
+    /// Reference operation on $n$ qubits that `givenU` is to be compared against.
     /// ## inputSize
-    /// The number of qubits n that the operations givenU and expectedU operate on.
+    /// The number of qubits $n$ that the operations `givenU` and `expectedU` operate on.
     operation AssertOperationsEqualInPlace( givenU : (Qubit[] => ()), expectedU : (Qubit[] => () : Adjoint ), inputSize : Int ) : ()
     {
         body
@@ -139,7 +136,7 @@ namespace Microsoft.Quantum.Canon {
     }
 
     /// # Summary
-    /// Checks if the operation givenU is equal to the operation expectedU on
+    /// Checks if the operation `givenU` is equal to the operation `expectedU` on
     /// the given input size  by checking the action of the operations only on
     /// the vectors from the computational basis.
     /// This is a necessary, but not sufficient, condition for the equality of
@@ -147,11 +144,11 @@ namespace Microsoft.Quantum.Canon {
     ///
     /// # Input
     /// ## givenU
-    /// Operation on n qubits to be checked.
+    /// Operation on $n$ qubits to be checked.
     /// ## expectedU
-    /// Reference operation on n qubits that givenU is to be compared against.
+    /// Reference operation on $n$ qubits that `givenU` is to be compared against.
     /// ## inputSize
-    /// The number of qubits n that the operations givenU and expectedU operate on.
+    /// The number of qubits $n$ that the operations `givenU` and `expectedU` operate on.
     operation AssertOperationsEqualInPlaceCompBasis( givenU : (Qubit[] => ()), expectedU : (Qubit[] => () : Adjoint ), inputSize : Int ) : ()
     {
         body

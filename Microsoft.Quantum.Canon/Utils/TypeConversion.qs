@@ -3,6 +3,16 @@
 
 namespace Microsoft.Quantum.Canon {
 
+    /// # Summary
+    /// Converts a `Result` type to a `Bool` type, where `One` is mapped to 
+    /// `true` and `Zero` is mapped to `false`.
+    ///
+    /// # Input
+    /// ## input
+    /// `Result` to be converted.
+    /// 
+    /// # Output
+    /// A `Bool` representing the `input`.
     function BoolFromResult( input: Result) : Bool
     {
         if(input == Zero) {
@@ -13,6 +23,16 @@ namespace Microsoft.Quantum.Canon {
         }
     }
 
+    /// # Summary
+    /// Converts a `Bool` type to a `Result` type, where `true` is mapped to 
+    /// `One` and `false` is mapped to `Zero`.
+    ///
+    /// # Input
+    /// ## input
+    /// `Bool` to be converted.
+    /// 
+    /// # Output
+    /// A `Result` representing the `input`.
     function ResultFromBool( input: Bool) : Result
     {
         if(input == false) {
@@ -23,6 +43,16 @@ namespace Microsoft.Quantum.Canon {
         }
     }
 
+     /// # Summary
+    /// Converts a `Result[]` type to a `Bool[]` type, where `One` is mapped to 
+    /// `true` and `Zero` is mapped to `false`.
+    ///
+    /// # Input
+    /// ## input
+    /// `Result[]` to be converted.
+    /// 
+    /// # Output
+    /// A `Bool[]` representing the `input`.
     function BoolArrFromResultArr(input : Result[]) : Bool[]
     {
         let nInput = Length(input);
@@ -33,6 +63,16 @@ namespace Microsoft.Quantum.Canon {
         return output;
     }
 
+    /// # Summary
+    /// Converts a `Bool[]` type to a `Result[]` type, where `true` is mapped to 
+    /// `One` and `false` is mapped to `Zero`.
+    ///
+    /// # Input
+    /// ## input
+    /// `Bool[]` to be converted.
+    /// 
+    /// # Output
+    /// A `Result[]` representing the `input`.
     function ResultArrFromBoolArr(input : Bool[]) : Result[]
     {
         let nInput = Length(input);

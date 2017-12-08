@@ -41,14 +41,24 @@ namespace Microsoft.Quantum.Canon {
     }
 
     /// # Summary
-    /// Table lookup decoder for the ⟦5, 1, 3⟧ quantum code.
+    /// Returns function that maps error syndrome measurements to the 
+    /// appropriate error-correcting Pauli operators by table lookup for
+    /// the ⟦5, 1, 3⟧ quantum code.
+    ///
+    /// # Output
+    /// Function of type `RecoveryFn` that takes a syndrome measurement 
+    /// `Result[]` and returns the `Pauli[]` operators that corrects the 
+    /// detected error.
     ///
     /// # Remarks
-    /// By iterating over all errors of weight 1, we obtain a total of 3*5=15 possible non-trivial syndromes. 
-    /// Together with the identity, a table of error and corresponding syndrom is built up. For the 5qubit code  
-    /// this table is given by: X_1 (0,0,0,1); X_2 (1,0,0,0); X_3 (1,1,0,0); X_4 (0,1,1,0); X_5 (0,0,1,1), 
-    /// Z_1 (1,0,1,0); Z_2 (0,1,0,1); Z_3 (0,0,1,0); Z_4 (1,0,0,1); Z_5 (0,1,0,0) with Yi = Xi + Yi. Note that the 
+    /// By iterating over all errors of weight $1$, we obtain a total of $3*5=15$ possible non-trivial syndromes. 
+    /// Together with the identity, a table of error and corresponding syndrom is built up. For the 5 qubit code  
+    /// this table is given by: $X\_1: (0,0,0,1); X\_2: (1,0,0,0); X\_3: (1,1,0,0); X\_4: (0,1,1,0); X\_5: (0,0,1,1), 
+    /// Z\_1: (1,0,1,0); Z\_2: (0,1,0,1); Z\_3: (0,0,1,0); Z\_4: (1,0,0,1); Z\_5: (0,1,0,0)$ with $Y_i$ obtained by adding the $X_i$ and $Z_i$ syndromes. Note that the 
     /// ordering in the table lookup recovery is given by converting the bitvectors to integers (using little endian).
+    ///
+    /// # See Also
+    /// - Microsoft.Quantum.Canon.RecoveryFn
     function  FiveQubitCodeRecoveryFn()  : RecoveryFn
     {
         return TableLookupRecovery(
@@ -76,18 +86,18 @@ namespace Microsoft.Quantum.Canon {
     ///
     /// # Input
     /// ## physRegister
-    /// An array of qubits representing an unencoded state.</param>
+    /// A qubit representing an unencoded state. This array `Qubit[]` is of 
+    /// length 1.
     /// ## auxQubits
-    /// A register of auxillary qubits that will be used to represent the encoded state.</param>
-    /// # See Also
-    /// - @"microsoft.quantum.canon.FiveQubitCodeDecoder"
+    /// A register of auxillary qubits that will be used to represent the
+    /// encoded state.
     ///
-    /// # Remarks
-    /// This code was found independently in the following two papers:
-    /// C. H. Bennett, D. DiVincenzo, J. A. Smolin and W. K. Wootters, "Mixed state entanglement and quantum error correction,"
-    /// Phys. Rev. A, 54 (1996) pp. 3824-3851; https://arxiv.org/abs/quant-ph/9604024 and
-    /// R. La?amme, C. Miquel, J. P. Paz and W. H. Zurek, "Perfect quantum error correction code," 
-    /// Phys. Rev. Lett. 77 (1996) pp. 198-201; https://arxiv.org/abs/quant-ph/9602019
+    /// # Output
+    /// An array of physical qubits of type `LogicalRegister` that store the
+    /// encoded state. 
+    ///
+    /// # See Also
+    /// - Microsoft.Quantum.Canon.LogicalRegister
     operation FiveQubitCodeEncoder(physRegister : Qubit[], auxQubits : Qubit[])  : LogicalRegister
     {
         body {
@@ -98,8 +108,20 @@ namespace Microsoft.Quantum.Canon {
         }
     }
 
+    /// # Summary
+    /// Decodes the ⟦5, 1, 3⟧ quantum code. 
+    ///
+    /// # Input
+    /// ## logicalRegister
+    /// An array of qubits representing the encoded 5-qubit code logical state.
+    ///
+    /// # Output
+    /// A qubit array of length 1 representing the unencoded state in the 
+    /// first parameter, together with auxillary qubits in the second parameter.
+    ///
     /// # See Also
-    /// - @"microsoft.quantum.canon.FiveQubitCodeEndocer"
+    /// - microsoft.quantum.canon.FiveQubitCodeEncoder
+    /// - Microsoft.Quantum.Canon.LogicalRegister
     operation FiveQubitCodeDecoder( logicalRegister : LogicalRegister)  : (Qubit[], Qubit[])
     {
         body {
@@ -115,6 +137,15 @@ namespace Microsoft.Quantum.Canon {
     /// # Summary
     /// Returns a QECC value representing the ⟦5, 1, 3⟧ code encoder and
     /// decoder with in-place syndrome measurement.
+    ///
+    /// # Output
+    /// Returns an implementation of a quantum error correction code by 
+    /// specifying a `QECC` type.
+    ///
+    /// # Remarks
+    /// This code was found independently in the following two papers:
+    /// - C. H. Bennett, D. DiVincenzo, J. A. Smolin and W. K. Wootters, "Mixed state entanglement and quantum error correction," Phys. Rev. A, 54 (1996) pp. 3824-3851; https://arxiv.org/abs/quant-ph/9604024 and
+    /// - R. Laflamme, C. Miquel, J. P. Paz and W. H. Zurek, "Perfect quantum error correction code," Phys. Rev. Lett. 77 (1996) pp. 198-201; https://arxiv.org/abs/quant-ph/9602019
     operation  FiveQubitCode()  : QECC
     {
         body {
