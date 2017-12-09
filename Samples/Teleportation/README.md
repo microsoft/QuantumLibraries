@@ -1,6 +1,6 @@
 ﻿# Quantum Teleportation Sample #
 
-This example demonstrates the use of the Quantum Development Kit for quantum teleportation, a sort of "hello, world" for quantum programming.
+This sample demonstrates the use of the Quantum Development Kit for quantum teleportation, a sort of "hello, world" for quantum programming.
 
 ## Running the Sample ##
 

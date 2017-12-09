@@ -1,27 +1,15 @@
-﻿---
-title: "Phase Estimation Sample"
----
+﻿# Iterative Phase Estimation #
 
-# Quantum and Iterative Phase Estimation #
+This sample demonstrates iterative phase estimation using Bayesian inference to provide a simple method to perform the classical statistical analysis.
 
-TODO: big strength is that we give a variety of phase estimation algs.
+## Running the Sample ##
 
-### Running the Sample ###
-
-Open the `QsharpLibraries.sln` solution in Visual Studio and set `Sample/PhaseEstimation/PhaseEstimationSample.csproj` as the startup project.
+Open the `QsharpLibraries.sln` solution in Visual Studio and set *Samples / 2. Characterization and Testing / PhaseEstimationSample* as the startup project.
 Press Start in Visual Studio to run the sample.
 
-### Manifest ###
+## Manifest ##
 
-- `PhaseEstimation/`
-  - `PhaseEstimationSample.csproj`: Main C# project for the example.
-  - `Program.cs`: C# code to call the operations defined in Q#.
-
-### References ###
-
-TODO: RPE, RWPE, RFPE, etc.
-
-### TODO ###
-
-- Currently all Q# code for this example is in the canon itself, due to multiproject restriction.
-  Need to move code up into this project directly when that becomes possible.
+- **PhaseEstimation/**
+  - [PhaseEstimationSample.csproj](./PhaseEstimationSample.csproj): Main C# project for the example.
+  - [Program.cs](./Program.cs): C# code to call the operations defined in Q#.
+  - [BayesianPhaseEstimation.qs](./BayesianPhaseEstimation.qs): The Q# implementation of iterative phase estimation and Bayesian inference.

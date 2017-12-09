@@ -14,7 +14,7 @@ namespace Microsoft.Quantum.Samples.PhaseEstimation {
     // This sample introduces iterative phase estimation, as well
     // as the algorithms for processing the results of iterative phase
     // estimation that are provided with Q#.
-        
+
     // In phase estimation, one is concerned with learning the *eigenvalues*
     // of a unitary operator U. In particular, suppose that U is unknown, but
     // that we have access to U as an oracle. That is, we can call U as an
@@ -34,14 +34,14 @@ namespace Microsoft.Quantum.Samples.PhaseEstimation {
     // operation to take as an input a value of type
     // (Qubit[] => () : Controlled), representing an operation that acts on
     // an array of qubits and that can be controlled.
-    
+
     // To implement U^m for some power m, we can use an operation of this form
     // inside of a for loop. This precludes, however, if we have a more
     // efficient implementation that would let us "fast forward."
     // By the no fast-forwarding theorem [https://arxiv.org/abs/0908.4398],
     // this cannot be done in general, such that if we only have oracular
     // access to U, we preclude significant opportunities for improvements.
-    
+
     // A more general approach is thus to take an operation of type
     // ((Int, Qubit[]) => () : Controlled) representing U(m) ≔ U^m.
     // For oracular access to U, we write out the same for loop here, or use
@@ -60,7 +60,7 @@ namespace Microsoft.Quantum.Samples.PhaseEstimation {
     // ((Double, Qubit[]) => () : Controlled).
 
     // For the rest of this sample, we follow the continuous-time convention.
-    
+
     //////////////////////////////////////////////////////////////////////////
     // Iterative Phase Estimation ////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////
@@ -68,7 +68,7 @@ namespace Microsoft.Quantum.Samples.PhaseEstimation {
     // In the iterative case, one learns φ by using
     // a single additional qubit to turn phase estimation into a classical
     // statistical problem.
-    
+
     // Given an operation representing U and an operation representing
     // preparation of |φ〉, we can implement each step of iterative phase estimation
     // by preparing a control qubit in the |+〉 state, controlling the application
@@ -108,7 +108,7 @@ namespace Microsoft.Quantum.Samples.PhaseEstimation {
     ///     \Pr(\texttt{Zero} | \phi; \texttt{time}, \texttt{inversionAngle}) =
     ///         \cos^2([\phi - \texttt{inversionAngle}] \texttt{time} / 2).
     /// $$
-    /// - For the circuit diagram see FIG. 5 on 
+    /// - For the circuit diagram see FIG. 5 on
     ///   [ Page 12 of arXiv:1304.0741 ](https://arxiv.org/pdf/1304.0741.pdf#page=12)
     operation IterativePhaseEstimationStep(
             time : Double, inversionAngle : Double,
