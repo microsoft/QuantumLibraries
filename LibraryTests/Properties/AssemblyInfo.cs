@@ -1,5 +1,6 @@
-﻿// Copyright (c) Microsoft Corporation. All rights reserved.
-// Licensed under the MIT License.
+﻿// Copyright (c) Microsoft Corporation. All rights reserved. Licensed under the 
+// Microsoft Software License Terms for Microsoft Quantum Development Kit Libraries 
+// and Samples. See LICENSE in the project root for license information.
 
 using System.Reflection;
 using System.Runtime.CompilerServices;
@@ -11,9 +12,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("LibraryTests")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("HP Inc.")]
+[assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("LibraryTests")]
-[assembly: AssemblyCopyright("Copyright © HP Inc. 2017")]
+[assembly: AssemblyCopyright("Copyright ©  2017")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
