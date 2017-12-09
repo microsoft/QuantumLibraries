@@ -215,7 +215,7 @@ namespace Microsoft.Quantum.Canon {
     /// # Summary
     /// Applies an operation that takes a
     /// <xref:microsoft.quantum.canon.littleendian> register as input
-    /// on a target register of type <xref:microsoft.quanutm.canon.phaselittleendian>.
+    /// on a target register of type <xref:microsoft.quantum.canon.phaselittleendian>.
     ///
     /// # Input
     /// ## op
@@ -292,7 +292,7 @@ namespace Microsoft.Quantum.Canon {
     /// # Summary
     /// Applies an operation that takes a
     /// <xref:microsoft.quantum.canon.phaselittleendian> register as input
-    /// on a target register of type <xref:microsoft.quanutm.canon.littleendian>.
+    /// on a target register of type <xref:microsoft.quantum.canon.littleendian>.
     ///
     /// # Input
     /// ## op

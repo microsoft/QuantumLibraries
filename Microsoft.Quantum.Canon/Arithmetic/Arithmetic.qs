@@ -199,24 +199,26 @@ namespace Microsoft.Quantum.Canon {
 
     /// # Summary
     /// Let us denote `increment` by a, `modulus` by N and integer encoded in `target` by y
-    /// Then the operation performs the following transformation: 
-    /// |y⟩ ↦ |y+a (mod N)⟩
+    /// Then the operation performs the following transformation:
+    /// \begin{align}
+    ///     \ket{y} \mapsto \ket{y + 1 \operatorname{mod} N}
+    /// \end{align}
     /// Integers are encoded in little-endian format.
     ///
     /// # Input
     /// ## increment
     /// Integer increment a to be added to y.
     /// ## modulus
-    /// Integer N that mods y + a. 
+    /// Integer N that mods y + a.
     /// ## target
     /// Integer y in `LittleEndian` format that `increment` a is added to.
     ///
     /// # See Also
-    /// - @"microsoft.quantum.primitive.modularincrementphasele"
-    /// 
-    /// # Remarks 
-    /// Assumes that the value of target is less than N. Note that 
-    /// <xref:microsoft.quantum.primitive.modularincrementphasele> implements
+    /// - Microsoft.Quantum.Canon.ModularIncrementPhaseLE
+    ///
+    /// # Remarks
+    /// Assumes that the value of target is less than N. Note that
+    /// <xref:microsoft.quantum.canon.modularincrementphasele> implements
     /// the same operation, but in the `PhaseLittleEndian` basis.
     operation ModularIncrementLE( increment : Int, modulus : Int,  target : LittleEndian) : () {
         body {
