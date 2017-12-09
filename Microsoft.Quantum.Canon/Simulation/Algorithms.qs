@@ -47,7 +47,7 @@ namespace Microsoft.Quantum.Canon {
     /// Duration of simulated time-evolution in single Trotter step.
     ///
     /// # Output
-    /// Unitary operation that approximate a single step of time-evolution
+    /// Unitary operation that approximates a single step of time-evolution
     /// for duration `trotterStepSize`.
     ///
     /// # Remarks

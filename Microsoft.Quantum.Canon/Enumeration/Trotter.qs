@@ -20,8 +20,8 @@ namespace Microsoft.Quantum.Canon {
     /// ## stepSize
     /// Multiplier on size of each step of the simulation.
     /// ## target
-	/// A quantum register on which the operations act.
-	///
+    /// A quantum register on which the operations act.
+    ///
     /// # Remarks
     /// ## Example
     /// The following are equivalent:
@@ -59,8 +59,8 @@ namespace Microsoft.Quantum.Canon {
     /// ## stepSize
     /// Multiplier on size of each step of the simulation.
     /// ## target
-	/// A quantum register on which the operations act.
-	///
+    /// A quantum register on which the operations act.
+    ///
     /// # Remarks
     /// ## Example
     /// The following are equivalent:

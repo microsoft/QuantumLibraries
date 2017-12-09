@@ -14,7 +14,7 @@ namespace Microsoft.Quantum.Canon {
     /// an array holding 4 qubits which add redundancy.
     ///
     /// # Remarks
-    /// The particular encoder chosen was taken from the paper V. Kliunchnikov and D. Maslov, "Optimization of Clifford Circuits," 
+    /// The particular encoder chosen was taken from the paper V. Kliuchnikov and D. Maslov, "Optimization of Clifford Circuits," 
     /// Phys. Rev. Phys. Rev. A 88, 052307 (2013); https://arxiv.org/abs/1305.0810, Figure 4b) and requires a total of 11 gates.
     operation FiveQubitCodeEncoderImpl(data : Qubit[], scratch : Qubit[])  : ()
     {
@@ -41,19 +41,19 @@ namespace Microsoft.Quantum.Canon {
     }
 
     /// # Summary
-    /// Returns function that maps error syndrome measurements to the 
+    /// Returns function that maps error syndrome measurements to the
     /// appropriate error-correcting Pauli operators by table lookup for
     /// the ⟦5, 1, 3⟧ quantum code.
     ///
     /// # Output
-    /// Function of type `RecoveryFn` that takes a syndrome measurement 
-    /// `Result[]` and returns the `Pauli[]` operators that corrects the 
+    /// Function of type `RecoveryFn` that takes a syndrome measurement
+    /// `Result[]` and returns the `Pauli[]` operators that corrects the
     /// detected error.
     ///
     /// # Remarks
-    /// By iterating over all errors of weight $1$, we obtain a total of $3*5=15$ possible non-trivial syndromes. 
-    /// Together with the identity, a table of error and corresponding syndrom is built up. For the 5 qubit code  
-    /// this table is given by: $X\_1: (0,0,0,1); X\_2: (1,0,0,0); X\_3: (1,1,0,0); X\_4: (0,1,1,0); X\_5: (0,0,1,1), 
+    /// By iterating over all errors of weight $1$, we obtain a total of $3\times 5=15$ possible non-trivial syndromes.
+    /// Together with the identity, a table of error and corresponding syndrom is built up. For the 5 qubit code
+    /// this table is given by: $X\_1: (0,0,0,1); X\_2: (1,0,0,0); X\_3: (1,1,0,0); X\_4: (0,1,1,0); X\_5: (0,0,1,1),
     /// Z\_1: (1,0,1,0); Z\_2: (0,1,0,1); Z\_3: (0,0,1,0); Z\_4: (1,0,0,1); Z\_5: (0,1,0,0)$ with $Y_i$ obtained by adding the $X_i$ and $Z_i$ syndromes. Note that the 
     /// ordering in the table lookup recovery is given by converting the bitvectors to integers (using little endian).
     ///

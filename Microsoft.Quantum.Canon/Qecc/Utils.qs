@@ -22,22 +22,22 @@ namespace Microsoft.Quantum.Canon {
         return n;
     }
 
-	/// # Summary
-	/// Measures the given set of generators of a stabilizer group.
-	/// # Input
-	/// ## stabilizerGroup
-	/// An array of multiqubit Pauli operators. 
-	/// For example, `stabilizerGroup[0]` is a list of single-qubit Pauli matrices,
-	/// the tensor product of which is a stabilizer generator.
-	/// ## logicalRegister
-	/// An array of qubits where the stabilizer code is defined.
-	/// ## gadget
-	/// An operation that specifies how to measure a multiqubit Pauli operator.
-	/// # Output
-	/// The result of measurements.
-	/// # Remarks
-	/// This does not checks if the given set of generators are commuting.
-	/// If they are not commuting, the result of measurements may be arbitrary.
+    /// # Summary
+    /// Measures the given set of generators of a stabilizer group.
+    /// # Input
+    /// ## stabilizerGroup
+    /// An array of multiqubit Pauli operators. 
+    /// For example, `stabilizerGroup[0]` is a list of single-qubit Pauli matrices,
+    /// the tensor product of which is a stabilizer generator.
+    /// ## logicalRegister
+    /// An array of qubits where the stabilizer code is defined.
+    /// ## gadget
+    /// An operation that specifies how to measure a multiqubit Pauli operator.
+    /// # Output
+    /// The result of measurements.
+    /// # Remarks
+    /// This does not check if the given set of generators are commuting.
+    /// If they are not commuting, the result of measurements may be arbitrary.
     operation  MeasureStabilizerGenerators(stabilizerGroup : Pauli[][],  logicalRegister : LogicalRegister, gadget : ((Pauli[], Qubit[]) => Result))  : Syndrome
     {
         body {
@@ -117,6 +117,18 @@ namespace Microsoft.Quantum.Canon {
         return table[ResultAsInt(syndrome)];
     }
 
+    /// # Summary 
+    /// For a given table of Pauli operations on a given register of qubits, this function 
+    /// returns an object of type `RecoveryFn` which contains all information needed to 
+    /// perform a table-lookup decoding with respect to the given array of Pauli operations. 
+    ///
+    /// # Inputs
+    /// ## table
+    /// Table of Pauli operations that operate on a given qubit register
+    ///
+    /// # Output
+    /// An object of type `RecoveryFn`, i.e., a map `Syndrome -> Pauli[]` that associates 
+    /// with a given syndrome array a corresponding Pauli correction operation.
     function  TableLookupRecovery(table : Pauli[][])  : RecoveryFn
     {
         return RecoveryFn(TableLookupRecoveryImpl(table, _));

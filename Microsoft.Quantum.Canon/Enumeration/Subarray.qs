@@ -11,6 +11,8 @@ namespace Microsoft.Quantum.Canon {
     /// # Remarks
     /// The function is defined for generic types, i.e., whenever we have 
     /// an array `'T[]` and a list of locations `Int[]` defining the subarray.
+    /// The construction of the subarray is a based on generating a new, deep 
+    /// copy of the given array as opposed to maintaining references. 
     ///
     /// If `Length(indices) < Lenth(array)`, this function will return a
     /// subset of `array`. On the other hand, if `indices` contains repeated

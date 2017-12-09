@@ -31,8 +31,30 @@ namespace Microsoft.Quantum.Canon {
         adjoint auto
     }
 
-    /// Steane code X error recovery operations.
-    function SteaneCodeRecoveryXImpl( syndrome : Syndrome)  : Pauli[]
+    /// # Summary
+    /// Decoder for the X-part of the stabilizer group of the ⟦7, 1, 3⟧ Steane quantum code.
+    ///
+    /// # Inputs
+    /// ## syndrome
+    /// A syndrome array obtained from measuring the X-part of the stabilizer.
+    ///
+    /// # Output
+    /// An array of Pauli operations which, when applied to the encoded quantum system
+    /// corrects the error corresponding to `syndrome`.
+    ///
+    /// # Remarks
+    /// The chosen decoder uses the CSS code property of the ⟦7, 1, 3⟧ Steane code, i.e., it corrects X errors
+    /// and Z errors separately. A property of the code is that the location of the X, respectively, Z correction
+    /// to be applied is the 3-bit encoding of the X, respectively, Z syndrome when considered an integer. 
+    ///
+    /// # See Also
+    /// - @"microsoft.quantum.canon.steanecoderecoveryx"
+    /// - @"microsoft.quantum.canon.steanecoderecoveryfn
+    ///
+    /// # References
+    /// - D. Gottesman, "Stabilizer Codes and Quantum Error Correction," Ph.D. Thesis, Caltech, 1997;
+    /// https://arxiv.org/abs/quant-ph/9705052
+    function SteaneCodeRecoveryX( syndrome : Syndrome ) : Pauli[]
     {
         let idxQubit = ResultAsInt(syndrome);
         if (idxQubit == 0) {
@@ -41,8 +63,13 @@ namespace Microsoft.Quantum.Canon {
         return EmbedPauli(PauliZ, idxQubit - 1, 7);
     }
 
-    /// Steane code Z error recovery operations.
-    function SteaneCodeRecoveryZImpl( syndrome : Syndrome)  : Pauli[]
+    /// # Summary
+    /// Decoder for the Z-part of the stabilizer group of the ⟦7, 1, 3⟧ Steane quantum code.
+    ///
+    /// # See Also
+    /// - @"microsoft.quantum.canon.steanecoderecoveryx"
+    /// - @"microsoft.quantum.canon.steanecoderecoveryfn"
+    function SteaneCodeRecoveryZ( syndrome : Syndrome)  : Pauli[]
     {
         let idxQubit = ResultAsInt(syndrome);
         if (idxQubit == 0) {
@@ -52,37 +79,38 @@ namespace Microsoft.Quantum.Canon {
     }
 
     /// # Summary
-    /// Function for recovery Pauli operations for given symdrome measurement
-    /// by table lookup for the ⟦7, 1, 3⟧ Steane quantum code.
+    /// Decoder for combined X- and Z-parts of the stabilizer group of the
+    /// ⟦7, 1, 3⟧ Steane quantum code.
     ///
     /// # Output
-    /// Tuple of functions of type `RecoveryFn` that takes a syndrome 
-    /// measurement `Result[]` and returns the `Pauli[]` operations that 
+    /// Tuple of functions of type `RecoveryFn` that takes a syndrome
+    /// measurement `Result[]` and returns the `Pauli[]` operations that
     /// corrects the detected error.
     ///
     /// # See Also
-    /// - Microsoft.Quantum.Canon.RecoveryFn
+    /// - @"microsoft.quantum.canon.steanecoderecoveryx"
+    /// - @"microsoft.quantum.canon.steanecoderecoveryz"
     function SteaneCodeRecoveryFns() : (RecoveryFn, RecoveryFn) {
-        return (RecoveryFn(SteaneCodeRecoveryXImpl), RecoveryFn(SteaneCodeRecoveryZImpl));
+        return (RecoveryFn(SteaneCodeRecoveryX), RecoveryFn(SteaneCodeRecoveryZ));
     }
 
     /// # Summary
-    /// Encodes into the ⟦7, 1, 3⟧ Steane quantum code.
+    /// An encoding operation that maps an unencoded quantum register to an encoded quantum register
+    /// under the ⟦7, 1, 3⟧ Steane quantum code.
     ///
-    /// # Input
+    /// # Inputs
     /// ## physRegister
-    /// A qubit representing an unencoded state. This array `Qubit[]` is of 
-    /// length 1.
+    /// A qubit register which holds the an unencoded quantum state
     /// ## auxQubits
-    /// A register of auxillary qubits that will be used to represent the
-    /// encoded state.
+    /// A qubit register which is initially zero and which gets added to the quantum
+    /// system so that an encoding operation can be performed
     ///
     /// # Output
-    /// An array of physical qubits of type `LogicalRegister` that store the
-    /// encoded state. 
+    /// A quantum register holding the state after the Steane encoder has been applied
     ///
     /// # See Also
     /// - Microsoft.Quantum.Canon.LogicalRegister
+    /// - Microsoft.Quantum.Canon.SteaneCodeDecoder
     operation SteaneCodeEncoder(physRegister : Qubit[], auxQubits : Qubit[])  : LogicalRegister
     {
         body {
@@ -94,26 +122,30 @@ namespace Microsoft.Quantum.Canon {
     }
 
     /// # Summary
-    /// Decodes the ⟦7, 1, 3⟧ Steane quantum code. 
+    /// An inverse encoding operation that maps an unencoded quantum register to an encoded quantum
+    /// register under the ⟦7, 1, 3⟧ Steane quantum code.
     ///
     /// # Input
     /// ## logicalRegister
     /// An array of qubits representing the encoded 5-qubit code logical state.
     ///
     /// # Output
-    /// A qubit array of length 1 representing the unencoded state in the 
+    /// A qubit array of length 1 representing the unencoded state in the
     /// first parameter, together with auxillary qubits in the second parameter.
     ///
     /// # Remarks
-    /// The chosen decoder uses the CSS code property of the ⟦7, 1, 3⟧ Steane code, i.e., it corrects X errors 
-    /// and Z errors separately. A property of the code is that the location of the X, respectively, Z correction 
-    /// to be applied is the 3-bit encoding of the X, repsectively, Z syndrome when considered an integer. For more 
-    /// information, see D. Gottesman, "Stabilizer Codes and Quantum Error Correction," Ph.D. Thesis, Caltech, 1997; 
-    /// https://arxiv.org/abs/quant-ph/9705052
+    /// The chosen decoder uses the CSS code property of the ⟦7, 1, 3⟧ Steane code, i.e., it corrects X errors
+    /// and Z errors separately. A property of the code is that the location of the X, respectively, Z correction
+    /// to be applied is the 3-bit encoding of the X, repsectively, Z syndrome when considered an integer.
     ///
     /// # See Also
-    /// - microsoft.quantum.canon.SteaneCodeEncoder
+    /// - Microsoft.Quantum.Canon.SteaneCodeEncoder
+    /// - Microsoft.Quantum.Canon.SteaneCodeDecoder
     /// - Microsoft.Quantum.Canon.LogicalRegister
+    ///
+    /// # References
+    /// - D. Gottesman, "Stabilizer Codes and Quantum Error Correction," Ph.D. Thesis, Caltech, 1997;
+    ///   https://arxiv.org/abs/quant-ph/9705052
     operation SteaneCodeDecoder( logicalRegister : LogicalRegister)  : (Qubit[], Qubit[])
     {
         body {
@@ -131,12 +163,12 @@ namespace Microsoft.Quantum.Canon {
     /// decoder with in-place syndrome measurement.
     ///
     /// # Output
-    /// Returns an implementation of a CSS quantum error correction code by 
-    /// specifying a `CSS` type.
+    /// An object of CSS type which collects all relevant data to perform encoding and
+    /// error correction for the ⟦7, 1, 3⟧ Steane code.
     ///
     /// # Remarks
     /// This code was found in the following paper:
-    /// - A. Steane, "Multiple Particle Interference and Quantum Error Correction", Proc. Roy. Soc. Lond. A452 (1996) pp. 2551; https://arxiv.org/abs/quant-ph/9601029 .
+    /// - A. Steane, "Multiple Particle Interference and Quantum Error Correction", Proc. Roy. Soc. Lond. A452 (1996) pp. 2551; https://arxiv.org/abs/quant-ph/9601029.
     operation  SteaneCode()  : CSS
     {
         body {
@@ -151,7 +183,7 @@ namespace Microsoft.Quantum.Canon {
             let sz = SyndromeMeasOp(MeasureStabilizerGenerators(
                         [ [ PauliZ; PauliI; PauliZ; PauliI; PauliZ; PauliI; PauliZ ];
                         [ PauliI; PauliZ; PauliZ; PauliI; PauliI; PauliZ; PauliZ ];
-                        [ PauliI; PauliI; PauliI; PauliZ; PauliZ; PauliZ; PauliZ ] ],                    
+                        [ PauliI; PauliI; PauliI; PauliZ; PauliZ; PauliZ; PauliZ ] ],
                         _, MeasureWithScratch)
                     );
             let code = CSS(e, d, sx, sz);
