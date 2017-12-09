@@ -11,14 +11,16 @@ namespace Microsoft.Quantum.Canon {
     ///
     /// # Input
     /// ## outerOperation
-    /// The operation $U$ that should be used to conjugate $V$. Note that the 
+    /// The operation $U$ that should be used to conjugate $V$. Note that the
     /// outer operation $U$ needs to be adjointable, but does not
     /// need to be controllable.
     /// ## innerOperation
     /// The operation $V$ being conjugated.
+    /// ## target
+    /// The input to be provided to the outer and inner operations.
     ///
     /// # Type Parameters
-    /// ## 'T 
+    /// ## 'T
     /// The target on which each of the inner and outer operations act.
     ///
     /// # Remarks
@@ -27,12 +29,12 @@ namespace Microsoft.Quantum.Canon {
     /// controllable.
     ///
     /// # See Also
-    /// - @"microsoft.quantum.canon.withc"
-    /// - @"microsoft.quantum.canon.witha"
-    /// - @"microsoft.quantum.canon.withca"
+    /// - Microsoft.Quantum.Canon.WithC
+    /// - Microsoft.Quantum.Canon.WithA
+    /// - Microsoft.Quantum.Canon.WithCA
     operation With<'T>(outerOperation : ('T => ():Adjoint), innerOperation : ('T => ()), target : 'T)  : ()
     {
-        body {  
+        body {
             outerOperation(target);
             innerOperation(target);
             (Adjoint(outerOperation))(target);
@@ -42,19 +44,21 @@ namespace Microsoft.Quantum.Canon {
     /// # Summary
     /// Given operations implementing operators $U$ and $V$, performs the
     /// operation $UVU^{\dagger}$ on a target. That is, this operation
-    /// conjugates $V$ with $U$. 
+    /// conjugates $V$ with $U$.
     /// The modifier 'A' indicates that the inner operation is adjointable.
     ///
     /// # Input
     /// ## outerOperation
-    /// The operation $U$ that should be used to conjugate $V$. Note that the 
+    /// The operation $U$ that should be used to conjugate $V$. Note that the
     /// outer operation $U$ needs to be adjointable, but does not
     /// need to be controllable.
     /// ## innerOperation
     /// The operation $V$ being conjugated.
+    /// ## target
+    /// The input to be provided to the outer and inner operations.
     ///
     /// # Type Parameters
-    /// ## 'T 
+    /// ## 'T
     /// The target on which each of the inner and outer operations act.
     ///
     /// # Remarks
@@ -63,10 +67,10 @@ namespace Microsoft.Quantum.Canon {
     /// controllable.
     ///
     /// # See Also
-    /// - @"microsoft.quantum.canon.with"
+    /// - Microsoft.Quantum.Canon.With
     operation WithA<'T>(outerOperation : ('T => ():Adjoint), innerOperation : ('T => ():Adjoint), target : 'T)  : ()
     {
-        body {  
+        body {
             outerOperation(target);
             innerOperation(target);
             (Adjoint(outerOperation))(target);
@@ -74,23 +78,25 @@ namespace Microsoft.Quantum.Canon {
 
         adjoint auto
     }
-        
+
     /// # Summary
     /// Given operations implementing operators $U$ and $V$, performs the
     /// operation $UVU^{\dagger}$ on a target. That is, this operation
-    /// conjugates $V$ with $U$. 
+    /// conjugates $V$ with $U$.
     /// The modifier 'C' indicates that the inner operation is controllable.
     ///
     /// # Input
     /// ## outerOperation
-    /// The operation $U$ that should be used to conjugate $V$. Note that the 
+    /// The operation $U$ that should be used to conjugate $V$. Note that the
     /// outer operation $U$ needs to be adjointable, but does not
     /// need to be controllable.
     /// ## innerOperation
     /// The operation $V$ being conjugated.
+    /// ## target
+    /// The input to be provided to the outer and inner operations.
     ///
     /// # Type Parameters
-    /// ## 'T 
+    /// ## 'T
     /// The target on which each of the inner and outer operations act.
     ///
     /// # Remarks
@@ -99,7 +105,7 @@ namespace Microsoft.Quantum.Canon {
     /// controllable.
     ///
     /// # See Also
-    /// - @"microsoft.quantum.canon.with"
+    /// - Microsoft.Quantum.Canon.With
     operation WithC<'T>(outerOperation : ('T => ():Adjoint), innerOperation : ('T => ():Controlled), target : 'T)  : ()
     {
         body {
@@ -118,20 +124,22 @@ namespace Microsoft.Quantum.Canon {
      /// # Summary
     /// Given operations implementing operators $U$ and $V$, performs the
     /// operation $UVU^{\dagger}$ on a target. That is, this operation
-    /// conjugates $V$ with $U$. 
+    /// conjugates $V$ with $U$.
     /// The modifier 'CA' indicates that the inner operation is controllable
     /// and adjointable.
     ///
     /// # Input
     /// ## outerOperation
-    /// The operation $U$ that should be used to conjugate $V$. Note that the 
+    /// The operation $U$ that should be used to conjugate $V$. Note that the
     /// outer operation $U$ needs to be adjointable, but does not
     /// need to be controllable.
     /// ## innerOperation
     /// The operation $V$ being conjugated.
+    /// ## target
+    /// The input to be provided to the outer and inner operations.
     ///
     /// # Type Parameters
-    /// ## 'T 
+    /// ## 'T
     /// The target on which each of the inner and outer operations act.
     ///
     /// # Remarks
@@ -140,7 +148,7 @@ namespace Microsoft.Quantum.Canon {
     /// controllable.
     ///
     /// # See Also
-    /// - @"microsoft.quantum.canon.with"
+    /// - Microsoft.Quantum.Canon.With
     operation WithCA<'T>(outerOperation : ('T => ():Adjoint), innerOperation : ('T => ():Adjoint,Controlled), target : 'T)  : ()
     {
         body {
