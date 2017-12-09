@@ -54,7 +54,7 @@ namespace Microsoft.Quantum.Canon {
     /// Ensures that the register is set to 0.
     ///
     /// # See Also
-    /// - @"microsoft.quantum.canon.measureintegerbe"
+    /// - Microsoft.Quantum.Canon.MeasureIntegerBE
     operation MeasureInteger( target : LittleEndian) : Int {
         body {
             mutable results = new Result[Length(target)]; 
@@ -69,7 +69,7 @@ namespace Microsoft.Quantum.Canon {
     /// Version of MeasureInteger for BigEndian register
     ///
     /// # See Also
-    /// - @"microsoft.quantum.canon.measureinteger"
+    /// - Microsoft.Quantum.Canon.MeasureInteger
     operation MeasureIntegerBE( target : BigEndian) : Int {
         body {
             mutable results = new Result[Length(target)]; 
@@ -95,7 +95,7 @@ namespace Microsoft.Quantum.Canon {
     /// The integer by which the `target` is incremented by.
     ///
     /// # See Also
-    /// - @"microsoft.quantum.primitive.integerincrementle"
+    /// - Microsoft.Quantum.Canon.IntegerIncrementLE"
     ///
     /// # References
     /// - [ *Thomas G. Draper*,
@@ -131,7 +131,7 @@ namespace Microsoft.Quantum.Canon {
     /// Unsigned integer of which the highest bit is checked
     ///
     /// # Remarks
-    /// Controlled version of the operation ignores controls
+    /// The controlled version of this operation ignores controls.
     operation AssertHighestBit( value : Result,  number : LittleEndian  ) : () {
         body{ 
             let mostSingificantQubit = Tail(AsQubitArray(number));
@@ -156,7 +156,7 @@ namespace Microsoft.Quantum.Canon {
     /// Unsigned integer which is compared to `value`.
     ///
     /// # Remarks
-    /// Controlled version of the operation ignores controls.
+    /// The controlled version of this operation ignores controls.
     operation AssertLessThanPhaseLE( value : Int ,  number : PhaseLittleEndian  ) : () {
         body{
             let inner = ApplyLEOperationOnPhaseLEA( AssertHighestBit(One,_), _ );
@@ -184,9 +184,9 @@ namespace Microsoft.Quantum.Canon {
     /// Quantum register encoding an unsigned integer using little-endian encoding.
     /// ## increment
     /// The integer by which the `target` is incremented by
-    /// 
-    /// # See Also 
-    /// - @"microsoft.quantum.primitive.integerincrementphasele"
+    ///
+    /// # See Also
+    /// - Microsoft.Quantum.Canon.IntegerIncrementPhaseLE
     operation IntegerIncrementLE(increment : Int, target : LittleEndian ) : () { 
         body {
             let inner = IntegerIncrementPhaseLE(increment, _);
@@ -245,7 +245,7 @@ namespace Microsoft.Quantum.Canon {
     /// in computational basis.
     ///
     /// # See Also
-    /// - @"microsoft.quantum.primitive.littleendian"
+    /// - Microsoft.Quantum.Canon.LittleEndian
     operation CopyMostSignificantBitLE(
         from : LittleEndian,
         target : Qubit
@@ -265,7 +265,7 @@ namespace Microsoft.Quantum.Canon {
     /// Integers are encoded in little-endian format in QFT basis
     ///
     /// # See Also
-    /// - @"microsoft.quantum.primitive.modularincrementle"
+    /// - Microsoft.Quantum.Canon.ModularIncrementLE
     ///
     /// # Remarks
     /// Assumes that `target` has the highest bit set to 0.
@@ -384,7 +384,7 @@ namespace Microsoft.Quantum.Canon {
     /// integers in QFT basis
     /// 
     /// # See Also 
-    /// - @"microsoft.quantum.canon.modularaddproductle"
+    /// - Microsoft.Quantum.Canon.ModularAddProductLE
     /// 
     /// # Remarks 
     /// Assumes that `phaseSummand` has the highest bit set to 0.

@@ -83,7 +83,7 @@ namespace Microsoft.Quantum.Canon {
     }
 
     /// # Summary
-    /// Represents a dynamical generator as a set of simulatable gates and an 
+    /// Represents a dynamical generator as a set of simulatable gates and an
     /// expansion in the Pauli basis.
     ///
     /// # Input
@@ -92,19 +92,15 @@ namespace Microsoft.Quantum.Canon {
     /// basis.
     ///
     /// # Output
-    /// An `EvolutionUnitary` representing time-evolution by the term 
+    /// An `EvolutionUnitary` representing time-evolution by the term
     /// referenced in `generatorIndex.
-    ///
-    /// # Remarks
-    /// This is obtained by partial application of 
-    /// @"microsoft.quantum.canon.PauliEvolutionImpl".
     function PauliEvolutionFunction(generatorIndex : GeneratorIndex) : EvolutionUnitary
     {
         return EvolutionUnitary(PauliEvolutionImpl(generatorIndex, _, _));
     }
 
     /// # Summary
-    /// Represents a dynamical generator as a set of simulatable gates and an 
+    /// Represents a dynamical generator as a set of simulatable gates and an
     /// expansion in the Pauli basis.
     ///
     /// # Output
@@ -112,8 +108,8 @@ namespace Microsoft.Quantum.Canon {
     /// an `EvolutionUnitary.
     ///
     /// # Remarks
-    /// This is obtained by partial application of 
-    /// @"microsoft.quantum.canon.PauliEvolutionFunction".
+    /// This is obtained by partial application of
+    /// <xref:microsoft.quantum.canon.paulievolutionfunction>.
     function PauliEvolutionSet() : EvolutionSet
     {
         return EvolutionSet(PauliEvolutionFunction);

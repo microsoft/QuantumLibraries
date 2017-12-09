@@ -42,9 +42,6 @@ namespace Microsoft.Quantum.Canon {
     ///
     /// # Output
     /// A unitary operator that applies `oracle` on the target register if the control register state corresponds to the bit mask `bits`.
-    ///
-    /// # Remarks 
-    /// Obtained by partial application of @"microsoft.quantum.canon.ControlledOnBitStringImpl".
     function ControlledOnBitString<'T>(bits : Bool[] , oracle: ('T => (): Adjoint, Controlled)) : ((Qubit[],'T) => (): Adjoint, Controlled)
     {
 	    return ControlledOnBitStringImpl(bits, oracle, _, _);
@@ -92,9 +89,6 @@ namespace Microsoft.Quantum.Canon {
     ///
     /// # Output
     /// A unitary operator that applies `oracle` on the target register if the control register state corresponds to the number state `numberState`.
-    ///
-    /// # Remarks 
-    /// Obtained by partial application of @"microsoft.quantum.canon.ControlledOnIntImpl".
     function ControlledOnInt<'T>(numberState : Int , oracle: ('T => (): Adjoint, Controlled)) : ((Qubit[],'T) => (): Adjoint, Controlled)
     {
 	    return ControlledOnIntImpl(numberState, oracle, _, _);

@@ -53,7 +53,7 @@ namespace Microsoft.Quantum.Canon {
     }
 
     /// # Summary
-    /// Implementation of @"quantum.microsoft.canon.ObliviousOracleFromDeterministicStateOracle".
+    /// Implementation of <xref:microsoft.quantum.canon.obliviousoraclefromdeterministicstateoracle>.
     operation _ObliviousOracleFromDeterministicStateOracle(ancillaOracle : DeterministicStateOracle, signalOracle : ObliviousOracle, ancillaRegister: Qubit[], systemRegister: Qubit[]) : (){
         body{
                 ancillaOracle(ancillaRegister);
@@ -76,7 +76,7 @@ namespace Microsoft.Quantum.Canon {
     /// # Output
     /// An oracle $O=UA$ of type `ObliviousOracle`.
     ///
-    /// # See Also 
+    /// # See Also
     /// - Microsoft.Quantum.Canon.DeterministicStateOracle
     /// - Microsoft.Quantum.Canon.ObliviousOracle
     function ObliviousOracleFromDeterministicStateOracle(ancillaOracle : DeterministicStateOracle, signalOracle : ObliviousOracle) : ObliviousOracle{
@@ -84,9 +84,9 @@ namespace Microsoft.Quantum.Canon {
     }
 
     /// # Summary
-    /// Implementation of @"quantum.microsoft.canon.DeterministicStateOracleFromStateOracle".
+    /// Implementation of <xref:microsoft.quantum.canon.deterministicstateoraclefromstateoracle>.
     operation _DeterministicStateOracleFromStateOracle(idxFlagQubit: Int, stateOracle : StateOracle, startQubits: Qubit[]) : (){
-        body{
+        body {
             stateOracle(idxFlagQubit, startQubits);
         }
         adjoint auto
@@ -118,7 +118,7 @@ namespace Microsoft.Quantum.Canon {
     }
 
     /// # Summary
-    /// Implementation of @"quantum.microsoft.canon.StateOracleFromDeterministicStateOracle".
+    /// Implementation of <xref:microsoft.quantum.canon.stateoraclefromdeterministicstateoracle>.
     operation _StateOracleFromDeterministicStateOracle(idxFlagQubit : Int, oracleStateDeterministic : DeterministicStateOracle, qubits: Qubit[]): ()
     {
         body {
@@ -149,7 +149,7 @@ namespace Microsoft.Quantum.Canon {
     }
 
     /// # Summary
-    /// Implementation of @"quantum.microsoft.canon.ReflectionStart".
+    /// Implementation of <xref:microsoft.quantum.canon.reflectionstart>.
     operation _ReflectionStart(phase: Double, qubits: Qubit[] ) : () {
         body {
             RAll0(phase, qubits );
@@ -165,14 +165,14 @@ namespace Microsoft.Quantum.Canon {
     /// # Output
     /// A `ReflectionOracle` that reflects about the state $\ket{0\cdots 0}$.
     ///
-    /// # See Also 
+    /// # See Also
     /// - Microsoft.Quantum.Canon.ReflectionOracle
     function ReflectionStart() : ReflectionOracle {
         return ReflectionOracle(_ReflectionStart( _, _ ));
     }
 
     /// # Summary
-    /// Implementation of @"microsoft.quantum.canon.ReflectionOracleFromDeterministicStateOracle".
+    /// Implementation of <xref:microsoft.quantum.canon.reflectionoraclefromdeterministicstateoracle>.
     operation ReflectionOracleFromDeterministicStateOracleImpl(phase: Double, oracle: DeterministicStateOracle, systemRegister: Qubit[]): ()
     {
         body {
@@ -185,7 +185,7 @@ namespace Microsoft.Quantum.Canon {
 
     /// # Summary
     /// Constructs reflection about a some state $\ket{\psi}$ from the oracle $O$ of type
-    /// @"microsoft.quantum.canon.deterministicstateoracle", where $O\ket{0} = \ket{\psi}$.
+    /// <xref:microsoft.quantum.canon.deterministicstateoracle>, where $O\ket{0} = \ket{\psi}$.
     ///
     /// # Input
     /// ## oracle
@@ -194,7 +194,7 @@ namespace Microsoft.Quantum.Canon {
     /// # Output
     /// A `ReflectionOracle` that reflects about the state $\ket{\psi}$.
     ///
-    /// # See Also 
+    /// # See Also
     /// - Microsoft.Quantum.Canon.DeterministicStateOracle
     /// - Microsoft.Quantum.Canon.ReflectionOracle
     function ReflectionOracleFromDeterministicStateOracle(oracle: DeterministicStateOracle): ReflectionOracle
@@ -203,7 +203,7 @@ namespace Microsoft.Quantum.Canon {
     }
 
     /// # Summary
-    /// Implementation of @"microsoft.quantum.canon.TargetStateReflectionOracle".
+    /// Implementation of <xref:microsoft.quantum.canon.targetstatereflectionoracle>.
     operation TargetStateReflectionOracleImpl(phase: Double, idxFlagQubit : Int, qubits: Qubit[]): ()
     {
         body {
@@ -216,7 +216,7 @@ namespace Microsoft.Quantum.Canon {
     }
 
     /// # Summary
-    /// Constructs reflection about the target state uniquely marked by the flag qubit state 
+    /// Constructs reflection about the target state uniquely marked by the flag qubit state
     /// $\ket{1}_f$, prepared the oracle of type "ReflectionOracle".
     ///
     /// # Input
@@ -226,7 +226,7 @@ namespace Microsoft.Quantum.Canon {
     /// # Output
     /// A `ReflectionOracle` that reflects about the state marked by $\ket{1}_f$.
     ///
-    /// # See Also 
+    /// # See Also
     /// - Microsoft.Quantum.Canon.ReflectionOracle
     function TargetStateReflectionOracle(idxFlagQubit : Int): ReflectionOracle
     {

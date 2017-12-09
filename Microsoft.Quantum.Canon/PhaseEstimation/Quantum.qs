@@ -10,15 +10,15 @@ namespace Microsoft.Quantum.Canon {
     ///
     /// # Input
     /// ## oracle
-    /// An operation implementing U^m for given integer powers m.
+    /// An operation implementing $U^m$ for given integer powers m.
     /// ## targetState
-    /// A quantum register representing the state |φ〉 acted on by U. If |φ〉 is an
-    /// eigenstate of U, U|φ〉 = e^{iφ} |φ〉 for φ ∈ [0, 2π) an unknown phase.
+    /// A quantum register representing the state $\ket{\phi}$ acted on by $U$. If $\ket{\phi}$ is an
+    /// eigenstate of $U$, $U\ket{\phi} = e^{i\phi} \ket{\phi}$ for $\phi \in [0, 2\pi)$ an unknown phase.
     /// ## controlRegister
     /// A big-endian representation integer register that can be used
-    /// to control the provided oracle, and that will contain the a representation of φ following
+    /// to control the provided oracle, and that will contain the a representation of $\phi$ following
     /// the application of this operation. The controlRegister is assumed to start in the initial
-    /// state |00.0>, where the length of the register indicates the desired precision.
+    /// state $\ket{00\cdots 0}$, where the length of the register indicates the desired precision.
     operation QuantumPhaseEstimation(
 		      oracle : DiscreteOracle, 
 			  targetState : Qubit[],

@@ -34,7 +34,7 @@ namespace Microsoft.Quantum.Canon {
     /// # Summary
     /// Decoder for the X-part of the stabilizer group of the ⟦7, 1, 3⟧ Steane quantum code.
     ///
-    /// # Inputs
+    /// # Input
     /// ## syndrome
     /// A syndrome array obtained from measuring the X-part of the stabilizer.
     ///
@@ -48,8 +48,8 @@ namespace Microsoft.Quantum.Canon {
     /// to be applied is the 3-bit encoding of the X, respectively, Z syndrome when considered an integer. 
     ///
     /// # See Also
-    /// - @"microsoft.quantum.canon.steanecoderecoveryx"
-    /// - @"microsoft.quantum.canon.steanecoderecoveryfn
+    /// - Microsoft.Quantum.Canon.SteaneCodeRecoveryX
+    /// - Microsoft.Quantum.Canon.SteaneCodeRecoveryFns
     ///
     /// # References
     /// - D. Gottesman, "Stabilizer Codes and Quantum Error Correction," Ph.D. Thesis, Caltech, 1997;
@@ -67,8 +67,8 @@ namespace Microsoft.Quantum.Canon {
     /// Decoder for the Z-part of the stabilizer group of the ⟦7, 1, 3⟧ Steane quantum code.
     ///
     /// # See Also
-    /// - @"microsoft.quantum.canon.steanecoderecoveryx"
-    /// - @"microsoft.quantum.canon.steanecoderecoveryfn"
+    /// - Microsoft.Quantum.Canon.SteaneCodeRecoveryX
+    /// - Microsoft.Quantum.Canon.SteaneCodeRecoveryFns
     function SteaneCodeRecoveryZ( syndrome : Syndrome)  : Pauli[]
     {
         let idxQubit = ResultAsInt(syndrome);
@@ -88,8 +88,8 @@ namespace Microsoft.Quantum.Canon {
     /// corrects the detected error.
     ///
     /// # See Also
-    /// - @"microsoft.quantum.canon.steanecoderecoveryx"
-    /// - @"microsoft.quantum.canon.steanecoderecoveryz"
+    /// - Microsoft.Quantum.Canon.SteaneCodeRecoveryX
+    /// - Microsoft.Quantum.Canon.SteaneCodeRecoveryZ
     function SteaneCodeRecoveryFns() : (RecoveryFn, RecoveryFn) {
         return (RecoveryFn(SteaneCodeRecoveryX), RecoveryFn(SteaneCodeRecoveryZ));
     }
@@ -98,7 +98,7 @@ namespace Microsoft.Quantum.Canon {
     /// An encoding operation that maps an unencoded quantum register to an encoded quantum register
     /// under the ⟦7, 1, 3⟧ Steane quantum code.
     ///
-    /// # Inputs
+    /// # Input
     /// ## physRegister
     /// A qubit register which holds the an unencoded quantum state
     /// ## auxQubits

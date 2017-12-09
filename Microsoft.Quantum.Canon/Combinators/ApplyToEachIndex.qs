@@ -17,10 +17,10 @@ namespace Microsoft.Quantum.Canon {
     /// The target on which each of the operations acts. 
     ///
     /// # See Also
-    /// - @"microsoft.quantum.canon.applytoeach"
-    /// - @"microsoft.quantum.canon.applytoeachindexa"
-    /// - @"microsoft.quantum.canon.applytoeachindexc"
-    /// - @"microsoft.quantum.canon.applytoeachindexca"
+    /// - Microsoft.Quantum.Canon.ApplyToEach
+    /// - Microsoft.Quantum.Canon.ApplyToEachIndexA
+    /// - Microsoft.Quantum.Canon.ApplyToEachIndexC
+    /// - Microsoft.Quantum.Canon.ApplyToEachIndexCA
     operation ApplyToEachIndex<'T>(singleElementOperation : ((Int, 'T) => ()), register : 'T[])  : ()
     {
         body {
@@ -45,7 +45,7 @@ namespace Microsoft.Quantum.Canon {
     /// The target on which each of the operations acts. 
     ///
     /// # See Also
-    /// - @"microsoft.quantum.canon.applytoeachindex"
+    /// - Microsoft.Quantum.Canon.ApplyToEachIndex
     operation ApplyToEachIndexC<'T>(singleElementOperation : ((Int, 'T) => () : Controlled), register : 'T[])  : ()
     {
         body {
@@ -72,7 +72,7 @@ namespace Microsoft.Quantum.Canon {
     /// The target on which each of the operations acts. 
     ///
     /// # See Also
-    /// - @"microsoft.quantum.canon.applytoeachindex"
+    /// - Microsoft.Quantum.Canon.ApplyToEachIndex
     operation ApplyToEachIndexA<'T>(singleElementOperation : ((Int, 'T) => () : Adjoint), register : 'T[])  : ()
     {
         body {
@@ -100,7 +100,7 @@ namespace Microsoft.Quantum.Canon {
     /// The target on which each of the operations acts. 
     ///
     /// # See Also
-    /// - @"microsoft.quantum.canon.applytoeachindex"
+    /// - Microsoft.Quantum.Canon.ApplyToEachIndex
     operation ApplyToEachIndexCA<'T>(singleElementOperation : ((Int, 'T) => () : Adjoint,Controlled), register : 'T[])  : ()
     {
         body {

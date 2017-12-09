@@ -64,17 +64,17 @@ namespace Microsoft.Quantum.Canon {
     }
 
     // This simulation algorithm takes (timeMax, EvolutionGenerator, 
-    // register) and other algorithm-specific parameters (trotterStepSize, 
-    // trotterOrder), and performs evolution under the EvolutionGenerator 
+    // register) and other algorithm-specific parameters (trotterStepSize,
+    // trotterOrder), and performs evolution under the EvolutionGenerator
     // for time = timeMax.
 
     /// # Summary
-    /// Makes repeated calls to `TrotterStep` to approximate the 
+    /// Makes repeated calls to `TrotterStep` to approximate the
     /// time-evolution operator $e^{-i H t}$.
     ///
     /// # Input
     /// ## trotterStepSize
-    /// Duration of simulated time-evolution in single Trotter step.    
+    /// Duration of simulated time-evolution in single Trotter step.
     /// ## trotterOrder
     /// Order of Trotter integrator. Order 1 and 2 are currently supported.
     /// ## maxTime
@@ -83,10 +83,10 @@ namespace Microsoft.Quantum.Canon {
     /// A complete description of the system to be simulated.
     /// ## qubits
     /// Qubits acted on by simulation.
-    operation TrotterSimulationAlgorithmImpl(trotterStepSize: Double, 
-                                                trotterOrder: Int, 
-                                                maxTime: Double, 
-                                                evolutionGenerator: EvolutionGenerator, 
+    operation TrotterSimulationAlgorithmImpl(trotterStepSize: Double,
+                                                trotterOrder: Int,
+                                                maxTime: Double,
+                                                evolutionGenerator: EvolutionGenerator,
                                                 qubits:Qubit[]) : () {
         body{
             let nTimeSlices = Ceiling(maxTime / trotterStepSize);
@@ -113,9 +113,6 @@ namespace Microsoft.Quantum.Canon {
     ///
     /// # Output
     /// A `SimulationAlgorithm` type.
-    ///
-    /// # Remarks
-    /// This is obtained by partial application of @"microsoft.quantum.canon.TrotterSimulationAlgorithmImpl".
     function TrotterSimulationAlgorithm(trotterStepSize: Double,
                                         trotterOrder: Int) : SimulationAlgorithm
     {
@@ -164,25 +161,22 @@ namespace Microsoft.Quantum.Canon {
     }
 
     /// # Summary
-    /// `TimeDependentSimulationAlgorithm` function that uses a Trotter–Suzuki 
-    /// decomposition to approximate a unitary operator that solves the 
-    /// time-dependent Schr�dinger equation at time $t$. 
+    /// `TimeDependentSimulationAlgorithm` function that uses a Trotter–Suzuki
+    /// decomposition to approximate a unitary operator that solves the
+    /// time-dependent Schr�dinger equation at time $t$.
     ///
     /// # Input
     /// ## trotterStepSize
-    /// Duration of simulated time-evolution in single Trotter step.    
+    /// Duration of simulated time-evolution in single Trotter step.
     /// ## trotterOrder
     /// Order of Trotter integrator. Order 1 and 2 are currently supported.
     ///
     /// # Output
     /// A `TimeDependentSimulationAlgorithm` type.
-    ///
-    /// # Remarks
-    /// This is obtained by partial application of @"microsoft.quantum.canon.TimeDependentTrotterSimulationAlgorithmImpl".
-    function TimeDependentTrotterSimulationAlgorithm(   trotterStepSize: Double, 
+    function TimeDependentTrotterSimulationAlgorithm(   trotterStepSize: Double,
                                                         trotterOrder: Int) : TimeDependentSimulationAlgorithm {
         return TimeDependentSimulationAlgorithm(TimeDependentTrotterSimulationAlgorithmImpl(trotterStepSize,trotterOrder, _, _, _));
-    }    
+    }
 
 }
 

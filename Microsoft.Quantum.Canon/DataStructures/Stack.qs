@@ -9,7 +9,7 @@ namespace Microsoft.Quantum.Canon {
     newtype ResultStack = (Int,  Int, Result[]);
 
     /// # Summary
-    /// Retrieves the capacity of a @"Microsoft.Quantum.Canon.ResultStack".
+    /// Retrieves the capacity of a <xref:microsoft.quantum.canon.resultstack>.
     ///
     /// # Input
     /// ## stack
@@ -24,7 +24,7 @@ namespace Microsoft.Quantum.Canon {
 
     /// # Summary
     /// Retrieves the number of elements stored in a
-    /// @"Microsoft.Quantum.Canon.ResultStack".
+    /// <xref:microsoft.quantum.canon.resultstack>.
     ///
     /// # Input
     /// ## stack
@@ -38,7 +38,7 @@ namespace Microsoft.Quantum.Canon {
     }
 
     /// # Summary
-    /// Removes the topmost element from a @"Microsoft.Quantum.Canon.ResultStack".
+    /// Removes the topmost element from a <xref:microsoft.quantum.canon.resultstack>.
     ///
     /// # Input
     /// ## stack
@@ -56,7 +56,7 @@ namespace Microsoft.Quantum.Canon {
     }
 
     /// # Summary
-    /// Pushes a new element onto a @"Microsoft.Quantum.Canon.ResultStack".
+    /// Pushes a new element onto a <xref:microsoft.quantum.canon.resultstack>.
     ///
     /// # Input
     /// ## stack
@@ -84,7 +84,7 @@ namespace Microsoft.Quantum.Canon {
     }
 
     /// # Summary
-    /// Retrieves the topmost element of a @"Microsoft.Quantum.Canon.ResultStack".
+    /// Retrieves the topmost element of a <xref:microsoft.quantum.canon.resultstack>.
     ///
     /// # Input
     /// ## stack
@@ -101,7 +101,7 @@ namespace Microsoft.Quantum.Canon {
     }
 
     /// # Summary
-    /// Creates a new empty @"Microsoft.Quantum.Canon.ResultStack" with given capacity.
+    /// Creates a new empty <xref:microsoft.quantum.canon.resultstack> with given capacity.
     ///
     /// # Input
     /// ## size

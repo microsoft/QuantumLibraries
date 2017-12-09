@@ -222,9 +222,9 @@ namespace Microsoft.Quantum.Canon {
     /// op(register[0], register[1], register[2]);
     /// ```
     /// # See Also
-    /// - @"microsoft.quantum.canon.applytofirstthreequbitsa"
-    /// - @"microsoft.quantum.canon.applytofirstthreequbitsc"
-    /// - @"microsoft.quantum.canon.applytofirstthreequbitsCa"
+    /// - Microsoft.Quantum.Canon.ApplyToFirstThreeQubitsC
+    /// - Microsoft.Quantum.Canon.ApplyToFirstThreeQubitsA
+    /// - Microsoft.Quantum.Canon.ApplyToFirstThreeQubitsCA
     operation ApplyToFirstThreeQubits( op : ((Qubit,Qubit,Qubit) => ()), register : Qubit[] ) : () {
         body {
             if (Length(register) < 3) {
@@ -250,7 +250,7 @@ namespace Microsoft.Quantum.Canon {
     /// ```
     ///
     /// # See Also
-    /// - @"microsoft.quantum.canon.applytofirstthreequbits"
+    /// - Microsoft.Quantum.Canon.ApplyToFirstThreeQubits
     operation ApplyToFirstThreeQubitsA( op : ((Qubit,Qubit,Qubit) => () : Adjoint), register : Qubit[] ) : () {
         body {
             if (Length(register) < 3) {
@@ -277,7 +277,7 @@ namespace Microsoft.Quantum.Canon {
     /// ```
     ///
     /// # See Also
-    /// - @"microsoft.quantum.canon.applytofirstthreequbits"
+    /// - Microsoft.Quantum.Canon.ApplyToFirstThreeQubits
     operation ApplyToFirstThreeQubitsC( op : ((Qubit,Qubit,Qubit) => () : Controlled), register : Qubit[] ) : () {
         body {
             if (Length(register) < 3) {
@@ -304,7 +304,7 @@ namespace Microsoft.Quantum.Canon {
     /// ```
     ///
     /// # See Also
-    /// - @"microsoft.quantum.canon.applytofirstthreequbits"
+    /// - Microsoft.Quantum.Canon.ApplyToFirstThreeQubits
     operation ApplyToFirstThreeQubitsCA( op : ((Qubit,Qubit,Qubit) => () : Adjoint, Controlled), register : Qubit[] ) : () {
         body {
             if (Length(register) < 3) {

@@ -35,7 +35,7 @@ namespace Microsoft.Quantum.Canon {
     /// The expected value.
     ///
     /// # Remarks
-    /// This is equivalent to @"Microsoft.Quantum.Canon.AssertAlmostEqualTol" with
+    /// This is equivalent to <xref:microsoft.quantum.canon.assertalmostequaltol> with
     /// hardcoded tolerance=1e-10.
     function AssertAlmostEqual(actual : Double, expected : Double) : () {
         AssertAlmostEqualTol(actual, expected, 1e-10);

@@ -260,10 +260,7 @@ namespace Microsoft.Quantum.Canon {
     }
 
     /// # Summary
-    /// Returns unitary that implements oblivious amplitude amplification by specifying for partial reflections.
-    ///
-    /// # Remarks
-    /// Obtained by partial implementation of @"microsoft.quantum.canon.AmpAmpObliviousByReflectionPhasesImpl".
+    /// Returns a unitary that implements oblivious amplitude amplification by specifying for partial reflections.
     function AmpAmpObliviousByReflectionPhases(phases : AmpAmpReflectionPhases, ancillaReflection : ReflectionOracle, targetStateReflection : ReflectionOracle, signalOracle : ObliviousOracle) : ((Qubit[], Qubit[]) => () : Adjoint, Controlled)
     {
         return AmpAmpObliviousByReflectionPhasesImpl(phases, ancillaReflection, targetStateReflection, signalOracle, _, _) ;
@@ -289,7 +286,7 @@ namespace Microsoft.Quantum.Canon {
     /// This imposes stricter conditions on form of the ancilla start and target states than in `AmpAmpObliviousByReflectionPhases`.
     /// It is assumed that $A\ket{0}\_f\ket{0}\_a= \ket{\text{start}}\_{fa}$ prepares the ancilla start state $\ket{\text{start}}\_{fa}$ from the computational basis $\ket{0}\_f\ket{0}$.
     /// It is assumed that the target state is marked by $\ket{1}\_f$.
-    /// It is assumed that     
+    /// It is assumed that
     /// \begin{align}
     /// O\ket{\text{start}}\_{fa}\ket{\psi}\_s= \lambda\ket{1}\_f\ket{\text{anything}}\_a\ket{\text{target}}\_s U \ket{\psi}\_s + \sqrt{1-|\lambda|^2}\ket{0}\_f\cdots,
     /// \end{align}

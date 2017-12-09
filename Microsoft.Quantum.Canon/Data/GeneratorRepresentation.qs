@@ -21,7 +21,7 @@ namespace Microsoft.Quantum.Canon {
     /// > with reference to a particular set of generators.
     ///
     /// # Example
-    /// Using  @"microsoft.quantum.canon.paulievolutionset", the operator
+    /// Using  <xref:microsoft.quantum.canon.paulievolutionset>, the operator
     /// $\pi X_2 X_5 Y_9$ is represented as:
     /// ```qsharp
     /// let index = GeneratorIndex(([1; 1; 2], [PI()]), [2; 5; 9]);
@@ -40,7 +40,7 @@ namespace Microsoft.Quantum.Canon {
     ///
     /// # Remarks
     /// Instances of `GeneratorSystem` can be defined easily using the
-    /// @"microsoft.quantum.canon.lookupfunction" function.
+    /// <xref:microsoft.quantum.canon.lookupfunction> function.
     ///
     /// # See Also
     /// - @"microsoft.quantum.canon.lookupfunction"
@@ -64,9 +64,9 @@ namespace Microsoft.Quantum.Canon {
     /// # Summary
     /// Represents a set of gates that can be readily implemented and used
     /// to implement simulation algorithms. Elements in the set are indexed
-    /// by a  @"microsoft.quantum.canon.generatorindex",
+    /// by a  <xref:microsoft.quantum.canon.generatorindex>,
     /// and each set is described by a function
-    /// from `GeneratorIndex` to  @"microsoft.quantum.canon.evolutionunitary",
+    /// from `GeneratorIndex` to  <xref:microsoft.quantum.canon.evolutionunitary>,
     /// which are operations
     /// parameterized by a real number representing time
     newtype EvolutionSet = (GeneratorIndex -> EvolutionUnitary);
@@ -89,7 +89,7 @@ namespace Microsoft.Quantum.Canon {
     /// # Input
     /// ## idxTerm
     /// This input is ignored, and is defined for consistency with the
-    /// @"microsoft.quantum.canon.generatorsystem" user-defined type.
+    /// <xref:microsoft.quantum.canon.generatorsystem> user-defined type.
     ///
     /// # Output
     /// A generator index representing evolution under the Hamiltonian
@@ -116,7 +116,7 @@ namespace Microsoft.Quantum.Canon {
     /// # Input
     /// ## schedule
     /// This input is ignored, and is defined for consistency with the
-    /// @"microsoft.quantum.canon.TimeDependentGeneratorSystem" user-defined type.
+    /// <xref:microsoft.quantum.canon.timedependentgeneratorsystem> user-defined type.
     ///
     /// # Output
     /// A generator system representing evolution under the Hamiltonian
@@ -141,7 +141,7 @@ namespace Microsoft.Quantum.Canon {
     ///
     /// # Input
     /// ## generatorSystem
-    /// The `GeneratorSystem` of interest. 
+    /// The `GeneratorSystem` of interest.
     ///
     /// # Output
     /// The number of terms in a `GeneratorSystem`.
@@ -158,7 +158,7 @@ namespace Microsoft.Quantum.Canon {
     ///
     /// # Input
     /// ## generatorSystem
-    /// The `GeneratorSystem` of interest. 
+    /// The `GeneratorSystem` of interest.
     ///
     /// # Output
     /// An function that indexes each `GeneratorIndex` term in a Hamiltonian.
@@ -226,7 +226,7 @@ namespace Microsoft.Quantum.Canon {
     /// `multiplier` larger.
     ///
     /// # See Also
-    /// - @"microsoft.quantum.canon.GeneratorSystem"
+    /// - Microsoft.Quantum.Canon.GeneratorSystem
     function MultiplyGeneratorSystem(multiplier: Double, generatorSystem : GeneratorSystem) : GeneratorSystem {
         let nTerms =  GetGeneratorSystemNTerms(generatorSystem);
         return GeneratorSystem(nTerms, _MultiplyGeneratorSystem(multiplier, _, generatorSystem));
@@ -265,7 +265,7 @@ namespace Microsoft.Quantum.Canon {
     /// input generator systems.
     ///
     /// # See Also
-    /// - @"microsoft.quantum.canon.GeneratorSystem"
+    /// - Microsoft.Quantum.Canon.GeneratorSystem
     function AddGeneratorSystems(generatorSystemA: GeneratorSystem, generatorSystemB: GeneratorSystem) : GeneratorSystem {
         let nTermsA = GetGeneratorSystemNTerms(generatorSystemA);
         let nTermsB = GetGeneratorSystemNTerms(generatorSystemB);
@@ -295,7 +295,7 @@ namespace Microsoft.Quantum.Canon {
     /// and weight $s$ on `generatorSystemEnd`.
     ///
     /// # See Also
-    /// - @"microsoft.quantum.canon.GeneratorSystem"
+    /// - Microsoft.Quantum.Canon.GeneratorSystem
     function InterpolateGeneratorSystemsImpl(schedule: Double, generatorSystemStart: GeneratorSystem, generatorSystemEnd: GeneratorSystem) : GeneratorSystem
     {
         let sysStart = MultiplyGeneratorSystem((1.0 - schedule), generatorSystemStart);
@@ -320,8 +320,8 @@ namespace Microsoft.Quantum.Canon {
     /// `generatorSystemStart` and weight $s$ on `generatorSystemEnd`.
     ///
     /// # See Also
-    /// - @"microsoft.quantum.canon.GeneratorSystem"
-    /// - @"microsoft.quantum.canon.TimeDependentGeneratorSystem"
+    /// - Microsoft.Quantum.Canon.GeneratorSystem
+    /// - Microsoft.Quantum.Canon.TimeDependentGeneratorSystem
     function InterpolateGeneratorSystems(generatorSystemStart: GeneratorSystem, generatorSystemEnd: GeneratorSystem) : TimeDependentGeneratorSystem
     {
         return TimeDependentGeneratorSystem(InterpolateGeneratorSystemsImpl(_, generatorSystemStart, generatorSystemEnd));

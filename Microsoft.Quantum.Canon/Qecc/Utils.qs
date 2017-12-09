@@ -122,7 +122,7 @@ namespace Microsoft.Quantum.Canon {
     /// returns an object of type `RecoveryFn` which contains all information needed to 
     /// perform a table-lookup decoding with respect to the given array of Pauli operations. 
     ///
-    /// # Inputs
+    /// # Input
     /// ## table
     /// Table of Pauli operations that operate on a given qubit register
     ///
