@@ -134,10 +134,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <QsharpCompile Include="Asserts\AssertOperationsEqualInPlace.qs" />
     <QsharpCompile Include="Combinators\ApplyToEach.qs" />
-    <QsharpCompile Include="Asserts\AssertQubit.qs" />
-    <QsharpCompile Include="Asserts\AssertOperationsEqualReferenced.qs" />
     <QsharpCompile Include="DataStructures\Stack.qs" />
     <QsharpCompile Include="UnsignedIntegers.qs" />
     <QsharpCompile Include="Identity.qs" />
