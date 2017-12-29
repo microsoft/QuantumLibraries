@@ -4,6 +4,7 @@
 
 namespace Microsoft.Quantum.Samples.Measurement {
     open Microsoft.Quantum.Primitive;
+    open Microsoft.Quantum.Extensions;
     open Microsoft.Quantum.Canon;
 
     //////////////////////////////////////////////////////////////////////////

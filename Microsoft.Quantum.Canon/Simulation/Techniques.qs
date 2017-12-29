@@ -4,6 +4,7 @@
 
 namespace Microsoft.Quantum.Canon {
     open Microsoft.Quantum.Extensions.Convert;
+    open Microsoft.Quantum.Extensions;
     open Microsoft.Quantum.Extensions.Math;
 
     /// # Summary
