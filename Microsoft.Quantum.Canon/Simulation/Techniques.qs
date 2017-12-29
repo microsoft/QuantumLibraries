@@ -3,8 +3,8 @@
 // and Samples. See LICENSE in the project root for license information.
 
 namespace Microsoft.Quantum.Canon {
+    open Microsoft.Quantum.Primitive;
     open Microsoft.Quantum.Extensions.Convert;
-    open Microsoft.Quantum.Extensions;
     open Microsoft.Quantum.Extensions.Math;
 
     /// # Summary

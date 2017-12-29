@@ -4,7 +4,6 @@
 
 namespace Microsoft.Quantum.Samples.DatabaseSearch {
     open Microsoft.Quantum.Primitive;
-    open Microsoft.Quantum.Extensions;
     open Microsoft.Quantum.Extensions.Convert;
     open Microsoft.Quantum.Extensions.Math;
     open Microsoft.Quantum.Canon;

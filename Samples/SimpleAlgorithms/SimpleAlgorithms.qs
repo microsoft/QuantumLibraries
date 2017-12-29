@@ -7,9 +7,6 @@ namespace Microsoft.Quantum.Samples.SimpleAlgorithms {
     // Hadamard gates, CNOT gates, etc. that are useful for defining circuits. The 
     // implementation of these operations is dependent on the targeted machine. 
     open Microsoft.Quantum.Primitive;
-    // Extensions include things that are not part of the Quantum primitives
-    // but available as part of the core libraries, including Reset and FlipToBasis.
-    open Microsoft.Quantum.Extensions;
     // The canon namespace contains many useful library functions for creating 
     // larger circuits, combinators, and utility functions. The implementation of 
     // the operations in the canon is machine independent as they are built on 

@@ -4,7 +4,6 @@
 
 namespace Microsoft.Quantum.Canon {
     open Microsoft.Quantum.Primitive;
-    open Microsoft.Quantum.Extensions;
 
     /// # Summary
     /// Measures the given Pauli operator using an explicit scratch

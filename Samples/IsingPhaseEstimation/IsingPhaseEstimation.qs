@@ -4,7 +4,6 @@
 
 namespace Microsoft.Quantum.Samples.Ising {
     open Microsoft.Quantum.Primitive;
-    open Microsoft.Quantum.Extensions;
     open Microsoft.Quantum.Canon;
 
     //////////////////////////////////////////////////////////////////////////
