@@ -5,15 +5,6 @@
 namespace Microsoft.Quantum.Canon {
 
 	/// # Summary
-	/// Performs the identity operation (no-op) on a single qubit.
-	operation I(target : Qubit) : () {
-		body {}
-		adjoint self
-		controlled auto
-		controlled adjoint auto
-	}
-
-	/// # Summary
 	/// Performs the identity operation (no-op) on a register of qubits.
 	operation NoOp(qubits: Qubit[]) : () {
 		body {}

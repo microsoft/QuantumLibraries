@@ -5,6 +5,7 @@
 namespace Microsoft.Quantum.Samples.UnitTesting {
     open Microsoft.Quantum.Primitive;
     open Microsoft.Quantum.Canon;
+    open Microsoft.Quantum.Extensions.Testing;
 
     ///////////////////////////////////////////////////////////////////////////////////////////////
     // Unit test for circuits implementing Multi Target Multiply Controlled Not gates

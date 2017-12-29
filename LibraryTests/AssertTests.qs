@@ -5,6 +5,7 @@
 namespace Microsoft.Quantum.Tests {
 	open Microsoft.Quantum.Primitive;
 	open Microsoft.Quantum.Canon;
+    open Microsoft.Quantum.Extensions.Testing;
 
 	// This file contains very simple tests that should trivially pass
 	// with the intent of testing the assert and testing harness mechanisms themselves.
