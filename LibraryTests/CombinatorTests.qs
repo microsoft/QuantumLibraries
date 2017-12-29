@@ -5,6 +5,7 @@
 namespace Microsoft.Quantum.Tests {
     open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Primitive;
+    open Microsoft.Quantum.Extensions.Testing;
 
     operation WithTest() : () {
         body {

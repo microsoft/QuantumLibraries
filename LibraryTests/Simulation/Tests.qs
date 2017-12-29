@@ -7,6 +7,7 @@ namespace Microsoft.Quantum.Tests {
     open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Extensions.Convert;
     open Microsoft.Quantum.Extensions.Math;
+    open Microsoft.Quantum.Extensions.Testing;
     // This contains unit tests for the Simulation library
 
     // Using the Hamiltonian representation library

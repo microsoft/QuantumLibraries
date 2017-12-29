@@ -6,6 +6,7 @@ namespace Microsoft.Quantum.Tests {
     open Microsoft.Quantum.Primitive;
     open Microsoft.Quantum.Extensions.Math;
     open Microsoft.Quantum.Canon;
+    open Microsoft.Quantum.Extensions.Testing;
 
     // NB: These tests need to be generalized to allow for unit testing CSS
     //     codes as well. Since the recovery functions look different for CSS

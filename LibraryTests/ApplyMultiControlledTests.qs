@@ -6,6 +6,7 @@ namespace Microsoft.Quantum.Tests {
 
     open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Primitive;
+    open Microsoft.Quantum.Extensions.Testing;
 
     /// # Summary 
     /// Tests multiply controlled not implementation that uses 

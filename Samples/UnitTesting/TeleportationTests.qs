@@ -5,6 +5,7 @@
 namespace Microsoft.Quantum.Samples.UnitTesting {
     open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Primitive;
+    open Microsoft.Quantum.Extensions.Testing;
 
     /// # Summary
     /// If the Teleportation circuit is correct this operation must be an identity

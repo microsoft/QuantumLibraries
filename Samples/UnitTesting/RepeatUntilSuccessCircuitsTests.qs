@@ -6,6 +6,7 @@ namespace Microsoft.Quantum.Samples.UnitTesting {
     open Microsoft.Quantum.Primitive;
     open Microsoft.Quantum.Extensions.Math;
     open Microsoft.Quantum.Extensions.Convert;
+    open Microsoft.Quantum.Extensions.Testing;
     open Microsoft.Quantum.Canon;
 
     ///////////////////////////////////////////////////////////////////////////////////////////////
