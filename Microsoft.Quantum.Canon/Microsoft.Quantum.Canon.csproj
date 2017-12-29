@@ -137,11 +137,10 @@
     <QsharpCompile Include="Combinators\ApplyToEach.qs" />
     <QsharpCompile Include="DataStructures\Stack.qs" />
     <QsharpCompile Include="UnsignedIntegers.qs" />
-    <QsharpCompile Include="Identity.qs" />
+    <QsharpCompile Include="NoOp.qs" />
     <QsharpCompile Include="IterateThroughCartesianProduct.qs" />
     <QsharpCompile Include="Math\Constants.qs" />
     <QsharpCompile Include="PhaseEstimation\Iterative.qs" />
-    <QsharpCompile Include="Math\Types.qs" />
     <QsharpCompile Include="Combinators\OperationPow.qs" />
     <QsharpCompile Include="PhaseEstimation\Types.qs" />
     <QsharpCompile Include="Utils\Paulis.qs" />
