@@ -62,7 +62,7 @@ namespace Microsoft.Quantum.Canon
     // amplitude amplifiction where `ObliviousOracle` is the identity operator,
     // and there are no system qubits i.e. `systemRegister` is empty.
     
-    //		This is called through the operaton `AmpAmByReflectionPhases` and
+    //		This is called through the operation `AmpAmByReflectionPhases` and
     //      `AmpAmpByOraclePhases`.
     
     // The phases for partial reflections in the standard case of Grover
