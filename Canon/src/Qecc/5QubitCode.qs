@@ -98,7 +98,7 @@ namespace Microsoft.Quantum.Canon
     /// A qubit representing an unencoded state. This array `Qubit[]` is of
     /// length 1.
     /// ## auxQubits
-    /// A register of auxillary qubits that will be used to represent the
+    /// A register of auxiliary qubits that will be used to represent the
     /// encoded state.
     ///
     /// # Output

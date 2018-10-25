@@ -59,7 +59,7 @@ namespace Microsoft.Quantum.Canon
     
     /// # Summary
     /// Represents a unitary time-evolution operator. The first parameter is
-    /// is duration of time-evoltion, and the second parameter is the qubit
+    /// is duration of time-evolution, and the second parameter is the qubit
     /// register acted upon by the unitary.
     newtype EvolutionUnitary = ((Double, Qubit[]) => Unit : Adjoint, Controlled);
     

@@ -156,7 +156,7 @@ namespace Microsoft.Quantum.Canon
     /// A state preparation oracle $A$ of type `DeterministicStateOracle`.
     ///
     /// # Output
-    /// The same state prepataion oracle $A$, but now of type
+    /// The same state preparation oracle $A$, but now of type
     /// `StateOracle`. Note that the flag index in this `StateOracle` is a
     /// dummy variable and has no effect.
     ///

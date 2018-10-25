@@ -164,7 +164,7 @@ namespace Microsoft.Quantum.Canon
     /// Target minimum success probability.
     ///
     /// # Output
-    /// Array of phases that can be used in fixed-point amplitide amplification
+    /// Array of phases that can be used in fixed-point amplitude amplification
     /// quantum algorithm implementation.
     ///
     /// # References
