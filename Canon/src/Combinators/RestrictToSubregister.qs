@@ -22,7 +22,7 @@ namespace Microsoft.Quantum.Canon
     /// Create three qubit state $\frac{1}{\sqrt{2}}\ket{0}\_2(\ket{0}\_1\ket{0}_3+\ket{1}\_1\ket{1}_3)$:
     /// ```qsharp
     ///     using (register = Qubit[3]) {
-    ///         ApplyToSubregister(Exp([PauliX,PauliY,],PI() / 4.0,_), [1,3], register);
+    ///         ApplyToSubregister(Exp([PauliX,PauliY],PI() / 4.0,_), [1,3], register);
     ///     }
     /// ```
     ///
