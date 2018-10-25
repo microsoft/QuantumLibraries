@@ -52,6 +52,7 @@
 # is only available from the command line. Turn it on by uncommenting the 
 # entries below.
 ###############################################################################
+*.md   diff=astextplain
 #*.doc   diff=astextplain
 #*.DOC   diff=astextplain
 #*.docx  diff=astextplain

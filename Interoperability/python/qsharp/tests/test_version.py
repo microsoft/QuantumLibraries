@@ -9,15 +9,17 @@
 ##
 
 import qsharp
-from distutils.version import LooseVersion
 
+from Microsoft.Quantum.Canon import CX
+from distutils.version import LooseVersion
 from nose.tools import eq_
 
 def test_versions_match():
     """
-    Check if Python and .NET assembly versions match.
+    Check if Python and .NET Canon's assembly versions match.
     """
-    asm = qsharp.QuantumSimulator().clr_type.Assembly
+    op = CX(None)
+    asm = op.GetType().Assembly
     asm_clr_version = asm.GetName().Version
 
     asm_version = LooseVersion(asm_clr_version.ToString())
