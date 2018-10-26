@@ -6,6 +6,7 @@ This repository contains open-source libraries for the [Quantum Development Kit]
 
 - **[Docs/](./Docs)**: Additional documentation for developing on the libraries and samples. Please see [QDK online documentation](https://docs.microsoft.com/quantum/) for online documentation. 
 - **[Canon/](./Canon)**: Q# sources used to implement [the canon](https://docs.microsoft.com/quantum/libraries/intro) portion of the Q# standard library.
+- **[Chemistry/](./Chemistry)**: Q# sources used to implement a library for [quantum chemistry](https://docs.microsoft.com/quantum/libraries/chemistry) and Hamiltonian simulation. 
 - **[LICENSE](./LICENSE.txt)**: Terms of use and license details for the Quantum Development Kit libraries and samples.
 
 ## New to Quantum? ##
