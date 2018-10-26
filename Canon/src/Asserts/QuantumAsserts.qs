@@ -11,6 +11,9 @@ namespace Microsoft.Quantum.Canon
     
     
     /// # Summary
+	/// Asserts that the probability of a specific state of a quantum register has the
+	/// expected value.
+	/// 
     /// Given an $n$-qubit quantum state $\ket{\psi}=\sum^{2^n-1}_{j=0}\alpha_j \ket{j}$,
     /// asserts that the probability $|\alpha_j|^2$ of the state $\ket{j}$ indexed by $j$
     /// has the expected value.
@@ -54,6 +57,9 @@ namespace Microsoft.Quantum.Canon
     
     
     /// # Summary
+	/// Asserts that the probability of a specific state of a quantum register has the
+	/// expected value.
+	/// 
     /// Given an $n$-qubit quantum state $\ket{\psi}=\sum^{2^n-1}_{j=0}\alpha_j \ket{j}$,
     /// asserts that the probability $|\alpha_j|^2$ of the state $\ket{j}$ indexed by $j$
     /// has the expected value.
@@ -87,7 +93,9 @@ namespace Microsoft.Quantum.Canon
     
     
     /// # Summary
-    /// Asserts that the phase $\phi$ of an equal superposition quantum state
+	/// Asserts that the phase of an equal superposition state has the expected value.
+	/// 
+    /// Specifically, asserts that the phase $\phi$ of a quantum state
     /// that may be expressed as
     /// $\frac{e^{i t}}{\sqrt{2}}(e^{i\phi}\ket{0} + e^{-i\phi}\ket{1})$
     /// for some arbitrary real t has the expected value.
