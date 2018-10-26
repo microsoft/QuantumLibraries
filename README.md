@@ -1,4 +1,4 @@
-# Microsoft Quantum Development Kit Samples and Libraries #
+# Microsoft Quantum Development Kit Libraries #
 
 Welcome to the Microsoft Quantum Development Kit!
 
