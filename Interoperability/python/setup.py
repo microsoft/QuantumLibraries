@@ -19,7 +19,7 @@ from setuptools.command.build_py import build_py
 ## CONFIGURATION #############################################################
 def pkgPlatform():
     if platform.system() == "Windows": 
-        return "win10-x64"
+        return "win-x64"
     elif platform.system() == "Darwin":
         return "osx-x64"
     elif platform.system() == "Linux":

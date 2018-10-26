@@ -1,14 +1,12 @@
 # Microsoft Quantum Development Kit Samples and Libraries #
 
 Welcome to the Microsoft Quantum Development Kit!
-This repository contains the libraries and samples provided with the Quantum Development Kit:
+
+This repository contains open-source libraries for the [Quantum Development Kit](https://docs.microsoft.com/en-us/quantum/?view=qsharp-preview):
 
 - **[Docs/](./Docs)**: Additional documentation for developing on the libraries and samples. Please see [QDK online documentation](https://docs.microsoft.com/quantum/) for online documentation. 
-- **[LibraryTests/](./LibraryTests)**: Tests to ensure correctness of the libraries and samples.
-- **[Microsoft.Quantum.Canon/](./Microsoft.Quantum.Canon)**: Q# sources used to implement [the canon](https://docs.microsoft.com/quantum/libraries/intro) portion of the Q# standard library.
-- **[Samples/](./Samples)**: C# and F# projects demonstrating how to use Q#, the prelude, and the canon.
-- **[LICENSE](./LICENSE)**: Terms of use and license details for the Quantum Development Kit libraries and samples.
-- **[QsharpLibraries.sln](./QsharpLibraries.sln)**: The main Visual Studio 2017 solution for all libraries and samples provided in this repository.
+- **[Canon/](./Canon)**: Q# sources used to implement [the canon](https://docs.microsoft.com/quantum/libraries/intro) portion of the Q# standard library.
+- **[LICENSE](./LICENSE.txt)**: Terms of use and license details for the Quantum Development Kit libraries and samples.
 
 ## New to Quantum? ##
 
@@ -16,7 +14,8 @@ See [introduction to quantum computing](https://docs.microsoft.com/quantum/quant
 
 ## Getting Started ##
 
-The libraries and samples provided in this repository are designed to work with Visual Studio 2017 and the Quantum Development Kit.
+The libraries provided in this repository are built using [.Net Core](https://docs.microsoft.com/en-us/dotnet/core/) and the
+[Quantum Development Kit](https://docs.microsoft.com/en-us/quantum/?view=qsharp-preview).
 Please see the [installation guide](https://docs.microsoft.com/quantum/quantum-installconfig) for how to get up and running.
 
 ## Build Status ##

@@ -9,8 +9,10 @@ steps:
 - task: DotNetCoreCLI@2
   displayName: 'Build Libraries'
   inputs:
-    projects: '**/*.sln'
-    arguments: '-c $(BuildConfiguration) -v n'
+    projects: |
+      $(LibrariesRootFolder)/Canon.sln
+      $(LibrariesRootFolder)/Chemistry.sln
+    arguments: '-c $(BuildConfiguration) -v n /p:Version=$(Assembly.Version)'
 
 
 ##
@@ -21,7 +23,22 @@ steps:
   inputs:
     command: test
     projects: |
-     Samples/UnitTesting
-     LibraryTests     
-    arguments: '-c $(BuildConfiguration) -v n'
+     $(LibrariesRootFolder)/Canon/tests
+     $(LibrariesRootFolder)/Chemistry/tests/ChemistryTests/ChemistryTests.csproj
+     $(LibrariesRootFolder)/Chemistry/tests/SystemTests/SystemTests.csproj
+     $(LibrariesRootFolder)/Chemistry/tests/DataModelTests/DataModelTests.csproj
+    arguments: '-c $(BuildConfiguration) -v n /p:Version=$(Assembly.Version)'
+
+##
+# Create Nuget.
+##
+- task: DotNetCoreCLI@2
+  displayName: 'Pack Libraries nugets'
+  inputs:
+    command: custom
+    custom: pack
+    projects: |
+     $(LibrariesRootFolder)/Canon/src/Canon.csproj
+     $(LibrariesRootFolder)/Chemistry/src/DataModel/DataModel.csproj
+    arguments: ' --no-build -c $(BuildConfiguration) -v n -o $(System.DefaultWorkingDirectory) /p:PackageVersion=$(Nuget.Version)'
 
