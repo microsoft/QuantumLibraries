@@ -224,7 +224,7 @@ namespace Microsoft.Quantum.Canon
     ///
     /// # Input
     /// ## target
-    /// A quantum register which is assumed to be in little endian encoding.
+    /// A quantum register which is assumed to be in little-endian encoding.
     ///
     /// # Output
     /// An unsigned integer that contains the measured value of `target`.
