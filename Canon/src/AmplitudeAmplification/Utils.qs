@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft Corporation. All rights reserved.
+﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
 
@@ -9,7 +9,9 @@ namespace Microsoft.Quantum.Canon
     
     
     /// # Summary
-    /// This performs a phase shift operation $R=\boldone-(1-e^{i \phi})\ket{1\cdots 1}\bra{1\cdots 1}$.
+    /// Performs a phase shift operation.
+	///
+	/// $R=\boldone-(1-e^{i \phi})\ket{1\cdots 1}\bra{1\cdots 1}$.
     ///
     /// # Input
     /// ## phase
@@ -33,7 +35,9 @@ namespace Microsoft.Quantum.Canon
     
     
     /// # Summary
-    /// This performs a phase shift operation $R=\boldone-(1-e^{i \phi})\ket{0\cdots 0}\bra{0\cdots 0}$.
+    /// Performs a phase shift operation.
+	///
+	/// $R=\boldone-(1-e^{i \phi})\ket{0\cdots 0}\bra{0\cdots 0}$.
     ///
     /// # Input
     /// ## phase
@@ -185,7 +189,7 @@ namespace Microsoft.Quantum.Canon
     
     
     /// # Summary
-    /// Constructs a reflection about the all-zero string $\ket{0\cdots 0}$, which is the typical input state to amplitude amplification.
+    /// Constructs a reflection about the all-zero string |0...0〉, which is the typical input state to amplitude amplification.
     ///
     /// # Output
     /// A `ReflectionOracle` that reflects about the state $\ket{0\cdots 0}$.
@@ -214,8 +218,12 @@ namespace Microsoft.Quantum.Canon
     
     
     /// # Summary
-    /// Constructs reflection about a some state $\ket{\psi}$ from the oracle $O$ of type
-    /// <xref:microsoft.quantum.canon.deterministicstateoracle>, where $O\ket{0} = \ket{\psi}$.
+    /// Constructs reflection about a given state from an oracle.
+	///
+	/// Given the oracle $O$ of type
+    /// <xref:microsoft.quantum.canon.deterministicstateoracle>, 
+	/// the result of this function is a reflection around the state $\ket{\psi}$ 
+	/// where $O\ket{0} = \ket{\psi}$.
     ///
     /// # Input
     /// ## oracle
@@ -249,8 +257,9 @@ namespace Microsoft.Quantum.Canon
     
     
     /// # Summary
-    /// Constructs reflection about the target state uniquely marked by the flag qubit state
-    /// $\ket{1}_f$, prepared the oracle of type "ReflectionOracle".
+    /// Constructs a `ReflectionOracle` about the target state uniquely marked by the flag qubit.
+	///
+	/// The target state has a single qubit set to 1, and all others 0: $\ket{1}_f$.
     ///
     /// # Input
     /// ## idxFlagQubit

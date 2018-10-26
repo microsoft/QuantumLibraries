@@ -9,7 +9,9 @@ namespace Microsoft.Quantum.Canon
     
     
     /// # Summary
-    /// Represents a reflection oracle $O$, where the inputs are
+    /// Represents a reflection oracle.
+	///
+	/// A reflection oracle, $O$, has inputs:
     /// - The phase $\phi$ by which to rotate the reflected subspace.
     /// - The qubit register on which to perform the given reflection.
     ///
@@ -22,8 +24,9 @@ namespace Microsoft.Quantum.Canon
     // This oracle O|s>_a|ψ>_s = λ |t>_a U |ψ>_s + ... acts on the ancilla state |s>_a to implement the unitary U on any system state |ψ>_s with amplitude λ in the |t>_a basis.
     
     /// # Summary
-    /// Represents an oracle $O$ for oblivious amplitude amplification, where
-    /// the inputs are
+    /// Represents an oracle for oblivious amplitude amplification.
+	///
+	/// The inputs to the oracle $O$ are
     /// - The ancilla register $a$ that $O$ acts on.
     /// - The system register $s$ on which the desired unitary $U$ is applied, post-selected on register $a$ being in state $\ket{t}\_a$.
     ///
@@ -37,7 +40,9 @@ namespace Microsoft.Quantum.Canon
     newtype ObliviousOracle = ((Qubit[], Qubit[]) => Unit : Adjoint, Controlled);
     
     /// # Summary
-    /// Represents an oracle $O$ for state preparation, where the inputs are
+    /// Represents an oracle for state preparation.
+	///
+	/// The inputs to the opracle $O$ are:
     /// - An integer indexing the flag qubit $f$.
     /// - The system register $s$ that will store the desired quantum state $\ket{\psi}\_s$.
     ///
@@ -51,8 +56,9 @@ namespace Microsoft.Quantum.Canon
     newtype StateOracle = ((Int, Qubit[]) => Unit : Adjoint, Controlled);
     
     /// # Summary
-    /// Represents an oracle $O$ for deterministic state preparation, where
-    /// the input is
+    /// Represents an oracle for deterministic state preparation.
+	///
+	/// The input to the oracle $O$ is:
     /// - The register that will store the desired quantum state $\ket{\psi}\_s$.
     ///
     /// # Remarks
