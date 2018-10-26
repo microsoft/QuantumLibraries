@@ -25,14 +25,7 @@ namespace Microsoft.Quantum.Canon
     function Reverse<'T> (array : 'T[]) : 'T[]
     {
         let nElements = Length(array);
-        mutable newArray = new 'T[nElements];
-        
-        for (idxElement in 0 .. nElements - 1)
-        {
-            set newArray[(nElements - idxElement) - 1] = array[idxElement];
-        }
-        
-        return newArray;
+		return array[nElements-1..-1..0];
     }
     
     
@@ -348,8 +341,8 @@ namespace Microsoft.Quantum.Canon
     ///
     /// # Example
     /// ```Q#
-    /// // The following returns [1;3;5;7];
-    /// // let array = IntArrayFromRange(1..2..8);
+    /// // The following returns [1,3,5,7];
+    /// let array = IntArrayFromRange(1..2..8);
     /// ```
     function IntArrayFromRange (range: Range) : Int[] {
         let start = RangeStart(range);
@@ -384,8 +377,8 @@ namespace Microsoft.Quantum.Canon
     ///
     /// # Example
     /// ```Q#
-    /// // The following returns [[1;5];[3];[7]];
-    /// let (arr1, arr2) = SplitArray([2;1], [1;5;3;7]);
+    /// // The following returns [[1,5],[3],[7]];
+    /// let (arr1, arr2) = SplitArray([2,1], [1,5,3,7]);
     /// ```
     function SplitArray<'T>(nElements: Int[], arr: 'T[]) : 'T[][] {
         mutable output = new 'T[][Length(nElements)+1];
