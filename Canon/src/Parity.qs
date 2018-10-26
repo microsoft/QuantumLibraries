@@ -5,8 +5,9 @@ namespace Microsoft.Quantum.Canon {
     open Microsoft.Quantum.Primitive;
 
     /// # Summary
-    /// This computes the parity of qubits $\ket{q_0} \ket{q_1} \cdots$
-    /// in-place, following the pattern
+    /// Computes the parity of an array of qubits in-place.
+	///
+    /// It follows the pattern
     /// $\ket{q_0} \ket{q_0 \oplus q_1} \ket{q_0 \oplus q_1 \oplus q_2} \cdots$.
     ///
     /// # Input
@@ -25,9 +26,11 @@ namespace Microsoft.Quantum.Canon {
     }
 
     /// # Summary
-    /// This computes the parity of qubits initially in the state
-    /// $\ket{q_0} \ket{q_1} \cdots \ket{q_{\text{target}}}$ in-place,
-    /// such that the final state is given by
+    /// Computes the parity of an array of qubits into a target qubit.
+	///
+	/// If the array is initially in the state
+    /// $\ket{q_0} \ket{q_1} \cdots \ket{q_{\text{target}}}$,
+    /// the final state is given by
     /// $\ket{q_0} \ket{q_1 \oplus q_0} \cdots \ket{q_{n - 1} \oplus \cdots \oplus q_0 \oplus q_{\text{target}}}$.
     ///
     /// # Input
