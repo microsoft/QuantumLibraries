@@ -16,9 +16,9 @@ namespace Microsoft.Quantum.Tests {
         AssertIntEqual(Call(Square, 4), 16, "Call failed with Square.");
     }
 
-    operation ToOperationTest : Unit {
+    operation ToOperationTest() : Unit {
         let op = ToOperation(Square);
-        AssertIntEqual(ApplyOp(op, 3), 9);
+        AssertIntEqual(ApplyOp(op, 3), 9, "ToOperation failed with Square.");
     }
 
 }

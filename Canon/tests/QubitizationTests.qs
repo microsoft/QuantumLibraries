@@ -11,7 +11,7 @@ namespace Microsoft.Quantum.Tests {
     // BlockEncoding.qs tests
 
     // The returned operations encode the Hamiltonian (cos^2(angle) I+sin^2(angle) X)/2.
-    function LCUTestHelper() : (Double[], Double, Double, (Qubit[] => () : Adjoint, Controlled), ((Qubit[], Qubit[]) => Unit : Adjoint, Controlled)){
+    function LCUTestHelper() : (Double[], Double, Double, (Qubit[] => Unit : Adjoint, Controlled), ((Qubit[], Qubit[]) => Unit : Adjoint, Controlled)){
         let angle = 1.789;
         let eigenvalues = [0.5, 0.5 * Cos(angle * 2.0)];
         let prob = PowD(Cos(angle),4.0)+PowD(Sin(angle),4.0);
