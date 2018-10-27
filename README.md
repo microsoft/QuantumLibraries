@@ -19,11 +19,14 @@ The libraries provided in this repository are built using [.Net Core](https://do
 [Quantum Development Kit](https://docs.microsoft.com/en-us/quantum/?view=qsharp-preview).
 Please see the [installation guide](https://docs.microsoft.com/quantum/quantum-installconfig) for how to get up and running.
 
+You may also visit our [Quantum](https://github.com/Microsoft/Quantum) repository, which offers a wide variety
+of samples on how to use these libraries to write quantum based programs.
+
 ## Build Status ##
 
 | branch | status    |
 |--------|-----------|
-| master | [![Build Status](https://travis-ci.org/Microsoft/Quantum.svg?branch=master)](https://travis-ci.org/Microsoft/Quantum) |
+| master | [![Build Status](https://quarcsw.visualstudio.com/Libraries/_apis/build/status/Github/Libraries%20(GitHub))](https://quarcsw.visualstudio.com/Libraries/_build/latest?definitionId=62) |
 
 
 ## Feedback ##
