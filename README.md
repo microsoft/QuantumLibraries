@@ -28,13 +28,11 @@ of samples on how to use these libraries to write quantum based programs.
 |--------|-----------|
 | master | [![Build Status](https://quarcsw.visualstudio.com/Libraries/_apis/build/status/Github/Libraries%20(GitHub))](https://quarcsw.visualstudio.com/Libraries/_build/latest?definitionId=62) |
 
-
 ## Feedback ##
 
 We are collecting feedback for the entire Microsoft Quantum Development Kit
 at [user voice](https://quantum.uservoice.com/). Please leave your suggestions,
 requests and bugs (or praises!) there.
-
 
 ## Contributing ##
 
