@@ -7,7 +7,7 @@ namespace Microsoft.Quantum.Canon
     
     /// # Summary
     /// Applies a single-qubit operation to each element in a register.
-    /// The modifier 'CA' indicates that the single-qubit operation is controllable
+    /// The modifier `CA` indicates that the single-qubit operation is controllable
     /// and adjointable.
     ///
     /// # Input
@@ -23,7 +23,7 @@ namespace Microsoft.Quantum.Canon
     /// # Remarks
     /// ## Example
     /// Prepare a three-qubit $\ket{+}$ state:
-    /// ```Q#
+    /// ```qsharp
     /// using (register = Qubit[3]) {
     ///     ApplyToEach(H, register);
     /// }
@@ -49,7 +49,7 @@ namespace Microsoft.Quantum.Canon
     
     /// # Summary
     /// Applies a single-qubit operation to each element in a register.
-    /// The modifier 'A' indicates that the single-qubit operation is adjointable.
+    /// The modifier `A` indicates that the single-qubit operation is adjointable.
     ///
     /// # Input
     /// ## singleElementOperation
@@ -64,7 +64,7 @@ namespace Microsoft.Quantum.Canon
     /// # Remarks
     /// ## Example
     /// Prepare a three-qubit $\ket{+}$ state:
-    /// ```Q#
+    /// ```qsharp
     /// using (register = Qubit[3]) {
     ///     ApplyToEach(H, register);
     /// }
@@ -88,7 +88,7 @@ namespace Microsoft.Quantum.Canon
     
     /// # Summary
     /// Applies a single-qubit operation to each element in a register.
-    /// The modifier 'C' indicates that the single-qubit operation is controllable.
+    /// The modifier `C` indicates that the single-qubit operation is controllable.
     ///
     /// # Input
     /// ## singleElementOperation
@@ -103,7 +103,7 @@ namespace Microsoft.Quantum.Canon
     /// # Remarks
     /// ## Example
     /// Prepare a three-qubit $\ket{+}$ state:
-    /// ```Q#
+    /// ```qsharp
     /// using (register = Qubit[3]) {
     ///     ApplyToEach(H, register);
     /// }
@@ -141,7 +141,7 @@ namespace Microsoft.Quantum.Canon
     /// # Remarks
     /// ## Example
     /// Prepare a three-qubit $\ket{+}$ state:
-    /// ```Q#
+    /// ```qsharp
     /// using (register = Qubit[3]) {
     ///     ApplyToEach(H, register);
     /// }

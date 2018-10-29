@@ -59,7 +59,9 @@ namespace Microsoft.Quantum.Canon
     
     
     /// # Summary
-    /// Given an operation representing a gate $U$, returns a new operation
+	/// Raises an operation to a power.
+	/// 
+    /// That is, given an operation representing a gate $U$, returns a new operation
     /// $U^m$ for a power $m$.
     ///
     /// # Input
@@ -86,9 +88,11 @@ namespace Microsoft.Quantum.Canon
     
     
     /// # Summary
-    /// Given an operation representing a gate $U$, returns a new operation
+	/// Raises an operation to a power.
+    /// The modifier `C` indicates that the operation is controllable.
+	/// 
+    /// That is, given an operation representing a gate $U$, returns a new operation
     /// $U^m$ for a power $m$.
-    /// The modifier 'C' indicates that the operation is controllable.
     ///
     /// # Input
     /// ## oracle
@@ -112,9 +116,11 @@ namespace Microsoft.Quantum.Canon
     
     
     /// # Summary
-    /// Given an operation representing a gate $U$, returns a new operation
+	/// Raises an operation to a power.
+    /// The modifier `A` indicates that the operation is adjointable.
+	/// 
+    /// That is, given an operation representing a gate $U$, returns a new operation
     /// $U^m$ for a power $m$.
-    /// The modifier 'A' indicates that the operation is adjointable.
     ///
     /// # Input
     /// ## oracle
@@ -138,9 +144,11 @@ namespace Microsoft.Quantum.Canon
     
     
     /// # Summary
-    /// Given an operation representing a gate $U$, returns a new operation
+	/// Raises an operation to a power.
+    /// The modifier `A` indicates that the operation is controllable and adjointable.
+	/// 
+    /// That is, given an operation representing a gate $U$, returns a new operation
     /// $U^m$ for a power $m$.
-    /// The modifier 'CA' indicates that the operation is controllable and adjointable.
     ///
     /// # Input
     /// ## oracle

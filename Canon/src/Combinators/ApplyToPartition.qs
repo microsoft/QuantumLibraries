@@ -32,7 +32,7 @@ namespace Microsoft.Quantum.Canon
     
     /// # Summary
     /// Applies a pair of operations to a given partition of a register into two parts.
-    /// The modifier 'A' indicates that the operation is adjointable.
+    /// The modifier `A` indicates that the operation is adjointable.
     ///
     /// # Input
     /// ## op
@@ -61,7 +61,7 @@ namespace Microsoft.Quantum.Canon
     
     /// # Summary
     /// Applies a pair of operations to a given partition of a register into two parts.
-    /// The modifier 'C' indicates that the operation is controllable.
+    /// The modifier `C` indicates that the operation is controllable.
     ///
     /// # Input
     /// ## op
@@ -90,7 +90,7 @@ namespace Microsoft.Quantum.Canon
     
     /// # Summary
     /// Applies a pair of operations to a given partition of a register into two parts.
-    /// The modifier 'CA' indicates that the operation is controllable and adjointable.
+    /// The modifier `CA` indicates that the operation is controllable and adjointable.
     ///
     /// # Input
     /// ## op
