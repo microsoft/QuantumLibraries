@@ -11,7 +11,10 @@ namespace Microsoft.Quantum.Canon {
     // block-encoding.
 
     /// # Summary
-    /// A `BlockEncoding` is a unitary $U$ where an arbitrary operator $H$ of 
+    /// Represents a unitary where an arbitrary operator of 
+    /// interest is encoded in the top-left block.
+	///
+    /// That is, a `BlockEncoding` is a unitary $U$ where an arbitrary operator $H$ of 
     /// interest that acts on the system register `s` is encoded in the top-
     /// left block corresponding to auxiliary state `\ket{0}_a`. That is,
     ///
@@ -34,9 +37,7 @@ namespace Microsoft.Quantum.Canon {
     newtype BlockEncoding = ((Qubit[], Qubit[]) => Unit : Adjoint, Controlled);
 
     /// # Summary
-    /// A `BlockEncodingReflection` is a unitary $U$ with the same properties
-    /// as a `BlockEncoding`, but is also a reflection. That is, 
-    /// $U^\dag = U$. 
+    /// Represents a `BlockEncoding` that is also a reflection.
     ///
     /// # Input
     /// ## First Parameter
@@ -54,7 +55,9 @@ namespace Microsoft.Quantum.Canon {
     newtype BlockEncodingReflection = BlockEncoding;
 
     /// # Summary
-    /// A `TimeDependentBlockEncoding` is a unitary $U$ controlled by a state 
+	/// Represents a `BlockEncoding` that is controlled by a clock register.
+	/// 
+    /// That is, a `TimeDependentBlockEncoding` is a unitary $U$ controlled by a state 
     /// $\ket{k}_d$ in clock register `d` such that an arbitrary operator $H_k$ of 
     /// interest that acts on the system register `s` is encoded in the top-
     /// left block corresponding to auxiliary state `\ket{0}_a`. That is,
@@ -80,8 +83,10 @@ namespace Microsoft.Quantum.Canon {
     newtype TimeDependentBlockEncoding = ((Qubit[], Qubit[], Qubit[]) => Unit : Adjoint, Controlled);
 
     /// # Summary
-    /// This function converts a `BlockEncoding` unitary $U$ that encodes some
-    /// operator $H$ of interest into a `BlockEncodingReflection` $U'$ that
+	/// Converts a `BlockEncoding` into an equivalent `BLockEncodingReflection`.
+	/// 
+    /// That is, given a `BlockEncoding` unitary $U$ that encodes some
+    /// operator $H$ of interest, converts it into a `BlockEncodingReflection` $U'$ that
     /// encodes the same operator, but also satisfies $U'^\dag = U'$. 
     /// This increases the size of the auxiliary register of $U$ by one qubit.
     ///
@@ -125,8 +130,10 @@ namespace Microsoft.Quantum.Canon {
     }
 
     /// # Summary
-    /// This function converts a `BlockEncodingReflection` unitary $U$ 
-    /// that encodes some operator $H$ of interest into a quantum walk
+	/// Converts a `BlockEncodingReflection` into a quantum walk.
+	/// 
+    /// That is, given a `BlockEncodingReflection` unitary $U$ 
+    /// that encodes some operator $H$ of interest, converts it into a quantum walk
     /// $W$ containing the spectrum of $\pm e^{\pm i\sin^{-1}(H)}$.
     ///
     /// # Input
@@ -165,6 +172,8 @@ namespace Microsoft.Quantum.Canon {
     }
 
     /// # Summary
+	/// Encodes an operator of interest into a `BlockEncoding`.
+	/// 
     /// This constructs a `BlockEncoding` unitary $U=P\cdot V\cdot P^\dag$ that encodes some
     /// operator $H=\sum_{j}|\alpha_j|U_j$ of interest that is a linear combination of
     /// unitaries. Typically, $P$ is a state preparation unitary such that
@@ -212,6 +221,8 @@ namespace Microsoft.Quantum.Canon {
     }
 
     /// # Summary
+	/// Encodes an operator of interest into a `BlockEncodingReflection`.
+	/// 
     /// This constructs a `BlockEncodingReflection` unitary $U=P\cdot V\cdot P^\dag$ that encodes some
     /// operator $H=\sum_{j}|\alpha_j|U_j$ of interest that is a linear combination of
     /// unitaries. Typically, $P$ is a state preparation unitary such that

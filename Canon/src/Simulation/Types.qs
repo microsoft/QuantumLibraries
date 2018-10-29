@@ -9,6 +9,8 @@ namespace Microsoft.Quantum.Canon
     // Simulation](applications#hamiltonian-simulation)
     
     /// # Summary
+	/// Represents a time-independent simulation algorithm.
+	/// 
     /// A time-independent simulation technique converts an
     ///  <xref:microsoft.quantum.canon.evolutiongenerator>
     /// to unitary time evolution for some time-interval.
@@ -26,6 +28,8 @@ namespace Microsoft.Quantum.Canon
     newtype SimulationAlgorithm = ((Double, EvolutionGenerator, Qubit[]) => Unit : Adjoint, Controlled);
     
     /// # Summary
+	/// Represents a time-dependent simulation algorithm.
+	/// 
     /// A time-dependent simulation technique converts an
     /// <xref:microsoft.quantum.canon.evolutionschedule>
     /// to unitary time-evolution for some time-interval.

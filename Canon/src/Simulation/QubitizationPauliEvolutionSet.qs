@@ -38,7 +38,9 @@ namespace Microsoft.Quantum.Canon {
 
     
     /// # Summary
-    /// Creates a block-encoding unitary $U$ of the Hamiltonian $H=\sum_{j}\alpha_j P_j$ described by a 
+	/// Creates a block-encoding unitary for a Hamiltonian.
+	/// 
+    /// The Hamiltonian $H=\sum_{j}\alpha_j P_j$ is described by a 
     /// sum of Pauli terms $P_j$, each with real coefficient $\alpha_j$.
     ///
     /// # Input
@@ -49,7 +51,7 @@ namespace Microsoft.Quantum.Canon {
     /// ## First parameter
     /// The one-norm of coefficients $\alpha=\sum_{j}|\alpha_j|$.
     /// ## Second parameter
-    /// A `BlockEncodingReflection` unitary $U$ of the Hamiltonian $U$. As this unitary 
+    /// A `BlockEncodingReflection` unitary $U$ of the Hamiltonian $H$. As this unitary 
     /// satisfies $U^2 = I$, it is also a reflection.
     ///
     /// # Remarks
@@ -65,7 +67,9 @@ namespace Microsoft.Quantum.Canon {
     }
 
     /// # Summary
-    /// Creates a block-encoding unitary $U$ of the Hamiltonian $H=\sum_{j}\alpha_j P_j$ described by a 
+	/// Creates a block-encoding unitary for a Hamiltonian.
+	/// 
+    /// The Hamiltonian $H=\sum_{j}\alpha_j P_j$ is described by a 
     /// sum of Pauli terms $P_j$, each with real coefficient $\alpha_j$.
     ///
     /// # Input
