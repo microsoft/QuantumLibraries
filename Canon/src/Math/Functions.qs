@@ -10,8 +10,8 @@ namespace Microsoft.Quantum.Canon
     
     
     /// # Summary
-    /// Represents an integer of the form p/q. Integer p is
-    /// the first element of the tuple and q is the second element
+    /// Represents a rational number of the form `p/q`. Integer `p` is
+    /// the first element of the tuple and `q` is the second element
     /// of the tuple.
     newtype Fraction = (Int, Int);
     
@@ -104,7 +104,7 @@ namespace Microsoft.Quantum.Canon
     /// # Example
     /// ```qsharp
     ///     // Returns 3 π / 2.
-    ///     let y = RealMod(5.5 * PI(), 2.0 * PI(), 0.0)
+    ///     let y = RealMod(5.5 * PI(), 2.0 * PI(), 0.0);
     ///     // Returns -1.2, since +3.6 and -1.2 are 4.8 apart on the real line,
     ///     // which is a multiple of 2.4.
     ///     let z = RealMod(3.6, 2.4, -1.2);
@@ -168,7 +168,7 @@ namespace Microsoft.Quantum.Canon
     
     
     /// # Summary
-    /// Computes canonical residue of `value` modulo `modulus`.
+    /// Computes the canonical residue of `value` modulo `modulus`.
     /// # Input
     /// ## value
     /// The value of which residue is computed
@@ -178,8 +178,8 @@ namespace Microsoft.Quantum.Canon
     /// Integer r between 0 and `modulus - 1' such that `value - r' is divisible by modulus
     ///
     /// # Remarks
-    /// This function behaves the way a mathematician would expect Mod function to behave,
-    /// as opposed to how operator `%` is behaving in C# and Q#.
+    /// This function behaves the way a mathematician would expect the Mod function to behave
+	/// for negative inputs, as opposed to how the operator `%` behaves in C# and Q#.
     function Modulus (value : Int, modulus : Int) : Int
     {
         AssertBoolEqual(modulus > 0, true, $"`modulus` must be positive");
@@ -198,7 +198,8 @@ namespace Microsoft.Quantum.Canon
     
     /// # Summary
     /// Let us denote expBase by x, power by p and modulus by N.
-    /// The function returns xᵖ mod N .
+    /// The function returns xᵖ mod N.
+	/// 
     /// We assume that N,x are positive and power is non-negative.
     ///
     /// # Remarks
@@ -249,7 +250,7 @@ namespace Microsoft.Quantum.Canon
     
     
     /// # Summary
-    /// Computes tuple (u,v) such that u⋅a + v⋅b = GCD(a,b), where GCD is a
+    /// Computes a tuple (u,v) such that u⋅a + v⋅b = GCD(a,b), where GCD is a
     /// greatest common divisor of a and b. The GCD is always positive.
     ///
     /// # Input
@@ -259,7 +260,7 @@ namespace Microsoft.Quantum.Canon
     /// the second number of which extended greatest common divisor is being computed
     ///
     /// # Output
-    /// Tuple (u,v) with properties u⋅a + v⋅b = GCD(a,b)
+    /// Tuple (u,v) with the property u⋅a + v⋅b = GCD(a,b)
     ///
     /// # References
     /// - This implementation is according to https://en.wikipedia.org/wiki/Extended_Euclidean_algorithm
@@ -275,7 +276,7 @@ namespace Microsoft.Quantum.Canon
     
     
     /// # Summary
-    /// Computes greatest common divisor of a and b. The GCD is always positive.
+    /// Computes the greatest common divisor of a and b. The GCD is always positive.
     ///
     /// # Input
     /// ## a
@@ -315,7 +316,7 @@ namespace Microsoft.Quantum.Canon
     
     
     /// # Summary
-    /// Finds a continued fraction convergent closest to `fraction`
+    /// Finds the continued fraction convergent closest to `fraction`
     /// with the denominator less or equal to `denominatorBound`
     ///
     /// # Input
@@ -390,7 +391,9 @@ namespace Microsoft.Quantum.Canon
     
     
     /// # Summary
-    /// For a non-negative integer `a`, returns the smallest $n$ such
+    /// For a non-negative integer `a`, returns the number of bits required to represent `a`.
+	///
+	/// That is, returns the smallest $n$ such
     /// that $a < 2^n$.
     ///
     /// # Input
@@ -407,7 +410,9 @@ namespace Microsoft.Quantum.Canon
     
     
     /// # Summary
-    /// Given an array $x$ of type `Double[]`, this returns the $p$-norm
+	/// Returns the `L(p)` norm of a vector of `Double`s.
+	/// 
+    /// That is, given an array $x$ of type `Double[]`, this returns the $p$-norm
     /// $\|x\|_p= (\sum_{j}|x_j|^{p})^{1/p}$.
     ///
     /// # Input
@@ -436,7 +441,9 @@ namespace Microsoft.Quantum.Canon
     
     
     /// # Summary
-    /// Given an array $x$ of type `Double[]`, this returns an array where
+	/// Normalizes a vector of `Double`s in the `L(p)` norm.
+	/// 
+    /// That is, given an array $x$ of type `Double[]`, this returns an array where
     /// all elements are divided by the $p$-norm $\|x\|_p$.
     ///
     /// # Input

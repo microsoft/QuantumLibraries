@@ -12,7 +12,9 @@ namespace Microsoft.Quantum.Canon
     // Library for classical arithmetic on complex numbers
     
     /// # Summary
-    /// Polar representation of a complex number $c=r e^{i t}$.
+	/// Represents a complex number in polar form.
+	/// 
+    /// The polar representation of a complex number is $c=r e^{i t}$.
     ///
     /// # Input
     /// ## First Parameter
@@ -23,7 +25,7 @@ namespace Microsoft.Quantum.Canon
     
     
     /// # Summary
-    /// Returns the squared absolute value of a complex number type
+    /// Returns the squared absolute value of a complex number of type
     /// `Complex`.
     ///
     /// # Input
@@ -40,7 +42,7 @@ namespace Microsoft.Quantum.Canon
     
     
     /// # Summary
-    /// Returns the absolute value of a complex number type
+    /// Returns the absolute value of a complex number of type
     /// `Complex`.
     ///
     /// # Input
@@ -56,7 +58,7 @@ namespace Microsoft.Quantum.Canon
     
     
     /// # Summary
-    /// Returns the phase of a complex number type
+    /// Returns the phase of a complex number of type 
     /// `Complex`.
     ///
     /// # Input
@@ -73,7 +75,7 @@ namespace Microsoft.Quantum.Canon
     
     
     /// # Summary
-    /// Returns the squared absolute value of a complex number type
+    /// Returns the squared absolute value of a complex number of type
     /// `ComplexPolar`.
     ///
     /// # Input
@@ -90,7 +92,7 @@ namespace Microsoft.Quantum.Canon
     
     
     /// # Summary
-    /// Returns the absolute value of a complex number type
+    /// Returns the absolute value of a complex number of type
     /// `ComplexPolar`.
     ///
     /// # Input
@@ -107,7 +109,7 @@ namespace Microsoft.Quantum.Canon
     
     
     /// # Summary
-    /// Returns the phase of a complex number type
+    /// Returns the phase of a complex number of type
     /// `ComplexPolar`.
     ///
     /// # Input
