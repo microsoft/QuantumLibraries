@@ -25,12 +25,11 @@ namespace Microsoft.Quantum.Canon {
     ///
     /// # Remarks
     /// Equivalent to:
-    /// ```Q#
+    /// ```qsharp
     /// Controlled X([control], target);
     /// ```
-    ///
-    /// Equivalent to:
-    /// ```Q#
+    /// and to:
+    /// ```qsharp
     /// CNOT(control, target);
     /// ```
     operation CX(control : Qubit, target : Qubit) : Unit {
@@ -63,7 +62,7 @@ namespace Microsoft.Quantum.Canon {
     ///
     /// # Remarks
     /// Equivalent to:
-    /// ```Q#
+    /// ```qsharp
     /// Controlled Y([control], target);
     /// ```
     operation CY(control : Qubit, target : Qubit) : Unit {
@@ -96,7 +95,7 @@ namespace Microsoft.Quantum.Canon {
     ///
     /// # Remarks
     /// Equivalent to:
-    /// ```Q#
+    /// ```qsharp
     /// Controlled Z([control], target);
     /// ```
     operation CZ(control : Qubit, target : Qubit) : Unit {

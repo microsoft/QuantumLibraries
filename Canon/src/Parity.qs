@@ -41,8 +41,11 @@ namespace Microsoft.Quantum.Canon {
     ///
     /// # Remarks
     /// The following are equivalent:
-    /// ```Q#
+    /// ```qsharp
     /// CNOTChainTarget(Most(qs), Last(qs));
+    /// ```
+	/// and
+	/// ```qsharp
     /// CNOTChain(qs);
     /// ```
     operation CNOTChainTarget(qubits: Qubit[], targetQubit: Qubit) : Unit {

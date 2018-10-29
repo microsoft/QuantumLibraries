@@ -29,10 +29,12 @@ namespace Microsoft.Quantum.Canon
     /// # Remarks
     /// ## Example
     /// The following are equivalent:
-    /// ```Q#
+    /// ```qsharp
     /// op(0, deltaT, target);
     /// op(1, deltaT, target);
-    ///
+    /// ```
+	/// and
+	/// ```qsharp
     /// Trotter1ImplCA((2, op), deltaT, target);
     /// ```
     operation Trotter1ImplCA<'T> ((nSteps : Int, op : ((Int, Double, 'T) => Unit : Adjoint, Controlled)), stepSize : Double, target : 'T) : Unit
@@ -73,12 +75,14 @@ namespace Microsoft.Quantum.Canon
     /// # Remarks
     /// ## Example
     /// The following are equivalent:
-    /// ```Q#
+    /// ```qsharp
     /// op(0, deltaT / 2.0, target);
     /// op(1, deltaT / 2.0, target);
     /// op(1, deltaT / 2.0, target);
     /// op(0, deltaT / 2.0, target);
-    ///
+    /// ```
+	/// and
+	/// ```qsharp
     /// Trotter2ImplCA((2, op), deltaT, target);
     /// ```
     operation Trotter2ImplCA<'T> ((nSteps : Int, op : ((Int, Double, 'T) => Unit : Adjoint, Controlled)), stepSize : Double, target : 'T) : Unit

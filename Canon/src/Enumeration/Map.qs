@@ -70,8 +70,11 @@ namespace Microsoft.Quantum.Canon
     ///
     /// # Example
     /// The following two lines are equivalent:
-    /// ```Q#
+    /// ```qsharp
     /// let arr = MapIndex(f, [x0, x1, x2]);
+    /// ```
+	/// and
+	/// ```qsharp
     /// let arr = [f(0, x0), f(1, x1), f(2, x2)];
     /// ```
     ///
