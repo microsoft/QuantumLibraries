@@ -10,7 +10,9 @@ namespace Microsoft.Quantum.Canon
     
     
     /// # Summary
-    /// Applies multiply-controlled unitary operation $U$ that performs
+	/// Applies a Pauli rotation conditioned on an array of qubits.
+	/// 
+    /// This applies the multiply-controlled unitary operation $U$ that performs
     /// rotations by angle $\theta_j$ about single-qubit Pauli operator $P$
     /// when controlled by the $n$-qubit number state $\ket{j}$.
     ///
@@ -70,7 +72,9 @@ namespace Microsoft.Quantum.Canon
     
     
     /// # Summary
-    /// Applies multiply-controlled unitary operation $U$ that performs
+	/// Applies a Pauli Z rotation conditioned on an array of qubits.
+	/// 
+    /// This applies the multiply-controlled unitary operation $U$ that performs
     /// rotations by angle $\theta_j$ about single-qubit Pauli operator $Z$
     /// when controlled by the $n$-qubit number state $\ket{j}$.
     ///
@@ -137,7 +141,9 @@ namespace Microsoft.Quantum.Canon
     
     
     /// # Summary
-    /// Applies Diagonal unitary operation $U$ that applies a complex phase
+	/// Applies an array of complex phases to numeric basis states of a register of qubits.
+	/// 
+    /// That is, this implements the diagonal unitary operation $U$ that applies a complex phase
     /// $e^{i \theta_j}$ on the $n$-qubit number state $\ket{j}$.
     ///
     /// $U = \sum^{2^n-1}_{j=0}e^{i\theta_j}\ket{j}\bra{j}$.
@@ -213,7 +219,9 @@ namespace Microsoft.Quantum.Canon
     
     
     /// # Summary
-    /// Applies Multiply-controlled unitary operation $U$ that applies a
+	/// Applies an array of operations controlled by an array of number states.
+	/// 
+    /// That is, applies Multiply-controlled unitary operation $U$ that applies a
     /// unitary $V_j$ when controlled by $n$-qubit number state $\ket{j}$.
     ///
     /// $U = \sum^{2^n-1}_{j=0}\ket{j}\bra{j}\otimes V_j$.

@@ -171,7 +171,7 @@ namespace Microsoft.Quantum.Canon
     
     
     /// # Summary
-    /// Used to cast UDTs that are derived from type Qubit[] down to Qubit[].
+    /// Used to cast UDTs that are derived from type `Qubit[]` down to `Qubit[]`.
     /// Handy when used with generic functions like Head and Tail.
     function AsQubitArray (arr : Qubit[]) : Qubit[]
     {

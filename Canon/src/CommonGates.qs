@@ -42,7 +42,7 @@ namespace Microsoft.Quantum.Canon {
     }
 
     /// # Summary
-    /// Applies the controlled-$Y$ (CY) gate to a pair of qubits.
+    /// Applies the controlled-Y (CY) gate to a pair of qubits.
 	///
     /// $$
     /// \begin{align}
@@ -75,7 +75,7 @@ namespace Microsoft.Quantum.Canon {
     }
 
     /// # Summary
-    /// Applies the controlled-$Z$ (CZ) gate to a pair of qubits.
+    /// Applies the controlled-Z (CZ) gate to a pair of qubits.
 	///
     /// $$
     /// \begin{align}
