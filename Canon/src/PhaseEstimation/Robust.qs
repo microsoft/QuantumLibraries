@@ -11,7 +11,7 @@ namespace Microsoft.Quantum.Canon
     
     
     /// # Summary
-    /// Performs the robust non-terative quantum phase estimation algorithm for a given oracle $U$ and eigenstate,
+    /// Performs the robust non-terative quantum phase estimation algorithm for a given oracle `U` and eigenstate,
     /// and provides a single real-valued estimate of the phase with variance scaling at the Heisenberg limit.
     ///
     /// # Input
