@@ -8,6 +8,8 @@ namespace Microsoft.Quantum.Canon
     open Microsoft.Quantum.Extensions.Convert;
 
     /// # Summary
+	/// Uses the Quantum ROM technique to represent a given density matrix.
+	/// 
     /// Given a list of $N$ coefficients $\alpha_j$, this returns a unitary $U$ that uses the Quantum-ROM
     /// technique to prepare
     /// an approximation  $\tilde\rho\sum^{N-1}_{j=0}p_j\ket{j}\bra{j}$ of the purification of the density matrix 
@@ -41,12 +43,12 @@ namespace Microsoft.Quantum.Canon
     /// The following code snippet prepares an purification of the $3$-qubit state 
     /// $\rho=\sum^{4}_{j=0}\frac{|alpha_j|}{\sum_k |\alpha_k|}\ket{j}\bra{j}$, where 
     /// $\vec\alpha=(1.0,2.0,3.0,4.0,5.0)$, and the error is `1e-3`;
-    /// ``` Q#
-    /// let coefficients = [1.0;2.0;3.0;4.0;5.0];
+    /// ```qsharp
+    /// let coefficients = [1.0,2.0,3.0,4.0,5.0];
     /// let targetError = 1e-3;
     /// let ((nTotalQubits, (nIndexQubits, nGarbageQubits)), oneNorm, op) = QuantumROM(targetError, coefficients);
-    /// using(indexRegister = Qubit[nIndexQubits]) {
-    ///     using(garbageRegister = Qubit[nGarbageQubits]) {
+    /// using (indexRegister = Qubit[nIndexQubits]) {
+    ///     using (garbageRegister = Qubit[nGarbageQubits]) {
     ///         op(BigEndian(indexRegister), garbageRegister);
     ///     }
     /// }
@@ -68,7 +70,7 @@ namespace Microsoft.Quantum.Canon
     }
 
     /// # Summary
-    /// Returns count of number of qubits that must be allocated
+    /// Returns the total number of qubits that must be allocated
     /// to the operation returned by `QuantumROM`.
     ///
     /// # Input

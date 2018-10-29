@@ -13,7 +13,9 @@ namespace Microsoft.Quantum.Canon
     // from the computational basis state $\ket{0...0}$.
     
     /// # Summary
-    /// Returns a unitary operation $U$ that prepares an arbitrary quantum
+	/// Returns an operation that prepares the given quantum state.
+	/// 
+    /// The returned operation $U$ prepares an arbitrary quantum
     /// state $\ket{\psi}$ with positive coefficients $\alpha_j\ge 0$ from
     /// the $n$-qubit computational basis state $\ket{0...0}$.
     ///
@@ -39,9 +41,9 @@ namespace Microsoft.Quantum.Canon
     /// The following snippet prepares the quantum state $\ket{\psi}=\sqrt{1/8}\ket{0}+\sqrt{7/8}\ket{2}$
     /// in the qubit register `qubitsBE`.
     /// ```qsharp
-    /// mutable amplitudes = [Sqrt(0.125), 0.0, Sqrt(0.875), 0.0];
+    /// let amplitudes = [Sqrt(0.125), 0.0, Sqrt(0.875), 0.0];
     /// let op = StatePreparationPositiveCoefficients(amplitudes);
-    /// using(qubits = Qubit[2]){
+    /// using (qubits = Qubit[2]) {
     ///     let qubitsBE = BigEndian(qubits);
     ///     op(qubitsBE);
     /// }
@@ -61,7 +63,9 @@ namespace Microsoft.Quantum.Canon
     
     
     /// # Summary
-    /// Returns a unitary operation $U$ that prepares an arbitrary quantum
+	/// Returns an operation that prepares a specific quantum state.
+	/// 
+    /// The returned operation $U$ prepares an arbitrary quantum
     /// state $\ket{\psi}$ with complex coefficients $r_j e^{i t_j}$ from
     /// the $n$-qubit computational basis state $\ket{0...0}$.
     ///
@@ -89,14 +93,14 @@ namespace Microsoft.Quantum.Canon
     /// The following snippet prepares the quantum state $\ket{\psi}=e^{i 0.1}\sqrt{1/8}\ket{0}+\sqrt{7/8}\ket{2}$
     /// in the qubit register `qubitsBE`.
     /// ```qsharp
-    /// mutable amplitudes = [Sqrt(0.125), 0.0, Sqrt(0.875), 0.0];
-    /// mutable phases = [0.1, 0.0, 0.0, 0.0];
+    /// let amplitudes = [Sqrt(0.125), 0.0, Sqrt(0.875), 0.0];
+    /// let phases = [0.1, 0.0, 0.0, 0.0];
     /// mutable complexNumbers = new ComplexPolar[4];
-    /// for(idx in 0..3){
+    /// for (idx in 0..3) {
     ///     set complexNumbers[idx] = ComplexPolar(amplitudes, phases);
     /// }
     /// let op = StatePreparationPositiveCoefficients(complexNumbers);
-    /// using(qubits = Qubit[2]){
+    /// using (qubits = Qubit[2]) {
     ///     let qubitsBE = BigEndian(qubits);
     ///     op(qubitsBE);
     /// }
@@ -108,7 +112,9 @@ namespace Microsoft.Quantum.Canon
     
     
     /// # Summary
-    /// Returns a unitary operation $U$ that prepares an arbitrary quantum
+	/// Returns an operation that prepares a given quantum state.
+	/// 
+    /// The returned operation $U$ prepares an arbitrary quantum
     /// state $\ket{\psi}$ with complex coefficients $r_j e^{i t_j}$ from
     /// the $n$-qubit computational basis state $\ket{0...0}$.
     ///
@@ -200,7 +206,9 @@ namespace Microsoft.Quantum.Canon
     
     
     /// # Summary
-    /// Given two complex numbers $a0, a1$, computes coordinates
+	/// Computes the Bloch sphere coordinates for a single-qubit state.
+	/// 
+    /// Given two complex numbers $a0, a1$ that represent the qubit state, computes coordinates
     /// on the Bloch sphere such that
     /// $a0 \ket{0} + a1 \ket{1} = r e^{it}(e^{-i \phi /2}\cos{(\theta/2)}\ket{0}+e^{i \phi /2}\sin{(\theta/2)}\ket{1})$.
     ///
