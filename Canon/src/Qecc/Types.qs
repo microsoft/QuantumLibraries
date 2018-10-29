@@ -77,7 +77,7 @@ namespace Microsoft.Quantum.Canon
     /// # Summary
     /// Represents a Calderbank–Shor–Steane (CSS) code as defined by
     /// its encoder, decoder, and its syndrome measurement procedures
-    /// for $X$ and $Z$ errors, respectively.
+    /// for `X` and `Z` errors, respectively.
     newtype CSS = (EncodeOp, DecodeOp, SyndromeMeasOp, SyndromeMeasOp);
     
 }

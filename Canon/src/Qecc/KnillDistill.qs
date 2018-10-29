@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft Corporation. All rights reserved.
+﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
 
@@ -11,6 +11,7 @@ namespace Microsoft.Quantum.Canon
     
     /// # Summary
     /// Syndrome measurement and the inverse of embedding.
+	/// 
     /// $X$- and $Z$-stabilizers are not treated equally,
     /// which is due to the particular choice of the encoding circuit.
     /// This asymmetry leads to a different syndrome extraction routine.
@@ -25,11 +26,13 @@ namespace Microsoft.Quantum.Canon
     /// would have caused the measured syndrome.
     ///
     /// # Remarks
+	/// 
     /// > [!WARNING]
     /// > This routine is tailored
     /// > to a particular encoding circuit for Steane's 7 qubit code;
     /// > if the encoding circuit is modified then the syndrome outcome
     /// > might have to be interpreted differently.
+	/// 
     operation _ExtractLogicalQubitFromSteaneCode (code : LogicalRegister) : (Qubit, Int, Int)
     {
         Adjoint SteaneCodeEncoderImpl((code!)[0 .. 0], (code!)[1 .. 6]);
@@ -86,7 +89,9 @@ namespace Microsoft.Quantum.Canon
     
     
     /// # Summary
-    /// Performs a $\pi / 4$ rotation about $Y$ by consuming a magic
+    /// Performs a π/4 rotation about `Y`.
+	/// 
+	/// The rotation is performed by consuming a magic
     /// state; that is, a copy of the state
     /// $$
     /// \begin{align}
@@ -104,11 +109,12 @@ namespace Microsoft.Quantum.Canon
     ///
     /// # Remarks
     /// The following are equivalent:
-    /// ```Q#
+    /// ```qsharp
     /// Ry(PI() / 4.0, data);
-    ///
-    /// using (magicRegister = Qubit[1]) {
-    ///     let magic = magicRegister[0];
+    /// ```
+	/// and
+	/// ```qsharp
+    /// using (magic = Qubit()) {
     ///     Ry(PI() / 4.0, magic);
     ///     InjectPi4YRotation(data, magic);
     ///     Reset(magic);
@@ -159,6 +165,8 @@ namespace Microsoft.Quantum.Canon
     
     
     /// # Summary
+	/// Implements the Knill magic state distillation algorithm.
+	/// 
     /// Given 15 approximate copies of a magic state
     /// $$
     /// \begin{align}
