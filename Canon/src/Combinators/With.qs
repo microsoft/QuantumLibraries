@@ -10,7 +10,7 @@ namespace Microsoft.Quantum.Canon
     
     /// # Summary
     /// Given operations implementing operators `U` and `V`, performs the
-    /// operation `UVU†` on a target. That is, this operation
+    /// operation `Uï¿½VU` on a target. That is, this operation
     /// conjugates `V` with `U`.
     ///
     /// # Input
@@ -46,7 +46,7 @@ namespace Microsoft.Quantum.Canon
     
     /// # Summary
     /// Given operations implementing operators `U` and `V`, performs the
-    /// operation `UVU†` on a target. That is, this operation
+    /// operation `Uï¿½VU` on a target. That is, this operation
     /// conjugates `V` with `U`.
     /// The modifier `A` indicates that the inner operation is adjointable.
     ///
@@ -86,7 +86,7 @@ namespace Microsoft.Quantum.Canon
     
     /// # Summary
     /// Given operations implementing operators `U` and `V`, performs the
-    /// operation `UVU†` on a target. That is, this operation
+    /// operation `Uï¿½VU` on a target. That is, this operation
     /// conjugates `V` with `U`.
     /// The modifier `C` dicates that the inner operation is controllable.
     ///
@@ -131,7 +131,7 @@ namespace Microsoft.Quantum.Canon
     
     /// # Summary
     /// Given operations implementing operators `U` and `V`, performs the
-    /// operation `UVU†` on a target. That is, this operation
+    /// operation `Uï¿½VU` on a target. That is, this operation
     /// conjugates `V` with `U`.
     /// The modifier `CA` indicates that the inner operation is controllable
     /// and adjointable.

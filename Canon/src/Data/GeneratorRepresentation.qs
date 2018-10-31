@@ -11,9 +11,9 @@ namespace Microsoft.Quantum.Canon
     /// # Summary
     /// Represents a single primitive term in the set of all dynamical generators, e.g.
     /// Hermitian operators, for which there exists a map from that generator
-    /// to time-evolution by that that generator, through "EvolutionSet". 
-	///
-	/// The first element
+    /// to time-evolution by that that generator, through `EvolutionSet`. 
+    ///
+    /// The first element
     /// (Int[], Double[]) is indexes that single term -- For instance, the Pauli string
     /// XXY with coefficient 0.5 would be indexed by ([1,1,2], [0.5]). Alternatively,
     /// Hamiltonians parameterized by a continuous variable, such as X cos φ + Y sin φ,
@@ -37,10 +37,10 @@ namespace Microsoft.Quantum.Canon
     /// - @"microsoft.quantum.canon.evolutionset"
     newtype GeneratorIndex = ((Int[], Double[]), Int[]);
     
-	/// # Summary
+    /// # Summary
     /// Represents a collection of `GeneratorIndex`es. 
-	///
-	/// We iterate over this
+    ///
+    /// We iterate over this
     /// collection using a single-index integer, and the size of the
     /// collection is assumed to be known.
     ///
@@ -63,8 +63,8 @@ namespace Microsoft.Quantum.Canon
     
     /// # Summary
     /// Represents a unitary time-evolution operator. 
-	/// 
-	/// The first parameter is
+    /// 
+    /// The first parameter is
     /// is duration of time-evolution, and the second parameter is the qubit
     /// register acted upon by the unitary.
     newtype EvolutionUnitary = ((Double, Qubit[]) => Unit : Adjoint, Controlled);
@@ -72,8 +72,8 @@ namespace Microsoft.Quantum.Canon
     /// # Summary
     /// Represents a set of gates that can be readily implemented and used
     /// to implement simulation algorithms.
-	/// 
-	/// Elements in the set are indexed
+    /// 
+    /// Elements in the set are indexed
     /// by a  <xref:microsoft.quantum.canon.generatorindex>,
     /// and each set is described by a function
     /// from `GeneratorIndex` to  <xref:microsoft.quantum.canon.evolutionunitary>,
@@ -84,14 +84,14 @@ namespace Microsoft.Quantum.Canon
     /// # Summary
     /// Represents a dynamical generator as a set of simulatable gates and
     /// an expansion in terms of that basis.
-	/// 
+    /// 
     /// Last parameter for number of terms.
     newtype EvolutionGenerator = (EvolutionSet, GeneratorSystem);
     
     /// # Summary
     /// Represents a time-dependent dynamical generator. 
-	/// 
-	/// The `Double`
+    /// 
+    /// The `Double`
     /// parameter is a schedule in $[0, 1]$.
     newtype EvolutionSchedule = (EvolutionSet, (Double -> GeneratorSystem));
     
@@ -312,7 +312,7 @@ namespace Microsoft.Quantum.Canon
     //
     /// # Summary
     /// Linearly interpolates between two `GeneratorSystems` according to a
-    /// schedule parameter `s` btween 0 and 1 (inclusive).
+    /// schedule parameter `s` between 0 and 1 (inclusive).
     ///
     /// # Input
     /// ## schedule

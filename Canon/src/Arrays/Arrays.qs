@@ -25,7 +25,7 @@ namespace Microsoft.Quantum.Canon
     function Reverse<'T> (array : 'T[]) : 'T[]
     {
         let nElements = Length(array);
-		return array[nElements-1..-1..0];
+        return array[nElements-1..-1..0];
     }
     
     

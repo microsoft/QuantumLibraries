@@ -178,8 +178,8 @@ namespace Microsoft.Quantum.Canon
     /// Integer r between 0 and `modulus - 1' such that `value - r' is divisible by modulus
     ///
     /// # Remarks
-    /// This function behaves the way a mathematician would expect the Mod function to behave
-	/// for negative inputs, as opposed to how the operator `%` behaves in C# and Q#.
+    /// This function behaves different to how the operator `%` behaves in C# and Q# as in the result
+    /// is always a positive integer between between 0 and `modulus - 1', even if value is negative.
     function Modulus (value : Int, modulus : Int) : Int
     {
         AssertBoolEqual(modulus > 0, true, $"`modulus` must be positive");
@@ -199,7 +199,7 @@ namespace Microsoft.Quantum.Canon
     /// # Summary
     /// Let us denote expBase by x, power by p and modulus by N.
     /// The function returns xᵖ mod N.
-	/// 
+    /// 
     /// We assume that N,x are positive and power is non-negative.
     ///
     /// # Remarks
@@ -392,8 +392,8 @@ namespace Microsoft.Quantum.Canon
     
     /// # Summary
     /// For a non-negative integer `a`, returns the number of bits required to represent `a`.
-	///
-	/// That is, returns the smallest $n$ such
+    ///
+    /// That is, returns the smallest $n$ such
     /// that $a < 2^n$.
     ///
     /// # Input
@@ -410,8 +410,8 @@ namespace Microsoft.Quantum.Canon
     
     
     /// # Summary
-	/// Returns the `L(p)` norm of a vector of `Double`s.
-	/// 
+    /// Returns the `L(p)` norm of a vector of `Double`s.
+    /// 
     /// That is, given an array $x$ of type `Double[]`, this returns the $p$-norm
     /// $\|x\|_p= (\sum_{j}|x_j|^{p})^{1/p}$.
     ///
@@ -441,8 +441,8 @@ namespace Microsoft.Quantum.Canon
     
     
     /// # Summary
-	/// Normalizes a vector of `Double`s in the `L(p)` norm.
-	/// 
+    /// Normalizes a vector of `Double`s in the `L(p)` norm.
+    /// 
     /// That is, given an array $x$ of type `Double[]`, this returns an array where
     /// all elements are divided by the $p$-norm $\|x\|_p$.
     ///

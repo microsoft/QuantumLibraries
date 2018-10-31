@@ -80,7 +80,7 @@ namespace Microsoft.Quantum.Canon
     
     /// # Summary
     /// Makes repeated calls to `TrotterStep` to approximate the
-    /// time-evolution operator _exp(-iHt)_.
+    /// time-evolution operator exp(_-iHt_).
     ///
     /// # Input
     /// ## trotterStepSize
@@ -135,7 +135,7 @@ namespace Microsoft.Quantum.Canon
     
     /// # Summary
     /// Implementation of multiple Trotter steps to approximate a unitary
-    /// operator that solves the time-dependent Schrodinger equation.
+    /// operator that solves the time-dependent Schr�dinger equation.
     ///
     /// # Input
     /// ## trotterStepSize

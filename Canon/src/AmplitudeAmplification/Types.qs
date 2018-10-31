@@ -10,8 +10,8 @@ namespace Microsoft.Quantum.Canon
     
     /// # Summary
     /// Represents a reflection oracle.
-	///
-	/// A reflection oracle, $O$, has inputs:
+    ///
+    /// A reflection oracle, $O$, has inputs:
     /// - The phase $\phi$ by which to rotate the reflected subspace.
     /// - The qubit register on which to perform the given reflection.
     ///
@@ -25,8 +25,8 @@ namespace Microsoft.Quantum.Canon
     
     /// # Summary
     /// Represents an oracle for oblivious amplitude amplification.
-	///
-	/// The inputs to the oracle $O$ are
+    ///
+    /// The inputs to the oracle $O$ are:
     /// - The ancilla register $a$ that $O$ acts on.
     /// - The system register $s$ on which the desired unitary $U$ is applied, post-selected on register $a$ being in state $\ket{t}\_a$.
     ///
@@ -41,8 +41,8 @@ namespace Microsoft.Quantum.Canon
     
     /// # Summary
     /// Represents an oracle for state preparation.
-	///
-	/// The inputs to the opracle $O$ are:
+    ///
+    /// The inputs to the opracle $O$ are:
     /// - An integer indexing the flag qubit $f$.
     /// - The system register $s$ that will store the desired quantum state $\ket{\psi}\_s$.
     ///
@@ -57,8 +57,8 @@ namespace Microsoft.Quantum.Canon
     
     /// # Summary
     /// Represents an oracle for deterministic state preparation.
-	///
-	/// The input to the oracle $O$ is:
+    ///
+    /// The input to the oracle $O$ is:
     /// - The register that will store the desired quantum state $\ket{\psi}\_s$.
     ///
     /// # Remarks
