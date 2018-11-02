@@ -5,7 +5,7 @@ namespace Microsoft.Quantum.Canon
 {
     
     /// # Summary
-    /// The `IsResultZero` function tests if a given Result value is equal to `Zero`.
+    /// Tests if a given Result value is equal to `Zero`.
     ///
     /// # Input
     /// ## input
@@ -19,7 +19,7 @@ namespace Microsoft.Quantum.Canon
     
     
     /// # Summary
-    /// The `IsResultOne` function tests if a given Result value is equal to `One`.
+    /// Tests if a given Result value is equal to `One`.
     ///
     /// # Input
     /// ## input

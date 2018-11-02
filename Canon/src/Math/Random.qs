@@ -16,8 +16,8 @@ namespace Microsoft.Quantum.Canon
     //     another operation will break adjointability and controllability.
     
     /// # Summary
-    /// Generates a random number uniformly sampled in the interval
-    /// $[0, 2^{\texttt{maxBits}} - 1]$.
+    /// Generates a random integer uniformly sampled from all integers that can be represented
+	/// in a given number of bits.
     ///
     /// # Input
     /// ## maxBits
@@ -46,8 +46,8 @@ namespace Microsoft.Quantum.Canon
     
     
     /// # Summary
-    /// Generates a random number uniformly sampled in the interval
-    /// $[0, \texttt{maxInt})$.
+    /// Generates a uniformly sampled random integer greater than or equal to zero
+	/// and less than a provided upper bound.
     ///
     /// # Input
     /// ## maxInt
@@ -87,7 +87,8 @@ namespace Microsoft.Quantum.Canon
     
     
     /// # Summary
-    /// Returns a random real number in the interval $[0, 1)$.
+    /// Returns a random real number in the interval greater than or equal to zero 
+	/// and less than one.
     ///
     /// # Input
     /// ## bitsRandom

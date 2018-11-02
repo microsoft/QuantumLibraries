@@ -8,9 +8,9 @@ namespace Microsoft.Quantum.Canon
     
     
     /// # Summary
-    /// Given operations implementing operators $U$ and $V$, performs the
-    /// operation $UVU^{\dagger}$ on a target. That is, this operation
-    /// conjugates $V$ with $U$.
+    /// Given operations implementing operators `U` and `V`, performs the
+    /// operation `U�VU` on a target. That is, this operation
+    /// conjugates `V` with `U`.
     ///
     /// # Input
     /// ## outerOperation
@@ -44,10 +44,10 @@ namespace Microsoft.Quantum.Canon
     
     
     /// # Summary
-    /// Given operations implementing operators $U$ and $V$, performs the
-    /// operation $UVU^{\dagger}$ on a target. That is, this operation
-    /// conjugates $V$ with $U$.
-    /// The modifier 'A' indicates that the inner operation is adjointable.
+    /// Given operations implementing operators `U` and `V`, performs the
+    /// operation `U�VU` on a target. That is, this operation
+    /// conjugates `V` with `U`.
+    /// The modifier `A` indicates that the inner operation is adjointable.
     ///
     /// # Input
     /// ## outerOperation
@@ -84,10 +84,10 @@ namespace Microsoft.Quantum.Canon
     
     
     /// # Summary
-    /// Given operations implementing operators $U$ and $V$, performs the
-    /// operation $UVU^{\dagger}$ on a target. That is, this operation
-    /// conjugates $V$ with $U$.
-    /// The modifier 'C' indicates that the inner operation is controllable.
+    /// Given operations implementing operators `U` and `V`, performs the
+    /// operation `U�VU` on a target. That is, this operation
+    /// conjugates `V` with `U`.
+    /// The modifier `C` dicates that the inner operation is controllable.
     ///
     /// # Input
     /// ## outerOperation
@@ -129,10 +129,10 @@ namespace Microsoft.Quantum.Canon
     
     
     /// # Summary
-    /// Given operations implementing operators $U$ and $V$, performs the
-    /// operation $UVU^{\dagger}$ on a target. That is, this operation
-    /// conjugates $V$ with $U$.
-    /// The modifier 'CA' indicates that the inner operation is controllable
+    /// Given operations implementing operators `U` and `V`, performs the
+    /// operation `U�VU` on a target. That is, this operation
+    /// conjugates `V` with `U`.
+    /// The modifier `CA` indicates that the inner operation is controllable
     /// and adjointable.
     ///
     /// # Input

@@ -29,7 +29,9 @@ namespace Microsoft.Quantum.Canon
     ///
     /// # Example
     /// ```qsharp
-    /// function Plus(a : Double, b : Double) { return a + b; }
+    /// function Plus(a : Double, b : Double) { 
+	///     return a + b;
+	/// }
     /// function Sum(xs : Double[]) {
     ///     return Fold(Plus, 0.0, xs);
     /// }

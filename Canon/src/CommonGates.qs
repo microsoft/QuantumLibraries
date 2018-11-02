@@ -5,7 +5,8 @@ namespace Microsoft.Quantum.Canon {
     open Microsoft.Quantum.Primitive;
 
     /// # Summary
-    /// Applies the controlled-$X$ (CX) gate to a pair of qubits,
+    /// Applies the controlled-X (CX) gate to a pair of qubits.
+	///
     /// $$
     /// \begin{align}
     ///     1 & 0 & 0 & 0 \\\\
@@ -24,12 +25,11 @@ namespace Microsoft.Quantum.Canon {
     ///
     /// # Remarks
     /// Equivalent to:
-    /// ```Q#
+    /// ```qsharp
     /// Controlled X([control], target);
     /// ```
-    ///
-    /// Equivalent to:
-    /// ```Q#
+    /// and to:
+    /// ```qsharp
     /// CNOT(control, target);
     /// ```
     operation CX(control : Qubit, target : Qubit) : Unit {
@@ -42,7 +42,8 @@ namespace Microsoft.Quantum.Canon {
     }
 
     /// # Summary
-    /// Applies the controlled-$Y$ (CY) gate to a pair of qubits,
+    /// Applies the controlled-Y (CY) gate to a pair of qubits.
+	///
     /// $$
     /// \begin{align}
     ///     1 & 0 & 0 & 0 \\\\
@@ -61,7 +62,7 @@ namespace Microsoft.Quantum.Canon {
     ///
     /// # Remarks
     /// Equivalent to:
-    /// ```Q#
+    /// ```qsharp
     /// Controlled Y([control], target);
     /// ```
     operation CY(control : Qubit, target : Qubit) : Unit {
@@ -74,7 +75,8 @@ namespace Microsoft.Quantum.Canon {
     }
 
     /// # Summary
-    /// Applies the controlled-$Z$ (CZ) gate to a pair of qubits,
+    /// Applies the controlled-Z (CZ) gate to a pair of qubits.
+	///
     /// $$
     /// \begin{align}
     ///     1 & 0 & 0 & 0 \\\\
@@ -93,7 +95,7 @@ namespace Microsoft.Quantum.Canon {
     ///
     /// # Remarks
     /// Equivalent to:
-    /// ```Q#
+    /// ```qsharp
     /// Controlled Z([control], target);
     /// ```
     operation CZ(control : Qubit, target : Qubit) : Unit {

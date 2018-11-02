@@ -24,14 +24,7 @@ namespace Microsoft.Quantum.Canon
     function Reverse<'T> (array : 'T[]) : 'T[]
     {
         let nElements = Length(array);
-        mutable newArray = new 'T[nElements];
-        
-        for (idxElement in 0 .. nElements - 1)
-        {
-            set newArray[(nElements - idxElement) - 1] = array[idxElement];
-        }
-        
-        return newArray;
+        return array[nElements-1..-1..0];
     }
     
     
@@ -131,7 +124,7 @@ namespace Microsoft.Quantum.Canon
     /// be as long as the shorter of the inputs.
     ///
     /// # Example
-    /// ```Q#
+    /// ```qsharp
     /// let left = [1, 3, 71];
     /// let right = [false, true];
     /// let pairs = Zip(left, right); // [(1, false), (3, true)]
@@ -246,7 +239,7 @@ namespace Microsoft.Quantum.Canon
     /// forth.
     ///
     /// # Example
-    /// ```Q#
+    /// ```qsharp
     /// let array = [10, 11, 12, 13, 14, 15];
     /// // The following line returns [10, 12, 15].
     /// let subarray = Exclude([1, 3, 4], array);
@@ -308,7 +301,7 @@ namespace Microsoft.Quantum.Canon
     /// with `defaultElement`s until `output` has length `nElementsTotal`
     ///
     /// # Example
-    /// ```Q#
+    /// ```qsharp
     /// let array = [10, 11, 12];
     /// // The following line returns [10, 12, 15, 2, 2, 2].
     /// let output = Pad(-6, array, 2);
@@ -346,9 +339,9 @@ namespace Microsoft.Quantum.Canon
     /// A new array of integers corresponding to values iterated over by `range`.
     ///
     /// # Example
-    /// ```Q#
-    /// // The following returns [1;3;5;7];
-    /// // let array = IntArrayFromRange(1..2..8);
+    /// ```qsharp
+    /// // The following returns [1,3,5,7];
+    /// let array = IntArrayFromRange(1..2..8);
     /// ```
     function IntArrayFromRange (range: Range) : Int[] {
         let start = RangeStart(range);
@@ -382,9 +375,9 @@ namespace Microsoft.Quantum.Canon
     /// will contain all remaining elements.
     ///
     /// # Example
-    /// ```Q#
-    /// // The following returns [[1;5];[3];[7]];
-    /// let (arr1, arr2) = SplitArray([2;1], [1;5;3;7]);
+    /// ```qsharp
+    /// // The following returns [[1,5],[3],[7]];
+    /// let (arr1, arr2) = SplitArray([2,1], [1,5,3,7]);
     /// ```
     function SplitArray<'T>(nElements: Int[], arr: 'T[]) : 'T[][] {
         mutable output = new 'T[][Length(nElements)+1];

@@ -5,8 +5,7 @@ namespace Microsoft.Quantum.Canon
 {
     
     /// # Summary
-    /// Returns the constant $\ln(2)$, where $\ln$
-    /// is the natural (base-$e$) logarithm.
+    /// Returns the natural logarithm of 2.
     ///
     /// # Output
     /// Returns a `Double` equal to $0.6931471805599453$.

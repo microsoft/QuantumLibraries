@@ -14,9 +14,9 @@ namespace Microsoft.Quantum.Canon
     
     
     /// # Summary
-    /// Applies a multiply controlled version of singly controlled
+    /// Applies a multiply controlled version of a singly controlled
     /// operation.
-    /// The modifier 'C' indicates that the single-qubit operation is controllable.
+    /// The modifier `C` indicates that the single-qubit operation is controllable.
     ///
     /// # Input
     /// ## singlyControlledOp
@@ -73,9 +73,9 @@ namespace Microsoft.Quantum.Canon
     
     
     /// # Summary
-    /// Applies a multiply controlled version of singly controlled
+    /// Applies a multiply controlled version of a singly controlled
     /// operation.
-    /// The modifier 'CA' indicates that the single-qubit operation is controllable
+    /// The modifier `CA` indicates that the single-qubit operation is controllable
     /// and adjointable.
     ///
     /// # Input
@@ -137,7 +137,9 @@ namespace Microsoft.Quantum.Canon
     
     
     /// # Summary
-    /// Applies a unitary given by the following map on computational basis vectors:
+	/// Performs a controlled 'AND ladder' on the target qubits.
+	/// 
+    /// This applies a unitary given by the following map on computational basis vectors:
     /// $$
     /// \begin{align}
     ///     \ket{x\_1, \dots, x\_n} \ket{y\_1, \dots, y\_{n - 1}} \mapsto

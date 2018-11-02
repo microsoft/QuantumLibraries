@@ -79,7 +79,7 @@ namespace Microsoft.Quantum.Canon
     
     /// # Summary
     /// Makes repeated calls to `TrotterStep` to approximate the
-    /// time-evolution operator $e^{-i H t}$.
+    /// time-evolution operator exp(_-iHt_).
     ///
     /// # Input
     /// ## trotterStepSize
@@ -113,7 +113,7 @@ namespace Microsoft.Quantum.Canon
     
     /// # Summary
     /// `SimulationAlgorithm` function that uses a Trotter–Suzuki
-    /// decomposition to approximate the time-evolution operator $e^{-i H t}$.
+    /// decomposition to approximate the time-evolution operator _exp(-iHt)_.
     ///
     /// # Input
     /// ## trotterStepSize
@@ -134,8 +134,7 @@ namespace Microsoft.Quantum.Canon
     
     /// # Summary
     /// Implementation of multiple Trotter steps to approximate a unitary
-    /// operator that solves the time-dependent Schr�dinger equation at time
-    /// $t$.
+    /// operator that solves the time-dependent Schr�dinger equation.
     ///
     /// # Input
     /// ## trotterStepSize
@@ -174,7 +173,7 @@ namespace Microsoft.Quantum.Canon
     /// # Summary
     /// `TimeDependentSimulationAlgorithm` function that uses a Trotter–Suzuki
     /// decomposition to approximate a unitary operator that solves the
-    /// time-dependent Schr�dinger equation at time $t$.
+    /// time-dependent Schrodinger equation.
     ///
     /// # Input
     /// ## trotterStepSize

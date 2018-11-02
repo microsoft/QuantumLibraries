@@ -5,15 +5,19 @@ namespace Microsoft.Quantum.Canon
 {
     
     /// # Summary
-    /// Represents a discrete-time oracle $U^m$ for a fixed operation $U$
+    /// Represents a discrete-time oracle.
+	///
+	/// This is an oracle that implements $U^m$ for a fixed operation $U$
     /// and a non-negative integer $m$.
     newtype DiscreteOracle = ((Int, Qubit[]) => Unit : Adjoint, Controlled);
     
     /// # Summary
-    /// Represents a continuous-time oracle
+    /// Represents a continuous-time oracle.
+	///
+	/// This is an oracle that implements 
     /// $U(\delta t) : \ket{\psi(t)} \mapsto \ket{\psi(t + \delta t)}
     /// for all times $t$, where $U$ is a fixed operation, and where
-    /// and $\delta t$ is a non-negative real number.
+    /// $\delta t$ is a non-negative real number.
     newtype ContinuousOracle = ((Double, Qubit[]) => Unit : Adjoint, Controlled);
     
     

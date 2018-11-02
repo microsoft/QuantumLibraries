@@ -8,7 +8,9 @@ namespace Microsoft.Quantum.Canon
     open Microsoft.Quantum.Extensions.Convert;
     
     /// # Summary
-    /// This unitary $U$ creates a uniform superposition over all number states
+	/// Creates a uniform superposition over states that encode 0 through `nIndices`.
+	/// 
+    /// That is, this unitary $U$ creates a uniform superposition over all number states
     /// $0$ to $M-1$, given an input state $\ket{0\cdots 0}$. In other words, 
     /// $$
     /// \begin{align}

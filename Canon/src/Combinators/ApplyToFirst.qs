@@ -9,7 +9,7 @@ namespace Microsoft.Quantum.Canon
     // operation to the first one, two and three qubits of a register
     
     /// # Summary
-    /// Applies operation op to the first qubit in the register.
+    /// Applies an operation to the first qubit in the register.
     /// # Input
     /// ## op
     /// An operation to be applied to the first qubit
@@ -32,8 +32,8 @@ namespace Microsoft.Quantum.Canon
     
     
     /// # Summary
-    /// Applies operation op to the first qubit in the register.
-    /// The modifier 'A' indicates that the operation is adjointable.
+    /// Applies an operation to the first qubit in the register.
+    /// The modifier `A` indicates that the operation is adjointable.
     /// # Input
     /// ## op
     /// An operation to be applied to the first qubit
@@ -60,7 +60,7 @@ namespace Microsoft.Quantum.Canon
     
     /// # Summary
     /// Applies operation op to the first qubit in the register.
-    /// The modifier 'C' indicates that the operation is controllable.
+    /// The modifier `C` indicates that the operation is controllable.
     /// # Input
     /// ## op
     /// An operation to be applied to the first qubit
@@ -87,7 +87,7 @@ namespace Microsoft.Quantum.Canon
     
     /// # Summary
     /// Applies operation op to the first qubit in the register.
-    /// The modifier 'CA' indicates that the operation is controllable and adjointable.
+    /// The modifier `CA` indicates that the operation is controllable and adjointable.
     /// # Input
     /// ## op
     /// An operation to be applied to the first qubit
@@ -115,7 +115,7 @@ namespace Microsoft.Quantum.Canon
     
     
     /// # Summary
-    /// Applies operation `op` to the first two qubits in the register.
+    /// Applies an operation to the first two qubits in the register.
     ///
     /// # Input
     /// ## op
@@ -145,8 +145,8 @@ namespace Microsoft.Quantum.Canon
     
     
     /// # Summary
-    /// Applies operation `op` to the first two qubits in the register.
-    /// The modifier 'A' indicates that the operation is adjointable.
+    /// Applies an operation to the first two qubits in the register.
+    /// The modifier `A` indicates that the operation is adjointable.
     ///
     /// # Input
     /// ## op
@@ -179,8 +179,8 @@ namespace Microsoft.Quantum.Canon
     
     
     /// # Summary
-    /// Applies operation `op` to the first two qubits in the register.
-    /// The modifier 'C' indicates that the operation is controllable.
+    /// Applies an operation to the first two qubits in the register.
+    /// The modifier `C` indicates that the operation is controllable.
     ///
     /// # Input
     /// ## op
@@ -213,8 +213,8 @@ namespace Microsoft.Quantum.Canon
     
     
     /// # Summary
-    /// Applies operation `op` to the first two qubits in the register.
-    /// The modifier 'CA' indicates that the operation is controllable and adjointable.
+    /// Applies an operation to the first two qubits in the register.
+    /// The modifier `CA` indicates that the operation is controllable and adjointable.
     ///
     /// # Input
     /// ## op
@@ -249,7 +249,7 @@ namespace Microsoft.Quantum.Canon
     
     
     /// # Summary
-    /// Applies operation `op` to the first three qubits in the register.
+    /// Applies an operation to the first three qubits in the register.
     /// # Input
     /// ## op
     /// An operation to be applied to the first three qubits
@@ -277,8 +277,8 @@ namespace Microsoft.Quantum.Canon
     
     
     /// # Summary
-    /// Applies operation `op` to the first three qubits in the register.
-    /// The modifier 'A' indicates that the operation is adjointable.
+    /// Applies an operation to the first three qubits in the register.
+    /// The modifier `A` indicates that the operation is adjointable.
     /// # Input
     /// ## op
     /// An operation to be applied to the first three qubits
@@ -310,8 +310,8 @@ namespace Microsoft.Quantum.Canon
     
     
     /// # Summary
-    /// Applies operation `op` to the first three qubits in the register.
-    /// The modifier 'C' indicates that the operation is controllable.
+    /// Applies an operation to the first three qubits in the register.
+    /// The modifier `C` indicates that the operation is controllable.
     /// # Input
     /// ## op
     /// An operation to be applied to the first three qubits
@@ -343,8 +343,8 @@ namespace Microsoft.Quantum.Canon
     
     
     /// # Summary
-    /// Applies operation `op` to the first three qubits in the register.
-    /// The modifier 'CA' indicates that the operation is controllable and adjointable.
+    /// Applies an operation to the first three qubits in the register.
+    /// The modifier `CA` indicates that the operation is controllable and adjointable.
     /// # Input
     /// ## op
     /// An operation to be applied to the first three qubits

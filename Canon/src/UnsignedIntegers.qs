@@ -29,8 +29,9 @@ namespace Microsoft.Quantum.Canon
     
     /// # Summary
     /// Little-endian unsigned integers in QFT basis.
-    /// For example, if |x⟩ is little-endian encoding of integer x in computational basis,
-    /// then QFTLE|x⟩ is encoding of x in QFT basis.
+	///
+    /// For example, if `|x⟩` is the little-endian encoding of the integer `x` in the computational basis,
+    /// then `QFTLE|x⟩` is the encoding of `x` in the QFT basis.
     ///
     /// # Remarks
     /// We abbreviate `LittleEndian` as `LE` in the documentation.

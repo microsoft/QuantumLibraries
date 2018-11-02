@@ -9,7 +9,7 @@ namespace Microsoft.Quantum.Canon
     
     
     /// # Summary
-    /// Performs the quantum phase estimation algorithm for a given oracle U and targetState,
+    /// Performs the quantum phase estimation algorithm for a given oracle `U` and `targetState`,
     /// reading the phase into a big-endian quantum register.
     ///
     /// # Input

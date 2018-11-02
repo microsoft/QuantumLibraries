@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft Corporation. All rights reserved.
+﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
 namespace Microsoft.Quantum.Canon
@@ -89,9 +89,11 @@ namespace Microsoft.Quantum.Canon
     ///
     /// # Example
     /// The following are equivalent:
-    /// ```Q#
+    /// ```qsharp
     /// ApplyPauli([PauliY, PauliZ, PauliX], target);
-    ///
+    /// ```
+	/// and
+	/// ```qsharp
     /// Y(target[0]);
     /// Z(target[1]);
     /// X(target[2]);
@@ -164,7 +166,7 @@ namespace Microsoft.Quantum.Canon
     
     
     /// # Summary
-    /// Applies a Pauli operator on the $n^{\text{th}}$ qubit if the $n^{\text{th}}$
+    /// Applies a Pauli operator on each qubit in an array if the corresponding
     /// bit of a Boolean array matches a given input.
     ///
     /// # Input
@@ -337,9 +339,9 @@ namespace Microsoft.Quantum.Canon
     
     
     /// # Summary
-    /// Measures a single qubit in the $Z$ basis,
+    /// Measures a single qubit in the `Z` basis,
     /// and resets it to the standard basis state
-    /// $\ket{0}$ following the measurement.
+    /// |0〉 following the measurement.
     ///
     /// # Input
     /// ## target
@@ -364,9 +366,9 @@ namespace Microsoft.Quantum.Canon
     
     
     /// # Summary
-    /// Measures a single qubit in the $X$ basis,
+    /// Measures a single qubit in the X basis,
     /// and resets it to the standard basis state
-    /// $\ket{0}$ following the measurement.
+    /// |0〉 following the measurement.
     ///
     /// # Input
     /// ## target
@@ -394,9 +396,9 @@ namespace Microsoft.Quantum.Canon
     
     
     /// # Summary
-    /// Measures a single qubit in the $Y$ basis,
+    /// Measures a single qubit in the Y basis,
     /// and resets it to the standard basis state
-    /// $\ket{0}$ following the measurement.
+    /// |0〉 following the measurement.
     ///
     /// # Input
     /// ## target
@@ -424,8 +426,10 @@ namespace Microsoft.Quantum.Canon
     
     
     /// # Summary
-    /// Applies the Hadamard transformation $H_Y = S H$
-    /// between the $Z$ and $Y$ bases to a single qubit,
+	/// Applies the Y-basis analog to the Hadamard transformation
+	/// that interchanges the Z and Y axes.
+	/// 
+    /// The Y Hadamard transformation $H_Y = S H$ on a single qubit is:
     ///
     /// \begin{align}
     ///     H_Y \mathrel{:=}

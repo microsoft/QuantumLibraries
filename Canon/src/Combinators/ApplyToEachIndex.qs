@@ -33,7 +33,7 @@ namespace Microsoft.Quantum.Canon
     
     /// # Summary
     /// Applies a single-qubit operation to each indexed element in a register.
-    /// The modifier 'C' indicates that the single-qubit operation is controllable.
+    /// The modifier `C` indicates that the single-qubit operation is controllable.
     ///
     /// # Input
     /// ## singleElementOperation
@@ -63,7 +63,7 @@ namespace Microsoft.Quantum.Canon
     
     /// # Summary
     /// Applies a single-qubit operation to each indexed element in a register.
-    /// The modifier 'A' indicates that the single-qubit operation is adjointable.
+    /// The modifier `A` indicates that the single-qubit operation is adjointable.
     ///
     /// # Input
     /// ## singleElementOperation
@@ -93,7 +93,7 @@ namespace Microsoft.Quantum.Canon
     
     /// # Summary
     /// Applies a single-qubit operation to each indexed element in a register.
-    /// The modifier 'CA' indicates that the single-qubit operation is adjointable
+    /// The modifier `CA` indicates that the single-qubit operation is adjointable
     /// and controllable.
     ///
     /// # Input

@@ -36,7 +36,7 @@ namespace Microsoft.Quantum.Canon
     /// # Summary
     /// Given an operation `op` and a bit value `bit`, applies `op` to the `target`
     /// if `bit` is true. If false, nothing happens to the `target`.
-    /// The modifier 'C' indicates that the operation is controllable.
+    /// The modifier `C` indicates that the operation is controllable.
     ///
     /// # Input
     /// ## op
@@ -69,7 +69,7 @@ namespace Microsoft.Quantum.Canon
     /// # Summary
     /// Given an operation `op` and a bit value `bit`, applies `op` to the `target`
     /// if `bit` is true. If false, nothing happens to the `target`.
-    /// The modifier 'A' indicates that the operation is adjointable.
+    /// The modifier `A` indicates that the operation is adjointable.
     ///
     /// # Input
     /// ## op
@@ -102,7 +102,7 @@ namespace Microsoft.Quantum.Canon
     /// # Summary
     /// Given an operation `op` and a bit value `bit`, applies `op` to the `target`
     /// if `bit` is true. If false, nothing happens to the `target`.
-    /// The modifier 'CA' indicates that the operation is controllable and adjointable.
+    /// The modifier `CA` indicates that the operation is controllable and adjointable.
     ///
     /// # Input
     /// ## op
@@ -162,7 +162,7 @@ namespace Microsoft.Quantum.Canon
     /// # Summary
     /// Given an operation op, returns a new operation which
     /// applies the op if a classical control bit is true. If false, nothing happens.
-    /// The modifier 'C' indicates that the operation is controllable.
+    /// The modifier `C` indicates that the operation is controllable.
     ///
     /// # Input
     /// ## op
@@ -186,7 +186,7 @@ namespace Microsoft.Quantum.Canon
     /// # Summary
     /// Given an operation op, returns a new operation which
     /// applies the op if a classical control bit is true. If false, nothing happens.
-    /// The modifier 'A' indicates that the operation is adjointable.
+    /// The modifier `A` indicates that the operation is adjointable.
     ///
     /// # Input
     /// ## op
@@ -210,7 +210,7 @@ namespace Microsoft.Quantum.Canon
     /// # Summary
     /// Given an operation op, returns a new operation which
     /// applies the op if a classical control bit is true. If false, nothing happens.
-    /// The modifier 'CA' indicates that the operation is controllable and adjointable.
+    /// The modifier `CA` indicates that the operation is controllable and adjointable.
     ///
     /// # Input
     /// ## op

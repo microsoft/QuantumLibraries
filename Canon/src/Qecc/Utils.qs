@@ -10,8 +10,8 @@ namespace Microsoft.Quantum.Canon
     /// # Summary
     /// Given an array of results, represents the array by a single
     /// integer, with the 0th (leftmost) entry in the array being mapped
-    /// the least significant bit. Thus, [One, Zero] is represented by
-    /// 1 and [Zero, One] by 2.
+    /// the least significant bit. Thus, `[One, Zero]` is represented by
+    /// 1 and `[Zero, One]` by 2.
     function ResultAsInt (results : Result[]) : Int
     {
         mutable n = 0;

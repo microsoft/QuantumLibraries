@@ -10,7 +10,9 @@ namespace Microsoft.Quantum.Canon
     /// # Summary
     /// Represents a single primitive term in the set of all dynamical generators, e.g.
     /// Hermitian operators, for which there exists a map from that generator
-    /// to time-evolution by that that generator, through "EvolutionSet". The first element
+    /// to time-evolution by that that generator, through `EvolutionSet`. 
+    ///
+    /// The first element
     /// (Int[], Double[]) is indexes that single term -- For instance, the Pauli string
     /// XXY with coefficient 0.5 would be indexed by ([1,1,2], [0.5]). Alternatively,
     /// Hamiltonians parameterized by a continuous variable, such as X cos φ + Y sin φ,
@@ -34,8 +36,10 @@ namespace Microsoft.Quantum.Canon
     /// - @"microsoft.quantum.canon.evolutionset"
     newtype GeneratorIndex = ((Int[], Double[]), Int[]);
     
-    //  is a collection of GeneratorTerms. We iterate over this
-    
+    /// # Summary
+    /// Represents a collection of `GeneratorIndex`es. 
+    ///
+    /// We iterate over this
     /// collection using a single-index integer, and the size of the
     /// collection is assumed to be known.
     ///
@@ -57,14 +61,18 @@ namespace Microsoft.Quantum.Canon
     newtype Unitary = (Qubit[] => Unit : Adjoint, Controlled);
     
     /// # Summary
-    /// Represents a unitary time-evolution operator. The first parameter is
+    /// Represents a unitary time-evolution operator. 
+    /// 
+    /// The first parameter is
     /// is duration of time-evolution, and the second parameter is the qubit
     /// register acted upon by the unitary.
     newtype EvolutionUnitary = ((Double, Qubit[]) => Unit : Adjoint, Controlled);
     
     /// # Summary
     /// Represents a set of gates that can be readily implemented and used
-    /// to implement simulation algorithms. Elements in the set are indexed
+    /// to implement simulation algorithms.
+    /// 
+    /// Elements in the set are indexed
     /// by a  <xref:microsoft.quantum.canon.generatorindex>,
     /// and each set is described by a function
     /// from `GeneratorIndex` to  <xref:microsoft.quantum.canon.evolutionunitary>,
@@ -75,18 +83,21 @@ namespace Microsoft.Quantum.Canon
     /// # Summary
     /// Represents a dynamical generator as a set of simulatable gates and
     /// an expansion in terms of that basis.
-    /// Last parameter for number of terms
+    /// 
+    /// Last parameter for number of terms.
     newtype EvolutionGenerator = (EvolutionSet, GeneratorSystem);
     
     /// # Summary
-    /// Represents a time-dependent dynamical generator. The `Double`
+    /// Represents a time-dependent dynamical generator. 
+    /// 
+    /// The `Double`
     /// parameter is a schedule in $[0, 1]$.
     newtype EvolutionSchedule = (EvolutionSet, (Double -> GeneratorSystem));
     
     
     /// # Summary
-    /// Returns a generator index consistent with the
-    /// Hamiltonian $H = 0$.
+    /// Returns a generator index consistent with the zero
+    /// Hamiltonian, `H = 0`, which corresponds to the identity evolution operation.
     ///
     /// # Input
     /// ## idxTerm
@@ -103,8 +114,8 @@ namespace Microsoft.Quantum.Canon
     
     
     /// # Summary
-    /// Returns a generator system consistent with the
-    /// Hamiltonian $H = 0$.
+    /// Returns a generator system consistent with the zero
+    /// Hamiltonian `H = 0`, which corresponds to the identity evolution operation.
     ///
     /// # Output
     /// A generator system representing evolution under the Hamiltonian
@@ -117,7 +128,7 @@ namespace Microsoft.Quantum.Canon
     
     /// # Summary
     /// Returns a generator system consistent with the
-    /// Hamiltonian $H(s) = 0$, where $s$ is a schedule parameter.
+    /// Hamiltonian `H(s) = 0`, where `s` is a schedule parameter.
     ///
     /// # Input
     /// ## schedule
@@ -135,7 +146,7 @@ namespace Microsoft.Quantum.Canon
     
     /// # Summary
     /// Returns a time-dependent generator system consistent with the
-    /// Hamiltonian $H(s) = 0$.
+    /// Hamiltonian `H(s) = 0`.
     ///
     /// # Output
     /// A time dependent generator system representing evolution under the Hamiltonian
@@ -202,7 +213,7 @@ namespace Microsoft.Quantum.Canon
     ///
     /// # Example
     /// ```qsharp
-    /// let gen = GeneratorIndex(([1,2,3],[coeff]),[1;2;3);
+    /// let gen = GeneratorIndex(([1,2,3],[coeff]),[1,2,3]);
     /// let ((idxPaulis, idxDoubles), idxQubits) = MultiplyGeneratorIndex(multipler, gen);
     /// // idxDoubles[0] == multipler * coeff;
     /// ```
@@ -253,7 +264,7 @@ namespace Microsoft.Quantum.Canon
     
     
     /// # Summary
-    /// Adds two `GeneratorSystems` to create a new GeneratorSystem.
+    /// Adds two `GeneratorSystem`s to create a new `GeneratorSystem`.
     ///
     /// # Remarks
     /// This is an intermediate step and should not be called.
@@ -271,7 +282,7 @@ namespace Microsoft.Quantum.Canon
     
     
     /// # Summary
-    /// Adds two `GeneratorSystems` to create a new GeneratorSystem.
+    /// Adds two `GeneratorSystem`s to create a new `GeneratorSystem`.
     ///
     /// # Input
     /// ## generatorSystemA
@@ -296,11 +307,11 @@ namespace Microsoft.Quantum.Canon
     }
     
     
-    /// Create description of system that interpolates between two GeneratorSystems based on a schedule parameter in [0,1]
-    ///
+    // Create description of system that interpolates between two GeneratorSystems based on a schedule parameter in [0,1]
+    //
     /// # Summary
     /// Linearly interpolates between two `GeneratorSystems` according to a
-    /// schedule parameter $s\in[0,1]$.
+    /// schedule parameter `s` between 0 and 1 (inclusive).
     ///
     /// # Input
     /// ## schedule
@@ -327,8 +338,7 @@ namespace Microsoft.Quantum.Canon
     
     /// # Summary
     /// Returns a `TimeDependentGeneratorSystem` representing the linear
-    /// interpolation between two `GeneratorSystems` according to a
-    /// schedule parameter $s\in[0,1]$.
+    /// interpolation between two `GeneratorSystem`s.
     ///
     /// # Input
     /// ##  generatorSystemStart
@@ -350,7 +360,7 @@ namespace Microsoft.Quantum.Canon
     }
 
     /// # Summary
-    /// Adds multiple `GeneratorSystems` to create a new GeneratorSystem.
+    /// Adds multiple `GeneratorSystem`s to create a new GeneratorSystem.
     ///
     /// # Input
     /// ## generatorSystems

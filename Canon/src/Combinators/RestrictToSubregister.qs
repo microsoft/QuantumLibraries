@@ -39,7 +39,7 @@ namespace Microsoft.Quantum.Canon
     /// # Summary
     /// Applies an operation to a subregister of a register, with qubits
     /// specified by an array of their indices.
-    /// The modifier 'A' indicates that the operation is adjointable.
+    /// The modifier `A` indicates that the operation is adjointable.
     ///
     /// # Input
     /// ## op
@@ -68,7 +68,7 @@ namespace Microsoft.Quantum.Canon
     /// # Summary
     /// Applies an operation to a subregister of a register, with qubits
     /// specified by an array of their indices.
-    /// The modifier 'C' indicates that the operation is controllable.
+    /// The modifier `C` indicates that the operation is controllable.
     ///
     /// # Input
     /// ## op
@@ -98,7 +98,7 @@ namespace Microsoft.Quantum.Canon
     /// # Summary
     /// Applies an operation to a subregister of a register, with qubits
     /// specified by an array of their indices.
-    /// The modifier 'CA' indicates that the operation is controllable and adjointable.
+    /// The modifier `CA` indicates that the operation is controllable and adjointable.
     ///
     /// # Input
     /// ## op
@@ -159,7 +159,7 @@ namespace Microsoft.Quantum.Canon
     
     /// # Summary
     /// Restricts an operation to an array of indices of a register, i.e., a subregister.
-    /// The modifier 'A' indicates that the operation is adjointable.
+    /// The modifier `A` indicates that the operation is adjointable.
     ///
     /// # Input
     /// ## op
@@ -179,7 +179,7 @@ namespace Microsoft.Quantum.Canon
     
     /// # Summary
     /// Restricts an operation to an array of indices of a register, i.e., a subregister.
-    /// The modifier 'C' indicates that the operation is controllable.
+    /// The modifier `C` indicates that the operation is controllable.
     ///
     /// # Input
     /// ## op
@@ -199,7 +199,7 @@ namespace Microsoft.Quantum.Canon
     
     /// # Summary
     /// Restricts an operation to an array of indices of a register, i.e., a subregister.
-    /// The modifier 'CA' indicates that the operation is controllable and adjointable.
+    /// The modifier `CA` indicates that the operation is controllable and adjointable.
     ///
     /// # Input
     /// ## op

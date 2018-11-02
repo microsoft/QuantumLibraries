@@ -10,7 +10,7 @@ namespace Microsoft.Quantum.Canon
     
     
     /// # Summary
-    /// This interpolates between two generators with a uniform schedule,
+    /// Interpolates between two generators with a uniform schedule,
     /// returning an operation that applies simulated evolution under
     /// the resulting time-dependent generator to a qubit register.
     ///
@@ -41,7 +41,7 @@ namespace Microsoft.Quantum.Canon
     
     
     /// # Summary
-    /// Convenience function that performs state preparation by applying a
+    /// Performs state preparation by applying a
     /// `statePrepUnitary` on the input state, followed by adiabatic state
     /// preparation using a `adiabaticUnitary`, and finally phase estimation
     /// with respect to `qpeUnitary`on the resulting state using a
@@ -78,9 +78,9 @@ namespace Microsoft.Quantum.Canon
     
     
     /// # Summary
-    /// Convenience function that performs state preparation by applying a
-    /// `statePrepUnitary` on an automatically allocated input state
-    /// $\ket{0...0}$, followed by adiabatic state preparation using a
+    /// Performs state preparation by applying a
+    /// `statePrepUnitary` on an automatically allocated input state, 
+	/// followed by adiabatic state preparation using a
     /// `adiabaticUnitary`, and finally phase estimation with respect to
     /// `qpeUnitary`on the resulting state using a `phaseEstAlgorithm`.
     ///
@@ -120,7 +120,7 @@ namespace Microsoft.Quantum.Canon
     
     
     /// # Summary
-    /// Convenience function that performs state preparation by applying a
+    /// Performs state preparation by applying a
     /// `statePrepUnitary` on an automatically allocated input state
     /// phase estimation with respect to `qpeUnitary`on the resulting state
     /// using a `phaseEstAlgorithm`.

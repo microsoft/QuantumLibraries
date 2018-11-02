@@ -11,7 +11,9 @@ namespace Microsoft.Quantum.Canon
     
     
     /// # Summary
-    /// Given two functions $f$ and $g$, returns a new function representing
+	/// Generates the composition of two functions.
+	///
+    /// That is, given two functions $f$ and $g$, returns a new function representing
     /// $f \circ g$.
     ///
     /// # Input

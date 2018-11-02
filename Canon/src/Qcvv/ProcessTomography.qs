@@ -10,7 +10,9 @@ namespace Microsoft.Quantum.Canon
     
     
     /// # Summary
-    /// Measures $Z \otimes Z \otimes \cdots \otimes Z$ on
+	/// Jointly measures a register of qubits in the Pauli Z basis.
+	/// 
+    /// In other words, measures the operation $Z \otimes Z \otimes \cdots \otimes Z$ on
     /// a given register.
     ///
     /// # Input
@@ -34,7 +36,7 @@ namespace Microsoft.Quantum.Canon
     
     
     /// # Summary
-    /// Measures the identity operator $\boldone$ on a register
+    /// Measures the identity operator on a register
     /// of qubits.
     ///
     /// # Input
@@ -62,8 +64,9 @@ namespace Microsoft.Quantum.Canon
     
     
     /// # Summary
-    /// Given a qubit, prepares that qubit in the maximally mixed
-    /// state $\boldone / 2$ by applying the depolarizing channel
+	/// Prepares a qubit in the maximally mixed state.
+	/// 
+    /// It prepares the given qubit in the $\boldone / 2$ state by applying the depolarizing channel
     /// $$
     /// \begin{align}
     ///     \Omega(\rho) \mathrel{:=} \frac{1}{4} \sum_{\mu \in \{0, 1, 2, 3\}} \sigma\_{\mu} \rho \sigma\_{\mu}^{\dagger},
@@ -92,8 +95,10 @@ namespace Microsoft.Quantum.Canon
     
     
     /// # Summary
-    /// Given a register, prepares that register in the maximally mixed
-    /// state $\boldone / 2^N$ by applying the complete depolarizing
+    /// Given a register, prepares that register in the maximally mixed state.
+	/// 
+    /// The register is prepared in the $\boldone / 2^N$ state by applying the 
+	/// complete depolarizing
     /// channel to each qubit, where $N$ is the length of the register.
     ///
     /// # Input
@@ -166,7 +171,11 @@ namespace Microsoft.Quantum.Canon
     
     
     /// # Summary
-    /// Given a single qubit initially in the $\ket{0}$ state, prepares the
+	/// Prepares a qubit in the +1 (`Zero`) eigenstate of the given Pauli operator.
+	/// If the identity operator is given, then the qubit is prepared in the maximally 
+	/// mixed state.
+	/// 
+    /// That is, given a single qubit initially in the $\ket{0}$ state, prepares the
     /// qubit in the $+1$ eigenstate of a given Pauli operator, or in the
     /// maximally mixed state for the $\boldone$ Pauli operator `PauliI`.
     ///
@@ -196,7 +205,9 @@ namespace Microsoft.Quantum.Canon
     
     
     /// # Summary
-    /// Given two registers, prepares the maximally entangled state
+	/// Pairwise entangles two qubit registers.
+	/// 
+    /// That is, given two registers, prepares the maximally entangled state
     /// $\bra{\beta_{00}}\ket{\beta_{00}}$ between each pair of qubits on the respective registers,
     /// assuming that each register starts in the $\ket{0\cdots 0}$ state.
     ///

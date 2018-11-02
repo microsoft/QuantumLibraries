@@ -35,10 +35,12 @@ namespace Microsoft.Quantum.Canon
     ///
     /// # Example
     /// The following are equivalent:
-    /// ```Q#
+    /// ```qsharp
     /// let bound = Bind([U, V]);
     /// bound(x);
-    ///
+    /// ```
+	/// and
+	/// ```qsharp
     /// U(x); V(x);
     /// ```
     ///
@@ -82,7 +84,7 @@ namespace Microsoft.Quantum.Canon
     /// Given an array of operations acting on a single input,
     /// produces a new operation that
     /// performs each given operation in sequence.
-    /// The modifier 'A' indicates that all operations in the array are adjointable.
+    /// The modifier `A` indicates that all operations in the array are adjointable.
     ///
     /// # Input
     /// ## operations
@@ -98,10 +100,12 @@ namespace Microsoft.Quantum.Canon
     ///
     /// # Example
     /// The following are equivalent:
-    /// ```Q#
+    /// ```qsharp
     /// let bound = Bind([U, V]);
     /// bound(x);
-    ///
+    /// ```
+	/// and
+	/// ```qsharp
     /// U(x); V(x);
     /// ```
     ///
@@ -141,7 +145,7 @@ namespace Microsoft.Quantum.Canon
     /// Given an array of operations acting on a single input,
     /// produces a new operation that
     /// performs each given operation in sequence.
-    /// The modifier 'C' indicates that all operations in the array are controllable.
+    /// The modifier `C` indicates that all operations in the array are controllable.
     ///
     /// # Input
     /// ## operations
@@ -157,10 +161,12 @@ namespace Microsoft.Quantum.Canon
     ///
     /// # Example
     /// The following are equivalent:
-    /// ```Q#
+    /// ```qsharp
     /// let bound = Bind([U, V]);
     /// bound(x);
-    ///
+    /// ```
+	/// and
+	/// ```qsharp
     /// U(x); V(x);
     /// ```
     ///
@@ -218,7 +224,7 @@ namespace Microsoft.Quantum.Canon
     /// Given an array of operations acting on a single input,
     /// produces a new operation that
     /// performs each given operation in sequence.
-    /// The modifier 'CA' indicates that all operations in the array are adjointable
+    /// The modifier `CA` indicates that all operations in the array are adjointable
     /// and controllable.
     ///
     /// # Input
@@ -235,10 +241,12 @@ namespace Microsoft.Quantum.Canon
     ///
     /// # Example
     /// The following are equivalent:
-    /// ```Q#
+    /// ```qsharp
     /// let bound = Bind([U, V]);
     /// bound(x);
-    ///
+    /// ```
+	/// and
+	/// ```qsharp
     /// U(x); V(x);
     /// ```
     ///

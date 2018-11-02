@@ -19,6 +19,8 @@ namespace Microsoft.Quantum.Canon
     }
     
     /// # Summary
+    /// Applies `X` operations to qubits in a little-endian register based on 1 bits in an integer.
+    ///
     /// Let us denote `value` by a and let y be an unsigned integer encoded in `target`,
     /// then `InPlaceXorLE` performs an operation given by the following map:
     /// $\ket{y}\rightarrow \ket{y\oplus a}$ , where $\oplus$ is the bitwise exclusive OR operator.
@@ -52,6 +54,8 @@ namespace Microsoft.Quantum.Canon
     }
         
     /// # Summary
+    /// Applies `X` operations to qubits in a big-endian register based on 1 bits in an integer.
+    ///
     /// Let us denote `value` by a and let y be an unsigned integer encoded in `target`,
     /// then `InPlaceXorBE` performs an operation given by the following map:
     /// $\ket{y}\rightarrow \ket{y\oplus a}$ , where $\oplus$ is the bitwise exclusive OR operator.
@@ -74,7 +78,7 @@ namespace Microsoft.Quantum.Canon
     }
 
     /// # Summary
-    /// This computes the Majority function in-place on $3$ bits.
+    /// This computes the Majority function in-place on 3 qubits.
     ///
     /// # Input
     /// ## output
@@ -85,7 +89,7 @@ namespace Microsoft.Quantum.Canon
     operation InPlaceMajority(output: Qubit, input: Qubit[]) : Unit {
         body (...){
             if(Length(input) != 2){
-                fail $"Majority on {input} qubits not implemented.";
+                fail $"Majority on {Length(input)} qubits not implemented.";
             }
             CNOT(output, input[1]);
             CNOT(output, input[0]);
@@ -98,9 +102,11 @@ namespace Microsoft.Quantum.Canon
 
 
     /// # Summary
-    /// This unitary $U$ tests if two integers $x,y$ stored in equal-size qubit registers 
-    /// satisfies $x > y$. If true, $1$ is XORed into an output
-    /// qubit. Otherwise, $0$ is XORed into an output qubit. In other words, 
+    /// This unitary tests if two integers `x` and `y` stored in equal-size qubit registers 
+    /// satisfy `x > y`. If true, 1 is XORed into an output
+    /// qubit. Otherwise, 0 is XORed into an output qubit. 
+    ///
+    /// In other words, this unitary $U$  satisfies:
     /// $$
     /// \begin{align}
     /// U\ket{x}\ket{y}\ket{z}=\ket{x}\ket{y}\ket{z\oplus (x>y)}.
@@ -187,9 +193,11 @@ namespace Microsoft.Quantum.Canon
     }
 
     /// # Summary
-    /// This unitary $U$ tests if two integers $x,y$ stored in equal-size qubit registers 
-    /// satisfies $x > y$. If true, $1$ is XORed into an output
-    /// qubit. Otherwise, $0$ is XORed into an output qubit. In other words, 
+    /// This unitary tests if two integers `x` and `y` stored in equal-size qubit registers 
+    /// satisfy `x > y`. If true, 1 is XORed into an output
+    /// qubit. Otherwise, 0 is XORed into an output qubit.
+    ///
+    /// In other words, this unitary $U$  satisfies:
     /// $$
     /// \begin{align}
     /// U\ket{x}\ket{y}\ket{z}=\ket{x}\ket{y}\ket{z\oplus (x>y)}.
@@ -218,8 +226,8 @@ namespace Microsoft.Quantum.Canon
     }
     
     /// # Summary
-    /// `MeasureInteger` reads out the content of a quantum register and converts
-    /// it to an integer of type `Int`. The measurement is performed with respect
+    /// Measures the content of a quantum register and converts
+    /// it to an integer. The measurement is performed with respect
     /// to the standard computational basis, i.e., the eigenbasis of `PauliZ`.
     ///
     /// # Input
@@ -267,6 +275,7 @@ namespace Microsoft.Quantum.Canon
     
     /// # Summary
     /// Unsigned integer increment by an integer constant, based on phase rotations.
+    ///
     /// Suppose `target` encodes unsigned integer x in little-endian encoding and
     /// `increment` is equal to a.
     /// The operation implements the unitary |x⟩ ↦ |x + a ⟩,
@@ -384,6 +393,7 @@ namespace Microsoft.Quantum.Canon
     
     /// # Summary
     /// Unsigned integer increment by an integer constant, based on phase rotations.
+    ///
     /// Suppose `target` encodes unsigned integer x in little-endian encoding and
     /// `increment` is equal to a.
     /// The operation implements the unitary |x⟩ ↦ |x + a ⟩,
@@ -413,6 +423,8 @@ namespace Microsoft.Quantum.Canon
     
     
     /// # Summary
+    /// Performs a modular increment of a qubit register by an integer constant.
+    ///
     /// Let us denote `increment` by a, `modulus` by N and integer encoded in `target` by y
     /// Then the operation performs the following transformation:
     /// \begin{align}
@@ -481,6 +493,8 @@ namespace Microsoft.Quantum.Canon
     
     
     /// # Summary
+    /// Performs a modular increment of a qubit register by an integer constant.
+    ///
     /// Let us denote `increment` by a, `modulus` by N and integer encoded in `target` by y
     /// Then the operation performs the following transformation:
     /// |y⟩ ↦ |y+a (mod N)⟩
@@ -584,7 +598,9 @@ namespace Microsoft.Quantum.Canon
     
     
     /// # Summary
-    /// Implements the map
+    /// Performs a modular multipy-and-add by integer constants on a qubit register.
+    ///
+    /// Implements the map 
     /// $$
     /// \begin{align}
     ///     \ket{x} \ket{b} \mapsto \ket{x} \ket{b + a \cdot x \operatorname{mod} N}
@@ -668,6 +684,8 @@ namespace Microsoft.Quantum.Canon
     
     
     /// # Summary
+    /// Performs modular multiplication by an integer constant on a qubit register.
+    ///
     /// Let us denote modulus by N and constMultiplier by a
     /// then this operation implements a unitary defined by the following map on
     /// computational basis:

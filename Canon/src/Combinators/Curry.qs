@@ -11,7 +11,9 @@ namespace Microsoft.Quantum.Canon
     
     
     /// # Summary
-    /// Given an operation with two inputs, applies Curry's isomorphism
+	/// Returns a curried version of an operation on two inputs.
+	/// 
+    /// That is, given an operation with two inputs, this function applies Curry's isomorphism
     /// $f(x, y) \equiv f(x)(y)$ to return an operation of one input which
     /// returns an operation of one input.
     ///
@@ -96,7 +98,7 @@ namespace Microsoft.Quantum.Canon
     /// Given a function which returns operations,
     /// returns a new operation which takes both inputs
     /// as a tuple.
-    /// The modifier 'C' indicates that the operations are controllable.
+    /// The modifier `C` indicates that the operations are controllable.
     ///
     /// # Input
     /// ## curriedOp
@@ -136,7 +138,7 @@ namespace Microsoft.Quantum.Canon
     /// Given a function which returns operations,
     /// returns a new operation which takes both inputs
     /// as a tuple.
-    /// The modifier 'A' indicates that the operations are adjointable.
+    /// The modifier `A` indicates that the operations are adjointable.
     ///
     /// # Input
     /// ## curriedOp
@@ -178,7 +180,7 @@ namespace Microsoft.Quantum.Canon
     /// Given a function which returns operations,
     /// returns a new operation which takes both inputs
     /// as a tuple.
-    /// The modifier 'CA' indicates that the operations are controllable and adjointable.
+    /// The modifier `CA` indicates that the operations are controllable and adjointable.
     ///
     /// # Input
     /// ## curriedOp
