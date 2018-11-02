@@ -4,7 +4,7 @@ ver=$1
 pkgs=$2
 
 : ${ver:="$NUGET_VERSION"}
-: ${pkgs:="Microsoft.Quantum.Development.Kit;Microsoft.Quantum.Canon;Microsoft.Quantum.Xunit"}
+: ${pkgs:="Microsoft.Quantum.Development.Kit;Microsoft.Quantum.Xunit"}
 
 for pkg in `echo $pkgs | tr ";" "\n"`; do 
   echo Will update package $pkg with version $ver...
