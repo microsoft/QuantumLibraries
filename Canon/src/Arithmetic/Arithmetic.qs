@@ -351,10 +351,7 @@ namespace Microsoft.Quantum.Canon
             AssertHighestBit(value, number);
         }
         
-        controlled adjoint (ctrls, ...)
-        {
-            Controlled AssertHighestBit(ctrls, (value, number));
-        }
+        controlled adjoint auto;
     }
     
     
@@ -384,10 +381,7 @@ namespace Microsoft.Quantum.Canon
             AssertLessThanPhaseLE(value, number);
         }
         
-        controlled adjoint (ctrls, ...)
-        {
-            Controlled AssertLessThanPhaseLE(ctrls, (value, number));
-        }
+        controlled adjoint auto;
     }
     
     
