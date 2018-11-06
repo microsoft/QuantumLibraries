@@ -25,7 +25,7 @@
     <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="2.1.1" />
     <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="2.1.1" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.7.0" />
-    <PackageReference Include="Microsoft.Quantum.Development.Kit" Version="0.3.1810.2508-preview" />
+    <PackageReference Include="Microsoft.Quantum.Development.Kit" Version="0.3.1811.203-preview" />
     <PackageReference Include="xunit.abstractions" Version="2.0.1" />
     <PackageReference Include="xunit.runner.console" Version="2.3.1" />
     <PackageReference Include="YamlDotNet" Version="5.0.1" />
