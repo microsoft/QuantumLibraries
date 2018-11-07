@@ -133,9 +133,9 @@ namespace Microsoft.Quantum.Canon
                 fail "Size of integer registers must be equal."; 
             }
 
-            using(auxillary = Qubit[1]){
+            using(auxillary = Qubit()){
                 WithCA(
-                    ApplyRippleCarryComparatorLE_(x, y, auxillary, _),
+                    ApplyRippleCarryComparatorLE_(x, y, [auxillary], _),
                     BindCA([X, CNOT(x![nQubitsX-1], _)]),
                     output
                 );
