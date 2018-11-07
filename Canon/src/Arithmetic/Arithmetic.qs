@@ -133,9 +133,9 @@ namespace Microsoft.Quantum.Canon
                 fail "Size of integer registers must be equal."; 
             }
 
-            using(auxillary = Qubit[1]){
+            using(auxillary = Qubit()){
                 WithCA(
-                    ApplyRippleCarryComparatorLE_(x, y, auxillary, _),
+                    ApplyRippleCarryComparatorLE_(x, y, [auxillary], _),
                     BindCA([X, CNOT(x![nQubitsX-1], _)]),
                     output
                 );
@@ -351,10 +351,7 @@ namespace Microsoft.Quantum.Canon
             AssertHighestBit(value, number);
         }
         
-        controlled adjoint (ctrls, ...)
-        {
-            Controlled AssertHighestBit(ctrls, (value, number));
-        }
+        controlled adjoint auto;
     }
     
     
@@ -384,10 +381,7 @@ namespace Microsoft.Quantum.Canon
             AssertLessThanPhaseLE(value, number);
         }
         
-        controlled adjoint (ctrls, ...)
-        {
-            Controlled AssertLessThanPhaseLE(ctrls, (value, number));
-        }
+        controlled adjoint auto;
     }
     
     
