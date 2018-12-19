@@ -67,7 +67,8 @@ namespace Microsoft.Quantum.Canon
     /// # Output
     /// An array `'U[]` of elements that are mapped by the `mapper` function.
     ///
-    /// # Example
+    /// # Remarks
+    /// ## Example
     /// The following two lines are equivalent:
     /// ```qsharp
     /// let arr = MapIndex(f, [x0, x1, x2]);

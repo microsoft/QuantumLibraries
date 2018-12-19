@@ -27,7 +27,8 @@ namespace Microsoft.Quantum.Canon
     /// The final state returned by the folder after iterating over
     /// all elements of `array`.
     ///
-    /// # Example
+    /// # Remarks
+    /// ## Example
     /// ```qsharp
     /// function Plus(a : Double, b : Double) { 
 	///     return a + b;

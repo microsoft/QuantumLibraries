@@ -10,7 +10,7 @@ namespace Microsoft.Quantum.Canon
     /// # Summary
     /// Represents a single primitive term in the set of all dynamical generators, e.g.
     /// Hermitian operators, for which there exists a map from that generator
-    /// to time-evolution by that that generator, through `EvolutionSet`. 
+    /// to time-evolution by that generator, through `EvolutionSet`. 
     ///
     /// The first element
     /// (Int[], Double[]) is indexes that single term -- For instance, the Pauli string
@@ -24,7 +24,7 @@ namespace Microsoft.Quantum.Canon
     /// > The interpretation of an `GeneratorIndex` is not defined except
     /// > with reference to a particular set of generators.
     ///
-    /// # Example
+    /// ## Example
     /// Using  <xref:microsoft.quantum.canon.paulievolutionset>, the operator
     /// $\pi X_2 X_5 Y_9$ is represented as:
     /// ```qsharp
@@ -211,7 +211,8 @@ namespace Microsoft.Quantum.Canon
     /// A `GeneratorIndex` representing a term with coefficient a factor
     /// `multiplier` larger.
     ///
-    /// # Example
+    /// # Remarks
+    /// ## Example
     /// ```qsharp
     /// let gen = GeneratorIndex(([1,2,3],[coeff]),[1,2,3]);
     /// let ((idxPaulis, idxDoubles), idxQubits) = MultiplyGeneratorIndex(multipler, gen);

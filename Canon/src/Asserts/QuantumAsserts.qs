@@ -31,7 +31,8 @@ namespace Microsoft.Quantum.Canon
     /// ## tolerance
     /// Absolute tolerance on the difference between actual and expected.
     ///
-    /// # Example
+    /// # Remarks
+    /// ## Example
     /// Suppose that the `qubits` register encodes a 3-qubit quantum state
     /// $\ket{\psi}=\sqrt{1/8}\ket{0}+\sqrt{7/8}\ket{6}$ in little-endian format.
     /// This means that the number states $\ket{0}\equiv\ket{0}\ket{0}\ket{0}$
@@ -77,7 +78,8 @@ namespace Microsoft.Quantum.Canon
     /// ## tolerance
     /// Absolute tolerance on the difference between actual and expected.
     ///
-    /// # Example
+    /// # Remarks
+    /// ## Example
     /// Suppose that the `qubits` register encodes a 3-qubit quantum state
     /// $\ket{\psi}=\sqrt{1/8}\ket{0}+\sqrt{7/8}\ket{6}$ in big-endian format.
     /// This means that the number states $\ket{0}\equiv\ket{0}\ket{0}\ket{0}$
@@ -109,7 +111,8 @@ namespace Microsoft.Quantum.Canon
     /// ## tolerance
     /// Absolute tolerance on the difference between actual and expected.
     ///
-    /// # Example
+    /// # Remarks
+    /// ## Example
     /// The following assert succeeds:
     /// `qubit` is in state $\ket{\psi}=e^{i 0.5}\sqrt{1/2}\ket{0}+e^{i 0.5}\sqrt{1/2}\ket{1}$;
     /// - `AssertPhase(0.0,qubit,10e-10);`
