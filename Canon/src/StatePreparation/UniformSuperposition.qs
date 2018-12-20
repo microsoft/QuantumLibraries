@@ -14,7 +14,7 @@ namespace Microsoft.Quantum.Canon
     /// $0$ to $M-1$, given an input state $\ket{0\cdots 0}$. In other words, 
     /// $$
     /// \begin{align}
-    /// U\ket{0}=\frac{1}{\sqrt{M}}\sum_{j=1}^{M-1}\ket{j}.
+    /// U\ket{0}=\frac{1}{\sqrt{M}}\sum_{j=0}^{M-1}\ket{j}.
     /// \end{align}
     /// $$.
     ///
@@ -27,7 +27,7 @@ namespace Microsoft.Quantum.Canon
     /// initialized in the state $\ket{0\cdots 0}$.
     ///
     /// # Example
-    /// The following example prepares the state $\frac{1}{\sqrt{6}}\sum_{j=1}^{5}\ket{j}$
+    /// The following example prepares the state $\frac{1}{\sqrt{6}}\sum_{j=0}^{5}\ket{j}$
     /// on $3$ qubits.
     /// ``` Q#
     /// let nIndices = 6;
