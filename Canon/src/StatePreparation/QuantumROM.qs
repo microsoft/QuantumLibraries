@@ -39,7 +39,8 @@ namespace Microsoft.Quantum.Canon
     /// ## Third parameter
     /// The unitary $U$.
     ///
-    /// # Example
+    /// # Remarks
+    /// ## Example
     /// The following code snippet prepares an purification of the $3$-qubit state 
     /// $\rho=\sum^{4}_{j=0}\frac{|alpha_j|}{\sum_k |\alpha_k|}\ket{j}\bra{j}$, where 
     /// $\vec\alpha=(1.0,2.0,3.0,4.0,5.0)$, and the error is `1e-3`;

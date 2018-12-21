@@ -46,7 +46,13 @@ namespace Microsoft.Quantum.Canon
     /// Represents an operation that is used to measure the syndrome
     /// of an error-correcting code block.
     ///
-    /// # Example
+    /// # Remarks
+    /// The signature `(LogicalRegister => Syndrome)` represents an operation
+    /// that acts jointly on the qubits in `LogicalRegister` and some ancilla
+    /// qubits followed by a measurements of the ancilla to extract a `Syndrome
+    /// type representing the `Result[]` of these measurements.
+    ///
+    /// ## Example
     /// Measure syndromes for the bit-flip code
     /// $S = \langle ZZI, IZZ \rangle$ using scratch qubits in a
     /// non–fault tolerant manner:
@@ -56,12 +62,6 @@ namespace Microsoft.Quantum.Canon
     ///             [PauliI, PauliZ, PauliZ]
     ///         ], _, MeasureWithScratch));
     /// ```
-    ///
-    /// # Remarks
-    /// The signature `(LogicalRegister => Syndrome)` represents an operation
-    /// that acts jointly on the qubits in `LogicalRegister` and some ancilla
-    /// qubits followed by a measurements of the ancilla to extract a `Syndrome
-    /// type representing the `Result[]` of these measurements.
     ///
     /// # See Also
     /// - Microsoft.Quantum.Canon.LogicalRegister

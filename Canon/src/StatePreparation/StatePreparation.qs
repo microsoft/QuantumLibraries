@@ -36,7 +36,7 @@ namespace Microsoft.Quantum.Canon
     /// positive with value $|\alpha_j|$. `coefficients` will be padded with
     /// elements $\alpha_j = 0.0$ if fewer than $2^n$ are specified.
     ///
-    /// # Example
+    /// ## Example
     /// The following snippet prepares the quantum state $\ket{\psi}=\sqrt{1/8}\ket{0}+\sqrt{7/8}\ket{2}$
     /// in the qubit register `qubitsBE`.
     /// ```qsharp
@@ -88,7 +88,7 @@ namespace Microsoft.Quantum.Canon
     /// elements $(r_j, t_j) = (0.0, 0.0)$ if fewer than $2^n$ are
     /// specified.
     ///
-    /// # Example
+    /// ## Example
     /// The following snippet prepares the quantum state $\ket{\psi}=e^{i 0.1}\sqrt{1/8}\ket{0}+\sqrt{7/8}\ket{2}$
     /// in the qubit register `qubitsBE`.
     /// ```qsharp
