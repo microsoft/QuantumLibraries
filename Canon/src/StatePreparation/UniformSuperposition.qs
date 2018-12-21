@@ -26,8 +26,9 @@ namespace Microsoft.Quantum.Canon
     /// This register must be able to store the number $M-1$, and is assumed to be
     /// initialized in the state $\ket{0\cdots 0}$.
     ///
-    /// # Example
-    /// The following example prepares the state $\frac{1}{\sqrt{6}}\sum_{j=0}^{5}\ket{j}$
+    /// # Remarks
+    /// ## Example
+    /// The following example prepares the state $\frac{1}{\sqrt{6}}\sum_{j=1}^{5}\ket{j}$
     /// on $3$ qubits.
     /// ``` Q#
     /// let nIndices = 6;
