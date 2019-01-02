@@ -20,6 +20,7 @@ steps:
 ##
 - task: DotNetCoreCLI@2
   displayName: 'Test Libraries'
+  enabled: false
   inputs:
     command: test
     projects: |
