@@ -21,7 +21,7 @@ namespace Microsoft.Quantum.Canon
     /// The action of U on a newly-allocated register is given by
     /// $$
     /// \begin{align}
-    ///     U \ket{0\cdots 0} = \ket{\psi} = \frac{\sum^{2^n-1}_{j=0}\alpha_j \ket{j}}{\sqrt{\sum^{2^n-1}_{j=0}|\alpha_j|^2}}.
+    ///     U \ket{0\cdots 0} = \ket{\psi} = \frac{\sum_{j=0}^{2^n-1}\alpha_j \ket{j}}{\sqrt{\sum_{j=0}^{2^n-1}|\alpha_j|^2}}.
     /// \end{align}
     /// $$
     ///
@@ -73,7 +73,7 @@ namespace Microsoft.Quantum.Canon
     /// The action of U on a newly-allocated register is given by
     /// $$
     /// \begin{align}
-    ///     U\ket{0...0}=\ket{\psi}=\frac{\sum^{2^n-1}_{j=0}r_j e^{i t_j}\ket{j}}{\sqrt{\sum^{2^n-1}_{j=0}|r_j|^2}}.
+    ///     U\ket{0...0}=\ket{\psi}=\frac{\sum_{j=0}^{2^n-1}r_j e^{i t_j}\ket{j}}{\sqrt{\sum_{j=0}^{2^n-1}|r_j|^2}}.
     /// \end{align}
     /// $$
     ///
@@ -121,7 +121,11 @@ namespace Microsoft.Quantum.Canon
     /// state $\ket{\psi}$ with complex coefficients $r_j e^{i t_j}$ from
     /// the $n$-qubit computational basis state $\ket{0...0}$.
     ///
-    /// $U\ket{0...0}=\ket{\psi}=\frac{\sum^{2^n-1}_{j=0}r_j e^{i t_j}\ket{j}}{\sqrt{\sum^{2^n-1}_{j=0}|r_j|^2}}$.
+    /// $$
+    /// \begin{align}
+    ///     U\ket{0...0}=\ket{\psi}=\frac{\sum_{j=0}^{2^n-1}r_j e^{i t_j}\ket{j}}{\sqrt{\sum_{j=0}^{2^n-1}|r_j|^2}}.
+    /// \end{align}
+    /// $$
     ///
     /// # Input
     /// ## coefficients
