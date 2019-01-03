@@ -15,7 +15,7 @@ namespace Microsoft.Quantum.Canon {
     /// ## unitaryGenerator
     /// A tuple where the first element `Int` is the number of unitaries $N$,
     /// and the second element `(Int -> ('T => () : Adjoint, Controlled))`
-    /// is a fuction that takes an integer $j$ in $[0,N-1]$ and outputs the unitary
+    /// is a function that takes an integer $j$ in $[0,N-1]$ and outputs the unitary
     /// operation $V_j$. 
     ///
     /// ## index
@@ -120,7 +120,7 @@ namespace Microsoft.Quantum.Canon {
     /// ## unitaryGenerator
     /// A tuple where the first element `Int` is the number of unitaries $N$,
     /// and the second element `(Int -> ('T => () : Adjoint, Controlled))`
-    /// is a fuction that takes an integer $j$ in $[0,N-1]$ and outputs the unitary
+    /// is a function that takes an integer $j$ in $[0,N-1]$ and outputs the unitary
     /// operation $V_j$. 
     ///
     /// ## index
@@ -158,7 +158,7 @@ namespace Microsoft.Quantum.Canon {
     /// ## unitaryGenerator
     /// A tuple where the first element `Int` is the number of unitaries $N$,
     /// and the second element `(Int -> ('T => () : Adjoint, Controlled))`
-    /// is a fuction that takes an integer $j$ in $[0,N-1]$ and outputs the unitary
+    /// is a function that takes an integer $j$ in $[0,N-1]$ and outputs the unitary
     /// operation $V_j$. 
     ///
     /// # Output
@@ -181,7 +181,7 @@ namespace Microsoft.Quantum.Canon {
     /// ## unitaryGenerator
     /// A tuple where the first element `Int` is the number of unitaries $N$,
     /// and the second element `(Int -> ('T => () : Adjoint, Controlled))`
-    /// is a fuction that takes an integer $j$ in $[0,N-1]$ and outputs the unitary
+    /// is a function that takes an integer $j$ in $[0,N-1]$ and outputs the unitary
     /// operation $V_j$. 
     ///
     /// # Output
