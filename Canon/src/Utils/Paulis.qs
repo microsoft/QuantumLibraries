@@ -1,4 +1,4 @@
-﻿// Copyright (c) Microsoft Corporation. All rights reserved.
+// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
 namespace Microsoft.Quantum.Canon
@@ -87,7 +87,8 @@ namespace Microsoft.Quantum.Canon
     /// ## target
     /// Register to apply the given Pauli operation on.
     ///
-    /// # Example
+    /// # Remarks
+    /// ## Example
     /// The following are equivalent:
     /// ```qsharp
     /// ApplyPauli([PauliY, PauliZ, PauliX], target);
@@ -245,7 +246,8 @@ namespace Microsoft.Quantum.Canon
     /// ## n
     /// Length of the array to be returned.
     ///
-    /// # Example
+    /// # Remarks
+    /// ## Example
     /// To obtain the array `[PauliI, PauliI, PauliX, PauliI]`:
     /// ```qsharp
     /// EmbedPauli(PauliX, 2, 3);
