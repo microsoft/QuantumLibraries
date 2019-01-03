@@ -32,7 +32,8 @@ namespace Microsoft.Quantum.Canon
     /// # Output
     /// An operation partially applied over the "black-box" oracle representing the discrete-time oracle
     ///
-    /// # Example
+    /// # Remarks
+    /// ## Example
     /// `OracleToDiscrete(U)(3, target)` is equivalent to `U(target)` repeated three times.
     operation OracleToDiscrete (blackBoxOracle : (Qubit[] => Unit : Adjoint, Controlled)) : DiscreteOracle
     {
