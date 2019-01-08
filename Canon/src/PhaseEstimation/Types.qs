@@ -15,7 +15,7 @@ namespace Microsoft.Quantum.Canon
     /// Represents a continuous-time oracle.
 	///
 	/// This is an oracle that implements 
-    /// $U(\delta t) : \ket{\psi(t)} \mapsto \ket{\psi(t + \delta t)}
+    /// $U(\delta t) : \ket{\psi(t)} \mapsto \ket{\psi(t + \delta t)}$
     /// for all times $t$, where $U$ is a fixed operation, and where
     /// $\delta t$ is a non-negative real number.
     newtype ContinuousOracle = ((Double, Qubit[]) => Unit : Adjoint, Controlled);

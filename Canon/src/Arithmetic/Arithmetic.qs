@@ -32,7 +32,7 @@ namespace Microsoft.Quantum.Canon
     /// A quantum register which is used to store `value` in little-endian encoding.
     ///
     /// # See Also
-    /// - InPlaceXorLE
+    /// - InPlaceXorBE
     operation InPlaceXorLE (value : Int, target : LittleEndian) : Unit
     {
         body (...)
@@ -67,7 +67,7 @@ namespace Microsoft.Quantum.Canon
     /// A quantum register which is used to store `value` in big-endian encoding.
     ///
     /// # See Also
-    /// - InPlaceXorBE
+    /// - InPlaceXorLE
     operation InPlaceXorBE(value : Int, target : BigEndian) : Unit {
         body (...) {
             ApplyReversedOpLittleEndianCA(InPlaceXorLE(value, _), target);
@@ -289,7 +289,7 @@ namespace Microsoft.Quantum.Canon
     /// The integer by which the `target` is incremented by.
     ///
     /// # See Also
-    /// - Microsoft.Quantum.Canon.IntegerIncrementLE"
+    /// - Microsoft.Quantum.Canon.IntegerIncrementLE
     ///
     /// # References
     /// - [ *Thomas G. Draper*,
@@ -639,7 +639,7 @@ namespace Microsoft.Quantum.Canon
     
     
     /// # Summary
-    /// The same as ModularAddProductInPlaceLE, but assumes that summand encodes
+    /// The same as ModularAddProductLE, but assumes that summand encodes
     /// integers in QFT basis
     ///
     /// # See Also

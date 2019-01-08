@@ -181,7 +181,7 @@ namespace Microsoft.Quantum.Canon
     /// Quantum register on which to selectively apply the specified Pauli operator
     ///
     /// # Remarks
-    /// The Boolean array and the quantum register must be of equal length
+    /// The Boolean array and the quantum register must be of equal length.
     operation ApplyPauliFromBitString (pauli : Pauli, bitApply : Bool, bits : Bool[], qubits : Qubit[]) : Unit
     {
         body (...)

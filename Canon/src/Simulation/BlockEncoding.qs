@@ -16,7 +16,7 @@ namespace Microsoft.Quantum.Canon {
 	///
     /// That is, a `BlockEncoding` is a unitary $U$ where an arbitrary operator $H$ of 
     /// interest that acts on the system register `s` is encoded in the top-
-    /// left block corresponding to auxiliary state `\ket{0}_a`. That is,
+    /// left block corresponding to auxiliary state $\ket{0}_a$. That is,
     ///
     /// $$
     /// \begin{align}
@@ -60,11 +60,11 @@ namespace Microsoft.Quantum.Canon {
     /// That is, a `TimeDependentBlockEncoding` is a unitary $U$ controlled by a state 
     /// $\ket{k}_d$ in clock register `d` such that an arbitrary operator $H_k$ of 
     /// interest that acts on the system register `s` is encoded in the top-
-    /// left block corresponding to auxiliary state `\ket{0}_a`. That is,
+    /// left block corresponding to auxiliary state $\ket{0}_a$. That is,
     ///
     /// $$
     /// \begin{align}
-    /// (\bra{0}_a\otimes I_{ds})U(\ket{0}_a\otimes I_{ds}) = \sum_{k}\ket{k}\bra{k}_d\otimes H_k.
+    /// (\bra{0}\_a\otimes I_{ds})U(\ket{0}\_a\otimes I_{ds}) = \sum_{k}\ket{k}\bra{k}\_d\otimes H_k.
     /// \end{align}
     /// $$.
     ///
@@ -74,7 +74,7 @@ namespace Microsoft.Quantum.Canon {
     /// ## Second Parameter
     /// An array of qubits representing the auxiliary register acted on by $U$.
     /// The action of $U$ is only defined when this is $\ket{0}_a$.
-    /// ## This Parameter
+    /// ## Third Parameter
     /// An array of qubits representing the system register acted on by $H$.
     ///
     /// # Output
@@ -87,7 +87,7 @@ namespace Microsoft.Quantum.Canon {
 	/// 
     /// That is, given a `BlockEncoding` unitary $U$ that encodes some
     /// operator $H$ of interest, converts it into a `BlockEncodingReflection` $U'$ that
-    /// encodes the same operator, but also satisfies $U'^\dag = U'$. 
+    /// encodes the same operator, but also satisfies $U'^\dagger = U'$. 
     /// This increases the size of the auxiliary register of $U$ by one qubit.
     ///
     /// # Input
@@ -96,7 +96,7 @@ namespace Microsoft.Quantum.Canon {
     ///
     /// # Output
     /// A unitary $U'$ acting jointly on registers `a` and `s` that block-
-    /// encodes $H$, and satisfies $U'^\dag = U'$.
+    /// encodes $H$, and satisfies $U'^\dagger = U'$.
     ///
     /// # Remarks
     /// This increases the size of the auxiliary register of $U$ by one qubit.  
@@ -174,11 +174,11 @@ namespace Microsoft.Quantum.Canon {
     /// # Summary
 	/// Encodes an operator of interest into a `BlockEncoding`.
 	/// 
-    /// This constructs a `BlockEncoding` unitary $U=P\cdot V\cdot P^\dag$ that encodes some
+    /// This constructs a `BlockEncoding` unitary $U=P\cdot V\cdot P^\dagger$ that encodes some
     /// operator $H=\sum_{j}|\alpha_j|U_j$ of interest that is a linear combination of
     /// unitaries. Typically, $P$ is a state preparation unitary such that
-    /// $P\ket{0}_a=\sum_j\sqrt{\alpha_j/\|\vec\alpha\|_2}\ket{j}_a$,
-    /// and $V=\sum_{j}\ket{j}\bra{j}_a\otimes U_j$.
+    /// $P\ket{0}\_a=\sum_j\sqrt{\alpha_j/\|\vec\alpha\|\_2}\ket{j}\_a$,
+    /// and $V=\sum_{j}\ket{j}\bra{j}\_a\otimes U_j$.
     ///
     /// # Input
     /// ## statePreparation
@@ -188,7 +188,7 @@ namespace Microsoft.Quantum.Canon {
     ///
     /// # Output
     /// A unitary $U$ acting jointly on registers `a` and `s` that block-
-    /// encodes $H$, and satisfies $U^\dag = U$.
+    /// encodes $H$, and satisfies $U^\dagger = U$.
     ///
     /// # Remarks
     /// This `BlockEncoding` implementation gives it the properties of a 
@@ -223,11 +223,11 @@ namespace Microsoft.Quantum.Canon {
     /// # Summary
 	/// Encodes an operator of interest into a `BlockEncodingReflection`.
 	/// 
-    /// This constructs a `BlockEncodingReflection` unitary $U=P\cdot V\cdot P^\dag$ that encodes some
+    /// This constructs a `BlockEncodingReflection` unitary $U=P\cdot V\cdot P^\dagger$ that encodes some
     /// operator $H=\sum_{j}|\alpha_j|U_j$ of interest that is a linear combination of
     /// unitaries. Typically, $P$ is a state preparation unitary such that
-    /// $P\ket{0}_a\sum_j\sqrt{\alpha_j/\|\vec\alpha\|_2}\ket{j}_a$,
-    /// and $V=\sum_{j}\ket{j}\bra{j}_a\otimes U_j$.
+    /// $P\ket{0}\_a\sum_j\sqrt{\alpha_j/\|\vec\alpha\|\_2}\ket{j}\_a$,
+    /// and $V=\sum_{j}\ket{j}\bra{j}\_a\otimes U_j$.
     ///
     /// # Input
     /// ## statePreparation

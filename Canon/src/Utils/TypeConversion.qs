@@ -134,7 +134,7 @@ namespace Microsoft.Quantum.Canon
     
     
     /// # Summary
-    /// Produces a positive integer from a string of bits in in little Endian format.
+    /// Produces a positive integer from a string of bits in little endian format.
     ///
     /// # Input
     /// ## bits
@@ -158,7 +158,7 @@ namespace Microsoft.Quantum.Canon
     
     
     /// # Summary
-    /// Produces a positive integer from a string of Results in in little Endian format.
+    /// Produces a positive integer from a string of Results in little endian format.
     ///
     /// # Input
     /// ## results

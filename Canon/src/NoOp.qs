@@ -24,7 +24,7 @@ namespace Microsoft.Quantum.Canon {
     /// # Remarks
     /// In almost all cases, the type parameter for `NoOp` needs to be specified
     /// explicitly. For instance, `NoOp<Qubit>` is identical to
-    /// @"Microsoft.Quantum.Primitive.I".
+    /// <xref:microsoft.quantum.primitive.i>.
     ///
     /// # See Also
     /// - Microsoft.Quantum.Primitive.I

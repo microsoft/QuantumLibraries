@@ -374,8 +374,8 @@ namespace Microsoft.Quantum.Canon
     /// Input array to be split.
     ///
     /// # Output
-    /// Multiple arrays where the first array is the first 'nElements[0]' of `arr`
-    /// and the second array are the next 'nElements[1]' of `arr` etc. The last array
+    /// Multiple arrays where the first array is the first `nElements[0]` of `arr`
+    /// and the second array are the next `nElements[1]` of `arr` etc. The last array
     /// will contain all remaining elements.
     ///
     /// # Remarks

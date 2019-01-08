@@ -28,7 +28,7 @@ namespace Microsoft.Quantum.Canon
     ///
     /// # Remarks
     /// ## Example
-    /// The following example prepares the state $\frac{1}{\sqrt{6}}\sum_{j=1}^{5}\ket{j}$
+    /// The following example prepares the state $\frac{1}{\sqrt{6}}\sum_{j=0}^{5}\ket{j}$
     /// on $3$ qubits.
     /// ``` Q#
     /// let nIndices = 6;

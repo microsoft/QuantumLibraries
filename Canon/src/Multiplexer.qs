@@ -6,8 +6,8 @@ namespace Microsoft.Quantum.Canon {
     open Microsoft.Quantum.Extensions.Math;
 
     /// # Summary
-    /// Applies a multiply-controlled unitary operation `U` that applies a 
-    /// unitary `V_j` when controlled by n-qubit number state `|j〉`.
+    /// Applies a multiply-controlled unitary operation $U$ that applies a 
+    /// unitary $V_j$ when controlled by n-qubit number state $\ket{j}$.
     ///
     /// $U = \sum^{N-1}_{j=0}\ket{j}\bra{j}\otimes V_j$.
     ///
@@ -111,8 +111,8 @@ namespace Microsoft.Quantum.Canon {
     }
 
     /// # Summary
-    /// Applies multiply-controlled unitary operation `U` that applies a 
-    /// unitary `V_j` when controlled by n-qubit number state `|j〉`.
+    /// Applies multiply-controlled unitary operation $U$ that applies a 
+    /// unitary $V_j$ when controlled by n-qubit number state $\ket{j}$.
     ///
     /// $U = \sum^{N-1}_{j=0}\ket{j}\bra{j}\otimes V_j$.
     ///
@@ -149,8 +149,8 @@ namespace Microsoft.Quantum.Canon {
     }
 
     /// # Summary
-    /// Returns a multiply-controlled unitary operation `U` that applies a 
-    /// unitary `V_j` when controlled by n-qubit number state `|j〉`.
+    /// Returns a multiply-controlled unitary operation $U$ that applies a 
+    /// unitary $V_j$ when controlled by n-qubit number state $\ket{j}$.
     ///
     /// $U = \sum^{2^n-1}_{j=0}\ket{j}\bra{j}\otimes V_j$.
     ///
@@ -172,8 +172,8 @@ namespace Microsoft.Quantum.Canon {
     }
 
     /// # Summary
-    /// Returns a multiply-controlled unitary operation `U` that applies a 
-    /// unitary `V_j` when controlled by n-qubit number state `|j〉`.
+    /// Returns a multiply-controlled unitary operation $U$ that applies a 
+    /// unitary $V_j$ when controlled by n-qubit number state $\ket{j}$.
     ///
     /// $U = \sum^{2^n-1}_{j=0}\ket{j}\bra{j}\otimes V_j$.
     ///
