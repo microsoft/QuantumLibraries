@@ -458,7 +458,7 @@ namespace Microsoft.Quantum.Chemistry
     {
 
         /// <summary>
-        /// First parameter <c>Int64</c> is the the number of different spin-orbitals.
+        /// First parameter <c>Int64</c> is the number of different spin-orbitals.
         /// Second parameter <c>QArray<Int64></c> represents a sequence of creation and annihilation operators.
         /// Third parameter <c>string</c> annotates the term type.
         /// </summary>
