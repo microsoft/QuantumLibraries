@@ -53,9 +53,9 @@ namespace Microsoft.Quantum.Canon
     /// A big-endian register to be transformed.
     ///
     /// # See Also
-    /// - @"microsoft.quantum.canon.applyreversedoplittleendiana"
-    /// - @"microsoft.quantum.canon.applyreversedoplittleendianc"
-    /// - @"microsoft.quantum.canon.applyreversedoplittleendianca"
+    /// - Microsoft.Quantum.Canon.ApplyReversedOpLittleEndianA
+    /// - Microsoft.Quantum.Canon.ApplyReversedOpLittleEndianC
+    /// - Microsoft.Quantum.Canon.ApplyReversedOpLittleEndianCA
     operation ApplyReversedOpLittleEndian (op : (LittleEndian => Unit), register : BigEndian) : Unit
     {
         let bareReversed = Reverse(register!);

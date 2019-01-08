@@ -174,7 +174,7 @@ namespace Microsoft.Quantum.Canon
     /// ## modulus
     /// The modulus by which residues are take, must be positive
     /// # Output
-    /// Integer r between 0 and `modulus - 1` such that `value - r` is divisible by modulus
+    /// Integer $r$ between 0 and `modulus - 1` such that `value - r` is divisible by modulus
     ///
     /// # Remarks
     /// This function behaves different to how the operator `%` behaves in C# and Q# as in the result
@@ -199,7 +199,7 @@ namespace Microsoft.Quantum.Canon
     /// Let us denote expBase by x, power by p and modulus by N.
     /// The function returns xᵖ mod N.
     /// 
-    /// We assume that N, x are positive and power is non-negative.
+    /// We assume that $N$, $x$ are positive and power is non-negative.
     ///
     /// # Remarks
     /// Takes time proportional to the number of bits in `power`, not the `power` itself.
