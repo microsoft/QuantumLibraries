@@ -134,7 +134,7 @@ namespace Microsoft.Quantum.Canon
     
     /// # Summary
     /// Implementation of multiple Trotter steps to approximate a unitary
-    /// operator that solves the time-dependent Schr�dinger equation.
+    /// operator that solves the time-dependent Schrödinger equation.
     ///
     /// # Input
     /// ## trotterStepSize
