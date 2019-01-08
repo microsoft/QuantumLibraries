@@ -109,7 +109,7 @@ namespace Microsoft.Quantum.Canon
         let oneNorm = PNorm(1.0, coefficients);
         let nCoefficients = Length(coefficients);
         if(bitsPrecision > 31){
-            fail $"Bits of precision {bitsPrecision} unsurpported. Max is 31.";
+            fail $"Bits of precision {bitsPrecision} unsupported. Max is 31.";
         }
         if(nCoefficients <= 1){
             fail $"Cannot prepare state with less than 2 coefficients.";
@@ -129,7 +129,7 @@ namespace Microsoft.Quantum.Canon
             set bars = bars + keepCoeff[idxCoeff] - barHeight;
         }
         //Message($"Excess bars {bars}.");
-        // Uniformly distribute excess bars acress coefficients.
+        // Uniformly distribute excess bars across coefficients.
         for(idx in 0..AbsI(bars)-1){
             if(bars > 0){
                 set keepCoeff[idx] = keepCoeff[idx]-1;

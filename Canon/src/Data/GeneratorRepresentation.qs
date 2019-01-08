@@ -215,8 +215,8 @@ namespace Microsoft.Quantum.Canon
     /// ## Example
     /// ```qsharp
     /// let gen = GeneratorIndex(([1,2,3],[coeff]),[1,2,3]);
-    /// let ((idxPaulis, idxDoubles), idxQubits) = MultiplyGeneratorIndex(multipler, gen);
-    /// // idxDoubles[0] == multipler * coeff;
+    /// let ((idxPaulis, idxDoubles), idxQubits) = MultiplyGeneratorIndex(multiplier, gen);
+    /// // idxDoubles[0] == multiplier * coeff;
     /// ```
     ///
     /// # See Also

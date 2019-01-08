@@ -19,7 +19,7 @@ namespace Microsoft.Quantum.Canon
     /// subset of `array`. On the other hand, if `indices` contains repeated
     /// elements, the corresponding elements of `array` will likewise be
     /// repeated.
-    /// If `indices` and `array` are the same length, this this function
+    /// If `indices` and `array` are the same length, this function
     /// provides permutations of `array`.
     ///
     /// # Type Parameters

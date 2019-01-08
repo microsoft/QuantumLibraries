@@ -332,7 +332,7 @@ namespace Microsoft.Quantum.Canon
     }
     
     /// # Summary
-    /// Creates an array `arr` of integers enumnerated by start..step..end.
+    /// Creates an array `arr` of integers enumerated by start..step..end.
     ///
     /// # Input
     /// ## range

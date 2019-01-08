@@ -123,7 +123,7 @@ namespace Microsoft.Quantum.Canon
     ///
     /// # Output
     /// A qubit array of length 1 representing the unencoded state in the
-    /// first parameter, together with auxillary qubits in the second parameter.
+    /// first parameter, together with auxiliary qubits in the second parameter.
     ///
     /// # See Also
     /// - microsoft.quantum.canon.FiveQubitCodeEncoder

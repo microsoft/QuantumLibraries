@@ -67,7 +67,7 @@ namespace Microsoft.Quantum.Canon
     ///
     /// # Remarks
     /// This function calls <xref:microsoft.quantum.primitive.random>, so
-    /// its randomess depends on the implementation of `Random`.
+    /// its randomness depends on the implementation of `Random`.
     operation RandomSingleQubitPauli () : Pauli
     {
         let probs = [0.5, 0.5, 0.5, 0.5];

@@ -58,7 +58,7 @@ namespace Microsoft.Quantum.Canon
     //  instead of reflections.
     
     // Note that amplitude amplification is a special case of oblivious
-    // amplitude amplifiction where `ObliviousOracle` is the identity operator,
+    // amplitude amplification where `ObliviousOracle` is the identity operator,
     // and there are no system qubits i.e. `systemRegister` is empty.
     
     //		This is called through the operation `AmpAmByReflectionPhases` and

@@ -30,7 +30,7 @@ namespace Microsoft.Quantum.Canon
     ///
     /// # Remarks
     /// This function calls <xref:microsoft.quantum.primitive.random>, so
-    /// its randomess depends on the implementation of `Random`.
+    /// its randomness depends on the implementation of `Random`.
     operation RandomIntPow2 (maxBits : Int) : Int
     {
         mutable number = 0;
@@ -66,7 +66,7 @@ namespace Microsoft.Quantum.Canon
     ///
     /// # Remarks
     /// This function calls <xref:microsoft.quantum.primitive.random>, so
-    /// its randomess depends on the implementation of `Random`.
+    /// its randomness depends on the implementation of `Random`.
     operation RandomInt (maxInt : Int) : Int
     {
         mutable nBits = 0;
@@ -102,7 +102,7 @@ namespace Microsoft.Quantum.Canon
     ///
     /// # Remarks
     /// This function calls <xref:microsoft.quantum.primitive.random>, so
-    /// its randomess depends on the implementation of `Random`.
+    /// its randomness depends on the implementation of `Random`.
     operation RandomReal (bitsRandom : Int) : Double
     {
         if (bitsRandom < 1)

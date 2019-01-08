@@ -28,7 +28,7 @@ namespace Microsoft.Quantum.Canon {
     /// # Remarks
     /// `coefficients` will be padded with identity elements if 
     /// fewer than $2^n$ are specified. This implementation uses
-    /// $n-1$ auxillary qubits.
+    /// $n-1$ auxiliary qubits.
     ///
     /// # References
     /// - [ *Andrew M. Childs, Dmitri Maslov, Yunseong Nam, Neil J. Ross, Yuan Su*,
@@ -41,8 +41,8 @@ namespace Microsoft.Quantum.Canon {
                 fail "MultiplexOperations failed. Number of index qubits must be greater than 0.";
             }
             if (nUnitaries > 0) {
-                let auxillary = new Qubit[0];
-                Adjoint MultiplexOperationsFromGenerator_(unitaryGeneratorWithOffset, auxillary, index, target);
+                let auxiliary = new Qubit[0];
+                Adjoint MultiplexOperationsFromGenerator_(unitaryGeneratorWithOffset, auxiliary, index, target);
             }
         }
         adjoint auto;
@@ -54,7 +54,7 @@ namespace Microsoft.Quantum.Canon {
     /// Implementation step of `MultiplexOperationsFromGenerator`.
     /// # See Also
     /// - Microsoft.Quantum.Canon.MultiplexOperationsFromGenerator
-    operation MultiplexOperationsFromGenerator_<'T>(unitaryGenerator : (Int, Int, (Int -> ('T => Unit : Adjoint, Controlled))), auxillary: Qubit[], index: BigEndian, target: 'T) : Unit {
+    operation MultiplexOperationsFromGenerator_<'T>(unitaryGenerator : (Int, Int, (Int -> ('T => Unit : Adjoint, Controlled))), auxiliary: Qubit[], index: BigEndian, target: 'T) : Unit {
         body (...) {
             let nIndex = Length(index!);
             let nStates = 2^nIndex;
@@ -70,42 +70,42 @@ namespace Microsoft.Quantum.Canon {
             let newControls = BigEndian(index![1..nIndex-1]);
 
             if(nUnitaries > 0){
-                if(Length(auxillary) == 1 && nIndex==0){
+                if(Length(auxiliary) == 1 && nIndex==0){
                     // Termination case
                     
-                    (Controlled Adjoint (unitaryFunction(unitaryOffset)))(auxillary, target);
+                    (Controlled Adjoint (unitaryFunction(unitaryOffset)))(auxiliary, target);
                 }
-                elif(Length(auxillary) == 0 && nIndex>=1){
+                elif(Length(auxiliary) == 0 && nIndex>=1){
                     // Start case
-                    let newauxillary = [index![0]];
+                    let newauxiliary = [index![0]];
                     if(nUnitariesRight > 0){
-                        MultiplexOperationsFromGenerator_(rightUnitaries, newauxillary, newControls, target);
+                        MultiplexOperationsFromGenerator_(rightUnitaries, newauxiliary, newControls, target);
                     }
-                    X(newauxillary[0]);
-                    MultiplexOperationsFromGenerator_(leftUnitaries, newauxillary, newControls, target);
-                    X(newauxillary[0]);
+                    X(newauxiliary[0]);
+                    MultiplexOperationsFromGenerator_(leftUnitaries, newauxiliary, newControls, target);
+                    X(newauxiliary[0]);
                 }
                 else{
-                    // Recursion that reduces nIndex by 1 & sets Length(auxillary) to 1.
-                    using(newauxillary = Qubit[1]){
+                    // Recursion that reduces nIndex by 1 & sets Length(auxiliary) to 1.
+                    using(newauxiliary = Qubit[1]){
                         let op = LogicalANDMeasAndFix_(_, _);
                         // Naive measurement-free approach uses 4x more T gates with 
                         // let op = (Controlled X);
-                        op(auxillary + [index![0]], newauxillary[0]);
+                        op(auxiliary + [index![0]], newauxiliary[0]);
                         if(nUnitariesRight > 0){
-                            MultiplexOperationsFromGenerator_(rightUnitaries, newauxillary, newControls, target);
+                            MultiplexOperationsFromGenerator_(rightUnitaries, newauxiliary, newControls, target);
                         }
-                        (Controlled X)(auxillary, newauxillary[0]);
-                        MultiplexOperationsFromGenerator_(leftUnitaries, newauxillary, newControls, target);
-                        (Controlled X)(auxillary, newauxillary[0]);
-                        (Adjoint op)(auxillary + [index![0]], newauxillary[0]);
+                        (Controlled X)(auxiliary, newauxiliary[0]);
+                        MultiplexOperationsFromGenerator_(leftUnitaries, newauxiliary, newControls, target);
+                        (Controlled X)(auxiliary, newauxiliary[0]);
+                        (Adjoint op)(auxiliary + [index![0]], newauxiliary[0]);
                     }
                 }
             }
         }
         adjoint auto;
         controlled (controlRegister, (...)) {
-            MultiplexOperationsFromGenerator_(unitaryGenerator, auxillary + controlRegister, index, target);
+            MultiplexOperationsFromGenerator_(unitaryGenerator, auxiliary + controlRegister, index, target);
         }
         adjoint controlled auto;
     }

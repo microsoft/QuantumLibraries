@@ -87,7 +87,7 @@ namespace Microsoft.Quantum.Canon
     /// Given operations implementing operators `U` and `V`, performs the
     /// operation `U†VU` on a target. That is, this operation
     /// conjugates `V` with `U`.
-    /// The modifier `C` dicates that the inner operation is controllable.
+    /// The modifier `C` dictates that the inner operation is controllable.
     ///
     /// # Input
     /// ## outerOperation

@@ -41,7 +41,7 @@ namespace Microsoft.Quantum.Canon
     /// # Summary
     /// Represents an oracle for state preparation.
     ///
-    /// The inputs to the opracle $O$ are:
+    /// The inputs to the oracle $O$ are:
     /// - An integer indexing the flag qubit $f$.
     /// - The system register $s$ that will store the desired quantum state $\ket{\psi}\_s$.
     ///
