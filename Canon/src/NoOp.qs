@@ -11,7 +11,7 @@ namespace Microsoft.Quantum.Canon {
     /// This can be useful whenever an input of an operation type is expected,
     /// but no action should be taken.
     /// For instance, if a particular error correction syndrome indicates that
-    /// no error has occured, `NoOp<Qubit[]>` may be the correct recovery
+    /// no error has occurred, `NoOp<Qubit[]>` may be the correct recovery
     /// procedure.
     /// Similarly, if an operation expects a state preparation procedure as
     /// input, `NoOp<Qubit[]>` can be used to prepare the state
@@ -24,7 +24,7 @@ namespace Microsoft.Quantum.Canon {
     /// # Remarks
     /// In almost all cases, the type parameter for `NoOp` needs to be specified
     /// explicitly. For instance, `NoOp<Qubit>` is identical to
-    /// @"Microsoft.Quantum.Primitive.I".
+    /// <xref:microsoft.quantum.primitive.i>.
     ///
     /// # See Also
     /// - Microsoft.Quantum.Primitive.I

@@ -150,9 +150,9 @@ namespace Microsoft.Quantum.Canon
     /// The input type of the operation to be conditionally applied.
     ///
     /// # See Also
-    /// - Microsoft.Quantum.Canon.ControlledC
-    /// - Microsoft.Quantum.Canon.ControlledA
-    /// - Microsoft.Quantum.Canon.ControlledCA
+    /// - Microsoft.Quantum.Canon.CControlledC
+    /// - Microsoft.Quantum.Canon.CControlledA
+    /// - Microsoft.Quantum.Canon.CControlledCA
     function CControlled<'T> (op : ('T => Unit)) : ((Bool, 'T) => Unit)
     {
         return ApplyIf(op, _, _);
@@ -176,7 +176,7 @@ namespace Microsoft.Quantum.Canon
     /// The input type of the operation to be conditionally applied.
     ///
     /// # See Also
-    /// - Microsoft.Quantum.Canon.Controlled
+    /// - Microsoft.Quantum.Canon.CControlled
     function CControlledC<'T> (op : ('T => Unit : Controlled)) : ((Bool, 'T) => Unit : Controlled)
     {
         return ApplyIfC(op, _, _);
@@ -200,7 +200,7 @@ namespace Microsoft.Quantum.Canon
     /// The input type of the operation to be conditionally applied.
     ///
     /// # See Also
-    /// - Microsoft.Quantum.Canon.Controlled
+    /// - Microsoft.Quantum.Canon.CControlled
     function CControlledA<'T> (op : ('T => Unit : Adjoint)) : ((Bool, 'T) => Unit : Adjoint)
     {
         return ApplyIfA(op, _, _);
@@ -224,7 +224,7 @@ namespace Microsoft.Quantum.Canon
     /// The input type of the operation to be conditionally applied.
     ///
     /// # See Also
-    /// - Microsoft.Quantum.Canon.Controlled
+    /// - Microsoft.Quantum.Canon.CControlled
     function CControlledCA<'T> (op : ('T => Unit : Controlled, Adjoint)) : ((Bool, 'T) => Unit : Controlled, Adjoint)
     {
         return ApplyIfCA(op, _, _);

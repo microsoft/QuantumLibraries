@@ -129,7 +129,7 @@ namespace Microsoft.Quantum.Canon
     }
     
     
-    // This simple time-depedendent simulation algorithm implements a
+    // This simple time-dependent simulation algorithm implements a
     // sequence of uniformly-sized trotter steps
     
     /// # Summary

@@ -151,7 +151,7 @@ namespace Microsoft.Quantum.Canon
     }
 
     /// # Summary
-    /// Computes Trotter step size in recursive implementaiton of
+    /// Computes Trotter step size in recursive implementation of
     /// Trotter simulation algorithm.
     function _TrotterStepSize (order: Int) : Double {
         return 1.0 / (4.0 - PowD(4.0, 1.0 / (2.0 * ToDouble(order) - 1.0)));

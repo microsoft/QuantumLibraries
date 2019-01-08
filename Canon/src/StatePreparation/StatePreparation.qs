@@ -136,7 +136,7 @@ namespace Microsoft.Quantum.Canon
     /// ## qubits
     /// Qubit register encoding number states in big-endian format. This is
     /// expected to be initialized in the computational basis state
-    /// $ket{0...0}$.
+    /// $\ket{0...0}$.
     ///
     /// # Remarks
     /// Negative input coefficients $r_j < 0$ will be treated as though

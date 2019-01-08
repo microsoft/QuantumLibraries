@@ -351,7 +351,7 @@ namespace Microsoft.Quantum.Canon
     /// The Result `Zero` with probability
     /// $$
     /// \begin{align}
-    ///     \Pr(\texttt{Zero} | \Lambda; P, Q) = \Tr\left(
+    ///     \Pr(\texttt{Zero} | \Lambda; P, Q) = \operatorname{Tr}\left(
     ///         \frac{\boldone + Q}{2} \Lambda\left[
     ///             \frac{\boldone + P}{2}
     ///         \right]
@@ -366,7 +366,7 @@ namespace Microsoft.Quantum.Canon
     /// is identical to
     /// $$
     /// \begin{align}
-    ///     \Pr(\texttt{Zero} | \rho; M) = \Tr(M \rho),
+    ///     \Pr(\texttt{Zero} | \rho; M) = \operatorname{Tr}(M \rho),
     /// \end{align}
     /// $$
     /// where $M = 2 (\boldone + P)^\mathrm{T} / 2 \cdot (\boldone + Q) / 2$

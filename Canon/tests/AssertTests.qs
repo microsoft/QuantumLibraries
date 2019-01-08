@@ -65,7 +65,7 @@ namespace Microsoft.Quantum.Tests {
     
     
     /// # Summary
-    /// Tests whether common builtin operations are self adjoint.
+    /// Tests whether common built-in operations are self adjoint.
     /// These tests are already performed in Solid itself, such that
     /// this operation tests whether we can reproduce that using our
     /// operation equality assertions.
