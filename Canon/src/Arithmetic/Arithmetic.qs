@@ -84,8 +84,8 @@ namespace Microsoft.Quantum.Canon
     /// ## output
     /// First input qubit. Note that the output is computed in-place
     /// and stored in this qubit.
-    /// ## Input
-    /// Second and third input qubits.
+    /// ## input
+    /// Second and third input qubits. Note that the values of these qubits are also changed.
     operation InPlaceMajority(output: Qubit, input: Qubit[]) : Unit {
         body (...){
             if(Length(input) != 2){
