@@ -175,17 +175,19 @@ namespace Microsoft.Quantum.Canon
 	/// If the identity operator is given, then the qubit is prepared in the maximally 
 	/// mixed state.
 	/// 
-    /// That is, given a single qubit initially in the $\ket{0}$ state, prepares the
-    /// qubit in the $+1$ eigenstate of a given Pauli operator, or in the
-    /// maximally mixed state for the $\boldone$ Pauli operator `PauliI`.
+    /// If the qubit was initially in the $\ket{0}$ state, this operation prepares the
+    /// qubit in the $+1$ eigenstate of a given Pauli operator, or, for `PauliI`,
+    /// in the maximally mixed state instead (see <xref:microsoft.quantum.canon.preparesinglequbitidentity>).
+    /// 
+    /// If the qubit was in a state other than $\ket{0}$, this operation applies the following gates:
+    /// $H$ for `PauliX`, $HS$ for `PauliY`, $I$ for `PauliZ` and 
+    /// <xref:microsoft.quantum.canon.preparesinglequbitidentity> for `PauliI`.
     ///
     /// # Input
     /// ## basis
-    /// A Pauli operator $P$ such that measuring $P$ immediately after this
-    /// operation will return `Zero`.
+    /// A Pauli operator $P$.
     /// ## qubit
-    /// A qubit initially in the $\ket{0}$ state which is to be prepared in
-    /// the given basis.
+    /// A qubit to be prepared.
     operation PrepareQubit (basis : Pauli, qubit : Qubit) : Unit
     {
         if (basis == PauliI)

@@ -80,11 +80,15 @@ namespace Microsoft.Quantum.Canon
     /// # Summary
     /// This computes the Majority function in-place on 3 qubits.
     ///
+    /// If we denote output qubit as $z$ and input qubits as $x$ and $y$,
+    /// the operation performs the following transformation:
+    /// $\ket{xyz} \rightarrow \ket{x \oplus z} \ket{y \oplus z} \ket{\operatorname{MAJ} (x, y, z)}$.
+    ///
     /// # Input
     /// ## output
     /// First input qubit. Note that the output is computed in-place
     /// and stored in this qubit.
-    /// ## Input
+    /// ## input
     /// Second and third input qubits.
     operation InPlaceMajority(output: Qubit, input: Qubit[]) : Unit {
         body (...){
