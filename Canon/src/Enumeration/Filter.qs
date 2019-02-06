@@ -19,7 +19,7 @@ namespace Microsoft.Quantum.Canon
     ///
     /// # Input
     /// ## predicate
-    /// A function from `'T' to Boolean that is used to filter elements.
+    /// A function from `'T` to Boolean that is used to filter elements.
     /// ## array
     /// An array of elements over `'T`.
     ///

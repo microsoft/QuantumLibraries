@@ -32,7 +32,7 @@ namespace Microsoft.Quantum.Canon
     /// A quantum register which is used to store `value` in little-endian encoding.
     ///
     /// # See Also
-    /// - InPlaceXorLE
+    /// - InPlaceXorBE
     operation InPlaceXorLE (value : Int, target : LittleEndian) : Unit
     {
         body (...)
@@ -67,7 +67,7 @@ namespace Microsoft.Quantum.Canon
     /// A quantum register which is used to store `value` in big-endian encoding.
     ///
     /// # See Also
-    /// - InPlaceXorBE
+    /// - InPlaceXorLE
     operation InPlaceXorBE(value : Int, target : BigEndian) : Unit {
         body (...) {
             ApplyReversedOpLittleEndianCA(InPlaceXorLE(value, _), target);
@@ -80,11 +80,15 @@ namespace Microsoft.Quantum.Canon
     /// # Summary
     /// This computes the Majority function in-place on 3 qubits.
     ///
+    /// If we denote output qubit as $z$ and input qubits as $x$ and $y$,
+    /// the operation performs the following transformation:
+    /// $\ket{xyz} \rightarrow \ket{x \oplus z} \ket{y \oplus z} \ket{\operatorname{MAJ} (x, y, z)}$.
+    ///
     /// # Input
     /// ## output
     /// First input qubit. Note that the output is computed in-place
     /// and stored in this qubit.
-    /// ## Input
+    /// ## input
     /// Second and third input qubits.
     operation InPlaceMajority(output: Qubit, input: Qubit[]) : Unit {
         body (...){
@@ -115,9 +119,9 @@ namespace Microsoft.Quantum.Canon
     ///
     /// # Input
     /// ## x
-    /// First nubmer to be compared stored in `LittleEndian` format in a qubit register.
+    /// First number to be compared stored in `LittleEndian` format in a qubit register.
     /// ## y
-    /// Second nubmer to be compared stored in `LittleEndian` format in a qubit register.
+    /// Second number to be compared stored in `LittleEndian` format in a qubit register.
     /// ## output
     /// Qubit that stores the result of the comparison $x>y$.
     ///
@@ -133,9 +137,9 @@ namespace Microsoft.Quantum.Canon
                 fail "Size of integer registers must be equal."; 
             }
 
-            using(auxillary = Qubit()){
+            using(auxiliary = Qubit()){
                 WithCA(
-                    ApplyRippleCarryComparatorLE_(x, y, [auxillary], _),
+                    ApplyRippleCarryComparatorLE_(x, y, [auxiliary], _),
                     BindCA([X, CNOT(x![nQubitsX-1], _)]),
                     output
                 );
@@ -147,14 +151,14 @@ namespace Microsoft.Quantum.Canon
     }
 
     // Implementation step of `ApplyRippleCarryComparatorLE`.
-    operation ApplyRippleCarryComparatorLE_(x: LittleEndian, y: LittleEndian, auxillary: Qubit[], output: Qubit) : Unit {
+    operation ApplyRippleCarryComparatorLE_(x: LittleEndian, y: LittleEndian, auxiliary: Qubit[], output: Qubit) : Unit {
         body (...) {
             let nQubitsX = Length(x!);
 
             // Take 2's complement
-            ApplyToEachCA(X, x! + auxillary);
+            ApplyToEachCA(X, x! + auxiliary);
 
-            InPlaceMajority(x![0], [y![0], auxillary[0]]);
+            InPlaceMajority(x![0], [y![0], auxiliary[0]]);
             for(idx in 1..nQubitsX - 1){
                 InPlaceMajority(x![idx], [x![idx - 1], y![idx]]);
             }
@@ -206,9 +210,9 @@ namespace Microsoft.Quantum.Canon
     ///
     /// # Input
     /// ## x
-    /// First nubmer to be compared stored in `BigEndian` format in a qubit register.
+    /// First number to be compared stored in `BigEndian` format in a qubit register.
     /// ## y
-    /// Second nubmer to be compared stored in `BigEndian` format in a qubit register.
+    /// Second number to be compared stored in `BigEndian` format in a qubit register.
     /// ## output
     /// Qubit that stores the result of the comparison $x>y$.
     ///
@@ -289,7 +293,7 @@ namespace Microsoft.Quantum.Canon
     /// The integer by which the `target` is incremented by.
     ///
     /// # See Also
-    /// - Microsoft.Quantum.Canon.IntegerIncrementLE"
+    /// - Microsoft.Quantum.Canon.IntegerIncrementLE
     ///
     /// # References
     /// - [ *Thomas G. Draper*,
@@ -592,7 +596,7 @@ namespace Microsoft.Quantum.Canon
     
     
     /// # Summary
-    /// Performs a modular multipy-and-add by integer constants on a qubit register.
+    /// Performs a modular multiply-and-add by integer constants on a qubit register.
     ///
     /// Implements the map 
     /// $$
@@ -639,7 +643,7 @@ namespace Microsoft.Quantum.Canon
     
     
     /// # Summary
-    /// The same as ModularAddProductInPlaceLE, but assumes that summand encodes
+    /// The same as ModularAddProductLE, but assumes that summand encodes
     /// integers in QFT basis
     ///
     /// # See Also

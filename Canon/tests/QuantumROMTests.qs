@@ -59,7 +59,7 @@ namespace Microsoft.Quantum.Tests {
                     // test passes
                 }
                 else{
-                    fail $"index {i} reconstruced cofficient incorrect. Error is {errors[i]}";
+                    fail $"index {i} reconstructed coefficient incorrect. Error is {errors[i]}";
                 }
             }
         }

@@ -49,7 +49,7 @@ namespace Microsoft.Quantum.Canon
     /// # Remarks
     /// The signature `(LogicalRegister => Syndrome)` represents an operation
     /// that acts jointly on the qubits in `LogicalRegister` and some ancilla
-    /// qubits followed by a measurements of the ancilla to extract a `Syndrome
+    /// qubits followed by a measurements of the ancilla to extract a `Syndrome`
     /// type representing the `Result[]` of these measurements.
     ///
     /// ## Example

@@ -129,12 +129,12 @@ namespace Microsoft.Quantum.Canon
     }
     
     
-    // This simple time-depedendent simulation algorithm implements a
+    // This simple time-dependent simulation algorithm implements a
     // sequence of uniformly-sized trotter steps
     
     /// # Summary
     /// Implementation of multiple Trotter steps to approximate a unitary
-    /// operator that solves the time-dependent Schr�dinger equation.
+    /// operator that solves the time-dependent Schrödinger equation.
     ///
     /// # Input
     /// ## trotterStepSize

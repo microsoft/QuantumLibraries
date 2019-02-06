@@ -137,7 +137,7 @@ namespace Microsoft.Quantum.Canon
     
     
     /// # Summary
-    /// Computes the inverse hyperbolic secant of a number.
+    /// Computes the inverse hyperbolic sine of a number.
     ///
     /// # Input
     /// ## x
@@ -174,11 +174,11 @@ namespace Microsoft.Quantum.Canon
     /// ## modulus
     /// The modulus by which residues are take, must be positive
     /// # Output
-    /// Integer r between 0 and `modulus - 1' such that `value - r' is divisible by modulus
+    /// Integer $r$ between 0 and `modulus - 1` such that `value - r` is divisible by modulus
     ///
     /// # Remarks
     /// This function behaves different to how the operator `%` behaves in C# and Q# as in the result
-    /// is always a positive integer between between 0 and `modulus - 1', even if value is negative.
+    /// is always a positive integer between 0 and `modulus - 1`, even if value is negative.
     function Modulus (value : Int, modulus : Int) : Int
     {
         AssertBoolEqual(modulus > 0, true, $"`modulus` must be positive");
@@ -199,10 +199,10 @@ namespace Microsoft.Quantum.Canon
     /// Let us denote expBase by x, power by p and modulus by N.
     /// The function returns xᵖ mod N.
     /// 
-    /// We assume that N,x are positive and power is non-negative.
+    /// We assume that $N$, $x$ are positive and power is non-negative.
     ///
     /// # Remarks
-    /// Takes time proportional to the number of bits in `power`, not the power itself
+    /// Takes time proportional to the number of bits in `power`, not the `power` itself.
     function ExpMod (expBase : Int, power : Int, modulus : Int) : Int
     {
         AssertBoolEqual(power >= 0, true, $"`power` must be non-negative");
@@ -412,7 +412,7 @@ namespace Microsoft.Quantum.Canon
     /// Returns the `L(p)` norm of a vector of `Double`s.
     /// 
     /// That is, given an array $x$ of type `Double[]`, this returns the $p$-norm
-    /// $\|x\|_p= (\sum_{j}|x_j|^{p})^{1/p}$.
+    /// $\|x\|\_p= (\sum_{j}|x_j|^{p})^{1/p}$.
     ///
     /// # Input
     /// ## p

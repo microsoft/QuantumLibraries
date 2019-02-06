@@ -27,13 +27,13 @@ namespace Microsoft.Quantum.Tests {
             let (eigenvalues, prob, inverseAngle, statePreparation, selector) = LCUTestHelper();
             let LCU = BlockEncodingByLCU(statePreparation, selector);
             using(qubits = Qubit[2]){
-                let auxillary = [qubits[0]];
+                let auxiliary = [qubits[0]];
                 let system = [qubits[1]];
 
                 for(rep in 0..5){
-                    LCU(auxillary, system);
-                    AssertProb([PauliZ], auxillary, Zero, prob, "Error0: Z Success probability does not match theory", 1e-10);
-                    let result = M(auxillary[0]);
+                    LCU(auxiliary, system);
+                    AssertProb([PauliZ], auxiliary, Zero, prob, "Error0: Z Success probability does not match theory", 1e-10);
+                    let result = M(auxiliary[0]);
                     if(result == Zero) {
                         Exp([PauliY],1.0 * inverseAngle, system);
                         AssertProb([PauliZ], system, Zero, 1.0, "Error1: Z Success probability does not match theory", 1e-10);
@@ -50,14 +50,14 @@ namespace Microsoft.Quantum.Tests {
             let (eigenvalues, prob, inverseAngle, statePreparation, selector) = LCUTestHelper();
             let LCU = BlockEncodingReflectionByLCU(statePreparation, selector);
             using(qubits = Qubit[4]){
-                let auxillary = qubits[2..3];
+                let auxiliary = qubits[2..3];
                 let system = [qubits[0]];
                 let flag = qubits[1];
 
                 for (rep in 0..5) {
-                    LCU!!(auxillary, system);
+                    LCU!!(auxiliary, system);
                     X(flag);
-                    (ControlledOnInt(0, X))(auxillary, flag);
+                    (ControlledOnInt(0, X))(auxiliary, flag);
                     AssertProb([PauliZ],[flag], Zero, prob, "Error0: Z Success probability does not match theory", 1e-10);
                     let result = M(flag);
                     if(result == Zero) {
@@ -76,14 +76,14 @@ namespace Microsoft.Quantum.Tests {
             let (eigenvalues, prob, inverseAngle, statePreparation, selector) = LCUTestHelper();
             let LCU = QuantumWalkByQubitization(BlockEncodingReflectionByLCU(statePreparation, selector));
             using(qubits = Qubit[4]){
-                let auxillary = qubits[2..3];
+                let auxiliary = qubits[2..3];
                 let system = [qubits[0]];
                 let flag = qubits[1];
 
                 for(rep in 0..5){
-                    LCU(auxillary, system);
+                    LCU(auxiliary, system);
                     X(flag);
-                    (ControlledOnInt(0, X))(auxillary, flag);
+                    (ControlledOnInt(0, X))(auxiliary, flag);
                     AssertProb([PauliZ],[flag], Zero, prob, "Error0: Z Success probability does not match theory", 1e-10);
                     let result = M(flag);
                     if(result == Zero) {
@@ -114,13 +114,13 @@ namespace Microsoft.Quantum.Tests {
 
             let (norm, LCU) = PauliBlockEncoding(generatorSystem);
             using (qubits = Qubit[2]) {
-                let auxillary = [qubits[0]];
+                let auxiliary = [qubits[0]];
                 let system = [qubits[1]];
 
                 for (rep in 0..5) {
-                    LCU!!(auxillary, system);
-                    AssertProb([PauliZ], auxillary, Zero, prob, "Error0: Z Success probability does not match theory", 1e-10);
-                    let result = M(auxillary[0]);
+                    LCU!!(auxiliary, system);
+                    AssertProb([PauliZ], auxiliary, Zero, prob, "Error0: Z Success probability does not match theory", 1e-10);
+                    let result = M(auxiliary[0]);
                     if(result == Zero) {
                         Exp([PauliY],1.0 * inverseAngle, system);
                         AssertProb([PauliZ], system, Zero, 1.0, "Error1: Z Success probability does not match theory", 1e-10);
