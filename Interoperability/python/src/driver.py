@@ -53,7 +53,7 @@ qsharp.print_tracer_counts(r)
 hello = qsharp.compile("""
     operation HelloQ() : Result
     {
-        Message($"Hello from quantum world!"); 
+        Message($"Hello from quantum world!");
         return Zero;
     }
 """)
