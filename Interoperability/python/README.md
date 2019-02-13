@@ -26,7 +26,7 @@ dotnet iqsharp install
 
 For more information, please see the complete [install guide](https://docs.microsoft.com/quantum/install-guide/).
 
-# Usage
+## Usage##
 
 Create one or more files with a `.qs` extension with the quantum operations you want to execute.
 The `qsharp` package automatically detects and tries to compile all the files under the current directory that have the  `.qs` extension.
