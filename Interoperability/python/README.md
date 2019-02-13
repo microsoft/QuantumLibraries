@@ -1,28 +1,44 @@
-# Pre-requisites.
+# Python Interoperability for Q# #
 
-The Q# compiler and simulation framework requires .NET core 2.1.300 or later.
-Please take a moment to install .NET Core from: https://dotnet.microsoft.com/download
+The `qsharp` package for Python provides interoperability with the Quantum Development Kit and with the Q# language, making it easy to simulate Q# operations and functions from within Python.
 
-This prototype requires Python 3.6. It has been tested with Python 3.6.5. 
+## Installation ##
 
-For the best experience developing Q# it is recommended, but not required, to install the rest of the
-Microsoft Quantum Developement Kit. Instructions for VS Code are found [here](https://docs.microsoft.com/en-us/quantum/install-guide/command-line?view=qsharp-preview).
+To get started with the `qsharp` package, you'll need a couple prerequisites:
 
+- .NET Core SDK 2.1.3 or later,
+- Python 3.6 or later,
+- Jupyter, and
+- The IQ# kernel for Jupyter.
+
+To install the .NET Core SDK, please follow the [Hello World tutorial](https://dotnet.microsoft.com/learn/dotnet/hello-world-tutorial/intro) provided with .NET Core.
+
+To install Python and Jupyter, we recommend using the Anaconda distribution of Python.
+Please see https://www.anaconda.com/distribution/ for more details.
+On other distributions of Python, the Jupyter platform can be installed using `pip install jupyter`.
+
+Finally, the IQ# kernel for Jupyter can be installed using the `dotnet` command line tool:
+
+```
+dotnet tool install -g Microsoft.Quantum.IQSharp
+dotnet iqsharp install
+```
+
+For more information, please see the complete [install guide](https://docs.microsoft.com/quantum/install-guide/).
 
 # Usage
 
 Create one or more files with a `.qs` extension with the quantum operations you want to execute.
-The qsharp module automatically detects and tries to compile all the files under the current 
-diretory that have the  `.qs` extension.
+The `qsharp` package automatically detects and tries to compile all the files under the current directory that have the  `.qs` extension.
 
-To call a Q# operation from Python, first import the `qsharp` module:
+To call a Q# operation from Python, first import `qsharp`:
 ```python
 import qsharp
 ```
 
 After this, Q# namespaces can be imported as Python packages, for example:
 ```python
-from Microsoft.Prototypes.Python import HelloQ, HelloAgain
+from Microsoft.Quantum.Python import HelloQ, HelloAgain
 ```
 
 Once imported, to simulate a Q# operation invoke it's `simulate` method:
@@ -76,47 +92,3 @@ r = hello.simulate()
 
 You may call `compile` multiple times, and may refer to operations previously defined in other snippets. 
 Calling `compile` using a previous snippet_id updates the corresponding definition.
-
-
-# Performance optimizations
-
-Behind the scenes, when loaded, the `qsharp` module starts a `qss` server that gets terminated
-when Python finishes execution. To improve performance and avoid the server's initialization costs 
-the `qss` server can be externally started and kept alive.
-
-## Installing `qss`
-
-Once the `qsharp` package has been installed in your project, from the project's root folder execute:
-```
-python -c "import qsharp"
-```
-
-## Running `qss`
-
-Once installed, to start the `qss` server, from a command line in your projects' root folder execute:
-```
-qsharp\qss
-```
-
-> The server must be started from the project's root folder to 
-> discover the `.qs` files
-
-If started successfully, you will see the following message:
-```
-Now listening on: http://localhost:5050
-Application started. Press Ctrl+C to shut down.
-```
-
-## Invoking QSS:
-
-From another command line, you can now execute your Python driver passing the `--skipQss` parameter,
-for example:
-```
-python driver.py --skipQss
-```
-
-You may do any changes to your `.qs` files while the qss server is running, the changes are 
-automatically picked up the next time you try to invoke the quantum operations from Python.
-
-
-
