@@ -14,7 +14,7 @@ print(qsharp.get_available_operations())
 
 # After importing the qsharp module, Q# namespaces can be imported like any
 # other Python packages.
-from Microsoft.Prototypes.Python import HelloQ, HelloAgain, HelloTuple
+from Microsoft.Quantum.Python import HelloQ, HelloAgain, HelloTuple
 
 # All Q# operations defined in any .qs file inside the same working directory
 # is automatically identified.
@@ -39,11 +39,7 @@ print("")
 # the count of primitive operations used by the algorithm and the number of required qubits.
 # For this, invoke the `estimate` method on the operation:
 r = HelloAgain.estimate(count=5, name="Counting")
-print()
-
-# # You may use the `print_tracer_counts` function `qsharp` to print the results to the console:
-qsharp.print_tracer_counts(r)
-
+print(r)
 
 # You can now also compile Q# operations on the fly from Python
 # and simulate them.

@@ -18,13 +18,6 @@ try:
 except:
     __version__ = "<unknown>"
 
-def print_tracer_counts(data):
-    counts = data['counts']
-    for key, value in counts.items():
-        print(key, ":")
-        print(value)
-        print()
-
 def compile(code) -> Union[QSharpCallable, List[QSharpCallable]]:
     ops = [
         QSharpCallable(op, "snippets")
@@ -50,12 +43,6 @@ def get_available_operations_by_namespace() -> Dict[str, List[str]]:
         by_ns[ns_name].append(op_name)
 
     return dict(by_ns.items())
-
-def simulate(op, **params):
-    return client.simulate(op, **params)
-
-def estimate(op, **params):
-    return client.estimate(op, **params)
 
 ## STARTUP ##
 

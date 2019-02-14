@@ -19,7 +19,7 @@ import os
 import jupyter_client
 
 from collections import defaultdict
-from typing import List, Dict, Callable
+from typing import List, Dict, Callable, Any
 from pathlib import Path
 from qsharp.utils import log_messages
 from qsharp.serialization import map_tuples, unmap_tuples
@@ -63,11 +63,16 @@ class IQSharpClient(object):
     def get_available_operations(self):
         return self.execute('%who')
 
-    def simulate(self, op, **params):
+    def simulate(self, op, **params) -> Any:
         return self.execute(f'%simulate {op._name} {json.dumps(map_tuples(params))}')
 
-    def estimate(self, op, **params):
-        return self.execute(f'%estimate {op._name} {json.dumps(map_tuples(params))}')
+    def estimate(self, op, **params) -> Dict[str, int]:
+        raw_counts = self.execute(f'%estimate {op._name} {json.dumps(map_tuples(params))}')
+        # Convert counts to ints, since they get turned to floats by JSON serialization.
+        return {
+            operation_name: int(count)
+            for operation_name, count in raw_counts.items()
+        }
 
     def execute(self, input, return_full_result=False, **kwargs):
         results = []
@@ -88,11 +93,3 @@ class IQSharpClient(object):
             return (obj, content) if return_full_result else obj
         else:
             return None
-
-    ## Installation Lifecycle ##
-
-    def check_installed(self):
-        pass
-
-    def install_backend(self):
-        pass

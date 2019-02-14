@@ -60,9 +60,9 @@ class QSharpCallable(object):
         return f"<Q# callable {self._name}>"
 
     def simulate(self, **kwargs):
-        return qsharp.simulate(self, **kwargs)
+        return qsharp.client.simulate(self, **kwargs)
     def estimate(self, **kwargs):
-        return qsharp.estimate(self, **kwargs)
+        return qsharp.client.estimate(self, **kwargs)
 
 class QSharpModule(ModuleType):
     _qs_name : str
