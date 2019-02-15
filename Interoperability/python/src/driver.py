@@ -37,8 +37,8 @@ print("")
 
 # On top of simulation, you can also do quantum resources estimation including
 # the count of primitive operations used by the algorithm and the number of required qubits.
-# For this, invoke the `estimate` method on the operation:
-r = HelloAgain.estimate(count=5, name="Counting")
+# For this, invoke the `estimate_resources` method on the operation:
+r = HelloAgain.estimate_resources(count=5, name="Counting")
 print(r)
 
 # You can now also compile Q# operations on the fly from Python

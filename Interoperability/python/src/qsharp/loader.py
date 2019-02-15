@@ -13,7 +13,7 @@ import importlib
 from importlib.abc import MetaPathFinder, Loader
 import qsharp
 
-from typing import Optional
+from typing import Optional, Any
 
 import logging
 logger = logging.getLogger(__name__)
@@ -59,9 +59,14 @@ class QSharpCallable(object):
     def __repr__(self) -> str:
         return f"<Q# callable {self._name}>"
 
-    def simulate(self, **kwargs):
+    def simulate(self, **kwargs) -> Any:
+        """
+        Executes this function or operation on the QuantumSimulator target
+        machine, returning its output as a Python object.
+        """
         return qsharp.client.simulate(self, **kwargs)
-    def estimate(self, **kwargs):
+
+    def estimate_resources(self, **kwargs) -> Dict[str, int]:
         return qsharp.client.estimate(self, **kwargs)
 
 class QSharpModule(ModuleType):
