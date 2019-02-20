@@ -1,39 +1,30 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 namespace Microsoft.Quantum.Tests {
-    
+    open Microsoft.Quantum.Arithmetic;
     open Microsoft.Quantum.Primitive;
     open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Extensions.Testing;
-    
-    
+
+
     // This file contains very simple tests that should trivially pass
     // with the intent of testing the assert and testing harness mechanisms themselves.
-    operation EmptyTest () : Unit {
-        
-    }
-    
-    
+    operation EmptyTest () : Unit { }
+
     operation PreparationTest () : Unit {
-        
-        using (qubits = Qubit[1]) {
-            AssertProb([PauliZ], [qubits[0]], Zero, 1.0, $"Freshly prepared qubit was not in |0〉 state.", 1E-10);
+        using (qubit = Qubit()) {
+            AssertProb([PauliZ], [qubit], Zero, 1.0, $"Freshly prepared qubit was not in |0〉 state.", 1E-10);
         }
     }
-    
-    
+
     operation OperationTestShouldFail () : Unit {
-        
         fail $"OK";
     }
-    
-    
+
     function FunctionTestShouldFail () : Unit {
-        
         fail $"OK";
     }
-    
-    
+
     function AssertEqualTestShouldFail () : Unit {
         
         AssertAlmostEqual(1.0, 0.0);

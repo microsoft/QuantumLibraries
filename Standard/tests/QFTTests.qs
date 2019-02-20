@@ -1,33 +1,29 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 namespace Microsoft.Quantum.Tests {
-    
+    open Microsoft.Quantum.Arithmetic;
     open Microsoft.Quantum.Primitive;
     open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Extensions.Testing;
-    
-    
+
     // To test QFT we hard code circuits based on Figure 5.1 on Page 219 of
     // [ *Michael A. Nielsen , Isaac L. Chuang*,
     //    Quantum Computation and Quantum Information ](http://doi.org/10.1017/CBO9780511976667)
-    
+
     /// # Summary
     /// Hard-code 1 qubit QFT
     operation QFT1 (target : BigEndian) : Unit {
-        
         body (...) {
             AssertIntEqual(Length(target!), 1, $"`Length(target!)` must be 1");
             H((target!)[0]);
         }
-        
+
         adjoint invert;
     }
-    
-    
+
     /// # Summary
     /// Hard-code 2 qubit QFT
     operation QFT2 (target : BigEndian) : Unit {
-        
         body (...) {
             AssertIntEqual(Length(target!), 2, $"`Length(target!)` must be 2");
             let (q1, q2) = ((target!)[0], (target!)[1]);
@@ -36,15 +32,13 @@ namespace Microsoft.Quantum.Tests {
             H(q2);
             SWAP(q1, q2);
         }
-        
+
         adjoint invert;
     }
-    
-    
+
     /// # Summary
     /// Hard-code 3 qubit QFT
     operation QFT3 (target : BigEndian) : Unit {
-        
         body (...) {
             AssertIntEqual(Length(target!), 3, $"`Length(target)` must be 3");
             let (q1, q2, q3) = ((target!)[0], (target!)[1], (target!)[2]);

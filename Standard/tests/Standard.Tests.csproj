@@ -11,7 +11,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\src\Canon.csproj" />
+    <ProjectReference Include="..\src\Standard.csproj" />
   </ItemGroup>
 
   <ItemGroup>

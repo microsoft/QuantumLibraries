@@ -1,19 +1,20 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 namespace Microsoft.Quantum.Tests {
-    
+    open Microsoft.Quantum.Preparation;
+    open Microsoft.Quantum.Arithmetic;
     open Microsoft.Quantum.Primitive;
     open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Extensions.Convert;
     open Microsoft.Quantum.Extensions.Math;
-    
-    
+
+
     // number of qubits, abs(amplitude), phase
     newtype StatePreparationTestCase = (Int, Double[], Double[]);
-    
-    
+
+
     operation StatePreparationPositiveCoefficientsTest () : Unit {
-        
+
         let tolerance = 1E-09;
         mutable testCases = new StatePreparationTestCase[100];
         mutable nTests = 0;
@@ -269,8 +270,7 @@ namespace Microsoft.Quantum.Tests {
     operation PrepareUniformSuperpositionTest() : Unit {
         body (...) {
             let nQubits = 5;
-            using(qubits = Qubit[nQubits])
-            {
+            using(qubits = Qubit[nQubits]) {
                 for(nIndices in 1..2^nQubits)
                 {
                     Message($"Testing nIndices {nIndices} on {nQubits} qubits");

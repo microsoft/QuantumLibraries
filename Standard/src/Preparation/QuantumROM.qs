@@ -62,7 +62,7 @@ namespace Microsoft.Quantum.Preparation {
     ///   https://arxiv.org/abs/1805.03662
     function QuantumROM(targetError: Double, coefficients: Double[]) : ((Int, (Int, Int)), Double, ((BigEndian, Qubit[]) => Unit : Adjoint, Controlled)) {
         let nBitsPrecision = -Ceiling(Lg(0.5*targetError))+1;
-        let (oneNorm, keepCoeff, altIndex) = QuantumROMDiscretization_(nBitsPrecision, coefficients);
+        let (oneNorm, keepCoeff, altIndex) = _QuantumROMDiscretization(nBitsPrecision, coefficients);
         let nCoeffs = Length(coefficients);
         let nBitsIndices = Ceiling(Lg(ToDouble(nCoeffs)));
 
@@ -106,7 +106,7 @@ namespace Microsoft.Quantum.Preparation {
     // Classical processing
     // This discretizes the coefficients such that
     // |coefficient[i] * oneNorm - discretizedCoefficient[i] * discreizedOneNorm| * nCoeffs <= 2^{1-bitsPrecision}.  
-    function QuantumROMDiscretization_(bitsPrecision: Int, coefficients: Double[]) : (Double, Int[], Int[]) {
+    function _QuantumROMDiscretization(bitsPrecision: Int, coefficients: Double[]) : (Double, Int[], Int[]) {
         let oneNorm = PNorm(1.0, coefficients);
         let nCoefficients = Length(coefficients);
         if(bitsPrecision > 31){

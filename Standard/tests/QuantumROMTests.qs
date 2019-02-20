@@ -5,12 +5,13 @@
 namespace Microsoft.Quantum.Tests {
     open Microsoft.Quantum.Primitive;
     open Microsoft.Quantum.Canon;
+    open Microsoft.Quantum.Preparation;
     open Microsoft.Quantum.Extensions.Testing;
     open Microsoft.Quantum.Extensions.Math;
     open Microsoft.Quantum.Extensions.Convert;
 
     // Tests the discretization algorithm
-    operation QuantumROMDiscretization_Test() : Unit {
+    operation _QuantumROMDiscretizationTest() : Unit {
         for(rep in 0..20){
             let coeffs = RandomInt(5000)+2;
             let bitsPrecision = RandomInt(30)+1;
@@ -25,7 +26,7 @@ namespace Microsoft.Quantum.Tests {
             let rnd = RandomInt(coeffs);
             set coefficients[rnd] = coefficients[rnd] + 1.0;
 
-            let (oneNorm, keepCoeff, altIndex) = QuantumROMDiscretization_(bitsPrecision, coefficients);
+            let (oneNorm, keepCoeff, altIndex) = _QuantumROMDiscretization(bitsPrecision, coefficients);
 
             Message($"One-norm {oneNorm}");
 

@@ -2,6 +2,7 @@ namespace Microsoft.Quantum.Tests {
     
     open Microsoft.Quantum.Primitive;
     open Microsoft.Quantum.Canon;
+    open Microsoft.Quantum.Arithmetic;
     open Microsoft.Quantum.Extensions.Convert;
     open Microsoft.Quantum.Extensions.Testing;
     open Microsoft.Quantum.Extensions.Math;

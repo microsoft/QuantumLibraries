@@ -1,29 +1,27 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 namespace Microsoft.Quantum.Tests {
-    
+    open Microsoft.Quantum.Arithmetic;
     open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Primitive;
     open Microsoft.Quantum.Extensions.Convert;
-    
-    
+
     operation MultiplexZTestHelper (coefficients : Double[], multiplexerControl : BigEndian, additionalControl : Qubit[], target : Qubit, tolerance : Double) : Unit {
-        
         let nCoefficients = Length(coefficients);
         let nQubits = (Length(multiplexerControl!) + Length(additionalControl)) + 1;
-        
+
         // Measure phase shift due to Exp^PauliZ rotation.
         H(target);
-        
+
         // Generate uniform superposition over control inputs.
         for (idxMultiplexer in 0 .. Length(multiplexerControl!) - 1) {
             H(multiplexerControl![idxMultiplexer]);
         }
-        
+
         for (idxAdditional in 0 .. Length(additionalControl) - 1) {
             H(additionalControl[idxAdditional]);
         }
-        
+
         // For deterministic test of particular number state `idx', we could use the following
         //let bits = Reverse(BoolArrFromPositiveInt (idx, Length(multiplexerControl)));
         //for(idxBits in 0..Length(bits)-1){
