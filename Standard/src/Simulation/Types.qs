@@ -1,12 +1,11 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-namespace Microsoft.Quantum.Canon
-{
-    
+namespace Microsoft.Quantum.Simulation {
+
     // For an overview of the simulation library, see [Hamiltonian
     // Simulation](applications#hamiltonian-simulation)
-    
+
     /// # Summary
 	/// Represents a time-independent simulation algorithm.
 	/// 

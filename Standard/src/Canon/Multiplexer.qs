@@ -4,6 +4,7 @@
 namespace Microsoft.Quantum.Canon {
     open Microsoft.Quantum.Primitive;
     open Microsoft.Quantum.Extensions.Math;
+    open Microsoft.Quantum.Arithmetic;
 
     /// # Summary
     /// Applies a multiply-controlled unitary operation $U$ that applies a 

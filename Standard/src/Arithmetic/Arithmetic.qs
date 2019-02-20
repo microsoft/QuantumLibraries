@@ -1,23 +1,10 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-namespace Microsoft.Quantum.Canon
-{
-    
+namespace Microsoft.Quantum.Arithmetic {
     open Microsoft.Quantum.Primitive;
-    
-    
-    /// # Summary
-    /// If true, enables extra asserts that are expensive, but useful to debug the use of
-    /// the arithmetic functions.
-    ///
-    /// # Remarks
-    /// This function allows to configure the behavior of the library.
-    function _EnableExtraAssertsForArithmetic () : Bool
-    {
-        return false;
-    }
-    
+    open Microsoft.Quantum.Canon;
+
     /// # Summary
     /// Applies `X` operations to qubits in a little-endian register based on 1 bits in an integer.
     ///
@@ -33,12 +20,10 @@ namespace Microsoft.Quantum.Canon
     ///
     /// # See Also
     /// - InPlaceXorBE
-    operation InPlaceXorLE (value : Int, target : LittleEndian) : Unit
-    {
-        body (...)
-        {
+    operation InPlaceXorLE (value : Int, target : LittleEndian) : Unit {
+        body (...) {
             let bitrepresentation = BoolArrFromPositiveInt(value, Length(target!));
-            
+
             for (idx in 0 .. Length(target!) - 1)
             {
                 if (bitrepresentation[idx])
@@ -47,12 +32,12 @@ namespace Microsoft.Quantum.Canon
                 }
             }
         }
-        
+
         adjoint invert;
         controlled distribute;
         controlled adjoint distribute;
     }
-        
+
     /// # Summary
     /// Applies `X` operations to qubits in a big-endian register based on 1 bits in an integer.
     ///
@@ -72,7 +57,7 @@ namespace Microsoft.Quantum.Canon
         body (...) {
             ApplyReversedOpLittleEndianCA(InPlaceXorLE(value, _), target);
         }
-        adjoint auto; 
+        adjoint auto;
         controlled auto;
         adjoint controlled auto;
     }
@@ -166,34 +151,6 @@ namespace Microsoft.Quantum.Canon
         adjoint auto;
         controlled auto;
         adjoint controlled auto;
-    }
-
-    /// # Summary
-    /// Converts a `LittleEndian` qubit register to a `BigEndian` Qubit
-    /// register by reversing the qubit ordering.
-    ///
-    /// # Input
-    /// ## input
-    /// Qubit register in `LittleEndian` format.
-    ///
-    /// # Output
-    /// Qubit register in `BigEndian` format.
-    function LittleEndianToBigEndian(input: LittleEndian) : BigEndian {
-        return BigEndian(Reverse(input!));
-    }
-
-    /// # Summary
-    /// Converts a `BigEndian` qubit register to a `LittleEndian` Qubit
-    /// register by reversing the qubit ordering.
-    ///
-    /// # Input
-    /// ## input
-    /// Qubit register in `BigEndian` format.
-    ///
-    /// # Output
-    /// Qubit register in `LittleEndian` format.
-    function BigEndianToLittleEndian(input: BigEndian) : LittleEndian {
-        return LittleEndian(Reverse(input!));
     }
 
     /// # Summary

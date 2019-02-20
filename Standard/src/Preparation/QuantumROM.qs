@@ -1,15 +1,16 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-namespace Microsoft.Quantum.Canon
-{
+namespace Microsoft.Quantum.Preparation {
     open Microsoft.Quantum.Primitive;
+    open Microsoft.Quantum.Canon;
+    open Microsoft.Quantum.Arithmetic;
     open Microsoft.Quantum.Extensions.Math;
     open Microsoft.Quantum.Extensions.Convert;
 
     /// # Summary
 	/// Uses the Quantum ROM technique to represent a given density matrix.
-	/// 
+	///
     /// Given a list of $N$ coefficients $\alpha_j$, this returns a unitary $U$ that uses the Quantum-ROM
     /// technique to prepare
     /// an approximation  $\tilde\rho\sum_{j=0}^{N-1}p_j\ket{j}\bra{j}$ of the purification of the density matrix 

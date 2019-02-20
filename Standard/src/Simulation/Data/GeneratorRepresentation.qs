@@ -1,16 +1,15 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-namespace Microsoft.Quantum.Canon
-{
-    
+namespace Microsoft.Quantum.Simulation {
     open Microsoft.Quantum.Extensions.Math;
-    
-    
+    open Microsoft.Quantum.Canon;
+
+
     /// # Summary
     /// Represents a single primitive term in the set of all dynamical generators, e.g.
     /// Hermitian operators, for which there exists a map from that generator
-    /// to time-evolution by that generator, through `EvolutionSet`. 
+    /// to time-evolution by that generator, through `EvolutionSet`.
     ///
     /// The first element
     /// (Int[], Double[]) is indexes that single term -- For instance, the Pauli string

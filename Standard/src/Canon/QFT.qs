@@ -1,12 +1,10 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-namespace Microsoft.Quantum.Canon
-{
-    
+namespace Microsoft.Quantum.Canon {
+    open Microsoft.Quantum.Arithmetic;
     open Microsoft.Quantum.Primitive;
-    
-    
+
     /// # Summary
     /// Apply the Approximate Quantum Fourier Transform (AQFT) to a quantum register.
     ///
@@ -34,14 +32,12 @@ namespace Microsoft.Quantum.Canon
     ///      Appl. Algebra Eng. Commun. Comput.
     ///      19(3): 177-193 (2008) ](http://doi.org/10.1007/s00200-008-0072-2)
     /// - [ *D. Coppersmith* arXiv:quant-ph/0201067v1 ](https://arxiv.org/abs/quant-ph/0201067)
-    operation ApproximateQFT (a : Int, qs : BigEndian) : Unit
-    {
-        body (...)
-        {
+    operation ApproximateQFT (a : Int, qs : BigEndian) : Unit {
+        body (...) {
             let nQubits = Length(qs!);
             AssertBoolEqual(nQubits > 0, true, $"`Length(qs)` must be least 1");
             AssertBoolEqual(a > 0 && a <= nQubits, true, $"`a` must be positive and less than `Length(qs)`");
-            
+
             for (i in 0 .. nQubits - 1)
             {
                 for (j in 0 .. i - 1)
@@ -79,15 +75,13 @@ namespace Microsoft.Quantum.Canon
     /// The input and output are assumed to be in big endian encoding.
     ///
     /// # See Also
-    /// - @"microsoft.quantum.canon.approximateqft"
-    /// - @"microsoft.quantum.canon.qftle"
-    operation QFT (qs : BigEndian) : Unit
-    {
-        body (...)
-        {
+    /// - Microsoft.Quantum.Canon.ApproximateQFT
+    /// - Microsoft.Quantum.Canon.QFTLE
+    operation QFT (qs : BigEndian) : Unit {
+        body (...) {
             ApproximateQFT(Length(qs!), qs);
         }
-        
+
         adjoint invert;
         controlled distribute;
         controlled adjoint distribute;

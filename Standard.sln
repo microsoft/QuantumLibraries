@@ -8,9 +8,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentation", "Documentat
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Canon", "Canon\src\Canon.csproj", "{A36EEB3F-89F0-4435-8527-2E68CC6067E1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Standard", "Standard\src\Standard.csproj", "{A36EEB3F-89F0-4435-8527-2E68CC6067E1}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Canon.Tests", "Canon\tests\Canon.Tests.csproj", "{DEDA9681-2C11-492F-B1C9-D772BB45730A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Standard.Tests", "Standard\tests\Standard.Tests.csproj", "{DEDA9681-2C11-492F-B1C9-D772BB45730A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

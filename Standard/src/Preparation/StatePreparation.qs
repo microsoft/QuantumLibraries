@@ -1,13 +1,12 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-namespace Microsoft.Quantum.Canon
-{
-    
+namespace Microsoft.Quantum.Preparation {
+    open Microsoft.Quantum.Canon;
+    open Microsoft.Quantum.Arithmetic;
     open Microsoft.Quantum.Primitive;
     open Microsoft.Quantum.Extensions.Math;
-    
-    
+
     // This library returns operations that prepare a specified quantum state
     // from the computational basis state $\ket{0...0}$.
     
@@ -108,8 +107,7 @@ namespace Microsoft.Quantum.Canon
     ///     op(qubitsBE);
     /// }
     /// ```
-    function StatePreparationComplexCoefficients (coefficients : ComplexPolar[]) : (BigEndian => Unit : Adjoint, Controlled)
-    {
+    function StatePreparationComplexCoefficients (coefficients : ComplexPolar[]) : (BigEndian => Unit : Adjoint, Controlled) {
         return PrepareArbitraryState(coefficients, _);
     }
     
@@ -186,7 +184,7 @@ namespace Microsoft.Quantum.Canon
         body (...)
         {
             // For each 2D block, compute disentangling single-qubit rotation parameters
-            let (disentanglingY, disentanglingZ, newCoefficients) = StatePreparationSBMComputeCoefficients_(coefficients);
+            let (disentanglingY, disentanglingZ, newCoefficients) = _StatePreparationSBMComputeCoefficients(coefficients);
             MultiplexPauli(disentanglingZ, PauliZ, control, target);
             MultiplexPauli(disentanglingY, PauliY, control, target);
             
@@ -239,29 +237,26 @@ namespace Microsoft.Quantum.Canon
         let theta = 2.0 * ArcTan2(abs1, abs0);
         return (ComplexPolar(r, t), phi, theta);
     }
-    
-    
+
     /// # Summary
     /// Implementation step of arbitrary state preparation procedure.
     /// # See Also
     /// - Microsoft.Quantum.Canon.PrepareArbitraryState
-    function StatePreparationSBMComputeCoefficients_ (coefficients : ComplexPolar[]) : (Double[], Double[], ComplexPolar[])
-    {
+    function _StatePreparationSBMComputeCoefficients (coefficients : ComplexPolar[]) : (Double[], Double[], ComplexPolar[]) {
         mutable disentanglingZ = new Double[Length(coefficients) / 2];
         mutable disentanglingY = new Double[Length(coefficients) / 2];
         mutable newCoefficients = new ComplexPolar[Length(coefficients) / 2];
-        
-        for (idxCoeff in 0 .. 2 .. Length(coefficients) - 1)
-        {
+
+        for (idxCoeff in 0 .. 2 .. Length(coefficients) - 1) {
             let (rt, phi, theta) = BlochSphereCoordinates(coefficients[idxCoeff], coefficients[idxCoeff + 1]);
             set disentanglingZ[idxCoeff / 2] = 0.5 * phi;
             set disentanglingY[idxCoeff / 2] = 0.5 * theta;
             set newCoefficients[idxCoeff / 2] = rt;
         }
-        
+
         return (disentanglingY, disentanglingZ, newCoefficients);
     }
-    
+
 }
 
 
