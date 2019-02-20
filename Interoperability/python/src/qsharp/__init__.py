@@ -19,6 +19,7 @@ from collections import defaultdict
 
 from qsharp.clients import _start_client
 from qsharp.loader import QSharpCallable, QSharpModuleFinder
+from qsharp.packages import Packages
 try:
     from qsharp.version import __version__
 except:
@@ -27,7 +28,9 @@ except:
 ## EXPORTS ##
 
 __all__ = [
-    'compile', 'get_available_operations', 'get_available_operations_by_namespace'
+    'compile',
+    'get_available_operations', 'get_available_operations_by_namespace',
+    'packages'
 ]
 
 ## FUNCTIONS ##
@@ -76,6 +79,7 @@ def get_available_operations_by_namespace() -> Dict[str, List[str]]:
 ## STARTUP ##
 
 client = _start_client()
+packages = Packages(client)
 
 # Make sure that we're last on the meta_path so that actual modules are loaded
 # first.

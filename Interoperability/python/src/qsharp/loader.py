@@ -13,7 +13,7 @@ import importlib
 from importlib.abc import MetaPathFinder, Loader
 import qsharp
 
-from typing import Optional, Any
+from typing import Optional, Any, Dict
 
 import logging
 logger = logging.getLogger(__name__)

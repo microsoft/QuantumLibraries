@@ -63,6 +63,12 @@ class IQSharpClient(object):
     def get_available_operations(self):
         return self.execute('%who')
 
+    def add_package(self, name : str) -> None:
+        return self.execute(f"%package {name}")
+
+    def get_packages(self) -> List[str]:
+        return self.execute("%package list")
+
     def simulate(self, op, **params) -> Any:
         return self.execute(f'%simulate {op._name} {json.dumps(map_tuples(params))}')
 
