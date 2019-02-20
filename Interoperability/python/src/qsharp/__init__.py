@@ -28,7 +28,7 @@ except:
 ## EXPORTS ##
 
 __all__ = [
-    'compile',
+    'compile', 'reload'
     'get_available_operations', 'get_available_operations_by_namespace',
     'packages'
 ]
@@ -51,6 +51,13 @@ def compile(code : str) -> Union[QSharpCallable, List[QSharpCallable]]:
     ]
     if len(ops) == 1:
         return ops[0]
+
+def reload() -> None:
+    """
+    Reloads the current IQ# workspace, discarding any current snippets and
+    recompiling source files in the workspace.
+    """
+    client.reload()
 
 def get_available_operations() -> List[str]:
     """

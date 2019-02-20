@@ -8,7 +8,7 @@
 ##
 
 import sys
-from types import ModuleType
+from types import ModuleType, new_class
 import importlib
 from importlib.abc import MetaPathFinder, Loader
 import qsharp
@@ -82,7 +82,9 @@ class QSharpModule(ModuleType):
     def __getattr__(self, name):
         ops = qsharp.get_available_operations_by_namespace()
         if name in ops[self._qs_name]:
-            return QSharpCallable(f"{self._qs_name}.{name}", "workspace")
+            op_cls = new_class(name, (QSharpCallable, ))
+            op_cls.__doc__ = qsharp.client.get_operation_metadata(f"{self._qs_name}.{name}").get('documentation', '')
+            return op_cls(f"{self._qs_name}.{name}", "workspace")
         raise AttributeError(f"Q# namespace {self._qs_name} does not contain a callable {name}.")
 
     def __repr__(self) -> str:

@@ -63,6 +63,15 @@ class IQSharpClient(object):
     def get_available_operations(self):
         return self.execute('%who')
 
+    def get_operation_metadata(self, name : str) -> Dict[str, Any]:
+        # TODO: placeholder for now until help commands are implemented in IQ#.
+        return {
+            "documentation": "TODO"
+        }
+
+    def reload(self) -> None:
+        return self.execute(f"%reload")
+
     def add_package(self, name : str) -> None:
         return self.execute(f"%package {name}")
 
