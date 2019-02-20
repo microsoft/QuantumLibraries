@@ -8,21 +8,27 @@
 ##
 
 from distutils.version import LooseVersion
+from typing import Iterable, Tuple
 
 ## CLASSES ##
 
 class Packages(object):
+    """
+    Represents the list of packages loaded into the current Q# session, and
+    allows for adding new packages from NuGet.org or any other configured feeds.
+    """
+
     def __init__(self, client):
         self._client = client
 
-    def __iter__(self):
+    def __iter__(self) -> Iterable[Tuple[str, LooseVersion]]:
         for pkg_spec in self._client.get_packages():
             name, version = pkg_spec.split("::", 1)
             yield name, LooseVersion(version)
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return repr(list(self))
-    def __str__(self):
+    def __str__(self) -> str:
         return str(list(self))
 
     def add(self, package_name : str) -> None:
