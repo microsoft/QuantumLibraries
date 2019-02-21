@@ -2,8 +2,6 @@
 // Licensed under the MIT License.
 
 namespace Microsoft.Quantum.Arithmetic {
-    open Microsoft.Quantum.Primitive;
-    open Microsoft.Quantum.Canon;
 
     /// # Summary
     /// Register that encodes an unsigned integer in little-endian order. The
