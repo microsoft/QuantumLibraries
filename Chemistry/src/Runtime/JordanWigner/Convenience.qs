@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 namespace Microsoft.Quantum.Chemistry.JordanWigner {
-    
+    open Microsoft.Quantum.Simulation;
     open Microsoft.Quantum.Primitive;
     open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Extensions.Convert;
@@ -40,7 +40,7 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
     }
     
     
-    function _QubitizationOracleSeperatedRegisters_ (qSharpData : JordanWignerEncodingData) : ((Int, Int), (Double, ((Qubit[], Qubit[]) => Unit : Adjoint, Controlled))) {
+    function _QubitizationOracleSeperatedRegisters (qSharpData : JordanWignerEncodingData) : ((Int, Int), (Double, ((Qubit[], Qubit[]) => Unit : Adjoint, Controlled))) {
         
         let (nSpinOrbitals, data, statePrepData, energyShift) = qSharpData!;
         let generatorSystem = JordanWignerBlockEncodingGeneratorSystem(data);
@@ -64,8 +64,8 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
     /// `Double` is the one-norm of Hamiltonian coefficients, and the operation
     /// is the Quantum walk created by Qubitization.
     function QubitizationOracle (qSharpData : JordanWignerEncodingData) : (Int, (Double, (Qubit[] => Unit : Adjoint, Controlled))) {
-        
-        let ((nCtrlRegisterQubits, nTargetRegisterQubits), (oneNorm, oracle)) = (_QubitizationOracleSeperatedRegisters_(qSharpData));
+
+        let ((nCtrlRegisterQubits, nTargetRegisterQubits), (oneNorm, oracle)) = (_QubitizationOracleSeperatedRegisters(qSharpData));
         let nQubits = nCtrlRegisterQubits + nTargetRegisterQubits;
         return (nQubits, (oneNorm, _MergeTwoRegisters_(oracle, nTargetRegisterQubits, _)));
     }

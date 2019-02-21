@@ -2,23 +2,19 @@
 // Licensed under the MIT License.
 
 namespace Microsoft.Quantum.Chemistry.Tests {
-    
+    open Microsoft.Quantum.Arithmetic;
     open Microsoft.Quantum.Primitive;
     open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Extensions.Testing;
     open Microsoft.Quantum.Extensions.Math;
     open Microsoft.Quantum.Extensions.Convert;
     open Microsoft.Quantum.Chemistry.JordanWigner;
-    
+
     // Test OptimizedBEXY operator.
     operation OptimizedBEOperatorZeroTestHelper (pauliBasis : Pauli, targetRegisterSize : Int, targetIndex : Int) : Unit {
-        
         let indexRegisterSize = Ceiling(Lg(ToDouble(targetRegisterSize)));
-        
         using (pauliBasisQubit = Qubit[1]) {
-            
             using (indexRegister = Qubit[indexRegisterSize]) {
-                
                 using (targetRegister = Qubit[targetRegisterSize]) {
                     
                     // Choose X or Y operator.

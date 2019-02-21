@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 namespace Microsoft.Quantum.Chemistry.JordanWigner {
-    
+    open Microsoft.Quantum.Simulation;
     open Microsoft.Quantum.Primitive;
     open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Extensions.Math;
@@ -33,8 +33,7 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
     ///
     /// # Output
     /// 'GeneratorIndex[]' expressing Z term as Pauli terms.
-    function _ZTermToPauliGenIdx_ (term : GeneratorIndex) : GeneratorIndex[] {
-        
+    function _ZTermToPauliGenIdx(term : GeneratorIndex) : GeneratorIndex[] {
         let ((idxTermType, coeff), idxFermions) = term!;
         return [GeneratorIndex(([3], coeff), idxFermions)];
     }
@@ -50,8 +49,7 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
     ///
     /// # Output
     /// 'GeneratorIndex[]' expressing ZZ term as Pauli terms.
-    function _ZZTermToPauliGenIdx_ (term : GeneratorIndex) : GeneratorIndex[] {
-        
+    function _ZZTermToPauliGenIdx (term : GeneratorIndex) : GeneratorIndex[] {
         let ((idxTermType, coeff), idxFermions) = term!;
         return [GeneratorIndex(([3, 3], coeff), idxFermions)];
     }
@@ -171,7 +169,7 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
         for (idx in 0 .. Length(ZData) - 1) {
             
             // Array of Arrays of Length 1
-            set genIdxes[idx] = (_ZTermToPauliGenIdx_(HTermToGenIdx(ZData[idx], [0])))[0];
+            set genIdxes[idx] = (_ZTermToPauliGenIdx(HTermToGenIdx(ZData[idx], [0])))[0];
         }
         
         set startIdx = Length(ZData);
@@ -179,7 +177,7 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
         for (idx in 0 .. Length(ZZData) - 1) {
             
             // Array of Arrays of Length 1
-            set genIdxes[startIdx + idx] = (_ZZTermToPauliGenIdx_(HTermToGenIdx(ZZData[idx], [1])))[0];
+            set genIdxes[startIdx + idx] = (_ZZTermToPauliGenIdx(HTermToGenIdx(ZZData[idx], [1])))[0];
         }
         
         set startIdx = startIdx + Length(ZZData);

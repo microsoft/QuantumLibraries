@@ -2,19 +2,18 @@
 // Licensed under the MIT License.
 
 namespace Microsoft.Quantum.Chemistry.JordanWigner {
-    
+    open Microsoft.Quantum.Simulation;
+    open Microsoft.Quantum.Arithmetic;
+    open Microsoft.Quantum.Preparation;
     open Microsoft.Quantum.Primitive;
     open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Extensions.Convert;
     open Microsoft.Quantum.Extensions.Math;
     open Microsoft.Quantum.Chemistry;
-    
 
     /// # Summary
     /// Term data in the optimized block-encoding algorithm.
     newtype OptimizedBETermIndex = (Double, Bool, Bool[], Bool[], Int[], Int[]);
-    
-
 
     /// # Summary
     /// Function that returns `OptimizedBETermIndex` data for term `n` given an
