@@ -97,47 +97,6 @@ namespace Microsoft.Quantum.Canon {
     }
 
     /// # Summary
-    /// Given two arrays, returns a new array of pairs such that each pair
-    /// contains an element from each original array.
-    ///
-    /// # Type Parameters
-    /// ## 'T
-    /// The type of the left array elements.
-    /// ## 'U
-    /// The type of the right array elements.
-    ///
-    /// # Input
-    /// ## left
-    /// An array containing values for the first element of each tuple.
-    /// ## right
-    /// An array containing values for the second element of each tuple.
-    ///
-    /// # Output
-    /// An array containing pairs of the form `(left[idx], right[idx])` for
-    /// each `idx`. If the two arrays are not of equal length, the output will
-    /// be as long as the shorter of the inputs.
-    ///
-    /// # Remarks
-    /// ## Example
-    /// ```qsharp
-    /// let left = [1, 3, 71];
-    /// let right = [false, true];
-    /// let pairs = Zip(left, right); // [(1, false), (3, true)]
-    /// ```
-    function Zip<'T, 'U> (left : 'T[], right : 'U[]) : ('T, 'U)[] {
-        let nElements = Length(left) < Length(right)
-                        ? Length(left)
-                        | Length(right);
-        mutable output = new ('T, 'U)[nElements];
-
-        for (idxElement in 0 .. nElements - 1) {
-            set output[idxElement] = (left[idxElement], right[idxElement]);
-        }
-
-        return output;
-    }
-
-    /// # Summary
     /// Returns the last element of the array.
     ///
     /// # Type Parameters
