@@ -5,9 +5,13 @@ namespace Microsoft.Quantum.Canon {
     open Microsoft.Quantum.Primitive;
 
     /// # Summary
-    /// Given operations implementing operators `U` and `V`, performs the
-    /// operation `U†VU` on a target. That is, this operation
-    /// conjugates `V` with `U`.
+    /// Given two operations, applies one as conjugated with the other.
+    ///
+    /// # Description
+    /// Given two operations, respectively described by unitary operators $U$
+    /// and $V$, applies them in the sequence $U^{\dagger} V U$. That is,
+    /// this operation implements the unitary operator given by $V$ conjugated
+    /// with $U$.
     ///
     /// # Input
     /// ## outerOperation
@@ -29,8 +33,8 @@ namespace Microsoft.Quantum.Canon {
     /// controllable.
     ///
     /// # See Also
-    /// - ApplyWithC
     /// - ApplyWithA
+    /// - ApplyWithC
     /// - ApplyWithCA
     operation ApplyWith<'T>(outerOperation : ('T => Unit : Adjoint), innerOperation : ('T => Unit), target : 'T) : Unit {
         outerOperation(target);
@@ -41,6 +45,7 @@ namespace Microsoft.Quantum.Canon {
     /// # Deprecated
     /// Please use @"Microsoft.Quantum.Canon.ApplyWith".
     operation With<'T>(outerOperation : ('T => Unit : Adjoint), innerOperation : ('T => Unit), target : 'T) : Unit {
+        Renamed("Microsoft.Quantum.Canon.With", "Microsoft.Quantum.Canon.ApplyWith");
         ApplyWith(outerOperation, innerOperation, target);
     }
 
@@ -80,10 +85,13 @@ namespace Microsoft.Quantum.Canon {
     }
 
     /// # Summary
-    /// Given operations implementing operators `U` and `V`, performs the
-    /// operation `U†VU` on a target. That is, this operation
-    /// conjugates `V` with `U`.
-    /// The modifier `A` indicates that the inner operation is adjointable.
+    /// Given two operations, applies one as conjugated with the other.
+    ///
+    /// # Description
+    /// Given two operations, respectively described by unitary operators $U$
+    /// and $V$, applies them in the sequence $U^{\dagger} V U$. That is,
+    /// this operation implements the unitary operator given by $V$ conjugated
+    /// with $U$.
     ///
     /// # Input
     /// ## outerOperation
@@ -105,25 +113,72 @@ namespace Microsoft.Quantum.Canon {
     /// controllable.
     ///
     /// # See Also
-    /// - Microsoft.Quantum.Canon.With
-    operation WithA<'T> (outerOperation : ('T => Unit : Adjoint), innerOperation : ('T => Unit : Adjoint), target : 'T) : Unit
-    {
-        body (...)
-        {
+    /// - ApplyWith
+    /// - ApplyWithC
+    /// - ApplyWithCA
+    operation ApplyWithA<'T>(outerOperation : ('T => Unit : Adjoint), innerOperation : ('T => Unit : Adjoint), target : 'T) : Unit {
+        body (...) {
             outerOperation(target);
             innerOperation(target);
             Adjoint outerOperation(target);
         }
-        
+
         adjoint invert;
     }
-    
-    
+
+    /// # Deprecated
+    /// Please use @"Microsoft.Quantum.Canon.ApplyWithA".
+    operation WithA<'T>(outerOperation : ('T => Unit : Adjoint), innerOperation : ('T => Unit : Adjoint), target : 'T) : Unit {
+        body (...) {
+            Renamed("Microsoft.Quantum.Canon.WithA", "Microsoft.Quantum.Canon.ApplyWithA");
+            ApplyWithA(outerOperation, innerOperation, target);
+        }
+        adjoint auto;
+    }
+
     /// # Summary
-    /// Given operations implementing operators `U` and `V`, performs the
-    /// operation `U†VU` on a target. That is, this operation
-    /// conjugates `V` with `U`.
-    /// The modifier `C` dictates that the inner operation is controllable.
+    /// Given outer and inner operations, returns a new operation that
+    /// conjugates the inner operation by the outer operation.
+    ///
+    /// # Input
+    /// ## outerOperation
+    /// The operation $U$ that should be used to conjugate $V$. Note that the
+    /// outer operation $U$ needs to be adjointable, but does not
+    /// need to be controllable.
+    /// ## innerOperation
+    /// The operation $V$ being conjugated.
+    ///
+    /// # Output
+    /// A new operation whose action is represented by the unitary
+    /// $U^{\dagger} V U$.
+    ///
+    /// # Type Parameters
+    /// ## 'T
+    /// The type of the target on which each of the inner and outer operations
+    /// act.
+    ///
+    /// # Remarks
+    /// The outer operation is always assumed to be adjointable, but does not
+    /// need to be controllable in order for the combined operation to be
+    /// controllable.
+    ///
+    /// # See Also
+    /// - ConjugatedByA
+    /// - ConjugatedByC
+    /// - ConjugatedByCA
+    /// - ApplyWith
+    function ConjugatedByA<'T>(outerOperation : ('T => Unit : Adjoint), innerOperation : ('T => Unit : Adjoint)) : ('T => Unit : Adjoint) {
+        return ApplyWithA(outerOperation, innerOperation, _);
+    }
+
+    // # Summary
+    /// Given two operations, applies one as conjugated with the other.
+    ///
+    /// # Description
+    /// Given two operations, respectively described by unitary operators $U$
+    /// and $V$, applies them in the sequence $U^{\dagger} V U$. That is,
+    /// this operation implements the unitary operator given by $V$ conjugated
+    /// with $U$.
     ///
     /// # Input
     /// ## outerOperation
@@ -145,31 +200,77 @@ namespace Microsoft.Quantum.Canon {
     /// controllable.
     ///
     /// # See Also
-    /// - Microsoft.Quantum.Canon.With
-    operation WithC<'T> (outerOperation : ('T => Unit : Adjoint), innerOperation : ('T => Unit : Controlled), target : 'T) : Unit
-    {
-        body (...)
-        {
+    /// - ApplyWith
+    /// - ApplyWithA
+    /// - ApplyWithCA
+    operation ApplyWithC<'T>(outerOperation : ('T => Unit : Adjoint), innerOperation : ('T => Unit : Controlled), target : 'T) : Unit {
+        body (...) {
             outerOperation(target);
             innerOperation(target);
             Adjoint outerOperation(target);
         }
-        
-        controlled (controlRegister, ...)
-        {
+
+        controlled (controlRegister, ...) {
             outerOperation(target);
             Controlled innerOperation(controlRegister, target);
             Adjoint outerOperation(target);
         }
     }
-    
-    
+
+    /// # Deprecated
+    /// Please use @"Microsoft.Quantum.Canon.ApplyWithC".
+    operation WithC<'T>(outerOperation : ('T => Unit : Adjoint), innerOperation : ('T => Unit : Controlled), target : 'T) : Unit {
+        body (...) {
+            Renamed("Microsoft.Quantum.Canon.WithC", "Microsoft.Quantum.Canon.ApplyWithC");
+            ApplyWithC(outerOperation, innerOperation, target);
+        }
+        controlled auto;
+    }
+
     /// # Summary
-    /// Given operations implementing operators `U` and `V`, performs the
-    /// operation `U†VU` on a target. That is, this operation
-    /// conjugates `V` with `U`.
-    /// The modifier `CA` indicates that the inner operation is controllable
-    /// and adjointable.
+    /// Given outer and inner operations, returns a new operation that
+    /// conjugates the inner operation by the outer operation.
+    ///
+    /// # Input
+    /// ## outerOperation
+    /// The operation $U$ that should be used to conjugate $V$. Note that the
+    /// outer operation $U$ needs to be adjointable, but does not
+    /// need to be controllable.
+    /// ## innerOperation
+    /// The operation $V$ being conjugated.
+    ///
+    /// # Output
+    /// A new operation whose action is represented by the unitary
+    /// $U^{\dagger} V U$.
+    ///
+    /// # Type Parameters
+    /// ## 'T
+    /// The type of the target on which each of the inner and outer operations
+    /// act.
+    ///
+    /// # Remarks
+    /// The outer operation is always assumed to be adjointable, but does not
+    /// need to be controllable in order for the combined operation to be
+    /// controllable.
+    ///
+    /// # See Also
+    /// - ConjugatedBy
+    /// - ConjugatedByA
+    /// - ConjugatedByCA
+    /// - ApplyWith
+    function ConjugatedByC<'T>(outerOperation : ('T => Unit : Adjoint), innerOperation : ('T => Unit : Controlled)) : ('T => Unit : Controlled) {
+        return ApplyWithC(outerOperation, innerOperation, _);
+    }
+
+
+    /// # Summary
+    /// Given two operations, applies one as conjugated with the other.
+    ///
+    /// # Description
+    /// Given two operations, respectively described by unitary operators $U$
+    /// and $V$, applies them in the sequence $U^{\dagger} V U$. That is,
+    /// this operation implements the unitary operator given by $V$ conjugated
+    /// with $U$.
     ///
     /// # Input
     /// ## outerOperation
@@ -191,28 +292,74 @@ namespace Microsoft.Quantum.Canon {
     /// controllable.
     ///
     /// # See Also
-    /// - Microsoft.Quantum.Canon.With
-    operation WithCA<'T> (outerOperation : ('T => Unit : Adjoint), innerOperation : ('T => Unit : Adjoint, Controlled), target : 'T) : Unit
-    {
-        body (...)
-        {
+    /// - ApplyWith
+    /// - ApplyWithA
+    /// - ApplyWithC
+    operation ApplyWithCA<'T>(outerOperation : ('T => Unit : Adjoint), innerOperation : ('T => Unit : Adjoint, Controlled), target : 'T) : Unit {
+        body (...) {
             outerOperation(target);
             innerOperation(target);
             Adjoint outerOperation(target);
         }
-        
-        adjoint invert;
-        
-        controlled (controlRegister, ...)
-        {
+
+        adjoint auto;
+
+        controlled (controlRegister, ...) {
             outerOperation(target);
             Controlled innerOperation(controlRegister, target);
             Adjoint outerOperation(target);
         }
-        
-        controlled adjoint invert;
+
+        controlled adjoint auto;
     }
-    
+
+    /// # Deprecated
+    /// Please use @"Microsoft.Quantum.Canon.ApplyWithCA".
+    operation WithCA<'T>(outerOperation : ('T => Unit : Adjoint), innerOperation : ('T => Unit : Controlled, Adjoint), target : 'T) : Unit {
+        body (...) {
+            Renamed("Microsoft.Quantum.Canon.WithCA", "Microsoft.Quantum.Canon.ApplyWithCA");
+            ApplyWithCA(outerOperation, innerOperation, target);
+        }
+        adjoint auto;
+        controlled auto;
+        controlled adjoint auto;
+    }
+
+    /// # Summary
+    /// Given outer and inner operations, returns a new operation that
+    /// conjugates the inner operation by the outer operation.
+    ///
+    /// # Input
+    /// ## outerOperation
+    /// The operation $U$ that should be used to conjugate $V$. Note that the
+    /// outer operation $U$ needs to be adjointable, but does not
+    /// need to be controllable.
+    /// ## innerOperation
+    /// The operation $V$ being conjugated.
+    ///
+    /// # Output
+    /// A new operation whose action is represented by the unitary
+    /// $U^{\dagger} V U$.
+    ///
+    /// # Type Parameters
+    /// ## 'T
+    /// The type of the target on which each of the inner and outer operations
+    /// act.
+    ///
+    /// # Remarks
+    /// The outer operation is always assumed to be adjointable, but does not
+    /// need to be controllable in order for the combined operation to be
+    /// controllable.
+    ///
+    /// # See Also
+    /// - ConjugatedByA
+    /// - ConjugatedByC
+    /// - ConjugatedByCA
+    /// - ApplyWith
+    function ConjugatedByCA<'T>(outerOperation : ('T => Unit : Adjoint), innerOperation : ('T => Unit : Controlled, Adjoint)) : ('T => Unit : Controlled, Adjoint) {
+        return ApplyWithCA(outerOperation, innerOperation, _);
+    }
+
 }
 
 
