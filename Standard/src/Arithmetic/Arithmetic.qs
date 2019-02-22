@@ -55,7 +55,7 @@ namespace Microsoft.Quantum.Arithmetic {
     /// - InPlaceXorLE
     operation InPlaceXorBE(value : Int, target : BigEndian) : Unit {
         body (...) {
-            ApplyReversedOpLittleEndianCA(InPlaceXorLE(value, _), target);
+            ApplyReversedOpLECA(InPlaceXorLE(value, _), target);
         }
         adjoint auto;
         controlled auto;
@@ -122,15 +122,15 @@ namespace Microsoft.Quantum.Arithmetic {
                 fail "Size of integer registers must be equal."; 
             }
 
-            using(auxiliary = Qubit()){
-                WithCA(
+            using (auxiliary = Qubit()) {
+                ApplyWithCA(
                     ApplyRippleCarryComparatorLE_(x, y, [auxiliary], _),
                     BindCA([X, CNOT(x![nQubitsX-1], _)]),
                     output
                 );
             }
         }
-        adjoint auto; 
+        adjoint auto;
         controlled auto;
         adjoint controlled auto;
     }
@@ -177,15 +177,15 @@ namespace Microsoft.Quantum.Arithmetic {
     /// - A new quantum ripple-carry addition circuit
     ///   Steven A. Cuccaro, Thomas G. Draper, Samuel A. Kutin, David Petrie Moulton
     ///   https://arxiv.org/abs/quant-ph/0410184
-    operation ApplyRippleCarryComparatorBE(x: BigEndian, y: BigEndian, output: Qubit) : Unit {
-        body (...){
-            ApplyRippleCarryComparatorLE(BigEndianToLittleEndian(x), BigEndianToLittleEndian(y), output);
+    operation ApplyRippleCarryComparatorBE(x : BigEndian, y : BigEndian, output : Qubit) : Unit {
+        body (...) {
+            ApplyRippleCarryComparatorLE(BigEndianAsLittleEndian(x), BigEndianAsLittleEndian(y), output);
         }
-        adjoint auto; 
+        adjoint auto;
         controlled auto;
         adjoint controlled auto;
     }
-    
+
     /// # Summary
     /// Measures the content of a quantum register and converts
     /// it to an integer. The measurement is performed with respect
@@ -221,7 +221,7 @@ namespace Microsoft.Quantum.Arithmetic {
     ///
     /// # See Also
     /// - Microsoft.Quantum.Canon.MeasureInteger
-    operation MeasureIntegerBE (target : BigEndian) : Int
+    operation MeasureIntegerBE(target : BigEndian) : Int
     {
         mutable results = new Result[Length(target!)];
         
@@ -282,68 +282,6 @@ namespace Microsoft.Quantum.Arithmetic {
     }
     
     
-    /// # Summary
-    /// Asserts that the highest qubit of a qubit register
-    /// representing an unsigned integer is in a particular state.
-    ///
-    /// # Input
-    /// ## value
-    /// The value of the highest bit being asserted.
-    /// ## number
-    /// Unsigned integer of which the highest bit is checked.
-    ///
-    /// # Remarks
-    /// The controlled version of this operation ignores controls.
-    ///
-    /// # See Also
-    /// - Microsoft.Quantum.Primitive.Assert
-    operation AssertHighestBit (value : Result, number : LittleEndian) : Unit
-    {
-        body (...)
-        {
-            let mostSingificantQubit = Tail(number!);
-            Assert([PauliZ], [mostSingificantQubit], value, $"Most significant bit expected to be {value}");
-        }
-        
-        adjoint self;
-        
-        controlled (ctrls, ...)
-        {
-            AssertHighestBit(value, number);
-        }
-        
-        controlled adjoint auto;
-    }
-    
-    
-    /// # Summary
-    /// Asserts that the `number` encoded in PhaseLittleEndian is less than `value`.
-    ///
-    /// # Input
-    /// ## value
-    /// `number` must be less than this.
-    /// ## number
-    /// Unsigned integer which is compared to `value`.
-    ///
-    /// # Remarks
-    /// The controlled version of this operation ignores controls.
-    operation AssertLessThanPhaseLE (value : Int, number : PhaseLittleEndian) : Unit
-    {
-        body (...)
-        {
-            let inner = ApplyLEOperationOnPhaseLEA(AssertHighestBit(One, _), _);
-            WithA(Adjoint IntegerIncrementPhaseLE(value, _), inner, number);
-        }
-        
-        adjoint self;
-        
-        controlled (ctrls, ...)
-        {
-            AssertLessThanPhaseLE(value, number);
-        }
-        
-        controlled adjoint auto;
-    }
     
     
     /// # Summary

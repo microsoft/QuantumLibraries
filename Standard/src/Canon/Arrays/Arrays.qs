@@ -23,8 +23,8 @@ namespace Microsoft.Quantum.Canon {
         return array[nElements-1..-1..0];
     }
 
-    /// # Summary
-    /// **DEPRECATED**. Please use @"Microsoft.Quantum.Canon.Reversed" instead.
+    /// # Deprecated
+    /// Please use @"Microsoft.Quantum.Canon.Reversed" instead.
     function Reverse<'T>(array : 'T[]) : 'T[] {
         Renamed("Reverse", "Reversed");
         return Reversed(array);
@@ -62,18 +62,14 @@ namespace Microsoft.Quantum.Canon {
     ///
     /// # Output
     /// An array containing the elements `array[0..Length(array) - 2]`.
-    function Most<'T> (array : 'T[]) : 'T[]
-    {
+    function Most<'T> (array : 'T[]) : 'T[] {
         return array[0 .. Length(array) - 2];
     }
-    
-    
-    function LookupImpl<'T> (array : 'T[], index : Int) : 'T
-    {
+
+    function LookupImpl<'T> (array : 'T[], index : Int) : 'T {
         return array[index];
     }
-    
-    
+
     /// # Summary
     /// Given an array, returns a function which returns elements of that
     /// array.
@@ -96,12 +92,10 @@ namespace Microsoft.Quantum.Canon {
     /// is common, for instance, in the generator representation library,
     /// where functions are used to avoid the need to record an entire array
     /// in memory.
-    function LookupFunction<'T> (array : 'T[]) : (Int -> 'T)
-    {
+    function LookupFunction<'T> (array : 'T[]) : (Int -> 'T) {
         return LookupImpl(array, _);
     }
-    
-    
+
     /// # Summary
     /// Given two arrays, returns a new array of pairs such that each pair
     /// contains an element from each original array.
@@ -130,30 +124,19 @@ namespace Microsoft.Quantum.Canon {
     /// let right = [false, true];
     /// let pairs = Zip(left, right); // [(1, false), (3, true)]
     /// ```
-    function Zip<'T, 'U> (left : 'T[], right : 'U[]) : ('T, 'U)[]
-    {
-        mutable nElements = 0;
-        
-        if (Length(left) < Length(right))
-        {
-            set nElements = Length(left);
-        }
-        else
-        {
-            set nElements = Length(right);
-        }
-        
+    function Zip<'T, 'U> (left : 'T[], right : 'U[]) : ('T, 'U)[] {
+        let nElements = Length(left) < Length(right)
+                        ? Length(left)
+                        | Length(right);
         mutable output = new ('T, 'U)[nElements];
-        
-        for (idxElement in 0 .. nElements - 1)
-        {
+
+        for (idxElement in 0 .. nElements - 1) {
             set output[idxElement] = (left[idxElement], right[idxElement]);
         }
-        
+
         return output;
     }
-    
-    
+
     /// # Summary
     /// Returns the last element of the array.
     ///
@@ -167,13 +150,11 @@ namespace Microsoft.Quantum.Canon {
     ///
     /// # Output
     /// The last element of the array.
-    function Tail<'A> (array : 'A[]) : 'A
-    {
+    function Tail<'A> (array : 'A[]) : 'A {
         AssertBoolEqual(Length(array) > 0, true, $"Array must be of the length at least 1");
         return array[Length(array) - 1];
     }
-    
-    
+
     /// # Summary
     /// Returns the first element of the array.
     ///
@@ -187,8 +168,7 @@ namespace Microsoft.Quantum.Canon {
     ///
     /// # Output
     /// The first element of the array.
-    function Head<'A> (array : 'A[]) : 'A
-    {
+    function Head<'A> (array : 'A[]) : 'A {
         AssertBoolEqual(Length(array) > 0, true, $"Array must be of the length at least 1");
         return array[0];
     }
