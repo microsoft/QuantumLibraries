@@ -24,11 +24,9 @@ namespace Microsoft.Quantum.Arithmetic {
     /// - ApplyReversedOpLEC
     /// - ApplyReversedOpLECA
     operation ApplyReversedOpLE(op : (LittleEndian => Unit), register : BigEndian) : Unit {
-        let bareReversed = Reverse(register!);
-        let reversed = LittleEndian(bareReversed);
-        op(reversed);
+        ApplyWithInputTransformation(BigEndianAsLittleEndian, op, register);
     }
-    
+
     /// # Deprecated
     /// Please use @"Microsoft.Quantum.ApplyReversedOpLE".
     operation ApplyReversedOpLittleEndian(op : (LittleEndian => Unit), register : BigEndian) : Unit {
@@ -55,7 +53,7 @@ namespace Microsoft.Quantum.Arithmetic {
     function ReversedOpLE(op : (LittleEndian => Unit)) : (BigEndian => Unit) {
         return ApplyReversedOpLE(op, _);
     }
-    
+
     /// # Summary
     /// Applies an operation that takes little-endian input to a register encoding
     /// an unsigned integer using big-endian format.
@@ -72,14 +70,12 @@ namespace Microsoft.Quantum.Arithmetic {
     /// - ApplyReversedOpLECA
     operation ApplyReversedOpLEA (op : (LittleEndian => Unit : Adjoint), register : BigEndian) : Unit {
         body (...) {
-            let bareReversed = Reverse(register!);
-            let reversed = LittleEndian(bareReversed);
-            op(reversed);
+            ApplyWithInputTransformationA(BigEndianAsLittleEndian, op, register);
         }
-        
-        adjoint invert;
+
+        adjoint auto;
     }
-    
+
     /// # Deprecated
     /// Please use @"Microsoft.Quantum.ApplyReversedOpLEA".
     operation ApplyReversedOpLittleEndianA(op : (LittleEndian => Unit : Adjoint), register : BigEndian) : Unit {
@@ -109,7 +105,7 @@ namespace Microsoft.Quantum.Arithmetic {
     function ReversedOpLEA(op : (LittleEndian => Unit : Adjoint)) : (BigEndian => Unit : Adjoint) {
         return ApplyReversedOpLEA(op, _);
     }
-    
+
     /// # Summary
     /// Applies an operation that takes little-endian input to a register encoding
     /// an unsigned integer using big-endian format.
@@ -126,12 +122,10 @@ namespace Microsoft.Quantum.Arithmetic {
     /// - ApplyReversedOpLECA
     operation ApplyReversedOpLEC(op : (LittleEndian => Unit : Controlled), register : BigEndian) : Unit {
         body (...) {
-            let bareReversed = Reverse(register!);
-            let reversed = LittleEndian(bareReversed);
-            op(reversed);
+            ApplyWithInputTransformationC(BigEndianAsLittleEndian, op, register);
         }
-        
-        controlled distribute;
+
+        controlled auto;
     }
 
     /// # Deprecated
@@ -163,7 +157,7 @@ namespace Microsoft.Quantum.Arithmetic {
     function ReversedOpLEC(op : (LittleEndian => Unit : Controlled)) : (BigEndian => Unit : Controlled) {
         return ApplyReversedOpLEC(op, _);
     }
-    
+
     /// # Summary
     /// Applies an operation that takes little-endian input to a register encoding
     /// an unsigned integer using big-endian format.
@@ -180,17 +174,14 @@ namespace Microsoft.Quantum.Arithmetic {
     /// - ApplyReversedOpLEC
     operation ApplyReversedOpLECA(op : (LittleEndian => Unit : Controlled, Adjoint), register : BigEndian) : Unit {
         body (...) {
-            let bareReversed = Reverse(register!);
-            let reversed = LittleEndian(bareReversed);
-            op(reversed);
+            ApplyWithInputTransformationCA(BigEndianAsLittleEndian, op, register);
         }
-        
-        adjoint invert;
-        controlled distribute;
-        controlled adjoint distribute;
+
+        adjoint auto;
+        controlled auto;
+        controlled adjoint auto;
     }
 
-    
     /// # Deprecated
     /// Please use @"Microsoft.Quantum.ApplyReversedOpLEC".
     operation ApplyReversedOpLittleEndianCA(op : (LittleEndian => Unit : Adjoint, Controlled), register : BigEndian) : Unit {
@@ -222,7 +213,7 @@ namespace Microsoft.Quantum.Arithmetic {
     function ReversedOpLECA(op : (LittleEndian => Unit : Adjoint, Controlled)) : (BigEndian => Unit : Adjoint, Controlled) {
         return ApplyReversedOpLECA(op, _);
     }
-    
+
     /// # Summary
     /// Applies an operation that takes big-endian input to a register encoding
     /// an unsigned integer using little-endian format.
@@ -238,11 +229,9 @@ namespace Microsoft.Quantum.Arithmetic {
     /// - ApplyReversedOpBEC
     /// - ApplyReversedOpBECA
     operation ApplyReversedOpBE(op : (BigEndian => Unit), register : LittleEndian) : Unit {
-        let bareReversed = Reverse(register!);
-        let reversed = BigEndian(bareReversed);
-        op(reversed);
+        ApplyWithInputTransformation(LittleEndianAsBigEndian, op, register);
     }
-    
+
     /// # Deprecated
     /// Please use @"Microsoft.Quantum.ApplyReversedOpBE".
     operation ApplyReversedOpBigEndian(op : (BigEndian => Unit), register : LittleEndian) : Unit {
@@ -269,7 +258,7 @@ namespace Microsoft.Quantum.Arithmetic {
     function ReversedOpBE(op : (BigEndian => Unit)) : (LittleEndian => Unit) {
         return ApplyReversedOpBE(op, _);
     }
-    
+
     /// # Summary
     /// Applies an operation that takes big-endian input to a register encoding
     /// an unsigned integer using little-endian format.
@@ -286,14 +275,12 @@ namespace Microsoft.Quantum.Arithmetic {
     /// - ApplyReversedOpBECA
     operation ApplyReversedOpBEA (op : (BigEndian => Unit : Adjoint), register : LittleEndian) : Unit {
         body (...) {
-            let bareReversed = Reverse(register!);
-            let reversed = BigEndian(bareReversed);
-            op(reversed);
+            ApplyWithInputTransformationA(LittleEndianAsBigEndian, op, register);
         }
-        
+
         adjoint invert;
     }
-    
+
     /// # Deprecated
     /// Please use @"Microsoft.Quantum.ApplyReversedOpBEA".
     operation ApplyReversedOpBigEndianA(op : (BigEndian => Unit : Adjoint), register : LittleEndian) : Unit {
@@ -323,7 +310,7 @@ namespace Microsoft.Quantum.Arithmetic {
     function ReversedOpBEA(op : (BigEndian => Unit : Adjoint)) : (LittleEndian => Unit : Adjoint) {
         return ApplyReversedOpBEA(op, _);
     }
-    
+
     /// # Summary
     /// Applies an operation that takes big-endian input to a register encoding
     /// an unsigned integer using little-endian format.
@@ -340,12 +327,10 @@ namespace Microsoft.Quantum.Arithmetic {
     /// - ApplyReversedOpBECA
     operation ApplyReversedOpBEC(op : (BigEndian => Unit : Controlled), register : LittleEndian) : Unit {
         body (...) {
-            let bareReversed = Reverse(register!);
-            let reversed = BigEndian(bareReversed);
-            op(reversed);
+            ApplyWithInputTransformationC(LittleEndianAsBigEndian, op, register);
         }
-        
-        controlled distribute;
+
+        controlled auto;
     }
 
     /// # Deprecated
@@ -377,7 +362,7 @@ namespace Microsoft.Quantum.Arithmetic {
     function ReversedOpBEC(op : (BigEndian => Unit : Controlled)) : (LittleEndian => Unit : Controlled) {
         return ApplyReversedOpBEC(op, _);
     }
-    
+
     /// # Summary
     /// Applies an operation that takes big-endian input to a register encoding
     /// an unsigned integer using little-endian format.
@@ -394,17 +379,14 @@ namespace Microsoft.Quantum.Arithmetic {
     /// - ApplyReversedOpBEC
     operation ApplyReversedOpBECA(op : (BigEndian => Unit : Controlled, Adjoint), register : LittleEndian) : Unit {
         body (...) {
-            let bareReversed = Reverse(register!);
-            let reversed = BigEndian(bareReversed);
-            op(reversed);
+            ApplyWithInputTransformationCA(LittleEndianAsBigEndian, op, register);
         }
-        
-        adjoint invert;
-        controlled distribute;
-        controlled adjoint distribute;
+
+        adjoint auto;
+        controlled auto;
+        controlled adjoint auto;
     }
 
-    
     /// # Deprecated
     /// Please use @"Microsoft.Quantum.ApplyReversedOpBEC".
     operation ApplyReversedOpBigEndianCA(op : (BigEndian => Unit : Adjoint, Controlled), register : LittleEndian) : Unit {
@@ -436,5 +418,5 @@ namespace Microsoft.Quantum.Arithmetic {
     function ReversedOpBECA(op : (BigEndian => Unit : Adjoint, Controlled)) : (LittleEndian => Unit : Adjoint, Controlled) {
         return ApplyReversedOpBECA(op, _);
     }
-    
+
 }
