@@ -15,8 +15,16 @@ namespace Microsoft.Quantum.Arithmetic {
     ///
     /// # Output
     /// Qubit register in `BigEndian` format.
-    function LittleEndianToBigEndian(input: LittleEndian) : BigEndian {
+    function LittleEndianAsBigEndian(input: LittleEndian) : BigEndian {
         return BigEndian(Reverse(input!));
+    }
+
+    /// # Summary
+    /// **DEPRECATED.**
+    /// Please use @"Microsoft.Quantum.Arithmetic.LittleEndianAsBigEndian".
+    function LittleEndianToBigEndian(input: LittleEndian) : BigEndian {
+        Renamed("LittleEndianToBigEndian", "LittleEndianAsBigEndian");
+        return LittleEndianAsBigEndian(input);
     }
 
     /// # Summary
@@ -29,8 +37,16 @@ namespace Microsoft.Quantum.Arithmetic {
     ///
     /// # Output
     /// Qubit register in `LittleEndian` format.
-    function BigEndianToLittleEndian(input: BigEndian) : LittleEndian {
+    function BigEndianAsLittleEndian(input: BigEndian) : LittleEndian {
         return LittleEndian(Reverse(input!));
+    }
+
+    /// # Summary
+    /// **DEPRECATED.**
+    /// Please use @"Microsoft.Quantum.Arithmetic.BigEndianAsLittleEndian".
+    function BigEndianToLittleEndian(input: BigEndian) : LittleEndian {
+        Renamed("BigEndianToLittleEndian", "BigEndianAsLittleEndian");
+        return BigEndianAsLittleEndian(input);
     }
 
 }

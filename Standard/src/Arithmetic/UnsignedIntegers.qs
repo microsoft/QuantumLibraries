@@ -160,34 +160,8 @@ namespace Microsoft.Quantum.Arithmetic {
         controlled distribute;
         controlled adjoint distribute;
     }
-    
-    
-    /// # Summary
-    /// Uses SWAP gates to reverse the order of the qubits in
-    /// a register.
-    ///
-    /// # Input
-    /// ## register
-    /// The qubits order of which should be reversed using SWAP gates
-    operation SwapReverseRegister (register : Qubit[]) : Unit
-    {
-        body (...)
-        {
-            let totalQubits = Length(register);
-            let halfTotal = totalQubits / 2;
-            
-            for (i in 0 .. halfTotal - 1)
-            {
-                SWAP(register[i], register[(totalQubits - i) - 1]);
-            }
-        }
-        
-        adjoint self;
-        controlled distribute;
-        controlled adjoint self;
-    }
-    
-    
+
+
     /// # Summary
     /// Applies an operation that takes a
     /// <xref:microsoft.quantum.canon.littleendian> register as input
@@ -345,12 +319,10 @@ namespace Microsoft.Quantum.Arithmetic {
             let targetLE = LittleEndian(target!);
             WithCA(Adjoint QFTLE, op, targetLE);
         }
-        
+
         adjoint invert;
         controlled distribute;
         controlled adjoint distribute;
     }
-    
+
 }
-
-

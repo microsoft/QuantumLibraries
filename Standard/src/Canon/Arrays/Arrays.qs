@@ -1,12 +1,9 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-namespace Microsoft.Quantum.Canon
-{
-    
+namespace Microsoft.Quantum.Canon {
     open Microsoft.Quantum.Extensions.Math;
-    
-    
+
     /// # Summary
     /// Create an array that contains the same elements as an input array but in reverse
     /// order.
@@ -21,13 +18,18 @@ namespace Microsoft.Quantum.Canon
     ///
     /// # Output
     /// An array containing the elements `array[Length(array) - 1]` .. `array[0]`.
-    function Reverse<'T> (array : 'T[]) : 'T[]
-    {
+    function Reversed<'T>(array : 'T[]) : 'T[] {
         let nElements = Length(array);
         return array[nElements-1..-1..0];
     }
-    
-    
+
+    /// # Summary
+    /// **DEPRECATED**. Please use @"Microsoft.Quantum.Canon.Reversed" instead.
+    function Reverse<'T>(array : 'T[]) : 'T[] {
+        Renamed("Reverse", "Reversed");
+        return Reversed(array);
+    }
+
     /// # Summary
     /// Creates an array that is equal to an input array except that the first array
     /// element is dropped.
@@ -42,12 +44,10 @@ namespace Microsoft.Quantum.Canon
     ///
     /// # Output
     /// An array containing the elements `array[1..Length(array) - 1]`.
-    function Rest<'T> (array : 'T[]) : 'T[]
-    {
+    function Rest<'T> (array : 'T[]) : 'T[] {
         return array[1 .. Length(array) - 1];
     }
-    
-    
+
     /// # Summary
     /// Creates an array that is equal to an input array except that the last array
     /// element is dropped.
