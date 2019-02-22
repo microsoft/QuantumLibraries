@@ -28,7 +28,7 @@ namespace Microsoft.Quantum.Arithmetic {
     }
 
     /// # Deprecated
-    /// Please use @"Microsoft.Quantum.ApplyReversedOpLE".
+    /// Please use @"Microsoft.Quantum.Arithmetic.ApplyReversedOpLE".
     operation ApplyReversedOpLittleEndian(op : (LittleEndian => Unit), register : BigEndian) : Unit {
         Renamed("ApplyReversedOpLittleEndian", "ApplyReversedOpLE");
         ApplyReversedOpLE(op, register);
@@ -77,7 +77,7 @@ namespace Microsoft.Quantum.Arithmetic {
     }
 
     /// # Deprecated
-    /// Please use @"Microsoft.Quantum.ApplyReversedOpLEA".
+    /// Please use @"Microsoft.Quantum.Arithmetic.ApplyReversedOpLEA".
     operation ApplyReversedOpLittleEndianA(op : (LittleEndian => Unit : Adjoint), register : BigEndian) : Unit {
         body (...) {
             Renamed("ApplyReversedOpLittleEndianA", "ApplyReversedOpLEA");
@@ -129,7 +129,7 @@ namespace Microsoft.Quantum.Arithmetic {
     }
 
     /// # Deprecated
-    /// Please use @"Microsoft.Quantum.ApplyReversedOpLEC".
+    /// Please use @"Microsoft.Quantum.Arithmetic.ApplyReversedOpLEC".
     operation ApplyReversedOpLittleEndianC(op : (LittleEndian => Unit : Controlled), register : BigEndian) : Unit {
         body (...) {
             Renamed("ApplyReversedOpLittleEndianC", "ApplyReversedOpLEC");
@@ -183,7 +183,7 @@ namespace Microsoft.Quantum.Arithmetic {
     }
 
     /// # Deprecated
-    /// Please use @"Microsoft.Quantum.ApplyReversedOpLEC".
+    /// Please use @"Microsoft.Quantum.Arithmetic.ApplyReversedOpLEC".
     operation ApplyReversedOpLittleEndianCA(op : (LittleEndian => Unit : Adjoint, Controlled), register : BigEndian) : Unit {
         body (...) {
             Renamed("ApplyReversedOpLittleEndianCA", "ApplyReversedOpLECA");
@@ -233,7 +233,7 @@ namespace Microsoft.Quantum.Arithmetic {
     }
 
     /// # Deprecated
-    /// Please use @"Microsoft.Quantum.ApplyReversedOpBE".
+    /// Please use @"Microsoft.Quantum.Arithmetic.ApplyReversedOpBE".
     operation ApplyReversedOpBigEndian(op : (BigEndian => Unit), register : LittleEndian) : Unit {
         Renamed("ApplyReversedOpBigEndian", "ApplyReversedOpBE");
         ApplyReversedOpBE(op, register);
@@ -282,7 +282,7 @@ namespace Microsoft.Quantum.Arithmetic {
     }
 
     /// # Deprecated
-    /// Please use @"Microsoft.Quantum.ApplyReversedOpBEA".
+    /// Please use @"Microsoft.Quantum.Arithmetic.ApplyReversedOpBEA".
     operation ApplyReversedOpBigEndianA(op : (BigEndian => Unit : Adjoint), register : LittleEndian) : Unit {
         body (...) {
             Renamed("ApplyReversedOpBigEndianA", "ApplyReversedOpBEA");
@@ -334,7 +334,7 @@ namespace Microsoft.Quantum.Arithmetic {
     }
 
     /// # Deprecated
-    /// Please use @"Microsoft.Quantum.ApplyReversedOpBEC".
+    /// Please use @"Microsoft.Quantum.Arithmetic.ApplyReversedOpBEC".
     operation ApplyReversedOpBigEndianC(op : (BigEndian => Unit : Controlled), register : LittleEndian) : Unit {
         body (...) {
             Renamed("ApplyReversedOpBigEndianC", "ApplyReversedOpBEC");
@@ -388,7 +388,7 @@ namespace Microsoft.Quantum.Arithmetic {
     }
 
     /// # Deprecated
-    /// Please use @"Microsoft.Quantum.ApplyReversedOpBEC".
+    /// Please use @"Microsoft.Quantum.Arithmetic.ApplyReversedOpBEC".
     operation ApplyReversedOpBigEndianCA(op : (BigEndian => Unit : Adjoint, Controlled), register : LittleEndian) : Unit {
         body (...) {
             Renamed("ApplyReversedOpBigEndianCA", "ApplyReversedOpBECA");
