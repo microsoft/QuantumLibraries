@@ -1,7 +1,6 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
-namespace Microsoft.Quantum.Tests {
-    
+namespace Microsoft.Quantum.Tests {    
     open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Primitive;
     open Microsoft.Quantum.Extensions.Testing;
@@ -207,11 +206,52 @@ namespace Microsoft.Quantum.Tests {
     
     
     operation CControlledTestCA () : Unit {
-        
         AssertOperationsEqualReferenced(CControlledActualCA(H, _), CControlledExpected(H, _), 3);
         AssertOperationsEqualReferenced(CControlledActualCA(Z, _), CControlledExpected(Z, _), 3);
         AssertOperationsEqualReferenced(CControlledActualCA(S, _), CControlledExpected(S, _), 3);
         AssertOperationsEqualReferenced(CControlledActualCA(T, _), CControlledExpected(T, _), 3);
+    }
+
+    /// # Summary
+    /// An example operation used for testing input transformations.
+    operation TransformationReferenceForward(register : Qubit[]) : Unit {
+        body (...) {
+            S(register[0]);
+            Y(register[1]);
+            Z(register[2]);
+        }
+        adjoint auto;
+    }
+
+    /// # Summary
+    /// An example operation used for testing input transformations.
+    operation TransformationReferenceReverse(register : Qubit[]) : Unit {
+        S(register[2]);
+        Y(register[1]);
+        Z(register[0]);
+    }
+
+    operation TransformedOperationTest() : Unit {
+        AssertOperationsEqualReferenced(
+            TransformedOperation(Reverse, TransformationReferenceReverse),
+            TransformationReferenceForward,
+            3
+        );
+        AssertOperationsEqualReferenced(
+            TransformedOperationC(Reverse, TransformationReferenceReverse),
+            TransformationReferenceForward,
+            3
+        );
+        AssertOperationsEqualReferenced(
+            Adjoint TransformedOperationA(Reverse, TransformationReferenceReverse),
+            Adjoint TransformationReferenceForward,
+            3
+        );
+        AssertOperationsEqualReferenced(
+            Adjoint TransformedOperationCA(Reverse, TransformationReferenceReverse),
+            Adjoint TransformationReferenceForward,
+            3
+        );
     }
     
 }
