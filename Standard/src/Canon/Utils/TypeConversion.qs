@@ -96,43 +96,42 @@ namespace Microsoft.Quantum.Canon
         
         return output;
     }
-    
-    
+
     /// # Summary
-    /// Produces binary representation of positive integer in little Endian format.
+    /// Produces a binary representation of a positive integer, using the
+    /// little-endian representation for the returned array.
     ///
     /// # Input
     /// ## number
-    /// Positive integer.
+    /// A positive integer to be converted to an array of boolean values.
     /// ## bits
-    /// Bits in binary representation of number.
+    /// The number of bits in the binary representation of `number`.
+    ///
+    /// # Output
+    /// An array of boolean values representing `number`.
     ///
     /// # Remarks
-    /// The input `number` must be at most 2^bits -1.
-    function BoolArrFromPositiveInt (number : Int, bits : Int) : Bool[]
-    {
+    /// The input `number` must be at most $2^{\texttt{bits}} - 1$.
+    function IntAsBoolArray(number : Int, bits : Int) : Bool[] {
         AssertBoolEqual(number >= 0 && number < 2 ^ bits, true, $"`number` must be between 0 and 2^`bits` - 1");
         mutable outputBits = new Bool[bits];
         mutable tempInt = number;
-        
-        for (idxBit in 0 .. bits - 1)
-        {
-            if (tempInt % 2 == 0)
-            {
-                set outputBits[idxBit] = false;
-            }
-            else
-            {
-                set outputBits[idxBit] = true;
-            }
-            
+
+        for (idxBit in 0 .. bits - 1) {
+            set outputBits[idxBit] = tempInt % 2 == 0 ? false | true;
             set tempInt = tempInt / 2;
         }
-        
+
         return outputBits;
     }
-    
-    
+
+    /// # Deprecated
+    /// Please use @"Microsoft.Quantum.Canon.IntAsBoolArray".
+    function BoolArrFromPositiveInt (number : Int, bits : Int) : Bool[] {
+        Renamed("Microsoft.Quantum.Canon.BoolArrFromPositiveInt", "Microsoft.Quantum.Canon.IntAsBoolArray");
+        return IntAsBoolArray(number, bits);
+    }
+
     /// # Summary
     /// Produces a positive integer from a string of bits in little endian format.
     ///
@@ -228,7 +227,5 @@ namespace Microsoft.Quantum.Canon
     function ToOperation<'Input, 'Output>(fn : ('Input -> 'Output)) : ('Input => 'Output) {
         return Call(fn, _);
     }
-    
+
 }
-
-

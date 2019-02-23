@@ -22,20 +22,15 @@ namespace Microsoft.Quantum.Arithmetic {
     /// - InPlaceXorBE
     operation InPlaceXorLE (value : Int, target : LittleEndian) : Unit {
         body (...) {
-            let bitrepresentation = BoolArrFromPositiveInt(value, Length(target!));
-
-            for (idx in 0 .. Length(target!) - 1)
-            {
-                if (bitrepresentation[idx])
-                {
-                    X((target!)[idx]);
-                }
-            }
+            ApplyToEachCA(
+                CControlledCA(X),
+                Zip(IntAsBoolArray(value, Length(target!)), target!)
+            );
         }
 
-        adjoint invert;
-        controlled distribute;
-        controlled adjoint distribute;
+        adjoint auto;
+        controlled auto;
+        controlled adjoint auto;
     }
 
     /// # Summary
@@ -76,15 +71,14 @@ namespace Microsoft.Quantum.Arithmetic {
     /// ## input
     /// Second and third input qubits.
     operation InPlaceMajority(output: Qubit, input: Qubit[]) : Unit {
-        body (...){
-            if(Length(input) != 2){
-                fail $"Majority on {Length(input)} qubits not implemented.";
+        body (...) {
+            if (Length(input) == 2) {
+                MAJ(input[0], input[1], output);
+            } else {
+                fail $"The in-place majority operation on {Length(input)} is qubits not yet implemented.";
             }
-            CNOT(output, input[1]);
-            CNOT(output, input[0]);
-            CCNOT(input[1], input[0], output);
         }
-        adjoint auto; 
+        adjoint auto;
         controlled auto;
         adjoint controlled auto;
     }
@@ -124,7 +118,7 @@ namespace Microsoft.Quantum.Arithmetic {
 
             using (auxiliary = Qubit()) {
                 ApplyWithCA(
-                    ApplyRippleCarryComparatorLE_(x, y, [auxiliary], _),
+                    _ApplyRippleCarryComparatorLE(x, y, [auxiliary], _),
                     BindCA([X, CNOT(x![nQubitsX-1], _)]),
                     output
                 );
@@ -136,7 +130,7 @@ namespace Microsoft.Quantum.Arithmetic {
     }
 
     // Implementation step of `ApplyRippleCarryComparatorLE`.
-    operation ApplyRippleCarryComparatorLE_(x: LittleEndian, y: LittleEndian, auxiliary: Qubit[], output: Qubit) : Unit {
+    operation _ApplyRippleCarryComparatorLE(x: LittleEndian, y: LittleEndian, auxiliary: Qubit[], output: Qubit) : Unit {
         body (...) {
             let nQubitsX = Length(x!);
 
