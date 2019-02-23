@@ -85,9 +85,9 @@ namespace Microsoft.Quantum.Arithmetic {
 
 
     /// # Summary
-    /// This unitary tests if two integers `x` and `y` stored in equal-size qubit registers 
+    /// This unitary tests if two integers `x` and `y` stored in equal-size qubit registers
     /// satisfy `x > y`. If true, 1 is XORed into an output
-    /// qubit. Otherwise, 0 is XORed into an output qubit. 
+    /// qubit. Otherwise, 0 is XORed into an output qubit.
     ///
     /// In other words, this unitary $U$  satisfies:
     /// $$
@@ -180,54 +180,6 @@ namespace Microsoft.Quantum.Arithmetic {
         adjoint controlled auto;
     }
 
-    /// # Summary
-    /// Measures the content of a quantum register and converts
-    /// it to an integer. The measurement is performed with respect
-    /// to the standard computational basis, i.e., the eigenbasis of `PauliZ`.
-    ///
-    /// # Input
-    /// ## target
-    /// A quantum register which is assumed to be in little-endian encoding.
-    ///
-    /// # Output
-    /// An unsigned integer that contains the measured value of `target`.
-    ///
-    /// # Remarks
-    /// Ensures that the register is set to 0.
-    ///
-    /// # See Also
-    /// - Microsoft.Quantum.Canon.MeasureIntegerBE
-    operation MeasureInteger (target : LittleEndian) : Int
-    {
-        mutable results = new Result[Length(target!)];
-        
-        for (idx in 0 .. Length(target!) - 1)
-        {
-            set results[idx] = MResetZ((target!)[idx]);
-        }
-        
-        return PositiveIntFromResultArr(results);
-    }
-    
-    
-    /// # Summary
-    /// Version of MeasureInteger for BigEndian register
-    ///
-    /// # See Also
-    /// - Microsoft.Quantum.Canon.MeasureInteger
-    operation MeasureIntegerBE(target : BigEndian) : Int
-    {
-        mutable results = new Result[Length(target!)];
-        
-        for (idx in 0 .. Length(target!) - 1)
-        {
-            set results[idx] = MResetZ((target!)[idx]);
-        }
-        
-        return PositiveIntFromResultArr(Reverse(results));
-    }
-    
-    
     /// # Summary
     /// Unsigned integer increment by an integer constant, based on phase rotations.
     ///
