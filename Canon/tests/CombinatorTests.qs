@@ -221,34 +221,41 @@ namespace Microsoft.Quantum.Tests {
             Z(register[2]);
         }
         adjoint auto;
+        controlled auto;
+        controlled adjoint auto;
     }
 
     /// # Summary
     /// An example operation used for testing input transformations.
     operation TransformationReferenceReverse(register : Qubit[]) : Unit {
-        S(register[2]);
-        Y(register[1]);
-        Z(register[0]);
+        body (...) {
+            S(register[2]);
+            Y(register[1]);
+            Z(register[0]);
+        }
+        adjoint auto;
+        controlled auto;
+        controlled adjoint auto;
     }
 
     operation TransformedOperationTest() : Unit {
         AssertOperationsEqualReferenced(
-            TransformedOperation(Reverse, TransformationReferenceReverse),
+            TransformedOperation(Reverse<Qubit>, TransformationReferenceReverse),
             TransformationReferenceForward,
             3
         );
         AssertOperationsEqualReferenced(
-            TransformedOperationC(Reverse, TransformationReferenceReverse),
+            TransformedOperationC(Reverse<Qubit>, TransformationReferenceReverse),
             TransformationReferenceForward,
             3
         );
         AssertOperationsEqualReferenced(
-            Adjoint TransformedOperationA(Reverse, TransformationReferenceReverse),
+            Adjoint (TransformedOperationA(Reverse<Qubit>, TransformationReferenceReverse)),
             Adjoint TransformationReferenceForward,
             3
         );
         AssertOperationsEqualReferenced(
-            Adjoint TransformedOperationCA(Reverse, TransformationReferenceReverse),
+            Adjoint (TransformedOperationCA(Reverse<Qubit>, TransformationReferenceReverse)),
             Adjoint TransformationReferenceForward,
             3
         );
