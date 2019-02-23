@@ -83,70 +83,6 @@ namespace Microsoft.Quantum.Arithmetic {
         adjoint controlled auto;
     }
 
-
-    /// # Summary
-    /// This unitary tests if two integers `x` and `y` stored in equal-size qubit registers
-    /// satisfy `x > y`. If true, 1 is XORed into an output
-    /// qubit. Otherwise, 0 is XORed into an output qubit.
-    ///
-    /// In other words, this unitary $U$  satisfies:
-    /// $$
-    /// \begin{align}
-    /// U\ket{x}\ket{y}\ket{z}=\ket{x}\ket{y}\ket{z\oplus (x>y)}.
-    /// \end{align}
-    /// $$.
-    ///
-    /// # Input
-    /// ## x
-    /// First number to be compared stored in `LittleEndian` format in a qubit register.
-    /// ## y
-    /// Second number to be compared stored in `LittleEndian` format in a qubit register.
-    /// ## output
-    /// Qubit that stores the result of the comparison $x>y$.
-    ///
-    /// # References
-    /// - A new quantum ripple-carry addition circuit
-    ///   Steven A. Cuccaro, Thomas G. Draper, Samuel A. Kutin, David Petrie Moulton
-    ///   https://arxiv.org/abs/quant-ph/0410184
-    operation ApplyRippleCarryComparatorLE(x: LittleEndian, y: LittleEndian, output: Qubit) : Unit {
-        body (...){
-            let nQubitsX = Length(x!);
-            let nQubitsY = Length(y!);
-            if (nQubitsX != nQubitsY){
-                fail "Size of integer registers must be equal."; 
-            }
-
-            using (auxiliary = Qubit()) {
-                ApplyWithCA(
-                    _ApplyRippleCarryComparatorLE(x, y, [auxiliary], _),
-                    BindCA([X, CNOT(x![nQubitsX-1], _)]),
-                    output
-                );
-            }
-        }
-        adjoint auto;
-        controlled auto;
-        adjoint controlled auto;
-    }
-
-    // Implementation step of `ApplyRippleCarryComparatorLE`.
-    operation _ApplyRippleCarryComparatorLE(x: LittleEndian, y: LittleEndian, auxiliary: Qubit[], output: Qubit) : Unit {
-        body (...) {
-            let nQubitsX = Length(x!);
-
-            // Take 2's complement
-            ApplyToEachCA(X, x! + auxiliary);
-
-            InPlaceMajority(x![0], [y![0], auxiliary[0]]);
-            for(idx in 1..nQubitsX - 1){
-                InPlaceMajority(x![idx], [x![idx - 1], y![idx]]);
-            }
-        }
-        adjoint auto;
-        controlled auto;
-        adjoint controlled auto;
-    }
-
     /// # Summary
     /// This unitary tests if two integers `x` and `y` stored in equal-size qubit registers 
     /// satisfy `x > y`. If true, 1 is XORed into an output
@@ -273,7 +209,7 @@ namespace Microsoft.Quantum.Arithmetic {
     /// in computational basis.
     ///
     /// # See Also
-    /// - Microsoft.Quantum.Canon.LittleEndian
+    /// - LittleEndian
     operation CopyMostSignificantBitLE (from : LittleEndian, target : Qubit) : Unit
     {
         body (...)
