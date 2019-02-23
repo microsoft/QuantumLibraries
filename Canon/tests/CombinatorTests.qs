@@ -244,16 +244,26 @@ namespace Microsoft.Quantum.Tests {
             TransformationReferenceForward,
             3
         );
+    }
+
+    operation TransformedOperationCTest() : Unit {
         AssertOperationsEqualReferenced(
             TransformedOperationC(Reverse<Qubit>, TransformationReferenceReverse),
             TransformationReferenceForward,
             3
         );
+    }
+
+    operation TransformedOperationATest() : Unit {
         AssertOperationsEqualReferenced(
             Adjoint (TransformedOperationA(Reverse<Qubit>, TransformationReferenceReverse)),
             Adjoint TransformationReferenceForward,
             3
         );
+    }
+
+    operation TransformedOperationCATest() : Unit {
+    
         AssertOperationsEqualReferenced(
             Adjoint (TransformedOperationCA(Reverse<Qubit>, TransformationReferenceReverse)),
             Adjoint TransformationReferenceForward,
