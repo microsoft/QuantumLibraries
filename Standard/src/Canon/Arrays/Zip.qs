@@ -120,7 +120,7 @@ namespace Microsoft.Quantum.Canon {
     /// # See Also
     /// - Zip
     /// - Zip3
-    function Zip4<'T1, 'T2, 'T3, 'T4> (first : 'T1[], second : 'T2[], third : 'T3[], fourth : 'T4) : ('T1, 'T2, 'T3, 'T4)[] {
+    function Zip4<'T1, 'T2, 'T3, 'T4> (first : 'T1[], second : 'T2[], third : 'T3[], fourth : 'T4[]) : ('T1, 'T2, 'T3, 'T4)[] {
         let nElements = Min([Length(first), Length(second), Length(third), Length(fourth)]);
         mutable output = new ('T1, 'T2, 'T3, 'T4)[nElements];
 
