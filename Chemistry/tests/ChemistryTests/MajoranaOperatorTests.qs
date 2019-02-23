@@ -267,11 +267,11 @@ namespace Microsoft.Quantum.Chemistry.Tests {
                 
                 for (idxTest in 0 .. targetRegisterSize - 1) {
                     H(targetRegister[idxTest]);
-                    InPlaceXorLE(idxTest, LittleEndian(Reverse(indexRegister)));
+                    InPlaceXorLE(idxTest, LittleEndian(Reversed(indexRegister)));
                     SelectZ(BigEndian(indexRegister), targetRegister);
                     AssertProb([PauliX], [targetRegister[idxTest]], One, 1.0, $"Error: Test {idxTest} X Pauli |+>", 1E-10);
                     Z(targetRegister[idxTest]);
-                    Adjoint InPlaceXorLE(idxTest, LittleEndian(Reverse(indexRegister)));
+                    Adjoint InPlaceXorLE(idxTest, LittleEndian(Reversed(indexRegister)));
                     H(targetRegister[idxTest]);
                 }
             }

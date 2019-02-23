@@ -1,7 +1,6 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-
 namespace Microsoft.Quantum.Tests {
     open Microsoft.Quantum.Simulation;
     open Microsoft.Quantum.Arithmetic;
@@ -170,10 +169,10 @@ namespace Microsoft.Quantum.Tests {
                     }
                     InPlaceMajority(qubits[0], qubits[1..2]);
 
-                    if(testCase[3] == false){
+                    if (testCase[3] == false) {
                         AssertProb([PauliZ], qubits[0..0], Zero, 1.0, "", 1e-10);
                     }
-                    else{
+                    else {
                         AssertProb([PauliZ], qubits[0..0], One, 1.0, "", 1e-10);
                     }
                     ResetAll(qubits);
