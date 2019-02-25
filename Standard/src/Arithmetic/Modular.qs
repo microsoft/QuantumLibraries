@@ -30,8 +30,7 @@ namespace Microsoft.Quantum.Arithmetic {
     /// Assumes that the value of target is less than N. Note that
     /// <xref:microsoft.quantum.canon.modularincrementphasele> implements
     /// the same operation, but in the `PhaseLittleEndian` basis.
-    operation ModularIncrementLE (increment : Int, modulus : Int, target : LittleEndian) : Unit
-    {
+    operation ModularIncrementLE (increment : Int, modulus : Int, target : LittleEndian) : Unit {
         body (...) {
             let inner = ModularIncrementPhaseLE(increment, modulus, _);
 
