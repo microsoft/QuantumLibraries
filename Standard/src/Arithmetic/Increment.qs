@@ -86,7 +86,7 @@ namespace Microsoft.Quantum.Arithmetic {
     ///
     /// # See Also
     /// - IncrementByIntegerBE
-    /// - Microsoft.Quantum.Canon.IntegerIncrementPhaseLE
+    /// - IncrementByIntegerPhaseLE
     operation IncrementByIntegerLE(increment : Int, target : LittleEndian) : Unit {
         body (...) {
             let inner = IntegerIncrementPhaseLE(increment, _);
@@ -131,7 +131,7 @@ namespace Microsoft.Quantum.Arithmetic {
     ///
     /// # See Also
     /// - IncrementByIntegerBE
-    /// - Microsoft.Quantum.Canon.IntegerIncrementPhaseLE
+    /// - IncrementByIntegerPhaseLE
     operation IncrementByIntegerBE(increment : Int, target : BigEndian) : Unit {
         body (...) {
             IncrementByIntegerLE(increment, BigEndianAsLittleEndian(target));
