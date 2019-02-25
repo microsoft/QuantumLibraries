@@ -43,9 +43,13 @@ class IQSharpClient(object):
     def start(self):
         self.kernel_manager.start_kernel()
         self.kernel_client = self.kernel_manager.client()
+        atexit.register(self.stop)
 
     def stop(self):
-        pass
+        try:
+            self.kernel_manager.shutdown_kernel()
+        except:
+            pass
 
     def is_ready(self):
         try:
