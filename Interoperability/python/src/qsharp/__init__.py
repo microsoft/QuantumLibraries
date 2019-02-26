@@ -59,6 +59,9 @@ def reload() -> None:
     """
     Reloads the current IQ# workspace, discarding any current snippets and
     recompiling source files in the workspace.
+
+    If the workspace fails to compile (e.g., because of a missing package),
+    Q# compilation errors are raised as an exception.
     """
     client.reload()
 
