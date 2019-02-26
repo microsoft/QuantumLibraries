@@ -70,12 +70,12 @@ def get_available_operations() -> List[str]:
     """
     return client.get_available_operations()
 
-def get_workspace_operations(self) -> List[str]:
+def get_workspace_operations() -> List[str]:
     """
     Returns a list containing the names of all operations and functions defined
     in the current workspace, excluding dynamically compiled snippets.
     """
-    return self.get_workspace_operations()
+    return client.get_workspace_operations()
 
 def get_available_operations_by_namespace() -> Dict[str, List[str]]:
     """

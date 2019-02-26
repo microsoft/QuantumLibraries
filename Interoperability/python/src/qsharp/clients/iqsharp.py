@@ -113,13 +113,13 @@ class IQSharpClient(object):
             else:
                 if raise_on_stderr and msg['msg_type'] == 'stream' and msg['content']['name'] == 'stderr':
                     errors.append(msg['content']['text'])
-                self.kernel_client._output_hook_default(msg)
+                else:
+                    self.kernel_client._output_hook_default(msg)
         reply = self.kernel_client.execute_interactive(input, output_hook=output_hook, **kwargs)
         # There should be either zero or one execute_result messages.
         if errors:
             raise IQSharpError(errors)
         if results:
-            print(results)
             assert len(results) == 1
             content = results[0]['content']
             if 'application/json' in content['data']:
