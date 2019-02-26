@@ -83,7 +83,11 @@ class QSharpModule(ModuleType):
         ops = qsharp.get_available_operations_by_namespace()
         if name in ops[self._qs_name]:
             op_cls = new_class(name, (QSharpCallable, ))
-            op_cls.__doc__ = qsharp.client.get_operation_metadata(f"{self._qs_name}.{name}").get('documentation', '')
+
+            # Copy over metadata from the operation's header.
+            metadata = qsharp.client.get_operation_metadata(f"{self._qs_name}.{name}")
+            op_cls.__doc__ = metadata.get('documentation', '')
+            op_cls.__file__ = metadata.get('source', None)
             return op_cls(f"{self._qs_name}.{name}", "workspace")
         raise AttributeError(f"Q# namespace {self._qs_name} does not contain a callable {name}.")
 
