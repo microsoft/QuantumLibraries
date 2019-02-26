@@ -18,6 +18,7 @@ from typing import List, Dict, Union
 from collections import defaultdict
 
 from qsharp.clients import _start_client
+from qsharp.clients.iqsharp import IQSharpError
 from qsharp.loader import QSharpCallable, QSharpModuleFinder
 from qsharp.packages import Packages
 try:
@@ -30,7 +31,9 @@ except:
 __all__ = [
     'compile', 'reload'
     'get_available_operations', 'get_available_operations_by_namespace',
-    'packages'
+    'get_workspace_operations',
+    'packages',
+    'IQSharpError'
 ]
 
 ## FUNCTIONS ##
@@ -62,9 +65,17 @@ def reload() -> None:
 def get_available_operations() -> List[str]:
     """
     Returns a list containing the names of all operations and functions defined
-    in the current workspace.
+    in the current workspace, and that have been compiled dynamically from
+    snippets.
     """
     return client.get_available_operations()
+
+def get_workspace_operations(self) -> List[str]:
+    """
+    Returns a list containing the names of all operations and functions defined
+    in the current workspace, excluding dynamically compiled snippets.
+    """
+    return self.get_workspace_operations()
 
 def get_available_operations_by_namespace() -> Dict[str, List[str]]:
     """
@@ -82,6 +93,7 @@ def get_available_operations_by_namespace() -> Dict[str, List[str]]:
         by_ns[ns_name].append(op_name)
 
     return dict(by_ns.items())
+
 
 ## STARTUP ##
 

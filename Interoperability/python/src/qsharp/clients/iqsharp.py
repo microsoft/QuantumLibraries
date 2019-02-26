@@ -18,6 +18,7 @@ import urllib.parse
 import os
 import jupyter_client
 
+from io import StringIO
 from collections import defaultdict
 from typing import List, Dict, Callable, Any
 from pathlib import Path
@@ -30,6 +31,16 @@ import logging
 logger = logging.getLogger(__name__)
 
 ## CLASSES ##
+
+class IQSharpError(RuntimeError):
+    def __init__(self, iqsharp_errors : List[str]):
+        self.iqsharp_errors = iqsharp_errors
+        error_msg = StringIO()
+        error_msg.write("The Q# kernel raised the following errors:\n")
+        error_msg.writelines([
+            "    " + msg for msg in iqsharp_errors
+        ])
+        super().__init__(error_msg.getvalue())
 
 class IQSharpClient(object):
     kernel_manager = None
@@ -64,21 +75,23 @@ class IQSharpClient(object):
     def compile(self, body):
         return self.execute(body)
 
-    def get_available_operations(self):
-        return self.execute('%who')
+    def get_available_operations(self) -> List[str]:
+        return self.execute('%who', raise_on_stderr=False)
 
     def get_operation_metadata(self, name : str) -> Dict[str, Any]:
-        metadata = self.execute(f"?{name}")
-        return metadata
+        return self.execute(f"?{name}")
+
+    def get_workspace_operations(self) -> List[str]:
+        return self.execute("%workspace")
 
     def reload(self) -> None:
-        return self.execute(f"%reload")
+        return self.execute(f"%workspace reload", raise_on_stderr=True)
 
     def add_package(self, name : str) -> None:
-        return self.execute(f"%package {name}")
+        return self.execute(f"%package {name}", raise_on_stderr=True)
 
     def get_packages(self) -> List[str]:
-        return self.execute("%package")
+        return self.execute("%package", raise_on_stderr=False1)
 
     def simulate(self, op, **params) -> Any:
         return self.execute(f'%simulate {op._name} {json.dumps(map_tuples(params))}')
@@ -91,16 +104,22 @@ class IQSharpClient(object):
             for operation_name, count in raw_counts.items()
         }
 
-    def execute(self, input, return_full_result=False, **kwargs):
+    def execute(self, input, return_full_result=False, raise_on_stderr=False, **kwargs):
         results = []
+        errors = []
         def output_hook(msg):
             if msg['msg_type'] == 'execute_result':
                 results.append(msg)
             else:
+                if raise_on_stderr and msg['msg_type'] == 'stream' and msg['content']['name'] == 'stderr':
+                    errors.append(msg['content']['text'])
                 self.kernel_client._output_hook_default(msg)
         reply = self.kernel_client.execute_interactive(input, output_hook=output_hook, **kwargs)
         # There should be either zero or one execute_result messages.
+        if errors:
+            raise IQSharpError(errors)
         if results:
+            print(results)
             assert len(results) == 1
             content = results[0]['content']
             if 'application/json' in content['data']:
