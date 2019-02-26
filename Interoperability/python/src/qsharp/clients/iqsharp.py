@@ -68,10 +68,8 @@ class IQSharpClient(object):
         return self.execute('%who')
 
     def get_operation_metadata(self, name : str) -> Dict[str, Any]:
-        # TODO: placeholder for now until help commands are implemented in IQ#.
-        return {
-            "documentation": "TODO"
-        }
+        metadata = self.execute(f"?{name}")
+        return metadata
 
     def reload(self) -> None:
         return self.execute(f"%reload")
@@ -80,7 +78,7 @@ class IQSharpClient(object):
         return self.execute(f"%package {name}")
 
     def get_packages(self) -> List[str]:
-        return self.execute("%package list")
+        return self.execute("%package")
 
     def simulate(self, op, **params) -> Any:
         return self.execute(f'%simulate {op._name} {json.dumps(map_tuples(params))}')

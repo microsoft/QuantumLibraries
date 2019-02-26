@@ -32,4 +32,9 @@ class Packages(object):
         return str(list(self))
 
     def add(self, package_name : str) -> None:
+        """
+        Adds a NuGet package with the given package name to the current Q#
+        session, downloading the package from NuGet.org or any other configured
+        feeds as necessary.
+        """
         self._client.add_package(package_name)
