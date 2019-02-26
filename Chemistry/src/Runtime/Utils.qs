@@ -34,18 +34,18 @@ namespace Microsoft.Quantum.Chemistry {
     
     
     /// # Summary
-    /// Converts an index to a Hamiltonian term in 'HTerm[]' data format to a GeneratorIndex.
+    /// Converts an index to a Hamiltonian term in `HTerm[]` data format to a GeneratorIndex.
     ///
     /// # Input
     /// ## data
-    /// Input data in 'HTerm[]' format.
+    /// Input data in `HTerm[]` format.
     /// ## termType
     /// Additional information added to GeneratorIndex.
     /// ## idx
     /// Index to a term of the Hamiltonian
     ///
     /// # Output
-    /// A GeneratorIndex representing a Hamiltonian term represented by 'data[idx]',
+    /// A GeneratorIndex representing a Hamiltonian term represented by `data[idx]`,
     /// together with additional information added by `termType`.
     function HTermsToGenIdx (data : HTerm[], termType : Int[], idx : Int) : GeneratorIndex {
         
@@ -54,11 +54,11 @@ namespace Microsoft.Quantum.Chemistry {
     
     
     /// # Summary
-    /// Converts a Hamiltonian in 'HTerm[]' data format to a GeneratorSystem.
+    /// Converts a Hamiltonian in `HTerm[]` data format to a GeneratorSystem.
     ///
     /// # Input
     /// ## data
-    /// Input data in 'HTerm[]' format.
+    /// Input data in `HTerm[]` format.
     /// ## termType
     /// Additional information added to GeneratorIndex.
     ///
@@ -79,7 +79,7 @@ namespace Microsoft.Quantum.Chemistry {
     /// Number to be checked
     ///
     /// # Output
-    /// Returns true if `number` has an absolute value greater '1e-15'.
+    /// Returns true if `number` has an absolute value greater than `1e-15`.
     function IsNotZero (number : Double) : Bool {
         
         if (AbsD(number) > PowD(10.0, -15.0)) {

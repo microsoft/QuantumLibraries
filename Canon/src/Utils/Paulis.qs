@@ -1,4 +1,4 @@
-﻿// Copyright (c) Microsoft Corporation. All rights reserved.
+// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
 namespace Microsoft.Quantum.Canon
@@ -67,7 +67,7 @@ namespace Microsoft.Quantum.Canon
     ///
     /// # Remarks
     /// This function calls <xref:microsoft.quantum.primitive.random>, so
-    /// its randomess depends on the implementation of `Random`.
+    /// its randomness depends on the implementation of `Random`.
     operation RandomSingleQubitPauli () : Pauli
     {
         let probs = [0.5, 0.5, 0.5, 0.5];
@@ -87,7 +87,8 @@ namespace Microsoft.Quantum.Canon
     /// ## target
     /// Register to apply the given Pauli operation on.
     ///
-    /// # Example
+    /// # Remarks
+    /// ## Example
     /// The following are equivalent:
     /// ```qsharp
     /// ApplyPauli([PauliY, PauliZ, PauliX], target);
@@ -180,7 +181,7 @@ namespace Microsoft.Quantum.Canon
     /// Quantum register on which to selectively apply the specified Pauli operator
     ///
     /// # Remarks
-    /// The Boolean array and the quantum register must be of equal length
+    /// The Boolean array and the quantum register must be of equal length.
     operation ApplyPauliFromBitString (pauli : Pauli, bitApply : Bool, bits : Bool[], qubits : Qubit[]) : Unit
     {
         body (...)
@@ -245,7 +246,8 @@ namespace Microsoft.Quantum.Canon
     /// ## n
     /// Length of the array to be returned.
     ///
-    /// # Example
+    /// # Remarks
+    /// ## Example
     /// To obtain the array `[PauliI, PauliI, PauliX, PauliI]`:
     /// ```qsharp
     /// EmbedPauli(PauliX, 2, 3);

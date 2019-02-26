@@ -19,9 +19,11 @@ namespace Microsoft.Quantum.Canon
     /// the $n$-qubit computational basis state $\ket{0...0}$.
     ///
     /// The action of U on a newly-allocated register is given by
+    /// $$
     /// \begin{align}
-    ///     U \ket{0\cdots 0} = \ket{\psi} = \frac{\sum^{2^n-1}_{j=0}\alpha_j \ket{j}}{\sqrt{\sum^{2^n-1}_{j=0}|\alpha_j|^2}}$.
+    ///     U \ket{0\cdots 0} = \ket{\psi} = \frac{\sum_{j=0}^{2^n-1}\alpha_j \ket{j}}{\sqrt{\sum_{j=0}^{2^n-1}|\alpha_j|^2}}.
     /// \end{align}
+    /// $$
     ///
     /// # Input
     /// ## coefficients
@@ -36,7 +38,7 @@ namespace Microsoft.Quantum.Canon
     /// positive with value $|\alpha_j|$. `coefficients` will be padded with
     /// elements $\alpha_j = 0.0$ if fewer than $2^n$ are specified.
     ///
-    /// # Example
+    /// ## Example
     /// The following snippet prepares the quantum state $\ket{\psi}=\sqrt{1/8}\ket{0}+\sqrt{7/8}\ket{2}$
     /// in the qubit register `qubitsBE`.
     /// ```qsharp
@@ -69,9 +71,11 @@ namespace Microsoft.Quantum.Canon
     /// the $n$-qubit computational basis state $\ket{0...0}$.
     ///
     /// The action of U on a newly-allocated register is given by
+    /// $$
     /// \begin{align}
-    /// U\ket{0...0}=\ket{\psi}=\frac{\sum^{2^n-1}_{j=0}r_j e^{i t_j}\ket{j}}{\sqrt{\sum^{2^n-1}_{j=0}|r_j|^2}}.
+    ///     U\ket{0...0}=\ket{\psi}=\frac{\sum_{j=0}^{2^n-1}r_j e^{i t_j}\ket{j}}{\sqrt{\sum_{j=0}^{2^n-1}|r_j|^2}}.
     /// \end{align}
+    /// $$
     ///
     /// # Input
     /// ## coefficients
@@ -88,7 +92,7 @@ namespace Microsoft.Quantum.Canon
     /// elements $(r_j, t_j) = (0.0, 0.0)$ if fewer than $2^n$ are
     /// specified.
     ///
-    /// # Example
+    /// ## Example
     /// The following snippet prepares the quantum state $\ket{\psi}=e^{i 0.1}\sqrt{1/8}\ket{0}+\sqrt{7/8}\ket{2}$
     /// in the qubit register `qubitsBE`.
     /// ```qsharp
@@ -96,9 +100,9 @@ namespace Microsoft.Quantum.Canon
     /// let phases = [0.1, 0.0, 0.0, 0.0];
     /// mutable complexNumbers = new ComplexPolar[4];
     /// for (idx in 0..3) {
-    ///     set complexNumbers[idx] = ComplexPolar(amplitudes, phases);
+    ///     set complexNumbers[idx] = ComplexPolar(amplitudes[idx], phases[idx]);
     /// }
-    /// let op = StatePreparationPositiveCoefficients(complexNumbers);
+    /// let op = StatePreparationComplexCoefficients(complexNumbers);
     /// using (qubits = Qubit[2]) {
     ///     let qubitsBE = BigEndian(qubits);
     ///     op(qubitsBE);
@@ -117,7 +121,11 @@ namespace Microsoft.Quantum.Canon
     /// state $\ket{\psi}$ with complex coefficients $r_j e^{i t_j}$ from
     /// the $n$-qubit computational basis state $\ket{0...0}$.
     ///
-    /// $U\ket{0...0}=\ket{\psi}=\frac{\sum^{2^n-1}_{j=0}r_j e^{i t_j}\ket{j}}{\sqrt{\sum^{2^n-1}_{j=0}|r_j|^2}}$.
+    /// $$
+    /// \begin{align}
+    ///     U\ket{0...0}=\ket{\psi}=\frac{\sum_{j=0}^{2^n-1}r_j e^{i t_j}\ket{j}}{\sqrt{\sum_{j=0}^{2^n-1}|r_j|^2}}.
+    /// \end{align}
+    /// $$
     ///
     /// # Input
     /// ## coefficients
@@ -128,7 +136,7 @@ namespace Microsoft.Quantum.Canon
     /// ## qubits
     /// Qubit register encoding number states in big-endian format. This is
     /// expected to be initialized in the computational basis state
-    /// $ket{0...0}$.
+    /// $\ket{0...0}$.
     ///
     /// # Remarks
     /// Negative input coefficients $r_j < 0$ will be treated as though

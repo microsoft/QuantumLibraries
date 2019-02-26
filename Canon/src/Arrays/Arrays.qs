@@ -123,7 +123,8 @@ namespace Microsoft.Quantum.Canon
     /// each `idx`. If the two arrays are not of equal length, the output will
     /// be as long as the shorter of the inputs.
     ///
-    /// # Example
+    /// # Remarks
+    /// ## Example
     /// ```qsharp
     /// let left = [1, 3, 71];
     /// let right = [false, true];
@@ -238,7 +239,8 @@ namespace Microsoft.Quantum.Canon
     /// such that `output[1]` is the second such element, and so
     /// forth.
     ///
-    /// # Example
+    /// # Remarks
+    /// ## Example
     /// ```qsharp
     /// let array = [10, 11, 12, 13, 14, 15];
     /// // The following line returns [10, 12, 15].
@@ -300,7 +302,8 @@ namespace Microsoft.Quantum.Canon
     /// An array `output` that is the `inputArray` padded at the head
     /// with `defaultElement`s until `output` has length `nElementsTotal`
     ///
-    /// # Example
+    /// # Remarks
+    /// ## Example
     /// ```qsharp
     /// let array = [10, 11, 12];
     /// // The following line returns [10, 12, 15, 2, 2, 2].
@@ -329,7 +332,7 @@ namespace Microsoft.Quantum.Canon
     }
     
     /// # Summary
-    /// Creates an array `arr` of integers enumnerated by start..step..end.
+    /// Creates an array `arr` of integers enumerated by start..step..end.
     ///
     /// # Input
     /// ## range
@@ -338,7 +341,8 @@ namespace Microsoft.Quantum.Canon
     /// # Output
     /// A new array of integers corresponding to values iterated over by `range`.
     ///
-    /// # Example
+    /// # Remarks
+    /// ## Example
     /// ```qsharp
     /// // The following returns [1,3,5,7];
     /// let array = IntArrayFromRange(1..2..8);
@@ -370,11 +374,12 @@ namespace Microsoft.Quantum.Canon
     /// Input array to be split.
     ///
     /// # Output
-    /// Multiple arrays where the first array is the first 'nElements[0]' of `arr`
-    /// and the second array are the next 'nElements[1]' of `arr` etc. The last array
+    /// Multiple arrays where the first array is the first `nElements[0]` of `arr`
+    /// and the second array are the next `nElements[1]` of `arr` etc. The last array
     /// will contain all remaining elements.
     ///
-    /// # Example
+    /// # Remarks
+    /// ## Example
     /// ```qsharp
     /// // The following returns [[1,5],[3],[7]];
     /// let (arr1, arr2) = SplitArray([2,1], [1,5,3,7]);
