@@ -18,7 +18,6 @@ jobs:
   pool: 'Hosted VS2017'
   steps:
   - template: Build/step-build-libs.yml
-  - template: Build/step-build-python.yml
 - job: macOS
   pool: 'Hosted macOS'
   steps:
