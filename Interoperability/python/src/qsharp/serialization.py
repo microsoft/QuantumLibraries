@@ -45,7 +45,7 @@ def unmap_tuples(obj):
     """
     if isinstance(obj, dict):
         # Does this dict represent a tuple?
-        if obj.get('@type', None) in ('tuple', '@tuple') or 'item1' in obj:
+        if obj.get('@type', None) in ('tuple', '@tuple') or 'Item1' in obj:
             values = []
             while True:
                 item = f"Item{len(values) + 1}"
