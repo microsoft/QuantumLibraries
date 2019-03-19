@@ -1,7 +1,8 @@
-﻿namespace Microsoft.Quantum.Tests {
+﻿// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License.
+
+namespace Microsoft.Quantum.Canon {
     open Microsoft.Quantum.Primitive;
-    open Microsoft.Quantum.Canon;
-    open Microsoft.Quantum.Canon.Arithmetic;
 
     operation IntegerAdderTestHelper( IntegerAdder : ( (LittleEndian, LittleEndian, Qubit) => Unit : Controlled), summand1 : Int, summand2 : Int, numberOfQubits : Int ) : Unit {
         body (...) {

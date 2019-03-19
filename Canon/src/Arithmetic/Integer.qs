@@ -1,6 +1,8 @@
-﻿namespace Microsoft.Quantum.Canon.Arithmetic {
+﻿// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License.
+
+namespace Microsoft.Quantum.Canon {
     open Microsoft.Quantum.Primitive;
-    open Microsoft.Quantum.Canon;
 
     /// # Summary
     /// Implements a reversible carry gate. Given a carry-in bit encoded in 
