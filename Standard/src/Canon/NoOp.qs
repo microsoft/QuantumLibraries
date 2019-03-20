@@ -43,8 +43,7 @@ namespace Microsoft.Quantum.Canon {
     /// # Input
     /// ## value
     /// A value to be ignored.
-    function Ignore<'T> (value : 'T) : Unit
-    {
+    function Ignore<'T> (value : 'T) : Unit {
         return ();
     }
 

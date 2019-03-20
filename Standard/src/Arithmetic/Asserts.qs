@@ -39,13 +39,13 @@ namespace Microsoft.Quantum.Arithmetic {
         let nQubits = Length(qubits!);
         let bits = BoolArrFromPositiveInt(stateIndex, nQubits);
 
-        using (flag = Qubit[1]) {
-            (ControlledOnBitString(bits, X))(qubits!, flag[0]);
-            AssertProb([PauliZ], flag, One, expected, $"AssertProbInt failed on stateIndex {stateIndex}, expected probability {expected}.", tolerance);
+        using (flag = Qubit()) {
+            (ControlledOnBitString(bits, X))(qubits!, flag);
+            AssertProb([PauliZ], [flag], One, expected, $"AssertProbInt failed on stateIndex {stateIndex}, expected probability {expected}.", tolerance);
 
             // Uncompute flag qubit.
-            (ControlledOnBitString(bits, X))(qubits!, flag[0]);
-            ResetAll(flag);
+            (ControlledOnBitString(bits, X))(qubits!, flag);
+            Reset(flag);
         }
     }
 
@@ -91,7 +91,7 @@ namespace Microsoft.Quantum.Arithmetic {
     }
 
     /// # Summary
-    /// Asserts that the highest qubit of a qubit register
+    /// Asserts that the most significant qubit of a qubit register
     /// representing an unsigned integer is in a particular state.
     ///
     /// # Input
@@ -105,7 +105,7 @@ namespace Microsoft.Quantum.Arithmetic {
     ///
     /// # See Also
     /// - Microsoft.Quantum.Primitive.Assert
-    operation AssertHighestBitLE(value : Result, number : LittleEndian) : Unit {
+    operation AssertMostSignificantBitLE(value : Result, number : LittleEndian) : Unit {
         body (...) {
             let mostSingificantQubit = Tail(number!);
             Assert([PauliZ], [mostSingificantQubit], value, $"Most significant bit expected to be {value}");
@@ -121,11 +121,11 @@ namespace Microsoft.Quantum.Arithmetic {
     }
 
     /// # Deprecated
-    /// Please use @"Microsoft.Quantum.Arithmetic.AssertHighestBitLE".
+    /// Please use @"Microsoft.Quantum.Arithmetic.AssertMostSignificantBitLE".
     operation AssertHighestBit(value : Result, number : LittleEndian) : Unit {
         body (...) {
-            Renamed("Microsoft.Quantum.Arithmetic.AssertHighestBit", "Microsoft.Quantum.Arithmetic.AssertHighestBitLE");
-            AssertHighestBitLE(value, number);
+            Renamed("Microsoft.Quantum.Arithmetic.AssertHighestBit", "Microsoft.Quantum.Arithmetic.AssertMostSignificantBitLE");
+            AssertMostSignificantBitLE(value, number);
         }
         adjoint auto;
         controlled auto;

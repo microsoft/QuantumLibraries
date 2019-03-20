@@ -77,7 +77,7 @@ namespace Microsoft.Quantum.Canon {
     /// # See Also
     /// - Microsoft.Quantum.Canon.ApproximateQFT
     /// - Microsoft.Quantum.Canon.QFTLE
-    operation QFT (qs : BigEndian) : Unit {
+    operation ApplyQuantumFourierTransformBE(qs : BigEndian) : Unit {
         body (...) {
             ApproximateQFT(Length(qs!), qs);
         }
@@ -86,8 +86,7 @@ namespace Microsoft.Quantum.Canon {
         controlled distribute;
         controlled adjoint distribute;
     }
-    
-    
+
     /// # Summary
     /// Performs the Quantum Fourier Transform on a quantum register containing an
     /// integer in the little-endian representation.
@@ -101,19 +100,17 @@ namespace Microsoft.Quantum.Canon {
     ///
     ///
     /// # See Also
-    /// - @"microsoft.quantum.canon.qft"
-    operation QFTLE (qs : LittleEndian) : Unit
-    {
-        body (...)
-        {
-            ApplyReversedOpBigEndianCA(QFT, qs);
+    /// - ApplyQuantumFourierTransformBE
+    operation ApplyQuantumFourierTransformLE(qs : LittleEndian) : Unit {
+        body (...) {
+            ApplyReversedOpBigEndianCA(ApplyQuantumFourierTransformBE, qs);
         }
-        
+
         adjoint invert;
         controlled distribute;
         controlled adjoint distribute;
     }
-    
+
 }
 
 

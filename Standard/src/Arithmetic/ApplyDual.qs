@@ -29,17 +29,15 @@ namespace Microsoft.Quantum.Arithmetic {
     /// - Microsoft.Quantum.Canon.ApplyPhaseLEOperationonLEA
     /// - Microsoft.Quantum.Canon.ApplyPhaseLEOperationonLEA
     /// - Microsoft.Quantum.Canon.ApplyPhaseLEOperationonLECA
-    operation ApplyPhaseLEOperationOnLE (op : (PhaseLittleEndian => Unit), target : LittleEndian) : Unit
-    {
+    operation ApplyPhaseLEOperationOnLE (op : (PhaseLittleEndian => Unit), target : LittleEndian) : Unit {
         QFTLE(target);
         let phaseLE = PhaseLittleEndian(target!);
         op(phaseLE);
         Adjoint QFTLE(target);
     }
-    
-    
+
     /// # See Also
-    /// - @"microsoft.quantum.canon.applyphaseleoperationonle"
+    /// - ApplyPhaseLEOperationOnLE
     operation ApplyPhaseLEOperationOnLEA (op : (PhaseLittleEndian => Unit : Adjoint), target : LittleEndian) : Unit
     {
         body (...)

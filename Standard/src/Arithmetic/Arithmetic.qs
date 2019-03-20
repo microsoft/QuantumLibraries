@@ -130,10 +130,8 @@ namespace Microsoft.Quantum.Arithmetic {
     ///
     /// # See Also
     /// - LittleEndian
-    operation CopyMostSignificantBitLE (from : LittleEndian, target : Qubit) : Unit
-    {
-        body (...)
-        {
+    operation CopyMostSignificantBitLE (from : LittleEndian, target : Qubit) : Unit {
+        body (...) {
             let mostSingificantQubit = Tail(from!);
             CNOT(mostSingificantQubit, target);
         }

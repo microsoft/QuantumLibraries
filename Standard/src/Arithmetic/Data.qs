@@ -5,7 +5,7 @@ namespace Microsoft.Quantum.Arithmetic {
 
     /// # Summary
     /// Register that encodes an unsigned integer in little-endian order. The
-    /// qubit with index `0` encodes the lowest bit of an unsigned integer
+    /// qubit with index `0` encodes the lowest bit of an unsigned integer.
     ///
     /// # Remarks
     /// We abbreviate `LittleEndian` as `LE` in the documentation.
@@ -13,7 +13,7 @@ namespace Microsoft.Quantum.Arithmetic {
 
     /// # Summary
     /// Register that encodes an unsigned integer in big-endian order. The
-    /// qubit with index `0` encodes the highest bit of an unsigned integer
+    /// qubit with index `0` encodes the highest bit of an unsigned integer.
     ///
     /// # Remarks
     /// We abbreviate `BigEndian` as `BE` in the documentation.
@@ -22,15 +22,17 @@ namespace Microsoft.Quantum.Arithmetic {
     /// # Summary
     /// Little-endian unsigned integers in QFT basis.
 	///
-    /// For example, if `|x⟩` is the little-endian encoding of the integer `x` in the computational basis,
-    /// then `QFTLE|x⟩` is the encoding of `x` in the QFT basis.
+    /// For example, if $\ket{x}$ is the little-endian encoding of the integer
+    /// $x$ in the computational basis,
+    /// then $\operatorname{QFTLE} \ket{x}$ is the encoding of $x$ in the QFT
+    /// basis.
     ///
     /// # Remarks
-    /// We abbreviate `LittleEndian` as `LE` in the documentation.
+    /// We abbreviate `PhaseLittleEndian` as `PhaseLE` in the documentation.
     ///
     /// # See Also
-    /// - microsoft.quantum.canon.qft
-    /// - microsoft.quantum.canon.qftle
+    /// - QFT
+    /// - QFTLE
     newtype PhaseLittleEndian = Qubit[];
 
 }

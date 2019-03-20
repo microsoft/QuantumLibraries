@@ -3,6 +3,7 @@
 
 namespace Microsoft.Quantum.Canon {
     open Microsoft.Quantum.Primitive;
+    open Microsoft.Quantum.Arithmetic;
 
     /// # Summary
     /// Applies the controlled-X (CX) gate to a pair of qubits.
@@ -105,6 +106,53 @@ namespace Microsoft.Quantum.Canon {
         adjoint self;
         controlled distribute;
         controlled adjoint self;
+    }
+
+    /// # Summary
+    /// Performs the Quantum Fourier Transform on a quantum register containing an
+    /// integer in the big-endian representation.
+    ///
+    /// # Input
+    /// ## qs
+    /// Quantum register to which the Quantum Fourier Transform is applied
+    ///
+    /// # Remarks
+    /// The input and output are assumed to be in big endian encoding.
+    ///
+    /// # See Also
+    /// - Microsoft.Quantum.Canon.ApplyQuantumFourierTransformBE
+    operation QFT(qs : BigEndian) : Unit {
+        body (...) {
+            ApplyQuantumFourierTransformBE(qs);
+        }
+
+        adjoint invert;
+        controlled distribute;
+        controlled adjoint distribute;
+    }
+
+    /// # Summary
+    /// Performs the Quantum Fourier Transform on a quantum register containing an
+    /// integer in the little-endian representation.
+    ///
+    /// # Input
+    /// ## qs
+    /// Quantum register to which the Quantum Fourier Transform is applied
+    ///
+    /// # Remarks
+    /// The input and output are assumed to be in little endian encoding.
+    ///
+    ///
+    /// # See Also
+    /// - @"microsoft.quantum.canon.qft"
+    operation QFTLE(qs : LittleEndian) : Unit {
+        body (...) {
+            ApplyQuantumFourierTransformLE(qs);
+        }
+
+        adjoint invert;
+        controlled distribute;
+        controlled adjoint distribute;
     }
 
 }
