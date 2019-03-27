@@ -1,0 +1,26 @@
+package:
+  name: iqsharp
+  version: {{ ASSEMBLY_VERSION }}
+
+about:
+  license: MIT
+  license_file: LICENSE
+  summary: IQ# is an interactive kernel for the Jupyter platform, supporting the Q# language.
+
+source:
+  # .NET Core SDK
+  - url: https://dot.net/v1/dotnet-install.ps1                               # [win]
+    sha256: cd27e92258951aeb6875b3746a8fdd035050ac0960b1ebc3a196491e8b754c17 # [win]
+  - path: ./bld.ps1                                                          # [win]
+
+  - url: https://dot.net/v1/dotnet-install.sh                                # [not win]
+    sha256: a77dc7db6ef2f1bc9544d4144fd154dd54c3a6f133ec856f9a6dd32eaca6fb0a # [not win]
+
+  # IQ# NuGet Packages
+  - path: ../nupkgs
+
+requirements:
+  build:
+  - jupyter
+  run:
+  - jupyter
