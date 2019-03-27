@@ -96,7 +96,7 @@ namespace Microsoft.Quantum.Canon
     /// should be sampled.
     ///
     ///	# Output
-    /// A real number $x = k / 2^{\texttt{bitsRandom} - 1}$ for an integer
+    /// A real number $x = k / 2^{\texttt{bitsRandom}}$ for an integer
     /// $k$ sampled from the interval $[0, 2^{\texttt{bitsRandom}})$
     /// with probability $\Pr(k) = 1 / 2^{\texttt{bitsRandom}}$.
     ///
@@ -110,7 +110,7 @@ namespace Microsoft.Quantum.Canon
             fail $"Number of random bits must be greater than 0.";
         }
         
-        return ToDouble(RandomIntPow2(bitsRandom)) / ToDouble(2 ^ (bitsRandom - 1));
+        return ToDouble(RandomIntPow2(bitsRandom)) / ToDouble(2 ^ bitsRandom + 1);
     }
     
 }
