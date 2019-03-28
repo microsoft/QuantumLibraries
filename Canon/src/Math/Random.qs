@@ -25,7 +25,7 @@ namespace Microsoft.Quantum.Canon
     /// that could be returned by this operation.
     ///
     /// # Output
-    /// An integer $x$ uniformly at random from the given interval;
+    /// An integer $x$ uniformly at random from $[0,2^{\texttt{maxBits}}-1]$;
     /// that is, with $\Pr(x) = \frac{1}{2^{\texttt{maxBits}}}$.
     ///
     /// # Remarks
@@ -110,7 +110,7 @@ namespace Microsoft.Quantum.Canon
             fail $"Number of random bits must be greater than 0.";
         }
         
-        return ToDouble(RandomIntPow2(bitsRandom)) / ToDouble(2 ^ bitsRandom + 1);
+        return ToDouble(RandomIntPow2(bitsRandom)) / ToDouble(2 ^ bitsRandom);
     }
     
 }
