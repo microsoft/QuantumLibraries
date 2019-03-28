@@ -16,11 +16,13 @@
 import sys
 from typing import List, Dict, Union
 from collections import defaultdict
+from distutils.version import LooseVersion
 
 from qsharp.clients import _start_client
 from qsharp.clients.iqsharp import IQSharpError
 from qsharp.loader import QSharpCallable, QSharpModuleFinder
 from qsharp.packages import Packages
+from qsharp.types import Result, Pauli
 try:
     from qsharp.version import __version__
 except:
@@ -33,7 +35,8 @@ __all__ = [
     'get_available_operations', 'get_available_operations_by_namespace',
     'get_workspace_operations',
     'packages',
-    'IQSharpError'
+    'IQSharpError',
+    'Result', 'Pauli'
 ]
 
 ## FUNCTIONS ##
@@ -96,6 +99,16 @@ def get_available_operations_by_namespace() -> Dict[str, List[str]]:
         by_ns[ns_name].append(op_name)
 
     return dict(by_ns.items())
+
+def component_versions() -> Dict[str, LooseVersion]:
+    """
+    Returns a dictionary from components of the IQ# kernel to their
+    versions.
+    """
+    versions = client.component_versions()
+    # Add in the qsharp Python package itself.
+    versions["qsharp"] = LooseVersion(__version__)
+    return versions
 
 
 ## STARTUP ##
