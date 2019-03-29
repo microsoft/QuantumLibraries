@@ -9,7 +9,7 @@ namespace Microsoft.Quantum.AmplitudeAmplification {
     /// # Remarks
     /// The first parameter is an array of phases for reflection about the start state. The second parameter is an array of phases for reflection about the target state.
     /// Both arrays must be of equal length. Note that in many cases, the first phase about the start state and last phase about the target state introduces a global phase shift and may be set to $0$.
-    newtype AmpAmpReflectionPhases = (Double[], Double[]);
+    newtype ReflectionPhases = (Double[], Double[]);
 
     /// # Summary
     /// Phases for a sequence of single-qubit rotations in amplitude amplification.
@@ -17,7 +17,7 @@ namespace Microsoft.Quantum.AmplitudeAmplification {
     /// # Remarks
     /// The first parameter is an array of phases for reflections, expressed as a product of single-qubit rotations.
     /// [ G.H. Low, I. L. Chuang, https://arxiv.org/abs/1707.05391].
-    newtype AmpAmpRotationPhases = Double[];
+    newtype RotationPhases = Double[];
 
 }
 

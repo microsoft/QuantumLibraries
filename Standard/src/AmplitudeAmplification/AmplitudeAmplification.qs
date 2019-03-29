@@ -24,7 +24,7 @@ namespace Microsoft.Quantum.AmplitudeAmplification {
     /// We use the convention in
     /// - [ *G.H. Low, I. L. Chuang* ](https://arxiv.org/abs/1707.05391)
     /// for relating single-qubit rotation phases to reflection operator phases.
-    function AmpAmpRotationToReflectionPhases (rotPhases : AmpAmpRotationPhases) : AmpAmpReflectionPhases
+    function AmpAmpRotationToReflectionPhases (rotPhases : RotationPhases) : ReflectionPhases
     {
         let nPhasesRot = Length(rotPhases!);
         let nPhasesRef = (nPhasesRot + 1) / 2;
@@ -47,7 +47,7 @@ namespace Microsoft.Quantum.AmplitudeAmplification {
         
         set phasesTarget[nPhasesRef - 1] = (rotPhases!)[2 * nPhasesRef - 2] - 0.5 * PI();
         set phasesStart[nPhasesRef - 1] = ((rotPhases!)[2 * nPhasesRef - 3] - (rotPhases!)[2 * nPhasesRef - 2]) + PI();
-        return AmpAmpReflectionPhases(phasesStart, phasesTarget);
+        return ReflectionPhases(phasesStart, phasesTarget);
     }
     
     
@@ -66,7 +66,7 @@ namespace Microsoft.Quantum.AmplitudeAmplification {
     /// # Remarks
     /// All phases are $\pi$, except for the first reflection about the start
     /// state and the last reflection about the target state, which are $0$.
-    function AmpAmpPhasesStandard (nIterations : Int) : AmpAmpReflectionPhases
+    function AmpAmpPhasesStandard (nIterations : Int) : ReflectionPhases
     {
         mutable phasesTarget = new Double[nIterations + 1];
         mutable phasesStart = new Double[nIterations + 1];
@@ -79,14 +79,14 @@ namespace Microsoft.Quantum.AmplitudeAmplification {
         
         set phasesTarget[nIterations] = 0.0;
         set phasesStart[0] = 0.0;
-        return AmpAmpReflectionPhases(phasesStart, phasesTarget);
+        return ReflectionPhases(phasesStart, phasesTarget);
     }
     
     
     // We use the phases in "Fixed-Point Amplitude Amplification with an
     // Optimal Number of Queires" [YoderLowChuang2014]
     // See also "Methodology of composite quantum gates" [LowYoderChuang2016]
-    // for phases in the `AmpAmpRotationPhases` format
+    // for phases in the `RotationPhases` format
     
     /// # Summary
     /// Computes partial reflection phases for fixed-point amplitude
@@ -109,8 +109,8 @@ namespace Microsoft.Quantum.AmplitudeAmplification {
     /// - [YoderLowChuang2014](https://arxiv.org/abs/1409.3305)
     /// See also "Methodology of composite quantum gates"
     /// - [LowYoderChuang2016](https://arxiv.org/abs/1603.03996)
-    /// for phases in the `AmpAmpRotationPhases` format.
-    function AmpAmpPhasesFixedPoint (nQueries : Int, successMin : Double) : AmpAmpReflectionPhases
+    /// for phases in the `RotationPhases` format.
+    function AmpAmpPhasesFixedPoint (nQueries : Int, successMin : Double) : ReflectionPhases
     {
         mutable phasesRot = new Double[nQueries];
         let nQueriesDouble = ToDouble(nQueries);
@@ -122,7 +122,7 @@ namespace Microsoft.Quantum.AmplitudeAmplification {
             set phasesRot[idxPhases] = phasesRot[idxPhases - 1] + 2.0 * ArcTan(Tan((((2.0 * 1.0) * ToDouble(idxPhases)) * PI()) / nQueriesDouble) * Sqrt(1.0 - beta * beta));
         }
         
-        return AmpAmpRotationToReflectionPhases(AmpAmpRotationPhases(phasesRot));
+        return AmpAmpRotationToReflectionPhases(RotationPhases(phasesRot));
     }
     
     
@@ -165,7 +165,7 @@ namespace Microsoft.Quantum.AmplitudeAmplification {
     /// See
     /// - [ *G.H. Low, I.L. Chuang* ](https://arxiv.org/abs/1610.06546)
     /// for a generalization to partial reflections.
-    operation AmpAmpObliviousByReflectionPhasesImpl (phases : AmpAmpReflectionPhases, ancillaReflection : ReflectionOracle, targetStateReflection : ReflectionOracle, signalOracle : ObliviousOracle, ancillaRegister : Qubit[], systemRegister : Qubit[]) : Unit
+    operation AmpAmpObliviousByReflectionPhasesImpl (phases : ReflectionPhases, ancillaReflection : ReflectionOracle, targetStateReflection : ReflectionOracle, signalOracle : ObliviousOracle, ancillaRegister : Qubit[], systemRegister : Qubit[]) : Unit
     {
         body (...)
         {
@@ -212,7 +212,7 @@ namespace Microsoft.Quantum.AmplitudeAmplification {
     
     /// # Summary
     /// Returns a unitary that implements oblivious amplitude amplification by specifying for partial reflections.
-    function AmpAmpObliviousByReflectionPhases (phases : AmpAmpReflectionPhases, ancillaReflection : ReflectionOracle, targetStateReflection : ReflectionOracle, signalOracle : ObliviousOracle) : ((Qubit[], Qubit[]) => Unit : Adjoint, Controlled)
+    function AmpAmpObliviousByReflectionPhases (phases : ReflectionPhases, ancillaReflection : ReflectionOracle, targetStateReflection : ReflectionOracle, signalOracle : ObliviousOracle) : ((Qubit[], Qubit[]) => Unit : Adjoint, Controlled)
     {
         return AmpAmpObliviousByReflectionPhasesImpl(phases, ancillaReflection, targetStateReflection, signalOracle, _, _);
     }
@@ -243,7 +243,7 @@ namespace Microsoft.Quantum.AmplitudeAmplification {
     /// O\ket{\text{start}}\_{fa}\ket{\psi}\_s= \lambda\ket{1}\_f\ket{\text{anything}}\_a\ket{\text{target}}\_s U \ket{\psi}\_s + \sqrt{1-|\lambda|^2}\ket{0}\_f\cdots,
     /// \end{align}
     /// for some unitary $U$.
-    function AmpAmpObliviousByOraclePhases (phases : AmpAmpReflectionPhases, ancillaOracle : DeterministicStateOracle, signalOracle : ObliviousOracle, idxFlagQubit : Int) : ((Qubit[], Qubit[]) => Unit : Adjoint, Controlled)
+    function AmpAmpObliviousByOraclePhases (phases : ReflectionPhases, ancillaOracle : DeterministicStateOracle, signalOracle : ObliviousOracle, idxFlagQubit : Int) : ((Qubit[], Qubit[]) => Unit : Adjoint, Controlled)
     {
         let ancillaReflection = ReflectionStart();
         let targetStateReflection = TargetStateReflectionOracle(idxFlagQubit);
@@ -271,7 +271,7 @@ namespace Microsoft.Quantum.AmplitudeAmplification {
     /// # Remarks
     /// Amplitude amplification is a special case of oblivious amplitude amplification where there are no system qubits and the oblivious oracle is set to identity.
     /// In most cases, `startQubits` is initialized in the state $\ket{\text{start}}\_1$, which is the $-1$ eigenstate of `startStateReflection`.
-    function AmpAmpByReflectionsPhases (phases : AmpAmpReflectionPhases, startStateReflection : ReflectionOracle, targetStateReflection : ReflectionOracle) : (Qubit[] => Unit : Adjoint, Controlled)
+    function AmpAmpByReflectionsPhases (phases : ReflectionPhases, startStateReflection : ReflectionOracle, targetStateReflection : ReflectionOracle) : (Qubit[] => Unit : Adjoint, Controlled)
     {
         // Pass empty qubit array using fact that NoOp does nothing.
         let qubitEmpty = new Qubit[0];
@@ -305,7 +305,7 @@ namespace Microsoft.Quantum.AmplitudeAmplification {
     /// A\ket{0}\_{f}\ket{0}\_s= \lambda\ket{1}\_f\ket{\text{target}}\_s + \sqrt{1-|\lambda|^2}\ket{0}\_f\cdots,
     /// \end{align}
     /// In most cases, `flagQubit` and `ancillaRegister` is initialized in the state $\ket{0}\_{f}\ket{0}\_s$.
-    function AmpAmpByOraclePhases (phases : AmpAmpReflectionPhases, stateOracle : StateOracle, idxFlagQubit : Int) : (Qubit[] => Unit : Adjoint, Controlled)
+    function AmpAmpByOraclePhases (phases : ReflectionPhases, stateOracle : StateOracle, idxFlagQubit : Int) : (Qubit[] => Unit : Adjoint, Controlled)
     {
         let qubitEmpty = new Qubit[0];
         let signalOracle = ObliviousOracle(NoOp<(Qubit[], Qubit[])>);
