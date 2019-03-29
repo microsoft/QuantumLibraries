@@ -125,7 +125,7 @@ class IQSharpClient(object):
                 data = unmap_tuples(json.loads(msg["content"]["data"]["application/json"]))
                 for component, version in data["rows"]:
                     versions[component] = LooseVersion(version)
-        self.execute("%version", output_hook=capture)
+        self.execute("%version", output_hook=capture, **kwargs)
         return versions
 
     def execute(self, input, return_full_result=False, raise_on_stderr=False, output_hook=None, **kwargs):
