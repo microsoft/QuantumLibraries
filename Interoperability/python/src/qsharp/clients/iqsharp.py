@@ -81,9 +81,6 @@ class IQSharpClient(object):
     def compile(self, body):
         return self.execute(body)
 
-    def version(self):
-        return self.execute('%version', raise_on_stderr=False)
-
     def get_available_operations(self) -> List[str]:
         return self.execute('%who', raise_on_stderr=False)
 

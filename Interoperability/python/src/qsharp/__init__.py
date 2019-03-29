@@ -29,7 +29,7 @@ except:
 ## EXPORTS ##
 
 __all__ = [
-    'compile', 'reload', 'version'
+    'compile', 'reload',
     'get_available_operations', 'get_available_operations_by_namespace',
     'get_workspace_operations',
     'packages',
@@ -55,13 +55,6 @@ def compile(code : str) -> Union[QSharpCallable, List[QSharpCallable]]:
     if len(ops) == 1:
         return ops[0]
 
-
-def version() -> None:
-    """
-    Prints IQ# and package version
-    """
-    client.version()
-    print("qsharp.py   ", __version__)
 
 def reload() -> None:
     """
