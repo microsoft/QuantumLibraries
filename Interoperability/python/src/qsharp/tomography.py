@@ -11,10 +11,21 @@
 
 import qsharp
 import numpy as np
-import qinfer as qi
-import qutip as qt
+
+try:
+    import qinfer as qi
+except ImportError:
+    qi = None
+
+try:
+    import qutip as qt
+except ImportError:
+    qt = None
 
 def projector(P):
+    if qt is None:
+        raise ImportError("This function requires QuTiP.")
+
     return (qt.qeye(2) + P) / 2.0
 
 def single_qubit_process_tomography(
@@ -27,6 +38,10 @@ def single_qubit_process_tomography(
         inputs are named `prep` and `meas` (respectively), representing
         a state preparation, evolution, and measurement.
     """
+    if qt is None:
+        raise ImportError("This function requires QuTiP.")
+    if qi is None:
+        raise ImportError("This function requires QInfer.")
 
     print("Preparing tomography model...")
     state_basis = qi.tomography.pauli_basis(1)
