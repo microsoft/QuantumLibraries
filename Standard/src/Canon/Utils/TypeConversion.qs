@@ -8,10 +8,9 @@ namespace Microsoft.Quantum.Canon {
     /// integer, with the 0th (leftmost) entry in the array being mapped
     /// the least significant bit. Thus, `[One, Zero]` is represented by
     /// 1 and `[Zero, One]` by 2.
-    function ResultAsInt (results : Result[]) : Int
-    {
+    function ResultArrayAsInt (results : Result[]) : Int {
         mutable n = 0;
-        
+
         for (idxResult in 0 .. Length(results) - 1)
         {
             if (results[idxResult] == One)
@@ -19,7 +18,7 @@ namespace Microsoft.Quantum.Canon {
                 set n = n + 2 ^ idxResult;
             }
         }
-        
+
         return n;
     }
 
@@ -33,19 +32,10 @@ namespace Microsoft.Quantum.Canon {
     ///
     /// # Output
     /// A `Bool` representing the `input`.
-    function BoolFromResult (input : Result) : Bool
-    {
-        if (input == Zero)
-        {
-            return false;
-        }
-        else
-        {
-            return true;
-        }
+    function ResultAsBool(input : Result) : Bool {
+        return (input == Zero ? false | true);
     }
-    
-    
+
     /// # Summary
     /// Converts a `Bool` type to a `Result` type, where `true` is mapped to
     /// `One` and `false` is mapped to `Zero`.
@@ -56,16 +46,8 @@ namespace Microsoft.Quantum.Canon {
     ///
     /// # Output
     /// A `Result` representing the `input`.
-    function ResultFromBool (input : Bool) : Result
-    {
-        if (input == false)
-        {
-            return Zero;
-        }
-        else
-        {
-            return One;
-        }
+    function BoolAsResult (input : Bool) : Result {
+        return (input == false ? Zero | One);
     }
     
     
@@ -144,21 +126,13 @@ namespace Microsoft.Quantum.Canon {
         return outputBits;
     }
 
-    /// # Deprecated
-    /// Please use @"Microsoft.Quantum.Canon.IntAsBoolArray".
-    function BoolArrFromPositiveInt (number : Int, bits : Int) : Bool[] {
-        Renamed("Microsoft.Quantum.Canon.BoolArrFromPositiveInt", "Microsoft.Quantum.Canon.IntAsBoolArray");
-        return IntAsBoolArray(number, bits);
-    }
-
     /// # Summary
     /// Produces a positive integer from a string of bits in little endian format.
     ///
     /// # Input
     /// ## bits
     /// Bits in binary representation of number.
-    function PositiveIntFromBoolArr (bits : Bool[]) : Int
-    {
+    function PositiveIntFromBoolArr (bits : Bool[]) : Int {
         AssertBoolEqual(Length(bits) < 64, true, $"`Length(bits)` must be less than 64");
         mutable number = 0;
         let nBits = Length(bits);
@@ -187,13 +161,6 @@ namespace Microsoft.Quantum.Canon {
     }
     
     
-    /// # Summary
-    /// Used to cast UDTs that are derived from type `Qubit[]` down to `Qubit[]`.
-    /// Handy when used with generic functions like Head and Tail.
-    function AsQubitArray (arr : Qubit[]) : Qubit[]
-    {
-        return arr;
-    }
     
     /// # Summary
     /// Calls a function with a given input.
