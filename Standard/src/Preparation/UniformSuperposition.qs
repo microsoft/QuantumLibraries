@@ -7,6 +7,7 @@ namespace Microsoft.Quantum.Preparation {
     open Microsoft.Quantum.Extensions.Math;
     open Microsoft.Quantum.Extensions.Convert;
     open Microsoft.Quantum.Arithmetic;
+    open Microsoft.Quantum.AmplitudeAmplification;
     
     /// # Summary
 	/// Creates a uniform superposition over states that encode 0 through `nIndices`.

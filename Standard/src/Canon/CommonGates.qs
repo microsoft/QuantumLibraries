@@ -155,4 +155,50 @@ namespace Microsoft.Quantum.Canon {
         controlled adjoint distribute;
     }
 
+    /// # Summary
+    /// Performs a phase shift operation.
+	///
+	/// $R=\boldone-(1-e^{i \phi})\ket{1\cdots 1}\bra{1\cdots 1}$.
+    ///
+    /// # Input
+    /// ## phase
+    /// The phase $\phi$ applied to state $\ket{1\cdots 1}\bra{1\cdots 1}$.
+    /// ## qubits
+    /// The register whose state is to be rotated by $R$.
+    operation RAll1 (phase : Double, qubits : Qubit[]) : Unit {
+        body (...) {
+            let nQubits = Length(qubits);
+            let flagQubit = qubits[0];
+            let systemRegister = qubits[1 .. nQubits - 1];
+            Controlled (R1(phase, _))(systemRegister, flagQubit);
+        }
+
+        adjoint invert;
+        controlled distribute;
+        controlled adjoint distribute;
+    }
+
+    /// # Summary
+    /// Performs a phase shift operation.
+	///
+	/// $R=\boldone-(1-e^{i \phi})\ket{0\cdots 0}\bra{0\cdots 0}$.
+    ///
+    /// # Input
+    /// ## phase
+    /// The phase $\phi$ applied to state $\ket{0\cdots 0}\bra{0\cdots 0}$.
+    /// ## qubits
+    /// The register whose state is to be rotated by $R$.
+    ///
+    /// # See Also
+    /// - Microsoft.Quantum.Canon.RAll1
+    operation RAll0 (phase : Double, qubits : Qubit[]) : Unit {
+        body (...) {
+            WithCA(ApplyToEachCA(X, _), RAll1(phase, _), qubits);
+        }
+
+        adjoint invert;
+        controlled distribute;
+        controlled adjoint distribute;
+    }
+
 }

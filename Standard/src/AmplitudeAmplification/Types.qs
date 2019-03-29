@@ -1,12 +1,8 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-namespace Microsoft.Quantum.Canon
-{
-    
-    open Microsoft.Quantum.Primitive;
-    
-    
+namespace Microsoft.Quantum.AmplitudeAmplification {
+
     /// # Summary
     /// Represents a reflection oracle.
     ///
@@ -19,9 +15,9 @@ namespace Microsoft.Quantum.Canon
     /// performs a partial reflection by a phase $\phi$ about a single pure state
     /// $\ket{\psi}$.
     newtype ReflectionOracle = ((Double, Qubit[]) => Unit : Adjoint, Controlled);
-    
+
     // This oracle O|s>_a|ψ>_s = λ |t>_a U |ψ>_s + ... acts on the ancilla state |s>_a to implement the unitary U on any system state |ψ>_s with amplitude λ in the |t>_a basis.
-    
+
     /// # Summary
     /// Represents an oracle for oblivious amplitude amplification.
     ///
