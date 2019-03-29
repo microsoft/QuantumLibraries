@@ -113,7 +113,7 @@ class IQSharpClient(object):
             for operation_name, count in raw_counts.items()
         }
 
-    def component_versions(self) -> Dict[str, LooseVersion]:
+    def component_versions(self, **kwargs) -> Dict[str, LooseVersion]:
         """
         Returns a dictionary from components of the IQ# kernel to their
         versions.
