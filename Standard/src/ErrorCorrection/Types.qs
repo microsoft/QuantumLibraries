@@ -1,9 +1,8 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-namespace Microsoft.Quantum.Canon
-{
-    
+namespace Microsoft.Quantum.ErrorCorrection {
+
     /// # Summary
     /// Type for register of physical qubits `Qubit[]` that encode the
     /// logical qubits.

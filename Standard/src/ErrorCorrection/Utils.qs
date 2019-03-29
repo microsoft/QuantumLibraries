@@ -1,31 +1,9 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-namespace Microsoft.Quantum.Canon
-{
-    
+namespace Microsoft.Quantum.ErrorCorrection {
     open Microsoft.Quantum.Primitive;
-    
-    
-    /// # Summary
-    /// Given an array of results, represents the array by a single
-    /// integer, with the 0th (leftmost) entry in the array being mapped
-    /// the least significant bit. Thus, `[One, Zero]` is represented by
-    /// 1 and `[Zero, One]` by 2.
-    function ResultAsInt (results : Result[]) : Int
-    {
-        mutable n = 0;
-        
-        for (idxResult in 0 .. Length(results) - 1)
-        {
-            if (results[idxResult] == One)
-            {
-                set n = n + 2 ^ idxResult;
-            }
-        }
-        
-        return n;
-    }
+    open Microsoft.Quantum.Canon;
     
     
     /// # Summary

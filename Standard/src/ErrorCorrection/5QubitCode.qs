@@ -1,12 +1,10 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-namespace Microsoft.Quantum.Canon
-{
-    
+namespace Microsoft.Quantum.ErrorCorrection {
     open Microsoft.Quantum.Primitive;
-    
-    
+    open Microsoft.Quantum.Canon;
+
     /// # Summary
     /// Private operation used to implement both the 5 qubit encoder and decoder.
     ///
@@ -21,8 +19,7 @@ namespace Microsoft.Quantum.Canon
     /// Phys. Rev. Phys. Rev. A 88, 052307 (2013); https://arxiv.org/abs/1305.0810, Figure 4b) and requires a total of 11 gates.
     operation FiveQubitCodeEncoderImpl (data : Qubit[], scratch : Qubit[]) : Unit
     {
-        body (...)
-        {
+        body (...) {
             Controlled X(data, scratch[1]);
             H(data[0]);
             H(scratch[0]);
@@ -34,18 +31,17 @@ namespace Microsoft.Quantum.Canon
             H(data[0]);
             Controlled X([scratch[0]], scratch[2]);
             Controlled X(data, scratch[3]);
-            
+
             // The last X below is to correct the signs of stabilizers.
             // The 5-qubit code is non-CSS, so even if the circuit implements
             // the correct symplectic matrix,
             // it may differ from the desired one by a Pauli correction.
             X(scratch[2]);
         }
-        
+
         adjoint invert;
     }
-    
-    
+
     /// # Summary
     /// Returns function that maps error syndrome measurements to the
     /// appropriate error-correcting Pauli operators by table lookup for

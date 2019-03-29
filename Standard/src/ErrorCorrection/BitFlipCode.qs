@@ -1,12 +1,10 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-namespace Microsoft.Quantum.Canon
-{
-    
+namespace Microsoft.Quantum.ErrorCorrection {
     open Microsoft.Quantum.Primitive;
-    
-    
+    open Microsoft.Quantum.Canon;
+
     /// # Summary
     /// Private operation used to implement both the bit flip encoder and decoder.
     ///

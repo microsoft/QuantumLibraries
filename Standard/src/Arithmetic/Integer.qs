@@ -49,7 +49,7 @@ namespace Microsoft.Quantum.Arithmetic {
     /// `summand1` and `summand2`.
     ///
     /// # Remarks
-    /// In contrast to the `Carry` operation, this does not compute the carry-out bit. 
+    /// In contrast to the `Carry` operation, this does not compute the carry-out bit.
     operation Sum (carryIn: Qubit, summand1: Qubit, summand2: Qubit) : Unit
     {
         body (...) {
