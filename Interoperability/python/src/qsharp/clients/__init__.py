@@ -27,10 +27,14 @@ def _start_client():
             server_ready = client.is_ready()
             if server_ready:
                 break
-        except Exception as ex:
-            logger.debug('Exception while checking Q# environment.', exc_info=ex)
             if idx_attempt == 0:
                 print("Preparing Q# environment...")
+            else:
+                print(".", end='', flush=True)
+            time.sleep(1)
+        except Exception as ex:
+            logger.debug('Exception while checking Q# environment.', exc_info=ex)
+            print("!", end='', flush=True)
             time.sleep(1)
     if not server_ready:
         raise Exception("Q# environment was not available in allocated time.")
