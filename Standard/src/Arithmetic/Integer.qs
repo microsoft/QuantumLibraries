@@ -1,14 +1,15 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-namespace Microsoft.Quantum.Canon {
+namespace Microsoft.Quantum.Arithmetic {
     open Microsoft.Quantum.Primitive;
+    open Microsoft.Quantum.Canon;
 
     /// # Summary
-    /// Implements a reversible carry gate. Given a carry-in bit encoded in 
-    /// qubit `carryIn` and two summand bits encoded in `summand1` and `summand2`,  
-    /// computes the bitwise xor of `carryIn`, `summand1` and `summand2` in the  
-    /// qubit `summand2` and the carry-out is xored to the qubit `carryOut`.  
+    /// Implements a reversible carry gate. Given a carry-in bit encoded in
+    /// qubit `carryIn` and two summand bits encoded in `summand1` and `summand2`,
+    /// computes the bitwise xor of `carryIn`, `summand1` and `summand2` in the
+    /// qubit `summand2` and the carry-out is xored to the qubit `carryOut`.
     ///
     /// # Input
     /// ## carryIn
@@ -33,9 +34,9 @@ namespace Microsoft.Quantum.Canon {
     }
 
     /// # Summary
-    /// Implements a reversible sum gate. Given a carry-in bit encoded in 
-    /// qubit `carryIn` and two summand bits encoded in `summand1` and `summand2`, 
-    /// computes the bitwise xor of `carryIn`, `summand1` and `summand2` in the qubit 
+    /// Implements a reversible sum gate. Given a carry-in bit encoded in
+    /// qubit `carryIn` and two summand bits encoded in `summand1` and `summand2`,
+    /// computes the bitwise xor of `carryIn`, `summand1` and `summand2` in the qubit
     /// `summand2`.
     ///
     /// # Input
