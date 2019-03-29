@@ -66,7 +66,7 @@ class IQSharpClient(object):
 
     def is_ready(self):
         try:
-            result = self.execute('%history', timeout=30)
+            result = self.execute('%version', timeout=30)
         except Exception as ex:
             logger.debug('Exception while checking if IQ# is ready.', exc_info=ex)
             return
