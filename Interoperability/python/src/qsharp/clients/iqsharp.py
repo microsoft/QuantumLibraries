@@ -22,6 +22,8 @@ from io import StringIO
 from collections import defaultdict
 from typing import List, Dict, Callable, Any
 from pathlib import Path
+from distutils.version import LooseVersion
+
 from qsharp.utils import log_messages
 from qsharp.serialization import map_tuples, unmap_tuples
 
@@ -65,7 +67,8 @@ class IQSharpClient(object):
 
     def is_ready(self):
         try:
-            self.execute('%history', timeout=6)
+            result = self.component_versions(timeout=6)
+            logger.info(f"Q# version\n{result}")
         except Exception as ex:
             logger.info('Exception while checking if IQ# is ready.', exc_info=ex)
             return
@@ -97,7 +100,7 @@ class IQSharpClient(object):
         return self.execute(f"%package {name}", raise_on_stderr=True)
 
     def get_packages(self) -> List[str]:
-        return self.execute("%package", raise_on_stderr=False1)
+        return self.execute("%package", raise_on_stderr=False)
 
     def simulate(self, op, **params) -> Any:
         return self.execute(f'%simulate {op._name} {json.dumps(map_tuples(params))}')
@@ -110,7 +113,22 @@ class IQSharpClient(object):
             for operation_name, count in raw_counts.items()
         }
 
-    def execute(self, input, return_full_result=False, raise_on_stderr=False, **kwargs):
+    def component_versions(self, **kwargs) -> Dict[str, LooseVersion]:
+        """
+        Returns a dictionary from components of the IQ# kernel to their
+        versions.
+        """
+        versions = {}
+        def capture(msg):
+            # We expect a display_data with the version table.
+            if msg["msg_type"] == "display_data":
+                data = unmap_tuples(json.loads(msg["content"]["data"]["application/json"]))
+                for component, version in data["rows"]:
+                    versions[component] = LooseVersion(version)
+        self.execute("%version", output_hook=capture, **kwargs)
+        return versions
+
+    def execute(self, input, return_full_result=False, raise_on_stderr=False, output_hook=None, **kwargs):
         logger.debug(f"sending:\n{input}")
 
         # make sure the server is still running:
@@ -121,16 +139,17 @@ class IQSharpClient(object):
 
         results = []
         errors = []
-        def output_hook(msg):
+        if output_hook is None:
+            output_hook = self.kernel_client._output_hook_default
+        def _output_hook(msg):
             if msg['msg_type'] == 'execute_result':
                 results.append(msg)
             else:
                 if raise_on_stderr and msg['msg_type'] == 'stream' and msg['content']['name'] == 'stderr':
                     errors.append(msg['content']['text'])
                 else:
-                    self.kernel_client._output_hook_default(msg)
-
-        reply = self.kernel_client.execute_interactive(input, output_hook=output_hook, **kwargs)
+                    output_hook(msg)
+        reply = self.kernel_client.execute_interactive(input, output_hook=_output_hook, **kwargs)
         logger.debug(f"received:\n{reply}")
 
         # There should be either zero or one execute_result messages.
