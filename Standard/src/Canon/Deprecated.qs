@@ -32,10 +32,38 @@ namespace Microsoft.Quantum.Canon {
     }
 
     /// # Deprecated
-    /// Please use @"Microsoft.Quantum.Canon.IntAsBoolArray".
+    /// Please use @"microsoft.quantum.canon.intasboolarray".
     function BoolArrFromPositiveInt (number : Int, bits : Int) : Bool[] {
         Renamed("Microsoft.Quantum.Canon.BoolArrFromPositiveInt", "Microsoft.Quantum.Canon.IntAsBoolArray");
         return IntAsBoolArray(number, bits);
+    }
+
+    /// # Deprecated
+    /// Please use @"microsoft.quantum.canon.resultarrayasboolarray".
+    function BoolArrFromResultArr(input : Result[]) : Bool[] {
+        Renamed("Microsoft.Quantum.Canon.BoolArrFromResultArr", "Microsoft.Quantum.Canon.ResultArrayAsBoolArray");
+        return ResultArrayAsBoolArray(input);
+    }
+
+    /// # Deprecated
+    /// Please use @"microsoft.quantum.canon.resultarrayasboolarray".
+    function ResultArrFromBoolArr(input : Bool[]) : Result[] {
+        Renamed("Microsoft.Quantum.Canon.ResultArrFromBoolArr", "Microsoft.Quantum.Canon.BoolArrayAsResultArray");
+        return BoolArrayAsResultArray(input);
+    }
+
+    /// # Deprecated
+    /// Please use @"microsoft.quantum.canon.boolarrayasint".
+    function PositiveIntFromBoolArr(bits : Bool[]) : Int {
+        Renamed("Microsoft.Quantum.Canon.PositiveIntFromBoolArr", "Microsoft.Quantum.Canon.BoolArrayAsInt");
+        return BoolArrayAsInt(bits);
+    }
+
+    /// # Deprecated
+    /// Please use @"microsoft.quantum.canon.resultarrayasint".
+    function PositiveIntFromResultArr(results : Result[]) : Int {
+        Renamed("Microsoft.Quantum.Canon.PositiveIntFromBoolArr", "Microsoft.Quantum.Canon.ResultArrayAsInt");
+        return ResultArrayAsInt(bits);
     }
 
 }
