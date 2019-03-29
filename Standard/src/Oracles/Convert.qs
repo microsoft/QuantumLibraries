@@ -1,9 +1,8 @@
-﻿// Copyright (c) Microsoft Corporation. All rights reserved.
+// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-namespace Microsoft.Quantum.AmplitudeAmplification {
+namespace Microsoft.Quantum.Oracles {
     open Microsoft.Quantum.Canon;
-    open Microsoft.Quantum.Primitive;
 
     /// # Summary
     /// Implementation of <xref:microsoft.quantum.canon.obliviousoraclefromdeterministicstateoracle>.
@@ -119,35 +118,6 @@ namespace Microsoft.Quantum.AmplitudeAmplification {
     
     
     /// # Summary
-    /// Implementation of <xref:microsoft.quantum.canon.reflectionstart>.
-    operation _ReflectionStart (phase : Double, qubits : Qubit[]) : Unit
-    {
-        body (...)
-        {
-            RAll0(phase, qubits);
-        }
-        
-        adjoint invert;
-        controlled distribute;
-        controlled adjoint distribute;
-    }
-    
-    
-    /// # Summary
-    /// Constructs a reflection about the all-zero string |0...0〉, which is the typical input state to amplitude amplification.
-    ///
-    /// # Output
-    /// A `ReflectionOracle` that reflects about the state $\ket{0\cdots 0}$.
-    ///
-    /// # See Also
-    /// - Microsoft.Quantum.Canon.ReflectionOracle
-    function ReflectionStart () : ReflectionOracle
-    {
-        return ReflectionOracle(_ReflectionStart(_, _));
-    }
-    
-    
-    /// # Summary
     /// Implementation of <xref:microsoft.quantum.canon.reflectionoraclefromdeterministicstateoracle>.
     operation ReflectionOracleFromDeterministicStateOracleImpl (phase : Double, oracle : DeterministicStateOracle, systemRegister : Qubit[]) : Unit
     {
@@ -184,38 +154,23 @@ namespace Microsoft.Quantum.AmplitudeAmplification {
     {
         return ReflectionOracle(ReflectionOracleFromDeterministicStateOracleImpl(_, oracle, _));
     }
-    
-    
-    /// # Summary
-    /// Implementation of <xref:microsoft.quantum.canon.targetstatereflectionoracle>.
-    operation TargetStateReflectionOracleImpl (phase : Double, idxFlagQubit : Int, qubits : Qubit[]) : Unit {
-        body (...) {
-            R1(phase, qubits[idxFlagQubit]);
-        }
-
-        adjoint invert;
-        controlled distribute;
-        controlled adjoint distribute;
-    }
 
     /// # Summary
-    /// Constructs a `ReflectionOracle` about the target state uniquely marked by the flag qubit.
-	///
-	/// The target state has a single qubit set to 1, and all others 0: $\ket{1}_f$.
+    /// Given an operation representing a "black-box" oracle, returns a discrete-time oracle
+    /// which represents the "black-box" oracle repeated multiple times.
     ///
     /// # Input
-    /// ## idxFlagQubit
-    /// Index to flag qubit $f$ of oracle.
+    /// ## blackBoxOracle
+    /// The operation to be exponentiated.
     ///
     /// # Output
-    /// A `ReflectionOracle` that reflects about the state marked by $\ket{1}_f$.
+    /// An operation partially applied over the "black-box" oracle representing the discrete-time oracle
     ///
-    /// # See Also
-    /// - Microsoft.Quantum.Canon.ReflectionOracle
-    function TargetStateReflectionOracle (idxFlagQubit : Int) : ReflectionOracle {
-        return ReflectionOracle(TargetStateReflectionOracleImpl(_, idxFlagQubit, _));
+    /// # Remarks
+    /// ## Example
+    /// `OracleToDiscrete(U)(3, target)` is equivalent to `U(target)` repeated three times.
+    function OracleToDiscrete (blackBoxOracle : (Qubit[] => Unit : Adjoint, Controlled)) : DiscreteOracle {
+        return DiscreteOracle(OperationPowImplCA(blackBoxOracle, _, _));
     }
 
 }
-
-

@@ -6,8 +6,8 @@ namespace Microsoft.Quantum.Tests {
     open Microsoft.Quantum.Extensions.Convert;
     open Microsoft.Quantum.Extensions.Math;
     open Microsoft.Quantum.AmplitudeAmplification;
-    
-    
+    open Microsoft.Quantum.Oracles;
+
     ///Here we consider the smallest example of amplitude amplification
     ///Suppose we have a single-qubit oracle that prepares the state
     /// O |0> = \lambda |1> + \sqrt{1-|\lambda|^2} |0>

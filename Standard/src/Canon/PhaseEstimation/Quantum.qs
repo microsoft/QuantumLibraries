@@ -5,6 +5,7 @@ namespace Microsoft.Quantum.Canon {
     open Microsoft.Quantum.Arithmetic;
     open Microsoft.Quantum.Primitive;
     open Microsoft.Quantum.Extensions.Testing;
+    open Microsoft.Quantum.Oracles;
 
     /// # Summary
     /// Performs the quantum phase estimation algorithm for a given oracle `U` and `targetState`,

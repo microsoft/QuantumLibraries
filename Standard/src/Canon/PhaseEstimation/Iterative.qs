@@ -1,19 +1,17 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-namespace Microsoft.Quantum.Canon
-{
-    
+namespace Microsoft.Quantum.Canon {
     open Microsoft.Quantum.Primitive;
     open Microsoft.Quantum.Extensions.Convert;
-    
-    
+    open Microsoft.Quantum.Oracles;
+
     // Design notes:
     //     The APIs for the iterative and quantum phase estimation algorithms are
-    //     parameterized in terms of discrete-time oracles as defined in the OracleTypes.qs
-    //     source file. Constructing such oracle definitions can be done with operations
+    //     parameterized in terms of discrete-time oracles as defined in the Microsoft.Quantum.Oracles
+    //     namespace. Constructing such oracle definitions can be done with operations
     //     acting on other operations, making heavy use of partial application internally.
-    
+
     // E.g.:
     //     let DiscreteOracle = OracleToDiscrete(U);
     //     DiscretePhaseEstimationIteration(oracle, pow, theta, targetState, control);
