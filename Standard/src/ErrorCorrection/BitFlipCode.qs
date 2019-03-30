@@ -48,8 +48,8 @@ namespace Microsoft.Quantum.ErrorCorrection {
     /// logical register.
     ///
     /// # See Also
-    /// - Microsoft.Quantum.Canon.LogicalRegister
-    operation BitFlipEncoder (physRegister : Qubit[], auxQubits : Qubit[]) : LogicalRegister
+    /// - LogicalRegister
+    operation EncodeIntoBitFlipCode(physRegister : Qubit[], auxQubits : Qubit[]) : LogicalRegister
     {
         BFEncoderImpl(false, physRegister, auxQubits);
         let logicalRegister = LogicalRegister(physRegister + auxQubits);
@@ -69,17 +69,16 @@ namespace Microsoft.Quantum.ErrorCorrection {
     /// qubits used to represent the syndrome.
     ///
     /// # See Also
-    /// - Microsoft.Quantum.Canon.LogicalRegister
-    /// - Microsoft.Quantum.Canon.BitFlipEncoder
-    operation BitFlipDecoder (logicalRegister : LogicalRegister) : (Qubit[], Qubit[])
+    /// - LogicalRegister
+    /// - EncodeIntoBitFlipCode
+    operation DecodeFromBitFlipCode(logicalRegister : LogicalRegister) : (Qubit[], Qubit[])
     {
         let physRegister = [(logicalRegister!)[0]];
         let auxQubits = (logicalRegister!)[1 .. 2];
         Adjoint BFEncoderImpl(false, physRegister, auxQubits);
         return (physRegister, auxQubits);
     }
-    
-    
+
     /// # Summary
     /// Returns a QECC value representing the ⟦3, 1, 1⟧ bit flip code encoder and
     /// decoder with in-place syndrome measurement.
@@ -87,16 +86,14 @@ namespace Microsoft.Quantum.ErrorCorrection {
     /// # Output
     /// Returns an implementation of a quantum error correction code by
     /// specifying a `QECC` type.
-    operation BitFlipCode () : QECC
-    {
-        let e = EncodeOp(BitFlipEncoder);
-        let d = DecodeOp(BitFlipDecoder);
+    function BitFlipCode () : QECC {
+        let e = EncodeOp(EncodeIntoBitFlipCode);
+        let d = DecodeOp(DecodeFromBitFlipCode);
         let s = SyndromeMeasOp(MeasureStabilizerGenerators([[PauliZ, PauliZ, PauliI], [PauliI, PauliZ, PauliZ]], _, MeasureWithScratch));
         let code = QECC(e, d, s);
         return code;
     }
-    
-    
+
     /// # Summary
     /// Function for recovery Pauli operations for given syndrome measurement
     /// by table lookup for the ⟦3, 1, 1⟧ bit flip code.
@@ -108,11 +105,13 @@ namespace Microsoft.Quantum.ErrorCorrection {
     ///
     /// # See Also
     /// - Microsoft.Quantum.Canon.RecoveryFn
-    function BitFlipRecoveryFn () : RecoveryFn
-    {
-        return TableLookupRecovery([[PauliI, PauliI, PauliI], [PauliX, PauliI, PauliI], [PauliI, PauliI, PauliX], [PauliI, PauliX, PauliI]]);
+    function BitFlipRecoveryFn () : RecoveryFn {
+        return TableLookupRecovery([
+            [PauliI, PauliI, PauliI],
+            [PauliX, PauliI, PauliI],
+            [PauliI, PauliI, PauliX],
+            [PauliI, PauliX, PauliI]
+        ]);
     }
-    
+
 }
-
-

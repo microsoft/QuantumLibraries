@@ -60,7 +60,7 @@ namespace Microsoft.Quantum.ErrorCorrection {
     /// ordering in the table lookup recovery is given by converting the bitvectors to integers (using little endian).
     ///
     /// # See Also
-    /// - Microsoft.Quantum.Canon.RecoveryFn
+    /// - RecoveryFn
     function FiveQubitCodeRecoveryFn () : RecoveryFn
     {
         return TableLookupRecovery(
@@ -101,15 +101,13 @@ namespace Microsoft.Quantum.ErrorCorrection {
     /// encoded state.
     ///
     /// # See Also
-    /// - Microsoft.Quantum.Canon.LogicalRegister
-    operation FiveQubitCodeEncoder (physRegister : Qubit[], auxQubits : Qubit[]) : LogicalRegister
-    {
+    /// - LogicalRegister
+    operation EncodeIntoFiveQubitCode(physRegister : Qubit[], auxQubits : Qubit[]) : LogicalRegister {
         FiveQubitCodeEncoderImpl(physRegister, auxQubits);
         let logicalRegister = LogicalRegister(physRegister + auxQubits);
         return logicalRegister;
     }
-    
-    
+
     /// # Summary
     /// Decodes the ⟦5, 1, 3⟧ quantum code.
     ///
@@ -122,17 +120,15 @@ namespace Microsoft.Quantum.ErrorCorrection {
     /// first parameter, together with auxiliary qubits in the second parameter.
     ///
     /// # See Also
-    /// - microsoft.quantum.canon.FiveQubitCodeEncoder
-    /// - Microsoft.Quantum.Canon.LogicalRegister
-    operation FiveQubitCodeDecoder (logicalRegister : LogicalRegister) : (Qubit[], Qubit[])
-    {
+    /// - FiveQubitCodeEncoder
+    /// - LogicalRegister
+    operation DecodeFromFiveQubitCode(logicalRegister : LogicalRegister) : (Qubit[], Qubit[]) {
         let physRegister = [(logicalRegister!)[0]];
         let auxQubits = (logicalRegister!)[1 .. 4];
         Adjoint FiveQubitCodeEncoderImpl(physRegister, auxQubits);
         return (physRegister, auxQubits);
     }
-    
-    
+
     /// # Summary
     /// Returns a QECC value representing the ⟦5, 1, 3⟧ code encoder and
     /// decoder with in-place syndrome measurement.
@@ -145,22 +141,20 @@ namespace Microsoft.Quantum.ErrorCorrection {
     /// This code was found independently in the following two papers:
     /// - C. H. Bennett, D. DiVincenzo, J. A. Smolin and W. K. Wootters, "Mixed state entanglement and quantum error correction," Phys. Rev. A, 54 (1996) pp. 3824-3851; https://arxiv.org/abs/quant-ph/9604024 and
     /// - R. Laflamme, C. Miquel, J. P. Paz and W. H. Zurek, "Perfect quantum error correction code," Phys. Rev. Lett. 77 (1996) pp. 198-201; https://arxiv.org/abs/quant-ph/9602019
-    operation FiveQubitCode () : QECC
-    {
-        let e = EncodeOp(FiveQubitCodeEncoder);
-        let d = DecodeOp(FiveQubitCodeDecoder);
-        let g = 
-            [
-                [PauliX, PauliZ, PauliZ, PauliX, PauliI], 
-                [PauliI, PauliX, PauliZ, PauliZ, PauliX], 
-                [PauliX, PauliI, PauliX, PauliZ, PauliZ], 
-                [PauliZ, PauliX, PauliI, PauliX, PauliZ]
-            ];
+    function FiveQubitCode() : QECC {
+        let e = EncodeOp(EncodeIntoFiveQubitCode);
+        let d = DecodeOp(DecodeFromFiveQubitCode);
+        let g = [
+            [PauliX, PauliZ, PauliZ, PauliX, PauliI],
+            [PauliI, PauliX, PauliZ, PauliZ, PauliX],
+            [PauliX, PauliI, PauliX, PauliZ, PauliZ],
+            [PauliZ, PauliX, PauliI, PauliX, PauliZ]
+        ];
         let s = SyndromeMeasOp(MeasureStabilizerGenerators(g, _, MeasureWithScratch));
         let code = QECC(e, d, s);
         return code;
     }
-    
+
 }
 
 
