@@ -75,7 +75,7 @@ namespace Microsoft.Quantum.Canon {
     /// # Remarks
     /// The input `number` must be at most $2^{\texttt{bits}} - 1$.
     function IntAsBoolArray(number : Int, bits : Int) : Bool[] {
-        AssertBoolEqual(number >= 0 && number < 2 ^ bits, true, $"`number` must be between 0 and 2^`bits` - 1");
+        AssertBoolEqual(number >= 0 and number < 2 ^ bits, true, $"`number` must be between 0 and 2^`bits` - 1");
         mutable outputBits = new Bool[bits];
         mutable tempInt = number;
 
