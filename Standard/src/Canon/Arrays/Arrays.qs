@@ -269,39 +269,6 @@ namespace Microsoft.Quantum.Canon {
             return inputArray + padArray;
         }
     }
-    
-    /// # Summary
-    /// Creates an array `arr` of integers enumerated by start..step..end.
-    ///
-    /// # Input
-    /// ## range
-    /// A `Range` of values `start..step..end` to be converted to an array.
-    ///
-    /// # Output
-    /// A new array of integers corresponding to values iterated over by `range`.
-    ///
-    /// # Remarks
-    /// ## Example
-    /// ```qsharp
-    /// // The following returns [1,3,5,7];
-    /// let array = IntArrayFromRange(1..2..8);
-    /// ```
-    function IntArrayFromRange (range: Range) : Int[] {
-        let start = RangeStart(range);
-        let step = RangeStep(range);
-        let end = RangeEnd(range);
-        if ((end - start) / step >= 0){
-            let nTerms = (end - start) / step + 1;
-            mutable array = new Int[nTerms];
-            for(idx in 0..nTerms - 1){
-               set array[idx] = start + idx * step;
-            }
-            return array;
-        }
-        else {
-            return new Int[0];
-        }
-    }
 
     /// # Summary
     /// Splits an array into multiple parts.

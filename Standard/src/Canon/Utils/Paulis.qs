@@ -129,41 +129,6 @@ namespace Microsoft.Quantum.Canon
     }
     
     
-    /// # Summary
-    /// Given a bit string, returns a multi-qubit Pauli operator
-    /// represented as an array of single-qubit Pauli operators.
-    ///
-    /// # Input
-    /// ## pauli
-    /// Pauli operator to apply to qubits where `bitsApply == bits[idx]`.
-    /// ## bitApply
-    /// apply Pauli if bit is this value.
-    /// ## bits
-    /// Boolean array.
-    /// ## qubits
-    /// Quantum register to which a Pauli operator is to be applied.
-    ///
-    /// # Remarks
-    /// The Boolean array and the quantum register must be of equal length.
-    function PauliFromBitString (pauli : Pauli, bitApply : Bool, bits : Bool[]) : Pauli[]
-    {
-        let nBits = Length(bits);
-        mutable paulis = new Pauli[nBits];
-        
-        for (idxBit in 0 .. nBits - 1)
-        {
-            if (bits[idxBit] == bitApply)
-            {
-                set paulis[idxBit] = pauli;
-            }
-            else
-            {
-                set paulis[idxBit] = PauliI;
-            }
-        }
-        
-        return paulis;
-    }
     
     
     /// # Summary

@@ -66,4 +66,18 @@ namespace Microsoft.Quantum.Canon {
         return ResultArrayAsInt(results);
     }
 
+    /// # Deprecated
+    /// Please use @"microsoft.quantum.canon.boolarrayaspauli".
+    function PauliFromBitString(pauli : Pauli, bitApply : Bool, bits : Bool[]) : Pauli[] {
+        Renamed("Microsoft.Quantum.Canon.PauliFromBitString", "Microsoft.Quantum.Canon.BoolArrayAsPauli");
+        return BoolArrayAsPauli(pauli, bitApply, bits);
+    }
+
+    /// # Deprecated
+    /// Please use @"microsoft.quantum.canon.rangeasintarray".
+    function IntArrayFromRange (range: Range) : Int[] {
+        Renamed("Microsoft.Quantum.Canon.IntArrayFromRange", "Microsoft.Quantum.Canon.RangeAsIntArray");
+        return RangeAsIntArray(range);
+    }
+
 }

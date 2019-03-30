@@ -166,7 +166,68 @@ namespace Microsoft.Quantum.Canon {
     /// This is mainly useful for passing functions to functions or operations
     /// which expect an operation as input.
     function ToOperation<'Input, 'Output>(fn : ('Input -> 'Output)) : ('Input => 'Output) {
+        // TODO: rename to FunctionAsOperation.
         return Call(fn, _);
+    }
+
+    /// # Summary
+    /// Given a bit string, returns a multi-qubit Pauli operator
+    /// represented as an array of single-qubit Pauli operators.
+    ///
+    /// # Input
+    /// ## pauli
+    /// Pauli operator to apply to qubits where `bitsApply == bits[idx]`.
+    /// ## bitApply
+    /// apply Pauli if bit is this value.
+    /// ## bits
+    /// Boolean array.
+    /// ## qubits
+    /// Quantum register to which a Pauli operator is to be applied.
+    ///
+    /// # Remarks
+    /// The Boolean array and the quantum register must be of equal length.
+    function BoolArrayAsPauli(pauli : Pauli, bitApply : Bool, bits : Bool[]) : Pauli[] {
+        let nBits = Length(bits);
+        mutable paulis = new Pauli[nBits];
+
+        for (idxBit in 0 .. nBits - 1) {
+            set paulis[idxBit] = bits[idxBit] == bitApply ? pauli | PauliI;
+        }
+
+        return paulis;
+    }
+
+    /// # Summary
+    /// Creates an array `arr` of integers enumerated by start..step..end.
+    ///
+    /// # Input
+    /// ## range
+    /// A `Range` of values `start..step..end` to be converted to an array.
+    ///
+    /// # Output
+    /// A new array of integers corresponding to values iterated over by `range`.
+    ///
+    /// # Remarks
+    /// ## Example
+    /// ```qsharp
+    /// // The following returns [1,3,5,7];
+    /// let array = IntArrayFromRange(1..2..8);
+    /// ```
+    function RangeAsIntArray(range: Range) : Int[] {
+        let start = RangeStart(range);
+        let step = RangeStep(range);
+        let end = RangeEnd(range);
+        if ((end - start) / step >= 0){
+            let nTerms = (end - start) / step + 1;
+            mutable array = new Int[nTerms];
+            for(idx in 0..nTerms - 1){
+               set array[idx] = start + idx * step;
+            }
+            return array;
+        }
+        else {
+            return new Int[0];
+        }
     }
 
 }
