@@ -1,7 +1,8 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-namespace Microsoft.Quantum.Canon {
+namespace Microsoft.Quantum.Convert {
+    open Microsoft.Quantum.Canon;
 
     /// # Summary
     /// Converts a `Result` type to a `Bool` type, where `One` is mapped to
