@@ -110,7 +110,7 @@ namespace Microsoft.Quantum.Canon
             fail $"Number of random bits must be greater than 0.";
         }
         
-        return ToDouble(RandomIntPow2(bitsRandom)) / ToDouble(2 ^ bitsRandom);
+        return ToDouble(RandomIntPow2(bitsRandom)) / PowD(2.0, ToDouble(bitsRandom));
     }
     
 }
