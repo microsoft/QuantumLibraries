@@ -10,22 +10,38 @@
 ## IMPORTS ##
 
 import qsharp
-
 import numpy as np
-import qinfer as qi
-import qutip as qt
 
-import clr
+try:
+    import qinfer as qi
+except ImportError:
+    qi = None
+
+try:
+    import qutip as qt
+except ImportError:
+    qt = None
 
 def projector(P):
+    if qt is None:
+        raise ImportError("This function requires QuTiP.")
+
     return (qt.qeye(2) + P) / 2.0
 
 def single_qubit_process_tomography(
-    simulator, channel,
+    operation,
     n_measurements=2000,
     n_particles=4000
 ):
-    from Microsoft.Quantum.Canon import SingleQubitProcessTomographyMeasurement
+    """
+    :param operation: A Q# operation of type ((Pauli, Pauli) => Result) whose
+        inputs are named `prep` and `meas` (respectively), representing
+        a state preparation, evolution, and measurement.
+    """
+    if qt is None:
+        raise ImportError("This function requires QuTiP.")
+    if qi is None:
+        raise ImportError("This function requires QInfer.")
 
     print("Preparing tomography model...")
     state_basis = qi.tomography.pauli_basis(1)
@@ -36,8 +52,8 @@ def single_qubit_process_tomography(
 
     print("Performing tomography...")
     for idx_experiment in range(n_measurements):
-        prep = qsharp.Pauli.random()
-        meas = qsharp.Pauli.random()
+        prep = qsharp.Pauli.sample()
+        meas = qsharp.Pauli.sample()
 
         # Convert into a QuTiP object by using the standard transformation
         # between state and process tomography.
@@ -49,11 +65,7 @@ def single_qubit_process_tomography(
             dtype=model.expparams_dtype
         )
 
-        datum = 1 - simulator.run(
-            SingleQubitProcessTomographyMeasurement,
-            prep, meas,
-            channel
-        ).Result
+        datum = 1 - operation.simulate(prep=prep, meas=meas)
 
         updater.update(datum, expparams)
 
