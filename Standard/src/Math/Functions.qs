@@ -1,20 +1,16 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-namespace Microsoft.Quantum.Canon
-{
-    
-    open Microsoft.Quantum.Primitive;
+namespace Microsoft.Quantum.Math {
+    open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Extensions.Math;
-    
-    
+
     /// # Summary
     /// Represents a rational number of the form `p/q`. Integer `p` is
     /// the first element of the tuple and `q` is the second element
     /// of the tuple.
     newtype Fraction = (Int, Int);
-    
-    
+
     /// # Summary
     /// Computes the base-2 logarithm of a number.
     ///
@@ -24,12 +20,10 @@ namespace Microsoft.Quantum.Canon
     ///
     /// # Output
     /// The base-2 logarithm $y = \log_2(x)$ such that $x = 2^y$.
-    function Lg (input : Double) : Double
-    {
+    function Lg (input : Double) : Double {
         return Log(input) / LogOf2();
     }
-    
-    
+
     /// # Summary
     /// Given an array of integers, returns the largest element.
     ///
@@ -39,23 +33,19 @@ namespace Microsoft.Quantum.Canon
     ///
     /// # Output
     /// The largest element of `values`.
-    function Max (values : Int[]) : Int
-    {
+    function Max (values : Int[]) : Int {
         mutable max = values[0];
         let nTerms = Length(values);
-        
-        for (idx in 0 .. nTerms - 1)
-        {
-            if (values[idx] > max)
-            {
+
+        for (idx in 0 .. nTerms - 1) {
+            if (values[idx] > max) {
                 set max = values[idx];
             }
         }
-        
+
         return max;
     }
-    
-    
+
     /// # Summary
     /// Given an array of integers, returns the smallest element.
     ///
@@ -108,7 +98,7 @@ namespace Microsoft.Quantum.Canon
     ///     // which is a multiple of 2.4.
     ///     let z = RealMod(3.6, 2.4, -1.2);
     /// ```
-    function RealMod (value : Double, modulo : Double, minValue : Double) : Double
+    function RealMod(value : Double, modulo : Double, minValue : Double) : Double
     {
         let fractionalValue = (2.0 * PI()) * ((value - minValue) / modulo - 0.5);
         let cosFracValue = Cos(fractionalValue);
@@ -130,8 +120,7 @@ namespace Microsoft.Quantum.Canon
     ///
     /// # Output
     /// A real number $y$ such that $x = \cosh(y)$.
-    function ArcCosh (x : Double) : Double
-    {
+    function ArcCosh (x : Double) : Double {
         return Log(x + Sqrt(x * x - 1.0));
     }
     
@@ -401,7 +390,7 @@ namespace Microsoft.Quantum.Canon
     ///
     /// # Output
     /// The bit-size of `a`.
-    function BitSize (a : Int) : Int
+    function BitSize(a : Int) : Int
     {
         AssertBoolEqual(a >= 0, true, $"`a` must be non-negative");
         return _bitsize(a, 0);
@@ -437,11 +426,10 @@ namespace Microsoft.Quantum.Canon
         
         return PowD(norm, 1.0 / p);
     }
-    
-    
+
     /// # Summary
     /// Normalizes a vector of `Double`s in the `L(p)` norm.
-    /// 
+    ///
     /// That is, given an array $x$ of type `Double[]`, this returns an array where
     /// all elements are divided by the $p$-norm $\|x\|_p$.
     ///
@@ -453,29 +441,24 @@ namespace Microsoft.Quantum.Canon
     /// The array $x$ normalized by the $p$-norm $\|x\|_p$.
     ///
     /// # See Also
-    /// - Microsoft.Quantum.Canon.PNorm
-    function PNormalize (p : Double, array : Double[]) : Double[]
-    {
+    /// - PNorm
+    function PNormalized(p : Double, array : Double[]) : Double[] {
         let nElements = Length(array);
         let norm = PNorm(p, array);
-        
-        if (norm == 0.0)
-        {
+
+        if (norm == 0.0){
             return array;
-        }
-        else
-        {
+        } else {
             mutable output = new Double[nElements];
-            
-            for (idx in 0 .. nElements - 1)
-            {
+
+            for (idx in 0 .. nElements - 1) {
                 set output[idx] = array[idx] / norm;
             }
-            
+
             return output;
         }
     }
-    
+
 }
 
 

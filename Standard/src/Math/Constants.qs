@@ -1,9 +1,8 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-namespace Microsoft.Quantum.Canon
-{
-    
+namespace Microsoft.Quantum.Math {
+
     /// # Summary
     /// Returns the natural logarithm of 2.
     ///
@@ -13,7 +12,5 @@ namespace Microsoft.Quantum.Canon
     {
         return 0.6931471805599453;
     }
-    
+
 }
-
-

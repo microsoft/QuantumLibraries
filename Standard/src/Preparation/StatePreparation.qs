@@ -6,6 +6,7 @@ namespace Microsoft.Quantum.Preparation {
     open Microsoft.Quantum.Arithmetic;
     open Microsoft.Quantum.Primitive;
     open Microsoft.Quantum.Extensions.Math;
+    open Microsoft.Quantum.Math;
 
     // This library returns operations that prepare a specified quantum state
     // from the computational basis state $\ket{0...0}$.

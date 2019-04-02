@@ -4,6 +4,7 @@
 namespace Microsoft.Quantum.Arithmetic {
     open Microsoft.Quantum.Primitive;
     open Microsoft.Quantum.Canon;
+    open Microsoft.Quantum.Math;
 
     operation IntegerAdderTestHelper( IntegerAdder : ( (LittleEndian, LittleEndian, Qubit) => Unit : Controlled), summand1 : Int, summand2 : Int, numberOfQubits : Int ) : Unit {
         body (...) {

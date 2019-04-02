@@ -6,6 +6,7 @@ namespace Microsoft.Quantum.Simulation {
     open Microsoft.Quantum.Preparation;
     open Microsoft.Quantum.Arithmetic;
     open Microsoft.Quantum.Primitive;
+    open Microsoft.Quantum.Math;
     open Microsoft.Quantum.Extensions.Math;
     open Microsoft.Quantum.Extensions.Convert;
     

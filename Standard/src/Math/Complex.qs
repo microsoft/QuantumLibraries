@@ -1,18 +1,12 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-namespace Microsoft.Quantum.Canon
-{
-    
-    open Microsoft.Quantum.Primitive;
+namespace Microsoft.Quantum.Math {
     open Microsoft.Quantum.Extensions.Math;
-    
-    
-    // Library for classical arithmetic on complex numbers
-    
+
     /// # Summary
 	/// Represents a complex number in polar form.
-	/// 
+	///
     /// The polar representation of a complex number is $c=r e^{i t}$.
     ///
     /// # Input
@@ -21,8 +15,7 @@ namespace Microsoft.Quantum.Canon
     /// ## Second Parameter
     /// `Double` is the phase $t \in \mathbb R$.
     newtype ComplexPolar = (Double, Double);
-    
-    
+
     /// # Summary
     /// Returns the squared absolute value of a complex number of type
     /// `Complex`.
@@ -33,13 +26,11 @@ namespace Microsoft.Quantum.Canon
     ///
     /// # Output
     /// Squared absolute value $|c|^2 = x^2 + y^2$.
-    function AbsSquaredComplex (input : Complex) : Double
-    {
+    function AbsSquaredComplex (input : Complex) : Double {
         let (real, imaginary) = input!;
         return real * real + imaginary * imaginary;
     }
-    
-    
+
     /// # Summary
     /// Returns the absolute value of a complex number of type
     /// `Complex`.
@@ -50,14 +41,12 @@ namespace Microsoft.Quantum.Canon
     ///
     /// # Output
     /// Absolute value $|c| = \sqrt{x^2 + y^2}$.
-    function AbsComplex (input : Complex) : Double
-    {
+    function AbsComplex (input : Complex) : Double {
         return Sqrt(AbsSquaredComplex(input));
     }
-    
-    
+
     /// # Summary
-    /// Returns the phase of a complex number of type 
+    /// Returns the phase of a complex number of type
     /// `Complex`.
     ///
     /// # Input
@@ -66,13 +55,11 @@ namespace Microsoft.Quantum.Canon
     ///
     /// # Output
     /// Phase $\text{Arg}[c] = \text{ArcTan}(y,x) \in (-\pi,\pi]$.
-    function ArgComplex (input : Complex) : Double
-    {
+    function ArgComplex (input : Complex) : Double {
         let (real, imaginary) = input!;
         return ArcTan2(imaginary, real);
     }
-    
-    
+
     /// # Summary
     /// Returns the squared absolute value of a complex number of type
     /// `ComplexPolar`.

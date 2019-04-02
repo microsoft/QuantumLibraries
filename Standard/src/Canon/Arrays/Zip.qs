@@ -3,6 +3,7 @@
 
 namespace Microsoft.Quantum.Canon {
     open Microsoft.Quantum.Extensions.Math;
+    open Microsoft.Quantum.Math;
 
     /// # Summary
     /// Given two arrays, returns a new array of pairs such that each pair

@@ -8,6 +8,7 @@ namespace Microsoft.Quantum.Tests {
     open Microsoft.Quantum.Preparation;
     open Microsoft.Quantum.Extensions.Testing;
     open Microsoft.Quantum.Extensions.Math;
+    open Microsoft.Quantum.Math;
     open Microsoft.Quantum.Extensions.Convert;
 
     // Tests the discretization algorithm
