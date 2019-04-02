@@ -1,10 +1,11 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-namespace Microsoft.Quantum.Canon {
+namespace Microsoft.Quantum.Characterization {
     open Microsoft.Quantum.Primitive;
     open Microsoft.Quantum.Extensions.Convert;
     open Microsoft.Quantum.Oracles;
+    open Microsoft.Quantum.Canon;
 
     // Design notes:
     //     The APIs for the iterative and quantum phase estimation algorithms are

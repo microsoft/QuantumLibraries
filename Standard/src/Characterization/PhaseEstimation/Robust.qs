@@ -1,14 +1,13 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-namespace Microsoft.Quantum.Canon {
+namespace Microsoft.Quantum.Characterization {
     open Microsoft.Quantum.Primitive;
     open Microsoft.Quantum.Extensions.Convert;
     open Microsoft.Quantum.Extensions.Math;
     open Microsoft.Quantum.Oracles;
     open Microsoft.Quantum.Math;
-    
-    
+
     /// # Summary
     /// Performs the robust non-iterative quantum phase estimation algorithm for a given oracle `U` and eigenstate,
     /// and provides a single real-valued estimate of the phase with variance scaling at the Heisenberg limit.
@@ -38,56 +37,46 @@ namespace Microsoft.Quantum.Canon {
         let alpha = 2.5;
         let beta = 0.5;
         mutable thetaEst = ToDouble(0);
-        
-        using (qubitAncilla = Qubit[1])
-        {
-            let q = qubitAncilla[0];
-            
-            for (exponent in 0 .. bitsPrecision - 1)
-            {
+
+        using (controlQubit = Qubit()) {
+
+            for (exponent in 0 .. bitsPrecision - 1) {
                 let power = 2 ^ exponent;
                 mutable nRepeats = Ceiling(alpha * ToDouble(bitsPrecision - exponent) + beta);
-                
-                if (nRepeats % 2 == 1)
-                {
+
+                if (nRepeats % 2 == 1) {
                     // Ensures that nRepeats is even.
                     set nRepeats = nRepeats + 1;
                 }
-                
+
                 mutable pZero = ToDouble(0);
                 mutable pPlus = ToDouble(0);
-                
-                for (idxRep in 0 .. nRepeats - 1)
-                {
-                    for (idxExperiment in 0 .. 1)
-                    {
+
+                for (idxRep in 0 .. nRepeats - 1) {
+                    for (idxExperiment in 0 .. 1) {
                         // Divide rotation by power to cancel the multiplication by power in DiscretePhaseEstimationIteration
                         let rotation = ((PI() * ToDouble(idxExperiment)) / 2.0) / ToDouble(power);
-                        DiscretePhaseEstimationIteration(oracle, power, rotation, targetState, q);
-                        let result = M(q);
-                        
-                        if (result == Zero)
-                        {
-                            if (idxExperiment == 0)
-                            {
+                        DiscretePhaseEstimationIteration(oracle, power, rotation, targetState, controlQubit);
+                        let result = M(controlQubit);
+
+                        if (result == Zero) {
+                            if (idxExperiment == 0) {
                                 set pZero = pZero + 1.0;
-                            }
-                            elif (idxExperiment == 1)
-                            {
+                            } elif (idxExperiment == 1) {
                                 set pPlus = pPlus + 1.0;
                             }
                         }
-                        
-                        Reset(q);
+
+                        Reset(controlQubit);
                     }
                 }
-                
+
                 let deltaTheta = ArcTan2(pPlus - ToDouble(nRepeats) / 2.0, pZero - ToDouble(nRepeats) / 2.0);
                 let delta = RealMod(deltaTheta - thetaEst * ToDouble(power), 2.0 * PI(), -PI());
                 set thetaEst = thetaEst + delta / ToDouble(power);
             }
-            
-            Reset(q);
+
+            Reset(controlQubit);
         }
         
         return thetaEst;

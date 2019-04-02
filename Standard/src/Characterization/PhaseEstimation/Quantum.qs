@@ -1,11 +1,12 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-namespace Microsoft.Quantum.Canon {
+namespace Microsoft.Quantum.Characterization {
     open Microsoft.Quantum.Arithmetic;
     open Microsoft.Quantum.Primitive;
     open Microsoft.Quantum.Extensions.Testing;
     open Microsoft.Quantum.Oracles;
+    open Microsoft.Quantum.Canon;
 
     /// # Summary
     /// Performs the quantum phase estimation algorithm for a given oracle `U` and `targetState`,
