@@ -130,7 +130,7 @@ namespace Microsoft.Quantum.Canon {
             AssertAlmostEqual(PNorm(p, array), pNormExpected);
             
             // if PNorm fails, PNormalize will fail.
-            let arrayNormalized = PNormalize(p, array);
+            let arrayNormalized = PNormalized(p, array);
             
             for (idxCoeff in 0 .. Length(array) - 1) {
                 AssertAlmostEqual(array[idxCoeff] / pNormExpected, arrayNormalized[idxCoeff]);

@@ -6,6 +6,8 @@ namespace Microsoft.Quantum.Tests {
     open Microsoft.Quantum.Extensions.Convert;
     open Microsoft.Quantum.Extensions.Math;
     open Microsoft.Quantum.Oracles;
+    open Microsoft.Quantum.Characterization;
+    open Microsoft.Quantum.Preparation;
     
     
     operation ChoiStateTest () : Unit {

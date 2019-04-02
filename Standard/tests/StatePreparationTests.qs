@@ -58,7 +58,7 @@ namespace Microsoft.Quantum.Tests {
                 let qubitsBE = BigEndian(qubits);
                 let op = StatePreparationPositiveCoefficients(coefficientsAmplitude);
                 op(qubitsBE);
-                let normalizedCoefficients = PNormalize(2.0, coefficientsAmplitude);
+                let normalizedCoefficients = PNormalized(2.0, coefficientsAmplitude);
                 
                 for (idxCoeff in 0 .. nCoefficients - 1) {
                     let amp = normalizedCoefficients[idxCoeff];
