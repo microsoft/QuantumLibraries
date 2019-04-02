@@ -1,9 +1,8 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-namespace Microsoft.Quantum.Canon
-{
-    
+namespace Microsoft.Quantum.Arrays {
+
     /// # Summary
     /// Takes an array and a list of locations and
     /// produces a new array formed from the elements of the original
@@ -35,19 +34,17 @@ namespace Microsoft.Quantum.Canon
     /// # Output
     /// An array `out` of elements whose indices correspond to the subarray,
     /// such that `out[idx] == array[indices[idx]]`.
-    function Subarray<'T> (indices : Int[], array : 'T[]) : 'T[]
-    {
+    function Subarray<'T> (indices : Int[], array : 'T[]) : 'T[] {
         let nSliced = Length(indices);
         mutable sliced = new 'T[nSliced];
-        
-        for (idx in 0 .. nSliced - 1)
-        {
+
+        for (idx in 0 .. nSliced - 1) {
             set sliced[idx] = array[indices[idx]];
         }
-        
+
         return sliced;
     }
-    
+
 }
 
 

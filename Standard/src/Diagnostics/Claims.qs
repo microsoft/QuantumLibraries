@@ -1,9 +1,8 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-namespace Microsoft.Quantum.Canon
-{
-    
+namespace Microsoft.Quantum.Diagnostics {
+
     /// # Summary
     /// Asserts that a classical floating point variable has the expected value up to a given
     /// absolute tolerance.
@@ -17,17 +16,13 @@ namespace Microsoft.Quantum.Canon
     ///
     /// ## tolerance
     /// Absolute tolerance on the difference between actual and expected.
-    function AssertAlmostEqualTol (actual : Double, expected : Double, tolerance : Double) : Unit
-    {
+    function AssertAlmostEqualTol (actual : Double, expected : Double, tolerance : Double) : Unit {
         let delta = actual - expected;
-        
-        if (delta > tolerance || delta < -tolerance)
-        {
-            fail $"Assertion failed. Expected: '{expected}'. Actual: '{actual}'";
+        if (delta > tolerance or delta < -tolerance) {
+            fail $"Claim was false. Expected: '{expected}'. Actual: '{actual}'";
         }
     }
-    
-    
+
     /// # Summary
     /// Asserts that a classical floating point variable has the expected value up to a
     /// small tolerance of 1e-10.

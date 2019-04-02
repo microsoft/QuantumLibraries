@@ -1,9 +1,8 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-namespace Microsoft.Quantum.Canon
-{
-    
+namespace Microsoft.Quantum.Arrays {
+
     /// # Summary
     /// Iterates a function `f` through an array `array`, returning
     /// `f(f(f(initialState, array[0]), array[1]), ...)`.
@@ -30,25 +29,21 @@ namespace Microsoft.Quantum.Canon
     /// # Remarks
     /// ## Example
     /// ```qsharp
-    /// function Plus(a : Double, b : Double) { 
+    /// function Plus(a : Double, b : Double) {
 	///     return a + b;
 	/// }
     /// function Sum(xs : Double[]) {
     ///     return Fold(Plus, 0.0, xs);
     /// }
     /// ```
-    function Fold<'State, 'T> (folder : (('State, 'T) -> 'State), state : 'State, array : 'T[]) : 'State
-    {
+    function Fold<'State, 'T> (folder : (('State, 'T) -> 'State), state : 'State, array : 'T[]) : 'State {
         mutable current = state;
-        
-        for (idxElement in 0 .. Length(array) - 1)
-        {
+
+        for (idxElement in 0 .. Length(array) - 1) {
             set current = folder(current, array[idxElement]);
         }
-        
+
         return current;
     }
-    
+
 }
-
-

@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-namespace Microsoft.Quantum.Canon {
+namespace Microsoft.Quantum.Arrays {
     open Microsoft.Quantum.Extensions.Math;
     open Microsoft.Quantum.Math;
 

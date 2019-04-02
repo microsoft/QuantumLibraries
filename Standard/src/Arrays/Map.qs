@@ -1,12 +1,11 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-namespace Microsoft.Quantum.Canon
-{
-    
+namespace Microsoft.Quantum.Arrays {
+
     /// # Summary
-    /// The `Map` function takes an array and a function that is defined
-    /// for the elements of the array, and returns a new array that consists
+    /// Given an array and a function that is defined
+    /// for the elements of the array, returns a new array that consists
     /// of the images of the original array under the function.
     ///
     /// # Remarks
@@ -28,22 +27,19 @@ namespace Microsoft.Quantum.Canon
     ///
     /// # Output
     /// An array `'U[]` of elements that are mapped by the `mapper` function.
-    function Map<'T, 'U> (mapper : ('T -> 'U), array : 'T[]) : 'U[]
-    {
+    function Mapped<'T, 'U> (mapper : ('T -> 'U), array : 'T[]) : 'U[] {
         mutable resultArray = new 'U[Length(array)];
-        
-        for (idxElement in 0 .. Length(array) - 1)
-        {
+
+        for (idxElement in 0 .. Length(array) - 1) {
             set resultArray[idxElement] = mapper(array[idxElement]);
         }
-        
+
         return resultArray;
     }
-    
-    
+
     /// # Summary
-    /// The `MapIndex` function takes an array and a function that is defined
-    /// for the indexed elements of the array, and returns a new array that consists
+    /// Given an array and a function that is defined
+    /// for the indexed elements of the array, returns a new array that consists
     /// of the images of the original array under the function.
     ///
     /// # Remarks
@@ -79,19 +75,17 @@ namespace Microsoft.Quantum.Canon
     /// ```
     ///
     /// # See Also
-    /// - @"microsoft.quantum.canon.map"
-    function MapIndex<'T, 'U> (mapper : ((Int, 'T) -> 'U), array : 'T[]) : 'U[]
-    {
+    /// - Mapped
+    function MappedByIndex<'T, 'U> (mapper : ((Int, 'T) -> 'U), array : 'T[]) : 'U[] {
         mutable resultArray = new 'U[Length(array)];
-        
-        for (idxElement in 0 .. Length(array) - 1)
-        {
+
+        for (idxElement in 0 .. Length(array) - 1) {
             set resultArray[idxElement] = mapper(idxElement, array[idxElement]);
         }
-        
+
         return resultArray;
     }
-    
+
 }
 
 

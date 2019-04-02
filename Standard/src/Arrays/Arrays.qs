@@ -1,8 +1,9 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-namespace Microsoft.Quantum.Canon {
+namespace Microsoft.Quantum.Arrays {
     open Microsoft.Quantum.Extensions.Math;
+    open Microsoft.Quantum.Diagnostics;
 
     /// # Summary
     /// Create an array that contains the same elements as an input array but in reverse
@@ -21,13 +22,6 @@ namespace Microsoft.Quantum.Canon {
     function Reversed<'T>(array : 'T[]) : 'T[] {
         let nElements = Length(array);
         return array[nElements-1..-1..0];
-    }
-
-    /// # Deprecated
-    /// Please use @"Microsoft.Quantum.Canon.Reversed" instead.
-    function Reverse<'T>(array : 'T[]) : 'T[] {
-        Renamed("Reverse", "Reversed");
-        return Reversed(array);
     }
 
     /// # Summary
@@ -131,8 +125,7 @@ namespace Microsoft.Quantum.Canon {
         AssertBoolEqual(Length(array) > 0, true, $"Array must be of the length at least 1");
         return array[0];
     }
-    
-    
+
     /// # Summary
     /// Creates an array of given length with all elements equal to given value.
     ///
@@ -144,19 +137,16 @@ namespace Microsoft.Quantum.Canon {
     ///
     /// # Output
     /// A new array of length `length`, such that every element is `value`.
-    function ConstantArray<'T> (length : Int, value : 'T) : 'T[]
-    {
+    function ConstantArray<'T> (length : Int, value : 'T) : 'T[] {
         mutable arr = new 'T[length];
-        
-        for (i in 0 .. length - 1)
-        {
+
+        for (i in 0 .. length - 1) {
             set arr[i] = value;
         }
-        
+
         return arr;
     }
-    
-    
+
     /// # Summary
     /// Returns an array containing the elements of another array,
     /// excluding elements at a given list of indices.
@@ -185,40 +175,34 @@ namespace Microsoft.Quantum.Canon {
     /// // The following line returns [10, 12, 15].
     /// let subarray = Exclude([1, 3, 4], array);
     /// ```
-    function Exclude<'T> (remove : Int[], array : 'T[]) : 'T[]
-    {
+    function Exclude<'T> (remove : Int[], array : 'T[]) : 'T[] {
         let nSliced = Length(remove);
         let nElements = Length(array);
-        
+
         //Would be better with sort function
         //Or way to add elements to array
         mutable arrayKeep = new Int[nElements];
         mutable sliced = new 'T[nElements - nSliced];
         mutable counter = 0;
-        
-        for (idx in 0 .. nElements - 1)
-        {
+
+        for (idx in 0 .. nElements - 1) {
             set arrayKeep[idx] = idx;
         }
-        
-        for (idx in 0 .. nSliced - 1)
-        {
+
+        for (idx in 0 .. nSliced - 1) {
             set arrayKeep[remove[idx]] = -1;
         }
-        
-        for (idx in 0 .. nElements - 1)
-        {
-            if (arrayKeep[idx] >= 0)
-            {
+
+        for (idx in 0 .. nElements - 1) {
+            if (arrayKeep[idx] >= 0) {
                 set sliced[counter] = array[arrayKeep[idx]];
                 set counter = counter + 1;
             }
         }
-        
+
         return sliced;
     }
-    
-    
+
     /// # Summary
     /// Returns an array padded at with specified values up to a
     /// specified length.
@@ -250,24 +234,16 @@ namespace Microsoft.Quantum.Canon {
     /// // The following line returns [2, 2, 2, 10, 12, 15].
     /// let output = Pad(6, array, 2);
     /// ```
-    function Pad<'T> (nElementsTotal : Int, defaultElement : 'T, inputArray : 'T[]) : 'T[]
-    {
+    function Pad<'T> (nElementsTotal : Int, defaultElement : 'T, inputArray : 'T[]) : 'T[] {
         let nElementsInitial = Length(inputArray);
         let nAbsElementsTotal = AbsI(nElementsTotal);
         AssertBoolEqual(nAbsElementsTotal >= nElementsInitial, true, $"Specified output array length must be longer than `inputArray` length.");
         let nElementsPad = nAbsElementsTotal - nElementsInitial;
         let padArray = ConstantArray(nElementsPad, defaultElement);
-        
-        if (nElementsTotal >= 0)
-        {
-            // Pad at head.
-            return padArray + inputArray;
-        }
-        else
-        {
-            // Pad at tail.
-            return inputArray + padArray;
-        }
+
+        return nElementsTotal >= 0
+               ? padArray + inputArray  // Pad at head.
+               | inputArray + padArray; // Pad at tail.
     }
 
     /// # Summary
@@ -293,8 +269,8 @@ namespace Microsoft.Quantum.Canon {
     function SplitArray<'T>(nElements: Int[], arr: 'T[]) : 'T[][] {
         mutable output = new 'T[][Length(nElements)+1];
         mutable currIdx = 0;
-        for(idx in 0..Length(nElements)-1){
-            if(currIdx + nElements[idx] > Length(arr)){
+        for (idx in 0..Length(nElements) - 1) {
+            if(currIdx + nElements[idx] > Length(arr)) {
                 fail "SplitArray argument out of bounds.";
             }
             set output[idx] = arr[currIdx..currIdx + nElements[idx]-1];

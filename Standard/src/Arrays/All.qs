@@ -1,11 +1,14 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-namespace Microsoft.Quantum.Canon
-{
-    
+namespace Microsoft.Quantum.Arrays {
+
+    function _And(left : Bool, right : Bool) : Bool {
+        return left and right;
+    }
+
     /// # Summary
-    /// The `ForAll` function takes an array and a predicate that is defined
+    /// Given an array and a predicate that is defined
     /// for the elements of the array, and checks if all elements of the
     /// array satisfy the predicate.
     ///
@@ -26,18 +29,8 @@ namespace Microsoft.Quantum.Canon
     ///
     /// # Output
     /// A `Bool` value of the AND function of the predicate applied to all elements.
-    function ForAll<'T> (predicate : ('T -> Bool), array : 'T[]) : Bool
-    {
-        mutable result = true;
-        
-        for (idxElement in 0 .. Length(array) - 1)
-        {
-            set result = result && predicate(array[idxElement]);
-        }
-        
-        return result;
+    function All<'T> (predicate : ('T -> Bool), array : 'T[]) : Bool {
+       return Fold(_And, true, Mapped(predicate, array));
     }
-    
+
 }
-
-

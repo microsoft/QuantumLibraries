@@ -1,12 +1,11 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-namespace Microsoft.Quantum.Canon
-{
-    
+namespace Microsoft.Quantum.Arrays {
+
     /// # Summary
-    /// The `Filter` function takes an array and a predicate that is defined
-    /// for the elements of the array, and returns an array that consists of
+    /// Given an array and a predicate that is defined
+    /// for the elements of the array, returns an array that consists of
     /// those elements that satisfy the predicate.
     ///
     /// # Remarks
@@ -25,23 +24,18 @@ namespace Microsoft.Quantum.Canon
     ///
     /// # Output
     /// An array `'T[]` of elements that satisfy the predicate.
-    function Filter<'T> (predicate : ('T -> Bool), array : 'T[]) : 'T[]
-    {
+    function Filtered<'T> (predicate : ('T -> Bool), array : 'T[]) : 'T[] {
         mutable totalFound = 0;
         mutable idxArray = new Int[Length(array)];
-        
-        for (idxElement in 0 .. Length(array) - 1)
-        {
-            if (predicate(array[idxElement]))
-            {
+
+        for (idxElement in 0 .. Length(array) - 1) {
+            if (predicate(array[idxElement])) {
                 set idxArray[totalFound] = idxElement;
                 set totalFound = totalFound + 1;
             }
         }
-        
+
         return Subarray(idxArray[0 .. totalFound - 1], array);
     }
-    
+
 }
-
-
