@@ -5,10 +5,11 @@ namespace Microsoft.Quantum.Tests {
     open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Primitive;
     open Microsoft.Quantum.Extensions.Testing;
+    open Microsoft.Quantum.Diagnostics;
+    open Microsoft.Quantum.Arrays;
     
     
     function ComposeTest () : Unit {
-        
         let target = [3, 17, 2];
         AssertIntEqual((Compose(Modulus(_, 14), Max))(target), 3, $"Compose(Modulus(_, 14), Max) did not return expected result.");
     }

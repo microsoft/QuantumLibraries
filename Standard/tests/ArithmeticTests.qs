@@ -5,6 +5,7 @@ namespace Microsoft.Quantum.Tests {
     open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Math;
     open Microsoft.Quantum.Primitive;
+    open Microsoft.Quantum.Diagnostics;
     
     
     operation InPlaceXorTestHelper (testValue : Int, numberOfQubits : Int) : Unit {

@@ -8,6 +8,7 @@ namespace Microsoft.Quantum.Tests {
     open Microsoft.Quantum.Oracles;
     open Microsoft.Quantum.Characterization;
     open Microsoft.Quantum.Preparation;
+    open Microsoft.Quantum.Diagnostics;
     
     
     operation ChoiStateTest () : Unit {

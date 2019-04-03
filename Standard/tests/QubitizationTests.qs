@@ -9,6 +9,9 @@ namespace Microsoft.Quantum.Tests {
     open Microsoft.Quantum.Extensions.Testing;
     open Microsoft.Quantum.Extensions.Math;
     open Microsoft.Quantum.Extensions.Convert;
+    open Microsoft.Quantum.Arrays;
+    open Microsoft.Quantum.Diagnostics;
+
     // BlockEncoding.qs tests
 
     // The returned operations encode the Hamiltonian (cos^2(angle) I+sin^2(angle) X)/2.
@@ -21,17 +24,17 @@ namespace Microsoft.Quantum.Tests {
         let selector = Controlled (ApplyToEachCA(X, _))(_, _);
         return (eigenvalues, prob, inverseAngle, statePreparation, selector);
     }
-    
+
     // This checks that BlockEncodingByLCU encodes the correct Hamiltonian. 
     operation BlockEncodingByLCUTest() : Unit {
         body (...) {
             let (eigenvalues, prob, inverseAngle, statePreparation, selector) = LCUTestHelper();
             let LCU = BlockEncodingByLCU(statePreparation, selector);
-            using(qubits = Qubit[2]){
+            using (qubits = Qubit[2]) {
                 let auxiliary = [qubits[0]];
                 let system = [qubits[1]];
 
-                for(rep in 0..5){
+                for (rep in 0..5) {
                     LCU(auxiliary, system);
                     AssertProb([PauliZ], auxiliary, Zero, prob, "Error0: Z Success probability does not match theory", 1e-10);
                     let result = M(auxiliary[0]);
@@ -143,7 +146,7 @@ namespace Microsoft.Quantum.Tests {
         for (idxTest in 0..Length(testCases) - 1) {
             let (expected, range) = testCases[idxTest];
             let output = IntArrayFromRange(range);
-            Ignore(Map(AssertIntEqual(_, _, "Pad failed."), Zip(output, expected)));
+            Ignore(Mapped(AssertIntEqual(_, _, "Pad failed."), Zip(output, expected)));
         }
     }
 

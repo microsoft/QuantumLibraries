@@ -1,8 +1,8 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-namespace Microsoft.Quantum.Canon
-{
+namespace Microsoft.Quantum.Canon {
+    open Microsoft.Quantum.Diagnostics;
     
     /// # Summary
     /// Applies a pair of operations to a given partition of a register into two parts.

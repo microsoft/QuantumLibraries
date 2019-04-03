@@ -9,7 +9,8 @@ namespace Microsoft.Quantum.Simulation {
     open Microsoft.Quantum.Math;
     open Microsoft.Quantum.Extensions.Math;
     open Microsoft.Quantum.Extensions.Convert;
-    
+    open Microsoft.Quantum.Arrays;
+
     /// # Summary
     /// Extracts the coefficient of a Pauli term described by a `GeneratorIndex`.
     ///
@@ -33,14 +34,13 @@ namespace Microsoft.Quantum.Simulation {
     /// `GeneratorIndex` type that encodes a Pauli term.
     ///
     /// # Output
-    /// The Pauli string of the term described by a `GeneratorIndex`, and 
+    /// The Pauli string of the term described by a `GeneratorIndex`, and
     /// indices to the qubits it acts on.
     function PauliStringFromGenIdx(generatorIndex: GeneratorIndex) : (Pauli[], Int[]) {
         let ((idxPaulis, coeff), idxQubits) = generatorIndex!;
         return (IntsToPaulis(idxPaulis), idxQubits);
     }
 
-    
     /// # Summary
 	/// Creates a block-encoding unitary for a Hamiltonian.
 	/// 

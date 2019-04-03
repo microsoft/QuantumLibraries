@@ -7,6 +7,7 @@ namespace Microsoft.Quantum.Characterization {
     open Microsoft.Quantum.Extensions.Convert;
     open Microsoft.Quantum.Extensions.Math;
     open Microsoft.Quantum.Preparation;
+    open Microsoft.Quantum.Arrays;
 
     /// # Summary
 	/// Jointly measures a register of qubits in the Pauli Z basis.

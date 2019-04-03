@@ -4,6 +4,7 @@ namespace Microsoft.Quantum.Canon {
     open Microsoft.Quantum.Math;
     open Microsoft.Quantum.Primitive;
     open Microsoft.Quantum.Extensions.Math;
+    open Microsoft.Quantum.Diagnostics;
 
     function NativeFnsAreCallableTest () : Unit {
         

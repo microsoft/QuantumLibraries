@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 namespace Microsoft.Quantum.Canon {
+    open Microsoft.Quantum.Arrays;
     
     /// # Summary
     /// Applies an operation to a subregister of a register, with qubits

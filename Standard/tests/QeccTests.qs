@@ -6,6 +6,8 @@ namespace Microsoft.Quantum.Tests {
     open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Extensions.Testing;
     open Microsoft.Quantum.ErrorCorrection;
+    open Microsoft.Quantum.Diagnostics;
+    open Microsoft.Quantum.Arrays;
     
     
     // NB: These tests need to be generalized to allow for unit testing CSS

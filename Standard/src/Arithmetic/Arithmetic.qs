@@ -5,6 +5,7 @@ namespace Microsoft.Quantum.Arithmetic {
     open Microsoft.Quantum.Primitive;
     open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Convert;
+    open Microsoft.Quantum.Arrays;
 
     /// # Summary
     /// Applies `X` operations to qubits in a little-endian register based on 1 bits in an integer.

@@ -4,6 +4,8 @@
 namespace Microsoft.Quantum.Arithmetic {
     open Microsoft.Quantum.Primitive;
     open Microsoft.Quantum.Canon;
+    open Microsoft.Quantum.Arrays;
+    open Microsoft.Quantum.Diagnostics;
 
     /// # Summary
 	/// Asserts that the probability of a specific state of a quantum register has the

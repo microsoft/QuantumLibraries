@@ -5,6 +5,7 @@ namespace Microsoft.Quantum.Tests {
     open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Primitive;
     open Microsoft.Quantum.Extensions.Convert;
+    open Microsoft.Quantum.Diagnostics;
 
     operation MultiplexZTestHelper (coefficients : Double[], multiplexerControl : BigEndian, additionalControl : Qubit[], target : Qubit, tolerance : Double) : Unit {
         let nCoefficients = Length(coefficients);

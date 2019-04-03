@@ -1,9 +1,10 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 namespace Microsoft.Quantum.Tests {
-    
+    open Microsoft.Quantum.Diagnostics;
     open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Primitive;
+    open Microsoft.Quantum.Arrays;
     
     
     function ZipTest () : Unit {
@@ -13,13 +14,13 @@ namespace Microsoft.Quantum.Tests {
         let zipped = Zip(left, right);
         let (leftActual1, rightActual1) = zipped[0];
         
-        if (leftActual1 != 1 || rightActual1 != PauliY) {
+        if (leftActual1 != 1 or rightActual1 != PauliY) {
             fail $"Expected (1, PauliY), got ({leftActual1}, {rightActual1}).";
         }
         
         let (leftActual2, rightActual2) = zipped[1];
         
-        if (leftActual2 != 2 || rightActual2 != PauliI) {
+        if (leftActual2 != 2 or rightActual2 != PauliI) {
             fail $"Expected (2, PauliI), got ({leftActual2}, {rightActual2}).";
         }
     }
@@ -101,6 +102,7 @@ namespace Microsoft.Quantum.Tests {
             Ignore(Map(AssertIntEqual(_, _, $"Pad failed."), Zip(outputArray, paddedArray)));
         }
     }
+
     
 }
 

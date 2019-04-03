@@ -234,7 +234,7 @@ namespace Microsoft.Quantum.Arrays {
     /// // The following line returns [2, 2, 2, 10, 12, 15].
     /// let output = Pad(6, array, 2);
     /// ```
-    function Pad<'T> (nElementsTotal : Int, defaultElement : 'T, inputArray : 'T[]) : 'T[] {
+    function Padded<'T> (nElementsTotal : Int, defaultElement : 'T, inputArray : 'T[]) : 'T[] {
         let nElementsInitial = Length(inputArray);
         let nAbsElementsTotal = AbsI(nElementsTotal);
         AssertBoolEqual(nAbsElementsTotal >= nElementsInitial, true, $"Specified output array length must be longer than `inputArray` length.");
@@ -264,9 +264,9 @@ namespace Microsoft.Quantum.Arrays {
     /// ## Example
     /// ```qsharp
     /// // The following returns [[1,5],[3],[7]];
-    /// let (arr1, arr2) = SplitArray([2,1], [1,5,3,7]);
+    /// let split = SplitArray([2,1], [1,5,3,7]);
     /// ```
-    function SplitArray<'T>(nElements: Int[], arr: 'T[]) : 'T[][] {
+    function Partitioned<'T>(nElements: Int[], arr: 'T[]) : 'T[][] {
         mutable output = new 'T[][Length(nElements)+1];
         mutable currIdx = 0;
         for (idx in 0..Length(nElements) - 1) {

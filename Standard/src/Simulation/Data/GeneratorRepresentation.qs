@@ -4,6 +4,7 @@
 namespace Microsoft.Quantum.Simulation {
     open Microsoft.Quantum.Extensions.Math;
     open Microsoft.Quantum.Canon;
+    open Microsoft.Quantum.Arrays;
 
 
     /// # Summary

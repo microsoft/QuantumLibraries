@@ -4,6 +4,7 @@
 namespace Microsoft.Quantum.Canon {
     open Microsoft.Quantum.Arithmetic;
     open Microsoft.Quantum.Primitive;
+    open Microsoft.Quantum.Diagnostics;
 
     /// # Summary
     /// Apply the Approximate Quantum Fourier Transform (AQFT) to a quantum register.
@@ -36,7 +37,7 @@ namespace Microsoft.Quantum.Canon {
         body (...) {
             let nQubits = Length(qs!);
             AssertBoolEqual(nQubits > 0, true, $"`Length(qs)` must be least 1");
-            AssertBoolEqual(a > 0 && a <= nQubits, true, $"`a` must be positive and less than `Length(qs)`");
+            AssertBoolEqual(a > 0 and a <= nQubits, true, $"`a` must be positive and less than `Length(qs)`");
 
             for (i in 0 .. nQubits - 1)
             {

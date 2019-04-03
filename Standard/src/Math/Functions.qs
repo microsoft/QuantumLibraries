@@ -4,6 +4,7 @@
 namespace Microsoft.Quantum.Math {
     open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Extensions.Math;
+    open Microsoft.Quantum.Diagnostics;
 
     /// # Summary
     /// Represents a rational number of the form `p/q`. Integer `p` is

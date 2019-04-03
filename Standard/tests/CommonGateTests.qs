@@ -4,6 +4,8 @@ namespace Microsoft.Quantum.Tests {
     open Microsoft.Quantum.Primitive;
     open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Extensions.Testing;
+    open Microsoft.Quantum.Diagnostics;
+    open Microsoft.Quantum.Arrays;
 
     operation ApplyCShorthandToRegister(cGate : ((Qubit, Qubit) => Unit), target : Qubit[]) : Unit {
         cGate(target[0], target[1]);

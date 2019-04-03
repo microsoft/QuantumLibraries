@@ -6,6 +6,7 @@ namespace Microsoft.Quantum.Simulation {
     open Microsoft.Quantum.Arithmetic;
     open Microsoft.Quantum.Primitive;
     open Microsoft.Quantum.Extensions.Math;
+    open Microsoft.Quantum.Arrays;
 
     // This library defines types for block-encoding an arbitrary operator.
     // General operations for performing block-encoding are provided,

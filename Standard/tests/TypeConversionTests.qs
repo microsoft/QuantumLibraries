@@ -4,6 +4,7 @@ namespace Microsoft.Quantum.Tests {
     open Microsoft.Quantum.Primitive;
     open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Convert;
+    open Microsoft.Quantum.Diagnostics;
 
     function Square(x : Int) : Int {
         return x * x;

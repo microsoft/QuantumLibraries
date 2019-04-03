@@ -4,6 +4,8 @@
 namespace Microsoft.Quantum.Arithmetic {
     open Microsoft.Quantum.Primitive;
     open Microsoft.Quantum.Canon;
+    open Microsoft.Quantum.Diagnostics;
+    open Microsoft.Quantum.Arrays;
 
     /// # Summary
     /// Implements a reversible carry gate. Given a carry-in bit encoded in

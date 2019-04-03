@@ -1,10 +1,9 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 namespace Microsoft.Quantum.Tests {
-    
+    open Microsoft.Quantum.Diagnostics;
     open Microsoft.Quantum.Canon;
-    
-    
+
     function ResultAsIntTest () : Unit {
         
         AssertIntEqual(ResultAsInt([Zero, Zero]), 0, $"Expected [Zero, Zero] to be represented by 0.");

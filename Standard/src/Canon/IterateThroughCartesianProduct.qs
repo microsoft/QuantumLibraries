@@ -1,8 +1,8 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-namespace Microsoft.Quantum.Canon
-{
+namespace Microsoft.Quantum.Canon {
+    open Microsoft.Quantum.Arrays;
     
     /// # Summary
     /// Iterates a variable, say `arr`, through a Cartesian product
@@ -47,8 +47,7 @@ namespace Microsoft.Quantum.Canon
     /// Iterates a variable, say arr, through Cartesian product
     /// [ 0, bound - 1 ] × [ 0, bound - 1 ] × [ 0, bound - 1 ]
     /// and calls op(arr) for every element of the Cartesian product
-    operation IterateThroughCartesianPower (power : Int, bound : Int, op : (Int[] => Unit)) : Unit
-    {
+    operation IterateThroughCartesianPower (power : Int, bound : Int, op : (Int[] => Unit)) : Unit {
         IterateThroughCartesianProduct(ConstantArray(power, bound), op);
     }
     

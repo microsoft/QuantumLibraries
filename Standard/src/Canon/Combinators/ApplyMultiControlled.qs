@@ -1,8 +1,9 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-namespace Microsoft.Quantum.Canon
-{
+namespace Microsoft.Quantum.Canon {
+    open Microsoft.Quantum.Diagnostics;
+    open Microsoft.Quantum.Arrays;
     
     ///////////////////////////////////////////////////////////////////////////////////////////////
     // Combinators for constructing multiply controlled versions of operations

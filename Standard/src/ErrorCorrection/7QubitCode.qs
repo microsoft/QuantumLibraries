@@ -4,6 +4,7 @@
 namespace Microsoft.Quantum.ErrorCorrection {
     open Microsoft.Quantum.Primitive;
     open Microsoft.Quantum.Canon;
+    open Microsoft.Quantum.Arrays;
 
     /// # Summary
     /// Private operation used to implement both the Steane code encoder and decoder.
@@ -58,8 +59,7 @@ namespace Microsoft.Quantum.ErrorCorrection {
     function SteaneCodeRecoveryX (syndrome : Syndrome) : Pauli[] {
         let idxQubit = ResultAsInt(syndrome!);
         
-        if (idxQubit == 0)
-        {
+        if (idxQubit == 0) {
             return ConstantArray(7, PauliI);
         }
         

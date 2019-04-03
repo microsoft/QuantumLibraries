@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License.
+
 namespace Microsoft.Quantum.Canon {
     open Microsoft.Quantum.Primitive;
     open Microsoft.Quantum.Arrays;
@@ -42,6 +45,20 @@ namespace Microsoft.Quantum.Canon {
     function MapIndex<'T, 'U> (mapper : ((Int, 'T) -> 'U), array : 'T[]) : 'U[] {
         Renamed("Microsoft.Quantum.Canon.MapIndex", "Microsoft.Quantum.Arrays.MappedByIndex");
         return MappedByIndex(mapper, array);
+    }
+
+    /// # Deprecated
+    /// Please use @"Microsoft.Quantum.Arrays.Padded" instead.
+    function Pad<'T> (nElementsTotal : Int, defaultElement : 'T, inputArray : 'T[]) : 'T[] {
+        Renamed("Microsoft.Quantum.Canon.Pad", "Microsoft.Quantum.Arrays.Padded");
+        return Padded(nElementsTotal, defaultElement, inputArray);
+    }
+
+    /// # Deprecated
+    /// Please use @"Microsoft.Quantum.Arrays.Partitioned" instead.
+    function SplitArray<'T>(nElements: Int[], arr: 'T[]) : 'T[][] {
+        Renamed("Microsoft.Quantum.Canon.SplitArray", "Microsoft.Quantum.Arrays.Partitioned");
+        return Partitioned(nElements, arr);
     }
 
 }
