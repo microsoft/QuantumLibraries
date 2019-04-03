@@ -49,7 +49,7 @@ namespace Microsoft.Quantum.Tests {
         let multiplexerControlInteger = MeasureIntegerBE(multiplexerControl);
         let additionalControlResults = MultiM(additionalControl);
         
-        if (Length(additionalControlResults) == 1 && additionalControlResults[0] == Zero) {
+        if (Length(additionalControlResults) == 1 and additionalControlResults[0] == Zero) {
             
             // Case where Identity operation is performed.
             Message($"Controlled MultiplexZ test. coefficient {multiplexerControlInteger} of {nCoefficients-1}.");

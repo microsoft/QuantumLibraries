@@ -72,14 +72,14 @@ namespace Microsoft.Quantum.Canon {
         let bitSize = 2 * BitSize(denominator);
         let numeratorDyadic = (numerator * 2 ^ bitSize) / denominator;
         let (u, v) = (ContinuedFractionConvergent(Fraction(numeratorDyadic, 2 ^ bitSize), denominator))!;
-        ClaimEqualB(AbsI(u) == numerator && AbsI(v) == denominator, true, $"The result must be ±{numerator}/±{denominator} got {u}/{v}");
+        ClaimEqualB(AbsI(u) == numerator and AbsI(v) == denominator, true, $"The result must be ±{numerator}/±{denominator} got {u}/{v}");
     }
     
     
     function ContinuedFractionConvergentEdgeCaseTestHelper (numerator : Int, denominator : Int, bound : Int) : Unit {
         
         let (num, denom) = (ContinuedFractionConvergent(Fraction(numerator, denominator), bound))!;
-        ClaimEqualB(AbsI(num) == numerator && AbsI(denom) == denominator, true, $"The result must be ±{numerator}/±{denominator} got {num}/{denom}");
+        ClaimEqualB(AbsI(num) == numerator and AbsI(denom) == denominator, true, $"The result must be ±{numerator}/±{denominator} got {num}/{denom}");
     }
     
     

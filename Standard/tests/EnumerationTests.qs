@@ -14,7 +14,7 @@ namespace Microsoft.Quantum.Tests {
     
     function IsSingleDigit (element : Int) : Bool {
         
-        return element >= 0 && element < 10;
+        return element >= 0 and element < 10;
     }
     
     
