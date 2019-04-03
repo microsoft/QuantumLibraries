@@ -61,16 +61,16 @@ namespace Microsoft.Quantum.Chemistry.Tests
             var oneBodyAmplitude = state.ClusterOperator.OneBodyAmplitudes;
             List<List<string>> oneBodyAmplitudeTruth =
                 new[] {
-                    new[] { "1a" , "2a", "0.1"}.ToList(),
-                    new[] { "1b" , "2a", "-0.2"}.ToList()
+                    new[] {"0.1", "(1a)+", "(2a)"}.ToList(),
+                    new[] {"-0.2", "(1b)+", "(2a)"}.ToList()
                 }.ToList();
             Assert.Equal(oneBodyAmplitudeTruth, oneBodyAmplitude);
 
             var twoBodyAmplitude = state.ClusterOperator.TwoBodyAmplitudes;
             List<List<string>> twoBodyAmplitudeTruth =
                 new[] {
-                    new[] { "1a" , "2a", "2b", "4b", "-0.5"}.ToList(),
-                    new[] { "1a" , "3a", "2a", "4b", "0.5"}.ToList()
+                    new[] {"-0.5", "(1a)+", "(2a)+", "(2b)", "(4b)"}.ToList(),
+                    new[] {"0.5", "(1a)+", "(3a)+", "(2a)", "(4b)"}.ToList()
                 }.ToList();
             Assert.Equal(twoBodyAmplitudeTruth, twoBodyAmplitude);
 

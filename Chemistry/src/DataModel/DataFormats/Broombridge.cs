@@ -47,7 +47,7 @@ namespace Microsoft.Quantum.Chemistry
                     return deserializer.Deserialize<V0_1.Data>(reader);
                 }
             }
-            
+
             /// <summary>
             /// Broombridge deserializer v0.2
             /// </summary>
@@ -102,7 +102,7 @@ namespace Microsoft.Quantum.Chemistry
                 output.Bibliography = input.Bibliography;
                 output.ProblemDescription = new List<V0_2.ProblemDescription>();
 
-                foreach(var integralSet in input.IntegralSets)
+                foreach (var integralSet in input.IntegralSets)
                 {
                     var problemDescription = new V0_2.ProblemDescription();
                     problemDescription.Metadata = integralSet.Metadata;
@@ -118,7 +118,7 @@ namespace Microsoft.Quantum.Chemistry
                     problemDescription.Hamiltonian = integralSet.Hamiltonian;
 
                     problemDescription.InitialStates = new List<V0_2.State>();
-                    foreach(var sourceInitialState in integralSet.SuggestedState)
+                    foreach (var sourceInitialState in integralSet.SuggestedState)
                     {
                         var initialState = new V0_2.State();
                         initialState.Label = sourceInitialState.SuggestedStateData.Label;
@@ -128,7 +128,7 @@ namespace Microsoft.Quantum.Chemistry
 
                         problemDescription.InitialStates.Add(initialState);
                     }
-                    
+
                     output.ProblemDescription.Add(problemDescription);
                 }
 
@@ -260,7 +260,7 @@ namespace Microsoft.Quantum.Chemistry
             {
                 // TODO: make this an enum.
                 public string Format { get; set; }
-                public Dictionary<TIndex[], TValue> Values { get; set; }
+                public List<(TIndex[], TValue)> Values { get; set; }
 
                 public void Read(IParser parser, Type expectedType, ObjectDeserializer nestedObjectDeserializer)
                 {
@@ -268,21 +268,14 @@ namespace Microsoft.Quantum.Chemistry
                     var data = (Dictionary<string, object>)nestedObjectDeserializer(typeof(Dictionary<string, object>));
                     Units = (string)data["units"];
                     Format = (string)data["format"];
-                    Values = ((IEnumerable<object>)data["values"])
-                        .Select(entry => (IEnumerable<object>)entry)
-                        .ToDictionary(
-                            entry => entry
-                                .Take(entry.Count() - 1)
-                                .Select((idx) => (TIndex)Convert.ChangeType(
-                                    idx,
-                                    typeof(TIndex)
-                                ))
-                                .ToArray(),
-                            entry => (TValue)Convert.ChangeType(
-                                entry.ElementAt(entry.Count() - 1),
-                                typeof(TValue)
-                            )
-                        );
+                    Values = new List<(TIndex[], TValue)>();
+                    foreach (var value in ((IEnumerable<object>)data["values"]))
+                    {
+                        var entries = (IEnumerable<object>)value;
+                        var a = entries.Take(entries.Count() - 1).Select(e => (TIndex)Convert.ChangeType(e, typeof(TIndex))).ToArray();
+                        var q = (TValue)Convert.ChangeType(entries.Last(), typeof(TValue));
+                        Values.Add((a, q));
+                    }
                 }
 
                 public void Write(IEmitter emitter, ObjectSerializer nestedObjectSerializer)
@@ -292,8 +285,8 @@ namespace Microsoft.Quantum.Chemistry
                         ["units"] = Units,
                         ["format"] = Format,
                         ["values"] = Values
-                            .Select(kvp =>
-                                kvp.Key.Select((idx) => (object)idx).Concat(new object[] { kvp.Value })
+                            .Select(entry =>
+                                entry.Item1.Select((idx) => (object)idx).Concat(new object[] { entry.Item2 })
                             )
                             .ToList()
                     });
@@ -329,7 +322,8 @@ namespace Microsoft.Quantum.Chemistry
         #region Broombridge v0.2 format
         public static class V0_2
         {
-            public static class Strings {
+            public static class Strings
+            {
                 public static string SparseMultiConfigurational = "sparse_multi_configurational";
                 public static string UnitaryCoupledCluster = "unitary_coupled_cluster";
                 public static string VersionNumber = "0.2";
@@ -527,69 +521,158 @@ namespace Microsoft.Quantum.Chemistry
                 [YamlMember(Alias = "superposition", ApplyNamingConventions = false)]
                 public List<List<object>> Superposition { get; set; }
             }
-
-
-            #endregion
-
-
         }
 
+        #endregion
+    }
+    // Parts of this might be merged intro Broombridge parsing due to overlap.
 
-        public struct ProblemDescription
-        {
+    public struct BroombridgeTyped { 
+        /* public bool Energy_Provided;
+            public double Energy_Min;
+            public double Energy_Approx;
+            public double Energy_Max;
+            */
+        public int NOrbitals, NElectrons;
 
+        public double IdentityTerm;
+        public List<OrbitalIntegral> OneBodyTerms;
+        public List<OrbitalIntegral> TwoBodyTerms;
+        public Dictionary<string, FermionHamiltonian.InputState> InitialStates;
+        /*[YamlMember(Alias = "coulomb_repulsion", ApplyNamingConventions = false)]
+        public DataStructures.SimpleQuantity CoulombRepulsion { get; set; }
 
-            /* public bool Energy_Provided;
-             public double Energy_Min;
-             public double Energy_Approx;
-             public double Energy_Max;
-             */
-            public int NOrbitals, NElectrons;
+        [YamlMember(Alias = "scf_energy", ApplyNamingConventions = false)]
+        public DataStructures.SimpleQuantity ScfEnergy { get; set; }
 
-            public double IdentityTerm;
-            public List<OrbitalIntegral> OneBodyTerms;
-            public List<OrbitalIntegral> TwoBodyTerms;
-            /*[YamlMember(Alias = "coulomb_repulsion", ApplyNamingConventions = false)]
-            public DataStructures.SimpleQuantity CoulombRepulsion { get; set; }
+        [YamlMember(Alias = "scf_energy_offset", ApplyNamingConventions = false)]
+        public DataStructures.SimpleQuantity ScfEnergyOffset { get; set; }
 
-            [YamlMember(Alias = "scf_energy", ApplyNamingConventions = false)]
-            public DataStructures.SimpleQuantity ScfEnergy { get; set; }
+        [YamlMember(Alias = "fci_energy", ApplyNamingConventions = false)]
+        public DataStructures.BoundedQuantity FciEnergy { get; set; }
 
-            [YamlMember(Alias = "scf_energy_offset", ApplyNamingConventions = false)]
-            public DataStructures.SimpleQuantity ScfEnergyOffset { get; set; }
+        [YamlMember(Alias = "n_orbitals", ApplyNamingConventions = false)]
+        public int NOrbitals { get; set; }
 
-            [YamlMember(Alias = "fci_energy", ApplyNamingConventions = false)]
-            public DataStructures.BoundedQuantity FciEnergy { get; set; }
+        [YamlMember(Alias = "n_electrons", ApplyNamingConventions = false)]
+        public int NElectrons { get; set; }
 
-            [YamlMember(Alias = "n_orbitals", ApplyNamingConventions = false)]
-            public int NOrbitals { get; set; }
+        [YamlMember(Alias = "energy_offset", ApplyNamingConventions = false)]
+        public DataStructures.SimpleQuantity EnergyOffset { get; set; }
 
-            [YamlMember(Alias = "n_electrons", ApplyNamingConventions = false)]
-            public int NElectrons { get; set; }
-
-            [YamlMember(Alias = "energy_offset", ApplyNamingConventions = false)]
-            public DataStructures.SimpleQuantity EnergyOffset { get; set; }
-
-            [YamlMember(Alias = "hamiltonian", ApplyNamingConventions = false)]
-            public DataStructures.HamiltonianData Hamiltonian { get; set; }
-    */
-            // FIXME: actually specify what initial_state_suggestions looks like.
-            //[YamlMember(Alias = "initial_state_suggestions", ApplyNamingConventions = false)]
-            //public List<Dictionary<string, object>> InitialStateSuggestions { get; set; }
-
-            //[YamlMember(Alias = "initial_state_suggestions", ApplyNamingConventions = false)]
-            public ProblemDescription(Broombridge.V0_2.ProblemDescription broombridgeProblem)
-            {
-                IdentityTerm = broombridgeProblem.CoulombRepulsion.Value + broombridgeProblem.EnergyOffset.Value;
-
-                NOrbitals = broombridgeProblem.NOrbitals;
-                NElectrons = broombridgeProblem.NElectrons;
-
-                var test = broombridgeProblem.Hamiltonian.OneElectronIntegrals.Values
+        [YamlMember(Alias = "hamiltonian", ApplyNamingConventions = false)]
+        public DataStructures.HamiltonianData Hamiltonian { get; set; }
     
+        // FIXME: actually specify what initial_state_suggestions looks like.
+        //[YamlMember(Alias = "initial_state_suggestions", ApplyNamingConventions = false)]
+        //public List<Dictionary<string, object>> InitialStateSuggestions { get; set; }
+
+        //[YamlMember(Alias = "initial_state_suggestions", ApplyNamingConventions = false)]
+        */
+        public BroombridgeTyped(Broombridge.V0_2.ProblemDescription broombridgeProblem)
+        {
+            NOrbitals = broombridgeProblem.NOrbitals;
+            NElectrons = broombridgeProblem.NElectrons;
+
+            IdentityTerm = broombridgeProblem.CoulombRepulsion.Value + broombridgeProblem.EnergyOffset.Value;
+
+            // This will convert from Broombridge 1-indexing to 0-indexing.
+            OneBodyTerms = broombridgeProblem.Hamiltonian.OneElectronIntegrals.Values.Select(
+                o => new OrbitalIntegral(o.Item1.Select(k => k-1), o.Item2)).ToList();
+
+            // This will convert from Broombridge 1-indexing to 0-indexing.
+            // This will convert to Dirac-indexing.
+            TwoBodyTerms = broombridgeProblem.Hamiltonian.TwoElectronIntegrals.Values.Select(
+                o => new OrbitalIntegral(o.Item1.Select(k => k - 1), o.Item2, OrbitalIntegral.Convention.Mulliken)).ToList();
+
+            InitialStates = broombridgeProblem.InitialStates.ToDictionary(
+                o => o.Label,
+                o => new FermionHamiltonian.InputState()
+                {
+                    Energy = o.Energy.Value,
+                    Label = o.Label,
+                    type = ParseInitialStateMethod(o.Method),
+                    Superposition = ParseInputState(o.Superposition)
+                }
+                );                
         }
+
+        internal static FermionHamiltonian.StateType ParseInitialStateMethod(string state)
+        {
+            if (state.ToLowerInvariant() == "single_configurational")
+            {
+                return FermionHamiltonian.StateType.Single_Configurational;
+            }
+            else if(state.ToLowerInvariant() == "sparse_multi_configurational")
+            {
+                return FermionHamiltonian.StateType.Sparse_Multi_Configurational;
+            }
+            else if(state.ToLowerInvariant() == "unitary_coupled_cluster")
+            {
+                return FermionHamiltonian.StateType.Unitary_Coupled_Cluster;
+            }
+            else
+            {
+                return FermionHamiltonian.StateType.Default;
+            }
+        }
+
+        internal static ((Double, Double), FermionTerm)[] ParseInputState(List<List<object>> superposition)
+        {
+            return superposition.Select(
+                o => ParseInputState(   
+                        o.Select(k => k.ToString()).ToList()
+                        )
+                    ).ToArray();
+        }
+
+        public static ((Double, Double), FermionTerm) ParseInputState(List<string> superpositionElement)
+        {
+            var amplitude = Double.Parse(superpositionElement.First(), System.Globalization.CultureInfo.InvariantCulture);
+            var initialState = superpositionElement.Last();
+            var ca = new List<Int64>();
+            var so = new List<SpinOrbital>();
+
+            for (int i = 1; i < superpositionElement.Count() - 1; i++)
+            {
+                FermionTerm singleTerm = ParsePolishNotation(superpositionElement[i]);
+                ca.Add(singleTerm.CreationAnnihilationIndices.First());
+                so.Add(singleTerm.SpinOrbitalIndices.First());
+            }
+            FermionTerm term = new FermionTerm(ca.ToArray(), so.ToArray(), amplitude);
+
+            var canonicalOrder = term.ToCanonicalOrder();
+            var noAnnihilationTerm = canonicalOrder.Where(o => !(o.CreationAnnihilationIndices.Contains(0)));
+            var finalAmplitude = 0.0;
+            // check if there are any valid terms.
+            if (noAnnihilationTerm.Count() == 1)
+            {
+                term = noAnnihilationTerm.Single();
+                finalAmplitude = term.coeff;
+            }
+            term.coeff = 1.0;
+            return ((finalAmplitude, 0.0), term);
+        }
+
+        internal static FermionTerm ParsePolishNotation(string input)
+        {
+            // Regex match examples: (1a)+ (2a)+ (3a)+ (4a)+ (5a)+ (6a)+ (1b)+ (2b)- (3b)+
+            Regex regex = new Regex(@"(\((?<orbital>\d+)(?<spin>[ab])\)(?<operator>\+*))");
+            Match match = regex.Match(input);
+            if (match.Success)
+            {
+                var orbital = Int64.Parse(match.Groups["orbital"].ToString()) - 1;
+                var spin = match.Groups["spin"].ToString() == "a" ? Spin.u : Spin.d;
+                var conjugate = match.Groups["operator"].ToString() == "+" ? 1 : 0;
+                return new FermionTerm(new long[] { conjugate }, new SpinOrbital[] { new SpinOrbital(orbital, spin) }, 1.0);
+            }
+            else
+            {
+                throw new System.ArgumentException($"{input} is not valid Polish notation");
+            }
         }
     }
+    
 
 
     public static partial class Extensions

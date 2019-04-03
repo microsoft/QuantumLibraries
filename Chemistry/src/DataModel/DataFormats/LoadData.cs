@@ -78,8 +78,8 @@ namespace Microsoft.Quantum.Chemistry
                     var fileHIJTerms = new Dictionary<Int64[], Double>(new Extensions.IntArrayIEqualityComparer());
                     var fileHIJKLTerms = new Dictionary<Int64[], Double>(new Extensions.IntArrayIEqualityComparer());
 
-                    fileHIJTerms = hamiltonianData.Hamiltonian.OneElectronIntegrals.Values;
-                    fileHIJKLTerms = hamiltonianData.Hamiltonian.TwoElectronIntegrals.Values;
+                    fileHIJTerms = hamiltonianData.Hamiltonian.OneElectronIntegrals.Values.ToDictionary(entry => entry.Item1, entry => entry.Item2);
+                    fileHIJKLTerms = hamiltonianData.Hamiltonian.TwoElectronIntegrals.Values.ToDictionary(entry => entry.Item1, entry => entry.Item2);
                     hamiltonian.NOrbitals = hamiltonianData.NOrbitals;
                     hamiltonian.NElectrons = hamiltonianData.NElectrons;
                     HashSet<Int64[]> recordedIJTerms = new HashSet<Int64[]>(new Extensions.IntArrayIEqualityComparer());
@@ -115,7 +115,7 @@ namespace Microsoft.Quantum.Chemistry
                             var energy = state.Energy?.Value ?? 0.0;
                             var superpositionRaw = state.Superposition;
                             var stringData = superpositionRaw.Select(o => o.Select(k => k.ToString()).ToList());
-                            var superposition = stringData.Select(o => ParseInputState(o)).ToArray();
+                            var superposition = stringData.Select(o => BroombridgeTyped.ParseInputState(o)).ToArray();
                             //Only have terms with non-zero amplitudes.
                             superposition = superposition.Where(o => Math.Abs(o.Item1.Item1) >= threshold).ToArray();
                             if (superposition.Count() > 0)
@@ -133,50 +133,6 @@ namespace Microsoft.Quantum.Chemistry
 
 
 
-        public static ((Double, Double), FermionTerm) ParseInputState(List<string> superpositionElement)
-        {
-            var amplitude = Double.Parse(superpositionElement.First(), System.Globalization.CultureInfo.InvariantCulture);
-            var initialState = superpositionElement.Last();
-            var ca = new List<Int64>();
-            var so = new List<SpinOrbital>();
-
-            for (int i = 1; i < superpositionElement.Count() - 1; i++)
-            {
-                FermionTerm singleTerm = ParsePolishNotation(superpositionElement[i]);
-                ca.Add(singleTerm.CreationAnnihilationIndices.First());
-                so.Add(singleTerm.SpinOrbitalIndices.First());
-            }
-            FermionTerm term = new FermionTerm(ca.ToArray(), so.ToArray(), amplitude);
-
-            var canonicalOrder = term.ToCanonicalOrder();
-            var noAnnihilationTerm = canonicalOrder.Where(o => !(o.CreationAnnihilationIndices.Contains(0)));
-            var finalAmplitude = 0.0;
-            // check if there are any valid terms.
-            if (noAnnihilationTerm.Count() == 1)
-            {
-                term = noAnnihilationTerm.Single();
-                finalAmplitude = term.coeff;
-            }
-            term.coeff = 1.0;
-            return ((finalAmplitude, 0.0), term);
-        }
-
-        public static FermionTerm ParsePolishNotation(string input)
-        {
-            // Regex match examples: (1a)+ (2a)+ (3a)+ (4a)+ (5a)+ (6a)+ (1b)+ (2b)- (3b)+
-            Regex regex = new Regex(@"(\((?<orbital>\d+)(?<spin>[ab])\)(?<operator>\+*))");
-            Match match = regex.Match(input);
-            if (match.Success)
-            {
-                var orbital = Int64.Parse(match.Groups["orbital"].ToString()) - 1;
-                var spin = match.Groups["spin"].ToString() == "a" ? Spin.u : Spin.d;
-                var conjugate = match.Groups["operator"].ToString() == "+" ? 1 : 0;
-                return new FermionTerm(new long[] { conjugate }, new SpinOrbital[] { new SpinOrbital(orbital, spin) }, 1.0);
-            }
-            else
-            {
-                throw new System.ArgumentException($"{input} is not valid Polish notation");
-            }
-        }
+        
     }
 }

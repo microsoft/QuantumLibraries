@@ -254,10 +254,11 @@ problem_description:
             # A one-body cluster term is t^{q}_{p} a^\dag_q a_p
             # A one-body unitary cluster term is t^{q}_{p}(a^\dag_q a_p- a^\dag_p a_q)
             one_body_amplitudes: 
-            # p q t^{q}_{p}
-            - ["1a", "2a", 0.1]
-            - ["1b", "2a", -0.2]
-            # p q r s t^{pq}_{rs}
+            # t^{q}_{p} p q 
+            - [0.1, "(1a)+", "(2a)"]
+            - [-0.2, "(1b)+", "(2a)"]
+            # t^{pq}_{rs} p q r s
             two_body_amplitudes:
-            - ["1a", "2a", "2b", "4b", -0.5]
-            - ["1a", "3a", "2a", "4b", 0.5]
+            - [-0.5, "(1a)+", "(2a)+", "(2b)", "(4b)"]
+            - [0.5, "(1a)+", "(3a)+", "(2a)", "(4b)"]
+
