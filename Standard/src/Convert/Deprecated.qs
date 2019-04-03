@@ -63,7 +63,7 @@ namespace Microsoft.Quantum.Canon {
     /// # Deprecated
     /// Please use @"microsoft.quantum.canon.resultarrayasint".
     function PositiveIntFromResultArr(results : Result[]) : Int {
-        Renamed("Microsoft.Quantum.Canon.PositiveIntFromBoolArr", "Microsoft.Quantum.Convert.ResultArrayAsInt");
+        Renamed("Microsoft.Quantum.Canon.PositiveIntFromResultArr", "Microsoft.Quantum.Convert.ResultArrayAsInt");
         return ResultArrayAsInt(results);
     }
 

@@ -49,7 +49,7 @@ namespace Microsoft.Quantum.Canon {
     {
         body (...)
         {
-            AssertBoolEqual(Length(controls) >= 1, true, $"Length of controls must be at least 1");
+            ClaimEqualB(Length(controls) >= 1, true, $"Length of controls must be at least 1");
             
             if (Length(controls) == 1)
             {
@@ -109,7 +109,7 @@ namespace Microsoft.Quantum.Canon {
     {
         body (...)
         {
-            AssertBoolEqual(Length(controls) >= 1, true, $"Length of controls must be at least 1");
+            ClaimEqualB(Length(controls) >= 1, true, $"Length of controls must be at least 1");
             
             if (Length(controls) == 1)
             {
@@ -178,8 +178,8 @@ namespace Microsoft.Quantum.Canon {
     {
         body (...)
         {
-            AssertBoolEqual(Length(controls) == Length(targets) + 1, true, $"Length(controls) must be equal to Length(target) + 1");
-            AssertBoolEqual(Length(controls) >= 2, true, $"The operation is not defined for less than 2 controls");
+            ClaimEqualB(Length(controls) == Length(targets) + 1, true, $"Length(controls) must be equal to Length(target) + 1");
+            ClaimEqualB(Length(controls) >= 2, true, $"The operation is not defined for less than 2 controls");
             ccnot!(controls[0], controls[1], targets[0]);
             
             for (k in 1 .. Length(targets) - 1)

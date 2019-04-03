@@ -4,6 +4,7 @@
 namespace Microsoft.Quantum.Arithmetic {
     open Microsoft.Quantum.Primitive;
     open Microsoft.Quantum.Canon;
+    open Microsoft.Quantum.Convert;
     open Microsoft.Quantum.Arrays;
     open Microsoft.Quantum.Diagnostics;
 
@@ -39,7 +40,7 @@ namespace Microsoft.Quantum.Arithmetic {
     /// - `AssertProbInt(6,0.875,qubits,10e-10);`
     operation AssertProbIntLE(stateIndex : Int, expected : Double, qubits : LittleEndian, tolerance : Double) : Unit {
         let nQubits = Length(qubits!);
-        let bits = BoolArrFromPositiveInt(stateIndex, nQubits);
+        let bits = IntAsBoolArray(stateIndex, nQubits);
 
         using (flag = Qubit()) {
             (ControlledOnBitString(bits, X))(qubits!, flag);
@@ -49,13 +50,6 @@ namespace Microsoft.Quantum.Arithmetic {
             (ControlledOnBitString(bits, X))(qubits!, flag);
             Reset(flag);
         }
-    }
-
-    /// # Deprecated
-    /// Please use @"Microsoft.Quantum.Arithmetic.AssertProbIntLE".
-    operation AssertProbInt(stateIndex : Int, expected : Double, qubits : LittleEndian, tolerance : Double) : Unit {
-        Renamed("Microsoft.Quantum.Arithmetic.AssertProbInt", "Microsoft.Quantum.Arithmetic.AssertProbIntLE");
-        AssertProbIntLE(stateIndex, expected, qubits, tolerance);
     }
 
     /// # Summary
@@ -122,18 +116,6 @@ namespace Microsoft.Quantum.Arithmetic {
         controlled adjoint auto;
     }
 
-    /// # Deprecated
-    /// Please use @"Microsoft.Quantum.Arithmetic.AssertMostSignificantBitLE".
-    operation AssertHighestBit(value : Result, number : LittleEndian) : Unit {
-        body (...) {
-            Renamed("Microsoft.Quantum.Arithmetic.AssertHighestBit", "Microsoft.Quantum.Arithmetic.AssertMostSignificantBitLE");
-            AssertMostSignificantBitLE(value, number);
-        }
-        adjoint auto;
-        controlled auto;
-        controlled adjoint auto;
-    }
-
     /// # Summary
     /// Asserts that the `number` encoded in PhaseLittleEndian is less than `value`.
     ///
@@ -150,7 +132,7 @@ namespace Microsoft.Quantum.Arithmetic {
         body (...)
         {
             let inner = ApplyLEOperationOnPhaseLEA(AssertHighestBit(One, _), _);
-            WithA(Adjoint IntegerIncrementPhaseLE(value, _), inner, number);
+            ApplyWithA(Adjoint IntegerIncrementPhaseLE(value, _), inner, number);
         }
         
         adjoint self;

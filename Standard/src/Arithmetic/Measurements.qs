@@ -5,6 +5,7 @@ namespace Microsoft.Quantum.Arithmetic {
     open Microsoft.Quantum.Primitive;
     open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Measurement;
+    open Microsoft.Quantum.Convert;
 
     // TODO: move to Microsoft.Quantum.Measurement.
 
@@ -33,14 +34,7 @@ namespace Microsoft.Quantum.Arithmetic {
             set results[idx] = MResetZ((target!)[idx]);
         }
 
-        return PositiveIntFromResultArr(results);
-    }
-
-    /// # Deprecated
-    /// Please use @"Microsoft.Quantum.Arithmetic.MeasureIntegerLE".
-    operation MeasureInteger(target : LittleEndian) : Int {
-        Renamed("Microsoft.Quantum.Arithmetic.MeasureInteger", "Microsoft.Quantum.Arithmetic.MeasureIntegerLE");
-        return MeasureIntegerLE(target);
+        return ResultArrayAsInt(results);
     }
 
     /// # Summary

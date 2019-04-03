@@ -125,7 +125,7 @@ namespace Microsoft.Quantum.Simulation {
             let blockEncodingAncilla = Rest(auxiliary);
             let op1 = Controlled blockEncoding!(_, (blockEncodingAncilla, system));
             let op0 = ApplyToEachCA(H,_);
-            WithCA(op0, WithCA(op1, ApplyToEachCA(X,_), _), [prep]);
+            ApplyWithCA(op0, ApplyWithCA(op1, ApplyToEachCA(X,_), _), [prep]);
         }
         adjoint auto;
         controlled auto;
@@ -216,7 +216,7 @@ namespace Microsoft.Quantum.Simulation {
         system: 'S) 
         : Unit {
         body (...){
-            WithCA(statePreparation, selector(_, system), auxiliary);
+            ApplyWithCA(statePreparation, selector(_, system), auxiliary);
         }
         adjoint auto;
         controlled auto;

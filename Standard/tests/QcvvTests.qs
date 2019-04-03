@@ -28,7 +28,7 @@ namespace Microsoft.Quantum.Tests {
     operation EstimateFrequencyTest () : Unit {
         
         let freq = EstimateFrequency(ApplyToEach(H, _), MeasureAllZ, 1, 1000);
-        AssertAlmostEqualTol(freq, 0.5, 0.1);
+        ClaimEqualWithinTolerance(freq, 0.5, 0.1);
     }
     
     
@@ -68,7 +68,7 @@ namespace Microsoft.Quantum.Tests {
         for (idxTest in 0 .. 9) {
             let phaseSet = ((2.0 * PI()) * ToDouble(idxTest - 5)) / 12.0;
             let phaseEst = RobustPhaseEstimationDemoImpl(phaseSet, bitsPrecision);
-            AssertAlmostEqualTol(phaseEst, phaseSet, 0.01);
+            ClaimEqualWithinTolerance(phaseEst, phaseSet, 0.01);
         }
     }
     

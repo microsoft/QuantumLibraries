@@ -1,11 +1,9 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-namespace Microsoft.Quantum.Canon
-{
-    
+namespace Microsoft.Quantum.Canon {
+    open Microsoft.Quantum.Convert;
     open Microsoft.Quantum.Primitive;
-    
     
     /// # Summary
     /// Applies a unitary operator on the target register if the control register state corresponds to a specified bit mask.
@@ -27,7 +25,7 @@ namespace Microsoft.Quantum.Canon
     {
         body (...)
         {
-            WithCA(ApplyPauliFromBitString(PauliX, false, bits, _), Controlled oracle(_, targetRegister), controlRegister);
+            ApplyWithCA(ApplyPauliFromBitString(PauliX, false, bits, _), Controlled oracle(_, targetRegister), controlRegister);
         }
         
         adjoint invert;
@@ -73,7 +71,7 @@ namespace Microsoft.Quantum.Canon
     {
         body (...)
         {
-            let bits = BoolArrFromPositiveInt(numberState, Length(controlRegister));
+            let bits = IntAsBoolArray(numberState, Length(controlRegister));
             (ControlledOnBitString(bits, oracle))(controlRegister, targetRegister);
         }
         

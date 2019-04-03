@@ -123,7 +123,7 @@ namespace Microsoft.Quantum.Oracles {
     {
         body (...)
         {
-            WithCA(Adjoint oracle!, RAll0(phase, _), systemRegister);
+            ApplyWithCA(Adjoint oracle!, RAll0(phase, _), systemRegister);
         }
         
         adjoint invert;

@@ -11,13 +11,13 @@ namespace Microsoft.Quantum.Tests {
     
     function ComposeTest () : Unit {
         let target = [3, 17, 2];
-        AssertIntEqual((Compose(Modulus(_, 14), Max))(target), 3, $"Compose(Modulus(_, 14), Max) did not return expected result.");
+        ClaimEqualI((Compose(Modulus(_, 14), Max))(target), 3, $"Compose(Modulus(_, 14), Max) did not return expected result.");
     }
     
     
     operation WithTest () : Unit {
         
-        let actual = With(H, X, _);
+        let actual = ApplyWith(H, X, _);
         let expected = Z;
         AssertOperationsEqualReferenced(ApplyToEach(actual, _), ApplyToEachA(expected, _), 4);
     }
@@ -55,7 +55,7 @@ namespace Microsoft.Quantum.Tests {
     
     operation BindATest () : Unit {
         
-        let bound = BindA(Map(StripControlled<Qubit>, [T, T]));
+        let bound = BindA(Mapped(StripControlled<Qubit>, [T, T]));
         AssertOperationsEqualReferenced(ApplyToEach(bound, _), ApplyToEachA(S, _), 3);
         AssertOperationsEqualReferenced(ApplyToEach(Adjoint bound, _), ApplyToEachA(Adjoint S, _), 3);
     }
@@ -85,7 +85,7 @@ namespace Microsoft.Quantum.Tests {
     
     operation BindCTest () : Unit {
         
-        let stripped = Map(StripAdjoint<Qubit>, [T, T]);
+        let stripped = Mapped(StripAdjoint<Qubit>, [T, T]);
         let bound = BindC(stripped);
         AssertOperationsEqualReferenced(ApplyToEach(bound, _), ApplyToEachA(S, _), 3);
         let op = BindCTestHelper0(bound, _);

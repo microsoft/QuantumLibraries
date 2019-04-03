@@ -44,7 +44,7 @@ namespace Microsoft.Quantum.Convert {
     /// # Output
     /// A `Bool[]` representing the `input`.
     function ResultArrayAsBoolArray(input : Result[]) : Bool[] {
-        return Map(ResultAsBool, input);
+        return Mapped(ResultAsBool, input);
     }
 
     /// # Summary
@@ -58,7 +58,7 @@ namespace Microsoft.Quantum.Convert {
     /// # Output
     /// A `Result[]` representing the `input`.
     function BoolArrayAsResultArray(input : Bool[]) : Result[] {
-        return Map(BoolAsResult, input);
+        return Mapped(BoolAsResult, input);
     }
 
     /// # Summary
@@ -77,7 +77,7 @@ namespace Microsoft.Quantum.Convert {
     /// # Remarks
     /// The input `number` must be at most $2^{\texttt{bits}} - 1$.
     function IntAsBoolArray(number : Int, bits : Int) : Bool[] {
-        AssertBoolEqual(number >= 0 and number < 2 ^ bits, true, $"`number` must be between 0 and 2^`bits` - 1");
+        ClaimEqualB(number >= 0 and number < 2 ^ bits, true, $"`number` must be between 0 and 2^`bits` - 1");
         mutable outputBits = new Bool[bits];
         mutable tempInt = number;
 
@@ -96,7 +96,7 @@ namespace Microsoft.Quantum.Convert {
     /// ## bits
     /// Bits in binary representation of number.
     function BoolArrayAsInt(bits : Bool[]) : Int {
-        AssertBoolEqual(Length(bits) < 64, true, $"`Length(bits)` must be less than 64");
+        ClaimEqualB(Length(bits) < 64, true, $"`Length(bits)` must be less than 64");
         mutable number = 0;
         let nBits = Length(bits);
 

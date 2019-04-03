@@ -5,6 +5,7 @@ namespace Microsoft.Quantum.Canon {
     open Microsoft.Quantum.Arithmetic;
     open Microsoft.Quantum.Primitive;
     open Microsoft.Quantum.Extensions.Math;
+    open Microsoft.Quantum.Arrays;
     
     
     /// # Summary
@@ -46,12 +47,12 @@ namespace Microsoft.Quantum.Canon {
             elif (pauli == PauliX)
             {
                 let op = MultiplexPauli(coefficients, PauliZ, control, _);
-                WithCA(H, op, target);
+                ApplyWithCA(H, op, target);
             }
             elif (pauli == PauliY)
             {
                 let op = MultiplexPauli(coefficients, PauliX, control, _);
-                WithCA(Adjoint S, op, target);
+                ApplyWithCA(Adjoint S, op, target);
             }
             elif (pauli == PauliI)
             {
@@ -103,7 +104,7 @@ namespace Microsoft.Quantum.Canon {
         body (...)
         {
             // pad coefficients length at tail to a power of 2.
-            let coefficientsPadded = Pad(-2 ^ Length(control!), 0.0, coefficients);
+            let coefficientsPadded = Padded(-2 ^ Length(control!), 0.0, coefficients);
             
             if (Length(coefficientsPadded) == 1)
             {
@@ -126,7 +127,7 @@ namespace Microsoft.Quantum.Canon {
         controlled (controlRegister, ...)
         {
             // pad coefficients length to a power of 2.
-            let coefficientsPadded = Pad(2 ^ (Length(control!) + 1), 0.0, Pad(-2 ^ Length(control!), 0.0, coefficients));
+            let coefficientsPadded = Padded(2 ^ (Length(control!) + 1), 0.0, Padded(-2 ^ Length(control!), 0.0, coefficients));
             let (coefficients0, coefficients1) = MultiplexZComputeCoefficients_(coefficientsPadded);
             MultiplexZ(coefficients0, control, target);
             Controlled X(controlRegister, target);
@@ -173,7 +174,7 @@ namespace Microsoft.Quantum.Canon {
             }
             
             // pad coefficients length at tail to a power of 2.
-            let coefficientsPadded = Pad(-2 ^ Length(qubits!), 0.0, coefficients);
+            let coefficientsPadded = Padded(-2 ^ Length(qubits!), 0.0, coefficients);
             
             // Compute new coefficients.
             let (coefficients0, coefficients1) = MultiplexZComputeCoefficients_(coefficientsPadded);

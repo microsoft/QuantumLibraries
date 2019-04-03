@@ -53,19 +53,6 @@ namespace Microsoft.Quantum.Arithmetic {
         controlled adjoint distribute;
     }
 
-    /// # Deprecated
-    /// Please use @"Microsoft.Quantum.Arithmetic.IncrementByIntegerPhaseLE".
-    operation IntegerIncrementPhaseLE (increment : Int, target : PhaseLittleEndian) : Unit {
-        body (...) {
-            Renamed("Microsoft.Quantum.Arithmetic.IntegerIncrementPhaseLE", "Microsoft.Quantum.Arithmetic.IncrementByIntegerPhaseLE");
-            IncrementByIntegerPhaseLE(increment, target);
-        }
-
-        adjoint invert;
-        controlled distribute;
-        controlled adjoint distribute;
-    }
-
     /// # Summary
     /// Increments an unsigned quantum register by a classical integer,
     /// using phase rotations.
@@ -98,18 +85,6 @@ namespace Microsoft.Quantum.Arithmetic {
         controlled adjoint distribute;
     }
 
-    /// # Deprecated
-    /// Please use @"Microsoft.Quantum.Arithmetic.IncrementByIntegerLE".
-    operation IntegerIncrementLE(increment : Int, target : LittleEndian) : Unit {
-        body (...) {
-            Renamed("Microsoft.Quantum.Arithmetic.IntegerIncrementLE", "Microsoft.Quantum.Arithmetic.IncrementByIntegerLE");
-            IncrementByIntegerLE(increment, target);
-        }
-
-        adjoint invert;
-        controlled distribute;
-        controlled adjoint distribute;
-    }
 
     /// # Summary
     /// Increments an unsigned quantum register by a classical integer,

@@ -123,7 +123,7 @@ namespace Microsoft.Quantum.Arithmetic {
     operation ApplyLEOperationOnPhaseLE (op : (LittleEndian => Unit), target : PhaseLittleEndian) : Unit
     {
         let targetLE = LittleEndian(target!);
-        With(Adjoint QFTLE, op, targetLE);
+        ApplyWith(Adjoint QFTLE, op, targetLE);
     }
     
     
@@ -134,7 +134,7 @@ namespace Microsoft.Quantum.Arithmetic {
         body (...)
         {
             let targetLE = LittleEndian(target!);
-            WithA(Adjoint QFTLE, op, targetLE);
+            ApplyWithA(Adjoint QFTLE, op, targetLE);
         }
         
         adjoint invert;
@@ -162,7 +162,7 @@ namespace Microsoft.Quantum.Arithmetic {
         body (...)
         {
             let targetLE = LittleEndian(target!);
-            WithCA(Adjoint QFTLE, op, targetLE);
+            ApplyWithCA(Adjoint QFTLE, op, targetLE);
         }
 
         adjoint invert;

@@ -9,18 +9,18 @@ namespace Microsoft.Quantum.Canon {
     function NativeFnsAreCallableTest () : Unit {
         
         let arg = PI() / 2.0;
-        AssertAlmostEqual(Sin(arg), 1.0);
-        AssertAlmostEqual(Cos(arg), 0.0);
+        ClaimAlmostEqual(Sin(arg), 1.0);
+        ClaimAlmostEqual(Cos(arg), 0.0);
         let arcArg = 1.0;
-        AssertAlmostEqual(ArcCos(arcArg), 0.0);
-        AssertAlmostEqual(ArcSin(arcArg), arg);
+        ClaimAlmostEqual(ArcCos(arcArg), 0.0);
+        ClaimAlmostEqual(ArcSin(arcArg), arg);
     }
     
     
     function RealModTest () : Unit {
         
-        AssertAlmostEqual(RealMod(5.5 * PI(), 2.0 * PI(), 0.0), 1.5 * PI());
-        AssertAlmostEqual(RealMod(0.5 * PI(), 2.0 * PI(), -PI() / 2.0), 0.5 * PI());
+        ClaimAlmostEqual(RealMod(5.5 * PI(), 2.0 * PI(), 0.0), 1.5 * PI());
+        ClaimAlmostEqual(RealMod(0.5 * PI(), 2.0 * PI(), -PI() / 2.0), 0.5 * PI());
     }
     
     
@@ -28,9 +28,9 @@ namespace Microsoft.Quantum.Canon {
         
         // These tests were generated using NumPy's implementations
         // of the inverse hyperbolic functions.
-        AssertAlmostEqual(ArcTanh(0.3), 0.30951960420311175);
-        AssertAlmostEqual(ArcCosh(1.3), 0.75643291085695963);
-        AssertAlmostEqual(ArcSinh(-0.7), -0.65266656608235574);
+        ClaimAlmostEqual(ArcTanh(0.3), 0.30951960420311175);
+        ClaimAlmostEqual(ArcCosh(1.3), 0.75643291085695963);
+        ClaimAlmostEqual(ArcSinh(-0.7), -0.65266656608235574);
     }
     
     
@@ -40,21 +40,21 @@ namespace Microsoft.Quantum.Canon {
         let (u, v) = ExtendedGCD(a, b);
         let expected = AbsI(gcd);
         let actual = AbsI(u * a + v * b);
-        AssertIntEqual(expected, actual, $"Expected absolute value of gcd to be {expected}, got {actual}");
+        ClaimEqualI(expected, actual, $"Expected absolute value of gcd to be {expected}, got {actual}");
     }
     
     
     function ExtendedGCDTest () : Unit {
         
         let testTuples = [(1, 1, 1), (1, -1, 1), (-1, 1, 1), (-1, -1, 1), (5, 7, 1), (-5, 7, 1), (3, 15, 3)];
-        Ignore(Map(ExtendedGCDTestHelper, testTuples));
+        Ignore(Mapped(ExtendedGCDTestHelper, testTuples));
     }
     
     
     function BitSizeTest () : Unit {
         
-        AssertIntEqual(BitSize(3), 2, $"BitSize(3) must be 2");
-        AssertIntEqual(BitSize(7), 3, $"BitSize(7) must be 2");
+        ClaimEqualI(BitSize(3), 2, $"BitSize(3) must be 2");
+        ClaimEqualI(BitSize(7), 3, $"BitSize(7) must be 2");
     }
     
     
@@ -62,7 +62,7 @@ namespace Microsoft.Quantum.Canon {
         
         // this test is generated using Mathematica PowerMod function
         let result = ExpMod(5, 4611686018427387903, 7);
-        AssertIntEqual(result, 6, $"The result must be 6, got {result}");
+        ClaimEqualI(result, 6, $"The result must be 6, got {result}");
     }
     
     
@@ -71,23 +71,23 @@ namespace Microsoft.Quantum.Canon {
         let bitSize = 2 * BitSize(denominator);
         let numeratorDyadic = (numerator * 2 ^ bitSize) / denominator;
         let (u, v) = (ContinuedFractionConvergent(Fraction(numeratorDyadic, 2 ^ bitSize), denominator))!;
-        AssertBoolEqual(AbsI(u) == numerator && AbsI(v) == denominator, true, $"The result must be ±{numerator}/±{denominator} got {u}/{v}");
+        ClaimEqualB(AbsI(u) == numerator && AbsI(v) == denominator, true, $"The result must be ±{numerator}/±{denominator} got {u}/{v}");
     }
     
     
     function ContinuedFractionConvergentEdgeCaseTestHelper (numerator : Int, denominator : Int, bound : Int) : Unit {
         
         let (num, denom) = (ContinuedFractionConvergent(Fraction(numerator, denominator), bound))!;
-        AssertBoolEqual(AbsI(num) == numerator && AbsI(denom) == denominator, true, $"The result must be ±{numerator}/±{denominator} got {num}/{denom}");
+        ClaimEqualB(AbsI(num) == numerator && AbsI(denom) == denominator, true, $"The result must be ±{numerator}/±{denominator} got {num}/{denom}");
     }
     
     
     function ContinuedFractionConvergentTest () : Unit {
         
         let testTuples = [(29, 47), (17, 37), (15, 67)];
-        Ignore(Map(ContinuedFractionConvergentTestHelper, testTuples));
+        Ignore(Mapped(ContinuedFractionConvergentTestHelper, testTuples));
         let edgeCaseTestTuples = [(1, 4, 512), (3, 4, 512)];
-        Ignore(Map(ContinuedFractionConvergentEdgeCaseTestHelper, edgeCaseTestTuples));
+        Ignore(Mapped(ContinuedFractionConvergentEdgeCaseTestHelper, edgeCaseTestTuples));
     }
     
     
@@ -101,18 +101,18 @@ namespace Microsoft.Quantum.Canon {
             let complexArg = ArcTan2(complexIm, complexRe);
             let complex = Complex(complexRe, complexIm);
             let complexPolar = ComplexPolar(complexAbs, complexArg);
-            AssertAlmostEqual(AbsSquaredComplex(complex), complexAbs * complexAbs);
-            AssertAlmostEqual(AbsComplex(complex), complexAbs);
-            AssertAlmostEqual(ArgComplex(complex), complexArg);
-            AssertAlmostEqual(AbsSquaredComplexPolar(complexPolar), complexAbs * complexAbs);
-            AssertAlmostEqual(AbsComplexPolar(complexPolar), complexAbs);
-            AssertAlmostEqual(ArgComplexPolar(complexPolar), complexArg);
+            ClaimAlmostEqual(AbsSquaredComplex(complex), complexAbs * complexAbs);
+            ClaimAlmostEqual(AbsComplex(complex), complexAbs);
+            ClaimAlmostEqual(ArgComplex(complex), complexArg);
+            ClaimAlmostEqual(AbsSquaredComplexPolar(complexPolar), complexAbs * complexAbs);
+            ClaimAlmostEqual(AbsComplexPolar(complexPolar), complexAbs);
+            ClaimAlmostEqual(ArgComplexPolar(complexPolar), complexArg);
             let (x, y) = (ComplexPolarToComplex(complexPolar))!;
-            AssertAlmostEqual(x, complexRe);
-            AssertAlmostEqual(y, complexIm);
+            ClaimAlmostEqual(x, complexRe);
+            ClaimAlmostEqual(y, complexIm);
             let (r, t) = (ComplexToComplexPolar(complex))!;
-            AssertAlmostEqual(r, complexAbs);
-            AssertAlmostEqual(t, complexArg);
+            ClaimAlmostEqual(r, complexAbs);
+            ClaimAlmostEqual(t, complexArg);
         }
     }
     
@@ -128,13 +128,13 @@ namespace Microsoft.Quantum.Canon {
         
         for (idxTest in 0 .. Length(testCases) - 1) {
             let (p, array, pNormExpected) = testCases[idxTest];
-            AssertAlmostEqual(PNorm(p, array), pNormExpected);
+            ClaimAlmostEqual(PNorm(p, array), pNormExpected);
             
             // if PNorm fails, PNormalize will fail.
             let arrayNormalized = PNormalized(p, array);
             
             for (idxCoeff in 0 .. Length(array) - 1) {
-                AssertAlmostEqual(array[idxCoeff] / pNormExpected, arrayNormalized[idxCoeff]);
+                ClaimAlmostEqual(array[idxCoeff] / pNormExpected, arrayNormalized[idxCoeff]);
             }
         }
     }

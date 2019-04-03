@@ -78,7 +78,7 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
             }
             
             Controlled X(ctrl, accumulator);
-            WithCA(Controlled (Adjoint S)([pauliBasis], _), Controlled X(ctrl, _), targetRegister[targetIndex]);
+            ApplyWithCA(Controlled (Adjoint S)([pauliBasis], _), Controlled X(ctrl, _), targetRegister[targetIndex]);
             Controlled Z([accumulator], targetRegister[targetIndex]);
         }
         

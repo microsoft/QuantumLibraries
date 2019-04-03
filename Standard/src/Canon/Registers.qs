@@ -5,7 +5,7 @@ namespace Microsoft.Quantum.Canon {
     open Microsoft.Quantum.Primitive;
 
     /// # Summary
-    /// Uses SWAP gates to reverse the order of the qubits in
+    /// Uses SWAP gates to Reversed the order of the qubits in
     /// a register.
     ///
     /// # Input

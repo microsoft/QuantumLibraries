@@ -6,7 +6,7 @@ namespace Microsoft.Quantum.Arrays {
     open Microsoft.Quantum.Diagnostics;
 
     /// # Summary
-    /// Create an array that contains the same elements as an input array but in reverse
+    /// Create an array that contains the same elements as an input array but in Reversed
     /// order.
     ///
     /// # Type Parameters
@@ -15,7 +15,7 @@ namespace Microsoft.Quantum.Arrays {
     ///
     /// # Input
     /// ## array
-    /// An array whose elements are to be copied in reverse order.
+    /// An array whose elements are to be copied in Reversed order.
     ///
     /// # Output
     /// An array containing the elements `array[Length(array) - 1]` .. `array[0]`.
@@ -230,9 +230,9 @@ namespace Microsoft.Quantum.Arrays {
     /// ```qsharp
     /// let array = [10, 11, 12];
     /// // The following line returns [10, 12, 15, 2, 2, 2].
-    /// let output = Pad(-6, array, 2);
+    /// let output = Padded(-6, array, 2);
     /// // The following line returns [2, 2, 2, 10, 12, 15].
-    /// let output = Pad(6, array, 2);
+    /// let output = Padded(6, array, 2);
     /// ```
     function Padded<'T> (nElementsTotal : Int, defaultElement : 'T, inputArray : 'T[]) : 'T[] {
         let nElementsInitial = Length(inputArray);
@@ -242,8 +242,8 @@ namespace Microsoft.Quantum.Arrays {
         let padArray = ConstantArray(nElementsPad, defaultElement);
 
         return nElementsTotal >= 0
-               ? padArray + inputArray  // Pad at head.
-               | inputArray + padArray; // Pad at tail.
+               ? padArray + inputArray  // Padded at head.
+               | inputArray + padArray; // Padded at tail.
     }
 
     /// # Summary

@@ -39,7 +39,7 @@ namespace Microsoft.Quantum.Tests {
     
     function AssertBoolEqualTestShouldFail () : Unit {
         
-        AssertBoolEqual(true, false, $"OK");
+        ClaimEqualB(true, false, $"OK");
     }
     
     
@@ -49,9 +49,9 @@ namespace Microsoft.Quantum.Tests {
     }
     
     
-    function AssertIntEqualTestShouldFail () : Unit {
+    function ClaimEqualITestShouldFail () : Unit {
         
-        AssertIntEqual(12, 42, $"OK");
+        ClaimEqualI(12, 42, $"OK");
     }
     
     

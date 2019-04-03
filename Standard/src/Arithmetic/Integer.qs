@@ -108,7 +108,7 @@ namespace Microsoft.Quantum.Arithmetic {
         body (...) {
             let nQubits = Length(targets);
 
-            AssertBoolEqual(
+            ClaimEqualB(
                 nQubits == Length(register)+1, true,
                 "Target register must have one more qubit." );
 
@@ -155,7 +155,7 @@ namespace Microsoft.Quantum.Arithmetic {
         controlled ( controls, ... ) { 
             let nQubits = Length(xs!);
 
-            AssertBoolEqual(
+            ClaimEqualB(
                 nQubits == Length(ys!), true,
                 "Input registers must have the same number of qubits." );
 
@@ -199,11 +199,11 @@ namespace Microsoft.Quantum.Arithmetic {
         body (...) {
             let nQubits = Length(xs!);
 
-            AssertBoolEqual(
+            ClaimEqualB(
                 nQubits == Length(ys!), true,
                 "Input registers must have the same number of qubits." );
 
-            AssertBoolEqual(
+            ClaimEqualB(
                 nQubits >= 3, true,
                 "Need at least 3 qubits per register.");
 
@@ -245,7 +245,7 @@ namespace Microsoft.Quantum.Arithmetic {
         body (...) {
             let nQubits = Length(xs!);
 
-            AssertBoolEqual(
+            ClaimEqualB(
                 nQubits == Length(ys!), true,
                 "Input registers must have the same number of qubits." );
 
@@ -261,7 +261,7 @@ namespace Microsoft.Quantum.Arithmetic {
     }
 
     /// # Summary
-    /// Outer operation in the RippleCarryAdderCDKM for use with _InnerCDKM in WithCA to 
+    /// Outer operation in the RippleCarryAdderCDKM for use with _InnerCDKM in ApplyWithCA to 
     /// construct RippleCarryAdderCDKM. 
     ///
     /// # Input
@@ -281,7 +281,7 @@ namespace Microsoft.Quantum.Arithmetic {
         body (...) {
             let nQubits = Length(xs!);
 
-            AssertBoolEqual(
+            ClaimEqualB(
                 nQubits == Length(ys!), true,
                 "Input registers must have the same number of qubits." );
 
@@ -295,7 +295,7 @@ namespace Microsoft.Quantum.Arithmetic {
     }
 
     /// # Summary
-    /// Inner operation in the RippleCarryAdderCDKM for use with _OuterCDKM in WithCA to 
+    /// Inner operation in the RippleCarryAdderCDKM for use with _OuterCDKM in ApplyWithCA to 
     /// construct RippleCarryAdderCDKM. 
     ///
     /// # Input
@@ -318,11 +318,11 @@ namespace Microsoft.Quantum.Arithmetic {
         body (...) {
             let nQubits = Length(xs!);
 
-            AssertBoolEqual(
+            ClaimEqualB(
                 nQubits == Length(ys!), true,
                 "Input registers must have the same number of qubits." );
 
-            WithCA(_RippleCDKM,
+            ApplyWithCA(_RippleCDKM,
                    _CarryOutCoreCDKM(_, _, _, carry), (xs, ys, ancilla));
             ApplyToEachCA (X, Most(Rest(ys!)));   // X on ys[1..(nQubits-2)]
         }
@@ -360,12 +360,12 @@ namespace Microsoft.Quantum.Arithmetic {
         body (...) {
             let nQubits = Length(xs!);
 
-            AssertBoolEqual(
+            ClaimEqualB(
                 nQubits == Length(ys!), true,
                 "Input registers must have the same number of qubits." );
 
             using ( ancilla = Qubit() ) {
-                WithCA(_OuterCDKM, _InnerCDKM(_, _, carry, _), (xs, ys, ancilla));
+                ApplyWithCA(_OuterCDKM, _InnerCDKM(_, _, carry, _), (xs, ys, ancilla));
                 CNOT (xs![0], ys![0]);
             }
         }
@@ -408,7 +408,7 @@ namespace Microsoft.Quantum.Arithmetic {
         controlled ( controls, ... ) {
             let nQubits = Length(xs!);
 
-            AssertBoolEqual(
+            ClaimEqualB(
                 nQubits == Length(ys!), true,
                 "Input registers must have the same number of qubits." );
 
@@ -446,7 +446,7 @@ namespace Microsoft.Quantum.Arithmetic {
         body (...) {
             let nQubits = Length(xs!);
 
-            AssertBoolEqual(
+            ClaimEqualB(
                 nQubits == Length(ys!), true,
                 "Input registers must have the same number of qubits." );
 
@@ -488,13 +488,13 @@ namespace Microsoft.Quantum.Arithmetic {
         body (...) {
             let nQubits = Length(xs!);
 
-            AssertBoolEqual(
+            ClaimEqualB(
                 nQubits == Length(ys!), true,
                 "Input registers must have the same number of qubits." );
 
             if (nQubits > 1) {
                 CNOT(xs![nQubits-1], carry);
-                WithCA(_OuterTTK, _InnerAddTTK(_, _, carry), (xs, ys));
+                ApplyWithCA(_OuterTTK, _InnerAddTTK(_, _, carry), (xs, ys));
             }
             else {
                 CCNOT(xs![0], ys![0], carry);
@@ -538,7 +538,7 @@ namespace Microsoft.Quantum.Arithmetic {
         controlled ( controls, ... ) {
             let nQubits = Length(xs!);
 
-            AssertBoolEqual(
+            ClaimEqualB(
                 nQubits == Length(ys!), true,
                 "Input registers must have the same number of qubits." );
 
@@ -581,12 +581,12 @@ namespace Microsoft.Quantum.Arithmetic {
         body (...) {
             let nQubits = Length(xs!);
 
-            AssertBoolEqual(
+            ClaimEqualB(
                 nQubits == Length(ys!), true,
                 "Input registers must have the same number of qubits." );
 
             if (nQubits > 1) {
-                WithCA(_OuterTTK, _InnerAddNoCarryTTK, (xs, ys));
+                ApplyWithCA(_OuterTTK, _InnerAddNoCarryTTK, (xs, ys));
             }
             CNOT (xs![0], ys![0]);
         }
@@ -628,7 +628,7 @@ namespace Microsoft.Quantum.Arithmetic {
         controlled (controls, ...) {
             let nQubits = Length(xs!);
 
-            AssertBoolEqual(
+            ClaimEqualB(
                 nQubits == Length(ys!), true,
                 "Input registers must have the same number of qubits." );
 

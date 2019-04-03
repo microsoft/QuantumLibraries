@@ -5,6 +5,7 @@ namespace Microsoft.Quantum.Canon {
     open Microsoft.Quantum.Primitive;
     open Microsoft.Quantum.Extensions.Math;
     open Microsoft.Quantum.Arithmetic;
+    open Microsoft.Quantum.Arrays;
 
     /// # Summary
     /// Applies a multiply-controlled unitary operation $U$ that applies a 
@@ -141,7 +142,7 @@ namespace Microsoft.Quantum.Canon {
             let nStates = 2^nIndex;
             let (nUnitaries, unitaryFunction) = unitaryGenerator;
             for(idxOp in 0..MinI(nStates,nUnitaries)-1){
-                (ControlledOnInt(idxOp, unitaryFunction(idxOp)))(Reverse(index!),target);
+                (ControlledOnInt(idxOp, unitaryFunction(idxOp)))(Reversed(index!),target);
             }
         }
         adjoint auto;

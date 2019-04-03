@@ -146,7 +146,7 @@ namespace Microsoft.Quantum.Tests {
         for (idxTest in 0..Length(testCases) - 1) {
             let (expected, range) = testCases[idxTest];
             let output = IntArrayFromRange(range);
-            Ignore(Mapped(AssertIntEqual(_, _, "Pad failed."), Zip(output, expected)));
+            Ignore(Mapped(ClaimEqualI(_, _, "Padded failed."), Zip(output, expected)));
         }
     }
 

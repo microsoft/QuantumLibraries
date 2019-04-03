@@ -7,6 +7,7 @@ namespace Microsoft.Quantum.Preparation {
     open Microsoft.Quantum.Primitive;
     open Microsoft.Quantum.Extensions.Math;
     open Microsoft.Quantum.Math;
+    open Microsoft.Quantum.Arrays;
 
     // This library returns operations that prepare a specified quantum state
     // from the computational basis state $\ket{0...0}$.
@@ -152,7 +153,7 @@ namespace Microsoft.Quantum.Preparation {
         body (...)
         {
             // pad coefficients at tail length to a power of 2.
-            let coefficientsPadded = Pad(-2 ^ Length(qubits!), ComplexPolar(0.0, 0.0), coefficients);
+            let coefficientsPadded = Padded(-2 ^ Length(qubits!), ComplexPolar(0.0, 0.0), coefficients);
             let target = (qubits!)[Length(qubits!) - 1];
             let op = (Adjoint PrepareArbitraryState_(coefficientsPadded, _, _))(_, target);
             

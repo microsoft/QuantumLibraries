@@ -193,7 +193,7 @@ namespace Microsoft.Quantum.Canon {
     /// - Microsoft.Quantum.Canon.RAll1
     operation RAll0 (phase : Double, qubits : Qubit[]) : Unit {
         body (...) {
-            WithCA(ApplyToEachCA(X, _), RAll1(phase, _), qubits);
+            ApplyWithCA(ApplyToEachCA(X, _), RAll1(phase, _), qubits);
         }
 
         adjoint invert;

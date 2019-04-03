@@ -71,7 +71,7 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
         
         let nExcitations = Length(excitations);
         
-        //FIXME compile error let coefficientsSqrtAbs = Map(Compose(Compose(Sqrt, Fst),Fst), excitations);
+        //FIXME compile error let coefficientsSqrtAbs = Mapped(Compose(Compose(Sqrt, Fst),Fst), excitations);
         mutable coefficientsSqrtAbs = new Double[nExcitations];
         mutable coefficientsNewComplexPolar = new ComplexPolar[nExcitations];
         mutable applyFlips = new Int[][nExcitations];
@@ -90,7 +90,7 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
             
             using (auxillary = Qubit[nBitsIndices + 1]) {
                 using (flag = Qubit[1]) {
-                    let multiplexer = MultiplexerBruteForceFromGenerator(nExcitations, LookupFunction(Map(_PrepareTrialStateSingleSiteOccupation_, applyFlips)));
+                    let multiplexer = MultiplexerBruteForceFromGenerator(nExcitations, LookupFunction(Mapped(_PrepareTrialStateSingleSiteOccupation_, applyFlips)));
                     (StatePreparationComplexCoefficients(coefficientsNewComplexPolar))(BigEndian(auxillary));
                     multiplexer(BigEndian(auxillary), qubits);
                     (Adjoint (StatePreparationPositiveCoefficients(coefficientsSqrtAbs)))(BigEndian(auxillary));

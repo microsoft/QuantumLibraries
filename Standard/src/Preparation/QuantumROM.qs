@@ -123,7 +123,7 @@ namespace Microsoft.Quantum.Preparation {
         let barHeight = 2^bitsPrecision - 1;
         
         mutable altIndex = IntArrayFromRange(0..nCoefficients-1);
-        mutable keepCoeff = Map(QuantumROMDiscretizationRoundCoefficients_(_, oneNorm, nCoefficients, barHeight), coefficients);
+        mutable keepCoeff = Mapped(QuantumROMDiscretizationRoundCoefficients_(_, oneNorm, nCoefficients, barHeight), coefficients);
 
         // Calculate difference between number of discretized bars vs. maximum
         mutable bars = 0;
