@@ -21,8 +21,8 @@ namespace Microsoft.Quantum.Chemistry
         /// <summary>
         ///      Loads a Hamiltonian from integral data represented
         ///      in .yaml format.
-        ///      Please see the <a href="http://ToBeDetermined/qchem-0.1.schema.json">
-        ///      for further details about the
+        ///      Please see the <a href="https://docs.microsoft.com/quantum/libraries/chemistry/schema/spec">Broombridge
+        ///      specification</a> for further details about the
         ///      format parsed by this method.
         /// </summary>
         /// <param name="filename">The name of the file to be loaded.</param>
