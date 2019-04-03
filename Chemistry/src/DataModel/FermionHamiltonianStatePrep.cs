@@ -50,7 +50,7 @@ namespace Microsoft.Quantum.Chemistry
 
         #region Function for state preparation
         /// <summary>
-        /// This approximates the Hamiltonian ground state by a greedy algorithm 
+        /// This approximates the Hamiltonian ground state by a greedy algorithm  
         /// that minimizes only the PP term energies. If there are no PP terms,
         /// states will be occupied in lexicographic order.
         /// </summary>
