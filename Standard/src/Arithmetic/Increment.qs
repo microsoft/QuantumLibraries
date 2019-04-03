@@ -103,7 +103,7 @@ namespace Microsoft.Quantum.Arithmetic {
     operation IntegerIncrementLE(increment : Int, target : LittleEndian) : Unit {
         body (...) {
             Renamed("Microsoft.Quantum.Arithmetic.IntegerIncrementLE", "Microsoft.Quantum.Arithmetic.IncrementByIntegerLE");
-            IntegerIncrementLE(increment, target);
+            IncrementByIntegerLE(increment, target);
         }
 
         adjoint invert;

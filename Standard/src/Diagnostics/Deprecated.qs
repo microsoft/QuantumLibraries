@@ -16,7 +16,7 @@ namespace Microsoft.Quantum.Canon {
     /// Please use @"Microsoft.Quantum.Diagnostics.ClaimAlmostEqual" instead.
     function AssertAlmostEqual(actual : Double, expected : Double) : Unit {
         Renamed("Microsoft.Quantum.Canon.AssertAlmostEqual", "Microsoft.Quantum.Diagnostics.ClaimAlmostEqual");
-        AssertAlmostEqual(actual, expected);
+        ClaimAlmostEqual(actual, expected);
     }
 
     /// # Deprecated
