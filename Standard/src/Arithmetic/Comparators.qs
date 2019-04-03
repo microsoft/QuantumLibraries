@@ -30,7 +30,7 @@ namespace Microsoft.Quantum.Arithmetic {
     /// - A new quantum ripple-carry addition circuit
     ///   Steven A. Cuccaro, Thomas G. Draper, Samuel A. Kutin, David Petrie Moulton
     ///   https://arxiv.org/abs/quant-ph/0410184
-    operation ApplyRippleCarryComparatorLE(x: LittleEndian, y: LittleEndian, output: Qubit) : Unit {
+    operation CompareUsingRippleCarry(x: LittleEndian, y: LittleEndian, output: Qubit) : Unit {
         body (...) {
             if (Length(x!) != Length(y!)) {
                 fail "Size of integer registers must be equal.";

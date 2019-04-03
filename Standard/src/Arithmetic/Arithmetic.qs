@@ -19,10 +19,7 @@ namespace Microsoft.Quantum.Arithmetic {
     /// An integer which is assumed to be non-negative.
     /// ## target
     /// A quantum register which is used to store `value` in little-endian encoding.
-    ///
-    /// # See Also
-    /// - InPlaceXorBE
-    operation InPlaceXorLE (value : Int, target : LittleEndian) : Unit {
+    operation ApplyXorInPlace(value : Int, target : LittleEndian) : Unit {
         body (...) {
             ApplyToEachCA(
                 CControlledCA(X),
@@ -50,15 +47,7 @@ namespace Microsoft.Quantum.Arithmetic {
     ///
     /// # See Also
     /// - InPlaceXorLE
-    operation InPlaceXorBE(value : Int, target : BigEndian) : Unit {
-        body (...) {
-            ApplyReversedOpLECA(InPlaceXorLE(value, _), target);
-        }
-        adjoint auto;
-        controlled auto;
-        adjoint controlled auto;
-    }
-
+    
     /// # Summary
     /// This computes the Majority function in-place on 3 qubits.
     ///
@@ -79,39 +68,6 @@ namespace Microsoft.Quantum.Arithmetic {
             } else {
                 fail $"The in-place majority operation on {Length(input)} is qubits not yet implemented.";
             }
-        }
-        adjoint auto;
-        controlled auto;
-        adjoint controlled auto;
-    }
-
-    /// # Summary
-    /// This unitary tests if two integers `x` and `y` stored in equal-size qubit registers 
-    /// satisfy `x > y`. If true, 1 is XORed into an output
-    /// qubit. Otherwise, 0 is XORed into an output qubit.
-    ///
-    /// In other words, this unitary $U$  satisfies:
-    /// $$
-    /// \begin{align}
-    /// U\ket{x}\ket{y}\ket{z}=\ket{x}\ket{y}\ket{z\oplus (x>y)}.
-    /// \end{align}
-    /// $$.
-    ///
-    /// # Input
-    /// ## x
-    /// First number to be compared stored in `BigEndian` format in a qubit register.
-    /// ## y
-    /// Second number to be compared stored in `BigEndian` format in a qubit register.
-    /// ## output
-    /// Qubit that stores the result of the comparison $x>y$.
-    ///
-    /// # References
-    /// - A new quantum ripple-carry addition circuit
-    ///   Steven A. Cuccaro, Thomas G. Draper, Samuel A. Kutin, David Petrie Moulton
-    ///   https://arxiv.org/abs/quant-ph/0410184
-    operation ApplyRippleCarryComparatorBE(x : BigEndian, y : BigEndian, output : Qubit) : Unit {
-        body (...) {
-            ApplyRippleCarryComparatorLE(BigEndianAsLittleEndian(x), BigEndianAsLittleEndian(y), output);
         }
         adjoint auto;
         controlled auto;

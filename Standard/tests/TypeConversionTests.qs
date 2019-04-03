@@ -19,7 +19,7 @@ namespace Microsoft.Quantum.Tests {
     }
 
     operation ToOperationTest() : Unit {
-        let op = ToOperation(Square);
+        let op = FunctionAsOperation(Square);
         ClaimEqualI(ApplyOp(op, 3), 9, "ToOperation failed with Square.");
     }
 

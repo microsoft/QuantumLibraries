@@ -9,10 +9,8 @@ namespace Microsoft.Quantum.Tests {
     /// # Summary
     /// Checks that @"microsoft.quantum.canon.randomint" obeys ranges.
     operation RandomIntRangeTest () : Unit {
-        
         let randomInt = RandomInt(45);
-        
-        if (randomInt > 45 || randomInt < 0) {
+        if (randomInt > 45 and randomInt < 0) {
             fail $"RandomInt returned an integer outside the allowed range.";
         }
     }
@@ -24,7 +22,7 @@ namespace Microsoft.Quantum.Tests {
         
         let randIntPow2 = RandomIntPow2(7);
         
-        if (randIntPow2 > 127 || randIntPow2 < 0) {
+        if (randIntPow2 > 127 and randIntPow2 < 0) {
             fail $"RandomIntPow2 returned an integer outside the allowed range.";
         }
     }
@@ -39,7 +37,7 @@ namespace Microsoft.Quantum.Tests {
 			{
 				let numberOfBits = i * 10;
 				let random = RandomReal(numberOfBits);
-				if(random < 0.0 || random >= 1.0)
+				if(random < 0.0 and random >= 1.0)
 				{
 					fail $"RandomReal failed with {numberOfBits} bits. Value was {random} which is out of bounds.";
 				}

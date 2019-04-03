@@ -38,7 +38,7 @@ namespace Microsoft.Quantum.Arithmetic {
     /// See the figure on
     /// [ Page 6 of arXiv:quant-ph/0008033v1 ](https://arxiv.org/pdf/quant-ph/0008033.pdf#page=6)
     /// for the circuit diagram and explanation.
-    operation IncrementByIntegerPhaseLE(increment : Int, target : PhaseLittleEndian) : Unit {
+    operation IncrementPhaseByInteger(increment : Int, target : PhaseLittleEndian) : Unit {
         body (...) {
             let d = Length(target!);
 
@@ -72,9 +72,8 @@ namespace Microsoft.Quantum.Arithmetic {
     /// The integer by which the `target` is incremented by.
     ///
     /// # See Also
-    /// - IncrementByIntegerBE
     /// - IncrementByIntegerPhaseLE
-    operation IncrementByIntegerLE(increment : Int, target : LittleEndian) : Unit {
+    operation IncrementByInteger(increment : Int, target : LittleEndian) : Unit {
         body (...) {
             let inner = IntegerIncrementPhaseLE(increment, _);
             ApplyPhaseLEOperationOnLECA(inner, target);
@@ -83,37 +82,6 @@ namespace Microsoft.Quantum.Arithmetic {
         adjoint invert;
         controlled distribute;
         controlled adjoint distribute;
-    }
-
-
-    /// # Summary
-    /// Increments an unsigned quantum register by a classical integer,
-    /// using phase rotations.
-    ///
-    /// # Description
-    /// Suppose that `target` encodes an unsigned integer $x$ in a big-endian
-    /// encoding and that `increment` is equal to $a$.
-    /// Then, this operation implements the unitary $\ket{x} \mapsto \ket{x + a}$,
-    /// where the addition is performed
-    /// modulo $2^n$, where $n = \texttt{Length(target!)}$.
-    ///
-    /// # Input
-    /// ## target
-    /// A quantum register encoding an unsigned integer using big-endian
-    /// encoding.
-    /// ## increment
-    /// The integer by which the `target` is incremented by.
-    ///
-    /// # See Also
-    /// - IncrementByIntegerBE
-    /// - IncrementByIntegerPhaseLE
-    operation IncrementByIntegerBE(increment : Int, target : BigEndian) : Unit {
-        body (...) {
-            IncrementByIntegerLE(increment, BigEndianAsLittleEndian(target));
-        }
-        adjoint auto;
-        controlled auto;
-        controlled adjoint auto;
     }
 
 }

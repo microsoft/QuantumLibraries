@@ -117,11 +117,11 @@ namespace Microsoft.Quantum.Canon {
     }
 
     /// # Deprecated
-    /// Please use @"Microsoft.Quantum.Arithmetic.IncrementByIntegerPhaseLE".
+    /// Please use @"Microsoft.Quantum.Arithmetic.IncrementPhaseByInteger".
     operation IntegerIncrementPhaseLE (increment : Int, target : PhaseLittleEndian) : Unit {
         body (...) {
-            Renamed("Microsoft.Quantum.Arithmetic.IntegerIncrementPhaseLE", "Microsoft.Quantum.Arithmetic.IncrementByIntegerPhaseLE");
-            IncrementByIntegerPhaseLE(increment, target);
+            Renamed("Microsoft.Quantum.Arithmetic.IntegerIncrementPhaseLE", "Microsoft.Quantum.Arithmetic.IncrementPhaseByInteger");
+            IncrementPhaseByInteger(increment, target);
         }
 
         adjoint invert;
@@ -130,11 +130,11 @@ namespace Microsoft.Quantum.Canon {
     }
 
     /// # Deprecated
-    /// Please use @"Microsoft.Quantum.Arithmetic.IncrementByIntegerLE".
+    /// Please use @"Microsoft.Quantum.Arithmetic.IncrementByInteger".
     operation IntegerIncrementLE(increment : Int, target : LittleEndian) : Unit {
         body (...) {
-            Renamed("Microsoft.Quantum.Arithmetic.IntegerIncrementLE", "Microsoft.Quantum.Arithmetic.IncrementByIntegerLE");
-            IncrementByIntegerLE(increment, target);
+            Renamed("Microsoft.Quantum.Arithmetic.IntegerIncrementLE", "Microsoft.Quantum.Arithmetic.IncrementByInteger");
+            IncrementByInteger(increment, target);
         }
 
         adjoint invert;
@@ -148,5 +148,123 @@ namespace Microsoft.Quantum.Canon {
         Renamed("Microsoft.Quantum.Canon.MeasureInteger", "Microsoft.Quantum.Measurement.MeasureIntegerLE");
         return MeasureIntegerLE(target);
     }
+
+    /// # Deprecated
+    /// Please use @"Microsoft.Quantum.Measurement.ApplyXorInPlace".
+    operation InPlaceXorLE(value : Int, target : LittleEndian) : Unit {
+        body (...) {
+            Renamed("Microsoft.Quantum.Canon.InPlaceXorLE", "Microsoft.Quantum.Arithmetic.ApplyXorInPlace");
+            ApplyXorInPlace(value, target);
+        }
+        adjoint auto;
+        controlled auto;
+        controlled adjoint auto;
+    }
+
+    /// # Deprecated
+    /// Please use @"Microsoft.Quantum.Arithmetic.CompareUsingRippleCarry".
+    operation ApplyRippleCarryComparatorLE(x: LittleEndian, y: LittleEndian, output: Qubit) : Unit {
+        body (...) {
+            Renamed("Microsoft.Quantum.Canon.ApplyRippleCarryComparatorLE", "Microsoft.Quantum.Arithmetic.CompareUsingRippleCarry");
+            CompareUsingRippleCarry(x, y, output);
+        }
+        adjoint auto;
+        controlled auto;
+        controlled adjoint auto;
+    }
+
+    /// # Deprecated
+    /// Please use @"Microsoft.Quantum.Arithmetic.ModularIncrementByInteger".
+    operation ModularIncrementLE (increment : Int, modulus : Int, target : LittleEndian) : Unit {
+        body (...) {
+            Renamed("Microsoft.Quantum.Canon.ModularIncrementLE", "Microsoft.Quantum.Arithmetic.IncrementByModularInteger");
+            IncrementByModularInteger(increment, modulus, target);
+        }
+        adjoint auto;
+        controlled auto;
+        controlled adjoint auto;
+    }
+
+    /// # Deprecated
+    /// Please use @"Microsoft.Quantum.Arithmetic.IncrementPhaseByModularInteger".
+    operation ModularIncrementPhaseLE (increment : Int, modulus : Int, target : PhaseLittleEndian) : Unit {
+        body (...) {
+            Renamed("Microsoft.Quantum.Canon.ModularIncrementPhaseLE", "Microsoft.Quantum.Arithmetic.IncrementPhaseByModularInteger");
+            IncrementPhaseByModularInteger(increment, modulus, target);
+        }
+        adjoint auto;
+        controlled auto;
+        controlled adjoint auto;
+    }
+
+    /// # Deprecated
+    /// Please use @"Microsoft.Quantum.Arithmetic.MultiplyAndAddByModularInteger".
+    operation ModularAddProductLE (constMultiplier : Int, modulus : Int, multiplier : LittleEndian, summand : LittleEndian) : Unit {
+        body (...) {
+            Renamed("Microsoft.Quantum.Canon.ModularIncrementPhaseLE", "Microsoft.Quantum.Arithmetic.MultiplyAndAddByModularInteger");
+            MultiplyAndAddByModularInteger(constMultiplier, modulus, multiplier, summand);
+        }
+        adjoint auto;
+        controlled auto;
+        controlled adjoint auto;
+    }
+
+    /// # Deprecated
+    /// Please use @"Microsoft.Quantum.Arithmetic.MultiplyAndAddPhaseByModularInteger".
+    operation ModularAddProductPhaseLE (constMultiplier : Int, modulus : Int, multiplier : LittleEndian, phaseSummand : PhaseLittleEndian) : Unit {
+        body (...) {
+            Renamed("Microsoft.Quantum.Canon.ModularAddProductPhaseLE", "Microsoft.Quantum.Arithmetic.MultiplyAndAddPhaseByModularInteger");
+            MultiplyAndAddPhaseByModularInteger(constMultiplier, modulus, multiplier, phaseSummand);
+        }
+        adjoint auto;
+        controlled auto;
+        controlled adjoint auto;
+    }
+
+    /// # Deprecated
+    /// Please use @"Microsoft.Quantum.Arithmetic.MultiplyByModularInteger".
+    operation ModularMultiplyByConstantLE(constMultiplier : Int, modulus : Int, multiplier : LittleEndian) : Unit {
+        body (...) {
+            Renamed("Microsoft.Quantum.Canon.ModularMultiplyByConstantLE", "Microsoft.Quantum.Arithmetic.MultiplyByModularInteger");
+            MultiplyByModularInteger(constMultiplier, modulus, multiplier);
+        }
+        adjoint auto;
+        controlled auto;
+        controlled adjoint auto;
+    }
+
+
+    // #region Removal of "BE" suffix
+    // NB: with Q# 0.6, all arithmetic functionality has been normalized to
+    //     take exclusively LittleEndian inputs.
+
+    /// # Deprecated
+    /// This operation has been removed.
+    operation InPlaceXorBE(value : Int, target : BigEndian) : Unit {
+        body (...) {
+            Removed("Microsoft.Quantum.Canon.InPlaceXorBE", "ApplyReversedOpLECA(ApplyXorInPlace(value, _), target)");
+            ApplyReversedOpLECA(ApplyXorInPlace(value, _), target);
+        }
+        adjoint auto;
+        controlled auto;
+        adjoint controlled auto;
+    }
+
+    /// # Deprecated
+    /// This operation has been removed.
+    operation ApplyRippleCarryComparatorBE(x : BigEndian, y : BigEndian, output : Qubit) : Unit {
+        body (...) {
+            Removed(
+                "Microsoft.Quantum.Canon.ApplyRippleCarryComparatorBE",
+                "ApplyRippleCarryComparatorLE(BigEndianAsLittleEndian(x), BigEndianAsLittleEndian(y), output)"
+            );
+            ApplyRippleCarryComparatorLE(BigEndianAsLittleEndian(x), BigEndianAsLittleEndian(y), output);
+        }
+        adjoint auto;
+        controlled auto;
+        adjoint controlled auto;
+    }
+
+    // #endregion
 
 }

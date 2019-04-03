@@ -32,7 +32,7 @@ namespace Microsoft.Quantum.Arithmetic {
     /// Assumes that the value of target is less than N. Note that
     /// <xref:microsoft.quantum.canon.modularincrementphasele> implements
     /// the same operation, but in the `PhaseLittleEndian` basis.
-    operation ModularIncrementLE (increment : Int, modulus : Int, target : LittleEndian) : Unit {
+    operation IncrementByModularInteger(increment : Int, modulus : Int, target : LittleEndian) : Unit {
         body (...) {
             let inner = ModularIncrementPhaseLE(increment, modulus, _);
 
@@ -63,7 +63,7 @@ namespace Microsoft.Quantum.Arithmetic {
     ///
     /// For the circuit diagram and explanation see Figure 5 on [Page 5
     /// of arXiv:quant-ph/0205095v3](https://arxiv.org/pdf/quant-ph/0205095v3.pdf#page=5).
-    operation ModularIncrementPhaseLE (increment : Int, modulus : Int, target : PhaseLittleEndian) : Unit {
+    operation IncrementPhaseByModularInteger(increment : Int, modulus : Int, target : PhaseLittleEndian) : Unit {
         body (...)
         {
             ClaimEqualB(modulus <= 2 ^ (Length(target!) - 1), true, $"`multiplier` must be big enough to fit integers modulo `modulus`" + $"with highest bit set to 0");
@@ -177,7 +177,7 @@ namespace Microsoft.Quantum.Arithmetic {
     ///        of arXiv:quant-ph/0205095v3](https://arxiv.org/pdf/quant-ph/0205095v3.pdf#page=7)
     /// - This operation corresponds to CMULT(a)MOD(N) in
     ///   [arXiv:quant-ph/0205095v3](https://arxiv.org/pdf/quant-ph/0205095v3.pdf)
-    operation ModularAddProductLE (constMultiplier : Int, modulus : Int, multiplier : LittleEndian, summand : LittleEndian) : Unit {
+    operation MultiplyAndAddByModularInteger(constMultiplier : Int, modulus : Int, multiplier : LittleEndian, summand : LittleEndian) : Unit {
         body (...) {
             let inner = ModularAddProductPhaseLE(constMultiplier, modulus, multiplier, _);
 
@@ -202,7 +202,7 @@ namespace Microsoft.Quantum.Arithmetic {
     /// # Remarks
     /// Assumes that `phaseSummand` has the highest bit set to 0.
     /// Also assumes that the value of `phaseSummand` is less than N.
-    operation ModularAddProductPhaseLE (constMultiplier : Int, modulus : Int, multiplier : LittleEndian, phaseSummand : PhaseLittleEndian) : Unit
+    operation MultiplyAndAddPhaseByModularInteger(constMultiplier : Int, modulus : Int, multiplier : LittleEndian, phaseSummand : PhaseLittleEndian) : Unit
     {
         body (...)
         {
@@ -221,7 +221,7 @@ namespace Microsoft.Quantum.Arithmetic {
             for (i in 0 .. Length(multiplier!) - 1)
             {
                 let summand = (ExpMod(2, i, modulus) * constMultiplier) % modulus;
-                Controlled ModularIncrementPhaseLE([(multiplier!)[i]], (summand, modulus, phaseSummand));
+                Controlled IncrementPhaseByModularInteger([(multiplier!)[i]], (summand, modulus, phaseSummand));
             }
         }
         
@@ -253,7 +253,7 @@ namespace Microsoft.Quantum.Arithmetic {
     ///        of arXiv:quant-ph/0205095v3](https://arxiv.org/pdf/quant-ph/0205095v3.pdf#page=8)
     /// - This operation corresponds to Uₐ in
     ///   [arXiv:quant-ph/0205095v3](https://arxiv.org/pdf/quant-ph/0205095v3.pdf)
-    operation ModularMultiplyByConstantLE (constMultiplier : Int, modulus : Int, multiplier : LittleEndian) : Unit
+    operation MultiplyByModularInteger(constMultiplier : Int, modulus : Int, multiplier : LittleEndian) : Unit
     {
         body (...)
         {
