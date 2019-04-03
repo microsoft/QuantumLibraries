@@ -535,6 +535,60 @@ namespace Microsoft.Quantum.Chemistry
         }
 
 
+        public struct ProblemDescription
+        {
+
+
+            /* public bool Energy_Provided;
+             public double Energy_Min;
+             public double Energy_Approx;
+             public double Energy_Max;
+             */
+            public int NOrbitals, NElectrons;
+
+            public double IdentityTerm;
+            public List<OrbitalIntegral> OneBodyTerms;
+            public List<OrbitalIntegral> TwoBodyTerms;
+            /*[YamlMember(Alias = "coulomb_repulsion", ApplyNamingConventions = false)]
+            public DataStructures.SimpleQuantity CoulombRepulsion { get; set; }
+
+            [YamlMember(Alias = "scf_energy", ApplyNamingConventions = false)]
+            public DataStructures.SimpleQuantity ScfEnergy { get; set; }
+
+            [YamlMember(Alias = "scf_energy_offset", ApplyNamingConventions = false)]
+            public DataStructures.SimpleQuantity ScfEnergyOffset { get; set; }
+
+            [YamlMember(Alias = "fci_energy", ApplyNamingConventions = false)]
+            public DataStructures.BoundedQuantity FciEnergy { get; set; }
+
+            [YamlMember(Alias = "n_orbitals", ApplyNamingConventions = false)]
+            public int NOrbitals { get; set; }
+
+            [YamlMember(Alias = "n_electrons", ApplyNamingConventions = false)]
+            public int NElectrons { get; set; }
+
+            [YamlMember(Alias = "energy_offset", ApplyNamingConventions = false)]
+            public DataStructures.SimpleQuantity EnergyOffset { get; set; }
+
+            [YamlMember(Alias = "hamiltonian", ApplyNamingConventions = false)]
+            public DataStructures.HamiltonianData Hamiltonian { get; set; }
+    */
+            // FIXME: actually specify what initial_state_suggestions looks like.
+            //[YamlMember(Alias = "initial_state_suggestions", ApplyNamingConventions = false)]
+            //public List<Dictionary<string, object>> InitialStateSuggestions { get; set; }
+
+            //[YamlMember(Alias = "initial_state_suggestions", ApplyNamingConventions = false)]
+            public ProblemDescription(Broombridge.V0_2.ProblemDescription broombridgeProblem)
+            {
+                IdentityTerm = broombridgeProblem.CoulombRepulsion.Value + broombridgeProblem.EnergyOffset.Value;
+
+                NOrbitals = broombridgeProblem.NOrbitals;
+                NElectrons = broombridgeProblem.NElectrons;
+
+                var test = broombridgeProblem.Hamiltonian.OneElectronIntegrals.Values
+    
+        }
+        }
     }
 
 
