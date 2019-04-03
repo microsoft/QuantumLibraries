@@ -27,4 +27,10 @@
     <ProjectReference Include="..\..\src\DataModel\DataModel.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="LithiumHydride\lih_sto-3g_fci_1.624.yaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

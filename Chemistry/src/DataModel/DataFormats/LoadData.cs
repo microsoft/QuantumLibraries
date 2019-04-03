@@ -51,7 +51,7 @@ namespace Microsoft.Quantum.Chemistry
         /// </returns>
         public static IEnumerable<FermionHamiltonian> LoadFromBroombridge(string filename)
         {
-            var broombridgeData = Broombridge.Deserialize.v0_2(filename);
+            var broombridgeData = Broombridge.Deserialize.Source(filename);
 
             return LoadData.LoadIntegralData(broombridgeData);
         }

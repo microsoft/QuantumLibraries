@@ -19,11 +19,28 @@ namespace Microsoft.Quantum.Chemistry
     public static class Broombridge
     {
         /// <summary>
-        /// Enumerable item for Broombridge version numbers.
+        /// Class containing Broombridge version number management.
         /// </summary>
-        public enum Version
+        public static class Version
         {
-            v0_1 = 0, v0_2 = 1
+            /// <summary>
+            /// Enumerable item for Broombridge version numbers.
+            /// </summary>
+            public enum Type
+            {
+                v0_1 = 0, v0_2 = 1
+            }
+
+            public static Dictionary<string, Type> VersionNumberDict = new Dictionary<string, Type>()
+            {
+                {"0.1", Type.v0_1 },
+                {"0.2", Type.v0_2 }
+            };
+
+            public static Type ParseVersionNumber(string versionNumber)
+            {
+                return VersionNumberDict[versionNumber];
+            }
         }
 
         // Implement backwards compatibility by converting v0.1 to v0.2.
@@ -34,6 +51,35 @@ namespace Microsoft.Quantum.Chemistry
         /// </summary>
         public static class Deserialize
         {
+            public static Version.Type GetVersionNumber(string filename)
+            {
+                using (var reader = File.OpenText(filename))
+                {
+                    var deserializer = new DeserializerBuilder().Build();
+                    var data = deserializer.Deserialize<Dictionary<string,object>>(reader);
+                    var format = (Dictionary<object, object>) data["format"];
+                    var version = (string) format["version"];
+                    return Version.ParseVersionNumber(version);
+                }
+            }
+
+            public static V0_2.Data Source(string filename)
+            {
+                Version.Type versionNumber = GetVersionNumber(filename);
+
+                if(versionNumber == Version.Type.v0_1)
+                {
+                    return Update.Data(v0_1(filename));
+                }
+                else if(versionNumber == Version.Type.v0_2)
+                {
+                    return v0_2(filename);
+                }
+                else{
+                    throw new System.InvalidOperationException("Unrecognized Broombridge version number.");
+                }
+            }
+
             /// <summary>
             /// Broombridge v0.1 deserializer
             /// </summary>
@@ -95,9 +141,8 @@ namespace Microsoft.Quantum.Chemistry
             public static V0_2.Data Data(V0_1.Data input)
             {
                 var output = new V0_2.Data();
-
                 output.Schema = input.Schema;
-                output.Version = V0_2.Strings.VersionNumber;
+                output.Format = new DataStructures.Format() { Version = V0_2.Strings.VersionNumber };
                 output.Generator = input.Generator;
                 output.Bibliography = input.Bibliography;
                 output.ProblemDescription = new List<V0_2.ProblemDescription>();
@@ -138,6 +183,11 @@ namespace Microsoft.Quantum.Chemistry
 
         public static class DataStructures
         {
+            public struct Format
+            {
+                [YamlMember(Alias = "version", ApplyNamingConventions = false)]
+                public string Version { get; set; }
+            }
 
             public struct Generator
             {
@@ -328,7 +378,6 @@ namespace Microsoft.Quantum.Chemistry
                 public static string UnitaryCoupledCluster = "unitary_coupled_cluster";
                 public static string VersionNumber = "0.2";
             }
-            public static Version VersionNumber = Version.v0_2;
 
             // Root of Broombridge data structure
             public struct Data
@@ -337,8 +386,8 @@ namespace Microsoft.Quantum.Chemistry
                 [YamlMember(Alias = "$schema", ApplyNamingConventions = false)]
                 public string Schema { get; set; }
 
-                [YamlMember(Alias = "version", ApplyNamingConventions = false)]
-                public string Version { get; set; }
+                [YamlMember(Alias = "format", ApplyNamingConventions = false)]
+                public DataStructures.Format Format { get; set; }
 
                 [YamlMember(Alias = "generator", ApplyNamingConventions = false)]
                 public DataStructures.Generator Generator { get; set; }
@@ -440,7 +489,7 @@ namespace Microsoft.Quantum.Chemistry
                 public string Schema { get; set; }
 
                 [YamlMember(Alias = "format", ApplyNamingConventions = false)]
-                public Format Format { get; set; }
+                public DataStructures.Format Format { get; set; }
 
                 [YamlMember(Alias = "generator", ApplyNamingConventions = false)]
                 public DataStructures.Generator Generator { get; set; }
@@ -454,11 +503,6 @@ namespace Microsoft.Quantum.Chemistry
 
             }
 
-            public struct Format
-            {
-                [YamlMember(Alias = "version", ApplyNamingConventions = false)]
-                public string Version { get; set; }
-            }
 
 
             public struct IntegralSet

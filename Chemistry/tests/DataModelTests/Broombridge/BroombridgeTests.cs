@@ -20,6 +20,16 @@ namespace Microsoft.Quantum.Chemistry.Tests
     using FermionTermType = FermionTermType;
     using SpinOrbital = SpinOrbital;
     
+    public class BroombridgeVersionNumberTests
+    {
+        [Fact]
+        public void DeserializeVersionNumbers()
+        {
+            Assert.Equal(Broombridge.Version.Type.v0_1, Broombridge.Deserialize.GetVersionNumber("Broombridge/broombridge_v0.1.yaml"));
+            Assert.Equal(Broombridge.Version.Type.v0_2, Broombridge.Deserialize.GetVersionNumber("Broombridge/broombridge_v0.2.yaml"));
+        }
+    }
+
     public class Broombridgev0_1Tests
     {
 
@@ -43,8 +53,8 @@ namespace Microsoft.Quantum.Chemistry.Tests
         [Fact]
         public void Version()
         {
-            Assert.Equal("0.2", broombridge.Version);
-            Assert.NotEqual("", broombridge.Version);
+            Assert.Equal("0.2", broombridge.Format.Version);
+            Assert.NotEqual("", broombridge.Format.Version);
         }
 
         [Fact]
