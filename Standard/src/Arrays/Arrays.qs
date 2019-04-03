@@ -104,7 +104,7 @@ namespace Microsoft.Quantum.Arrays {
     /// # Output
     /// The last element of the array.
     function Tail<'A> (array : 'A[]) : 'A {
-        AssertBoolEqual(Length(array) > 0, true, $"Array must be of the length at least 1");
+        ClaimEqualB(Length(array) > 0, true, $"Array must be of the length at least 1");
         return array[Length(array) - 1];
     }
 
@@ -122,7 +122,7 @@ namespace Microsoft.Quantum.Arrays {
     /// # Output
     /// The first element of the array.
     function Head<'A> (array : 'A[]) : 'A {
-        AssertBoolEqual(Length(array) > 0, true, $"Array must be of the length at least 1");
+        ClaimEqualB(Length(array) > 0, true, $"Array must be of the length at least 1");
         return array[0];
     }
 
@@ -237,7 +237,7 @@ namespace Microsoft.Quantum.Arrays {
     function Padded<'T> (nElementsTotal : Int, defaultElement : 'T, inputArray : 'T[]) : 'T[] {
         let nElementsInitial = Length(inputArray);
         let nAbsElementsTotal = AbsI(nElementsTotal);
-        AssertBoolEqual(nAbsElementsTotal >= nElementsInitial, true, $"Specified output array length must be longer than `inputArray` length.");
+        ClaimEqualB(nAbsElementsTotal >= nElementsInitial, true, $"Specified output array length must be longer than `inputArray` length.");
         let nElementsPad = nAbsElementsTotal - nElementsInitial;
         let padArray = ConstantArray(nElementsPad, defaultElement);
 

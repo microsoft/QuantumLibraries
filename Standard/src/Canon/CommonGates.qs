@@ -201,4 +201,37 @@ namespace Microsoft.Quantum.Canon {
         controlled adjoint distribute;
     }
 
+    /// # Summary
+	/// Applies the Y-basis analog to the Hadamard transformation
+	/// that interchanges the Z and Y axes.
+	/// 
+    /// The Y Hadamard transformation $H_Y = S H$ on a single qubit is:
+    ///
+    /// \begin{align}
+    ///     H_Y \mathrel{:=}
+    ///     \frac{1}{\sqrt{2}}
+    ///     \begin{bmatrix}
+    ///         1 & 1 \\\\
+    ///         i & -i
+    ///     \end{bmatrix}.
+    /// \end{align}
+    ///
+    /// # Input
+    /// ## qubit
+    /// Qubit to which the gate should be applied.
+    ///
+    /// # See Also
+    operation HY (target : Qubit) : Unit
+    {
+        body (...)
+        {
+            H(target);
+            S(target);
+        }
+        
+        adjoint invert;
+        controlled distribute;
+        controlled adjoint distribute;
+    }
+
 }

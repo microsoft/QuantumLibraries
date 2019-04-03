@@ -4,6 +4,7 @@
 namespace Microsoft.Quantum.Preparation {
     open Microsoft.Quantum.Primitive;
     open Microsoft.Quantum.Canon;
+    open Microsoft.Quantum.Math;
 
     /// # Summary
 	/// Prepares a qubit in the maximally mixed state.

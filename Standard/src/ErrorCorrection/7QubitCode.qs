@@ -5,6 +5,7 @@ namespace Microsoft.Quantum.ErrorCorrection {
     open Microsoft.Quantum.Primitive;
     open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Arrays;
+    open Microsoft.Quantum.Measurement;
 
     /// # Summary
     /// Private operation used to implement both the Steane code encoder and decoder.

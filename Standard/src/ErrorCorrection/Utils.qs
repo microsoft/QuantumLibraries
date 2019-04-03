@@ -4,6 +4,7 @@
 namespace Microsoft.Quantum.ErrorCorrection {
     open Microsoft.Quantum.Primitive;
     open Microsoft.Quantum.Canon;
+    open Microsoft.Quantum.Measurement;
 
     /// # Summary
     /// Measures the given set of generators of a stabilizer group.

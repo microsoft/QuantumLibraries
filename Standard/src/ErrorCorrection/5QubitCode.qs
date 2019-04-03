@@ -4,6 +4,7 @@
 namespace Microsoft.Quantum.ErrorCorrection {
     open Microsoft.Quantum.Primitive;
     open Microsoft.Quantum.Canon;
+    open Microsoft.Quantum.Measurement;
 
     /// # Summary
     /// Private operation used to implement both the 5 qubit encoder and decoder.

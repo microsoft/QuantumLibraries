@@ -4,6 +4,9 @@
 namespace Microsoft.Quantum.Arithmetic {
     open Microsoft.Quantum.Primitive;
     open Microsoft.Quantum.Canon;
+    open Microsoft.Quantum.Measurement;
+
+    // TODO: move to Microsoft.Quantum.Measurement.
 
     /// # Summary
     /// Measures the content of a quantum register and converts

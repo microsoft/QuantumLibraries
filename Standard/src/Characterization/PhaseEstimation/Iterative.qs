@@ -6,6 +6,7 @@ namespace Microsoft.Quantum.Characterization {
     open Microsoft.Quantum.Extensions.Convert;
     open Microsoft.Quantum.Oracles;
     open Microsoft.Quantum.Canon;
+    open Microsoft.Quantum.Measurement;
 
     // Design notes:
     //     The APIs for the iterative and quantum phase estimation algorithms are

@@ -110,7 +110,24 @@ namespace Microsoft.Quantum.Math {
         
         return ToDouble(RandomIntPow2(bitsRandom)) / PowD(2.0, ToDouble(bitsRandom));
     }
-    
+
+    /// # Summary
+    /// Returns one of the single-qubit Pauli operators uniformly
+    /// at random.
+    ///
+    /// # Output
+    /// A `Pauli` operator that is one of `[PauliI, PauliX, PauliY, PauliZ]`.
+    ///
+    /// # Remarks
+    /// This function calls <xref:microsoft.quantum.primitive.random>, so
+    /// its randomness depends on the implementation of `Random`.
+    operation RandomSingleQubitPauli () : Pauli {
+        let probs = [0.5, 0.5, 0.5, 0.5];
+        let idxPauli = Random(probs);
+        let singleQubitPaulis = [PauliI, PauliX, PauliY, PauliZ];
+        return singleQubitPaulis[idxPauli];
+    }
+
 }
 
 
