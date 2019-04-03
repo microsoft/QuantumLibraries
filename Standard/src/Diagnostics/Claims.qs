@@ -37,7 +37,7 @@ namespace Microsoft.Quantum.Diagnostics {
     /// # Remarks
     /// This is equivalent to <xref:microsoft.quantum.diagnostics.claimequalwithtolerance> with
     /// hardcoded tolerance of $10^{-10}$.
-    function AssertAlmostEqual(actual : Double, expected : Double) : Unit {
+    function ClaimAlmostEqual(actual : Double, expected : Double) : Unit {
         ClaimEqualWithinTolerance(actual, expected, 1E-10);
     }
 

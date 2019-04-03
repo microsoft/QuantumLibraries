@@ -49,7 +49,7 @@ namespace Microsoft.Quantum.Tests {
         
         let dblArray = ConstantArray(71, 2.17);
         AssertIntEqual(Length(dblArray), 71, $"ConstantArray(Int, Double) had the wrong length.");
-        let ignore = Map(AssertAlmostEqual(_, 2.17), dblArray);
+        let ignore = Mapped(ClaimAlmostEqual(_, 2.17), dblArray);
         
         // Stress test by making an array of Int -> Int.
         let fnArray = ConstantArray(7, ConstantArrayTestHelper);

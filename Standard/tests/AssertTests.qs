@@ -27,8 +27,7 @@ namespace Microsoft.Quantum.Tests {
     }
 
     function AssertEqualTestShouldFail () : Unit {
-        
-        AssertAlmostEqual(1.0, 0.0);
+        ClaimAlmostEqual(1.0, 0.0);
     }
     
     
