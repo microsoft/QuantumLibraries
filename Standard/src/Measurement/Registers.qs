@@ -4,6 +4,7 @@
 namespace Microsoft.Quantum.Measurement {
     open Microsoft.Quantum.Primitive;
     open Microsoft.Quantum.Canon;
+    open Microsoft.Quantum.Arrays;
 
     /// # Summary
     /// Measures the given Pauli operator using an explicit scratch
@@ -19,40 +20,26 @@ namespace Microsoft.Quantum.Measurement {
     /// # Output
     /// The result of measuring the given Pauli operator on
     /// the `target` register.
-    operation MeasureWithScratch (pauli : Pauli[], target : Qubit[]) : Result
-    {
-        mutable result = Zero;
-        
-        using (scratchRegister = Qubit[1])
-        {
-            let scratch = scratchRegister[0];
+    operation MeasureWithScratch (pauli : Pauli[], target : Qubit[]) : Result {
+        using (scratch = Qubit()) {
             H(scratch);
-            
-            for (idxPauli in 0 .. Length(pauli) - 1)
-            {
+
+            for (idxPauli in 0 .. Length(pauli) - 1) {
                 let P = pauli[idxPauli];
                 let src = target[idxPauli];
-                
-                if (P == PauliX)
-                {
+
+                if (P == PauliX) {
                     Controlled X([scratch], src);
-                }
-                elif (P == PauliY)
-                {
+                } elif (P == PauliY) {
                     Controlled Y([scratch], src);
-                }
-                elif (P == PauliZ)
-                {
+                } elif (P == PauliZ) {
                     Controlled Z([scratch], src);
                 }
             }
 
             H(scratch);
-            set result = M(scratch);
-            ResetAll(scratchRegister);
+            return MResetZ(scratch);
         }
-
-        return result;
     }
 
     /// # Summary
@@ -70,19 +57,10 @@ namespace Microsoft.Quantum.Measurement {
     /// # Output
     /// The array of results obtained from measuring each element of `paulis`
     /// on `target`.
-    operation MeasurePaulis (paulis : Pauli[][], target : Qubit[], gadget : ((Pauli[], Qubit[]) => Result)) : Result[]
-    {
-        mutable results = new Result[Length(paulis)];
-        
-        for (idxPauli in 0 .. Length(paulis) - 1)
-        {
-            set results[idxPauli] = gadget(paulis[idxPauli], target);
-        }
-        
-        return results;
+    operation MeasurePaulis (paulis : Pauli[][], target : Qubit[], gadget : ((Pauli[], Qubit[]) => Result)) : Result[] {
+        return ForEach(gadget(_, target), paulis);
     }
 
-    
     /// # Summary
     /// Measures each qubit in a given array in the standard basis.
     /// # Input
@@ -90,16 +68,8 @@ namespace Microsoft.Quantum.Measurement {
     /// An array of qubits to be measured.
     /// # Output
     /// An array of measurement results.
-    operation MultiM (targets : Qubit[]) : Result[]
-    {
-        mutable results = new Result[Length(targets)];
-        
-        for (idxQubit in 0 .. Length(targets) - 1)
-        {
-            set results[idxQubit] = M(targets[idxQubit]);
-        }
-        
-        return results;
+    operation MultiM (targets : Qubit[]) : Result[] {
+        return ForEach(M, targets);
     }
 
 }
