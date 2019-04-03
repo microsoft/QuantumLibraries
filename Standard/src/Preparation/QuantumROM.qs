@@ -8,6 +8,7 @@ namespace Microsoft.Quantum.Preparation {
     open Microsoft.Quantum.Extensions.Math;
     open Microsoft.Quantum.Extensions.Convert;
     open Microsoft.Quantum.Math;
+    open Microsoft.Quantum.Arrays;
 
     /// # Summary
 	/// Uses the Quantum ROM technique to represent a given density matrix.

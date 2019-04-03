@@ -4,6 +4,7 @@
 namespace Microsoft.Quantum.Convert {
     open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Diagnostics;
+    open Microsoft.Quantum.Arrays;
 
     /// # Summary
     /// Converts a `Result` type to a `Bool` type, where `One` is mapped to
