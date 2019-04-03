@@ -13,44 +13,7 @@ namespace Microsoft.Quantum.Chemistry
 
     public static partial class Extensions
     {
-        /// <summary>
-        ///      Given a value of an enumeration type, and an action for each
-        ///      possible value of that enumeration type, performs the action
-        ///      corresponding to the given value.
-        /// </summary>
-        public static void Map<E>
-            (this E @enum, params (E, Action)[] actions)
-            where E : struct, IConvertible
-        {
-            foreach (var (value, action) in actions)
-            {
-                if (@enum.Equals(value))
-                {
-                    action();
-                    return;
-                }
-            }
-        }
-
-        /// <summary>
-        ///      Given a value of an enumeration type, and an function for each
-        ///      possible value of that enumeration type, returns the value
-        //       returned by the function corresponding to the given value.
-        /// </summary>
-        public static T Map<E, T>
-            (this E @enum, params (E, Func<T>)[] actions)
-            where E: struct, IConvertible
-        {
-            foreach (var (value, action) in actions)
-            {
-                if (@enum.Equals(value))
-                {
-                    return action();
-                }
-            }
-
-            throw new ArgumentException($"Expected {@enum} to be a member of {@enum.GetType()}.");
-        }
+        
 
         #region Extension methods
         /// <summary>

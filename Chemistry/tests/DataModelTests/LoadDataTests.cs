@@ -20,27 +20,8 @@ namespace Microsoft.Quantum.Chemistry.Tests
     using FermionTermType = FermionTermType;
     using SpinOrbital = SpinOrbital;
 
-    public class LoadFromYAMLTests
-    {
-        /*
-        [Fact]
-        public void LoadFromYAMLTest()
-        {
-            var filename = "resources/yamltest.yaml";
 
-            using (var reader = File.OpenText(filename))
-            {
-                var deserializer = new DeserializerBuilder().Build();
-                var yamlData = deserializer.Deserialize<IntegralDataSchema>(reader);
 
-                //yamlData.IntegralSets
-            }
-
-            
-
-            //var hamiltonian = FermionHamiltonian.LoadFromYAML(filename);
-        }*/
-    }
 
     public class LoadFromLiquidTests
     {
@@ -53,12 +34,12 @@ namespace Microsoft.Quantum.Chemistry.Tests
             var hamiltonian = LoadData.LoadFromLiquid(line);
             Assert.True(hamiltonian.FermionTerms.ContainsKey(termType));
             // Check that expected terms are found
-            foreach(var term in terms)
+            foreach (var term in terms)
             {
                 Assert.Contains(term, hamiltonian.FermionTerms[termType], new Comparers.FermionTermComparer());
             }
             // Check only expected terms are found
-            foreach(var term in hamiltonian.FermionTerms[termType])
+            foreach (var term in hamiltonian.FermionTerms[termType])
             {
                 Assert.Contains(term, terms, new Comparers.FermionTermComparer());
             }
@@ -140,10 +121,9 @@ namespace Microsoft.Quantum.Chemistry.Tests
                         new FermionTerm(4, new Int64[] {1,1,0,0}, new Int64[] { 0, 3, 2, 1 }, 2.0 ),
                     } },
             };
-        
+
 
     }
-
 
 
 }
