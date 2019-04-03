@@ -8,7 +8,8 @@ namespace Microsoft.Quantum.Chemistry.Tests {
     open Microsoft.Quantum.Extensions.Testing;
     open Microsoft.Quantum.Extensions.Math;
     open Microsoft.Quantum.Extensions.Convert;
-    open Microsoft.Quantum.Chemistry.JordanWigner; 
+    open Microsoft.Quantum.Chemistry.JordanWigner;
+    open Microsoft.Quantum.Arrays;
     
     // Prepare single excitation
     operation PrepareTrialStateCoupledCluster0Test () : Unit {

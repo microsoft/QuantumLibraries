@@ -8,6 +8,7 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
     open Microsoft.Quantum.Extensions.Convert;
     open Microsoft.Quantum.Extensions.Math;
     open Microsoft.Quantum.Chemistry;
+    open Microsoft.Quantum.Math;
     
     
     // Convenience functions for performing simulation.

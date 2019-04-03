@@ -7,6 +7,7 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
     open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Extensions.Math;
     open Microsoft.Quantum.Chemistry;
+    open Microsoft.Quantum.Arrays;
     
     
     // This block encoding for qubitization runs off data optimized for a jordan-wigner encoding.

@@ -10,6 +10,8 @@ using System.Text;
 using System.Text.RegularExpressions;
 using YamlDotNet.Core;
 using YamlDotNet.Serialization;
+using static System.Math;
+using static System.Convert;
 
 namespace Microsoft.Quantum.Chemistry
 {
@@ -165,8 +167,8 @@ namespace Microsoft.Quantum.Chemistry
             foreach (var value in ((IEnumerable<object>)data["values"]))
             {
                 var entries = (IEnumerable<object>)value;
-                var a = entries.Take(entries.Count() - 1).Select(e => (TIndex)Convert.ChangeType(e, typeof(TIndex))).ToArray();
-                var q = (TValue)Convert.ChangeType(entries.Last(), typeof(TValue));
+                var a = entries.Take(entries.Count() - 1).Select(e => (TIndex)ChangeType(e, typeof(TIndex))).ToArray();
+                var q = (TValue)ChangeType(entries.Last(), typeof(TValue));
                 Values.Add((a, q));
             }
         }
@@ -315,7 +317,7 @@ namespace Microsoft.Quantum.Chemistry
                         if (recordedIJTerms.Contains(orderedTerm) == false)
                         {
                             recordedIJTerms.Add(orderedTerm);
-                            if (Math.Abs(ijTerm.Value) >= threshold)
+                            if (Abs(ijTerm.Value) >= threshold)
                             {
                                 hamiltonian.AddFermionTerm(new OrbitalIntegral(ijTerm.Key.Select(o => o - 1), ijTerm.Value, OrbitalIntegral.Convention.Mulliken));
                             }
@@ -324,7 +326,7 @@ namespace Microsoft.Quantum.Chemistry
                     foreach (var ijklTerm in fileHIJKLTerms)
                     {
                         var tmp = new OrbitalIntegral(ijklTerm.Key.Select(o => o - 1), ijklTerm.Value, OrbitalIntegral.Convention.Mulliken);
-                        if (Math.Abs(ijklTerm.Value) >= threshold)
+                        if (Abs(ijklTerm.Value) >= threshold)
                         {
                             hamiltonian.AddFermionTerm(new OrbitalIntegral(ijklTerm.Key.Select(o => o - 1), ijklTerm.Value, OrbitalIntegral.Convention.Mulliken));
                         }
@@ -342,7 +344,7 @@ namespace Microsoft.Quantum.Chemistry
                             var stringData = superpositionRaw.Select(o => o.Select(k => k.ToString()).ToList());
                             var superposition = stringData.Select(o => ParseInputState(o)).ToArray();
                             //Only have terms with non-zero amplitudes.
-                            superposition = superposition.Where(o => Math.Abs(o.Item1.Item1) >= threshold).ToArray();
+                            superposition = superposition.Where(o => Abs(o.Item1.Item1) >= threshold).ToArray();
                             if (superposition.Count() > 0)
                             {
                                 hamiltonian.InputStates.Add(

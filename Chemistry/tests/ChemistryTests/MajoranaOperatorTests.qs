@@ -9,6 +9,8 @@ namespace Microsoft.Quantum.Chemistry.Tests {
     open Microsoft.Quantum.Extensions.Math;
     open Microsoft.Quantum.Extensions.Convert;
     open Microsoft.Quantum.Chemistry.JordanWigner;
+    open Microsoft.Quantum.Math;
+    open Microsoft.Quantum.Arrays;
 
     // Test OptimizedBEXY operator.
     operation OptimizedBEOperatorZeroTestHelper (pauliBasis : Pauli, targetRegisterSize : Int, targetIndex : Int) : Unit {

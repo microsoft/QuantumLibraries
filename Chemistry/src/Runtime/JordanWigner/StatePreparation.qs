@@ -8,8 +8,9 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
     open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Extensions.Math;
     open Microsoft.Quantum.Extensions.Convert;
-    
-    
+    open Microsoft.Quantum.Arrays;
+    open Microsoft.Quantum.Math;
+
     //newtype JordanWignerInputState = ((Double, Double), Int[]);
     operation PrepareTrialState (superposition : JordanWignerInputState[], qubits : Qubit[]) : Unit {
         

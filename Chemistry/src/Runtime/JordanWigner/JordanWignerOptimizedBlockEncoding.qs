@@ -10,6 +10,8 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
     open Microsoft.Quantum.Extensions.Convert;
     open Microsoft.Quantum.Extensions.Math;
     open Microsoft.Quantum.Chemistry;
+    open Microsoft.Quantum.Arrays;
+    open Microsoft.Quantum.Math;
 
     /// # Summary
     /// Term data in the optimized block-encoding algorithm.
