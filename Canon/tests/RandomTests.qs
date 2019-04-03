@@ -28,6 +28,24 @@ namespace Microsoft.Quantum.Tests {
             fail $"RandomIntPow2 returned an integer outside the allowed range.";
         }
     }
+
+    /// # Summary
+    /// Checks that @"Microsoft.Quantum.Canon.RandomReal" obeys ranges.
+	operation RandomRealTest() : Unit
+	{
+		for(i in 1..6)
+		{
+			for(j in 0..10000)
+			{
+				let numberOfBits = i * 10;
+				let random = RandomReal(numberOfBits);
+				if(random < 0.0 || random >= 1.0)
+				{
+					fail $"RandomReal failed with {numberOfBits} bits. Value was {random} which is out of bounds.";
+				}
+			}
+		}
+	}
     
 }
 
