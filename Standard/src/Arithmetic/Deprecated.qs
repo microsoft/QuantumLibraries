@@ -3,6 +3,7 @@
 
 namespace Microsoft.Quantum.Canon {
     open Microsoft.Quantum.Arithmetic;
+    open Microsoft.Quantum.Measurement;
 
     /// # Deprecated
     /// Please use @"Microsoft.Quantum.Arithmetic.ApplyReversedOpLE".
@@ -142,9 +143,9 @@ namespace Microsoft.Quantum.Canon {
     }
 
     /// # Deprecated
-    /// Please use @"Microsoft.Quantum.Arithmetic.MeasureIntegerLE".
+    /// Please use @"Microsoft.Quantum.Measurement.MeasureIntegerLE".
     operation MeasureInteger(target : LittleEndian) : Int {
-        Renamed("Microsoft.Quantum.Arithmetic.MeasureInteger", "Microsoft.Quantum.Arithmetic.MeasureIntegerLE");
+        Renamed("Microsoft.Quantum.Canon.MeasureInteger", "Microsoft.Quantum.Measurement.MeasureIntegerLE");
         return MeasureIntegerLE(target);
     }
 

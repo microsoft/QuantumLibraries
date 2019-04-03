@@ -81,4 +81,11 @@ namespace Microsoft.Quantum.Canon {
         return RangeAsIntArray(range);
     }
 
+    /// # Deprecated
+    /// Please use @"microsoft.quantum.convert.functionasoperation".
+    function ToOperation<'Input, 'Output>(fn : ('Input -> 'Output)) : ('Input => 'Output) {
+        Renamed("Microsoft.Quantum.Canon.ToOperation", "Microsoft.Quantum.Convert.FunctionAsOperation");
+        return FunctionAsOperation(fn);
+    }
+
 }

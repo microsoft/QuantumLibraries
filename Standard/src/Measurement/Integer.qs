@@ -1,13 +1,11 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-namespace Microsoft.Quantum.Arithmetic {
+namespace Microsoft.Quantum.Measurement {
     open Microsoft.Quantum.Primitive;
     open Microsoft.Quantum.Canon;
-    open Microsoft.Quantum.Measurement;
+    open Microsoft.Quantum.Arithmetic;
     open Microsoft.Quantum.Convert;
-
-    // TODO: move to Microsoft.Quantum.Measurement.
 
     /// # Summary
     /// Measures the content of a quantum register and converts

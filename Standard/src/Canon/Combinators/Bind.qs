@@ -68,8 +68,7 @@ namespace Microsoft.Quantum.Canon
             }
         }
         
-        adjoint (...)
-        {
+        adjoint (...) {
             // TODO: replace with an implementation based on Reversed : 'T[] -> 'T[]
             //       and AdjointAll : ('T => () : Adjointable)[] -> ('T => () : Adjointable).
             for (idxOperation in Length(operations) - 1 .. -1 .. 0)

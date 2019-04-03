@@ -168,8 +168,7 @@ namespace Microsoft.Quantum.Convert {
     /// # Remarks
     /// This is mainly useful for passing functions to functions or operations
     /// which expect an operation as input.
-    function ToOperation<'Input, 'Output>(fn : ('Input -> 'Output)) : ('Input => 'Output) {
-        // TODO: rename to FunctionAsOperation.
+    function FunctionAsOperation<'Input, 'Output>(fn : ('Input -> 'Output)) : ('Input => 'Output) {
         return Call(fn, _);
     }
 

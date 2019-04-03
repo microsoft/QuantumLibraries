@@ -8,6 +8,7 @@ namespace Microsoft.Quantum.Tests {
     open Microsoft.Quantum.Extensions.Convert;
     open Microsoft.Quantum.Extensions.Math;
     open Microsoft.Quantum.Math;
+    open Microsoft.Quantum.Measurement;
 
 
     // number of qubits, abs(amplitude), phase
