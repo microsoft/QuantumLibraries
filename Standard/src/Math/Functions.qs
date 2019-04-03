@@ -286,9 +286,9 @@ namespace Microsoft.Quantum.Math {
     /// Internal recursive call to calculate the GCD with a bound
     function _gcd_continued (signA : Int, signB : Int, r : (Int, Int), s : (Int, Int), t : (Int, Int), denominatorBound : Int) : Fraction
     {
-        if (Snd(r) == 0 || AbsI(Snd(s)) > denominatorBound)
+        if (Snd(r) == 0 or AbsI(Snd(s)) > denominatorBound)
         {
-            if (Snd(r) == 0 && AbsI(Snd(s)) <= denominatorBound)
+            if (Snd(r) == 0 and AbsI(Snd(s)) <= denominatorBound)
             {
                 return Fraction(-Snd(t) * signB, Snd(s) * signA);
             }

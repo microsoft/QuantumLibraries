@@ -217,7 +217,7 @@ namespace Microsoft.Quantum.ErrorCorrection {
             let (logicalQubit, xsyn, zsyn) = _ExtractLogicalQubitFromSteaneCode(LogicalRegister(code));
             let m = M(anc);
             
-            if ((xsyn == -1 && zsyn == -1) && m == Zero)
+            if ((xsyn == -1 and zsyn == -1) and m == Zero)
             {
                 SWAP(logicalQubit, roughMagic[0]);
                 set accept = true;

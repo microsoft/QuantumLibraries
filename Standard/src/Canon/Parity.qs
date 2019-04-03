@@ -18,7 +18,7 @@ namespace Microsoft.Quantum.Canon {
         body (...) {
             for (idxQubit in 0..Length(qubits) - 2){
                 CNOT(qubits[idxQubit], qubits[idxQubit + 1]);
-            }                    
+            }
         }
         adjoint auto;
         controlled auto;
@@ -51,7 +51,7 @@ namespace Microsoft.Quantum.Canon {
     operation CNOTChainTarget(qubits: Qubit[], targetQubit: Qubit) : Unit {
         body (...) {
             let allQubits = qubits + [targetQubit];
-            CNOTChain(allQubits);                 
+            CNOTChain(allQubits);
         }
         adjoint auto;
         controlled auto;
@@ -61,8 +61,7 @@ namespace Microsoft.Quantum.Canon {
     /// # Summary
     /// This computes the exclusive-OR of two bits.
     function XOR(bit1: Bool, bit2: Bool) : Bool {
-        return (bit1 || bit2) && (not bit1 || not bit2);
+        return (bit1 or bit2) and (not bit1 or not bit2);
     }
-
 
 }

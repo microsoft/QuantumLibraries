@@ -207,7 +207,7 @@ namespace Microsoft.Quantum.Arithmetic {
         body (...)
         {
             AssertBoolEqual(modulus <= 2 ^ (Length(phaseSummand!) - 1), true, $"`multiplier` must be big enough to fit integers modulo `modulus`" + $"with highest bit set to 0");
-            AssertBoolEqual(constMultiplier >= 0 && constMultiplier < modulus, true, $"`constMultiplier` must be between 0 and `modulus`-1");
+            AssertBoolEqual(constMultiplier >= 0 and constMultiplier < modulus, true, $"`constMultiplier` must be between 0 and `modulus`-1");
             
             if (_EnableExtraAssertsForArithmetic())
             {
@@ -258,7 +258,7 @@ namespace Microsoft.Quantum.Arithmetic {
         body (...)
         {
             // Check the preconditions using Microsoft.Quantum.Canon.AssertBoolEqual
-            AssertBoolEqual(constMultiplier >= 0 && constMultiplier < modulus, true, $"`constMultiplier` must be between 0 and `modulus`");
+            AssertBoolEqual(constMultiplier >= 0 and constMultiplier < modulus, true, $"`constMultiplier` must be between 0 and `modulus`");
             AssertBoolEqual(modulus <= 2 ^ Length(multiplier!), true, $"`multiplier` must be big enough to fit integers modulo `modulus`");
             AssertBoolEqual(IsCoprime(constMultiplier, modulus), true, $"`constMultiplier` and `modulus` must be co-prime");
             

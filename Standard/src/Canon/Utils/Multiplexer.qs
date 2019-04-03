@@ -286,12 +286,12 @@ namespace Microsoft.Quantum.Canon {
             
             if (nUnitaries > 0)
             {
-                if (Length(ancilla) == 1 && nIndex == 0)
+                if (Length(ancilla) == 1 and nIndex == 0)
                 {
                     // Termination case
                     Controlled unitaries[0](ancilla, target);
                 }
-                elif (Length(ancilla) == 0 && nIndex >= 1)
+                elif (Length(ancilla) == 0 and nIndex >= 1)
                 {
                     // Start case
                     let newAncilla = [(index!)[0]];

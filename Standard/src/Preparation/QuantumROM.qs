@@ -157,8 +157,8 @@ namespace Microsoft.Quantum.Preparation {
             }
         }
 
-        for(rep in 0..nCoefficients * 10){
-            if(nBarSource > 0 && nBarSink > 0){
+        for (rep in 0..nCoefficients * 10) {
+            if (nBarSource > 0 and nBarSink > 0) {
                 let idxSink = barSink[nBarSink-1];
                 let idxSource = barSource[nBarSource-1];
                 set nBarSink = nBarSink - 1;
@@ -178,13 +178,12 @@ namespace Microsoft.Quantum.Preparation {
                     set nBarSource = nBarSource + 1;
                 }
             }
-            elif(nBarSource > 0){
+            elif (nBarSource > 0) {
                 //Message($"rep: {rep}, nBarSource {nBarSource}.");
                 let idxSource = barSource[nBarSource-1];
                 set nBarSource = nBarSource - 1;
                 set keepCoeff[idxSource] = barHeight;
-            }
-            else {
+            } else {
                 return (oneNorm, keepCoeff, altIndex);
             }
         }
