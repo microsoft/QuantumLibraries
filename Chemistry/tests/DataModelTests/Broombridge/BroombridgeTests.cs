@@ -75,6 +75,17 @@ namespace Microsoft.Quantum.Chemistry.Tests
             Assert.Equal(twoBodyAmplitudeTruth, twoBodyAmplitude);
 
         }
+
+        [Fact]
+        public void UpdateFrom_v0_1()
+        {
+            var filename = "Broombridge/broombridge_v0.1.yaml";
+            var broombridge_v0_1 = Broombridge.Deserialize.v0_1(filename);
+            var broombridge_v0_2 = Broombridge.Update.Data(broombridge_v0_1);
+
+            Broombridge.Serialize.v0_2(broombridge_v0_2, "");
+
+        }
     }
 
 

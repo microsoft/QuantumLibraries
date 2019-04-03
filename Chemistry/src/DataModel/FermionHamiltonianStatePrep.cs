@@ -27,13 +27,22 @@ namespace Microsoft.Quantum.Chemistry
         /// <summary>
         /// List of Hamiltonian input states.
         /// </summary>
-        public List<InputState> InputStates = new List<InputState>();
+        public Dictionary<string, InputState> InputStates = new Dictionary<string, InputState>();
+
+        /// <summary>
+        /// Enum over valid input state types.
+        /// </summary>
+        public enum StateType
+        {
+            Single_Configurational, Sparse_Multi_Configurational, Unitary_Coupled_Cluster
+        }
         
         /// <summary>
         /// Data structure representing an input state.
         /// </summary>
         public struct InputState
         {
+            public StateType type;
             public string Label;
             public Double Energy;
             public ((Double, Double) complexCoeff, FermionTerm term)[] Superposition;
@@ -80,7 +89,6 @@ namespace Microsoft.Quantum.Chemistry
                 return new InputState { Label = label, Superposition = superposition };
             }
         }
-        
         #endregion
 
     }

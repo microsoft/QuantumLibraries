@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Text;
 using System.Linq;
 using System.Text.RegularExpressions;
 using YamlDotNet.Core;
@@ -22,7 +23,7 @@ namespace Microsoft.Quantum.Chemistry
         /// </summary>
         public enum Version
         {
-            v0_1, v0_2
+            v0_1 = 0, v0_2 = 1
         }
 
         // Implement backwards compatibility by converting v0.1 to v0.2.
@@ -46,7 +47,7 @@ namespace Microsoft.Quantum.Chemistry
                     return deserializer.Deserialize<V0_1.Data>(reader);
                 }
             }
-
+            
             /// <summary>
             /// Broombridge deserializer v0.2
             /// </summary>
@@ -62,6 +63,78 @@ namespace Microsoft.Quantum.Chemistry
             }
         }
 
+        /// <summary>
+        /// Broombridge serializers
+        /// </summary>
+        public static class Serialize
+        {
+            /// <summary>
+            /// Broombridge serializer
+            /// </summary>
+            /// <param name="filename">Broombridge filename to serialize</param>
+            /// <returns>Serialized Broombridge</returns>
+            public static void v0_2(V0_2.Data data, string filename)
+            {
+                var stringBuilder = new StringBuilder();
+                var serializer = new Serializer();
+                stringBuilder.AppendLine(serializer.Serialize(data));
+                Console.WriteLine(stringBuilder);
+                Console.WriteLine("");
+            }
+        }
+
+
+
+        public static class Update
+        {
+            /// <summary>
+            /// Converts v0.1 Broombridge to v0.2.
+            /// </summary>
+            /// <param name="input">Source Broombridge in v0.1 format.</param>
+            /// <returns>Converted Broombridge in v0.2 format.</returns>
+            public static V0_2.Data Data(V0_1.Data input)
+            {
+                var output = new V0_2.Data();
+
+                output.Schema = input.Schema;
+                output.Version = V0_2.Strings.VersionNumber;
+                output.Generator = input.Generator;
+                output.Bibliography = input.Bibliography;
+                output.ProblemDescription = new List<V0_2.ProblemDescription>();
+
+                foreach(var integralSet in input.IntegralSets)
+                {
+                    var problemDescription = new V0_2.ProblemDescription();
+                    problemDescription.Metadata = integralSet.Metadata;
+                    problemDescription.BasisSet = integralSet.BasisSet;
+                    problemDescription.Geometry = integralSet.Geometry;
+                    problemDescription.CoulombRepulsion = integralSet.CoulombRepulsion;
+                    problemDescription.ScfEnergy = integralSet.ScfEnergy;
+                    problemDescription.ScfEnergyOffset = integralSet.ScfEnergyOffset;
+                    problemDescription.FciEnergy = integralSet.FciEnergy;
+                    problemDescription.NOrbitals = integralSet.NOrbitals;
+                    problemDescription.NElectrons = integralSet.NElectrons;
+                    problemDescription.EnergyOffset = integralSet.EnergyOffset;
+                    problemDescription.Hamiltonian = integralSet.Hamiltonian;
+
+                    problemDescription.InitialStates = new List<V0_2.State>();
+                    foreach(var sourceInitialState in integralSet.SuggestedState)
+                    {
+                        var initialState = new V0_2.State();
+                        initialState.Label = sourceInitialState.SuggestedStateData.Label;
+                        initialState.Energy = sourceInitialState.SuggestedStateData.Energy;
+                        initialState.Method = V0_2.Strings.SparseMultiConfigurational;
+                        initialState.Superposition = sourceInitialState.SuggestedStateData.Superposition;
+
+                        problemDescription.InitialStates.Add(initialState);
+                    }
+                    
+                    output.ProblemDescription.Add(problemDescription);
+                }
+
+                return output;
+            }
+        }
 
         public static class DataStructures
         {
@@ -149,6 +222,22 @@ namespace Microsoft.Quantum.Chemistry
                 public List<Dictionary<string, object>> Atoms { get; set; }
             }
 
+            public struct HamiltonianData
+            {
+                [YamlMember(Alias = "particle_hole_representation", ApplyNamingConventions = false)]
+                // TODO: make this not object
+                // FIXME: currently strips off the last element as the "value", but the
+                //        present schema requires us to pull off the last two as a (double, string).
+                public DataStructures.ArrayQuantity<object, object> ParticleHoleRepresentation { get; set; }
+
+                [YamlMember(Alias = "one_electron_integrals", ApplyNamingConventions = false)]
+                public DataStructures.ArrayQuantity<long, double> OneElectronIntegrals { get; set; }
+
+                [YamlMember(Alias = "two_electron_integrals", ApplyNamingConventions = false)]
+                public DataStructures.ArrayQuantity<long, double> TwoElectronIntegrals { get; set; }
+
+            }
+
             public class SimpleQuantity : HasUnits
             {
                 [YamlMember(Alias = "value", ApplyNamingConventions = false)]
@@ -217,7 +306,7 @@ namespace Microsoft.Quantum.Chemistry
             public struct ClusterOperator
             {
                 [YamlMember(Alias = "reference_state", ApplyNamingConventions = false)]
-                public int Reference { get; set; }
+                public string Reference { get; set; }
 
                 [YamlMember(Alias = "one_body_amplitudes", ApplyNamingConventions = false)]
                 public List<List<string>> OneBodyAmplitudes { get; set; }
@@ -240,6 +329,13 @@ namespace Microsoft.Quantum.Chemistry
         #region Broombridge v0.2 format
         public static class V0_2
         {
+            public static class Strings {
+                public static string SparseMultiConfigurational = "sparse_multi_configurational";
+                public static string UnitaryCoupledCluster = "unitary_coupled_cluster";
+                public static string VersionNumber = "0.2";
+            }
+            public static Version VersionNumber = Version.v0_2;
+
             // Root of Broombridge data structure
             public struct Data
             {
@@ -297,7 +393,7 @@ namespace Microsoft.Quantum.Chemistry
                 public DataStructures.SimpleQuantity EnergyOffset { get; set; }
 
                 [YamlMember(Alias = "hamiltonian", ApplyNamingConventions = false)]
-                public HamiltonianData Hamiltonian { get; set; }
+                public DataStructures.HamiltonianData Hamiltonian { get; set; }
 
                 // FIXME: actually specify what initial_state_suggestions looks like.
                 //[YamlMember(Alias = "initial_state_suggestions", ApplyNamingConventions = false)]
@@ -307,21 +403,6 @@ namespace Microsoft.Quantum.Chemistry
                 public List<State> InitialStates { get; set; }
             }
 
-            public struct HamiltonianData
-            {
-                [YamlMember(Alias = "particle_hole_representation", ApplyNamingConventions = false)]
-                // TODO: make this not object
-                // FIXME: currently strips off the last element as the "value", but the
-                //        present schema requires us to pull off the last two as a (double, string).
-                public DataStructures.ArrayQuantity<object, object> ParticleHoleRepresentation { get; set; }
-
-                [YamlMember(Alias = "one_electron_integrals", ApplyNamingConventions = false)]
-                public DataStructures.ArrayQuantity<long, double> OneElectronIntegrals { get; set; }
-
-                [YamlMember(Alias = "two_electron_integrals", ApplyNamingConventions = false)]
-                public DataStructures.ArrayQuantity<long, double> TwoElectronIntegrals { get; set; }
-
-            }
 
 
             public struct State
@@ -385,21 +466,6 @@ namespace Microsoft.Quantum.Chemistry
                 public string Version { get; set; }
             }
 
-            public struct HamiltonianData
-            {
-                [YamlMember(Alias = "particle_hole_representation", ApplyNamingConventions = false)]
-                // TODO: make this not object
-                // FIXME: currently strips off the last element as the "value", but the
-                //        present schema requires us to pull off the last two as a (double, string).
-                public DataStructures.ArrayQuantity<object, object> ParticleHoleRepresentation { get; set; }
-
-                [YamlMember(Alias = "one_electron_integrals", ApplyNamingConventions = false)]
-                public DataStructures.ArrayQuantity<long, double> OneElectronIntegrals { get; set; }
-
-                [YamlMember(Alias = "two_electron_integrals", ApplyNamingConventions = false)]
-                public DataStructures.ArrayQuantity<long, double> TwoElectronIntegrals { get; set; }
-
-            }
 
             public struct IntegralSet
             {
@@ -434,7 +500,7 @@ namespace Microsoft.Quantum.Chemistry
                 public DataStructures.SimpleQuantity EnergyOffset { get; set; }
 
                 [YamlMember(Alias = "hamiltonian", ApplyNamingConventions = false)]
-                public HamiltonianData Hamiltonian { get; set; }
+                public DataStructures.HamiltonianData Hamiltonian { get; set; }
 
                 // FIXME: actually specify what initial_state_suggestions looks like.
                 //[YamlMember(Alias = "initial_state_suggestions", ApplyNamingConventions = false)]

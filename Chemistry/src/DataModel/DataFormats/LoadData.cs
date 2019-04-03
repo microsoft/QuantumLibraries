@@ -51,7 +51,7 @@ namespace Microsoft.Quantum.Chemistry
         /// </returns>
         public static IEnumerable<FermionHamiltonian> LoadFromBroombridge(string filename)
         {
-            var broombridgeData = Broombridge.Deserialize.v0_1(filename);
+            var broombridgeData = Broombridge.Deserialize.v0_2(filename);
 
             return LoadData.LoadIntegralData(broombridgeData);
         }
@@ -61,9 +61,9 @@ namespace Microsoft.Quantum.Chemistry
 
     public partial class LoadData
     {
-        internal static IEnumerable<FermionHamiltonian> LoadIntegralData(Broombridge.V0_1.Data schemaInstance, Double threshold = 1e-8)
+        internal static IEnumerable<FermionHamiltonian> LoadIntegralData(Broombridge.V0_2.Data schemaInstance, Double threshold = 1e-8)
         {
-            return schemaInstance.IntegralSets.Select(
+            return schemaInstance.ProblemDescription.Select(
                 (hamiltonianData, index) =>
                 {
                     var hamiltonian = new FermionHamiltonian()
@@ -106,22 +106,22 @@ namespace Microsoft.Quantum.Chemistry
                     }
                     hamiltonian.SortAndAccumulate();
 
-                    if (!(hamiltonianData.SuggestedState == null))
+                    if (!(hamiltonianData.InitialStates == null))
                     {
 
-                        foreach (var state in hamiltonianData.SuggestedState)
+                        foreach (var state in hamiltonianData.InitialStates)
                         {
-                            var label = state.SuggestedStateData.Label;
-                            var energy = state.SuggestedStateData.Energy?.Value ?? 0.0;
-                            var superpositionRaw = state.SuggestedStateData.Superposition;
+                            var label = state.Label;
+                            var energy = state.Energy?.Value ?? 0.0;
+                            var superpositionRaw = state.Superposition;
                             var stringData = superpositionRaw.Select(o => o.Select(k => k.ToString()).ToList());
                             var superposition = stringData.Select(o => ParseInputState(o)).ToArray();
                             //Only have terms with non-zero amplitudes.
                             superposition = superposition.Where(o => Math.Abs(o.Item1.Item1) >= threshold).ToArray();
                             if (superposition.Count() > 0)
                             {
-                                hamiltonian.InputStates.Add(
-                                    new FermionHamiltonian.InputState { Label = label, Energy = energy, Superposition = superposition }
+                                hamiltonian.InputStates.Add(label,
+                                    new FermionHamiltonian.InputState {  Energy = energy, Superposition = superposition }
                                     );
                             }
                         }

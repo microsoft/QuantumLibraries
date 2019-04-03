@@ -309,9 +309,11 @@ namespace Microsoft.Quantum.Chemistry
             jordanWignerEncoding.InputStateFromGreedyAlgorithm = jordanWignerEncoding.InitialStatePrep(greedyState.complexCoeff, greedyState.term);
 
             var inputStateFromFile = new Dictionary<string, QArray<JordanWignerInputState>>();
-            foreach(var superposition in hamiltonian.InputStates)
+            foreach(var entry in hamiltonian.InputStates)
             {
-                inputStateFromFile.Add(superposition.Label, jordanWignerEncoding.InitialStatePrep(superposition.Superposition));
+                var label = entry.Key;
+                var inputState = entry.Value;
+                inputStateFromFile.Add(label, jordanWignerEncoding.InitialStatePrep(inputState.Superposition));
             }
             jordanWignerEncoding.InputStateFromFile = inputStateFromFile;
 

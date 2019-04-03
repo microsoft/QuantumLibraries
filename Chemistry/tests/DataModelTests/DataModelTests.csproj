@@ -7,10 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Broombridge\BroombridgeTests.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Content Include="xunit.runner.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -26,7 +22,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="Broombridge\BroombridgeTests.cs" />
     <None Include="Broombridge\broombridge_v0.2.yaml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
