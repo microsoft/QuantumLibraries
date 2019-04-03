@@ -42,13 +42,13 @@ namespace Microsoft.Quantum.Chemistry
     }
 
 
-    internal struct Format
+    public struct Format
     {
         [YamlMember(Alias = "version", ApplyNamingConventions = false)]
         public string Version { get; set; }
     }
 
-    internal struct Generator
+    public struct Generator
     {
         [YamlMember(Alias = "source", ApplyNamingConventions = false)]
         public string Source { get; set; }
@@ -57,7 +57,7 @@ namespace Microsoft.Quantum.Chemistry
         public string Version { get; set; }
     }
 
-    internal struct BasisSet
+    public struct BasisSet
     {
         [YamlMember(Alias = "type", ApplyNamingConventions = false)]
         public string Type { get; set; }
@@ -71,7 +71,7 @@ namespace Microsoft.Quantum.Chemistry
         arXiv, DOI, URL
     }
 
-    internal struct BibliographyItem : IYamlConvertible
+    public struct BibliographyItem : IYamlConvertible
     {
         public string Value { get; set; }
         public BibliographyKind Kind { get; set; }
@@ -111,14 +111,14 @@ namespace Microsoft.Quantum.Chemistry
         }
     }
 
-    internal class HasUnits
+    public class HasUnits
     {
         [YamlMember(Alias = "units", ApplyNamingConventions = false)]
         // FIXME: make this an enum of allowed units.
         public string Units { get; set; }
     }
 
-    internal class Geometry : HasUnits
+    public class Geometry : HasUnits
     {
         [YamlMember(Alias = "coordinate_system", ApplyNamingConventions = false)]
         public string CoordinateSystem { get; set; }
@@ -131,13 +131,13 @@ namespace Microsoft.Quantum.Chemistry
         public List<Dictionary<string, object>> Atoms { get; set; }
     }
 
-    internal class SimpleQuantity : HasUnits
+    public class SimpleQuantity : HasUnits
     {
         [YamlMember(Alias = "value", ApplyNamingConventions = false)]
         public double Value { get; set; }
     }
 
-    internal class BoundedQuantity : HasUnits
+    public class BoundedQuantity : HasUnits
     {
         [YamlMember(Alias = "value", ApplyNamingConventions = false)]
         public double? Value { get; set; }
@@ -149,11 +149,11 @@ namespace Microsoft.Quantum.Chemistry
         public double Lower { get; set; }
     }
 
-    internal class ArrayQuantity<TIndex, TValue> : HasUnits, IYamlConvertible
+    public class ArrayQuantity<TIndex, TValue> : HasUnits, IYamlConvertible
     {
         // TODO: make this an enum.
         public string Format { get; set; }
-        public Dictionary<TIndex[], TValue> Values { get; set; }
+        public List<(TIndex[], TValue)> Values { get; set; }
 
         public void Read(IParser parser, Type expectedType, ObjectDeserializer nestedObjectDeserializer)
         {
@@ -161,21 +161,14 @@ namespace Microsoft.Quantum.Chemistry
             var data = (Dictionary<string, object>)nestedObjectDeserializer(typeof(Dictionary<string, object>));
             Units = (string)data["units"];
             Format = (string)data["format"];
-            Values = ((IEnumerable<object>)data["values"])
-                .Select(entry => (IEnumerable<object>)entry)
-                .ToDictionary(
-                    entry => entry
-                        .Take(entry.Count() - 1)
-                        .Select((idx) => (TIndex)Convert.ChangeType(
-                            idx,
-                            typeof(TIndex)
-                        ))
-                        .ToArray(),
-                    entry => (TValue)Convert.ChangeType(
-                        entry.ElementAt(entry.Count() - 1),
-                        typeof(TValue)
-                    )
-                );
+            Values = new List<(TIndex[], TValue)>();
+            foreach (var value in ((IEnumerable<object>)data["values"]))
+            {
+                var entries = (IEnumerable<object>)value;
+                var a = entries.Take(entries.Count() - 1).Select(e => (TIndex)Convert.ChangeType(e, typeof(TIndex))).ToArray();
+                var q = (TValue)Convert.ChangeType(entries.Last(), typeof(TValue));
+                Values.Add((a, q));
+            }
         }
 
         public void Write(IEmitter emitter, ObjectSerializer nestedObjectSerializer)
@@ -185,15 +178,15 @@ namespace Microsoft.Quantum.Chemistry
                 ["units"] = Units,
                 ["format"] = Format,
                 ["values"] = Values
-                    .Select(kvp =>
-                        kvp.Key.Select((idx) => (object)idx).Concat(new object[] { kvp.Value })
+                    .Select(entry =>
+                        entry.Item1.Select((idx) => (object)idx).Concat(new object[] { entry.Item2 })
                     )
                     .ToList()
             });
         }
     }
 
-    internal struct HamiltonianData
+    public struct HamiltonianData
     {
         [YamlMember(Alias = "particle_hole_representation", ApplyNamingConventions = false)]
         // TODO: make this not object
@@ -209,7 +202,7 @@ namespace Microsoft.Quantum.Chemistry
 
     }
 
-    internal struct IntegralSet
+    public struct IntegralSet
     {
         [YamlMember(Alias = "metadata", ApplyNamingConventions = false)]
         public Dictionary<string, object> Metadata { get; set; }
@@ -252,13 +245,13 @@ namespace Microsoft.Quantum.Chemistry
         public List<SuggestedState> SuggestedState { get; set; }
     }
 
-    internal struct SuggestedState
+    public struct SuggestedState
     {
         [YamlMember(Alias = "state", ApplyNamingConventions = false)]
         public SuggestedStateData SuggestedStateData { get; set; }
     }
 
-    internal struct SuggestedStateData
+    public struct SuggestedStateData
     {
         [YamlMember(Alias = "label", ApplyNamingConventions = false)]
         public string Label { get; set; }
@@ -270,7 +263,7 @@ namespace Microsoft.Quantum.Chemistry
         public List<List<object>> Superposition { get; set; }
     }
 
-    internal struct IntegralDataSchema
+    public struct IntegralDataSchema
     {
 
         [YamlMember(Alias = "$schema", ApplyNamingConventions = false)]
@@ -293,7 +286,7 @@ namespace Microsoft.Quantum.Chemistry
 
     public partial class LoadData
     {
-        internal static IEnumerable<FermionHamiltonian> LoadIntegralData(IntegralDataSchema schemaInstance, Double threshold = 1e-8)
+        public static IEnumerable<FermionHamiltonian> LoadIntegralData(IntegralDataSchema schemaInstance, Double threshold = 1e-8)
         {
             return schemaInstance.IntegralSets.Select(
                 (hamiltonianData, index) =>
@@ -310,8 +303,8 @@ namespace Microsoft.Quantum.Chemistry
                     var fileHIJTerms = new Dictionary<Int64[], Double>(new Extensions.IntArrayIEqualityComparer());
                     var fileHIJKLTerms = new Dictionary<Int64[], Double>(new Extensions.IntArrayIEqualityComparer());
 
-                    fileHIJTerms = hamiltonianData.Hamiltonian.OneElectronIntegrals.Values;
-                    fileHIJKLTerms = hamiltonianData.Hamiltonian.TwoElectronIntegrals.Values;
+                    fileHIJTerms = hamiltonianData.Hamiltonian.OneElectronIntegrals.Values.ToDictionary(entry => entry.Item1, entry => entry.Item2);
+                    fileHIJKLTerms = hamiltonianData.Hamiltonian.TwoElectronIntegrals.Values.ToDictionary(entry => entry.Item1, entry => entry.Item2);
                     hamiltonian.NOrbitals = hamiltonianData.NOrbitals;
                     hamiltonian.NElectrons = hamiltonianData.NElectrons;
                     HashSet<Int64[]> recordedIJTerms = new HashSet<Int64[]>(new Extensions.IntArrayIEqualityComparer());

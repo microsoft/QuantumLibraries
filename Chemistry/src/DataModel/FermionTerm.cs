@@ -423,7 +423,7 @@ namespace Microsoft.Quantum.Chemistry
 
         public override bool Equals(object x)
         {
-            return Equals((FermionTerm)x);
+            return (x is FermionTerm ft) ? Equals(ft) : false;
         }
 
         public bool Equals(FermionTerm x)
@@ -542,9 +542,10 @@ namespace Microsoft.Quantum.Chemistry
         {
             return !(x == y);
         }
+
         public override bool Equals(object x)
         {
-            return Equals((FermionTermType)x);
+            return (x is FermionTermType ft) ? Equals(ft) : false;
         }
 
         public bool Equals(FermionTermType x)
