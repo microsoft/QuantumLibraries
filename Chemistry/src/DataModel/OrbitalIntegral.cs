@@ -75,7 +75,7 @@ namespace Microsoft.Quantum.Chemistry
                 }
                 else
                 {
-                    throw new System.ArgumentException("Mulliken convention for 2 or 4 indices is not defined.");
+                    throw new System.ArgumentException("Mulliken convention for not 2 or 4 indices is not defined.");
                 }
                 Coefficient = coefficient;
             }
@@ -222,6 +222,29 @@ namespace Microsoft.Quantum.Chemistry
                 spinOrbitalArrayOfArray[idx] = spinOrbitalArray;
             }
             return spinOrbitalArrayOfArray;
+        }
+
+        public bool Equals(OrbitalIntegral x)
+        {
+            if (ReferenceEquals(null, x))
+            {
+                return false;
+            }
+            else if (ReferenceEquals(this, x))
+            {
+                return true;
+            }
+            else if (GetType() != x.GetType())
+            {
+                return false;
+            }
+            else
+                return this.OrbitalIndices == x.OrbitalIndices;
+        }
+
+        public override int GetHashCode()
+        {
+            return OrbitalIndices.GetHashCode();
         }
     }
 }

@@ -580,8 +580,8 @@ namespace Microsoft.Quantum.Chemistry
         public int NOrbitals, NElectrons;
 
         public double IdentityTerm;
-        public List<OrbitalIntegral> OneBodyTerms;
-        public List<OrbitalIntegral> TwoBodyTerms;
+        public HashSet<OrbitalIntegral> OneBodyTerms;
+        public HashSet<OrbitalIntegral> TwoBodyTerms;
         public Dictionary<string, FermionHamiltonian.InputState> InitialStates;
         /*[YamlMember(Alias = "coulomb_repulsion", ApplyNamingConventions = false)]
         public DataStructures.SimpleQuantity CoulombRepulsion { get; set; }
@@ -621,13 +621,14 @@ namespace Microsoft.Quantum.Chemistry
             IdentityTerm = broombridgeProblem.CoulombRepulsion.Value + broombridgeProblem.EnergyOffset.Value;
 
             // This will convert from Broombridge 1-indexing to 0-indexing.
-            OneBodyTerms = broombridgeProblem.Hamiltonian.OneElectronIntegrals.Values.Select(
-                o => new OrbitalIntegral(o.Item1.Select(k => k-1), o.Item2)).ToList();
+            OneBodyTerms = new HashSet<OrbitalIntegral> (broombridgeProblem.Hamiltonian.OneElectronIntegrals.Values.Select(
+                o => new OrbitalIntegral(o.Item1.Select(k => k - 1), o.Item2, OrbitalIntegral.Convention.Mulliken).ToCanonicalForm())
+                .Distinct().ToList());
 
             // This will convert from Broombridge 1-indexing to 0-indexing.
             // This will convert to Dirac-indexing.
-            TwoBodyTerms = broombridgeProblem.Hamiltonian.TwoElectronIntegrals.Values.Select(
-                o => new OrbitalIntegral(o.Item1.Select(k => k - 1), o.Item2, OrbitalIntegral.Convention.Mulliken)).ToList();
+            TwoBodyTerms = new HashSet<OrbitalIntegral> (broombridgeProblem.Hamiltonian.TwoElectronIntegrals.Values.Select(
+                o => new OrbitalIntegral(o.Item1.Select(k => k - 1), o.Item2, OrbitalIntegral.Convention.Mulliken)).ToList());
 
             InitialStates = broombridgeProblem.InitialStates.ToDictionary(
                 o => o.Label,

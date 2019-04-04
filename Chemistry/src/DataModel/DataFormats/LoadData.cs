@@ -52,8 +52,8 @@ namespace Microsoft.Quantum.Chemistry
         public static IEnumerable<FermionHamiltonian> LoadFromBroombridge(string filename)
         {
             var broombridgeData = Broombridge.Deserialize.Source(filename);
-
-            return LoadData.LoadIntegralData(broombridgeData);
+            IEnumerable<BroombridgeTyped> broombridgeDataTyped = broombridgeData.ProblemDescription.Select(o => new BroombridgeTyped(o));
+            return broombridgeDataTyped.Select(o => LoadData.LoadIntegralData(o));
         }
 
     }
@@ -61,74 +61,39 @@ namespace Microsoft.Quantum.Chemistry
 
     public partial class LoadData
     {
-        internal static IEnumerable<FermionHamiltonian> LoadIntegralData(Broombridge.V0_2.Data schemaInstance, Double threshold = 1e-8)
+        internal static FermionHamiltonian LoadIntegralData(BroombridgeTyped schemaInstance, Double threshold = 1e-8)
         {
-            return schemaInstance.ProblemDescription.Select(
-                (hamiltonianData, index) =>
+            var hamiltonian = new FermionHamiltonian()
+            {
+
+                NOrbitals = schemaInstance.NOrbitals,
+                NElectrons = schemaInstance.NElectrons,
+                EnergyOffset = schemaInstance.IdentityTerm,
+                // TODO: optionally look at metadata to decide a better label.
+                Name = $"hamiltonian"
+            };
+
+            foreach (var orbitalIntegral in schemaInstance.OneBodyTerms)
+            {
+                if (Math.Abs(orbitalIntegral.Coefficient) >= threshold)
                 {
-                    var hamiltonian = new FermionHamiltonian()
-                    {
-
-                        NOrbitals = hamiltonianData.NOrbitals,
-                        EnergyOffset = 0 * hamiltonianData.EnergyOffset.Value + hamiltonianData.CoulombRepulsion.Value,
-                        // TODO: optionally look at metadata to decide a better label.
-                        Name = $"hamiltonian_{index}"
-                    };
-
-                    var fileHIJTerms = new Dictionary<Int64[], Double>(new Extensions.IntArrayIEqualityComparer());
-                    var fileHIJKLTerms = new Dictionary<Int64[], Double>(new Extensions.IntArrayIEqualityComparer());
-
-                    fileHIJTerms = hamiltonianData.Hamiltonian.OneElectronIntegrals.Values.ToDictionary(entry => entry.Item1, entry => entry.Item2);
-                    fileHIJKLTerms = hamiltonianData.Hamiltonian.TwoElectronIntegrals.Values.ToDictionary(entry => entry.Item1, entry => entry.Item2);
-                    hamiltonian.NOrbitals = hamiltonianData.NOrbitals;
-                    hamiltonian.NElectrons = hamiltonianData.NElectrons;
-                    HashSet<Int64[]> recordedIJTerms = new HashSet<Int64[]>(new Extensions.IntArrayIEqualityComparer());
-                    foreach (var ijTerm in fileHIJTerms)
-                    {
-                        // If equivalent overlaps are specified, only record the first instance.
-                        var orderedTerm = ijTerm.Key[0] > ijTerm.Key[1] ? ijTerm.Key.Reverse().ToArray() : ijTerm.Key;
-                        if (recordedIJTerms.Contains(orderedTerm) == false)
-                        {
-                            recordedIJTerms.Add(orderedTerm);
-                            if (Math.Abs(ijTerm.Value) >= threshold)
-                            {
-                                hamiltonian.AddFermionTerm(new OrbitalIntegral(ijTerm.Key.Select(o => o - 1), ijTerm.Value, OrbitalIntegral.Convention.Mulliken));
-                            }
-                        }
-                    }
-                    foreach (var ijklTerm in fileHIJKLTerms)
-                    {
-                        var tmp = new OrbitalIntegral(ijklTerm.Key.Select(o => o - 1), ijklTerm.Value, OrbitalIntegral.Convention.Mulliken);
-                        if (Math.Abs(ijklTerm.Value) >= threshold)
-                        {
-                            hamiltonian.AddFermionTerm(new OrbitalIntegral(ijklTerm.Key.Select(o => o - 1), ijklTerm.Value, OrbitalIntegral.Convention.Mulliken));
-                        }
-                    }
-                    hamiltonian.SortAndAccumulate();
-
-                    if (!(hamiltonianData.InitialStates == null))
-                    {
-
-                        foreach (var state in hamiltonianData.InitialStates)
-                        {
-                            var label = state.Label;
-                            var energy = state.Energy?.Value ?? 0.0;
-                            var superpositionRaw = state.Superposition;
-                            var stringData = superpositionRaw.Select(o => o.Select(k => k.ToString()).ToList());
-                            var superposition = stringData.Select(o => BroombridgeTyped.ParseInputState(o)).ToArray();
-                            //Only have terms with non-zero amplitudes.
-                            superposition = superposition.Where(o => Math.Abs(o.Item1.Item1) >= threshold).ToArray();
-                            if (superposition.Count() > 0)
-                            {
-                                hamiltonian.InputStates.Add(label,
-                                    new FermionHamiltonian.InputState {  Energy = energy, Superposition = superposition }
-                                    );
-                            }
-                        }
-                    }
-                    return hamiltonian;
+                    hamiltonian.AddFermionTerm(orbitalIntegral);
                 }
-            );
+            }
+
+            foreach (var orbitalIntegral in schemaInstance.TwoBodyTerms)
+            {
+                if (Math.Abs(orbitalIntegral.Coefficient) >= threshold)
+                {
+                    hamiltonian.AddFermionTerm(orbitalIntegral);
+                }
+            }
+
+            hamiltonian.SortAndAccumulate();
+
+            hamiltonian.InputStates = schemaInstance.InitialStates;
+
+            return hamiltonian;
         }
 
 
