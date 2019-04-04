@@ -38,7 +38,7 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
 			// The last term is the reference state.
 			let referenceState = PrepareTrialState((2, [terms[nTerms-1]]), _);
 			
-			PrepareTrialStateUnitaryCoupledCluster(NoOp<Qubit[]>, terms[0..nTerms-2], trotterStepSize, qubits);
+			PrepareTrialStateUnitaryCoupledCluster(referenceState, terms[0..nTerms-2], trotterStepSize, qubits);
 		}
     }
     
