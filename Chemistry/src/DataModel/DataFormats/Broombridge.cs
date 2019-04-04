@@ -63,7 +63,7 @@ namespace Microsoft.Quantum.Chemistry
                 }
             }
 
-            public static V0_2.Data Source(string filename)
+            public static Current.Data Source(string filename)
             {
                 Version.Type versionNumber = GetVersionNumber(filename);
 
@@ -361,6 +361,13 @@ namespace Microsoft.Quantum.Chemistry
         }
 
         /// <summary>
+        /// Broombridge latest supported format.
+        /// </summary>
+        public class Current : V0_2 {
+             
+        }
+        
+        /// <summary>
         /// Broombridge v0.2 format.
         /// 
         /// Changes from v0.1:
@@ -370,7 +377,7 @@ namespace Microsoft.Quantum.Chemistry
         /// - Initial state suggestion `state` key removed. All values in this key are moved up one level.
         /// </summary>
         #region Broombridge v0.2 format
-        public static class V0_2
+        public class V0_2
         {
             public static class Strings
             {
@@ -397,9 +404,6 @@ namespace Microsoft.Quantum.Chemistry
 
                 [YamlMember(Alias = "problem_description", ApplyNamingConventions = false)]
                 public List<ProblemDescription> ProblemDescription { get; set; }
-
-
-
 
             }
 
@@ -480,7 +484,7 @@ namespace Microsoft.Quantum.Chemistry
         /// Broombridge v0.1 format
         /// </summary>
         #region Broombridge v0.1 format
-        public static class V0_1
+        public class V0_1
         {
             public struct Data
             {
