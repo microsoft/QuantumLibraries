@@ -583,36 +583,7 @@ namespace Microsoft.Quantum.Chemistry
         public HashSet<OrbitalIntegral> OneBodyTerms;
         public HashSet<OrbitalIntegral> TwoBodyTerms;
         public Dictionary<string, FermionHamiltonian.InputState> InitialStates;
-        /*[YamlMember(Alias = "coulomb_repulsion", ApplyNamingConventions = false)]
-        public DataStructures.SimpleQuantity CoulombRepulsion { get; set; }
-
-        [YamlMember(Alias = "scf_energy", ApplyNamingConventions = false)]
-        public DataStructures.SimpleQuantity ScfEnergy { get; set; }
-
-        [YamlMember(Alias = "scf_energy_offset", ApplyNamingConventions = false)]
-        public DataStructures.SimpleQuantity ScfEnergyOffset { get; set; }
-
-        [YamlMember(Alias = "fci_energy", ApplyNamingConventions = false)]
-        public DataStructures.BoundedQuantity FciEnergy { get; set; }
-
-        [YamlMember(Alias = "n_orbitals", ApplyNamingConventions = false)]
-        public int NOrbitals { get; set; }
-
-        [YamlMember(Alias = "n_electrons", ApplyNamingConventions = false)]
-        public int NElectrons { get; set; }
-
-        [YamlMember(Alias = "energy_offset", ApplyNamingConventions = false)]
-        public DataStructures.SimpleQuantity EnergyOffset { get; set; }
-
-        [YamlMember(Alias = "hamiltonian", ApplyNamingConventions = false)]
-        public DataStructures.HamiltonianData Hamiltonian { get; set; }
-    
-        // FIXME: actually specify what initial_state_suggestions looks like.
-        //[YamlMember(Alias = "initial_state_suggestions", ApplyNamingConventions = false)]
-        //public List<Dictionary<string, object>> InitialStateSuggestions { get; set; }
-
-        //[YamlMember(Alias = "initial_state_suggestions", ApplyNamingConventions = false)]
-        */
+        
         public BroombridgeTyped(Broombridge.V0_2.ProblemDescription broombridgeProblem)
         {
             NOrbitals = broombridgeProblem.NOrbitals;
@@ -640,6 +611,28 @@ namespace Microsoft.Quantum.Chemistry
                     Superposition = ParseInputState(o.Superposition)
                 }
                 );                
+        }
+
+        internal static FermionHamiltonian.InputState ParseInitialState(Broombridge.V0_2.State initialState)
+        {
+            var state = new FermionHamiltonian.InputState();
+            state.type = ParseInitialStateMethod(initialState.Method);
+            state.Label = initialState.Label;
+            if (state.type == FermionHamiltonian.StateType.Sparse_Multi_Configurational)
+            {
+                state.Superposition = ParseInputState(initialState.Superposition);
+            }
+            else if (state.type == FermionHamiltonian.StateType.Unitary_Coupled_Cluster)
+            {
+                var oneBodyTerms = initialState.ClusterOperator.OneBodyAmplitudes.Select(o => ParseUnitaryCoupledClisterInputState(o));
+                var twoBodyTerms = initialState.ClusterOperator.OneBodyAmplitudes.Select(o => ParseUnitaryCoupledClisterInputState(o));
+                state.Superposition = oneBodyTerms.Concat(twoBodyTerms).ToArray();
+            }
+            else
+            {
+                throw new System.ArgumentException($"initial state `{state.Label}` is not recognized or implemented.");
+            }
+            return state;
         }
 
         internal static FermionHamiltonian.StateType ParseInitialStateMethod(string state)
@@ -699,6 +692,25 @@ namespace Microsoft.Quantum.Chemistry
             return ((finalAmplitude, 0.0), term);
         }
 
+        public static ((Double, Double), FermionTerm) ParseUnitaryCoupledClisterInputState(List<string> clusterTerm)
+        {
+            var amplitude = Double.Parse(clusterTerm.First(), System.Globalization.CultureInfo.InvariantCulture);
+            var ca = new List<Int64>();
+            var so = new List<SpinOrbital>();
+
+            for (int i = 1; i < clusterTerm.Count(); i++)
+            {
+                FermionTerm singleTerm = ParsePolishNotation(clusterTerm[i]);
+                ca.Add(singleTerm.CreationAnnihilationIndices.First());
+                so.Add(singleTerm.SpinOrbitalIndices.First());
+            }
+            FermionTerm term = new FermionTerm(ca.ToArray(), so.ToArray(), amplitude);
+
+            var canonicalOrder = term.ToCanonicalOrder();
+
+            return ((term.coeff, 0), term);
+        }
+
         internal static FermionTerm ParsePolishNotation(string input)
         {
             // Regex match examples: (1a)+ (2a)+ (3a)+ (4a)+ (5a)+ (6a)+ (1b)+ (2b)- (3b)+
@@ -706,6 +718,7 @@ namespace Microsoft.Quantum.Chemistry
             Match match = regex.Match(input);
             if (match.Success)
             {
+                // Convert from Broombridge 1-indexing to 0-indexing.
                 var orbital = Int64.Parse(match.Groups["orbital"].ToString()) - 1;
                 var spin = match.Groups["spin"].ToString() == "a" ? Spin.u : Spin.d;
                 var conjugate = match.Groups["operator"].ToString() == "+" ? 1 : 0;
