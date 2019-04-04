@@ -10,8 +10,9 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
     
     
     //newtype JordanWignerInputState = ((Double, Double), Int[]);
-    operation PrepareTrialState (superposition : JordanWignerInputState[], qubits : Qubit[]) : Unit {
-        
+    operation PrepareTrialState (stateData : (Int, JordanWignerInputState[]), qubits : Qubit[]) : Unit {
+        let (stateType, superposition) = stateData;
+
         if (Length(superposition) == 0) {
             // Do nothing
         }

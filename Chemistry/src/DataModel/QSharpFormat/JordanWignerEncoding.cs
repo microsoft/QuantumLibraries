@@ -88,14 +88,14 @@ namespace Microsoft.Quantum.Chemistry
         /// </summary>
         public JordanWignerEncodingData QSharpData(string selectInputState = "Greedy")
         {
-            var inputState = new QArray<JordanWignerInputState>();
+            var inputState = (0L, new QArray<JordanWignerInputState>());
             if(selectInputState == "Greedy")
             {
-                inputState = new QArray<JordanWignerInputState>(new[] { InputStateFromGreedyAlgorithm });
+                inputState = (1L,new QArray<JordanWignerInputState>(new[] { InputStateFromGreedyAlgorithm }));
             }
             else
             {
-                inputState = InputStateFromFile[selectInputState];
+                inputState = (1L, InputStateFromFile[selectInputState]);
             }
             return new JordanWignerEncodingData(
                 (NSpinOrbitals
