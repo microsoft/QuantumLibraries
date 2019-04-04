@@ -64,11 +64,13 @@ namespace SystemTests
         [Fact]
         public void EnergyUpDownIndexConvention()
         {
-            Settings.SetIndexConvention = Settings.IndexConventionType.UpDown;
+            Settings.IndexConvention.Current = Settings.IndexConvention.Type.UpDown;
 
             var hamiltonian = FermionHamiltonian.LoadFromBroombridge(filename).First();
             var jordanWignerEncoding = JordanWignerEncoding.Create(hamiltonian);
             var qSharpData = jordanWignerEncoding.QSharpData("|G>");
+
+            Settings.IndexConvention.Current = Settings.IndexConvention.Default();
 
 
             // We specify the bits of precision desired in the phase estimation 

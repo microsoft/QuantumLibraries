@@ -67,7 +67,7 @@ namespace Microsoft.Quantum.Chemistry
         /// <param name="nOrbitals">The total number of orbitals.</param>
         public Int64 ToInt(Int64 nOrbitals = maxOrbital)
         {
-           if (Settings.SetIndexConvention == Settings.IndexConventionType.UpDown)
+           if (Settings.IndexConvention.Current == Settings.IndexConvention.Type.UpDown)
             {
                 return orbital * 2 + spin;
             }

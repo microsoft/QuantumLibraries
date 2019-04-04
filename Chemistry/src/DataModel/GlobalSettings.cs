@@ -14,12 +14,18 @@ namespace Microsoft.Quantum.Chemistry
 {
     public static class Settings
     {
-        public enum IndexConventionType
-        {
-            UpDown, HalfUp
-        }
-        public static IndexConventionType SetIndexConvention = IndexConventionType.HalfUp;
-        
+        public static class IndexConvention {
+            public enum Type
+            {
+                UpDown, HalfUp
+            }
+            public static Type Default()
+            {
+                return Type.HalfUp;
+            }
+            public static Type Current = Default();
+                
+        }        
     }
 }
 
