@@ -88,19 +88,10 @@ namespace Microsoft.Quantum.Chemistry
         /// </summary>
         public JordanWignerEncodingData QSharpData(string selectInputState = "Greedy")
         {
-            var inputState = (0L, new QArray<JordanWignerInputState>());
-            if(selectInputState == "Greedy")
-            {
-                inputState = (1L,new QArray<JordanWignerInputState>(new[] { InputStateFromGreedyAlgorithm }));
-            }
-            else
-            {
-                inputState = (1L, InputStateFromFile[selectInputState]);
-            }
             return new JordanWignerEncodingData(
                 (NSpinOrbitals
                 , Terms
-                , inputState
+                , InputStateToQSharp(InputStates[selectInputState])
                 , energyOffset));
         }
 
@@ -305,17 +296,9 @@ namespace Microsoft.Quantum.Chemistry
 
             // Map Hamiltonian input trial states to Jordan-Wigner encoding.
             var jordanWignerEncoding = new JordanWignerEncoding(NOrbitals, NSpinOrbitals, statePrep, globalPhase, (hZTerms, hZZTerms, hPQandPQQRTerms, h0123Terms));
-            var greedyState = hamiltonian.GreedyStatePreparation().Superposition.First();
-            jordanWignerEncoding.InputStateFromGreedyAlgorithm = jordanWignerEncoding.InitialStatePrep(greedyState.complexCoeff, greedyState.term);
 
-            var inputStateFromFile = new Dictionary<string, QArray<JordanWignerInputState>>();
-            foreach(var entry in hamiltonian.InputStates)
-            {
-                var label = entry.Key;
-                var inputState = entry.Value;
-                inputStateFromFile.Add(label, jordanWignerEncoding.InitialStatePrep(inputState.Superposition));
-            }
-            jordanWignerEncoding.InputStateFromFile = inputStateFromFile;
+            jordanWignerEncoding.InputStates = hamiltonian.InputStates;
+            jordanWignerEncoding.InputStates.Add("Greedy", hamiltonian.GreedyStatePreparation());
 
             return jordanWignerEncoding;
         }

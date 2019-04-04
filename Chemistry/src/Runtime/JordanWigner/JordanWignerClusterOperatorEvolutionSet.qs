@@ -16,18 +16,18 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
     /// # Input
     /// ## nFermions
     /// Number of fermions in the system.
-	/// ## fermionIndices
+	/// ## idxFermions
 	/// fermionic operator indices.
     ///
     /// # Output
     /// Bitstring `Bool[]` that is `true` where a `PauliZ` should be applied.
-	function _ComputeJordanWignerBitString_(nFermions: Int,  fermionIndices: Int[]) : Bool[] {
-		if(Length(fermionIndices) % 2 != 0){
-			fail $"ComputeJordanWignerString failed. `fermionIndices` must contain an even number of terms.";
+	function _ComputeJordanWignerBitString_(nFermions: Int,  idxFermions: Int[]) : Bool[] {
+		if(Length(idxFermions) % 2 != 0){
+			fail $"ComputeJordanWignerString failed. `idxFermions` must contain an even number of terms.";
 		}
 		
 		mutable zString = new Bool[nFermions];
-		for(fermionIdx in fermionIndices){
+		for(fermionIdx in idxFermions){
 			if(fermionIdx >= nFermions){
 				fail $"ComputeJordanWignerString failed. fermionIdx {fermionIdx} out of range.";
 			}
@@ -36,7 +36,7 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
 			}
 		}
 		
-		for(fermionIdx in fermionIndices){
+		for(fermionIdx in idxFermions){
 			set zString[fermionIdx] = false;
 		}
 		return zString;
@@ -44,8 +44,8 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
 
 	// Identical to `_ComputeJordanWignerBitString_`, except with the map  
 	// false -> PauliI and true -> PauliZ
-	function _ComputeJordanWignerPauliZString_(nFermions: Int,  fermionIndices: Int[]) : Pauli[] {
-		let bitString = _ComputeJordanWignerBitString_(nFermions, fermionIndices);
+	function _ComputeJordanWignerPauliZString_(nFermions: Int,  idxFermions: Int[]) : Pauli[] {
+		let bitString = _ComputeJordanWignerBitString_(nFermions, idxFermions);
 
 		mutable pauliString = new Pauli[nFermions];
 		for(idx in 0..nFermions-1){
@@ -57,11 +57,11 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
 
 	// Identical to `_ComputeJordanWignerPauliZString_`, except that some
 	// specified elements are substituted.
-	function _ComputeJordanWignerPauliString_(nFermions: Int,  fermionIndices: Int[], pauliReplacements : Pauli[]) : Pauli[] {
-		mutable pauliString = _ComputeJordanWignerPauliZString_(nFermions, fermionIndices);
+	function _ComputeJordanWignerPauliString_(nFermions: Int,  idxFermions: Int[], pauliReplacements : Pauli[]) : Pauli[] {
+		mutable pauliString = _ComputeJordanWignerPauliZString_(nFermions, idxFermions);
 
-		for(idx in 0..Length(fermionIndices)-1){
-			let idxFermion = fermionIndices[idx];
+		for(idx in 0..Length(idxFermions)-1){
+			let idxFermion = idxFermions[idx];
 			let op = pauliReplacements[idx];
 			set pauliString[idxFermion] = op;
 		}
@@ -92,12 +92,7 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
             for (idxOp in 0 .. Length(ops) - 1) {
 				let pauliString = _ComputeJordanWignerPauliString_(Length(qubits), idxFermions, ops[idxOp]);
 				let sign = signs[idxOp];
-				if(p < q){
-					Exp(pauliString, sign * angle, qubits);
-				}
-				else{
-					Exp(pauliString, -1.0 * sign * angle, qubits);
-				}
+				Exp(pauliString, sign * angle, qubits);
             }
         }
         adjoint invert;
@@ -149,7 +144,7 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
     ///
     /// # Input
     /// ## term
-    /// `GeneratorIndex` representing a cluster operator PQQR term.
+    /// `GeneratorIndex` representing a cluster operator PQRS term.
     /// ## stepSize
     /// Duration of time-evolution.
     /// ## qubits
@@ -164,35 +159,130 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
 			let s = idxFermions[3];
 			let angle = 0.125 * coeff[0];
 			
-			let ops = [
-			[PauliX, PauliX, PauliX, PauliX], 
-			[PauliX, PauliX, PauliY, PauliY], 
-			[PauliX, PauliY, PauliX, PauliY], 
-			[PauliY, PauliX, PauliX, PauliY], 
-			[PauliY, PauliY, PauliY, PauliY], 
-			[PauliY, PauliY, PauliX, PauliX], 
-			[PauliY, PauliX, PauliY, PauliX], 
-			[PauliX, PauliY, PauliY, PauliX]];
-            
-			
-			let ops = [[PauliX, PauliY], [PauliY, PauliX]];
-            let signs = [+1.0, -1.0];
+			let x = PauliX;
+			let y = PauliY;
+
+			let ops = [[y,y,x,y],[x,x,x,y],[x,y,y,y],[y,x,y,y],[x,y,x,x],[y,x,x,x],[y,y,y,x],[x,x,y,x]];
+			let signs = [1.0, -1.0, -1.0, -1.0, 1.0, 1.0, 1.0, -1.0];
 
             for (idxOp in 0 .. Length(ops) - 1) {
 				let pauliString = _ComputeJordanWignerPauliString_(Length(qubits), idxFermions, ops[idxOp]);
 				let sign = signs[idxOp];
-				if(p < q){
-					Exp(pauliString, sign * angle, qubits);
-				}
-				else{
-					Exp(pauliString, -1.0 * sign * angle, qubits);
-				}
+				Exp(pauliString, sign * angle, qubits);
             }
         }
         
         adjoint invert;
         controlled distribute;
         controlled adjoint distribute;
+    }
+
+
+	/// # Summary
+    /// Converts a Hamiltonian described by `JWOptimizedHTerms`
+    /// to a `GeneratorSystem` expressed in terms of the
+    /// `GeneratorIndex` convention defined in this file.
+    ///
+    /// # Input
+    /// ## data
+    /// Description of Hamiltonian in `JWOptimizedHTerms` format.
+    ///
+    /// # Output
+    /// Representation of Hamiltonian as `GeneratorSystem`.
+    function JordanWignerClusterOperatorGeneratorSystem (data : JordanWignerInputState[]) : GeneratorSystem {
+        return GeneratorSystem(Length(data), _JordanWignerClusterOperatorGeneratorSystemImpl_(data, _));
+	}
+
+	function _JordanWignerClusterOperatorGeneratorSystemImpl_(data : JordanWignerInputState[], idx: Int) : GeneratorIndex {
+		return _JordanWignerClusterOperatorGeneratorIndex_(data[idx]);
+	}
+
+	function _JordanWignerClusterOperatorGeneratorIndex_(data: JordanWignerInputState): GeneratorIndex {
+		let ((real, imaginary), idxFermions) = data!;
+		if(Length(idxFermions) == 2){
+			// PQ term
+			return GeneratorIndex(([0],[real]),idxFermions);
+		}
+		elif(Length(idxFermions) == 4){
+			if(idxFermions[1] == idxFermions[2]){
+				// PQQR term
+				return GeneratorIndex(([1],[real]),idxFermions);
+			}
+			else{
+				// PQRS term
+				return GeneratorIndex(([2],[real]),idxFermions);
+			}
+		}
+		else{
+			// Any other term in invalid
+			return GeneratorIndex(([-1],[0.0]),[0]);
+		}
+	}
+
+	/// # Summary
+    /// Represents a dynamical generator as a set of simulatable gates and an
+    /// expansion in the JordanWigner basis.
+    ///
+    /// See [Dynamical Generator Modeling](../libraries/data-structures#dynamical-generator-modeling)
+    /// for more details.
+    ///
+    /// # Input
+    /// ## generatorIndex
+    /// A generator index to be represented as unitary evolution in the JordanWigner.
+    /// ## stepSize
+    /// Dummy variable to match signature of simulation algorithms.
+    /// ## qubits
+    /// Register acted upon by time-evolution operator.
+    operation _JordanWignerClusterOperatorImpl_(generatorIndex : GeneratorIndex, stepSize : Double, qubits : Qubit[]) : Unit {
+        
+        body (...) {
+            let ((idxTermType, idxDoubles), idxFermions) = generatorIndex!;
+            let termType = idxTermType[0];
+            
+            if (termType == 0) {
+                _ApplyJordanWignerClusterOperatorPQTerm_ (generatorIndex, qubits);
+            }
+            elif (termType == 1) {
+                _ApplyJordanWignerClusterOperatorPQQRTerm_(generatorIndex, qubits);
+            }
+            elif (termType == 2) {
+                _ApplyJordanWignerClusterOperatorPQRSTerm_ (generatorIndex, qubits);
+            }
+        }
+        
+        adjoint invert;
+        controlled distribute;
+        controlled adjoint distribute;
+    }
+    
+    
+    /// # Summary
+    /// Represents a dynamical generator as a set of simulatable gates and an
+    /// expansion in the JordanWigner basis.
+    ///
+    /// # Input
+    /// ## generatorIndex
+    /// A generator index to be represented as unitary evolution in the JordanWigner.
+    ///
+    /// # Output
+    /// An `EvolutionUnitary` representing time-evolution by the term
+    /// referenced in `generatorIndex.
+    function _JordanWignerClusterOperatorFunction_ (generatorIndex : GeneratorIndex) : EvolutionUnitary {
+        
+        return EvolutionUnitary(_JordanWignerClusterOperatorImpl_(generatorIndex, _, _));
+    }
+    
+    
+    /// # Summary
+    /// Represents a dynamical generator as a set of simulatable gates and an
+    /// expansion in the JordanWigner basis.
+    ///
+    /// # Output
+    /// An `EvolutionSet` that maps a `GeneratorIndex` for the JordanWigner basis to
+    /// an `EvolutionUnitary.
+    function JordanWignerClusterOperatorEvolutionSet () : EvolutionSet {
+        
+        return EvolutionSet(_JordanWignerClusterOperatorFunction_(_));
     }
     
 }

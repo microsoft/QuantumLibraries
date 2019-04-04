@@ -14,9 +14,32 @@ namespace Microsoft.Quantum.Chemistry
 
     public partial class JordanWignerEncoding
     {
-        public JordanWignerInputState InputStateFromGreedyAlgorithm;
-        public Dictionary<string,QArray<JordanWignerInputState>> InputStateFromFile;
+        /// <summary>
+        /// List of Hamiltonian input states.
+        /// </summary>
+        public Dictionary<string, FermionHamiltonian.InputState> InputStates;
         
+        /// <summary>
+        /// Translate initial state to a format consumable by Q#.
+        /// </summary>
+        /// <param name="inputState">Initial state</param>
+        /// <returns>Initial state in Q# format.</returns>
+        internal (int, QArray<JordanWignerInputState>) InputStateToQSharp(FermionHamiltonian.InputState inputState)
+        {
+            if(inputState.type == FermionHamiltonian.StateType.Sparse_Multi_Configurational)
+            {
+                return ((int)inputState.type, InitialStatePrep(inputState.Superposition));
+            }
+            else if(inputState.type == FermionHamiltonian.StateType.Unitary_Coupled_Cluster)
+            {
+                return ((int)inputState.type, InitialStatePrepUnitaryCoupledCluster(inputState.Superposition));
+            }
+            else
+            {
+                return InputStateToQSharp(InputStates["Greedy"]);
+            }            
+        }
+
         /// <summary>
         /// Translate initial state specified by a <see cref="FermionTerm"/> acting on 
         /// the vacuum state to a format consumable by Q#
@@ -59,6 +82,14 @@ namespace Microsoft.Quantum.Chemistry
         public QArray<JordanWignerInputState> InitialStatePrep(IEnumerable<((Double, Double) complexCoeff, FermionTerm term)> terms)
         {
             return new QArray<JordanWignerInputState>(terms.Select(o => InitialStatePrep(o.complexCoeff, o.term)));
+        }
+
+        internal QArray<JordanWignerInputState> InitialStatePrepUnitaryCoupledCluster(IEnumerable<((Double, Double) complexCoeff, FermionTerm term)> terms)
+        {
+            return new QArray<JordanWignerInputState>(terms.Select(o =>
+            new JordanWignerInputState(
+                (((Double) o.complexCoeff.Item1, (Double) o.complexCoeff.Item2),
+                 new QArray<Int64>(o.term.SpinOrbitalIndices.ToInts(NOrbitals))))));
         }
     }
 

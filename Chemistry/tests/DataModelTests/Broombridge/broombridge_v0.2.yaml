@@ -260,8 +260,10 @@ problem_description:
             # t^{q}_{p} p q 
             - [0.1, "(1a)+", "(2a)"]
             - [-0.2, "(1b)+", "(2a)"]
-            # t^{pq}_{rs} p q r s
+            
             two_body_amplitudes:
+			# t^{pq}_{rs} p q r s
+			# If this is a PQQR term, the middle two indices must coincide.
             - [-0.5, "(1a)+", "(2a)+", "(2b)", "(4b)"]
             - [0.5, "(1a)+", "(3a)+", "(2a)", "(4b)"]
 

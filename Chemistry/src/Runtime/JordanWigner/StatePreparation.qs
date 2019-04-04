@@ -11,19 +11,8 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
     
     //newtype JordanWignerInputState = ((Double, Double), Int[]);
     operation PrepareTrialState (stateData : (Int, JordanWignerInputState[]), qubits : Qubit[]) : Unit {
-        let (stateType, superposition) = stateData;
-
-        if (Length(superposition) == 0) {
-            // Do nothing
-        }
-        elif (Length(superposition) == 1) {
-            let (complex, qubitIndices) = superposition[0]!;
-            PrepareTrialStateSingleSiteOccupation(qubitIndices, qubits);
-        }
-        else {
-            PrepareTrialStateCoupledCluster(NoOp<Qubit[]>, superposition, qubits);
-        }
-    }
+        
+	}
     
     
     /// # Summary
@@ -54,7 +43,7 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
     
     
     /// # Summary
-    /// Coupled-cluster state preparation of trial state by adding excitations
+    /// Sparse multi-configurationalr state preparation of trial state by adding excitations
     /// to initial trial state.
     ///
     /// # Input
@@ -66,7 +55,7 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
     /// the excitation acts on.
     /// ## qubits
     /// Qubits of Hamiltonian.
-    operation PrepareTrialStateCoupledCluster (initialStatePreparation : (Qubit[] => Unit), excitations : JordanWignerInputState[], qubits : Qubit[]) : Unit {
+    operation PrepareTrialStateSparseMultiConfigurational (initialStatePreparation : (Qubit[] => Unit), excitations : JordanWignerInputState[], qubits : Qubit[]) : Unit {
         
         let nExcitations = Length(excitations);
         
@@ -109,6 +98,7 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
         }
     }
     
+
 }
 
 
