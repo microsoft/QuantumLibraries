@@ -10,8 +10,8 @@ namespace Microsoft.Quantum.Characterization {
     open Microsoft.Quantum.Arrays;
 
     /// # Summary
-	/// Jointly measures a register of qubits in the Pauli Z basis.
-	///
+    /// Jointly measures a register of qubits in the Pauli Z basis.
+    ///
     /// In other words, measures the operation $Z \otimes Z \otimes \cdots \otimes Z$ on
     /// a given register.
     ///

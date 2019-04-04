@@ -20,8 +20,8 @@ namespace Microsoft.Quantum.Canon {
     /// ```qsharp
     /// ApplyPauli([PauliY, PauliZ, PauliX], target);
     /// ```
-	/// and
-	/// ```qsharp
+    /// and
+    /// ```qsharp
     /// Y(target[0]);
     /// Z(target[1]);
     /// X(target[2]);
