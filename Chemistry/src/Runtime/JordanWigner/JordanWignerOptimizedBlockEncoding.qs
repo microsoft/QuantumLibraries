@@ -309,16 +309,16 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
             elif (Length(pauliBasesSet) == 4) {
                 
                 // for PQRS terms, create |abcd> + |a^ b^ c^ d^>
-                if (pauliBasesSet[2] == 1 && pauliBasesSet[3] == 1) {
+                if (pauliBasesSet[2] == 1 and pauliBasesSet[3] == 1) {
                     InPlaceXorBE(1, pauliBasesIdx);
                 }
-                elif (pauliBasesSet[2] == 2 && pauliBasesSet[3] == 2) {
+                elif (pauliBasesSet[2] == 2 and pauliBasesSet[3] == 2) {
                     InPlaceXorBE(2, pauliBasesIdx);
                 }
-                elif (pauliBasesSet[2] == 1 && pauliBasesSet[3] == 2) {
+                elif (pauliBasesSet[2] == 1 and pauliBasesSet[3] == 2) {
                     InPlaceXorBE(3, pauliBasesIdx);
                 }
-                elif (pauliBasesSet[2] == 2 && pauliBasesSet[3] == 1) {
+                elif (pauliBasesSet[2] == 2 and pauliBasesSet[3] == 1) {
                     InPlaceXorBE(4, pauliBasesIdx);
                 }
             }

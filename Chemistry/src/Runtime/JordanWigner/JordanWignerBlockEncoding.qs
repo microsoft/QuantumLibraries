@@ -100,7 +100,7 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
             let qubitQidx = idxFermions[1];
             let qubitRidx = idxFermions[3];
             
-            if (qubitPidx < qubitQidx && qubitQidx < qubitRidx) {
+            if (qubitPidx < qubitQidx and qubitQidx < qubitRidx) {
                 
                 // Apply XZ..ZIZ..ZX
                 let qubitIndices = IntArrayFromRange(qubitPidx .. qubitQidx - 1) + IntArrayFromRange(qubitQidx + 1 .. qubitRidx);
