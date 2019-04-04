@@ -392,7 +392,7 @@ namespace Microsoft.Quantum.Tests {
                 
                 if (result == One) {
                     Message($"MultiplexOperations test. Qubits: {nQubits}; idxTest {idxTest} of idxTarget {idxTarget} result {result}.");
-                    ClaimEqualI(idxTarget, idxTest, $"MultiplexOperations failed.");
+                    EqualityFactI(idxTarget, idxTest, $"MultiplexOperations failed.");
                 }
             }
         }
@@ -405,28 +405,28 @@ namespace Microsoft.Quantum.Tests {
                 
                 if (result == One) {
                     Message($"Controlled MultiplexOperations test. Qubits: {nQubits}; idxControl = 0; nControls = 1; idxTest {idxTest} of idxTarget {idxTarget} result {result}.");
-                    ClaimEqualI(idxTarget, idxTest, $"MultiplexOperations failed.");
+                    EqualityFactI(idxTarget, idxTest, $"MultiplexOperations failed.");
                 }
                 
                 set result = MultiplexOperationsTestHelper(idxTest, idxTarget, nQubits, 1, 1);
                 
                 if (result == One) {
                     Message($"Controlled MultiplexOperations test. Qubits: {nQubits}; idxControl = 1; nControls = 1; idxTest {idxTest} of idxTarget {idxTarget} result {result}.");
-                    ClaimEqualI(idxTarget, idxTest, $"MultiplexOperations failed.");
+                    EqualityFactI(idxTarget, idxTest, $"MultiplexOperations failed.");
                 }
                 
                 set result = MultiplexOperationsTestHelper(idxTest, idxTarget, nQubits, 1, 2);
                 
                 if (result == One) {
                     Message($"Controlled MultiplexOperations test. Qubits: {nQubits}; idxControl = 1; nControls = 2; idxTest {idxTest} of idxTarget {idxTarget} result {result}.");
-                    ClaimEqualI(idxTarget, idxTest, $"MultiplexOperations failed.");
+                    EqualityFactI(idxTarget, idxTest, $"MultiplexOperations failed.");
                 }
                 
                 set result = MultiplexOperationsTestHelper(idxTest, idxTarget, nQubits, 3, 2);
                 
                 if (result == One) {
                     Message($"Controlled MultiplexOperations test. Qubits: {nQubits}; idxControl = 3; nControls = 2; idxTest {idxTest} of idxTarget {idxTarget} result {result}.");
-                    ClaimEqualI(idxTarget, idxTest, $"MultiplexOperations failed.");
+                    EqualityFactI(idxTarget, idxTest, $"MultiplexOperations failed.");
                 }
             }
         }
@@ -535,7 +535,7 @@ namespace Microsoft.Quantum.Tests {
                     set result = MultiplexOperationsFromGeneratorTestHelper(idxTest, idxTarget, nQubits, 0, 0);
                     if(result == One){
                         Message($"MultiplexOperations test. Qubits: {nQubits}; idxTest {idxTest} of idxTarget {idxTarget} result {result}.");
-                        ClaimEqualI(idxTarget, idxTest, "MultiplexOperations failed.");
+                        EqualityFactI(idxTarget, idxTest, "MultiplexOperations failed.");
                     }
                 }
             }
@@ -546,25 +546,25 @@ namespace Microsoft.Quantum.Tests {
                     set result = MultiplexOperationsFromGeneratorTestHelper(idxTest, idxTarget, nQubits, 0, 1);
                     if(result == One){
                         Message($"Controlled MultiplexOperations test. Qubits: {nQubits}; idxControl = 0; nControls = 1; idxTest {idxTest} of idxTarget {idxTarget} result {result}.");
-                        ClaimEqualI(idxTarget, idxTest, "MultiplexOperations failed.");
+                        EqualityFactI(idxTarget, idxTest, "MultiplexOperations failed.");
                     }
 
                     set result = MultiplexOperationsFromGeneratorTestHelper(idxTest, idxTarget, nQubits, 1, 1);
                     if(result == One){
                         Message($"Controlled MultiplexOperations test. Qubits: {nQubits}; idxControl = 1; nControls = 1; idxTest {idxTest} of idxTarget {idxTarget} result {result}.");
-                        ClaimEqualI(idxTarget, idxTest, "MultiplexOperations failed.");
+                        EqualityFactI(idxTarget, idxTest, "MultiplexOperations failed.");
                     }
 
                     set result = MultiplexOperationsFromGeneratorTestHelper(idxTest, idxTarget, nQubits, 1, 2);
                     if(result == One){
                         Message($"Controlled MultiplexOperations test. Qubits: {nQubits}; idxControl = 1; nControls = 2; idxTest {idxTest} of idxTarget {idxTarget} result {result}.");
-                        ClaimEqualI(idxTarget, idxTest, "MultiplexOperations failed.");
+                        EqualityFactI(idxTarget, idxTest, "MultiplexOperations failed.");
                     }
 
                     set result = MultiplexOperationsFromGeneratorTestHelper(idxTest, idxTarget, nQubits, 3, 2);
                     if(result == One){
                         Message($"Controlled MultiplexOperations test. Qubits: {nQubits}; idxControl = 3; nControls = 2; idxTest {idxTest} of idxTarget {idxTarget} result {result}.");
-                        ClaimEqualI(idxTarget, idxTest, "MultiplexOperations failed.");
+                        EqualityFactI(idxTarget, idxTest, "MultiplexOperations failed.");
                     }
                 }
             }

@@ -172,7 +172,7 @@ namespace Microsoft.Quantum.Math {
     /// is always a positive integer between 0 and `modulus - 1`, even if value is negative.
     function Modulus (value : Int, modulus : Int) : Int
     {
-        ClaimEqualB(modulus > 0, true, $"`modulus` must be positive");
+        EqualityFactB(modulus > 0, true, $"`modulus` must be positive");
         let r = value % modulus;
         
         if (r < 0)
@@ -196,9 +196,9 @@ namespace Microsoft.Quantum.Math {
     /// Takes time proportional to the number of bits in `power`, not the `power` itself.
     function ExpMod (expBase : Int, power : Int, modulus : Int) : Int
     {
-        ClaimEqualB(power >= 0, true, $"`power` must be non-negative");
-        ClaimEqualB(modulus > 0, true, $"`modulus` must be positive");
-        ClaimEqualB(expBase > 0, true, $"`expBase` must be positive");
+        EqualityFactB(power >= 0, true, $"`power` must be non-negative");
+        EqualityFactB(modulus > 0, true, $"`modulus` must be positive");
+        EqualityFactB(expBase > 0, true, $"`expBase` must be positive");
         mutable res = 1;
         mutable expPow2mod = expBase;
         
@@ -317,7 +317,7 @@ namespace Microsoft.Quantum.Math {
     /// with the denominator less or equal to `denominatorBound`
     function ContinuedFractionConvergent (fraction : Fraction, denominatorBound : Int) : Fraction
     {
-        ClaimEqualB(denominatorBound > 0, true, $"Denominator bound must be positive");
+        EqualityFactB(denominatorBound > 0, true, $"Denominator bound must be positive");
         let (a, b) = fraction!;
         let signA = SignI(a);
         let signB = SignI(b);
@@ -362,7 +362,7 @@ namespace Microsoft.Quantum.Math {
     {
         let (u, v) = ExtendedGCD(a, modulus);
         let gcd = u * a + v * modulus;
-        ClaimEqualB(gcd == 1, true, $"`a` and `modulus` must be co-prime");
+        EqualityFactB(gcd == 1, true, $"`a` and `modulus` must be co-prime");
         return Modulus(u, modulus);
     }
     
@@ -394,7 +394,7 @@ namespace Microsoft.Quantum.Math {
     /// The bit-size of `a`.
     function BitSize(a : Int) : Int
     {
-        ClaimEqualB(a >= 0, true, $"`a` must be non-negative");
+        EqualityFactB(a >= 0, true, $"`a` must be non-negative");
         return _bitsize(a, 0);
     }
     

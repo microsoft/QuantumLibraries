@@ -15,7 +15,7 @@ namespace Microsoft.Quantum.Tests {
     /// Hard-code 1 qubit QFT
     operation QFT1 (target : BigEndian) : Unit {
         body (...) {
-            ClaimEqualI(Length(target!), 1, $"`Length(target!)` must be 1");
+            EqualityFactI(Length(target!), 1, $"`Length(target!)` must be 1");
             H((target!)[0]);
         }
 
@@ -26,7 +26,7 @@ namespace Microsoft.Quantum.Tests {
     /// Hard-code 2 qubit QFT
     operation QFT2 (target : BigEndian) : Unit {
         body (...) {
-            ClaimEqualI(Length(target!), 2, $"`Length(target!)` must be 2");
+            EqualityFactI(Length(target!), 2, $"`Length(target!)` must be 2");
             let (q1, q2) = ((target!)[0], (target!)[1]);
             H(q1);
             Controlled R1Frac([q2], (2, 2, q1));
@@ -41,7 +41,7 @@ namespace Microsoft.Quantum.Tests {
     /// Hard-code 3 qubit QFT
     operation QFT3 (target : BigEndian) : Unit {
         body (...) {
-            ClaimEqualI(Length(target!), 3, $"`Length(target)` must be 3");
+            EqualityFactI(Length(target!), 3, $"`Length(target)` must be 3");
             let (q1, q2, q3) = ((target!)[0], (target!)[1], (target!)[2]);
             H(q1);
             Controlled R1Frac([q2], (2, 2, q1));
@@ -61,7 +61,7 @@ namespace Microsoft.Quantum.Tests {
     operation QFT4 (target : BigEndian) : Unit {
         
         body (...) {
-            ClaimEqualI(Length(target!), 4, $"`Length(target!)` must be 4");
+            EqualityFactI(Length(target!), 4, $"`Length(target!)` must be 4");
             let (q1, q2, q3, q4) = ((target!)[0], (target!)[1], (target!)[2], (target!)[3]);
             H(q1);
             Controlled R1Frac([q2], (2, 2, q1));

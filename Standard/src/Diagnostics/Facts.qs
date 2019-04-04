@@ -17,10 +17,10 @@ namespace Microsoft.Quantum.Diagnostics {
     /// The expected value.
     /// ## tolerance
     /// Absolute tolerance on the difference between actual and expected.
-    function ClaimEqualWithinTolerance(actual : Double, expected : Double, tolerance : Double) : Unit {
+    function EqualityWithinToleranceFact(actual : Double, expected : Double, tolerance : Double) : Unit {
         let delta = actual - expected;
         if (delta > tolerance or delta < -tolerance) {
-            fail $"Claim was false. Expected: '{expected}'. Actual: '{actual}'";
+            fail $"Fact was false. Expected: '{expected}'. Actual: '{actual}'";
         }
     }
 
@@ -37,8 +37,8 @@ namespace Microsoft.Quantum.Diagnostics {
     /// # Remarks
     /// This is equivalent to <xref:microsoft.quantum.diagnostics.claimequalwithtolerance> with
     /// hardcoded tolerance of $10^{-10}$.
-    function ClaimAlmostEqual(actual : Double, expected : Double) : Unit {
-        ClaimEqualWithinTolerance(actual, expected, 1E-10);
+    function NearEqualityFact(actual : Double, expected : Double) : Unit {
+        EqualityWithinToleranceFact(actual, expected, 1E-10);
     }
 
     /// # Summary
@@ -52,7 +52,7 @@ namespace Microsoft.Quantum.Diagnostics {
     ///
     /// ## message
     /// Failure message string to be used when the assertion is triggered.
-    function ClaimEqualI(actual : Int, expected : Int, message : String) : Unit
+    function EqualityFactI(actual : Int, expected : Int, message : String) : Unit
     {
         if (actual != expected)
         {
@@ -72,7 +72,7 @@ namespace Microsoft.Quantum.Diagnostics {
     ///
     /// ## message
     /// Failure message string to be used when the assertion is triggered.
-    function ClaimEqualB(actual : Bool, expected : Bool, message : String) : Unit
+    function EqualityFactB(actual : Bool, expected : Bool, message : String) : Unit
     {
         if (actual != expected)
         {
@@ -92,7 +92,7 @@ namespace Microsoft.Quantum.Diagnostics {
     ///
     /// ## message
     /// Failure message string to be used when the assertion is triggered.
-    function ClaimEqualR (actual : Result, expected : Result, message : String) : Unit {
+    function EqualityFactR (actual : Result, expected : Result, message : String) : Unit {
         if (actual != expected)
         {
             fail message;
@@ -109,13 +109,13 @@ namespace Microsoft.Quantum.Diagnostics {
     /// The array that is expected from a test case of interest.
     /// ## message
     /// A message to be printed if the arrays are not equal.
-    function ClaimAllEqualB(actual : Bool[], expected : Bool[], message : String) : Unit {
+    function AllEqualityFactB(actual : Bool[], expected : Bool[], message : String) : Unit {
         let n = Length(actual);
         if (n != Length(expected)) {
             fail message;
         }
 
-        Ignore(Mapped(ClaimEqualB(_, _, message), Zip(actual, expected)));
+        Ignore(Mapped(EqualityFactB(_, _, message), Zip(actual, expected)));
     }
 
 }

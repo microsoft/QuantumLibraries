@@ -66,7 +66,7 @@ namespace Microsoft.Quantum.Arithmetic {
     operation IncrementPhaseByModularInteger(increment : Int, modulus : Int, target : PhaseLittleEndian) : Unit {
         body (...)
         {
-            ClaimEqualB(modulus <= 2 ^ (Length(target!) - 1), true, $"`multiplier` must be big enough to fit integers modulo `modulus`" + $"with highest bit set to 0");
+            EqualityFactB(modulus <= 2 ^ (Length(target!) - 1), true, $"`multiplier` must be big enough to fit integers modulo `modulus`" + $"with highest bit set to 0");
             
             if (_EnableExtraAssertsForArithmetic())
             {
@@ -107,7 +107,7 @@ namespace Microsoft.Quantum.Arithmetic {
         
         controlled (controls, ...)
         {
-            ClaimEqualB(modulus <= 2 ^ (Length(target!) - 1), true, $"`multiplier` must be big enough to fit integers modulo `modulus`" + $"with highest bit set to 0");
+            EqualityFactB(modulus <= 2 ^ (Length(target!) - 1), true, $"`multiplier` must be big enough to fit integers modulo `modulus`" + $"with highest bit set to 0");
             
             if (_EnableExtraAssertsForArithmetic())
             {
@@ -206,8 +206,8 @@ namespace Microsoft.Quantum.Arithmetic {
     {
         body (...)
         {
-            ClaimEqualB(modulus <= 2 ^ (Length(phaseSummand!) - 1), true, $"`multiplier` must be big enough to fit integers modulo `modulus`" + $"with highest bit set to 0");
-            ClaimEqualB(constMultiplier >= 0 and constMultiplier < modulus, true, $"`constMultiplier` must be between 0 and `modulus`-1");
+            EqualityFactB(modulus <= 2 ^ (Length(phaseSummand!) - 1), true, $"`multiplier` must be big enough to fit integers modulo `modulus`" + $"with highest bit set to 0");
+            EqualityFactB(constMultiplier >= 0 and constMultiplier < modulus, true, $"`constMultiplier` must be between 0 and `modulus`-1");
             
             if (_EnableExtraAssertsForArithmetic())
             {
@@ -257,10 +257,10 @@ namespace Microsoft.Quantum.Arithmetic {
     {
         body (...)
         {
-            // Check the preconditions using Microsoft.Quantum.Canon.ClaimEqualB
-            ClaimEqualB(constMultiplier >= 0 and constMultiplier < modulus, true, $"`constMultiplier` must be between 0 and `modulus`");
-            ClaimEqualB(modulus <= 2 ^ Length(multiplier!), true, $"`multiplier` must be big enough to fit integers modulo `modulus`");
-            ClaimEqualB(IsCoprime(constMultiplier, modulus), true, $"`constMultiplier` and `modulus` must be co-prime");
+            // Check the preconditions using Microsoft.Quantum.Canon.EqualityFactB
+            EqualityFactB(constMultiplier >= 0 and constMultiplier < modulus, true, $"`constMultiplier` must be between 0 and `modulus`");
+            EqualityFactB(modulus <= 2 ^ Length(multiplier!), true, $"`multiplier` must be big enough to fit integers modulo `modulus`");
+            EqualityFactB(IsCoprime(constMultiplier, modulus), true, $"`constMultiplier` and `modulus` must be co-prime");
             
             using (summand = Qubit[Length(multiplier!)])
             {

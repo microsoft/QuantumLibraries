@@ -14,7 +14,7 @@ namespace Microsoft.Quantum.Tests {
             let registerLE = LittleEndian(register);
             InPlaceXorLE(testValue, registerLE);
             let measuredValue = MeasureInteger(registerLE);
-            ClaimEqualI(testValue, measuredValue, $"Did not measure the integer we expected.");
+            EqualityFactI(testValue, measuredValue, $"Did not measure the integer we expected.");
         }
     }
     
@@ -33,7 +33,7 @@ namespace Microsoft.Quantum.Tests {
             IntegerIncrementLE(summand2, registerLE);
             let expected = Modulus(summand1 + summand2, 2 ^ numberOfQubits);
             let actual = MeasureInteger(registerLE);
-            ClaimEqualI(expected, actual, $"Expected {expected}, got {actual}");
+            EqualityFactI(expected, actual, $"Expected {expected}, got {actual}");
         }
     }
     
@@ -62,19 +62,19 @@ namespace Microsoft.Quantum.Tests {
             ModularIncrementLE(summand2, modulus, registerLE);
             let expected = Modulus(summand1 + summand2, modulus);
             let actual = MeasureInteger(registerLE);
-            ClaimEqualI(expected, actual, $"Expected {expected}, got {actual}");
+            EqualityFactI(expected, actual, $"Expected {expected}, got {actual}");
             
             using (controls = Qubit[2]) {
                 InPlaceXorLE(summand1, registerLE);
                 Controlled ModularIncrementLE(controls, (summand2, modulus, registerLE));
                 let actual2 = MeasureInteger(registerLE);
-                ClaimEqualI(summand1, actual2, $"Expected {summand1}, got {actual2}");
+                EqualityFactI(summand1, actual2, $"Expected {summand1}, got {actual2}");
                 
                 // now set all controls to 1
                 InPlaceXorLE(summand1, registerLE);
                 (ControlledOnInt(0, ModularIncrementLE(summand2, modulus, _)))(controls, registerLE);
                 let actual3 = MeasureInteger(registerLE);
-                ClaimEqualI(expected, actual3, $"Expected {expected}, got {actual3}");
+                EqualityFactI(expected, actual3, $"Expected {expected}, got {actual3}");
                 // restore controls back to |0⟩
             }
         }
@@ -109,8 +109,8 @@ namespace Microsoft.Quantum.Tests {
             let expected = Modulus(summand + multiplier1 * multiplier2, modulus);
             let actual = MeasureInteger(summandLE);
             let actualMult = MeasureInteger(multiplierLE);
-            ClaimEqualI(expected, actual, $"Expected {expected}, got {actual}");
-            ClaimEqualI(multiplier1, actualMult, $"Expected {multiplier1}, got {actualMult}");
+            EqualityFactI(expected, actual, $"Expected {expected}, got {actual}");
+            EqualityFactI(multiplier1, actualMult, $"Expected {multiplier1}, got {actualMult}");
         }
     }
     
@@ -145,7 +145,7 @@ namespace Microsoft.Quantum.Tests {
                 ModularMultiplyByConstantLE(multiplier2, modulus, multiplierLE);
                 let expected = Modulus(multiplier1 * multiplier2, modulus);
                 let actualMult = MeasureInteger(multiplierLE);
-                ClaimEqualI(expected, actualMult, $"Expected {expected}, got {actualMult}");
+                EqualityFactI(expected, actualMult, $"Expected {expected}, got {actualMult}");
             }
         }
     }

@@ -36,8 +36,8 @@ namespace Microsoft.Quantum.Canon {
     operation ApproximateQFT (a : Int, qs : BigEndian) : Unit {
         body (...) {
             let nQubits = Length(qs!);
-            ClaimEqualB(nQubits > 0, true, $"`Length(qs)` must be least 1");
-            ClaimEqualB(a > 0 and a <= nQubits, true, $"`a` must be positive and less than `Length(qs)`");
+            EqualityFactB(nQubits > 0, true, $"`Length(qs)` must be least 1");
+            EqualityFactB(a > 0 and a <= nQubits, true, $"`a` must be positive and less than `Length(qs)`");
 
             for (i in 0 .. nQubits - 1)
             {
