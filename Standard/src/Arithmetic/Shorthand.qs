@@ -3,7 +3,7 @@ namespace Microsoft.Quantum.Arithmetic {
     open Microsoft.Quantum.Canon;
 
     /// # Summary
-    /// This computes applies the in-place majority operation on 3 qubits.
+    /// This applies the in-place majority operation to 3 qubits.
     ///
     /// # Description
     /// If we denote the state of the target qubit as $\ket{z}$, and input states of
