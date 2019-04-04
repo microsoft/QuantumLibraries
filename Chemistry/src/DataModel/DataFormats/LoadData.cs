@@ -49,11 +49,11 @@ namespace Microsoft.Quantum.Chemistry
         ///      An instance of <see cref="FermionHamiltonian"/> representing the
         ///      data contained in <paramref name="filename"/>.
         /// </returns>
-        public static IEnumerable<FermionHamiltonian> LoadFromBroombridge(string filename)
+        public static IEnumerable<FermionHamiltonian> LoadFromBroombridge(string filename, Configuration configuration)
         {
             var broombridgeData = Broombridge.Deserialize.Source(filename);
             IEnumerable<BroombridgeTyped> broombridgeDataTyped = broombridgeData.ProblemDescription.Select(o => new BroombridgeTyped(o));
-            return broombridgeDataTyped.Select(o => LoadData.LoadIntegralData(o));
+            return broombridgeDataTyped.Select(o => LoadData.LoadIntegralData(o, configuration));
         }
 
     }
@@ -61,7 +61,7 @@ namespace Microsoft.Quantum.Chemistry
 
     public partial class LoadData
     {
-        internal static FermionHamiltonian LoadIntegralData(BroombridgeTyped schemaInstance, Double threshold = 1e-8)
+        internal static FermionHamiltonian LoadIntegralData(BroombridgeTyped schemaInstance, Configuration configuration)
         {
             var hamiltonian = new FermionHamiltonian()
             {
@@ -75,7 +75,7 @@ namespace Microsoft.Quantum.Chemistry
 
             foreach (var orbitalIntegral in schemaInstance.OneBodyTerms)
             {
-                if (Math.Abs(orbitalIntegral.Coefficient) >= threshold)
+                if (Math.Abs(orbitalIntegral.Coefficient) >= configuration.TruncationThreshold)
                 {
                     hamiltonian.AddFermionTerm(orbitalIntegral);
                 }
@@ -83,7 +83,7 @@ namespace Microsoft.Quantum.Chemistry
 
             foreach (var orbitalIntegral in schemaInstance.TwoBodyTerms)
             {
-                if (Math.Abs(orbitalIntegral.Coefficient) >= threshold)
+                if (Math.Abs(orbitalIntegral.Coefficient) >= configuration.TruncationThreshold)
                 {
                     hamiltonian.AddFermionTerm(orbitalIntegral);
                 }

@@ -22,6 +22,8 @@ namespace Microsoft.Quantum.Chemistry
     /// </summary>
     public partial class FermionHamiltonian
     {
+        public readonly Configuration Configuration = new Configuration();
+
         // This will sort terms and accumulate terms in a canonical format.
         // This format is sorted by:
         // 1) List {1,1,...,0,...} of ones for each `a^\dag` followed by zeros for each `a` 
