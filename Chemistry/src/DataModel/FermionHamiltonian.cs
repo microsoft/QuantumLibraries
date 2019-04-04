@@ -22,7 +22,7 @@ namespace Microsoft.Quantum.Chemistry
     /// </summary>
     public partial class FermionHamiltonian
     {
-        public Configuration Configuration = new Configuration();
+        public Config Configuration = new Config();
 
         // This will sort terms and accumulate terms in a canonical format.
         // This format is sorted by:

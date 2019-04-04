@@ -12,26 +12,27 @@ using Microsoft.Quantum.Chemistry;
 
 namespace Microsoft.Quantum.Chemistry
 {
-    public class Configuration
+    
+    public class Config
     {
         /// <summary>
         /// Default configuration constructor;
         /// </summary>
-        public Configuration()
+        public Config()
         {
-            IndexConvention = IndexConventionClass.Default();
-            TruncationThreshold = 1e-8;
+            indexConvention = IndexConvention.Default();
+            truncationThreshold = TruncationThreshold.Default;
         }
 
         /// <summary>
         /// Choose indexing convention from spin-orbital index to an integer.
         /// </summary>
-        public IndexConventionClass.Type IndexConvention = IndexConventionClass.Default();
+        public IndexConvention.Type indexConvention;
 
         /// <summary>
         /// Available indexing convention from spin-orbital index to an integer.
         /// </summary>
-        public static class IndexConventionClass {
+        public static class IndexConvention {
             public enum Type
             {
                 UpDown, HalfUp
@@ -39,14 +40,21 @@ namespace Microsoft.Quantum.Chemistry
             public static Type Default()
             {
                 return Type.HalfUp;
-            }                
+            }
         }
 
         /// <summary>
         /// Threshold hold below which to truncate Hamiltonian coefficients.
         /// </summary>
-        public double TruncationThreshold;
+        public double truncationThreshold;
+
+        public static class TruncationThreshold
+        {
+            public static double Default = 1e-8;
+        }
         
     }
+
+  
 }
 

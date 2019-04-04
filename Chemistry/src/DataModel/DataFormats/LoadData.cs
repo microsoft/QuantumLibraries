@@ -49,18 +49,18 @@ namespace Microsoft.Quantum.Chemistry
         ///      An instance of <see cref="FermionHamiltonian"/> representing the
         ///      data contained in <paramref name="filename"/>.
         /// </returns>
-        public static IEnumerable<FermionHamiltonian> LoadFromBroombridge(string filename, Configuration configuration)
+        public static IEnumerable<FermionHamiltonian> LoadFromBroombridge(string filename, Config configuration)
         {
             var broombridgeData = Broombridge.Deserialize.Source(filename);
-            IEnumerable<BroombridgeTyped> broombridgeDataTyped = broombridgeData.ProblemDescription.Select(o => new BroombridgeTyped(o));
+            IEnumerable<BroombridgeTyped> broombridgeDataTyped = broombridgeData.ProblemDescription.Select(o => new BroombridgeTyped(o, configuration.indexConvention));
             return broombridgeDataTyped.Select(o => LoadData.LoadIntegralData(o, configuration));
         }
 
         public static IEnumerable<FermionHamiltonian> LoadFromBroombridge(string filename)
         {
-            var configuration = new Configuration();
+            var configuration = new Config();
             var broombridgeData = Broombridge.Deserialize.Source(filename);
-            IEnumerable<BroombridgeTyped> broombridgeDataTyped = broombridgeData.ProblemDescription.Select(o => new BroombridgeTyped(o));
+            IEnumerable<BroombridgeTyped> broombridgeDataTyped = broombridgeData.ProblemDescription.Select(o => new BroombridgeTyped(o, configuration.indexConvention));
             return broombridgeDataTyped.Select(o => LoadData.LoadIntegralData(o, configuration));
         }
 
@@ -69,7 +69,7 @@ namespace Microsoft.Quantum.Chemistry
 
     public partial class LoadData
     {
-        internal static FermionHamiltonian LoadIntegralData(BroombridgeTyped schemaInstance, Configuration configuration)
+        internal static FermionHamiltonian LoadIntegralData(BroombridgeTyped schemaInstance, Config configuration)
         {
             var hamiltonian = new FermionHamiltonian()
             {
@@ -83,7 +83,7 @@ namespace Microsoft.Quantum.Chemistry
 
             foreach (var orbitalIntegral in schemaInstance.OneBodyTerms)
             {
-                if (Math.Abs(orbitalIntegral.Coefficient) >= configuration.TruncationThreshold)
+                if (Math.Abs(orbitalIntegral.Coefficient) >= configuration.truncationThreshold)
                 {
                     hamiltonian.AddFermionTerm(orbitalIntegral);
                 }
@@ -91,7 +91,7 @@ namespace Microsoft.Quantum.Chemistry
 
             foreach (var orbitalIntegral in schemaInstance.TwoBodyTerms)
             {
-                if (Math.Abs(orbitalIntegral.Coefficient) >= configuration.TruncationThreshold)
+                if (Math.Abs(orbitalIntegral.Coefficient) >= configuration.truncationThreshold)
                 {
                     hamiltonian.AddFermionTerm(orbitalIntegral);
                 }

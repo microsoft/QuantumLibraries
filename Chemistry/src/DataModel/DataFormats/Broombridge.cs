@@ -588,7 +588,14 @@ namespace Microsoft.Quantum.Chemistry
         public HashSet<OrbitalIntegral> TwoBodyTerms;
         public Dictionary<string, FermionHamiltonian.InputState> InitialStates;
         
-        public BroombridgeTyped(Broombridge.V0_2.ProblemDescription broombridgeProblem)
+        public BroombridgeTyped(
+            Broombridge.V0_2.ProblemDescription broombridgeProblem,
+            Config.IndexConvention.Type indexConvention = config.Default2)
+            )
+
+        public BroombridgeTyped(
+            Broombridge.V0_2.ProblemDescription broombridgeProblem, 
+            Config.IndexConvention.Type indexConvention = config.Default2)
         {
             NOrbitals = broombridgeProblem.NOrbitals;
             NElectrons = broombridgeProblem.NElectrons;
