@@ -603,13 +603,7 @@ namespace Microsoft.Quantum.Chemistry
 
             InitialStates = broombridgeProblem.InitialStates.ToDictionary(
                 o => o.Label,
-                o => new FermionHamiltonian.InputState()
-                {
-                    Energy = o.Energy.Value,
-                    Label = o.Label,
-                    type = ParseInitialStateMethod(o.Method),
-                    Superposition = ParseInputState(o.Superposition)
-                }
+                o => ParseInitialState(o)
                 );                
         }
 
@@ -625,7 +619,7 @@ namespace Microsoft.Quantum.Chemistry
             else if (state.type == FermionHamiltonian.StateType.Unitary_Coupled_Cluster)
             {
                 var oneBodyTerms = initialState.ClusterOperator.OneBodyAmplitudes.Select(o => ParseUnitaryCoupledClisterInputState(o));
-                var twoBodyTerms = initialState.ClusterOperator.OneBodyAmplitudes.Select(o => ParseUnitaryCoupledClisterInputState(o));
+                var twoBodyTerms = initialState.ClusterOperator.TwoBodyAmplitudes.Select(o => ParseUnitaryCoupledClisterInputState(o));
                 state.Superposition = oneBodyTerms.Concat(twoBodyTerms).ToArray();
             }
             else
@@ -705,8 +699,6 @@ namespace Microsoft.Quantum.Chemistry
                 so.Add(singleTerm.SpinOrbitalIndices.First());
             }
             FermionTerm term = new FermionTerm(ca.ToArray(), so.ToArray(), amplitude);
-
-            var canonicalOrder = term.ToCanonicalOrder();
 
             return ((term.coeff, 0), term);
         }

@@ -62,7 +62,7 @@ namespace Microsoft.Quantum.Chemistry
         /// creation and annihilation operators, and that the number of
         /// creation an annihilation operators are equal.
         /// </summary>
-        public FermionTerm(IEnumerable<SpinOrbital> SpinOrbitals, Double coeffIn)
+        public FermionTerm(IEnumerable<SpinOrbital> SpinOrbitals, Double coeffIn, bool sort = true)
         {
             var length = SpinOrbitals.Count();
             if (length % 2 == 1)
@@ -83,7 +83,11 @@ namespace Microsoft.Quantum.Chemistry
             coeff = coeffIn;
 
             // Anti-commutes spin-orbital indices to canonical order.
-            ToSpinOrbitalCanonicalOrder();
+            if (sort)
+            {
+                ToSpinOrbitalCanonicalOrder();
+            }
+            
         }
 
         /// <summary>

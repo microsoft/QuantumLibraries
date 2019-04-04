@@ -19,7 +19,7 @@ namespace Microsoft.Quantum.Chemistry.Tests
     using FermionTerm = FermionTerm;
     using FermionTermType = FermionTermType;
     using SpinOrbital = SpinOrbital;
-    
+
     public class BroombridgeVersionNumberTests
     {
         [Fact]
@@ -37,7 +37,7 @@ namespace Microsoft.Quantum.Chemistry.Tests
         public void LoadTest()
         {
             var filename = "Broombridge/broombridge_v0.1.yaml";
-            
+
 
             var broombridge = Broombridge.Deserialize.v0_1(filename);
 
@@ -61,7 +61,7 @@ namespace Microsoft.Quantum.Chemistry.Tests
         public void UnitaryCoupledCluster()
         {
             var state = broombridge.ProblemDescription.First().InitialStates.ElementAt(3);
-            
+
             Assert.Equal("UCCSD |G>", state.Label);
 
             Assert.Equal("unitary_coupled_cluster", state.Method);
@@ -98,5 +98,26 @@ namespace Microsoft.Quantum.Chemistry.Tests
         }
     }
 
+    public class BroombridgeTypedTests
+    {
+        static string filename = "Broombridge/broombridge_v0.2.yaml";
+        static Broombridge.V0_2.Data broombridge = Broombridge.Deserialize.v0_2(filename);
+        static Broombridge.V0_2.ProblemDescription broombridgeProblem = broombridge.ProblemDescription.First();
+        
+        [Fact]
+        public void UnitaryCoupledCluster()
+        {
+            BroombridgeTyped broombridgeTyped = new BroombridgeTyped(broombridgeProblem);
+            var state = broombridgeTyped.InitialStates["UCCSD |G>"];
 
+            var targetTerm = new FermionTerm(
+                new[] { 1L, 1L, 0L, 0L },
+                new[] { (0, Spin.u), (1, Spin.u), (1, Spin.d), (3, Spin.d) }.Select(o => new SpinOrbital(o)).ToArray(),
+                -0.5);
+
+            var checkTerm = state.Superposition.ElementAt(2).term;
+
+            Assert.Equal(targetTerm, checkTerm);
+        }
+    }
 }

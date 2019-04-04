@@ -244,6 +244,8 @@ problem_description:
             - [-0.176269178877495,"(7a)+","(7b)+","(2b)","(6a)","|G>"]
             - [-0.285084428017466,"(7a)+","(7b)+","(4b)","(6a)","|G>"]
         - label : "|F>"
+          #method: single_configurational # required
+          method: sparse_multi_configurational # required
           superposition:
             # ?
             - [1.0, "(6b)+","(2a)","|E>"]
