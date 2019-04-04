@@ -11,8 +11,31 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
     
     //newtype JordanWignerInputState = ((Double, Double), Int[]);
     operation PrepareTrialState (stateData : (Int, JordanWignerInputState[]), qubits : Qubit[]) : Unit {
-        
-	}
+        let (stateType, superposition) = stateData;
+
+		// State type indexing from FermionHamiltonianStatePrep
+        // public enum StateType
+        //{
+        //    Default = 0, Single_Configurational = 1, Sparse_Multi_Configurational = 2, Unitary_Coupled_Cluster = 3
+        //}
+
+		if(stateType == 2){
+			if (Length(superposition) == 0) {
+            // Do nothing
+			}
+			elif (Length(superposition) == 1) {
+				let (complex, qubitIndices) = superposition[0]!;
+				PrepareTrialStateSingleSiteOccupation(qubitIndices, qubits);
+			}
+			else {
+				PrepareTrialStateSparseMultiConfigurational(NoOp<Qubit[]>, superposition, qubits);
+			}
+		}
+		elif(stateType == 3){
+			let trotterStepSize = 1.0;
+			PrepareTrialStateUnitaryCoupledCluster(initialStatePreparation : (Qubit[] => Unit), stateData, trotterStepSize, qubits);
+		}
+    }
     
     
     /// # Summary
@@ -98,7 +121,32 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
         }
     }
     
+	/// # Summary
+    /// Unitary coupled-cluster state preparation of trial state 
+    ///
+    /// # Input
+    /// ## initialStatePreparation
+    /// Unitary to prepare initial trial state.
+    /// ## excitations
+    /// Excitations of initial trial state represented by
+    /// the amplitude of the excitation and the qubit indices
+    /// the excitation acts on.
+    /// ## qubits
+    /// Qubits of Hamiltonian.
+    operation PrepareTrialStateUnitaryCoupledCluster (initialStatePreparation : (Qubit[] => Unit), clusterOperator : JordanWignerInputState[], trotterStepSize : Double, qubits : Qubit[]) : Unit {
+        body(...){
+			let clusterOperatorGeneratorSystem = JordanWignerClusterOperatorGeneratorSystem(clusterOperator);
+			let evolutionGenerator = EvolutionGenerator(JordanWignerClusterOperatorEvolutionSet(), clusterOperatorGeneratorSystem);
+			let trotterOrder = 1;
+			let simulationAlgorithm = (TrotterSimulationAlgorithm(trotterStepSize, trotterOrder))!;
+			let oracle = simulationAlgorithm(1.0, evolutionGenerator, _);
 
+			oracle(qubits);
+		}
+		adjoint invert;
+        controlled distribute;
+        controlled adjoint distribute;
+	}
 }
 
 
