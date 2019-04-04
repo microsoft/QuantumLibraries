@@ -56,6 +56,14 @@ namespace Microsoft.Quantum.Chemistry
             return broombridgeDataTyped.Select(o => LoadData.LoadIntegralData(o, configuration));
         }
 
+        public static IEnumerable<FermionHamiltonian> LoadFromBroombridge(string filename)
+        {
+            var configuration = new Configuration();
+            var broombridgeData = Broombridge.Deserialize.Source(filename);
+            IEnumerable<BroombridgeTyped> broombridgeDataTyped = broombridgeData.ProblemDescription.Select(o => new BroombridgeTyped(o));
+            return broombridgeDataTyped.Select(o => LoadData.LoadIntegralData(o, configuration));
+        }
+
     }
 
 
