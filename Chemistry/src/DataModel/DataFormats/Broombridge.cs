@@ -349,7 +349,7 @@ namespace Microsoft.Quantum.Chemistry
             public struct ClusterOperator
             {
                 [YamlMember(Alias = "reference_state", ApplyNamingConventions = false)]
-                public string Reference { get; set; }
+                public List<string> Reference { get; set; }
 
                 [YamlMember(Alias = "one_body_amplitudes", ApplyNamingConventions = false)]
                 public List<List<string>> OneBodyAmplitudes { get; set; }
@@ -618,9 +618,14 @@ namespace Microsoft.Quantum.Chemistry
             }
             else if (state.type == FermionHamiltonian.StateType.Unitary_Coupled_Cluster)
             {
+                var referenceState = ParseInputState(initialState.ClusterOperator.Reference.Select(o => o.ToString()).ToList());
                 var oneBodyTerms = initialState.ClusterOperator.OneBodyAmplitudes.Select(o => ParseUnitaryCoupledClisterInputState(o));
                 var twoBodyTerms = initialState.ClusterOperator.TwoBodyAmplitudes.Select(o => ParseUnitaryCoupledClisterInputState(o));
-                state.Superposition = oneBodyTerms.Concat(twoBodyTerms).ToArray();
+                var clusterTerms = oneBodyTerms.Concat(twoBodyTerms).ToList();
+                // The last term is the reference state.
+                clusterTerms.Add(referenceState);
+
+                state.Superposition = clusterTerms.ToArray() ;
             }
             else
             {

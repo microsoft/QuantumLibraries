@@ -66,7 +66,8 @@ namespace Microsoft.Quantum.Chemistry.Tests
 
             Assert.Equal("unitary_coupled_cluster", state.Method);
 
-            Assert.Equal("|G>", state.ClusterOperator.Reference);
+            //Assert.Equal("|G>", state.ClusterOperator.Reference);
+            Assert.Equal(new[] {"1.0", "(1a)+", "(2a)+", "(3a)+", "(4a)+", "(5a)+", "(6a)+", "(1b)+", "(2b)+", "(3b)+", "(4b)+", "(5b)+", "(6b)+", "|vacuum>"}, state.ClusterOperator.Reference);
 
             var oneBodyAmplitude = state.ClusterOperator.OneBodyAmplitudes;
             List<List<string>> oneBodyAmplitudeTruth =

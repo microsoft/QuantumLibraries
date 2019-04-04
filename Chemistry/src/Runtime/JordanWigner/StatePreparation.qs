@@ -11,7 +11,7 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
     
     //newtype JordanWignerInputState = ((Double, Double), Int[]);
     operation PrepareTrialState (stateData : (Int, JordanWignerInputState[]), qubits : Qubit[]) : Unit {
-        let (stateType, superposition) = stateData;
+        let (stateType, terms) = stateData;
 
 		// State type indexing from FermionHamiltonianStatePrep
         // public enum StateType
@@ -20,20 +20,25 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
         //}
 
 		if(stateType == 2){
-			if (Length(superposition) == 0) {
+			if (Length(terms) == 0) {
             // Do nothing
 			}
-			elif (Length(superposition) == 1) {
-				let (complex, qubitIndices) = superposition[0]!;
+			elif (Length(terms) == 1) {
+				let (complex, qubitIndices) = terms[0]!;
 				PrepareTrialStateSingleSiteOccupation(qubitIndices, qubits);
 			}
 			else {
-				PrepareTrialStateSparseMultiConfigurational(NoOp<Qubit[]>, superposition, qubits);
+				PrepareTrialStateSparseMultiConfigurational(NoOp<Qubit[]>, terms, qubits);
 			}
 		}
 		elif(stateType == 3){
+			let nTerms = Length(terms);
 			let trotterStepSize = 1.0;
-			PrepareTrialStateUnitaryCoupledCluster(initialStatePreparation : (Qubit[] => Unit), stateData, trotterStepSize, qubits);
+
+			// The last term is the reference state.
+			let referenceState = PrepareTrialState((2, [terms[nTerms-1]]), _);
+			
+			PrepareTrialStateUnitaryCoupledCluster(NoOp<Qubit[]>, terms[0..nTerms-2], trotterStepSize, qubits);
 		}
     }
     

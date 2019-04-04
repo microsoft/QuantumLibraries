@@ -86,10 +86,15 @@ namespace Microsoft.Quantum.Chemistry
 
         internal QArray<JordanWignerInputState> InitialStatePrepUnitaryCoupledCluster(IEnumerable<((Double, Double) complexCoeff, FermionTerm term)> terms)
         {
-            return new QArray<JordanWignerInputState>(terms.Select(o =>
+            // The last term is the reference state.
+            var referenceState = (terms.Last());
+            var clusterOperator = terms.Take(terms.Count() - 1);
+            var stateQSharp = new QArray<JordanWignerInputState>(clusterOperator.Select(o =>
             new JordanWignerInputState(
                 (((Double) o.complexCoeff.Item1, (Double) o.complexCoeff.Item2),
                  new QArray<Int64>(o.term.SpinOrbitalIndices.ToInts(NOrbitals))))));
+            stateQSharp.Add(InitialStatePrep(referenceState.complexCoeff, referenceState.term));
+            return stateQSharp;
         }
     }
 

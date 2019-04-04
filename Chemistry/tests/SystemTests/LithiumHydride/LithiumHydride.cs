@@ -23,6 +23,15 @@ namespace SystemTests
     public class LithiumHydride
     {
         static string filename = "LithiumHydride/lih_sto-3g_fci_1.624.yaml";
+
+        [Fact]
+        public void Load()
+        {
+            var hamiltonian = FermionHamiltonian.LoadFromBroombridge(filename).First();
+            var jordanWignerEncoding = JordanWignerEncoding.Create(hamiltonian);
+            var qSharpData = jordanWignerEncoding.QSharpData("|G>");
+        }
+
         [Fact]
         public void Energy()
         {
@@ -51,7 +60,6 @@ namespace SystemTests
                 Assert.Equal(0.0, error, 1);
             }
         }
-        
 
     }
 }
