@@ -8,7 +8,6 @@ using Microsoft.Quantum.Simulation.Core;
 using System;
 using System.Linq;
 using System.Collections.Generic;
-using Microsoft.Quantum.Chemistry;
 
 namespace Microsoft.Quantum.Chemistry
 {
@@ -66,19 +65,18 @@ namespace Microsoft.Quantum.Chemistry
         /// to a single integer index. 
         /// </summary>
         /// <param name="nOrbitals">The total number of orbitals.</param>
-        public Int64 ToInt(Int64 nOrbitals)
+        public Int64 ToInt(Int64 nOrbitals = maxOrbital)
         {
-            return orbital + nOrbitals * spin;
+           if (Settings.SetIndexConvention == Settings.IndexConventionType.UpDown)
+            {
+                return orbital * 2 + spin;
+            }
+            else
+            {
+                return orbital + nOrbitals * spin;
+            }
         }
 
-        /// <summary>
-        /// This maps the separate orbital and spin indices of a <c>SpinOrbital</c> 
-        /// to a single integer index. 
-        /// </summary>
-        internal Int64 ToInt()
-        {
-            return orbital + spin * maxOrbital;
-        }
 
         /// <summary>
         /// This maps the single integer index produced by <c>ToInt(Int64 nOrbitals)</c>
