@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 namespace Microsoft.Quantum.Chemistry.JordanWigner {
-    open Microsoft.Quantum.Simulation;
+    
     open Microsoft.Quantum.Preparation;
     open Microsoft.Quantum.Arithmetic;
     open Microsoft.Quantum.Primitive;
@@ -17,12 +17,11 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
     operation PrepareTrialState (stateData : (Int, JordanWignerInputState[]), qubits : Qubit[]) : Unit {
         let (stateType, terms) = stateData;
 
-		// State type indexing from FermionHamiltonianStatePrep
+        // State type indexing from FermionHamiltonianStatePrep
         // public enum StateType
         //{
         //    Default = 0, Single_Configurational = 1, Sparse_Multi_Configurational = 2, Unitary_Coupled_Cluster = 3
         //}
-
 		if(stateType == 2){
 			if (Length(terms) == 0) {
             // Do nothing
@@ -75,7 +74,7 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
     
     
     /// # Summary
-    /// Sparse multi-configurationalr state preparation of trial state by adding excitations
+    /// Sparse multi-configurational state preparation of trial state by adding excitations
     /// to initial trial state.
     ///
     /// # Input
