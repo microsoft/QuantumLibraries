@@ -56,11 +56,19 @@
 
   <ItemGroup>
     <Compile Remove="ConfigurationFile.cs" />
+    <Compile Remove="Conversion.cs" />
     <Compile Remove="FermionHamiltonian.cs" />
     <Compile Remove="FermionHamiltonian2.cs" />
     <Compile Remove="FermionHamiltonianStatePrep.cs" />
+    <Compile Remove="FermionTerm - Copy.cs" />
     <Compile Remove="FermionTermDeprecated.cs" />
     <Compile Remove="FermionTermold.cs" />
+    <Compile Remove="FermionTerms\FermionTerm.cs" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <None Include="FermionTerms\FermionTerm.cs" />
   </ItemGroup>
 
 </Project>

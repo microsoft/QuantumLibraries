@@ -11,13 +11,26 @@ using System.Numerics;
 
 namespace Microsoft.Quantum.Chemistry
 {
-    public partial class FermionTerm : LadderOperators
+    public partial class FermionTerm : NormalOrderedLadderOperators
     {
-        // FermionTerms that are in normal order should always be sorted into index order.
+        internal FermionTerm() : base() { }
 
-        public FermionTerm(List<LadderOperator> setSequence, Symmetry setSymmetry, int setCoefficient = 1) : base(setSequence, setCoefficient) { symmetry = setSymmetry; }
+        // FermionTerms that are in normal order should always be sorted into index order.
+        // Disallow inputs that are not normal ordered.
+        public FermionTerm(FermionTerm term) 
+        {
+            sequence = term.sequence;
+            coefficient = term.coefficient;
+            symmetry = term.symmetry;
+        }
+
+        public FermionTerm(List<LadderOperator> setSequence, Symmetry setSymmetry, int setCoefficient = 1) : base(setSequence, setCoefficient) {
+            symmetry = setSymmetry;
+
+        }
         public FermionTerm(List<(LadderOperator.Type, int)> set, Symmetry setSymmetry) : base(set) { }
-        public FermionTerm(LadderOperators set, Symmetry setSymmetry) : base(set.sequence, set.coefficient) { symmetry = setSymmetry; }
+
+        public FermionTerm(LadderOperators set, Symmetry setSymmetry) : base(set) { symmetry = setSymmetry; }
         
         public Symmetry symmetry;
         
@@ -34,7 +47,7 @@ namespace Microsoft.Quantum.Chemistry
         /// Returns <c>true</c> this condition is satisfied.
         /// Returns <c>false</c> otherwise.
         /// </returns>
-        private bool IsInCanonicalOrder()
+        public bool IsInCanonicalOrder()
         {
             if (symmetry == Symmetry.Single) {
                 return base.GetOrdering() == Ordering.CanonicalOrder;

@@ -13,7 +13,7 @@ using System.Collections.Generic;
 namespace Microsoft.Quantum.Chemistry.Tests
 {
     //using static FermionTermType.Common;
-    using FermionTerm = FermionTerm;
+    //using FermionTerm = FermionTerm;
     //using FermionTermType = FermionTermType;
     using SpinOrbital = SpinOrbital;
     using OrbitalIntegral = OrbitalIntegral;

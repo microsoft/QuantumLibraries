@@ -13,6 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="FermionTermTests.cs" />
     <Compile Remove="LoadDataTests.cs" />
     <Compile Remove="ToEvolutionSetTest.cs" />
   </ItemGroup>
@@ -30,6 +31,10 @@
     <PackageReference Include="xunit" Version="2.3.1" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.3.1" />
     <DotNetCliToolReference Include="dotnet-xunit" Version="2.3.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="FermionTermTests.cs" />
   </ItemGroup>
 
   <ItemGroup>
