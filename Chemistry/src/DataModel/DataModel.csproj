@@ -40,4 +40,16 @@
     <BuildOutputInPackage Include="..\Runtime\bin\$(Configuration)\netstandard2.0\Microsoft.Quantum.Chemistry.*" />
   </ItemGroup>
 
+
+  <ItemGroup>
+    <Compile Remove="FermionHamiltonian.cs" />
+    <Compile Remove="FermionTerm.cs" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <None Include="FermionHamiltonian.cs" />
+    <None Include="FermionTerm.cs" />
+  </ItemGroup>
+
 </Project>

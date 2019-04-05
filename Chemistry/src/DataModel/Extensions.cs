@@ -69,6 +69,7 @@ namespace Microsoft.Quantum.Chemistry
             return "[" + string.Join(", ", ints) + "]";
         }
 
+
         /// <summary>
         /// Checks whether a sequence of integers {x,y,z,...} is sorted in
         /// ascending order x <= y <= z <= ...
@@ -96,6 +97,7 @@ namespace Microsoft.Quantum.Chemistry
             }
             return true;
         }
+        public static bool IsIntArrayAscending(this IEnumerable<int> x) => IsIntArrayAscending(x);
 
         #region Accumulators
 
