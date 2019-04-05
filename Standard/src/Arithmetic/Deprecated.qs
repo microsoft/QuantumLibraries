@@ -270,4 +270,15 @@ namespace Microsoft.Quantum.Canon {
 
     // #endregion
 
+   /// # Deprecated
+    /// Please use @"Microsoft.Quantum.Arithmetic.CopyMostSignificantBit".
+     operation CopyMostSignificantBitLE(from : LittleEndian, target : Qubit) : Unit {
+        body (...) {
+            Renamed("Microsoft.Quantum.Canon.CopyMostSignificantBitLE", "Microsoft.Quantum.Arithmetic.CopyMostSignificantBit");
+            CopyMostSignificantBit(from, target);
+        }
+
+        adjoint invert;
+    }
+
 }
