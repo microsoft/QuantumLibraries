@@ -2,13 +2,15 @@
 // Licensed under the MIT License.
 
 namespace Microsoft.Quantum.Chemistry.JordanWigner {
-    
+    open Microsoft.Quantum.Preparation;
+    open Microsoft.Quantum.Arithmetic;
     open Microsoft.Quantum.Primitive;
     open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Extensions.Math;
     open Microsoft.Quantum.Extensions.Convert;
-    
-    
+    open Microsoft.Quantum.Arrays;
+    open Microsoft.Quantum.Math;
+
     //newtype JordanWignerInputState = ((Double, Double), Int[]);
     operation PrepareTrialState (stateData : (Int, JordanWignerInputState[]), qubits : Qubit[]) : Unit {
         let (stateType, terms) = stateData;
@@ -87,7 +89,7 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
         
         let nExcitations = Length(excitations);
         
-        //FIXME compile error let coefficientsSqrtAbs = Map(Compose(Compose(Sqrt, Fst),Fst), excitations);
+        //FIXME compile error let coefficientsSqrtAbs = Mapped(Compose(Compose(Sqrt, Fst),Fst), excitations);
         mutable coefficientsSqrtAbs = new Double[nExcitations];
         mutable coefficientsNewComplexPolar = new ComplexPolar[nExcitations];
         mutable applyFlips = new Int[][nExcitations];
@@ -106,7 +108,7 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
             
             using (auxillary = Qubit[nBitsIndices + 1]) {
                 using (flag = Qubit[1]) {
-                    let multiplexer = MultiplexerBruteForceFromGenerator(nExcitations, LookupFunction(Map(_PrepareTrialStateSingleSiteOccupation_, applyFlips)));
+                    let multiplexer = MultiplexerBruteForceFromGenerator(nExcitations, LookupFunction(Mapped(_PrepareTrialStateSingleSiteOccupation_, applyFlips)));
                     (StatePreparationComplexCoefficients(coefficientsNewComplexPolar))(BigEndian(auxillary));
                     multiplexer(BigEndian(auxillary), qubits);
                     (Adjoint (StatePreparationPositiveCoefficients(coefficientsSqrtAbs)))(BigEndian(auxillary));

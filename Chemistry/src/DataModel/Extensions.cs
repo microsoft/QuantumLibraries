@@ -222,7 +222,7 @@ namespace Microsoft.Quantum.Chemistry
         /// </summary>
         public class IntIComparer : IComparer<Int64>
         {
-            public int Compare(Int64 x, Int64 y) => Math.Sign(x - y);
+            public int Compare(Int64 x, Int64 y) => System.Math.Sign(x - y);
         }
 
 

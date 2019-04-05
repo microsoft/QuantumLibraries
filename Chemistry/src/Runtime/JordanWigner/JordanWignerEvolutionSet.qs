@@ -2,28 +2,28 @@
 // Licensed under the MIT License.
 
 namespace Microsoft.Quantum.Chemistry.JordanWigner {
-    
+    open Microsoft.Quantum.Simulation;
     open Microsoft.Quantum.Primitive;
     open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Extensions.Math;
     open Microsoft.Quantum.Chemistry;
-    
-    
+    open Microsoft.Quantum.Arrays;
+
     // This evolution set runs off data optimized for a jordan-wigner encoding.
     // This collects terms Z, ZZ, PQandPQQR, hpqrs separately.
     // This only apples the needed hpqrs XXXX XXYY terms.
     // Operations here are expressed in terms of Exp([...])
-    
+
     // Convention for GeneratorIndex = ((Int[],Double[]), Int[])
     // We index single Paulis as 0 for I, 1 for X, 2 for Y, 3 for Z.
     // We index Pauli strings with arrays of integers e.g. a = [3,1,1,2] for ZXXY.
     // We assume the zeroth element of Double[] is the angle of rotation
     // We index the qubits that Pauli strings act on with arrays of integers e.g. q = [2,4,5,8] for Z_2 X_4 X_5, Y_8
     // An example of a Pauli string GeneratorIndex is thus ((a,b), q)
-    
+
     // Consider the Hamiltonian H = 0.1 XI + 0.2 IX + 0.3 ZY
     // Its GeneratorTerms are (([1],b),[0]), 0.1),  (([1],b),[1]), 0.2),  (([3,2],b),[0,1]), 0.3).
-    
+
     /// # Summary
     /// Applies time-evolution by a Z term described by a `GeneratorIndex`.
     ///
@@ -35,7 +35,6 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
     /// ## qubits
     /// Qubits of Hamiltonian.
     operation _ApplyJordanWignerZTerm_ (term : GeneratorIndex, stepSize : Double, qubits : Qubit[]) : Unit {
-        
         body (...) {
             let ((idxTermType, coeff), idxFermions) = term!;
             let angle = (1.0 * coeff[0]) * stepSize;
