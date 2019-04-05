@@ -2,19 +2,20 @@
 // Licensed under the MIT License.
 
 namespace Microsoft.Quantum.Chemistry.JordanWigner {
-    
+    open Microsoft.Quantum.Simulation;
+    open Microsoft.Quantum.Arithmetic;
+    open Microsoft.Quantum.Preparation;
     open Microsoft.Quantum.Primitive;
     open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Extensions.Convert;
     open Microsoft.Quantum.Extensions.Math;
     open Microsoft.Quantum.Chemistry;
-    
+    open Microsoft.Quantum.Arrays;
+    open Microsoft.Quantum.Math;
 
     /// # Summary
     /// Term data in the optimized block-encoding algorithm.
     newtype OptimizedBETermIndex = (Double, Bool, Bool[], Bool[], Int[], Int[]);
-    
-
 
     /// # Summary
     /// Function that returns `OptimizedBETermIndex` data for term `n` given an
@@ -308,16 +309,16 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
             elif (Length(pauliBasesSet) == 4) {
                 
                 // for PQRS terms, create |abcd> + |a^ b^ c^ d^>
-                if (pauliBasesSet[2] == 1 && pauliBasesSet[3] == 1) {
+                if (pauliBasesSet[2] == 1 and pauliBasesSet[3] == 1) {
                     InPlaceXorBE(1, pauliBasesIdx);
                 }
-                elif (pauliBasesSet[2] == 2 && pauliBasesSet[3] == 2) {
+                elif (pauliBasesSet[2] == 2 and pauliBasesSet[3] == 2) {
                     InPlaceXorBE(2, pauliBasesIdx);
                 }
-                elif (pauliBasesSet[2] == 1 && pauliBasesSet[3] == 2) {
+                elif (pauliBasesSet[2] == 1 and pauliBasesSet[3] == 2) {
                     InPlaceXorBE(3, pauliBasesIdx);
                 }
-                elif (pauliBasesSet[2] == 2 && pauliBasesSet[3] == 1) {
+                elif (pauliBasesSet[2] == 2 and pauliBasesSet[3] == 1) {
                     InPlaceXorBE(4, pauliBasesIdx);
                 }
             }

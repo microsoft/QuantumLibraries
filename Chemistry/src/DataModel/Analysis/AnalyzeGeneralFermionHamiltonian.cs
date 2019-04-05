@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using static System.Math;
 
 namespace Microsoft.Quantum.Chemistry
 {
@@ -29,7 +30,7 @@ namespace Microsoft.Quantum.Chemistry
                 (termTypePair) => termTypePair
                     .Value
                     .AsParallel()
-                    .Select(o => Math.Abs(o.coeff))
+                    .Select(o => Abs(o.coeff))
                     .Sum()
             );
         }
