@@ -10,6 +10,8 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using YamlDotNet.Core;
 using YamlDotNet.Serialization;
+using static System.Math;
+using static System.Convert;
 
 namespace Microsoft.Quantum.Chemistry
 {
@@ -341,8 +343,8 @@ namespace Microsoft.Quantum.Chemistry
                     foreach (var value in ((IEnumerable<object>)data["values"]))
                     {
                         var entries = (IEnumerable<object>)value;
-                        var a = entries.Take(entries.Count() - 1).Select(e => (TIndex)Convert.ChangeType(e, typeof(TIndex))).ToArray();
-                        var q = (TValue)Convert.ChangeType(entries.Last(), typeof(TValue));
+                        var a = entries.Take(entries.Count() - 1).Select(e => (TIndex)ChangeType(e, typeof(TIndex))).ToArray();
+                        var q = (TValue)ChangeType(entries.Last(), typeof(TValue));
                         Values.Add((a, q));
                     }
                 }

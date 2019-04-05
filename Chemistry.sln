@@ -18,9 +18,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{595D5855
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SystemTests", "Chemistry\tests\SystemTests\SystemTests.csproj", "{E9688DB1-CECC-407E-A192-90CC07FC48CA}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataModelTests", "Chemistry\tests\DataModelTests\DataModelTests.csproj", "{56296CAB-76A9-4595-B5DB-DC8290B9B991}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CSharp Tests", "Chemistry\tests\DataModelTests\CSharp Tests.csproj", "{56296CAB-76A9-4595-B5DB-DC8290B9B991}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChemistryTests", "Chemistry\tests\ChemistryTests\ChemistryTests.csproj", "{F723F015-C78C-46A2-BB9D-CD2FD3D1DDCD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QSharpTests", "Chemistry\tests\ChemistryTests\QSharpTests.csproj", "{F723F015-C78C-46A2-BB9D-CD2FD3D1DDCD}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Standard", "Standard\src\Standard.csproj", "{4EE69CC7-1158-49A2-A28F-9443B06D4A32}"
 EndProject

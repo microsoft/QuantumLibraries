@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 namespace Microsoft.Quantum.Chemistry.JordanWigner {
+    open Microsoft.Quantum.Simulation;
     open Microsoft.Quantum.Preparation;
     open Microsoft.Quantum.Arithmetic;
     open Microsoft.Quantum.Primitive;
@@ -10,6 +11,7 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
     open Microsoft.Quantum.Extensions.Convert;
     open Microsoft.Quantum.Arrays;
     open Microsoft.Quantum.Math;
+    
 
     //newtype JordanWignerInputState = ((Double, Double), Int[]);
     operation PrepareTrialState (stateData : (Int, JordanWignerInputState[]), qubits : Qubit[]) : Unit {

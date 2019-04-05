@@ -2,12 +2,13 @@
 // Licensed under the MIT License.
 
 namespace Microsoft.Quantum.Chemistry.JordanWigner {
-    
+    open Microsoft.Quantum.Simulation;
     open Microsoft.Quantum.Primitive;
     open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Extensions.Math;
     open Microsoft.Quantum.Chemistry;
-    
+    open Microsoft.Quantum.Arrays;
+
 	/// # Summary
     /// Computes Z component of Jordan-Wigner string between
 	/// fermion indices in a fermionic operator with an even
