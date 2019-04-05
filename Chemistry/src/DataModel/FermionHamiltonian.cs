@@ -15,6 +15,21 @@ using Microsoft.Extensions.Logging;
 
 namespace Microsoft.Quantum.Chemistry
 {
+
+    public class FermionHamiltonian
+    {
+        /// <summary>
+        /// Container for all terms in a Fermion Hamiltonian.
+        /// </summary>
+        public Dictionary<FermionTerm, double> FermionTerms;
+
+
+
+        // public AddFermionTerm
+    }
+
+
+
     public partial class FermionHamiltonian
     {
         public class Config : FermionTerm.Config { }

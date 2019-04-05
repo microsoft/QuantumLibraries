@@ -59,8 +59,8 @@
     <Compile Remove="FermionHamiltonian.cs" />
     <Compile Remove="FermionHamiltonian2.cs" />
     <Compile Remove="FermionHamiltonianStatePrep.cs" />
-    <Compile Remove="FermionTerm.cs" />
     <Compile Remove="FermionTermDeprecated.cs" />
+    <Compile Remove="FermionTermold.cs" />
   </ItemGroup>
 
 </Project>

@@ -48,6 +48,7 @@ namespace Microsoft.Quantum.Chemistry
 
         public LadderOperator((Type, int) set) : this(set.Item1, set.Item2) { }
 
+        #region Equality Testing
         public override bool Equals(object obj)
         {
             return (obj is LadderOperator x) ? Equals(x) : false;
@@ -72,18 +73,25 @@ namespace Microsoft.Quantum.Chemistry
         {
             return !(x.Equals(y));
         }
+#endregion
     }
 
-    public partial class FermionTerm : IEquatable<FermionTerm>
+
+    public partial class LadderOperators : IEquatable<LadderOperators>
     {
         public List<LadderOperator> sequence { get; set; }
 
-        public FermionTerm(List<LadderOperator> setSequence)
+        public LadderOperators()
+        {
+
+        }
+
+        public LadderOperators(List<LadderOperator> setSequence)
         {
             sequence = setSequence;
         }
 
-        public FermionTerm(List<(LadderOperator.Type, int)> set) : this(set.Select(o => new LadderOperator(o)).ToList()) { }
+        public LadderOperators(List<(LadderOperator.Type, int)> set) : this(set.Select(o => new LadderOperator(o)).ToList()) { }
 
         public bool IsInNormalOrder()
         {
@@ -91,25 +99,25 @@ namespace Microsoft.Quantum.Chemistry
         }
 
         /// <summary>
-        ///  Checks whether the creation operator sequence of a <see cref="FermionTerm"/> is in 
+        ///  Checks whether the creation operator sequence of a <see cref="LadderOperators"/> is in 
         ///  canonical order. This means
         ///  1) <c>SpinOrbital</c> is sorted in ascending order for the creation operators.
         /// </summary>
-        /// <returns><c>true</c> if the creation opeartor sequence of a <c>FermionTerm</c> is in 
+        /// <returns><c>true</c> if the creation opeartor sequence of a <c>LadderOperators</c> is in 
         /// canonical order. <c>false</c> otherwise</returns>
-        private bool IsInIndexCreationCanonicalOrder()
+        public bool IsInIndexCreationCanonicalOrder()
         {
             return sequence.Where(o => o.type == LadderOperator.Type.u).Select(o => o.index).IsIntArrayAscending();
         }
 
         /// <summary>
-        ///  Checks whether the annihilation operator sequence of a <see cref="FermionTerm"/> is in 
+        ///  Checks whether the annihilation operator sequence of a <see cref="LadderOperators"/> is in 
         ///  canonical order. This means
         ///  1) <c>SpinOrbital</c> is sorted in descending order for the annihilation operators.
         /// </summary>
-        /// <returns><c>true</c> if the annihilation opeartor sequence of a <c>FermionTerm</c> is in 
+        /// <returns><c>true</c> if the annihilation opeartor sequence of a <c>LadderOperators</c> is in 
         /// canonical order. <c>false</c> otherwise</returns>
-        private bool IsInIndexAnnihilationCanonicalOrder()
+        public bool IsInIndexAnnihilationCanonicalOrder()
         {
             return sequence.Where(o => o.type == LadderOperator.Type.d).Select(o => o.index).Reverse().IsIntArrayAscending(); 
         }
@@ -131,23 +139,23 @@ namespace Microsoft.Quantum.Chemistry
 
         }
 
-        public (int, FermionTerm) ToCanonicalOrder(bool AllowHermitianConjugate = true)
+        public (int, LadderOperators) ToCanonicalOrderFromNormalOrder()
         {
-            FermionTerm tmp = new FermionTerm(sequence);
+            LadderOperators tmp = new LadderOperators(sequence);
             int coeff = 1;
             //var left = sequence.Where(o => o.type == LadderOperator.Type.u).OrderBy(o => o.index);
             //var right = sequence.Where(o => o.type == LadderOperator.Type.d).OrderBy(o => o.index).Reverse();
             //var normalOrdered = new LadderOperators(left.Concat(right));
             //return (0, normalOrdered);
 
-            // Check that FermionTerm is normal-ordered.
+            // Check that LadderOperators is normal-ordered.
             if (!tmp.IsInNormalOrder())
             {
                 throw new System.ArgumentException(
                     $"ToCanonicalOrder() assumes input is normal-ordered. This is currently not satisfied."
                     );
             }
-            // Check that FermionTerm spin-orbital indices are in canonical order.
+            // Check that LadderOperators spin-orbital indices are in canonical order.
             if (!tmp.IsInCanonicalOrder())
             {
 
@@ -185,20 +193,18 @@ namespace Microsoft.Quantum.Chemistry
                 }
             }
 
-            // Take Hermitian conjugate if still not in canonical order. 
-            if (!tmp.IsInCanonicalOrder())
-            {
-                tmp.sequence = tmp.sequence.Select(o => (o.type == LadderOperator.Type.d ? LadderOperator.Type.u : LadderOperator.Type.d, o.index)).Select(o => new LadderOperator(o)).Reverse().ToList();
-            }
             return (coeff, tmp);
         }
 
+
+        #region Equality Testing
+
         public override bool Equals(object obj)
         {
-            return (obj is FermionTerm x) ? Equals(x) : false;
+            return (obj is LadderOperators x) ? Equals(x) : false;
         }
 
-        public bool Equals(FermionTerm x)
+        public bool Equals(LadderOperators x)
         {
             // If parameter is null, return false.
             if (ReferenceEquals(x, null))
@@ -231,7 +237,7 @@ namespace Microsoft.Quantum.Chemistry
             return h;
         }
 
-        public static bool operator == (FermionTerm x, FermionTerm y)
+        public static bool operator == (LadderOperators x, LadderOperators y)
         {
             // Check for null on left side.
             if (Object.ReferenceEquals(x, null))
@@ -249,42 +255,12 @@ namespace Microsoft.Quantum.Chemistry
             return x.Equals(y);
         }
 
-        public static bool operator !=(FermionTerm x, FermionTerm y)
+        public static bool operator !=(LadderOperators x, LadderOperators y)
         {
             return !(x == y);
         }
-    }   
-
-    public partial class FermionTerm
-    {
-        /// <summary>
-        /// FermionTerm constructor that assumes normal-ordered fermionic 
-        /// creation and annihilation operators, and that the number of
-        /// creation an annihilation operators are equal.
-        /// </summary>
-        public FermionTerm(IEnumerable<int> indices, bool sort = true)
-        {
-            var length = indices.Count();
-            if (length % 2 == 1)
-            {
-                throw new System.ArgumentException(
-                    $"SpinOrbital array of length {length} must be of even length."
-                    );
-            }
-            var tmp = new FermionTerm(indices.Select((o, idx) => new LadderOperator((idx < length / 2 ? LadderOperator.Type.u : LadderOperator.Type.d, o))).ToList());
-
-            sequence = tmp.sequence;
-        }
-
-        public Int64 GetUniqueIndices()
-        {
-            return sequence.Select(o => o.index).Distinct().Count();
-        }
-
-
+        #endregion
     }
-
-
 }
 
 
