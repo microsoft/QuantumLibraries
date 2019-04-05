@@ -13,9 +13,9 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.Quantum.Development.Kit" Version="0.5.1903.2703" />
   </ItemGroup>
-
+  
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Standard\src\Standard.csproj" />
+    <ProjectReference Include="..\..\..\Canon\src\Canon.csproj" />
   </ItemGroup>
 
 </Project>

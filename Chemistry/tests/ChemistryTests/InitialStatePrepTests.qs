@@ -2,14 +2,13 @@
 // Licensed under the MIT License.
 
 namespace Microsoft.Quantum.Chemistry.Tests {
-    open Microsoft.Quantum.Arithmetic;
+    
     open Microsoft.Quantum.Primitive;
     open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Extensions.Testing;
     open Microsoft.Quantum.Extensions.Math;
     open Microsoft.Quantum.Extensions.Convert;
-    open Microsoft.Quantum.Chemistry.JordanWigner;
-    open Microsoft.Quantum.Arrays;
+    open Microsoft.Quantum.Chemistry.JordanWigner; 
     
     // Prepare single excitation
     operation PrepareTrialStateCoupledCluster0Test () : Unit {
@@ -22,7 +21,7 @@ namespace Microsoft.Quantum.Chemistry.Tests {
             PrepareTrialStateCoupledCluster(NoOp<Qubit[]>, excitations, qubits);
             
             for (idx in 0 .. Length(excitations) - 1) {
-                AssertProbIntBE(intTest[idx], AbsD(1.0), BigEndian(Reversed(qubits)), 1E-05);
+                AssertProbIntBE(intTest[idx], AbsD(1.0), BigEndian(Reverse(qubits)), 1E-05);
             }
             
             ResetAll(qubits);
@@ -42,7 +41,7 @@ namespace Microsoft.Quantum.Chemistry.Tests {
             PrepareTrialStateCoupledCluster(NoOp<Qubit[]>, excitations, qubits);
             
             for (idx in 0 .. Length(excitations) - 1) {
-                AssertProbIntBE(intTest[idx], expectedProb[idx], BigEndian(Reversed(qubits)), 1E-05);
+                AssertProbIntBE(intTest[idx], expectedProb[idx], BigEndian(Reverse(qubits)), 1E-05);
             }
             
             ResetAll(qubits);
@@ -62,7 +61,7 @@ namespace Microsoft.Quantum.Chemistry.Tests {
             PrepareTrialStateCoupledCluster(NoOp<Qubit[]>, excitations, qubits);
             
             for (idx in 0 .. Length(excitations) - 1) {
-                AssertProbIntBE(intTest[idx], expectedProb[idx], BigEndian(Reversed(qubits)), 1E-05);
+                AssertProbIntBE(intTest[idx], expectedProb[idx], BigEndian(Reverse(qubits)), 1E-05);
             }
             
             ResetAll(qubits);
@@ -83,7 +82,7 @@ namespace Microsoft.Quantum.Chemistry.Tests {
             PrepareTrialStateCoupledCluster(NoOp<Qubit[]>, excitations, qubits);
             
             for (idx in 0 .. Length(excitations) - 1) {
-                AssertProbIntBE(intTest[idx], expectedProb[idx], BigEndian(Reversed(qubits)), 1E-05);
+                AssertProbIntBE(intTest[idx], expectedProb[idx], BigEndian(Reverse(qubits)), 1E-05);
             }
             
             ResetAll(qubits);
