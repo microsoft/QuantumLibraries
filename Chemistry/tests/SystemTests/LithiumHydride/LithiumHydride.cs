@@ -140,11 +140,21 @@ namespace SystemTests
                 Assert.True(Math.Abs(error) < 1e-1);
             }
 
-            public Double SetUpLiHSimulation(Config configuration, int bits)
+            [Fact]
+            public void RunUnitaryCoupledCluster()
+            {
+                var configuration = Config.Default();
+                configuration.indexConvention = SpinOrbital.Config.IndexConvention.Type.UpDown;
+
+                // This is a ranodm UCCSD state, not the actual one for LiH.
+                var error = SetUpLiHSimulation(configuration, 1, "UCCSD |E1>");
+            }
+
+            public Double SetUpLiHSimulation(Config configuration, int bits, string state = "|G>")
             {
                 var hamiltonian = FermionHamiltonian.LoadFromBroombridge(filename, configuration).First();
                 var jordanWignerEncoding = JordanWignerEncoding.Create(hamiltonian);
-                var qSharpData = jordanWignerEncoding.QSharpData("|G>");
+                var qSharpData = jordanWignerEncoding.QSharpData(state);
 
                 // We specify the bits of precision desired in the phase estimation 
                 // algorithm
