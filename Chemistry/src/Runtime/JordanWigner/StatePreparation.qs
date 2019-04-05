@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 namespace Microsoft.Quantum.Chemistry.JordanWigner {
-    
+    open Microsoft.Quantum.Simulation;
     open Microsoft.Quantum.Preparation;
     open Microsoft.Quantum.Arithmetic;
     open Microsoft.Quantum.Primitive;
