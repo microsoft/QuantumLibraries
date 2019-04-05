@@ -193,7 +193,7 @@ namespace Microsoft.Quantum.Chemistry
         /// <returns>
         /// Array of spin-orbital orbital integrals with the same coefficient.
         /// </returns>
-        public SpinOrbital[][] EnumerateSpinOrbitals()
+        public SpinOrbital[][] EnumerateSpinOrbitals(SpinOrbital.Config.IndexConvention.Type indexConvention)
         {
             // Assumes spinOrbitals has an even number of elements
             // Only index over like spins S1 S2 S3 ... S3 S2 S1
@@ -207,17 +207,9 @@ namespace Microsoft.Quantum.Chemistry
                 {
                     var fst = idxOrbital;
                     var lst = OrbitalIndices.Length - idxOrbital - 1;
-                    var spin = (idx / nSpins.Pow(idxOrbital)) % nSpins;
-                    spinOrbitalArray[fst] = new SpinOrbital
-                    {
-                        orbital = OrbitalIndices[fst],
-                        spin = spin
-                    };
-                    spinOrbitalArray[lst] = new SpinOrbital
-                    {
-                        orbital = OrbitalIndices[lst],
-                        spin = spin
-                    };
+                    var spin = (Spin)((idx / nSpins.Pow(idxOrbital)) % nSpins);
+                    spinOrbitalArray[fst] = new SpinOrbital(OrbitalIndices[fst], spin, indexConvention);
+                    spinOrbitalArray[lst] = new SpinOrbital(OrbitalIndices[lst], spin, indexConvention);
                 }
                 spinOrbitalArrayOfArray[idx] = spinOrbitalArray;
             }

@@ -15,6 +15,13 @@ using Microsoft.Extensions.Logging;
 
 namespace Microsoft.Quantum.Chemistry
 {
+    public partial class FermionHamiltonian
+    {
+        public class Config : FermionTerm.Config { }
+        public readonly Config.IndexConvention.Type IndexConvention;
+    }
+
+
     /// <summary>
     /// Representation of a general Fermion Hamiltonian. This Hamiltonian is
     /// assumed to be a linear combination of sequences of creation
@@ -22,7 +29,7 @@ namespace Microsoft.Quantum.Chemistry
     /// </summary>
     public partial class FermionHamiltonian
     {
-        public Config Configuration = new Config();
+        ///public Config Configuration = Config.Default();
 
         // This will sort terms and accumulate terms in a canonical format.
         // This format is sorted by:
@@ -54,12 +61,18 @@ namespace Microsoft.Quantum.Chemistry
         public Double EnergyOffset = 0.0;
         public Int64 NElectrons = 0;
         public string MiscellaneousInformation;
-        
+
         /// <summary>
         /// Empty constructor for <see cref="FermionHamiltonian"/>.
         /// </summary>
-        public FermionHamiltonian(Int64 nOrbitals = 0, Int64 nElectrons = 0)
+        public FermionHamiltonian(Int64 nOrbitals = 0, Int64 nElectrons = 0) : this(Chemistry.Config.Default(), nOrbitals, nElectrons) { }
+
+        /// <summary>
+        /// Empty constructor for <see cref="FermionHamiltonian"/>.
+        /// </summary>
+        public FermionHamiltonian(Chemistry.Config configuration, Int64 nOrbitals = 0, Int64 nElectrons = 0)
         {
+            IndexConvention = configuration.indexConvention;
             NOrbitals = nOrbitals;
             NElectrons = nElectrons;
         }
@@ -111,7 +124,8 @@ namespace Microsoft.Quantum.Chemistry
                 nOrbitals: NOrbitals,
                 caArray: conjugateArray,
                 fermionIdxArray: fermionIdxArray,
-                coeffIn: coefficient
+                coeffIn: coefficient,
+                IndexConvention
                 );
             AddFermionTerm(termType, fermionTerm);
         }
@@ -186,7 +200,7 @@ namespace Microsoft.Quantum.Chemistry
         {
             // One-electron orbital integral symmetries
             // ij = ji
-            var pqSpinOrbitals = orbitalIntegral.EnumerateOrbitalSymmetries().EnumerateSpinOrbitals();
+            var pqSpinOrbitals = orbitalIntegral.EnumerateOrbitalSymmetries().EnumerateSpinOrbitals(IndexConvention);
 
             var coefficient = orbitalIntegral.Coefficient;
             
@@ -219,7 +233,7 @@ namespace Microsoft.Quantum.Chemistry
         {
             // Two-electron orbital integral symmetries
             // ijkl = lkji = jilk = klij = ikjl = ljki = kilj = jlik.
-            var pqrsSpinOrbitals = orbitalIntegral.EnumerateOrbitalSymmetries().EnumerateSpinOrbitals();
+            var pqrsSpinOrbitals = orbitalIntegral.EnumerateOrbitalSymmetries().EnumerateSpinOrbitals(IndexConvention);
             var coefficient = orbitalIntegral.Coefficient;
 
 

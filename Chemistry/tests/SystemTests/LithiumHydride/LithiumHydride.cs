@@ -33,49 +33,45 @@ namespace SystemTests
         }
 
         [Fact]
+        public void HighPrecisionEnergy()
+        {
+            var configuration = Config.Default();
+
+            var error = SetUpLiHSimulation(configuration, 9);
+
+            Assert.True(Math.Abs(error) < 1e-2);
+        }
+
+
+        [Fact]
         public void Energy()
         {
-            var hamiltonian = FermionHamiltonian.LoadFromBroombridge(filename).First();
-            var jordanWignerEncoding = JordanWignerEncoding.Create(hamiltonian);
-            var qSharpData = jordanWignerEncoding.QSharpData("|G>");
+            var configuration = Config.Default();
 
+            var error = SetUpLiHSimulation(configuration, 6);
 
-            // We specify the bits of precision desired in the phase estimation 
-            // algorithm
-            var bits = 6;
-
-            // We specify the step-size of the simulated time-evolution
-            var trotterStep = 0.5;
-
-            // Choose the Trotter integrator order
-            Int64 trotterOrder = 1;
-
-            using (var qsim = new QuantumSimulator())
-            {
-
-                    // EstimateEnergyByTrotterization
-                var (phaseEst, energyEst) = GetEnergyByTrotterization.Run(qsim, qSharpData, bits, trotterStep, trotterOrder).Result;
-                var error = -7.881844675840115 - energyEst;
-
-                Assert.Equal(0.0, error, 1);
-            }
+            Assert.True(Math.Abs(error) < 1e-1);
         }
 
         [Fact]
         public void EnergyUpDownIndexConvention()
         {
-            Settings.IndexConvention.Current = Settings.IndexConvention.Type.UpDown;
+            var configuration = Config.Default();
+            configuration.indexConvention = SpinOrbital.Config.IndexConvention.Type.UpDown;
 
-            var hamiltonian = FermionHamiltonian.LoadFromBroombridge(filename).First();
+            var error = SetUpLiHSimulation(configuration, 6);
+
+            Assert.True(Math.Abs(error) < 1e-1);                
+        }
+
+        public Double SetUpLiHSimulation(Config configuration, int bits)
+        {
+            var hamiltonian = FermionHamiltonian.LoadFromBroombridge(filename, configuration).First();
             var jordanWignerEncoding = JordanWignerEncoding.Create(hamiltonian);
             var qSharpData = jordanWignerEncoding.QSharpData("|G>");
 
-            Settings.IndexConvention.Current = Settings.IndexConvention.Default();
-
-
             // We specify the bits of precision desired in the phase estimation 
             // algorithm
-            var bits = 6;
 
             // We specify the step-size of the simulated time-evolution
             var trotterStep = 0.5;
@@ -88,9 +84,9 @@ namespace SystemTests
 
                 // EstimateEnergyByTrotterization
                 var (phaseEst, energyEst) = GetEnergyByTrotterization.Run(qsim, qSharpData, bits, trotterStep, trotterOrder).Result;
-                var error = -7.881844675840115 - energyEst;
+                var errorResult = -7.881844675840115 - energyEst;
 
-                Assert.Equal(0.0, error, 1);
+                return errorResult;
             }
         }
 

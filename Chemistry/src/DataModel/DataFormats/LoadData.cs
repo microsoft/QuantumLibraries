@@ -49,7 +49,7 @@ namespace Microsoft.Quantum.Chemistry
         ///      An instance of <see cref="FermionHamiltonian"/> representing the
         ///      data contained in <paramref name="filename"/>.
         /// </returns>
-        public static IEnumerable<FermionHamiltonian> LoadFromBroombridge(string filename, Config configuration)
+        public static IEnumerable<FermionHamiltonian> LoadFromBroombridge(string filename, Chemistry.Config configuration)
         {
             var broombridgeData = Broombridge.Deserialize.Source(filename);
             IEnumerable<BroombridgeTyped> broombridgeDataTyped = broombridgeData.ProblemDescription.Select(o => new BroombridgeTyped(o, configuration.indexConvention));
@@ -58,10 +58,8 @@ namespace Microsoft.Quantum.Chemistry
 
         public static IEnumerable<FermionHamiltonian> LoadFromBroombridge(string filename)
         {
-            var configuration = new Config();
-            var broombridgeData = Broombridge.Deserialize.Source(filename);
-            IEnumerable<BroombridgeTyped> broombridgeDataTyped = broombridgeData.ProblemDescription.Select(o => new BroombridgeTyped(o, configuration.indexConvention));
-            return broombridgeDataTyped.Select(o => LoadData.LoadIntegralData(o, configuration));
+            var configuration = Microsoft.Quantum.Chemistry.Config.Default();
+            return LoadFromBroombridge(filename, configuration);
         }
 
     }
@@ -69,9 +67,14 @@ namespace Microsoft.Quantum.Chemistry
 
     public partial class LoadData
     {
+        internal static FermionHamiltonian LoadIntegralData(BroombridgeTyped schemaInstance)
+        {
+            return LoadIntegralData(schemaInstance, Config.Default());
+        }
+
         internal static FermionHamiltonian LoadIntegralData(BroombridgeTyped schemaInstance, Config configuration)
         {
-            var hamiltonian = new FermionHamiltonian()
+            var hamiltonian = new FermionHamiltonian(configuration)
             {
 
                 NOrbitals = schemaInstance.NOrbitals,

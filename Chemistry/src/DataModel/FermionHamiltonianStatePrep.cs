@@ -82,7 +82,7 @@ namespace Microsoft.Quantum.Chemistry
                     (int)NElectrons,
                     conjugate,
                     Enumerable.Range(0, (int)NElectrons).Select(o => (Int64)o).ToArray(),
-                    1.0);
+                    1.0, IndexConvention);
                 var superposition = new((Double, Double), FermionTerm)[] {
                             (coeff, fermionTerm)
                             };

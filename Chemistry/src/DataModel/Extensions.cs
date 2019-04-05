@@ -35,16 +35,16 @@ namespace Microsoft.Quantum.Chemistry
         /// <summary>
         /// Converts an array of (orbital index, spin index) into an array of spin-orbitals.
         /// </summary>
-        public static SpinOrbital[] ToSpinOrbitals(this IEnumerable<(int, Spin)> spinOrbitalIndices)
+        public static SpinOrbital[] ToSpinOrbitals(this IEnumerable<(int, Spin)> spinOrbitalIndices, SpinOrbital.Config.IndexConvention.Type indexConvention = SpinOrbital.Config.IndexConvention.Default)
         {
-            return spinOrbitalIndices.Select(o => new SpinOrbital(o)).ToArray();
+            return spinOrbitalIndices.Select(o => new SpinOrbital(o, indexConvention)).ToArray();
         }
         /// <summary>
         /// Converts an array of (orbital index, spin index) into an array of spin-orbitals.
         /// </summary>
-        public static SpinOrbital[] ToSpinOrbitals(this IEnumerable<(int, int)> spinOrbitalIndices)
+        public static SpinOrbital[] ToSpinOrbitals(this IEnumerable<(int, int)> spinOrbitalIndices, SpinOrbital.Config.IndexConvention.Type indexConvention = SpinOrbital.Config.IndexConvention.Default)
         {
-            return spinOrbitalIndices.Select(o => new SpinOrbital(o)).ToArray();
+            return spinOrbitalIndices.Select(o => new SpinOrbital(o, indexConvention)).ToArray();
         }
 
         /// <summary>
@@ -53,9 +53,9 @@ namespace Microsoft.Quantum.Chemistry
         /// </summary>
         /// <param name="orbitalIntegrals">Array of orbital integrals.</param>
         /// <returns>Array of Array of spin-orbitals.</returns>
-        public static SpinOrbital[][] EnumerateSpinOrbitals(this IEnumerable<OrbitalIntegral> orbitalIntegrals)
+        public static SpinOrbital[][] EnumerateSpinOrbitals(this IEnumerable<OrbitalIntegral> orbitalIntegrals, SpinOrbital.Config.IndexConvention.Type indexConvention = SpinOrbital.Config.IndexConvention.Default)
         {
-            return orbitalIntegrals.SelectMany(o => o.EnumerateSpinOrbitals()).ToArray();
+            return orbitalIntegrals.SelectMany(o => o.EnumerateSpinOrbitals(indexConvention)).ToArray();
         }
 
 

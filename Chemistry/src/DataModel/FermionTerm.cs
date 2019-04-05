@@ -17,6 +17,15 @@ namespace Microsoft.Quantum.Chemistry
     public struct FermionTerm
     {
         /// <summary>
+        /// FermionTerm cnfiguration settings.
+        /// </summary>
+        public class Config : SpinOrbital.Config
+        {
+
+        }
+        public readonly Config.IndexConvention.Type IndexConvention;
+
+        /// <summary>
         /// <c>Int64[] CreationAnnihilation</c> represents a sequence of creation or annihilation operators.
         /// For example, <c>{1,1,0,1,0}</c> represents h * a^\dag_i a^\dag_j a_k a^\dag_l a_m.
         /// </summary>
@@ -37,16 +46,17 @@ namespace Microsoft.Quantum.Chemistry
         /// </summary>
         public override string ToString() =>
             $"([{String.Join(",", CreationAnnihilationIndices)}], " +
-            $"[{String.Join(",", SpinOrbitalIndices)}], " +
+            $"[{String.Join(",", SpinOrbitalIndices.ToString())}], " +
             $"{coeff})";
 
         /// <summary>
         /// FermionTerm constructor. 
         /// </summary>
-        public FermionTerm(Int64 nOrbitals, Int64[] caArray, Int64[] fermionIdxArray, Double coeffIn)
+        public FermionTerm(Int64 nOrbitals, Int64[] caArray, Int64[] fermionIdxArray, Double coeffIn, Config.IndexConvention.Type indexConvention = SpinOrbital.Config.IndexConvention.Default)
         {
+            IndexConvention = indexConvention;
             CreationAnnihilationIndices = caArray;
-            SpinOrbitalIndices = SpinOrbital.ToSpinOrbitals(nOrbitals, fermionIdxArray);
+            SpinOrbitalIndices = SpinOrbital.ToSpinOrbitals(nOrbitals, fermionIdxArray, IndexConvention);
             coeff = coeffIn;
             if (!IsValid())
             {
@@ -64,6 +74,7 @@ namespace Microsoft.Quantum.Chemistry
         /// </summary>
         public FermionTerm(IEnumerable<SpinOrbital> SpinOrbitals, Double coeffIn, bool sort = true)
         {
+            IndexConvention = SpinOrbital.GetIndexConvention(SpinOrbitals);
             var length = SpinOrbitals.Count();
             if (length % 2 == 1)
             {
@@ -95,6 +106,7 @@ namespace Microsoft.Quantum.Chemistry
         /// </summary>
         public FermionTerm(Int64[] caArray, SpinOrbital[] soArray, Double coeffIn)
         {
+            IndexConvention = SpinOrbital.GetIndexConvention(soArray);
             CreationAnnihilationIndices = caArray;
             SpinOrbitalIndices = soArray;
             coeff = coeffIn;

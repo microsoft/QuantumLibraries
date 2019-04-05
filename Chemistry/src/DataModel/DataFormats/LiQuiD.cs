@@ -65,7 +65,7 @@ namespace Microsoft.Quantum.Chemistry
             Double coulombRepulsion = 0.0;
             var fileHIJTerms = new Dictionary<Int64[], Double>(new Extensions.IntArrayIEqualityComparer());
             var fileHIJKLTerms = new Dictionary<Int64[], Double>(new Extensions.IntArrayIEqualityComparer());
-            var hamiltonian = new FermionHamiltonian();
+            var hamiltonian = new FermionHamiltonian(Chemistry.Config.Default());
 
             var nOrbitals = 0L;
 

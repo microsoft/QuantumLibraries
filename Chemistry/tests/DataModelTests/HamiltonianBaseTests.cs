@@ -116,7 +116,7 @@ namespace Microsoft.Quantum.Chemistry.Tests
         [InlineData(1, 0, 1, 1)]
         [InlineData(1, 0, 0, 0)]
         public void SpinOrbitalTest(Int64 nOrbitals, Int64 orbital, Int64 spin, Int64 expected){
-            Assert.Equal(expected, new SpinOrbital { orbital= orbital, spin= spin }.ToInt(nOrbitals));
+            Assert.Equal(expected, new SpinOrbital((orbital, spin)).ToInt(nOrbitals));
             Assert.Equal(new SpinOrbital(nOrbitals, expected).ToInt(nOrbitals), expected);
         }
     }

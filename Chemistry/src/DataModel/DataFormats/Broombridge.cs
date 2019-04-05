@@ -26,18 +26,26 @@ namespace Microsoft.Quantum.Chemistry
             /// <summary>
             /// Enumerable item for Broombridge version numbers.
             /// </summary>
-            public enum Type
+            public enum Number
             {
                 v0_1 = 0, v0_2 = 1
             }
 
-            public static Dictionary<string, Type> VersionNumberDict = new Dictionary<string, Type>()
+            /// <summary>
+            /// Dictionary from version number strings to version number types.
+            /// </summary>
+            public static Dictionary<string, Number> VersionNumberDict = new Dictionary<string, Number>()
             {
-                {"0.1", Type.v0_1 },
-                {"0.2", Type.v0_2 }
+                {"0.1", Number.v0_1 },
+                {"0.2", Number.v0_2 }
             };
 
-            public static Type ParseVersionNumber(string versionNumber)
+            /// <summary>
+            /// Parse version number string
+            /// </summary>
+            /// <param name="versionNumber">Version number string</param>
+            /// <returns>Version number in enum `Number` format.</returns>
+            public static Number ParseVersionNumber(string versionNumber)
             {
                 return VersionNumberDict[versionNumber];
             }
@@ -51,31 +59,37 @@ namespace Microsoft.Quantum.Chemistry
         /// </summary>
         public static class Deserialize
         {
-            public static Version.Type GetVersionNumber(string filename)
+            /// <summary>
+            /// 
+            /// </summary>
+            /// <param name="filename"></param>
+            /// <returns></returns>
+            public static Version.Number GetVersionNumber(string filename)
             {
                 using (var reader = File.OpenText(filename))
                 {
                     var deserializer = new DeserializerBuilder().Build();
-                    var data = deserializer.Deserialize<Dictionary<string,object>>(reader);
-                    var format = (Dictionary<object, object>) data["format"];
-                    var version = (string) format["version"];
+                    var data = deserializer.Deserialize<Dictionary<string, object>>(reader);
+                    var format = (Dictionary<object, object>)data["format"];
+                    var version = (string)format["version"];
                     return Version.ParseVersionNumber(version);
                 }
             }
 
+
             public static Current.Data Source(string filename)
             {
-                Version.Type versionNumber = GetVersionNumber(filename);
+                Version.Number versionNumber = GetVersionNumber(filename);
 
-                if(versionNumber == Version.Type.v0_1)
+                if (versionNumber == Version.Number.v0_1)
                 {
                     return Update.Data(v0_1(filename));
                 }
-                else if(versionNumber == Version.Type.v0_2)
+                else if (versionNumber == Version.Number.v0_2)
                 {
                     return v0_2(filename);
                 }
-                else{
+                else {
                     throw new System.InvalidOperationException("Unrecognized Broombridge version number.");
                 }
             }
@@ -364,9 +378,9 @@ namespace Microsoft.Quantum.Chemistry
         /// Broombridge latest supported format.
         /// </summary>
         public class Current : V0_2 {
-             
+
         }
-        
+
         /// <summary>
         /// Broombridge v0.2 format.
         /// 
@@ -575,6 +589,10 @@ namespace Microsoft.Quantum.Chemistry
     }
     // Parts of this might be merged intro Broombridge parsing due to overlap.
 
+
+    /// <summary>
+    /// Broombridge with type information parsed, and only relevant metadata kept.
+    /// </summary>
     public struct BroombridgeTyped { 
         /* public bool Energy_Provided;
             public double Energy_Min;
@@ -587,16 +605,14 @@ namespace Microsoft.Quantum.Chemistry
         public HashSet<OrbitalIntegral> OneBodyTerms;
         public HashSet<OrbitalIntegral> TwoBodyTerms;
         public Dictionary<string, FermionHamiltonian.InputState> InitialStates;
-        
-        public BroombridgeTyped(
-            Broombridge.V0_2.ProblemDescription broombridgeProblem,
-            Config.IndexConvention.Type indexConvention = config.Default2)
-            )
 
-        public BroombridgeTyped(
-            Broombridge.V0_2.ProblemDescription broombridgeProblem, 
-            Config.IndexConvention.Type indexConvention = config.Default2)
+        public class Config : FermionHamiltonian.Config { }
+        public readonly SpinOrbital.Config.IndexConvention.Type IndexConvention;
+
+
+        public BroombridgeTyped(Broombridge.V0_2.ProblemDescription broombridgeProblem, SpinOrbital.Config.IndexConvention.Type indexConvention = SpinOrbital.Config.IndexConvention.Default)
         {
+            IndexConvention = indexConvention;
             NOrbitals = broombridgeProblem.NOrbitals;
             NElectrons = broombridgeProblem.NElectrons;
 
@@ -614,24 +630,24 @@ namespace Microsoft.Quantum.Chemistry
 
             InitialStates = broombridgeProblem.InitialStates.ToDictionary(
                 o => o.Label,
-                o => ParseInitialState(o)
+                o => ParseInitialState(o,indexConvention)
                 );                
         }
 
-        internal static FermionHamiltonian.InputState ParseInitialState(Broombridge.V0_2.State initialState)
+        internal static FermionHamiltonian.InputState ParseInitialState(Broombridge.V0_2.State initialState, SpinOrbital.Config.IndexConvention.Type indexConvention)
         {
             var state = new FermionHamiltonian.InputState();
             state.type = ParseInitialStateMethod(initialState.Method);
             state.Label = initialState.Label;
             if (state.type == FermionHamiltonian.StateType.Sparse_Multi_Configurational)
             {
-                state.Superposition = ParseInputState(initialState.Superposition);
+                state.Superposition = ParseInputState(initialState.Superposition, indexConvention);
             }
             else if (state.type == FermionHamiltonian.StateType.Unitary_Coupled_Cluster)
             {
-                var referenceState = ParseInputState(initialState.ClusterOperator.Reference.Select(o => o.ToString()).ToList());
-                var oneBodyTerms = initialState.ClusterOperator.OneBodyAmplitudes.Select(o => ParseUnitaryCoupledClisterInputState(o));
-                var twoBodyTerms = initialState.ClusterOperator.TwoBodyAmplitudes.Select(o => ParseUnitaryCoupledClisterInputState(o));
+                var referenceState = ParseInputState(initialState.ClusterOperator.Reference.Select(o => o.ToString()).ToList(), indexConvention);
+                var oneBodyTerms = initialState.ClusterOperator.OneBodyAmplitudes.Select(o => ParseUnitaryCoupledClisterInputState(o, indexConvention));
+                var twoBodyTerms = initialState.ClusterOperator.TwoBodyAmplitudes.Select(o => ParseUnitaryCoupledClisterInputState(o, indexConvention));
                 var clusterTerms = oneBodyTerms.Concat(twoBodyTerms).ToList();
                 // The last term is the reference state.
                 clusterTerms.Add(referenceState);
@@ -665,16 +681,16 @@ namespace Microsoft.Quantum.Chemistry
             }
         }
 
-        internal static ((Double, Double), FermionTerm)[] ParseInputState(List<List<object>> superposition)
+        internal static ((Double, Double), FermionTerm)[] ParseInputState(List<List<object>> superposition, SpinOrbital.Config.IndexConvention.Type indexConvention)
         {
             return superposition.Select(
                 o => ParseInputState(   
-                        o.Select(k => k.ToString()).ToList()
+                        o.Select(k => k.ToString()).ToList(), indexConvention
                         )
                     ).ToArray();
         }
 
-        public static ((Double, Double), FermionTerm) ParseInputState(List<string> superpositionElement)
+        public static ((Double, Double), FermionTerm) ParseInputState(List<string> superpositionElement, SpinOrbital.Config.IndexConvention.Type indexConvention)
         {
             var amplitude = Double.Parse(superpositionElement.First(), System.Globalization.CultureInfo.InvariantCulture);
             var initialState = superpositionElement.Last();
@@ -683,7 +699,7 @@ namespace Microsoft.Quantum.Chemistry
 
             for (int i = 1; i < superpositionElement.Count() - 1; i++)
             {
-                FermionTerm singleTerm = ParsePolishNotation(superpositionElement[i]);
+                FermionTerm singleTerm = ParsePolishNotation(superpositionElement[i], indexConvention);
                 ca.Add(singleTerm.CreationAnnihilationIndices.First());
                 so.Add(singleTerm.SpinOrbitalIndices.First());
             }
@@ -702,7 +718,7 @@ namespace Microsoft.Quantum.Chemistry
             return ((finalAmplitude, 0.0), term);
         }
 
-        public static ((Double, Double), FermionTerm) ParseUnitaryCoupledClisterInputState(List<string> clusterTerm)
+        public static ((Double, Double), FermionTerm) ParseUnitaryCoupledClisterInputState(List<string> clusterTerm, SpinOrbital.Config.IndexConvention.Type indexConvention)
         {
             var amplitude = Double.Parse(clusterTerm.First(), System.Globalization.CultureInfo.InvariantCulture);
             var ca = new List<Int64>();
@@ -710,7 +726,7 @@ namespace Microsoft.Quantum.Chemistry
 
             for (int i = 1; i < clusterTerm.Count(); i++)
             {
-                FermionTerm singleTerm = ParsePolishNotation(clusterTerm[i]);
+                FermionTerm singleTerm = ParsePolishNotation(clusterTerm[i], indexConvention);
                 ca.Add(singleTerm.CreationAnnihilationIndices.First());
                 so.Add(singleTerm.SpinOrbitalIndices.First());
             }
@@ -719,7 +735,7 @@ namespace Microsoft.Quantum.Chemistry
             return ((term.coeff, 0), term);
         }
 
-        internal static FermionTerm ParsePolishNotation(string input)
+        internal static FermionTerm ParsePolishNotation(string input, SpinOrbital.Config.IndexConvention.Type indexConvention)
         {
             // Regex match examples: (1a)+ (2a)+ (3a)+ (4a)+ (5a)+ (6a)+ (1b)+ (2b)- (3b)+
             Regex regex = new Regex(@"(\((?<orbital>\d+)(?<spin>[ab])\)(?<operator>\+*))");
@@ -730,7 +746,7 @@ namespace Microsoft.Quantum.Chemistry
                 var orbital = Int64.Parse(match.Groups["orbital"].ToString()) - 1;
                 var spin = match.Groups["spin"].ToString() == "a" ? Spin.u : Spin.d;
                 var conjugate = match.Groups["operator"].ToString() == "+" ? 1 : 0;
-                return new FermionTerm(new long[] { conjugate }, new SpinOrbital[] { new SpinOrbital(orbital, spin) }, 1.0);
+                return new FermionTerm(new long[] { conjugate }, new SpinOrbital[] { new SpinOrbital(orbital, spin, indexConvention) }, 1.0);
             }
             else
             {
