@@ -27,13 +27,13 @@ namespace Microsoft.Quantum.Arithmetic {
                 let sum = summand1 + summand2;
                 let expected = Modulus(sum, 2^numberOfQubits);
                 set actual1 = MeasureInteger(summand1LE);
-                ClaimEqualI(summand1, actual1, $"Expected {summand1}, got {actual1}");
+                EqualityFactI(summand1, actual1, $"Expected {summand1}, got {actual1}");
                 set actual2 = MeasureInteger(summand2LE);
-                ClaimEqualI(expected, actual2, $"Expected {expected}, got {actual2}");
+                EqualityFactI(expected, actual2, $"Expected {expected}, got {actual2}");
                 let expected_carry = (sum / 2^numberOfQubits);
                 set measured_carry = MResetZ(carry);
                 if (measured_carry == One) {set actual_carry = 1;} else {set actual_carry = 0;}
-                ClaimEqualI(expected_carry, actual_carry, $"Expected {expected_carry}, got {actual_carry}");
+                EqualityFactI(expected_carry, actual_carry, $"Expected {expected_carry}, got {actual_carry}");
 
                 for (numberOfControls in 1..2) { 
                     using (controls = Qubit[numberOfControls]) {
@@ -42,24 +42,24 @@ namespace Microsoft.Quantum.Arithmetic {
                         // controls are |0>, no addition is computed
                         (Controlled IntegerAdder) (controls, (summand1LE, summand2LE, carry));
                         set actual1 = MeasureInteger(summand1LE);
-                        ClaimEqualI(summand1, actual1, $"Expected {summand1}, got {actual1}");
+                        EqualityFactI(summand1, actual1, $"Expected {summand1}, got {actual1}");
                         set actual2 = MeasureInteger(summand2LE);
-                        ClaimEqualI(summand2, actual2, $"Expected {expected}, got {actual2}");
+                        EqualityFactI(summand2, actual2, $"Expected {expected}, got {actual2}");
                         set measured_carry = MResetZ(carry);
                         if (measured_carry == One) {set actual_carry = 1;} else {set actual_carry = 0;}
-                        ClaimEqualI(0, actual_carry, $"Expected {0}, got {actual_carry}");
+                        EqualityFactI(0, actual_carry, $"Expected {0}, got {actual_carry}");
                         InPlaceXorLE(summand1, summand1LE);
                         InPlaceXorLE(summand2, summand2LE);
                         // now controls are set to |1>, addition is computed
                         ApplyToEach(X, controls);
                         (Controlled IntegerAdder) (controls, (summand1LE, summand2LE, carry));
                         set actual1 = MeasureInteger(summand1LE);
-                        ClaimEqualI(summand1, actual1, $"Expected {summand1}, got {actual1}");
+                        EqualityFactI(summand1, actual1, $"Expected {summand1}, got {actual1}");
                         set actual2 = MeasureInteger(summand2LE);
-                        ClaimEqualI(expected, actual2, $"Expected {expected}, got {actual2}");
+                        EqualityFactI(expected, actual2, $"Expected {expected}, got {actual2}");
                         set measured_carry = MResetZ(carry);
                         if (measured_carry == One) {set actual_carry = 1;} else {set actual_carry = 0;}
-                        ClaimEqualI(expected_carry, actual_carry, $"Expected {expected_carry}, got {actual_carry}");
+                        EqualityFactI(expected_carry, actual_carry, $"Expected {expected_carry}, got {actual_carry}");
                         ResetAll(controls);
                     }
                 }
@@ -140,9 +140,9 @@ namespace Microsoft.Quantum.Arithmetic {
             let sum = summand1 + summand2;
             let expected = Modulus(sum, 2^numberOfQubits);
             set actual1 = MeasureInteger(summand1LE);
-            ClaimEqualI(summand1, actual1, $"Expected {summand1}, got {actual1}");
+            EqualityFactI(summand1, actual1, $"Expected {summand1}, got {actual1}");
             set actual2 = MeasureInteger(summand2LE);
-            ClaimEqualI(expected, actual2, $"Expected {expected}, got {actual2}");
+            EqualityFactI(expected, actual2, $"Expected {expected}, got {actual2}");
             let expected_carry = (sum / 2^numberOfQubits);
 
             for (numberOfControls in 1..2) { 
@@ -152,18 +152,18 @@ namespace Microsoft.Quantum.Arithmetic {
                     // controls are |0>, no addition is computed
                     (Controlled IntegerAdder) (controls, (summand1LE, summand2LE));
                     set actual1 = MeasureInteger(summand1LE);
-                    ClaimEqualI(summand1, actual1, $"Expected {summand1}, got {actual1}");
+                    EqualityFactI(summand1, actual1, $"Expected {summand1}, got {actual1}");
                     set actual2 = MeasureInteger(summand2LE);
-                    ClaimEqualI(summand2, actual2, $"Expected {expected}, got {actual2}");
+                    EqualityFactI(summand2, actual2, $"Expected {expected}, got {actual2}");
                     InPlaceXorLE(summand1, summand1LE);
                     InPlaceXorLE(summand2, summand2LE);
                     // now controls are set to |1>, addition is computed
                     ApplyToEach(X, controls);
                     (Controlled IntegerAdder) (controls, (summand1LE, summand2LE));
                     set actual1 = MeasureInteger(summand1LE);
-                    ClaimEqualI(summand1, actual1, $"Expected {summand1}, got {actual1}");
+                    EqualityFactI(summand1, actual1, $"Expected {summand1}, got {actual1}");
                     set actual2 = MeasureInteger(summand2LE);
-                    ClaimEqualI(expected, actual2, $"Expected {expected}, got {actual2}");
+                    EqualityFactI(expected, actual2, $"Expected {expected}, got {actual2}");
                     ResetAll(controls);
                 }
             }
@@ -214,11 +214,11 @@ namespace Microsoft.Quantum.Arithmetic {
 
             if (integer1 > integer2) {set gt = One;} 
             set actual1 = MeasureInteger(integer1LE);
-            ClaimEqualI(integer1, actual1, $"Expected {integer1}, got {actual1}");
+            EqualityFactI(integer1, actual1, $"Expected {integer1}, got {actual1}");
             set actual2 = MeasureInteger(integer2LE);
-            ClaimEqualI(integer2, actual2, $"Expected {integer2}, got {actual2}");
+            EqualityFactI(integer2, actual2, $"Expected {integer2}, got {actual2}");
             set actualr = M(result);
-            ClaimEqualB((gt == actualr), true, $"Expected {gt}, got {actualr}");
+            EqualityFactB((gt == actualr), true, $"Expected {gt}, got {actualr}");
 
             Reset(result);
             for (numberOfControls in 1..2) { 
@@ -228,11 +228,11 @@ namespace Microsoft.Quantum.Arithmetic {
                     (Controlled GreaterThan) (controls, (integer1LE, integer2LE, result));
 
                     set actual1 = MeasureInteger(integer1LE);
-                    ClaimEqualI(integer1, actual1, $"Expected {integer1}, got {actual1}");
+                    EqualityFactI(integer1, actual1, $"Expected {integer1}, got {actual1}");
                     set actual2 = MeasureInteger(integer2LE);
-                    ClaimEqualI(integer2, actual2, $"Expected {integer2}, got {actual2}");
+                    EqualityFactI(integer2, actual2, $"Expected {integer2}, got {actual2}");
                     set actualr = M(result);
-                    ClaimEqualB((actualr == Zero), true, $"Expected Zero, got {actualr}");
+                    EqualityFactB((actualr == Zero), true, $"Expected Zero, got {actualr}");
 
                     ApplyToEach(X, controls);
                     InPlaceXorLE(integer1, integer1LE);
@@ -240,11 +240,11 @@ namespace Microsoft.Quantum.Arithmetic {
                     (Controlled GreaterThan) (controls, (integer1LE, integer2LE, result));
 
                     set actual1 = MeasureInteger(integer1LE);
-                    ClaimEqualI(integer1, actual1, $"Expected {integer1}, got {actual1}");
+                    EqualityFactI(integer1, actual1, $"Expected {integer1}, got {actual1}");
                     set actual2 = MeasureInteger(integer2LE);
-                    ClaimEqualI(integer2, actual2, $"Expected {integer2}, got {actual2}");
+                    EqualityFactI(integer2, actual2, $"Expected {integer2}, got {actual2}");
                     set actualr = M(result);
-                    ClaimEqualB((gt == actualr), true, $"Expected {gt}, got {actualr}");
+                    EqualityFactB((gt == actualr), true, $"Expected {gt}, got {actualr}");
 
                     ResetAll(controls);
                     Reset(result);

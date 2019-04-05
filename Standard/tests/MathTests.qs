@@ -10,18 +10,18 @@ namespace Microsoft.Quantum.Canon {
     function NativeFnsAreCallableTest () : Unit {
         
         let arg = PI() / 2.0;
-        ClaimAlmostEqual(Sin(arg), 1.0);
-        ClaimAlmostEqual(Cos(arg), 0.0);
+        NearEqualityFact(Sin(arg), 1.0);
+        NearEqualityFact(Cos(arg), 0.0);
         let arcArg = 1.0;
-        ClaimAlmostEqual(ArcCos(arcArg), 0.0);
-        ClaimAlmostEqual(ArcSin(arcArg), arg);
+        NearEqualityFact(ArcCos(arcArg), 0.0);
+        NearEqualityFact(ArcSin(arcArg), arg);
     }
     
     
     function RealModTest () : Unit {
         
-        ClaimAlmostEqual(RealMod(5.5 * PI(), 2.0 * PI(), 0.0), 1.5 * PI());
-        ClaimAlmostEqual(RealMod(0.5 * PI(), 2.0 * PI(), -PI() / 2.0), 0.5 * PI());
+        NearEqualityFact(RealMod(5.5 * PI(), 2.0 * PI(), 0.0), 1.5 * PI());
+        NearEqualityFact(RealMod(0.5 * PI(), 2.0 * PI(), -PI() / 2.0), 0.5 * PI());
     }
     
     
@@ -29,9 +29,9 @@ namespace Microsoft.Quantum.Canon {
         
         // These tests were generated using NumPy's implementations
         // of the inverse hyperbolic functions.
-        ClaimAlmostEqual(ArcTanh(0.3), 0.30951960420311175);
-        ClaimAlmostEqual(ArcCosh(1.3), 0.75643291085695963);
-        ClaimAlmostEqual(ArcSinh(-0.7), -0.65266656608235574);
+        NearEqualityFact(ArcTanh(0.3), 0.30951960420311175);
+        NearEqualityFact(ArcCosh(1.3), 0.75643291085695963);
+        NearEqualityFact(ArcSinh(-0.7), -0.65266656608235574);
     }
     
     
@@ -41,7 +41,7 @@ namespace Microsoft.Quantum.Canon {
         let (u, v) = ExtendedGCD(a, b);
         let expected = AbsI(gcd);
         let actual = AbsI(u * a + v * b);
-        ClaimEqualI(expected, actual, $"Expected absolute value of gcd to be {expected}, got {actual}");
+        EqualityFactI(expected, actual, $"Expected absolute value of gcd to be {expected}, got {actual}");
     }
     
     
@@ -54,8 +54,8 @@ namespace Microsoft.Quantum.Canon {
     
     function BitSizeTest () : Unit {
         
-        ClaimEqualI(BitSize(3), 2, $"BitSize(3) must be 2");
-        ClaimEqualI(BitSize(7), 3, $"BitSize(7) must be 2");
+        EqualityFactI(BitSize(3), 2, $"BitSize(3) must be 2");
+        EqualityFactI(BitSize(7), 3, $"BitSize(7) must be 2");
     }
     
     
@@ -63,7 +63,7 @@ namespace Microsoft.Quantum.Canon {
         
         // this test is generated using Mathematica PowerMod function
         let result = ExpMod(5, 4611686018427387903, 7);
-        ClaimEqualI(result, 6, $"The result must be 6, got {result}");
+        EqualityFactI(result, 6, $"The result must be 6, got {result}");
     }
     
     
@@ -72,14 +72,14 @@ namespace Microsoft.Quantum.Canon {
         let bitSize = 2 * BitSize(denominator);
         let numeratorDyadic = (numerator * 2 ^ bitSize) / denominator;
         let (u, v) = (ContinuedFractionConvergent(Fraction(numeratorDyadic, 2 ^ bitSize), denominator))!;
-        ClaimEqualB(AbsI(u) == numerator and AbsI(v) == denominator, true, $"The result must be ±{numerator}/±{denominator} got {u}/{v}");
+        EqualityFactB(AbsI(u) == numerator and AbsI(v) == denominator, true, $"The result must be ±{numerator}/±{denominator} got {u}/{v}");
     }
     
     
     function ContinuedFractionConvergentEdgeCaseTestHelper (numerator : Int, denominator : Int, bound : Int) : Unit {
         
         let (num, denom) = (ContinuedFractionConvergent(Fraction(numerator, denominator), bound))!;
-        ClaimEqualB(AbsI(num) == numerator and AbsI(denom) == denominator, true, $"The result must be ±{numerator}/±{denominator} got {num}/{denom}");
+        EqualityFactB(AbsI(num) == numerator and AbsI(denom) == denominator, true, $"The result must be ±{numerator}/±{denominator} got {num}/{denom}");
     }
     
     
@@ -102,18 +102,18 @@ namespace Microsoft.Quantum.Canon {
             let complexArg = ArcTan2(complexIm, complexRe);
             let complex = Complex(complexRe, complexIm);
             let complexPolar = ComplexPolar(complexAbs, complexArg);
-            ClaimAlmostEqual(AbsSquaredComplex(complex), complexAbs * complexAbs);
-            ClaimAlmostEqual(AbsComplex(complex), complexAbs);
-            ClaimAlmostEqual(ArgComplex(complex), complexArg);
-            ClaimAlmostEqual(AbsSquaredComplexPolar(complexPolar), complexAbs * complexAbs);
-            ClaimAlmostEqual(AbsComplexPolar(complexPolar), complexAbs);
-            ClaimAlmostEqual(ArgComplexPolar(complexPolar), complexArg);
+            NearEqualityFact(AbsSquaredComplex(complex), complexAbs * complexAbs);
+            NearEqualityFact(AbsComplex(complex), complexAbs);
+            NearEqualityFact(ArgComplex(complex), complexArg);
+            NearEqualityFact(AbsSquaredComplexPolar(complexPolar), complexAbs * complexAbs);
+            NearEqualityFact(AbsComplexPolar(complexPolar), complexAbs);
+            NearEqualityFact(ArgComplexPolar(complexPolar), complexArg);
             let (x, y) = (ComplexPolarToComplex(complexPolar))!;
-            ClaimAlmostEqual(x, complexRe);
-            ClaimAlmostEqual(y, complexIm);
+            NearEqualityFact(x, complexRe);
+            NearEqualityFact(y, complexIm);
             let (r, t) = (ComplexToComplexPolar(complex))!;
-            ClaimAlmostEqual(r, complexAbs);
-            ClaimAlmostEqual(t, complexArg);
+            NearEqualityFact(r, complexAbs);
+            NearEqualityFact(t, complexArg);
         }
     }
     
@@ -129,13 +129,13 @@ namespace Microsoft.Quantum.Canon {
         
         for (idxTest in 0 .. Length(testCases) - 1) {
             let (p, array, pNormExpected) = testCases[idxTest];
-            ClaimAlmostEqual(PNorm(p, array), pNormExpected);
+            NearEqualityFact(PNorm(p, array), pNormExpected);
             
             // if PNorm fails, PNormalize will fail.
             let arrayNormalized = PNormalized(p, array);
             
             for (idxCoeff in 0 .. Length(array) - 1) {
-                ClaimAlmostEqual(array[idxCoeff] / pNormExpected, arrayNormalized[idxCoeff]);
+                NearEqualityFact(array[idxCoeff] / pNormExpected, arrayNormalized[idxCoeff]);
             }
         }
     }

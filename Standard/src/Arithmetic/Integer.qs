@@ -108,7 +108,7 @@ namespace Microsoft.Quantum.Arithmetic {
         body (...) {
             let nQubits = Length(targets);
 
-            ClaimEqualB(
+            EqualityFactB(
                 nQubits == Length(register)+1, true,
                 "Target register must have one more qubit." );
 
@@ -155,7 +155,7 @@ namespace Microsoft.Quantum.Arithmetic {
         controlled ( controls, ... ) { 
             let nQubits = Length(xs!);
 
-            ClaimEqualB(
+            EqualityFactB(
                 nQubits == Length(ys!), true,
                 "Input registers must have the same number of qubits." );
 
@@ -199,11 +199,11 @@ namespace Microsoft.Quantum.Arithmetic {
         body (...) {
             let nQubits = Length(xs!);
 
-            ClaimEqualB(
+            EqualityFactB(
                 nQubits == Length(ys!), true,
                 "Input registers must have the same number of qubits." );
 
-            ClaimEqualB(
+            EqualityFactB(
                 nQubits >= 3, true,
                 "Need at least 3 qubits per register.");
 
@@ -245,7 +245,7 @@ namespace Microsoft.Quantum.Arithmetic {
         body (...) {
             let nQubits = Length(xs!);
 
-            ClaimEqualB(
+            EqualityFactB(
                 nQubits == Length(ys!), true,
                 "Input registers must have the same number of qubits." );
 
@@ -281,7 +281,7 @@ namespace Microsoft.Quantum.Arithmetic {
         body (...) {
             let nQubits = Length(xs!);
 
-            ClaimEqualB(
+            EqualityFactB(
                 nQubits == Length(ys!), true,
                 "Input registers must have the same number of qubits." );
 
@@ -318,7 +318,7 @@ namespace Microsoft.Quantum.Arithmetic {
         body (...) {
             let nQubits = Length(xs!);
 
-            ClaimEqualB(
+            EqualityFactB(
                 nQubits == Length(ys!), true,
                 "Input registers must have the same number of qubits." );
 
@@ -360,7 +360,7 @@ namespace Microsoft.Quantum.Arithmetic {
         body (...) {
             let nQubits = Length(xs!);
 
-            ClaimEqualB(
+            EqualityFactB(
                 nQubits == Length(ys!), true,
                 "Input registers must have the same number of qubits." );
 
@@ -408,7 +408,7 @@ namespace Microsoft.Quantum.Arithmetic {
         controlled ( controls, ... ) {
             let nQubits = Length(xs!);
 
-            ClaimEqualB(
+            EqualityFactB(
                 nQubits == Length(ys!), true,
                 "Input registers must have the same number of qubits." );
 
@@ -446,7 +446,7 @@ namespace Microsoft.Quantum.Arithmetic {
         body (...) {
             let nQubits = Length(xs!);
 
-            ClaimEqualB(
+            EqualityFactB(
                 nQubits == Length(ys!), true,
                 "Input registers must have the same number of qubits." );
 
@@ -488,7 +488,7 @@ namespace Microsoft.Quantum.Arithmetic {
         body (...) {
             let nQubits = Length(xs!);
 
-            ClaimEqualB(
+            EqualityFactB(
                 nQubits == Length(ys!), true,
                 "Input registers must have the same number of qubits." );
 
@@ -538,7 +538,7 @@ namespace Microsoft.Quantum.Arithmetic {
         controlled ( controls, ... ) {
             let nQubits = Length(xs!);
 
-            ClaimEqualB(
+            EqualityFactB(
                 nQubits == Length(ys!), true,
                 "Input registers must have the same number of qubits." );
 
@@ -581,7 +581,7 @@ namespace Microsoft.Quantum.Arithmetic {
         body (...) {
             let nQubits = Length(xs!);
 
-            ClaimEqualB(
+            EqualityFactB(
                 nQubits == Length(ys!), true,
                 "Input registers must have the same number of qubits." );
 
@@ -628,7 +628,7 @@ namespace Microsoft.Quantum.Arithmetic {
         controlled (controls, ...) {
             let nQubits = Length(xs!);
 
-            ClaimEqualB(
+            EqualityFactB(
                 nQubits == Length(ys!), true,
                 "Input registers must have the same number of qubits." );
 

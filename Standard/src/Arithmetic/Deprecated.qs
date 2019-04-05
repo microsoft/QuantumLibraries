@@ -143,13 +143,6 @@ namespace Microsoft.Quantum.Canon {
     }
 
     /// # Deprecated
-    /// Please use @"Microsoft.Quantum.Measurement.MeasureIntegerLE".
-    operation MeasureInteger(target : LittleEndian) : Int {
-        Renamed("Microsoft.Quantum.Canon.MeasureInteger", "Microsoft.Quantum.Measurement.MeasureIntegerLE");
-        return MeasureIntegerLE(target);
-    }
-
-    /// # Deprecated
     /// Please use @"Microsoft.Quantum.Measurement.ApplyXorInPlace".
     operation InPlaceXorLE(value : Int, target : LittleEndian) : Unit {
         body (...) {
@@ -263,6 +256,16 @@ namespace Microsoft.Quantum.Canon {
         adjoint auto;
         controlled auto;
         adjoint controlled auto;
+    }
+
+    /// # Deprecated
+    /// This operation has been removed.
+    operation MeasureIntegerBE(target : BigEndian) : Int {
+        Removed(
+            "Microsoft.Quantum.Canon.MeasureIntegerBE",
+            "MeasureInteger(BigEndianAsLittleEndian(target))"
+        );
+        return MeasureInteger(BigEndianAsLittleEndian(target));
     }
 
     // #endregion

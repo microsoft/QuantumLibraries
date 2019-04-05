@@ -27,7 +27,7 @@ namespace Microsoft.Quantum.Tests {
     }
 
     function AssertEqualTestShouldFail () : Unit {
-        ClaimAlmostEqual(1.0, 0.0);
+        NearEqualityFact(1.0, 0.0);
     }
     
     
@@ -39,7 +39,7 @@ namespace Microsoft.Quantum.Tests {
     
     function AssertBoolEqualTestShouldFail () : Unit {
         
-        ClaimEqualB(true, false, $"OK");
+        EqualityFactB(true, false, $"OK");
     }
     
     
@@ -49,9 +49,9 @@ namespace Microsoft.Quantum.Tests {
     }
     
     
-    function ClaimEqualITestShouldFail () : Unit {
+    function EqualityFactITestShouldFail () : Unit {
         
-        ClaimEqualI(12, 42, $"OK");
+        EqualityFactI(12, 42, $"OK");
     }
     
     

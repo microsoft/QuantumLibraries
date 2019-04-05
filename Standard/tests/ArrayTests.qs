@@ -30,12 +30,12 @@ namespace Microsoft.Quantum.Tests {
         
         let array = [1, 12, 71, 103];
         let fn = LookupFunction(array);
-        ClaimEqualI(fn(0), 1, $"fn(0) did not return array[0]");
+        EqualityFactI(fn(0), 1, $"fn(0) did not return array[0]");
         
         // Make sure we can call in random order!
-        ClaimEqualI(fn(3), 103, $"fn(3) did not return array[3]");
-        ClaimEqualI(fn(2), 71, $"fn(2) did not return array[2]");
-        ClaimEqualI(fn(1), 12, $"fn(1) did not return array[1]");
+        EqualityFactI(fn(3), 103, $"fn(3) did not return array[3]");
+        EqualityFactI(fn(2), 71, $"fn(2) did not return array[2]");
+        EqualityFactI(fn(1), 12, $"fn(1) did not return array[1]");
     }
     
     
@@ -48,13 +48,13 @@ namespace Microsoft.Quantum.Tests {
     function ConstantArrayTest () : Unit {
         
         let dblArray = ConstantArray(71, 2.17);
-        ClaimEqualI(Length(dblArray), 71, $"ConstantArray(Int, Double) had the wrong length.");
-        let ignore = Mapped(ClaimAlmostEqual(_, 2.17), dblArray);
+        EqualityFactI(Length(dblArray), 71, $"ConstantArray(Int, Double) had the wrong length.");
+        let ignore = Mapped(NearEqualityFact(_, 2.17), dblArray);
         
         // Stress test by making an array of Int -> Int.
         let fnArray = ConstantArray(7, ConstantArrayTestHelper);
-        ClaimEqualI(Length(fnArray), 7, $"ConstantArray(Int, Int -> Int) had the wrong length.");
-        ClaimEqualI(fnArray[3](7), 49, $"ConstantArray(Int, Int -> Int) had the wrong value.");
+        EqualityFactI(Length(fnArray), 7, $"ConstantArray(Int, Int -> Int) had the wrong length.");
+        EqualityFactI(fnArray[3](7), 49, $"ConstantArray(Int, Int -> Int) had the wrong value.");
     }
     
     
@@ -63,10 +63,10 @@ namespace Microsoft.Quantum.Tests {
         let array0 = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
         let subarrayOdd = Subarray([1, 3, 5, 7, 9], array0);
         let subarrayEven = Subarray([0, 2, 4, 6, 8, 10], array0);
-        ClaimEqualB(ForAll(IsEven, subarrayEven), true, $"the even elements of [1..10] were not correctly sliced.");
-        ClaimEqualB(ForAny(IsEven, subarrayOdd), false, $"the odd elements of [1..10] were not correctly sliced.");
+        EqualityFactB(ForAll(IsEven, subarrayEven), true, $"the even elements of [1..10] were not correctly sliced.");
+        EqualityFactB(ForAny(IsEven, subarrayOdd), false, $"the odd elements of [1..10] were not correctly sliced.");
         let array1 = [10, 11, 12, 13];
-        Ignore(Mapped(ClaimEqualI(_, _, $"Subarray failed: subpermutation case."), Zip([12, 11], Subarray([2, 1], array1))));
+        Ignore(Mapped(EqualityFactI(_, _, $"Subarray failed: subpermutation case."), Zip([12, 11], Subarray([2, 1], array1))));
     }
     
     
@@ -74,21 +74,21 @@ namespace Microsoft.Quantum.Tests {
         
         let array = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
         let evenArray = Filter(IsEven, array);
-        ClaimEqualB(ForAll(IsEven, evenArray), true, $"the even elements of [1..10] were not correctly filtered.");
+        EqualityFactB(ForAll(IsEven, evenArray), true, $"the even elements of [1..10] were not correctly filtered.");
     }
     
     
     function ReverseTest () : Unit {
         
         let array = [1, 2, 3];
-        Ignore(Mapped(ClaimEqualI(_, _, $"Reversed failed."), Zip([3, 2, 1], Reversed(array))));
+        Ignore(Mapped(EqualityFactI(_, _, $"Reversed failed."), Zip([3, 2, 1], Reversed(array))));
     }
     
     
     function ExcludeTest () : Unit {
         
         let array = [10, 11, 12, 13, 14, 15];
-        Ignore(Mapped(ClaimEqualI(_, _, $"Exclude failed."), Zip([10, 11, 13, 14], Exclude([2, 5], array))));
+        Ignore(Mapped(EqualityFactI(_, _, $"Exclude failed."), Zip([10, 11, 13, 14], Exclude([2, 5], array))));
     }
     
     
@@ -99,7 +99,7 @@ namespace Microsoft.Quantum.Tests {
         for (idxTest in 0 .. Length(arrayTestCase) - 1) {
             let (nElementsTotal, defaultElement, inputArray, outputArray) = arrayTestCase[idxTest];
             let paddedArray = Padded(nElementsTotal, defaultElement, inputArray);
-            Ignore(Mapped(ClaimEqualI(_, _, $"Padded failed."), Zip(outputArray, paddedArray)));
+            Ignore(Mapped(EqualityFactI(_, _, $"Padded failed."), Zip(outputArray, paddedArray)));
         }
     }
 

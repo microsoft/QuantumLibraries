@@ -15,12 +15,12 @@ namespace Microsoft.Quantum.Tests {
     }
 
     operation CallTest() : Unit {
-        ClaimEqualI(Call(Square, 4), 16, "Call failed with Square.");
+        EqualityFactI(Call(Square, 4), 16, "Call failed with Square.");
     }
 
     operation ToOperationTest() : Unit {
         let op = FunctionAsOperation(Square);
-        ClaimEqualI(ApplyOp(op, 3), 9, "ToOperation failed with Square.");
+        EqualityFactI(ApplyOp(op, 3), 9, "ToOperation failed with Square.");
     }
 
 }

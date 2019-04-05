@@ -23,8 +23,8 @@ namespace Microsoft.Quantum.Canon {
     /// - @"microsoft.quantum.canon.applytopartitionca"
     operation ApplyToPartition (op : ((Qubit[], Qubit[]) => Unit), numberOfQubitsToFirstArgument : Int, target : Qubit[]) : Unit
     {
-        ClaimEqualB(numberOfQubitsToFirstArgument >= 0, true, $"numberOfQubitsToFirstArgument must be non-negative");
-        ClaimEqualB(Length(target) >= numberOfQubitsToFirstArgument, true, $"Length(target) must greater or equal to numberOfQubitsToFirstArgument");
+        EqualityFactB(numberOfQubitsToFirstArgument >= 0, true, $"numberOfQubitsToFirstArgument must be non-negative");
+        EqualityFactB(Length(target) >= numberOfQubitsToFirstArgument, true, $"Length(target) must greater or equal to numberOfQubitsToFirstArgument");
         op(target[0 .. numberOfQubitsToFirstArgument - 1], target[numberOfQubitsToFirstArgument .. Length(target) - 1]);
     }
     
@@ -49,8 +49,8 @@ namespace Microsoft.Quantum.Canon {
     {
         body (...)
         {
-            ClaimEqualB(numberOfQubitsToFirstArgument >= 0, true, $"numberOfQubitsToFirstArgument must be non-negative");
-            ClaimEqualB(Length(target) >= numberOfQubitsToFirstArgument, true, $"Length(target) must greater or equal to numberOfQubitsToFirstArgument");
+            EqualityFactB(numberOfQubitsToFirstArgument >= 0, true, $"numberOfQubitsToFirstArgument must be non-negative");
+            EqualityFactB(Length(target) >= numberOfQubitsToFirstArgument, true, $"Length(target) must greater or equal to numberOfQubitsToFirstArgument");
             op(target[0 .. numberOfQubitsToFirstArgument - 1], target[numberOfQubitsToFirstArgument .. Length(target) - 1]);
         }
         
@@ -78,8 +78,8 @@ namespace Microsoft.Quantum.Canon {
     {
         body (...)
         {
-            ClaimEqualB(numberOfQubitsToFirstArgument >= 0, true, $"numberOfQubitsToFirstArgument must be non-negative");
-            ClaimEqualB(Length(target) >= numberOfQubitsToFirstArgument, true, $"Length(target) must greater or equal to numberOfQubitsToFirstArgument");
+            EqualityFactB(numberOfQubitsToFirstArgument >= 0, true, $"numberOfQubitsToFirstArgument must be non-negative");
+            EqualityFactB(Length(target) >= numberOfQubitsToFirstArgument, true, $"Length(target) must greater or equal to numberOfQubitsToFirstArgument");
             op(target[0 .. numberOfQubitsToFirstArgument - 1], target[numberOfQubitsToFirstArgument .. Length(target) - 1]);
         }
         
@@ -107,8 +107,8 @@ namespace Microsoft.Quantum.Canon {
     {
         body (...)
         {
-            ClaimEqualB(numberOfQubitsToFirstArgument >= 0, true, $"numberOfQubitsToFirstArgument must be non-negative");
-            ClaimEqualB(Length(target) >= numberOfQubitsToFirstArgument, true, $"Length(target) must greater or equal to numberOfQubitsToFirstArgument");
+            EqualityFactB(numberOfQubitsToFirstArgument >= 0, true, $"numberOfQubitsToFirstArgument must be non-negative");
+            EqualityFactB(Length(target) >= numberOfQubitsToFirstArgument, true, $"Length(target) must greater or equal to numberOfQubitsToFirstArgument");
             op(target[0 .. numberOfQubitsToFirstArgument - 1], target[numberOfQubitsToFirstArgument .. Length(target) - 1]);
         }
         

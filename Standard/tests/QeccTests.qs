@@ -141,7 +141,7 @@ namespace Microsoft.Quantum.Tests {
                 X(m);
             }
             
-            ClaimEqualI(n, 0, $"syndrome failure");
+            EqualityFactI(n, 0, $"syndrome failure");
             
             // Now testing MeasureWithScratch
             if (MeasureWithScratch([PauliX, PauliZ, PauliZ, PauliX, PauliI], anc[0 .. 4]) == One) {
@@ -177,7 +177,7 @@ namespace Microsoft.Quantum.Tests {
             FiveQubitCodeEncoderImpl([anc[0]], anc[1 .. 4]);
             let syn = s!(LogicalRegister(anc));
             let a = ResultAsInt(syn!);
-            ClaimEqualI(a, 0, $"syndrome failure");
+            EqualityFactI(a, 0, $"syndrome failure");
             let (encode, decode, syndMeas) = (FiveQubitCode())!;
             let recovery = FiveQubitCodeRecoveryFn();
             
@@ -187,7 +187,7 @@ namespace Microsoft.Quantum.Tests {
                 let recoveryOp = recovery!(syndrome);
                 ApplyPauli(recoveryOp, anc);
                 let ans = ResultAsInt((syndMeas!(LogicalRegister(anc)))!);
-                ClaimEqualI(ans, 0, $"Correction failure");
+                EqualityFactI(ans, 0, $"Correction failure");
             }
             
             for (idx in 0 .. 4) {
@@ -196,7 +196,7 @@ namespace Microsoft.Quantum.Tests {
                 let recoveryOp = recovery!(syndrome);
                 ApplyPauli(recoveryOp, anc);
                 let ans = ResultAsInt((syndMeas!(LogicalRegister(anc)))!);
-                ClaimEqualI(ans, 0, $"Correction failure");
+                EqualityFactI(ans, 0, $"Correction failure");
             }
             
             for (idx in 0 .. 4) {
@@ -205,7 +205,7 @@ namespace Microsoft.Quantum.Tests {
                 let recoveryOp = recovery!(syndrome);
                 ApplyPauli(recoveryOp, anc);
                 let ans = ResultAsInt((syndMeas!(LogicalRegister(anc)))!);
-                ClaimEqualI(ans, 0, $"Correction failure");
+                EqualityFactI(ans, 0, $"Correction failure");
             }
             
             ResetAll(anc);
@@ -310,8 +310,8 @@ namespace Microsoft.Quantum.Tests {
             let (logicalQubit, xsyn, zsyn) = _ExtractLogicalQubitFromSteaneCode(LogicalRegister(anc));
             
             // The logical qubit must be in Zero
-            ClaimEqualI(xsyn, -1, $"X syndrome detected!");
-            ClaimEqualI(zsyn, -1, $"Z syndrome detected!");
+            EqualityFactI(xsyn, -1, $"X syndrome detected!");
+            EqualityFactI(zsyn, -1, $"Z syndrome detected!");
             AssertQubit(Zero, anc[0]);
             ResetAll(anc);
         }
@@ -327,12 +327,12 @@ namespace Microsoft.Quantum.Tests {
                 SteaneCodeEncoderImpl(anc[0 .. 0], anc[1 .. 6]);
                 Z(anc[idx]);
                 let (logiQ, xsyn, zsyn) = _ExtractLogicalQubitFromSteaneCode(LogicalRegister(anc));
-                ClaimEqualI(idx, xsyn, $"wrong X syndrome");
+                EqualityFactI(idx, xsyn, $"wrong X syndrome");
                 ResetAll(anc);
                 SteaneCodeEncoderImpl(anc[0 .. 0], anc[1 .. 6]);
                 X(anc[idx]);
                 let (logiQ2, xsyn2, zsyn2) = _ExtractLogicalQubitFromSteaneCode(LogicalRegister(anc));
-                ClaimEqualI(idx, zsyn2, $"wrong Z syndrome");
+                EqualityFactI(idx, zsyn2, $"wrong Z syndrome");
             }
             
             ResetAll(anc);
@@ -348,7 +348,7 @@ namespace Microsoft.Quantum.Tests {
             ApplyToEach(Ry(PI() / 4.0, _), register);
             let accept = KnillDistill(register);
             Ry(-PI() / 4.0, register[0]);
-            ClaimEqualB(true, accept, $"Distillation failure");
+            EqualityFactB(true, accept, $"Distillation failure");
             ApplyToEach(AssertQubit(Zero, _), register);
             // NB: no need to reset, we just asserted everything
             //     was returned to |0〉.
@@ -373,7 +373,7 @@ namespace Microsoft.Quantum.Tests {
             // successfully reset to |0〉.
             ApplyToEach(AssertQubit(Zero, _), Rest(rm));
             Ry(-PI() / 4.0, rm[0]);
-            ClaimEqualB(true, acc, $"Distillation failure");
+            EqualityFactB(true, acc, $"Distillation failure");
             AssertQubit(Zero, rm[0]);
             
             // Cases where a single magic state is wrong
@@ -386,7 +386,7 @@ namespace Microsoft.Quantum.Tests {
                 // Check that the rough magic states were
                 // successfully reset to |0〉.
                 ApplyToEach(AssertQubit(Zero, _), Rest(rm));
-                ClaimEqualB(false, acc1, $"Distillation missed an error");
+                EqualityFactB(false, acc1, $"Distillation missed an error");
             }
             
             // Cases where two magic states are wrong
@@ -402,7 +402,7 @@ namespace Microsoft.Quantum.Tests {
                     // Check that the rough magic states were
                     // successfully reset to |0〉.
                     ApplyToEach(AssertQubit(Zero, _), Rest(rm));
-                    ClaimEqualB(false, acc1, $"Distillation missed a pair error");
+                    EqualityFactB(false, acc1, $"Distillation missed a pair error");
                 }
             }
             
