@@ -84,18 +84,11 @@ namespace Microsoft.Quantum.Canon {
     }
 
     /// # Deprecated
-    /// Please use @"Microsoft.Quantum.Arithmetic.AssertProbIntLE".
-    operation AssertProbInt(stateIndex : Int, expected : Double, qubits : LittleEndian, tolerance : Double) : Unit {
-        Renamed("Microsoft.Quantum.Arithmetic.AssertProbInt", "Microsoft.Quantum.Arithmetic.AssertProbIntLE");
-        AssertProbIntLE(stateIndex, expected, qubits, tolerance);
-    }
-
-    /// # Deprecated
-    /// Please use @"Microsoft.Quantum.Arithmetic.AssertMostSignificantBitLE".
+    /// Please use @"Microsoft.Quantum.Arithmetic.AssertMostSignificantBit".
     operation AssertHighestBit(value : Result, number : LittleEndian) : Unit {
         body (...) {
-            Renamed("Microsoft.Quantum.Arithmetic.AssertHighestBit", "Microsoft.Quantum.Arithmetic.AssertMostSignificantBitLE");
-            AssertMostSignificantBitLE(value, number);
+            Renamed("Microsoft.Quantum.Arithmetic.AssertHighestBit", "Microsoft.Quantum.Arithmetic.AssertMostSignificantBit");
+            AssertMostSignificantBit(value, number);
         }
         adjoint auto;
         controlled auto;
@@ -226,6 +219,17 @@ namespace Microsoft.Quantum.Canon {
         controlled adjoint auto;
     }
 
+    /// # Deprecated
+    /// Please use @"Microsoft.Quantum.Arithmetic.AssertPhaseLessThan".
+    operation AssertLessThanPhaseLE(value : Int, number : PhaseLittleEndian) : Unit {
+        body (...) {
+            Renamed("Microsoft.Quantum.Canon.AssertPhaseLessThan", "Microsoft.Quantum.Arithmetic.AssertPhaseLessThan");
+            AssertPhaseLessThan(value, number);
+        }
+        adjoint auto;
+        controlled auto;
+        adjoint controlled auto;
+    }
 
     // #region Removal of "BE" suffix
     // NB: with Q# 0.6, all arithmetic functionality has been normalized to
@@ -268,9 +272,19 @@ namespace Microsoft.Quantum.Canon {
         return MeasureInteger(BigEndianAsLittleEndian(target));
     }
 
+    /// # Deprecated
+    /// This operation has been removed.
+    operation AssertProbIntBE (stateIndex : Int, prob : Double, qubits : BigEndian, tolerance : Double) : Unit {
+        Removed(
+            "Microsoft.Quantum.Canon.AssertProbIntBE",
+            "AssertProbInt(stateIndex, prob, BigEndianAsLittleEndian(qubits), tolerance)"
+        );
+        AssertProbInt(stateIndex, prob, BigEndianAsLittleEndian(qubits), tolerance);
+    }
+
     // #endregion
 
-   /// # Deprecated
+    /// # Deprecated
     /// Please use @"Microsoft.Quantum.Arithmetic.CopyMostSignificantBit".
      operation CopyMostSignificantBitLE(from : LittleEndian, target : Qubit) : Unit {
         body (...) {
