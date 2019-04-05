@@ -88,6 +88,11 @@ namespace Microsoft.Quantum.Chemistry
 
     public class LadderOperators : IEquatable<LadderOperators>
     {
+
+        /// <summary>
+        /// Ordering of terms. 
+        /// </summary>
+
         public enum Ordering
         {
             NoOrder = 0, NormalOrder = 1, CanonicalOrder = 2
@@ -120,21 +125,26 @@ namespace Microsoft.Quantum.Chemistry
             }
         }
 
-        /// <summary>
-        /// Ordering of terms. 
-        /// </summary>
-
-        
+        public int coefficient;
 
         public LadderOperators()
         {
         }
 
-        public LadderOperators(List<LadderOperator> setSequence)
+        /// <summary>
+        /// Construct LadderOperators from sequence of ladder operators.
+        /// </summary>
+        /// <param name="setSequence">Sequence of ladder operators.</param>
+        public LadderOperators(List<LadderOperator> setSequence, int setCoefficient = 1)
         {
             sequence = setSequence;
+            coefficient = setCoefficient;
         }
 
+        /// <summary>
+        /// Construct LadderOperators from sequence of ladder operators.
+        /// </summary>
+        /// <param name="setSequence">Sequence of ladder operators.</param>
         public LadderOperators(List<(LadderOperator.Type, int)> set) : this(set.Select(o => new LadderOperator(o)).ToList()) { }
 
         /// <summary>
@@ -151,7 +161,9 @@ namespace Microsoft.Quantum.Chemistry
                     $"Number of terms provided is `{length}` and must be of even length."
                     );
             }
-            var tmp = new LadderOperators(indices.Select((o, idx) => new LadderOperator((idx < length / 2 ? LadderOperator.Type.u : LadderOperator.Type.d, o))).ToList());
+            Func<int, int, LadderOperator> GetLadderOperator = (index, position) 
+                => new LadderOperator(position < length / 2 ? LadderOperator.Type.u : LadderOperator.Type.d, index);
+            var tmp = new LadderOperators(indices.Select((o, idx) => GetLadderOperator(o,idx)).ToList());
 
             sequence = tmp.sequence;
         }
@@ -239,12 +251,14 @@ namespace Microsoft.Quantum.Chemistry
             return sequence.Select(o => o.index).Distinct().Count();
         }
 
-
-
-        public (LadderOperators, int) ToCanonicalOrderFromNormalOrder()
+        public LadderOperators CreateCanonicalOrderFromNormalOrder()
         {
-            var tmp = new LadderOperators(sequence);
-            int coeff = 1;
+            return CreateCanonicalOrderFromNormalOrder(this);
+        }
+
+        public static LadderOperators CreateCanonicalOrderFromNormalOrder(LadderOperators op)
+        {
+            var tmp = new LadderOperators(op.sequence, op.coefficient);
             //var left = sequence.Where(o => o.type == LadderOperator.Type.u).OrderBy(o => o.index);
             //var right = sequence.Where(o => o.type == LadderOperator.Type.d).OrderBy(o => o.index).Reverse();
             //var normalOrdered = new LadderOperators(left.Concat(right));
@@ -274,7 +288,7 @@ namespace Microsoft.Quantum.Chemistry
                             var tmpLadderOperator = tmp.sequence.ElementAt(upArrayIndices.ElementAt(idx));
                             tmp.sequence[upArrayIndices.ElementAt(idx)] = tmp.sequence[upArrayIndices.ElementAt(idx + 1)];
                             tmp.sequence[upArrayIndices.ElementAt(idx + 1)] = tmpLadderOperator;
-                            coeff = -1 * coeff;
+                            tmp.coefficient = -1 * tmp.coefficient;
                         }
                     }
                 }
@@ -289,13 +303,12 @@ namespace Microsoft.Quantum.Chemistry
                             var tmpLadderOperator = tmp.sequence.ElementAt(downArrayIndices.ElementAt(idx));
                             tmp.sequence[downArrayIndices.ElementAt(idx)] = tmp.sequence[downArrayIndices.ElementAt(idx + 1)];
                             tmp.sequence[downArrayIndices.ElementAt(idx + 1)] = tmpLadderOperator;
-                            coeff = -1 * coeff;
+                            tmp.coefficient = -1 * tmp.coefficient;
                         }
                     }
                 }
             }
-            tmp = new LadderOperators(tmp.Sequence);
-            return (tmp, coeff);
+            return tmp;
         }
 
 

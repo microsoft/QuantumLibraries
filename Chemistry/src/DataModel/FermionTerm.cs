@@ -13,11 +13,12 @@ namespace Microsoft.Quantum.Chemistry
 {
     public partial class FermionTerm : LadderOperators
     {
-        public FermionTerm(List<LadderOperator> setSequence, Symmetry setSymmetry) : base(setSequence) { symmetry = setSymmetry; }
+        // FermionTerms that are in normal order should always be sorted into index order.
+
+        public FermionTerm(List<LadderOperator> setSequence, Symmetry setSymmetry, int setCoefficient = 1) : base(setSequence, setCoefficient) { symmetry = setSymmetry; }
         public FermionTerm(List<(LadderOperator.Type, int)> set, Symmetry setSymmetry) : base(set) { }
-        public FermionTerm(LadderOperators set, Symmetry setSymmetry) : this(set.sequence, setSymmetry) { }
-
-
+        public FermionTerm(LadderOperators set, Symmetry setSymmetry) : base(set.sequence, set.coefficient) { symmetry = setSymmetry; }
+        
         public Symmetry symmetry;
         
         public enum Symmetry
@@ -73,62 +74,65 @@ namespace Microsoft.Quantum.Chemistry
         }
 
 
-        public (int, FermionTerm) ToCanonicalOrderFromNormalOrder(bool AllowHermitianConjugate = false)
+        public FermionTerm CreateCanonicalOrderFromNormalOrder()
         {
-            var (sign, newTerm) = base.ToCanonicalOrderFromNormalOrder();
-
-            // Take Hermitian conjugate if still not in canonical order. 
-            if (!newTerm.IsInIndexOrder())
+            var fermionTerm = new FermionTerm(base.CreateCanonicalOrderFromNormalOrder(), this.symmetry);
+            
+            if (fermionTerm.symmetry == Symmetry.Hermitian)
             {
-                newTerm.sequence = newTerm.sequence.Select(o => (o.type == LadderOperator.Type.d ? LadderOperator.Type.u : LadderOperator.Type.d, o.index)).Select(o => new LadderOperator(o)).Reverse().ToList();
+                // Take Hermitian Conjugate
+                if (!fermionTerm.IsInCanonicalOrder())
+                {
+                    fermionTerm.sequence = fermionTerm.sequence.Select(o => (o.type == LadderOperator.Type.d ? LadderOperator.Type.u : LadderOperator.Type.d, o.index)).Select(o => new LadderOperator(o)).Reverse().ToList();
+                }
             }
-            return (sign, new FermionTerm(newTerm));
+            return fermionTerm;
         }
 
         /// <summary>
         ///  Converts a <c>FermionTerm</c> to canonical order. This generates
         ///  new terms and modifies the coefficient as needed.
         /// </summary>
-        public List<(int, FermionTerm)> ToCanonicalOrder()
+        public List<FermionTerm> CreateCanonicalOrder()
         {
             // Step 1: anti-commute creation to the left.
             // Step 2: sort to canonical order
 
-            var TmpTerms = new Stack<(int, FermionTerm)>();
-            var NewTerms = new List<(int, FermionTerm)>();
+            var TmpTerms = new Stack<FermionTerm>();
+            var NewTerms = new List<FermionTerm>();
 
-            TmpTerms.Push((1,this));
+            TmpTerms.Push(this);
 
             // Anti-commutes creation and annihilation operators to canonical order
             // and creates new terms if spin-orbital indices match.
             while (TmpTerms.Any())
             {
                 var tmpTerm = TmpTerms.Pop();
-                if (tmpTerm.Item2.IsInNormalOrder())
+                if (tmpTerm.IsInCanonicalOrder())
                 {
                     NewTerms.Add(tmpTerm);
                 }
                 else
                 {
                     // Anticommute creation and annihilation operators.
-                    for (int i = 0; i < tmpTerm.Item2.sequence.Count() - 1; i++)
+                    for (int i = 0; i < tmpTerm.sequence.Count() - 1; i++)
                     {
-                        if ((int) tmpTerm.Item2.sequence.ElementAt(i).type > (int) tmpTerm.Item2.sequence.ElementAt(i + 1).type)
+                        if ((int) tmpTerm.sequence.ElementAt(i).type > (int) tmpTerm.sequence.ElementAt(i + 1).type)
                         {
                             // Swap the two elements and flip sign of the coefficient.
-                            tmpTerm.Item2.sequence[i + 1] = tmpTerm.Item2.sequence.ElementAt(i);
-                            tmpTerm.Item2.sequence[i] = tmpTerm.Item2.sequence.ElementAt(i + 1);
-
-                            var antiCommutedTerm = (-1 * tmpTerm.Item1, new FermionTerm(tmpTerm.Item2));
+                            tmpTerm.sequence[i + 1] = tmpTerm.sequence.ElementAt(i);
+                            tmpTerm.sequence[i] = tmpTerm.sequence.ElementAt(i + 1);
+                            tmpTerm.coefficient *= -1;
+                            var antiCommutedTerm = new FermionTerm(tmpTerm, this.symmetry);
 
                             TmpTerms.Push(antiCommutedTerm);
 
                             // If the two elements have the same spin orbital index, generate a new term.
-                            if (tmpTerm.Item2.sequence.ElementAt(i).type == tmpTerm.Item2.sequence.ElementAt(i + 1).type)
+                            if (tmpTerm.sequence.ElementAt(i).type == tmpTerm.sequence.ElementAt(i + 1).type)
                             {
-                                tmpTerm.Item2.sequence.RemoveRange(i, 2);
+                                tmpTerm.sequence.RemoveRange(i, 2);
 
-                                var newTerm = (tmpTerm.Item1, new FermionTerm(tmpTerm.Item2));
+                                var newTerm = new FermionTerm(tmpTerm, this.symmetry);
 
                                 TmpTerms.Push(newTerm);
                             }
@@ -142,9 +146,7 @@ namespace Microsoft.Quantum.Chemistry
             // and changes the sign of the coefficient as necessay.
             for (int idx = 0; idx < NewTerms.Count(); idx++)
             {
-                var (coeff, tmp) = NewTerms[idx];
-                var (coeff2, tmp2) = tmp.ToCanonicalOrderFromNormalOrder();
-                NewTerms[idx] = (coeff * coeff2, tmp2);
+                NewTerms[idx] = NewTerms[idx].CreateCanonicalOrderFromNormalOrder();
             }
             return NewTerms;
         }
