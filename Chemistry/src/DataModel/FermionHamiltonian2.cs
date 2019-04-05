@@ -22,7 +22,7 @@ namespace Microsoft.Quantum.Chemistry
     {
         public Dictionary<FermionTerm, double> FermionTerms = new Dictionary<FermionTerm, double>();
 
-        public AddFermionTerm
+       // public AddFermionTerm
     }
 
 

@@ -10,64 +10,151 @@ using Microsoft.Quantum.Chemistry;
 
 namespace Microsoft.Quantum.Chemistry
 {
-
-
+    
     /// <summary>
     /// Represents a term in a Fermion Hamiltonian.
     /// </summary>
     [Serializable]
-    public struct FermionTerm2
+    public struct FermionTermDeprecated
     {
-        public FermionTerm sequence;
+        /// <summary>
+        /// FermionTerm cnfiguration settings.
+        /// </summary>
+        public class Config : SpinOrbital.Config
+        {
 
-        //Deprecated
+        }
+        public readonly Config.IndexConvention.Type IndexConvention;
+
+        /// <summary>
+        /// <c>Int64[] CreationAnnihilation</c> represents a sequence of creation or annihilation operators.
+        /// For example, <c>{1,1,0,1,0}</c> represents h * a^\dag_i a^\dag_j a_k a^\dag_l a_m.
+        /// </summary>
+        public Int64[] CreationAnnihilationIndices;
+        /// <summary>
+        /// <c>Int64[] SpinOrbital</c> represents the index of a sequence of creation or annihilation operators.
+        /// For example, <c>new SpinOrbital[] {i,j,k,l,m}</c> represents the subscript index of, say, h * a^\dag_i a^\dag_j a_k a^\dag_l a_m.
+        /// </summary>
+        public SpinOrbital[] SpinOrbitalIndices;
+        /// <summary>
+        /// <c>Double coeff</c> represents the coefficient of a sequence of creation or annihilation operators.
+        /// For example, <c>coeff = h</c> represents h * a^\dag_i a^\dag_j a_k a^\dag_l a_m.
+        /// </summary>
         public Double coeff;
 
-        public FermionTerm(List<LadderOperator> setSequence)
-        {
-            sequence = new FermionTerm(setSequence);
-            coeff = 0.0;
-        }
+        /// <summary>
+        /// Returns a human-readable description of a spin-orbital.
+        /// </summary>
+        public override string ToString() =>
+            $"([{String.Join(",", CreationAnnihilationIndices)}], " +
+            $"[{String.Join(",", SpinOrbitalIndices.ToString())}], " +
+            $"{coeff})";
 
-        public FermionTerm(List<(LadderOperator.Type, int)> set) : this(set.Select(o => new LadderOperator(o)).ToList()) { }
+        /// <summary>
+        /// FermionTerm constructor. 
+        /// </summary>
+        public FermionTermDeprecated(Int64 nOrbitals, Int64[] caArray, Int64[] fermionIdxArray, Double coeffIn, Config.IndexConvention.Type indexConvention = SpinOrbital.Config.IndexConvention.Default)
+        {
+            IndexConvention = indexConvention;
+            CreationAnnihilationIndices = caArray;
+            SpinOrbitalIndices = SpinOrbital.ToSpinOrbitals(nOrbitals, fermionIdxArray, IndexConvention);
+            coeff = coeffIn;
+            if (!IsValid())
+            {
+                throw new System.ArgumentException(
+                    $"Invalid FermionTerm specified. Length of caArray {caArray} and soArray {fermionIdxArray} must be equal.",
+                    "caArray"
+                    );
+            }
+        }
 
         /// <summary>
         /// FermionTerm constructor that assumes normal-ordered fermionic 
         /// creation and annihilation operators, and that the number of
         /// creation an annihilation operators are equal.
         /// </summary>
-        public FermionTerm(IEnumerable<int> indices)
+        public FermionTermDeprecated(IEnumerable<SpinOrbital> SpinOrbitals, Double coeffIn, bool sort = true)
         {
-            coeff = 0.0;
-            var length = indices.Count();
+            IndexConvention = SpinOrbital.GetIndexConvention(SpinOrbitals);
+            var length = SpinOrbitals.Count();
             if (length % 2 == 1)
             {
                 throw new System.ArgumentException(
                     $"SpinOrbital array of length {length} must be of even length."
                     );
             }
-            var tmp = new FermionTerm(indices.Select((o,idx) => new LadderOperator((idx < length / 2 ? LadderOperator.Type.u : LadderOperator.Type.d, o))).ToList());
+            // Create normal-ordered sequence of operators with
+            // an equal number of creation and annihilation operators
+            CreationAnnihilationIndices = new Int64[length];
+            for (int i = 0; i < length / 2; i++)
+            {
+                CreationAnnihilationIndices[i] = 1;
+                CreationAnnihilationIndices[length - i - 1] = 0;
+            }
+            SpinOrbitalIndices = SpinOrbitals.ToArray();
+            coeff = coeffIn;
 
-            sequence = tmp.sequence;            
+            // Anti-commutes spin-orbital indices to canonical order.
+            if (sort)
+            {
+                ToSpinOrbitalCanonicalOrder();
+            }
+            
         }
-        
+
+        /// <summary>
+        /// FermionTerm constructor.
+        /// </summary>
+        public FermionTermDeprecated(Int64[] caArray, SpinOrbital[] soArray, Double coeffIn)
+        {
+            IndexConvention = SpinOrbital.GetIndexConvention(soArray);
+            CreationAnnihilationIndices = caArray;
+            SpinOrbitalIndices = soArray;
+            coeff = coeffIn;
+            if (!IsValid())
+            {
+                throw new System.ArgumentException(
+                    $"Invalid FermionTerm specified. Length of caArray {caArray} and soArray {soArray} must be equal.",
+                    "caArray"
+                    );
+            }
+        }
+
         /// <summary>
         /// Concatenates two Fermion terms.
         /// </summary>
         /// <param name="left">Left Fermion term `x`</param>
         /// <param name="right">Right Fermion term  `y`</param>
-        /// <returns>Returns new <see cref="FermionTerm"/> `xy` where coefficients and 
+        /// <returns>Returns new <see cref="FermionTermDeprecated"/> `xy` where coefficients and 
         /// Fermion operators are multipled together.</returns>
-        public FermionTerm Concatenate(FermionTerm left, FermionTerm right)
+        public FermionTermDeprecated Concatenate(FermionTermDeprecated left, FermionTermDeprecated right)
         {
-            return new FermionTerm(
+            return new FermionTermDeprecated(
                 left.CreationAnnihilationIndices.Concat(right.CreationAnnihilationIndices).ToArray(),
                 left.SpinOrbitalIndices.Concat(right.SpinOrbitalIndices).ToArray(),
                 left.coeff * right.coeff
                 );
         }
 
+        /// <summary>
+        /// Method for incrementing the coefficient of a <c>FermionTerm</c>.
+        /// </summary>
+        public void AddCoeff(Double addCoeff)
+        {
+            coeff += addCoeff;
+        }
 
+        public bool IsValid()
+        {
+            if (CreationAnnihilationIndices.Length == SpinOrbitalIndices.Length)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
 
         /// <summary>
         /// Count the number of unique <see cref="SpinOrbital"/> indices.
@@ -120,7 +207,7 @@ namespace Microsoft.Quantum.Chemistry
         }
 
         /// <summary>
-        ///  Checks whether the <see cref="SpinOrbitalIndices"/> sequence of a <see cref="FermionTerm"/> is in 
+        ///  Checks whether the <see cref="SpinOrbitalIndices"/> sequence of a <see cref="FermionTermDeprecated"/> is in 
         ///  canonical order. This means
         ///  1) <c>SpinOrbital</c> is sorted in ascending order for the creation operators.
         ///  2) <c>SpinOrbital</c> is sorted in descending order for the annihilation operators.
@@ -155,7 +242,7 @@ namespace Microsoft.Quantum.Chemistry
         }
 
         /// <summary>
-        ///  Checks whether the creation operator sequence of a <see cref="FermionTerm"/> is in 
+        ///  Checks whether the creation operator sequence of a <see cref="FermionTermDeprecated"/> is in 
         ///  canonical order. This means
         ///  1) <c>SpinOrbital</c> is sorted in ascending order for the creation operators.
         /// </summary>
@@ -172,7 +259,7 @@ namespace Microsoft.Quantum.Chemistry
         }
 
         /// <summary>
-        ///  Checks whether the annihilation operator sequence of a <see cref="FermionTerm"/> is in 
+        ///  Checks whether the annihilation operator sequence of a <see cref="FermionTermDeprecated"/> is in 
         ///  canonical order. This means
         ///  1) <c>SpinOrbital</c> is sorted in descending order for the annihilation operators.
         /// </summary>
@@ -254,13 +341,13 @@ namespace Microsoft.Quantum.Chemistry
         ///  Converts a <c>FermionTerm</c> to canonical order. This generates
         ///  new terms and modifies the coefficient as needed.
         /// </summary>
-        public List<FermionTerm> ToCanonicalOrder()
+        public List<FermionTermDeprecated> ToCanonicalOrder()
         {
             // Step 1: anti-commute creation to the left.
             // Step 2: sort to canonical order
 
-            var TmpTerms = new Stack<FermionTerm>();
-            var NewTerms = new List<FermionTerm>();
+            var TmpTerms = new Stack<FermionTermDeprecated>();
+            var NewTerms = new List<FermionTermDeprecated>();
 
             TmpTerms.Push(this);
 
@@ -288,7 +375,7 @@ namespace Microsoft.Quantum.Chemistry
                             antiCommutedSpinOrbitalIndices[i + 1] = tmpTerm.SpinOrbitalIndices.ElementAt(i);
                             antiCommutedSpinOrbitalIndices[i] = tmpTerm.SpinOrbitalIndices.ElementAt(i + 1);
 
-                            var antiCommutedTerm = new FermionTerm(antiCommutedCreationAnnihilationIndices.ToArray(), antiCommutedSpinOrbitalIndices.ToArray(), -1.0 * tmpTerm.coeff);
+                            var antiCommutedTerm = new FermionTermDeprecated(antiCommutedCreationAnnihilationIndices.ToArray(), antiCommutedSpinOrbitalIndices.ToArray(), -1.0 * tmpTerm.coeff);
 
                             TmpTerms.Push(antiCommutedTerm);
 
@@ -300,7 +387,7 @@ namespace Microsoft.Quantum.Chemistry
                                 newCreationAnnihilationIndices.RemoveRange(i, 2);
                                 newSpinOrbitalIndices.RemoveRange(i, 2);
 
-                                var newTerm = new FermionTerm(newCreationAnnihilationIndices.ToArray(), newSpinOrbitalIndices.ToArray(), tmpTerm.coeff);
+                                var newTerm = new FermionTermDeprecated(newCreationAnnihilationIndices.ToArray(), newSpinOrbitalIndices.ToArray(), tmpTerm.coeff);
 
                                 TmpTerms.Push(newTerm);
                             }
@@ -337,7 +424,7 @@ namespace Microsoft.Quantum.Chemistry
         /// <summary>
         /// Boolean equality operator definition.
         /// </summary>
-        public static bool operator ==(FermionTerm x, FermionTerm y)
+        public static bool operator ==(FermionTermDeprecated x, FermionTermDeprecated y)
         {
             return x.coeff == y.coeff
                 && x.CreationAnnihilationIndices.SequenceEqual(y.CreationAnnihilationIndices)
@@ -346,17 +433,17 @@ namespace Microsoft.Quantum.Chemistry
         /// <summary>
         /// Boolean inequality operator definition.
         /// </summary>
-        public static bool operator !=(FermionTerm x, FermionTerm y)
+        public static bool operator !=(FermionTermDeprecated x, FermionTermDeprecated y)
         {
             return !(x == y);
         }
 
         public override bool Equals(object x)
         {
-            return (x is FermionTerm ft) ? Equals(ft) : false;
+            return (x is FermionTermDeprecated ft) ? Equals(ft) : false;
         }
 
-        public bool Equals(FermionTerm x)
+        public bool Equals(FermionTermDeprecated x)
         {
             if (ReferenceEquals(null, x))
             {
@@ -514,7 +601,7 @@ namespace Microsoft.Quantum.Chemistry.Comparers
     /// <summary>
     /// IComparer for <c>FermionTerm</c>.
     /// </summary>
-    public class FermionTermIComparer : IComparer<FermionTerm>
+    public class FermionTermIComparer : IComparer<FermionTermDeprecated>
     {
         private int nOnes = 0;
         public FermionTermIComparer(int nOnesIn)
@@ -522,7 +609,7 @@ namespace Microsoft.Quantum.Chemistry.Comparers
             nOnes = nOnesIn;
         }
 
-        public int Compare(FermionTerm x, FermionTerm y)
+        public int Compare(FermionTermDeprecated x, FermionTermDeprecated y)
         {
             return Extensions.CompareIntArray(
                 x.SpinOrbitalIndices.Take(nOnes).Concat(x.SpinOrbitalIndices.Skip(nOnes).Reverse()).ToInts(),
@@ -569,9 +656,9 @@ namespace Microsoft.Quantum.Chemistry.Comparers
     /// 2) The sequence of spin-orbitals are identical.
     /// 3) The coefficients are identical.
     /// </summary>
-    public class FermionTermComparer : IEqualityComparer<FermionTerm>
+    public class FermionTermComparer : IEqualityComparer<FermionTermDeprecated>
     {
-        public bool Equals(FermionTerm x, FermionTerm y)
+        public bool Equals(FermionTermDeprecated x, FermionTermDeprecated y)
         {
             if (x.CreationAnnihilationIndices.SequenceEqual(y.CreationAnnihilationIndices) && x.SpinOrbitalIndices.SequenceEqual(y.SpinOrbitalIndices) && x.coeff == y.coeff)
             {
@@ -582,7 +669,7 @@ namespace Microsoft.Quantum.Chemistry.Comparers
                 return false;
             }
         }
-        public int GetHashCode(FermionTerm x)
+        public int GetHashCode(FermionTermDeprecated x)
         {
             int h = 19;
             foreach (var i in x.CreationAnnihilationIndices.Select(o => o.GetHashCode()))

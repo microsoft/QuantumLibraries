@@ -112,9 +112,9 @@ namespace Microsoft.Quantum.Chemistry.Tests
             var state = broombridgeTyped.InitialStates["UCCSD |G>"];
 
             var targetTerm = new FermionTerm(
-                new[] { 1L, 1L, 0L, 0L },
-                new[] { (0, Spin.u), (1, Spin.u), (1, Spin.d), (3, Spin.d) }.Select(o => new SpinOrbital(o)).ToArray(),
-                -0.5);
+(long[])                (new[] { 1L, 1L, 0L, 0L }),
+(SpinOrbital[])                (new[] { ((int)0, u:(Spin)Spin.u), ((int)1, u:(Spin)Spin.u), ((int)1, d:(Spin)Spin.d), ((int)3, d:(Spin)Spin.d) }).Select((Func<(int, Spin), SpinOrbital>)(((int, Spin) o) => (SpinOrbital)new SpinOrbital(o))).ToArray(),
+(double)-0.5);
 
             var checkTerm = state.Superposition.ElementAt(2).term;
 

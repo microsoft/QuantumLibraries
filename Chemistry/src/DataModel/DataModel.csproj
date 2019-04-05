@@ -42,14 +42,25 @@
 
 
   <ItemGroup>
-    <Compile Remove="FermionHamiltonian.cs" />
-    <Compile Remove="FermionTerm.cs" />
+    <Compile Remove="Analysis\**" />
+    <Compile Remove="DataFormats\**" />
+    <Compile Remove="QSharpFormat\**" />
+    <EmbeddedResource Remove="Analysis\**" />
+    <EmbeddedResource Remove="DataFormats\**" />
+    <EmbeddedResource Remove="QSharpFormat\**" />
+    <QsharpCompile Remove="Analysis\**" />
+    <QsharpCompile Remove="DataFormats\**" />
+    <QsharpCompile Remove="QSharpFormat\**" />
   </ItemGroup>
 
 
   <ItemGroup>
-    <None Include="FermionHamiltonian.cs" />
-    <None Include="FermionTerm.cs" />
+    <Compile Remove="ConfigurationFile.cs" />
+    <Compile Remove="FermionHamiltonian.cs" />
+    <Compile Remove="FermionHamiltonian2.cs" />
+    <Compile Remove="FermionHamiltonianStatePrep.cs" />
+    <Compile Remove="FermionTerm.cs" />
+    <Compile Remove="FermionTermDeprecated.cs" />
   </ItemGroup>
 
 </Project>

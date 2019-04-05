@@ -97,7 +97,10 @@ namespace Microsoft.Quantum.Chemistry
             }
             return true;
         }
-        public static bool IsIntArrayAscending(this IEnumerable<int> x) => IsIntArrayAscending(x);
+        public static bool IsIntArrayAscending(this IEnumerable<int> x)
+        {
+            return x.Select(o => (long)o).IsIntArrayAscending();
+        }
 
         #region Accumulators
 
@@ -142,6 +145,7 @@ namespace Microsoft.Quantum.Chemistry
 
 
         #endregion
+        /*
         /// <summary>
         /// This combines the coefficients of adjacent identical terms in a 
         /// sequence of type <c>FermionTerm</c> that are sorted in canonical order.
@@ -181,7 +185,7 @@ namespace Microsoft.Quantum.Chemistry
             }
             return output;
         }
-
+        */
         #endregion
 
         #region Comparers
