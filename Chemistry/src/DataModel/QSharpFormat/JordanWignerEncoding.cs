@@ -47,6 +47,7 @@ namespace Microsoft.Quantum.Chemistry
     /// </summary>
     public partial class JordanWignerEncoding
     {
+        
         // This has contribution from PP and PQQP terms.
         public Double energyOffset = 0.0;
         // This has contribution from PP and PQQP terms.

@@ -28,11 +28,11 @@ namespace Microsoft.Quantum.Chemistry
         {
             if(inputState.type == FermionHamiltonian.StateType.Sparse_Multi_Configurational)
             {
-                return ((int)inputState.type, InitialStatePrep(inputState.Superposition));
+                return ((int)inputState.type, InitialStateSparseMultiConfigural(inputState.Superposition));
             }
             else if(inputState.type == FermionHamiltonian.StateType.Unitary_Coupled_Cluster)
             {
-                return ((int)inputState.type, InitialStatePrepUnitaryCoupledCluster(inputState.Superposition));
+                return ((int)inputState.type, InitialStateUnitaryCoupledCluster(inputState.Superposition));
             }
             else
             {
@@ -79,12 +79,18 @@ namespace Microsoft.Quantum.Chemistry
         /// </summary>
         /// /// <param name="term">List of sequences of creation operations acting on vacuum state and their coefficients.</param>
         /// <returns>Q# description of initial state</returns>
-        public QArray<JordanWignerInputState> InitialStatePrep(IEnumerable<((Double, Double) complexCoeff, FermionTerm term)> terms)
+        public QArray<JordanWignerInputState> InitialStateSparseMultiConfigural(IEnumerable<((Double, Double) complexCoeff, FermionTerm term)> terms)
         {
             return new QArray<JordanWignerInputState>(terms.Select(o => InitialStatePrep(o.complexCoeff, o.term)));
         }
 
-        internal QArray<JordanWignerInputState> InitialStatePrepUnitaryCoupledCluster(IEnumerable<((Double, Double) complexCoeff, FermionTerm term)> terms)
+        /// <summary>
+        /// Translate initial state specified by a unitary coupled-cluster operator acting on a single-reference state
+        /// to a format consumable by Q#.
+        /// </summary>
+        /// <param name="terms">single-reference state and cluster operator terms.</param>
+        /// <returns>Q# description of unitary coupled-cluster state.</returns>
+        internal QArray<JordanWignerInputState> InitialStateUnitaryCoupledCluster(IEnumerable<((Double, Double) complexCoeff, FermionTerm term)> terms)
         {
             // The last term is the reference state.
             var referenceState = (terms.Last());

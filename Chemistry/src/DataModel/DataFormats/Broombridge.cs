@@ -60,10 +60,10 @@ namespace Microsoft.Quantum.Chemistry
         public static class Deserialize
         {
             /// <summary>
-            /// 
+            /// Returns version number of Broombridge file.
             /// </summary>
-            /// <param name="filename"></param>
-            /// <returns></returns>
+            /// <param name="filename">Broombridge file address.</param>
+            /// <returns>Version number of Broombridge file</returns>
             public static Version.Number GetVersionNumber(string filename)
             {
                 using (var reader = File.OpenText(filename))
@@ -76,7 +76,12 @@ namespace Microsoft.Quantum.Chemistry
                 }
             }
 
-
+            /// <summary>
+            /// Returns deserializer Broombridge data strauture.
+            /// Data structure is automatically updated to the current Broombridge version.
+            /// </summary>
+            /// <param name="filename">Broombridge file address.</param>
+            /// <returns>Deserializer Broombridge data strauture.</returns>
             public static Current.Data Source(string filename)
             {
                 Version.Number versionNumber = GetVersionNumber(filename);
@@ -375,7 +380,7 @@ namespace Microsoft.Quantum.Chemistry
         }
 
         /// <summary>
-        /// Broombridge latest supported format.
+        /// Alias for Broombridge latest supported format.
         /// </summary>
         public class Current : V0_2 {
 
@@ -594,11 +599,7 @@ namespace Microsoft.Quantum.Chemistry
     /// Broombridge with type information parsed, and only relevant metadata kept.
     /// </summary>
     public struct BroombridgeTyped { 
-        /* public bool Energy_Provided;
-            public double Energy_Min;
-            public double Energy_Approx;
-            public double Energy_Max;
-            */
+ 
         public int NOrbitals, NElectrons;
 
         public double IdentityTerm;
@@ -609,8 +610,12 @@ namespace Microsoft.Quantum.Chemistry
         public class Config : FermionHamiltonian.Config { }
         public readonly SpinOrbital.Config.IndexConvention.Type IndexConvention;
 
-
-        public BroombridgeTyped(Broombridge.V0_2.ProblemDescription broombridgeProblem, SpinOrbital.Config.IndexConvention.Type indexConvention = SpinOrbital.Config.IndexConvention.Default)
+        /// <summary>
+        /// Extracts only the required information from a Broombridge problem instance.
+        /// </summary>
+        /// <param name="broombridgeProblem">A Broombridge problem description.</param>
+        /// <param name="indexConvention">The indexing convention used to map a spin-orbital indicx to a single integer.</param>
+        public BroombridgeTyped(Broombridge.Current.ProblemDescription broombridgeProblem, SpinOrbital.Config.IndexConvention.Type indexConvention = SpinOrbital.Config.IndexConvention.Default)
         {
             IndexConvention = indexConvention;
             NOrbitals = broombridgeProblem.NOrbitals;

@@ -15,18 +15,23 @@ namespace Microsoft.Quantum.Chemistry
 
     
     /// <summary>
-    /// Configuration settings file for modifying chemistry library behavior.
+    /// Configuration settings for modifying chemistry library behavior.
     /// </summary>
     public class Config
     {
+
         /// <summary>
-        /// Default configuration constructor;
+        /// Construct default configuration.
         /// </summary>
+        /// <returns>Default configuration class.</returns>
         public static Config Default()
         {
             return new Config();
         }
 
+        /// <summary>
+        /// Default configuration constructor;
+        /// </summary>
         public Config()
         {
             indexConvention = IndexConvention.Default;

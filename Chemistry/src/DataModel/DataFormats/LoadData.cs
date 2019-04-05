@@ -18,7 +18,7 @@ namespace Microsoft.Quantum.Chemistry
     /// </summary>
     public enum IntegralDataFormat
     {
-        Liquid, YAML
+        Liquid, Broombridge
     }
 
     /// <summary>
