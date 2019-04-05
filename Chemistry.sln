@@ -22,7 +22,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataModelTests", "Chemistry
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChemistryTests", "Chemistry\tests\ChemistryTests\ChemistryTests.csproj", "{F723F015-C78C-46A2-BB9D-CD2FD3D1DDCD}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Standard", "Standard\src\Standard.csproj", "{4EE69CC7-1158-49A2-A28F-9443B06D4A32}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Canon", "Canon\src\Canon.csproj", "{4EE69CC7-1158-49A2-A28F-9443B06D4A32}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -2,21 +2,23 @@
 // Licensed under the MIT License.
 
 namespace Microsoft.Quantum.Chemistry.Tests {
-    open Microsoft.Quantum.Arithmetic;
+    
     open Microsoft.Quantum.Primitive;
     open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Extensions.Testing;
     open Microsoft.Quantum.Extensions.Math;
     open Microsoft.Quantum.Extensions.Convert;
     open Microsoft.Quantum.Chemistry.JordanWigner;
-    open Microsoft.Quantum.Math;
-    open Microsoft.Quantum.Arrays;
-
+    
     // Test OptimizedBEXY operator.
     operation OptimizedBEOperatorZeroTestHelper (pauliBasis : Pauli, targetRegisterSize : Int, targetIndex : Int) : Unit {
+        
         let indexRegisterSize = Ceiling(Lg(ToDouble(targetRegisterSize)));
+        
         using (pauliBasisQubit = Qubit[1]) {
+            
             using (indexRegister = Qubit[indexRegisterSize]) {
+                
                 using (targetRegister = Qubit[targetRegisterSize]) {
                     
                     // Choose X or Y operator.
@@ -269,11 +271,11 @@ namespace Microsoft.Quantum.Chemistry.Tests {
                 
                 for (idxTest in 0 .. targetRegisterSize - 1) {
                     H(targetRegister[idxTest]);
-                    InPlaceXorLE(idxTest, LittleEndian(Reversed(indexRegister)));
+                    InPlaceXorLE(idxTest, LittleEndian(Reverse(indexRegister)));
                     SelectZ(BigEndian(indexRegister), targetRegister);
                     AssertProb([PauliX], [targetRegister[idxTest]], One, 1.0, $"Error: Test {idxTest} X Pauli |+>", 1E-10);
                     Z(targetRegister[idxTest]);
-                    Adjoint InPlaceXorLE(idxTest, LittleEndian(Reversed(indexRegister)));
+                    Adjoint InPlaceXorLE(idxTest, LittleEndian(Reverse(indexRegister)));
                     H(targetRegister[idxTest]);
                 }
             }
