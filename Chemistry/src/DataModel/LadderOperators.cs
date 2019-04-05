@@ -16,34 +16,43 @@ namespace Microsoft.Quantum.Chemistry
     {
         public enum Type
         {
-            u = 0, d = 1
+            u = 0, d = 1, identity
         }
 
+        
         public Type type;
         public int index;
+        
 
-        public int Commutation(LadderOperator x, LadderOperator y)
+        public static (Type, int) AntiCommutation(LadderOperator x, LadderOperator y)
         {
-            if(x.index == y.index)
+            // {a_x, a_y^\dag} = \delta_{xy}
+            // {a_x, a_y} = 1
+            // {a_x^\dag, a_y^\dag} = 1
+            if (x.index == y.index)
             {
                 if(x.type != y.type)
                 {
                     if(x.type == Type.d){
-                        return 1;
+                        return (Type.identity, 1);
                     }
                     else
                     {
-                        return -1;
+                        return (Type.identity, -1);
                     }
                 }
+                else
+                {
+                    return (Type.identity, 0);
+                }
             }
-            return 0;
+            return (Type.identity, 0);
         }
 
         public LadderOperator(Type setType, int setIndex)
         {
             type = setType;
-            this.index = setIndex;
+            index = setIndex;
         }
 
         public LadderOperator((Type, int) set) : this(set.Item1, set.Item2) { }
@@ -77,13 +86,48 @@ namespace Microsoft.Quantum.Chemistry
     }
 
 
-    public partial class LadderOperators : IEquatable<LadderOperators>
+    public class LadderOperators : IEquatable<LadderOperators>
     {
-        public List<LadderOperator> sequence { get; set; }
+        public enum Ordering
+        {
+            NoOrder = 0, NormalOrder = 1, CanonicalOrder = 2
+        }
+        private Ordering Order;
+        public Ordering order
+        {
+            get
+            {
+                return Order;
+            }
+            set
+            {
+                throw new ArgumentException("order may not be changed directly");
+            }
+        }
+
+        private List<LadderOperator> Sequence;
+
+        public List<LadderOperator> sequence
+        {
+            get
+            {
+                return Sequence;
+            }
+            set
+            {
+                Sequence = value;
+                order = GetOrdering();
+            }
+        }
+
+        /// <summary>
+        /// Ordering of terms. 
+        /// </summary>
+
+        
 
         public LadderOperators()
         {
-
         }
 
         public LadderOperators(List<LadderOperator> setSequence)
@@ -93,9 +137,77 @@ namespace Microsoft.Quantum.Chemistry
 
         public LadderOperators(List<(LadderOperator.Type, int)> set) : this(set.Select(o => new LadderOperator(o)).ToList()) { }
 
-        public bool IsInNormalOrder()
+        /// <summary>
+        /// FermionTerm constructor that assumes normal-ordered fermionic 
+        /// creation and annihilation operators, and that the number of
+        /// creation an annihilation operators are equal.
+        /// </summary>
+        public LadderOperators(IEnumerable<int> indices)
         {
-            return sequence.Count() == 0 ? true : sequence.Select(o => (int) o.type).IsIntArrayAscending();
+            var length = indices.Count();
+            if (length % 2 == 1)
+            {
+                throw new System.ArgumentException(
+                    $"Number of terms provided is `{length}` and must be of even length."
+                    );
+            }
+            var tmp = new LadderOperators(indices.Select((o, idx) => new LadderOperator((idx < length / 2 ? LadderOperator.Type.u : LadderOperator.Type.d, o))).ToList());
+
+            sequence = tmp.sequence;
+        }
+
+        /// <summary>
+        /// Checks whether all raising operators are to the left of all lowering operators.
+        /// </summary>
+        /// <returns>
+        /// Returns <c>true</c> this condition is satisfied.
+        /// Returns <c>false</c> otherwise.
+        /// </returns>
+        private bool IsInNormalOrder()
+        {
+            bool isInNormalOrder = sequence.Count() == 0 ? true : sequence.Select(o => (int)o.type).IsIntArrayAscending();
+            return isInNormalOrder;
+        }
+
+        /// <summary>
+        ///  Checks if raising operators indices are in ascending order, 
+        ///  then if lowering operator indices are in descending order.
+        /// </summary>
+        /// <returns>
+        /// Returns <c>true</c> this condition is satisfied.
+        /// Returns <c>false</c> otherwise.
+        /// </returns>
+        private bool IsInIndexOrder()
+        {
+            return IsInIndexCreationCanonicalOrder() && IsInIndexAnnihilationCanonicalOrder();
+        }
+
+        public void SetOrdering()
+        {
+            Order = GetOrdering();
+        }
+
+        /// <summary>
+        ///  Checks whether the ladder operators are normal ordered, then checks if raising operators indices
+        ///  are in ascending order, then if lowering operator indices are in descending order.
+        /// </summary>
+        /// <returns>
+        /// Returns the ordering type detected.
+        /// </returns>
+        public Ordering GetOrdering()
+        { 
+            if (!IsInNormalOrder())
+            {
+                return Ordering.NoOrder;
+            }
+            else if (!IsInIndexOrder())
+            {
+                return Ordering.NormalOrder;
+            }
+            else
+            {
+                return Ordering.CanonicalOrder;
+            }
         }
 
         /// <summary>
@@ -105,7 +217,7 @@ namespace Microsoft.Quantum.Chemistry
         /// </summary>
         /// <returns><c>true</c> if the creation opeartor sequence of a <c>LadderOperators</c> is in 
         /// canonical order. <c>false</c> otherwise</returns>
-        public bool IsInIndexCreationCanonicalOrder()
+        private bool IsInIndexCreationCanonicalOrder()
         {
             return sequence.Where(o => o.type == LadderOperator.Type.u).Select(o => o.index).IsIntArrayAscending();
         }
@@ -117,31 +229,21 @@ namespace Microsoft.Quantum.Chemistry
         /// </summary>
         /// <returns><c>true</c> if the annihilation opeartor sequence of a <c>LadderOperators</c> is in 
         /// canonical order. <c>false</c> otherwise</returns>
-        public bool IsInIndexAnnihilationCanonicalOrder()
+        private bool IsInIndexAnnihilationCanonicalOrder()
         {
             return sequence.Where(o => o.type == LadderOperator.Type.d).Select(o => o.index).Reverse().IsIntArrayAscending(); 
         }
 
-        public bool IsInCanonicalOrder()
+        public Int64 GetUniqueIndices()
         {
-            var creation = sequence.Where(o => o.type == LadderOperator.Type.u).Select(o => (long) o.index);
-            var annihilation = sequence.Where(o => o.type == LadderOperator.Type.d).Select(o => (long) o.index);
-            if (creation.Count() == annihilation.Count())
-            {
-                if (Extensions.CompareIntArray(creation, annihilation.Reverse()) > 0)
-                {
-                    return false;
-                }
-            }
-            return IsInNormalOrder()
-                && IsInIndexCreationCanonicalOrder()
-                && IsInIndexAnnihilationCanonicalOrder();
-
+            return sequence.Select(o => o.index).Distinct().Count();
         }
 
-        public (int, LadderOperators) ToCanonicalOrderFromNormalOrder()
+
+
+        public (LadderOperators, int) ToCanonicalOrderFromNormalOrder()
         {
-            LadderOperators tmp = new LadderOperators(sequence);
+            var tmp = new LadderOperators(sequence);
             int coeff = 1;
             //var left = sequence.Where(o => o.type == LadderOperator.Type.u).OrderBy(o => o.index);
             //var right = sequence.Where(o => o.type == LadderOperator.Type.d).OrderBy(o => o.index).Reverse();
@@ -156,7 +258,7 @@ namespace Microsoft.Quantum.Chemistry
                     );
             }
             // Check that LadderOperators spin-orbital indices are in canonical order.
-            if (!tmp.IsInCanonicalOrder())
+            if (!tmp.IsInIndexOrder())
             {
 
                 var upArrayIndices = tmp.sequence.Select((op, idx) => new { op, idx }).Where(x => x.op.type == LadderOperator.Type.u).Select(x => x.idx).ToArray();
@@ -192,8 +294,8 @@ namespace Microsoft.Quantum.Chemistry
                     }
                 }
             }
-
-            return (coeff, tmp);
+            tmp = new LadderOperators(tmp.Sequence);
+            return (tmp, coeff);
         }
 
 

@@ -222,6 +222,21 @@ namespace Microsoft.Quantum.Chemistry
             }
             return 0;
         }
+        public static int CompareIntArray(IEnumerable<int> xArr, IEnumerable<int> yArr)
+        {
+            foreach (var item in xArr.Zip(yArr, (x, y) => (x, y)))
+            {
+                if (item.y > item.x)
+                {
+                    return -1;
+                }
+                else if (item.y < item.x)
+                {
+                    return 1;
+                }
+            }
+            return 0;
+        }
 
         /// <summary>
         /// IComparer for two integers.

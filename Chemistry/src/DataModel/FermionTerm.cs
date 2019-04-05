@@ -13,44 +13,76 @@ namespace Microsoft.Quantum.Chemistry
 {
     public partial class FermionTerm : LadderOperators
     {
-        public FermionTerm(LadderOperators set) : this(set.sequence) { }
-        public FermionTerm(List<LadderOperator> setSequence) : base(setSequence) { }
-        public FermionTerm(List<(LadderOperator.Type, int)> set) : base() { }
+        public FermionTerm(List<LadderOperator> setSequence, Symmetry setSymmetry) : base(setSequence) { symmetry = setSymmetry; }
+        public FermionTerm(List<(LadderOperator.Type, int)> set, Symmetry setSymmetry) : base(set) { }
+        public FermionTerm(LadderOperators set, Symmetry setSymmetry) : this(set.sequence, setSymmetry) { }
 
+
+        public Symmetry symmetry;
+        
+        public enum Symmetry
+        {
+            Single, Hermitian, AntiHermitian 
+        }
+        
+        /// <summary>
+        ///  Checks if raising operators indices are in ascending order, 
+        ///  then if lowering operator indices are in descending order.
+        /// </summary>
+        /// <returns>
+        /// Returns <c>true</c> this condition is satisfied.
+        /// Returns <c>false</c> otherwise.
+        /// </returns>
+        private bool IsInCanonicalOrder()
+        {
+            if (symmetry == Symmetry.Single) {
+                return base.GetOrdering() == Ordering.CanonicalOrder;
+            }
+            else if(symmetry == Symmetry.Hermitian)
+            {
+                Ordering ladderOperatorOrdering = base.GetOrdering();
+                if(ladderOperatorOrdering == Ordering.CanonicalOrder)
+                {
+                    var creationSequence = sequence.Where(o => o.type == LadderOperator.Type.u).Select(o => o.index);
+                    var annihilationSequence = sequence.Where(o => o.type == LadderOperator.Type.d).Select(o => o.index);
+                    if (creationSequence.Count() == annihilationSequence.Count())
+                    {
+                        if (Extensions.CompareIntArray(creationSequence, annihilationSequence.Reverse()) > 0)
+                        {
+                            return false;
+                        }
+                    }
+                    return true;
+                }
+            }
+            return false;
+        }
+        
         /// <summary>
         /// FermionTerm constructor that assumes normal-ordered fermionic 
         /// creation and annihilation operators, and that the number of
         /// creation an annihilation operators are equal.
         /// </summary>
-        public FermionTerm(IEnumerable<int> indices, bool sort = true)
+        public FermionTerm(IEnumerable<int> indices, Symmetry setSymmetry) : base(indices)
         {
-            var length = indices.Count();
-            if (length % 2 == 1)
+            symmetry = setSymmetry;
+            if(symmetry == Symmetry.Hermitian)
             {
-                throw new System.ArgumentException(
-                    $"SpinOrbital array of length {length} must be of even length."
-                    );
+
             }
-            var tmp = new FermionTerm(indices.Select((o, idx) => new LadderOperator((idx < length / 2 ? LadderOperator.Type.u : LadderOperator.Type.d, o))).ToList());
-
-            sequence = tmp.sequence;
         }
 
-        public Int64 GetUniqueIndices()
-        {
-            return sequence.Select(o => o.index).Distinct().Count();
-        }
 
-        public (int, FermionTerm) ToCanonicalOrderFromNormalOrder(bool AllowHermitianConjugate = true)
+        public (int, FermionTerm) ToCanonicalOrderFromNormalOrder(bool AllowHermitianConjugate = false)
         {
-            var (coeff, tmp) = base.ToCanonicalOrderFromNormalOrder();
+            var (sign, newTerm) = base.ToCanonicalOrderFromNormalOrder();
 
             // Take Hermitian conjugate if still not in canonical order. 
-            if (!tmp.IsInCanonicalOrder())
+            if (!newTerm.IsInIndexOrder())
             {
-                tmp.sequence = tmp.sequence.Select(o => (o.type == LadderOperator.Type.d ? LadderOperator.Type.u : LadderOperator.Type.d, o.index)).Select(o => new LadderOperator(o)).Reverse().ToList();
+                newTerm.sequence = newTerm.sequence.Select(o => (o.type == LadderOperator.Type.d ? LadderOperator.Type.u : LadderOperator.Type.d, o.index)).Select(o => new LadderOperator(o)).Reverse().ToList();
             }
-            return (coeff, new FermionTerm(tmp));
+            return (sign, new FermionTerm(newTerm));
         }
 
         /// <summary>
