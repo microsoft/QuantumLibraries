@@ -19,7 +19,7 @@ namespace Microsoft.Quantum.Chemistry
         /// <summary>
         /// Converts an array of <c>SpinOrbital</c>s into an array of integers representing each spin orbital.
         /// </summary>
-        public static Int64[] ToInts(this IEnumerable<SpinOrbital> spinOrbitals, Int64 nOrbitals)
+        public static int[] ToInts(this IEnumerable<SpinOrbital> spinOrbitals, int nOrbitals)
         {
             return spinOrbitals.Select(x => x.ToInt(nOrbitals)).ToArray();
         }
@@ -27,7 +27,7 @@ namespace Microsoft.Quantum.Chemistry
         /// <summary>
         /// Converts an array of <c>SpinOrbital</c>s into an array of integers representing each spin orbital.
         /// </summary>
-        internal static Int64[] ToInts(this IEnumerable<SpinOrbital> spinOrbitals)
+        internal static int[] ToInts(this IEnumerable<SpinOrbital> spinOrbitals)
         {
             return spinOrbitals.Select(x => x.ToInt()).ToArray();
         }
@@ -58,13 +58,23 @@ namespace Microsoft.Quantum.Chemistry
             return orbitalIntegrals.SelectMany(o => o.EnumerateSpinOrbitals(indexConvention)).ToArray();
         }
 
+        /// <summary>
+        /// Computes `x^y` for an integer base `x` and exponent `y`
+        /// </summary>
+        /// <param name="x">Base.</param>
+        /// <param name="exponent">Exponent.</param>
+        /// <returns>An integer `x^y`</returns>
+        public static int Pow(this int x, int exponent)
+        {
+            return Convert.ToInt32(((long)x).Pow(exponent));
+        }
 
         /// <summary>
-        /// String representation of elements of an <see cref="IEnumerable{T}"/> of <see cref="Int64"/>.
+        /// String representation of elements of an <see cref="IEnumerable{T}"/> of <see cref="int"/>.
         /// </summary>
-        /// <param name="ints"><see cref="IEnumerable{T}"/> of <see cref="Int64"/>.</param>
+        /// <param name="ints"><see cref="IEnumerable{T}"/> of <see cref="int"/>.</param>
         /// <returns>String representation of input elements.</returns>
-        public static string Print(this IEnumerable<Int64> ints)
+        public static string Print(this IEnumerable<int> ints)
         {
             return "[" + string.Join(", ", ints) + "]";
         }
@@ -222,32 +232,18 @@ namespace Microsoft.Quantum.Chemistry
             }
             return 0;
         }
-        public static int CompareIntArray(IEnumerable<int> xArr, IEnumerable<int> yArr)
-        {
-            foreach (var item in xArr.Zip(yArr, (x, y) => (x, y)))
-            {
-                if (item.y > item.x)
-                {
-                    return -1;
-                }
-                else if (item.y < item.x)
-                {
-                    return 1;
-                }
-            }
-            return 0;
-        }
+
 
         /// <summary>
         /// IComparer for two integers.
         /// </summary>
-        public class IntIComparer : IComparer<Int64>
+        public class Int64IComparer : IComparer<Int64>
         {
             public int Compare(Int64 x, Int64 y) => Math.Sign(x - y);
         }
 
 
-        public class IntArrayIComparer : IComparer<IEnumerable<Int64>>
+        public class Int64ArrayIComparer : IComparer<IEnumerable<Int64>>
         {
             public int Compare(IEnumerable<Int64> x, IEnumerable<Int64> y)
             {
@@ -297,7 +293,7 @@ namespace Microsoft.Quantum.Chemistry
             }
         }
 
-        public class IntArrayIEqualityComparer : IEqualityComparer<IEnumerable<Int64>>
+        public class Int64ArrayIEqualityComparer : IEqualityComparer<IEnumerable<Int64>>
         {
             public bool Equals(IEnumerable<Int64> x, IEnumerable<Int64> y)
             {
@@ -315,7 +311,57 @@ namespace Microsoft.Quantum.Chemistry
         }
         #endregion
 
-        
+        #region new tpes
+        public class IntArrayIEqualityComparer : IEqualityComparer<IEnumerable<int>>
+        {
+            public bool Equals(IEnumerable<int> x, IEnumerable<int> y)
+            {
+                return x.SequenceEqual(y);
+            }
+            public int GetHashCode(IEnumerable<int> x)
+            {
+                int h = 19;
+                foreach (var i in x)
+                {
+                    h = h * 31 + ((int)i);
+                }
+                return h;
+            }
+        }
+
+        public static int CompareIntArray(IEnumerable<int> xArr, IEnumerable<int> yArr)
+        {
+            foreach (var item in xArr.Zip(yArr, (x, y) => (x, y)))
+            {
+                if (item.y > item.x)
+                {
+                    return -1;
+                }
+                else if (item.y < item.x)
+                {
+                    return 1;
+                }
+            }
+            return 0;
+        }
+
+        /// <summary>
+        /// IComparer for two integers.
+        /// </summary>
+        public class IntIComparer : IComparer<int>
+        {
+            public int Compare(int x, int y) => Math.Sign(x - y);
+        }
+
+
+        public class IntArrayIComparer : IComparer<IEnumerable<int>>
+        {
+            public int Compare(IEnumerable<int> x, IEnumerable<int> y)
+            {
+                return CompareIntArray(x, y);
+            }
+        }
+        #endregion
 
 
     }

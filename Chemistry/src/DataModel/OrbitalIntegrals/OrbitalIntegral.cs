@@ -22,9 +22,9 @@ namespace Microsoft.Quantum.Chemistry
         }
 
         /// <summary>
-        /// <c>Int64[] OrbitalIndices</c> represents the indices of orbitals in the overlap integral.
+        /// <c>int[] OrbitalIndices</c> represents the indices of orbitals in the overlap integral.
         /// </summary>
-        public Int64[] OrbitalIndices;
+        public int[] OrbitalIndices;
 
         /// <summary>
         /// <c>Double coefficient</c> represents the coefficient of the orbital overlap integral.
@@ -36,34 +36,25 @@ namespace Microsoft.Quantum.Chemistry
         /// </summary>
         /// <param name="orbitalIndices">Array of orbital indices in Dirac notation.</param>
         /// <param name="coefficient">coefficient of orbital integral.</param>
-        public OrbitalIntegral(IEnumerable<Int64> orbitalIndices, Double coefficient = 0.0) 
+        public OrbitalIntegral(IEnumerable<int> orbitalIndices, Double coefficient = 0.0) 
         {
             OrbitalIndices = orbitalIndices.ToArray();
             Coefficient = coefficient;
         }
-
-        /// <summary>
-        /// OrbitalIntegral constructor.
-        /// </summary>
-        /// <param name="orbitalIndices">Array of orbital indices in Dirac notation.</param>
-        /// <param name="coefficient">coefficient of orbital integral.</param>
-        public OrbitalIntegral(IEnumerable<int> orbitalIndices, Double coefficient = 0.0) :
-            this(orbitalIndices.Select(o => (Int64)o).ToArray(), coefficient)
-        { }
-
+        
         /// <summary>
         /// OrbitalIntegral constructor.
         /// </summary>
         /// <param name="orbitalIndices">Array of orbital indices.</param>
         /// <param name="coefficient">coefficient of orbital integral.</param>
         /// <param name="convention">Convention for ordering of orbital indices.</param>
-        public OrbitalIntegral(IEnumerable<Int64> orbitalIndices, Double coefficient, Convention convention)
+        public OrbitalIntegral(IEnumerable<int> orbitalIndices, Double coefficient, Convention convention = Convention.Mulliken)
         {
             if (convention == Convention.Mulliken)
             {
                 if (orbitalIndices.Count() == 2)
                 {
-                    OrbitalIndices = orbitalIndices.Select(o => (Int64)o).ToArray();
+                    OrbitalIndices = orbitalIndices.Select(o => o).ToArray();
                 }
                 else if (orbitalIndices.Count() == 4)
                 {
@@ -71,7 +62,7 @@ namespace Microsoft.Quantum.Chemistry
                     var q = orbitalIndices.ElementAt(2);
                     var r = orbitalIndices.ElementAt(3);
                     var s = orbitalIndices.ElementAt(1);
-                    OrbitalIndices = new Int64[] { p, q, r, s };
+                    OrbitalIndices = new int[] { p, q, r, s };
                 }
                 else
                 {
@@ -105,7 +96,7 @@ namespace Microsoft.Quantum.Chemistry
         /// Returns length of <see cref="OrbitalIndices"/>. 
         /// </summary>
         /// <returns>Length of <see cref="OrbitalIndices"/>.</returns>
-        public Int64 Length()
+        public int Length()
         {
             return OrbitalIndices.Length;
         }
@@ -126,10 +117,10 @@ namespace Microsoft.Quantum.Chemistry
             {
                 var i = OrbitalIndices[0];
                 var j = OrbitalIndices[1];
-                var symmetries = new Int64[][]
+                var symmetries = new int[][]
                 {
-                    new Int64[] {i, j},
-                    new Int64[] {j, i}
+                    new int[] {i, j},
+                    new int[] {j, i}
                 };
                 return symmetries.Distinct(new Extensions.IntArrayIEqualityComparer()).Select(o => new OrbitalIntegral(o, coefficient)).ToArray();
             }
@@ -139,15 +130,15 @@ namespace Microsoft.Quantum.Chemistry
                 var j = OrbitalIndices[1];
                 var k = OrbitalIndices[2];
                 var l = OrbitalIndices[3];
-                var symmetries = new Int64[][] {
-                    new Int64[] { i, j, k, l }, // 0123
-                    new Int64[] { j, i, l, k }, // 1032
-                    new Int64[] { k, l, i, j }, // 2301
-                    new Int64[] { l, k, j, i }, // 3210
-                    new Int64[] { i, k, j, l }, // 0213
-                    new Int64[] { k, i, l, j }, // 2031
-                    new Int64[] { j, l, i, k }, // 1302
-                    new Int64[] { l, j, k, i }  // 3120
+                var symmetries = new int[][] {
+                    new int[] { i, j, k, l }, // 0123
+                    new int[] { j, i, l, k }, // 1032
+                    new int[] { k, l, i, j }, // 2301
+                    new int[] { l, k, j, i }, // 3210
+                    new int[] { i, k, j, l }, // 0213
+                    new int[] { k, i, l, j }, // 2031
+                    new int[] { j, l, i, k }, // 1302
+                    new int[] { l, j, k, i }  // 3120
                 };
                 return symmetries.Distinct(new Extensions.IntArrayIEqualityComparer()).Select(o => new OrbitalIntegral(o, coefficient)).ToArray();
             }
@@ -212,7 +203,7 @@ namespace Microsoft.Quantum.Chemistry
         {
             // Assumes spinOrbitals has an even number of elements
             // Only index over like spins S1 S2 S3 ... S3 S2 S1
-            const Int64 nSpins = 2L;
+            const int nSpins = 2;
             var nSpinOrbitalArrays = nSpins.Pow(OrbitalIndices.Length / 2);
             SpinOrbital[][] spinOrbitalArrayOfArray = new SpinOrbital[OrbitalIndices.Length][];
             for (int idx = 0; idx < nSpinOrbitalArrays; idx++)
