@@ -31,33 +31,37 @@ namespace Microsoft.Quantum.Chemistry
         /// </summary>
         public enum VersionNumber
         {
-            v0_1 = 0, v0_2 = 1
+            NotRecognized, v0_1 = 0, v0_2 = 1
         }
-
+        
         /// <summary>
-        /// Class containing Broombridge version number management.
+        /// Dictionary from version number strings to version number types.
         /// </summary>
-        public static class Version
+        internal static Dictionary<string, VersionNumber> VersionNumberDict = new Dictionary<string, VersionNumber>()
         {
-
-            /// <summary>
-            /// Dictionary from version number strings to version number types.
-            /// </summary>
-            public static Dictionary<string, VersionNumber> VersionNumberDict = new Dictionary<string, VersionNumber>()
+            {"0.1", VersionNumber.v0_1 },
+            {"0.2", VersionNumber.v0_2 }
+        };
+        
+        /// <summary>
+        /// Parse version number string.
+        /// </summary>
+        /// <param name="versionNumber">Version number string.</param>
+        /// <param name="parsedVersionNumber">Parsed version number in enum `Number` format.</param>
+        /// <returns>Returns <c>true</c> if version number string parsed successfully. Returns <c>false</c> otherwise.</returns>
+        public static bool TryParseVersionNumber(string versionNumber, out VersionNumber parsedVersionNumber)
+        {
+            if (VersionNumberDict.ContainsKey(versionNumber))
             {
-                {"0.1", VersionNumber.v0_1 },
-                {"0.2", VersionNumber.v0_2 }
-            };
-
-            /// <summary>
-            /// Parse version number string
-            /// </summary>
-            /// <param name="versionNumber">Version number string</param>
-            /// <returns>Version number in enum `Number` format.</returns>
-            public static VersionNumber ParseVersionNumber(string versionNumber)
-            {
-                return VersionNumberDict[versionNumber];
+                parsedVersionNumber = VersionNumberDict[versionNumber];
+                return true;
             }
+            else
+            {
+                parsedVersionNumber = VersionNumber.NotRecognized;
+                return false;
+            }
+            return false;
         }
 
     }

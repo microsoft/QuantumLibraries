@@ -29,35 +29,37 @@ namespace Microsoft.Quantum.Chemistry
             /// </summary>
             /// <param name="filename">Broombridge file address.</param>
             /// <returns>Version number of Broombridge file</returns>
-            public static Version.VersionNumber GetVersionNumber(string filename)
+            public static VersionNumber GetVersionNumber(string filename)
             {
                 using (var reader = File.OpenText(filename))
                 {
                     var deserializer = new DeserializerBuilder().Build();
                     var data = deserializer.Deserialize<Dictionary<string, object>>(reader);
                     var format = (Dictionary<object, object>)data["format"];
-                    var version = (string)format["version"];
-                    return Version.ParseVersionNumber(version);
+                    var version = format["version"] as string ?? "";
+                    VersionNumber versionNumberFound = VersionNumber.NotRecognized;
+                    TryParseVersionNumber(version, out versionNumberFound);
+                    return versionNumberFound;
                 }
             }
 
             /// <summary>
-            /// Returns deserializer Broombridge data strauture.
+            /// Returns Broombridge deserialized into the current version data structure.
             /// Data structure is automatically updated to the current Broombridge version.
             /// </summary>
             /// <param name="filename">Broombridge file address.</param>
             /// <returns>Deserializer Broombridge data strauture.</returns>
             public static Current.Data Source(string filename)
             {
-                Version.VersionNumber versionNumber = GetVersionNumber(filename);
+                VersionNumber versionNumber = GetVersionNumber(filename);
 
-                if (versionNumber == Version.VersionNumber.v0_1)
+                if (versionNumber == VersionNumber.v0_1)
                 {
-                    return Updater.Data(v0_1(filename));
+                    return Updater.Data(DeserializeBroombridgev0_1(filename));
                 }
-                else if (versionNumber == Version.VersionNumber.v0_2)
+                else if (versionNumber == VersionNumber.v0_2)
                 {
-                    return v0_2(filename);
+                    return DeserializeBroombridgev0_2(filename);
                 }
                 else
                 {
@@ -66,11 +68,12 @@ namespace Microsoft.Quantum.Chemistry
             }
 
             /// <summary>
-            /// Broombridge v0.1 deserializer
+            /// Deserialize Broombridge v0.1 from a file into the Broombridge v0.1 data structure.
             /// </summary>
             /// <param name="filename">Broombridge filename to deserialize</param>
             /// <returns>Deserialized Broombridge v0.1 data.</returns>
-            public static V0_1.Data v0_1(string filename)
+            [InternalsVisibleTo]
+            internal static V0_1.Data DeserializeBroombridgev0_1(string filename)
             {
                 using (var reader = File.OpenText(filename))
                 {
@@ -80,11 +83,11 @@ namespace Microsoft.Quantum.Chemistry
             }
 
             /// <summary>
-            /// Broombridge deserializer v0.2
+            /// Deserialize Broombridge v0.2 from a file into the Broombridge v0.2 data structure.
             /// </summary>
             /// <param name="filename">Broombridge filename to deserialize</param>
             /// <returns>Deserialized Broombridge v0.2 data.</returns>
-            public static V0_2.Data v0_2(string filename)
+            public static V0_2.Data DeserializeBroombridgev0_2(string filename)
             {
                 using (var reader = File.OpenText(filename))
                 {
@@ -104,7 +107,7 @@ namespace Microsoft.Quantum.Chemistry
             /// </summary>
             /// <param name="filename">Broombridge filename to serialize</param>
             /// <returns>Serialized Broombridge</returns>
-            public static void v0_2(V0_2.Data data, string filename)
+            public static void SerializeBroombridgev0_2(V0_2.Data data, string filename)
             {
                 var stringBuilder = new StringBuilder();
                 var serializer = new Serializer();

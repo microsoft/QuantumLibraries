@@ -159,7 +159,7 @@ namespace Microsoft.Quantum.Canon
             ApplyToEachCA(X, x! + auxiliary);
 
             InPlaceMajority(x![0], [y![0], auxiliary[0]]);
-            for(idx in 1..nQubitsX - 1){
+            for (idx in 1..nQubitsX - 1){
                 InPlaceMajority(x![idx], [x![idx - 1], y![idx]]);
             }
         }

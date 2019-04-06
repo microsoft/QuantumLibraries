@@ -222,28 +222,66 @@ namespace Microsoft.Quantum.Chemistry
             return spinOrbitalArrayOfArray;
         }
 
+
+        #region Equality Testing
+
+        public override bool Equals(object obj)
+        {
+            return (obj is OrbitalIntegral x) ? Equals(x) : false;
+        }
+
         public bool Equals(OrbitalIntegral x)
         {
-            if (ReferenceEquals(null, x))
+            // If parameter is null, return false.
+            if (ReferenceEquals(x, null))
             {
                 return false;
             }
-            else if (ReferenceEquals(this, x))
+
+            // Optimization for a common success case.
+            if (ReferenceEquals(this, x))
             {
                 return true;
             }
-            else if (GetType() != x.GetType())
+
+            // If run-time types are not exactly the same, return false.
+            if (GetType() != x.GetType())
             {
                 return false;
             }
-            else
-                return this.OrbitalIndices == x.OrbitalIndices;
+            // Return true if the fields match.
+            return this.OrbitalIndices == x.OrbitalIndices;
         }
 
         public override int GetHashCode()
         {
             return OrbitalIndices.GetHashCode();
         }
+
+        public static bool operator ==(OrbitalIntegral x, OrbitalIntegral y)
+        {
+            // Check for null on left side.
+            if (Object.ReferenceEquals(x, null))
+            {
+                if (Object.ReferenceEquals(y, null))
+                {
+                    // null == null = true.
+                    return true;
+                }
+
+                // Only the left side is null.
+                return false;
+            }
+            // Equals handles case of null on right side.
+            return x.Equals(y);
+        }
+
+        public static bool operator !=(OrbitalIntegral x, OrbitalIntegral y)
+        {
+            return !(x == y);
+        }
+        #endregion
+
     }
 }
 
