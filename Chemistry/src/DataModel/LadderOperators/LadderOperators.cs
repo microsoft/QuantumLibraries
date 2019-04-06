@@ -15,12 +15,20 @@ namespace Microsoft.Quantum.Chemistry
     public class LadderOperators : IEquatable<LadderOperators>
     {
 
-
+        /// <summary>
+        /// Sequence of ladder operators.
+        /// </summary>
         public List<LadderOperator> sequence { get; set; }
 
+        /// <summary>
+        /// sign (-1,+1) coefficient of ladder operators.
+        /// </summary>
         public int coefficient { get; set; }
 
         #region Constructors
+        /// <summary>
+        /// Constructor for empty ladder operators.
+        /// </summary>
         internal LadderOperators() { }
 
         /// <summary>
@@ -69,6 +77,7 @@ namespace Microsoft.Quantum.Chemistry
             var tmp = new LadderOperators(indices.Select((o, idx) => GetLadderOperator(o,idx)).ToList());
 
             sequence = tmp.sequence;
+            coefficient = tmp.coefficient;
         }
         #endregion
         
@@ -153,6 +162,14 @@ namespace Microsoft.Quantum.Chemistry
             return !(x == y);
         }
         #endregion
+
+        /// <summary>
+        /// Returns a human-readable description this object.
+        /// </summary>
+        public override string ToString() 
+        {
+            return $"{coefficient} * {string.Join(" ",sequence)}";
+        }
     }
 
 }

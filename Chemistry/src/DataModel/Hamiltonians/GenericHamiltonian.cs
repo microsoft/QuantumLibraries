@@ -99,7 +99,7 @@ namespace Microsoft.Quantum.Chemistry
         }
 
         /// <summary>
-        /// Add multiple terms to a Hamiltonian.This method 
+        /// Add multiple terms to a Hamiltonian. This method 
         /// infers the term category from the term index if possible.
         /// </summary>
         /// <param name="terms">
@@ -110,6 +110,18 @@ namespace Microsoft.Quantum.Chemistry
             foreach (var term in terms)
             {
                 AddTerm(term.Item1, term.Item2);
+            }
+        }
+
+        /// <summary>
+        /// Method for add all terms from a source Hamiltonian into this Hamiltonian.
+        /// </summary>
+        /// <param name="sourceHamiltonian">Source Hamiltonian.</param>
+        public void AddHamiltonian(Hamiltonian<TermClassification, TermIndexing> sourceHamiltonian)
+        {
+            foreach(var termType in sourceHamiltonian.terms)
+            {
+                AddTerms(termType.Key, termType.Value.Select(o => (o.Key, o.Value)));
             }
         }
 

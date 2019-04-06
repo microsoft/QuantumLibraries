@@ -51,42 +51,7 @@ namespace Microsoft.Quantum.Chemistry.Tests
             var targetHamiltonian1 = sourceHamiltonian.ToFermionHamiltonian(SpinOrbital.Config.IndexConvention.Type.UpDown);
         }
         /*
-                public FermionHamiltonian GenerateTestHamiltonian()
-            {
-                Int64 nOrbitals = 6;
-                Dictionary<FermionTermType, List<FermionTerm>> fermionTerms = new Dictionary<FermionTermType, List<FermionTerm>>
-                {
-                    { PPTermType, new List<FermionTerm>() },
-                    { PQTermType, new List<FermionTerm>() },
-                    { PQQPTermType, new List<FermionTerm>() },
-                    { PQQRTermType, new List<FermionTerm>() },
-                    { PQRSTermType, new List<FermionTerm>() }
-                };
-
-
-
-                fermionTerms[PPTermType].Add(new FermionTerm(nOrbitals, new Int64[] { 1, 0 }, new Int64[] { 0, 0 }, 1.0));
-                fermionTerms[PPTermType].Add(new FermionTerm(nOrbitals, new Int64[] { 1, 0 }, new Int64[] { 1, 1 }, 1.0));
-                fermionTerms[PPTermType].Add(new FermionTerm(nOrbitals, new Int64[] { 1, 0 }, new Int64[] { 2, 2 }, 1.0));
-
-                fermionTerms[PQTermType].Add(new FermionTerm(nOrbitals, new Int64[] { 1, 0 }, new Int64[] { 0, 2 }, 1.0));
-                fermionTerms[PQTermType].Add(new FermionTerm(nOrbitals, new Int64[] { 1, 0 }, new Int64[] { 1, 3 }, 1.0));
-                fermionTerms[PQTermType].Add(new FermionTerm(nOrbitals, new Int64[] { 1, 0 }, new Int64[] { 2, 6 }, 1.0));
-
-                fermionTerms[PQQPTermType].Add(new FermionTerm(nOrbitals, new Int64[] { 1, 1, 0, 0 }, new Int64[] { 0, 2,2 ,0 }, 1.0));
-                fermionTerms[PQQPTermType].Add(new FermionTerm(nOrbitals, new Int64[] { 1, 1, 0, 0 }, new Int64[] { 1, 3, 3,1 }, 1.0));
-                fermionTerms[PQQPTermType].Add(new FermionTerm(nOrbitals, new Int64[] { 1, 1, 0, 0 }, new Int64[] { 2, 6, 6, 2 }, 1.0));
-
-                fermionTerms[PQQRTermType].Add(new FermionTerm(nOrbitals, new Int64[] { 1, 1, 0, 0 }, new Int64[] { 0, 2, 2, 1 }, 1.0));
-                fermionTerms[PQQRTermType].Add(new FermionTerm(nOrbitals, new Int64[] { 1, 1, 0, 0 }, new Int64[] { 1, 3, 3, 2 }, 1.0));
-                fermionTerms[PQQRTermType].Add(new FermionTerm(nOrbitals, new Int64[] { 1, 1, 0, 0 }, new Int64[] { 2, 6, 6, 5 }, 1.0));
-
-                fermionTerms[PQRSTermType].Add(new FermionTerm(nOrbitals, new Int64[] { 1, 1, 0, 0 }, new Int64[] { 0, 2, 4, 3 }, 1.0));
-                fermionTerms[PQRSTermType].Add(new FermionTerm(nOrbitals, new Int64[] { 1, 1, 0, 0 }, new Int64[] { 1, 4, 3, 2 }, 1.0));
-                fermionTerms[PQRSTermType].Add(new FermionTerm(nOrbitals, new Int64[] { 1, 1, 0, 0 }, new Int64[] { 2, 4,5, 3 }, 1.0));
-                return new FermionHamiltonian(fermionTerms, nOrbitals);
-            }
-
+               
             [Fact]
             public void VerifyFermionTermsTest()
             {
