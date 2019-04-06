@@ -16,16 +16,16 @@ namespace Microsoft.Quantum.Chemistry
         internal HermitianFermionTerm() : base() { }
 
         // Disallow inputs that are not normal ordered.
-        public HermitianFermionTerm(HermitianFermionTerm term)
+        internal HermitianFermionTerm(HermitianFermionTerm term)
         {
             sequence = term.sequence;
             coefficient = term.coefficient;
         }
 
-        public HermitianFermionTerm(List<LadderOperator> setSequence, int setCoefficient = 1) : base(setSequence, setCoefficient) { }
-        public HermitianFermionTerm(List<(LadderOperator.Type, int)> set) : base(set) { }
-        public HermitianFermionTerm(LadderOperators set) : base(set) { }
-        public HermitianFermionTerm(IEnumerable<int> indices) : base(indices) { }
+        public HermitianFermionTerm(List<LadderOperator> setSequence, int setCoefficient = 1) : base(setSequence, setCoefficient) { ToIndexOrder(); }
+        public HermitianFermionTerm(List<(LadderOperator.Type, int)> set) : base(set) { ToIndexOrder(); }
+        public HermitianFermionTerm(LadderOperators set) : base(set) { ToIndexOrder(); }
+        public HermitianFermionTerm(IEnumerable<int> indices) : base(indices) { ToIndexOrder(); }
 
         /// <summary>
         ///  Checks if raising operators indices are in ascending order, 
@@ -54,9 +54,9 @@ namespace Microsoft.Quantum.Chemistry
         }
 
 
-        public HermitianFermionTerm CreateCanonicalOrderOrder()
+        public HermitianFermionTerm CreateIndexOrder()
         {
-            var fermionTerm = new HermitianFermionTerm(base.CreateCreateIndexOrder());
+            var fermionTerm = new HermitianFermionTerm(base.CreateIndexOrder());
 
             // Take Hermitian Conjugate
             if (!fermionTerm.IsInCanonicalOrder())
@@ -65,6 +65,14 @@ namespace Microsoft.Quantum.Chemistry
             }
             return fermionTerm;
         }
+
+        private void ToIndexOrder()
+        {
+            var newTerm = this.CreateIndexOrder();
+            sequence = newTerm.sequence;
+            coefficient = newTerm.coefficient;
+        }
+        
     }
     
 }

@@ -14,7 +14,7 @@ namespace Microsoft.Quantum.Chemistry
     /// <summary>
     /// Type representing orbital overlap integrals.
     /// </summary>
-    public struct OrbitalIntegral
+    public struct OrbitalIntegral : HamiltonianTerm<TermType.OrbitalIntegral>, IEquatable<OrbitalIntegral>
     {
         public enum Convention
         {
@@ -83,6 +83,21 @@ namespace Microsoft.Quantum.Chemistry
             {
                 OrbitalIndices = orbitalIndices.ToArray();
                 Coefficient = coefficient;
+            }
+        }
+
+        public TermType.OrbitalIntegral GetTermType()
+        {
+            switch (Length())
+            {
+                case 0:
+                    return TermType.OrbitalIntegral.Identity;
+                case 2:
+                    return TermType.OrbitalIntegral.OneBody;
+                case 4:
+                    return TermType.OrbitalIntegral.TwoBody;
+                default:
+                    throw new ArgumentException("Attempted to classify unimplemented orbital integral.");
             }
         }
 

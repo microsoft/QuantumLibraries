@@ -16,16 +16,38 @@ using Microsoft.Extensions.Logging;
 namespace Microsoft.Quantum.Chemistry
 {
 
+    public TermType thing;
+    // List of terms
+    // Classification of terms
+    // Some way to re-index terms
+    // Some way to sort terms
+
+    public void AddTerm();
+
+
     public class FermionHamiltonian
     {
         /// <summary>
         /// Container for all terms in a Fermion Hamiltonian.
         /// </summary>
-        public Dictionary<FermionTerm, double> FermionTerms;
+        public Dictionary<TermType.Fermion, Dictionary<HermitianFermionTerm, double>> terms;
 
-        //public 
+        public void AddFermionTerm(FermionTerm term, double coefficient)
+        {
 
-        // public AddFermionTerm
+        }
+
+        public void AddFermionTerm((FermionTerm, double) term)
+        {
+
+        }
+    }
+    public class FermionHamiltonian
+    {
+        /// <summary>
+        /// Container for all terms in a Fermion Hamiltonian.
+        /// </summary>
+        public Dictionary<TermType.Fermion, Dictionary<HermitianFermionTerm, double>> terms;
 
         public void AddFermionTerm(FermionTerm term, double coefficient)
         {

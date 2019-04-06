@@ -115,7 +115,7 @@ namespace Microsoft.Quantum.Chemistry
         }
 
 
-        public LadderOperators CreateCreateIndexOrder()
+        public LadderOperators CreateIndexOrder()
         {
             return CreateIndexOrder(this);
         }

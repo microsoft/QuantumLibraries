@@ -42,5 +42,9 @@
     <ProjectReference Include="..\..\src\DataModel\DataModel.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="FermionHamiltonianTests\" />
+  </ItemGroup>
+
 
 </Project>

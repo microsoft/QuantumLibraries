@@ -60,15 +60,20 @@
     <Compile Remove="FermionHamiltonian.cs" />
     <Compile Remove="FermionHamiltonian2.cs" />
     <Compile Remove="FermionHamiltonianStatePrep.cs" />
+    <Compile Remove="FermionHamiltonian\FermionHamiltonian.cs" />
+    <Compile Remove="FermionHamiltonian\FermionHamiltonian2.cs" />
     <Compile Remove="FermionTerm - Copy.cs" />
     <Compile Remove="FermionTermDeprecated.cs" />
     <Compile Remove="FermionTermold.cs" />
+    <Compile Remove="FermionTerms\FermionTerm - Copy.cs" />
     <Compile Remove="FermionTerms\FermionTerm.cs" />
+    <Compile Remove="FermionTerms\FermionTermDeprecated.cs" />
+    <Compile Remove="FermionTerms\FermionTermold.cs" />
   </ItemGroup>
 
 
   <ItemGroup>
-    <None Include="FermionTerms\FermionTerm.cs" />
+    <Folder Include="FermionHamiltonian\" />
   </ItemGroup>
 
 </Project>

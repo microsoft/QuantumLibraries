@@ -13,8 +13,6 @@ using System.Collections.Generic;
 namespace Microsoft.Quantum.Chemistry.Tests
 {
 
-    using OrbitalIntegral = OrbitalIntegral;
- 
     public class OrbitalIntegralTests
     {
         [Theory]
