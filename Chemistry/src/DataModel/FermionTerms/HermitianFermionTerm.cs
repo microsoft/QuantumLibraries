@@ -11,7 +11,7 @@ using System.Numerics;
 
 namespace Microsoft.Quantum.Chemistry
 {
-    public class HermitianFermionTerm : NormalOrderedLadderOperators
+    public class HermitianFermionTerm : NormalOrderedLadderOperators, HamiltonianTerm<TermType.Fermion>
     {
         internal HermitianFermionTerm() : base() { }
 
@@ -22,10 +22,10 @@ namespace Microsoft.Quantum.Chemistry
             coefficient = term.coefficient;
         }
 
-        public HermitianFermionTerm(List<LadderOperator> setSequence, int setCoefficient = 1) : base(setSequence, setCoefficient) { ToIndexOrder(); }
-        public HermitianFermionTerm(List<(LadderOperator.Type, int)> set) : base(set) { ToIndexOrder(); }
-        public HermitianFermionTerm(LadderOperators set) : base(set) { ToIndexOrder(); }
-        public HermitianFermionTerm(IEnumerable<int> indices) : base(indices) { ToIndexOrder(); }
+        public HermitianFermionTerm(IEnumerable<LadderOperator> setSequence, int setCoefficient = 1) : base(setSequence, setCoefficient) { ToCanonicalOrder(); }
+        public HermitianFermionTerm(IEnumerable<(LadderOperator.Type, int)> set) : base(set) { ToCanonicalOrder(); }
+        public HermitianFermionTerm(LadderOperators set) : base(set) { ToCanonicalOrder(); }
+        public HermitianFermionTerm(IEnumerable<int> indices) : base(indices) { ToCanonicalOrder(); }
 
         /// <summary>
         ///  Checks if raising operators indices are in ascending order, 
@@ -48,29 +48,58 @@ namespace Microsoft.Quantum.Chemistry
                         return false;
                     }
                 }
+                else if(creationSequence.Count() < annihilationSequence.Count())
+                {
+                    return false;
+                }
                 return true;
             }
             return false;
         }
 
-
-        public HermitianFermionTerm CreateIndexOrder()
+        private void ToCanonicalOrder()
         {
-            var fermionTerm = new HermitianFermionTerm(base.CreateIndexOrder());
-
-            // Take Hermitian Conjugate
-            if (!fermionTerm.IsInCanonicalOrder())
+            // Take Hermitian Conjugate    
+            if (!IsInCanonicalOrder())
             {
-                fermionTerm.sequence = fermionTerm.sequence.Select(o => (o.type == LadderOperator.Type.d ? LadderOperator.Type.u : LadderOperator.Type.d, o.index)).Select(o => new LadderOperator(o)).Reverse().ToList();
+                sequence = sequence.Select(o => (o.type == LadderOperator.Type.d ? LadderOperator.Type.u : LadderOperator.Type.d, o.index)).Select(o => new LadderOperator(o)).Reverse().ToList();
             }
-            return fermionTerm;
         }
 
-        private void ToIndexOrder()
+        public TermType.Fermion GetTermType()
         {
-            var newTerm = this.CreateIndexOrder();
-            sequence = newTerm.sequence;
-            coefficient = newTerm.coefficient;
+            var length = sequence.Count();
+            var uniqueIndices = this.GetUniqueIndices();
+
+            switch (length)
+            {
+                case 0:
+                    return TermType.Fermion.Identity;
+                case 2:
+                    switch (uniqueIndices)
+                    {
+                        case 1:
+                            return TermType.Fermion.PP;
+                        case 2:
+                            return TermType.Fermion.PQ;
+                        default:
+                            throw new ArgumentException("Attempted to classify unknown fermion term.");
+                    }
+                case 4:
+                    switch (uniqueIndices)
+                    {
+                        case 2:
+                            return TermType.Fermion.PQQP;
+                        case 3:
+                            return TermType.Fermion.PQQR;
+                        case 4:
+                            return TermType.Fermion.PQRS;
+                        default:
+                            throw new ArgumentException("Attempted to classify unknown fermion term.");
+                    }
+                default:
+                    throw new ArgumentException("Attempted to classify unknown fermion term.");
+            }
         }
         
     }

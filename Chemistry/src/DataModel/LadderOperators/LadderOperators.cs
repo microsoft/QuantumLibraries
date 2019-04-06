@@ -37,9 +37,9 @@ namespace Microsoft.Quantum.Chemistry
         /// Construct LadderOperators from sequence of ladder operators.
         /// </summary>
         /// <param name="setSequence">Sequence of ladder operators.</param>
-        public LadderOperators(List<LadderOperator> setSequence, int setCoefficient = 1)
+        public LadderOperators(IEnumerable<LadderOperator> setSequence, int setCoefficient = 1)
         {
-            sequence = setSequence;
+            sequence = setSequence.ToList();
             coefficient = setCoefficient;
         }
 
@@ -47,7 +47,8 @@ namespace Microsoft.Quantum.Chemistry
         /// Construct LadderOperators from sequence of ladder operators.
         /// </summary>
         /// <param name="setSequence">Sequence of ladder operators.</param>
-        public LadderOperators(List<(LadderOperator.Type, int)> set) : this(set.Select(o => new LadderOperator(o)).ToList()) { }
+        public LadderOperators(IEnumerable<(LadderOperator.Type, int)> set, int setCoefficient = 1) : this(set.Select(o => new LadderOperator(o)).ToList(), setCoefficient) { }
+        
 
         /// <summary>
         /// FermionTerm constructor that assumes normal-ordered fermionic 

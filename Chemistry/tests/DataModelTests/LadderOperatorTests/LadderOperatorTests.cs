@@ -14,18 +14,19 @@ namespace Microsoft.Quantum.Chemistry.Tests
 {
     using HermitianFermionTerm = HermitianFermionTerm;
     using SpinOrbital = SpinOrbital;
+    using static TermType.Fermion;
 
-     
 
-    public class HermitianFermionTermTests
+
+    public class LadderOperatorTests
     {
         [Fact]
-        public void EmptyHermitianFermionTerm()
+        public void Empty()
         {
-            var term = new HermitianFermionTerm(new List<LadderOperator>());
-            var term2 = new HermitianFermionTerm(new List<LadderOperator>());
+            var term = new LadderOperators(new List<LadderOperator>());
+            var term2 = new LadderOperators(new List<LadderOperator>());
 
-            Dictionary<HermitianFermionTerm, double> dictionary = new Dictionary<HermitianFermionTerm, double>();
+            Dictionary<LadderOperators, double> dictionary = new Dictionary<LadderOperators, double>();
             dictionary.Add(term, 0.5);
 
             Assert.Equal(0.5, dictionary[term2]);
@@ -40,10 +41,9 @@ namespace Microsoft.Quantum.Chemistry.Tests
         [InlineData(3, new[] { 4, 3, 2, 1 }, 4)]
         public void UniqueIndicesTests(int norbitals, int[] idx, int uniqueIndices)
         {
-            var spinOrbitals = idx.Select(o => new SpinOrbital(norbitals, o)).ToInts(norbitals).Select(o => (int) o).ToList();
             var coefficient = 1.0;
-            var HermitianFermionTerm = new HermitianFermionTerm(spinOrbitals);
-            Assert.True(HermitianFermionTerm.GetUniqueIndices() == uniqueIndices);
+            var term = new LadderOperators(idx);
+            Assert.True(term.GetUniqueIndices() == uniqueIndices);
         }
 
         [Theory]
@@ -70,15 +70,10 @@ namespace Microsoft.Quantum.Chemistry.Tests
         public void IsInCanonicalOrderTest(bool pass, int nOrbitals, int[] ca, int[] idx)
         {
             var ladderOperators = ca.Zip(idx, (a, b) => (a == 0 ? LadderOperator.Type.d : LadderOperator.Type.u, (int) b)).Select(o => new LadderOperator(o)).ToList();
-            var tmp = new HermitianFermionTerm(ladderOperators);
-            if (pass)
-            {
-                Assert.True(tmp.IsInCanonicalOrder());
-            }
-            else
-            {
-                Assert.False(tmp.IsInCanonicalOrder());
-            }
+            var tmp = new LadderOperators(ladderOperators);
+            
+                Assert.True(tmp.IsInNormalOrder());
+            
         }
 
         [Theory]
@@ -92,48 +87,9 @@ namespace Microsoft.Quantum.Chemistry.Tests
         public void NotNormalOrderedTest(bool pass, int nOrbitals, IEnumerable<int> ca, IEnumerable<int> idx)
         {
             var ladderOperators = ca.Zip(idx, (a, b) => (a == 0 ? LadderOperator.Type.d : LadderOperator.Type.u, (int)b)).Select(o => new LadderOperator(o)).ToList();
-            Assert.Throws<ArgumentException>(() => new HermitianFermionTerm(ladderOperators));
+            Assert.Throws<ArgumentException>(() => new NormalOrderedLadderOperators(ladderOperators));
         }
-
         
-        /*
-        [Theory]
-        [InlineData(true, new int[] { 1, 2, 1, 3 }, new Spin[] { Spin.u, Spin.u, Spin.d, Spin.d }, -1.0)]
-        [InlineData(true, new int[] { 1, 2, 1, 3 }, new Spin[] { Spin.d, Spin.u, Spin.d, Spin.d }, 1.0)]
-        public void CreateHermitianFermionTermTest(bool pass, int[] orbitalIdx, Spin[] spinIdx, Double sign)
-        {
-            var coeff = 1.0;
-            var spinOrbital = orbitalIdx.Zip(spinIdx, (a, b) => new SpinOrbital(a, b));
-            var tmp = new HermitianFermionTerm((IEnumerable<SpinOrbital>)spinOrbital, (double)coeff);
-            Assert.True(tmp.IsInCanonicalOrder());
-            Assert.True(tmp.coeff == sign);
-        }
-        */
-        /*
-    [Theory]
-    [InlineData(3, new int[] {}, 0)]
-    [InlineData(3, new int[] { 0, 0 }, 1)]
-    [InlineData(3, new int[] { 0, 1 }, 2)]
-    [InlineData(2, new int[] { 0, 1, 3, 0 }, 4)]
-    [InlineData(3, new int[] { 1, 2, 2, 1 }, 3)]
-    [InlineData(3, new int[] { 4, 3, 2, 1 }, 5)]
-    public void GetFermionTermTypeTests(int norbitals, int[] idx, int type)
-    {
-        var tmp = new FermionTermType[] {   IdentityTermType,
-                                            PPTermType,
-                                            PQTermType,
-                                            PQQPTermType,
-                                            PQQRTermType,
-                                            PQRSTermType};
-
-
-        var spinOrbitals = idx.Select(o => new SpinOrbital(norbitals, o)).ToArray();
-        var coefficient = 1.0;
-        var fermionTerm = new FermionTerm((SpinOrbital[])spinOrbitals, (double)coefficient);
-        var fermionTermType = fermionTerm.GetFermionTermType();
-        Assert.True(fermionTermType == tmp[type]);
-    }
-    */
     }
 
 }

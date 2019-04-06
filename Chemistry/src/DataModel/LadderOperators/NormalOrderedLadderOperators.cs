@@ -34,15 +34,17 @@ namespace Microsoft.Quantum.Chemistry
         public NormalOrderedLadderOperators(LadderOperators ladderOperators) : base(ladderOperators)
         {
             ExceptionIfNotInNormalOrder();
+            ToIndexOrder();
         }
         
         /// <summary>
         /// Construct LadderOperators from sequence of ladder operators.
         /// </summary>
         /// <param name="setSequence">Sequence of ladder operators.</param>
-        public NormalOrderedLadderOperators(List<LadderOperator> setSequence, int setCoefficient = 1) : base(setSequence, setCoefficient)
+        public NormalOrderedLadderOperators(IEnumerable<LadderOperator> setSequence, int setCoefficient = 1) : base(setSequence, setCoefficient)
         {
             ExceptionIfNotInNormalOrder();
+            ToIndexOrder();
         }
 
 
@@ -50,9 +52,10 @@ namespace Microsoft.Quantum.Chemistry
         /// Construct LadderOperators from sequence of ladder operators.
         /// </summary>
         /// <param name="setSequence">Sequence of ladder operators.</param>
-        public NormalOrderedLadderOperators(List<(LadderOperator.Type, int)> set) : base(set)
+        public NormalOrderedLadderOperators(IEnumerable<(LadderOperator.Type, int)> set) : base(set)
         {
             ExceptionIfNotInNormalOrder();
+            ToIndexOrder();
         }
 
         /// <summary>
@@ -63,6 +66,7 @@ namespace Microsoft.Quantum.Chemistry
         public NormalOrderedLadderOperators(IEnumerable<int> indices) : base(indices)
         {
             ExceptionIfNotInNormalOrder();
+            ToIndexOrder();
         }
         #endregion
 
@@ -114,6 +118,12 @@ namespace Microsoft.Quantum.Chemistry
             return sequence.Where(o => o.type == LadderOperator.Type.d).Select(o => o.index).Reverse().IsIntArrayAscending();
         }
 
+        private void ToIndexOrder()
+        {
+            var ladderTerm = CreateIndexOrder();
+            sequence = ladderTerm.sequence;
+            coefficient = ladderTerm.coefficient;        
+        }
 
         public LadderOperators CreateIndexOrder()
         {

@@ -56,12 +56,9 @@
 
   <ItemGroup>
     <Compile Remove="ConfigurationFile.cs" />
-    <Compile Remove="Conversion.cs" />
     <Compile Remove="FermionHamiltonian.cs" />
     <Compile Remove="FermionHamiltonian2.cs" />
     <Compile Remove="FermionHamiltonianStatePrep.cs" />
-    <Compile Remove="FermionHamiltonian\FermionHamiltonian.cs" />
-    <Compile Remove="FermionHamiltonian\FermionHamiltonian2.cs" />
     <Compile Remove="FermionTerm - Copy.cs" />
     <Compile Remove="FermionTermDeprecated.cs" />
     <Compile Remove="FermionTermold.cs" />
@@ -69,11 +66,7 @@
     <Compile Remove="FermionTerms\FermionTerm.cs" />
     <Compile Remove="FermionTerms\FermionTermDeprecated.cs" />
     <Compile Remove="FermionTerms\FermionTermold.cs" />
-  </ItemGroup>
-
-
-  <ItemGroup>
-    <Folder Include="FermionHamiltonian\" />
+    <Compile Remove="Hamiltonians\FermionHamiltonian2.cs" />
   </ItemGroup>
 
 </Project>
