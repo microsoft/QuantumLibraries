@@ -42,17 +42,14 @@
 
 
   <ItemGroup>
-    <Compile Remove="Broombridge\**" />
     <Compile Remove="DataFormat\**" />
     <Compile Remove="Old\**" />
     <Compile Remove="Pauli\**" />
     <Compile Remove="QSharpFormat\**" />
-    <EmbeddedResource Remove="Broombridge\**" />
     <EmbeddedResource Remove="DataFormat\**" />
     <EmbeddedResource Remove="Old\**" />
     <EmbeddedResource Remove="Pauli\**" />
     <EmbeddedResource Remove="QSharpFormat\**" />
-    <QsharpCompile Remove="Broombridge\**" />
     <QsharpCompile Remove="DataFormat\**" />
     <QsharpCompile Remove="Old\**" />
     <QsharpCompile Remove="Pauli\**" />
@@ -67,11 +64,10 @@
     <Compile Remove="FermionTerm - Copy.cs" />
     <Compile Remove="FermionTermDeprecated.cs" />
     <Compile Remove="FermionTermold.cs" />
-    <Compile Remove="Fermion\FermionStateMultiConfigurational.cs" />
-    <Compile Remove="Fermion\FermionStateSingleConfigurational.cs" />
     <Compile Remove="Fermion\FermionTermDeprecated.cs" />
     <Compile Remove="Fermion\FermionTermold.cs" />
     <Compile Remove="Hamiltonian\FermionHamiltonian2.cs" />
+    <Compile Remove="ProblemContainer\BroombridgeProcessed.cs" />
     <Compile Remove="ProblemContainer\LoadData.cs" />
     <Compile Remove="QuantumStates\FermionHamiltonianStatePrep.cs" />
   </ItemGroup>

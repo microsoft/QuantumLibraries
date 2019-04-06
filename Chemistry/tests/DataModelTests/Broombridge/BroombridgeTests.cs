@@ -15,18 +15,13 @@ using YamlDotNet.Serialization;
 
 namespace Microsoft.Quantum.Chemistry.Tests
 {
-    using static FermionTermType.Common;
-    using FermionTerm = FermionTerm;
-    using FermionTermType = FermionTermType;
-    using SpinOrbital = SpinOrbital;
-
     public class BroombridgeVersionNumberTests
     {
         [Fact]
         public void DeserializeVersionNumbers()
         {
-            Assert.Equal(Broombridge.Version.Number.v0_1, Broombridge.Deserialize.GetVersionNumber("Broombridge/broombridge_v0.1.yaml"));
-            Assert.Equal(Broombridge.Version.Number.v0_2, Broombridge.Deserialize.GetVersionNumber("Broombridge/broombridge_v0.2.yaml"));
+            Assert.Equal(Broombridge.Version.Number.v0_1, Broombridge.Deserializers.GetVersionNumber("Broombridge/broombridge_v0.1.yaml"));
+            Assert.Equal(Broombridge.Version.Number.v0_2, Broombridge.Deserializers.GetVersionNumber("Broombridge/broombridge_v0.2.yaml"));
         }
     }
 
@@ -39,7 +34,7 @@ namespace Microsoft.Quantum.Chemistry.Tests
             var filename = "Broombridge/broombridge_v0.1.yaml";
 
 
-            var broombridge = Broombridge.Deserialize.v0_1(filename);
+            var broombridge = Broombridge.Deserializers.v0_1(filename);
 
             Assert.Equal("0.1", broombridge.Format.Version);
         }
@@ -48,7 +43,7 @@ namespace Microsoft.Quantum.Chemistry.Tests
     public class Broombridgev0_2Tests
     {
         static string filename = "Broombridge/broombridge_v0.2.yaml";
-        static Broombridge.V0_2.Data broombridge = Broombridge.Deserialize.v0_2(filename);
+        static Broombridge.V0_2.Data broombridge = Broombridge.Deserializers.v0_2(filename);
 
         [Fact]
         public void Version()
@@ -91,34 +86,12 @@ namespace Microsoft.Quantum.Chemistry.Tests
         public void UpdateFrom_v0_1()
         {
             var filename = "Broombridge/broombridge_v0.1.yaml";
-            var broombridge_v0_1 = Broombridge.Deserialize.v0_1(filename);
-            var broombridge_v0_2 = Broombridge.Update.Data(broombridge_v0_1);
+            var broombridge_v0_1 = Broombridge.Deserializers.v0_1(filename);
+            var broombridge_v0_2 = Broombridge.Updater.Data(broombridge_v0_1);
 
-            Broombridge.Serialize.v0_2(broombridge_v0_2, "");
+            Broombridge.Serializers.v0_2(broombridge_v0_2, "");
 
         }
     }
-
-    public class BroombridgeTypedTests
-    {
-        static string filename = "Broombridge/broombridge_v0.2.yaml";
-        static Broombridge.V0_2.Data broombridge = Broombridge.Deserialize.v0_2(filename);
-        static Broombridge.V0_2.ProblemDescription broombridgeProblem = broombridge.ProblemDescription.First();
-        
-        [Fact]
-        public void UnitaryCoupledCluster()
-        {
-            BroombridgeTyped broombridgeTyped = new BroombridgeTyped(broombridgeProblem);
-            var state = broombridgeTyped.InitialStates["UCCSD |G>"];
-
-            var targetTerm = new FermionTerm(
-(long[])                (new[] { 1L, 1L, 0L, 0L }),
-(SpinOrbital[])                (new[] { ((int)0, u:(Spin)Spin.u), ((int)1, u:(Spin)Spin.u), ((int)1, d:(Spin)Spin.d), ((int)3, d:(Spin)Spin.d) }).Select((Func<(int, Spin), SpinOrbital>)(((int, Spin) o) => (SpinOrbital)new SpinOrbital(o))).ToArray(),
-(double)-0.5);
-
-            var checkTerm = state.Superposition.ElementAt(2).term;
-
-            Assert.Equal(targetTerm, checkTerm);
-        }
-    }
+    
 }

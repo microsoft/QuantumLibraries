@@ -1,6 +1,8 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
+using System;
+using System.Linq;
 using System.Collections.Generic;
 
 namespace Microsoft.Quantum.Chemistry
@@ -14,19 +16,19 @@ namespace Microsoft.Quantum.Chemistry
     /// 2) Index-ordered, where are raising(lowering) operators are in ascending(descending) order.
     /// 3) Contains only creation operators.
     /// </summary>
-    public class FermionStateSingleConfigurational : IndexOrderedLadderSequence
+    public class FermionStateSingleConfigurational : FermionTerm
     {
         #region Constructors
         /// <summary>
         /// Constructor for empty instance.
         /// </summary>
-        internal FermionTermSingle() : base() { }
+        internal FermionStateSingleConfigurational() : base() { }
 
         /// <summary>
         /// Construct a copy of the input instance.
         /// </summary>
         /// <param name="term">Sequence of ladder operators.</param>
-        internal FermionTermSingle(FermionTermSingle term)
+        internal FermionStateSingleConfigurational(FermionStateSingleConfigurational term)
         {
             // All constructions are pass by value.
             sequence = term.sequence.Select(o => o).ToList();
@@ -37,21 +39,22 @@ namespace Microsoft.Quantum.Chemistry
         /// Construct instance from a normal-ordered sequence of ladder operators.
         /// </summary>
         /// <param name="ladderOperators">Normal-ordered sequence of ladder operators.</param>
-        public FermionTermSingle(LadderSequence ladderOperators) : base(ladderOperators) { }
+        public FermionStateSingleConfigurational(LadderSequence ladderOperators) : base(ladderOperators) { }
         #endregion
 
+        /// <summary>
+        /// This throws an ArgumentException if the operators in NormalOrderedLadderSequence are not normal-ordered.
+        /// </summary>
+        private void ExceptionIfNotOnlyRaising()
+        {
+            if (sequence.Where(o => o.type == LadderOperator.Type.d).Count() > 0)
+            {
+                throw new ArgumentException("FermionStateSingleConfigurational must contatin only raising operators.");
+            }
+        }
+
     }
 
-
-    // An indexing convention is important here.
-    public class StateMultiConfigurational
-    {
-
-
-        public Dictionary<SingleFermionTerm, double> terms;
-        
-
-    }
 }
 
 

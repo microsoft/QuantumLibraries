@@ -37,6 +37,12 @@ namespace Microsoft.Quantum.Chemistry
         public FermionTerm(LadderSequence ladderOperators) : base(ladderOperators) { }
         #endregion
 
+        // If LadderSequence is used as a base class for non-fermionic operators in the future,
+        // will need to override the anticommutator.
+        //public override (LadderOperator.Type, int) AntiCommutator(LadderOperator x, LadderOperator y)
+        //{
+        //    return base.AntiCommutator(x, y);
+        //}
     }
 }
 

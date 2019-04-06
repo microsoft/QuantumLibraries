@@ -18,7 +18,7 @@ namespace Microsoft.Quantum.Chemistry
     /// </summary>
     public static partial class Broombridge
     {
-        
+
         /// <summary>
         /// Broombridge deserializers
         /// </summary>
@@ -59,7 +59,8 @@ namespace Microsoft.Quantum.Chemistry
                 {
                     return v0_2(filename);
                 }
-                else {
+                else
+                {
                     throw new System.InvalidOperationException("Unrecognized Broombridge version number.");
                 }
             }
@@ -112,5 +113,5 @@ namespace Microsoft.Quantum.Chemistry
                 Console.WriteLine("");
             }
         }
-        
+    }       
 }
