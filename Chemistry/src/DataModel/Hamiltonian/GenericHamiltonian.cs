@@ -6,12 +6,8 @@ using Microsoft.Quantum.Simulation.Core;
 using System;
 using System.Linq;
 using System.Collections.Generic;
-
-using System.Runtime.Serialization.Formatters.Binary;
-using System.IO;
-using System.IO.Compression;
-using YamlDotNet.Serialization;
-using Microsoft.Extensions.Logging;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Microsoft.Quantum.Chemistry
 {
@@ -131,7 +127,7 @@ namespace Microsoft.Quantum.Chemistry
         /// <returns>Number of terms in a Hamiltonian.</returns>
         public int CountTerms()
         {
-            return terms.Select(o => o.Value.Count()).Sum();
+            return terms.Select(o => o.Value.Count()).AsParallel().Sum();
         }
 
         /// <summary>
@@ -159,7 +155,7 @@ namespace Microsoft.Quantum.Chemistry
         /// <returns>L_p norm of Hamiltonian coefficients.</returns>
         public double Norm(IEnumerable<TermClassification> termTypes, double power = 1.0)
         {
-            return Math.Pow(terms.Where(o => termTypes.Contains(o.Key)).Select(termType => termType.Value.Select(termValue => Math.Pow(Math.Abs(termValue.Value), power)).Sum()).Sum(),1.0/power);
+            return Math.Pow(terms.Where(o => termTypes.Contains(o.Key)).Select(termType => termType.Value.AsParallel().Select(termValue => Math.Pow(Math.Abs(termValue.Value), power)).Sum()).Sum(),1.0/power);
         }
         
     }

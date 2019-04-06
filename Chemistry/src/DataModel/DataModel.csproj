@@ -42,28 +42,25 @@
 
 
   <ItemGroup>
-    <Compile Remove="Analysis\**" />
     <Compile Remove="DataFormat\**" />
+    <Compile Remove="Old\**" />
     <Compile Remove="QSharpFormat\**" />
-    <EmbeddedResource Remove="Analysis\**" />
     <EmbeddedResource Remove="DataFormat\**" />
+    <EmbeddedResource Remove="Old\**" />
     <EmbeddedResource Remove="QSharpFormat\**" />
-    <QsharpCompile Remove="Analysis\**" />
     <QsharpCompile Remove="DataFormat\**" />
+    <QsharpCompile Remove="Old\**" />
     <QsharpCompile Remove="QSharpFormat\**" />
   </ItemGroup>
 
 
   <ItemGroup>
-    <Compile Remove="ConfigurationFile.cs" />
     <Compile Remove="FermionHamiltonian.cs" />
     <Compile Remove="FermionHamiltonian2.cs" />
     <Compile Remove="FermionHamiltonianStatePrep.cs" />
     <Compile Remove="FermionTerm - Copy.cs" />
     <Compile Remove="FermionTermDeprecated.cs" />
     <Compile Remove="FermionTermold.cs" />
-    <Compile Remove="Fermion\FermionTerm - Copy.cs" />
-    <Compile Remove="Fermion\FermionTerm.cs" />
     <Compile Remove="Fermion\FermionTermDeprecated.cs" />
     <Compile Remove="Fermion\FermionTermold.cs" />
     <Compile Remove="Hamiltonian\FermionHamiltonian2.cs" />
@@ -73,6 +70,13 @@
   <ItemGroup>
     <Compile Include="DataFormat\LiQuiD.cs" />
     <Compile Include="DataFormat\LoadData.cs" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <Folder Include="Analysis\" />
+    <Folder Include="Pauli\" />
+    <Folder Include="QuantumStates\" />
   </ItemGroup>
 
 </Project>

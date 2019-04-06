@@ -11,6 +11,8 @@ using System.Numerics;
 
 namespace Microsoft.Quantum.Chemistry
 {
+    // This class is for Fermion terms that are not grouped into Hermitian bunches.
+    
     public partial class FermionTerm : NormalOrderedLadderOperators
     {
         internal FermionTerm() : base() { }
@@ -40,69 +42,6 @@ namespace Microsoft.Quantum.Chemistry
         }
         
         /// <summary>
-        ///  Checks if raising operators indices are in ascending order, 
-        ///  then if lowering operator indices are in descending order.
-        /// </summary>
-        /// <returns>
-        /// Returns <c>true</c> this condition is satisfied.
-        /// Returns <c>false</c> otherwise.
-        /// </returns>
-        public bool IsInCanonicalOrder()
-        {
-            if (symmetry == Symmetry.Single) {
-                return base.GetOrdering() == Ordering.CanonicalOrder;
-            }
-            else if(symmetry == Symmetry.Hermitian)
-            {
-                Ordering ladderOperatorOrdering = base.GetOrdering();
-                if(ladderOperatorOrdering == Ordering.CanonicalOrder)
-                {
-                    var creationSequence = sequence.Where(o => o.type == LadderOperator.Type.u).Select(o => o.index);
-                    var annihilationSequence = sequence.Where(o => o.type == LadderOperator.Type.d).Select(o => o.index);
-                    if (creationSequence.Count() == annihilationSequence.Count())
-                    {
-                        if (Extensions.CompareIntArray(creationSequence, annihilationSequence.Reverse()) > 0)
-                        {
-                            return false;
-                        }
-                    }
-                    return true;
-                }
-            }
-            return false;
-        }
-        
-        /// <summary>
-        /// FermionTerm constructor that assumes normal-ordered fermionic 
-        /// creation and annihilation operators, and that the number of
-        /// creation an annihilation operators are equal.
-        /// </summary>
-        public FermionTerm(IEnumerable<int> indices, Symmetry setSymmetry) : base(indices)
-        {
-            symmetry = setSymmetry;
-            if(symmetry == Symmetry.Hermitian)
-            {
-
-            }
-        }
-
-
-        public FermionTerm CreateCanonicalOrderFromNormalOrder()
-        {
-            var fermionTerm = new FermionTerm(base.CreateCanonicalOrderFromNormalOrder(), this.symmetry);
-            
-            if (fermionTerm.symmetry == Symmetry.Hermitian)
-            {
-                // Take Hermitian Conjugate
-                if (!fermionTerm.IsInCanonicalOrder())
-                {
-                    fermionTerm.sequence = fermionTerm.sequence.Select(o => (o.type == LadderOperator.Type.d ? LadderOperator.Type.u : LadderOperator.Type.d, o.index)).Select(o => new LadderOperator(o)).Reverse().ToList();
-                }
-            }
-            return fermionTerm;
-        }
-
-        /// <summary>
         ///  Converts a <c>FermionTerm</c> to canonical order. This generates
         ///  new terms and modifies the coefficient as needed.
         /// </summary>
@@ -113,7 +52,7 @@ namespace Microsoft.Quantum.Chemistry
 
             var TmpTerms = new Stack<FermionTerm>();
             var NewTerms = new List<FermionTerm>();
-
+            /*
             TmpTerms.Push(this);
 
             // Anti-commutes creation and annihilation operators to canonical order
@@ -161,6 +100,7 @@ namespace Microsoft.Quantum.Chemistry
             {
                 NewTerms[idx] = NewTerms[idx].CreateCanonicalOrderFromNormalOrder();
             }
+            */
             return NewTerms;
         }
 
