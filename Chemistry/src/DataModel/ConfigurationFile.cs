@@ -49,7 +49,7 @@ namespace Microsoft.Quantum.Chemistry
         public class IndexConvention : SpinOrbital.Config.IndexConvention { }
 
         /// <summary>
-        /// Threshold hold below which to truncate Hamiltonian coefficients.
+        /// Threshold below which to truncate Hamiltonian coefficients.
         /// </summary>
         public double truncationThreshold;
 
