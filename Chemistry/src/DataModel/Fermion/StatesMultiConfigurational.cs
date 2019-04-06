@@ -9,6 +9,16 @@ namespace Microsoft.Quantum.Chemistry
     // Maybe need a stype for quantum state?
 
     // An indexing convention is important here.
+    public class SingleConfigurational
+    {
+
+        public SingleFermionTerm term;
+        
+
+    }
+
+
+    // An indexing convention is important here.
     public class StateMultiConfigurational
     {
 

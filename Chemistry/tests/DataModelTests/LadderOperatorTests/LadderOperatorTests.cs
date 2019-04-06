@@ -23,10 +23,10 @@ namespace Microsoft.Quantum.Chemistry.Tests
         [Fact]
         public void Empty()
         {
-            var term = new LadderOperatorSequence(new List<LadderOperator>());
-            var term2 = new LadderOperatorSequence(new List<LadderOperator>());
+            var term = new LadderSequence(new List<LadderOperator>());
+            var term2 = new LadderSequence(new List<LadderOperator>());
 
-            Dictionary<LadderOperatorSequence, double> dictionary = new Dictionary<LadderOperatorSequence, double>();
+            Dictionary<LadderSequence, double> dictionary = new Dictionary<LadderSequence, double>();
             dictionary.Add(term, 0.5);
 
             Assert.Equal(0.5, dictionary[term2]);
@@ -36,8 +36,8 @@ namespace Microsoft.Quantum.Chemistry.Tests
         public void NotPassByReference()
         {
             var ints = new[] { 1, 2, 4, 3 };
-            var op = new LadderOperatorSequence(new[] { 1, 2, 4, 3 });
-            var newTerm = new LadderOperatorSequence(op);
+            var op = new LadderSequence(new[] { 1, 2, 4, 3 });
+            var newTerm = new LadderSequence(op);
             
             ints[2] = 5;
             Assert.Equal(op.sequence, newTerm.sequence);
@@ -45,12 +45,12 @@ namespace Microsoft.Quantum.Chemistry.Tests
             op.sequence[2] = new LadderOperator(LadderOperator.Type.d, 6);
             Assert.NotEqual(op.sequence, newTerm.sequence);
 
-            var newTerm2 = new LadderOperatorSequence(ints);
+            var newTerm2 = new LadderSequence(ints);
             ints[1] = 0;
             Assert.Equal(2, newTerm2.sequence[1].index);
 
             var op2 = new[] { (u, 2), (d, 5), (d, 8) };
-            var newTerm3 = new LadderOperatorSequence(op2);
+            var newTerm3 = new LadderSequence(op2);
 
             op2[2] = (d, 4);
 
@@ -68,7 +68,7 @@ namespace Microsoft.Quantum.Chemistry.Tests
         public void UniqueIndicesTests(int norbitals, int[] idx, int uniqueIndices)
         {
             var coefficient = 1.0;
-            var term = new LadderOperatorSequence(idx);
+            var term = new LadderSequence(idx);
             Assert.True(term.GetUniqueIndices() == uniqueIndices);
         }
 
@@ -96,7 +96,7 @@ namespace Microsoft.Quantum.Chemistry.Tests
         public void IsInCanonicalOrderTest(bool pass, int nOrbitals, int[] ca, int[] idx)
         {
             var ladderOperators = ca.Zip(idx, (a, b) => (a == 0 ? LadderOperator.Type.d : LadderOperator.Type.u, (int) b)).Select(o => new LadderOperator(o)).ToList();
-            var tmp = new LadderOperatorSequence(ladderOperators);
+            var tmp = new LadderSequence(ladderOperators);
             
                 Assert.True(tmp.IsInNormalOrder());
             
@@ -113,7 +113,7 @@ namespace Microsoft.Quantum.Chemistry.Tests
         public void NotNormalOrderedTest(bool pass, int nOrbitals, IEnumerable<int> ca, IEnumerable<int> idx)
         {
             var ladderOperators = ca.Zip(idx, (a, b) => (a == 0 ? LadderOperator.Type.d : LadderOperator.Type.u, (int)b)).Select(o => new LadderOperator(o)).ToList();
-            Assert.Throws<ArgumentException>(() => new IndexOrderedLadderOperators(ladderOperators));
+            Assert.Throws<ArgumentException>(() => new IndexOrderedLadderSequence(ladderOperators));
         }
         
     }
@@ -124,8 +124,8 @@ namespace Microsoft.Quantum.Chemistry.Tests
         [Fact]
         public void NotPassByReference()
         {
-            var op = new LadderOperatorSequence(new[] { 1, 2, 4, 3 });
-            var newTerm = new NormalOrderedLadderOperators(op);
+            var op = new LadderSequence(new[] { 1, 2, 4, 3 });
+            var newTerm = new NormalOrderedLadderSequence(op);
             op.sequence[2] = new LadderOperator(LadderOperator.Type.d, 5);
 
             Assert.NotEqual(op.sequence, newTerm.sequence);
@@ -134,10 +134,10 @@ namespace Microsoft.Quantum.Chemistry.Tests
         [Fact]
         public void CommuteToNormalOrder()
         {
-            var term = new LadderOperatorSequence(new[] { (d, 2), (u, 5), (d, 8) });
+            var term = new LadderSequence(new[] { (d, 2), (u, 5), (d, 8) });
 
-            var expected = new LadderOperatorSequence(new[] { (u, 5), (d, 2), (d, 8) });
-            var output = NormalOrderedLadderOperators.CreateNormalOrder(term).ToList();
+            var expected = new LadderSequence(new[] { (u, 5), (d, 2), (d, 8) });
+            var output = NormalOrderedLadderSequence.CreateNormalOrder(term).ToList();
             Assert.Equal(expected.sequence, output.First().sequence);
             Assert.Equal(-1, output.First().coefficient);
         }
@@ -145,10 +145,10 @@ namespace Microsoft.Quantum.Chemistry.Tests
         [Fact]
         public void CreateNormalOrder()
         {
-            var term = new LadderOperatorSequence(new[] { (d, 2), (u, 5), (d, 8) });
+            var term = new LadderSequence(new[] { (d, 2), (u, 5), (d, 8) });
 
-            var expected = new LadderOperatorSequence(new[] { (u, 5), (d, 8), (d, 2) });
-            var output = IndexOrderedLadderOperators.CreateIndexOrder(term).ToList();
+            var expected = new LadderSequence(new[] { (u, 5), (d, 8), (d, 2) });
+            var output = IndexOrderedLadderSequence.CreateIndexOrder(term).ToList();
             Assert.Equal(expected.sequence, output.First().sequence);
         }
 
@@ -160,8 +160,8 @@ namespace Microsoft.Quantum.Chemistry.Tests
         [Fact]
         public void NotPassByReference()
         {
-            var op = new LadderOperatorSequence(new[] { 1, 2, 4, 3 });
-            var newTerm = new IndexOrderedLadderOperators(op);
+            var op = new LadderSequence(new[] { 1, 2, 4, 3 });
+            var newTerm = new IndexOrderedLadderSequence(op);
             op.sequence[2] = new LadderOperator(LadderOperator.Type.d, 5);
 
             Assert.NotEqual(op.sequence, newTerm.sequence);
@@ -171,13 +171,13 @@ namespace Microsoft.Quantum.Chemistry.Tests
         [Fact]
         public void CreateIndexOrder()
         {
-            var term = new LadderOperatorSequence(new[] { (d, 2), (u, 2), (d, 8) });
+            var term = new LadderSequence(new[] { (d, 2), (u, 2), (d, 8) });
 
             var expected = new[] {
-                new LadderOperatorSequence(new[] { (u, 2), (d, 8), (d, 2) }, 1),
-                new LadderOperatorSequence(new[] { (d, 8) })
+                new LadderSequence(new[] { (u, 2), (d, 8), (d, 2) }, 1),
+                new LadderSequence(new[] { (d, 8) })
             };
-            var output = IndexOrderedLadderOperators.CreateIndexOrder(term).ToList();
+            var output = IndexOrderedLadderSequence.CreateIndexOrder(term).ToList();
             Assert.Contains(expected[0].sequence, output.Select(o => o.sequence));
             Assert.Contains(expected[1].sequence, output.Select(o => o.sequence));
         }

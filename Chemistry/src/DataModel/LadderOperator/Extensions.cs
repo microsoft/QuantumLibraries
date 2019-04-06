@@ -7,84 +7,68 @@ using System.Collections.Generic;
 
 namespace Microsoft.Quantum.Chemistry
 {
-    
-    public class IndexOrderedLadderOperators : NormalOrderedLadderOperators
+
+
+    public static partial class Extensions
     {
-        #region Constructors
-        /// <summary>
-        /// Constructor for empty ladder operator sequence.
-        /// </summary>
-        internal IndexOrderedLadderOperators() : base() { }
-
-        /// <summary>
-        /// Construct LadderOperators from another LadderOperators.
-        /// </summary>
-        /// <param name="setSequence">Sequence of ladder operators.</param>
-        public IndexOrderedLadderOperators(IndexOrderedLadderOperators ladderOperators)
-        {
-            // All constructions are pass by value.
-            sequence = ladderOperators.sequence.Select(o => o).ToList();
-            coefficient = ladderOperators.coefficient;
-        }
-
-        /// <summary>
-        /// Construct LadderOperators from sequence of ladder operators.
-        /// </summary>
-        /// <param name="setSequence">Sequence of ladder operators.</param>
-        public IndexOrderedLadderOperators(LadderOperatorSequence ladderOperators) : base(ladderOperators)
-        {
-            ToIndexOrder();
-        }
-        
-        /// <summary>
-        /// Construct LadderOperators from sequence of ladder operators.
-        /// </summary>
-        /// <param name="setSequence">Sequence of ladder operators.</param>
-        public IndexOrderedLadderOperators(IEnumerable<LadderOperator> setSequence, int setCoefficient = 1) : base(setSequence, setCoefficient)
-        {
-            ToIndexOrder();
-        }
-
-
-        /// <summary>
-        /// Construct LadderOperators from sequence of ladder operators.
-        /// </summary>
-        /// <param name="setSequence">Sequence of ladder operators.</param>
-        public IndexOrderedLadderOperators(IEnumerable<(LadderOperator.Type, int)> set) : base(set)
-        {
-            ToIndexOrder();
-        }
-
-        /// <summary>
-        /// FermionTerm constructor that assumes normal-ordered fermionic 
-        /// creation and annihilation operators, and that the number of
-        /// creation an annihilation operators are equal.
-        /// </summary>
-        public IndexOrderedLadderOperators(IEnumerable<int> indices) : base(indices)
-        {
-            ToIndexOrder();
-        }
-        #endregion
-
-
-
-
         #region Reordering methods
-        private void ToIndexOrder()
+
+        /// <summary>
+        ///  Converts a <see cref="LadderSequence"/> to normal order. 
+        ///  In general, this can generate new terms and modifies the coefficient.
+        /// </summary>
+        public static HashSet<NormalOrderedLadderSequence> CreateNormalOrder(this LadderSequence ladderOperator)
         {
-            var ladderTerm = CreateIndexOrder();
-            sequence = ladderTerm.sequence;
-            coefficient = ladderTerm.coefficient;        
+            // Recursively anti-commute creation to the left.
+            var TmpTerms = new Stack<LadderSequence>();
+            var NewTerms = new HashSet<NormalOrderedLadderSequence>();
+
+            TmpTerms.Push(new LadderSequence(ladderOperator));
+
+            // Anti-commutes creation and annihilation operators to canonical order
+            // and creates new terms if spin-orbital indices match.
+            while (TmpTerms.Any())
+            {
+                var tmpTerm = TmpTerms.Pop();
+                if (tmpTerm.IsInNormalOrder())
+                {
+                    NewTerms.Add(new NormalOrderedLadderSequence(tmpTerm));
+                }
+                else
+                {
+                    // Anticommute creation and annihilation operators.
+                    for (int i = 0; i < tmpTerm.sequence.Count() - 1; i++)
+                    {
+                        if ((int)tmpTerm.sequence.ElementAt(i).type > (int)tmpTerm.sequence.ElementAt(i + 1).type)
+                        {
+                            // If the two elements have the same spin orbital index, generate a new term.
+                            if (tmpTerm.sequence.ElementAt(i).index == tmpTerm.sequence.ElementAt(i + 1).index)
+                            {
+                                var newTerm = new LadderSequence(tmpTerm);
+                                newTerm.sequence.RemoveRange(i, 2);
+                                TmpTerms.Push(newTerm);
+                            }
+
+                            // Swap the two elements and flip sign of the coefficient.
+                            var tmpOp = tmpTerm.sequence.ElementAt(i + 1);
+                            tmpTerm.sequence[i + 1] = tmpTerm.sequence.ElementAt(i);
+                            tmpTerm.sequence[i] = tmpOp;
+                            tmpTerm.coefficient *= -1;
+                        }
+                    }
+                    TmpTerms.Push(tmpTerm);
+                }
+            }
+            return NewTerms;
         }
 
-        public IndexOrderedLadderOperators CreateIndexOrder()
+        /// <summary>
+        ///  Converts a <see cref="NormalOrderedLadderSequence"/> to index order. 
+        ///  In general, this can generate new terms and modifies the coefficient.
+        /// </summary>
+        public static IndexOrderedLadderSequence CreateIndexOrder(this NormalOrderedLadderSequence ladderOperators)
         {
-            return CreateIndexOrder(this);
-        }
-
-        public static IndexOrderedLadderOperators CreateIndexOrder(NormalOrderedLadderOperators ladderOperators)
-        {
-            var tmp = new IndexOrderedLadderOperators();
+            var tmp = new IndexOrderedLadderSequence();
             tmp.sequence = ladderOperators.sequence.Select(o => o).ToList();
             tmp.coefficient = ladderOperators.coefficient;
             if (!tmp.IsInIndexOrder())
@@ -129,15 +113,14 @@ namespace Microsoft.Quantum.Chemistry
         }
 
         /// <summary>
-        ///  Converts a <see cref="LadderOperatorSequence"/> to normal order, then index order. 
+        ///  Converts a <see cref="LadderSequence"/> to normal order, then index order. 
         ///  In general, this can generate new terms and modifies the coefficient.
         /// </summary>
-        public static IEnumerable<IndexOrderedLadderOperators> CreateIndexOrder(LadderOperatorSequence ladderOperator)
+        public static HashSet<IndexOrderedLadderSequence> CreateIndexOrder(LadderSequence ladderOperator)
         {
             return CreateNormalOrder(ladderOperator).Select(o => CreateIndexOrder(o));
         }
         #endregion
-        
     }
 
 }

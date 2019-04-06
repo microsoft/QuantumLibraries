@@ -16,7 +16,7 @@ namespace Microsoft.Quantum.Chemistry.Tests
     using SpinOrbital = SpinOrbital;
     using static TermType.Fermion;
     using static LadderOperator.Type;
-    using Op = LadderOperatorSequence;
+    using Op = LadderSequence;
 
     public class HermitianFermionTermTests
     {
@@ -138,7 +138,7 @@ namespace Microsoft.Quantum.Chemistry.Tests
             Assert.Equal(term0, term1);
         }
 
-        public (LadderOperatorSequence, LadderOperatorSequence) CanonicalOrderCorrectnessHelper(int test)
+        public (LadderSequence, LadderSequence) CanonicalOrderCorrectnessHelper(int test)
         {
             switch (test)
             {

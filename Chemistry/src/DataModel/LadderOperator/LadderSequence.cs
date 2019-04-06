@@ -8,7 +8,7 @@ using System.Collections.Generic;
 namespace Microsoft.Quantum.Chemistry
 {
     
-    public class LadderOperatorSequence : IEquatable<LadderOperatorSequence>
+    public class LadderSequence : IEquatable<LadderSequence>
     {
 
         /// <summary>
@@ -25,13 +25,13 @@ namespace Microsoft.Quantum.Chemistry
         /// <summary>
         /// Constructor for empty ladder operator sequence.
         /// </summary>
-        internal LadderOperatorSequence() { }
+        internal LadderSequence() { }
 
         /// <summary>
-        /// Construct LadderOperators from another LadderOperators.
+        /// Construct <see cref="LadderSequence"/> from another LadderSequence.
         /// </summary>
         /// <param name="setSequence">Sequence of ladder operators.</param>
-        public LadderOperatorSequence(LadderOperatorSequence ladderOperators)
+        public LadderSequence(LadderSequence ladderOperators)
         {
             // All constructions are pass by value.
             sequence = ladderOperators.sequence.Select(o => o).ToList();
@@ -39,20 +39,20 @@ namespace Microsoft.Quantum.Chemistry
         }
 
         /// <summary>
-        /// Construct LadderOperators from sequence of ladder operators.
+        /// Construct <see cref="LadderSequence"/> from sequence of ladder operators.
         /// </summary>
         /// <param name="setSequence">Sequence of ladder operators.</param>
-        public LadderOperatorSequence(IEnumerable<LadderOperator> setSequence, int setCoefficient = 1)
+        public LadderSequence(IEnumerable<LadderOperator> setSequence, int setCoefficient = 1)
         {
             sequence = setSequence.Select(o => o).ToList();
             coefficient = setCoefficient;
         }
 
         /// <summary>
-        /// Construct LadderOperators from sequence of ladder operators.
+        /// Construct <see cref="LadderSequence"/> from sequence of ladder operators.
         /// </summary>
         /// <param name="setSequence">Sequence of ladder operators.</param>
-        public LadderOperatorSequence(IEnumerable<(LadderOperator.Type, int)> set, int setCoefficient = 1) : this(set.Select(o => new LadderOperator(o)).ToList(), setCoefficient) { }
+        public LadderSequence(IEnumerable<(LadderOperator.Type, int)> set, int setCoefficient = 1) : this(set.Select(o => new LadderOperator(o)).ToList(), setCoefficient) { }
         
 
         /// <summary>
@@ -60,7 +60,7 @@ namespace Microsoft.Quantum.Chemistry
         /// creation and annihilation operators, and that the number of
         /// creation an annihilation operators are equal.
         /// </summary>
-        public LadderOperatorSequence(IEnumerable<int> indices)
+        public LadderSequence(IEnumerable<int> indices)
         {
             var length = indices.Count();
             if (length % 2 == 1)
@@ -71,7 +71,7 @@ namespace Microsoft.Quantum.Chemistry
             }
             Func<int, int, LadderOperator> GetLadderOperator = (index, position) 
                 => new LadderOperator(position < length / 2 ? LadderOperator.Type.u : LadderOperator.Type.d, index);
-            var tmp = new LadderOperatorSequence(indices.Select((o, idx) => GetLadderOperator(o,idx)).ToList());
+            var tmp = new LadderSequence(indices.Select((o, idx) => GetLadderOperator(o,idx)).ToList());
 
             sequence = tmp.sequence;
             coefficient = tmp.coefficient;
@@ -95,20 +95,20 @@ namespace Microsoft.Quantum.Chemistry
         /// <summary>
         /// Concatenates two Fermion terms.
         /// </summary>
-        /// <param name="left">Left <see cref="LadderOperatorSequence"/> <c>x</c>.</param>
-        /// <param name="right">Right <see cref="LadderOperatorSequence"/> <c>y</c>.</param>
+        /// <param name="left">Left <see cref="LadderSequence"/> <c>x</c>.</param>
+        /// <param name="right">Right <see cref="LadderSequence"/> <c>y</c>.</param>
         /// <returns>
-        /// Returns new <see cref="LadderOperatorSequence"/> <c>xy</c> where coefficients and 
+        /// Returns new <see cref="LadderSequence"/> <c>xy</c> where coefficients and 
         /// LadderOperatorSequences are multipled together.
         /// </returns>
-        public LadderOperatorSequence Multiply(LadderOperatorSequence left, LadderOperatorSequence right)
+        public LadderSequence Multiply(LadderSequence left, LadderSequence right)
         {
-            return new LadderOperatorSequence(left.sequence.Concat(right.sequence), left.coefficient * right.coefficient);
+            return new LadderSequence(left.sequence.Concat(right.sequence), left.coefficient * right.coefficient);
         }
 
         /// <summary>
         /// Counts the number of unique system indices across all <see cref="LadderOperator"/> terms
-        /// in a <see cref="LadderOperatorSequence"/>
+        /// in a <see cref="LadderSequence"/>
         /// </summary>
         /// <returns>Number of unique system indices.</returns>
         public int GetUniqueIndices()
@@ -128,10 +128,10 @@ namespace Microsoft.Quantum.Chemistry
 
         public override bool Equals(object obj)
         {
-            return (obj is LadderOperatorSequence x) ? Equals(x) : false;
+            return (obj is LadderSequence x) ? Equals(x) : false;
         }
 
-        public bool Equals(LadderOperatorSequence x)
+        public bool Equals(LadderSequence x)
         {
             // If parameter is null, return false.
             if (ReferenceEquals(x, null))
@@ -164,7 +164,7 @@ namespace Microsoft.Quantum.Chemistry
             return h;
         }
 
-        public static bool operator == (LadderOperatorSequence x, LadderOperatorSequence y)
+        public static bool operator == (LadderSequence x, LadderSequence y)
         {
             // Check for null on left side.
             if (Object.ReferenceEquals(x, null))
@@ -182,7 +182,7 @@ namespace Microsoft.Quantum.Chemistry
             return x.Equals(y);
         }
 
-        public static bool operator !=(LadderOperatorSequence x, LadderOperatorSequence y)
+        public static bool operator !=(LadderSequence x, LadderSequence y)
         {
             return !(x == y);
         }

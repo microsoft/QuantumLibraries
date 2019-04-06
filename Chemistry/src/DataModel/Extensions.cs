@@ -13,50 +13,49 @@ namespace Microsoft.Quantum.Chemistry
 
     public static partial class Extensions
     {
-        
+        /// <summary>
+        /// IComparer for <c>(QArray<Int64>, QArray<Double>)</c>. This compares only
+        /// the integer sequence, and ignores the double sequence.
+        /// </summary>
+        public class HTermIndexIComparer : IComparer<HTerm>
+        {
+            public int Compare(HTerm x, HTerm y) =>
+                CompareIntArray(x.Item1, y.Item1);
+        }
+
+        /// <summary>
+        /// Equality comparer for <see cref="HTerm"/>. This compares both
+        /// the integer sequence and the double sequence.
+        /// </summary>
+        public class HTermArrayComparer : IEqualityComparer<HTerm>
+        {
+            public bool Equals(HTerm x, HTerm y)
+            {
+                if (x.Item1.SequenceEqual(y.Item1) && x.Item2.SequenceEqual(y.Item2))
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            public int GetHashCode(HTerm x)
+            {
+                int h = 19;
+                foreach (var i in x.Item1.Select(o => o.GetHashCode()))
+                {
+                    h = h * 31 + i;
+                }
+                foreach (var i in x.Item2.Select(o => o.GetHashCode()))
+                {
+                    h = h * 17 + i;
+                }
+                return h;
+            }
+        }
 
         #region Extension methods
-        /// <summary>
-        /// Converts an array of <c>SpinOrbital</c>s into an array of integers representing each spin orbital.
-        /// </summary>
-        public static int[] ToInts(this IEnumerable<SpinOrbital> spinOrbitals, int nOrbitals)
-        {
-            return spinOrbitals.Select(x => x.ToInt(nOrbitals)).ToArray();
-        }
-
-        /// <summary>
-        /// Converts an array of <c>SpinOrbital</c>s into an array of integers representing each spin orbital.
-        /// </summary>
-        internal static int[] ToInts(this IEnumerable<SpinOrbital> spinOrbitals)
-        {
-            return spinOrbitals.Select(x => x.ToInt()).ToArray();
-        }
-
-        /// <summary>
-        /// Converts an array of (orbital index, spin index) into an array of spin-orbitals.
-        /// </summary>
-        public static SpinOrbital[] ToSpinOrbitals(this IEnumerable<(int, Spin)> spinOrbitalIndices, SpinOrbital.Config.IndexConvention.Type indexConvention = SpinOrbital.Config.IndexConvention.Default)
-        {
-            return spinOrbitalIndices.Select(o => new SpinOrbital(o, indexConvention)).ToArray();
-        }
-        /// <summary>
-        /// Converts an array of (orbital index, spin index) into an array of spin-orbitals.
-        /// </summary>
-        public static SpinOrbital[] ToSpinOrbitals(this IEnumerable<(int, int)> spinOrbitalIndices, SpinOrbital.Config.IndexConvention.Type indexConvention = SpinOrbital.Config.IndexConvention.Default)
-        {
-            return spinOrbitalIndices.Select(o => new SpinOrbital(o, indexConvention)).ToArray();
-        }
-
-        /// <summary>
-        /// Enumerates all spin-orbitals described by an array of <see cref="OrbitalIntegral"/> by
-        /// applying <see cref="OrbitalIntegral.EnumerateSpinOrbitals"/> to each.
-        /// </summary>
-        /// <param name="orbitalIntegrals">Array of orbital integrals.</param>
-        /// <returns>Array of Array of spin-orbitals.</returns>
-        public static SpinOrbital[][] EnumerateSpinOrbitals(this IEnumerable<OrbitalIntegral> orbitalIntegrals, SpinOrbital.Config.IndexConvention.Type indexConvention = SpinOrbital.Config.IndexConvention.Default)
-        {
-            return orbitalIntegrals.SelectMany(o => o.EnumerateSpinOrbitals(indexConvention)).ToArray();
-        }
 
         /// <summary>
         /// Computes `x^y` for an integer base `x` and exponent `y`
@@ -111,94 +110,10 @@ namespace Microsoft.Quantum.Chemistry
         {
             return x.Select(o => (long)o).IsIntArrayAscending();
         }
-
-        #region Accumulators
-
-        /// <summary>
-        /// This combines the coefficients of adjacent identical terms in a 
-        /// sequence of type <c>(QArray<Int64>,QArray<Double>)</c>. Adjacent terms are
-        /// considered identical if their <c>QArray<Int64></c> sequences are identical.
-        /// </summary>
-        /// <param name="term">Sequence of terms in a Hamiltonian.</param>
-        /// <returns>Sequence of terms in a Hamiltonian with adjacent entries of the 
-        /// same type merged.</returns>
-        public static TermArray AccumulateTermArray(this IEnumerable<HTerm> term)
-        {
-            TermArray output = new TermArray();
-            if (term.Any())
-            {
-                output.Add(term.First());
-                var nElements = 1;
-                foreach (var next in term.Skip(1))
-                {
-                    var curr = output[nElements - 1];
-
-                    if (Enumerable.SequenceEqual(curr.Item1, next.Item1))
-                    {
-                        var (pqrsSorted, coeffs) = next;
-                        for (var idxCoeff = 0; idxCoeff < coeffs.Length; idxCoeff++)
-                        {
-                            curr.Item2[idxCoeff] += coeffs[idxCoeff];
-                            output[nElements - 1] = curr;
-                        }
-                    }
-                    else
-                    {
-                        output.Add(next);
-                        nElements++;
-                    }
-                }
-            }
-            return output;
-        }
-
-
-
-        #endregion
-        /*
-        /// <summary>
-        /// This combines the coefficients of adjacent identical terms in a 
-        /// sequence of type <c>FermionTerm</c> that are sorted in canonical order.
-        /// <see cref="FermionTerm.CanonicalSort"/>. Adjacent terms are
-        /// considered identical if their creation-annihilation and
-        /// spin-orbit sequences are identical.
-        /// </summary>
-        /// <param name="term">Sequence of terms in a Hamiltonian.</param>
-        /// <returns>
-        /// Sequence of terms in a Hamiltonian with adjacent entries of the 
-        /// same type merged.
-        /// </returns>
-        public static List<FermionTerm> AccumulateFermionTerm(this IEnumerable<FermionTerm> term)
-        {
-            var output = new List<FermionTerm>();
-            if (term.Any())
-            {
-                output.Add(term.First());
-                var nElements = 1;
-                foreach (var next in term.Skip(1))
-                {
-                    var curr = output[nElements - 1];
-
-                    if (Enumerable.SequenceEqual(curr.SpinOrbitalIndices.Select(o => o.spin), next.SpinOrbitalIndices.Select(o => o.spin))
-                        &&
-                        Enumerable.SequenceEqual(curr.SpinOrbitalIndices.Select(o => o.orbital), next.SpinOrbitalIndices.Select(o => o.orbital)))
-                    {
-                        curr.AddCoeff(next.coeff);
-                        output[nElements - 1] = curr;
-                    }
-                    else
-                    {
-                        output.Add(next);
-                        nElements++;
-                    }
-                }
-            }
-            return output;
-        }
-        */
         #endregion
 
-        #region Comparers
+
+        #region Int64 Comparers
 
 
         /// <summary>
@@ -251,48 +166,6 @@ namespace Microsoft.Quantum.Chemistry
             }
         }
 
-        /// <summary>
-        /// IComparer for <c>(QArray<Int64>, QArray<Double>)</c>. This compares only
-        /// the integer sequence, and ignores the double sequence.
-        /// </summary>
-        public class HTermIndexIComparer : IComparer<HTerm>
-        {
-            public int Compare(HTerm x, HTerm y) =>
-                CompareIntArray(x.Item1, y.Item1);
-        }
-
-        /// <summary>
-        /// Equality comparer for <see cref="HTerm"/>. This compares both
-        /// the integer sequence and the double sequence.
-        /// </summary>
-        public class HTermArrayComparer : IEqualityComparer<HTerm>
-        {
-            public bool Equals(HTerm x, HTerm y)
-            {
-                if (x.Item1.SequenceEqual(y.Item1) && x.Item2.SequenceEqual(y.Item2))
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-            }
-            public int GetHashCode(HTerm x)
-            {
-                int h = 19;
-                foreach (var i in x.Item1.Select(o => o.GetHashCode()))
-                {
-                    h = h * 31 + i;
-                }
-                foreach (var i in x.Item2.Select(o => o.GetHashCode()))
-                {
-                    h = h * 17 + i;
-                }
-                return h;
-            }
-        }
-
         public class Int64ArrayIEqualityComparer : IEqualityComparer<IEnumerable<Int64>>
         {
             public bool Equals(IEnumerable<Int64> x, IEnumerable<Int64> y)
@@ -311,7 +184,7 @@ namespace Microsoft.Quantum.Chemistry
         }
         #endregion
 
-        #region new tpes
+        #region int Comparers
         public class IntArrayIEqualityComparer : IEqualityComparer<IEnumerable<int>>
         {
             public bool Equals(IEnumerable<int> x, IEnumerable<int> y)
@@ -362,7 +235,8 @@ namespace Microsoft.Quantum.Chemistry
             }
         }
         #endregion
-        
+
+        #region Map
         /// <summary>
         ///      Given a value of an enumeration type, and an action for each
         ///      possible value of that enumeration type, performs the action
@@ -402,4 +276,5 @@ namespace Microsoft.Quantum.Chemistry
             throw new ArgumentException($"Expected {@enum} to be a member of {@enum.GetType()}.");
         }
     }
+    #endregion
 }

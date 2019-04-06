@@ -36,5 +36,16 @@ namespace Microsoft.Quantum.Chemistry.Tests
             Assert.Equal(1, Extensions.CompareIntArray(new Int64[] { 2, 2, 3, 4 }, new Int64[] { 1, 2, 10, 3 }));
             Assert.Equal(-1, Extensions.CompareIntArray(new Int64[] { 1, 3, 3, 3 }, new Int64[] { 10, 2, 3, 4 }));
         }
+
+        [Fact]
+        public void PrintIntArray()
+        {
+            var arr = new[] { 1, 2, 3, 4 };
+            var arrString = arr.ToString();
+
+            var arrHashSet = new HashSet<int>(arr) ;
+            var arrHashSetString = arr.ToString();
+
+        }
     }
 }

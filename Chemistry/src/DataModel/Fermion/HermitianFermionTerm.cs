@@ -7,20 +7,21 @@ using System.Collections.Generic;
 
 namespace Microsoft.Quantum.Chemistry
 {
-    public class HermitianFermionTerm : IndexOrderedLadderOperators, HamiltonianTerm<TermType.Fermion>
+    public class HermitianFermionTerm : IndexOrderedLadderSequence, HamiltonianTerm<TermType.Fermion>
     {
         internal HermitianFermionTerm() : base() { }
 
         // Disallow inputs that are not normal ordered.
         internal HermitianFermionTerm(HermitianFermionTerm term)
         {
-            sequence = term.sequence;
+            // All constructions are pass by value.
+            sequence = term.sequence.Select(o => o).ToList();
             coefficient = term.coefficient;
         }
 
         public HermitianFermionTerm(IEnumerable<LadderOperator> setSequence, int setCoefficient = 1) : base(setSequence, setCoefficient) { ToCanonicalOrder(); }
         public HermitianFermionTerm(IEnumerable<(LadderOperator.Type, int)> set) : base(set) { ToCanonicalOrder(); }
-        public HermitianFermionTerm(LadderOperatorSequence set) : base(set) { ToCanonicalOrder(); }
+        public HermitianFermionTerm(LadderSequence set) : base(set) { ToCanonicalOrder(); }
         public HermitianFermionTerm(IEnumerable<int> indices) : base(indices) { ToCanonicalOrder(); }
 
         /// <summary>
