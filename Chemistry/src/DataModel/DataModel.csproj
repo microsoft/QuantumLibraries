@@ -42,14 +42,20 @@
 
 
   <ItemGroup>
+    <Compile Remove="Broombridge\**" />
     <Compile Remove="DataFormat\**" />
     <Compile Remove="Old\**" />
+    <Compile Remove="Pauli\**" />
     <Compile Remove="QSharpFormat\**" />
+    <EmbeddedResource Remove="Broombridge\**" />
     <EmbeddedResource Remove="DataFormat\**" />
     <EmbeddedResource Remove="Old\**" />
+    <EmbeddedResource Remove="Pauli\**" />
     <EmbeddedResource Remove="QSharpFormat\**" />
+    <QsharpCompile Remove="Broombridge\**" />
     <QsharpCompile Remove="DataFormat\**" />
     <QsharpCompile Remove="Old\**" />
+    <QsharpCompile Remove="Pauli\**" />
     <QsharpCompile Remove="QSharpFormat\**" />
   </ItemGroup>
 
@@ -64,19 +70,13 @@
     <Compile Remove="Fermion\FermionTermDeprecated.cs" />
     <Compile Remove="Fermion\FermionTermold.cs" />
     <Compile Remove="Hamiltonian\FermionHamiltonian2.cs" />
-  </ItemGroup>
-
-
-  <ItemGroup>
-    <Compile Include="DataFormat\LiQuiD.cs" />
-    <Compile Include="DataFormat\LoadData.cs" />
+    <Compile Remove="ProblemContainer\LoadData.cs" />
+    <Compile Remove="QuantumStates\FermionHamiltonianStatePrep.cs" />
   </ItemGroup>
 
 
   <ItemGroup>
     <Folder Include="Analysis\" />
-    <Folder Include="Pauli\" />
-    <Folder Include="QuantumStates\" />
   </ItemGroup>
 
 </Project>

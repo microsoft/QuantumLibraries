@@ -1,20 +1,19 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-using Microsoft.Quantum.Simulation.Core;
-
 using System;
 using System.Linq;
 using System.Collections.Generic;
-using Microsoft.Quantum.Chemistry;
-using System.Numerics;
 
 namespace Microsoft.Quantum.Chemistry
 {
     
-    public class NormalOrderedLadderOperators : LadderOperators
+    public class NormalOrderedLadderOperators : LadderOperatorSequence
     {
         #region Constructors
+        /// <summary>
+        /// Constructor for empty ladder operator sequence.
+        /// </summary>
         internal NormalOrderedLadderOperators() : base() { }
 
         /// <summary>
@@ -23,7 +22,8 @@ namespace Microsoft.Quantum.Chemistry
         /// <param name="setSequence">Sequence of ladder operators.</param>
         public NormalOrderedLadderOperators(NormalOrderedLadderOperators ladderOperators)
         {
-            sequence = ladderOperators.sequence;
+            // All constructions are pass by value.
+            sequence = ladderOperators.sequence.Select(o => o).ToList();
             coefficient = ladderOperators.coefficient;
         }
 
@@ -31,10 +31,9 @@ namespace Microsoft.Quantum.Chemistry
         /// Construct LadderOperators from sequence of ladder operators.
         /// </summary>
         /// <param name="setSequence">Sequence of ladder operators.</param>
-        public NormalOrderedLadderOperators(LadderOperators ladderOperators) : base(ladderOperators)
+        public NormalOrderedLadderOperators(LadderOperatorSequence ladderOperators) : base(ladderOperators)
         {
             ExceptionIfNotInNormalOrder();
-            ToIndexOrder();
         }
         
         /// <summary>
@@ -44,18 +43,16 @@ namespace Microsoft.Quantum.Chemistry
         public NormalOrderedLadderOperators(IEnumerable<LadderOperator> setSequence, int setCoefficient = 1) : base(setSequence, setCoefficient)
         {
             ExceptionIfNotInNormalOrder();
-            ToIndexOrder();
         }
 
 
         /// <summary>
         /// Construct LadderOperators from sequence of ladder operators.
         /// </summary>
-        /// <param name="setSequence">Sequence of ladder operators.</param>
+        /// <param name="set">Sequence of ladder operators.</param>
         public NormalOrderedLadderOperators(IEnumerable<(LadderOperator.Type, int)> set) : base(set)
         {
             ExceptionIfNotInNormalOrder();
-            ToIndexOrder();
         }
 
         /// <summary>
@@ -66,21 +63,10 @@ namespace Microsoft.Quantum.Chemistry
         public NormalOrderedLadderOperators(IEnumerable<int> indices) : base(indices)
         {
             ExceptionIfNotInNormalOrder();
-            ToIndexOrder();
         }
         #endregion
 
-
-        /// <summary>
-        /// This throws an ArgumentException if the operators in NormalOrderedLadderOperators are not normal-ordered.
-        /// </summary>
-        private void ExceptionIfNotInNormalOrder()
-        {
-            if (!base.IsInNormalOrder())
-            {
-                throw new ArgumentException("NormalOrderedLadderOperators must contatin normal-ordered LadderOperators");
-            }
-        }
+        #region Ordering testers
         /// <summary>
         ///  Checks if raising operators indices are in ascending order, 
         ///  then if lowering operator indices are in descending order.
@@ -95,95 +81,91 @@ namespace Microsoft.Quantum.Chemistry
         }
 
         /// <summary>
-        ///  Checks whether the creation operator sequence of a <see cref="LadderOperators"/> is in 
+        ///  Checks whether the creation operator sequence of a <see cref="LadderOperatorSequence"/> is in 
         ///  canonical order. This means
         ///  1) <c>SpinOrbital</c> is sorted in ascending order for the creation operators.
         /// </summary>
         /// <returns><c>true</c> if the creation opeartor sequence of a <c>LadderOperators</c> is in 
         /// canonical order. <c>false</c> otherwise</returns>
-        private bool IsInIndexCreationCanonicalOrder()
+        public bool IsInIndexCreationCanonicalOrder()
         {
             return sequence.Where(o => o.type == LadderOperator.Type.u).Select(o => o.index).IsIntArrayAscending();
         }
 
         /// <summary>
-        ///  Checks whether the annihilation operator sequence of a <see cref="LadderOperators"/> is in 
+        ///  Checks whether the annihilation operator sequence of a <see cref="LadderOperatorSequence"/> is in 
         ///  canonical order. This means
         ///  1) <c>SpinOrbital</c> is sorted in descending order for the annihilation operators.
         /// </summary>
         /// <returns><c>true</c> if the annihilation opeartor sequence of a <c>LadderOperators</c> is in 
         /// canonical order. <c>false</c> otherwise</returns>
-        private bool IsInIndexAnnihilationCanonicalOrder()
+        public bool IsInIndexAnnihilationCanonicalOrder()
         {
             return sequence.Where(o => o.type == LadderOperator.Type.d).Select(o => o.index).Reverse().IsIntArrayAscending();
         }
+        #endregion
 
-        private void ToIndexOrder()
+        #region Reordering methods
+
+        /// <summary>
+        ///  Converts a <see cref="LadderOperatorSequence"/> to normal order. 
+        ///  In general, this can generate new terms and modifies the coefficient.
+        /// </summary>
+        public static IEnumerable<NormalOrderedLadderOperators> CreateNormalOrder(LadderOperatorSequence ladderOperator)
         {
-            var ladderTerm = CreateIndexOrder();
-            sequence = ladderTerm.sequence;
-            coefficient = ladderTerm.coefficient;        
-        }
+            // Recursively anti-commute creation to the left.
+            var TmpTerms = new Stack<LadderOperatorSequence>();
+            var NewTerms = new HashSet<NormalOrderedLadderOperators>();
+            
+            TmpTerms.Push(new LadderOperatorSequence(ladderOperator));
 
-        public LadderOperators CreateIndexOrder()
-        {
-            return CreateIndexOrder(this);
-        }
-
-        public static NormalOrderedLadderOperators CreateIndexOrder(NormalOrderedLadderOperators ladderOperators)
-        {
-            var tmp = new NormalOrderedLadderOperators(ladderOperators);
-            //var left = sequence.Where(o => o.type == LadderOperator.Type.u).OrderBy(o => o.index);
-            //var right = sequence.Where(o => o.type == LadderOperator.Type.d).OrderBy(o => o.index).Reverse();
-            //var normalOrdered = new LadderOperators(left.Concat(right));
-            //return (0, normalOrdered);
-
-            // Check that LadderOperators is normal-ordered.
-            /*
-            if (!tmp.IsInNormalOrder())
+            // Anti-commutes creation and annihilation operators to canonical order
+            // and creates new terms if spin-orbital indices match.
+            while (TmpTerms.Any())
             {
-                throw new System.ArgumentException(
-                    $"ToCanonicalOrder() assumes input is normal-ordered. This is currently not satisfied."
-                    );
-            }*/
-            // Check that LadderOperators spin-orbital indices are in canonical order.
-            if (!tmp.IsInIndexOrder())
-            {
-
-                var upArrayIndices = tmp.sequence.Select((op, idx) => new { op, idx }).Where(x => x.op.type == LadderOperator.Type.u).Select(x => x.idx).ToArray();
-                var downArrayIndices = tmp.sequence.Select((op, idx) => new { op, idx }).Where(x => x.op.type == LadderOperator.Type.d).Select(x => x.idx).ToArray();
-
-                // Bubble sort spin-orbital indices of creation operator.
-                while (!tmp.IsInIndexCreationCanonicalOrder())
+                var tmpTerm = TmpTerms.Pop();
+                if (tmpTerm.IsInNormalOrder())
                 {
-                    for (int idx = 0; idx < upArrayIndices.Count() - 1; idx++)
-                    {
-                        if (tmp.sequence.ElementAt(upArrayIndices.ElementAt(idx)).index > tmp.sequence.ElementAt(upArrayIndices.ElementAt(idx + 1)).index)
-                        {
-                            var tmpLadderOperator = tmp.sequence.ElementAt(upArrayIndices.ElementAt(idx));
-                            tmp.sequence[upArrayIndices.ElementAt(idx)] = tmp.sequence[upArrayIndices.ElementAt(idx + 1)];
-                            tmp.sequence[upArrayIndices.ElementAt(idx + 1)] = tmpLadderOperator;
-                            tmp.coefficient = -1 * tmp.coefficient;
-                        }
-                    }
+                    NewTerms.Add(new NormalOrderedLadderOperators(tmpTerm));
                 }
-
-                // Bubble sort spin-orbital indices of annihilation operator.
-                while (!tmp.IsInIndexAnnihilationCanonicalOrder())
+                else
                 {
-                    for (int idx = 0; idx < downArrayIndices.Length - 1; idx++)
+                    // Anticommute creation and annihilation operators.
+                    for (int i = 0; i < tmpTerm.sequence.Count() - 1; i++)
                     {
-                        if (tmp.sequence.ElementAt(downArrayIndices.ElementAt(idx)).index < tmp.sequence.ElementAt(downArrayIndices.ElementAt(idx + 1)).index)
+                        if ((int) tmpTerm.sequence.ElementAt(i).type > (int) tmpTerm.sequence.ElementAt(i + 1).type)
                         {
-                            var tmpLadderOperator = tmp.sequence.ElementAt(downArrayIndices.ElementAt(idx));
-                            tmp.sequence[downArrayIndices.ElementAt(idx)] = tmp.sequence[downArrayIndices.ElementAt(idx + 1)];
-                            tmp.sequence[downArrayIndices.ElementAt(idx + 1)] = tmpLadderOperator;
-                            tmp.coefficient = -1 * tmp.coefficient;
+                            // If the two elements have the same spin orbital index, generate a new term.
+                            if (tmpTerm.sequence.ElementAt(i).index == tmpTerm.sequence.ElementAt(i + 1).index)
+                            {
+                                var newTerm = new LadderOperatorSequence(tmpTerm);
+                                newTerm.sequence.RemoveRange(i, 2);
+                                TmpTerms.Push(newTerm);
+                            }
+
+                            // Swap the two elements and flip sign of the coefficient.
+                            var tmpOp = tmpTerm.sequence.ElementAt(i + 1);
+                            tmpTerm.sequence[i + 1] = tmpTerm.sequence.ElementAt(i);
+                            tmpTerm.sequence[i] = tmpOp;
+                            tmpTerm.coefficient *= -1;
                         }
                     }
+                    TmpTerms.Push(tmpTerm);
                 }
             }
-            return tmp;
+            return NewTerms;
+        }
+        #endregion
+
+        /// <summary>
+        /// This throws an ArgumentException if the operators in NormalOrderedLadderOperators are not normal-ordered.
+        /// </summary>
+        private void ExceptionIfNotInNormalOrder()
+        {
+            if (!base.IsInNormalOrder())
+            {
+                throw new ArgumentException("NormalOrderedLadderOperators must contatin normal-ordered LadderOperators");
+            }
         }
     }
 

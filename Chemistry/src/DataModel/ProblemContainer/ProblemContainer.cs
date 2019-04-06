@@ -69,8 +69,8 @@ namespace Microsoft.Quantum.Chemistry
     /// assumed to be a linear combination of sequences of creation
     /// and annihilation operators. 
     /// </summary>
-    public partial class FermionHamiltonian
-    {
+   // public partial class FermionHamiltonian
+   // {
         ///public Config Configuration = Config.Default();
 
         // This will sort terms and accumulate terms in a canonical format.
@@ -139,7 +139,7 @@ namespace Microsoft.Quantum.Chemistry
         }
 
     */
-    }
+  //  }
 
 }
  

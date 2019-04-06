@@ -17,7 +17,7 @@ namespace Microsoft.Quantum.Chemistry
     /// </summary>
     /// <typeparam name="TermClassification">Index to categories of terms.</typeparam>
     /// <typeparam name="TermIndexing">Index to individual terms.</typeparam>
-    public class GenericHamiltonian<TermClassification, TermIndexing> 
+    public class GenericQuantumState<TermClassification, TermIndexing> 
         //where TermClassification: IEquatable<TermClassification>
         where TermIndexing: HamiltonianTerm<TermClassification>//, IEquatable<TermIndexing>
     {
@@ -34,7 +34,7 @@ namespace Microsoft.Quantum.Chemistry
         /// <summary>
         /// Constructor for empty Hamiltonian.
         /// </summary>
-        public GenericHamiltonian()
+        public GenericQuantumState()
         {
             terms = new Dictionary<TermClassification, Dictionary<TermIndexing, double>>();
         }
@@ -42,7 +42,7 @@ namespace Microsoft.Quantum.Chemistry
         /// <summary>
         /// Constructor for copying a Hamiltonian.
         /// </summary>
-        public GenericHamiltonian(GenericHamiltonian<TermClassification, TermIndexing> hamiltonian)
+        public GenericQuantumState(GenericQuantumState<TermClassification, TermIndexing> hamiltonian)
         {
             terms = hamiltonian.terms;
         }
@@ -106,18 +106,6 @@ namespace Microsoft.Quantum.Chemistry
             foreach (var term in terms)
             {
                 AddTerm(term.Item1, term.Item2);
-            }
-        }
-
-        /// <summary>
-        /// Method for add all terms from a source Hamiltonian into this Hamiltonian.
-        /// </summary>
-        /// <param name="sourceHamiltonian">Source Hamiltonian.</param>
-        public void AddHamiltonian(GenericHamiltonian<TermClassification, TermIndexing> sourceHamiltonian)
-        {
-            foreach(var termType in sourceHamiltonian.terms)
-            {
-                AddTerms(termType.Key, termType.Value.Select(o => (o.Key, o.Value)));
             }
         }
 

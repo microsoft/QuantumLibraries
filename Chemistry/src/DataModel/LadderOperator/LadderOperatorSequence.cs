@@ -1,18 +1,14 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-using Microsoft.Quantum.Simulation.Core;
-
 using System;
 using System.Linq;
 using System.Collections.Generic;
-using Microsoft.Quantum.Chemistry;
-using System.Numerics;
 
 namespace Microsoft.Quantum.Chemistry
 {
     
-    public class LadderOperators : IEquatable<LadderOperators>
+    public class LadderOperatorSequence : IEquatable<LadderOperatorSequence>
     {
 
         /// <summary>
@@ -27,17 +23,18 @@ namespace Microsoft.Quantum.Chemistry
 
         #region Constructors
         /// <summary>
-        /// Constructor for empty ladder operators.
+        /// Constructor for empty ladder operator sequence.
         /// </summary>
-        internal LadderOperators() { }
+        internal LadderOperatorSequence() { }
 
         /// <summary>
         /// Construct LadderOperators from another LadderOperators.
         /// </summary>
         /// <param name="setSequence">Sequence of ladder operators.</param>
-        public LadderOperators(LadderOperators ladderOperators)
+        public LadderOperatorSequence(LadderOperatorSequence ladderOperators)
         {
-            sequence = ladderOperators.sequence;
+            // All constructions are pass by value.
+            sequence = ladderOperators.sequence.Select(o => o).ToList();
             coefficient = ladderOperators.coefficient;
         }
 
@@ -45,9 +42,9 @@ namespace Microsoft.Quantum.Chemistry
         /// Construct LadderOperators from sequence of ladder operators.
         /// </summary>
         /// <param name="setSequence">Sequence of ladder operators.</param>
-        public LadderOperators(IEnumerable<LadderOperator> setSequence, int setCoefficient = 1)
+        public LadderOperatorSequence(IEnumerable<LadderOperator> setSequence, int setCoefficient = 1)
         {
-            sequence = setSequence.ToList();
+            sequence = setSequence.Select(o => o).ToList();
             coefficient = setCoefficient;
         }
 
@@ -55,7 +52,7 @@ namespace Microsoft.Quantum.Chemistry
         /// Construct LadderOperators from sequence of ladder operators.
         /// </summary>
         /// <param name="setSequence">Sequence of ladder operators.</param>
-        public LadderOperators(IEnumerable<(LadderOperator.Type, int)> set, int setCoefficient = 1) : this(set.Select(o => new LadderOperator(o)).ToList(), setCoefficient) { }
+        public LadderOperatorSequence(IEnumerable<(LadderOperator.Type, int)> set, int setCoefficient = 1) : this(set.Select(o => new LadderOperator(o)).ToList(), setCoefficient) { }
         
 
         /// <summary>
@@ -63,7 +60,7 @@ namespace Microsoft.Quantum.Chemistry
         /// creation and annihilation operators, and that the number of
         /// creation an annihilation operators are equal.
         /// </summary>
-        public LadderOperators(IEnumerable<int> indices)
+        public LadderOperatorSequence(IEnumerable<int> indices)
         {
             var length = indices.Count();
             if (length % 2 == 1)
@@ -74,13 +71,14 @@ namespace Microsoft.Quantum.Chemistry
             }
             Func<int, int, LadderOperator> GetLadderOperator = (index, position) 
                 => new LadderOperator(position < length / 2 ? LadderOperator.Type.u : LadderOperator.Type.d, index);
-            var tmp = new LadderOperators(indices.Select((o, idx) => GetLadderOperator(o,idx)).ToList());
+            var tmp = new LadderOperatorSequence(indices.Select((o, idx) => GetLadderOperator(o,idx)).ToList());
 
             sequence = tmp.sequence;
             coefficient = tmp.coefficient;
         }
         #endregion
-        
+
+        #region Ordering testers
         /// <summary>
         /// Checks whether all raising operators are to the left of all lowering operators.
         /// </summary>
@@ -92,21 +90,48 @@ namespace Microsoft.Quantum.Chemistry
         {
             return sequence.Count() == 0 ? true : sequence.Select(o => (int)o.type).IsIntArrayAscending();
         }
+        #endregion
 
+        /// <summary>
+        /// Concatenates two Fermion terms.
+        /// </summary>
+        /// <param name="left">Left <see cref="LadderOperatorSequence"/> <c>x</c>.</param>
+        /// <param name="right">Right <see cref="LadderOperatorSequence"/> <c>y</c>.</param>
+        /// <returns>
+        /// Returns new <see cref="LadderOperatorSequence"/> <c>xy</c> where coefficients and 
+        /// LadderOperatorSequences are multipled together.
+        /// </returns>
+        public LadderOperatorSequence Multiply(LadderOperatorSequence left, LadderOperatorSequence right)
+        {
+            return new LadderOperatorSequence(left.sequence.Concat(right.sequence), left.coefficient * right.coefficient);
+        }
 
-        public Int64 GetUniqueIndices()
+        /// <summary>
+        /// Counts the number of unique system indices across all <see cref="LadderOperator"/> terms
+        /// in a <see cref="LadderOperatorSequence"/>
+        /// </summary>
+        /// <returns>Number of unique system indices.</returns>
+        public int GetUniqueIndices()
         {
             return sequence.Select(o => o.index).Distinct().Count();
         }
-               
+
+        /// <summary>
+        /// Returns a human-readable description this object.
+        /// </summary>
+        public override string ToString() 
+        {
+            return $"{coefficient} * {string.Join(" ",sequence)}";
+        }     
+
         #region Equality Testing
 
         public override bool Equals(object obj)
         {
-            return (obj is LadderOperators x) ? Equals(x) : false;
+            return (obj is LadderOperatorSequence x) ? Equals(x) : false;
         }
 
-        public bool Equals(LadderOperators x)
+        public bool Equals(LadderOperatorSequence x)
         {
             // If parameter is null, return false.
             if (ReferenceEquals(x, null))
@@ -139,7 +164,7 @@ namespace Microsoft.Quantum.Chemistry
             return h;
         }
 
-        public static bool operator == (LadderOperators x, LadderOperators y)
+        public static bool operator == (LadderOperatorSequence x, LadderOperatorSequence y)
         {
             // Check for null on left side.
             if (Object.ReferenceEquals(x, null))
@@ -157,19 +182,13 @@ namespace Microsoft.Quantum.Chemistry
             return x.Equals(y);
         }
 
-        public static bool operator !=(LadderOperators x, LadderOperators y)
+        public static bool operator !=(LadderOperatorSequence x, LadderOperatorSequence y)
         {
             return !(x == y);
         }
         #endregion
 
-        /// <summary>
-        /// Returns a human-readable description this object.
-        /// </summary>
-        public override string ToString() 
-        {
-            return $"{coefficient} * {string.Join(" ",sequence)}";
-        }
+
     }
 
 }

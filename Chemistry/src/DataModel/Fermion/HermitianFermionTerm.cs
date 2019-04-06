@@ -1,17 +1,13 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-using Microsoft.Quantum.Simulation.Core;
-
 using System;
 using System.Linq;
 using System.Collections.Generic;
-using Microsoft.Quantum.Chemistry;
-using System.Numerics;
 
 namespace Microsoft.Quantum.Chemistry
 {
-    public class HermitianFermionTerm : NormalOrderedLadderOperators, HamiltonianTerm<TermType.Fermion>
+    public class HermitianFermionTerm : IndexOrderedLadderOperators, HamiltonianTerm<TermType.Fermion>
     {
         internal HermitianFermionTerm() : base() { }
 
@@ -24,7 +20,7 @@ namespace Microsoft.Quantum.Chemistry
 
         public HermitianFermionTerm(IEnumerable<LadderOperator> setSequence, int setCoefficient = 1) : base(setSequence, setCoefficient) { ToCanonicalOrder(); }
         public HermitianFermionTerm(IEnumerable<(LadderOperator.Type, int)> set) : base(set) { ToCanonicalOrder(); }
-        public HermitianFermionTerm(LadderOperators set) : base(set) { ToCanonicalOrder(); }
+        public HermitianFermionTerm(LadderOperatorSequence set) : base(set) { ToCanonicalOrder(); }
         public HermitianFermionTerm(IEnumerable<int> indices) : base(indices) { ToCanonicalOrder(); }
 
         /// <summary>
