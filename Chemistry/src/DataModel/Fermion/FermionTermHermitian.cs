@@ -14,18 +14,18 @@ namespace Microsoft.Quantum.Chemistry
     /// 2) Index-ordered, where are raising(lowering) operators are in ascending(descending) order.
     /// 3) Hermitian, and is assumed to be implicitly summed with its Hermitian conjugate if not explicitly Hermitian.
     /// </summary>
-    public class FermionTermHermitian : IndexOrderedLadderSequence, HamiltonianTerm<TermType.Fermion>
+    public class FermionTermHermitian : FermionTerm, HamiltonianTerm<TermType.Fermion>
     {
         #region Constructors
         /// <summary>
-        /// Constructor for empty ladder operator sequence.
+        /// Constructor for empty instance.
         /// </summary>
         internal FermionTermHermitian() : base() { }
 
         /// <summary>
-        /// Construct a copy of a the input instance.
+        /// Construct a copy of the input instance.
         /// </summary>
-        /// <param name="setSequence">Sequence of ladder operators.</param>
+        /// <param name="term">Sequence of ladder operators.</param>
         internal FermionTermHermitian(FermionTermHermitian term)
         {
             // All constructions are pass by value.
@@ -33,7 +33,11 @@ namespace Microsoft.Quantum.Chemistry
             coefficient = term.coefficient;
         }
 
-        public FermionTermHermitian(LadderSequence set) : base(set) { ToCanonicalOrder(); }
+        /// <summary>
+        /// Construct instance from a normal-ordered sequence of ladder operators.
+        /// </summary>
+        /// <param name="ladderOperators">Normal-ordered sequence of ladder operators.</param>
+        public FermionTermHermitian(LadderSequence ladderOperators) : base(ladderOperators) { ToCanonicalOrder(); }
         #endregion
 
         /// <summary>
@@ -44,9 +48,12 @@ namespace Microsoft.Quantum.Chemistry
         /// Returns <c>true</c> this condition is satisfied.
         /// Returns <c>false</c> otherwise.
         /// </returns>
+        /// <remarks>
+        /// This should always return <c>true</c> when invoked outside this class.
+        /// </remarks>
         public bool IsInCanonicalOrder()
         {
-            if (base.IsInIndexOrder())
+            if (IsInIndexOrder())
             {
                 var creationSequence = sequence.Where(o => o.type == LadderOperator.Type.u).Select(o => o.index);
                 var annihilationSequence = sequence.Where(o => o.type == LadderOperator.Type.d).Select(o => o.index);

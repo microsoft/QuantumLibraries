@@ -11,27 +11,32 @@ namespace Microsoft.Quantum.Chemistry
     /// 1) Normal-ordered, where all raising operators are to the left of all lowering operators.
     /// 2) Index-ordered, where are raising(lowering) operators are in ascending(descending) order.
     /// </summary>
-    public class FermionTermSingle : IndexOrderedLadderSequence
+    public class FermionTerm : IndexOrderedLadderSequence
     {
         #region Constructors
         /// <summary>
-        /// Constructor for empty ladder operator sequence.
+        /// Constructor for empty instance.
         /// </summary>
-        internal FermionTermSingle() : base() { }
+        internal FermionTerm() : base() { }
 
         /// <summary>
         /// Construct a copy of the input instance.
         /// </summary>
-        /// <param name="term">Fermion term.</param>
-        internal FermionTermSingle(FermionTermSingle term)
+        /// <param name="term">Sequence of ladder operators.</param>
+        internal FermionTerm(FermionTerm term)
         {
             // All constructions are pass by value.
             sequence = term.sequence.Select(o => o).ToList();
             coefficient = term.coefficient;
         }
 
-        public FermionTermSingle(LadderSequence set) : base(set) { }
+        /// <summary>
+        /// Construct instance from a normal-ordered sequence of ladder operators.
+        /// </summary>
+        /// <param name="ladderOperators">Normal-ordered sequence of ladder operators.</param>
+        public FermionTerm(LadderSequence ladderOperators) : base(ladderOperators) { }
         #endregion
+
     }
 }
 

@@ -33,20 +33,13 @@ namespace Microsoft.Quantum.Chemistry
         }
 
         /// <summary>
-        /// Construct LadderSequence from sequence of ladder operators.
+        /// Construct instance from a normal-ordered sequence of ladder operators.
         /// </summary>
-        /// <param name="setSequence">Sequence of ladder operators.</param>
+        /// <param name="ladderOperators">Normal-ordered sequence of ladder operators.</param>
         public IndexOrderedLadderSequence(LadderSequence ladderOperators) : base(ladderOperators)
         {
             ToIndexOrder();
         }
-        #endregion
-
-        #region Reordering methods
-        new private void ToIndexOrder()
-        {
-            base.ToIndexOrder();        
-        }        
         #endregion
         
     }

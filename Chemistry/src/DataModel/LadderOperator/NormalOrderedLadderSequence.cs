@@ -33,7 +33,7 @@ namespace Microsoft.Quantum.Chemistry
         /// <summary>
         /// Construct instance from a normal-ordered sequence of ladder operators.
         /// </summary>
-        /// <param name="setSequence">Normal-ordered sequence of ladder operators.</param>
+        /// <param name="ladderOperators">Normal-ordered sequence of ladder operators.</param>
         public NormalOrderedLadderSequence(LadderSequence ladderOperators) : base(ladderOperators)
         {
             ExceptionIfNotInNormalOrder();
