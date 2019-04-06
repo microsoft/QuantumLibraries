@@ -43,13 +43,13 @@
 
   <ItemGroup>
     <Compile Remove="Analysis\**" />
-    <Compile Remove="DataFormats\**" />
+    <Compile Remove="DataFormat\**" />
     <Compile Remove="QSharpFormat\**" />
     <EmbeddedResource Remove="Analysis\**" />
-    <EmbeddedResource Remove="DataFormats\**" />
+    <EmbeddedResource Remove="DataFormat\**" />
     <EmbeddedResource Remove="QSharpFormat\**" />
     <QsharpCompile Remove="Analysis\**" />
-    <QsharpCompile Remove="DataFormats\**" />
+    <QsharpCompile Remove="DataFormat\**" />
     <QsharpCompile Remove="QSharpFormat\**" />
   </ItemGroup>
 
@@ -62,11 +62,17 @@
     <Compile Remove="FermionTerm - Copy.cs" />
     <Compile Remove="FermionTermDeprecated.cs" />
     <Compile Remove="FermionTermold.cs" />
-    <Compile Remove="FermionTerms\FermionTerm - Copy.cs" />
-    <Compile Remove="FermionTerms\FermionTerm.cs" />
-    <Compile Remove="FermionTerms\FermionTermDeprecated.cs" />
-    <Compile Remove="FermionTerms\FermionTermold.cs" />
-    <Compile Remove="Hamiltonians\FermionHamiltonian2.cs" />
+    <Compile Remove="Fermion\FermionTerm - Copy.cs" />
+    <Compile Remove="Fermion\FermionTerm.cs" />
+    <Compile Remove="Fermion\FermionTermDeprecated.cs" />
+    <Compile Remove="Fermion\FermionTermold.cs" />
+    <Compile Remove="Hamiltonian\FermionHamiltonian2.cs" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <Compile Include="DataFormat\LiQuiD.cs" />
+    <Compile Include="DataFormat\LoadData.cs" />
   </ItemGroup>
 
 </Project>
