@@ -3,7 +3,7 @@
 
 namespace Microsoft.Quantum.Chemistry
 {
-    public class FermionHamiltonian : GenericHamiltonian<TermType.Fermion, HermitianFermionTerm>
+    public class FermionHamiltonian : GenericHamiltonian<TermType.Fermion, FermionTermHermitian>
     {
         public FermionHamiltonian() : base() { }
     }

@@ -7,10 +7,55 @@ using System.Collections.Generic;
 
 namespace Microsoft.Quantum.Chemistry
 {
-
+    using static LadderOperator.Type;
 
     public static partial class Extensions
     {
+        #region Convenience constructors
+        /// <summary>
+        /// Construct <see cref="LadderSequence"/> from sequence of ladder operators.
+        /// </summary>
+        /// <param name="setSequence">Sequence of ladder operators.</param>
+        /// <param name="setSign">Set the sign coefficient of the sequence.</param>
+        /// <returns>
+        /// Sequence of ladder operators.
+        /// </returns>
+        public static LadderSequence ToLadderSequence(this IEnumerable<(LadderOperator.Type, int)> setSequence, int setSign = 1) {
+            return new LadderSequence(setSequence.Select(o => new LadderOperator(o)), setSign);
+            var tmp = new[] { (u, 1), (u, 2), (d, 3), (d, 4) }.ToLadderSequence();
+        }
+
+        /// <summary>
+        /// Construct <see cref="LadderSequence"/> from an even-length sequence of integers.
+        /// </summary>
+        /// <param name="setSequence">Even-length sequence of integers.</param>
+        /// <param name="setSign">Set the sign coefficient of the sequence.</param>
+        /// <returns>
+        /// Sequence of ladder operators with an equal number of creation and annihilation terms
+        /// that are normal-ordered.
+        /// </returns>
+        /// <example>
+        /// <code>
+        /// // The following two return the same ladder operator sequence.
+        /// var seq = new[] { 1, 2, 3, 4 }.ToLadderSequence();
+        /// var expected = new[] { (u, 1), (u, 2), (d, 3), (d, 4) }.ToLadderSequence();
+        /// </code>
+        /// </example>
+        public static LadderSequence ToLadderSequence(this IEnumerable<int> indices)
+        {
+            var length = indices.Count();
+            if (length % 2 == 1)
+            {
+                throw new System.ArgumentException(
+                    $"Number of terms provided is `{length}` and must be of even length."
+                    );
+            }
+            Func<int, int, (LadderOperator.Type, int)> GetLadderOperator = (index, position)
+                => (position < length / 2 ? u : d, index);
+            return indices.Select((o, idx) => GetLadderOperator(o, idx)).ToLadderSequence();
+        }
+        #endregion
+
         #region Reordering methods
 
         /// <summary>
@@ -63,62 +108,14 @@ namespace Microsoft.Quantum.Chemistry
         }
 
         /// <summary>
-        ///  Converts a <see cref="NormalOrderedLadderSequence"/> to index order. 
-        ///  In general, this can generate new terms and modifies the coefficient.
-        /// </summary>
-        public static IndexOrderedLadderSequence CreateIndexOrder(this NormalOrderedLadderSequence ladderOperators)
-        {
-            var tmp = new IndexOrderedLadderSequence();
-            tmp.sequence = ladderOperators.sequence.Select(o => o).ToList();
-            tmp.coefficient = ladderOperators.coefficient;
-            if (!tmp.IsInIndexOrder())
-            {
-                var left = tmp.sequence.Select((op, idx) => new { op, idx }).Where(x => x.op.type == LadderOperator.Type.u);
-                var right = tmp.sequence.Select((op, idx) => new { op, idx }).Where(x => x.op.type == LadderOperator.Type.d);
-
-                var upArrayIndices = tmp.sequence.Select((op, idx) => new { op, idx }).Where(x => x.op.type == LadderOperator.Type.u).Select(x => x.idx).ToArray();
-                var downArrayIndices = tmp.sequence.Select((op, idx) => new { op, idx }).Where(x => x.op.type == LadderOperator.Type.d).Select(x => x.idx).ToArray();
-
-                // Bubble sort spin-orbital indices of creation operator.
-                while (!tmp.IsInIndexCreationCanonicalOrder())
-                {
-                    for (int idx = 0; idx < upArrayIndices.Count() - 1; idx++)
-                    {
-                        if (tmp.sequence.ElementAt(upArrayIndices.ElementAt(idx)).index > tmp.sequence.ElementAt(upArrayIndices.ElementAt(idx + 1)).index)
-                        {
-                            var tmpLadderOperator = tmp.sequence.ElementAt(upArrayIndices.ElementAt(idx));
-                            tmp.sequence[upArrayIndices.ElementAt(idx)] = tmp.sequence[upArrayIndices.ElementAt(idx + 1)];
-                            tmp.sequence[upArrayIndices.ElementAt(idx + 1)] = tmpLadderOperator;
-                            tmp.coefficient = -1 * tmp.coefficient;
-                        }
-                    }
-                }
-
-                // Bubble sort spin-orbital indices of annihilation operator.
-                while (!tmp.IsInIndexAnnihilationCanonicalOrder())
-                {
-                    for (int idx = 0; idx < downArrayIndices.Length - 1; idx++)
-                    {
-                        if (tmp.sequence.ElementAt(downArrayIndices.ElementAt(idx)).index < tmp.sequence.ElementAt(downArrayIndices.ElementAt(idx + 1)).index)
-                        {
-                            var tmpLadderOperator = tmp.sequence.ElementAt(downArrayIndices.ElementAt(idx));
-                            tmp.sequence[downArrayIndices.ElementAt(idx)] = tmp.sequence[downArrayIndices.ElementAt(idx + 1)];
-                            tmp.sequence[downArrayIndices.ElementAt(idx + 1)] = tmpLadderOperator;
-                            tmp.coefficient = -1 * tmp.coefficient;
-                        }
-                    }
-                }
-            }
-            return tmp;
-        }
-
-        /// <summary>
         ///  Converts a <see cref="LadderSequence"/> to normal order, then index order. 
         ///  In general, this can generate new terms and modifies the coefficient.
         /// </summary>
-        public static HashSet<IndexOrderedLadderSequence> CreateIndexOrder(LadderSequence ladderOperator)
+        public static HashSet<IndexOrderedLadderSequence> CreateIndexOrder(this LadderSequence ladderOperator)
         {
-            return CreateNormalOrder(ladderOperator).Select(o => CreateIndexOrder(o));
+            return new HashSet<IndexOrderedLadderSequence>(
+                ladderOperator.CreateNormalOrder().Select(o => new IndexOrderedLadderSequence(o))
+                );
         }
         #endregion
     }

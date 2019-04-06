@@ -18,7 +18,6 @@ namespace Microsoft.Quantum.Chemistry.Tests
     using SpinOrbital = SpinOrbital;
     using OrbitalIntegral = OrbitalIntegral;
     using Spin = Spin;
-    using Conversion;
 
     public class OrbitalIntegralToFermionHamiltonianTests
     {

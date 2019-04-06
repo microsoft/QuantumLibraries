@@ -7,7 +7,12 @@ using System.Collections.Generic;
 
 namespace Microsoft.Quantum.Chemistry
 {
-    
+
+    /// <summary>
+    /// Class representing a sequence of raising and lowering operators, subject to the additional constraints: 
+    /// 1) Normal-ordered, where all raising operators are to the left of all lowering operators.
+    /// 2) Index-ordered, where are raising(lowering) operators are in ascending(descending) order.
+    /// </summary>
     public class IndexOrderedLadderSequence : NormalOrderedLadderSequence
     {
         #region Constructors
@@ -17,9 +22,9 @@ namespace Microsoft.Quantum.Chemistry
         internal IndexOrderedLadderSequence() : base() { }
 
         /// <summary>
-        /// Construct LadderSequence from another LadderSequence.
+        /// Construct a copy of the input instance.
         /// </summary>
-        /// <param name="setSequence">Sequence of ladder operators.</param>
+        /// <param name="ladderOperators">Sequence of ladder operators.</param>
         public IndexOrderedLadderSequence(IndexOrderedLadderSequence ladderOperators)
         {
             // All constructions are pass by value.
@@ -35,53 +40,13 @@ namespace Microsoft.Quantum.Chemistry
         {
             ToIndexOrder();
         }
-        
-        /// <summary>
-        /// Construct LadderSequence from sequence of ladder operators.
-        /// </summary>
-        /// <param name="setSequence">Sequence of ladder operators.</param>
-        public IndexOrderedLadderSequence(IEnumerable<LadderOperator> setSequence, int setCoefficient = 1) : base(setSequence, setCoefficient)
-        {
-            ToIndexOrder();
-        }
-
-
-        /// <summary>
-        /// Construct LadderSequence from sequence of ladder operators.
-        /// </summary>
-        /// <param name="setSequence">Sequence of ladder operators.</param>
-        public IndexOrderedLadderSequence(IEnumerable<(LadderOperator.Type, int)> set) : base(set)
-        {
-            ToIndexOrder();
-        }
-
-        /// <summary>
-        /// FermionTerm constructor that assumes normal-ordered fermionic 
-        /// creation and annihilation operators, and that the number of
-        /// creation an annihilation operators are equal.
-        /// </summary>
-        public IndexOrderedLadderSequence(IEnumerable<int> indices) : base(indices)
-        {
-            ToIndexOrder();
-        }
         #endregion
 
-
-
-
         #region Reordering methods
-        private void ToIndexOrder()
+        new private void ToIndexOrder()
         {
-            var ladderTerm = CreateIndexOrder();
-            sequence = ladderTerm.sequence;
-            coefficient = ladderTerm.coefficient;        
-        }
-
-        private IndexOrderedLadderSequence CreateIndexOrder()
-        {
-            return this.CreateIndexOrder();
-        }
-        
+            base.ToIndexOrder();        
+        }        
         #endregion
         
     }

@@ -6,6 +6,9 @@ using System;
 namespace Microsoft.Quantum.Chemistry
 {
 
+    /// <summary>
+    /// Data strcture for raising and lowering operators.
+    /// </summary>
     public struct LadderOperator
     {
         /// <summary>
@@ -26,37 +29,6 @@ namespace Microsoft.Quantum.Chemistry
         /// </summary>
         public int index;
         
-        /// <summary>
-        /// Anti-commutation of ladder operators {x,y}.
-        /// </summary>
-        /// <param name="x">Left ladder operator.</param>
-        /// <param name="y">Right ladder operator.</param>
-        /// <returns>Result of {x,y}.</returns>
-        [Obsolete]
-        public static (Type, int) AntiCommutation(LadderOperator x, LadderOperator y)
-        {
-            // {a_x, a_y^\dag} = \delta_{xy}
-            // {a_x, a_y} = 1
-            // {a_x^\dag, a_y^\dag} = 1
-            if (x.index == y.index)
-            {
-                if(x.type != y.type)
-                {
-                    if(x.type == Type.d){
-                        return (Type.identity, 1);
-                    }
-                    else
-                    {
-                        return (Type.identity, -1);
-                    }
-                }
-                else
-                {
-                    return (Type.identity, 0);
-                }
-            }
-            return (Type.identity, 0);
-        }
 
         /// <summary>
         /// Constructor for ladder operator.

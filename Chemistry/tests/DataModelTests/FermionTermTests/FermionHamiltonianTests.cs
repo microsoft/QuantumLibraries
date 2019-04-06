@@ -12,33 +12,33 @@ using System.Collections.Generic;
 
 namespace Microsoft.Quantum.Chemistry.Tests
 {
-    using FT = HermitianFermionTerm;
+    using FT = FermionTermHermitian;
 
-    public class OFermionHamiltonianTests
+    public class FermionHamiltonianTests
     {
         public FermionHamiltonian GenerateTestHamiltonian()
         {
             var hamiltonian = new FermionHamiltonian();
-            
-            List<(FT, double)> fermionTerms = new List<(FT, double)>()
+
+            List<(FT, double)> fermionTerms = new List<(int[], double)>()
             {
-                (new FT(new int[] {}), 10.0),
-                (new FT(new[] {0,0}), 1.0),
-                (new FT(new[] {1,1}), 1.0),
-                (new FT(new[] {2,2}), 1.0),
-                (new FT(new[] {0,2}), 1.0),
-                (new FT(new[] {1,3}), 1.0),
-                (new FT(new[] {2,6}), 1.0),
-                (new FT(new[] {0,2,2,0}), 1.0),
-                (new FT(new[] {1,3,3,1}), 1.0),
-                (new FT(new[] {2,6,6,2}), 1.0),
-                (new FT(new[] {0,2,2,1}), 1.0),
-                (new FT(new[] {1,3,3,2}), 1.0),
-                (new FT(new[] {2,6,6,5}), 1.0),
-                (new FT(new[] {0,2,4,3}), 1.0),
-                (new FT(new[] {1,4,3,2}), 1.0),
-                (new FT(new[] {2,4,5,3}), 1.0)
-            };
+                (new int[] {}, 10.0),
+                (new[] {0,0}, 1.0),
+                (new[] {1,1}, 1.0),
+                (new[] {2,2}, 1.0),
+                (new[] {0,2}, 1.0),
+                (new[] {1,3}, 1.0),
+                (new[] {2,6}, 1.0),
+                (new[] {0,2,2,0}, 1.0),
+                (new[] {1,3,3,1}, 1.0),
+                (new[] {2,6,6,2}, 1.0),
+                (new[] {0,2,2,1}, 1.0),
+                (new[] {1,3,3,2}, 1.0),
+                (new[] {2,6,6,5}, 1.0),
+                (new[] {0,2,4,3}, 1.0),
+                (new[] {1,4,3,2}, 1.0),
+                (new[] {2,4,5,3}, 1.0)
+            }.Select(o => (new FT(o.Item1.ToLadderSequence()), o.Item2)).ToList();
 
             hamiltonian.AddTerms(fermionTerms);
             return hamiltonian;

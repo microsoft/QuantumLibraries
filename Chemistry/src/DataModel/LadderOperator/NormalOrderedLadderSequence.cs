@@ -7,7 +7,10 @@ using System.Collections.Generic;
 
 namespace Microsoft.Quantum.Chemistry
 {
-    
+    /// <summary>
+    /// Class representing a sequence of raising and lowering operators, subject to the additional constraints: 
+    /// 1) Normal-ordered, where all raising operators are to the left of all lowering operators.
+    /// </summary>
     public class NormalOrderedLadderSequence : LadderSequence
     {
         #region Constructors
@@ -17,9 +20,9 @@ namespace Microsoft.Quantum.Chemistry
         internal NormalOrderedLadderSequence() : base() { }
 
         /// <summary>
-        /// Construct <see cref="NormalOrderedLadderSequence"/> from another <see cref="NormalOrderedLadderSequence"/>.
+        /// Construct a copy of the input instance.
         /// </summary>
-        /// <param name="setSequence">Sequence of ladder operators.</param>
+        /// <param name="ladderOperators">Sequence of ladder operators.</param>
         public NormalOrderedLadderSequence(NormalOrderedLadderSequence ladderOperators)
         {
             // All constructions are pass by value.
@@ -28,39 +31,10 @@ namespace Microsoft.Quantum.Chemistry
         }
 
         /// <summary>
-        /// Construct <see cref="NormalOrderedLadderSequence"/> from sequence of ladder operators.
+        /// Construct instance from a normal-ordered sequence of ladder operators.
         /// </summary>
-        /// <param name="setSequence">Sequence of ladder operators.</param>
+        /// <param name="setSequence">Normal-ordered sequence of ladder operators.</param>
         public NormalOrderedLadderSequence(LadderSequence ladderOperators) : base(ladderOperators)
-        {
-            ExceptionIfNotInNormalOrder();
-        }
-
-        /// <summary>
-        /// Construct <see cref="NormalOrderedLadderSequence"/> from sequence of ladder operators.
-        /// </summary>
-        /// <param name="setSequence">Sequence of ladder operators.</param>
-        public NormalOrderedLadderSequence(IEnumerable<LadderOperator> setSequence, int setCoefficient = 1) : base(setSequence, setCoefficient)
-        {
-            ExceptionIfNotInNormalOrder();
-        }
-
-
-        /// <summary>
-        /// Construct <see cref="NormalOrderedLadderSequence"/> from sequence of ladder operators.
-        /// </summary>
-        /// <param name="set">Sequence of ladder operators.</param>
-        public NormalOrderedLadderSequence(IEnumerable<(LadderOperator.Type, int)> set) : base(set)
-        {
-            ExceptionIfNotInNormalOrder();
-        }
-
-        /// <summary>
-        /// FermionTerm constructor that assumes normal-ordered fermionic 
-        /// creation and annihilation operators, and that the number of
-        /// creation an annihilation operators are equal.
-        /// </summary>
-        public NormalOrderedLadderSequence(IEnumerable<int> indices) : base(indices)
         {
             ExceptionIfNotInNormalOrder();
         }
@@ -102,6 +76,57 @@ namespace Microsoft.Quantum.Chemistry
         public bool IsInIndexAnnihilationCanonicalOrder()
         {
             return sequence.Where(o => o.type == LadderOperator.Type.d).Select(o => o.index).Reverse().IsIntArrayAscending();
+        }
+        #endregion
+
+        #region Reordering methods
+        /// <summary>
+        ///  Converts a <see cref="NormalOrderedLadderSequence"/> to index order. 
+        ///  In general, this can generate new terms and modifies the coefficient.
+        /// </summary>
+        public void ToIndexOrder()
+        {
+            var tmp = new NormalOrderedLadderSequence(this);
+            if (!tmp.IsInIndexOrder())
+            {
+                var left = tmp.sequence.Select((op, idx) => new { op, idx }).Where(x => x.op.type == LadderOperator.Type.u);
+                var right = tmp.sequence.Select((op, idx) => new { op, idx }).Where(x => x.op.type == LadderOperator.Type.d);
+
+                var upArrayIndices = tmp.sequence.Select((op, idx) => new { op, idx }).Where(x => x.op.type == LadderOperator.Type.u).Select(x => x.idx).ToArray();
+                var downArrayIndices = tmp.sequence.Select((op, idx) => new { op, idx }).Where(x => x.op.type == LadderOperator.Type.d).Select(x => x.idx).ToArray();
+
+                // Bubble sort spin-orbital indices of creation operator.
+                while (!tmp.IsInIndexCreationCanonicalOrder())
+                {
+                    for (int idx = 0; idx < upArrayIndices.Count() - 1; idx++)
+                    {
+                        if (tmp.sequence.ElementAt(upArrayIndices.ElementAt(idx)).index > tmp.sequence.ElementAt(upArrayIndices.ElementAt(idx + 1)).index)
+                        {
+                            var tmpLadderOperator = tmp.sequence.ElementAt(upArrayIndices.ElementAt(idx));
+                            tmp.sequence[upArrayIndices.ElementAt(idx)] = tmp.sequence[upArrayIndices.ElementAt(idx + 1)];
+                            tmp.sequence[upArrayIndices.ElementAt(idx + 1)] = tmpLadderOperator;
+                            tmp.coefficient = -1 * tmp.coefficient;
+                        }
+                    }
+                }
+
+                // Bubble sort spin-orbital indices of annihilation operator.
+                while (!tmp.IsInIndexAnnihilationCanonicalOrder())
+                {
+                    for (int idx = 0; idx < downArrayIndices.Length - 1; idx++)
+                    {
+                        if (tmp.sequence.ElementAt(downArrayIndices.ElementAt(idx)).index < tmp.sequence.ElementAt(downArrayIndices.ElementAt(idx + 1)).index)
+                        {
+                            var tmpLadderOperator = tmp.sequence.ElementAt(downArrayIndices.ElementAt(idx));
+                            tmp.sequence[downArrayIndices.ElementAt(idx)] = tmp.sequence[downArrayIndices.ElementAt(idx + 1)];
+                            tmp.sequence[downArrayIndices.ElementAt(idx + 1)] = tmpLadderOperator;
+                            tmp.coefficient = -1 * tmp.coefficient;
+                        }
+                    }
+                }
+            }
+            sequence = tmp.sequence;
+            coefficient = tmp.coefficient;
         }
         #endregion
 

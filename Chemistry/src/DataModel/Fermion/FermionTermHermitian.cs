@@ -7,22 +7,34 @@ using System.Collections.Generic;
 
 namespace Microsoft.Quantum.Chemistry
 {
-    public class HermitianFermionTerm : IndexOrderedLadderSequence, HamiltonianTerm<TermType.Fermion>
-    {
-        internal HermitianFermionTerm() : base() { }
 
-        // Disallow inputs that are not normal ordered.
-        internal HermitianFermionTerm(HermitianFermionTerm term)
+    /// <summary>
+    /// Class representing a sequence of fermionic raising and lowering operators, subject to the additional constraints: 
+    /// 1) Normal-ordered, where all raising operators are to the left of all lowering operators.
+    /// 2) Index-ordered, where are raising(lowering) operators are in ascending(descending) order.
+    /// 3) Hermitian, and is assumed to be implicitly summed with its Hermitian conjugate if not explicitly Hermitian.
+    /// </summary>
+    public class FermionTermHermitian : IndexOrderedLadderSequence, HamiltonianTerm<TermType.Fermion>
+    {
+        #region Constructors
+        /// <summary>
+        /// Constructor for empty ladder operator sequence.
+        /// </summary>
+        internal FermionTermHermitian() : base() { }
+
+        /// <summary>
+        /// Construct a copy of a the input instance.
+        /// </summary>
+        /// <param name="setSequence">Sequence of ladder operators.</param>
+        internal FermionTermHermitian(FermionTermHermitian term)
         {
             // All constructions are pass by value.
             sequence = term.sequence.Select(o => o).ToList();
             coefficient = term.coefficient;
         }
 
-        public HermitianFermionTerm(IEnumerable<LadderOperator> setSequence, int setCoefficient = 1) : base(setSequence, setCoefficient) { ToCanonicalOrder(); }
-        public HermitianFermionTerm(IEnumerable<(LadderOperator.Type, int)> set) : base(set) { ToCanonicalOrder(); }
-        public HermitianFermionTerm(LadderSequence set) : base(set) { ToCanonicalOrder(); }
-        public HermitianFermionTerm(IEnumerable<int> indices) : base(indices) { ToCanonicalOrder(); }
+        public FermionTermHermitian(LadderSequence set) : base(set) { ToCanonicalOrder(); }
+        #endregion
 
         /// <summary>
         ///  Checks if raising operators indices are in ascending order, 

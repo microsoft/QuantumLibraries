@@ -67,6 +67,8 @@
     <Compile Remove="FermionTerm - Copy.cs" />
     <Compile Remove="FermionTermDeprecated.cs" />
     <Compile Remove="FermionTermold.cs" />
+    <Compile Remove="Fermion\FermionStateMultiConfigurational.cs" />
+    <Compile Remove="Fermion\FermionStateSingleConfigurational.cs" />
     <Compile Remove="Fermion\FermionTermDeprecated.cs" />
     <Compile Remove="Fermion\FermionTermold.cs" />
     <Compile Remove="Hamiltonian\FermionHamiltonian2.cs" />

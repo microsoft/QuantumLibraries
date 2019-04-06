@@ -8,6 +8,9 @@ using System.Collections.Generic;
 namespace Microsoft.Quantum.Chemistry
 {
     
+    /// <summary>
+    /// Class representing a sequence of raising and lowering operators.
+    /// </summary>
     public class LadderSequence : IEquatable<LadderSequence>
     {
 
@@ -25,12 +28,12 @@ namespace Microsoft.Quantum.Chemistry
         /// <summary>
         /// Constructor for empty ladder operator sequence.
         /// </summary>
-        internal LadderSequence() { }
+        public LadderSequence() { }
 
         /// <summary>
-        /// Construct <see cref="LadderSequence"/> from another LadderSequence.
+        /// Construct a copy of the input instance.
         /// </summary>
-        /// <param name="setSequence">Sequence of ladder operators.</param>
+        /// <param name="ladderOperators">Sequence of ladder operators.</param>
         public LadderSequence(LadderSequence ladderOperators)
         {
             // All constructions are pass by value.
@@ -39,42 +42,13 @@ namespace Microsoft.Quantum.Chemistry
         }
 
         /// <summary>
-        /// Construct <see cref="LadderSequence"/> from sequence of ladder operators.
+        /// Construct instance from sequence of ladder operators.
         /// </summary>
         /// <param name="setSequence">Sequence of ladder operators.</param>
         public LadderSequence(IEnumerable<LadderOperator> setSequence, int setCoefficient = 1)
         {
             sequence = setSequence.Select(o => o).ToList();
             coefficient = setCoefficient;
-        }
-
-        /// <summary>
-        /// Construct <see cref="LadderSequence"/> from sequence of ladder operators.
-        /// </summary>
-        /// <param name="setSequence">Sequence of ladder operators.</param>
-        public LadderSequence(IEnumerable<(LadderOperator.Type, int)> set, int setCoefficient = 1) : this(set.Select(o => new LadderOperator(o)).ToList(), setCoefficient) { }
-        
-
-        /// <summary>
-        /// FermionTerm constructor that assumes normal-ordered fermionic 
-        /// creation and annihilation operators, and that the number of
-        /// creation an annihilation operators are equal.
-        /// </summary>
-        public LadderSequence(IEnumerable<int> indices)
-        {
-            var length = indices.Count();
-            if (length % 2 == 1)
-            {
-                throw new System.ArgumentException(
-                    $"Number of terms provided is `{length}` and must be of even length."
-                    );
-            }
-            Func<int, int, LadderOperator> GetLadderOperator = (index, position) 
-                => new LadderOperator(position < length / 2 ? LadderOperator.Type.u : LadderOperator.Type.d, index);
-            var tmp = new LadderSequence(indices.Select((o, idx) => GetLadderOperator(o,idx)).ToList());
-
-            sequence = tmp.sequence;
-            coefficient = tmp.coefficient;
         }
         #endregion
 
@@ -104,6 +78,38 @@ namespace Microsoft.Quantum.Chemistry
         public LadderSequence Multiply(LadderSequence left, LadderSequence right)
         {
             return new LadderSequence(left.sequence.Concat(right.sequence), left.coefficient * right.coefficient);
+        }
+
+        /// <summary>
+        /// Anti-commutation of ladder operators {x,y}.
+        /// </summary>
+        /// <param name="x">Left ladder operator.</param>
+        /// <param name="y">Right ladder operator.</param>
+        /// <returns>Result of {x,y}.</returns>
+        public virtual (LadderOperator.Type, int) AntiCommutator(LadderOperator x, LadderOperator y)
+        {
+            // {a_x, a_y^\dag} = \delta_{xy}
+            // {a_x, a_y} = 1
+            // {a_x^\dag, a_y^\dag} = 1
+            if (x.index == y.index)
+            {
+                if (x.type != y.type)
+                {
+                    if (x.type == LadderOperator.Type.d)
+                    {
+                        return (LadderOperator.Type.identity, 1);
+                    }
+                    else
+                    {
+                        return (LadderOperator.Type.identity, -1);
+                    }
+                }
+                else
+                {
+                    return (LadderOperator.Type.identity, 0);
+                }
+            }
+            return (LadderOperator.Type.identity, 0);
         }
 
         /// <summary>

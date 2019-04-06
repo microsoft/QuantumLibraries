@@ -12,7 +12,7 @@ using System.Collections.Generic;
 
 namespace Microsoft.Quantum.Chemistry.Tests
 {
-    using HermitianFermionTerm = HermitianFermionTerm;
+    using FermionTermHermitian = FermionTermHermitian;
     using SpinOrbital = SpinOrbital;
     using static TermType.Fermion;
     using static LadderOperator.Type;
@@ -23,13 +23,20 @@ namespace Microsoft.Quantum.Chemistry.Tests
         [Fact]
         public void EmptyHermitianFermionTerm()
         {
-            var term = new HermitianFermionTerm(new List<LadderOperator>());
-            var term2 = new HermitianFermionTerm(new List<LadderOperator>());
+            var term = new FermionTermHermitian(new LadderSequence());
+            var term2 = new FermionTermHermitian(new LadderSequence());
 
-            Dictionary<HermitianFermionTerm, double> dictionary = new Dictionary<HermitianFermionTerm, double>();
+            Dictionary<FermionTermHermitian, double> dictionary = new Dictionary<FermionTermHermitian, double>();
             dictionary.Add(term, 0.5);
 
             Assert.Equal(0.5, dictionary[term2]);
+        }
+
+        [Fact]
+        public void Inheritance()
+        {
+            var term = new NormalOrderedLadderSequence(new LadderSequence());
+            var term2 = new FermionTermHermitian(term);
         }
 
 
@@ -41,9 +48,9 @@ namespace Microsoft.Quantum.Chemistry.Tests
         [InlineData(3, new[] { 4, 3, 2, 1 }, 4)]
         public void UniqueIndicesTests(int norbitals, int[] idx, int uniqueIndices)
         {
-            var spinOrbitals = idx.Select(o => new SpinOrbital(norbitals, o)).ToInts(norbitals).Select(o => (int) o).ToList();
+            var spinOrbitals = idx.Select(o => new SpinOrbital(norbitals, o)).ToInts(norbitals).Select(o => (int)o).ToLadderSequence();
             var coefficient = 1.0;
-            var HermitianFermionTerm = new HermitianFermionTerm(spinOrbitals);
+            var HermitianFermionTerm = new FermionTermHermitian(spinOrbitals);
             Assert.True(HermitianFermionTerm.GetUniqueIndices() == uniqueIndices);
         }
 
@@ -70,8 +77,8 @@ namespace Microsoft.Quantum.Chemistry.Tests
         [InlineData(false, 10, new int[] { 1, 1 }, new int[] { 6, 5 })]
         public void IsInCanonicalOrderTest(bool pass, int nOrbitals, int[] ca, int[] idx)
         {
-            var ladderOperators = ca.Zip(idx, (a, b) => (a == 0 ? LadderOperator.Type.d : LadderOperator.Type.u, (int) b)).Select(o => new LadderOperator(o)).ToList();
-            var tmp = new HermitianFermionTerm(ladderOperators);
+            var ladderOperators = ca.Zip(idx, (a, b) => (a == 0 ? LadderOperator.Type.d : LadderOperator.Type.u, (int)b)).ToLadderSequence();
+            var tmp = new FermionTermHermitian(ladderOperators);
 
             Assert.True(tmp.IsInCanonicalOrder());
         }
@@ -86,8 +93,8 @@ namespace Microsoft.Quantum.Chemistry.Tests
         [InlineData(true, 10, new int[] { 0, 1, 1 }, new int[] { 0, 1, 0 })]
         public void NotNormalOrderedTest(bool pass, int nOrbitals, IEnumerable<int> ca, IEnumerable<int> idx)
         {
-            var ladderOperators = ca.Zip(idx, (a, b) => (a == 0 ? LadderOperator.Type.d : LadderOperator.Type.u, (int)b)).Select(o => new LadderOperator(o)).ToList();
-            Assert.Throws<ArgumentException>(() => new HermitianFermionTerm(ladderOperators));
+            var ladderOperators = ca.Zip(idx, (a, b) => (a == 0 ? LadderOperator.Type.d : LadderOperator.Type.u, (int)b)).ToLadderSequence();
+            Assert.Throws<ArgumentException>(() => new FermionTermHermitian(ladderOperators));
         }
 
         
@@ -99,7 +106,7 @@ namespace Microsoft.Quantum.Chemistry.Tests
         {
             var coeff = 1.0;
             var spinOrbital = orbitalIdx.Zip(spinIdx, (a, b) => new SpinOrbital(a, b));
-            var tmp = new HermitianFermionTerm((IEnumerable<SpinOrbital>)spinOrbital, (double)coeff);
+            var tmp = new FermionTermHermitian((IEnumerable<SpinOrbital>)spinOrbital, (double)coeff);
             Assert.True(tmp.IsInCanonicalOrder());
             Assert.True(tmp.coeff == sign);
         }
@@ -122,8 +129,7 @@ namespace Microsoft.Quantum.Chemistry.Tests
                                                 PQRS};
 
 
-            var indices = idx.Select(o => new SpinOrbital(norbitals, o)).ToArray();
-            var fermionTerm = new HermitianFermionTerm(idx);
+            var fermionTerm = new FermionTermHermitian(idx.ToLadderSequence());
             var fermionTermType = fermionTerm.GetTermType();
             Assert.True(fermionTermType == tmp[type]);
         }
@@ -131,8 +137,8 @@ namespace Microsoft.Quantum.Chemistry.Tests
         [Fact]
         public void EqualityTest()
         {
-            var term0 = new HermitianFermionTerm(new Op(new[] { (u, 0), (u, 0) }));
-            var term1 = new HermitianFermionTerm(new Op(new[] { (u, 0), (u, 0) }));
+            var term0 = new FermionTermHermitian(new[] { (u, 0), (u, 0) }.ToLadderSequence());
+            var term1 = new FermionTermHermitian(new[] { (u, 0), (u, 0) }.ToLadderSequence());
 
             Assert.True(term0 == term1);
             Assert.Equal(term0, term1);
@@ -143,25 +149,25 @@ namespace Microsoft.Quantum.Chemistry.Tests
             switch (test)
             {
                 case 0:
-                    return (new Op(new[] { (u, 0), (u, 0) }),
-                            new Op(new[] { (u, 0), (u, 0) }));
+                    return (new[] { (u, 0), (u, 0) }.ToLadderSequence(),
+                            new[] { (u, 0), (u, 0) }.ToLadderSequence());
                 case 1:
-                    return (new Op(new[] { (u, 0), (u, 1) }, -1),
-                            new Op(new[] { (u, 1), (u, 0) }));
+                    return (new[] { (u, 0), (u, 1) }.ToLadderSequence(-1),
+                            new[] { (u, 1), (u, 0) }.ToLadderSequence());
                 case 2:
-                    return (new Op(new[] { (u, 0), (u, 1) }, -1),
-                            new Op(new[] { (d, 0), (d, 1) }));
+                    return (new[] { (u, 0), (u, 1) }.ToLadderSequence(-1),
+                            new[] { (d, 0), (d, 1) }.ToLadderSequence());
                 case 3:
-                    return (new Op(new[] { (u, 0), (d, 1) }),
-                            new Op(new[] { (u, 1), (d, 0) }));
+                    return (new[] { (u, 0), (d, 1) }.ToLadderSequence(),
+                            new[] { (u, 1), (d, 0) }.ToLadderSequence());
                 case 4:
-                    return (new Op(new[] { (u, 2), (u, 5), (u, 9), (d, 10), (d, 5) }),
-                            new Op(new[] { (u, 5), (u, 2), (u, 9), (d, 5), (d, 10) }));
+                    return (new[] { (u, 2), (u, 5), (u, 9), (d, 10), (d, 5) }.ToLadderSequence(),
+                            new[] { (u, 5), (u, 2), (u, 9), (d, 5), (d, 10) }.ToLadderSequence());
                 case 5:
-                    return (new Op(new[] { (u, 5), (u, 9), (u, 10), (d, 5), (d, 2) }, -1),
-                            new Op(new[] { (u, 5), (u, 2), (d, 9), (d, 5), (d, 10) }));
+                    return (new[] { (u, 5), (u, 9), (u, 10), (d, 5), (d, 2) }.ToLadderSequence(-1),
+                            new[] { (u, 5), (u, 2), (d, 9), (d, 5), (d, 10) }.ToLadderSequence());
                 default:
-                    return (new Op(new int[] { }), new Op(new int[] { }));
+                    return (new int[] { }.ToLadderSequence(), new int[] { }.ToLadderSequence());
             }
         }
 
@@ -177,7 +183,7 @@ namespace Microsoft.Quantum.Chemistry.Tests
         public void CanonicalCorrectness(int test)
         {
             var (expected, input) = CanonicalOrderCorrectnessHelper(test);
-            var term = new HermitianFermionTerm(input);
+            var term = new FermionTermHermitian(input);
 
             Assert.Equal(expected.sequence, term.sequence);
             Assert.Equal(expected.coefficient, term.coefficient);
