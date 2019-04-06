@@ -72,8 +72,7 @@ namespace Microsoft.Quantum.Chemistry
             /// </summary>
             /// <param name="filename">Broombridge filename to deserialize</param>
             /// <returns>Deserialized Broombridge v0.1 data.</returns>
-            [InternalsVisibleTo]
-            internal static V0_1.Data DeserializeBroombridgev0_1(string filename)
+            public static V0_1.Data DeserializeBroombridgev0_1(string filename)
             {
                 using (var reader = File.OpenText(filename))
                 {

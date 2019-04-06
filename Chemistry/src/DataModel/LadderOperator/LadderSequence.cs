@@ -28,7 +28,9 @@ namespace Microsoft.Quantum.Chemistry
         /// <summary>
         /// Constructor for empty ladder operator sequence.
         /// </summary>
-        public LadderSequence() { }
+        public LadderSequence() {
+            sequence = new List<LadderOperator>();
+        }
 
         /// <summary>
         /// Construct a copy of the input instance.
