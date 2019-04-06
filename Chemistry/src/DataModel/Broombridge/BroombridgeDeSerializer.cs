@@ -29,7 +29,7 @@ namespace Microsoft.Quantum.Chemistry
             /// </summary>
             /// <param name="filename">Broombridge file address.</param>
             /// <returns>Version number of Broombridge file</returns>
-            public static Version.Number GetVersionNumber(string filename)
+            public static Version.VersionNumber GetVersionNumber(string filename)
             {
                 using (var reader = File.OpenText(filename))
                 {
@@ -49,13 +49,13 @@ namespace Microsoft.Quantum.Chemistry
             /// <returns>Deserializer Broombridge data strauture.</returns>
             public static Current.Data Source(string filename)
             {
-                Version.Number versionNumber = GetVersionNumber(filename);
+                Version.VersionNumber versionNumber = GetVersionNumber(filename);
 
-                if (versionNumber == Version.Number.v0_1)
+                if (versionNumber == Version.VersionNumber.v0_1)
                 {
                     return Updater.Data(v0_1(filename));
                 }
-                else if (versionNumber == Version.Number.v0_2)
+                else if (versionNumber == Version.VersionNumber.v0_2)
                 {
                     return v0_2(filename);
                 }

@@ -20,8 +20,8 @@ namespace Microsoft.Quantum.Chemistry.Tests
         [Fact]
         public void DeserializeVersionNumbers()
         {
-            Assert.Equal(Broombridge.Version.Number.v0_1, Broombridge.Deserializers.GetVersionNumber("Broombridge/broombridge_v0.1.yaml"));
-            Assert.Equal(Broombridge.Version.Number.v0_2, Broombridge.Deserializers.GetVersionNumber("Broombridge/broombridge_v0.2.yaml"));
+            Assert.Equal(Broombridge.Version.VersionNumber.v0_1, Broombridge.Deserializers.GetVersionNumber("Broombridge/broombridge_v0.1.yaml"));
+            Assert.Equal(Broombridge.Version.VersionNumber.v0_2, Broombridge.Deserializers.GetVersionNumber("Broombridge/broombridge_v0.2.yaml"));
         }
     }
 

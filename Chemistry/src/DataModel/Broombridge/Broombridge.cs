@@ -25,27 +25,28 @@ namespace Microsoft.Quantum.Chemistry
         {
 
         }
+        
+        /// <summary>
+        /// Enumerable item for Broombridge version numbers.
+        /// </summary>
+        public enum VersionNumber
+        {
+            v0_1 = 0, v0_2 = 1
+        }
 
         /// <summary>
         /// Class containing Broombridge version number management.
         /// </summary>
         public static class Version
         {
-            /// <summary>
-            /// Enumerable item for Broombridge version numbers.
-            /// </summary>
-            public enum Number
-            {
-                v0_1 = 0, v0_2 = 1
-            }
 
             /// <summary>
             /// Dictionary from version number strings to version number types.
             /// </summary>
-            public static Dictionary<string, Number> VersionNumberDict = new Dictionary<string, Number>()
+            public static Dictionary<string, VersionNumber> VersionNumberDict = new Dictionary<string, VersionNumber>()
             {
-                {"0.1", Number.v0_1 },
-                {"0.2", Number.v0_2 }
+                {"0.1", VersionNumber.v0_1 },
+                {"0.2", VersionNumber.v0_2 }
             };
 
             /// <summary>
@@ -53,7 +54,7 @@ namespace Microsoft.Quantum.Chemistry
             /// </summary>
             /// <param name="versionNumber">Version number string</param>
             /// <returns>Version number in enum `Number` format.</returns>
-            public static Number ParseVersionNumber(string versionNumber)
+            public static VersionNumber ParseVersionNumber(string versionNumber)
             {
                 return VersionNumberDict[versionNumber];
             }
