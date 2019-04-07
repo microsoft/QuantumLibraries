@@ -27,9 +27,9 @@ namespace Microsoft.Quantum.Chemistry
         /// </summary>
         /// <param name="x">Input double.</param>
         /// <returns>Double representing the input double.</returns>
-        public static Double ToDouble(this double x)
+        public static DoubleCoeff ToDouble(this double x)
         {
-            return new Double(x);
+            return new DoubleCoeff(x);
         }
 
         /// <summary>

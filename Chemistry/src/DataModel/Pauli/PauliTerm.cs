@@ -8,7 +8,10 @@ using System.Collections.Generic;
 
 namespace Microsoft.Quantum.Chemistry.Pauli
 {
-   
+    public enum QubitEncoding
+    {
+        JordanWigner
+    }
     
     /// <summary>
     /// Data structure for sparse representations of Pauli terms.
@@ -17,10 +20,7 @@ namespace Microsoft.Quantum.Chemistry.Pauli
         ITermIndex<TermType.PauliTerm>, 
         IEquatable<PauliTerm>
     {
-        public enum Encoding
-        {
-            JordanWigner
-        }
+
 
         /// <summary>
         /// Qubit indices that represent this Pauli string.

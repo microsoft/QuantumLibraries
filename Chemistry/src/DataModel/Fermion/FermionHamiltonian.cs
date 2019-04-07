@@ -5,9 +5,31 @@ using Microsoft.Quantum.Chemistry.Hamiltonian;
 
 namespace Microsoft.Quantum.Chemistry.Fermion
 {
-    public class FermionHamiltonian : GenericHamiltonian<TermType.Fermion, FermionTermHermitian, Double>
+    public class FermionHamiltonian : GenericHamiltonian<TermType.Fermion, FermionTermHermitian, DoubleCoeff>
     {
         public FermionHamiltonian() : base() { }
+
+        /// <summary>
+        /// Method for adding a term to a fermion Hamiltonian.
+        /// </summary>
+        /// <param name="term">Term to be added.</param>
+        /// <param name="coefficient">Coefficient of term.</param>
+        public void AddTerm(FermionTermHermitian term, double coefficient)
+        {
+            AddTerm(term, coefficient.ToDouble());
+        }
+
+        /// <summary>
+        /// Method for collecting all distinct system (orbital) indices.
+        /// </summary>
+        /// <param name="orbitalIntegral">Collate orbital indices from this orbital integral.</param>
+        public override void AddToSystemIndices(FermionTermHermitian index)
+        {
+            foreach (var idx in index.sequence)
+            {
+                systemIndices.Add(idx.index);
+            }
+        }
     }
     /*
     /// <summary>

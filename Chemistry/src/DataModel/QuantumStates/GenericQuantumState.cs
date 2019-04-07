@@ -28,8 +28,8 @@ namespace Microsoft.Quantum.Chemistry.Wavefunction
     {
         public StateType type;
         public string Label;
-        public Double Energy;
-        public ((Double, Double) complexCoeff, FermionTerm term)[] Superposition;
+        public DoubleCoeff Energy;
+        public ((DoubleCoeff, DoubleCoeff) complexCoeff, FermionTerm term)[] Superposition;
     }
 
     /// <summary>

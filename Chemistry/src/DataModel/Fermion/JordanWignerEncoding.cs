@@ -24,7 +24,7 @@ namespace Microsoft.Quantum.Chemistry.Fermion
         /// <returns>Fermion Hamiltonian constructed from orbital integrals.</returns>
         public static PauliHamiltonian ToPauliHamiltonian(
             this FermionHamiltonian sourceHamiltonian,
-            PauliTerm.Encoding encoding)
+            QubitEncoding encoding)
         {
             var nFermions = sourceHamiltonian.systemIndices.Max() + 1;
             var hamiltonian = new PauliHamiltonian();
@@ -78,9 +78,10 @@ namespace Microsoft.Quantum.Chemistry.Fermion
                     break;
 
                 case TermType.Fermion.PQQP:
-                    pauliTerms.Add((new PauliTerm(seq.Take(2), TermType.PauliTerm.ZZ), (-0.25 * coeff).ToPauliTermValue()));
+                    pauliTerms.Add((new PauliTerm(new int[] { }, TermType.PauliTerm.Identity), (0.25 * coeff).ToPauliTermValue()));
+                    pauliTerms.Add((new PauliTerm(seq.Take(2), TermType.PauliTerm.ZZ), (0.25 * coeff).ToPauliTermValue()));
                     pauliTerms.Add((new PauliTerm(seq.Take(1), TermType.PauliTerm.Z), (-0.25 * coeff).ToPauliTermValue()));
-                    pauliTerms.Add((new PauliTerm(seq.Skip(1).Take(1), TermType.PauliTerm.Z), (0.25 * coeff).ToPauliTermValue()));
+                    pauliTerms.Add((new PauliTerm(seq.Skip(1).Take(1), TermType.PauliTerm.Z), (-0.25 * coeff).ToPauliTermValue()));
                     break;
 
                 case TermType.Fermion.PQQR:

@@ -10,7 +10,6 @@
     <Compile Remove="FermionTermTests.cs" />
     <Compile Remove="FermionTermTests\FermionTermTests.cs" />
     <Compile Remove="ProblemContainer\ProblemContainerTests.cs" />
-    <Compile Remove="ToEvolutionSetTest.cs" />
   </ItemGroup>
 
   <ItemGroup>

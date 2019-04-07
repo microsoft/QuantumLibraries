@@ -60,23 +60,23 @@ namespace Microsoft.Quantum.Chemistry
         }
     }
 
-    public struct Double : ITermValue<Double>
+    public struct DoubleCoeff : ITermValue<DoubleCoeff>
     {
         public double Value;
 
-        public Double(double value)
+        public DoubleCoeff(double value)
         {
             Value = value;
         }
 
-        public Double Default()
+        public DoubleCoeff Default()
         {
-            return new Double(0.0);
+            return new DoubleCoeff(0.0);
         }
 
-        public Double AddValue(Double addThis)
+        public DoubleCoeff AddValue(DoubleCoeff addThis)
         {
-            return new Double(Value + addThis.Value);
+            return new DoubleCoeff(Value + addThis.Value);
         }
 
         /// <summary>
@@ -103,10 +103,10 @@ namespace Microsoft.Quantum.Chemistry
 
         public override bool Equals(object obj)
         {
-            return (obj is Double x) ? Equals(x) : false;
+            return (obj is DoubleCoeff x) ? Equals(x) : false;
         }
 
-        public bool Equals(Double x)
+        public bool Equals(DoubleCoeff x)
         {
             // If parameter is null, return false.
             if (ReferenceEquals(x, null))
@@ -134,7 +134,7 @@ namespace Microsoft.Quantum.Chemistry
             return Value.GetHashCode();
         }
 
-        public static bool operator == (Double x, Double y)
+        public static bool operator == (DoubleCoeff x, DoubleCoeff y)
         {
             // Check for null on left side.
             if (Object.ReferenceEquals(x, null))
@@ -152,24 +152,24 @@ namespace Microsoft.Quantum.Chemistry
             return x.Equals(y);
         }
 
-        public static bool operator !=(Double x, Double y)
+        public static bool operator !=(DoubleCoeff x, DoubleCoeff y)
         {
             return !(x == y);
         }
 
-        public static Double operator +(Double x, Double y)
+        public static DoubleCoeff operator +(DoubleCoeff x, DoubleCoeff y)
         {
-            return new Double(x.Value + y.Value);
+            return new DoubleCoeff(x.Value + y.Value);
         }
 
-        public static Double operator -(Double x, Double y)
+        public static DoubleCoeff operator -(DoubleCoeff x, DoubleCoeff y)
         {
-            return new Double(x.Value - y.Value);
+            return new DoubleCoeff(x.Value - y.Value);
         }
 
-        public static Double operator *(Double x, Double y)
+        public static DoubleCoeff operator *(DoubleCoeff x, DoubleCoeff y)
         {
-            return new Double(x.Value * y.Value);
+            return new DoubleCoeff(x.Value * y.Value);
         }
 
 

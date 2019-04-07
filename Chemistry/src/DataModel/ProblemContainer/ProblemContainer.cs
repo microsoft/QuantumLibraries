@@ -92,7 +92,7 @@ namespace Microsoft.Quantum.Chemistry
 
             // We target a qubit quantum computer, which requires a Pauli representation of the fermion Hamiltonian.
             // A number of mappings from fermions to qubits are possible. Let us choose the Jordan--Wigner encoding.
-            PauliHamiltonian pauliHamiltonian = fermionHamiltonian.ToPauliHamiltonian(PauliTerm.Encoding.JordanWigner);
+            PauliHamiltonian pauliHamiltonian = fermionHamiltonian.ToPauliHamiltonian(QubitEncoding.JordanWigner);
             #endregion
 
             #region Create wavefunction Ansatz

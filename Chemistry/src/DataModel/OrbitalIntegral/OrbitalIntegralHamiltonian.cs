@@ -9,7 +9,7 @@ using Microsoft.Quantum.Chemistry.Hamiltonian;
 namespace Microsoft.Quantum.Chemistry.OrbitalIntegrals
 {
  
-    public class OrbitalIntegralHamiltonian : GenericHamiltonian<TermType.OrbitalIntegral, OrbitalIntegral, Double>
+    public class OrbitalIntegralHamiltonian : GenericHamiltonian<TermType.OrbitalIntegral, OrbitalIntegral, DoubleCoeff>
     {
         /// <summary>
         /// Constructor for empty orbital integral Hamiltonian.

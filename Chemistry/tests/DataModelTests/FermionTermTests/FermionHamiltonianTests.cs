@@ -25,7 +25,7 @@ namespace Microsoft.Quantum.Chemistry.Tests
         {
             var hamiltonian = new FermionHamiltonian();
 
-            List<(FT, Double)> fermionTerms = new List<(int[], double)>()
+            List<(FT, DoubleCoeff)> fermionTerms = new List<(int[], double)>()
             {
                 (new int[] {}, 10.0),
                 (new[] {0,0}, 1.0),

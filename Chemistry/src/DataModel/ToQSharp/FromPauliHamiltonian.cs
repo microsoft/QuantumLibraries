@@ -8,41 +8,47 @@ using System.Linq;
 using System.Collections.Generic;
 
 using Microsoft.Quantum.Chemistry.Pauli;
+using Microsoft.Quantum.Chemistry.JordanWigner;
 
-namespace Microsoft.Quantum.Chemistry.ToQSharp
+namespace Microsoft.Quantum.Chemistry.QSharpFormat
 {
-    using HTermArray = QArray<HTerm>;
-    using Microsoft.Quantum.Chemistry.JordanWigner;
-    
-    public class FromPauliHamiltonian
+    /// <summary>
+    /// Methods for converting electronic structure problem to data for consumption by Q#.
+    /// </summary>
+    public class ToQSharp
     {
-        public PauliHamiltonian pauliHamiltonian;
-
-        public static HTerm ToQSharp(PauliTerm term, PauliTermValue value)
+        
+        public static HTerm FromPauliTerm(PauliTerm term, PauliTermValue value)
         {
             return new HTerm((new QArray<Int64>(term.QubitIndices.Select(o=>(Int64)o)), new QArray<double>(value.Value)));
         }
 
-        public static (double, int, JWOptimizedHTerms) ToQSharp(PauliHamiltonian pauliHamiltonian)
+        public static (double, int, JWOptimizedHTerms) FromPauliHamiltonian(PauliHamiltonian pauliHamiltonian)
         {
             double energyOffset = pauliHamiltonian.terms[TermType.PauliTerm.Identity].Values.First().Value.First();
             var nSpinOrbitals = pauliHamiltonian.systemIndices.Count() + 1;
-            var hZ = pauliHamiltonian.terms[TermType.PauliTerm.Z].Select(o => ToQSharp(o.Key, o.Value));
-            var hZZ = pauliHamiltonian.terms[TermType.PauliTerm.Z].Select(o => ToQSharp(o.Key, o.Value));
-            var hPQ = pauliHamiltonian.terms[TermType.PauliTerm.Z].Select(o => ToQSharp(o.Key, o.Value));
-            var hPQQR = pauliHamiltonian.terms[TermType.PauliTerm.Z].Select(o => ToQSharp(o.Key, o.Value));
-            var hv0123 = pauliHamiltonian.terms[TermType.PauliTerm.Z].Select(o => ToQSharp(o.Key, o.Value));
+            var hZ = pauliHamiltonian.terms[TermType.PauliTerm.Z].Select(o => FromPauliTerm(o.Key, o.Value)).ToList();
+            var hZZ = pauliHamiltonian.terms[TermType.PauliTerm.ZZ].Select(o => FromPauliTerm(o.Key, o.Value)).ToList();
+            var hPQ = pauliHamiltonian.terms[TermType.PauliTerm.PQ].Select(o => FromPauliTerm(o.Key, o.Value));
+            var hPQQR = pauliHamiltonian.terms[TermType.PauliTerm.PQQR].Select(o => FromPauliTerm(o.Key, o.Value));
+            var hv0123 = pauliHamiltonian.terms[TermType.PauliTerm.v01234].Select(o => FromPauliTerm(o.Key, o.Value)).ToList();
+                                 
+            var hPQandPQQR = hPQ.Concat(hPQQR).ToList();
 
-            var hPQandPQQR = hPQ.Concat(hPQQR);
+            // Sort terms into desired order.
+            hZ.Sort(new HTermIndexIComparer());
+            hZZ.Sort(new HTermIndexIComparer());
+            hPQandPQQR.Sort(new HPQandPQQRIComparer());
+            hv0123.Sort(new HTermIndexIComparer());
 
             return (
                 energyOffset,
                 nSpinOrbitals,
                 new JWOptimizedHTerms((
-                new HTermArray(hZ),
-                new HTermArray(hZZ),
-                new HTermArray(hPQandPQQR),
-                new HTermArray(hv0123)))
+                new QArray<HTerm>(hZ),
+                new QArray<HTerm>(hZZ),
+                new QArray<HTerm>(hPQandPQQR),
+                new QArray<HTerm>(hv0123)))
                 );
         }
         /*

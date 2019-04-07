@@ -33,7 +33,7 @@ namespace Microsoft.Quantum.Chemistry.OrbitalIntegrals
         {
             var nOrbitals = sourceHamiltonian.systemIndices.Max() + 1;
             var hamiltonian = new FermionHamiltonian();
-            Func<OrbitalIntegral, double, IEnumerable<(FermionTermHermitian, Double)>> conversion = 
+            Func<OrbitalIntegral, double, IEnumerable<(FermionTermHermitian, DoubleCoeff)>> conversion = 
                 (orb, coeff) => new OrbitalIntegral(orb.OrbitalIndices, coeff).ToHermitianFermionTerms(nOrbitals, indexConvention)
                 .Select(o => (o.Item1, o.Item2.ToDouble()));
 

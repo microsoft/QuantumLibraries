@@ -28,16 +28,16 @@ namespace Microsoft.Quantum.Chemistry.Tests
         [Fact]
         void DoubleAddTest()
         {
-            var x = new Double(1.0);
-            var y = new Double(2.0);
+            var x = new DoubleCoeff(1.0);
+            var y = new DoubleCoeff(2.0);
             Assert.Equal(3.0, (x + y).Value);
         }
 
         [Fact]
         void DoubleReferenceTest()
         {
-            var x = new Double(1.0);
-            var y = new Double(3.0);
+            var x = new DoubleCoeff(1.0);
+            var y = new DoubleCoeff(3.0);
             var z = x + y;
             Assert.Equal(1.0, x.Value);
             Assert.Equal(3.0, y.Value);
@@ -47,8 +47,8 @@ namespace Microsoft.Quantum.Chemistry.Tests
         [Fact]
         void DoubleSubtractTest()
         {
-            var x = new Double(1.0);
-            var y = new Double(3.0);
+            var x = new DoubleCoeff(1.0);
+            var y = new DoubleCoeff(3.0);
             var z = x - y;
             Assert.Equal(1.0, x.Value);
             Assert.Equal(3.0, y.Value);
