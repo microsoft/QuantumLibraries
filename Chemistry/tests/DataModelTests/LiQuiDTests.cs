@@ -13,6 +13,8 @@ using System.IO;
 using YamlDotNet.Core;
 using YamlDotNet.Serialization;
 
+using Microsoft.Quantum.Chemistry.OrbitalIntegrals;
+
 namespace Microsoft.Quantum.Chemistry.Tests
 {
     using static TermType.OrbitalIntegral;

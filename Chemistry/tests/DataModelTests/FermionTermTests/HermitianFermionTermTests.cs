@@ -10,13 +10,16 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 
+using Microsoft.Quantum.Chemistry.LadderOperators;
+using Microsoft.Quantum.Chemistry.Fermion;
+using Microsoft.Quantum.Chemistry.OrbitalIntegrals;
+
 namespace Microsoft.Quantum.Chemistry.Tests
 {
     using FermionTermHermitian = FermionTermHermitian;
-    using SpinOrbital = SpinOrbital;
     using static TermType.Fermion;
-    using static LadderOperator.Type;
     using Op = LadderSequence;
+    using static LadderType;
 
     public class HermitianFermionTermTests
     {
@@ -76,7 +79,7 @@ namespace Microsoft.Quantum.Chemistry.Tests
         [InlineData(false, 10, new int[] { 1, 1 }, new int[] { 6, 5 })]
         public void IsInCanonicalOrderTest(bool pass, int nOrbitals, int[] ca, int[] idx)
         {
-            var ladderOperators = ca.Zip(idx, (a, b) => (a == 0 ? LadderOperator.Type.d : LadderOperator.Type.u, (int)b)).ToLadderSequence();
+            var ladderOperators = ca.Zip(idx, (a, b) => (a == 0 ? LadderType.d : LadderType.u, (int)b)).ToLadderSequence();
             var tmp = new FermionTermHermitian(ladderOperators);
 
             Assert.True(tmp.IsInCanonicalOrder());
@@ -92,7 +95,7 @@ namespace Microsoft.Quantum.Chemistry.Tests
         [InlineData(true, 10, new int[] { 0, 1, 1 }, new int[] { 0, 1, 0 })]
         public void NotNormalOrderedTest(bool pass, int nOrbitals, IEnumerable<int> ca, IEnumerable<int> idx)
         {
-            var ladderOperators = ca.Zip(idx, (a, b) => (a == 0 ? LadderOperator.Type.d : LadderOperator.Type.u, (int)b)).ToLadderSequence();
+            var ladderOperators = ca.Zip(idx, (a, b) => (a == 0 ? LadderType.d : LadderType.u, (int)b)).ToLadderSequence();
             Assert.Throws<ArgumentException>(() => new FermionTermHermitian(ladderOperators));
         }
 
