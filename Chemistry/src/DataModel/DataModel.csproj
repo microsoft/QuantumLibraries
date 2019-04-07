@@ -42,17 +42,14 @@
 
 
   <ItemGroup>
-    <Compile Remove="DataFormat\**" />
+    <Compile Remove="OtherFileFormats\**" />
     <Compile Remove="Old\**" />
-    <Compile Remove="Pauli\**" />
     <Compile Remove="QSharpFormat\**" />
-    <EmbeddedResource Remove="DataFormat\**" />
+    <EmbeddedResource Remove="OtherFileFormats\**" />
     <EmbeddedResource Remove="Old\**" />
-    <EmbeddedResource Remove="Pauli\**" />
     <EmbeddedResource Remove="QSharpFormat\**" />
-    <QsharpCompile Remove="DataFormat\**" />
+    <QsharpCompile Remove="OtherFileFormats\**" />
     <QsharpCompile Remove="Old\**" />
-    <QsharpCompile Remove="Pauli\**" />
     <QsharpCompile Remove="QSharpFormat\**" />
   </ItemGroup>
 
@@ -69,22 +66,19 @@
     <Compile Remove="Hamiltonian\FermionHamiltonian2.cs" />
     <Compile Remove="ProblemContainer\BroombridgeProcessed.cs" />
     <Compile Remove="ProblemContainer\LoadData.cs" />
+    <Compile Remove="QuantumStates\FermionExtensions.cs" />
     <Compile Remove="QuantumStates\FermionHamiltonianStatePrep.cs" />
+    <Compile Remove="QuantumStates\JordanWignerStatePrep.cs" />
   </ItemGroup>
 
 
   <ItemGroup>
-    <Compile Include="DataFormat\LiQuiD.cs" />
+    <Compile Include="OtherFileFormats\LiQuiD.cs" />
   </ItemGroup>
 
 
   <ItemGroup>
     <Content Include="Analysis\README.txt" />
-  </ItemGroup>
-
-
-  <ItemGroup>
-    <Folder Include="Conversion\" />
   </ItemGroup>
 
 

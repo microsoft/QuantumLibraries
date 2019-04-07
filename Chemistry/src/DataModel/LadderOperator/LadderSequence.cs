@@ -37,8 +37,9 @@ namespace Microsoft.Quantum.Chemistry
         /// <param name="ladderOperators">Sequence of ladder operators.</param>
         public LadderSequence(LadderSequence ladderOperators)
         {
-            // All constructions are pass by value.
-            sequence = ladderOperators.sequence.Select(o => o).ToList();
+            // All constructions are pass by value. 
+            // ToList() copies values if the underlying object is a value type.
+            sequence = ladderOperators.sequence.ToList();
             coefficient = ladderOperators.coefficient;
         }
 
@@ -48,7 +49,7 @@ namespace Microsoft.Quantum.Chemistry
         /// <param name="setSequence">Sequence of ladder operators.</param>
         public LadderSequence(IEnumerable<LadderOperator> setSequence, int setCoefficient = 1)
         {
-            sequence = setSequence.Select(o => o).ToList();
+            sequence = setSequence.ToList();
             coefficient = setCoefficient;
         }
         #endregion

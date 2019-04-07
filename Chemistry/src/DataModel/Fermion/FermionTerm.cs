@@ -26,7 +26,7 @@ namespace Microsoft.Quantum.Chemistry
         internal FermionTerm(FermionTerm term)
         {
             // All constructions are pass by value.
-            sequence = term.sequence.Select(o => o).ToList();
+            sequence = term.sequence.ToList();
             coefficient = term.coefficient;
         }
 

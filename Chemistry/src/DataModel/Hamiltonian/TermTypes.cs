@@ -25,8 +25,9 @@ namespace Microsoft.Quantum.Chemistry
     }
 
     /// <summary>
-    /// Class containing a indices to a variety of term categories.
+    /// Class containing a indices to a variety of term categories. 
     /// </summary>
+    // Might want to distribute these to the separate term classes.
     public static class TermType
     {
         public enum OrbitalIntegral
@@ -36,12 +37,17 @@ namespace Microsoft.Quantum.Chemistry
 
         public enum Fermion
         {
-            Identity, PP, PQ, PQQP, PQQR, PQRS
+            Identity = 0, PP = 1, PQ = 2, PQQP = 3, PQQR = 4, PQRS = 5
         }
 
-        public enum JordanWigner
+        public enum PauliTerm
         {
-            Identity, Z, ZZ, PQ, PQQR, PQRS
+            Identity = 0,   // This has contribution from PP and PQQP terms.
+            Z = 1,          // This has contribution from PP and PQQP terms.
+            ZZ = 2,         // This has contribution from PQQP terms.
+            PQ = 3,         // This has contributions from PQ and PQQR terms.
+            PQQR = 4,       // This has contributions from PQQR terms.
+            v01234 = 5      // This has contributions from PQRS terms.
         }
     }
 }

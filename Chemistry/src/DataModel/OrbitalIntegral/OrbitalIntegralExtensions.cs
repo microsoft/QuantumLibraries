@@ -39,6 +39,8 @@ namespace Microsoft.Quantum.Chemistry
                     hamiltonian.AddTerms(conversion(term.Key, term.Value));
                 }
             }
+            // Number of fermions is twice the number of orbitals.
+            hamiltonian.systemIndices = new HashSet<int>(Enumerable.Range(0, 2 * nOrbitals));
             return hamiltonian;
         }
 

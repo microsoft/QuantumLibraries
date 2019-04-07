@@ -44,6 +44,10 @@ namespace Microsoft.Quantum.Chemistry
             }
         }
 
+        /// <summary>
+        /// Method for collecting all distinct system (orbital) indices.
+        /// </summary>
+        /// <param name="orbitalIntegral">Collate orbital indices from this orbital integral.</param>
         public override void AddToSystemIndices(OrbitalIntegral index)
         {
             foreach(var idx in index.OrbitalIndices)
@@ -54,16 +58,5 @@ namespace Microsoft.Quantum.Chemistry
     }
 
      
-    public class OrbitalIntegralComparer : IEqualityComparer<OrbitalIntegral>
-    {
-        public bool Equals(OrbitalIntegral x, OrbitalIntegral y)
-        {
-            return x.Equals(y);
-        }
-        public int GetHashCode(OrbitalIntegral x)
-        {
-            return x.GetHashCode();
-        }
-    }
 }
  

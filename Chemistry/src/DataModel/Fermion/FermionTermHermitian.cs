@@ -73,6 +73,9 @@ namespace Microsoft.Quantum.Chemistry
             return false;
         }
 
+        /// <summary>
+        /// Additional sort using the Hermitian conjugate.
+        /// </summary>
         private void ToCanonicalOrder()
         {
             // Take Hermitian Conjugate    
@@ -82,6 +85,10 @@ namespace Microsoft.Quantum.Chemistry
             }
         }
 
+        /// <summary>
+        /// Return the category of this fermion term.
+        /// </summary>
+        /// <returns>Category of fermion term.</returns>
         public TermType.Fermion GetTermType()
         {
             var length = sequence.Count();
