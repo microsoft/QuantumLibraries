@@ -64,6 +64,7 @@
     <Compile Remove="Fermion\FermionTermDeprecated.cs" />
     <Compile Remove="Fermion\FermionTermold.cs" />
     <Compile Remove="Hamiltonian\FermionHamiltonian2.cs" />
+    <Compile Remove="Pauli\JordanWignerEncoding.cs" />
     <Compile Remove="ProblemContainer\BroombridgeProcessed.cs" />
     <Compile Remove="ProblemContainer\LoadData.cs" />
     <Compile Remove="QuantumStates\FermionExtensions.cs" />

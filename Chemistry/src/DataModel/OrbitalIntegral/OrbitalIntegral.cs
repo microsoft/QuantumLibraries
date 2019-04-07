@@ -15,7 +15,7 @@ namespace Microsoft.Quantum.Chemistry
     /// Type representing orbital overlap integrals.
     /// </summary>
     public struct OrbitalIntegral : 
-        HamiltonianTerm<TermType.OrbitalIntegral>//, IEquatable<OrbitalIntegral>
+        ITermIndex<TermType.OrbitalIntegral>//, IEquatable<OrbitalIntegral>
     {
         public enum Convention
         {
@@ -30,9 +30,9 @@ namespace Microsoft.Quantum.Chemistry
         /// <summary>
         /// <c>Double coefficient</c> represents the coefficient of the orbital overlap integral.
         /// </summary>
-        public Double Coefficient;
+        public double Coefficient;
 
-        public OrbitalIntegral(Double coefficient = 0.0)
+        public OrbitalIntegral(double coefficient = 0.0)
         {
             OrbitalIndices = new int[] { };
             Coefficient = coefficient;
@@ -43,7 +43,7 @@ namespace Microsoft.Quantum.Chemistry
         /// </summary>
         /// <param name="orbitalIndices">Array of orbital indices in Dirac notation.</param>
         /// <param name="coefficient">coefficient of orbital integral.</param>
-        public OrbitalIntegral(IEnumerable<int> orbitalIndices, Double coefficient = 0.0) 
+        public OrbitalIntegral(IEnumerable<int> orbitalIndices, double coefficient = 0.0) 
         {
             OrbitalIndices = orbitalIndices.ToArray();
             Coefficient = coefficient;
@@ -55,7 +55,7 @@ namespace Microsoft.Quantum.Chemistry
         /// <param name="orbitalIndices">Array of orbital indices.</param>
         /// <param name="coefficient">coefficient of orbital integral.</param>
         /// <param name="convention">Convention for ordering of orbital indices.</param>
-        public OrbitalIntegral(IEnumerable<int> orbitalIndices, Double coefficient, Convention convention = Convention.Mulliken)
+        public OrbitalIntegral(IEnumerable<int> orbitalIndices, double coefficient, Convention convention = Convention.Mulliken)
         {
             if (convention == Convention.Mulliken)
             {

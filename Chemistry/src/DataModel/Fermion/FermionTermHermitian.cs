@@ -14,7 +14,7 @@ namespace Microsoft.Quantum.Chemistry
     /// 2) Index-ordered, where are raising(lowering) operators are in ascending(descending) order.
     /// 3) Hermitian, and is assumed to be implicitly summed with its Hermitian conjugate if not explicitly Hermitian.
     /// </summary>
-    public class FermionTermHermitian : FermionTerm, HamiltonianTerm<TermType.Fermion>//, IEquatable<FermionTermHermitian>
+    public class FermionTermHermitian : FermionTerm, ITermIndex<TermType.Fermion>//, IEquatable<FermionTermHermitian>
     {
         #region Constructors
         /// <summary>

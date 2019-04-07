@@ -29,14 +29,15 @@ namespace Microsoft.Quantum.Chemistry
         {
             var nOrbitals = sourceHamiltonian.systemIndices.Max() + 1;
             var hamiltonian = new FermionHamiltonian();
-            Func<OrbitalIntegral, double, List<(FermionTermHermitian, double)>> conversion = 
-                (orb, coeff) => new OrbitalIntegral(orb.OrbitalIndices, coeff).ToHermitianFermionTerms(nOrbitals, indexConvention);
+            Func<OrbitalIntegral, double, IEnumerable<(FermionTermHermitian, Double)>> conversion = 
+                (orb, coeff) => new OrbitalIntegral(orb.OrbitalIndices, coeff).ToHermitianFermionTerms(nOrbitals, indexConvention)
+                .Select(o => (o.Item1, o.Item2.ToDouble()));
 
             foreach (var termType in sourceHamiltonian.terms)
             {
                 foreach(var term in termType.Value)
                 {
-                    hamiltonian.AddTerms(conversion(term.Key, term.Value));
+                    hamiltonian.AddTerms(conversion(term.Key, term.Value.Value));
                 }
             }
             // Number of fermions is twice the number of orbitals.

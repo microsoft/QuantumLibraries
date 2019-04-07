@@ -20,7 +20,7 @@ namespace Microsoft.Quantum.Chemistry.Tests
         {
             var hamiltonian = new FermionHamiltonian();
 
-            List<(FT, double)> fermionTerms = new List<(int[], double)>()
+            List<(FT, Double)> fermionTerms = new List<(int[], double)>()
             {
                 (new int[] {}, 10.0),
                 (new[] {0,0}, 1.0),
@@ -38,7 +38,7 @@ namespace Microsoft.Quantum.Chemistry.Tests
                 (new[] {0,2,4,3}, 1.0),
                 (new[] {1,4,3,2}, 1.0),
                 (new[] {2,4,5,3}, 1.0)
-            }.Select(o => (new FT(o.Item1.ToLadderSequence()), o.Item2)).ToList();
+            }.Select(o => (new FT(o.Item1.ToLadderSequence()), o.Item2.ToDouble())).ToList();
 
             hamiltonian.AddTerms(fermionTerms);
             return hamiltonian;
@@ -50,18 +50,18 @@ namespace Microsoft.Quantum.Chemistry.Tests
             var hamiltonian = GenerateTestHamiltonian();
             var check = new FermionTermHermitian(new[] { 0, 2, 2, 0 }.ToLadderSequence());
 
-            hamiltonian.AddTerm(check, 100.0);
+            hamiltonian.AddTerm(check, 100.0.ToDouble());
 
             var sourceDict = hamiltonian.terms[TermType.Fermion.PQQP];
 
             var check2 = new FermionTermHermitian(new[] { 0, 2, 2, 0 }.ToLadderSequence());
             var coeff = sourceDict[check2];
 
-            Assert.Equal(101.0, coeff);
-            Assert.Equal(101.0, hamiltonian.terms[TermType.Fermion.PQQP][check]);
+            Assert.Equal(101.0, coeff.Value);
+            Assert.Equal(101.0, hamiltonian.terms[TermType.Fermion.PQQP][check].Value);
 
             // Check using GetTerm method.
-            Assert.Equal(101.0, hamiltonian.GetTerm(new FermionTermHermitian(check)));
+            Assert.Equal(101.0, hamiltonian.GetTerm(new FermionTermHermitian(check)).Value);
         }
 
 

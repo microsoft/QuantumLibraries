@@ -36,7 +36,7 @@ namespace Microsoft.Quantum.Chemistry.Tests
             //Assert.True(term == orb);
 
             // Check coefficient
-            Assert.Equal(term.Coefficient, hamiltonian.terms[termType][term.ToCanonicalForm()]);
+            Assert.Equal(term.Coefficient, hamiltonian.terms[termType][term.ToCanonicalForm()].Value);
         }
 
         public static IEnumerable<object[]> LiquidOrbitalsData =>

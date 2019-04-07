@@ -17,18 +17,17 @@ namespace Microsoft.Quantum.Chemistry
     /// </summary>
     /// <typeparam name="TermClassification">Index to categories of terms.</typeparam>
     /// <typeparam name="TermIndexing">Index to individual terms.</typeparam>
-    public class GenericHamiltonian<TermClassification, TermIndexing>
+    public class GenericHamiltonian<TermClassification, TermIndexing, TermValue>
         //TODO: Restore `where TermClassification: IEquatable<TermClassification>`
         // in the future if we want more complicated term classifications.
-        where TermIndexing : HamiltonianTerm<TermClassification>
+        where TermIndexing : ITermIndex<TermClassification>
+        where TermValue: ITermValue<TermValue>
         // TODO: Restore `IEquatable<TermIndexing>` in the future if we expand to more types of terms.
     {
         /// <summary>
         /// Container for all terms in a Hamiltonian.
         /// </summary>
-        public Dictionary<TermClassification, Dictionary<TermIndexing, double>> terms = new Dictionary<TermClassification, Dictionary<TermIndexing, double>>();
-
-        public double IdentityTerm = 0.0;
+        public Dictionary<TermClassification, Dictionary<TermIndexing, TermValue>> terms = new Dictionary<TermClassification, Dictionary<TermIndexing, TermValue>>();
 
         /// <summary>
         /// Indices to systems (e.g. fermions, qubits, or orbitals) the Hamiltonian acts on.
@@ -45,7 +44,7 @@ namespace Microsoft.Quantum.Chemistry
         /// <summary>
         /// Constructor for copying a Hamiltonian.
         /// </summary>
-        public GenericHamiltonian(GenericHamiltonian<TermClassification, TermIndexing> hamiltonian)
+        public GenericHamiltonian(GenericHamiltonian<TermClassification, TermIndexing, TermValue> hamiltonian)
         {
             terms = hamiltonian.terms;
         }
@@ -56,15 +55,15 @@ namespace Microsoft.Quantum.Chemistry
         /// <param name="type">Category of term.</param>
         /// <param name="index">Index to term.</param>
         /// <param name="coefficient">Coefficient of term.</param>
-        public void AddTerm(TermClassification type, TermIndexing index, double coefficient)
+        public void AddTerm(TermClassification type, TermIndexing index, TermValue coefficient)
         {
             if (!terms.ContainsKey(type))
             {
-                terms.Add(type, new Dictionary<TermIndexing, double>());
+                terms.Add(type, new Dictionary<TermIndexing, TermValue>());
             }
             if (terms[type].ContainsKey(index))
             {
-                terms[type][index] = terms[type][index] + coefficient;
+                terms[type][index] = terms[type][index].AddValue(coefficient);
             }
             else
             {
@@ -79,7 +78,7 @@ namespace Microsoft.Quantum.Chemistry
         /// </summary>
         /// <param name="type">Category of terms.</param>
         /// <param name="terms">Enumerable sequence of terms and coefficients.</param>
-        public void AddTerms(TermClassification type, IEnumerable<(TermIndexing, double)> terms)
+        public void AddTerms(TermClassification type, IEnumerable<(TermIndexing, TermValue)> terms)
         {
             foreach (var term in terms)
             {
@@ -93,7 +92,7 @@ namespace Microsoft.Quantum.Chemistry
         /// </summary>
         /// <param name="index">Index to term.</param>
         /// <param name="coefficient">Coefficient of term.</param>
-        public void AddTerm(TermIndexing index, double coefficient)
+        public void AddTerm(TermIndexing index, TermValue coefficient)
         {
             AddTerm(index.GetTermType(), index, coefficient);
         }
@@ -105,7 +104,7 @@ namespace Microsoft.Quantum.Chemistry
         /// <param name="terms">
         /// Enumerable sequence of terms and coefficients.
         /// </param>
-        public void AddTerms(IEnumerable<(TermIndexing, double)> terms)
+        public void AddTerms(IEnumerable<(TermIndexing, TermValue)> terms)
         {
             foreach (var term in terms)
             {
@@ -118,16 +117,16 @@ namespace Microsoft.Quantum.Chemistry
         /// infers the term category from the term index if possible.
         /// </summary>
         /// <param name="index">Index to term.</param>
-        public double GetTerm(TermIndexing index)
+        public TermValue GetTerm(TermIndexing index)
         {
             var type = index.GetTermType();
             if (!terms.ContainsKey(type))
             {
-                return 0.0;
+                return default;
             }
             if (!terms[type].ContainsKey(index))
             {
-                return 0.0;
+                return default;
             }
             return terms[type][index];
         }
@@ -136,7 +135,7 @@ namespace Microsoft.Quantum.Chemistry
         /// Method for add all terms from a source Hamiltonian into this Hamiltonian.
         /// </summary>
         /// <param name="sourceHamiltonian">Source Hamiltonian.</param>
-        public void AddHamiltonian(GenericHamiltonian<TermClassification, TermIndexing> sourceHamiltonian)
+        public void AddHamiltonian(GenericHamiltonian<TermClassification, TermIndexing, TermValue> sourceHamiltonian)
         {
             foreach(var termType in sourceHamiltonian.terms)
             {
@@ -150,7 +149,7 @@ namespace Microsoft.Quantum.Chemistry
         /// <returns>Number of terms in a Hamiltonian.</returns>
         public int CountTerms()
         {
-            return terms.Select(o => o.Value.Count()).AsParallel().Sum();
+            return terms.Select(o => o.Value.Count()).Sum();
         }
 
         /// <summary>
@@ -178,7 +177,10 @@ namespace Microsoft.Quantum.Chemistry
         /// <returns>L_p norm of Hamiltonian coefficients.</returns>
         public double Norm(IEnumerable<TermClassification> termTypes, double power = 1.0)
         {
-            return Math.Pow(terms.Where(o => termTypes.Contains(o.Key)).Select(termType => termType.Value.AsParallel().Select(termValue => Math.Pow(Math.Abs(termValue.Value), power)).Sum()).Sum(),1.0/power);
+            var typesEnum = terms.Where(o => termTypes.Contains(o.Key));
+            return typesEnum
+                .Select(termType => termType.Value
+                .Select(termIndex => termIndex.Value.Norm(power)).Norm(power)).Norm(power);
         }
         
     }

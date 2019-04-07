@@ -38,7 +38,7 @@ namespace Microsoft.Quantum.Chemistry
     /// <typeparam name="TermIndexing">Index to individual terms.</typeparam>
     public class GenericQuantumState<TermClassification, TermIndexing> 
         //where TermClassification: IEquatable<TermClassification>
-        where TermIndexing: HamiltonianTerm<TermClassification>//, IEquatable<TermIndexing>
+        where TermIndexing: ITermIndex<TermClassification>//, IEquatable<TermIndexing>
     {
         /// <summary>
         /// Container for all terms in a Hamiltonian.

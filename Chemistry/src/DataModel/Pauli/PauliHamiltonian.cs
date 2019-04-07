@@ -46,7 +46,7 @@ namespace Microsoft.Quantum.Chemistry
     /// </list>
     /// </para>
     /// </summary>
-    public class PauliHamiltonian : GenericHamiltonian<TermType.PauliTerm, PauliTerm>
+    public class PauliHamiltonian : GenericHamiltonian<TermType.PauliTerm, PauliTerm, PauliTermValue>
     {
 
     }

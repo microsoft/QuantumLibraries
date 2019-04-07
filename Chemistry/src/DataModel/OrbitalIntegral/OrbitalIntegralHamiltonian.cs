@@ -16,7 +16,7 @@ using Microsoft.Extensions.Logging;
 namespace Microsoft.Quantum.Chemistry
 {
  
-    public class OrbitalIntegralHamiltonian : GenericHamiltonian<TermType.OrbitalIntegral, OrbitalIntegral>
+    public class OrbitalIntegralHamiltonian : GenericHamiltonian<TermType.OrbitalIntegral, OrbitalIntegral, Double>
     {
         /// <summary>
         /// Constructor for empty orbital integral Hamiltonian.
@@ -29,7 +29,7 @@ namespace Microsoft.Quantum.Chemistry
         /// <param name="orbitalIntegral">Orbital integral to add to Hamiltonian.</param>
         public void AddTerm(OrbitalIntegral orbitalIntegral)
         {
-            AddTerm(orbitalIntegral, orbitalIntegral.Coefficient);
+            AddTerm(orbitalIntegral, orbitalIntegral.Coefficient.ToDouble());
         }
 
         /// <summary>

@@ -56,6 +56,46 @@ namespace Microsoft.Quantum.Chemistry
         }
 
         #region Extension methods
+        /// <summary>
+        /// Computes the L_p norm of coefficicients of all terms in a Hamiltonian.
+        /// </summary>
+        /// <param name="power">Selects type of norm.</param>
+        /// <returns>L_p norm of Hamiltonian coefficients.</returns>
+        public static double Norm(this IEnumerable<double> x, double power = 1.0)
+        {
+            double sum = x.Select(y => Math.Pow(Math.Abs(y), power)).Sum();
+            return Math.Pow(sum, 1.0 / power);
+        }
+
+        /// <summary>
+        /// Construct Double that implements the ITermValue interface. 
+        /// </summary>
+        /// <param name="x">Input double.</param>
+        /// <returns>Double representing the input double.</returns>
+        public static Double ToDouble(this double x)
+        {
+            return new Double(x);
+        }
+
+        /// <summary>
+        /// Construct PauliTermValue that implements the ITermValue interface. 
+        /// </summary>
+        /// <param name="x">Input double.</param>
+        /// <returns>PauliTermValue representing the input double.</returns>
+        public static PauliTermValue ToPauliTermValue(this double x)
+        {
+            return new PauliTermValue(x);
+        }
+
+        /// <summary>
+        /// Construct PauliTermValue that implements the ITermValue interface. 
+        /// </summary>
+        /// <param name="x">Input double  sequence.</param>
+        /// <returns>PauliTermValue representing the input double sequence.</returns>
+        public static PauliTermValue ToPauliTermValue(this IEnumerable<double> x)
+        {
+            return new PauliTermValue(x);
+        }
 
         /// <summary>
         /// Computes `x^y` for an integer base `x` and exponent `y`

@@ -57,9 +57,9 @@ namespace Microsoft.Quantum.Chemistry
             var regexPQ = new Regex(@"(^|\s+)(?<p>\d+),(?<q>\d+)\D*=\s*(?<coeff>-?\s*\d*.\d*)e?(?<exponent>-?\d*)");
             var regexPQRS = new Regex(@"(^|\s+)(?<p>\d+)\D+(?<q>\d+)\D+(?<r>\d+)\D+(?<s>\d+)\D*=\s*(?<coeff>-?\s*\d*.\d*)e?(?<exponent>-?\d*)");
 
-            Double coulombRepulsion = 0.0;
-            var fileHIJTerms = new Dictionary<int[], Double>(new Extensions.IntArrayIEqualityComparer());
-            var fileHIJKLTerms = new Dictionary<int[], Double>(new Extensions.IntArrayIEqualityComparer());
+            double coulombRepulsion = 0.0;
+            var fileHIJTerms = new Dictionary<int[], double>(new Extensions.IntArrayIEqualityComparer());
+            var fileHIJKLTerms = new Dictionary<int[], double>(new Extensions.IntArrayIEqualityComparer());
             var hamiltonian = new OrbitalIntegralHamiltonian();
 
             var nOrbitals = 0L;
@@ -73,7 +73,7 @@ namespace Microsoft.Quantum.Chemistry
             Match stringnuc = regexnuc.Match(line);
             if (stringnuc.Success)
             {
-                hamiltonian.AddTerm(TermType.OrbitalIntegral.Identity, new OrbitalIntegral(), double.Parse(stringnuc.Groups["nuc"].ToString()));
+                hamiltonian.AddTerm(TermType.OrbitalIntegral.Identity, new OrbitalIntegral(),  double.Parse(stringnuc.Groups["nuc"].ToString()).ToDouble());
             }
             foreach (Match stringPQ in regexPQ.Matches(line))
             {
@@ -86,7 +86,7 @@ namespace Microsoft.Quantum.Chemistry
                     var exponent = 0.0;
                     if (exponentString != "")
                     {
-                        exponent = Double.Parse(stringPQ.Groups["exponent"].ToString());
+                        exponent = double.Parse(stringPQ.Groups["exponent"].ToString());
                     }
                     nOrbitals = new long[] { nOrbitals, p + 1, q + 1 }.Max();
 
