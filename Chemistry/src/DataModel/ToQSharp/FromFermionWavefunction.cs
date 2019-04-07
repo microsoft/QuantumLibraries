@@ -26,11 +26,11 @@ namespace Microsoft.Quantum.Chemistry
         /// <returns>Initial state in Q# format.</returns>
         internal (int, QArray<JordanWignerInputState>) InputStateToQSharp(FermionHamiltonian.InputState inputState)
         {
-            if(inputState.type == FermionHamiltonian.StateType.Sparse_Multi_Configurational)
+            if(inputState.type == FermionHamiltonian.StateType.SparseMultiConfigurational)
             {
                 return ((int)inputState.type, InitialStateSparseMultiConfigural(inputState.Superposition));
             }
-            else if(inputState.type == FermionHamiltonian.StateType.Unitary_Coupled_Cluster)
+            else if(inputState.type == FermionHamiltonian.StateType.UnitaryCoupledCluster)
             {
                 return ((int)inputState.type, InitialStateUnitaryCoupledCluster(inputState.Superposition));
             }

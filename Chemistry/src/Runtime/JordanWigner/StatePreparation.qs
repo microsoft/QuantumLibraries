@@ -2,23 +2,26 @@
 // Licensed under the MIT License.
 
 namespace Microsoft.Quantum.Chemistry.JordanWigner {
-    
+    open Microsoft.Quantum.Simulation;
+    open Microsoft.Quantum.Preparation;
+    open Microsoft.Quantum.Arithmetic;
     open Microsoft.Quantum.Primitive;
     open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Extensions.Math;
     open Microsoft.Quantum.Extensions.Convert;
+    open Microsoft.Quantum.Arrays;
+    open Microsoft.Quantum.Math;
     
-    
+
     //newtype JordanWignerInputState = ((Double, Double), Int[]);
     operation PrepareTrialState (stateData : (Int, JordanWignerInputState[]), qubits : Qubit[]) : Unit {
         let (stateType, terms) = stateData;
 
-		// State type indexing from FermionHamiltonianStatePrep
+        // State type indexing from FermionHamiltonianStatePrep
         // public enum StateType
         //{
         //    Default = 0, Single_Configurational = 1, Sparse_Multi_Configurational = 2, Unitary_Coupled_Cluster = 3
         //}
-
 		if(stateType == 2){
 			if (Length(terms) == 0) {
             // Do nothing
@@ -71,7 +74,7 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
     
     
     /// # Summary
-    /// Sparse multi-configurationalr state preparation of trial state by adding excitations
+    /// Sparse multi-configurational state preparation of trial state by adding excitations
     /// to initial trial state.
     ///
     /// # Input
@@ -87,7 +90,7 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
         
         let nExcitations = Length(excitations);
         
-        //FIXME compile error let coefficientsSqrtAbs = Map(Compose(Compose(Sqrt, Fst),Fst), excitations);
+        //FIXME compile error let coefficientsSqrtAbs = Mapped(Compose(Compose(Sqrt, Fst),Fst), excitations);
         mutable coefficientsSqrtAbs = new Double[nExcitations];
         mutable coefficientsNewComplexPolar = new ComplexPolar[nExcitations];
         mutable applyFlips = new Int[][nExcitations];
@@ -106,7 +109,7 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
             
             using (auxillary = Qubit[nBitsIndices + 1]) {
                 using (flag = Qubit[1]) {
-                    let multiplexer = MultiplexerBruteForceFromGenerator(nExcitations, LookupFunction(Map(_PrepareTrialStateSingleSiteOccupation_, applyFlips)));
+                    let multiplexer = MultiplexerBruteForceFromGenerator(nExcitations, LookupFunction(Mapped(_PrepareTrialStateSingleSiteOccupation_, applyFlips)));
                     (StatePreparationComplexCoefficients(coefficientsNewComplexPolar))(BigEndian(auxillary));
                     multiplexer(BigEndian(auxillary), qubits);
                     (Adjoint (StatePreparationPositiveCoefficients(coefficientsSqrtAbs)))(BigEndian(auxillary));

@@ -10,7 +10,7 @@ steps:
   displayName: 'Build Libraries'
   inputs:
     projects: |
-      $(LibrariesRootFolder)/Canon.sln
+      $(LibrariesRootFolder)/Standard.sln
       $(LibrariesRootFolder)/Chemistry.sln
     arguments: '-c $(BuildConfiguration) -v n /p:Version=$(Assembly.Version)'
 
@@ -23,7 +23,7 @@ steps:
   inputs:
     command: test
     projects: |
-     $(LibrariesRootFolder)/Canon/tests
+     $(LibrariesRootFolder)/Standard/tests
      $(LibrariesRootFolder)/Chemistry/tests/ChemistryTests/ChemistryTests.csproj
      $(LibrariesRootFolder)/Chemistry/tests/SystemTests/SystemTests.csproj
      $(LibrariesRootFolder)/Chemistry/tests/DataModelTests/DataModelTests.csproj
@@ -38,7 +38,7 @@ steps:
     command: custom
     custom: pack
     projects: |
-     $(LibrariesRootFolder)/Canon/src/Canon.csproj
+     $(LibrariesRootFolder)/Standard/src/Standard.csproj
      $(LibrariesRootFolder)/Chemistry/src/DataModel/DataModel.csproj
     arguments: ' --no-build -c $(BuildConfiguration) -v n -o $(System.DefaultWorkingDirectory) /p:PackageVersion=$(Nuget.Version)'
 

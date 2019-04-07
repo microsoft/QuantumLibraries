@@ -8,6 +8,8 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using YamlDotNet;
+using static System.Math;
+using static System.Convert;
 
 namespace Microsoft.Quantum.Chemistry
 {
@@ -40,7 +42,7 @@ namespace Microsoft.Quantum.Chemistry
         /// <summary>
         ///      Loads a Hamiltonian from integral data represented
         ///      in Broombridge format.
-        ///      Please see the <a href="https://raw.githubusercontent.com/Microsoft/Quantum/master/Chemistry/Schema/broombridge-0.1.schema.json">
+        ///      Please see the <a href="https://docs.microsoft.com/quantum/libraries/chemistry/schema/spec">
         ///      for further details about the
         ///      format parsed by this method.
         /// </summary>
@@ -86,7 +88,7 @@ namespace Microsoft.Quantum.Chemistry
 
             foreach (var orbitalIntegral in schemaInstance.OneBodyTerms)
             {
-                if (Math.Abs(orbitalIntegral.Coefficient) >= configuration.truncationThreshold)
+                if (Abs(orbitalIntegral.Coefficient) >= configuration.truncationThreshold)
                 {
                     hamiltonian.AddFermionTerm(orbitalIntegral);
                 }
@@ -94,7 +96,7 @@ namespace Microsoft.Quantum.Chemistry
 
             foreach (var orbitalIntegral in schemaInstance.TwoBodyTerms)
             {
-                if (Math.Abs(orbitalIntegral.Coefficient) >= configuration.truncationThreshold)
+                if (Abs(orbitalIntegral.Coefficient) >= configuration.truncationThreshold)
                 {
                     hamiltonian.AddFermionTerm(orbitalIntegral);
                 }
