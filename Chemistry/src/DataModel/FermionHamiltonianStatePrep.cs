@@ -34,7 +34,7 @@ namespace Microsoft.Quantum.Chemistry
         /// </summary>
         public enum StateType
         {
-            Default = 0, Single_Configurational = 1, Sparse_Multi_Configurational = 2, Unitary_Coupled_Cluster = 3
+            Default = 0, SingleConfigurational = 1, SparseMultiConfigurational = 2, UnitaryCoupledCluster = 3
         }
         
         /// <summary>
