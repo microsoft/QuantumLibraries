@@ -5,8 +5,13 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 
-namespace Microsoft.Quantum.Chemistry
+using Microsoft.Quantum.Chemistry.LadderOperators;
+using Microsoft.Quantum.Chemistry.Hamiltonian;
+using Microsoft.Quantum.Chemistry;
+
+namespace Microsoft.Quantum.Chemistry.Fermion
 {
+    using static Microsoft.Quantum.Chemistry.Extensions;
 
     /// <summary>
     /// Class representing a sequence of fermionic raising and lowering operators, subject to the additional constraints: 
@@ -55,11 +60,11 @@ namespace Microsoft.Quantum.Chemistry
         {
             if (IsInIndexOrder())
             {
-                var creationSequence = sequence.Where(o => o.type == LadderOperator.Type.u).Select(o => o.index);
-                var annihilationSequence = sequence.Where(o => o.type == LadderOperator.Type.d).Select(o => o.index);
+                var creationSequence = sequence.Where(o => o.type == LadderType.u).Select(o => o.index);
+                var annihilationSequence = sequence.Where(o => o.type == LadderType.d).Select(o => o.index);
                 if (creationSequence.Count() == annihilationSequence.Count())
                 {
-                    if (Extensions.CompareIntArray(creationSequence, annihilationSequence.Reverse()) > 0)
+                    if (CompareIntArray(creationSequence, annihilationSequence.Reverse()) > 0)
                     {
                         return false;
                     }
@@ -81,7 +86,7 @@ namespace Microsoft.Quantum.Chemistry
             // Take Hermitian Conjugate    
             if (!IsInCanonicalOrder())
             {
-                sequence = sequence.Select(o => (o.type == LadderOperator.Type.d ? LadderOperator.Type.u : LadderOperator.Type.d, o.index)).Select(o => new LadderOperator(o)).Reverse().ToList();
+                sequence = sequence.Select(o => (o.type == LadderType.d ? LadderType.u : LadderType.d, o.index)).Select(o => new LadderOperator(o)).Reverse().ToList();
             }
         }
 

@@ -4,9 +4,10 @@
 using Microsoft.Quantum.Simulation.Core;
 
 using System.Text.RegularExpressions;
-using System;
 using System.Linq;
 using System.Collections.Generic;
+
+using Microsoft.Quantum.Chemistry.OrbitalIntegrals;
 
 namespace Microsoft.Quantum.Chemistry
 {

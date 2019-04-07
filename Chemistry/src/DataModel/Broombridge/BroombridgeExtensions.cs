@@ -1,15 +1,12 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-using Microsoft.Quantum.Simulation.Core;
-
 using System;
 using System.Linq;
-using System.Collections.Generic;
-using Microsoft.Quantum.Chemistry;
-using System.Numerics;
 
-namespace Microsoft.Quantum.Chemistry
+using Microsoft.Quantum.Chemistry.OrbitalIntegrals;
+
+namespace Microsoft.Quantum.Chemistry.Broombridge
 {
     /// <summary>
     /// Extensions for converting orbital integrals to fermion terms.
@@ -20,7 +17,7 @@ namespace Microsoft.Quantum.Chemistry
         /// Builds Hamiltonian from Broombridge if data is available.
         /// </summary>
         public static OrbitalIntegralHamiltonian CreateOrbitalIntegralHamiltonian(
-            this Broombridge.Current.ProblemDescription broombridge)
+            this CurrentVersion.ProblemDescription broombridge)
         {
             return broombridge.CreateOrbitalIntegralHamiltonian();
         }
@@ -29,7 +26,7 @@ namespace Microsoft.Quantum.Chemistry
         /// Builds Hamiltonian from Broombridge orbital integral data.
         /// </summary>
         internal static OrbitalIntegralHamiltonian CreateOrbitalIntegralHamiltonian(
-        this Broombridge.DataStructures.HamiltonianData hamiltonianData)
+        this DataStructures.DataStructure.HamiltonianData hamiltonianData)
         {
             var hamiltonian = new OrbitalIntegralHamiltonian();
             // This will convert from Broombridge 1-indexing to 0-indexing.

@@ -3,8 +3,15 @@
 
 using System;
 
-namespace Microsoft.Quantum.Chemistry
+namespace Microsoft.Quantum.Chemistry.LadderOperators
 {
+    /// <summary>
+    /// Enum for raising or lowering operator.
+    /// </summary>
+    public enum LadderType
+    {
+        u = 0, d = 1, identity
+    }
 
     /// <summary>
     /// Data strcture for raising and lowering operators.
@@ -12,17 +19,9 @@ namespace Microsoft.Quantum.Chemistry
     public struct LadderOperator
     {
         /// <summary>
-        /// Enum for raising or lowering operator.
+        /// LadderType specifying raising or lowering operator.
         /// </summary>
-        public enum Type
-        {
-            u = 0, d = 1, identity
-        }
-
-        /// <summary>
-        /// Type specifying raising or lowering operator.
-        /// </summary>
-        public Type type;
+        public LadderType type;
 
         /// <summary>
         /// System index operator acts on.
@@ -35,7 +34,7 @@ namespace Microsoft.Quantum.Chemistry
         /// </summary>
         /// <param name="setType">Set raising or lowering operator.</param>
         /// <param name="setIndex">Set system index.</param>
-        public LadderOperator(Type setType, int setIndex)
+        public LadderOperator(LadderType setType, int setIndex)
         {
             type = setType;
             index = setIndex;
@@ -46,7 +45,7 @@ namespace Microsoft.Quantum.Chemistry
         /// </summary>
         /// <param name="set">Tuple where first item sets the operator type,
         /// and the second item indexes the system.</param>
-        public LadderOperator((Type, int) set) : this(set.Item1, set.Item2) { }
+        public LadderOperator((LadderType, int) set) : this(set.Item1, set.Item2) { }
 
         #region Equality Testing
         public override bool Equals(object obj)
@@ -61,7 +60,7 @@ namespace Microsoft.Quantum.Chemistry
 
         public override int GetHashCode()
         {
-            return index * Enum.GetNames(typeof(Type)).Length + (int) type;
+            return index * Enum.GetNames(typeof(LadderType)).Length + (int) type;
         }
 
         public static bool operator ==(LadderOperator x, LadderOperator y)

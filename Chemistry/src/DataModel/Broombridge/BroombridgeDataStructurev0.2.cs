@@ -11,12 +11,12 @@ using System.Text.RegularExpressions;
 using YamlDotNet.Core;
 using YamlDotNet.Serialization;
 
-namespace Microsoft.Quantum.Chemistry
+namespace Microsoft.Quantum.Chemistry.Broombridge
 {
     /// <summary>
     /// Functionality to validate and parse Broombridge
     /// </summary>
-    public static partial class Broombridge
+    public static partial class DataStructures
     {
 
         /// <summary>
@@ -46,13 +46,13 @@ namespace Microsoft.Quantum.Chemistry
                 public string Schema { get; set; }
 
                 [YamlMember(Alias = "format", ApplyNamingConventions = false)]
-                public DataStructures.Format Format { get; set; }
+                public DataStructure.Format Format { get; set; }
 
                 [YamlMember(Alias = "generator", ApplyNamingConventions = false)]
-                public DataStructures.Generator Generator { get; set; }
+                public DataStructure.Generator Generator { get; set; }
 
                 [YamlMember(Alias = "bibliography", ApplyNamingConventions = false)]
-                public List<DataStructures.BibliographyItem> Bibliography { get; set; }
+                public List<DataStructure.BibliographyItem> Bibliography { get; set; }
 
                 [YamlMember(Alias = "problem_description", ApplyNamingConventions = false)]
                 public List<ProblemDescription> ProblemDescriptions { get; set; }
@@ -65,22 +65,22 @@ namespace Microsoft.Quantum.Chemistry
                 public Dictionary<string, object> Metadata { get; set; }
 
                 [YamlMember(Alias = "basis_set", ApplyNamingConventions = false)]
-                public DataStructures.BasisSet BasisSet { get; set; }
+                public DataStructure.BasisSet BasisSet { get; set; }
 
                 [YamlMember(Alias = "geometry", ApplyNamingConventions = false)]
-                public DataStructures.Geometry Geometry { get; set; }
+                public DataStructure.Geometry Geometry { get; set; }
 
                 [YamlMember(Alias = "coulomb_repulsion", ApplyNamingConventions = false)]
-                public DataStructures.SimpleQuantity CoulombRepulsion { get; set; }
+                public DataStructure.SimpleQuantity CoulombRepulsion { get; set; }
 
                 [YamlMember(Alias = "scf_energy", ApplyNamingConventions = false)]
-                public DataStructures.SimpleQuantity ScfEnergy { get; set; }
+                public DataStructure.SimpleQuantity ScfEnergy { get; set; }
 
                 [YamlMember(Alias = "scf_energy_offset", ApplyNamingConventions = false)]
-                public DataStructures.SimpleQuantity ScfEnergyOffset { get; set; }
+                public DataStructure.SimpleQuantity ScfEnergyOffset { get; set; }
 
                 [YamlMember(Alias = "fci_energy", ApplyNamingConventions = false)]
-                public DataStructures.BoundedQuantity FciEnergy { get; set; }
+                public DataStructure.BoundedQuantity FciEnergy { get; set; }
 
                 [YamlMember(Alias = "n_orbitals", ApplyNamingConventions = false)]
                 public int NOrbitals { get; set; }
@@ -89,10 +89,10 @@ namespace Microsoft.Quantum.Chemistry
                 public int NElectrons { get; set; }
 
                 [YamlMember(Alias = "energy_offset", ApplyNamingConventions = false)]
-                public DataStructures.SimpleQuantity EnergyOffset { get; set; }
+                public DataStructure.SimpleQuantity EnergyOffset { get; set; }
 
                 [YamlMember(Alias = "hamiltonian", ApplyNamingConventions = false)]
-                public DataStructures.HamiltonianData Hamiltonian { get; set; }
+                public DataStructure.HamiltonianData Hamiltonian { get; set; }
 
                 // FIXME: actually specify what initial_state_suggestions looks like.
                 //[YamlMember(Alias = "initial_state_suggestions", ApplyNamingConventions = false)]
@@ -113,7 +113,7 @@ namespace Microsoft.Quantum.Chemistry
                 public string Method { get; set; }
 
                 [YamlMember(Alias = "energy", ApplyNamingConventions = false)]
-                public DataStructures.SimpleQuantity Energy { get; set; }
+                public DataStructure.SimpleQuantity Energy { get; set; }
 
                 /// <summary>
                 /// Sparse multi-configurational data
@@ -125,7 +125,7 @@ namespace Microsoft.Quantum.Chemistry
                 /// Coupled-cluster operator
                 /// </summary>
                 [YamlMember(Alias = "cluster_operator", ApplyNamingConventions = false)]
-                public DataStructures.ClusterOperator ClusterOperator { get; set; }
+                public DataStructure.ClusterOperator ClusterOperator { get; set; }
             }
 
 

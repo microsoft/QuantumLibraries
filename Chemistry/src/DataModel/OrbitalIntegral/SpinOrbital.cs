@@ -1,15 +1,10 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-
-
-using Microsoft.Quantum.Simulation.Core;
-
 using System;
-using System.Linq;
 using System.Collections.Generic;
 
-namespace Microsoft.Quantum.Chemistry
+namespace Microsoft.Quantum.Chemistry.OrbitalIntegrals
 {
     /// <summary>
     /// Contains common data structures and methods relevant to representing a
@@ -25,7 +20,7 @@ namespace Microsoft.Quantum.Chemistry
     };
 
     /// <summary>
-    /// Type representing a spin-orbital
+    /// LadderType representing a spin-orbital
     /// </summary>
     [Serializable]
     public class SpinOrbital

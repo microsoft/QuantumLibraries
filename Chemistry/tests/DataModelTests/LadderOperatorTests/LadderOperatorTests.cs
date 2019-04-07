@@ -2,13 +2,12 @@
 // Licensed under the MIT License.
 
 using Xunit;
-using Microsoft.Quantum.Chemistry;
-using Microsoft.Quantum.Simulation.Core;
 
-using System.Text.RegularExpressions;
 using System;
 using System.Linq;
 using System.Collections.Generic;
+
+using Microsoft.Quantum.Chemistry.LadderOperator;
 
 namespace Microsoft.Quantum.Chemistry.Tests
 {

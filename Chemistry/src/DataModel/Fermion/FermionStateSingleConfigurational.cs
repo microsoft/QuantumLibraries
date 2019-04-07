@@ -5,7 +5,9 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 
-namespace Microsoft.Quantum.Chemistry
+using Microsoft.Quantum.Chemistry.LadderOperators;
+
+namespace Microsoft.Quantum.Chemistry.Fermion
 {
     // This class is for Fermion terms that are not grouped into Hermitian bunches.
     // Maybe need a stype for quantum state?
@@ -47,7 +49,7 @@ namespace Microsoft.Quantum.Chemistry
         /// </summary>
         private void ExceptionIfNotOnlyRaising()
         {
-            if (sequence.Where(o => o.type == LadderOperator.Type.d).Count() > 0)
+            if (sequence.Where(o => o.type == LadderType.d).Count() > 0)
             {
                 throw new ArgumentException("FermionStateSingleConfigurational must contatin only raising operators.");
             }

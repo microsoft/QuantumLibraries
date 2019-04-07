@@ -1,7 +1,9 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-namespace Microsoft.Quantum.Chemistry
+using Microsoft.Quantum.Chemistry.Hamiltonian;
+
+namespace Microsoft.Quantum.Chemistry.Fermion
 {
     public class FermionHamiltonian : GenericHamiltonian<TermType.Fermion, FermionTermHermitian, Double>
     {

@@ -42,13 +42,13 @@
 
 
   <ItemGroup>
-    <Compile Remove="OtherFileFormats\**" />
+    <Compile Remove="Broombridge\OtherFileFormats\**" />
     <Compile Remove="Old\**" />
     <Compile Remove="QSharpFormat\**" />
-    <EmbeddedResource Remove="OtherFileFormats\**" />
+    <EmbeddedResource Remove="Broombridge\OtherFileFormats\**" />
     <EmbeddedResource Remove="Old\**" />
     <EmbeddedResource Remove="QSharpFormat\**" />
-    <QsharpCompile Remove="OtherFileFormats\**" />
+    <QsharpCompile Remove="Broombridge\OtherFileFormats\**" />
     <QsharpCompile Remove="Old\**" />
     <QsharpCompile Remove="QSharpFormat\**" />
   </ItemGroup>
@@ -74,7 +74,7 @@
 
 
   <ItemGroup>
-    <Compile Include="OtherFileFormats\LiQuiD.cs" />
+    <Compile Include="Broombridge\OtherFileFormats\LiQuiD.cs" />
   </ItemGroup>
 
 
@@ -85,6 +85,11 @@
 
   <ItemGroup>
     <None Include="ProblemContainer\BroombridgeProcessed.cs" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <Folder Include="Old\" />
   </ItemGroup>
 
 </Project>

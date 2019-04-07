@@ -13,8 +13,59 @@ using System.IO.Compression;
 using YamlDotNet.Serialization;
 using Microsoft.Extensions.Logging;
 
+using Microsoft.Quantum.Chemistry;
+using Microsoft.Quantum.Chemistry.Broombridge;
+using Microsoft.Quantum.Chemistry.OrbitalIntegrals;
+using Microsoft.Quantum.Chemistry.Fermion;
+using Microsoft.Quantum.Chemistry.Pauli;
+using Microsoft.Quantum.Chemistry.Wavefunction;
+
 namespace Microsoft.Quantum.Chemistry
 {
+
+
+    /// <summary>
+    /// Configuration settings for modifying chemistry library behavior.
+    /// </summary>
+    public class Config
+    {
+
+        /// <summary>
+        /// Construct default configuration.
+        /// </summary>
+        /// <returns>Default configuration class.</returns>
+        public static Config Default()
+        {
+            return new Config();
+        }
+
+        /// <summary>
+        /// Default configuration constructor;
+        /// </summary>
+        public Config()
+        {
+            IndexConvention = DefaultSettings.IndexConvention;
+            TruncationThreshold = DefaultSettings.TruncationThreshold;
+        }
+
+        /// <summary>
+        /// Choose indexing convention from spin-orbital index to an integer.
+        /// </summary>
+        public SpinOrbital.IndexConvention IndexConvention;
+
+        /// <summary>
+        /// Threshold below which to truncate Hamiltonian coefficients.
+        /// </summary>
+        public double TruncationThreshold;
+
+        public static class DefaultSettings
+        {
+            public const SpinOrbital.IndexConvention IndexConvention = SpinOrbital.IndexConvention.UpDown;
+            public const double TruncationThreshold = 1e-8;
+        }
+
+    }
+
     public class Convenience
     {
         /// <summary>
@@ -24,10 +75,10 @@ namespace Microsoft.Quantum.Chemistry
         public void SampleWorkflow(string filename)
         {
             // Deserialize Broombridge from file.
-            Broombridge.Current.Data broombridge = Broombridge.DeserializeBroombridge(filename);
+            CurrentVersion.Data broombridge = Deserializers.DeserializeBroombridge(filename);
 
             // A single file can contain multiple problem descriptions. Let us pick the first one.
-            Broombridge.Current.ProblemDescription problemData = broombridge.ProblemDescriptions.First();
+            CurrentVersion.ProblemDescription problemData = broombridge.ProblemDescriptions.First();
 
             #region Create electronic structure Hamiltonian
             // Electronic structure Hamiltonians are usually represented compactly by orbital integrals. Let us construct
@@ -57,7 +108,7 @@ namespace Microsoft.Quantum.Chemistry
     public class ProblemContainer
     {
         public class Config { }
-        //public readonly Config.IndexConvention.Type IndexConvention;
+        //public readonly Config.IndexConvention.LadderType IndexConvention;
 
         // For now, this only has a few options.
         public OrbitalIntegralHamiltonian orbitalIntegralHamiltonian = new OrbitalIntegralHamiltonian();

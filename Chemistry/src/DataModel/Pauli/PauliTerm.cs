@@ -1,13 +1,12 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-using Microsoft.Quantum.Simulation.Core;
-
 using System;
 using System.Linq;
 using System.Collections.Generic;
 
-namespace Microsoft.Quantum.Chemistry
+
+namespace Microsoft.Quantum.Chemistry.Pauli
 {
    
     
@@ -29,7 +28,7 @@ namespace Microsoft.Quantum.Chemistry
         public List<int> QubitIndices { get; set; }
 
         /// <summary>
-        /// Type of Pauli string encoded by list of qubit indices.
+        /// LadderType of Pauli string encoded by list of qubit indices.
         /// </summary>
         public TermType.PauliTerm TermType;
 
@@ -247,5 +246,6 @@ namespace Microsoft.Quantum.Chemistry
         }
         #endregion
     }
+  
 }
 

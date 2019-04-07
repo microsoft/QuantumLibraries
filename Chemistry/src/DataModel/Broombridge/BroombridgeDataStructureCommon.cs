@@ -11,15 +11,19 @@ using System.Text.RegularExpressions;
 using YamlDotNet.Core;
 using YamlDotNet.Serialization;
 
-namespace Microsoft.Quantum.Chemistry
+namespace Microsoft.Quantum.Chemistry.Broombridge
 {
+    /// <summary>
+    /// Alias for Broombridge latest supported format.
+    /// </summary>
+    public class CurrentVersion : DataStructures.V0_2 { }
     /// <summary>
     /// Functionality to validate and parse Broombridge
     /// </summary>
-    public static partial class Broombridge
+    public static partial class DataStructures
     {
 
-        public static class DataStructures
+        public static class DataStructure
         {
             public struct Format
             {
@@ -116,13 +120,13 @@ namespace Microsoft.Quantum.Chemistry
                 // TODO: make this not object
                 // FIXME: currently strips off the last element as the "value", but the
                 //        present schema requires us to pull off the last two as a (double, string).
-                public DataStructures.ArrayQuantity<object, object> ParticleHoleRepresentation { get; set; }
+                public DataStructure.ArrayQuantity<object, object> ParticleHoleRepresentation { get; set; }
 
                 [YamlMember(Alias = "one_electron_integrals", ApplyNamingConventions = false)]
-                public DataStructures.ArrayQuantity<long, double> OneElectronIntegrals { get; set; }
+                public DataStructure.ArrayQuantity<long, double> OneElectronIntegrals { get; set; }
 
                 [YamlMember(Alias = "two_electron_integrals", ApplyNamingConventions = false)]
-                public DataStructures.ArrayQuantity<long, double> TwoElectronIntegrals { get; set; }
+                public DataStructure.ArrayQuantity<long, double> TwoElectronIntegrals { get; set; }
 
             }
 

@@ -9,7 +9,11 @@ using System.Collections.Generic;
 using Microsoft.Quantum.Chemistry;
 using System.Numerics;
 
-namespace Microsoft.Quantum.Chemistry
+using Microsoft.Quantum.Chemistry.Hamiltonian;
+using Microsoft.Quantum.Chemistry.LadderOperators;
+using Microsoft.Quantum.Chemistry.Fermion;
+
+namespace Microsoft.Quantum.Chemistry.OrbitalIntegrals
 {
     /// <summary>
     /// Extensions for converting orbital integrals to fermion terms.

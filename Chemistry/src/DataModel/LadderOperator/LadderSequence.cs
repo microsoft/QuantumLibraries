@@ -5,7 +5,7 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 
-namespace Microsoft.Quantum.Chemistry
+namespace Microsoft.Quantum.Chemistry.LadderOperators
 {
     
     /// <summary>
@@ -88,7 +88,7 @@ namespace Microsoft.Quantum.Chemistry
         /// <param name="x">Left ladder operator.</param>
         /// <param name="y">Right ladder operator.</param>
         /// <returns>Result of {x,y}.</returns>
-        public virtual (LadderOperator.Type, int) AntiCommutator(LadderOperator x, LadderOperator y)
+        public virtual (LadderType, int) AntiCommutator(LadderOperator x, LadderOperator y)
         {
             // {a_x, a_y^\dag} = \delta_{xy}
             // {a_x, a_y} = 1
@@ -97,21 +97,21 @@ namespace Microsoft.Quantum.Chemistry
             {
                 if (x.type != y.type)
                 {
-                    if (x.type == LadderOperator.Type.d)
+                    if (x.type == LadderType.d)
                     {
-                        return (LadderOperator.Type.identity, 1);
+                        return (LadderType.identity, 1);
                     }
                     else
                     {
-                        return (LadderOperator.Type.identity, -1);
+                        return (LadderType.identity, -1);
                     }
                 }
                 else
                 {
-                    return (LadderOperator.Type.identity, 0);
+                    return (LadderType.identity, 0);
                 }
             }
-            return (LadderOperator.Type.identity, 0);
+            return (LadderType.identity, 0);
         }
 
         /// <summary>

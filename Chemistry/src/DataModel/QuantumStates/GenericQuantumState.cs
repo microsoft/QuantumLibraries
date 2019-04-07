@@ -9,7 +9,9 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Microsoft.Quantum.Chemistry
+using Microsoft.Quantum.Chemistry.Fermion;
+
+namespace Microsoft.Quantum.Chemistry.Wavefunction
 {
     /// <summary>
     /// Enum over valid input state types.

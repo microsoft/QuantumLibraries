@@ -1,16 +1,15 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-using Microsoft.Quantum.Simulation.Core;
-
 using System;
 using System.Linq;
 using System.Collections.Generic;
-using Microsoft.Quantum.Chemistry;
-using System.Numerics;
 
-namespace Microsoft.Quantum.Chemistry
+using Microsoft.Quantum.Chemistry.Pauli;
+
+namespace Microsoft.Quantum.Chemistry.Fermion
 {
+    using static Microsoft.Quantum.Chemistry.Extensions;
     /// <summary>
     /// Extensions for converting fermion terms to Pauli terms.
     /// </summary>
@@ -105,10 +104,9 @@ namespace Microsoft.Quantum.Chemistry
                     // PQ term
                     pauliTerms.Add((new PauliTerm(new int[] { seq[0], seq[3] }, TermType.PauliTerm.PQ), (0.125 * multiplier * coeff).ToPauliTermValue()));
                     break;
-
                 case TermType.Fermion.PQRS:
                     var pqrsSorted = seq.ToList();
-                    pqrsSorted.Sort(new Extensions.IntIComparer());
+                    pqrsSorted.Sort(new IntIComparer());
                     var (newTerm, newCoeff) = IdentifyHpqrsPermutation((pqrsSorted, seq, coeff));
                     pauliTerms.Add((new PauliTerm(newTerm, TermType.PauliTerm.v01234), newCoeff.ToPauliTermValue()));
                     break;

@@ -1,59 +1,14 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-using Microsoft.Quantum.Simulation.Core;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace Microsoft.Quantum.Chemistry
 {
-    using TermArray = List<HTerm>;
-
     public static partial class Extensions
     {
-        /// <summary>
-        /// IComparer for <c>(QArray<Int64>, QArray<Double>)</c>. This compares only
-        /// the integer sequence, and ignores the double sequence.
-        /// </summary>
-        public class HTermIndexIComparer : IComparer<HTerm>
-        {
-            public int Compare(HTerm x, HTerm y) =>
-                CompareIntArray(x.Item1, y.Item1);
-        }
-
-        /// <summary>
-        /// Equality comparer for <see cref="HTerm"/>. This compares both
-        /// the integer sequence and the double sequence.
-        /// </summary>
-        public class HTermArrayComparer : IEqualityComparer<HTerm>
-        {
-            public bool Equals(HTerm x, HTerm y)
-            {
-                if (x.Item1.SequenceEqual(y.Item1) && x.Item2.SequenceEqual(y.Item2))
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-            }
-            public int GetHashCode(HTerm x)
-            {
-                int h = 19;
-                foreach (var i in x.Item1.Select(o => o.GetHashCode()))
-                {
-                    h = h * 31 + i;
-                }
-                foreach (var i in x.Item2.Select(o => o.GetHashCode()))
-                {
-                    h = h * 17 + i;
-                }
-                return h;
-            }
-        }
 
         #region Extension methods
         /// <summary>
@@ -78,26 +33,6 @@ namespace Microsoft.Quantum.Chemistry
         }
 
         /// <summary>
-        /// Construct PauliTermValue that implements the ITermValue interface. 
-        /// </summary>
-        /// <param name="x">Input double.</param>
-        /// <returns>PauliTermValue representing the input double.</returns>
-        public static PauliTermValue ToPauliTermValue(this double x)
-        {
-            return new PauliTermValue(x);
-        }
-
-        /// <summary>
-        /// Construct PauliTermValue that implements the ITermValue interface. 
-        /// </summary>
-        /// <param name="x">Input double  sequence.</param>
-        /// <returns>PauliTermValue representing the input double sequence.</returns>
-        public static PauliTermValue ToPauliTermValue(this IEnumerable<double> x)
-        {
-            return new PauliTermValue(x);
-        }
-
-        /// <summary>
         /// Computes `x^y` for an integer base `x` and exponent `y`
         /// </summary>
         /// <param name="x">Base.</param>
@@ -105,7 +40,12 @@ namespace Microsoft.Quantum.Chemistry
         /// <returns>An integer `x^y`</returns>
         public static int Pow(this int x, int exponent)
         {
-            return Convert.ToInt32(((long)x).Pow(exponent));
+            int output = 1;
+            for (int i = 0; i < exponent; i++)
+            {
+                output *= x;
+            }
+            return output;
         }
 
         /// <summary>
@@ -128,7 +68,7 @@ namespace Microsoft.Quantum.Chemistry
         /// <c>true</c> if <paramref name="x"/> is sorted in ascending
         /// order, and <c>false</c> otherwise.
         /// </returns>
-        public static bool IsIntArrayAscending(this IEnumerable<Int64> x)
+        public static bool IsIntArrayAscending(this IEnumerable<long> x)
         {
             // return true for empty list.
             if (!x.Any())
@@ -151,78 +91,7 @@ namespace Microsoft.Quantum.Chemistry
             return x.Select(o => (long)o).IsIntArrayAscending();
         }
         #endregion
-
-
-        #region Int64 Comparers
-
-
-        /// <summary>
-        /// Compares two equal-length sequences of integers by perform an element-wise
-        /// comparison, starting from the first element.
-        /// </summary>
-        /// <param name="xArr">First sequence of integers.</param>
-        /// <param name="yArr">Second sequence of integers.</param>
-        /// <returns>
-        /// Returns <c>1</c> if <paramref name="xArr"/> is greater than <paramref name="yArr"/>.
-        /// Returns <c>-1</c> if <paramref name="xArr"/> is less than <paramref name="yArr"/>.
-        /// Returns <c>0</c> if <paramref name="xArr"/> is equal to <paramref name="yArr"/>.
-        /// </returns>
-        /// <example>
-        /// CompareIntArray(new Int64[] {5}, new Int64[] {7}) == -1;
-        /// CompareIntArray(new Int64[] {5,7}, new Int64[] {5,6}) == 1;
-        /// CompareIntArray(new Int64[] {2,1,3}, new Int64[] {2,2,3}) == -1;
-        /// </example>
-        public static int CompareIntArray(IEnumerable<Int64> xArr, IEnumerable<Int64> yArr)
-        {
-            foreach (var item in xArr.Zip(yArr, (x, y) => (x, y)))
-            {
-                if (item.y > item.x)
-                {
-                    return -1;
-                }
-                else if (item.y < item.x)
-                {
-                    return 1;
-                }
-            }
-            return 0;
-        }
-
-
-        /// <summary>
-        /// IComparer for two integers.
-        /// </summary>
-        public class Int64IComparer : IComparer<Int64>
-        {
-            public int Compare(Int64 x, Int64 y) => Math.Sign(x - y);
-        }
-
-
-        public class Int64ArrayIComparer : IComparer<IEnumerable<Int64>>
-        {
-            public int Compare(IEnumerable<Int64> x, IEnumerable<Int64> y)
-            {
-                return CompareIntArray(x, y);
-            }
-        }
-
-        public class Int64ArrayIEqualityComparer : IEqualityComparer<IEnumerable<Int64>>
-        {
-            public bool Equals(IEnumerable<Int64> x, IEnumerable<Int64> y)
-            {
-                return x.SequenceEqual(y);
-            }
-            public int GetHashCode(IEnumerable<Int64> x)
-            {
-                int h = 19;
-                foreach (var i in x)
-                {
-                    h = h * 31 + ((int)i);
-                }
-                return h;
-            }
-        }
-        #endregion
+        
 
         #region int Comparers
         public class IntArrayIEqualityComparer : IEqualityComparer<IEnumerable<int>>
@@ -256,6 +125,7 @@ namespace Microsoft.Quantum.Chemistry
                 }
             }
             return 0;
+            
         }
 
         /// <summary>
@@ -315,6 +185,7 @@ namespace Microsoft.Quantum.Chemistry
 
             throw new ArgumentException($"Expected {@enum} to be a member of {@enum.GetType()}.");
         }
+
+        #endregion
     }
-    #endregion
 }

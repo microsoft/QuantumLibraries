@@ -2,9 +2,10 @@
 // Licensed under the MIT License.
 
 using System.Linq;
-using System.Collections.Generic;
 
-namespace Microsoft.Quantum.Chemistry
+using Microsoft.Quantum.Chemistry.LadderOperators;
+
+namespace Microsoft.Quantum.Chemistry.Fermion
 {
     /// <summary>
     /// Class representing a sequence of fermionic raising and lowering operators, subject to the additional constraints: 
@@ -39,7 +40,7 @@ namespace Microsoft.Quantum.Chemistry
 
         // If LadderSequence is used as a base class for non-fermionic operators in the future,
         // will need to override the anticommutator.
-        //public override (LadderOperator.Type, int) AntiCommutator(LadderOperator x, LadderOperator y)
+        //public override (LadderType, int) AntiCommutator(LadderOperator x, LadderOperator y)
         //{
         //    return base.AntiCommutator(x, y);
         //}

@@ -1,11 +1,10 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-using System;
-using System.Linq;
-using System.Collections.Generic;
 
-namespace Microsoft.Quantum.Chemistry
+using System.Linq;
+
+namespace Microsoft.Quantum.Chemistry.LadderOperators
 {
 
     /// <summary>

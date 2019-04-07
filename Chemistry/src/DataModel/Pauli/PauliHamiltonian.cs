@@ -1,19 +1,9 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-using Microsoft.Quantum.Simulation.Core;
+using Microsoft.Quantum.Chemistry.Hamiltonian;
 
-using System;
-using System.Linq;
-using System.Collections.Generic;
-
-using System.Runtime.Serialization.Formatters.Binary;
-using System.IO;
-using System.IO.Compression;
-using YamlDotNet.Serialization;
-using Microsoft.Extensions.Logging;
-
-namespace Microsoft.Quantum.Chemistry
+namespace Microsoft.Quantum.Chemistry.Pauli
 {
 
     /// <summary>
@@ -48,7 +38,7 @@ namespace Microsoft.Quantum.Chemistry
     /// </summary>
     public class PauliHamiltonian : GenericHamiltonian<TermType.PauliTerm, PauliTerm, PauliTermValue>
     {
-
+        public PauliHamiltonian() : base() { }
     }
 }
  

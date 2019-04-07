@@ -93,5 +93,107 @@ namespace Microsoft.Quantum.Chemistry.Tests
 
         }
 
+        [Theory]
+        [MemberData(nameof(OrbitalsData))]
+        public void BuildFromOrbitalIntegrals(
+            OrbitalIntegral orbitalIntegral, 
+            TermType.Fermion termType, 
+            (int, int[], double)[] termsRaw)
+        {
+            var terms = termsRaw.Select(o => (new FermionTermHermitian(o.Item2.ToLadderSequence()),o.Item3));
+            var orbitalhamiltonian = new OrbitalIntegralHamiltonian();
+            orbitalhamiltonian.AddTerm(orbitalIntegral);
+            var hamiltonian = orbitalhamiltonian.ToFermionHamiltonian(SpinOrbital.IndexConvention.HalfUp);
+
+            Assert.True(hamiltonian.terms.ContainsKey(termType));
+            // Check that expected terms are found
+            foreach (var term in terms)
+            {
+                Assert.Contains(term.Item1, hamiltonian.terms[termType].Keys);
+                Assert.Equal(term.Item2, hamiltonian.terms[termType][term.Item1].Value);
+            }
+            // Check only expected terms are found
+            foreach (var term in hamiltonian.terms[termType])
+            {
+                Assert.Contains(term.Key, terms.Select(o => o.Item1));
+            }
+        }
+
+        public static IEnumerable<object[]> OrbitalsData =>
+            new List<object[]>
+            {
+                new object[] { new OrbitalIntegral(new[] {0,0 },1.0, OrbitalIntegral.Convention.Dirac), TermType.Fermion.PP,
+                    new (int, int[], double)[] {
+                        (1, new[] { 0, 0 }, 1.0 ),
+                        (1, new[] { 1, 1 }, 1.0 )}},
+                new object[] { new OrbitalIntegral(new[] {0,1 },1.0, OrbitalIntegral.Convention.Dirac),  TermType.Fermion.PQ,
+                    new (int, int[], double)[] {
+                        (2, new[] { 0, 1 }, 2.0 ),
+                        (2, new[] { 2, 3 }, 2.0 )}},
+                new object[] { new OrbitalIntegral(new[] {0,1,1,0 },1.0, OrbitalIntegral.Convention.Dirac),  TermType.Fermion.PQQP,
+                    new (int, int[], double)[] {
+                        (2, new[] { 0, 1, 1, 0 }, 1.0 ),
+                        (2, new[] { 2, 3, 3, 2 }, 1.0 ),
+                        (2, new[] { 0, 3, 3, 0 }, 1.0 ),
+                        (2, new[] { 1, 2, 2, 1 }, 1.0 )}},
+                new object[] { new OrbitalIntegral(new[] {0,1,0,1 },1.0, OrbitalIntegral.Convention.Dirac),  TermType.Fermion.PQQP,
+                    new (int, int[], double)[] {
+                        (2, new[] { 0, 1, 1, 0 }, -1.0 ),
+                        (2, new[] { 2, 3, 3, 2 }, -1.0 ),
+                    } },
+                new object[] { new OrbitalIntegral(new[] {0,1,0,1 },1.0, OrbitalIntegral.Convention.Dirac),  TermType.Fermion.PQRS,
+                    new (int, int[], double)[] {
+                        (2, new[] { 0, 3, 2, 1 }, 2.0 ),
+                        (2,  new[] { 0, 2, 3, 1 }, 2.0 )
+                    } },
+                new object[] { new OrbitalIntegral(new[] {0,1,0,0 },1.0, OrbitalIntegral.Convention.Dirac),  TermType.Fermion.PQQR,
+                    new (int, int[], double)[] {
+                        (2, new[] { 0, 2, 2, 1 }, 2.0 ),
+                        (2, new[] { 0, 2, 3, 0 }, 2.0 ),
+                    } },
+                new object[] {new OrbitalIntegral(new[] {0,0,1,2 },1.0, OrbitalIntegral.Convention.Dirac),  TermType.Fermion.PQQR,
+                    new (int, int[], double)[] {
+                        (3, new[] { 0, 1, 2, 0 }, -2.0 ),
+                        (3, new[] { 3, 4, 5, 3 }, -2.0 ),
+                    } },
+                new object[] { new OrbitalIntegral(new[] {0,0,1,2 },1.0, OrbitalIntegral.Convention.Dirac),  TermType.Fermion.PQRS,
+                    new (int, int[], double)[] {
+                        (3, new[] { 0, 3, 4, 2 }, 2.0 ),
+                        (3, new[] { 0, 3, 5, 1 }, 2.0 ),
+                        (3, new[] { 0, 4, 3, 2 }, 2.0 ),
+                        (3, new[] { 0, 5, 3, 1 }, 2.0 ),
+                    } },
+                new object[] { new OrbitalIntegral(new[] {0,1,2,0 },1.0, OrbitalIntegral.Convention.Dirac),  TermType.Fermion.PQQR,
+                    new (int, int[], double)[] {
+                        (3, new[] { 0, 1, 2, 0 }, 2.0 ),
+                        (3, new[] { 1, 3, 3, 2 }, 2.0 ),
+                        (3, new[] { 0, 4, 5, 0 }, 2.0 ),
+                        (3, new[] { 3, 4, 5, 3 }, 2.0 ),
+                    } },
+                new object[] { new OrbitalIntegral(new[] {0,1,2,3 },1.0, OrbitalIntegral.Convention.Dirac),  TermType.Fermion.PQRS,
+                    new (int, int[], double)[] {
+                        (4, new[] { 0, 5, 6, 3 }, 2.0 ),
+                        (4, new[] { 0, 6, 5, 3 }, 2.0 ),
+                        (4, new[] { 4, 5, 7, 6 }, -2.0 ),
+                        (4, new[] { 0, 1, 3, 2 }, -2.0 ),
+                        (4, new[] { 1, 4, 7, 2 }, 2.0 ),
+                        (4, new[] { 4, 6, 7, 5 }, -2.0 ),
+                        (4, new[] { 0, 2, 3, 1 }, -2.0 ),
+                        (4, new[] { 1, 7, 4, 2 }, 2.0 ),
+                    } },
+                new object[] { new OrbitalIntegral(new[] {3,1,0,2 },1.0, OrbitalIntegral.Convention.Dirac),  TermType.Fermion.PQRS,
+                    new (int, int[], double)[] {
+                        (4, new[] { 2, 4, 5, 3 }, 2.0 ),
+                        (4, new[] { 0, 6, 7, 1 }, 2.0 ),
+                        (4, new[] { 4, 6, 7, 5 }, 2.0 ),
+                        (4, new[] { 0, 2, 3, 1 }, 2.0 ),
+                        (4, new[] { 2, 5, 4, 3 }, 2.0 ),
+                        (4, new[] { 0, 7, 6, 1 }, 2.0 ),
+                        (4, new[] { 4, 7, 6, 5 }, 2.0 ),
+                        (4, new[] { 0, 3, 2, 1 }, 2.0 ),
+                    } },
+            };
+
+
     }
 }

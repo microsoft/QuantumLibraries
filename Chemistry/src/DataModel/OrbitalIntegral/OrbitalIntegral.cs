@@ -1,18 +1,19 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-using Microsoft.Quantum.Simulation.Core;
-
 using System;
 using System.Linq;
 using System.Collections.Generic;
 
-namespace Microsoft.Quantum.Chemistry
+using Microsoft.Quantum.Chemistry;
+using Microsoft.Quantum.Chemistry.Hamiltonian;
+
+namespace Microsoft.Quantum.Chemistry.OrbitalIntegrals
 {
-   
+    using static Microsoft.Quantum.Chemistry.Extensions;
     
     /// <summary>
-    /// Type representing orbital overlap integrals.
+    /// LadderType representing orbital overlap integrals.
     /// </summary>
     public struct OrbitalIntegral : 
         ITermIndex<TermType.OrbitalIntegral>//, IEquatable<OrbitalIntegral>
@@ -129,7 +130,7 @@ namespace Microsoft.Quantum.Chemistry
                     new int[] {i, j},
                     new int[] {j, i}
                 };
-                return symmetries.Distinct(new Extensions.IntArrayIEqualityComparer()).Select(o => new OrbitalIntegral(o, coefficient)).ToArray();
+                return symmetries.Distinct(new IntArrayIEqualityComparer()).Select(o => new OrbitalIntegral(o, coefficient)).ToArray();
             }
             else if (OrbitalIndices.Length == 4)
             {
@@ -147,7 +148,7 @@ namespace Microsoft.Quantum.Chemistry
                     new int[] { j, l, i, k }, // 1302
                     new int[] { l, j, k, i }  // 3120
                 };
-                return symmetries.Distinct(new Extensions.IntArrayIEqualityComparer()).Select(o => new OrbitalIntegral(o, coefficient)).ToArray();
+                return symmetries.Distinct(new IntArrayIEqualityComparer()).Select(o => new OrbitalIntegral(o, coefficient)).ToArray();
             }
             else
             {
@@ -163,7 +164,7 @@ namespace Microsoft.Quantum.Chemistry
         public OrbitalIntegral ToCanonicalForm()
         {
             var symmetries = EnumerateOrbitalSymmetries().Select(o => o.OrbitalIndices).ToList();
-            symmetries.Sort(new Extensions.IntArrayIComparer());
+            symmetries.Sort(new IntArrayIComparer());
             return new OrbitalIntegral(symmetries.First(), Coefficient);
         }
 
