@@ -646,11 +646,11 @@ namespace Microsoft.Quantum.Chemistry
             var state = new FermionHamiltonian.InputState();
             state.type = ParseInitialStateMethod(initialState.Method);
             state.Label = initialState.Label;
-            if (state.type == FermionHamiltonian.StateType.Sparse_Multi_Configurational)
+            if (state.type == FermionHamiltonian.StateType.SparseMultiConfigurational)
             {
                 state.Superposition = ParseInputState(initialState.Superposition, indexConvention);
             }
-            else if (state.type == FermionHamiltonian.StateType.Unitary_Coupled_Cluster)
+            else if (state.type == FermionHamiltonian.StateType.UnitaryCoupledCluster)
             {
                 var referenceState = ParseInputState(initialState.ClusterOperator.Reference.Select(o => o.ToString()).ToList(), indexConvention);
                 var oneBodyTerms = initialState.ClusterOperator.OneBodyAmplitudes.Select(o => ParseUnitaryCoupledClisterInputState(o, indexConvention));
@@ -672,15 +672,15 @@ namespace Microsoft.Quantum.Chemistry
         {
             if (state.ToLowerInvariant() == "single_configurational")
             {
-                return FermionHamiltonian.StateType.Single_Configurational;
+                return FermionHamiltonian.StateType.SingleConfigurational;
             }
             else if(state.ToLowerInvariant() == "sparse_multi_configurational")
             {
-                return FermionHamiltonian.StateType.Sparse_Multi_Configurational;
+                return FermionHamiltonian.StateType.SparseMultiConfigurational;
             }
             else if(state.ToLowerInvariant() == "unitary_coupled_cluster")
             {
-                return FermionHamiltonian.StateType.Unitary_Coupled_Cluster;
+                return FermionHamiltonian.StateType.UnitaryCoupledCluster;
             }
             else
             {

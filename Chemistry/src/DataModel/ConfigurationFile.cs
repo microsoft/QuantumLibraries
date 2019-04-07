@@ -41,7 +41,7 @@ namespace Microsoft.Quantum.Chemistry
         /// <summary>
         /// Choose indexing convention from spin-orbital index to an integer.
         /// </summary>
-        public IndexConvention.Type IndexConvention;
+        public IndexConvention.Type indexConvention;
 
         /// <summary>
         /// Available indexing convention from spin-orbital index to an integer.

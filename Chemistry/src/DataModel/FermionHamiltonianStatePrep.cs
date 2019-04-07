@@ -74,7 +74,7 @@ namespace Microsoft.Quantum.Chemistry
                 var superposition = new((Double, Double), FermionTerm)[] {
                             (coeff, fermionTerm)
                             };
-                return new InputState { type = StateType.Sparse_Multi_Configurational, Label = label, Superposition = superposition };
+                return new InputState { type = StateType.SparseMultiConfigurational, Label = label, Superposition = superposition };
             }
             else
             {
@@ -86,7 +86,7 @@ namespace Microsoft.Quantum.Chemistry
                 var superposition = new((Double, Double), FermionTerm)[] {
                             (coeff, fermionTerm)
                             };
-                return new InputState { type = StateType.Sparse_Multi_Configurational, Label = label, Superposition = superposition };
+                return new InputState { type = StateType.SparseMultiConfigurational, Label = label, Superposition = superposition };
             }
         }
         #endregion
