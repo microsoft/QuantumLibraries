@@ -200,6 +200,46 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
                 [YamlMember(Alias = "two_body_amplitudes", ApplyNamingConventions = false)]
                 public List<List<string>> TwoBodyAmplitudes { get; set; }
             }
+            /*
+            ((double, double), (int, Spin, RaisingLowering)[])[] ParseInputState(List<List<object>> superposition)
+            {
+
+
+            [YamlMember(Alias = "superposition", ApplyNamingConventions = false)]
+            public struct WavefunctionMCF : IYamlConvertible
+            {
+                public ((double, double), (int, Spin, RaisingLowering)[])[] superposition { get; set; }
+
+                public string ToPolishNotation((int, Spin, RaisingLowering) op)
+                {
+                    return $"({op.Item1}" + (op.Item2 == Spin.u ? "a" : "b") + ")" + (op.Item3 == RaisingLowering.u ? "+" : "");
+                }
+
+                public List<string> ToPolishSequence(List<(int, Spin, RaisingLowering)> seq)
+                {
+                    return seq.Select(opp => ToPolishNotation(opp)).ToList();
+                }
+
+                public void Read(IParser parser, Type expectedType, ObjectDeserializer nestedObjectDeserializer)
+                {
+                    // We need to read units ourselves since we've overriden IYamlConvertible interface.
+                    var data = (List<List<object>>)nestedObjectDeserializer(typeof(List<List<object>>));
+                    superposition = Deserializers.ParseInputState(data);
+                }
+
+                public void Write(IEmitter emitter, ObjectSerializer nestedObjectSerializer)
+                {
+
+                    nestedObjectSerializer(new List<List<string>>
+                    {
+                        superposition.Select(o =>
+                            new List<string>() { o.Item1.Item1.ToString() }
+                            .Concat(o.Item2.Select(op => conversion(op))
+                            .ToList()
+                            ).ToList()
+                    });
+                }
+            }*/
 
         }
 

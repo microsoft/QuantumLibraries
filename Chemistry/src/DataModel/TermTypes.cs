@@ -60,6 +60,30 @@ namespace Microsoft.Quantum.Chemistry
         }
     }
 
+    /// <summary>
+    /// Spin index enumeration type.
+    /// </summary>
+    public enum Spin : byte
+    {
+        u = 0, d = 1
+    };
+
+    /// <summary>
+    /// Wavefunction types
+    /// </summary>
+    public enum StateType
+    {
+        Default = 0, SingleConfigurational = 1, SparseMultiConfigurational = 2, UnitaryCoupledCluster = 3
+    }
+
+    /// <summary>
+    /// Enum for raising or lowering operator.
+    /// </summary>
+    public enum RaisingLowering
+    {
+        u = 0, d = 1, identity
+    }
+
     public struct DoubleCoeff : ITermValue<DoubleCoeff>
     {
         public double Value;
@@ -67,6 +91,15 @@ namespace Microsoft.Quantum.Chemistry
         public DoubleCoeff(double value)
         {
             Value = value;
+        }
+
+        public static implicit operator DoubleCoeff(double value)
+        {
+            return new DoubleCoeff(value);
+        }
+        public static implicit operator double(DoubleCoeff value)
+        {
+            return value.Value;
         }
 
         public DoubleCoeff Default()
@@ -174,5 +207,14 @@ namespace Microsoft.Quantum.Chemistry
 
 
         #endregion
+
+        /// <summary>
+        ///     Represents the possible formats that can be used to represent integral
+        ///     data sets.
+        /// </summary>
+        public enum IntegralDataFormat
+        {
+            LiQuiD, Broombridge
+        }
     }
 }

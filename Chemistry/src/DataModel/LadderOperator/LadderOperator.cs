@@ -5,23 +5,17 @@ using System;
 
 namespace Microsoft.Quantum.Chemistry.LadderOperators
 {
-    /// <summary>
-    /// Enum for raising or lowering operator.
-    /// </summary>
-    public enum LadderType
-    {
-        u = 0, d = 1, identity
-    }
+
 
     /// <summary>
     /// Data strcture for raising and lowering operators.
     /// </summary>
-    public struct LadderOperator
+    public struct LadderOperator : IEquatable<LadderOperator>
     {
         /// <summary>
         /// LadderType specifying raising or lowering operator.
         /// </summary>
-        public LadderType Type;
+        public RaisingLowering Type;
 
         /// <summary>
         /// System index operator acts on.
@@ -34,7 +28,7 @@ namespace Microsoft.Quantum.Chemistry.LadderOperators
         /// </summary>
         /// <param name="setType">Set raising or lowering operator.</param>
         /// <param name="setIndex">Set system index.</param>
-        public LadderOperator(LadderType setType, int setIndex)
+        public LadderOperator(RaisingLowering setType, int setIndex)
         {
             Type = setType;
             Index = setIndex;
@@ -45,7 +39,7 @@ namespace Microsoft.Quantum.Chemistry.LadderOperators
         /// </summary>
         /// <param name="set">Tuple where first item sets the operator type,
         /// and the second item indexes the system.</param>
-        public LadderOperator((LadderType, int) set) : this(set.Item1, set.Item2) { }
+        public LadderOperator((RaisingLowering, int) set) : this(set.Item1, set.Item2) { }
 
         #region Equality Testing
         public override bool Equals(object obj)
@@ -60,7 +54,7 @@ namespace Microsoft.Quantum.Chemistry.LadderOperators
 
         public override int GetHashCode()
         {
-            return Index * Enum.GetNames(typeof(LadderType)).Length + (int) Type;
+            return Index * Enum.GetNames(typeof(RaisingLowering)).Length + (int) Type;
         }
 
         public static bool operator ==(LadderOperator x, LadderOperator y)

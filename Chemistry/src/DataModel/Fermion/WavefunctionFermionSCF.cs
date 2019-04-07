@@ -54,7 +54,7 @@ namespace Microsoft.Quantum.Chemistry.Fermion
         /// Sequence of ladder operators with only creation terms in ascending order.
         /// that are normal-ordered.
         /// </returns>
-        public WavefunctionFermionSCF(IEnumerable<int> indices) : base(indices.Select(o => (LadderType.u, o)).ToLadderSequence()) { }
+        public WavefunctionFermionSCF(IEnumerable<int> indices) : base(indices.Select(o => (RaisingLowering.u, o)).ToLadderSequence()) { }
 
         #endregion
 
@@ -63,7 +63,7 @@ namespace Microsoft.Quantum.Chemistry.Fermion
         /// </summary>
         private void ExceptionIfNotOnlyRaising()
         {
-            if (Sequence.Where(o => o.Type == LadderType.d).Count() > 0)
+            if (Sequence.Where(o => o.Type == RaisingLowering.d).Count() > 0)
             {
                 throw new ArgumentException("FermionStateSingleConfigurational must contatin only raising operators.");
             }

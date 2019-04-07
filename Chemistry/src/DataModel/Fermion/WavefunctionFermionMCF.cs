@@ -12,10 +12,17 @@ namespace Microsoft.Quantum.Chemistry.Fermion
     // This class is for Fermion terms that are not grouped into Hermitian bunches.
     // Maybe need a stype for quantum state?
 
-    public class WavefunctionFermionMCF : FermionHamiltonian
+    /*public class WavefunctionFermionMCF
     {
-        public WavefunctionFermionMCF() : base() { }
-        public object referenceState;
+        public List<((double, double), WavefunctionFermionSCF)> Superposition = new List<((double, double), WavefunctionFermionSCF)>();
+        public WavefunctionFermionSCF reference = new WavefunctionFermionSCF();
+    }*/
+
+    // To do: work in progress
+    public class WavefunctionFermionMCF
+    {
+        public List<((double, double), IndexOrderedLadderSequence)> Superposition = new List<((double, double), IndexOrderedLadderSequence)>();
+        public WavefunctionFermionSCF reference = new WavefunctionFermionSCF();
     }
 
 }

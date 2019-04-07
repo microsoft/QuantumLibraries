@@ -62,7 +62,7 @@ namespace Microsoft.Quantum.Chemistry.LadderOperators
         /// canonical order. <c>false</c> otherwise</returns>
         public bool IsInIndexCreationCanonicalOrder()
         {
-            return Sequence.Where(o => o.Type == LadderType.u).Select(o => o.Index).IsIntArrayAscending();
+            return Sequence.Where(o => o.Type == RaisingLowering.u).Select(o => o.Index).IsIntArrayAscending();
         }
 
         /// <summary>
@@ -74,7 +74,7 @@ namespace Microsoft.Quantum.Chemistry.LadderOperators
         /// canonical order. <c>false</c> otherwise</returns>
         public bool IsInIndexAnnihilationCanonicalOrder()
         {
-            return Sequence.Where(o => o.Type == LadderType.d).Select(o => o.Index).Reverse().IsIntArrayAscending();
+            return Sequence.Where(o => o.Type == RaisingLowering.d).Select(o => o.Index).Reverse().IsIntArrayAscending();
         }
         #endregion
 
@@ -88,11 +88,11 @@ namespace Microsoft.Quantum.Chemistry.LadderOperators
             var tmp = new NormalOrderedLadderSequence(this);
             if (!tmp.IsInIndexOrder())
             {
-                var left = tmp.Sequence.Select((op, idx) => new { op, idx }).Where(x => x.op.Type == LadderType.u);
-                var right = tmp.Sequence.Select((op, idx) => new { op, idx }).Where(x => x.op.Type == LadderType.d);
+                var left = tmp.Sequence.Select((op, idx) => new { op, idx }).Where(x => x.op.Type == RaisingLowering.u);
+                var right = tmp.Sequence.Select((op, idx) => new { op, idx }).Where(x => x.op.Type == RaisingLowering.d);
 
-                var upArrayIndices = tmp.Sequence.Select((op, idx) => new { op, idx }).Where(x => x.op.Type == LadderType.u).Select(x => x.idx).ToArray();
-                var downArrayIndices = tmp.Sequence.Select((op, idx) => new { op, idx }).Where(x => x.op.Type == LadderType.d).Select(x => x.idx).ToArray();
+                var upArrayIndices = tmp.Sequence.Select((op, idx) => new { op, idx }).Where(x => x.op.Type == RaisingLowering.u).Select(x => x.idx).ToArray();
+                var downArrayIndices = tmp.Sequence.Select((op, idx) => new { op, idx }).Where(x => x.op.Type == RaisingLowering.d).Select(x => x.idx).ToArray();
 
                 // Bubble sort spin-orbital indices of creation operator.
                 while (!tmp.IsInIndexCreationCanonicalOrder())
@@ -140,7 +140,7 @@ namespace Microsoft.Quantum.Chemistry.LadderOperators
             }
         }
     }
-    
+
 }
 
 

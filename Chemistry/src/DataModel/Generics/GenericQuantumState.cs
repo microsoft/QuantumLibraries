@@ -10,16 +10,14 @@ using System.Threading;
 using System.Threading.Tasks;
 
 using Microsoft.Quantum.Chemistry.Fermion;
+using Microsoft.Quantum.Chemistry.LadderOperators;
 
 namespace Microsoft.Quantum.Chemistry.Generic
 {
     /// <summary>
     /// Enum over valid input state types.
     /// </summary>
-    public enum StateType
-    {
-        Default = 0, Single_Configurational = 1, Sparse_Multi_Configurational = 2, Unitary_Coupled_Cluster = 3
-    }
+
 
     /// <summary>
     /// Data structure representing an input state.
@@ -29,9 +27,12 @@ namespace Microsoft.Quantum.Chemistry.Generic
         public StateType type;
         public string Label;
         public DoubleCoeff Energy;
-        public ((DoubleCoeff, DoubleCoeff) complexCoeff, FermionTerm term)[] Superposition;
+        public List<((double, double), IndexOrderedLadderSequence)> Superposition = new List<((double, double), IndexOrderedLadderSequence)>();
+        public WavefunctionFermionSCF reference = new WavefunctionFermionSCF();
     }
 
+    // Work in progress on generic Quantum state.
+    /*
     /// <summary>
     /// Generic Hamiltonian class. This is the base class for any Hamiltonians,
     /// which are collections of categorized terms.
@@ -68,5 +69,6 @@ namespace Microsoft.Quantum.Chemistry.Generic
             terms = hamiltonian.terms;
         }
     }
+    */
     
 }

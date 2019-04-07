@@ -20,12 +20,12 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
     {
         // https://github.com/Microsoft/Quantum/blob/master/Chemistry/Schema/broombridge-0.1.schema.json
 
-        /// <summary>
-        /// Returns version number of Broombridge file.
-        /// </summary>
-        /// <param name="filename">Broombridge file address.</param>
-        /// <returns>Version number of Broombridge file</returns>
-        public static VersionNumber GetVersionNumber(string filename)
+    /// <summary>
+    /// Returns version number of Broombridge file.
+    /// </summary>
+    /// <param name="filename">Broombridge file address.</param>
+    /// <returns>Version number of Broombridge file</returns>
+    public static VersionNumber GetVersionNumber(string filename)
         {
             using (var reader = File.OpenText(filename))
             {
@@ -116,6 +116,75 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
             {
                 var deserializer = new DeserializerBuilder().Build();
                 return deserializer.Deserialize<DataStructures.V0_2.Data>(reader);
+            }
+        }
+
+        public static ((double, double), (int, Spin, RaisingLowering)[])[] ParseInputState(List<List<object>> superposition)
+        {
+            return superposition.Select(o => ParseInputState(o)).ToArray();
+        }
+
+        public static ((double, double), (int, Spin, RaisingLowering)[]) ParseInputState(List<object> superpositionElement)
+            => ParseInputState(superpositionElement.Select(o => o.ToString()).ToList());
+
+        // For MCF states
+        public static ((double, double), (int, Spin, RaisingLowering)[]) ParseInputState(List<string> superpositionElement)
+        {
+            // Todo parse reference state e.g. "|G>" in the last entery.
+            var amplitude = double.Parse(superpositionElement.First().ToString(), System.Globalization.CultureInfo.InvariantCulture);
+            var operatorSequence = superpositionElement
+                .Take(superpositionElement.Count() - 1)
+                .Skip(1)
+                .Select(o => ParsePolishNotation(o.ToString()))
+                .ToArray();
+            return ((amplitude, 0), operatorSequence);            
+        }
+
+        // For UCC states
+        public static ((double, double), (int, Spin, RaisingLowering)[]) ParseUnitaryCoupledClusterInputState(List<string> clusterTerm)
+        {
+            var amplitude = double.Parse(clusterTerm.First(), System.Globalization.CultureInfo.InvariantCulture);
+            var operatorSequence = clusterTerm.Skip(1).Select(o => ParsePolishNotation(o)).ToArray();
+            return ((amplitude, 0), operatorSequence);
+        }
+
+        // orbital, spin, raising/lowering.
+        internal static (int,Spin,RaisingLowering) ParsePolishNotation(string input)
+        {
+            // Regex match examples: (1a)+ (2a)+ (3a)+ (4a)+ (5a)+ (6a)+ (1b)+ (2b)- (3b)+
+            Regex regex = new Regex(@"(\((?<orbital>\d+)(?<spin>[ab])\)(?<operator>\+*))");
+            Match match = regex.Match(input);
+            if (match.Success)
+            {
+                // Convert from Broombridge 1-indexing to 0-indexing.
+                var orbital = int.Parse(match.Groups["orbital"].ToString()) - 1;
+                var spin = match.Groups["spin"].ToString() == "a" ? Spin.u : Spin.d;
+                var conjugate = match.Groups["operator"].ToString() == "+" ? RaisingLowering.u : RaisingLowering.d;
+                return (orbital, spin, conjugate);
+            }
+            else
+            {
+                throw new System.ArgumentException($"{input} is not valid Polish notation");
+            }
+        }
+
+        internal static StateType ParseInitialStateMethod(string state)
+        {
+            if (state.ToLowerInvariant() == "single_configurational")
+            {
+                return StateType.SingleConfigurational;
+            }
+            else if (state.ToLowerInvariant() == "sparse_multi_configurational")
+            {
+                return StateType.SparseMultiConfigurational;
+            }
+            else if (state.ToLowerInvariant() == "unitary_coupled_cluster")
+            {
+                return StateType.UnitaryCoupledCluster;
+            }
+            else
+            {
+                return StateType.Default;
             }
         }
     }

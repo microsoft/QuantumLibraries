@@ -179,6 +179,23 @@ namespace Microsoft.Quantum.Chemistry.Generic
                 .Select(termIndex => termIndex.Value.Norm(power)).Norm(power)).Norm(power);
         }
         
+        /// <summary>
+        /// String representation of Hamiltonian.
+        /// </summary>
+        /// <returns>String representation of Hamiltonian.</returns>
+        public override string ToString()
+        {
+            var output = "";
+            foreach (var termType in Terms)
+            {
+                output += $"{termType.Key} has {termType.Value.Count()} entries).\n";
+                foreach (var term in termType.Value)
+                {
+                    output += $"    {term.ToString()}\n";
+                }
+            }
+            return output;
+        }
     }
-    
+
 }

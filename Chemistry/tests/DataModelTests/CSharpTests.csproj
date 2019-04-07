@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Broombridge\BroombridgeTests.cs" />
     <Compile Remove="FermionTermTests.cs" />
     <Compile Remove="FermionTermTests\FermionTermTests.cs" />
     <Compile Remove="ProblemContainerTests.cs" />

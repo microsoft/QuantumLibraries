@@ -61,8 +61,7 @@
     <Compile Remove="Fermion\FermionTermDeprecated.cs" />
     <Compile Remove="Fermion\FermionTermold.cs" />
     <Compile Remove="Pauli\JordanWignerEncoding.cs" />
-    <Compile Remove="ProblemContainer\BroombridgeProcessed.cs" />
-    <Compile Remove="ProblemContainer\LoadData.cs" />
+    <Compile Remove="Workflows\LoadData.cs" />
     <Compile Remove="Generics\FermionExtensions.cs" />
     <Compile Remove="Generics\JordanWignerStatePrep.cs" />
     <Compile Remove="Generics\WavefunctionFermionMCF.cs" />
@@ -78,11 +77,6 @@
 
   <ItemGroup>
     <Content Include="Analysis\README.txt" />
-  </ItemGroup>
-
-
-  <ItemGroup>
-    <None Include="ProblemContainer\BroombridgeProcessed.cs" />
   </ItemGroup>
 
 </Project>

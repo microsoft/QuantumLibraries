@@ -15,7 +15,7 @@ namespace Microsoft.Quantum.Chemistry.QSharpFormat
     /// <summary>
     /// Methods for converting electronic structure problem to data for consumption by Q#.
     /// </summary>
-    public class ToQSharp
+    public static class ToQSharp
     {
         
         public static HTerm FromPauliTerm(PauliTerm term, PauliTermValue value)
@@ -23,7 +23,7 @@ namespace Microsoft.Quantum.Chemistry.QSharpFormat
             return new HTerm((new QArray<Int64>(term.QubitIndices.Select(o=>(Int64)o)), new QArray<double>(value.Value)));
         }
 
-        public static (double, int, JWOptimizedHTerms) FromPauliHamiltonian(PauliHamiltonian pauliHamiltonian)
+        public static (double, int, JWOptimizedHTerms) ToQSharpFormat(this PauliHamiltonian pauliHamiltonian)
         {
             double energyOffset = pauliHamiltonian.Terms[TermType.PauliTerm.Identity].Values.First().Value.First();
             var nSpinOrbitals = pauliHamiltonian.SystemIndices.Count() + 1;
@@ -69,15 +69,7 @@ namespace Microsoft.Quantum.Chemistry.QSharpFormat
         }
         */
         // Number of orbitals
-        /// <summary>
-        /// <see cref="NOrbitals"/> is the number of distinct orbitals.
-        /// <see cref="NSpinOrbitals"/> is the number of distinct spin orbitals.
-        /// </summary>
-        public Int64 NOrbitals, NSpinOrbitals;
-        /// <summary>
-        /// This indexes the spin-orbitals to be occupied by electrons.
-        /// </summary>
-        public QArray<Int64> statePrep = new QArray<Int64>();    
+        ///public QArray<Int64> statePrep = new QArray<Int64>();    
         
         #region Term Sorting
         /// <summary>

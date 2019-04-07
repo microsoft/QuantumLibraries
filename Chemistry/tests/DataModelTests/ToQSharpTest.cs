@@ -60,7 +60,7 @@ namespace Microsoft.Quantum.Chemistry.Tests
         {
             var fermionHamiltonian = GenerateTestHamiltonian();
             var pauliHamiltonian = fermionHamiltonian.ToPauliHamiltonian(QubitEncoding.JordanWigner);
-            var (energyOffset, nSpinOrbitals, termData) = ToQSharp.FromPauliHamiltonian(pauliHamiltonian);
+            var (energyOffset, nSpinOrbitals, termData) = pauliHamiltonian.ToQSharpFormat();
             var (hZ, hZZ, hPQandPQQR, v01234) = termData;
             
             //Assert.Equal(3.0 * 0.5 + 0.25 * 3.0, energyOffset);

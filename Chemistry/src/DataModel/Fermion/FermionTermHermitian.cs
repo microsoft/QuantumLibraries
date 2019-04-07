@@ -60,8 +60,8 @@ namespace Microsoft.Quantum.Chemistry.Fermion
         {
             if (IsInIndexOrder())
             {
-                var creationSequence = Sequence.Where(o => o.Type == LadderType.u).Select(o => o.Index);
-                var annihilationSequence = Sequence.Where(o => o.Type == LadderType.d).Select(o => o.Index);
+                var creationSequence = Sequence.Where(o => o.Type == RaisingLowering.u).Select(o => o.Index);
+                var annihilationSequence = Sequence.Where(o => o.Type == RaisingLowering.d).Select(o => o.Index);
                 if (creationSequence.Count() == annihilationSequence.Count())
                 {
                     if (CompareIntArray(creationSequence, annihilationSequence.Reverse()) > 0)
@@ -86,7 +86,7 @@ namespace Microsoft.Quantum.Chemistry.Fermion
             // Take Hermitian Conjugate    
             if (!IsInCanonicalOrder())
             {
-                Sequence = Sequence.Select(o => (o.Type == LadderType.d ? LadderType.u : LadderType.d, o.Index)).Select(o => new LadderOperator(o)).Reverse().ToList();
+                Sequence = Sequence.Select(o => (o.Type == RaisingLowering.d ? RaisingLowering.u : RaisingLowering.d, o.Index)).Select(o => new LadderOperator(o)).Reverse().ToList();
             }
         }
 

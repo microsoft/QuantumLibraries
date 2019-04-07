@@ -88,7 +88,7 @@ namespace Microsoft.Quantum.Chemistry.LadderOperators
         /// <param name="x">Left ladder operator.</param>
         /// <param name="y">Right ladder operator.</param>
         /// <returns>Result of {x,y}.</returns>
-        public virtual (LadderType, int) AntiCommutator(LadderOperator x, LadderOperator y)
+        public virtual (RaisingLowering, int) AntiCommutator(LadderOperator x, LadderOperator y)
         {
             // {a_x, a_y^\dag} = \delta_{xy}
             // {a_x, a_y} = 1
@@ -97,21 +97,21 @@ namespace Microsoft.Quantum.Chemistry.LadderOperators
             {
                 if (x.Type != y.Type)
                 {
-                    if (x.Type == LadderType.d)
+                    if (x.Type == RaisingLowering.d)
                     {
-                        return (LadderType.identity, 1);
+                        return (RaisingLowering.identity, 1);
                     }
                     else
                     {
-                        return (LadderType.identity, -1);
+                        return (RaisingLowering.identity, -1);
                     }
                 }
                 else
                 {
-                    return (LadderType.identity, 0);
+                    return (RaisingLowering.identity, 0);
                 }
             }
-            return (LadderType.identity, 0);
+            return (RaisingLowering.identity, 0);
         }
 
         /// <summary>

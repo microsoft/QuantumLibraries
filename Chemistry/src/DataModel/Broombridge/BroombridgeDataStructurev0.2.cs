@@ -120,7 +120,7 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
                 /// </summary>
                 [YamlMember(Alias = "superposition", ApplyNamingConventions = false)]
                 public List<List<object>> Superposition { get; set; }
-
+                
                 /// <summary>
                 /// Coupled-cluster operator
                 /// </summary>

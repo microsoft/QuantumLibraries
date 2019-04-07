@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 namespace Microsoft.Quantum.Chemistry.LadderOperators
 {
-    using static LadderType;
+    using static RaisingLowering;
 
     public static partial class Extensions
     {
@@ -24,7 +24,7 @@ namespace Microsoft.Quantum.Chemistry.LadderOperators
         /// // Construct a sequence a ladder operators 1^ 2^ 3 4
         /// var tmp = new[] { (u, 1), (u, 2), (d, 3), (d, 4) }.ToLadderSequence();
         /// </example>
-        public static LadderSequence ToLadderSequence(this IEnumerable<(LadderType, int)> setSequence, int setSign = 1) {
+        public static LadderSequence ToLadderSequence(this IEnumerable<(RaisingLowering, int)> setSequence, int setSign = 1) {
             return new LadderSequence(setSequence.Select(o => new LadderOperator(o)), setSign);
         }
 
@@ -53,7 +53,7 @@ namespace Microsoft.Quantum.Chemistry.LadderOperators
                     $"Number of terms provided is `{length}` and must be of even length."
                     );
             }
-            Func<int, int, (LadderType, int)> GetLadderOperator = (index, position)
+            Func<int, int, (RaisingLowering, int)> GetLadderOperator = (index, position)
                 => (position < length / 2 ? u : d, index);
             return indices.Select((o, idx) => GetLadderOperator(o, idx)).ToLadderSequence();
         }

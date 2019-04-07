@@ -7,19 +7,6 @@ using System.Collections.Generic;
 namespace Microsoft.Quantum.Chemistry.OrbitalIntegrals
 {
     /// <summary>
-    /// Contains common data structures and methods relevant to representing a
-    /// Fermion Hamiltonian.
-    /// </summary>
-
-    /// <summary>
-    /// Spin index enumeration type.
-    /// </summary>
-    public enum Spin : byte
-    {
-        u = 0, d = 1
-    };
-
-    /// <summary>
     /// LadderType representing a spin-orbital
     /// </summary>
     [Serializable]
