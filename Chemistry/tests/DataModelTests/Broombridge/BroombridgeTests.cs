@@ -55,7 +55,7 @@ namespace Microsoft.Quantum.Chemistry.Tests
         [Fact]
         public void UnitaryCoupledCluster()
         {
-            var state = broombridge.ProblemDescription.First().InitialStates.ElementAt(3);
+            var state = broombridge.ProblemDescriptions.First().InitialStates.ElementAt(3);
 
             Assert.Equal("UCCSD |G>", state.Label);
 

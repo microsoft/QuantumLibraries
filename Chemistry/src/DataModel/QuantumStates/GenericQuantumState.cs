@@ -12,6 +12,25 @@ using System.Threading.Tasks;
 namespace Microsoft.Quantum.Chemistry
 {
     /// <summary>
+    /// Enum over valid input state types.
+    /// </summary>
+    public enum StateType
+    {
+        Default = 0, Single_Configurational = 1, Sparse_Multi_Configurational = 2, Unitary_Coupled_Cluster = 3
+    }
+
+    /// <summary>
+    /// Data structure representing an input state.
+    /// </summary>
+    public class InputState
+    {
+        public StateType type;
+        public string Label;
+        public Double Energy;
+        public ((Double, Double) complexCoeff, FermionTerm term)[] Superposition;
+    }
+
+    /// <summary>
     /// Generic Hamiltonian class. This is the base class for any Hamiltonians,
     /// which are collections of categorized terms.
     /// </summary>

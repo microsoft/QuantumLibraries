@@ -34,28 +34,24 @@ namespace Microsoft.Quantum.Chemistry
         /// </summary>
         public Config()
         {
-            indexConvention = IndexConvention.Default;
-            truncationThreshold = TruncationThreshold.Default;
+            IndexConvention = DefaultSettings.IndexConvention;
+            TruncationThreshold = DefaultSettings.TruncationThreshold;
         }
 
         /// <summary>
         /// Choose indexing convention from spin-orbital index to an integer.
         /// </summary>
-        public IndexConvention.Type indexConvention;
-
-        /// <summary>
-        /// Available indexing convention from spin-orbital index to an integer.
-        /// </summary>
-        public class IndexConvention : SpinOrbital.Config.IndexConvention { }
+        public SpinOrbital.IndexConvention IndexConvention;
 
         /// <summary>
         /// Threshold below which to truncate Hamiltonian coefficients.
         /// </summary>
-        public double truncationThreshold;
+        public double TruncationThreshold;
 
-        public static class TruncationThreshold
+        public static class DefaultSettings
         {
-            public const double Default = 1e-8;
+            public const SpinOrbital.IndexConvention IndexConvention = SpinOrbital.IndexConvention.UpDown;
+            public const double TruncationThreshold = 1e-8;
         }
         
     }

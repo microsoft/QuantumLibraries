@@ -33,14 +33,14 @@ namespace Microsoft.Quantum.Chemistry
             public Dictionary<string, FermionHamiltonian.InputState> InitialStates;
 
             public class Config : FermionHamiltonian.Config { }
-            public readonly SpinOrbital.Config.IndexConvention.Type IndexConvention;
+            public readonly SpinOrbital.Config.IndexConvention.IndexConvention IndexConvention;
 
             /// <summary>
             /// Extracts only the required information from a Broombridge problem instance.
             /// </summary>
             /// <param name="broombridgeProblem">A Broombridge problem description.</param>
             /// <param name="indexConvention">The indexing convention used to map a spin-orbital indicx to a single integer.</param>
-            public BroombridgeTyped(Broombridge.Current.ProblemDescription broombridgeProblem, SpinOrbital.Config.IndexConvention.Type indexConvention = SpinOrbital.Config.IndexConvention.Default)
+            public BroombridgeTyped(Broombridge.Current.ProblemDescription broombridgeProblem, SpinOrbital.Config.IndexConvention.IndexConvention indexConvention = SpinOrbital.Config.IndexConvention.Default)
             {
                 IndexConvention = indexConvention;
                 NOrbitals = broombridgeProblem.NOrbitals;
@@ -64,7 +64,7 @@ namespace Microsoft.Quantum.Chemistry
                     );
             }
 
-            internal static FermionHamiltonian.InputState ParseInitialState(Broombridge.V0_2.State initialState, SpinOrbital.Config.IndexConvention.Type indexConvention)
+            internal static FermionHamiltonian.InputState ParseInitialState(Broombridge.V0_2.State initialState, SpinOrbital.Config.IndexConvention.IndexConvention indexConvention)
             {
                 var state = new FermionHamiltonian.InputState();
                 state.type = ParseInitialStateMethod(initialState.Method);
@@ -111,7 +111,7 @@ namespace Microsoft.Quantum.Chemistry
                 }
             }
 
-            internal static ((Double, Double), FermionTerm)[] ParseInputState(List<List<object>> superposition, SpinOrbital.Config.IndexConvention.Type indexConvention)
+            internal static ((Double, Double), FermionTerm)[] ParseInputState(List<List<object>> superposition, SpinOrbital.Config.IndexConvention.IndexConvention indexConvention)
             {
                 return superposition.Select(
                     o => ParseInputState(
@@ -120,7 +120,7 @@ namespace Microsoft.Quantum.Chemistry
                         ).ToArray();
             }
 
-            public static ((Double, Double), FermionTerm) ParseInputState(List<string> superpositionElement, SpinOrbital.Config.IndexConvention.Type indexConvention)
+            public static ((Double, Double), FermionTerm) ParseInputState(List<string> superpositionElement, SpinOrbital.Config.IndexConvention.IndexConvention indexConvention)
             {
                 var amplitude = Double.Parse(superpositionElement.First(), System.Globalization.CultureInfo.InvariantCulture);
                 var initialState = superpositionElement.Last();
@@ -148,7 +148,7 @@ namespace Microsoft.Quantum.Chemistry
                 return ((finalAmplitude, 0.0), term);
             }
 
-            public static ((Double, Double), FermionTerm) ParseUnitaryCoupledClisterInputState(List<string> clusterTerm, SpinOrbital.Config.IndexConvention.Type indexConvention)
+            public static ((Double, Double), FermionTerm) ParseUnitaryCoupledClisterInputState(List<string> clusterTerm, SpinOrbital.Config.IndexConvention.IndexConvention indexConvention)
             {
                 var amplitude = Double.Parse(clusterTerm.First(), System.Globalization.CultureInfo.InvariantCulture);
                 var ca = new List<Int64>();
@@ -165,7 +165,7 @@ namespace Microsoft.Quantum.Chemistry
                 return ((term.coeff, 0), term);
             }
 
-            internal static FermionTerm ParsePolishNotation(string input, SpinOrbital.Config.IndexConvention.Type indexConvention)
+            internal static FermionTerm ParsePolishNotation(string input, SpinOrbital.Config.IndexConvention.IndexConvention indexConvention)
             {
                 // Regex match examples: (1a)+ (2a)+ (3a)+ (4a)+ (5a)+ (6a)+ (1b)+ (2b)- (3b)+
                 Regex regex = new Regex(@"(\((?<orbital>\d+)(?<spin>[ab])\)(?<operator>\+*))");

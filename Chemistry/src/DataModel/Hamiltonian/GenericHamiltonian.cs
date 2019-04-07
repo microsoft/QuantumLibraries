@@ -17,9 +17,11 @@ namespace Microsoft.Quantum.Chemistry
     /// </summary>
     /// <typeparam name="TermClassification">Index to categories of terms.</typeparam>
     /// <typeparam name="TermIndexing">Index to individual terms.</typeparam>
-    public class GenericHamiltonian<TermClassification, TermIndexing> 
-        //where TermClassification: IEquatable<TermClassification>
-        where TermIndexing: HamiltonianTerm<TermClassification>//, IEquatable<TermIndexing>
+    public class GenericHamiltonian<TermClassification, TermIndexing>
+        //TODO: Restore `where TermClassification: IEquatable<TermClassification>`
+        // in the future if we want more complicated term classifications.
+        where TermIndexing : HamiltonianTerm<TermClassification>
+        // TODO: Restore `IEquatable<TermIndexing>` in the future if we expand to more types of terms.
     {
         /// <summary>
         /// Container for all terms in a Hamiltonian.

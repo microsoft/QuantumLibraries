@@ -19,19 +19,40 @@ namespace Microsoft.Quantum.Chemistry
     public static partial class Broombridge
     {
         /// <summary>
-        /// Alias for Broombridge latest supported format.
-        /// </summary>
-        public class Current : V0_2
-        {
-
-        }
-        
-        /// <summary>
         /// Enumerable item for Broombridge version numbers.
         /// </summary>
         public enum VersionNumber
         {
-            NotRecognized, v0_1 = 0, v0_2 = 1
+            NotRecognized = -1, v0_1 = 0, v0_2 = 1
+        }
+
+        /// <summary>
+        /// Alias for Broombridge latest supported format.
+        /// </summary>
+        public class Current : V0_2 { }
+
+        /// <summary>
+        /// Returns Broombridge deserialized into the current version data structure.
+        /// Data structure is automatically updated to the current Broombridge version.
+        /// </summary>
+        /// <param name="filename">Broombridge file address.</param>
+        /// <returns>Deserializer Broombridge data strauture.</returns>
+        public static Current.Data DeserializeBroombridge(string filename)
+        {
+            VersionNumber versionNumber = Deserializers.GetVersionNumber(filename);
+
+            if (versionNumber == VersionNumber.v0_1)
+            {
+                return Updater.Data(Deserializers.DeserializeBroombridgev0_1(filename));
+            }
+            else if (versionNumber == VersionNumber.v0_2)
+            {
+                return Deserializers.DeserializeBroombridgev0_2(filename);
+            }
+            else
+            {
+                throw new System.InvalidOperationException("Unrecognized Broombridge version number.");
+            }
         }
         
         /// <summary>
@@ -61,10 +82,8 @@ namespace Microsoft.Quantum.Chemistry
                 parsedVersionNumber = VersionNumber.NotRecognized;
                 return false;
             }
-            return false;
         }
 
     }
-    // Parts of this might be merged intro Broombridge parsing due to overlap.
     
 }

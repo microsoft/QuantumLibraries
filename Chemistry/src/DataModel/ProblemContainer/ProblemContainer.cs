@@ -15,13 +15,44 @@ using Microsoft.Extensions.Logging;
 
 namespace Microsoft.Quantum.Chemistry
 {
+    public class Convenience
+    {
+        // Load from broombridge, and export Qsharp data
+        //public
+        public void ExampleWorkflow(string filename)
+        {
+            // Deserialize Broombridge from file.
+            Broombridge.Current.Data broombridge = Broombridge.DeserializeBroombridge(filename);
+
+            // A single file can contain multiple problem descriptions. Let us pick the first one.
+            Broombridge.Current.ProblemDescription broombridgeProblemDescription = broombridge.ProblemDescriptions.First();
+
+            // Electronic structure Hamiltonians are usually represented compactly by orbital integrals. Let us construct
+            // such a Hamiltonian from broombridge.
+            OrbitalIntegralHamiltonian orbitalIntegralHamiltonian = broombridgeProblemDescription.CreateOrbitalIntegralHamiltonian();
+
+            // We can obtain the full fermion Hamiltonian from the more compact orbital integral representation.
+            // This transformation requires us to pick a convention for converting a spin-orbital index to a single integer.
+            // Let us pick one according to the formula `integer = 2 * orbitalIndex + spinIndex`.
+            FermionHamiltonian fermionHamiltonian = orbitalIntegralHamiltonian.ToFermionHamiltonian(SpinOrbital.IndexConvention.UpDown);
+        }
+    }
+
     public class ProblemContainer
     {
         public class Config { }
         //public readonly Config.IndexConvention.Type IndexConvention;
 
+        // For now, this only has a few options.
+        public OrbitalIntegralHamiltonian orbitalIntegralHamiltonian = new OrbitalIntegralHamiltonian();
+        public FermionHamiltonian fermionHamiltonian = new FermionHamiltonian();
+        //public PauliHamiltonian =
+
+        // For now, do not process input states much.
+        public Dictionary<string, InputState> InputStates = new Dictionary<string, InputState>();
+
+        // Additional data
         public Int64 NOrbitals = 0;
-        public Double EnergyOffset = 0.0;
         public Int64 NElectrons = 0;
         public string MiscellaneousInformation;
 

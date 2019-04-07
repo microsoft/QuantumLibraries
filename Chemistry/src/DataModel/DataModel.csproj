@@ -87,4 +87,9 @@
     <Folder Include="Conversion\" />
   </ItemGroup>
 
+
+  <ItemGroup>
+    <None Include="ProblemContainer\BroombridgeProcessed.cs" />
+  </ItemGroup>
+
 </Project>

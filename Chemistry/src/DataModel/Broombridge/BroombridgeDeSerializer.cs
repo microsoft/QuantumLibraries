@@ -44,30 +44,6 @@ namespace Microsoft.Quantum.Chemistry
             }
 
             /// <summary>
-            /// Returns Broombridge deserialized into the current version data structure.
-            /// Data structure is automatically updated to the current Broombridge version.
-            /// </summary>
-            /// <param name="filename">Broombridge file address.</param>
-            /// <returns>Deserializer Broombridge data strauture.</returns>
-            public static Current.Data Source(string filename)
-            {
-                VersionNumber versionNumber = GetVersionNumber(filename);
-
-                if (versionNumber == VersionNumber.v0_1)
-                {
-                    return Updater.Data(DeserializeBroombridgev0_1(filename));
-                }
-                else if (versionNumber == VersionNumber.v0_2)
-                {
-                    return DeserializeBroombridgev0_2(filename);
-                }
-                else
-                {
-                    throw new System.InvalidOperationException("Unrecognized Broombridge version number.");
-                }
-            }
-
-            /// <summary>
             /// Deserialize Broombridge v0.1 from a file into the Broombridge v0.1 data structure.
             /// </summary>
             /// <param name="filename">Broombridge filename to deserialize</param>

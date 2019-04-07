@@ -48,9 +48,8 @@ namespace Microsoft.Quantum.Chemistry.Tests
         [InlineData(3, new[] { 4, 3, 2, 1 }, 4)]
         public void UniqueIndicesTests(int norbitals, int[] idx, int uniqueIndices)
         {
-            var spinOrbitals = idx.Select(o => new SpinOrbital(norbitals, o)).ToInts(norbitals).Select(o => (int)o).ToLadderSequence();
             var coefficient = 1.0;
-            var HermitianFermionTerm = new FermionTermHermitian(spinOrbitals);
+            var HermitianFermionTerm = new FermionTermHermitian(idx.ToLadderSequence());
             Assert.True(HermitianFermionTerm.GetUniqueIndices() == uniqueIndices);
         }
 

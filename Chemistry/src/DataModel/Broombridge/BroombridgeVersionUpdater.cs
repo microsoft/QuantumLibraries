@@ -32,7 +32,7 @@ namespace Microsoft.Quantum.Chemistry
                 output.Format = new DataStructures.Format() { Version = V0_2.Strings.VersionNumber };
                 output.Generator = input.Generator;
                 output.Bibliography = input.Bibliography;
-                output.ProblemDescription = new List<V0_2.ProblemDescription>();
+                output.ProblemDescriptions = new List<V0_2.ProblemDescription>();
 
                 foreach (var integralSet in input.IntegralSets)
                 {
@@ -61,7 +61,7 @@ namespace Microsoft.Quantum.Chemistry
                         problemDescription.InitialStates.Add(initialState);
                     }
 
-                    output.ProblemDescription.Add(problemDescription);
+                    output.ProblemDescriptions.Add(problemDescription);
                 }
 
                 return output;

@@ -40,14 +40,15 @@ namespace Microsoft.Quantum.Chemistry.Tests
         }
 
         [Fact]
+        // Checks if any errors occur while building Hamiltonian for both index conventions.
         public void BuildFermionHamiltonian()
         {
             var sourceHamiltonian = new OrbitalIntegralHamiltonian();
             sourceHamiltonian.AddTerms(orbitalIntegrals);
 
-            var targetHamiltonian0 = sourceHamiltonian.ToFermionHamiltonian(SpinOrbital.Config.IndexConvention.Type.HalfUp);
+            var targetHamiltonian0 = sourceHamiltonian.ToFermionHamiltonian(SpinOrbital.IndexConvention.HalfUp);
 
-            var targetHamiltonian1 = sourceHamiltonian.ToFermionHamiltonian(SpinOrbital.Config.IndexConvention.Type.UpDown);
+            var targetHamiltonian1 = sourceHamiltonian.ToFermionHamiltonian(SpinOrbital.IndexConvention.UpDown);
         }
         /*
                

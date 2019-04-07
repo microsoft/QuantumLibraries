@@ -15,11 +15,8 @@ using Microsoft.Extensions.Logging;
 
 namespace Microsoft.Quantum.Chemistry
 {
-    public class OrbitalIntegralHamiltonian2 : GenericHamiltonian<TermType.OrbitalIntegral, OrbitalIntegral>
-    {
-
-    }
-        public class OrbitalIntegralHamiltonian : GenericHamiltonian<TermType.OrbitalIntegral, OrbitalIntegral>
+ 
+    public class OrbitalIntegralHamiltonian : GenericHamiltonian<TermType.OrbitalIntegral, OrbitalIntegral>
     {
         /// <summary>
         /// Constructor for empty orbital integral Hamiltonian.

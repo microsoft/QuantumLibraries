@@ -31,23 +31,14 @@ namespace Microsoft.Quantum.Chemistry
     public class SpinOrbital
     {
         /// <summary>
-        /// SpinOrbital configuration settings.
+        /// Available indexing convention from a spin-orbital index to an integer.
         /// </summary>
-        public class Config
+        public enum IndexConvention
         {
-            /// <summary>
-            /// Available indexing convention from spin-orbital index to an integer.
-            /// </summary>
-            public class IndexConvention
-            {
-                public enum Type
-                {
-                    NotApplicable, UpDown, HalfUp
-                }
-                public const Type Default = Type.HalfUp;
-            }
+            NotApplicable, UpDown, HalfUp
         }
-        public readonly Config.IndexConvention.Type IndexConvention;
+
+        IndexConvention IdxConvention;
 
         /// <summary>
         /// Smallest orbital index
@@ -84,9 +75,9 @@ namespace Microsoft.Quantum.Chemistry
         /// to a single integer index. 
         /// </summary>
         /// <param name="nOrbitals">The total number of orbitals.</param>
-        public int ToInt(int nOrbitals = maxOrbital)
+        public int ToInt(IndexConvention indexConvention, int nOrbitals = maxOrbital)
         {
-           if (IndexConvention == Config.IndexConvention.Type.UpDown)
+           if (indexConvention == IndexConvention.UpDown)
             {
                 return orbital * 2 + spin;
             }
@@ -97,62 +88,37 @@ namespace Microsoft.Quantum.Chemistry
         }
 
         /// <summary>
+        /// This maps the separate orbital and spin indices of a <c>SpinOrbital</c> 
+        /// to a single integer index according to `2*orbitalIndex + spinIndex`.
+        /// </summary>
+        public int ToInt()
+        {
+            return ToInt(IndexConvention.UpDown);
+        }
+
+        /// <summary>
         /// Spin-orbital constructor.
         /// </summary>
         /// <param name="orbitalIdx">Orbital index.</param>
         /// <param name="spinIdx">Spin index.</param>
-        public SpinOrbital(int orbitalIdx, Spin spinIdx, Config.IndexConvention.Type indexConvention = SpinOrbital.Config.IndexConvention.Default)
+        public SpinOrbital(int orbitalIdx, Spin spinIdx)
         {
-            IndexConvention = indexConvention;
             orbital = orbitalIdx;
             spin = (int)spinIdx;
             IsValid();
         }
 
         /// <summary>
-        /// This maps the single integer index produced by <c>ToInt(int nOrbitals)</c>
-        /// back to an orbital and spin index.
-        /// </summary>
-        /// <param name="nOrbitals">The total number of orbitals.</param>
-        /// <param name="spinOrbitalIdx">A single integer representing a spin-orbital.</parm>
-        /// <returns>Returns the tuple `(orbital index, spin index)`.</returns>
-        internal static (int, int) ToSpinOrbital(int nOrbitals, int spinOrbitalIdx, Config.IndexConvention.Type indexConvention)
-        {
-            var orbital = 0;
-            var spin = 0;
-            if (indexConvention == Config.IndexConvention.Type.UpDown)
-            {
-                orbital = spinOrbitalIdx / 2;
-                spin = spinOrbitalIdx % 2;
-            }
-            else
-            {
-                orbital = spinOrbitalIdx % nOrbitals;
-                spin = spinOrbitalIdx / nOrbitals;
-            }
-            return (orbital, spin);
-        }
-
-        /// <summary>
-        /// This maps the single integer index produced by <c>ToInt(int nOrbitals)</c>
-        /// back to an orbital and spin index.
-        /// </summary>
-        /// <param name="nOrbitals">The total number of orbitals.</param>
-        /// <param name="spinOrbitalIdx">A single integer representing a spin-orbital.</param>
-        public SpinOrbital(int nOrbitals, int spinOrbitalIdx, Config.IndexConvention.Type indexConvention = SpinOrbital.Config.IndexConvention.Default) : this(ToSpinOrbital(nOrbitals, spinOrbitalIdx, indexConvention), indexConvention) { }
-
-        /// <summary>
         /// Spin-orbital constructor.
         /// </summary>
         /// <param name="idx">Tuple of (orbital index, spin index).</param>
-        public SpinOrbital((int, Spin) idx, Config.IndexConvention.Type indexConvention = SpinOrbital.Config.IndexConvention.Default) : this(idx.Item1, idx.Item2, indexConvention) { }
+        public SpinOrbital((int, Spin) idx) : this(idx.Item1, idx.Item2) { }
             
-
         /// <summary>
         /// Spin-orbital constructor.
         /// </summary>
         /// <param name="idx">Tuple of (orbital index, spin index).</param>
-        public SpinOrbital((int, int) idx, Config.IndexConvention.Type indexConvention = SpinOrbital.Config.IndexConvention.Default) : this(idx.Item1, (Spin) idx.Item2, indexConvention) { }
+        public SpinOrbital((int, int) idx) : this(idx.Item1, (Spin) idx.Item2) { }
 
         /// <summary>
         /// Throws an exception if spin-orbital is invalid.
@@ -177,22 +143,12 @@ namespace Microsoft.Quantum.Chemistry
         }
 
         /// <summary>
-        /// This maps an array of integer indices to an array of SpinOrbitals.
-        /// </summary>
-        /// <param name="nOrbitals">The total number of orbitals.</param>
-        /// <param name="spinOrbitalIdx">A sequence of integers representing a sequence of spin-orbitals.</param>
-        public static SpinOrbital[] ToSpinOrbitals(int nOrbitals, IEnumerable<int> fermionIdxArray, Config.IndexConvention.Type indexConvention)
-        {
-            return fermionIdxArray.Select(x => new SpinOrbital(nOrbitals, x, indexConvention)).ToArray();
-        }
-
-        /// <summary>
         /// This creates all possible spin-orbitals Hamiltonian terms given 
         /// an array of an even number of orbital indices. 
         /// </summary>
         /// <param name="nSpins">The number of possible spin states. This is 2 for electrons (spin 1/2).</param>
         /// <param name="orbitals">A sequence of integers representing a sequence of orbitals in Mullikan convention.</param>
-        public static IEnumerable<SpinOrbital[]> Enumerate(int nSpins, int[] orbitals, Config.IndexConvention.Type indexConvention)
+        public static IEnumerable<SpinOrbital[]> Enumerate(int[] orbitals, int nSpins = 2)
         {
             // Assumes spinOrbitals has an even number of elements
             // Only index over like spins S1 S2 S3 ... S3 S2 S1
@@ -204,31 +160,12 @@ namespace Microsoft.Quantum.Chemistry
                 SpinOrbital[] spinOrbitalArray = new SpinOrbital[orbitalArrayLength];
                 for (int idxOrbital = 0; idxOrbital < orbitalArrayLength; idxOrbital++)
                 {
-                    spinOrbitalArray[idxOrbital] = new SpinOrbital(orbitals[idxOrbital], (Spin)((idx / nSpins.Pow(idxOrbital)) % nSpins), indexConvention);
+                    spinOrbitalArray[idxOrbital] = new SpinOrbital(orbitals[idxOrbital], (Spin)((idx / nSpins.Pow(idxOrbital)) % nSpins));
                 }
                 yield return spinOrbitalArray;
             }
         }
-
-        /// <summary>
-        /// This returns the indexing convention of a sequence of spin-orbitals.
-        /// </summary>
-        /// <param name="spinOrbitals">Sequence of spin-orbitals.</param>
-        /// <returns>Indexing convention of the spin-orbitals.</returns>
-        public static Config.IndexConvention.Type GetIndexConvention(IEnumerable<SpinOrbital> spinOrbitals)
-        {
-            var typesDetected = spinOrbitals.Select(o => o.IndexConvention).Distinct().Count();
-            if (typesDetected == 0)
-            {
-                return Config.IndexConvention.Type.NotApplicable;
-            }
-            else if (typesDetected > 1)
-            {
-                throw new System.ArgumentException("Input spinOrbitals must have the same indexing convention.");
-            }
-            return spinOrbitals.First().IndexConvention;
-        }
-
+        
         /// <summary>
         /// Override for string representation of spin-orbital data.
         /// </summary>
@@ -241,19 +178,19 @@ namespace Microsoft.Quantum.Chemistry
         /// <summary>
         /// Boolean equality operator definition.
         /// </summary>
-        public static bool operator ==(SpinOrbital x, SpinOrbital y)
+        public static bool operator == (SpinOrbital x, SpinOrbital y)
         {
             return x.orbital == y.orbital && x.spin == y.spin;
         }
         /// <summary>
         /// Boolean inequality operator definition.
         /// </summary>
-        public static bool operator !=(SpinOrbital x, SpinOrbital y)
+        public static bool operator != (SpinOrbital x, SpinOrbital y)
         {
             return !(x == y);
         }
 
-        
+        /*
         /// <summary>
         /// Boolean greater-than operator definition.
         /// </summary>
@@ -268,7 +205,7 @@ namespace Microsoft.Quantum.Chemistry
         {
             return x.ToInt() < y.ToInt();
         }
-
+        */
         public override bool Equals(object x)
         {
             return Equals((SpinOrbital) x);
@@ -294,7 +231,7 @@ namespace Microsoft.Quantum.Chemistry
 
         public override int GetHashCode()
         {
-            return ToInt().GetHashCode();
+            return ToInt(IndexConvention.UpDown).GetHashCode();
         }
     }
 }

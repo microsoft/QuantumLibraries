@@ -55,7 +55,7 @@ namespace Microsoft.Quantum.Chemistry
                 public List<DataStructures.BibliographyItem> Bibliography { get; set; }
 
                 [YamlMember(Alias = "problem_description", ApplyNamingConventions = false)]
-                public List<ProblemDescription> ProblemDescription { get; set; }
+                public List<ProblemDescription> ProblemDescriptions { get; set; }
 
             }
 

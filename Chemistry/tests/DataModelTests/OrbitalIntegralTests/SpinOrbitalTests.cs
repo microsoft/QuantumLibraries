@@ -24,8 +24,7 @@ namespace Microsoft.Quantum.Chemistry.Tests
         [InlineData(1, 0, 1, 1)]
         [InlineData(1, 0, 0, 0)]
         public void SpinOrbitalTest(int nOrbitals, int orbital, int spin, int expected){
-            Assert.Equal(expected, new SpinOrbital((orbital, spin)).ToInt(nOrbitals));
-            Assert.Equal(new SpinOrbital(nOrbitals, expected).ToInt(nOrbitals), expected);
+            Assert.Equal(expected, new SpinOrbital((orbital, spin)).ToInt(SpinOrbital.IndexConvention.HalfUp, nOrbitals));
         }
     }
     
