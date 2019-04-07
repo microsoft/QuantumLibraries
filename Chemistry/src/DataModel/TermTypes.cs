@@ -1,11 +1,10 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-using System;
-
 namespace Microsoft.Quantum.Chemistry
-{ 
-    
+{
+    using System;
+
     /// <summary>
     /// All Hamiltonian terms must implement this interface.
     /// </summary>
@@ -41,6 +40,7 @@ namespace Microsoft.Quantum.Chemistry
     {
         public enum OrbitalIntegral
         {
+            
             Identity, OneBody, TwoBody
         }
 

@@ -97,8 +97,8 @@ namespace Microsoft.Quantum.Chemistry.OrbitalIntegrals
 
             foreach (var pq in pqSpinOrbitals)
             {
-                var pInt = Convert.ToInt32(pq[0].ToInt(indexConvention, nOrbitals));
-                var qInt = Convert.ToInt32(pq[1].ToInt(indexConvention, nOrbitals));
+                var pInt = pq[0].ToInt(indexConvention, nOrbitals);
+                var qInt = pq[1].ToInt(indexConvention, nOrbitals);
                 var tmp = new FermionTermHermitian(new[] { pInt, qInt }.ToLadderSequence());
                 if (pInt == qInt)
                 {

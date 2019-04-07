@@ -1,7 +1,6 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -13,6 +12,8 @@ using YamlDotNet.Serialization;
 
 namespace Microsoft.Quantum.Chemistry.Broombridge
 {
+    using System;
+
     /// <summary>
     /// Alias for Broombridge latest supported format.
     /// </summary>

@@ -33,7 +33,7 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
             hamiltonian.AddTerms
                 (hamiltonianData.OneElectronIntegrals.Values
                 .Select(o => new OrbitalIntegral(o.Item1
-                .Select(k => Convert.ToInt32(k - 1)), o.Item2, OrbitalIntegral.Convention.Mulliken)
+                .Select(k => (int)(k - 1)), o.Item2, OrbitalIntegral.Convention.Mulliken)
                 .ToCanonicalForm())
                 .Distinct());
 
@@ -42,7 +42,7 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
             hamiltonian.AddTerms
                 (hamiltonianData.TwoElectronIntegrals.Values
                 .Select(o => new OrbitalIntegral(o.Item1
-                .Select(k => Convert.ToInt32(k - 1)), o.Item2, OrbitalIntegral.Convention.Mulliken)
+                .Select(k => (int)(k - 1)), o.Item2, OrbitalIntegral.Convention.Mulliken)
                 .ToCanonicalForm())
                 .Distinct());
             
