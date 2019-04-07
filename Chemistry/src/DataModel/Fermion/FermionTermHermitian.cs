@@ -14,7 +14,7 @@ namespace Microsoft.Quantum.Chemistry
     /// 2) Index-ordered, where are raising(lowering) operators are in ascending(descending) order.
     /// 3) Hermitian, and is assumed to be implicitly summed with its Hermitian conjugate if not explicitly Hermitian.
     /// </summary>
-    public class FermionTermHermitian : FermionTerm, HamiltonianTerm<TermType.Fermion>
+    public class FermionTermHermitian : FermionTerm, HamiltonianTerm<TermType.Fermion>//, IEquatable<FermionTermHermitian>
     {
         #region Constructors
         /// <summary>
@@ -117,9 +117,31 @@ namespace Microsoft.Quantum.Chemistry
                     throw new ArgumentException("Attempted to classify unknown fermion term.");
             }
         }
-        
+
+        /*
+        #region Equality Testing
+
+        public override bool Equals(object obj)
+        {
+            return (obj is FermionTermHermitian x) ? Equals(x) : false;
+        }
+
+        public bool Equals(FermionTermHermitian x)
+        {
+            return base.Equals(x);
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+        */
+
+        //#endregion
+
     }
-    
+
+
 }
 
 

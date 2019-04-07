@@ -17,19 +17,18 @@ namespace Microsoft.Quantum.Chemistry
         /// <summary>
         /// Sequence of ladder operators.
         /// </summary>
-        public List<LadderOperator> sequence { get; set; }
+        public List<LadderOperator> sequence { get; set; } = new List<LadderOperator>();
 
         /// <summary>
         /// sign (-1,+1) coefficient of ladder operators.
         /// </summary>
-        public int coefficient { get; set; }
+        public int coefficient { get; set; } = 0;
 
         #region Constructors
         /// <summary>
         /// Constructor for empty ladder operator sequence.
         /// </summary>
         public LadderSequence() {
-            sequence = new List<LadderOperator>();
         }
 
         /// <summary>

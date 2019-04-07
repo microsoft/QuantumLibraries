@@ -15,13 +15,16 @@ using Microsoft.Extensions.Logging;
 
 namespace Microsoft.Quantum.Chemistry
 {
+    public class OrbitalIntegralHamiltonian2 : GenericHamiltonian<TermType.OrbitalIntegral, OrbitalIntegral>
+    {
 
-    public class OrbitalIntegralHamiltonian : GenericHamiltonian<TermType.OrbitalIntegral, OrbitalIntegral>
+    }
+        public class OrbitalIntegralHamiltonian : GenericHamiltonian<TermType.OrbitalIntegral, OrbitalIntegral>
     {
         /// <summary>
         /// Constructor for empty orbital integral Hamiltonian.
         /// </summary>
-        public OrbitalIntegralHamiltonian() : base() { }
+        public OrbitalIntegralHamiltonian() : base() {}
 
         /// <summary>
         /// Method for adding an orbital integral term to a Hamiltonian.
@@ -48,8 +51,22 @@ namespace Microsoft.Quantum.Chemistry
         {
             foreach(var idx in index.OrbitalIndices)
             {
-                systemIndices.Add(Convert.ToInt32(idx));
+                systemIndices.Add(idx);
             }
         }
     }
+
+     
+    public class OrbitalIntegralComparer : IEqualityComparer<OrbitalIntegral>
+    {
+        public bool Equals(OrbitalIntegral x, OrbitalIntegral y)
+        {
+            return x.Equals(y);
+        }
+        public int GetHashCode(OrbitalIntegral x)
+        {
+            return x.GetHashCode();
+        }
+    }
 }
+ 

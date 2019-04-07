@@ -24,7 +24,9 @@ namespace Microsoft.Quantum.Chemistry
         /// <summary>
         /// Container for all terms in a Hamiltonian.
         /// </summary>
-        public Dictionary<TermClassification, Dictionary<TermIndexing, double>> terms;
+        public Dictionary<TermClassification, Dictionary<TermIndexing, double>> terms = new Dictionary<TermClassification, Dictionary<TermIndexing, double>>();
+
+        public double IdentityTerm = 0.0;
 
         /// <summary>
         /// Indices to systems (e.g. fermions, qubits, or orbitals) the Hamiltonian acts on.
@@ -36,7 +38,6 @@ namespace Microsoft.Quantum.Chemistry
         /// </summary>
         public GenericHamiltonian()
         {
-            terms = new Dictionary<TermClassification, Dictionary<TermIndexing, double>>();
         }
 
         /// <summary>
@@ -69,6 +70,7 @@ namespace Microsoft.Quantum.Chemistry
                 AddToSystemIndices(index);
             }
         }
+        
 
         /// <summary>
         /// Add multiple terms to a Hamiltonian.
@@ -107,6 +109,25 @@ namespace Microsoft.Quantum.Chemistry
             {
                 AddTerm(term.Item1, term.Item2);
             }
+        }
+
+        /// <summary>
+        /// Method for retrieving a term to a Hamiltonian. This method 
+        /// infers the term category from the term index if possible.
+        /// </summary>
+        /// <param name="index">Index to term.</param>
+        public double GetTerm(TermIndexing index)
+        {
+            var type = index.GetTermType();
+            if (!terms.ContainsKey(type))
+            {
+                return 0.0;
+            }
+            if (!terms[type].ContainsKey(index))
+            {
+                return 0.0;
+            }
+            return terms[type][index];
         }
 
         /// <summary>

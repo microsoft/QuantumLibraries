@@ -51,5 +51,15 @@ namespace Microsoft.Quantum.Chemistry.Tests
             var spinOrbitals = orbitalIntegrals.EnumerateSpinOrbitals();
             Assert.Equal(elements * 4, spinOrbitals.Length);
         }
+
+        [Fact]
+        public void OrbitalIntegralIndexTest()
+        {
+            var orb0 = new OrbitalIntegral( 1.0);
+            var orb1 = new OrbitalIntegral( 2.0);
+            var orb2 = new OrbitalIntegral(new[] { 1, 2, 3, 4 }, 0.5);
+            Assert.True(orb0 == orb1);
+            Assert.False(orb0 == orb2);
+        }
     }
 }

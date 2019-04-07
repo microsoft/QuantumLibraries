@@ -74,7 +74,16 @@
 
 
   <ItemGroup>
-    <Folder Include="Analysis\" />
+    <Compile Include="DataFormat\LiQuiD.cs" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <Content Include="Analysis\README.txt" />
+  </ItemGroup>
+
+
+  <ItemGroup>
     <Folder Include="Conversion\" />
   </ItemGroup>
 

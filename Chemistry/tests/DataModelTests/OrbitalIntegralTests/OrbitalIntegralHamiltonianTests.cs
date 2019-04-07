@@ -34,6 +34,39 @@ namespace Microsoft.Quantum.Chemistry.Tests
         }
 
         [Fact]
+        void CheckTermPresent()
+        {
+            var hamiltonian = new OrbitalIntegralHamiltonian();
+            var addTerms0 = orbitalIntegrals.Select(o => (o, o.Coefficient)).ToList();
+            hamiltonian.AddTerms(addTerms0);
+
+            // Check that all terms present.
+            foreach(var term in addTerms0)
+            {
+                Assert.Equal(term.Coefficient, hamiltonian.GetTerm(term.o));
+            }
+
+            // Now check that indexing is by value and not by reference.
+            var newTerms0Copy = new[] {
+                new[] { 0,0 },
+                new[] { 1,1 },
+                new[] { 0,0,0,0 },
+                new[] { 0,1,0,1 },
+                new[] { 0,1,1,0 },
+                new[] { 1,1,1,1 } }.Select(o => new OrbitalIntegral(o));
+            foreach (var term in addTerms0.Zip(newTerms0Copy, (a,b) => (a.Coefficient, b)))
+            {
+                Assert.Equal(term.Coefficient, hamiltonian.GetTerm(term.b));
+            }
+
+
+            var orb = new OrbitalIntegral(new[] { 0,1,1,0}, 4.0);
+            Assert.Equal(new[] { 0, 1, 1, 0 }, orb.OrbitalIndices);
+            
+            Assert.Equal(0.663472101, hamiltonian.terms[orb.GetTermType()][new OrbitalIntegral(orb.OrbitalIndices, orb.Coefficient)]);
+        }
+
+        [Fact]
         void CountTerms()
         {
             var hamiltonian = new OrbitalIntegralHamiltonian();

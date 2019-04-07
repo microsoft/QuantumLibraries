@@ -44,6 +44,26 @@ namespace Microsoft.Quantum.Chemistry.Tests
             return hamiltonian;
         }
 
+        [Fact]
+        void CheckKeyPresence()
+        {
+            var hamiltonian = GenerateTestHamiltonian();
+            var check = new FermionTermHermitian(new[] { 0, 2, 2, 0 }.ToLadderSequence());
+
+            hamiltonian.AddTerm(check, 100.0);
+
+            var sourceDict = hamiltonian.terms[TermType.Fermion.PQQP];
+
+            var check2 = new FermionTermHermitian(new[] { 0, 2, 2, 0 }.ToLadderSequence());
+            var coeff = sourceDict[check2];
+
+            Assert.Equal(101.0, coeff);
+            Assert.Equal(101.0, hamiltonian.terms[TermType.Fermion.PQQP][check]);
+
+            // Check using GetTerm method.
+            Assert.Equal(101.0, hamiltonian.GetTerm(new FermionTermHermitian(check)));
+        }
+
 
         [Fact]
         void CountTerms()

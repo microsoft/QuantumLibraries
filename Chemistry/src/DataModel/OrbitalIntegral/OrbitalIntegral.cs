@@ -9,12 +9,13 @@ using System.Collections.Generic;
 
 namespace Microsoft.Quantum.Chemistry
 {
-
-
+   
+    
     /// <summary>
     /// Type representing orbital overlap integrals.
     /// </summary>
-    public struct OrbitalIntegral : HamiltonianTerm<TermType.OrbitalIntegral>, IEquatable<OrbitalIntegral>
+    public struct OrbitalIntegral : 
+        HamiltonianTerm<TermType.OrbitalIntegral>//, IEquatable<OrbitalIntegral>
     {
         public enum Convention
         {
@@ -30,6 +31,12 @@ namespace Microsoft.Quantum.Chemistry
         /// <c>Double coefficient</c> represents the coefficient of the orbital overlap integral.
         /// </summary>
         public Double Coefficient;
+
+        public OrbitalIntegral(Double coefficient = 0.0)
+        {
+            OrbitalIndices = new int[] { };
+            Coefficient = coefficient;
+        }
 
         /// <summary>
         /// OrbitalIntegral constructor.
@@ -250,12 +257,17 @@ namespace Microsoft.Quantum.Chemistry
                 return false;
             }
             // Return true if the fields match.
-            return this.OrbitalIndices == x.OrbitalIndices;
+            return OrbitalIndices.SequenceEqual(x.OrbitalIndices);
         }
 
         public override int GetHashCode()
         {
-            return OrbitalIndices.GetHashCode();
+            int h = 19;
+            foreach (var i in OrbitalIndices)
+            {
+                h = h * 53 + i;
+            }
+            return h;
         }
 
         public static bool operator ==(OrbitalIntegral x, OrbitalIntegral y)
