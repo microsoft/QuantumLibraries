@@ -5,7 +5,7 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 
-namespace Microsoft.Quantum.Chemistry.Hamiltonian
+namespace Microsoft.Quantum.Chemistry.Generic
 {
     /// <summary>
     /// Generic Hamiltonian class. This is the base class for any Hamiltonians,
@@ -13,7 +13,7 @@ namespace Microsoft.Quantum.Chemistry.Hamiltonian
     /// </summary>
     /// <typeparam name="TermClassification">Index to categories of terms.</typeparam>
     /// <typeparam name="TermIndexing">Index to individual terms.</typeparam>
-    public class GenericHamiltonian<TermClassification, TermIndexing, TermValue>
+    public class Hamiltonian<TermClassification, TermIndexing, TermValue>
         //TODO: Restore `where TermClassification: IEquatable<TermClassification>`
         // in the future if we want more complicated term classifications.
         where TermIndexing : ITermIndex<TermClassification>
@@ -23,26 +23,26 @@ namespace Microsoft.Quantum.Chemistry.Hamiltonian
         /// <summary>
         /// Container for all terms in a Hamiltonian.
         /// </summary>
-        public Dictionary<TermClassification, Dictionary<TermIndexing, TermValue>> terms = new Dictionary<TermClassification, Dictionary<TermIndexing, TermValue>>();
+        public Dictionary<TermClassification, Dictionary<TermIndexing, TermValue>> Terms = new Dictionary<TermClassification, Dictionary<TermIndexing, TermValue>>();
 
         /// <summary>
         /// Indices to systems (e.g. fermions, qubits, or orbitals) the Hamiltonian acts on.
         /// </summary>
-        public HashSet<int> systemIndices = new HashSet<int>();
+        public HashSet<int> SystemIndices = new HashSet<int>();
 
         /// <summary>
         /// Constructor for empty Hamiltonian.
         /// </summary>
-        public GenericHamiltonian()
+        public Hamiltonian()
         {
         }
 
         /// <summary>
         /// Constructor for copying a Hamiltonian.
         /// </summary>
-        public GenericHamiltonian(GenericHamiltonian<TermClassification, TermIndexing, TermValue> hamiltonian)
+        public Hamiltonian(Hamiltonian<TermClassification, TermIndexing, TermValue> hamiltonian)
         {
-            terms = hamiltonian.terms;
+            Terms = hamiltonian.Terms;
         }
 
         /// <summary>
@@ -53,17 +53,17 @@ namespace Microsoft.Quantum.Chemistry.Hamiltonian
         /// <param name="coefficient">Coefficient of term.</param>
         public void AddTerm(TermClassification type, TermIndexing index, TermValue coefficient)
         {
-            if (!terms.ContainsKey(type))
+            if (!Terms.ContainsKey(type))
             {
-                terms.Add(type, new Dictionary<TermIndexing, TermValue>());
+                Terms.Add(type, new Dictionary<TermIndexing, TermValue>());
             }
-            if (terms[type].ContainsKey(index))
+            if (Terms[type].ContainsKey(index))
             {
-                terms[type][index] = terms[type][index].AddValue(coefficient);
+                Terms[type][index] = Terms[type][index].AddValue(coefficient);
             }
             else
             {
-                terms[type].Add(index, coefficient);
+                Terms[type].Add(index, coefficient);
                 AddToSystemIndices(index);
             }
         }
@@ -116,24 +116,24 @@ namespace Microsoft.Quantum.Chemistry.Hamiltonian
         public TermValue GetTerm(TermIndexing index)
         {
             var type = index.GetTermType();
-            if (!terms.ContainsKey(type))
+            if (!Terms.ContainsKey(type))
             {
                 return default;
             }
-            if (!terms[type].ContainsKey(index))
+            if (!Terms[type].ContainsKey(index))
             {
                 return default;
             }
-            return terms[type][index];
+            return Terms[type][index];
         }
 
         /// <summary>
         /// Method for add all terms from a source Hamiltonian into this Hamiltonian.
         /// </summary>
         /// <param name="sourceHamiltonian">Source Hamiltonian.</param>
-        public void AddHamiltonian(GenericHamiltonian<TermClassification, TermIndexing, TermValue> sourceHamiltonian)
+        public void AddHamiltonian(Hamiltonian<TermClassification, TermIndexing, TermValue> sourceHamiltonian)
         {
-            foreach(var termType in sourceHamiltonian.terms)
+            foreach(var termType in sourceHamiltonian.Terms)
             {
                 AddTerms(termType.Key, termType.Value.Select(o => (o.Key, o.Value)));
             }
@@ -145,7 +145,7 @@ namespace Microsoft.Quantum.Chemistry.Hamiltonian
         /// <returns>Number of terms in a Hamiltonian.</returns>
         public int CountTerms()
         {
-            return terms.Select(o => o.Value.Count()).Sum();
+            return Terms.Select(o => o.Value.Count()).Sum();
         }
 
         /// <summary>
@@ -155,7 +155,7 @@ namespace Microsoft.Quantum.Chemistry.Hamiltonian
         /// <returns>L_p norm of Hamiltonian coefficients.</returns>
         public double Norm(double power = 1.0)
         {
-            return Norm(terms.Keys, power);
+            return Norm(Terms.Keys, power);
         }
 
         /// <summary>
@@ -173,7 +173,7 @@ namespace Microsoft.Quantum.Chemistry.Hamiltonian
         /// <returns>L_p norm of Hamiltonian coefficients.</returns>
         public double Norm(IEnumerable<TermClassification> termTypes, double power = 1.0)
         {
-            var typesEnum = terms.Where(o => termTypes.Contains(o.Key));
+            var typesEnum = Terms.Where(o => termTypes.Contains(o.Key));
             return typesEnum
                 .Select(termType => termType.Value
                 .Select(termIndex => termIndex.Value.Norm(power)).Norm(power)).Norm(power);

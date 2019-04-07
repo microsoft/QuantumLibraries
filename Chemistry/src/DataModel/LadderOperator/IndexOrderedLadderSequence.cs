@@ -27,8 +27,8 @@ namespace Microsoft.Quantum.Chemistry.LadderOperators
         public IndexOrderedLadderSequence(IndexOrderedLadderSequence ladderOperators)
         {
             // All constructions are pass by value.
-            sequence = ladderOperators.sequence.Select(o => o).ToList();
-            coefficient = ladderOperators.coefficient;
+            Sequence = ladderOperators.Sequence.Select(o => o).ToList();
+            Coefficient = ladderOperators.Coefficient;
         }
 
         /// <summary>

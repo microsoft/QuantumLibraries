@@ -12,9 +12,9 @@ namespace Microsoft.Quantum.Chemistry.Fermion
     // This class is for Fermion terms that are not grouped into Hermitian bunches.
     // Maybe need a stype for quantum state?
 
-    public class FermionStateMultiConfigurational : FermionHamiltonian
+    public class WavefunctionFermionUCC : FermionHamiltonian
     {
-        public FermionStateMultiConfigurational() : base() { }
+        public WavefunctionFermionUCC() : base() { }
         public object referenceState;
     }
 

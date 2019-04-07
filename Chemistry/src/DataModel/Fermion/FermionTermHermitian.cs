@@ -6,7 +6,7 @@ using System.Linq;
 using System.Collections.Generic;
 
 using Microsoft.Quantum.Chemistry.LadderOperators;
-using Microsoft.Quantum.Chemistry.Hamiltonian;
+using Microsoft.Quantum.Chemistry.Generic;
 using Microsoft.Quantum.Chemistry;
 
 namespace Microsoft.Quantum.Chemistry.Fermion
@@ -19,7 +19,7 @@ namespace Microsoft.Quantum.Chemistry.Fermion
     /// 2) Index-ordered, where are raising(lowering) operators are in ascending(descending) order.
     /// 3) Hermitian, and is assumed to be implicitly summed with its Hermitian conjugate if not explicitly Hermitian.
     /// </summary>
-    public class FermionTermHermitian : FermionTerm, ITermIndex<TermType.Fermion>//, IEquatable<FermionTermHermitian>
+    public class FermionTermHermitian : FermionTerm, ITermIndex<TermType.Fermion>, IEquatable<FermionTermHermitian>
     {
         #region Constructors
         /// <summary>
@@ -34,8 +34,8 @@ namespace Microsoft.Quantum.Chemistry.Fermion
         internal FermionTermHermitian(FermionTermHermitian term)
         {
             // All constructions are pass by value.
-            sequence = term.sequence.Select(o => o).ToList();
-            coefficient = term.coefficient;
+            Sequence = term.Sequence.Select(o => o).ToList();
+            Coefficient = term.Coefficient;
         }
 
         /// <summary>
@@ -60,8 +60,8 @@ namespace Microsoft.Quantum.Chemistry.Fermion
         {
             if (IsInIndexOrder())
             {
-                var creationSequence = sequence.Where(o => o.type == LadderType.u).Select(o => o.index);
-                var annihilationSequence = sequence.Where(o => o.type == LadderType.d).Select(o => o.index);
+                var creationSequence = Sequence.Where(o => o.Type == LadderType.u).Select(o => o.Index);
+                var annihilationSequence = Sequence.Where(o => o.Type == LadderType.d).Select(o => o.Index);
                 if (creationSequence.Count() == annihilationSequence.Count())
                 {
                     if (CompareIntArray(creationSequence, annihilationSequence.Reverse()) > 0)
@@ -86,7 +86,7 @@ namespace Microsoft.Quantum.Chemistry.Fermion
             // Take Hermitian Conjugate    
             if (!IsInCanonicalOrder())
             {
-                sequence = sequence.Select(o => (o.type == LadderType.d ? LadderType.u : LadderType.d, o.index)).Select(o => new LadderOperator(o)).Reverse().ToList();
+                Sequence = Sequence.Select(o => (o.Type == LadderType.d ? LadderType.u : LadderType.d, o.Index)).Select(o => new LadderOperator(o)).Reverse().ToList();
             }
         }
 
@@ -96,7 +96,7 @@ namespace Microsoft.Quantum.Chemistry.Fermion
         /// <returns>Category of fermion term.</returns>
         public TermType.Fermion GetTermType()
         {
-            var length = sequence.Count();
+            var length = Sequence.Count();
             var uniqueIndices = this.GetUniqueIndices();
 
             switch (length)
@@ -130,7 +130,7 @@ namespace Microsoft.Quantum.Chemistry.Fermion
             }
         }
 
-        /*
+        
         #region Equality Testing
 
         public override bool Equals(object obj)
@@ -147,9 +147,7 @@ namespace Microsoft.Quantum.Chemistry.Fermion
         {
             return base.GetHashCode();
         }
-        */
-
-        //#endregion
+        #endregion
 
     }
 

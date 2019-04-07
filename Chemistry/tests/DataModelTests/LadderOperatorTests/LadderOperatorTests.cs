@@ -36,21 +36,21 @@ namespace Microsoft.Quantum.Chemistry.Tests
             var newTerm = new LadderSequence(op);
             
             ints[2] = 5;
-            Assert.Equal(op.sequence, newTerm.sequence);
+            Assert.Equal(op.Sequence, newTerm.Sequence);
 
-            op.sequence[2] = new LadderOperator(LadderType.d, 6);
-            Assert.NotEqual(op.sequence, newTerm.sequence);
+            op.Sequence[2] = new LadderOperator(LadderType.d, 6);
+            Assert.NotEqual(op.Sequence, newTerm.Sequence);
 
             var newTerm2 = new LadderSequence(ints.ToLadderSequence());
             ints[1] = 0;
-            Assert.Equal(2, newTerm2.sequence[1].index);
+            Assert.Equal(2, newTerm2.Sequence[1].Index);
 
             var op2 = new[] { (u, 2), (d, 5), (d, 8) };
             var newTerm3 = new LadderSequence(op2.ToLadderSequence());
 
             op2[2] = (d, 4);
 
-            Assert.Equal(8, newTerm3.sequence[2].index);
+            Assert.Equal(8, newTerm3.Sequence[2].Index);
 
         }
 
@@ -122,9 +122,9 @@ namespace Microsoft.Quantum.Chemistry.Tests
         {
             var op = new[] { 1, 2, 4, 3 }.ToLadderSequence();
             var newTerm = new NormalOrderedLadderSequence(op);
-            op.sequence[2] = new LadderOperator(LadderType.d, 5);
+            op.Sequence[2] = new LadderOperator(LadderType.d, 5);
 
-            Assert.NotEqual(op.sequence, newTerm.sequence);
+            Assert.NotEqual(op.Sequence, newTerm.Sequence);
         }
         
         [Fact]
@@ -134,8 +134,8 @@ namespace Microsoft.Quantum.Chemistry.Tests
 
             var expected = new[] { (u, 5), (d, 2), (d, 8) }.ToLadderSequence();
             var output = term.CreateNormalOrder();
-            Assert.Equal(expected.sequence, output.First().sequence);
-            Assert.Equal(-1, output.First().coefficient);
+            Assert.Equal(expected.Sequence, output.First().Sequence);
+            Assert.Equal(-1, output.First().Coefficient);
         }
 
         [Fact]
@@ -145,7 +145,7 @@ namespace Microsoft.Quantum.Chemistry.Tests
 
             var expected = new[] { (u, 5), (d, 8), (d, 2) }.ToLadderSequence();
             var output = term.CreateIndexOrder().ToList();
-            Assert.Equal(expected.sequence, output.First().sequence);
+            Assert.Equal(expected.Sequence, output.First().Sequence);
         }
 
     }
@@ -158,9 +158,9 @@ namespace Microsoft.Quantum.Chemistry.Tests
         {
             var op = new[] { 1, 2, 4, 3 }.ToLadderSequence();
             var newTerm = new IndexOrderedLadderSequence(op);
-            op.sequence[2] = new LadderOperator(LadderType.d, 5);
+            op.Sequence[2] = new LadderOperator(LadderType.d, 5);
 
-            Assert.NotEqual(op.sequence, newTerm.sequence);
+            Assert.NotEqual(op.Sequence, newTerm.Sequence);
         }
 
 
@@ -174,8 +174,8 @@ namespace Microsoft.Quantum.Chemistry.Tests
                 new[] { (d, 8) }.ToLadderSequence(1)
             };
             var output = term.CreateIndexOrder();
-            Assert.Contains(expected[0].sequence, output.Select(o => o.sequence));
-            Assert.Contains(expected[1].sequence, output.Select(o => o.sequence));
+            Assert.Contains(expected[0].Sequence, output.Select(o => o.Sequence));
+            Assert.Contains(expected[1].Sequence, output.Select(o => o.Sequence));
         }
 
     }

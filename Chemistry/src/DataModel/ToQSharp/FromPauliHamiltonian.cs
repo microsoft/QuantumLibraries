@@ -25,13 +25,13 @@ namespace Microsoft.Quantum.Chemistry.QSharpFormat
 
         public static (double, int, JWOptimizedHTerms) FromPauliHamiltonian(PauliHamiltonian pauliHamiltonian)
         {
-            double energyOffset = pauliHamiltonian.terms[TermType.PauliTerm.Identity].Values.First().Value.First();
-            var nSpinOrbitals = pauliHamiltonian.systemIndices.Count() + 1;
-            var hZ = pauliHamiltonian.terms[TermType.PauliTerm.Z].Select(o => FromPauliTerm(o.Key, o.Value)).ToList();
-            var hZZ = pauliHamiltonian.terms[TermType.PauliTerm.ZZ].Select(o => FromPauliTerm(o.Key, o.Value)).ToList();
-            var hPQ = pauliHamiltonian.terms[TermType.PauliTerm.PQ].Select(o => FromPauliTerm(o.Key, o.Value));
-            var hPQQR = pauliHamiltonian.terms[TermType.PauliTerm.PQQR].Select(o => FromPauliTerm(o.Key, o.Value));
-            var hv0123 = pauliHamiltonian.terms[TermType.PauliTerm.v01234].Select(o => FromPauliTerm(o.Key, o.Value)).ToList();
+            double energyOffset = pauliHamiltonian.Terms[TermType.PauliTerm.Identity].Values.First().Value.First();
+            var nSpinOrbitals = pauliHamiltonian.SystemIndices.Count() + 1;
+            var hZ = pauliHamiltonian.Terms[TermType.PauliTerm.Z].Select(o => FromPauliTerm(o.Key, o.Value)).ToList();
+            var hZZ = pauliHamiltonian.Terms[TermType.PauliTerm.ZZ].Select(o => FromPauliTerm(o.Key, o.Value)).ToList();
+            var hPQ = pauliHamiltonian.Terms[TermType.PauliTerm.PQ].Select(o => FromPauliTerm(o.Key, o.Value));
+            var hPQQR = pauliHamiltonian.Terms[TermType.PauliTerm.PQQR].Select(o => FromPauliTerm(o.Key, o.Value));
+            var hv0123 = pauliHamiltonian.Terms[TermType.PauliTerm.v01234].Select(o => FromPauliTerm(o.Key, o.Value)).ToList();
                                  
             var hPQandPQQR = hPQ.Concat(hPQQR).ToList();
 

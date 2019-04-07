@@ -7,6 +7,7 @@ using Microsoft.Quantum.Chemistry.LadderOperators;
 
 namespace Microsoft.Quantum.Chemistry.Fermion
 {
+
     /// <summary>
     /// Class representing a sequence of fermionic raising and lowering operators, subject to the additional constraints: 
     /// 1) Normal-ordered, where all raising operators are to the left of all lowering operators.
@@ -27,8 +28,8 @@ namespace Microsoft.Quantum.Chemistry.Fermion
         internal FermionTerm(FermionTerm term)
         {
             // All constructions are pass by value.
-            sequence = term.sequence.ToList();
-            coefficient = term.coefficient;
+            Sequence = term.Sequence.ToList();
+            Coefficient = term.Coefficient;
         }
 
         /// <summary>

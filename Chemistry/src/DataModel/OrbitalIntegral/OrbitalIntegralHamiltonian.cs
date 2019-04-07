@@ -4,12 +4,12 @@
 using System;
 using System.Collections.Generic;
 
-using Microsoft.Quantum.Chemistry.Hamiltonian;
+using Microsoft.Quantum.Chemistry.Generic;
 
 namespace Microsoft.Quantum.Chemistry.OrbitalIntegrals
 {
  
-    public class OrbitalIntegralHamiltonian : GenericHamiltonian<TermType.OrbitalIntegral, OrbitalIntegral, DoubleCoeff>
+    public class OrbitalIntegralHamiltonian : Hamiltonian<TermType.OrbitalIntegral, OrbitalIntegral, DoubleCoeff>
     {
         /// <summary>
         /// Constructor for empty orbital integral Hamiltonian.
@@ -45,7 +45,7 @@ namespace Microsoft.Quantum.Chemistry.OrbitalIntegrals
         {
             foreach(var idx in index.OrbitalIndices)
             {
-                systemIndices.Add(idx);
+                SystemIndices.Add(idx);
             }
         }
     }

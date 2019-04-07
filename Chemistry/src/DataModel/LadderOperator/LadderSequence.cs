@@ -17,17 +17,17 @@ namespace Microsoft.Quantum.Chemistry.LadderOperators
         /// <summary>
         /// Sequence of ladder operators.
         /// </summary>
-        public List<LadderOperator> sequence { get; set; } = new List<LadderOperator>();
+        public List<LadderOperator> Sequence { get; set; } = new List<LadderOperator>();
 
         /// <summary>
         /// sign (-1,+1) coefficient of ladder operators.
         /// </summary>
-        public int coefficient { get; set; } = 0;
+        public int Coefficient { get; set; } = 0;
 
         #region Constructors
         /// <summary>
         /// Constructor for empty ladder operator sequence.
-        /// </summary>
+        /// </summary>B
         public LadderSequence() {
         }
 
@@ -39,8 +39,8 @@ namespace Microsoft.Quantum.Chemistry.LadderOperators
         {
             // All constructions are pass by value. 
             // ToList() copies values if the underlying object is a value type.
-            sequence = ladderOperators.sequence.ToList();
-            coefficient = ladderOperators.coefficient;
+            Sequence = ladderOperators.Sequence.ToList();
+            Coefficient = ladderOperators.Coefficient;
         }
 
         /// <summary>
@@ -49,8 +49,8 @@ namespace Microsoft.Quantum.Chemistry.LadderOperators
         /// <param name="setSequence">Sequence of ladder operators.</param>
         public LadderSequence(IEnumerable<LadderOperator> setSequence, int setCoefficient = 1)
         {
-            sequence = setSequence.ToList();
-            coefficient = setCoefficient;
+            Sequence = setSequence.ToList();
+            Coefficient = setCoefficient;
         }
         #endregion
 
@@ -64,7 +64,7 @@ namespace Microsoft.Quantum.Chemistry.LadderOperators
         /// </returns>
         public bool IsInNormalOrder()
         {
-            return sequence.Count() == 0 ? true : sequence.Select(o => (int)o.type).IsIntArrayAscending();
+            return Sequence.Count() == 0 ? true : Sequence.Select(o => (int)o.Type).IsIntArrayAscending();
         }
         #endregion
 
@@ -79,7 +79,7 @@ namespace Microsoft.Quantum.Chemistry.LadderOperators
         /// </returns>
         public LadderSequence Multiply(LadderSequence left, LadderSequence right)
         {
-            return new LadderSequence(left.sequence.Concat(right.sequence), left.coefficient * right.coefficient);
+            return new LadderSequence(left.Sequence.Concat(right.Sequence), left.Coefficient * right.Coefficient);
         }
 
         /// <summary>
@@ -93,11 +93,11 @@ namespace Microsoft.Quantum.Chemistry.LadderOperators
             // {a_x, a_y^\dag} = \delta_{xy}
             // {a_x, a_y} = 1
             // {a_x^\dag, a_y^\dag} = 1
-            if (x.index == y.index)
+            if (x.Index == y.Index)
             {
-                if (x.type != y.type)
+                if (x.Type != y.Type)
                 {
-                    if (x.type == LadderType.d)
+                    if (x.Type == LadderType.d)
                     {
                         return (LadderType.identity, 1);
                     }
@@ -121,7 +121,7 @@ namespace Microsoft.Quantum.Chemistry.LadderOperators
         /// <returns>Number of unique system indices.</returns>
         public int GetUniqueIndices()
         {
-            return sequence.Select(o => o.index).Distinct().Count();
+            return Sequence.Select(o => o.Index).Distinct().Count();
         }
 
         /// <summary>
@@ -129,7 +129,7 @@ namespace Microsoft.Quantum.Chemistry.LadderOperators
         /// </summary>
         public override string ToString() 
         {
-            return $"{coefficient} * {string.Join(" ",sequence)}";
+            return $"{Coefficient} * {string.Join(" ",Sequence)}";
         }     
 
         #region Equality Testing
@@ -159,13 +159,13 @@ namespace Microsoft.Quantum.Chemistry.LadderOperators
                 return false;
             }
             // Return true if the fields match.
-            return sequence.SequenceEqual(x.sequence);
+            return Sequence.SequenceEqual(x.Sequence);
         }
 
         public override int GetHashCode()
         {
             int h = 19;
-            foreach (var i in sequence)
+            foreach (var i in Sequence)
             {
                 h = h * 53 + i.GetHashCode();
             }

@@ -9,6 +9,7 @@
   <ItemGroup>
     <Compile Remove="FermionTermTests.cs" />
     <Compile Remove="FermionTermTests\FermionTermTests.cs" />
+    <Compile Remove="ProblemContainerTests.cs" />
     <Compile Remove="ProblemContainer\ProblemContainerTests.cs" />
   </ItemGroup>
 

@@ -6,7 +6,7 @@ using System.Linq;
 using System.Collections.Generic;
 
 using Microsoft.Quantum.Chemistry;
-using Microsoft.Quantum.Chemistry.Hamiltonian;
+using Microsoft.Quantum.Chemistry.Generic;
 
 namespace Microsoft.Quantum.Chemistry.OrbitalIntegrals
 {

@@ -26,13 +26,13 @@ namespace Microsoft.Quantum.Chemistry.Fermion
             this FermionHamiltonian sourceHamiltonian,
             QubitEncoding encoding)
         {
-            var nFermions = sourceHamiltonian.systemIndices.Max() + 1;
+            var nFermions = sourceHamiltonian.SystemIndices.Max() + 1;
             var hamiltonian = new PauliHamiltonian();
             Func<FermionTerm, TermType.Fermion, double, IEnumerable<(PauliTerm, PauliTermValue)>> conversion =
                 (fermionTerm, termType, coeff) 
                 => (fermionTerm.ToJordanWignerPauliTerms(termType, coeff));
 
-            foreach (var termType in sourceHamiltonian.terms)
+            foreach (var termType in sourceHamiltonian.Terms)
             {
                 foreach (var term in termType.Value)
                 {
@@ -40,7 +40,7 @@ namespace Microsoft.Quantum.Chemistry.Fermion
                 }
             }
             // Create a copy of fermion indices hash set.
-            hamiltonian.systemIndices = new HashSet<int>(sourceHamiltonian.systemIndices.ToList());
+            hamiltonian.SystemIndices = new HashSet<int>(sourceHamiltonian.SystemIndices.ToList());
             return hamiltonian;
         }
 
@@ -60,7 +60,7 @@ namespace Microsoft.Quantum.Chemistry.Fermion
         {
             var pauliTerms = new List<(PauliTerm, PauliTermValue)>();
             // Make a copy of the list of indices.
-            var seq = fermionTerm.sequence.Select(o => o.index).ToArray();
+            var seq = fermionTerm.Sequence.Select(o => o.Index).ToArray();
 
             switch (termType)
             {

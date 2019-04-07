@@ -9,7 +9,7 @@ using System.Collections.Generic;
 using Microsoft.Quantum.Chemistry;
 using System.Numerics;
 
-using Microsoft.Quantum.Chemistry.Hamiltonian;
+using Microsoft.Quantum.Chemistry.Generic;
 using Microsoft.Quantum.Chemistry.LadderOperators;
 using Microsoft.Quantum.Chemistry.Fermion;
 
@@ -31,13 +31,13 @@ namespace Microsoft.Quantum.Chemistry.OrbitalIntegrals
             this OrbitalIntegralHamiltonian sourceHamiltonian, 
             SpinOrbital.IndexConvention indexConvention)
         {
-            var nOrbitals = sourceHamiltonian.systemIndices.Max() + 1;
+            var nOrbitals = sourceHamiltonian.SystemIndices.Max() + 1;
             var hamiltonian = new FermionHamiltonian();
             Func<OrbitalIntegral, double, IEnumerable<(FermionTermHermitian, DoubleCoeff)>> conversion = 
                 (orb, coeff) => new OrbitalIntegral(orb.OrbitalIndices, coeff).ToHermitianFermionTerms(nOrbitals, indexConvention)
                 .Select(o => (o.Item1, o.Item2.ToDouble()));
 
-            foreach (var termType in sourceHamiltonian.terms)
+            foreach (var termType in sourceHamiltonian.Terms)
             {
                 foreach(var term in termType.Value)
                 {
@@ -45,7 +45,7 @@ namespace Microsoft.Quantum.Chemistry.OrbitalIntegrals
                 }
             }
             // Number of fermions is twice the number of orbitals.
-            hamiltonian.systemIndices = new HashSet<int>(Enumerable.Range(0, 2 * nOrbitals));
+            hamiltonian.SystemIndices = new HashSet<int>(Enumerable.Range(0, 2 * nOrbitals));
             return hamiltonian;
         }
 

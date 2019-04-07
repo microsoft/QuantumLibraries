@@ -1,8 +1,6 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-using Microsoft.Quantum.Simulation.Core;
-
 using System;
 using System.Linq;
 using System.Collections.Generic;
@@ -13,12 +11,10 @@ using System.IO.Compression;
 using YamlDotNet.Serialization;
 using Microsoft.Extensions.Logging;
 
-using Microsoft.Quantum.Chemistry;
 using Microsoft.Quantum.Chemistry.Broombridge;
 using Microsoft.Quantum.Chemistry.OrbitalIntegrals;
 using Microsoft.Quantum.Chemistry.Fermion;
 using Microsoft.Quantum.Chemistry.Pauli;
-using Microsoft.Quantum.Chemistry.Wavefunction;
 
 namespace Microsoft.Quantum.Chemistry
 {
@@ -76,7 +72,7 @@ namespace Microsoft.Quantum.Chemistry
         {
             // Deserialize Broombridge from file.
             CurrentVersion.Data broombridge = Deserializers.DeserializeBroombridge(filename);
-
+            
             // A single file can contain multiple problem descriptions. Let us pick the first one.
             CurrentVersion.ProblemDescription problemData = broombridge.ProblemDescriptions.First();
 
@@ -116,7 +112,7 @@ namespace Microsoft.Quantum.Chemistry
         //public PauliHamiltonian =
 
         // For now, do not process input states much.
-        public Dictionary<string, InputState> InputStates = new Dictionary<string, InputState>();
+        //public Dictionary<string, InputState> InputStates = new Dictionary<string, InputState>();
 
         // Additional data
         public Int64 NOrbitals = 0;

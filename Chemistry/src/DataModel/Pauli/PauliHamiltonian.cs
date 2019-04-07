@@ -1,7 +1,7 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-using Microsoft.Quantum.Chemistry.Hamiltonian;
+using Microsoft.Quantum.Chemistry.Generic;
 
 namespace Microsoft.Quantum.Chemistry.Pauli
 {
@@ -36,7 +36,7 @@ namespace Microsoft.Quantum.Chemistry.Pauli
     /// </list>
     /// </para>
     /// </summary>
-    public class PauliHamiltonian : GenericHamiltonian<TermType.PauliTerm, PauliTerm, PauliTermValue>
+    public class PauliHamiltonian : Hamiltonian<TermType.PauliTerm, PauliTerm, PauliTermValue>
     {
         public PauliHamiltonian() : base() { }
     }

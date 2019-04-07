@@ -20,9 +20,12 @@ namespace Microsoft.Quantum.Chemistry.LadderOperators
         /// <returns>
         /// Sequence of ladder operators.
         /// </returns>
+        /// <example>
+        /// // Construct a sequence a ladder operators 1^ 2^ 3 4
+        /// var tmp = new[] { (u, 1), (u, 2), (d, 3), (d, 4) }.ToLadderSequence();
+        /// </example>
         public static LadderSequence ToLadderSequence(this IEnumerable<(LadderType, int)> setSequence, int setSign = 1) {
             return new LadderSequence(setSequence.Select(o => new LadderOperator(o)), setSign);
-            var tmp = new[] { (u, 1), (u, 2), (d, 3), (d, 4) }.ToLadderSequence();
         }
 
         /// <summary>
@@ -82,23 +85,23 @@ namespace Microsoft.Quantum.Chemistry.LadderOperators
                 else
                 {
                     // Anticommute creation and annihilation operators.
-                    for (int i = 0; i < tmpTerm.sequence.Count() - 1; i++)
+                    for (int i = 0; i < tmpTerm.Sequence.Count() - 1; i++)
                     {
-                        if ((int)tmpTerm.sequence.ElementAt(i).type > (int)tmpTerm.sequence.ElementAt(i + 1).type)
+                        if ((int)tmpTerm.Sequence.ElementAt(i).Type > (int)tmpTerm.Sequence.ElementAt(i + 1).Type)
                         {
                             // If the two elements have the same spin orbital index, generate a new term.
-                            if (tmpTerm.sequence.ElementAt(i).index == tmpTerm.sequence.ElementAt(i + 1).index)
+                            if (tmpTerm.Sequence.ElementAt(i).Index == tmpTerm.Sequence.ElementAt(i + 1).Index)
                             {
                                 var newTerm = new LadderSequence(tmpTerm);
-                                newTerm.sequence.RemoveRange(i, 2);
+                                newTerm.Sequence.RemoveRange(i, 2);
                                 TmpTerms.Push(newTerm);
                             }
 
                             // Swap the two elements and flip sign of the coefficient.
-                            var tmpOp = tmpTerm.sequence.ElementAt(i + 1);
-                            tmpTerm.sequence[i + 1] = tmpTerm.sequence.ElementAt(i);
-                            tmpTerm.sequence[i] = tmpOp;
-                            tmpTerm.coefficient *= -1;
+                            var tmpOp = tmpTerm.Sequence.ElementAt(i + 1);
+                            tmpTerm.Sequence[i + 1] = tmpTerm.Sequence.ElementAt(i);
+                            tmpTerm.Sequence[i] = tmpOp;
+                            tmpTerm.Coefficient *= -1;
                         }
                     }
                     TmpTerms.Push(tmpTerm);

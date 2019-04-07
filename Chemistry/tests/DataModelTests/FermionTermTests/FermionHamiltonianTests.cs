@@ -57,13 +57,13 @@ namespace Microsoft.Quantum.Chemistry.Tests
 
             hamiltonian.AddTerm(check, 100.0.ToDouble());
 
-            var sourceDict = hamiltonian.terms[TermType.Fermion.PQQP];
+            var sourceDict = hamiltonian.Terms[TermType.Fermion.PQQP];
 
             var check2 = new FermionTermHermitian(new[] { 0, 2, 2, 0 }.ToLadderSequence());
             var coeff = sourceDict[check2];
 
             Assert.Equal(101.0, coeff.Value);
-            Assert.Equal(101.0, hamiltonian.terms[TermType.Fermion.PQQP][check].Value);
+            Assert.Equal(101.0, hamiltonian.Terms[TermType.Fermion.PQQP][check].Value);
 
             // Check using GetTerm method.
             Assert.Equal(101.0, hamiltonian.GetTerm(new FermionTermHermitian(check)).Value);
@@ -110,15 +110,15 @@ namespace Microsoft.Quantum.Chemistry.Tests
             orbitalhamiltonian.AddTerm(orbitalIntegral);
             var hamiltonian = orbitalhamiltonian.ToFermionHamiltonian(SpinOrbital.IndexConvention.HalfUp);
 
-            Assert.True(hamiltonian.terms.ContainsKey(termType));
+            Assert.True(hamiltonian.Terms.ContainsKey(termType));
             // Check that expected terms are found
             foreach (var term in terms)
             {
-                Assert.Contains(term.Item1, hamiltonian.terms[termType].Keys);
-                Assert.Equal(term.Item2, hamiltonian.terms[termType][term.Item1].Value);
+                Assert.Contains(term.Item1, hamiltonian.Terms[termType].Keys);
+                Assert.Equal(term.Item2, hamiltonian.Terms[termType][term.Item1].Value);
             }
             // Check only expected terms are found
-            foreach (var term in hamiltonian.terms[termType])
+            foreach (var term in hamiltonian.Terms[termType])
             {
                 Assert.Contains(term.Key, terms.Select(o => o.Item1));
             }

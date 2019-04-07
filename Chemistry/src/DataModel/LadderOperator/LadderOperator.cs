@@ -21,12 +21,12 @@ namespace Microsoft.Quantum.Chemistry.LadderOperators
         /// <summary>
         /// LadderType specifying raising or lowering operator.
         /// </summary>
-        public LadderType type;
+        public LadderType Type;
 
         /// <summary>
         /// System index operator acts on.
         /// </summary>
-        public int index;
+        public int Index;
         
 
         /// <summary>
@@ -36,8 +36,8 @@ namespace Microsoft.Quantum.Chemistry.LadderOperators
         /// <param name="setIndex">Set system index.</param>
         public LadderOperator(LadderType setType, int setIndex)
         {
-            type = setType;
-            index = setIndex;
+            Type = setType;
+            Index = setIndex;
         }
 
         /// <summary>
@@ -55,12 +55,12 @@ namespace Microsoft.Quantum.Chemistry.LadderOperators
 
         public bool Equals(LadderOperator x)
         {
-            return (type == x.type) && (index == x.index);
+            return (Type == x.Type) && (Index == x.Index);
         }
 
         public override int GetHashCode()
         {
-            return index * Enum.GetNames(typeof(LadderType)).Length + (int) type;
+            return Index * Enum.GetNames(typeof(LadderType)).Length + (int) Type;
         }
 
         public static bool operator ==(LadderOperator x, LadderOperator y)
@@ -78,8 +78,8 @@ namespace Microsoft.Quantum.Chemistry.LadderOperators
         /// Returns a human-readable description this object.
         /// </summary>
         public override string ToString() {
-            string op = type.ToString();
-            return $"{index}{op}";
+            string op = Type.ToString();
+            return $"{Index}{op}";
         }
     }
     

@@ -18,6 +18,8 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
     /// </summary>
     public static class Deserializers
     {
+        // https://github.com/Microsoft/Quantum/blob/master/Chemistry/Schema/broombridge-0.1.schema.json
+
         /// <summary>
         /// Returns version number of Broombridge file.
         /// </summary>
@@ -29,11 +31,20 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
             {
                 var deserializer = new DeserializerBuilder().Build();
                 var data = deserializer.Deserialize<Dictionary<string, object>>(reader);
-                var format = (Dictionary<object, object>)data["format"];
-                var version = format["version"] as string ?? "";
-                VersionNumber versionNumberFound = VersionNumber.NotRecognized;
-                TryParseVersionNumber(version, out versionNumberFound);
-                return versionNumberFound;
+                var schema = data["$schema"] as string;
+                VersionNumber versionNumber = VersionNumber.NotRecognized;
+                if(schema != null)
+                {
+                    foreach (var kv in VersionNumberDict)
+                    {
+                        if (schema.ToLowerInvariant().Contains(kv.Key))
+                        {
+                            versionNumber = kv.Value;
+                            break;
+                        }
+                    }
+                }
+                return versionNumber;
             }
         }
 
@@ -51,7 +62,9 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
         internal static Dictionary<string, VersionNumber> VersionNumberDict = new Dictionary<string, VersionNumber>()
         {
             {"0.1", VersionNumber.v0_1 },
-            {"0.2", VersionNumber.v0_2 }
+            {"broombridge-0.1.schema", VersionNumber.v0_1 },
+            {"0.2", VersionNumber.v0_2 },
+            {"broombridge-0.2.schema", VersionNumber.v0_2 }
         };
 
         /// <summary>
@@ -77,27 +90,7 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
                 throw new System.InvalidOperationException("Unrecognized Broombridge version number.");
             }
         }
-
-        /// <summary>
-        /// Parse version number string.
-        /// </summary>
-        /// <param name="versionNumber">Version number string.</param>
-        /// <param name="parsedVersionNumber">Parsed version number in enum `Number` format.</param>
-        /// <returns>Returns <c>true</c> if version number string parsed successfully. Returns <c>false</c> otherwise.</returns>
-        public static bool TryParseVersionNumber(string versionNumber, out VersionNumber parsedVersionNumber)
-        {
-            if (VersionNumberDict.ContainsKey(versionNumber))
-            {
-                parsedVersionNumber = VersionNumberDict[versionNumber];
-                return true;
-            }
-            else
-            {
-                parsedVersionNumber = VersionNumber.NotRecognized;
-                return false;
-            }
-        }
-
+        
         /// <summary>
         /// Deserialize Broombridge v0.1 from a file into the Broombridge v0.1 data structure.
         /// </summary>

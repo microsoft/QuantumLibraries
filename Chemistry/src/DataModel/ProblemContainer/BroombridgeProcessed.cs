@@ -47,17 +47,7 @@ namespace Microsoft.Quantum.Chemistry
                 NElectrons = broombridgeProblem.NElectrons;
 
                 IdentityTerm = broombridgeProblem.CoulombRepulsion.Value + broombridgeProblem.EnergyOffset.Value;
-
-                // This will convert from Broombridge 1-indexing to 0-indexing.
-                OneBodyTerms = new HashSet<OrbitalIntegral>(broombridgeProblem.Hamiltonian.OneElectronIntegrals.Values.Select(
-                    o => new OrbitalIntegral(o.Item1.Select(k => k - 1), o.Item2, OrbitalIntegral.Convention.Mulliken).ToCanonicalForm())
-                    .Distinct().ToList());
-
-                // This will convert from Broombridge 1-indexing to 0-indexing.
-                // This will convert to Dirac-indexing.
-                TwoBodyTerms = new HashSet<OrbitalIntegral>(broombridgeProblem.Hamiltonian.TwoElectronIntegrals.Values.Select(
-                    o => new OrbitalIntegral(o.Item1.Select(k => k - 1), o.Item2, OrbitalIntegral.Convention.Mulliken)).ToList());
-
+                
                 InitialStates = broombridgeProblem.InitialStates.ToDictionary(
                     o => o.Label,
                     o => ParseInitialState(o, indexConvention)
@@ -91,6 +81,12 @@ namespace Microsoft.Quantum.Chemistry
                 return state;
             }
 
+
+            // To do use a dictionary instead
+            //Using a static readonly immutable dictionary may be easier than nested if/else if blocks with redundant calls to ToLowerInvariant.
+
+//https://docs.microsoft.com/en-us/dotnet/api/system.collections.immutable.immutabledictionary-2.withcomparers?view=netcore-2.2#System_Collections_Immutable_ImmutableDictionary_2_WithComparers_System_Collections_Generic_IEqualityComparer__0__
+//https://docs.microsoft.com/en-us/dotnet/api/system.stringcomparer.invariantcultureignorecase?view=netcore-2.2
             internal static FermionHamiltonian.StateType ParseInitialStateMethod(string state)
             {
                 if (state.ToLowerInvariant() == "single_configurational")

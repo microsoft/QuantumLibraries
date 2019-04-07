@@ -43,13 +43,10 @@
 
   <ItemGroup>
     <Compile Remove="Broombridge\OtherFileFormats\**" />
-    <Compile Remove="Old\**" />
     <Compile Remove="QSharpFormat\**" />
     <EmbeddedResource Remove="Broombridge\OtherFileFormats\**" />
-    <EmbeddedResource Remove="Old\**" />
     <EmbeddedResource Remove="QSharpFormat\**" />
     <QsharpCompile Remove="Broombridge\OtherFileFormats\**" />
-    <QsharpCompile Remove="Old\**" />
     <QsharpCompile Remove="QSharpFormat\**" />
   </ItemGroup>
 
@@ -63,13 +60,14 @@
     <Compile Remove="FermionTermold.cs" />
     <Compile Remove="Fermion\FermionTermDeprecated.cs" />
     <Compile Remove="Fermion\FermionTermold.cs" />
-    <Compile Remove="Hamiltonian\FermionHamiltonian2.cs" />
     <Compile Remove="Pauli\JordanWignerEncoding.cs" />
     <Compile Remove="ProblemContainer\BroombridgeProcessed.cs" />
     <Compile Remove="ProblemContainer\LoadData.cs" />
-    <Compile Remove="QuantumStates\FermionExtensions.cs" />
-    <Compile Remove="QuantumStates\FermionHamiltonianStatePrep.cs" />
-    <Compile Remove="QuantumStates\JordanWignerStatePrep.cs" />
+    <Compile Remove="Generics\FermionExtensions.cs" />
+    <Compile Remove="Generics\JordanWignerStatePrep.cs" />
+    <Compile Remove="Generics\WavefunctionFermionMCF.cs" />
+    <Compile Remove="Generics\WavefunctionFermionUCC.cs" />
+    <Compile Remove="ToQSharp\FromFermionWavefunction.cs" />
   </ItemGroup>
 
 
@@ -85,11 +83,6 @@
 
   <ItemGroup>
     <None Include="ProblemContainer\BroombridgeProcessed.cs" />
-  </ItemGroup>
-
-
-  <ItemGroup>
-    <Folder Include="Old\" />
   </ItemGroup>
 
 </Project>

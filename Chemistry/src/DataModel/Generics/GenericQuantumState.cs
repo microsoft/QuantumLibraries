@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 using Microsoft.Quantum.Chemistry.Fermion;
 
-namespace Microsoft.Quantum.Chemistry.Wavefunction
+namespace Microsoft.Quantum.Chemistry.Generic
 {
     /// <summary>
     /// Enum over valid input state types.
@@ -38,7 +38,7 @@ namespace Microsoft.Quantum.Chemistry.Wavefunction
     /// </summary>
     /// <typeparam name="TermClassification">Index to categories of terms.</typeparam>
     /// <typeparam name="TermIndexing">Index to individual terms.</typeparam>
-    public class GenericQuantumState<TermClassification, TermIndexing> 
+    public class QuantumState<TermClassification, TermIndexing> 
         //where TermClassification: IEquatable<TermClassification>
         where TermIndexing: ITermIndex<TermClassification>//, IEquatable<TermIndexing>
     {
@@ -55,7 +55,7 @@ namespace Microsoft.Quantum.Chemistry.Wavefunction
         /// <summary>
         /// Constructor for empty Hamiltonian.
         /// </summary>
-        public GenericQuantumState()
+        public QuantumState()
         {
             terms = new Dictionary<TermClassification, Dictionary<TermIndexing, double>>();
         }
@@ -63,7 +63,7 @@ namespace Microsoft.Quantum.Chemistry.Wavefunction
         /// <summary>
         /// Constructor for copying a Hamiltonian.
         /// </summary>
-        public GenericQuantumState(GenericQuantumState<TermClassification, TermIndexing> hamiltonian)
+        public QuantumState(QuantumState<TermClassification, TermIndexing> hamiltonian)
         {
             terms = hamiltonian.terms;
         }

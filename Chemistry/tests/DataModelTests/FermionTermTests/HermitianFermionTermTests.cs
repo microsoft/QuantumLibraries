@@ -187,8 +187,8 @@ namespace Microsoft.Quantum.Chemistry.Tests
             var (expected, input) = CanonicalOrderCorrectnessHelper(test);
             var term = new FermionTermHermitian(input);
 
-            Assert.Equal(expected.sequence, term.sequence);
-            Assert.Equal(expected.coefficient, term.coefficient);
+            Assert.Equal(expected.Sequence, term.Sequence);
+            Assert.Equal(expected.Coefficient, term.Coefficient);
         }
 
         /*

@@ -30,15 +30,15 @@ namespace Microsoft.Quantum.Chemistry.Tests
             //var test = terms.Item1;
             //string[] lines, FermionTermType termType, FermionTerm[] terms
             var hamiltonian = LiQuiD.LoadFromLiquid(line);
-            Assert.True(hamiltonian.terms.ContainsKey(termType));
+            Assert.True(hamiltonian.Terms.ContainsKey(termType));
             // Check that expected terms are found
 
-            var orb = hamiltonian.terms[termType].Keys.First();
+            var orb = hamiltonian.Terms[termType].Keys.First();
             // Check index
             //Assert.True(term == orb);
 
             // Check coefficient
-            Assert.Equal(term.Coefficient, hamiltonian.terms[termType][term.ToCanonicalForm()].Value);
+            Assert.Equal(term.Coefficient, hamiltonian.Terms[termType][term.ToCanonicalForm()].Value);
         }
 
         public static IEnumerable<object[]> LiquidOrbitalsData =>

@@ -58,12 +58,12 @@ namespace Microsoft.Quantum.Chemistry.OrbitalIntegrals
         /// <summary>
         /// <c>orbital</c> is the orbital index. This integer must satisfy '0 &lt;= orbital &lt Int32.ManValue'.
         /// </summary>
-        public int orbital;
+        public int Orbital;
         /// <summary>
         /// <c>spin</c> is the spin index. For electrons, spin=0 is spin up, and spin=1 is spin down. 
         /// This integer must satisfy '0 &lt;= orbital &lt Int16.MaxValue'.
         /// </summary>
-        public int spin;
+        public int Spin;
 
         /// <summary>
         /// This maps the separate orbital and spin indices of a <c>SpinOrbital</c> 
@@ -74,11 +74,11 @@ namespace Microsoft.Quantum.Chemistry.OrbitalIntegrals
         {
            if (indexConvention == IndexConvention.UpDown)
             {
-                return orbital * 2 + spin;
+                return Orbital * 2 + Spin;
             }
             else
             {
-                return orbital + nOrbitals * spin;
+                return Orbital + nOrbitals * Spin;
             }
         }
 
@@ -98,8 +98,8 @@ namespace Microsoft.Quantum.Chemistry.OrbitalIntegrals
         /// <param name="spinIdx">Spin index.</param>
         public SpinOrbital(int orbitalIdx, Spin spinIdx)
         {
-            orbital = orbitalIdx;
-            spin = (int)spinIdx;
+            Orbital = orbitalIdx;
+            Spin = (int)spinIdx;
             IsValid();
         }
 
@@ -121,14 +121,14 @@ namespace Microsoft.Quantum.Chemistry.OrbitalIntegrals
         /// <returns>Returns true if spin-orbital is valid.</returns>
         public bool IsValid()
         {
-            if (orbital < minOrbital || orbital > maxOrbital || spin < minSpin || spin > maxSpin)
+            if (Orbital < minOrbital || Orbital > maxOrbital || Spin < minSpin || Spin > maxSpin)
             {
                 throw new System.ArgumentException(
                     $"Invalid SpinOrbital specified. " +
-                    $"Orbital index is {orbital}. " +
-                    $"It must satisfy {minOrbital} <= {orbital} <= {maxOrbital}." +
-                    $"Spin index is {spin}. " +
-                    $"It must satisfy {minSpin} <= {spin} <= {maxSpin}."
+                    $"Orbital index is {Orbital}. " +
+                    $"It must satisfy {minOrbital} <= {Orbital} <= {maxOrbital}." +
+                    $"Spin index is {Spin}. " +
+                    $"It must satisfy {minSpin} <= {Spin} <= {maxSpin}."
                     );
             }
             else
@@ -167,7 +167,7 @@ namespace Microsoft.Quantum.Chemistry.OrbitalIntegrals
         /// <returns>String representation of spin-orbital data.</returns>
         public override string ToString()
         {
-            return $"({ orbital},{ spin })";
+            return $"({ Orbital},{ Spin })";
         }
 
         /// <summary>
@@ -175,7 +175,7 @@ namespace Microsoft.Quantum.Chemistry.OrbitalIntegrals
         /// </summary>
         public static bool operator == (SpinOrbital x, SpinOrbital y)
         {
-            return x.orbital == y.orbital && x.spin == y.spin;
+            return x.Orbital == y.Orbital && x.Spin == y.Spin;
         }
         /// <summary>
         /// Boolean inequality operator definition.

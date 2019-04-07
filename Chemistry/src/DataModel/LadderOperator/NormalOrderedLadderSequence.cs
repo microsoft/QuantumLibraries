@@ -25,8 +25,8 @@ namespace Microsoft.Quantum.Chemistry.LadderOperators
         public NormalOrderedLadderSequence(NormalOrderedLadderSequence ladderOperators)
         {
             // All constructions are pass by value.
-            sequence = ladderOperators.sequence.Select(o => o).ToList();
-            coefficient = ladderOperators.coefficient;
+            Sequence = ladderOperators.Sequence.Select(o => o).ToList();
+            Coefficient = ladderOperators.Coefficient;
         }
 
         /// <summary>
@@ -62,7 +62,7 @@ namespace Microsoft.Quantum.Chemistry.LadderOperators
         /// canonical order. <c>false</c> otherwise</returns>
         public bool IsInIndexCreationCanonicalOrder()
         {
-            return sequence.Where(o => o.type == LadderType.u).Select(o => o.index).IsIntArrayAscending();
+            return Sequence.Where(o => o.Type == LadderType.u).Select(o => o.Index).IsIntArrayAscending();
         }
 
         /// <summary>
@@ -74,7 +74,7 @@ namespace Microsoft.Quantum.Chemistry.LadderOperators
         /// canonical order. <c>false</c> otherwise</returns>
         public bool IsInIndexAnnihilationCanonicalOrder()
         {
-            return sequence.Where(o => o.type == LadderType.d).Select(o => o.index).Reverse().IsIntArrayAscending();
+            return Sequence.Where(o => o.Type == LadderType.d).Select(o => o.Index).Reverse().IsIntArrayAscending();
         }
         #endregion
 
@@ -88,23 +88,23 @@ namespace Microsoft.Quantum.Chemistry.LadderOperators
             var tmp = new NormalOrderedLadderSequence(this);
             if (!tmp.IsInIndexOrder())
             {
-                var left = tmp.sequence.Select((op, idx) => new { op, idx }).Where(x => x.op.type == LadderType.u);
-                var right = tmp.sequence.Select((op, idx) => new { op, idx }).Where(x => x.op.type == LadderType.d);
+                var left = tmp.Sequence.Select((op, idx) => new { op, idx }).Where(x => x.op.Type == LadderType.u);
+                var right = tmp.Sequence.Select((op, idx) => new { op, idx }).Where(x => x.op.Type == LadderType.d);
 
-                var upArrayIndices = tmp.sequence.Select((op, idx) => new { op, idx }).Where(x => x.op.type == LadderType.u).Select(x => x.idx).ToArray();
-                var downArrayIndices = tmp.sequence.Select((op, idx) => new { op, idx }).Where(x => x.op.type == LadderType.d).Select(x => x.idx).ToArray();
+                var upArrayIndices = tmp.Sequence.Select((op, idx) => new { op, idx }).Where(x => x.op.Type == LadderType.u).Select(x => x.idx).ToArray();
+                var downArrayIndices = tmp.Sequence.Select((op, idx) => new { op, idx }).Where(x => x.op.Type == LadderType.d).Select(x => x.idx).ToArray();
 
                 // Bubble sort spin-orbital indices of creation operator.
                 while (!tmp.IsInIndexCreationCanonicalOrder())
                 {
                     for (int idx = 0; idx < upArrayIndices.Count() - 1; idx++)
                     {
-                        if (tmp.sequence.ElementAt(upArrayIndices.ElementAt(idx)).index > tmp.sequence.ElementAt(upArrayIndices.ElementAt(idx + 1)).index)
+                        if (tmp.Sequence.ElementAt(upArrayIndices.ElementAt(idx)).Index > tmp.Sequence.ElementAt(upArrayIndices.ElementAt(idx + 1)).Index)
                         {
-                            var tmpLadderOperator = tmp.sequence.ElementAt(upArrayIndices.ElementAt(idx));
-                            tmp.sequence[upArrayIndices.ElementAt(idx)] = tmp.sequence[upArrayIndices.ElementAt(idx + 1)];
-                            tmp.sequence[upArrayIndices.ElementAt(idx + 1)] = tmpLadderOperator;
-                            tmp.coefficient = -1 * tmp.coefficient;
+                            var tmpLadderOperator = tmp.Sequence.ElementAt(upArrayIndices.ElementAt(idx));
+                            tmp.Sequence[upArrayIndices.ElementAt(idx)] = tmp.Sequence[upArrayIndices.ElementAt(idx + 1)];
+                            tmp.Sequence[upArrayIndices.ElementAt(idx + 1)] = tmpLadderOperator;
+                            tmp.Coefficient = -1 * tmp.Coefficient;
                         }
                     }
                 }
@@ -114,18 +114,18 @@ namespace Microsoft.Quantum.Chemistry.LadderOperators
                 {
                     for (int idx = 0; idx < downArrayIndices.Length - 1; idx++)
                     {
-                        if (tmp.sequence.ElementAt(downArrayIndices.ElementAt(idx)).index < tmp.sequence.ElementAt(downArrayIndices.ElementAt(idx + 1)).index)
+                        if (tmp.Sequence.ElementAt(downArrayIndices.ElementAt(idx)).Index < tmp.Sequence.ElementAt(downArrayIndices.ElementAt(idx + 1)).Index)
                         {
-                            var tmpLadderOperator = tmp.sequence.ElementAt(downArrayIndices.ElementAt(idx));
-                            tmp.sequence[downArrayIndices.ElementAt(idx)] = tmp.sequence[downArrayIndices.ElementAt(idx + 1)];
-                            tmp.sequence[downArrayIndices.ElementAt(idx + 1)] = tmpLadderOperator;
-                            tmp.coefficient = -1 * tmp.coefficient;
+                            var tmpLadderOperator = tmp.Sequence.ElementAt(downArrayIndices.ElementAt(idx));
+                            tmp.Sequence[downArrayIndices.ElementAt(idx)] = tmp.Sequence[downArrayIndices.ElementAt(idx + 1)];
+                            tmp.Sequence[downArrayIndices.ElementAt(idx + 1)] = tmpLadderOperator;
+                            tmp.Coefficient = -1 * tmp.Coefficient;
                         }
                     }
                 }
             }
-            sequence = tmp.sequence;
-            coefficient = tmp.coefficient;
+            Sequence = tmp.Sequence;
+            Coefficient = tmp.Coefficient;
         }
         #endregion
 
