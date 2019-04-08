@@ -98,9 +98,19 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
         }
         */
 
+        // This reads the number of orbitals from Broombridge
+        public static Dictionary<string, InputState> CreateWavefunctions(
+            this CurrentVersion.ProblemDescription problemDescription,
+            SpinOrbital.IndexConvention indexConvention)
+        {
+            var nOrbitals = problemDescription.NOrbitals;
+            var states = problemDescription.InitialStates.Select(o => o.CreateWavefunction(indexConvention, nOrbitals)).ToDictionary(o => o.Label, o => o);
+            return states;
+        }
+
         // Todo: Deserializer should refer spin orbital indices.
         internal static InputState CreateWavefunction(
-            CurrentVersion.State initialState, 
+            this CurrentVersion.State initialState, 
             SpinOrbital.IndexConvention indexConvention,
             int nOrbitals)
         {

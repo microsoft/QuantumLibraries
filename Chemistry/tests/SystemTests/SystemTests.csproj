@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <QsharpCompile Remove="LithiumHydride\LithiumHydride.qs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Include="xunit.runner.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -22,18 +26,18 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Standard\src\Standard.csproj" />
-    <ProjectReference Include="..\..\src\Runtime\Runtime.csproj" />
-    <ProjectReference Include="..\..\src\DataModel\DataModel.csproj" />
+    <None Include="LithiumHydride\LiH_0.1.yaml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="LithiumHydride\LiH_0.2.yaml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="LithiumHydride\LiH 0.2.yaml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="LithiumHydride\LiH 0.1.yaml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+    <ProjectReference Include="..\..\..\Standard\src\Standard.csproj" />
+    <ProjectReference Include="..\..\src\Runtime\Runtime.csproj" />
+    <ProjectReference Include="..\..\src\DataModel\DataModel.csproj" />
   </ItemGroup>
 
 </Project>

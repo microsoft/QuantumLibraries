@@ -7,37 +7,50 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using Microsoft.Quantum.Chemistry;
+using Microsoft.Quantum.Chemistry.Generic;
+using Microsoft.Quantum.Chemistry.LadderOperators;
 
-namespace Microsoft.Quantum.Chemistry
+namespace Microsoft.Quantum.Chemistry.QSharpFormat
 {
-    using Microsoft.Quantum.Chemistry.JordanWigner;   
-
-    public partial class JordanWignerEncoding
-    {
-        /// <summary>
-        /// List of Hamiltonian input states.
-        /// </summary>
-        public Dictionary<string, FermionHamiltonian.InputState> InputStates;
-        
+    using Microsoft.Quantum.Chemistry.JordanWigner;
+   
+    /// <summary>
+    /// Methods for converting electronic structure problem to data for consumption by Q#.
+    /// </summary>
+    public static partial class Convert
+    {        
         /// <summary>
         /// Translate initial state to a format consumable by Q#.
         /// </summary>
         /// <param name="inputState">Initial state</param>
         /// <returns>Initial state in Q# format.</returns>
-        internal (int, QArray<JordanWignerInputState>) InputStateToQSharp(FermionHamiltonian.InputState inputState)
+        public static (Int64, QArray<JordanWignerInputState>) ToQSharpFormat(this InputState inputState)
         {
-            if(inputState.type == FermionHamiltonian.StateType.SparseMultiConfigurational)
+            if(inputState.type == StateType.SparseMultiConfigurational)
             {
                 return ((int)inputState.type, InitialStateSparseMultiConfigural(inputState.Superposition));
             }
-            else if(inputState.type == FermionHamiltonian.StateType.UnitaryCoupledCluster)
+            else if(inputState.type == StateType.UnitaryCoupledCluster)
             {
                 return ((int)inputState.type, InitialStateUnitaryCoupledCluster(inputState.Superposition));
             }
             else
             {
-                return InputStateToQSharp(InputStates["Greedy"]);
+                throw new ArgumentException($"Selected quantum state {inputState.type.ToString("G")} not recognized.");
+                return ((int)StateType.Default, null);
             }            
+        }
+
+        /// <summary>
+        /// Translate initial state specified by a superposition of <see cref="FermionTerm"/> acting on 
+        /// the vacuum state to a format consumable by Q#
+        /// </summary>
+        /// /// <param name="term">List of sequences of creation operations acting on vacuum state and their coefficients.</param>
+        /// <returns>Q# description of initial state</returns>
+        public static QArray<JordanWignerInputState> InitialStateSparseMultiConfigural(
+            IEnumerable<((double, double) complexCoeff, IndexOrderedLadderSequence term)> terms)
+        {
+            return new QArray<JordanWignerInputState>(terms.Select(o => InitialStatePrep(o.complexCoeff, o.term)));
         }
 
         /// <summary>
@@ -47,42 +60,32 @@ namespace Microsoft.Quantum.Chemistry
         /// <param name="term">Sequence of creation operations acting on vacuum state.</param>
         /// <param name="complexCoeff"></param>
         /// <returns>Q# description of initial state</returns>
-        public JordanWignerInputState InitialStatePrep((Double, Double) complexCoeff, FermionTerm term)
+        public static JordanWignerInputState InitialStatePrep((double, double) complexCoeff, IndexOrderedLadderSequence term)
         {
             // Place input in canonical order.
             var termCanonical = term;
-            termCanonical.ToSpinOrbitalCanonicalOrder();
 
             // There must be no annihilation operators the presence of
             // any of the in normal order destroys the vacuum state.
-            if (termCanonical.CreationAnnihilationIndices.Contains(0))
+            if (termCanonical.Sequence.Where(o => o.Type == RaisingLowering.d).Count() > 0)
             {
                 throw new System.ArgumentException("Initial state cannot contain annihilation operators acting on the vacuum state.");
             }
             
             // There must be no duplicate creation operators.
-            if(termCanonical.SpinOrbitalIndices.Distinct().Count() != termCanonical.SpinOrbitalIndices.Count())
+            if(termCanonical.Sequence.Distinct().Count() != termCanonical.Sequence.Count())
             {
                 throw new System.ArgumentException("Initial state cannot contain duplicate creation operators with the same index.");
             }
 
             // Rescale input complex coefficient by fermion term coefficient,
             // including any sign changes.
-            (Double, Double) complexOut = (term.coeff * complexCoeff.Item1, complexCoeff.Item2 );
-            var state = new JordanWignerInputState((complexOut, new QArray<Int64>(term.SpinOrbitalIndices.ToInts(NOrbitals))));
+            (double, double) complexOut = ((double) term.Coefficient * complexCoeff.Item1, complexCoeff.Item2 );
+            QArray<Int64> indices = new QArray<Int64>(term.Sequence.Select(o => (Int64)o.Index));
+            var state = new JordanWignerInputState((complexOut, indices));
             return state;
         }
 
-        /// <summary>
-        /// Translate initial state specified by a superposition of <see cref="FermionTerm"/> acting on 
-        /// the vacuum state to a format consumable by Q#
-        /// </summary>
-        /// /// <param name="term">List of sequences of creation operations acting on vacuum state and their coefficients.</param>
-        /// <returns>Q# description of initial state</returns>
-        public QArray<JordanWignerInputState> InitialStateSparseMultiConfigural(IEnumerable<((Double, Double) complexCoeff, FermionTerm term)> terms)
-        {
-            return new QArray<JordanWignerInputState>(terms.Select(o => InitialStatePrep(o.complexCoeff, o.term)));
-        }
 
         /// <summary>
         /// Translate initial state specified by a unitary coupled-cluster operator acting on a single-reference state
@@ -90,16 +93,18 @@ namespace Microsoft.Quantum.Chemistry
         /// </summary>
         /// <param name="terms">single-reference state and cluster operator terms.</param>
         /// <returns>Q# description of unitary coupled-cluster state.</returns>
-        internal QArray<JordanWignerInputState> InitialStateUnitaryCoupledCluster(IEnumerable<((Double, Double) complexCoeff, FermionTerm term)> terms)
+        internal static QArray<JordanWignerInputState> InitialStateUnitaryCoupledCluster(
+            IEnumerable<((double, double) complexCoeff, IndexOrderedLadderSequence)> terms)
         {
             // The last term is the reference state.
             var referenceState = (terms.Last());
             var clusterOperator = terms.Take(terms.Count() - 1);
+            
             var stateQSharp = new QArray<JordanWignerInputState>(clusterOperator.Select(o =>
             new JordanWignerInputState(
-                (((Double) o.complexCoeff.Item1, (Double) o.complexCoeff.Item2),
-                 new QArray<Int64>(o.term.SpinOrbitalIndices.ToInts(NOrbitals))))));
-            stateQSharp.Add(InitialStatePrep(referenceState.complexCoeff, referenceState.term));
+                (((Double)o.complexCoeff.Item1, (Double)o.complexCoeff.Item2),
+                 new QArray<Int64>(o.Item2.Sequence.Select(y => (Int64)y.Index))))));
+            stateQSharp.Add(InitialStatePrep(referenceState.complexCoeff, referenceState.Item2));
             return stateQSharp;
         }
     }

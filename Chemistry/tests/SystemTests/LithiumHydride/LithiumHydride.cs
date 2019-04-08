@@ -12,28 +12,73 @@ using System.Threading.Tasks;
 using Microsoft.Quantum.Chemistry;
 using Microsoft.Quantum.Simulation.Core;
 using Microsoft.Quantum.Simulation.Simulators;
+using Microsoft.Quantum.Chemistry.Broombridge;
+using Microsoft.Quantum.Chemistry.OrbitalIntegrals;
+using Microsoft.Quantum.Chemistry.Fermion;
+using Microsoft.Quantum.Chemistry.Pauli;
+using Microsoft.Quantum.Chemistry.QSharpFormat;
+using Microsoft.Quantum.Chemistry.Generic;
+using Microsoft.Quantum.Chemistry.JordanWigner;
 
 using Xunit;
 
 namespace SystemTests
 {
-    using static FermionTermType.Common;
-    using FermionTerm = FermionTerm;
-    using FermionTermType = FermionTermType;
     public class LithiumHydride
     {
-        
+        public static JordanWignerEncodingData TestStack(string filename, Config configuration)
+        {
+            var broombridge = Deserializers.DeserializeBroombridge(filename).ProblemDescriptions.First();
+
+            var hamiltonian = broombridge
+                .CreateOrbitalIntegralHamiltonian()
+                .ToFermionHamiltonian(configuration.IndexConvention)
+                .ToPauliHamiltonian(QubitEncoding.JordanWigner)
+                .ToQSharpFormat();
+
+            var wavefunction = broombridge
+                .CreateWavefunctions(SpinOrbital.IndexConvention.HalfUp)["|G>"]
+                .ToQSharpFormat();
+
+            var qSharpData = Microsoft.Quantum.Chemistry.QSharpFormat.Convert.ToQSharpFormat(hamiltonian, wavefunction);
+            return qSharpData;
+        }
+
+        public static Double SetUpLiHSimulation(string filename, Config configuration, int bits, string wavefunction = "|G>")
+        {
+            var qSharpData = TestStack(filename, configuration);
+
+            // We specify the bits of precision desired in the phase estimation 
+            // algorithm
+
+            // We specify the step-size of the simulated time-evolution
+            var trotterStep = 0.5;
+
+            // Choose the Trotter integrator order
+            Int64 trotterOrder = 1;
+
+            using (var qsim = new QuantumSimulator())
+            {
+
+                // EstimateEnergyByTrotterization
+                var (phaseEst, energyEst) = GetEnergyByTrotterization.Run(qsim, qSharpData, bits, trotterStep, trotterOrder).Result;
+                var errorResult = -7.881844675840115 - energyEst;
+
+                return errorResult;
+            }
+        }
+
 
         public class Version_v0_1
         {
-            static string filename = "LithiumHydride/LiH 0.1.yaml";
+            static string filename = "LithiumHydride/LiH_0.1.yaml";
 
             [Fact]
+            // Test classical computing Stack.
             public void Load()
             {
-                var hamiltonian = FermionHamiltonian.LoadFromBroombridge(filename).First();
-                var jordanWignerEncoding = JordanWignerEncoding.Create(hamiltonian);
-                var qSharpData = jordanWignerEncoding.QSharpData("|G>");
+
+                TestStack(filename, Config.Default());
             }
 
             [Fact(Skip ="Takes 2 minutes")]
@@ -41,7 +86,7 @@ namespace SystemTests
             {
                 var configuration = Config.Default();
 
-                var error = SetUpLiHSimulation(configuration, 9);
+                var error = SetUpLiHSimulation(filename, configuration, 9);
 
                 Assert.True(Math.Abs(error) < 1e-2, "This test is probabilistic.");
             }
@@ -52,7 +97,7 @@ namespace SystemTests
             {
                 var configuration = Config.Default();
 
-                var error = SetUpLiHSimulation(configuration, 6);
+                var error = SetUpLiHSimulation(filename, configuration, 6);
 
                 Assert.True(Math.Abs(error) < 1e-1, "This test is probabilistic.");
             }
@@ -61,51 +106,25 @@ namespace SystemTests
             public void EnergyUpDownIndexConvention()
             {
                 var configuration = Config.Default();
-                configuration.indexConvention = SpinOrbital.Config.IndexConvention.Type.UpDown;
+                configuration.IndexConvention = SpinOrbital.IndexConvention.UpDown;
 
-                var error = SetUpLiHSimulation(configuration, 6);
+                var error = SetUpLiHSimulation(filename, configuration, 6);
 
                 Assert.True(Math.Abs(error) < 1e-1, "This test is probabilistic.");
             }
 
-            public Double SetUpLiHSimulation(Config configuration, int bits)
-            {
-                var hamiltonian = FermionHamiltonian.LoadFromBroombridge(filename, configuration).First();
-                var jordanWignerEncoding = JordanWignerEncoding.Create(hamiltonian);
-                var qSharpData = jordanWignerEncoding.QSharpData("|G>");
-
-                // We specify the bits of precision desired in the phase estimation 
-                // algorithm
-
-                // We specify the step-size of the simulated time-evolution
-                var trotterStep = 0.5;
-
-                // Choose the Trotter integrator order
-                Int64 trotterOrder = 1;
-
-                using (var qsim = new QuantumSimulator())
-                {
-
-                    // EstimateEnergyByTrotterization
-                    var (phaseEst, energyEst) = GetEnergyByTrotterization.Run(qsim, qSharpData, bits, trotterStep, trotterOrder).Result;
-                    var errorResult = -7.881844675840115 - energyEst;
-
-                    return errorResult;
-                }
-            }
+            
         }
 
 
         public class Version_v0_2
         {
-            static string filename = "LithiumHydride/LiH 0.2.yaml";
+            static string filename = "LithiumHydride/LiH_0.2.yaml";
 
             [Fact]
             public void Load()
             {
-                var hamiltonian = FermionHamiltonian.LoadFromBroombridge(filename).First();
-                var jordanWignerEncoding = JordanWignerEncoding.Create(hamiltonian);
-                var qSharpData = jordanWignerEncoding.QSharpData("|G>");
+                TestStack(filename, Config.Default());
             }
 
             [Fact(Skip = "Takes 2 minutes")]
@@ -113,7 +132,7 @@ namespace SystemTests
             {
                 var configuration = Config.Default();
 
-                var error = SetUpLiHSimulation(configuration, 9);
+                var error = SetUpLiHSimulation(filename, configuration, 9);
 
                 Assert.True(Math.Abs(error) < 1e-2);
             }
@@ -124,7 +143,7 @@ namespace SystemTests
             {
                 var configuration = Config.Default();
 
-                var error = SetUpLiHSimulation(configuration, 6);
+                var error = SetUpLiHSimulation(filename, configuration, 6);
 
                 Assert.True(Math.Abs(error) < 1e-1);
             }
@@ -133,9 +152,9 @@ namespace SystemTests
             public void EnergyUpDownIndexConvention()
             {
                 var configuration = Config.Default();
-                configuration.indexConvention = SpinOrbital.Config.IndexConvention.Type.UpDown;
+                configuration.IndexConvention = SpinOrbital.IndexConvention.UpDown;
 
-                var error = SetUpLiHSimulation(configuration, 6);
+                var error = SetUpLiHSimulation(filename, configuration, 6);
 
                 Assert.True(Math.Abs(error) < 1e-1);
             }
@@ -144,36 +163,10 @@ namespace SystemTests
             public void RunUnitaryCoupledCluster()
             {
                 var configuration = Config.Default();
-                configuration.indexConvention = SpinOrbital.Config.IndexConvention.Type.UpDown;
+                configuration.IndexConvention = SpinOrbital.IndexConvention.UpDown;
 
                 // This is a ranodm UCCSD state, not the actual one for LiH.
-                var error = SetUpLiHSimulation(configuration, 1, "UCCSD |E1>");
-            }
-
-            public Double SetUpLiHSimulation(Config configuration, int bits, string state = "|G>")
-            {
-                var hamiltonian = FermionHamiltonian.LoadFromBroombridge(filename, configuration).First();
-                var jordanWignerEncoding = JordanWignerEncoding.Create(hamiltonian);
-                var qSharpData = jordanWignerEncoding.QSharpData(state);
-
-                // We specify the bits of precision desired in the phase estimation 
-                // algorithm
-
-                // We specify the step-size of the simulated time-evolution
-                var trotterStep = 0.5;
-
-                // Choose the Trotter integrator order
-                Int64 trotterOrder = 1;
-
-                using (var qsim = new QuantumSimulator())
-                {
-
-                    // EstimateEnergyByTrotterization
-                    var (phaseEst, energyEst) = GetEnergyByTrotterization.Run(qsim, qSharpData, bits, trotterStep, trotterOrder).Result;
-                    var errorResult = -7.881844675840115 - energyEst;
-
-                    return errorResult;
-                }
+                var error = SetUpLiHSimulation(filename, configuration, 1, "UCCSD |E1>");
             }
         }
 

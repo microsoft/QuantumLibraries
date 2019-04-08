@@ -15,11 +15,6 @@ using Microsoft.Quantum.Chemistry.LadderOperators;
 namespace Microsoft.Quantum.Chemistry.Generic
 {
     /// <summary>
-    /// Enum over valid input state types.
-    /// </summary>
-
-
-    /// <summary>
     /// Data structure representing an input state.
     /// </summary>
     public class InputState
@@ -30,6 +25,7 @@ namespace Microsoft.Quantum.Chemistry.Generic
         public List<((double, double), IndexOrderedLadderSequence)> Superposition = new List<((double, double), IndexOrderedLadderSequence)>();
         public WavefunctionFermionSCF reference = new WavefunctionFermionSCF();
     }
+    
 
     // Work in progress on generic Quantum state.
     /*

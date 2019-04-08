@@ -149,6 +149,15 @@ namespace Microsoft.Quantum.Chemistry.Generic
         }
 
         /// <summary>
+        /// Counts the number of systems (fermions) in a Hamiltonian.
+        /// </summary>
+        /// <returns>Number of systems in a Hamiltonian.</returns>
+        public int CountUniqueSystemIndices()
+        {
+            return SystemIndices.Count();
+        }
+
+        /// <summary>
         /// Computes the L_p norm of coefficicients of all terms in a Hamiltonian.
         /// </summary>
         /// <param name="power">Selects type of norm.</param>

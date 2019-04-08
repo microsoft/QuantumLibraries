@@ -68,28 +68,6 @@ namespace Microsoft.Quantum.Chemistry.Fermion
                 throw new ArgumentException("FermionStateSingleConfigurational must contatin only raising operators.");
             }
         }
- 
-        /// <summary>
-        /// This approximates the Hamiltonian ground state by a greedy algorithm  
-        /// that minimizes only the PP term energies. If there are no PP terms,
-        /// states will be occupied in lexicographic order.
-        /// </summary>
-        /// <returns>
-        /// Greedy trial state for minimizing Hamiltonian diagonal one-electron energy.
-        /// </returns>
-        public WavefunctionFermionSCF GreedyStatePreparation(FermionHamiltonian hamiltonian, int nElectrons)
-        {
-            if (hamiltonian.Terms.ContainsKey(TermType.Fermion.PP))
-            {
-                var hPPTermSortedByCoeff = hamiltonian.Terms[TermType.Fermion.PP];
-                var spinOrbitalIndices = hPPTermSortedByCoeff.OrderBy(o => o.Value).Select(o => o.Key.Sequence.First().Index).Take((int)nElectrons).ToArray();
-                return new WavefunctionFermionSCF(spinOrbitalIndices);
-            }
-            else
-            {
-                return new WavefunctionFermionSCF(Enumerable.Range(0, nElectrons).ToArray());
-            }
-        }
     }
 }
 

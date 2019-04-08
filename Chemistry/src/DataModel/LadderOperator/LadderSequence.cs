@@ -125,6 +125,15 @@ namespace Microsoft.Quantum.Chemistry.LadderOperators
         }
 
         /// <summary>
+        /// Returns a copy of the ladder sequence base class.
+        /// </summary>
+        /// <returns>LadderSequence class of underlying sequence of ladder operators.</returns>
+        public LadderSequence GetLadderSequence()
+        {
+            return new LadderSequence(Sequence);
+        }
+
+        /// <summary>
         /// Returns a human-readable description this object.
         /// </summary>
         public override string ToString() 

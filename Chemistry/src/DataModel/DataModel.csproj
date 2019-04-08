@@ -43,11 +43,8 @@
 
   <ItemGroup>
     <Compile Remove="Broombridge\OtherFileFormats\**" />
-    <Compile Remove="QSharpFormat\**" />
     <EmbeddedResource Remove="Broombridge\OtherFileFormats\**" />
-    <EmbeddedResource Remove="QSharpFormat\**" />
     <QsharpCompile Remove="Broombridge\OtherFileFormats\**" />
-    <QsharpCompile Remove="QSharpFormat\**" />
   </ItemGroup>
 
 
@@ -66,7 +63,6 @@
     <Compile Remove="Generics\JordanWignerStatePrep.cs" />
     <Compile Remove="Generics\WavefunctionFermionMCF.cs" />
     <Compile Remove="Generics\WavefunctionFermionUCC.cs" />
-    <Compile Remove="ToQSharp\FromFermionWavefunction.cs" />
   </ItemGroup>
 
 

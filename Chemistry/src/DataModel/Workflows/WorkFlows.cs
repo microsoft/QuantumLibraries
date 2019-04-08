@@ -1,21 +1,15 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-using System;
 using System.Linq;
 using System.Collections.Generic;
-
-using System.Runtime.Serialization.Formatters.Binary;
-using System.IO;
-using System.IO.Compression;
-using YamlDotNet.Serialization;
-using Microsoft.Extensions.Logging;
 
 using Microsoft.Quantum.Chemistry.Broombridge;
 using Microsoft.Quantum.Chemistry.OrbitalIntegrals;
 using Microsoft.Quantum.Chemistry.Fermion;
 using Microsoft.Quantum.Chemistry.Pauli;
 using Microsoft.Quantum.Chemistry.QSharpFormat;
+using Microsoft.Quantum.Chemistry.Generic;
 
 namespace Microsoft.Quantum.Chemistry
 {
@@ -25,7 +19,11 @@ namespace Microsoft.Quantum.Chemistry
         /// Sample implementation of end-to-end electronic structure problem simulation. 
         /// </summary>
         /// <param name="filename"></param>
-        public static void SampleWorkflow(string filename)
+        public static void SampleWorkflow(
+            string filename,
+            string wavefunctionLabel,
+            SpinOrbital.IndexConvention indexConvention
+            )
         {
             // Deserialize Broombridge from file.
             CurrentVersion.Data broombridge = Deserializers.DeserializeBroombridge(filename);
@@ -41,21 +39,29 @@ namespace Microsoft.Quantum.Chemistry
             // We can obtain the full fermion Hamiltonian from the more compact orbital integral representation.
             // This transformation requires us to pick a convention for converting a spin-orbital index to a single integer.
             // Let us pick one according to the formula `integer = 2 * orbitalIndex + spinIndex`.
-            FermionHamiltonian fermionHamiltonian = orbitalIntegralHamiltonian.ToFermionHamiltonian(SpinOrbital.IndexConvention.UpDown);
+            FermionHamiltonian fermionHamiltonian = orbitalIntegralHamiltonian.ToFermionHamiltonian(indexConvention);
 
             // We target a qubit quantum computer, which requires a Pauli representation of the fermion Hamiltonian.
             // A number of mappings from fermions to qubits are possible. Let us choose the Jordan--Wigner encoding.
             PauliHamiltonian pauliHamiltonian = fermionHamiltonian.ToPauliHamiltonian(QubitEncoding.JordanWigner);
             #endregion
 
-            #region Create wavefunction Ansatz
+            #region Create wavefunction Ansatzes
+            // A list of trial wavefunctions can be provided in the Broombridge file. For instance, the wavefunction
+            // may be a single-reference Hartree--Fock state, a multi-reference state, or a unitary coupled-cluster state.
+            Dictionary<string, InputState> inputStates = problemData.CreateWavefunctions(indexConvention);
 
+            // If no states are provided, use the Hartree--Fock state.
+            InputState inputState = inputStates.Count() != 0
+                ? inputStates[wavefunctionLabel] : fermionHamiltonian.GreedyStatePreparation(problemData.NElectrons);
             #endregion
 
             #region Pipe to QSharp and simulate
-            // We now convert this Hamiltonian to a format that than be passed onto the QSharp component
+            // We now convert this Hamiltonian and a selected state to a format that than be passed onto the QSharp component
             // of the library that implements quantum simulation algorithms.
             var qSharpHamiltonian = pauliHamiltonian.ToQSharpFormat();
+            var qSharpWavefunction = inputStates[wavefunctionLabel].ToQSharpFormat();
+            var qSharpData = QSharpFormat.Convert.ToQSharpFormat(qSharpHamiltonian, qSharpWavefunction);
             #endregion
         }
     }

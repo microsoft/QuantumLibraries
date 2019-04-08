@@ -19,7 +19,7 @@ namespace Microsoft.Quantum.Chemistry.Fermion
     }*/
 
     // To do: work in progress
-    public class WavefunctionFermionMCF
+    public class WavefunctionFermionMCFandUCCPlaceholder
     {
         public List<((double, double), IndexOrderedLadderSequence)> Superposition = new List<((double, double), IndexOrderedLadderSequence)>();
         public WavefunctionFermionSCF reference = new WavefunctionFermionSCF();

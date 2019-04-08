@@ -14,7 +14,7 @@ namespace Microsoft.Quantum.Chemistry.Fermion
 
     // For now, UCC is a subclass of MCF. It should eventually be a Hamiltonian
     // + a WavefunctionSCF.
-    public class WavefunctionFermionUCC : WavefunctionFermionMCF
+    public class WavefunctionFermionUCC : WavefunctionFermionMCFandUCCPlaceholder
     {
         public WavefunctionFermionUCC() : base() { }
     }

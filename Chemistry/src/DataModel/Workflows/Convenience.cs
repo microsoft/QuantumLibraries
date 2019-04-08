@@ -1,8 +1,10 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
-
+using System;
 using System.Linq;
 using System.Collections.Generic;
+
+using Microsoft.Quantum.Simulation.Core;
 
 using Microsoft.Quantum.Chemistry.Broombridge;
 using Microsoft.Quantum.Chemistry.OrbitalIntegrals;
@@ -10,13 +12,15 @@ using Microsoft.Quantum.Chemistry.Fermion;
 using Microsoft.Quantum.Chemistry.Pauli;
 using Microsoft.Quantum.Chemistry.QSharpFormat;
 using Microsoft.Quantum.Chemistry.JordanWigner;
+using Microsoft.Quantum.Chemistry.Generic;
+using Microsoft.Quantum.Chemistry.LadderOperators;
 
 namespace Microsoft.Quantum.Chemistry
 {
     /// <summary>
     /// This class contains convenience functions for simulating electronic structure problems.
     /// </summary>
-    public class Convenience
+    public static class Convenience
     {
         public class ProblemContainer
         {
@@ -76,6 +80,31 @@ namespace Microsoft.Quantum.Chemistry
                 .ToFermionHamiltonian(indexConvention));
 
             return fermionHamiltonians;
+        }
+
+        /// <summary>
+        /// This approximates the Hamiltonian ground state by a greedy algorithm  
+        /// that minimizes only the PP term energies. If there are no PP terms,
+        /// states will be occupied in lexicographic order.
+        /// </summary>
+        /// <returns>
+        /// Greedy trial state for minimizing Hamiltonian diagonal one-electron energy.
+        /// </returns>
+        public static InputState GreedyStatePreparation(this FermionHamiltonian hamiltonian, int nElectrons)
+        {
+            InputState state = new InputState();
+            WavefunctionFermionSCF greedyState = hamiltonian.GreedyStatePreparationSCF(nElectrons);
+
+            state.Label = "Greedy";
+
+            // Currently not used
+            // state.reference = null;
+
+            state.type = StateType.SparseMultiConfigurational;
+
+            state.Superposition.Add(((1.0, 0.0), new IndexOrderedLadderSequence(greedyState.GetLadderSequence())));
+
+            return state;
         }
 
         /*
