@@ -134,6 +134,24 @@ namespace Microsoft.Quantum.Chemistry.LadderOperators
         }
 
         /// <summary>
+        /// Returns list of indices of ladder operator sequence.
+        /// </summary>
+        /// <returns>LadderSequence class of underlying sequence of ladder operators.</returns>
+        public List<int> GetLadderSequenceIndices()
+        {
+            return Sequence.Select(o => o.Index).ToList();
+        }
+
+        /// <summary>
+        /// Returns list of raising and lowering types of ladder operator sequence.
+        /// </summary>
+        /// <returns>LadderSequence class of underlying sequence of ladder operators.</returns>
+        public List<RaisingLowering> GetLadderSequenceRaisingLowering()
+        {
+            return Sequence.Select(o => o.Type).ToList();
+        }
+
+        /// <summary>
         /// Returns a human-readable description this object.
         /// </summary>
         public override string ToString() 

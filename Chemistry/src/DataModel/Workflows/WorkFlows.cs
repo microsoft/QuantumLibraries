@@ -86,25 +86,31 @@ namespace Microsoft.Quantum.Chemistry
         /// </summary>
         public Config()
         {
-            IndexConvention = DefaultSettings.IndexConvention;
-            TruncationThreshold = DefaultSettings.TruncationThreshold;
+            UseIndexConvention = DefaultIndexConvention;
+            QubitEncoding UseQubitEncoding = DefaultQubitEncoding;
+            UseTruncationThreshold = DefaultTruncationThreshold;
         }
 
         /// <summary>
         /// Choose indexing convention from spin-orbital index to an integer.
         /// </summary>
-        public SpinOrbital.IndexConvention IndexConvention;
+        public SpinOrbital.IndexConvention UseIndexConvention;
 
         /// <summary>
         /// Threshold below which to truncate Hamiltonian coefficients.
         /// </summary>
-        public double TruncationThreshold;
+        public double UseTruncationThreshold;
 
-        public static class DefaultSettings
-        {
-            public const SpinOrbital.IndexConvention IndexConvention = SpinOrbital.IndexConvention.UpDown;
-            public const double TruncationThreshold = 1e-8;
-        }
+        /// <summary>
+        /// Chose mapping from fermions operators to Pauli operatos.
+        /// </summary>
+        public QubitEncoding UseQubitEncoding;
+
+        // Default settings
+        public const SpinOrbital.IndexConvention DefaultIndexConvention = SpinOrbital.IndexConvention.UpDown;
+        public const QubitEncoding DefaultQubitEncoding = QubitEncoding.JordanWigner;
+        public const double DefaultTruncationThreshold = 1e-8;
+        
 
     }
         

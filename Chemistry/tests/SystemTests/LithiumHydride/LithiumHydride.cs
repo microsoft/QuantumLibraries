@@ -22,6 +22,8 @@ using Microsoft.Quantum.Chemistry.JordanWigner;
 
 using Xunit;
 
+
+
 namespace SystemTestsLiH
 {
     public class LithiumHydride
@@ -32,14 +34,14 @@ namespace SystemTestsLiH
 
             var orbHam = broombridge.CreateOrbitalIntegralHamiltonian();
 
-            var ferHam = orbHam.ToFermionHamiltonian(configuration.IndexConvention);
+            var ferHam = orbHam.ToFermionHamiltonian(configuration.UseIndexConvention);
 
             var pauHam = ferHam.ToPauliHamiltonian();
 
             var hamiltonian = pauHam.ToQSharpFormat();
 
             var wavefunction = broombridge
-                .CreateWavefunctions(configuration.IndexConvention)["|G>"]
+                .CreateWavefunctions(configuration.UseIndexConvention)["|G>"]
                 .ToQSharpFormat();
 
             var qSharpData = Microsoft.Quantum.Chemistry.QSharpFormat.Convert.ToQSharpFormat(hamiltonian, wavefunction);
@@ -108,7 +110,7 @@ namespace SystemTestsLiH
             public void EnergyUpDownIndexConvention()
             {
                 var configuration = Config.Default();
-                configuration.IndexConvention = SpinOrbital.IndexConvention.UpDown;
+                configuration.UseIndexConvention = SpinOrbital.IndexConvention.UpDown;
 
                 var error = SetUpLiHSimulation(filename, configuration, 6);
 
@@ -154,7 +156,7 @@ namespace SystemTestsLiH
             public void EnergyUpDownIndexConvention()
             {
                 var configuration = Config.Default();
-                configuration.IndexConvention = SpinOrbital.IndexConvention.UpDown;
+                configuration.UseIndexConvention = SpinOrbital.IndexConvention.UpDown;
 
                 var error = SetUpLiHSimulation(filename, configuration, 6);
 
@@ -165,7 +167,7 @@ namespace SystemTestsLiH
             public void RunUnitaryCoupledCluster()
             {
                 var configuration = Config.Default();
-                configuration.IndexConvention = SpinOrbital.IndexConvention.UpDown;
+                configuration.UseIndexConvention = SpinOrbital.IndexConvention.UpDown;
 
                 // This is a ranodm UCCSD state, not the actual one for LiH.
                 var error = SetUpLiHSimulation(filename, configuration, 1, "UCCSD |E1>");
