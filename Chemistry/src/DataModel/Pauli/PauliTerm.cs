@@ -162,6 +162,11 @@ namespace Microsoft.Quantum.Chemistry.Pauli
             return new PauliTermValue( Value.Zip(addThis.Value, (a, b) => (a + b)));
         }
 
+        public override string ToString()
+        {
+            return string.Join(", ", Value);
+        }
+
         /// <summary>
         /// Computes the L_p norm of term.
         /// </summary>

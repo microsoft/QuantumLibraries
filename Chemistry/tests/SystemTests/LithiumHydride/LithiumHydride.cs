@@ -39,7 +39,7 @@ namespace SystemTestsLiH
             var hamiltonian = pauHam.ToQSharpFormat();
 
             var wavefunction = broombridge
-                .CreateWavefunctions(SpinOrbital.IndexConvention.HalfUp)["|G>"]
+                .CreateWavefunctions(configuration.IndexConvention)["|G>"]
                 .ToQSharpFormat();
 
             var qSharpData = Microsoft.Quantum.Chemistry.QSharpFormat.Convert.ToQSharpFormat(hamiltonian, wavefunction);
