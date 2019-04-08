@@ -26,7 +26,7 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
 
             // Add the identity terms
             var identityterm = broombridge.CoulombRepulsion.Value + broombridge.EnergyOffset.Value;
-            var hamiltonian = broombridge.CreateOrbitalIntegralHamiltonian();
+            var hamiltonian = CreateOrbitalIntegralHamiltonian(broombridge.Hamiltonian);
             hamiltonian.AddTerm(new OrbitalIntegral(), identityterm);
             return hamiltonian;
         }
@@ -108,6 +108,43 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
             return states;
         }
 
+        internal static ((double,double),IndexOrderedLadderSequence) CreateSingleState(
+            ((double, double), LadderSequence) superposition
+            )
+        {
+            var ((amplitude, im), sequence) = superposition;
+            var output = new IndexOrderedLadderSequence();
+            var states = sequence.CreateIndexOrder();
+            var noAnnihilationTerm = states.Where(o => !(o.Sequence.Select(x => x.Type)).Contains(RaisingLowering.d));
+
+            if(noAnnihilationTerm.Count() == 1)
+            {
+                output = noAnnihilationTerm.Single();
+                amplitude *= (double)output.Coefficient;
+            }
+            return ((amplitude, 0.0), output);
+        }
+
+        internal static List<((double, double), IndexOrderedLadderSequence)> CreateSingleState(
+            ((double, double), (int, Spin, RaisingLowering)[])[] superposition,
+            SpinOrbital.IndexConvention indexConvention,
+            int nOrbitals
+            )
+        {
+            Func<(int, Spin, RaisingLowering), LadderOperator> ToLadderOperator = x
+                 => new LadderOperator(x.Item3, new SpinOrbital(x.Item1, x.Item2).ToInt(indexConvention, nOrbitals));
+
+            Func<(int, Spin, RaisingLowering)[], LadderSequence> MakeState = x
+                => new LadderSequence(x.Select(o => ToLadderOperator(o)));
+
+            var output = superposition
+                .Select(o => CreateSingleState((o.Item1, MakeState(o.Item2))))
+                .ToList();
+
+            return output;
+        }
+
+
         // Todo: Deserializer should refer spin orbital indices.
         internal static InputState CreateWavefunction(
             this CurrentVersion.State initialState, 
@@ -115,20 +152,21 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
             int nOrbitals)
         {
 
+
             Func<(int, Spin, RaisingLowering), LadderOperator> ToLadderOperator = x
-                 => new LadderOperator(x.Item3, new SpinOrbital(x.Item1, x.Item2).ToInt(indexConvention, nOrbitals));
+                => new LadderOperator(x.Item3, new SpinOrbital(x.Item1, x.Item2).ToInt(indexConvention, nOrbitals));
 
             Func<(int, Spin, RaisingLowering)[], IndexOrderedLadderSequence> ToIndexOrder = x
                 => new LadderSequence(x.Select(o => ToLadderOperator(o))).CreateIndexOrder().First();
 
-            
             var state = new InputState();
             state.type = Deserializers.ParseInitialStateMethod(initialState.Method);
             state.Label = initialState.Label;
             if (state.type == StateType.SparseMultiConfigurational)
             {
-                state.Superposition = Deserializers.ParseInputState(initialState.Superposition)
-                    .Select(o => (o.Item1,ToIndexOrder(o.Item2))).ToList();
+                ((double, double), (int, Spin, RaisingLowering)[])[]  deserializedState = Deserializers.ParseInputState(initialState.Superposition);
+
+                state.Superposition = CreateSingleState(deserializedState, indexConvention, nOrbitals);
             }
             else if (state.type == StateType.UnitaryCoupledCluster)
             {

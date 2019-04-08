@@ -15,7 +15,8 @@ using YamlDotNet.Serialization;
 
 namespace Microsoft.Quantum.Chemistry.Tests
 {
-
+    //TODO when problem container is completed
+    /*
    
     public class ProblemContainerTests
     {
@@ -38,5 +39,5 @@ namespace Microsoft.Quantum.Chemistry.Tests
 
             Assert.Equal(targetTerm, checkTerm);
         }
-    }
+    }*/
 }

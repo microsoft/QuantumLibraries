@@ -71,6 +71,11 @@ namespace Microsoft.Quantum.Chemistry.OrbitalIntegrals
             {
                 return orbitalIntegral.CreateTwoBodySpinOrbitalTerms(nOrbitals, indexConvention);
             }
+            else if(termType == TermType.OrbitalIntegral.Identity)
+            {
+                return new List<(FermionTermHermitian, double)>() { (new FermionTermHermitian() , orbitalIntegral.Coefficient) }; 
+            }
+            else
             {
                 throw new System.NotImplementedException();
             }

@@ -1,6 +1,6 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
-namespace SystemTests {
+namespace SystemTestsLiH {
     open Microsoft.Quantum.Characterization;
     open Microsoft.Quantum.Simulation;
     open Microsoft.Quantum.Primitive;

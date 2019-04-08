@@ -15,7 +15,7 @@ namespace Microsoft.Quantum.Chemistry.OrbitalIntegrals
     /// <summary>
     /// LadderType representing orbital overlap integrals.
     /// </summary>
-    public struct OrbitalIntegral : 
+    public class OrbitalIntegral : 
         ITermIndex<TermType.OrbitalIntegral>//, IEquatable<OrbitalIntegral>
     {
         public enum Convention
@@ -26,7 +26,7 @@ namespace Microsoft.Quantum.Chemistry.OrbitalIntegrals
         /// <summary>
         /// <c>int[] OrbitalIndices</c> represents the indices of orbitals in the overlap integral.
         /// </summary>
-        public int[] OrbitalIndices;
+        public int[] OrbitalIndices = new int[] { };
 
         /// <summary>
         /// <c>Double coefficient</c> represents the coefficient of the orbital overlap integral.

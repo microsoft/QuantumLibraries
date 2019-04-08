@@ -22,7 +22,7 @@ using Microsoft.Quantum.Chemistry.JordanWigner;
 
 using Xunit;
 
-namespace SystemTests
+namespace SystemTestsLiH
 {
     public class LithiumHydride
     {
@@ -30,11 +30,13 @@ namespace SystemTests
         {
             var broombridge = Deserializers.DeserializeBroombridge(filename).ProblemDescriptions.First();
 
-            var hamiltonian = broombridge
-                .CreateOrbitalIntegralHamiltonian()
-                .ToFermionHamiltonian(configuration.IndexConvention)
-                .ToPauliHamiltonian(QubitEncoding.JordanWigner)
-                .ToQSharpFormat();
+            var orbHam = broombridge.CreateOrbitalIntegralHamiltonian();
+
+            var ferHam = orbHam.ToFermionHamiltonian(configuration.IndexConvention);
+
+            var pauHam = ferHam.ToPauliHamiltonian();
+
+            var hamiltonian = pauHam.ToQSharpFormat();
 
             var wavefunction = broombridge
                 .CreateWavefunctions(SpinOrbital.IndexConvention.HalfUp)["|G>"]
