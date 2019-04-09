@@ -1,0 +1,44 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <PlatformTarget>x64</PlatformTarget>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="xunit.runner.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.7.2" />
+    <PackageReference Include="Microsoft.Quantum.Development.Kit" Version="0.5.1903.2902" />
+    <PackageReference Include="Microsoft.Quantum.Xunit" Version="0.5.1903.2902" />
+    <PackageReference Include="xunit" Version="2.3.1" />
+    <PackageReference Include="xunit.abstractions" Version="2.0.3" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.3.1" />
+    <DotNetCliToolReference Include="dotnet-xunit" Version="2.3.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+<<<<<<< HEAD
+    <None Include="LithiumHydride\LiH_0.1.yaml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="LithiumHydride\LiH_0.2.yaml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Standard\src\Standard.csproj" />
+=======
+    <ProjectReference Include="..\..\..\Canon\src\Canon.csproj" />
+>>>>>>> origin/release/v0.7
+    <ProjectReference Include="..\..\src\Runtime\Runtime.csproj" />
+    <ProjectReference Include="..\..\src\DataModel\DataModel.csproj" />
+  </ItemGroup>
+
+</Project>
