@@ -138,28 +138,28 @@ namespace Microsoft.Quantum.Chemistry.Pauli
 
     }
 
-    public struct PauliTermValue : ITermValue<PauliTermValue>
+    public struct PauliTTermValue : ITermValue<PauliTTermValue>
     {
         public double[] Value;
 
-        public PauliTermValue(double value)
+        public PauliTTermValue(double value)
         {
             Value = new[] { value };
         }
 
-        public PauliTermValue(IEnumerable<double> value)
+        public PauliTTermValue(IEnumerable<double> value)
         {
             Value = value.ToArray();
         }
 
-        public PauliTermValue Default()
+        public PauliTTermValue Default()
         {
-            return new PauliTermValue(0.0);
+            return new PauliTTermValue(0.0);
         }
 
-        public PauliTermValue AddValue(PauliTermValue addThis)
+        public PauliTTermValue AddValue(PauliTTermValue addThis)
         {
-            return new PauliTermValue( Value.Zip(addThis.Value, (a, b) => (a + b)));
+            return new PauliTTermValue( Value.Zip(addThis.Value, (a, b) => (a + b)));
         }
 
         public override string ToString()
@@ -181,10 +181,10 @@ namespace Microsoft.Quantum.Chemistry.Pauli
 
         public override bool Equals(object obj)
         {
-            return (obj is PauliTermValue x) ? Equals(x) : false;
+            return (obj is PauliTTermValue x) ? Equals(x) : false;
         }
 
-        public bool Equals(PauliTermValue x)
+        public bool Equals(PauliTTermValue x)
         {
             // If parameter is null, return false.
             if (ReferenceEquals(x, null))
@@ -212,7 +212,7 @@ namespace Microsoft.Quantum.Chemistry.Pauli
             return Value.GetHashCode();
         }
 
-        public static bool operator ==(PauliTermValue x, PauliTermValue y)
+        public static bool operator ==(PauliTTermValue x, PauliTTermValue y)
         {
             // Check for null on left side.
             if (Object.ReferenceEquals(x, null))
@@ -230,24 +230,24 @@ namespace Microsoft.Quantum.Chemistry.Pauli
             return x.Equals(y);
         }
 
-        public static bool operator !=(PauliTermValue x, PauliTermValue y)
+        public static bool operator !=(PauliTTermValue x, PauliTTermValue y)
         {
             return !(x == y);
         }
 
-        public static PauliTermValue operator +(PauliTermValue x, PauliTermValue y)
+        public static PauliTTermValue operator +(PauliTTermValue x, PauliTTermValue y)
         {
-            return new PauliTermValue(x.Value.Zip(y.Value, (a, b) => (a + b)));
+            return new PauliTTermValue(x.Value.Zip(y.Value, (a, b) => (a + b)));
         }
 
-        public static PauliTermValue operator -(PauliTermValue x, PauliTermValue y)
+        public static PauliTTermValue operator -(PauliTTermValue x, PauliTTermValue y)
         {
-            return new PauliTermValue(x.Value.Zip(y.Value, (a, b) => (a - b)));
+            return new PauliTTermValue(x.Value.Zip(y.Value, (a, b) => (a - b)));
         }
 
-        public static PauliTermValue operator *(PauliTermValue x, PauliTermValue y)
+        public static PauliTTermValue operator *(PauliTTermValue x, PauliTTermValue y)
         {
-            return new PauliTermValue(x.Value.Zip(y.Value, (a, b) => (a * b)));
+            return new PauliTTermValue(x.Value.Zip(y.Value, (a, b) => (a * b)));
         }
         #endregion
     }

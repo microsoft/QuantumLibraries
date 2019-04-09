@@ -13,7 +13,8 @@ namespace Microsoft.Quantum.Chemistry.LadderOperators
     {
         #region Convenience constructors
         /// <summary>
-        /// Construct <see cref="LadderSequence"/> from sequence of ladder operators.
+        /// Construct a sequence of ladder operators from sequence of tuples each
+        /// specifying whether it is a raising or lowering term, and its index.
         /// </summary>
         /// <param name="setSequence">Sequence of ladder operators.</param>
         /// <param name="setSign">Set the sign coefficient of the sequence.</param>
@@ -29,10 +30,9 @@ namespace Microsoft.Quantum.Chemistry.LadderOperators
         }
 
         /// <summary>
-        /// Construct <see cref="LadderSequence"/> from an even-length sequence of integers.
+        /// Construct a sequence of ladder operators from an even-length sequence of integers.
         /// </summary>
-        /// <param name="setSequence">Even-length sequence of integers.</param>
-        /// <param name="setSign">Set the sign coefficient of the sequence.</param>
+        /// <param name="indices">Even-length sequence of integers.</param>
         /// <returns>
         /// Sequence of ladder operators with an equal number of creation and annihilation terms
         /// that are normal-ordered.
@@ -65,7 +65,7 @@ namespace Microsoft.Quantum.Chemistry.LadderOperators
         ///  Converts a <see cref="LadderSequence"/> to normal order. 
         ///  In general, this can generate new terms and modifies the coefficient.
         /// </summary>
-        public static HashSet<NormalOrderedLadderSequence> CreateNormalOrder(this LadderSequence ladderOperator)
+        public static HashSet<NormalOrderedLadderSequence> ToNormalOrder(this LadderSequence ladderOperator)
         {
             // Recursively anti-commute creation to the left.
             var TmpTerms = new Stack<LadderSequence>();
@@ -114,10 +114,10 @@ namespace Microsoft.Quantum.Chemistry.LadderOperators
         ///  Converts a <see cref="LadderSequence"/> to normal order, then index order. 
         ///  In general, this can generate new terms and modifies the coefficient.
         /// </summary>
-        public static HashSet<IndexOrderedLadderSequence> CreateIndexOrder(this LadderSequence ladderOperator)
+        public static HashSet<IndexOrderedLadderSequence> ToIndexOrder(this LadderSequence ladderOperator)
         {
             return new HashSet<IndexOrderedLadderSequence>(
-                ladderOperator.CreateNormalOrder().Select(o => new IndexOrderedLadderSequence(o))
+                ladderOperator.ToNormalOrder().Select(o => new IndexOrderedLadderSequence(o))
                 );
         }
         #endregion

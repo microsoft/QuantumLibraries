@@ -34,7 +34,7 @@ namespace Microsoft.Quantum.Chemistry
             #region Create electronic structure Hamiltonian
             // Electronic structure Hamiltonians are usually represented compactly by orbital integrals. Let us construct
             // such a Hamiltonian from broombridge.
-            OrbitalIntegralHamiltonian orbitalIntegralHamiltonian = problemData.CreateOrbitalIntegralHamiltonian();
+            OrbitalIntegralHamiltonian orbitalIntegralHamiltonian = problemData.ToOrbitalIntegralHamiltonian();
 
             // We can obtain the full fermion Hamiltonian from the more compact orbital integral representation.
             // This transformation requires us to pick a convention for converting a spin-orbital index to a single integer.
@@ -42,14 +42,14 @@ namespace Microsoft.Quantum.Chemistry
             FermionHamiltonian fermionHamiltonian = orbitalIntegralHamiltonian.ToFermionHamiltonian(indexConvention);
 
             // We target a qubit quantum computer, which requires a Pauli representation of the fermion Hamiltonian.
-            // A number of mappings from fermions to qubits are possible. Let us choose the Jordan--Wigner encoding.
+            // A number of mappings from fermions to qubits are possible. Let us choose the Jordan-Wigner encoding.
             PauliHamiltonian pauliHamiltonian = fermionHamiltonian.ToPauliHamiltonian(QubitEncoding.JordanWigner);
             #endregion
 
             #region Create wavefunction Ansatzes
             // A list of trial wavefunctions can be provided in the Broombridge file. For instance, the wavefunction
             // may be a single-reference Hartree--Fock state, a multi-reference state, or a unitary coupled-cluster state.
-            Dictionary<string, InputState> inputStates = problemData.CreateWavefunctions(indexConvention);
+            Dictionary<string, InputState> inputStates = problemData.ToWavefunctions(indexConvention);
 
             // If no states are provided, use the Hartree--Fock state.
             InputState inputState = inputStates.Count() != 0

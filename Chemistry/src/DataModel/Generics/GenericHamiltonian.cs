@@ -11,19 +11,19 @@ namespace Microsoft.Quantum.Chemistry.Generic
     /// Generic Hamiltonian class. This is the base class for any Hamiltonians,
     /// which are collections of categorized terms.
     /// </summary>
-    /// <typeparam name="TermClassification">Index to categories of terms.</typeparam>
-    /// <typeparam name="TermIndexing">Index to individual terms.</typeparam>
-    public class Hamiltonian<TermClassification, TermIndexing, TermValue>
-        //TODO: Restore `where TermClassification: IEquatable<TermClassification>`
+    /// <typeparam name="TTermClassification">Index to categories of terms.</typeparam>
+    /// <typeparam name="TTermIndexing">Index to individual terms.</typeparam>
+    public class Hamiltonian<TTermClassification, TTermIndexing, TTermValue>
+        //TODO: Restore `where TTermClassification: IEquatable<TTermClassification>`
         // in the future if we want more complicated term classifications.
-        where TermIndexing : ITermIndex<TermClassification>
-        where TermValue: ITermValue<TermValue>
-        // TODO: Restore `IEquatable<TermIndexing>` in the future if we expand to more types of terms.
+        where TTermIndexing : ITermIndex<TTermClassification>
+        where TTermValue: ITermValue<TTermValue>
+        // TODO: Restore `IEquatable<TTermIndexing>` in the future if we expand to more types of terms.
     {
         /// <summary>
         /// Container for all terms in a Hamiltonian.
         /// </summary>
-        public Dictionary<TermClassification, Dictionary<TermIndexing, TermValue>> Terms = new Dictionary<TermClassification, Dictionary<TermIndexing, TermValue>>();
+        public Dictionary<TTermClassification, Dictionary<TTermIndexing, TTermValue>> Terms = new Dictionary<TTermClassification, Dictionary<TTermIndexing, TTermValue>>();
 
         /// <summary>
         /// Indices to systems (e.g. fermions, qubits, or orbitals) the Hamiltonian acts on.
@@ -40,22 +40,22 @@ namespace Microsoft.Quantum.Chemistry.Generic
         /// <summary>
         /// Constructor for copying a Hamiltonian.
         /// </summary>
-        public Hamiltonian(Hamiltonian<TermClassification, TermIndexing, TermValue> hamiltonian)
+        public Hamiltonian(Hamiltonian<TTermClassification, TTermIndexing, TTermValue> hamiltonian)
         {
             Terms = hamiltonian.Terms;
         }
 
         /// <summary>
-        /// Method for adding a term to a Hamiltonian.
+        /// Adds a term to a Hamiltonian. 
         /// </summary>
         /// <param name="type">Category of term.</param>
         /// <param name="index">Index to term.</param>
         /// <param name="coefficient">Coefficient of term.</param>
-        public void AddTerm(TermClassification type, TermIndexing index, TermValue coefficient)
+        public void Add(TTermClassification type, TTermIndexing index, TTermValue coefficient)
         {
             if (!Terms.ContainsKey(type))
             {
-                Terms.Add(type, new Dictionary<TermIndexing, TermValue>());
+                Terms.Add(type, new Dictionary<TTermIndexing, TTermValue>());
             }
             if (Terms[type].ContainsKey(index))
             {
@@ -67,30 +67,30 @@ namespace Microsoft.Quantum.Chemistry.Generic
                 AddToSystemIndices(index);
             }
         }
-        
+
 
         /// <summary>
-        /// Add multiple terms to a Hamiltonian.
+        /// Adds multiple term to a Hamiltonian. 
         /// </summary>
         /// <param name="type">Category of terms.</param>
         /// <param name="terms">Enumerable sequence of terms and coefficients.</param>
-        public void AddTerms(TermClassification type, IEnumerable<(TermIndexing, TermValue)> terms)
+        public void AddRange(TTermClassification type, IEnumerable<(TTermIndexing, TTermValue)> terms)
         {
             foreach (var term in terms)
             {
-                AddTerm(term.Item1, term.Item2);
+                Add(term.Item1, term.Item2);
             }
         }
 
         /// <summary>
-        /// Method for adding a term to a Hamiltonian. This method 
+        /// Adds a term to a Hamiltonian. This method 
         /// infers the term category from the term index if possible.
         /// </summary>
         /// <param name="index">Index to term.</param>
         /// <param name="coefficient">Coefficient of term.</param>
-        public void AddTerm(TermIndexing index, TermValue coefficient)
+        public void Add(TTermIndexing index, TTermValue coefficient)
         {
-            AddTerm(index.GetTermType(), index, coefficient);
+            Add(index.GetTermType(), index, coefficient);
         }
 
         /// <summary>
@@ -100,11 +100,11 @@ namespace Microsoft.Quantum.Chemistry.Generic
         /// <param name="terms">
         /// Enumerable sequence of terms and coefficients.
         /// </param>
-        public void AddTerms(IEnumerable<(TermIndexing, TermValue)> terms)
+        public void AddRange(IEnumerable<(TTermIndexing, TTermValue)> terms)
         {
             foreach (var term in terms)
             {
-                AddTerm(term.Item1, term.Item2);
+                Add(term.Item1, term.Item2);
             }
         }
 
@@ -113,7 +113,7 @@ namespace Microsoft.Quantum.Chemistry.Generic
         /// infers the term category from the term index if possible.
         /// </summary>
         /// <param name="index">Index to term.</param>
-        public TermValue GetTerm(TermIndexing index)
+        public TTermValue GetTerm(TTermIndexing index)
         {
             var type = index.GetTermType();
             if (!Terms.ContainsKey(type))
@@ -131,11 +131,11 @@ namespace Microsoft.Quantum.Chemistry.Generic
         /// Method for add all terms from a source Hamiltonian into this Hamiltonian.
         /// </summary>
         /// <param name="sourceHamiltonian">Source Hamiltonian.</param>
-        public void AddHamiltonian(Hamiltonian<TermClassification, TermIndexing, TermValue> sourceHamiltonian)
+        public void AddHamiltonian(Hamiltonian<TTermClassification, TTermIndexing, TTermValue> sourceHamiltonian)
         {
             foreach(var termType in sourceHamiltonian.Terms)
             {
-                AddTerms(termType.Key, termType.Value.Select(o => (o.Key, o.Value)));
+                AddRange(termType.Key, termType.Value.Select(o => (o.Key, o.Value)));
             }
         }
 
@@ -143,35 +143,26 @@ namespace Microsoft.Quantum.Chemistry.Generic
         /// Counts the number of terms in a Hamiltonian.
         /// </summary>
         /// <returns>Number of terms in a Hamiltonian.</returns>
-        public int CountTerms()
-        {
-            return Terms.Select(o => o.Value.Count()).Sum();
-        }
+        public int CountTerms() => Terms.Select(o => o.Value.Count()).Sum();
 
         /// <summary>
         /// Counts the number of systems (fermions) in a Hamiltonian.
         /// </summary>
         /// <returns>Number of systems in a Hamiltonian.</returns>
-        public int CountUniqueSystemIndices()
-        {
-            return SystemIndices.Count();
-        }
+        public int CountUniqueSystemIndices() =>SystemIndices.Count();
 
         /// <summary>
         /// Computes the L_p norm of coefficicients of all terms in a Hamiltonian.
         /// </summary>
         /// <param name="power">Selects type of norm.</param>
         /// <returns>L_p norm of Hamiltonian coefficients.</returns>
-        public double Norm(double power = 1.0)
-        {
-            return Norm(Terms.Keys, power);
-        }
+        public double Norm(double power = 1.0) => Norm(Terms.Keys, power);
 
         /// <summary>
         /// Method that add system indices to the systemIndices hashset.
         /// </summary>
         /// <param name="index"></param>
-        public virtual void AddToSystemIndices(TermIndexing index) {
+        public virtual void AddToSystemIndices(TTermIndexing index) {
         }
 
         /// <summary>
@@ -180,12 +171,15 @@ namespace Microsoft.Quantum.Chemistry.Generic
         /// <param name="termTypes">Selects the categories of Hamiltonian terms.</param>
         /// <param name="power">Selects type of norm.</param>
         /// <returns>L_p norm of Hamiltonian coefficients.</returns>
-        public double Norm(IEnumerable<TermClassification> termTypes, double power = 1.0)
+        public double Norm(IEnumerable<TTermClassification> termTypes, double power = 1.0)
         {
             var typesEnum = Terms.Where(o => termTypes.Contains(o.Key));
             return typesEnum
                 .Select(termType => termType.Value
-                .Select(termIndex => termIndex.Value.Norm(power)).Norm(power)).Norm(power);
+                    .Select(termIndex => termIndex.Value
+                        .Norm(power))
+                    .Norm(power))
+                .Norm(power);
         }
         
         /// <summary>

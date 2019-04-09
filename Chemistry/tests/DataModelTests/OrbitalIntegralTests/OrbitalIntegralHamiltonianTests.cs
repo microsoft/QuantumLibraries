@@ -32,15 +32,15 @@ namespace Microsoft.Quantum.Chemistry.Tests
         void BuildHamiltonian()
         {
             var hamiltonian = new OrbitalIntegralHamiltonian();
-            hamiltonian.AddTerms(orbitalIntegrals.Select(o => (o, o.Coefficient.ToDouble())));
+            hamiltonian.AddRange(orbitalIntegrals.Select(o => (o, o.Coefficient.ToDoubleCoeff())));
         }
 
         [Fact]
         void CheckTermPresent()
         {
             var hamiltonian = new OrbitalIntegralHamiltonian();
-            var addTerms0 = orbitalIntegrals.Select(o => (o, o.Coefficient.ToDouble())).ToList();
-            hamiltonian.AddTerms(addTerms0);
+            var addTerms0 = orbitalIntegrals.Select(o => (o, o.Coefficient.ToDoubleCoeff())).ToList();
+            hamiltonian.AddRange(addTerms0);
 
             // Check that all terms present.
             foreach(var term in addTerms0)
@@ -65,24 +65,24 @@ namespace Microsoft.Quantum.Chemistry.Tests
             var orb = new OrbitalIntegral(new[] { 0,1,1,0}, 4.0);
             Assert.Equal(new[] { 0, 1, 1, 0 }, orb.OrbitalIndices);
             
-            Assert.Equal(0.663472101.ToDouble(), hamiltonian.Terms[orb.GetTermType()][new OrbitalIntegral(orb.OrbitalIndices, orb.Coefficient)]);
+            Assert.Equal(0.663472101.ToDoubleCoeff(), hamiltonian.Terms[orb.GetTermType()][new OrbitalIntegral(orb.OrbitalIndices, orb.Coefficient)]);
         }
 
         [Fact]
         void CountTerms()
         {
             var hamiltonian = new OrbitalIntegralHamiltonian();
-            hamiltonian.AddTerms(orbitalIntegrals.Select(o => (o, o.Coefficient.ToDouble())));
+            hamiltonian.AddRange(orbitalIntegrals.Select(o => (o, o.Coefficient.ToDoubleCoeff())));
             var oneNorm = hamiltonian.Norm();
             Assert.Equal(orbitalIntegrals.Count(), hamiltonian.CountTerms());
 
-            hamiltonian.AddTerms(orbitalIntegrals.Select(o => (o, o.Coefficient.ToDouble())));
+            hamiltonian.AddRange(orbitalIntegrals.Select(o => (o, o.Coefficient.ToDoubleCoeff())));
             Assert.Equal(orbitalIntegrals.Count(), hamiltonian.CountTerms());
 
-            hamiltonian.AddTerms(orbitalIntegrals.Select(o => (o, o.Coefficient.ToDouble())));
+            hamiltonian.AddRange(orbitalIntegrals.Select(o => (o, o.Coefficient.ToDoubleCoeff())));
             Assert.Equal(orbitalIntegrals.Count(), hamiltonian.CountTerms());
 
-            hamiltonian.AddTerms(orbitalIntegrals.Select(o => (o, o.Coefficient.ToDouble())));
+            hamiltonian.AddRange(orbitalIntegrals.Select(o => (o, o.Coefficient.ToDoubleCoeff())));
             Assert.Equal(orbitalIntegrals.Count(), hamiltonian.CountTerms());
         }
 
@@ -90,16 +90,16 @@ namespace Microsoft.Quantum.Chemistry.Tests
         void NormTerms()
         {
             var hamiltonian = new OrbitalIntegralHamiltonian();
-            hamiltonian.AddTerms(orbitalIntegrals.Select(o => (o, o.Coefficient.ToDouble())));
+            hamiltonian.AddRange(orbitalIntegrals.Select(o => (o, o.Coefficient.ToDoubleCoeff())));
             var oneNorm = hamiltonian.Norm();
 
-            hamiltonian.AddTerms(orbitalIntegrals.Select(o => (o, o.Coefficient.ToDouble())));
+            hamiltonian.AddRange(orbitalIntegrals.Select(o => (o, o.Coefficient.ToDoubleCoeff())));
             Assert.Equal(oneNorm * 2.0, hamiltonian.Norm());
 
-            hamiltonian.AddTerms(orbitalIntegrals.Select(o => (o, o.Coefficient.ToDouble())));
+            hamiltonian.AddRange(orbitalIntegrals.Select(o => (o, o.Coefficient.ToDoubleCoeff())));
             Assert.Equal(oneNorm * 3.0, hamiltonian.Norm());
 
-            hamiltonian.AddTerms(orbitalIntegrals.Select(o => (o, o.Coefficient.ToDouble())));
+            hamiltonian.AddRange(orbitalIntegrals.Select(o => (o, o.Coefficient.ToDoubleCoeff())));
             Assert.Equal(oneNorm * 4.0, hamiltonian.Norm());
         }
 

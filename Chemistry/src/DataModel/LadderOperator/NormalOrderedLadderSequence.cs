@@ -8,7 +8,13 @@ namespace Microsoft.Quantum.Chemistry.LadderOperators
 {
     /// <summary>
     /// Class representing a sequence of raising and lowering operators, subject to the additional constraints: 
-    /// 1) Normal-ordered, where all raising operators are to the left of all lowering operators.
+    /// <list type="number">
+    /// <item>
+    /// <description>
+    /// Normal-ordered, where all raising operators are to the left of all lowering operators.
+    /// </description>
+    /// </item>
+    /// </item>
     /// </summary>
     public class NormalOrderedLadderSequence : LadderSequence
     {
@@ -25,7 +31,7 @@ namespace Microsoft.Quantum.Chemistry.LadderOperators
         public NormalOrderedLadderSequence(NormalOrderedLadderSequence ladderOperators)
         {
             // All constructions are pass by value.
-            Sequence = ladderOperators.Sequence.Select(o => o).ToList();
+            Sequence = ladderOperators.Sequence.ToList();
             Coefficient = ladderOperators.Coefficient;
         }
 
@@ -33,10 +39,7 @@ namespace Microsoft.Quantum.Chemistry.LadderOperators
         /// Construct instance from a normal-ordered sequence of ladder operators.
         /// </summary>
         /// <param name="ladderOperators">Normal-ordered sequence of ladder operators.</param>
-        public NormalOrderedLadderSequence(LadderSequence ladderOperators) : base(ladderOperators)
-        {
-            ExceptionIfNotInNormalOrder();
-        }
+        public NormalOrderedLadderSequence(LadderSequence ladderOperators) : base(ladderOperators) => ThrowExceptionIfNotInNormalOrder();
         #endregion
 
         #region Ordering testers
@@ -48,10 +51,7 @@ namespace Microsoft.Quantum.Chemistry.LadderOperators
         /// Returns <c>true</c> this condition is satisfied.
         /// Returns <c>false</c> otherwise.
         /// </returns>
-        public bool IsInIndexOrder()
-        {
-            return IsInIndexCreationCanonicalOrder() && IsInIndexAnnihilationCanonicalOrder();
-        }
+        public bool IsInIndexOrder() => IsInIndexCreationCanonicalOrder() && IsInIndexAnnihilationCanonicalOrder();
 
         /// <summary>
         ///  Checks whether the creation operator sequence of a <see cref="LadderSequence"/> is in 
@@ -60,10 +60,7 @@ namespace Microsoft.Quantum.Chemistry.LadderOperators
         /// </summary>
         /// <returns><c>true</c> if the creation opeartor sequence of a <c>LadderSequence</c> is in 
         /// canonical order. <c>false</c> otherwise</returns>
-        public bool IsInIndexCreationCanonicalOrder()
-        {
-            return Sequence.Where(o => o.Type == RaisingLowering.u).Select(o => o.Index).IsIntArrayAscending();
-        }
+        public bool IsInIndexCreationCanonicalOrder() => Sequence.Where(o => o.Type == RaisingLowering.u).Select(o => o.Index).IsInAscendingOrder();
 
         /// <summary>
         ///  Checks whether the annihilation operator sequence of a <see cref="LadderSequence"/> is in 
@@ -72,10 +69,7 @@ namespace Microsoft.Quantum.Chemistry.LadderOperators
         /// </summary>
         /// <returns><c>true</c> if the annihilation opeartor sequence of a <c>LadderSequence</c> is in 
         /// canonical order. <c>false</c> otherwise</returns>
-        public bool IsInIndexAnnihilationCanonicalOrder()
-        {
-            return Sequence.Where(o => o.Type == RaisingLowering.d).Select(o => o.Index).Reverse().IsIntArrayAscending();
-        }
+        public bool IsInIndexAnnihilationCanonicalOrder() => Sequence.Where(o => o.Type == RaisingLowering.d).Select(o => o.Index).Reverse().IsInAscendingOrder();
         #endregion
 
         #region Reordering methods
@@ -83,7 +77,7 @@ namespace Microsoft.Quantum.Chemistry.LadderOperators
         ///  Converts a <see cref="NormalOrderedLadderSequence"/> to index order. 
         ///  In general, this can generate new terms and modifies the coefficient.
         /// </summary>
-        public void ToIndexOrder()
+        public void NormalizeToIndexOrder()
         {
             var tmp = new NormalOrderedLadderSequence(this);
             if (!tmp.IsInIndexOrder())
@@ -132,7 +126,7 @@ namespace Microsoft.Quantum.Chemistry.LadderOperators
         /// <summary>
         /// This throws an ArgumentException if the operators in NormalOrderedLadderSequence are not normal-ordered.
         /// </summary>
-        private void ExceptionIfNotInNormalOrder()
+        private void ThrowExceptionIfNotInNormalOrder()
         {
             if (!base.IsInNormalOrder())
             {

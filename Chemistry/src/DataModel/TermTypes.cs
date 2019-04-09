@@ -8,20 +8,20 @@ namespace Microsoft.Quantum.Chemistry
     /// <summary>
     /// All Hamiltonian terms must implement this interface.
     /// </summary>
-    /// <typeparam name="TermClassification">Index to categories of terms.</typeparam>
-    public interface ITermIndex <TermClassification>
+    /// <typeparam name="TTermClassification">Index to categories of terms.</typeparam>
+    public interface ITermIndex <TTermClassification>
     {
-        TermClassification GetTermType();
+        TTermClassification GetTermType();
     }
 
     /// <summary>
     /// All Hamiltonian terms must implement this interface.
     /// </summary>
-    /// <typeparam name="TermClassification">Index to categories of terms.</typeparam>
-    public interface ITermValue<TermValue>
+    /// <typeparam name="TTermClassification">Index to categories of terms.</typeparam>
+    public interface ITermValue<TTermValue>
     {
-        TermValue AddValue(TermValue addThis);
-        TermValue Default();
+        TTermValue AddValue(TTermValue addThis);
+        TTermValue Default();
 
         /// <summary>
         /// Computes the L_p norm of term.
@@ -61,7 +61,7 @@ namespace Microsoft.Quantum.Chemistry
     }
 
     /// <summary>
-    /// Spin index enumeration type.
+    /// Spin index up/dpwn enumeration type.
     /// </summary>
     public enum Spin : byte
     {
@@ -84,6 +84,10 @@ namespace Microsoft.Quantum.Chemistry
         u = 0, d = 1, identity
     }
 
+    /// <summary>
+    /// Boxed version of double that implements the <see cref="ITermValue"></see> interface
+    /// that requires all values to have a method to compute its norm.
+    /// </summary>
     public struct DoubleCoeff : ITermValue<DoubleCoeff>
     {
         public double Value;
@@ -93,51 +97,30 @@ namespace Microsoft.Quantum.Chemistry
             Value = value;
         }
 
-        public static implicit operator DoubleCoeff(double value)
-        {
-            return new DoubleCoeff(value);
-        }
-        public static implicit operator double(DoubleCoeff value)
-        {
-            return value.Value;
-        }
+        public static implicit operator DoubleCoeff(double value) => new DoubleCoeff(value);
+        public static implicit operator double(DoubleCoeff value) => value.Value;
 
-        public DoubleCoeff Default()
-        {
-            return new DoubleCoeff(0.0);
-        }
+        public DoubleCoeff Default() => 0.0;
 
-        public DoubleCoeff AddValue(DoubleCoeff addThis)
-        {
-            return new DoubleCoeff(Value + addThis.Value);
-        }
+        public DoubleCoeff AddValue(DoubleCoeff addThis) => Value + addThis.Value;
 
         /// <summary>
         /// Computes the L_p norm of term.
         /// </summary>
         /// <param name="power">Selects type of norm.</param>
         /// <returns>L_p norm of term.</returns>
-        public double Norm(double power)
-        {
-            return Math.Abs(Value);
-        }
+        public double Norm(double power) => Math.Abs(Value);
 
         /// <summary>
         /// Override for string representation of Double
         /// </summary>
         /// <returns>String representation of Double</returns>
-        public override string ToString()
-        {
-            return Value.ToString();
-        }
+        public override string ToString() => Value.ToString();
 
 
         #region Equality Testing
 
-        public override bool Equals(object obj)
-        {
-            return (obj is DoubleCoeff x) ? Equals(x) : false;
-        }
+        public override bool Equals(object obj) => (obj is DoubleCoeff x) ? Equals(x) : false;
 
         public bool Equals(DoubleCoeff x)
         {
@@ -162,10 +145,7 @@ namespace Microsoft.Quantum.Chemistry
             return Value == x.Value;
         }
 
-        public override int GetHashCode()
-        {
-            return Value.GetHashCode();
-        }
+        public override int GetHashCode() => Value.GetHashCode();
 
         public static bool operator == (DoubleCoeff x, DoubleCoeff y)
         {
@@ -185,25 +165,7 @@ namespace Microsoft.Quantum.Chemistry
             return x.Equals(y);
         }
 
-        public static bool operator !=(DoubleCoeff x, DoubleCoeff y)
-        {
-            return !(x == y);
-        }
-
-        public static DoubleCoeff operator +(DoubleCoeff x, DoubleCoeff y)
-        {
-            return new DoubleCoeff(x.Value + y.Value);
-        }
-
-        public static DoubleCoeff operator -(DoubleCoeff x, DoubleCoeff y)
-        {
-            return new DoubleCoeff(x.Value - y.Value);
-        }
-
-        public static DoubleCoeff operator *(DoubleCoeff x, DoubleCoeff y)
-        {
-            return new DoubleCoeff(x.Value * y.Value);
-        }
+        public static bool operator !=(DoubleCoeff x, DoubleCoeff y) => !(x == y);
 
 
         #endregion

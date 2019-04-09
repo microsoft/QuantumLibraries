@@ -65,7 +65,7 @@ namespace Microsoft.Quantum.Chemistry.Tests
         {
             var coefficient = 1.0;
             var term = new LadderSequence(idx.ToLadderSequence());
-            Assert.True(term.GetUniqueIndices() == uniqueIndices);
+            Assert.True(term.UniqueIndices() == uniqueIndices);
         }
 
         [Theory]
@@ -133,18 +133,18 @@ namespace Microsoft.Quantum.Chemistry.Tests
             var term = new[] { (d, 2), (u, 5), (d, 8) }.ToLadderSequence();
 
             var expected = new[] { (u, 5), (d, 2), (d, 8) }.ToLadderSequence();
-            var output = term.CreateNormalOrder();
+            var output = term.ToNormalOrder();
             Assert.Equal(expected.Sequence, output.First().Sequence);
             Assert.Equal(-1, output.First().Coefficient);
         }
 
         [Fact]
-        public void CreateNormalOrder()
+        public void ToNormalOrder()
         {
             var term = new[] { (d, 2), (u, 5), (d, 8) }.ToLadderSequence();
 
             var expected = new[] { (u, 5), (d, 8), (d, 2) }.ToLadderSequence();
-            var output = term.CreateIndexOrder().ToList();
+            var output = term.ToIndexOrder().ToList();
             Assert.Equal(expected.Sequence, output.First().Sequence);
         }
 
@@ -165,7 +165,7 @@ namespace Microsoft.Quantum.Chemistry.Tests
 
 
         [Fact]
-        public void CreateIndexOrder()
+        public void ToIndexOrder()
         {
             var term = new[] { (d, 2), (u, 2), (d, 8) }.ToLadderSequence();
 
@@ -173,7 +173,7 @@ namespace Microsoft.Quantum.Chemistry.Tests
                 new[] { (u, 2), (d, 8), (d, 2) }.ToLadderSequence(1),
                 new[] { (d, 8) }.ToLadderSequence(1)
             };
-            var output = term.CreateIndexOrder();
+            var output = term.ToIndexOrder();
             Assert.Contains(expected[0].Sequence, output.Select(o => o.Sequence));
             Assert.Contains(expected[1].Sequence, output.Select(o => o.Sequence));
         }

@@ -24,12 +24,12 @@ namespace Microsoft.Quantum.Chemistry.OrbitalIntegrals
         }
 
         /// <summary>
-        /// <c>int[] OrbitalIndices</c> represents the indices of orbitals in the overlap integral.
+        /// Indices of orbitals in the overlap integral.
         /// </summary>
         public int[] OrbitalIndices = new int[] { };
 
         /// <summary>
-        /// <c>Double coefficient</c> represents the coefficient of the orbital overlap integral.
+        /// Coefficient of the orbital overlap integral.
         /// </summary>
         public double Coefficient;
 
@@ -40,7 +40,7 @@ namespace Microsoft.Quantum.Chemistry.OrbitalIntegrals
         }
 
         /// <summary>
-        /// OrbitalIntegral constructor.
+        /// Constructor for orbital integral object.
         /// </summary>
         /// <param name="orbitalIndices">Array of orbital indices in Dirac notation.</param>
         /// <param name="coefficient">coefficient of orbital integral.</param>
@@ -49,9 +49,9 @@ namespace Microsoft.Quantum.Chemistry.OrbitalIntegrals
             OrbitalIndices = orbitalIndices.ToArray();
             Coefficient = coefficient;
         }
-        
+
         /// <summary>
-        /// OrbitalIntegral constructor.
+        /// Constructor for orbital integral object.
         /// </summary>
         /// <param name="orbitalIndices">Array of orbital indices.</param>
         /// <param name="coefficient">coefficient of orbital integral.</param>
@@ -87,7 +87,7 @@ namespace Microsoft.Quantum.Chemistry.OrbitalIntegrals
 
         public TermType.OrbitalIntegral GetTermType()
         {
-            switch (Length())
+            switch (Length)
             {
                 case 0:
                     return TermType.OrbitalIntegral.Identity;
@@ -101,13 +101,10 @@ namespace Microsoft.Quantum.Chemistry.OrbitalIntegrals
         }
 
         /// <summary>
-        /// Returns length of <see cref="OrbitalIndices"/>. 
+        /// Returns length of indices in orbital integral.
         /// </summary>
-        /// <returns>Length of <see cref="OrbitalIndices"/>.</returns>
-        public int Length()
-        {
-            return OrbitalIndices.Length;
-        }
+        /// <returns>Length of orbital indices.</returns>
+        public int Length => OrbitalIndices.Length;
 
 
         /// <summary>
@@ -130,7 +127,7 @@ namespace Microsoft.Quantum.Chemistry.OrbitalIntegrals
                     new int[] {i, j},
                     new int[] {j, i}
                 };
-                return symmetries.Distinct(new IntArrayIEqualityComparer()).Select(o => new OrbitalIntegral(o, coefficient)).ToArray();
+                return symmetries.Distinct(new ArrayEqualityComparer<int>()).Select(o => new OrbitalIntegral(o, coefficient)).ToArray();
             }
             else if (OrbitalIndices.Length == 4)
             {
@@ -148,7 +145,7 @@ namespace Microsoft.Quantum.Chemistry.OrbitalIntegrals
                     new int[] { j, l, i, k }, // 1302
                     new int[] { l, j, k, i }  // 3120
                 };
-                return symmetries.Distinct(new IntArrayIEqualityComparer()).Select(o => new OrbitalIntegral(o, coefficient)).ToArray();
+                return symmetries.Distinct(new ArrayEqualityComparer<int>()).Select(o => new OrbitalIntegral(o, coefficient)).ToArray();
             }
             else
             {
@@ -164,19 +161,19 @@ namespace Microsoft.Quantum.Chemistry.OrbitalIntegrals
         public OrbitalIntegral ToCanonicalForm()
         {
             var symmetries = EnumerateOrbitalSymmetries().Select(o => o.OrbitalIndices).ToList();
-            symmetries.Sort(new IntArrayIComparer());
+            symmetries.Sort(new ArrayLexicographicComparer<int>());
             return new OrbitalIntegral(symmetries.First(), Coefficient);
         }
 
         /// <summary>
-        /// Checks of this <see cref="OrbitalIntegral"/> has indices sorted in canonical order.
+        /// Checks of this orbital integral has indices sorted in canonical order.
         /// </summary>
-        /// <returns>Returns <see cref="bool"/> if <see cref="OrbitalIntegral"/> is canonically sorted
+        /// <returns>Returns <see cref="bool"/> if the orbital integral indices are canonically sorted
         /// and <see cref="false"/> otherwise.
         /// </returns>
         public bool IsInCanonicalOrder()
         {
-            if (Length() == 2 || Length() == 4)
+            if (Length == 2 || Length == 4)
             {
                 var canonicalOrder = ToCanonicalForm();
                 return canonicalOrder.OrbitalIndices.SequenceEqual(OrbitalIndices);
@@ -233,10 +230,7 @@ namespace Microsoft.Quantum.Chemistry.OrbitalIntegrals
 
         #region Equality Testing
 
-        public override bool Equals(object obj)
-        {
-            return (obj is OrbitalIntegral x) ? Equals(x) : false;
-        }
+        public override bool Equals(object obj) => (obj is OrbitalIntegral x) ? Equals(x) : false;
 
         public bool Equals(OrbitalIntegral x)
         {
@@ -289,10 +283,7 @@ namespace Microsoft.Quantum.Chemistry.OrbitalIntegrals
             return x.Equals(y);
         }
 
-        public static bool operator !=(OrbitalIntegral x, OrbitalIntegral y)
-        {
-            return !(x == y);
-        }
+        public static bool operator !=(OrbitalIntegral x, OrbitalIntegral y) => !(x == y);
         #endregion
 
     }

@@ -20,20 +20,20 @@ namespace Microsoft.Quantum.Chemistry.OrbitalIntegrals
         /// Method for adding an orbital integral term to a Hamiltonian.
         /// </summary>
         /// <param name="orbitalIntegral">Orbital integral to add to Hamiltonian.</param>
-        public void AddTerm(OrbitalIntegral orbitalIntegral)
+        public void Add(OrbitalIntegral orbitalIntegral)
         {
-            AddTerm(orbitalIntegral, orbitalIntegral.Coefficient);
+            Add(orbitalIntegral, orbitalIntegral.Coefficient);
         }
 
         /// <summary>
         /// Method for adding multiple orbital integrals to a Hamiltonian.
         /// </summary>
         /// <param name="orbitalIntegral">Orbital integrals to add to Hamiltonian.</param>
-        public void AddTerms(IEnumerable<OrbitalIntegral> terms)
+        public void Add(IEnumerable<OrbitalIntegral> terms)
         {
             foreach (var term in terms)
             {
-                AddTerm(term);
+                Add(term);
             }
         }
 

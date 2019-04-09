@@ -34,25 +34,25 @@ namespace Microsoft.Quantum.Chemistry.Tests
             var nOrbitals = 6;
             var nElectrons = 2;
 
-            hamiltonian.AddTerm(new FermionTermHermitian( new [] { 0, 0 }.ToLadderSequence()), 1.0);
-            hamiltonian.AddTerm(new FermionTermHermitian( new [] { 1, 1 }.ToLadderSequence()), 1.0);
-            hamiltonian.AddTerm(new FermionTermHermitian( new [] { 2, 2 }.ToLadderSequence()), 1.0);
+            hamiltonian.Add(new HermitianFermionTerm( new [] { 0, 0 }.ToLadderSequence()), 1.0);
+            hamiltonian.Add(new HermitianFermionTerm( new [] { 1, 1 }.ToLadderSequence()), 1.0);
+            hamiltonian.Add(new HermitianFermionTerm( new [] { 2, 2 }.ToLadderSequence()), 1.0);
 
-            hamiltonian.AddTerm(new FermionTermHermitian( new [] { 0, 2 }.ToLadderSequence()), 1.0);
-            hamiltonian.AddTerm(new FermionTermHermitian( new [] { 1, 3 }.ToLadderSequence()), 1.0);
-            hamiltonian.AddTerm(new FermionTermHermitian( new [] { 2, 6 }.ToLadderSequence()), 1.0);
+            hamiltonian.Add(new HermitianFermionTerm( new [] { 0, 2 }.ToLadderSequence()), 1.0);
+            hamiltonian.Add(new HermitianFermionTerm( new [] { 1, 3 }.ToLadderSequence()), 1.0);
+            hamiltonian.Add(new HermitianFermionTerm( new [] { 2, 6 }.ToLadderSequence()), 1.0);
 
-            hamiltonian.AddTerm(new FermionTermHermitian( new [] { 0, 2, 2, 0 }.ToLadderSequence()), 1.0);
-            hamiltonian.AddTerm(new FermionTermHermitian( new [] { 1, 3, 3, 1 }.ToLadderSequence()), 1.0);
-            hamiltonian.AddTerm(new FermionTermHermitian( new [] { 2, 6, 6, 2 }.ToLadderSequence()), 1.0);
+            hamiltonian.Add(new HermitianFermionTerm( new [] { 0, 2, 2, 0 }.ToLadderSequence()), 1.0);
+            hamiltonian.Add(new HermitianFermionTerm( new [] { 1, 3, 3, 1 }.ToLadderSequence()), 1.0);
+            hamiltonian.Add(new HermitianFermionTerm( new [] { 2, 6, 6, 2 }.ToLadderSequence()), 1.0);
 
-            hamiltonian.AddTerm(new FermionTermHermitian( new [] { 0, 2, 2, 1 }.ToLadderSequence()), 1.0);
-            hamiltonian.AddTerm(new FermionTermHermitian( new [] { 1, 3, 3, 2 }.ToLadderSequence()), 1.0);
-            hamiltonian.AddTerm(new FermionTermHermitian( new [] { 2, 6, 6, 5 }.ToLadderSequence()), 1.0);
+            hamiltonian.Add(new HermitianFermionTerm( new [] { 0, 2, 2, 1 }.ToLadderSequence()), 1.0);
+            hamiltonian.Add(new HermitianFermionTerm( new [] { 1, 3, 3, 2 }.ToLadderSequence()), 1.0);
+            hamiltonian.Add(new HermitianFermionTerm( new [] { 2, 6, 6, 5 }.ToLadderSequence()), 1.0);
 
-            hamiltonian.AddTerm(new FermionTermHermitian( new [] { 0, 2, 4, 3 }.ToLadderSequence()), 1.0);
-            hamiltonian.AddTerm(new FermionTermHermitian( new [] { 1, 4, 3, 2 }.ToLadderSequence()), 1.0);
-            hamiltonian.AddTerm(new FermionTermHermitian( new [] { 2, 4, 5, 3 }.ToLadderSequence()), 1.0);
+            hamiltonian.Add(new HermitianFermionTerm( new [] { 0, 2, 4, 3 }.ToLadderSequence()), 1.0);
+            hamiltonian.Add(new HermitianFermionTerm( new [] { 1, 4, 3, 2 }.ToLadderSequence()), 1.0);
+            hamiltonian.Add(new HermitianFermionTerm( new [] { 2, 4, 5, 3 }.ToLadderSequence()), 1.0);
             return hamiltonian;
         }
 

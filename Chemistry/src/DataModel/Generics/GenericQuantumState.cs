@@ -33,16 +33,16 @@ namespace Microsoft.Quantum.Chemistry.Generic
     /// Generic Hamiltonian class. This is the base class for any Hamiltonians,
     /// which are collections of categorized terms.
     /// </summary>
-    /// <typeparam name="TermClassification">Index to categories of terms.</typeparam>
-    /// <typeparam name="TermIndexing">Index to individual terms.</typeparam>
-    public class QuantumState<TermClassification, TermIndexing> 
-        //where TermClassification: IEquatable<TermClassification>
-        where TermIndexing: ITermIndex<TermClassification>//, IEquatable<TermIndexing>
+    /// <typeparam name="TTermClassification">Index to categories of terms.</typeparam>
+    /// <typeparam name="TTermIndexing">Index to individual terms.</typeparam>
+    public class QuantumState<TTermClassification, TTermIndexing> 
+        //where TTermClassification: IEquatable<TTermClassification>
+        where TTermIndexing: ITermIndex<TTermClassification>//, IEquatable<TTermIndexing>
     {
         /// <summary>
         /// Container for all terms in a Hamiltonian.
         /// </summary>
-        public Dictionary<TermClassification, Dictionary<TermIndexing, double>> terms;
+        public Dictionary<TTermClassification, Dictionary<TTermIndexing, double>> terms;
 
         /// <summary>
         /// Indices to systems (e.g. fermions, qubits, or orbitals) the Hamiltonian acts on.
@@ -54,13 +54,13 @@ namespace Microsoft.Quantum.Chemistry.Generic
         /// </summary>
         public QuantumState()
         {
-            terms = new Dictionary<TermClassification, Dictionary<TermIndexing, double>>();
+            terms = new Dictionary<TTermClassification, Dictionary<TTermIndexing, double>>();
         }
 
         /// <summary>
         /// Constructor for copying a Hamiltonian.
         /// </summary>
-        public QuantumState(QuantumState<TermClassification, TermIndexing> hamiltonian)
+        public QuantumState(QuantumState<TTermClassification, TTermIndexing> hamiltonian)
         {
             terms = hamiltonian.terms;
         }

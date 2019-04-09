@@ -15,26 +15,39 @@ namespace Microsoft.Quantum.Chemistry.Fermion
 
     /// <summary>
     /// Class representing a sequence of fermionic raising and lowering operators, subject to the additional constraints: 
-    /// 1) Normal-ordered, where all raising operators are to the left of all lowering operators.
-    /// 2) Index-ordered, where are raising(lowering) operators are in ascending(descending) order.
-    /// 3) Hermitian, and is assumed to be implicitly summed with its Hermitian conjugate if not explicitly Hermitian.
+    /// <list type="number">
+    /// <item>
+    /// <description>
+    /// Normal-ordered, where all raising operators are to the left of all lowering operators.
+    /// </description>
+    /// </item>
+    /// <item>
+    /// <description>
+    /// Index-ordered, where are raising(lowering) operators are in ascending(descending) order.
+    /// </description>
+    /// </item>
+    /// <item>
+    /// <description>
+    /// Hermitian, and is assumed to be implicitly summed with its Hermitian conjugate if not explicitly Hermitian.
+    /// </description>
+    /// </item>
     /// </summary>
-    public class FermionTermHermitian : FermionTerm, ITermIndex<TermType.Fermion>, IEquatable<FermionTermHermitian>
+    public class HermitianFermionTerm : FermionTerm, ITermIndex<TermType.Fermion>, IEquatable<HermitianFermionTerm>
     {
         #region Constructors
         /// <summary>
         /// Constructor for empty instance.
         /// </summary>
-        internal FermionTermHermitian() : base() { }
+        internal HermitianFermionTerm() : base() { }
 
         /// <summary>
         /// Construct a copy of the input instance.
         /// </summary>
         /// <param name="term">Sequence of ladder operators.</param>
-        internal FermionTermHermitian(FermionTermHermitian term)
+        internal HermitianFermionTerm(HermitianFermionTerm term)
         {
             // All constructions are pass by value.
-            Sequence = term.Sequence.Select(o => o).ToList();
+            Sequence = term.Sequence.ToList();
             Coefficient = term.Coefficient;
         }
 
@@ -42,7 +55,7 @@ namespace Microsoft.Quantum.Chemistry.Fermion
         /// Construct instance from a normal-ordered sequence of ladder operators.
         /// </summary>
         /// <param name="ladderOperators">Normal-ordered sequence of ladder operators.</param>
-        public FermionTermHermitian(LadderSequence ladderOperators) : base(ladderOperators) { ToCanonicalOrder(); }
+        public HermitianFermionTerm(LadderSequence ladderOperators) : base(ladderOperators) { NormalizeToCanonicalOrder(); }
         #endregion
 
         /// <summary>
@@ -64,7 +77,7 @@ namespace Microsoft.Quantum.Chemistry.Fermion
                 var annihilationSequence = Sequence.Where(o => o.Type == RaisingLowering.d).Select(o => o.Index);
                 if (creationSequence.Count() == annihilationSequence.Count())
                 {
-                    if (CompareIntArray(creationSequence, annihilationSequence.Reverse()) > 0)
+                    if (CompareArray(creationSequence, annihilationSequence.Reverse()) > 0)
                     {
                         return false;
                     }
@@ -81,7 +94,7 @@ namespace Microsoft.Quantum.Chemistry.Fermion
         /// <summary>
         /// Additional sort using the Hermitian conjugate.
         /// </summary>
-        private void ToCanonicalOrder()
+        private void NormalizeToCanonicalOrder()
         {
             // Take Hermitian Conjugate    
             if (!IsInCanonicalOrder())
@@ -97,7 +110,7 @@ namespace Microsoft.Quantum.Chemistry.Fermion
         public TermType.Fermion GetTermType()
         {
             var length = Sequence.Count();
-            var uniqueIndices = this.GetUniqueIndices();
+            var uniqueIndices = this.UniqueIndices();
 
             switch (length)
             {
@@ -132,21 +145,11 @@ namespace Microsoft.Quantum.Chemistry.Fermion
 
         
         #region Equality Testing
+        public override bool Equals(object obj) => (obj is HermitianFermionTerm x) ? Equals(x) : false;
 
-        public override bool Equals(object obj)
-        {
-            return (obj is FermionTermHermitian x) ? Equals(x) : false;
-        }
+        public bool Equals(HermitianFermionTerm x) => base.Equals(x);
 
-        public bool Equals(FermionTermHermitian x)
-        {
-            return base.Equals(x);
-        }
-
-        public override int GetHashCode()
-        {
-            return base.GetHashCode();
-        }
+        public override int GetHashCode() => base.GetHashCode();
         #endregion
 
     }

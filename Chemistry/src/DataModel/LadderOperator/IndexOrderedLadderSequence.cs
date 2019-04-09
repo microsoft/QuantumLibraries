@@ -9,8 +9,17 @@ namespace Microsoft.Quantum.Chemistry.LadderOperators
 
     /// <summary>
     /// Class representing a sequence of raising and lowering operators, subject to the additional constraints: 
-    /// 1) Normal-ordered, where all raising operators are to the left of all lowering operators.
-    /// 2) Index-ordered, where are raising(lowering) operators are in ascending(descending) order.
+    /// <list type="number">
+    /// <item>
+    /// <description>
+    /// Normal-ordered, where all raising operators are to the left of all lowering operators.
+    /// </description>
+    /// </item>
+    /// <item>
+    /// <description>
+    /// Index-ordered, where are raising(lowering) operators are in ascending(descending) order.
+    /// </description>
+    /// </item>
     /// </summary>
     public class IndexOrderedLadderSequence : NormalOrderedLadderSequence
     {
@@ -27,7 +36,7 @@ namespace Microsoft.Quantum.Chemistry.LadderOperators
         public IndexOrderedLadderSequence(IndexOrderedLadderSequence ladderOperators)
         {
             // All constructions are pass by value.
-            Sequence = ladderOperators.Sequence.Select(o => o).ToList();
+            Sequence = ladderOperators.Sequence.ToList();
             Coefficient = ladderOperators.Coefficient;
         }
 
@@ -37,7 +46,7 @@ namespace Microsoft.Quantum.Chemistry.LadderOperators
         /// <param name="ladderOperators">Normal-ordered sequence of ladder operators.</param>
         public IndexOrderedLadderSequence(LadderSequence ladderOperators) : base(ladderOperators)
         {
-            ToIndexOrder();
+            NormalizeToIndexOrder();
         }
         #endregion
         

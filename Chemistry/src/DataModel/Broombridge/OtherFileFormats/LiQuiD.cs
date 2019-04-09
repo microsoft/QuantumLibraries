@@ -59,22 +59,17 @@ namespace Microsoft.Quantum.Chemistry
             var regexPQRS = new Regex(@"(^|\s+)(?<p>\d+)\D+(?<q>\d+)\D+(?<r>\d+)\D+(?<s>\d+)\D*=\s*(?<coeff>-?\s*\d*.\d*)e?(?<exponent>-?\d*)");
 
             double coulombRepulsion = 0.0;
-            var fileHIJTerms = new Dictionary<int[], double>(new Extensions.IntArrayIEqualityComparer());
-            var fileHIJKLTerms = new Dictionary<int[], double>(new Extensions.IntArrayIEqualityComparer());
+            var fileHIJTerms = new Dictionary<int[], double>(new Extensions.ArrayEqualityComparer<int>());
+            var fileHIJKLTerms = new Dictionary<int[], double>(new Extensions.ArrayEqualityComparer<int>());
             var hamiltonian = new OrbitalIntegralHamiltonian();
 
             var nOrbitals = 0L;
-
-            Match stringMisc = regexMiscellaneous.Match(line);
-            if (stringMisc.Success)
-            {
-                //hamiltonian.MiscellaneousInformation = stringMisc.Groups["info"].ToString();
-            }
+            
 
             Match stringnuc = regexnuc.Match(line);
             if (stringnuc.Success)
             {
-                hamiltonian.AddTerm(TermType.OrbitalIntegral.Identity, new OrbitalIntegral(),  double.Parse(stringnuc.Groups["nuc"].ToString()).ToDouble());
+                hamiltonian.Add(TermType.OrbitalIntegral.Identity, new OrbitalIntegral(),  double.Parse(stringnuc.Groups["nuc"].ToString()).ToDoubleCoeff());
             }
             foreach (Match stringPQ in regexPQ.Matches(line))
             {
@@ -93,8 +88,7 @@ namespace Microsoft.Quantum.Chemistry
 
                     var orbitalIntegral = new OrbitalIntegral(new int[] { p, q }, coeff * (10.0).Pow(exponent));
                     var orbitalIntegralCanonical = orbitalIntegral.ToCanonicalForm();
-
-                    //Logger.Message.WriteLine($"1e orbital { orbitalIntegral.Print()}, { orbitalIntegralCanonical.Print()}");
+                    
 
                     if (fileHIJTerms.ContainsKey(orbitalIntegralCanonical.OrbitalIndices))
                     {
@@ -111,7 +105,7 @@ namespace Microsoft.Quantum.Chemistry
                         {
                             // Consistency check passed.
                         }
-                        //Logger.Message.WriteLine($"1e orbital collision { orbitalIntegral.Print()}, { orbitalIntegralCanonical.Print()}");
+                        
                     }
                     else
                     {
@@ -138,8 +132,7 @@ namespace Microsoft.Quantum.Chemistry
 
                     var orbitalIntegral = new OrbitalIntegral(new int[] { p, q, r, s }, coeff * (10.0).Pow(exponent));
                     var orbitalIntegralCanonical = orbitalIntegral.ToCanonicalForm();
-
-                    //Logger.Message.WriteLine($"2e orbital: { orbitalIntegral.Print()}, { orbitalIntegralCanonical.Print()}");
+                    
 
                     if (fileHIJKLTerms.ContainsKey(orbitalIntegralCanonical.OrbitalIndices))
                     {
@@ -156,7 +149,6 @@ namespace Microsoft.Quantum.Chemistry
                         {
                             // Consistency check passed.
                         }
-                        //Logger.Message.WriteLine($"2e orbital collision { orbitalIntegral.Print()}, { orbitalIntegralCanonical.Print()}");
                     }
                     else
                     {
@@ -168,11 +160,11 @@ namespace Microsoft.Quantum.Chemistry
             //hamiltonian.NOrbitals = nOrbitals;
             foreach (var ijTerm in fileHIJTerms)
             {
-                hamiltonian.AddTerm(new OrbitalIntegral(ijTerm.Key, ijTerm.Value));
+                hamiltonian.Add(new OrbitalIntegral(ijTerm.Key, ijTerm.Value));
             }
             foreach (var ijklTerm in fileHIJKLTerms)
             {
-                hamiltonian.AddTerm(new OrbitalIntegral(ijklTerm.Key, ijklTerm.Value));
+                hamiltonian.Add(new OrbitalIntegral(ijklTerm.Key, ijklTerm.Value));
             }
             return hamiltonian;
         }

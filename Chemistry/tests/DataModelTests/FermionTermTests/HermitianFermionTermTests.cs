@@ -16,7 +16,7 @@ using Microsoft.Quantum.Chemistry.OrbitalIntegrals;
 
 namespace Microsoft.Quantum.Chemistry.Tests
 {
-    using FermionTermHermitian = FermionTermHermitian;
+    using HermitianFermionTerm = HermitianFermionTerm;
     using static TermType.Fermion;
     using Op = LadderSequence;
     using static RaisingLowering;
@@ -26,10 +26,10 @@ namespace Microsoft.Quantum.Chemistry.Tests
         [Fact]
         public void EmptyHermitianFermionTerm()
         {
-            var term = new FermionTermHermitian(new LadderSequence());
-            var term2 = new FermionTermHermitian(new LadderSequence());
+            var term = new HermitianFermionTerm(new LadderSequence());
+            var term2 = new HermitianFermionTerm(new LadderSequence());
 
-            Dictionary<FermionTermHermitian, double> dictionary = new Dictionary<FermionTermHermitian, double>();
+            Dictionary<HermitianFermionTerm, double> dictionary = new Dictionary<HermitianFermionTerm, double>();
             dictionary.Add(term, 0.5);
 
             Assert.Equal(0.5, dictionary[term2]);
@@ -39,7 +39,7 @@ namespace Microsoft.Quantum.Chemistry.Tests
         public void Inheritance()
         {
             var term = new NormalOrderedLadderSequence(new LadderSequence());
-            var term2 = new FermionTermHermitian(term);
+            var term2 = new HermitianFermionTerm(term);
         }
 
 
@@ -52,8 +52,8 @@ namespace Microsoft.Quantum.Chemistry.Tests
         public void UniqueIndicesTests(int norbitals, int[] idx, int uniqueIndices)
         {
             var coefficient = 1.0;
-            var HermitianFermionTerm = new FermionTermHermitian(idx.ToLadderSequence());
-            Assert.True(HermitianFermionTerm.GetUniqueIndices() == uniqueIndices);
+            var HermitianFermionTerm = new HermitianFermionTerm(idx.ToLadderSequence());
+            Assert.True(HermitianFermionTerm.UniqueIndices() == uniqueIndices);
         }
 
         [Theory]
@@ -80,7 +80,7 @@ namespace Microsoft.Quantum.Chemistry.Tests
         public void IsInCanonicalOrderTest(bool pass, int nOrbitals, int[] ca, int[] idx)
         {
             var ladderOperators = ca.Zip(idx, (a, b) => (a == 0 ? RaisingLowering.d : RaisingLowering.u, (int)b)).ToLadderSequence();
-            var tmp = new FermionTermHermitian(ladderOperators);
+            var tmp = new HermitianFermionTerm(ladderOperators);
 
             Assert.True(tmp.IsInCanonicalOrder());
         }
@@ -96,7 +96,7 @@ namespace Microsoft.Quantum.Chemistry.Tests
         public void NotNormalOrderedTest(bool pass, int nOrbitals, IEnumerable<int> ca, IEnumerable<int> idx)
         {
             var ladderOperators = ca.Zip(idx, (a, b) => (a == 0 ? RaisingLowering.d : RaisingLowering.u, (int)b)).ToLadderSequence();
-            Assert.Throws<ArgumentException>(() => new FermionTermHermitian(ladderOperators));
+            Assert.Throws<ArgumentException>(() => new HermitianFermionTerm(ladderOperators));
         }
 
         
@@ -131,7 +131,7 @@ namespace Microsoft.Quantum.Chemistry.Tests
                                                 PQRS};
 
 
-            var fermionTerm = new FermionTermHermitian(idx.ToLadderSequence());
+            var fermionTerm = new HermitianFermionTerm(idx.ToLadderSequence());
             var fermionTermType = fermionTerm.GetTermType();
             Assert.True(fermionTermType == tmp[type]);
         }
@@ -139,8 +139,8 @@ namespace Microsoft.Quantum.Chemistry.Tests
         [Fact]
         public void EqualityTest()
         {
-            var term0 = new FermionTermHermitian(new[] { (u, 0), (u, 0) }.ToLadderSequence());
-            var term1 = new FermionTermHermitian(new[] { (u, 0), (u, 0) }.ToLadderSequence());
+            var term0 = new HermitianFermionTerm(new[] { (u, 0), (u, 0) }.ToLadderSequence());
+            var term1 = new HermitianFermionTerm(new[] { (u, 0), (u, 0) }.ToLadderSequence());
 
             Assert.True(term0 == term1);
             Assert.Equal(term0, term1);
@@ -185,7 +185,7 @@ namespace Microsoft.Quantum.Chemistry.Tests
         public void CanonicalCorrectness(int test)
         {
             var (expected, input) = CanonicalOrderCorrectnessHelper(test);
-            var term = new FermionTermHermitian(input);
+            var term = new HermitianFermionTerm(input);
 
             Assert.Equal(expected.Sequence, term.Sequence);
             Assert.Equal(expected.Coefficient, term.Coefficient);

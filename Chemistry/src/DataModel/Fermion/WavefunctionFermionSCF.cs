@@ -34,7 +34,7 @@ namespace Microsoft.Quantum.Chemistry.Fermion
         internal WavefunctionFermionSCF(WavefunctionFermionSCF term)
         {
             // All constructions are pass by value.
-            Sequence = term.Sequence.Select(o => o).ToList();
+            Sequence = term.Sequence.ToList();
             Coefficient = term.Coefficient;
         }
 
@@ -43,7 +43,7 @@ namespace Microsoft.Quantum.Chemistry.Fermion
         /// </summary>
         /// <param name="ladderOperators">Normal-ordered sequence of ladder operators.</param>
         public WavefunctionFermionSCF(LadderSequence ladderOperators) : base(ladderOperators) {
-            ExceptionIfNotOnlyRaising();
+            ThrowExceptionIfNotOnlyRaising();
         }
 
         /// <summary>
@@ -61,11 +61,11 @@ namespace Microsoft.Quantum.Chemistry.Fermion
         /// <summary>
         /// This throws an ArgumentException if the operators in NormalOrderedLadderSequence are not normal-ordered.
         /// </summary>
-        private void ExceptionIfNotOnlyRaising()
+        private void ThrowExceptionIfNotOnlyRaising()
         {
             if (Sequence.Where(o => o.Type == RaisingLowering.d).Count() > 0)
             {
-                throw new ArgumentException("FermionStateSingleConfigurational must contatin only raising operators.");
+                throw new ArgumentException("WavefunctionFermionSCF must contatin only raising operators.");
             }
         }
     }

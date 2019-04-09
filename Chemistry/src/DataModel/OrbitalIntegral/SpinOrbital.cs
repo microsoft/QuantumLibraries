@@ -7,7 +7,7 @@ using System.Collections.Generic;
 namespace Microsoft.Quantum.Chemistry.OrbitalIntegrals
 {
     /// <summary>
-    /// LadderType representing a spin-orbital
+    /// Indexing scheme representing a spin-orbital.
     /// </summary>
     [Serializable]
     public class SpinOrbital
@@ -57,26 +57,14 @@ namespace Microsoft.Quantum.Chemistry.OrbitalIntegrals
         /// to a single integer index. 
         /// </summary>
         /// <param name="nOrbitals">The total number of orbitals.</param>
-        public int ToInt(IndexConvention indexConvention, int nOrbitals = maxOrbital)
-        {
-           if (indexConvention == IndexConvention.UpDown)
-            {
-                return Orbital * 2 + Spin;
-            }
-            else
-            {
-                return Orbital + nOrbitals * Spin;
-            }
-        }
+        public int ToInt(IndexConvention indexConvention, int nOrbitals = maxOrbital) =>
+            indexConvention == IndexConvention.UpDown ? Orbital * 2 + Spin : Orbital + nOrbitals * Spin;
 
         /// <summary>
         /// This maps the separate orbital and spin indices of a <c>SpinOrbital</c> 
         /// to a single integer index according to `2*orbitalIndex + spinIndex`.
         /// </summary>
-        public int ToInt()
-        {
-            return ToInt(IndexConvention.UpDown);
-        }
+        public int ToInt() => ToInt(IndexConvention.UpDown);
 
         /// <summary>
         /// Spin-orbital constructor.
@@ -87,7 +75,7 @@ namespace Microsoft.Quantum.Chemistry.OrbitalIntegrals
         {
             Orbital = orbitalIdx;
             Spin = (int)spinIdx;
-            IsValid();
+            ThrowIfInvalid();
         }
 
         /// <summary>
@@ -106,7 +94,7 @@ namespace Microsoft.Quantum.Chemistry.OrbitalIntegrals
         /// Throws an exception if spin-orbital is invalid.
         /// </summary>
         /// <returns>Returns true if spin-orbital is valid.</returns>
-        public bool IsValid()
+        public void ThrowIfInvalid()
         {
             if (Orbital < minOrbital || Orbital > maxOrbital || Spin < minSpin || Spin > maxSpin)
             {
@@ -117,10 +105,6 @@ namespace Microsoft.Quantum.Chemistry.OrbitalIntegrals
                     $"Spin index is {Spin}. " +
                     $"It must satisfy {minSpin} <= {Spin} <= {maxSpin}."
                     );
-            }
-            else
-            {
-                return true;
             }
         }
 
@@ -152,25 +136,17 @@ namespace Microsoft.Quantum.Chemistry.OrbitalIntegrals
         /// Override for string representation of spin-orbital data.
         /// </summary>
         /// <returns>String representation of spin-orbital data.</returns>
-        public override string ToString()
-        {
-            return $"({ Orbital},{ Spin })";
-        }
+        public override string ToString() => $"({ Orbital},{ Spin })";
 
         /// <summary>
         /// Boolean equality operator definition.
         /// </summary>
-        public static bool operator == (SpinOrbital x, SpinOrbital y)
-        {
-            return x.Orbital == y.Orbital && x.Spin == y.Spin;
-        }
+        public static bool operator == (SpinOrbital x, SpinOrbital y) => x.Orbital == y.Orbital && x.Spin == y.Spin;
+
         /// <summary>
         /// Boolean inequality operator definition.
         /// </summary>
-        public static bool operator != (SpinOrbital x, SpinOrbital y)
-        {
-            return !(x == y);
-        }
+        public static bool operator != (SpinOrbital x, SpinOrbital y) => !(x == y);
 
         /*
         /// <summary>
@@ -188,10 +164,7 @@ namespace Microsoft.Quantum.Chemistry.OrbitalIntegrals
             return x.ToInt() < y.ToInt();
         }
         */
-        public override bool Equals(object x)
-        {
-            return Equals((SpinOrbital) x);
-        }
+        public override bool Equals(object x) => Equals((SpinOrbital) x);
 
         public bool Equals(SpinOrbital x)
         {
@@ -211,10 +184,7 @@ namespace Microsoft.Quantum.Chemistry.OrbitalIntegrals
                 return this == x;
         }
 
-        public override int GetHashCode()
-        {
-            return ToInt(IndexConvention.UpDown).GetHashCode();
-        }
+        public override int GetHashCode() => ToInt(IndexConvention.UpDown).GetHashCode();
     }
 }
 

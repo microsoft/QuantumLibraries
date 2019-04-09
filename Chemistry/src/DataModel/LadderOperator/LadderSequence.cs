@@ -27,7 +27,7 @@ namespace Microsoft.Quantum.Chemistry.LadderOperators
         #region Constructors
         /// <summary>
         /// Constructor for empty ladder operator sequence.
-        /// </summary>B
+        /// </summary>
         public LadderSequence() {
         }
 
@@ -62,10 +62,7 @@ namespace Microsoft.Quantum.Chemistry.LadderOperators
         /// Returns <c>true</c> this condition is satisfied.
         /// Returns <c>false</c> otherwise.
         /// </returns>
-        public bool IsInNormalOrder()
-        {
-            return Sequence.Count() == 0 ? true : Sequence.Select(o => (int)o.Type).IsIntArrayAscending();
-        }
+        public bool IsInNormalOrder() => Sequence.Count() == 0 ? true : Sequence.Select(o => (int)o.Type).IsInAscendingOrder();
         #endregion
 
         /// <summary>
@@ -77,10 +74,8 @@ namespace Microsoft.Quantum.Chemistry.LadderOperators
         /// Returns new <see cref="LadderSequence"/> <c>xy</c> where coefficients and 
         /// LadderOperatorSequences are multipled together.
         /// </returns>
-        public LadderSequence Multiply(LadderSequence left, LadderSequence right)
-        {
-            return new LadderSequence(left.Sequence.Concat(right.Sequence), left.Coefficient * right.Coefficient);
-        }
+        // TODO: May decide to overload the * operator.
+        public LadderSequence Multiply(LadderSequence left, LadderSequence right) => new LadderSequence(left.Sequence.Concat(right.Sequence), left.Coefficient * right.Coefficient);
 
         /// <summary>
         /// Anti-commutation of ladder operators {x,y}.
@@ -119,52 +114,34 @@ namespace Microsoft.Quantum.Chemistry.LadderOperators
         /// in a <see cref="LadderSequence"/>
         /// </summary>
         /// <returns>Number of unique system indices.</returns>
-        public int GetUniqueIndices()
-        {
-            return Sequence.Select(o => o.Index).Distinct().Count();
-        }
+        public int UniqueIndices() => Sequence.Select(o => o.Index).Distinct().Count();
 
         /// <summary>
         /// Returns a copy of the ladder sequence base class.
         /// </summary>
-        /// <returns>LadderSequence class of underlying sequence of ladder operators.</returns>
-        public LadderSequence GetLadderSequence()
-        {
-            return new LadderSequence(Sequence);
-        }
+        /// <returns>Base class of this sequence of ladder operators.</returns>
+        public LadderSequence GetLadderSequence() => new LadderSequence(Sequence); 
 
         /// <summary>
-        /// Returns list of indices of ladder operator sequence.
+        /// Returns list of indices of the ladder operator sequence.
         /// </summary>
-        /// <returns>LadderSequence class of underlying sequence of ladder operators.</returns>
-        public List<int> GetLadderSequenceIndices()
-        {
-            return Sequence.Select(o => o.Index).ToList();
-        }
+        /// <returns>Sequence of integers. </returns>
+        public IEnumerable<int> Indices() => Sequence.Select(o => o.Index);
 
         /// <summary>
-        /// Returns list of raising and lowering types of ladder operator sequence.
+        /// Returns sequence of raising and lowering types of the ladder operator sequence.
         /// </summary>
-        /// <returns>LadderSequence class of underlying sequence of ladder operators.</returns>
-        public List<RaisingLowering> GetLadderSequenceRaisingLowering()
-        {
-            return Sequence.Select(o => o.Type).ToList();
-        }
+        /// <returns>Sequence of raising an lowering operators.</returns>
+        public IEnumerable<RaisingLowering> SequenceRaisingLowering() =>  Sequence.Select(o => o.Type);
 
         /// <summary>
         /// Returns a human-readable description this object.
         /// </summary>
-        public override string ToString() 
-        {
-            return $"{Coefficient} * {string.Join(" ",Sequence)}";
-        }     
+        public override string ToString() => $"{Coefficient} * {string.Join(" ",Sequence)}";
+
 
         #region Equality Testing
-
-        public override bool Equals(object obj)
-        {
-            return (obj is LadderSequence x) ? Equals(x) : false;
-        }
+        public override bool Equals(object obj) => (obj is LadderSequence x) ? Equals(x) : false;
 
         public bool Equals(LadderSequence x)
         {
@@ -217,12 +194,9 @@ namespace Microsoft.Quantum.Chemistry.LadderOperators
             return x.Equals(y);
         }
 
-        public static bool operator !=(LadderSequence x, LadderSequence y)
-        {
-            return !(x == y);
-        }
+        public static bool operator !=(LadderSequence x, LadderSequence y) => !(x == y);
+        
         #endregion
-
 
     }
 

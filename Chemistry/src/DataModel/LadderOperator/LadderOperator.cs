@@ -42,30 +42,15 @@ namespace Microsoft.Quantum.Chemistry.LadderOperators
         public LadderOperator((RaisingLowering, int) set) : this(set.Item1, set.Item2) { }
 
         #region Equality Testing
-        public override bool Equals(object obj)
-        {
-            return (obj is LadderOperator x) ? Equals(x) : false;
-        }
+        public override bool Equals(object obj) => (obj is LadderOperator x) ? Equals(x) : false;
 
-        public bool Equals(LadderOperator x)
-        {
-            return (Type == x.Type) && (Index == x.Index);
-        }
+        public bool Equals(LadderOperator x) => (Type == x.Type) && (Index == x.Index);
 
-        public override int GetHashCode()
-        {
-            return Index * Enum.GetNames(typeof(RaisingLowering)).Length + (int) Type;
-        }
+        public override int GetHashCode() => Index * Enum.GetNames(typeof(RaisingLowering)).Length + (int) Type;
 
-        public static bool operator ==(LadderOperator x, LadderOperator y)
-        {
-            return x.Equals(y);
-        }
+        public static bool operator ==(LadderOperator x, LadderOperator y) => x.Equals(y);
 
-        public static bool operator !=(LadderOperator x, LadderOperator y)
-        {
-            return !(x.Equals(y));
-        }
+        public static bool operator !=(LadderOperator x, LadderOperator y) => !(x.Equals(y));
         #endregion
 
         /// <summary>

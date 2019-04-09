@@ -17,24 +17,24 @@ namespace Microsoft.Quantum.Chemistry.Tests
         [Fact]
         public void IsIntArrayAscendingTest()
         {
-            Assert.True((new Int64[] {  }).IsIntArrayAscending());
-            Assert.True((new Int64[] { 1 }).IsIntArrayAscending());
-            Assert.True((new Int64[] { 1, 2, 3, 4 }).IsIntArrayAscending());
-            Assert.True((new Int64[] { 1, 1, 3, 3 }).IsIntArrayAscending());
-            Assert.False((new Int64[] { 1, 1, 0, 1 }).IsIntArrayAscending());
-            Assert.False((new Int64[] { 10, 9, 7, 4 }).IsIntArrayAscending());
-            Assert.False((new Int64[] { 1, 2, 3, 2 }).IsIntArrayAscending());
+            Assert.True((new Int64[] {  }).IsInAscendingOrder());
+            Assert.True((new Int64[] { 1 }).IsInAscendingOrder());
+            Assert.True((new Int64[] { 1, 2, 3, 4 }).IsInAscendingOrder());
+            Assert.True((new Int64[] { 1, 1, 3, 3 }).IsInAscendingOrder());
+            Assert.False((new Int64[] { 1, 1, 0, 1 }).IsInAscendingOrder());
+            Assert.False((new Int64[] { 10, 9, 7, 4 }).IsInAscendingOrder());
+            Assert.False((new Int64[] { 1, 2, 3, 2 }).IsInAscendingOrder());
         }
 
         [Fact]
         public void CompareIntArrayTest()
         {
-            Assert.Equal(0, Extensions.CompareIntArray(new Int64[] { 1, 2, 3, 4 }, new Int64[] { 1, 2, 3, 4 }));
-            Assert.Equal(1, Extensions.CompareIntArray(new Int64[] { 1, 2, 3, 4 }, new Int64[] { 1, 2, 3, 3 }));
-            Assert.Equal(-1, Extensions.CompareIntArray(new Int64[] { 1, 2, 3, 3 }, new Int64[] { 1, 2, 3, 4 }));
-            Assert.Equal(0, Extensions.CompareIntArray(new Int64[] { 2, 2, 2, 2 }, new Int64[] { 2, 2, 2, 2 }));
-            Assert.Equal(1, Extensions.CompareIntArray(new Int64[] { 2, 2, 3, 4 }, new Int64[] { 1, 2, 10, 3 }));
-            Assert.Equal(-1, Extensions.CompareIntArray(new Int64[] { 1, 3, 3, 3 }, new Int64[] { 10, 2, 3, 4 }));
+            Assert.Equal(0, Extensions.CompareArray(new Int64[] { 1, 2, 3, 4 }, new Int64[] { 1, 2, 3, 4 }));
+            Assert.Equal(1, Extensions.CompareArray(new Int64[] { 1, 2, 3, 4 }, new Int64[] { 1, 2, 3, 3 }));
+            Assert.Equal(-1, Extensions.CompareArray(new Int64[] { 1, 2, 3, 3 }, new Int64[] { 1, 2, 3, 4 }));
+            Assert.Equal(0, Extensions.CompareArray(new Int64[] { 2, 2, 2, 2 }, new Int64[] { 2, 2, 2, 2 }));
+            Assert.Equal(1, Extensions.CompareArray(new Int64[] { 2, 2, 3, 4 }, new Int64[] { 1, 2, 10, 3 }));
+            Assert.Equal(-1, Extensions.CompareArray(new Int64[] { 1, 3, 3, 3 }, new Int64[] { 10, 2, 3, 4 }));
         }
 
         [Fact]

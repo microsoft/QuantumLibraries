@@ -13,7 +13,7 @@ using System.Collections.Generic;
 namespace Microsoft.Quantum.Chemistry.Tests
 {
 
-    public class TermValueTests
+    public class TTermValueTests
     {
         [Fact]
         void NormTest()
@@ -30,7 +30,7 @@ namespace Microsoft.Quantum.Chemistry.Tests
         {
             var x = new DoubleCoeff(1.0);
             var y = new DoubleCoeff(2.0);
-            Assert.Equal(3.0, (x + y).Value);
+            Assert.Equal(3.0, (x + y));
         }
 
         [Fact]
@@ -41,7 +41,7 @@ namespace Microsoft.Quantum.Chemistry.Tests
             var z = x + y;
             Assert.Equal(1.0, x.Value);
             Assert.Equal(3.0, y.Value);
-            Assert.Equal(4.0, z.Value);
+            Assert.Equal(4.0, z);
         }
 
         [Fact]
@@ -52,7 +52,7 @@ namespace Microsoft.Quantum.Chemistry.Tests
             var z = x - y;
             Assert.Equal(1.0, x.Value);
             Assert.Equal(3.0, y.Value);
-            Assert.Equal(-2.0, z.Value);
+            Assert.Equal(-2.0, z);
         }
     }
 }
