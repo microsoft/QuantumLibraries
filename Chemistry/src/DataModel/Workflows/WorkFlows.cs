@@ -60,7 +60,7 @@ namespace Microsoft.Quantum.Chemistry
             // We now convert this Hamiltonian and a selected state to a format that than be passed onto the QSharp component
             // of the library that implements quantum simulation algorithms.
             var qSharpHamiltonian = pauliHamiltonian.ToQSharpFormat();
-            var qSharpWavefunction = inputStates[wavefunctionLabel].ToQSharpFormat();
+            var qSharpWavefunction = inputState.ToQSharpFormat();
             var qSharpData = QSharpFormat.Convert.ToQSharpFormat(qSharpHamiltonian, qSharpWavefunction);
             #endregion
         }

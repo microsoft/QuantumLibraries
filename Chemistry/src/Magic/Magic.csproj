@@ -19,8 +19,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="ChemistryMagic.cs" />
+    <PackageReference Include="Microsoft.Jupyter.Core" Version="1.1.12077" />
+    <PackageReference Include="Microsoft.Quantum.IQSharp.Core" Version="0.5.1903.2902" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\DataModel\DataModel.csproj" />
+    <ProjectReference Include="..\Runtime\Runtime.csproj" />
+  </ItemGroup>
 
 </Project>
