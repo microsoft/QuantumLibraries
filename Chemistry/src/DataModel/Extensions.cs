@@ -28,7 +28,7 @@ namespace Microsoft.Quantum.Chemistry
         /// </summary>
         /// <param name="x">Input double.</param>
         /// <returns>Double representing the input double.</returns>
-        public static DoubleCoeff ToDouble(this double x)
+        public static DoubleCoeff ToDoubleCoeff(this double x)
         {
             return new DoubleCoeff(x);
         }
@@ -54,55 +54,23 @@ namespace Microsoft.Quantum.Chemistry
         /// </summary>
         /// <param name="ints"><see cref="IEnumerable{T}"/> of <see cref="int"/>.</param>
         /// <returns>String representation of input elements.</returns>
-        public static string Print(this IEnumerable<int> ints)
+        public static string ToCustomString(this IEnumerable<int> ints)
         {
             return "[" + string.Join(", ", ints) + "]";
         }
 
 
-        /// <summary>
-        /// Checks whether a sequence of integers {x,y,z,...} is sorted in
-        /// ascending order x <= y <= z <= ...
-        /// </summary>
-        /// <param name="x">Sequence of integers to be checked.</param>
-        /// <returns>
-        /// <c>true</c> if <paramref name="x"/> is sorted in ascending
-        /// order, and <c>false</c> otherwise.
-        /// </returns>
-        public static bool IsIntArrayAscending(this IEnumerable<long> x)
-        {
-            // return true for empty list.
-            if (!x.Any())
-            {
-                return true;
-            }
-            var curr = x.First();
-            foreach (var next in x.Skip(1))
-            {
-                if (next < curr)
-                {
-                    return false;
-                }
-                curr = next;
-            }
-            return true;
-        }
-        public static bool IsIntArrayAscending(this IEnumerable<int> x)
-        {
-            return x.Select(o => (long)o).IsIntArrayAscending();
-        }
         #endregion
 
 
-        #region Int64 Comparers
-
-
+        #region Array Comparers
         /// <summary>
         /// Compares two equal-length sequences of integers by perform an element-wise
         /// comparison, starting from the first element.
         /// </summary>
-        /// <param name="xArr">First sequence of integers.</param>
-        /// <param name="yArr">Second sequence of integers.</param>
+        /// <param name="xArr">First sequence of elements.</param>
+        /// <param name="yArr">Second sequence of elements.</param>
+        /// <param name="comparer">Comparer used to define ordering of elements.</param>
         /// <returns>
         /// Returns <c>1</c> if <paramref name="xArr"/> is greater than <paramref name="yArr"/>.
         /// Returns <c>-1</c> if <paramref name="xArr"/> is less than <paramref name="yArr"/>.
@@ -113,110 +81,92 @@ namespace Microsoft.Quantum.Chemistry
         /// CompareIntArray(new Int64[] {5,7}, new Int64[] {5,6}) == 1;
         /// CompareIntArray(new Int64[] {2,1,3}, new Int64[] {2,2,3}) == -1;
         /// </example>
-        public static int CompareIntArray(IEnumerable<Int64> xArr, IEnumerable<Int64> yArr)
+        public static int CompareArray<TElement>(IEnumerable<TElement> xArr, IEnumerable<TElement> yArr, IComparer<TElement> comparer = null)
         {
+            var useComparer = comparer == null ? Comparer<TElement>.Default : comparer;
             foreach (var item in xArr.Zip(yArr, (x, y) => (x, y)))
             {
-                if (item.y > item.x)
+                if (useComparer.Compare( item.y , item.x) > 0)
                 {
                     return -1;
                 }
-                else if (item.y < item.x)
+                else if (useComparer.Compare(item.y, item.x) < 0)
                 {
                     return 1;
                 }
             }
             return 0;
         }
-
+        
 
         /// <summary>
-        /// IComparer for two integers.
+        /// Checks whether a sequence e.g. of integers {x,y,z,...} is sorted in
+        /// ascending order x <= y <= z <= ...
         /// </summary>
-        public class Int64IComparer : IComparer<Int64>
+        /// <param name="enumerable">Sequence of elements to be checked.</param>
+        /// <param name="comparer">Comparer used to define ordering of elements.</param>
+        /// <returns>
+        /// <c>true</c> if the sequenceis sorted in ascending order, and <c>false</c> otherwise.
+        /// </returns>
+        public static bool IsInAscendingOrder<TElement>(this IEnumerable<TElement> enumerable, IComparer<TElement> comparer = null)
         {
-            public int Compare(Int64 x, Int64 y) => System.Math.Sign(x - y);
+            // return true for empty list.
+            if (!enumerable.Any())
+            {
+                return true;
+            }
+            var curr = enumerable.First();
+            foreach (var next in enumerable.Skip(1))
+            {
+                var useComparer = comparer == null ? Comparer<TElement>.Default : comparer;
+                if (useComparer.Compare(next, curr) < 0)
+                {
+                    return false;
+                }
+                curr = next;
+            }
+            return true;
         }
 
-
-        public class Int64ArrayIComparer : IComparer<IEnumerable<Int64>>
+        public class ArrayEqualityComparer<TElement> : IEqualityComparer<IEnumerable<TElement>>
         {
-            public int Compare(IEnumerable<Int64> x, IEnumerable<Int64> y)
+            IComparer<TElement> useComparer;
+            public ArrayEqualityComparer(IComparer<TElement> comparer = null)
             {
-                return CompareIntArray(x, y);
+                var useComparer = comparer == null ? Comparer<TElement>.Default : comparer;
             }
-        }
 
-        public class Int64ArrayIEqualityComparer : IEqualityComparer<IEnumerable<Int64>>
-        {
-            public bool Equals(IEnumerable<Int64> x, IEnumerable<Int64> y)
+            public bool Equals(IEnumerable<TElement> x, IEnumerable<TElement> y)
             {
-                return x.SequenceEqual(y);
+                return CompareArray(x, y, useComparer) == 0;
             }
-            public int GetHashCode(IEnumerable<Int64> x)
+            public int GetHashCode(IEnumerable<TElement> x)
             {
                 int h = 19;
                 foreach (var i in x)
                 {
-                    h = h * 31 + ((int)i);
-                }
-                return h;
-            }
-        }
-        #endregion
-
-        #region int Comparers
-        public class IntArrayIEqualityComparer : IEqualityComparer<IEnumerable<int>>
-        {
-            public bool Equals(IEnumerable<int> x, IEnumerable<int> y)
-            {
-                return x.SequenceEqual(y);
-            }
-            public int GetHashCode(IEnumerable<int> x)
-            {
-                int h = 19;
-                foreach (var i in x)
-                {
-                    h = h * 31 + ((int)i);
+                    h = h * 31 + (i.GetHashCode());
                 }
                 return h;
             }
         }
 
-        public static int CompareIntArray(IEnumerable<int> xArr, IEnumerable<int> yArr)
+        public class ArrayLexicographicComparer<TElement> : IComparer<IEnumerable<TElement>>
         {
-            foreach (var item in xArr.Zip(yArr, (x, y) => (x, y)))
+            IComparer<TElement> useComparer;
+            public ArrayLexicographicComparer(IComparer<TElement> comparer = null)
             {
-                if (item.y > item.x)
-                {
-                    return -1;
-                }
-                else if (item.y < item.x)
-                {
-                    return 1;
-                }
+                var useComparer = comparer == null ? Comparer<TElement>.Default : comparer;
             }
-            return 0;
-            
-        }
-
-        /// <summary>
-        /// IComparer for two integers.
-        /// </summary>
-        public class IntIComparer : IComparer<int>
-        {
-            public int Compare(int x, int y) => Math.Sign(x - y);
-        }
-
-
-        public class IntArrayIComparer : IComparer<IEnumerable<int>>
-        {
-            public int Compare(IEnumerable<int> x, IEnumerable<int> y)
+            public int Compare(IEnumerable<TElement> x, IEnumerable<TElement> y)
             {
-                return CompareIntArray(x, y);
+                return CompareArray(x, y);
             }
         }
+
+
         #endregion
+
 
         #region Map
         /// <summary>

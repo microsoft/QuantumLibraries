@@ -2,8 +2,7 @@
 // Licensed under the MIT License.
 
 namespace SystemTestsBlockEncoding {
-    open Microsoft.Quantum.Simulation;
-    open Microsoft.Quantum.Math;
+    
     open Microsoft.Quantum.Primitive;
     open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Extensions.Math;

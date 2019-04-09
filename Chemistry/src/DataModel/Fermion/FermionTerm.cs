@@ -10,8 +10,17 @@ namespace Microsoft.Quantum.Chemistry.Fermion
 
     /// <summary>
     /// Class representing a sequence of fermionic raising and lowering operators, subject to the additional constraints: 
-    /// 1) Normal-ordered, where all raising operators are to the left of all lowering operators.
-    /// 2) Index-ordered, where are raising(lowering) operators are in ascending(descending) order.
+    /// <list type="number">
+    /// <item>
+    /// <description>
+    /// Normal-ordered, where all raising operators are to the left of all lowering operators.
+    /// </description>
+    /// </item>
+    /// <item>
+    /// <description>
+    /// Index-ordered, where are raising(lowering) operators are in ascending(descending) order.
+    /// </description>
+    /// </item>
     /// </summary>
     public class FermionTerm : IndexOrderedLadderSequence
     {

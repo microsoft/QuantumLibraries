@@ -37,7 +37,7 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
                 {
                     foreach (var kv in VersionNumberDict)
                     {
-                        if (schema.ToLowerInvariant().Contains(kv.Key))
+                        if (schema.Contains(kv.Key))
                         {
                             versionNumber = kv.Value;
                             break;

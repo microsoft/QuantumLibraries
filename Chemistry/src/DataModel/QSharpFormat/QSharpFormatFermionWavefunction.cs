@@ -26,17 +26,17 @@ namespace Microsoft.Quantum.Chemistry.QSharpFormat
         /// <returns>Initial state in Q# format.</returns>
         public static (Int64, QArray<JordanWignerInputState>) ToQSharpFormat(this InputState inputState)
         {
-            if(inputState.type == StateType.SparseMultiConfigurational)
+            if(inputState.TypeOfState == StateType.SparseMultiConfigurational)
             {
-                return ((int)inputState.type, InitialStateSparseMultiConfigural(inputState.Superposition));
+                return ((int)inputState.TypeOfState, InitialStateSparseMultiConfigural(inputState.Superposition));
             }
-            else if(inputState.type == StateType.UnitaryCoupledCluster)
+            else if(inputState.TypeOfState == StateType.UnitaryCoupledCluster)
             {
-                return ((int)inputState.type, InitialStateUnitaryCoupledCluster(inputState.Superposition));
+                return ((int)inputState.TypeOfState, InitialStateUnitaryCoupledCluster(inputState.Superposition));
             }
             else
             {
-                throw new ArgumentException($"Selected quantum state {inputState.type.ToString("G")} not recognized.");
+                throw new ArgumentException($"Selected quantum state {inputState.TypeOfState.ToString("G")} not recognized.");
                 return ((int)StateType.Default, null);
             }            
         }

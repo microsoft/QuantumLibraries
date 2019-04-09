@@ -19,11 +19,45 @@ namespace Microsoft.Quantum.Chemistry.Generic
     /// </summary>
     public class InputState
     {
-        public StateType type;
+        public StateType TypeOfState;
         public string Label;
         public DoubleCoeff Energy;
         public List<((double, double), IndexOrderedLadderSequence)> Superposition = new List<((double, double), IndexOrderedLadderSequence)>();
         public WavefunctionFermionSCF reference = new WavefunctionFermionSCF();
+
+
+        /// <summary>
+        /// Constructor for empty input state;
+        /// </summary>
+        public InputState() { }
+
+        /// <summary>
+        /// Convert a fermion Hamiltonian object into a serialization-friendly object.
+        /// </summary>
+        /// <returns>Representation of Hamiltonian in terms of primitive types.</returns>
+        // system indices
+        public (StateType, IEnumerable<(double, IEnumerable<(RaisingLowering, int)>)>) SerializationFormat()
+        {
+            var superposition = Superposition
+                .Select(o => (o.Item1.Item1, o.Item2.Sequence
+                    .Select(v => (v.Type, v.Index))));
+                
+
+            return (TypeOfState, superposition);
+        }
+
+        /// <summary>
+        /// Create a fermion Hamiltonian object from a its serialization.
+        /// </summary>
+        /// <returns>Deserialized fermion Hamiltonian.</returns>
+        // system indices
+        public InputState((StateType, (double, (RaisingLowering, int)[])[]) serialization)
+        {
+            var (TypeOfState, superposition) = serialization;
+            Superposition = superposition
+                .Select(o => ((o.Item1, 0.0), new IndexOrderedLadderSequence(o.Item2.ToLadderSequence())))
+                .ToList();
+        }
     }
     
 
@@ -33,16 +67,16 @@ namespace Microsoft.Quantum.Chemistry.Generic
     /// Generic Hamiltonian class. This is the base class for any Hamiltonians,
     /// which are collections of categorized terms.
     /// </summary>
-    /// <typeparam name="TermClassification">Index to categories of terms.</typeparam>
-    /// <typeparam name="TermIndexing">Index to individual terms.</typeparam>
-    public class QuantumState<TermClassification, TermIndexing> 
-        //where TermClassification: IEquatable<TermClassification>
-        where TermIndexing: ITermIndex<TermClassification>//, IEquatable<TermIndexing>
+    /// <typeparam name="TTermClassification">Index to categories of terms.</typeparam>
+    /// <typeparam name="TTermIndexing">Index to individual terms.</typeparam>
+    public class QuantumState<TTermClassification, TTermIndexing> 
+        //where TTermClassification: IEquatable<TTermClassification>
+        where TTermIndexing: ITermIndex<TTermClassification>//, IEquatable<TTermIndexing>
     {
         /// <summary>
         /// Container for all terms in a Hamiltonian.
         /// </summary>
-        public Dictionary<TermClassification, Dictionary<TermIndexing, double>> terms;
+        public Dictionary<TTermClassification, Dictionary<TTermIndexing, double>> terms;
 
         /// <summary>
         /// Indices to systems (e.g. fermions, qubits, or orbitals) the Hamiltonian acts on.
@@ -54,13 +88,13 @@ namespace Microsoft.Quantum.Chemistry.Generic
         /// </summary>
         public QuantumState()
         {
-            terms = new Dictionary<TermClassification, Dictionary<TermIndexing, double>>();
+            terms = new Dictionary<TTermClassification, Dictionary<TTermIndexing, double>>();
         }
 
         /// <summary>
         /// Constructor for copying a Hamiltonian.
         /// </summary>
-        public QuantumState(QuantumState<TermClassification, TermIndexing> hamiltonian)
+        public QuantumState(QuantumState<TTermClassification, TTermIndexing> hamiltonian)
         {
             terms = hamiltonian.terms;
         }

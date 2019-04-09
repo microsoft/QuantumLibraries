@@ -2,12 +2,11 @@
 // Licensed under the MIT License.
 
 namespace Microsoft.Quantum.Chemistry.JordanWigner {
-    open Microsoft.Quantum.Simulation;
+    
     open Microsoft.Quantum.Primitive;
     open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Extensions.Math;
     open Microsoft.Quantum.Chemistry;
-    open Microsoft.Quantum.Arrays;
     
     
     // This block encoding for qubitization runs off data optimized for a jordan-wigner encoding.
@@ -34,7 +33,8 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
     ///
     /// # Output
     /// 'GeneratorIndex[]' expressing Z term as Pauli terms.
-    function _ZTermToPauliGenIdx(term : GeneratorIndex) : GeneratorIndex[] {
+    function _ZTermToPauliGenIdx_ (term : GeneratorIndex) : GeneratorIndex[] {
+        
         let ((idxTermType, coeff), idxFermions) = term!;
         return [GeneratorIndex(([3], coeff), idxFermions)];
     }
@@ -50,7 +50,8 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
     ///
     /// # Output
     /// 'GeneratorIndex[]' expressing ZZ term as Pauli terms.
-    function _ZZTermToPauliGenIdx (term : GeneratorIndex) : GeneratorIndex[] {
+    function _ZZTermToPauliGenIdx_ (term : GeneratorIndex) : GeneratorIndex[] {
+        
         let ((idxTermType, coeff), idxFermions) = term!;
         return [GeneratorIndex(([3, 3], coeff), idxFermions)];
     }
@@ -100,7 +101,7 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
             let qubitQidx = idxFermions[1];
             let qubitRidx = idxFermions[3];
             
-            if (qubitPidx < qubitQidx and qubitQidx < qubitRidx) {
+            if (qubitPidx < qubitQidx && qubitQidx < qubitRidx) {
                 
                 // Apply XZ..ZIZ..ZX
                 let qubitIndices = IntArrayFromRange(qubitPidx .. qubitQidx - 1) + IntArrayFromRange(qubitQidx + 1 .. qubitRidx);
@@ -170,7 +171,7 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
         for (idx in 0 .. Length(ZData) - 1) {
             
             // Array of Arrays of Length 1
-            set genIdxes[idx] = (_ZTermToPauliGenIdx(HTermToGenIdx(ZData[idx], [0])))[0];
+            set genIdxes[idx] = (_ZTermToPauliGenIdx_(HTermToGenIdx(ZData[idx], [0])))[0];
         }
         
         set startIdx = Length(ZData);
@@ -178,7 +179,7 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
         for (idx in 0 .. Length(ZZData) - 1) {
             
             // Array of Arrays of Length 1
-            set genIdxes[startIdx + idx] = (_ZZTermToPauliGenIdx(HTermToGenIdx(ZZData[idx], [1])))[0];
+            set genIdxes[startIdx + idx] = (_ZZTermToPauliGenIdx_(HTermToGenIdx(ZZData[idx], [1])))[0];
         }
         
         set startIdx = startIdx + Length(ZZData);

@@ -16,7 +16,7 @@ using Xunit;
 
 namespace Microsoft.Quantum.Chemistry.Tests
 {
-    using FT = FermionTermHermitian;
+    using FT = HermitianFermionTerm;
 
     public class FermionHamiltonianTests
     {
@@ -42,9 +42,9 @@ namespace Microsoft.Quantum.Chemistry.Tests
                 (new[] {0,2,4,3}, 1.0),
                 (new[] {1,4,3,2}, 1.0),
                 (new[] {2,4,5,3}, 1.0)
-            }.Select(o => (new FT(o.Item1.ToLadderSequence()), o.Item2.ToDouble())).ToList();
+            }.Select(o => (new FT(o.Item1.ToLadderSequence()), o.Item2.ToDoubleCoeff())).ToList();
 
-            hamiltonian.AddTerms(fermionTerms);
+            hamiltonian.AddRange(fermionTerms);
             return hamiltonian;
         }
 
@@ -52,20 +52,20 @@ namespace Microsoft.Quantum.Chemistry.Tests
         void CheckKeyPresence()
         {
             var hamiltonian = GenerateTestHamiltonian();
-            var check = new FermionTermHermitian(new[] { 0, 2, 2, 0 }.ToLadderSequence());
+            var check = new HermitianFermionTerm(new[] { 0, 2, 2, 0 }.ToLadderSequence());
 
-            hamiltonian.AddTerm(check, 100.0.ToDouble());
+            hamiltonian.Add(check, 100.0.ToDoubleCoeff());
 
             var sourceDict = hamiltonian.Terms[TermType.Fermion.PQQP];
 
-            var check2 = new FermionTermHermitian(new[] { 0, 2, 2, 0 }.ToLadderSequence());
+            var check2 = new HermitianFermionTerm(new[] { 0, 2, 2, 0 }.ToLadderSequence());
             var coeff = sourceDict[check2];
 
             Assert.Equal(101.0, coeff.Value);
             Assert.Equal(101.0, hamiltonian.Terms[TermType.Fermion.PQQP][check].Value);
 
             // Check using GetTerm method.
-            Assert.Equal(101.0, hamiltonian.GetTerm(new FermionTermHermitian(check)).Value);
+            Assert.Equal(101.0, hamiltonian.GetTerm(new HermitianFermionTerm(check)).Value);
         }
 
 
@@ -104,7 +104,7 @@ namespace Microsoft.Quantum.Chemistry.Tests
             CurrentVersion.Data broombridge = Deserializers.DeserializeBroombridge(filename);
             CurrentVersion.ProblemDescription problemData = broombridge.ProblemDescriptions.First();
 
-            OrbitalIntegralHamiltonian orbitalIntegralHamiltonian = problemData.CreateOrbitalIntegralHamiltonian();
+            OrbitalIntegralHamiltonian orbitalIntegralHamiltonian = problemData.ToOrbitalIntegralHamiltonian();
             FermionHamiltonian original = orbitalIntegralHamiltonian.ToFermionHamiltonian(SpinOrbital.IndexConvention.HalfUp);
 
             var json = JsonConvert.SerializeObject(original);
@@ -126,9 +126,9 @@ namespace Microsoft.Quantum.Chemistry.Tests
             TermType.Fermion termType, 
             (int, int[], double)[] termsRaw)
         {
-            var terms = termsRaw.Select(o => (new FermionTermHermitian(o.Item2.ToLadderSequence()),o.Item3));
+            var terms = termsRaw.Select(o => (new HermitianFermionTerm(o.Item2.ToLadderSequence()),o.Item3));
             var orbitalhamiltonian = new OrbitalIntegralHamiltonian();
-            orbitalhamiltonian.AddTerm(orbitalIntegral);
+            orbitalhamiltonian.Add(orbitalIntegral);
             var hamiltonian = orbitalhamiltonian.ToFermionHamiltonian(SpinOrbital.IndexConvention.HalfUp);
 
             Assert.True(hamiltonian.Terms.ContainsKey(termType));

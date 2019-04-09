@@ -36,7 +36,7 @@
 
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Standard\src\Standard.csproj" />
+    <ProjectReference Include="..\..\..\Canon\src\Canon.csproj" />
     <ProjectReference Include="..\Runtime\Runtime.csproj" PrivateAssets="all" />
 
     <BuildOutputInPackage Include="..\Runtime\bin\$(Configuration)\netstandard2.0\Microsoft.Quantum.Chemistry.*" />

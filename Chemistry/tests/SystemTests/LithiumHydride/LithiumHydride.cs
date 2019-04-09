@@ -32,7 +32,7 @@ namespace SystemTestsLiH
         {
             var broombridge = Deserializers.DeserializeBroombridge(filename).ProblemDescriptions.First();
 
-            var orbHam = broombridge.CreateOrbitalIntegralHamiltonian();
+            var orbHam = broombridge.ToOrbitalIntegralHamiltonian();
 
             var ferHam = orbHam.ToFermionHamiltonian(configuration.UseIndexConvention);
 
@@ -41,7 +41,7 @@ namespace SystemTestsLiH
             var hamiltonian = pauHam.ToQSharpFormat();
 
             var wavefunction = broombridge
-                .CreateWavefunctions(configuration.UseIndexConvention)["|G>"]
+                .ToWavefunctions(configuration.UseIndexConvention)["|G>"]
                 .ToQSharpFormat();
 
             var qSharpData = Microsoft.Quantum.Chemistry.QSharpFormat.Convert.ToQSharpFormat(hamiltonian, wavefunction);

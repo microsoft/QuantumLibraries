@@ -32,7 +32,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Standard\src\Standard.csproj" />
+    <ProjectReference Include="..\..\..\Canon\src\Canon.csproj" />
     <ProjectReference Include="..\..\src\Runtime\Runtime.csproj" />
     <ProjectReference Include="..\..\src\DataModel\DataModel.csproj" />
   </ItemGroup>

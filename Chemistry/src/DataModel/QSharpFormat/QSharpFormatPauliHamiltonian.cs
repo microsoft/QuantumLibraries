@@ -18,7 +18,7 @@ namespace Microsoft.Quantum.Chemistry.QSharpFormat
     public static partial class Convert
     {
         
-        public static HTerm FromPauliTerm(PauliTerm term, PauliTermValue value)
+        public static HTerm FromPauliTerm(PauliTerm term, PauliTTermValue value)
         {
             return new HTerm((new QArray<Int64>(term.QubitIndices.Select(o=>(Int64)o)), new QArray<double>(value.Value)));
         }
@@ -83,7 +83,7 @@ namespace Microsoft.Quantum.Chemistry.QSharpFormat
 
                 var xArr = x.Item1.Length == 2 ? new Int64[] { x.Item1[0], x.Item1[1], -1, -1 } : new Int64[] { x.Item1[0], x.Item1[3], x.Item1[2], x.Item1[1] };
                 var yArr = y.Item1.Length == 2 ? new Int64[] { y.Item1[0], y.Item1[1], -1, -1 } : new Int64[] { y.Item1[0], y.Item1[3], y.Item1[2], y.Item1[1] };
-                return Extensions.CompareIntArray(xArr, yArr);
+                return Extensions.CompareArray(xArr, yArr);
             }
         }
 
@@ -94,7 +94,7 @@ namespace Microsoft.Quantum.Chemistry.QSharpFormat
         public class HTermIndexIComparer : IComparer<HTerm>
         {
             public int Compare(HTerm x, HTerm y) =>
-                Extensions.CompareIntArray(x.Item1, y.Item1);
+                Extensions.CompareArray(x.Item1, y.Item1);
         }
 
         /// <summary>

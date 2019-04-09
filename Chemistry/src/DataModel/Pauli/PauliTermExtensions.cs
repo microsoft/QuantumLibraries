@@ -13,23 +13,23 @@ namespace Microsoft.Quantum.Chemistry.Pauli
     public static class Extensions
     {
         /// <summary>
-        /// Construct PauliTermValue that implements the ITermValue interface. 
+        /// Construct PauliTTermValue that implements the ITermValue interface. 
         /// </summary>
         /// <param name="x">Input double.</param>
-        /// <returns>PauliTermValue representing the input double.</returns>
-        public static PauliTermValue ToPauliTermValue(this double x)
+        /// <returns>PauliTTermValue representing the input double.</returns>
+        public static PauliTTermValue ToPauliTTermValue(this double x)
         {
-            return new PauliTermValue(x);
+            return new PauliTTermValue(x);
         }
 
         /// <summary>
-        /// Construct PauliTermValue that implements the ITermValue interface. 
+        /// Construct PauliTTermValue that implements the ITermValue interface. 
         /// </summary>
         /// <param name="x">Input double  sequence.</param>
-        /// <returns>PauliTermValue representing the input double sequence.</returns>
-        public static PauliTermValue ToPauliTermValue(this IEnumerable<double> x)
+        /// <returns>PauliTTermValue representing the input double sequence.</returns>
+        public static PauliTTermValue ToPauliTTermValue(this IEnumerable<double> x)
         {
-            return new PauliTermValue(x);
+            return new PauliTTermValue(x);
         }
     }
 }

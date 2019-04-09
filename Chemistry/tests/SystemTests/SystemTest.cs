@@ -22,7 +22,7 @@ using Microsoft.Quantum.Chemistry.JordanWigner;
 
 namespace SystemTests
 {
-    // All following examples assume Jordan--Wigner encoding.
+    // All following examples assume Jordan-Wigner encoding.
     public class SystemTestFromGeneralHamiltonian
     {
 
@@ -30,7 +30,7 @@ namespace SystemTests
         public void PPTermFromGeneralHamiltonianTest()
         {
             var generalHamiltonian = new FermionHamiltonian();
-            generalHamiltonian.AddTerm(new FermionTermHermitian(new[] { 0, 0 }.ToLadderSequence()), 1.0);
+            generalHamiltonian.Add(new HermitianFermionTerm(new[] { 0, 0 }.ToLadderSequence()), 1.0);
 
             var (identityCoefficient, qubits, termData)= generalHamiltonian.ToPauliHamiltonian().ToQSharpFormat();
 
@@ -44,7 +44,7 @@ namespace SystemTests
         public void PQTermABFromGeneralHamiltonianTest()
         {
             var generalHamiltonian = new FermionHamiltonian();
-            generalHamiltonian.AddTerm(new FermionTermHermitian(new[] { 0, 1 }.ToLadderSequence()), 2.0);
+            generalHamiltonian.Add(new HermitianFermionTerm(new[] { 0, 1 }.ToLadderSequence()), 2.0);
 
             var (identityCoefficient, qubits, termData) = generalHamiltonian.ToPauliHamiltonian().ToQSharpFormat();
 
@@ -58,7 +58,7 @@ namespace SystemTests
         public void PQTermACFromGeneralHamiltonianTest()
         {
             var generalHamiltonian = new FermionHamiltonian();
-            generalHamiltonian.AddTerm(new FermionTermHermitian(new[] { 0, 2 }.ToLadderSequence()), 2.0);
+            generalHamiltonian.Add(new HermitianFermionTerm(new[] { 0, 2 }.ToLadderSequence()), 2.0);
 
             var (identityCoefficient, qubits, termData) = generalHamiltonian.ToPauliHamiltonian().ToQSharpFormat();
             using (var qsim = new QuantumSimulator())
@@ -72,7 +72,7 @@ namespace SystemTests
         public void PQQPTermFromGeneralHamiltonianTest()
         {
             var generalHamiltonian = new FermionHamiltonian();
-            generalHamiltonian.AddTerm(new FermionTermHermitian(new[] { 0, 1, 1, 0 }.ToLadderSequence()), 1.0);
+            generalHamiltonian.Add(new HermitianFermionTerm(new[] { 0, 1, 1, 0 }.ToLadderSequence()), 1.0);
 
             var (identityCoefficient, qubits, termData) = generalHamiltonian.ToPauliHamiltonian().ToQSharpFormat();
             using (var qsim = new QuantumSimulator())
@@ -85,7 +85,7 @@ namespace SystemTests
         public void PQQRTermFromGeneralHamiltonianTest()
         {
             var generalHamiltonian = new FermionHamiltonian();
-            generalHamiltonian.AddTerm(new FermionTermHermitian(new[] { 0, 1, 2, 0 }.ToLadderSequence()), 1.0);
+            generalHamiltonian.Add(new HermitianFermionTerm(new[] { 0, 1, 2, 0 }.ToLadderSequence()), 1.0);
 
             var (identityCoefficient, qubits, termData) = generalHamiltonian.ToPauliHamiltonian().ToQSharpFormat();
             using (var qsim = new QuantumSimulator())
@@ -98,7 +98,7 @@ namespace SystemTests
         public void PQRSTermFromGeneralHamiltonianTest()
         {
             var generalHamiltonian = new FermionHamiltonian();
-            generalHamiltonian.AddTerm(new FermionTermHermitian(new[] { 0, 1, 3, 2 }.ToLadderSequence()), 2.0);
+            generalHamiltonian.Add(new HermitianFermionTerm(new[] { 0, 1, 3, 2 }.ToLadderSequence()), 2.0);
 
             var (identityCoefficient, qubits, termData) = generalHamiltonian.ToPauliHamiltonian().ToQSharpFormat();
             using (var qsim = new QuantumSimulator())
@@ -117,7 +117,7 @@ namespace SystemTests
             string orbitals =  "0,0=1.0" ;
             var generalHamiltonian = LoadData.LoadFromLiquid(orbitals);
             generalHamiltonian.NElectrons = 1L;
-            var jwEvolutionSetData = JordanWignerEncoding.Create(generalHamiltonian);
+            var jwEvolutionSetData = JordanWignerEncoding.To(generalHamiltonian);
             var identityCoefficient = jwEvolutionSetData.energyOffset;
             var termData = jwEvolutionSetData.Terms;
             using (var qsim = new QuantumSimulator())
@@ -132,7 +132,7 @@ namespace SystemTests
             string orbitals =  "0,1=1.0" ;
             var generalHamiltonian = LoadData.LoadFromLiquid(orbitals);
             generalHamiltonian.NElectrons = 1L;
-            var jwEvolutionSetData = JordanWignerEncoding.Create(generalHamiltonian);
+            var jwEvolutionSetData = JordanWignerEncoding.To(generalHamiltonian);
             var termData = jwEvolutionSetData.Terms;
             using (var qsim = new QuantumSimulator())
             {
@@ -146,7 +146,7 @@ namespace SystemTests
             string orbitals =  "0,2=1.0" ;
             var generalHamiltonian = LoadData.LoadFromLiquid(orbitals);
             generalHamiltonian.NElectrons = 1L;
-            var jwEvolutionSetData = JordanWignerEncoding.Create(generalHamiltonian);
+            var jwEvolutionSetData = JordanWignerEncoding.To(generalHamiltonian);
             var identityCoefficient = jwEvolutionSetData.energyOffset;
             var termData = jwEvolutionSetData.Terms;
             using (var qsim = new QuantumSimulator())
@@ -161,7 +161,7 @@ namespace SystemTests
             string orbitals =  "0,1,1,0=1.0" ;
             var generalHamiltonian = LoadData.LoadFromLiquid(orbitals);
             generalHamiltonian.NElectrons = 1L;
-            var jwEvolutionSetData = JordanWignerEncoding.Create(generalHamiltonian);
+            var jwEvolutionSetData = JordanWignerEncoding.To(generalHamiltonian);
             var identityCoefficient = jwEvolutionSetData.energyOffset;
             var termData = jwEvolutionSetData.Terms;
             using (var qsim = new QuantumSimulator())
@@ -176,7 +176,7 @@ namespace SystemTests
             string orbitals =  "0,0,1,0=1.0" ;
             var generalHamiltonian = LoadData.LoadFromLiquid(orbitals);
             generalHamiltonian.NElectrons = 1L;
-            var jwEvolutionSetData = JordanWignerEncoding.Create(generalHamiltonian);
+            var jwEvolutionSetData = JordanWignerEncoding.To(generalHamiltonian);
             var termData = jwEvolutionSetData.Terms;
             using (var qsim = new QuantumSimulator())
             {
@@ -190,7 +190,7 @@ namespace SystemTests
             string orbitals =  "0,1,0,1=1.0" ;
             var generalHamiltonian = LoadData.LoadFromLiquid(orbitals);
             generalHamiltonian.NElectrons = 1L;
-            var jwEvolutionSetData = JordanWignerEncoding.Create(generalHamiltonian);
+            var jwEvolutionSetData = JordanWignerEncoding.To(generalHamiltonian);
             var termData = jwEvolutionSetData.Terms;
             using (var qsim = new QuantumSimulator())
             {

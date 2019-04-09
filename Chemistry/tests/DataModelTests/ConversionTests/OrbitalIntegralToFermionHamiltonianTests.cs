@@ -32,7 +32,7 @@ namespace Microsoft.Quantum.Chemistry.Tests
         void BuildOrbitalIntegralHamiltonian()
         {
             var hamiltonian = new OrbitalIntegralHamiltonian();
-            hamiltonian.AddTerms(orbitalIntegrals);
+            hamiltonian.Add(orbitalIntegrals);
         }
 
         [Fact]
@@ -40,7 +40,7 @@ namespace Microsoft.Quantum.Chemistry.Tests
         public void BuildFermionHamiltonian()
         {
             var sourceHamiltonian = new OrbitalIntegralHamiltonian();
-            sourceHamiltonian.AddTerms(orbitalIntegrals);
+            sourceHamiltonian.Add(orbitalIntegrals);
 
             var targetHamiltonian0 = sourceHamiltonian.ToFermionHamiltonian(SpinOrbital.IndexConvention.HalfUp);
 

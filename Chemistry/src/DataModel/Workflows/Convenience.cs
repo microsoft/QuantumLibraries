@@ -76,7 +76,7 @@ namespace Microsoft.Quantum.Chemistry
             // Create electronic structure Hamiltonian
             var fermionHamiltonians = problemData
                 .Select(o => o
-                .CreateOrbitalIntegralHamiltonian()
+                .ToOrbitalIntegralHamiltonian()
                 .ToFermionHamiltonian(indexConvention));
 
             return fermionHamiltonians;
@@ -100,7 +100,7 @@ namespace Microsoft.Quantum.Chemistry
             // Currently not used
             // state.reference = null;
 
-            state.type = StateType.SparseMultiConfigurational;
+            state.TypeOfState = StateType.SparseMultiConfigurational;
 
             state.Superposition.Add(((1.0, 0.0), new IndexOrderedLadderSequence(greedyState.GetLadderSequence())));
 
