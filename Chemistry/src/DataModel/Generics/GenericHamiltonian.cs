@@ -4,6 +4,7 @@
 using System;
 using System.Linq;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace Microsoft.Quantum.Chemistry.Generic
 {
@@ -13,6 +14,7 @@ namespace Microsoft.Quantum.Chemistry.Generic
     /// </summary>
     /// <typeparam name="TTermClassification">Index to categories of terms.</typeparam>
     /// <typeparam name="TTermIndexing">Index to individual terms.</typeparam>
+    /// <typeparam name="TTermValue">The type of the value of each Term</typeparam>
     public class Hamiltonian<TTermClassification, TTermIndexing, TTermValue>
         //TODO: Restore `where TTermClassification: IEquatable<TTermClassification>`
         // in the future if we want more complicated term classifications.
@@ -21,9 +23,21 @@ namespace Microsoft.Quantum.Chemistry.Generic
         // TODO: Restore `IEquatable<TTermIndexing>` in the future if we expand to more types of terms.
     {
         /// <summary>
+        /// Represents a single Terms in the Hamiltonian.
+        /// </summary>
+        [JsonConverter(typeof(HamiltonianTermsJsonConverter))]
+        public class HamiltonianTerm : Dictionary<TTermIndexing, TTermValue> { }
+
+        /// <summary>
+        /// Represents the collection of all Terms in the Hamiltonian.
+        /// </summary>
+        [JsonConverter(typeof(HamiltonianTermsJsonConverter))]
+        public class HamiltonianTerms : Dictionary<TTermClassification, HamiltonianTerm> { }
+
+        /// <summary>
         /// Container for all terms in a Hamiltonian.
         /// </summary>
-        public Dictionary<TTermClassification, Dictionary<TTermIndexing, TTermValue>> Terms = new Dictionary<TTermClassification, Dictionary<TTermIndexing, TTermValue>>();
+        public HamiltonianTerms Terms = new HamiltonianTerms();
 
         /// <summary>
         /// Indices to systems (e.g. fermions, qubits, or orbitals) the Hamiltonian acts on.
@@ -55,7 +69,7 @@ namespace Microsoft.Quantum.Chemistry.Generic
         {
             if (!Terms.ContainsKey(type))
             {
-                Terms.Add(type, new Dictionary<TTermIndexing, TTermValue>());
+                Terms.Add(type, new HamiltonianTerm());
             }
             if (Terms[type].ContainsKey(index))
             {

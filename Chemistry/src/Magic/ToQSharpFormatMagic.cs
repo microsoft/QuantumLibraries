@@ -17,8 +17,6 @@ using Microsoft.Quantum.Chemistry;
 
 namespace Magic
 {
- 
-
     /// <summary>
     /// "Converts a fermion Hamiltonian and wavefunction ansatz to a format consumable by Q#."
     /// </summary>
@@ -34,25 +32,22 @@ namespace Magic
 
         public class Arguments
         {
-            public (int[], Dictionary<TermType.Fermion, (int[], double)[]>) serializedHamiltonian { get; set; }
-            public (Microsoft.Quantum.Chemistry.StateType, (double, (RaisingLowering, int)[])[]) serializedInputState { get; set; }
+            public FermionHamiltonian hamiltonian { get; set; }
+            public InputState inputState { get; set; }
         }
 
         public ExecutionResult Run(string input, IChannel channel)
         {
-            var args = Newtonsoft.Json.JsonConvert.DeserializeObject<Arguments>(input);
-
-            var fermionHamiltonian = new FermionHamiltonian(args.serializedHamiltonian);
-            var inputState = new InputState(args.serializedInputState);
+            var args = JsonConvert.DeserializeObject<Arguments>(input);
 
             // We target a qubit quantum computer, which requires a Pauli representation of the fermion Hamiltonian.
             // A number of mappings from fermions to qubits are possible. Let us choose the Jordan-Wigner encoding.
-            PauliHamiltonian pauliHamiltonian = fermionHamiltonian.ToPauliHamiltonian(QubitEncoding.JordanWigner);
+            PauliHamiltonian pauliHamiltonian = args.hamiltonian.ToPauliHamiltonian(QubitEncoding.JordanWigner);
 
             // We now convert this Hamiltonian and a selected state to a format that than be passed onto the QSharp component
             // of the library that implements quantum simulation algorithms.
             var qSharpHamiltonian = pauliHamiltonian.ToQSharpFormat();
-            var qSharpWavefunction = inputState.ToQSharpFormat();
+            var qSharpWavefunction = args.inputState.ToQSharpFormat();
             var qSharpData = Microsoft.Quantum.Chemistry.QSharpFormat.Convert.ToQSharpFormat(qSharpHamiltonian, qSharpWavefunction);
 
             return qSharpData.ToExecutionResult();

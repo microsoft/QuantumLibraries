@@ -1,19 +1,15 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-using Xunit;
-using Microsoft.Quantum.Chemistry;
-using Microsoft.Quantum.Simulation.Core;
-using System.Text.RegularExpressions;
-using System;
-using System.Linq;
 using System.Collections.Generic;
 using System.IO;
-
-using YamlDotNet.Core;
-using YamlDotNet.Serialization;
+using System.Linq;
 
 using Microsoft.Quantum.Chemistry.Broombridge;
+
+using Newtonsoft.Json;
+
+using Xunit;
 
 namespace Microsoft.Quantum.Chemistry.Tests
 {
@@ -94,6 +90,24 @@ namespace Microsoft.Quantum.Chemistry.Tests
             Broombridge.Serializers.SerializeBroombridgev0_2(broombridge_v0_2, "");
 
         }
+
+        [Fact]
+        public void JsonEncoding()
+        {
+            var filename = "Broombridge/broombridge_v0.2.yaml";
+            CurrentVersion.Data original = Deserializers.DeserializeBroombridge(filename);
+
+            var json = JsonConvert.SerializeObject(original);
+            File.WriteAllText("original.json", json);
+
+            var serialized = JsonConvert.DeserializeObject<CurrentVersion.Data>(json);
+                File.WriteAllText("serialized.json", JsonConvert.SerializeObject(serialized));
+
+            Assert.Equal(original.Format, serialized.Format);
+            Assert.Equal(original.Bibliography.Count, serialized.Bibliography.Count);
+            Assert.Equal(original.ProblemDescriptions.Count, serialized.ProblemDescriptions.Count);
+            Assert.Equal(original.Generator.Source, serialized.Generator.Source);
+            Assert.Equal(original.Schema, serialized.Schema);
+        }
     }
-    
 }

@@ -46,7 +46,6 @@ namespace SerializationTests
             Console.WriteLine(json);
 
             FermionHamiltonian deserializedHamiltonian = JsonConvert.DeserializeObject<FermionHamiltonian>(json);
-
         }
 
         [Fact]
@@ -58,12 +57,11 @@ namespace SerializationTests
 
             var ferHam = orbHam.ToFermionHamiltonian(SpinOrbital.IndexConvention.UpDown);
 
-            string json = JsonConvert.SerializeObject(ferHam.SerializationFormat(),Formatting.None);
+            string json = JsonConvert.SerializeObject(ferHam);
 
             Debug.WriteLine(@json);
 
-            var deserializedHamiltonian = new FermionHamiltonian(JsonConvert.DeserializeObject<(int[], Dictionary<TermType.Fermion, (int[], double)[]>)>(json));
-
+            var deserializedHamiltonian = JsonConvert.DeserializeObject<FermionHamiltonian>(json);
         }
     }
 

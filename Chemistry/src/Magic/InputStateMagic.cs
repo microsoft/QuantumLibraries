@@ -39,6 +39,7 @@ namespace Magic
             this.Kind = SymbolKind.Magic;
             this.Execute = this.Run;
         }
+
         public class Arguments
         {
             public Arguments()
@@ -113,10 +114,7 @@ namespace Magic
             // Create empty fermion Hamiltonian instance.
             FermionHamiltonian fermionHamiltonian = new FermionHamiltonian();
 
-            // TODO: Implement serialization of fermion Hamiltonian first.
-            var fermionHamiltonianData = Newtonsoft.Json.JsonConvert.SerializeObject(fermionHamiltonian.SerializationFormat());
-
-            return fermionHamiltonianData.ToExecutionResult();
+            return fermionHamiltonian.ToExecutionResult();
         }
     }
 }

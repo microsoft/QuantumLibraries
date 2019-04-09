@@ -30,9 +30,12 @@ namespace Microsoft.Quantum.Chemistry.LadderOperators
         /// <param name="ladderOperators">Sequence of ladder operators.</param>
         public NormalOrderedLadderSequence(NormalOrderedLadderSequence ladderOperators)
         {
-            // All constructions are pass by value.
-            Sequence = ladderOperators.Sequence.ToList();
-            Coefficient = ladderOperators.Coefficient;
+            if (ladderOperators != null)
+            {
+                // All constructions are pass by value.
+                Sequence = ladderOperators.Sequence.ToList();
+                Coefficient = ladderOperators.Coefficient;
+            }
         }
 
         /// <summary>

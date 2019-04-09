@@ -63,12 +63,8 @@ namespace Magic
             // This transformation requires us to pick a convention for converting a spin-orbital index to a single integer.
             // Let us pick one according to the formula `integer = 2 * orbitalIndex + spinIndex`.
             FermionHamiltonian fermionHamiltonian = orbitalIntegralHamiltonian.ToFermionHamiltonian(SpinOrbital.IndexConvention.UpDown);
-
-
-            // TODO: Implement serialization of fermion Hamiltonian first.
-            var fermionHamiltonianData = Newtonsoft.Json.JsonConvert.SerializeObject(fermionHamiltonian.SerializationFormat());
             
-            return fermionHamiltonianData.ToExecutionResult();
+            return fermionHamiltonian.ToExecutionResult();
         }
     }
 
@@ -90,10 +86,7 @@ namespace Magic
             // Create empty fermion Hamiltonian instance.
             FermionHamiltonian fermionHamiltonian = new FermionHamiltonian();
 
-            // TODO: Implement serialization of fermion Hamiltonian first.
-            var fermionHamiltonianData = Newtonsoft.Json.JsonConvert.SerializeObject(fermionHamiltonian.SerializationFormat());
-
-            return fermionHamiltonianData.ToExecutionResult();
+            return fermionHamiltonian.ToExecutionResult();
         }
     }
 
@@ -112,22 +105,18 @@ namespace Magic
 
         public class Arguments
         {
-            public (int[], Dictionary<TermType.Fermion, (int[], double)[]>) serializedHamiltonian { get; set; }
-            public List<(int[], double)> fermionTerms { get; set; }
+            public FermionHamiltonian hamiltonian { get; set; }
+
+            public List<(HermitianFermionTerm, DoubleCoeff)> fermionTerms { get; set; }
         }
 
         public ExecutionResult Run(string input, IChannel channel)
         {
+            var args = JsonConvert.DeserializeObject<Arguments>(input);
+
+            args.hamiltonian.AddRange(args.fermionTerms);
             
-            var args = Newtonsoft.Json.JsonConvert.DeserializeObject<Arguments>(input);
-
-            var fermionHamiltonian = new FermionHamiltonian(args.serializedHamiltonian);
-
-            fermionHamiltonian.AddRange(args.fermionTerms.Select(o => (new HermitianFermionTerm(o.Item1), o.Item2.ToDoubleCoeff())));
-            
-            var fermionHamiltonianData = Newtonsoft.Json.JsonConvert.SerializeObject(fermionHamiltonian.SerializationFormat());
-
-            return fermionHamiltonianData.ToExecutionResult();
+            return args.hamiltonian.ToExecutionResult();
         }
     }
     

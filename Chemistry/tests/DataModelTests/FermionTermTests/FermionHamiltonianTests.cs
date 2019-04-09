@@ -1,19 +1,18 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-using Xunit;
-using Microsoft.Quantum.Chemistry;
-using Microsoft.Quantum.Simulation.Core;
-
-using System.Text.RegularExpressions;
-using System;
-using System.Linq;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 
-using Microsoft.Quantum.Chemistry.LadderOperators;
+using Microsoft.Quantum.Chemistry.Broombridge;
 using Microsoft.Quantum.Chemistry.Fermion;
+using Microsoft.Quantum.Chemistry.LadderOperators;
 using Microsoft.Quantum.Chemistry.OrbitalIntegrals;
 
+using Newtonsoft.Json;
+
+using Xunit;
 
 namespace Microsoft.Quantum.Chemistry.Tests
 {
@@ -95,7 +94,29 @@ namespace Microsoft.Quantum.Chemistry.Tests
 
             hamiltonian.AddHamiltonian(GenerateTestHamiltonian());
             Assert.Equal(oneNorm * 3.0, hamiltonian.Norm(), 5);
+        }
 
+
+        [Fact]
+        public void JsonEncoding()
+        {
+            var filename = "Broombridge/broombridge_v0.2.yaml";
+            CurrentVersion.Data broombridge = Deserializers.DeserializeBroombridge(filename);
+            CurrentVersion.ProblemDescription problemData = broombridge.ProblemDescriptions.First();
+
+            OrbitalIntegralHamiltonian orbitalIntegralHamiltonian = problemData.ToOrbitalIntegralHamiltonian();
+            FermionHamiltonian original = orbitalIntegralHamiltonian.ToFermionHamiltonian(SpinOrbital.IndexConvention.HalfUp);
+
+            var json = JsonConvert.SerializeObject(original);
+            File.WriteAllText("fermion.original.json", json);
+
+            var serialized = JsonConvert.DeserializeObject<FermionHamiltonian>(json);
+            File.WriteAllText("fermion.serialized.json", JsonConvert.SerializeObject(serialized));
+
+            Assert.Equal(original.SystemIndices.Count, serialized.SystemIndices.Count);
+            Assert.Equal(original.Terms.Count, serialized.Terms.Count);
+            Assert.Equal(original.Norm(), serialized.Norm());
+            Assert.Equal(original.ToString(), serialized.ToString());
         }
 
         [Theory]

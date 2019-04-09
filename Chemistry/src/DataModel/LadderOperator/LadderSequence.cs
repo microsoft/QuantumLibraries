@@ -37,10 +37,13 @@ namespace Microsoft.Quantum.Chemistry.LadderOperators
         /// <param name="ladderOperators">Sequence of ladder operators.</param>
         public LadderSequence(LadderSequence ladderOperators)
         {
-            // All constructions are pass by value. 
-            // ToList() copies values if the underlying object is a value type.
-            Sequence = ladderOperators.Sequence.ToList();
-            Coefficient = ladderOperators.Coefficient;
+            if (ladderOperators != null)
+            {
+                // All constructions are pass by value. 
+                // ToList() copies values if the underlying object is a value type.
+                Sequence = ladderOperators.Sequence.ToList();
+                Coefficient = ladderOperators.Coefficient;
+            }
         }
 
         /// <summary>
