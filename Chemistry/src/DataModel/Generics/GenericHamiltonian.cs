@@ -4,6 +4,7 @@
 using System;
 using System.Linq;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace Microsoft.Quantum.Chemistry.Generic
 {
@@ -13,17 +14,30 @@ namespace Microsoft.Quantum.Chemistry.Generic
     /// </summary>
     /// <typeparam name="TermClassification">Index to categories of terms.</typeparam>
     /// <typeparam name="TermIndexing">Index to individual terms.</typeparam>
-    public class Hamiltonian<TermClassification, TermIndexing, TermValue>
+    /// <typeparam name="TermValue">The type of the value of each Term</typeparam>
+    public partial class Hamiltonian<TermClassification, TermIndexing, TermValue>
         //TODO: Restore `where TermClassification: IEquatable<TermClassification>`
         // in the future if we want more complicated term classifications.
         where TermIndexing : ITermIndex<TermClassification>
-        where TermValue: ITermValue<TermValue>
+        where TermValue : ITermValue<TermValue>
         // TODO: Restore `IEquatable<TermIndexing>` in the future if we expand to more types of terms.
     {
         /// <summary>
+        /// Represents a single Terms in the Hamiltonian.
+        /// </summary>
+        [JsonConverter(typeof(HamiltonianTermsJsonConverter))]
+        public class HamiltonianTerm : Dictionary<TermIndexing, TermValue> { }
+
+        /// <summary>
+        /// Represents the collection of all Terms in the Hamiltonian.
+        /// </summary>
+        [JsonConverter(typeof(HamiltonianTermsJsonConverter))]
+        public class HamiltonianTerms : Dictionary<TermClassification, HamiltonianTerm> { }
+
+        /// <summary>
         /// Container for all terms in a Hamiltonian.
         /// </summary>
-        public Dictionary<TermClassification, Dictionary<TermIndexing, TermValue>> Terms = new Dictionary<TermClassification, Dictionary<TermIndexing, TermValue>>();
+        public HamiltonianTerms Terms = new HamiltonianTerms();
 
         /// <summary>
         /// Indices to systems (e.g. fermions, qubits, or orbitals) the Hamiltonian acts on.
@@ -55,7 +69,7 @@ namespace Microsoft.Quantum.Chemistry.Generic
         {
             if (!Terms.ContainsKey(type))
             {
-                Terms.Add(type, new Dictionary<TermIndexing, TermValue>());
+                Terms.Add(type, new HamiltonianTerm());
             }
             if (Terms[type].ContainsKey(index))
             {

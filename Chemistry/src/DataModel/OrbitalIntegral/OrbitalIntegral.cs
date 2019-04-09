@@ -33,7 +33,14 @@ namespace Microsoft.Quantum.Chemistry.OrbitalIntegrals
         /// </summary>
         public double Coefficient;
 
-        public OrbitalIntegral(double coefficient = 0.0)
+        /// <summary>
+        /// Parameterless constructors. Sets this as an empty OrbitalIntegral with coefficient 0.0
+        /// </summary>
+        public OrbitalIntegral() : this(0.0)
+        {
+        }
+
+        public OrbitalIntegral(double coefficient)
         {
             OrbitalIndices = new int[] { };
             Coefficient = coefficient;
