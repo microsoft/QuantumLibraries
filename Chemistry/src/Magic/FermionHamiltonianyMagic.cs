@@ -13,6 +13,7 @@ using Microsoft.Quantum.Chemistry.Fermion;
 using Microsoft.Quantum.Chemistry.Pauli;
 using Microsoft.Quantum.Chemistry.QSharpFormat;
 using Microsoft.Quantum.Chemistry.Generic;
+using Microsoft.Quantum.Chemistry;
 
 namespace Magic
 {
@@ -65,7 +66,7 @@ namespace Magic
 
 
             // TODO: Implement serialization of fermion Hamiltonian first.
-            var fermionHamiltonianData = Newtonsoft.Json.JsonConvert.SerializeObject(fermionHamiltonian);
+            var fermionHamiltonianData = Newtonsoft.Json.JsonConvert.SerializeObject(fermionHamiltonian.SerializationFormat());
             
             return fermionHamiltonianData.ToExecutionResult();
         }
@@ -90,7 +91,7 @@ namespace Magic
             FermionHamiltonian fermionHamiltonian = new FermionHamiltonian();
 
             // TODO: Implement serialization of fermion Hamiltonian first.
-            var fermionHamiltonianData = Newtonsoft.Json.JsonConvert.SerializeObject(fermionHamiltonian);
+            var fermionHamiltonianData = Newtonsoft.Json.JsonConvert.SerializeObject(fermionHamiltonian.SerializationFormat());
 
             return fermionHamiltonianData.ToExecutionResult();
         }
@@ -111,69 +112,23 @@ namespace Magic
 
         public class Arguments
         {
-            public Arguments()
-            {
-                this.fermionHamiltonian = new FermionHamiltonian();
-                this.fermionTerms = new List<(HermitianFermionTerm, double)>();
-            }
-
-            public FermionHamiltonian fermionHamiltonian { get; set; }
-            public List<(HermitianFermionTerm, double)> fermionTerms { get; set; }
+            public (int[], Dictionary<TermType.Fermion, (int[], double)[]>) serializedHamiltonian { get; set; }
+            public List<(int[], double)> fermionTerms { get; set; }
         }
 
         public ExecutionResult Run(string input, IChannel channel)
         {
+            
             var args = Newtonsoft.Json.JsonConvert.DeserializeObject<Arguments>(input);
 
-            args.fermionHamiltonian.AddRange(args.fermionTerms.Select(o => (o.Item1, o.Item2.ToDoubleCoeff())));
+            var fermionHamiltonian = new FermionHamiltonian(args.serializedHamiltonian);
 
-            // TODO: Implement serialization of fermion Hamiltonian first.
-            var fermionHamiltonianData = Newtonsoft.Json.JsonConvert.SerializeObject(args.fermionHamiltonian);
+            fermionHamiltonian.AddRange(args.fermionTerms.Select(o => (new HermitianFermionTerm(o.Item1), o.Item2.ToDoubleCoeff())));
+            
+            var fermionHamiltonianData = Newtonsoft.Json.JsonConvert.SerializeObject(fermionHamiltonian.SerializationFormat());
 
             return fermionHamiltonianData.ToExecutionResult();
         }
     }
-
-    /// <summary>
-    /// "Converts a fermion Hamiltonian and wavefunction ansatz to a format consumable by Q#."
-    /// </summary>
-    public class ToQSharpFormatFromFermionHamiltonian : MagicSymbol
-    {
-        public ToQSharpFormatFromFermionHamiltonian()
-        {
-            this.Name = $"%toQSharpFormatFromFermionHamiltonian";
-            this.Documentation = new Documentation() { Summary = "Converts a fermion Hamiltonian and wavefunction ansatz to a format consumable by Q#." };
-            this.Kind = SymbolKind.Magic;
-            this.Execute = this.Run;
-        }
-
-        public class Arguments
-        {
-            public Arguments()
-            {
-                this.fermionHamiltonian = new FermionHamiltonian();
-                this.inputState = new InputState();
-            }
-
-            public FermionHamiltonian fermionHamiltonian { get; set; }
-            public InputState inputState { get; set; }
-        }
-
-        public ExecutionResult Run(string input, IChannel channel)
-        {
-            var args = Newtonsoft.Json.JsonConvert.DeserializeObject<Arguments>(input);
-
-            // We target a qubit quantum computer, which requires a Pauli representation of the fermion Hamiltonian.
-            // A number of mappings from fermions to qubits are possible. Let us choose the Jordan-Wigner encoding.
-            PauliHamiltonian pauliHamiltonian = args.fermionHamiltonian.ToPauliHamiltonian(QubitEncoding.JordanWigner);
-
-            // We now convert this Hamiltonian and a selected state to a format that than be passed onto the QSharp component
-            // of the library that implements quantum simulation algorithms.
-            var qSharpHamiltonian = pauliHamiltonian.ToQSharpFormat();
-            var qSharpWavefunction = args.inputState.ToQSharpFormat();
-            var qSharpData = Microsoft.Quantum.Chemistry.QSharpFormat.Convert.ToQSharpFormat(qSharpHamiltonian, qSharpWavefunction);
-
-            return qSharpData.ToExecutionResult();
-        }
-    }
+    
 }

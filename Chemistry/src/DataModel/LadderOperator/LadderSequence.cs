@@ -22,7 +22,7 @@ namespace Microsoft.Quantum.Chemistry.LadderOperators
         /// <summary>
         /// sign (-1,+1) coefficient of ladder operators.
         /// </summary>
-        public int Coefficient { get; set; } = 0;
+        public int Coefficient { get; set; } = 1;
 
         #region Constructors
         /// <summary>
@@ -41,6 +41,53 @@ namespace Microsoft.Quantum.Chemistry.LadderOperators
             // ToList() copies values if the underlying object is a value type.
             Sequence = ladderOperators.Sequence.ToList();
             Coefficient = ladderOperators.Coefficient;
+        }
+
+        /// <summary>
+        /// Construct a sequence of ladder operators from sequence of tuples each
+        /// specifying whether it is a raising or lowering term, and its index.
+        /// </summary>
+        /// <param name="setSequence">Sequence of ladder operators.</param>
+        /// <param name="setSign">Set the sign coefficient of the sequence.</param>
+        /// <returns>
+        /// Sequence of ladder operators.
+        /// </returns>
+        /// <example>
+        /// // Construct a sequence a ladder operators 1^ 2^ 3 4
+        /// var tmp = new[] { (u, 1), (u, 2), (d, 3), (d, 4) }.ToLadderSequence();
+        /// </example>
+        public static implicit operator LadderSequence((RaisingLowering, int)[] setSequence)
+        {
+            return new LadderSequence(setSequence.Select(o => new LadderOperator(o)));
+        }
+
+        /// <summary>
+        /// Construct a sequence of ladder operators from an even-length sequence of integers.
+        /// </summary>
+        /// <param name="indices">Even-length sequence of integers.</param>
+        /// <returns>
+        /// Sequence of ladder operators with an equal number of creation and annihilation terms
+        /// that are normal-ordered.
+        /// </returns>
+        /// <example>
+        /// <code>
+        /// // The following two return the same ladder operator sequence.
+        /// var seq = new[] { 1, 2, 3, 4 }.ToLadderSequence();
+        /// var expected = new[] { (u, 1), (u, 2), (d, 3), (d, 4) }.ToLadderSequence();
+        /// </code>
+        /// </example>
+        public static implicit operator LadderSequence(int[] indices)
+        {
+            var length = indices.Count();
+            if (length % 2 == 1)
+            {
+                throw new System.ArgumentException(
+                    $"Number of terms provided is `{length}` and must be of even length."
+                    );
+            }
+            Func<int, int, (RaisingLowering, int)> GetLadderOperator = (index, position)
+                => (position < length / 2 ? RaisingLowering.u : RaisingLowering.d, index);
+            return indices.Select((o, idx) => GetLadderOperator(o, idx)).ToLadderSequence();
         }
 
         /// <summary>

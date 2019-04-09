@@ -160,15 +160,15 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
                 => new LadderSequence(x.Select(o => ToLadderOperator(o))).ToIndexOrder().First();
 
             var state = new InputState();
-            state.type = Deserializers.ParseInitialStateMethod(initialState.Method);
+            state.TypeOfState = Deserializers.ParseInitialStateMethod(initialState.Method);
             state.Label = initialState.Label;
-            if (state.type == StateType.SparseMultiConfigurational)
+            if (state.TypeOfState == StateType.SparseMultiConfigurational)
             {
                 ((double, double), (int, Spin, RaisingLowering)[])[]  deserializedState = Deserializers.ParseInputState(initialState.Superposition);
 
                 state.Superposition = ToSingleState(deserializedState, indexConvention, nOrbitals);
             }
-            else if (state.type == StateType.UnitaryCoupledCluster)
+            else if (state.TypeOfState == StateType.UnitaryCoupledCluster)
             {
                 var referenceState = Deserializers.ParseInputState(initialState.ClusterOperator.Reference);
                 var reference = (referenceState.Item1, ToIndexOrder(referenceState.Item2));

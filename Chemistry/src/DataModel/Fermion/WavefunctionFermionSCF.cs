@@ -38,6 +38,7 @@ namespace Microsoft.Quantum.Chemistry.Fermion
             Coefficient = term.Coefficient;
         }
 
+        /*
         /// <summary>
         /// Construct instance from a normal-ordered sequence of ladder operators.
         /// </summary>
@@ -45,6 +46,7 @@ namespace Microsoft.Quantum.Chemistry.Fermion
         public WavefunctionFermionSCF(LadderSequence ladderOperators) : base(ladderOperators) {
             ThrowExceptionIfNotOnlyRaising();
         }
+        */
 
         /// <summary>
         /// Construct <see cref="WavefunctionFermionSCF"/> from a sequence of integers.

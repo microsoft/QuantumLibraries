@@ -19,11 +19,45 @@ namespace Microsoft.Quantum.Chemistry.Generic
     /// </summary>
     public class InputState
     {
-        public StateType type;
+        public StateType TypeOfState;
         public string Label;
         public DoubleCoeff Energy;
         public List<((double, double), IndexOrderedLadderSequence)> Superposition = new List<((double, double), IndexOrderedLadderSequence)>();
         public WavefunctionFermionSCF reference = new WavefunctionFermionSCF();
+
+
+        /// <summary>
+        /// Constructor for empty input state;
+        /// </summary>
+        public InputState() { }
+
+        /// <summary>
+        /// Convert a fermion Hamiltonian object into a serialization-friendly object.
+        /// </summary>
+        /// <returns>Representation of Hamiltonian in terms of primitive types.</returns>
+        // system indices
+        public (StateType, IEnumerable<(double, IEnumerable<(RaisingLowering, int)>)>) SerializationFormat()
+        {
+            var superposition = Superposition
+                .Select(o => (o.Item1.Item1, o.Item2.Sequence
+                    .Select(v => (v.Type, v.Index))));
+                
+
+            return (TypeOfState, superposition);
+        }
+
+        /// <summary>
+        /// Create a fermion Hamiltonian object from a its serialization.
+        /// </summary>
+        /// <returns>Deserialized fermion Hamiltonian.</returns>
+        // system indices
+        public InputState((StateType, (double, (RaisingLowering, int)[])[]) serialization)
+        {
+            var (TypeOfState, superposition) = serialization;
+            Superposition = superposition
+                .Select(o => ((o.Item1, 0.0), new IndexOrderedLadderSequence(o.Item2.ToLadderSequence())))
+                .ToList();
+        }
     }
     
 

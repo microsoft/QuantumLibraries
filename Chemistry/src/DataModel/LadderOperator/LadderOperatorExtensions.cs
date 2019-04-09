@@ -12,6 +12,7 @@ namespace Microsoft.Quantum.Chemistry.LadderOperators
     public static partial class Extensions
     {
         #region Convenience constructors
+        
         /// <summary>
         /// Construct a sequence of ladder operators from sequence of tuples each
         /// specifying whether it is a raising or lowering term, and its index.
@@ -25,9 +26,9 @@ namespace Microsoft.Quantum.Chemistry.LadderOperators
         /// // Construct a sequence a ladder operators 1^ 2^ 3 4
         /// var tmp = new[] { (u, 1), (u, 2), (d, 3), (d, 4) }.ToLadderSequence();
         /// </example>
-        public static LadderSequence ToLadderSequence(this IEnumerable<(RaisingLowering, int)> setSequence, int setSign = 1) {
-            return new LadderSequence(setSequence.Select(o => new LadderOperator(o)), setSign);
-        }
+        public static LadderSequence ToLadderSequence(this IEnumerable<(RaisingLowering, int)> setSequence, int setSign = 1) =>
+            new LadderSequence(setSequence.Select(o => new LadderOperator(o)), setSign);
+        
 
         /// <summary>
         /// Construct a sequence of ladder operators from an even-length sequence of integers.
@@ -44,19 +45,7 @@ namespace Microsoft.Quantum.Chemistry.LadderOperators
         /// var expected = new[] { (u, 1), (u, 2), (d, 3), (d, 4) }.ToLadderSequence();
         /// </code>
         /// </example>
-        public static LadderSequence ToLadderSequence(this IEnumerable<int> indices)
-        {
-            var length = indices.Count();
-            if (length % 2 == 1)
-            {
-                throw new System.ArgumentException(
-                    $"Number of terms provided is `{length}` and must be of even length."
-                    );
-            }
-            Func<int, int, (RaisingLowering, int)> GetLadderOperator = (index, position)
-                => (position < length / 2 ? u : d, index);
-            return indices.Select((o, idx) => GetLadderOperator(o, idx)).ToLadderSequence();
-        }
+        public static LadderSequence ToLadderSequence(this IEnumerable<int> indices) => indices.ToArray();
         #endregion
 
         #region Reordering methods
