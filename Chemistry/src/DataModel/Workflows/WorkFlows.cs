@@ -50,16 +50,14 @@ namespace Microsoft.Quantum.Chemistry
             // A list of trial wavefunctions can be provided in the Broombridge file. For instance, the wavefunction
             // may be a single-reference Hartree--Fock state, a multi-reference state, or a unitary coupled-cluster state.
             // In this case, Broombridge indexes the fermion operators with spin-orbitals instead of integers. 
-            Dictionary<string, FermionWavefunction<SpinOrbital>> inputStates = problemData.Wavefunctions;
+            Dictionary<string, FermionWavefunction<SpinOrbital>> inputStates = problemData.Wavefunctions ?? new Dictionary<string, FermionWavefunction<SpinOrbital>>();
 
             // If no states are provided, use the Hartree--Fock state.
             // As fermion operators the fermion Hamiltonian are already indexed by, we now apply the desired
             // spin-orbital -> integer indexing convention.
-            FermionWavefunction<int> inputState = inputStates[wavefunctionLabel].ToIndexing(indexConvention);
-            
-            //Data.State inputState = inputStates.Count() != 0
-            //    ? inputStates[wavefunctionLabel] 
-            //    : fermionHamiltonian.GreedyStatePreparation(problemData.NElectrons);
+            FermionWavefunction<int> inputState = inputStates.ContainsKey(wavefunctionLabel) 
+                ? inputStates[wavefunctionLabel].ToIndexing(indexConvention)
+                : fermionHamiltonian.CreateHartreeFockState(problemData.NElectrons);
             #endregion
 
             #region Pipe to QSharp and simulate

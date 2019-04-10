@@ -172,7 +172,7 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
             // Add the identity terms
             var identityterm = broombridge.CoulombRepulsion.Value + broombridge.EnergyOffset.Value;
             var hamiltonian = V0_1.ToOrbitalIntegralHamiltonian(broombridge.Hamiltonian);
-            //hamiltonian.Add(new OrbitalIntegral(), identityterm);
+            hamiltonian.Add(new OrbitalIntegral(), identityterm);
             return hamiltonian;
         }
         

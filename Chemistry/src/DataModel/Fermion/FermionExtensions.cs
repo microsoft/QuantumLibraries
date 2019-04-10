@@ -47,16 +47,15 @@ namespace Microsoft.Quantum.Chemistry.Fermion
         {
             SingleCFWavefunction<int> greedyState = hamiltonian.GreedyStatePreparationSCF(nElectrons);
 
-            return new FermionWavefunction<int>
+            var wavefunction = new FermionWavefunction<int>
             {
                 Energy = 0.0,
                 Method = StateType.SparseMultiConfigurational,
                 MCFData = new SparseMultiCFWavefunction<int>()
-                {
-                    Reference = greedyState,
-                    Excitations = new Dictionary<IndexOrderedSequence<int>, System.Numerics.Complex>()
-                }
             };
+            wavefunction.MCFData.Set(new System.Numerics.Complex(1.0, 0.0), greedyState);
+
+            return wavefunction;
         }
 
     }
