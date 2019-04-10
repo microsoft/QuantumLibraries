@@ -8,7 +8,7 @@ namespace Microsoft.Quantum.SanityTests
     open Microsoft.Quantum.Primitive;
     open Microsoft.Quantum.Canon;
 
-    /// # Summary: 
+    /// # Summary
     ///     The simplest program. Just generate a debug Message on the console.
     operation HelloQ() : Unit
     {
