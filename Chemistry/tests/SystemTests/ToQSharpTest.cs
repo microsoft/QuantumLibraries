@@ -15,7 +15,7 @@ using Microsoft.Quantum.Chemistry.Fermion;
 
 using Microsoft.Quantum.Chemistry.Pauli;
 using Microsoft.Quantum.Chemistry.QSharpFormat;
-using Microsoft.Quantum.Chemistry.Generic;
+using Microsoft.Quantum.Chemistry.LadderOperators;
 
 namespace Microsoft.Quantum.Chemistry.Tests
 {

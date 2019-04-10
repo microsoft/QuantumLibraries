@@ -9,7 +9,7 @@ using System.Collections.Generic;
 using Microsoft.Quantum.Chemistry;
 using System.Numerics;
 
-using Microsoft.Quantum.Chemistry.Generic;
+using Microsoft.Quantum.Chemistry.LadderOperators;
 
 using Microsoft.Quantum.Chemistry.Fermion;
 

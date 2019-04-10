@@ -11,7 +11,7 @@ using Microsoft.Quantum.Chemistry.Magic;
 using Newtonsoft.Json;
 using Microsoft.Quantum.Chemistry.LadderOperators;
 using Xunit;
-using Microsoft.Quantum.Chemistry.Generic;
+using Microsoft.Quantum.Chemistry.LadderOperators;
 using Microsoft.Quantum.Chemistry.JordanWigner;
 using Microsoft.Quantum.Chemistry.OrbitalIntegrals;
 
@@ -33,14 +33,14 @@ namespace Microsoft.Quantum.Chemistry.Tests
             var broombridge = Deserializers.DeserializeBroombridge(fileName);
             var problemData = broombridge.ProblemDescriptions.First();
             var orbitalIntegralHamiltonian = problemData.ToOrbitalIntegralHamiltonian();
-            var fermionHamiltonian = orbitalIntegralHamiltonian.ToFermionHamiltonian(SpinOrbital.IndexConvention.HalfUp);
+            var fermionHamiltonian = orbitalIntegralHamiltonian.ToFermionHamiltonian(IndexConvention.HalfUp);
 
             var inputMagic = new InputStateMagic();
             var args = JsonConvert.SerializeObject(new InputStateMagic.Arguments
             {
                 fileName = "broombridge_v0.2.yaml",
                 wavefunctionLabel = "UCCSD |G>",
-                indexConvention = SpinOrbital.IndexConvention.HalfUp
+                indexConvention = IndexConvention.HalfUp
             });
             var inputState = (InputState)inputMagic.Run(args, channel).Output;
 

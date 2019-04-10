@@ -3,7 +3,7 @@
 
 using System;
 
-namespace Microsoft.Quantum.Chemistry.Generic
+namespace Microsoft.Quantum.Chemistry.LadderOperators
 {
 
 

@@ -5,7 +5,7 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 
-namespace Microsoft.Quantum.Chemistry.Generic
+namespace Microsoft.Quantum.Chemistry.LadderOperators
 {
     /// <summary>
     /// Class representing a sequence of raising and lowering operators, subject to the additional constraints: 

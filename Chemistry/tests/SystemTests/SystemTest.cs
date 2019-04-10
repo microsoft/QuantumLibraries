@@ -16,7 +16,7 @@ using Microsoft.Quantum.Simulation.Simulators;
 using Xunit;
 
 using Microsoft.Quantum.Chemistry.Fermion;
-using Microsoft.Quantum.Chemistry.Generic;
+using Microsoft.Quantum.Chemistry.LadderOperators;
 using Microsoft.Quantum.Chemistry.QSharpFormat;
 using Microsoft.Quantum.Chemistry.JordanWigner;
 

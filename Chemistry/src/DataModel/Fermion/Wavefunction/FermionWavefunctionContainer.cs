@@ -24,8 +24,8 @@ namespace Microsoft.Quantum.Chemistry.Fermion
     public class FermionWavefunction<TIndex>
     where TIndex : IEquatable<TIndex>, IComparable<TIndex>
     {
-        public StateType Method { get; set; }
-        public double Energy { get; set; }
+        public StateType Method { get; set; } = StateType.NotRcegonized;
+        public double Energy { get; set; } = 0;
         public SingleCFWavefunction<TIndex> SCFData { get; set; } = new SingleCFWavefunction<TIndex>();
         public SparseMultiCFWavefunction<TIndex> MCFData { get; set; } = new SparseMultiCFWavefunction<TIndex>();
         public UnitaryCCWavefunction<TIndex> UCCData { get; set; } = new UnitaryCCWavefunction<TIndex>();

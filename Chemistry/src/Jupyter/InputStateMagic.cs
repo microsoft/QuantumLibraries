@@ -4,7 +4,7 @@ using System.Linq;
 using Microsoft.Jupyter.Core;
 using Microsoft.Quantum.Chemistry.Broombridge;
 using Microsoft.Quantum.Chemistry.Fermion;
-using Microsoft.Quantum.Chemistry.Generic;
+using Microsoft.Quantum.Chemistry.LadderOperators;
 using Microsoft.Quantum.Chemistry.OrbitalIntegrals;
 
 using Newtonsoft.Json;
@@ -14,9 +14,9 @@ namespace Microsoft.Quantum.Chemistry.Magic
     /// <summary>
     /// Loads Broombridge electronic structure problem and returns fermion Hamiltonian.
     /// </summary>
-    public class InputStateMagic : MagicSymbol
+    public class WavefunctionMagic : MagicSymbol
     {
-        public InputStateMagic()
+        public WavefunctionMagic()
         {
             this.Name = $"%inputstate-load";
             this.Documentation = new Documentation() { Summary = "Loads Broombridge electronic structure problem and returns selected input state." };
@@ -37,12 +37,12 @@ namespace Microsoft.Quantum.Chemistry.Magic
             /// <summary>
             /// A Broombridge ProblemDescription to load the FermionHamiltonian from.
             /// </summary>
-            public CurrentVersion.ProblemDescription problemDescription { get; set; }
+            public Data.ProblemDescription problemDescription { get; set; }
 
             /// <summary>
             /// The IndexConvention to use to generate the Hamiltonian from the ProblemDescription.
             /// </summary>
-            public SpinOrbital.IndexConvention indexConvention { get; set; } = SpinOrbital.IndexConvention.UpDown;
+            public IndexConvention indexConvention { get; set; } = IndexConvention.UpDown;
 
             /// <summary>
             /// The label of the wavefunctio within the ProblemDescription to use. 
@@ -72,8 +72,8 @@ namespace Microsoft.Quantum.Chemistry.Magic
 
             // Based on the argument, return the Hartree--Fock state or the wavefunction with the given label.
             var inputState = (string.IsNullOrEmpty(args.wavefunctionLabel))
-                ? problemData.CreateHartreeFockState(args.indexConvention)
-                : problemData.ToWavefunctions(args.indexConvention)[args.wavefunctionLabel];
+                ? problemData.OrbitalIntegralHamiltonian.ToFermionHamiltonian(args.indexConvention).CreateHartreeFockState(problemData.NElectrons)
+                : problemData.Wavefunctions[args.wavefunctionLabel].ToIndexing(args.indexConvention);
 
             return inputState.ToExecutionResult();
         }
@@ -83,7 +83,7 @@ namespace Microsoft.Quantum.Chemistry.Magic
         /// If the fileName is specified, it will try to load the Broombridge data from the file
         /// and will use the first ProblemDescription, otherwise, the problemDescription in the arguments is used.
         /// </summary>
-        protected virtual CurrentVersion.ProblemDescription SelectProblemDescription(Arguments args)
+        protected virtual Data.ProblemDescription SelectProblemDescription(Arguments args)
         {
             if (string.IsNullOrWhiteSpace(args.fileName))
             {
@@ -91,7 +91,7 @@ namespace Microsoft.Quantum.Chemistry.Magic
             }
 
             // A single file can contain multiple problem descriptions. Let us pick the first one.
-            CurrentVersion.Data broombridge = Deserializers.DeserializeBroombridge(args.fileName);
+            Data broombridge = Deserializers.DeserializeBroombridge(args.fileName);
             return broombridge.ProblemDescriptions.First();
         }
     }

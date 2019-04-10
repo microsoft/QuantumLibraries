@@ -2,9 +2,19 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
-  <PlatformTarget>x64</PlatformTarget>
+    <PlatformTarget>x64</PlatformTarget>
     <IsPackable>false</IsPackable>
   </PropertyGroup>
+
+  <ItemGroup>
+<<<<<<< HEAD
+    <Compile Remove="HamiltonianTests\**" />
+    <Compile Remove="NewFolder\**" />
+    <EmbeddedResource Remove="HamiltonianTests\**" />
+    <EmbeddedResource Remove="NewFolder\**" />
+    <QsharpCompile Remove="HamiltonianTests\**" />
+    <QsharpCompile Remove="NewFolder\**" />
+  </ItemGroup>
 
   <ItemGroup>
     <Compile Remove="FermionTermTests.cs" />
@@ -14,15 +24,17 @@
   </ItemGroup>
 
   <ItemGroup>
+=======
+>>>>>>> origin/release/v0.7
     <Content Include="xunit.runner.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.7.0" />
-    <PackageReference Include="Microsoft.Quantum.Development.Kit" Version="0.5.1903.2703" />
-    <PackageReference Include="Microsoft.Quantum.Xunit" Version="0.5.1903.2703" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.7.2" />
+    <PackageReference Include="Microsoft.Quantum.Development.Kit" Version="0.5.1903.2902" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
     <PackageReference Include="xunit" Version="2.3.1" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.3.1" />
     <DotNetCliToolReference Include="dotnet-xunit" Version="2.3.1" />
@@ -43,9 +55,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="HamiltonianTests\" />
+<<<<<<< HEAD
     <Folder Include="ProblemContainer\" />
+=======
+    <Folder Include="MagicTests\" />
+>>>>>>> origin/release/v0.7
   </ItemGroup>
-
-
 </Project>

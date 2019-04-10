@@ -11,7 +11,7 @@ using Microsoft.Quantum.Chemistry.Fermion;
 using Microsoft.Quantum.Chemistry.OrbitalIntegrals;
 
 using Newtonsoft.Json;
-using Microsoft.Quantum.Chemistry.Generic;
+using Microsoft.Quantum.Chemistry.LadderOperators;
 using Xunit;
 
 namespace Microsoft.Quantum.Chemistry.Tests

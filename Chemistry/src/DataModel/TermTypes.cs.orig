@@ -86,7 +86,7 @@ namespace Microsoft.Quantum.Chemistry
     /// </summary>
     public enum StateType
     {
-        NotRcegonized = -1, Default = 0, SingleConfigurational = 1, SparseMultiConfigurational = 2, UnitaryCoupledCluster = 3
+        Default = 0, SingleConfigurational = 1, SparseMultiConfigurational = 2, UnitaryCoupledCluster = 3
     }
 
     /// <summary>
@@ -101,7 +101,11 @@ namespace Microsoft.Quantum.Chemistry
     /// Boxed version of double that implements the <see cref="ITermValue"></see> interface
     /// that requires all values to have a method to compute its norm.
     /// </summary>
-    public struct DoubleCoeff : IEquatable<DoubleCoeff>, ITermValue<DoubleCoeff>, IComparable
+<<<<<<< HEAD
+    public struct DoubleCoeff : IEquatable<DoubleCoeff>, ITermValue<DoubleCoeff>
+=======
+    public struct DoubleCoeff : ITermValue<DoubleCoeff>, IComparable
+>>>>>>> origin/release/v0.7
     {
         public double Value;
 

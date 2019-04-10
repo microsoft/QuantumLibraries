@@ -41,12 +41,12 @@ namespace Microsoft.Quantum.Chemistry.Magic
             /// <summary>
             /// A Broombridge ProblemDescription to load the FermionHamiltonian from.
             /// </summary>
-            public CurrentVersion.ProblemDescription problemDescription { get; set; }
+            public Data.ProblemDescription problemDescription { get; set; }
 
             /// <summary>
             /// The IndexConvention to use to generate the Hamiltonian from the ProblemDescription.
             /// </summary>
-            public SpinOrbital.IndexConvention indexConvention { get; set; } = SpinOrbital.IndexConvention.UpDown;
+            public IndexConvention indexConvention { get; set; } = IndexConvention.UpDown;
         }
 
         /// <summary>
@@ -68,12 +68,12 @@ namespace Microsoft.Quantum.Chemistry.Magic
 
             // Electronic structure Hamiltonians are usually represented compactly by orbital integrals. Let us construct
             // such a Hamiltonian from broombridge.
-            OrbitalIntegralHamiltonian orbitalIntegralHamiltonian = problemData.ToOrbitalIntegralHamiltonian();
+            OrbitalIntegralHamiltonian orbitalIntegralHamiltonian = problemData.OrbitalIntegralHamiltonian;
 
             // We can obtain the full fermion Hamiltonian from the more compact orbital integral representation.
             // This transformation requires us to pick a convention for converting a spin-orbital index to a single integer.
             // Let us pick one according to the formula `integer = 2 * orbitalIndex + spinIndex`.
-            FermionHamiltonian fermionHamiltonian = orbitalIntegralHamiltonian.ToFermionHamiltonian(SpinOrbital.IndexConvention.UpDown);
+            FermionHamiltonian fermionHamiltonian = orbitalIntegralHamiltonian.ToFermionHamiltonian(IndexConvention.UpDown);
             
             return fermionHamiltonian.ToExecutionResult();
         }
@@ -83,7 +83,7 @@ namespace Microsoft.Quantum.Chemistry.Magic
         /// If the fileName is specified, it will try to load the Broombridge data from the file
         /// and will use the first ProblemDescription, otherwise, the problemDescription in the arguments is used.
         /// </summary>
-        protected virtual CurrentVersion.ProblemDescription SelectProblemDescription(Arguments args)
+        protected virtual Data.ProblemDescription SelectProblemDescription(Arguments args)
         {
             if (string.IsNullOrWhiteSpace(args.fileName))
             {
@@ -91,7 +91,7 @@ namespace Microsoft.Quantum.Chemistry.Magic
             }
 
             // A single file can contain multiple problem descriptions. Let us pick the first one.
-            CurrentVersion.Data broombridge = Deserializers.DeserializeBroombridge(args.fileName);
+            Data broombridge = Deserializers.DeserializeBroombridge(args.fileName);
             return broombridge.ProblemDescriptions.First();
         }
     }

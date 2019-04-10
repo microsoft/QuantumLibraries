@@ -4,7 +4,7 @@
 using System;
 using System.Linq;
 using System.Collections.Generic;
-using Microsoft.Quantum.Chemistry.Generic;
+using Microsoft.Quantum.Chemistry.LadderOperators;
 using System.Numerics;
 
 namespace Microsoft.Quantum.Chemistry.Fermion

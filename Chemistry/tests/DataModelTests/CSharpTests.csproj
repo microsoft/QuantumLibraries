@@ -7,6 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="MagicTests\**" />
+    <EmbeddedResource Remove="MagicTests\**" />
+    <QsharpCompile Remove="MagicTests\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Include="xunit.runner.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -33,9 +39,5 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\Runtime\Runtime.csproj" />
     <ProjectReference Include="..\..\src\DataModel\DataModel.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="MagicTests\" />
   </ItemGroup>
 </Project>

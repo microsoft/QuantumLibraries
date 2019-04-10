@@ -28,11 +28,15 @@ namespace Microsoft.Quantum.Chemistry.Magic
             /// The fermion hamiltonian.
             /// </summary>
             public FermionHamiltonian hamiltonian { get; set; }
+<<<<<<< HEAD:Chemistry/src/Magic/ToQSharpFormatMagic.cs
+            public FermionWavefunction<int> inputState { get; set; }
+=======
 
             /// <summary>
             /// The input state.
             /// </summary>
-            public FermionWavefunction<int> inputState { get; set; }
+            public InputState inputState { get; set; }
+>>>>>>> origin/release/v0.7:Chemistry/src/Jupyter/ChemistryEncodeMagic.cs
         }
 
         public ExecutionResult Run(string input, IChannel channel)

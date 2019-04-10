@@ -13,7 +13,7 @@ using System.Collections.Generic;
 
 using Microsoft.Quantum.Chemistry.Fermion;
 using Microsoft.Quantum.Chemistry.OrbitalIntegrals;
-using Microsoft.Quantum.Chemistry.Generic;
+using Microsoft.Quantum.Chemistry.LadderOperators;
 
 namespace Microsoft.Quantum.Chemistry.Tests
 {

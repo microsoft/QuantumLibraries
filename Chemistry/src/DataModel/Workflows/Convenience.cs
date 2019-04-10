@@ -79,52 +79,5 @@ namespace Microsoft.Quantum.Chemistry
             return fermionHamiltonians;
         }
 
-        /// <summary>
-        /// This approximates the Hamiltonian ground state by a greedy algorithm  
-        /// that minimizes only the PP term energies. If there are no PP terms,
-        /// states will be occupied in lexicographic order.
-        /// </summary>
-        /// <returns>
-        /// Greedy trial state for minimizing Hamiltonian diagonal one-electron energy.
-        /// </returns>
-        public static FermionWavefunction<int> GreedyStatePreparation(this FermionHamiltonian hamiltonian, int nElectrons)
-        {
-            SingleCFWavefunction<int> greedyState = hamiltonian.GreedyStatePreparationSCF(nElectrons);
-
-            return new FermionWavefunction<int>
-            {
-                Energy = 0.0,
-                Method = StateType.SparseMultiConfigurational,
-                MCFData = new SparseMultiCFWavefunction<int>()
-                {
-                    Reference = greedyState,
-                    Excitations = new Dictionary<IndexOrderedSequence<int>, System.Numerics.Complex>()
-                }
-            };
-        }
-
-        /*
-        /// <summary>
-        /// Extracts only the required information from a Broombridge problem instance.
-        /// </summary>
-        /// <param name="broombridgeProblem">A Broombridge problem description.</param>
-        /// <param name="indexConvention">The indexing convention used to map a spin-orbital indicx to a single integer.</param>
-        public BroombridgeTyped(Broombridge.Current.ProblemDescription broombridgeProblem, SpinOrbital.Config.IndexConvention.IndexConvention indexConvention = SpinOrbital.Config.IndexConvention.Default)
-        {
-            IndexConvention = indexConvention;
-            NOrbitals = broombridgeProblem.NOrbitals;
-            NElectrons = broombridgeProblem.NElectrons;
-
-            IdentityTerm = broombridgeProblem.CoulombRepulsion.Value + broombridgeProblem.EnergyOffset.Value;
-
-            InitialStates = broombridgeProblem.InitialStates.ToDictionary(
-                o => o.Label,
-                o => ParseInitialState(o, indexConvention)
-                );
-        }
-
-
-        // Make LoadFromBroombridge with hamiltonian & states.
-        */
     }
 }

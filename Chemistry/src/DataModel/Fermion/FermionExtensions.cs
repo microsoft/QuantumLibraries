@@ -5,14 +5,12 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 
-using Microsoft.Quantum.Chemistry.Pauli;
+using Microsoft.Quantum.Chemistry.LadderOperators;
 
 namespace Microsoft.Quantum.Chemistry.Fermion
 {
     using static Microsoft.Quantum.Chemistry.Extensions;
-    /// <summary>
-    /// Extensions for converting fermion terms to Pauli terms.
-    /// </summary>
+ 
     public static partial class Extensions
     {
         /// <summary>
@@ -23,7 +21,7 @@ namespace Microsoft.Quantum.Chemistry.Fermion
         /// <returns>
         /// Greedy trial state for minimizing Hamiltonian diagonal one-electron energy.
         /// </returns>
-        public static SingleCFWavefunction<int> GreedyStatePreparationSCF(this FermionHamiltonian hamiltonian, int nElectrons)
+        internal static SingleCFWavefunction<int> GreedyStatePreparationSCF(this FermionHamiltonian hamiltonian, int nElectrons)
         {
             if (hamiltonian.Terms.ContainsKey(TermType.Fermion.PP))
             {
@@ -36,7 +34,31 @@ namespace Microsoft.Quantum.Chemistry.Fermion
                 return new SingleCFWavefunction<int>(Enumerable.Range(0, nElectrons).ToArray());
             }
         }
-        
+
+        /// <summary>
+        /// This approximates the Hamiltonian ground state by a greedy algorithm  
+        /// that minimizes only the PP term energies. If there are no PP terms,
+        /// states will be occupied in lexicographic order.
+        /// </summary>
+        /// <returns>
+        /// Greedy trial state for minimizing Hamiltonian diagonal one-electron energy.
+        /// </returns>
+        public static FermionWavefunction<int> CreateHartreeFockState(this FermionHamiltonian hamiltonian, int nElectrons)
+        {
+            SingleCFWavefunction<int> greedyState = hamiltonian.GreedyStatePreparationSCF(nElectrons);
+
+            return new FermionWavefunction<int>
+            {
+                Energy = 0.0,
+                Method = StateType.SparseMultiConfigurational,
+                MCFData = new SparseMultiCFWavefunction<int>()
+                {
+                    Reference = greedyState,
+                    Excitations = new Dictionary<IndexOrderedSequence<int>, System.Numerics.Complex>()
+                }
+            };
+        }
+
     }
 }
 

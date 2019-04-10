@@ -5,7 +5,7 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 
-namespace Microsoft.Quantum.Chemistry.Generic
+namespace Microsoft.Quantum.Chemistry.LadderOperators
 { 
     public static partial class Extensions
     {

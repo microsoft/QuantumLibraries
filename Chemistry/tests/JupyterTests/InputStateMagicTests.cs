@@ -11,7 +11,7 @@ using Microsoft.Quantum.Chemistry.Magic;
 using Newtonsoft.Json;
 using Microsoft.Quantum.Chemistry.LadderOperators;
 using Xunit;
-using Microsoft.Quantum.Chemistry.Generic;
+using Microsoft.Quantum.Chemistry.LadderOperators;
 
 namespace Microsoft.Quantum.Chemistry.Tests
 {
@@ -66,7 +66,7 @@ namespace Microsoft.Quantum.Chemistry.Tests
         {
             var (magic, channel) = Init();
             var broombridgeMagic = new BroombridgeMagic();
-            var broombridge = (CurrentVersion.Data)broombridgeMagic.Run("broombridge_v0.2.yaml", channel).Output;
+            var broombridge = (Data.Data)broombridgeMagic.Run("broombridge_v0.2.yaml", channel).Output;
 
             var args = JsonConvert.SerializeObject(new FermionHamiltonianLoadMagic.Arguments
             {
