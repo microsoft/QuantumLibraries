@@ -7,6 +7,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="HamiltonianTests\**" />
+    <Compile Remove="NewFolder\**" />
+    <EmbeddedResource Remove="HamiltonianTests\**" />
+    <EmbeddedResource Remove="NewFolder\**" />
+    <QsharpCompile Remove="HamiltonianTests\**" />
+    <QsharpCompile Remove="NewFolder\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Remove="FermionTermTests.cs" />
     <Compile Remove="FermionTermTests\FermionTermTests.cs" />
     <Compile Remove="ProblemContainerTests.cs" />
@@ -43,8 +52,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="HamiltonianTests\" />
-    <Folder Include="NewFolder\" />
     <Folder Include="ProblemContainer\" />
   </ItemGroup>
 

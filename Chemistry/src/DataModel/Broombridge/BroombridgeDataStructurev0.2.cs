@@ -232,7 +232,7 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
 
                 var ladderSequence = new LadderSequence<SpinOrbital>(operators);
 
-                // Terms are assumed to be in norma order.
+                // Terms are assumed to be in normal order.
                 var sortedOperator = new IndexOrderedSequence<SpinOrbital>(operators);
 
                 outputState.Set(new Complex(amplitude, 0.0), sortedOperator);
