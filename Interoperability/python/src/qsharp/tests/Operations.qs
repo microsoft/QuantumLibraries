@@ -8,8 +8,8 @@ namespace Microsoft.Quantum.SanityTests
     open Microsoft.Quantum.Primitive;
     open Microsoft.Quantum.Canon;
 
-    /// # Summary: 
-    ///     The simplest program. Just generate a debug Message on the console.
+    /// # Summary
+    /// The simplest program. Just generate a debug Message on the console.
     operation HelloQ() : Unit
     {
         Message($"Hello from quantum world!"); 

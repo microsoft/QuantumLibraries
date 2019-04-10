@@ -1,17 +1,18 @@
-﻿using System;
-using System.IO;
-using System.Linq;
-using Microsoft.Jupyter.Core;
-using Microsoft.Quantum.Chemistry;
-using Microsoft.Quantum.Simulation.Core;
-using YamlDotNet.Serialization;
+﻿using Microsoft.Jupyter.Core;
 using Microsoft.Quantum.Chemistry.Broombridge;
 
-namespace Magic
+namespace Microsoft.Quantum.Chemistry.Magic
 {
-    public class DeserializeBroombridge : MagicSymbol
+    /// <summary>
+    /// Jupyter Magic that loads and returns 
+    /// Broombridge electronic structure problem representation from a given .yaml file.
+    /// </summary>
+    public class BroombridgeMagic : MagicSymbol
     {
-        public DeserializeBroombridge()
+        /// <summary>
+        /// Default constructor.
+        /// </summary>
+        public BroombridgeMagic()
         {
             this.Name = $"%broombridge";
             this.Documentation = new Documentation() { Summary = "Loads and returns Broombridge electronic structure problem representation from a given .yaml file." };
@@ -19,6 +20,9 @@ namespace Magic
             this.Execute = this.Run;
         }
 
+        /// <summary>
+        /// Loads the broombridge data from the given .yaml file and returns it.
+        /// </summary>
         public ExecutionResult Run(string input, IChannel channel)
         {
             if (string.IsNullOrWhiteSpace(input))
@@ -30,6 +34,5 @@ namespace Magic
             var yamlData = Deserializers.DeserializeBroombridge(input);
             return yamlData.ToExecutionResult();
         }
-    }
-    
+    }    
 }

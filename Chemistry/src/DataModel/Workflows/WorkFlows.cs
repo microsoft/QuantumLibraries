@@ -58,7 +58,8 @@ namespace Microsoft.Quantum.Chemistry
             FermionWavefunction<int> inputState = inputStates[wavefunctionLabel].ToIndexing(indexConvention);
             
             //Data.State inputState = inputStates.Count() != 0
-            //    ? inputStates[wavefunctionLabel] : fermionHamiltonian.GreedyStatePreparation(problemData.NElectrons);
+            //    ? inputStates[wavefunctionLabel] 
+            //    : fermionHamiltonian.GreedyStatePreparation(problemData.NElectrons);
             #endregion
 
             #region Pipe to QSharp and simulate

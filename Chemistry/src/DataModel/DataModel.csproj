@@ -24,11 +24,8 @@
     <PackageReference Include="Microsoft.Extensions.Logging" Version="2.1.1" />
     <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="2.1.1" />
     <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="2.1.1" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.7.2" />
     <PackageReference Include="Microsoft.Quantum.Development.Kit" Version="0.5.1903.2902" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
-    <PackageReference Include="xunit.abstractions" Version="2.0.1" />
-    <PackageReference Include="xunit.runner.console" Version="2.3.1" />
     <PackageReference Include="YamlDotNet" Version="5.0.1" />
     <PackageReference Include="Serilog.Extensions.Logging.File" Version="1.1.0" />
   </ItemGroup>
@@ -41,43 +38,7 @@
     <BuildOutputInPackage Include="..\Runtime\bin\$(Configuration)\netstandard2.0\Microsoft.Quantum.Chemistry.*" />
   </ItemGroup>
 
-
-  <ItemGroup>
-    <Compile Remove="Broombridge\OtherFileFormats\**" />
-    <Compile Remove="GenericHamiltonian\LadderOperators\**" />
-    <EmbeddedResource Remove="Broombridge\OtherFileFormats\**" />
-    <EmbeddedResource Remove="GenericHamiltonian\LadderOperators\**" />
-    <QsharpCompile Remove="Broombridge\OtherFileFormats\**" />
-    <QsharpCompile Remove="GenericHamiltonian\LadderOperators\**" />
-  </ItemGroup>
-
-
-  <ItemGroup>
-    <Compile Remove="FermionHamiltonian.cs" />
-    <Compile Remove="FermionHamiltonian2.cs" />
-    <Compile Remove="FermionHamiltonianStatePrep.cs" />
-    <Compile Remove="FermionTerm - Copy.cs" />
-    <Compile Remove="FermionTermDeprecated.cs" />
-    <Compile Remove="FermionTermold.cs" />
-    <Compile Remove="Fermion\FermionTermDeprecated.cs" />
-    <Compile Remove="Fermion\FermionTermold.cs" />
-    <Compile Remove="LadderOperator\IndexOrderedLadderSequence.cs" />
-    <Compile Remove="LadderOperator\NormalOrderedLadderSequence.cs" />
-    <Compile Remove="Pauli\JordanWignerEncoding.cs" />
-    <Compile Remove="GenericHamiltonian\FermionExtensions.cs" />
-    <Compile Remove="GenericHamiltonian\JordanWignerStatePrep.cs" />
-    <Compile Remove="GenericHamiltonian\WavefunctionFermionMCF.cs" />
-    <Compile Remove="GenericHamiltonian\WavefunctionFermionUCC.cs" />
-  </ItemGroup>
-
-
-  <ItemGroup>
-    <Compile Include="Broombridge\OtherFileFormats\LiQuiD.cs" />
-  </ItemGroup>
-
-
   <ItemGroup>
     <Content Include="Analysis\README.txt" />
   </ItemGroup>
-
 </Project>
