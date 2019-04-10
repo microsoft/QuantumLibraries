@@ -101,7 +101,7 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
                     var (method, energy, outputState) = V0_2.ToWavefunction(initialState);
                     
                     state.Method = V0_2.ParseInitialStateMethod(initialState.Method);
-                    state.Energy = initialState.Energy.Value;
+                    state.Energy = energy;
 
                     if(state.Method == StateType.SparseMultiConfigurational)
                     {

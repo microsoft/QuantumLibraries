@@ -29,7 +29,7 @@ namespace Microsoft.Quantum.Chemistry.Tests
         {
             //var test = terms.Item1;
             //string[] lines, FermionTermType termType, FermionTerm[] terms
-            var hamiltonian = LiQuiD.DeserializeSingle(line).orbitalIntegralHamiltonian;
+            var hamiltonian = LiQuiD.DeserializeSingle(line).OrbitalIntegralHamiltonian;
             Assert.True(hamiltonian.Terms.ContainsKey(termType));
             // Check that expected terms are found
 

@@ -65,7 +65,7 @@ namespace Microsoft.Quantum.Chemistry.Tests
             var orb = new OrbitalIntegral(new[] { 0,1,1,0}, 4.0);
             Assert.Equal(new[] { 0, 1, 1, 0 }, orb.OrbitalIndices);
             
-            Assert.Equal(0.663472101.ToDoubleCoeff(), hamiltonian.Terms[orb.GetTermType()][new OrbitalIntegral(orb.OrbitalIndices, orb.Coefficient)]);
+            Assert.True(0.663472101 == hamiltonian.Terms[orb.GetTermType()][new OrbitalIntegral(orb.OrbitalIndices, orb.Coefficient)]);
         }
 
         [Fact]

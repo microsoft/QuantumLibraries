@@ -20,8 +20,8 @@ namespace Microsoft.Quantum.Chemistry
         public struct ProblemDescription
         {
             public int NOrbitals { get; set; }
-            public double coulombRepulation { get; set; }
-            public OrbitalIntegralHamiltonian orbitalIntegralHamiltonian { get; set; }
+            public double CoulombRepulation { get; set; }
+            public OrbitalIntegralHamiltonian OrbitalIntegralHamiltonian { get; set; }
         }
 
         /// <summary>
@@ -169,9 +169,9 @@ namespace Microsoft.Quantum.Chemistry
 
             hamiltonian.Add(fileHIJKLTerms.Select(o => new OrbitalIntegral(o.Key, o.Value)));
 
-            problem.orbitalIntegralHamiltonian = hamiltonian;
+            problem.OrbitalIntegralHamiltonian = hamiltonian;
             problem.NOrbitals = System.Convert.ToInt32 ( nOrbitals);
-            problem.coulombRepulation = coulombRepulsion;
+            problem.CoulombRepulation = coulombRepulsion;
 
             return problem;
 

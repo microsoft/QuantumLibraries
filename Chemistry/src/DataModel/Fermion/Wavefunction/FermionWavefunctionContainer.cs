@@ -21,14 +21,14 @@ namespace Microsoft.Quantum.Chemistry.Fermion
     /// Container containing references to all fermion wavefunction types.
     /// </summary>
     /// <typeparam name="TIndex">Index type used for all fermion operators.</typeparam>
-    public struct FermionWavefunction<TIndex>
+    public class FermionWavefunction<TIndex>
     where TIndex : IEquatable<TIndex>, IComparable<TIndex>
     {
         public StateType Method { get; set; }
         public double Energy { get; set; }
-        public SingleCFWavefunction<TIndex> SCFData { get; set; }
-        public SparseMultiCFWavefunction<TIndex> MCFData { get; set; }
-        public UnitaryCCWavefunction<TIndex> UCCData { get; set; }
+        public SingleCFWavefunction<TIndex> SCFData { get; set; } = new SingleCFWavefunction<TIndex>();
+        public SparseMultiCFWavefunction<TIndex> MCFData { get; set; } = new SparseMultiCFWavefunction<TIndex>();
+        public UnitaryCCWavefunction<TIndex> UCCData { get; set; } = new UnitaryCCWavefunction<TIndex>();
     }
 
     public static partial class Extensions

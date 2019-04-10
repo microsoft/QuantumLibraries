@@ -251,8 +251,8 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
         internal static (StateType, double, object) ToWavefunction(V0_2.State state)
         {
             StateType method = ParseInitialStateMethod(state.Method);
-            double energy = state.Energy.Value;
-            List<List<string>> superposition = state.Superposition;
+            double energy = state.Energy != null ? state.Energy.Value : 0.0;
+            List<List<string>> superposition = state.Superposition ?? new List<List<string>>();
             ClusterOperator clusterOperator = state.ClusterOperator;
             object outputState;
 
