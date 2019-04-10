@@ -45,7 +45,7 @@ namespace Microsoft.Quantum.Chemistry.QSharpFormat
                 energyOffset = pauliHamiltonian.Terms[TermType.PauliTerm.Identity].Values.First().Value.First();
             }
             
-            var nSpinOrbitals = pauliHamiltonian.SystemIndices.Count() + 1;
+            var nSpinOrbitals = pauliHamiltonian.SystemIndices.Max() + 1;
             var hZ = CreateHTermList(pauliHamiltonian,TermType.PauliTerm.Z);
             var hZZ = CreateHTermList(pauliHamiltonian,TermType.PauliTerm.ZZ);
             var hPQ = CreateHTermList(pauliHamiltonian,TermType.PauliTerm.PQ);

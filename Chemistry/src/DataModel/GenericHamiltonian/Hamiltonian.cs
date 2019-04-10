@@ -80,13 +80,13 @@ namespace Microsoft.Quantum.Chemistry.Generic
             }
             else
             {
-                Terms[type].Add(index, coefficient.Default());
-                Add(type, index, coefficient);
+                Terms[type].Add(index, coefficient);
+                Terms[type][index].SetValue(coefficient, index.GetSign());
+                index.ResetSign();
                 AddToSystemIndices(index);
             }
         }
-
-
+        
         /// <summary>
         /// Adds multiple term to a Hamiltonian. 
         /// </summary>

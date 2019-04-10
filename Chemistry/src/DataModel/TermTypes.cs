@@ -22,6 +22,7 @@ namespace Microsoft.Quantum.Chemistry
     /// <typeparam name="TTermClassification">Index to categories of terms.</typeparam>
     public interface ITermValue<TTermValue>
     {
+        TTermValue SetValue(TTermValue setThis, int sign);
         TTermValue AddValue(TTermValue addThis, int sign);
         TTermValue Default();
         
@@ -115,6 +116,7 @@ namespace Microsoft.Quantum.Chemistry
         public DoubleCoeff Default() => 0.0;
 
         public DoubleCoeff AddValue(DoubleCoeff addThis, int sign) => Value + (addThis.Value * (double)sign);
+        public DoubleCoeff SetValue(DoubleCoeff setThis, int sign) => Value * (double)sign;
 
         /// <summary>
         /// Computes the L_p norm of term.

@@ -169,15 +169,13 @@ namespace Microsoft.Quantum.Chemistry.Pauli
             Value = value.ToArray();
         }
 
-        public PauliTTermValue Default()
-        {
-            return new PauliTTermValue(0.0);
-        }
+        public PauliTTermValue Default() => new PauliTTermValue(0.0);
 
-        public PauliTTermValue AddValue(PauliTTermValue addThis, int sign = 1)
-        {
-            return new PauliTTermValue( Value.Zip(addThis.Value, (a, b) => (a + b) * (double) sign));
-        }
+        public PauliTTermValue AddValue(PauliTTermValue addThis, int sign = 1) =>
+            new PauliTTermValue( Value.Zip(addThis.Value, (a, b) => (a + b) * (double) sign));
+        
+        public PauliTTermValue SetValue(PauliTTermValue setThis, int sign = 1) =>
+            new PauliTTermValue(Value.Select( a => a * (double)sign));
 
         public override string ToString()
         {
