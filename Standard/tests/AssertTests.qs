@@ -38,14 +38,12 @@ namespace Microsoft.Quantum.Tests {
     
     
     function AssertBoolEqualTestShouldFail () : Unit {
-        
         EqualityFactB(true, false, $"OK");
     }
     
     
-    function AssertResultEqualTestShouldFail () : Unit {
-        
-        AssertResultEqual(Zero, One, $"OK");
+    function EqualityFactRTestShouldFail () : Unit {
+        EqualityFactR(Zero, One, $"OK");
     }
     
     
