@@ -23,7 +23,7 @@ namespace Microsoft.Quantum.Chemistry.Magic
         public FermionHamiltonianLoadMagic()
         {
             this.Name = $"%fh-load";
-            this.Documentation = new Documentation() { Summary = "Loads Broombridge electronic structure problem and returns fermion Hamiltonian." };
+            this.Documentation = new Documentation() { Summary = "Loads the fermion Hamiltonian for an electronic structure problem. The problem is loaded from a file or passed as an argument." };
             this.Kind = SymbolKind.Magic;
             this.Execute = this.Run;
         }
@@ -58,7 +58,7 @@ namespace Microsoft.Quantum.Chemistry.Magic
         {
             if (string.IsNullOrWhiteSpace(input))
             {
-                channel.Stderr("Please provide the name of a broombridge file or a problemDescription to load the FermionHamiltonian from.");
+                channel.Stderr("Please provide the name of a Broombridge file or a problem description to load the fermion Hamiltonian from.");
                 return ExecuteStatus.Error.ToExecutionResult();
             }
 
@@ -161,6 +161,12 @@ namespace Microsoft.Quantum.Chemistry.Magic
         /// </summary>
         public ExecutionResult Run(string input, IChannel channel)
         {
+            if (string.IsNullOrWhiteSpace(input))
+            {
+                channel.Stderr("Please provide the hamiltonian and fermion terms as input.");
+                return ExecuteStatus.Error.ToExecutionResult();
+            }
+
             var args = JsonConvert.DeserializeObject<Arguments>(input);
 
             if (args.hamiltonian == null) throw new ArgumentNullException(nameof(args.hamiltonian));

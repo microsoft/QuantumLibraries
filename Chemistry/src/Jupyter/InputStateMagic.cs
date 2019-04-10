@@ -62,7 +62,7 @@ namespace Microsoft.Quantum.Chemistry.Magic
         {
             if (string.IsNullOrWhiteSpace(input))
             {
-                channel.Stderr("Please provide the name of a broombridge file or a problemDescription to load the FermionHamiltonian from.");
+                channel.Stderr("Please provide the name of a Broombridge file or a problem description to load the fermion Hamiltonian from.");
                 return ExecuteStatus.Error.ToExecutionResult();
             }
 
@@ -72,23 +72,12 @@ namespace Microsoft.Quantum.Chemistry.Magic
 
             // Based on the argument, return the Hartree--Fock state or the wavefunction with the given label.
             var inputState = (string.IsNullOrEmpty(args.wavefunctionLabel))
-                ? CreateHartreeFockState(problemData, args.indexConvention)
+                ? problemData.CreateHartreeFockState(args.indexConvention)
                 : problemData.ToWavefunctions(args.indexConvention)[args.wavefunctionLabel];
 
             return inputState.ToExecutionResult();
         }
-
-        /// <summary>
-        /// Creates a HartreeFork state from the FermionHamiltonian associated with the given ProblemDescription
-        /// </summary>
-        public static InputState CreateHartreeFockState(CurrentVersion.ProblemDescription problemData, SpinOrbital.IndexConvention indexConvention)
-        {
-            OrbitalIntegralHamiltonian orbitalIntegralHamiltonian = problemData.ToOrbitalIntegralHamiltonian();
-            FermionHamiltonian fermionHamiltonian = orbitalIntegralHamiltonian.ToFermionHamiltonian(indexConvention);
-            return fermionHamiltonian.GreedyStatePreparation(problemData.NElectrons);
-        }
-
-
+        
         /// <summary>
         /// Selects the ProblemDescription from the given arguments.
         /// If the fileName is specified, it will try to load the Broombridge data from the file
