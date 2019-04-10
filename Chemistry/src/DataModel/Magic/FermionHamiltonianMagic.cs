@@ -1,41 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using Microsoft.Jupyter.Core;
-using Microsoft.Quantum.Chemistry;
-using Microsoft.Quantum.IQSharp;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
+using Microsoft.Jupyter.Core;
 using Microsoft.Quantum.Chemistry.Broombridge;
-using Microsoft.Quantum.Chemistry.OrbitalIntegrals;
 using Microsoft.Quantum.Chemistry.Fermion;
+using Microsoft.Quantum.Chemistry.Generic;
+using Microsoft.Quantum.Chemistry.OrbitalIntegrals;
 using Microsoft.Quantum.Chemistry.Pauli;
 using Microsoft.Quantum.Chemistry.QSharpFormat;
-using Microsoft.Quantum.Chemistry.Generic;
-using Microsoft.Quantum.Chemistry;
 
-namespace Magic
+using Newtonsoft.Json;
+
+namespace Microsoft.Quantum.Chemistry.Magic
 {
-    // Expose function that creates fermion Hamiltonian froom  Broombridge
-    // Expose function to create empty FermionHamiltonian
-    // Expose function to populate FermionHamiltonian
-
-    // Python: 1) Make empty FermionHamiltonian -- this returns serialization of empty Hamiltonian
-    //          2) Python AddTerms to the Hamiltonian -- this passes the Ham back to c#, and returns one populated with terms. Note: Make SetTerms for multiple terms.
-    //          3) Python .ToQSharpFormat -- back to C# and back out.
-
-    // Do the same for quantum states.
-
-
     /// <summary>
     /// Loads Broombridge electronic structure problem and returns fermion Hamiltonian.
     /// </summary>
-    public class FermionHamiltonianFromBroombridge : MagicSymbol
+    public class FermionHamiltonianLoadMagic : MagicSymbol
     {
-        public FermionHamiltonianFromBroombridge()
+        public FermionHamiltonianLoadMagic()
         {
-            this.Name = $"%fermionHamiltonianFromBroombridge";
+            this.Name = $"%fh_load";
             this.Documentation = new Documentation() { Summary = "Loads Broombridge electronic structure problem and returns fermion Hamiltonian." };
             this.Kind = SymbolKind.Magic;
             this.Execute = this.Run;
@@ -69,13 +54,13 @@ namespace Magic
     }
 
     /// <summary>
-    /// "Creates an empty fermion Hamiltonian instance." 
+    /// Creates an empty fermion Hamiltonian instance.
     /// </summary>
-    public class CreateNewFermionHamiltonian : MagicSymbol
+    public class FermionHamiltonianCreateMagic : MagicSymbol
     {
-        public CreateNewFermionHamiltonian()
+        public FermionHamiltonianCreateMagic()
         {
-            this.Name = $"%createNewFermionHamiltonian";
+            this.Name = $"%fh_create";
             this.Documentation = new Documentation() { Summary = "Creates an empty fermion Hamiltonian instance." };
             this.Kind = SymbolKind.Magic;
             this.Execute = this.Run;
@@ -91,33 +76,84 @@ namespace Magic
     }
 
     /// <summary>
-    /// "Adds terms to a fermion Hamiltonian."
+    /// Adds terms to a fermion Hamiltonian.
     /// </summary>
-    public class AddTermsToFermionHamiltonian : MagicSymbol
+    public class FermionHamiltonianAddTermsMagic : MagicSymbol
     {
-        public AddTermsToFermionHamiltonian()
+        public FermionHamiltonianAddTermsMagic()
         {
-            this.Name = $"%addTermsToFermionHamiltonian";
+            this.Name = $"%fh_add_terms";
             this.Documentation = new Documentation() { Summary = "Adds terms to a fermion Hamiltonian." };
+            this.Kind = SymbolKind.Magic;
+            this.Execute = this.Run;
+        }
+
+        /// <summary>
+        /// The list of arguments
+        /// </summary>
+        public class Arguments
+        {
+            /// <summary>
+            /// The fermion hamiltonian to add terms to.
+            /// </summary>
+            public FermionHamiltonian hamiltonian { get; set; }
+
+            /// <summary>
+            /// The list of terms and their coefficient to add.
+            /// </summary>
+            public List<(HermitianFermionTerm, double)> fermionTerms { get; set; }
+        }
+
+        public ExecutionResult Run(string input, IChannel channel)
+        {
+            var args = JsonConvert.DeserializeObject<Arguments>(input);
+            args.hamiltonian.AddRange(args.fermionTerms.Select(t => (t.Item1, t.Item2.ToDoubleCoeff())));
+            
+            return args.hamiltonian.ToExecutionResult();
+        }
+    }
+
+    /// <summary>
+    /// Encodes a fermion Hamiltonian and wavefunction ansatz into a format consumable by Q#.
+    /// </summary>
+    public class FermionHamiltonianEncodeMagic : MagicSymbol
+    {
+        public FermionHamiltonianEncodeMagic()
+        {
+            this.Name = $"%fh_encode";
+            this.Documentation = new Documentation() { Summary = "Encodes a fermion Hamiltonian to a format consumable by Q#." };
             this.Kind = SymbolKind.Magic;
             this.Execute = this.Run;
         }
 
         public class Arguments
         {
+            /// <summary>
+            /// The fermion hamiltonian.
+            /// </summary>
             public FermionHamiltonian hamiltonian { get; set; }
 
-            public List<(HermitianFermionTerm, DoubleCoeff)> fermionTerms { get; set; }
+            /// <summary>
+            /// The input state.
+            /// </summary>
+            public InputState inputState { get; set; }
         }
 
         public ExecutionResult Run(string input, IChannel channel)
         {
             var args = JsonConvert.DeserializeObject<Arguments>(input);
 
-            args.hamiltonian.AddRange(args.fermionTerms);
-            
-            return args.hamiltonian.ToExecutionResult();
+            // We target a qubit quantum computer, which requires a Pauli representation of the fermion Hamiltonian.
+            // A number of mappings from fermions to qubits are possible. Let us choose the Jordan-Wigner encoding.
+            PauliHamiltonian pauliHamiltonian = args.hamiltonian.ToPauliHamiltonian(QubitEncoding.JordanWigner);
+
+            // We now convert this Hamiltonian and a selected state to a format that than be passed onto the QSharp component
+            // of the library that implements quantum simulation algorithms.
+            var qSharpHamiltonian = pauliHamiltonian.ToQSharpFormat();
+            var qSharpWavefunction = args.inputState.ToQSharpFormat();
+            var qSharpData = Microsoft.Quantum.Chemistry.QSharpFormat.Convert.ToQSharpFormat(qSharpHamiltonian, qSharpWavefunction);
+
+            return qSharpData.ToExecutionResult();
         }
     }
-    
 }

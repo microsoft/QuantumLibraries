@@ -1,20 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+
 using Microsoft.Jupyter.Core;
-using Microsoft.Quantum.Chemistry;
-using Microsoft.Quantum.IQSharp;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-
 using Microsoft.Quantum.Chemistry.Broombridge;
-using Microsoft.Quantum.Chemistry.OrbitalIntegrals;
 using Microsoft.Quantum.Chemistry.Fermion;
-using Microsoft.Quantum.Chemistry.Pauli;
-using Microsoft.Quantum.Chemistry.QSharpFormat;
 using Microsoft.Quantum.Chemistry.Generic;
+using Microsoft.Quantum.Chemistry.OrbitalIntegrals;
 
-namespace Magic
+using Newtonsoft.Json;
+
+namespace Microsoft.Quantum.Chemistry.Magic
 {
     // Expose function that creates fermion Hamiltonian froom  Broombridge
     // Expose function to create empty FermionHamiltonian
@@ -34,7 +29,7 @@ namespace Magic
     {
         public InputStateFromBroombridge()
         {
-            this.Name = $"%inputStateFromBroombridge";
+            this.Name = $"%input_encode";
             this.Documentation = new Documentation() { Summary = "Loads Broombridge electronic structure problem and returns selected input state." };
             this.Kind = SymbolKind.Magic;
             this.Execute = this.Run;
@@ -49,6 +44,7 @@ namespace Magic
             }
 
             public string broombridge { get; set; }
+
             public string wavefunctionLabel { get; set; }
         }
 
@@ -60,8 +56,7 @@ namespace Magic
                 return ExecuteStatus.Error.ToExecutionResult();
             }
 
-
-            var args = Newtonsoft.Json.JsonConvert.DeserializeObject<Arguments>(input);
+            var args = JsonConvert.DeserializeObject<Arguments>(input);
 
             // Deserialize Broombridge from file.
             CurrentVersion.Data broombridge = Deserializers.DeserializeBroombridge(args.broombridge);
@@ -89,21 +84,18 @@ namespace Magic
             }
             #endregion
 
-            // TODO: Implement serialization of fermion Hamiltonian first.
-            var inputStateData = Newtonsoft.Json.JsonConvert.SerializeObject(inputState.SerializationFormat());
-            
-            return inputStateData.ToExecutionResult();
+            return inputState.ToExecutionResult();
         }
     }
 
     /// <summary>
     /// "Creates an empty fermion Hamiltonian instance." 
     /// </summary>
-    public class InputStateToQSharpFormat : MagicSymbol
+    public class InputStateEncodeMagic: MagicSymbol
     {
-        public InputStateToQSharpFormat()
+        public InputStateEncodeMagic()
         {
-            this.Name = $"%toQSharpFormatFromInputState";
+            this.Name = $"%input_encode";
             this.Documentation = new Documentation() { Summary = "Converts an input state to a format consumable by Q#." };
             this.Kind = SymbolKind.Magic;
             this.Execute = this.Run;
