@@ -58,16 +58,12 @@ namespace Microsoft.Quantum.ErrorCorrection {
     /// - D. Gottesman, "Stabilizer Codes and Quantum Error Correction," Ph.D. Thesis, Caltech, 1997;
     /// https://arxiv.org/abs/quant-ph/9705052
     function SteaneCodeRecoveryX (syndrome : Syndrome) : Pauli[] {
-        let idxQubit = ResultAsInt(syndrome!);
-        
-        if (idxQubit == 0) {
-            return ConstantArray(7, PauliI);
-        }
-        
-        return EmbedPauli(PauliZ, idxQubit - 1, 7);
+        let idxQubit = ResultArrayAsInt(syndrome!);
+        return idxQubit == 0
+               ? ConstantArray(7, PauliI)
+               | EmbedPauli(PauliZ, idxQubit - 1, 7);
     }
-    
-    
+
     /// # Summary
     /// Decoder for the Z-part of the stabilizer group of the ⟦7, 1, 3⟧ Steane quantum code.
     ///
@@ -75,17 +71,12 @@ namespace Microsoft.Quantum.ErrorCorrection {
     /// - SteaneCodeRecoveryX
     /// - SteaneCodeRecoveryFns
     function SteaneCodeRecoveryZ (syndrome : Syndrome) : Pauli[] {
-        let idxQubit = ResultAsInt(syndrome!);
-        
-        if (idxQubit == 0)
-        {
-            return ConstantArray(7, PauliI);
-        }
-        
-        return EmbedPauli(PauliX, idxQubit - 1, 7);
+        let idxQubit = ResultArrayAsInt(syndrome!);
+        return idxQubit == 0
+               ? ConstantArray(7, PauliI)
+               | EmbedPauli(PauliX, idxQubit - 1, 7);
     }
-    
-    
+
     /// # Summary
     /// Decoder for combined X- and Z-parts of the stabilizer group of the
     /// ⟦7, 1, 3⟧ Steane quantum code.
