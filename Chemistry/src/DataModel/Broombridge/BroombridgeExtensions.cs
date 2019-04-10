@@ -2,13 +2,12 @@
 // Licensed under the MIT License.
 
 using System;
-using System.Linq;
 using System.Collections.Generic;
-
-using Microsoft.Quantum.Chemistry.OrbitalIntegrals;
+using System.Linq;
 using Microsoft.Quantum.Chemistry.Fermion;
-using Microsoft.Quantum.Chemistry.LadderOperators;
 using Microsoft.Quantum.Chemistry.Generic;
+using Microsoft.Quantum.Chemistry.LadderOperators;
+using Microsoft.Quantum.Chemistry.OrbitalIntegrals;
 
 namespace Microsoft.Quantum.Chemistry.Broombridge
 {
@@ -188,6 +187,16 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
                 throw new System.ArgumentException($"initial state `{state.Label}` is not recognized or implemented.");
             }
             return state;
+        }
+
+        /// <summary>
+        /// Creates the Hartree--Fock state for the tiven ProblemDescription.
+        /// </summary>
+        public static InputState CreateHartreeFockState(this CurrentVersion.ProblemDescription problemData, SpinOrbital.IndexConvention indexConvention)
+        {
+            OrbitalIntegralHamiltonian orbitalIntegralHamiltonian = problemData.ToOrbitalIntegralHamiltonian();
+            FermionHamiltonian fermionHamiltonian = orbitalIntegralHamiltonian.ToFermionHamiltonian(indexConvention);
+            return fermionHamiltonian.GreedyStatePreparation(problemData.NElectrons);
         }
     }
 }

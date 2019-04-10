@@ -53,7 +53,8 @@ namespace Microsoft.Quantum.Chemistry
 
             // If no states are provided, use the Hartree--Fock state.
             InputState inputState = inputStates.Count() != 0
-                ? inputStates[wavefunctionLabel] : fermionHamiltonian.GreedyStatePreparation(problemData.NElectrons);
+                ? inputStates[wavefunctionLabel] 
+                : fermionHamiltonian.GreedyStatePreparation(problemData.NElectrons);
             #endregion
 
             #region Pipe to QSharp and simulate

@@ -88,7 +88,7 @@ namespace Microsoft.Quantum.Chemistry
     /// Boxed version of double that implements the <see cref="ITermValue"></see> interface
     /// that requires all values to have a method to compute its norm.
     /// </summary>
-    public struct DoubleCoeff : ITermValue<DoubleCoeff>
+    public struct DoubleCoeff : ITermValue<DoubleCoeff>, IComparable
     {
         public double Value;
 
@@ -146,6 +146,13 @@ namespace Microsoft.Quantum.Chemistry
         }
 
         public override int GetHashCode() => Value.GetHashCode();
+
+        public int CompareTo(object obj)
+        {
+            if (obj is DoubleCoeff d) return this.Value.CompareTo(d.Value);
+
+            return 0;
+        }
 
         public static bool operator == (DoubleCoeff x, DoubleCoeff y)
         {

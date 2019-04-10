@@ -18,13 +18,16 @@ jobs:
   pool: 'Hosted VS2017'
   steps:
   - template: Build/step-build-libs.yml
+  - template: Build/step-build-magic.yml
 - job: macOS
   pool: 'Hosted macOS'
   steps:
   - template: Build/step-build-libs.yml
+  - template: Build/step-build-magic.yml
 - job: Linux
   pool: 'Hosted Ubuntu 1604'
   steps:
   - template: Build/step-build-libs.yml
+  - template: Build/step-build-magic.yml
 
 

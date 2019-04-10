@@ -1,0 +1,56 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.572
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Jupyter", "Chemistry\src\Jupyter\Jupyter.csproj", "{57D99A51-439B-420A-A208-9EF6BA1BF092}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JupyterTests", "Chemistry\tests\JupyterTests\JupyterTests.csproj", "{B018B75B-F558-4232-8C28-B2F019724CBD}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Chemistry", "Chemistry", "{D0697AEA-5A09-4642-80C5-A1C02CF3C00E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataModel", "Chemistry\src\DataModel\DataModel.csproj", "{2CF8B6AB-7C73-410C-96BB-54B911027FB6}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Runtime", "Chemistry\src\Runtime\Runtime.csproj", "{03A9C044-B0D2-4C78-8312-4BD8AD4B2BF3}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Canon", "Canon\src\Canon.csproj", "{FF1F0212-88E2-42D1-A868-A3A3BA3FE866}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{57D99A51-439B-420A-A208-9EF6BA1BF092}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{57D99A51-439B-420A-A208-9EF6BA1BF092}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{57D99A51-439B-420A-A208-9EF6BA1BF092}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{57D99A51-439B-420A-A208-9EF6BA1BF092}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B018B75B-F558-4232-8C28-B2F019724CBD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B018B75B-F558-4232-8C28-B2F019724CBD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B018B75B-F558-4232-8C28-B2F019724CBD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B018B75B-F558-4232-8C28-B2F019724CBD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2CF8B6AB-7C73-410C-96BB-54B911027FB6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2CF8B6AB-7C73-410C-96BB-54B911027FB6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2CF8B6AB-7C73-410C-96BB-54B911027FB6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2CF8B6AB-7C73-410C-96BB-54B911027FB6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{03A9C044-B0D2-4C78-8312-4BD8AD4B2BF3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{03A9C044-B0D2-4C78-8312-4BD8AD4B2BF3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{03A9C044-B0D2-4C78-8312-4BD8AD4B2BF3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{03A9C044-B0D2-4C78-8312-4BD8AD4B2BF3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FF1F0212-88E2-42D1-A868-A3A3BA3FE866}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FF1F0212-88E2-42D1-A868-A3A3BA3FE866}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FF1F0212-88E2-42D1-A868-A3A3BA3FE866}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FF1F0212-88E2-42D1-A868-A3A3BA3FE866}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{2CF8B6AB-7C73-410C-96BB-54B911027FB6} = {D0697AEA-5A09-4642-80C5-A1C02CF3C00E}
+		{03A9C044-B0D2-4C78-8312-4BD8AD4B2BF3} = {D0697AEA-5A09-4642-80C5-A1C02CF3C00E}
+		{FF1F0212-88E2-42D1-A868-A3A3BA3FE866} = {D0697AEA-5A09-4642-80C5-A1C02CF3C00E}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {0FE5927D-B7C0-492E-BC96-480FC0AF7B76}
+	EndGlobalSection
+EndGlobal

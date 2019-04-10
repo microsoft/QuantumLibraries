@@ -1,38 +1,37 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿
 using Microsoft.Jupyter.Core;
-using Microsoft.Quantum.Chemistry;
-using Microsoft.Quantum.IQSharp;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-
-using Microsoft.Quantum.Chemistry.Broombridge;
-using Microsoft.Quantum.Chemistry.OrbitalIntegrals;
 using Microsoft.Quantum.Chemistry.Fermion;
+using Microsoft.Quantum.Chemistry.Generic;
 using Microsoft.Quantum.Chemistry.Pauli;
 using Microsoft.Quantum.Chemistry.QSharpFormat;
-using Microsoft.Quantum.Chemistry.Generic;
-using Microsoft.Quantum.Chemistry;
 
-namespace Magic
+using Newtonsoft.Json;
+
+namespace Microsoft.Quantum.Chemistry.Magic
 {
     /// <summary>
-    /// "Converts a fermion Hamiltonian and wavefunction ansatz to a format consumable by Q#."
+    /// Encodes a fermion Hamiltonian and wavefunction ansatz into a format consumable by Q#.
     /// </summary>
-    public class ToQSharpFormat : MagicSymbol
+    public class ChemistryEncodeMagic : MagicSymbol
     {
-        public ToQSharpFormat()
+        public ChemistryEncodeMagic()
         {
-            this.Name = $"%toQSharpFormat";
-            this.Documentation = new Documentation() { Summary = "Converts a fermion Hamiltonian to a format consumable by Q#." };
+            this.Name = $"%chemistry-encode";
+            this.Documentation = new Documentation() { Summary = "Encodes a fermion Hamiltonian to a format consumable by Q#." };
             this.Kind = SymbolKind.Magic;
             this.Execute = this.Run;
         }
 
         public class Arguments
         {
+            /// <summary>
+            /// The fermion hamiltonian.
+            /// </summary>
             public FermionHamiltonian hamiltonian { get; set; }
+
+            /// <summary>
+            /// The input state.
+            /// </summary>
             public InputState inputState { get; set; }
         }
 

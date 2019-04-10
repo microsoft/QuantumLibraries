@@ -57,6 +57,8 @@ def compile(code : str) -> Union[QSharpCallable, List[QSharpCallable]]:
     ]
     if len(ops) == 1:
         return ops[0]
+    else:
+        return ops
 
 
 def reload() -> None:
