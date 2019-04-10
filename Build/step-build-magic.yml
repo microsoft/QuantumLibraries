@@ -10,8 +10,7 @@ steps:
   displayName: 'Build Chemistry Magic'
   inputs:
     projects: |
-      $(LibrariesRootFolder)/Canon.sln
-      $(LibrariesRootFolder)/Chemistry.sln
+      $(LibrariesRootFolder)/Magic.sln
     arguments: '-c $(BuildConfiguration) -v n /p:Version=$(Assembly.Version)'
 
 
@@ -19,26 +18,10 @@ steps:
 # Test
 ##
 - task: DotNetCoreCLI@2
-  displayName: 'Test Libraries'
+  displayName: 'Test Chemistry Magic'
   inputs:
     command: test
     projects: |
-     $(LibrariesRootFolder)/Canon/tests
-     $(LibrariesRootFolder)/Chemistry/tests/ChemistryTests/ChemistryTests.csproj
-     $(LibrariesRootFolder)/Chemistry/tests/SystemTests/SystemTests.csproj
-     $(LibrariesRootFolder)/Chemistry/tests/DataModelTests/DataModelTests.csproj
+     $(LibrariesRootFolder)/Chemistry/tests/JupyterTests/JupyterTests.csproj
     arguments: '-c $(BuildConfiguration) -v n /p:Version=$(Assembly.Version)'
-
-##
-# Create Nuget.
-##
-- task: DotNetCoreCLI@2
-  displayName: 'Pack Libraries nugets'
-  inputs:
-    command: custom
-    custom: pack
-    projects: |
-     $(LibrariesRootFolder)/Canon/src/Canon.csproj
-     $(LibrariesRootFolder)/Chemistry/src/DataModel/DataModel.csproj
-    arguments: ' --no-build -c $(BuildConfiguration) -v n -o $(System.DefaultWorkingDirectory) /p:PackageVersion=$(Nuget.Version)'
 
