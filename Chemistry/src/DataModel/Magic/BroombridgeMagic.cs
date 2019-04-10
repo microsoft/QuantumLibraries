@@ -34,6 +34,5 @@ namespace Microsoft.Quantum.Chemistry.Magic
             var yamlData = Deserializers.DeserializeBroombridge(input);
             return yamlData.ToExecutionResult();
         }
-    }
-    
+    }    
 }
