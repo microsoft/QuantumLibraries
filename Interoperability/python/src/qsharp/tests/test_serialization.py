@@ -18,7 +18,7 @@ class TestSerialization(unittest.TestCase):
     def test_map_shallow_tuple(self):
         self.assertEqual(
             map_tuples((42, 'foo')),
-            {'@type': 'tuple', 'item1': 42, 'item2': 'foo'}
+            {'@type': 'tuple', 'Item1': 42, 'Item2': 'foo'}
         )
 
     def test_map_deep_tuple(self):
@@ -27,9 +27,9 @@ class TestSerialization(unittest.TestCase):
             'bar': {'a': ('a', 'a'), 'b': ()}
         }
         expected = {
-            'foo': [1, 3.14, {'@type': 'tuple', 'item1': 42, 'item2': 'baz'}],
+            'foo': [1, 3.14, {'@type': 'tuple', 'Item1': 42, 'Item2': 'baz'}],
             'bar': {
-                'a': {'@type': 'tuple', 'item1': 'a', 'item2': 'a'},
+                'a': {'@type': 'tuple', 'Item1': 'a', 'Item2': 'a'},
                 'b': {'@type': 'tuple'}
             }
         }
