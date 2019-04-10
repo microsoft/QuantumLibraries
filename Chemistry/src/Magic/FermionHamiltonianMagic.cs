@@ -11,7 +11,6 @@ using Microsoft.Quantum.Chemistry.Broombridge;
 using Microsoft.Quantum.Chemistry.OrbitalIntegrals;
 using Microsoft.Quantum.Chemistry.Fermion;
 using Microsoft.Quantum.Chemistry.Pauli;
-using Microsoft.Quantum.Chemistry.QSharpFormat;
 using Microsoft.Quantum.Chemistry.Generic;
 using Microsoft.Quantum.Chemistry;
 
@@ -50,19 +49,19 @@ namespace Magic
             }
 
             // Deserialize Broombridge from file.
-            CurrentVersion.Data broombridge = Deserializers.DeserializeBroombridge(input);
+            Data broombridge = Deserializers.DeserializeBroombridge(input);
 
             // A single file can contain multiple problem descriptions. Let us pick the first one.
-            CurrentVersion.ProblemDescription problemData = broombridge.ProblemDescriptions.First();
-            
+            Data.ProblemDescription problemData = broombridge.ProblemDescriptions.First();
+
             // Electronic structure Hamiltonians are usually represented compactly by orbital integrals. Let us construct
             // such a Hamiltonian from broombridge.
-            OrbitalIntegralHamiltonian orbitalIntegralHamiltonian = problemData.ToOrbitalIntegralHamiltonian();
+            OrbitalIntegralHamiltonian orbitalIntegralHamiltonian = problemData.OrbitalIntegralHamiltonian;
 
             // We can obtain the full fermion Hamiltonian from the more compact orbital integral representation.
             // This transformation requires us to pick a convention for converting a spin-orbital index to a single integer.
             // Let us pick one according to the formula `integer = 2 * orbitalIndex + spinIndex`.
-            FermionHamiltonian fermionHamiltonian = orbitalIntegralHamiltonian.ToFermionHamiltonian(SpinOrbital.IndexConvention.UpDown);
+            FermionHamiltonian fermionHamiltonian = orbitalIntegralHamiltonian.ToFermionHamiltonian(IndexConvention.UpDown);
             
             return fermionHamiltonian.ToExecutionResult();
         }

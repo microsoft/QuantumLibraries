@@ -13,7 +13,7 @@ using Microsoft.Quantum.Chemistry.Pauli;
 using Microsoft.Quantum.Chemistry.QSharpFormat;
 using Microsoft.Quantum.Chemistry.JordanWigner;
 using Microsoft.Quantum.Chemistry.Generic;
-using Microsoft.Quantum.Chemistry.LadderOperators;
+
 
 namespace Microsoft.Quantum.Chemistry
 {
@@ -67,16 +67,13 @@ namespace Microsoft.Quantum.Chemistry
         /// </returns>
         public static IEnumerable<FermionHamiltonian> LoadFromBroombridge(
             string filename,
-            SpinOrbital.IndexConvention indexConvention)
+            IndexConvention indexConvention)
         {
             var broombridgeData = Deserializers.DeserializeBroombridge(filename);
             
-            IEnumerable<CurrentVersion.ProblemDescription> problemData = broombridgeData.ProblemDescriptions;
-
             // Create electronic structure Hamiltonian
-            var fermionHamiltonians = problemData
-                .Select(o => o
-                .ToOrbitalIntegralHamiltonian()
+            var fermionHamiltonians = broombridgeData.ProblemDescriptions
+                .Select(o => o.OrbitalIntegralHamiltonian
                 .ToFermionHamiltonian(indexConvention));
 
             return fermionHamiltonians;
@@ -90,21 +87,20 @@ namespace Microsoft.Quantum.Chemistry
         /// <returns>
         /// Greedy trial state for minimizing Hamiltonian diagonal one-electron energy.
         /// </returns>
-        public static InputState GreedyStatePreparation(this FermionHamiltonian hamiltonian, int nElectrons)
+        public static FermionWavefunction<int> GreedyStatePreparation(this FermionHamiltonian hamiltonian, int nElectrons)
         {
-            InputState state = new InputState();
-            WavefunctionFermionSCF greedyState = hamiltonian.GreedyStatePreparationSCF(nElectrons);
+            SingleCFWavefunction<int> greedyState = hamiltonian.GreedyStatePreparationSCF(nElectrons);
 
-            state.Label = "Greedy";
-
-            // Currently not used
-            // state.reference = null;
-
-            state.TypeOfState = StateType.SparseMultiConfigurational;
-
-            state.Superposition.Add(((1.0, 0.0), new IndexOrderedLadderSequence(greedyState.GetLadderSequence())));
-
-            return state;
+            return new FermionWavefunction<int>
+            {
+                Energy = 0.0,
+                Method = StateType.SparseMultiConfigurational,
+                MCFData = new SparseMultiCFWavefunction<int>()
+                {
+                    Reference = greedyState,
+                    Excitations = new Dictionary<IndexOrderedSequence<int>, System.Numerics.Complex>()
+                }
+            };
         }
 
         /*

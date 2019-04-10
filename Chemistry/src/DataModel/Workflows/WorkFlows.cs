@@ -22,19 +22,19 @@ namespace Microsoft.Quantum.Chemistry
         public static void SampleWorkflow(
             string filename,
             string wavefunctionLabel,
-            SpinOrbital.IndexConvention indexConvention
+            IndexConvention indexConvention
             )
         {
             // Deserialize Broombridge from file.
-            CurrentVersion.Data broombridge = Deserializers.DeserializeBroombridge(filename);
+            Data broombridge = Deserializers.DeserializeBroombridge(filename);
 
             // A single file can contain multiple problem descriptions. Let us pick the first one.
-            CurrentVersion.ProblemDescription problemData = broombridge.ProblemDescriptions.First();
+            Data.ProblemDescription problemData = broombridge.ProblemDescriptions.First();
 
             #region Create electronic structure Hamiltonian
             // Electronic structure Hamiltonians are usually represented compactly by orbital integrals. Let us construct
             // such a Hamiltonian from broombridge.
-            OrbitalIntegralHamiltonian orbitalIntegralHamiltonian = problemData.ToOrbitalIntegralHamiltonian();
+            OrbitalIntegralHamiltonian orbitalIntegralHamiltonian = problemData.OrbitalIntegralHamiltonian;
 
             // We can obtain the full fermion Hamiltonian from the more compact orbital integral representation.
             // This transformation requires us to pick a convention for converting a spin-orbital index to a single integer.
@@ -49,11 +49,16 @@ namespace Microsoft.Quantum.Chemistry
             #region Create wavefunction Ansatzes
             // A list of trial wavefunctions can be provided in the Broombridge file. For instance, the wavefunction
             // may be a single-reference Hartree--Fock state, a multi-reference state, or a unitary coupled-cluster state.
-            Dictionary<string, InputState> inputStates = problemData.ToWavefunctions(indexConvention);
+            // In this case, Broombridge indexes the fermion operators with spin-orbitals instead of integers. 
+            Dictionary<string, FermionWavefunction<SpinOrbital>> inputStates = problemData.Wavefunctions;
 
             // If no states are provided, use the Hartree--Fock state.
-            InputState inputState = inputStates.Count() != 0
-                ? inputStates[wavefunctionLabel] : fermionHamiltonian.GreedyStatePreparation(problemData.NElectrons);
+            // As fermion operators the fermion Hamiltonian are already indexed by, we now apply the desired
+            // spin-orbital -> integer indexing convention.
+            FermionWavefunction<int> inputState = inputStates[wavefunctionLabel].ToIndexing(indexConvention);
+            
+            //Data.State inputState = inputStates.Count() != 0
+            //    ? inputStates[wavefunctionLabel] : fermionHamiltonian.GreedyStatePreparation(problemData.NElectrons);
             #endregion
 
             #region Pipe to QSharp and simulate
@@ -86,15 +91,15 @@ namespace Microsoft.Quantum.Chemistry
         /// </summary>
         public Config()
         {
-            UseIndexConvention = DefaultIndexConvention;
-            QubitEncoding UseQubitEncoding = DefaultQubitEncoding;
-            UseTruncationThreshold = DefaultTruncationThreshold;
+            UseIndexConvention = IndexConvention.UpDown;
+            QubitEncoding UseQubitEncoding = QubitEncoding.JordanWigner;
+            UseTruncationThreshold = 1e-8;
         }
 
         /// <summary>
         /// Choose indexing convention from spin-orbital index to an integer.
         /// </summary>
-        public SpinOrbital.IndexConvention UseIndexConvention;
+        public IndexConvention UseIndexConvention;
 
         /// <summary>
         /// Threshold below which to truncate Hamiltonian coefficients.
@@ -105,11 +110,7 @@ namespace Microsoft.Quantum.Chemistry
         /// Chose mapping from fermions operators to Pauli operatos.
         /// </summary>
         public QubitEncoding UseQubitEncoding;
-
-        // Default settings
-        public const SpinOrbital.IndexConvention DefaultIndexConvention = SpinOrbital.IndexConvention.UpDown;
-        public const QubitEncoding DefaultQubitEncoding = QubitEncoding.JordanWigner;
-        public const double DefaultTruncationThreshold = 1e-8;
+        
         
 
     }

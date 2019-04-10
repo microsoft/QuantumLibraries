@@ -16,7 +16,7 @@ namespace Microsoft.Quantum.Chemistry.OrbitalIntegrals
     /// LadderType representing orbital overlap integrals.
     /// </summary>
     public class OrbitalIntegral : 
-        ITermIndex<TermType.OrbitalIntegral>//, IEquatable<OrbitalIntegral>
+        ITermIndex<TermType.OrbitalIntegral>, IEquatable<OrbitalIntegral>
     {
         public enum Convention
         {
@@ -105,6 +105,23 @@ namespace Microsoft.Quantum.Chemistry.OrbitalIntegrals
                 default:
                     throw new ArgumentException("Attempted to classify unimplemented orbital integral.");
             }
+        }
+
+        /// <summary>
+        /// Returns the sign of this term.
+        /// </summary>
+        /// <returns>Sign of this term.</returns>
+        public int GetSign()
+        {
+            return Math.Sign(Coefficient);
+        }
+
+        /// <summary>
+        /// Sets the sign of this fermion term to one.
+        /// </summary>
+        public void ResetSign()
+        {
+            Coefficient = 1.0;
         }
 
         /// <summary>

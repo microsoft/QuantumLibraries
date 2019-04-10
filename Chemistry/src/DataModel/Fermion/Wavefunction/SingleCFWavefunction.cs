@@ -5,7 +5,7 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 
-using Microsoft.Quantum.Chemistry.LadderOperators;
+
 using Microsoft.Quantum.Chemistry.Generic;
 
 namespace Microsoft.Quantum.Chemistry.Fermion
@@ -19,24 +19,20 @@ namespace Microsoft.Quantum.Chemistry.Fermion
     /// 2) Index-ordered, where are raising(lowering) operators are in ascending(descending) order.
     /// 3) Contains only creation operators.
     /// </summary>
-    public class WavefunctionFermionSCF : FermionTerm
+    public class SingleCFWavefunction<TIndex> : IndexOrderedSequence<TIndex>
+        where TIndex : IEquatable<TIndex>, IComparable<TIndex>
     {
         #region Constructors
         /// <summary>
         /// Constructor for empty instance.
         /// </summary>
-        internal WavefunctionFermionSCF() : base() { }
+        internal SingleCFWavefunction() : base() { }
 
         /// <summary>
         /// Construct a copy of the input instance.
         /// </summary>
         /// <param name="term">Sequence of ladder operators.</param>
-        internal WavefunctionFermionSCF(WavefunctionFermionSCF term)
-        {
-            // All constructions are pass by value.
-            Sequence = term.Sequence.ToList();
-            Coefficient = term.Coefficient;
-        }
+        internal SingleCFWavefunction(SingleCFWavefunction<TIndex> term) : base(term) { }
 
         /*
         /// <summary>
@@ -56,9 +52,20 @@ namespace Microsoft.Quantum.Chemistry.Fermion
         /// Sequence of ladder operators with only creation terms in ascending order.
         /// that are normal-ordered.
         /// </returns>
-        public WavefunctionFermionSCF(IEnumerable<int> indices) : base(indices.Select(o => (RaisingLowering.u, o)).ToLadderSequence()) { }
+        public SingleCFWavefunction(IEnumerable<TIndex> indices) : base(indices
+            .Select(o => new LadderOperator<TIndex>(RaisingLowering.u, o))) { }
 
         #endregion
+
+        /// <summary>
+        /// Changes the indexing scheme of this instance.
+        /// </summary>
+        /// <typeparam name="TNewIndex">Type of the new indexing scheme.</typeparam>
+        /// <param name="indexFunction">Function for mapping the current scheme to the new scheme.</param>
+        /// <returns>Instance with a new index type.</returns>
+        public SingleCFWavefunction<TNewIndex> ToNewIndex<TNewIndex>(Func<TIndex, TNewIndex> indexFunction)
+        where TNewIndex : IEquatable<TNewIndex>, IComparable<TNewIndex>
+            => new SingleCFWavefunction<TNewIndex>(base.ToNewIndex(indexFunction).ToIndices());
 
         /// <summary>
         /// This throws an ArgumentException if the operators in NormalOrderedLadderSequence are not normal-ordered.

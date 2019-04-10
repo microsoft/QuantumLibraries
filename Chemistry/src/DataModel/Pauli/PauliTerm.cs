@@ -65,6 +65,23 @@ namespace Microsoft.Quantum.Chemistry.Pauli
         }
 
         /// <summary>
+        /// Returns the sign of this term.
+        /// </summary>
+        /// <returns>Sign of this term.</returns>
+        public int GetSign()
+        {
+            return 1;
+        }
+
+        /// <summary>
+        /// Sets the sign of this fermion term to one.
+        /// </summary>
+        public void ResetSign()
+        {
+            // All Pauli terms currently have no sign.
+        }
+
+        /// <summary>
         /// Returns a human-readable description this object.
         /// </summary>
         public override string ToString()
@@ -157,9 +174,9 @@ namespace Microsoft.Quantum.Chemistry.Pauli
             return new PauliTTermValue(0.0);
         }
 
-        public PauliTTermValue AddValue(PauliTTermValue addThis)
+        public PauliTTermValue AddValue(PauliTTermValue addThis, int sign = 1)
         {
-            return new PauliTTermValue( Value.Zip(addThis.Value, (a, b) => (a + b)));
+            return new PauliTTermValue( Value.Zip(addThis.Value, (a, b) => (a + b) * (double) sign));
         }
 
         public override string ToString()

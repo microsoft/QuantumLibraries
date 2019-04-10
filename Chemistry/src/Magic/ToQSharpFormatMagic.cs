@@ -33,7 +33,7 @@ namespace Magic
         public class Arguments
         {
             public FermionHamiltonian hamiltonian { get; set; }
-            public InputState inputState { get; set; }
+            public FermionWavefunction<int> inputState { get; set; }
         }
 
         public ExecutionResult Run(string input, IChannel channel)

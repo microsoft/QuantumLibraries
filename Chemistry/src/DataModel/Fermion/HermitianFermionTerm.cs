@@ -5,13 +5,14 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 
-using Microsoft.Quantum.Chemistry.LadderOperators;
 using Microsoft.Quantum.Chemistry.Generic;
+using Microsoft.Quantum.Chemistry;
 using Microsoft.Quantum.Chemistry;
 
 namespace Microsoft.Quantum.Chemistry.Fermion
 {
     using static Microsoft.Quantum.Chemistry.Extensions;
+    using FermionOperator = LadderOperator<int>;
 
     /// <summary>
     /// Class representing a sequence of fermionic raising and lowering operators, subject to the additional constraints: 
@@ -41,22 +42,41 @@ namespace Microsoft.Quantum.Chemistry.Fermion
         internal HermitianFermionTerm() : base() { }
 
         /// <summary>
-        /// Construct a copy of the input instance.
+        /// Construct Hermitian fermion term instance from a normal-ordered sequence of ladder operators.
         /// </summary>
-        /// <param name="term">Sequence of ladder operators.</param>
-        internal HermitianFermionTerm(HermitianFermionTerm term)
-        {
-            // All constructions are pass by value.
-            Sequence = term.Sequence.ToList();
-            Coefficient = term.Coefficient;
+        /// <param name="ladderOperators">Normal-ordered sequence of ladder operators.</param>
+        public HermitianFermionTerm(LadderSequence<int> ladderOperators) : base(ladderOperators) {
+            NormalizeToCanonicalOrder();
         }
 
         /// <summary>
-        /// Construct instance from a normal-ordered sequence of ladder operators.
+        /// Construct Hermitian instance from a normal-ordered sequence of ladder operators.
         /// </summary>
-        /// <param name="ladderOperators">Normal-ordered sequence of ladder operators.</param>
-        public HermitianFermionTerm(LadderSequence ladderOperators) : base(ladderOperators) { NormalizeToCanonicalOrder(); }
+        /// <param name="ladderOperators">Hermitian normal-ordered sequence of ladder operators.</param>
+        public HermitianFermionTerm(IEnumerable<FermionOperator> ladderOperators, int setSign = 1) : base(ladderOperators, setSign) {
+            NormalizeToCanonicalOrder();
+        }
+
+        public static implicit operator HermitianFermionTerm((RaisingLowering, int)[] setSequence)
+            => new HermitianFermionTerm(setSequence.Select(o => new FermionOperator(o)));
         #endregion
+
+        /// <summary>
+        /// Returns the sign of this fermion term.
+        /// </summary>
+        /// <returns>The sign of the fermion term.</returns>
+        public int GetSign()
+        {
+            return Coefficient;
+        }
+
+        /// <summary>
+        /// Sets the sign of this fermion term to one.
+        /// </summary>
+        public void ResetSign()
+        {
+            Coefficient = 1;
+        }
 
         /// <summary>
         ///  Checks if raising operators indices are in ascending order, 
@@ -99,7 +119,7 @@ namespace Microsoft.Quantum.Chemistry.Fermion
             // Take Hermitian Conjugate    
             if (!IsInCanonicalOrder())
             {
-                Sequence = Sequence.Select(o => (o.Type == RaisingLowering.d ? RaisingLowering.u : RaisingLowering.d, o.Index)).Select(o => new LadderOperator(o)).Reverse().ToList();
+                Sequence = Sequence.Select(o => (o.Type == RaisingLowering.d ? RaisingLowering.u : RaisingLowering.d, o.Index)).Select(o => new FermionOperator(o)).Reverse().ToList();
             }
         }
 

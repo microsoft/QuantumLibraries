@@ -4,7 +4,7 @@
 namespace Microsoft.Quantum.Chemistry
 {
     using System;
-
+    
     /// <summary>
     /// All Hamiltonian terms must implement this interface.
     /// </summary>
@@ -12,6 +12,8 @@ namespace Microsoft.Quantum.Chemistry
     public interface ITermIndex <TTermClassification>
     {
         TTermClassification GetTermType();
+        int GetSign();
+        void ResetSign();
     }
 
     /// <summary>
@@ -20,8 +22,9 @@ namespace Microsoft.Quantum.Chemistry
     /// <typeparam name="TTermClassification">Index to categories of terms.</typeparam>
     public interface ITermValue<TTermValue>
     {
-        TTermValue AddValue(TTermValue addThis);
+        TTermValue AddValue(TTermValue addThis, int sign);
         TTermValue Default();
+        
 
         /// <summary>
         /// Computes the L_p norm of term.
@@ -30,6 +33,7 @@ namespace Microsoft.Quantum.Chemistry
         /// <returns>L_p norm of term.</returns>
         double Norm(double power);
     }
+
 
 
     /// <summary>
@@ -69,6 +73,14 @@ namespace Microsoft.Quantum.Chemistry
     };
 
     /// <summary>
+    /// Available indexing convention from a spin-orbital index to an integer.
+    /// </summary>
+    public enum IndexConvention
+    {
+        NotApplicable, UpDown, HalfUp
+    }
+
+    /// <summary>
     /// Wavefunction types
     /// </summary>
     public enum StateType
@@ -88,7 +100,7 @@ namespace Microsoft.Quantum.Chemistry
     /// Boxed version of double that implements the <see cref="ITermValue"></see> interface
     /// that requires all values to have a method to compute its norm.
     /// </summary>
-    public struct DoubleCoeff : ITermValue<DoubleCoeff>
+    public struct DoubleCoeff : IEquatable<DoubleCoeff>, ITermValue<DoubleCoeff>
     {
         public double Value;
 
@@ -102,7 +114,7 @@ namespace Microsoft.Quantum.Chemistry
 
         public DoubleCoeff Default() => 0.0;
 
-        public DoubleCoeff AddValue(DoubleCoeff addThis) => Value + addThis.Value;
+        public DoubleCoeff AddValue(DoubleCoeff addThis, int sign) => Value + (addThis.Value * (double)sign);
 
         /// <summary>
         /// Computes the L_p norm of term.

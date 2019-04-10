@@ -18,8 +18,8 @@ namespace Microsoft.Quantum.Chemistry.Tests
         [Fact]
         public void DeserializeVersionNumbers()
         {
-            Assert.Equal(Deserializers.VersionNumber.v0_1, Broombridge.Deserializers.GetVersionNumber("Broombridge/broombridge_v0.1.yaml"));
-            Assert.Equal(Deserializers.VersionNumber.v0_2, Broombridge.Deserializers.GetVersionNumber("Broombridge/broombridge_v0.2.yaml"));
+            Assert.Equal(VersionNumber.v0_1, Broombridge.Deserializers.GetVersionNumber("Broombridge/broombridge_v0.1.yaml"));
+            Assert.Equal(VersionNumber.v0_2, Broombridge.Deserializers.GetVersionNumber("Broombridge/broombridge_v0.2.yaml"));
         }
     }
 
@@ -41,7 +41,7 @@ namespace Microsoft.Quantum.Chemistry.Tests
     public class Broombridgev0_2Tests
     {
         static string filename = "Broombridge/broombridge_v0.2.yaml";
-        static DataStructures.V0_2.Data broombridge = Deserializers.DeserializeBroombridgev0_2(filename);
+        static V0_2.Data broombridge = Deserializers.DeserializeBroombridgev0_2(filename);
 
         [Fact]
         public void Version()
@@ -95,18 +95,19 @@ namespace Microsoft.Quantum.Chemistry.Tests
         public void JsonEncoding()
         {
             var filename = "Broombridge/broombridge_v0.2.yaml";
-            CurrentVersion.Data original = Deserializers.DeserializeBroombridge(filename);
+            Data original = Deserializers.DeserializeBroombridge(filename);
+            var rawData = original.Raw;
 
-            var json = JsonConvert.SerializeObject(original);
+            var json = JsonConvert.SerializeObject(rawData);
             File.WriteAllText("original.json", json);
 
-            var serialized = JsonConvert.DeserializeObject<CurrentVersion.Data>(json);
+            var serialized = JsonConvert.DeserializeObject<Data>(json);
                 File.WriteAllText("serialized.json", JsonConvert.SerializeObject(serialized));
 
-            Assert.Equal(original.Format, serialized.Format);
-            Assert.Equal(original.Bibliography.Count, serialized.Bibliography.Count);
-            Assert.Equal(original.ProblemDescriptions.Count, serialized.ProblemDescriptions.Count);
-            Assert.Equal(original.Generator.Source, serialized.Generator.Source);
+            Assert.Equal(original.Raw.Format, serialized.Raw.Format);
+            Assert.Equal(original.Raw.Bibliography.Count, serialized.Raw.Bibliography.Count);
+            Assert.Equal(original.Raw.ProblemDescriptions.Count, serialized.ProblemDescriptions.Count);
+            Assert.Equal(original.Raw.Generator.Source, serialized.Raw.Generator.Source);
             Assert.Equal(original.Schema, serialized.Schema);
         }
     }

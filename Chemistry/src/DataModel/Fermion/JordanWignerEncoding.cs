@@ -15,29 +15,7 @@ namespace Microsoft.Quantum.Chemistry.Fermion
     /// </summary>
     public static partial class Extensions
     {
-        /// <summary>
-        /// This approximates the Hamiltonian ground state by a greedy algorithm  
-        /// that minimizes only the PP term energies. If there are no PP terms,
-        /// states will be occupied in lexicographic order.
-        /// </summary>
-        /// <returns>
-        /// Greedy trial state for minimizing Hamiltonian diagonal one-electron energy.
-        /// </returns>
-        public static WavefunctionFermionSCF GreedyStatePreparationSCF(this FermionHamiltonian hamiltonian, int nElectrons)
-        {
-            if (hamiltonian.Terms.ContainsKey(TermType.Fermion.PP))
-            {
-                var hPPTermSortedByCoeff = hamiltonian.Terms[TermType.Fermion.PP];
-                var spinOrbitalIndices = hPPTermSortedByCoeff.OrderBy(o => o.Value).Select(o => o.Key.Sequence.First().Index).Take((int)nElectrons).ToArray();
-                return new WavefunctionFermionSCF(spinOrbitalIndices);
-            }
-            else
-            {
-                return new WavefunctionFermionSCF(Enumerable.Range(0, nElectrons).ToArray());
-            }
-        }
-
-        /// <summary>
+         /// <summary>
         /// Method for constructing a Pauli Hamiltonian from a fermion Hamiltonina.
         /// </summary>
         /// <param name="sourceHamiltonian">Input orbital integral Hamiltonian.</param>

@@ -6,13 +6,17 @@ using Xunit;
 using System;
 using System.Linq;
 using System.Collections.Generic;
+using Microsoft.Quantum.Chemistry.Generic;
 
-using Microsoft.Quantum.Chemistry.LadderOperators;
 
 namespace Microsoft.Quantum.Chemistry.Tests
 {
 
     using static RaisingLowering;
+    using LadderSequence = LadderSequence<int>;
+    using LadderOperator = LadderOperator<int>;
+    using NormalOrderedSequence = NormalOrderedSequence<int>;
+    using IndexOrderedSequence = IndexOrderedSequence<int>;
 
     public class LadderOperatorTests
     {
@@ -109,7 +113,7 @@ namespace Microsoft.Quantum.Chemistry.Tests
         public void NotNormalOrderedTest(bool pass, int nOrbitals, IEnumerable<int> ca, IEnumerable<int> idx)
         {
             var ladderOperators = ca.Zip(idx, (a, b) => (a == 0 ? RaisingLowering.d : RaisingLowering.u, (int)b)).ToLadderSequence();
-            Assert.Throws<ArgumentException>(() => new IndexOrderedLadderSequence(ladderOperators));
+            Assert.Throws<ArgumentException>(() => new IndexOrderedSequence(ladderOperators));
         }
         
     }
@@ -121,7 +125,7 @@ namespace Microsoft.Quantum.Chemistry.Tests
         public void NotPassByReference()
         {
             var op = new[] { 1, 2, 4, 3 }.ToLadderSequence();
-            var newTerm = new NormalOrderedLadderSequence(op);
+            var newTerm = new NormalOrderedSequence(op);
             op.Sequence[2] = new LadderOperator(RaisingLowering.d, 5);
 
             Assert.NotEqual(op.Sequence, newTerm.Sequence);
@@ -157,7 +161,7 @@ namespace Microsoft.Quantum.Chemistry.Tests
         public void NotPassByReference()
         {
             var op = new[] { 1, 2, 4, 3 }.ToLadderSequence();
-            var newTerm = new IndexOrderedLadderSequence(op);
+            var newTerm = new IndexOrderedSequence(op);
             op.Sequence[2] = new LadderOperator(RaisingLowering.d, 5);
 
             Assert.NotEqual(op.Sequence, newTerm.Sequence);

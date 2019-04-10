@@ -12,9 +12,10 @@ using System.Collections.Generic;
 
 using Microsoft.Quantum.Chemistry.OrbitalIntegrals;
 using Microsoft.Quantum.Chemistry.Fermion;
-using Microsoft.Quantum.Chemistry.LadderOperators;
+
 using Microsoft.Quantum.Chemistry.Pauli;
 using Microsoft.Quantum.Chemistry.QSharpFormat;
+using Microsoft.Quantum.Chemistry.Generic;
 
 namespace Microsoft.Quantum.Chemistry.Tests
 {

@@ -32,7 +32,7 @@ namespace SystemTestsLiH
         {
             var broombridge = Deserializers.DeserializeBroombridge(filename).ProblemDescriptions.First();
 
-            var orbHam = broombridge.ToOrbitalIntegralHamiltonian();
+            var orbHam = broombridge.OrbitalIntegralHamiltonian;
 
             var ferHam = orbHam.ToFermionHamiltonian(configuration.UseIndexConvention);
 
@@ -41,7 +41,7 @@ namespace SystemTestsLiH
             var hamiltonian = pauHam.ToQSharpFormat();
 
             var wavefunction = broombridge
-                .ToWavefunctions(configuration.UseIndexConvention)["|G>"]
+                .Wavefunctions["|G>"].ToIndexing(configuration.UseIndexConvention)
                 .ToQSharpFormat();
 
             var qSharpData = Microsoft.Quantum.Chemistry.QSharpFormat.Convert.ToQSharpFormat(hamiltonian, wavefunction);
@@ -101,7 +101,7 @@ namespace SystemTestsLiH
             {
                 var configuration = Config.Default();
 
-                var error = SetUpLiHSimulation(filename, configuration, 6);
+                var error = SetUpLiHSimulation(filename, configuration, 7);
 
                 Assert.True(Math.Abs(error) < 1e-1, "This test is probabilistic.");
             }
@@ -110,11 +110,11 @@ namespace SystemTestsLiH
             public void EnergyUpDownIndexConvention()
             {
                 var configuration = Config.Default();
-                configuration.UseIndexConvention = SpinOrbital.IndexConvention.UpDown;
+                configuration.UseIndexConvention = IndexConvention.UpDown;
 
                 var error = SetUpLiHSimulation(filename, configuration, 6);
 
-                Assert.True(Math.Abs(error) < 1e-1, "This test is probabilistic.");
+                Assert.True(Math.Abs(error) < 2e-1, "This test is probabilistic.");
             }
 
             
@@ -149,16 +149,16 @@ namespace SystemTestsLiH
 
                 var error = SetUpLiHSimulation(filename, configuration, 6);
 
-                Assert.True(Math.Abs(error) < 1e-1);
+                Assert.True(Math.Abs(error) < 2e-1);
             }
 
             [Fact]
             public void EnergyUpDownIndexConvention()
             {
                 var configuration = Config.Default();
-                configuration.UseIndexConvention = SpinOrbital.IndexConvention.UpDown;
+                configuration.UseIndexConvention = IndexConvention.UpDown;
 
-                var error = SetUpLiHSimulation(filename, configuration, 6);
+                var error = SetUpLiHSimulation(filename, configuration, 7);
 
                 Assert.True(Math.Abs(error) < 1e-1);
             }
@@ -167,7 +167,7 @@ namespace SystemTestsLiH
             public void RunUnitaryCoupledCluster()
             {
                 var configuration = Config.Default();
-                configuration.UseIndexConvention = SpinOrbital.IndexConvention.UpDown;
+                configuration.UseIndexConvention = IndexConvention.UpDown;
 
                 // This is a ranodm UCCSD state, not the actual one for LiH.
                 var error = SetUpLiHSimulation(filename, configuration, 1, "UCCSD |E1>");

@@ -5,14 +5,12 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 
-namespace Microsoft.Quantum.Chemistry.LadderOperators
-{
-    using static RaisingLowering;
-
+namespace Microsoft.Quantum.Chemistry.Generic
+{ 
     public static partial class Extensions
     {
         #region Convenience constructors
-        
+
         /// <summary>
         /// Construct a sequence of ladder operators from sequence of tuples each
         /// specifying whether it is a raising or lowering term, and its index.
@@ -26,9 +24,8 @@ namespace Microsoft.Quantum.Chemistry.LadderOperators
         /// // Construct a sequence a ladder operators 1^ 2^ 3 4
         /// var tmp = new[] { (u, 1), (u, 2), (d, 3), (d, 4) }.ToLadderSequence();
         /// </example>
-        public static LadderSequence ToLadderSequence(this IEnumerable<(RaisingLowering, int)> setSequence, int setSign = 1) =>
-            new LadderSequence(setSequence.Select(o => new LadderOperator(o)), setSign);
-        
+        public static LadderSequence<int> ToLadderSequence(this IEnumerable<(RaisingLowering, int)> setSequence, int setSign = 1) =>
+            new LadderSequence<int>(setSequence.Select(o => new LadderOperator<int>(o)), setSign);
 
         /// <summary>
         /// Construct a sequence of ladder operators from an even-length sequence of integers.
@@ -45,7 +42,7 @@ namespace Microsoft.Quantum.Chemistry.LadderOperators
         /// var expected = new[] { (u, 1), (u, 2), (d, 3), (d, 4) }.ToLadderSequence();
         /// </code>
         /// </example>
-        public static LadderSequence ToLadderSequence(this IEnumerable<int> indices) => indices.ToArray();
+        public static LadderSequence<int> ToLadderSequence(this IEnumerable<int> indices) => indices.ToArray();
         #endregion
 
         #region Reordering methods
@@ -54,13 +51,14 @@ namespace Microsoft.Quantum.Chemistry.LadderOperators
         ///  Converts a <see cref="LadderSequence"/> to normal order. 
         ///  In general, this can generate new terms and modifies the coefficient.
         /// </summary>
-        public static HashSet<NormalOrderedLadderSequence> ToNormalOrder(this LadderSequence ladderOperator)
+        public static HashSet<NormalOrderedSequence<TIndex>> ToNormalOrder<TIndex>(this LadderSequence<TIndex> ladderOperator)
+            where TIndex : IEquatable<TIndex>
         {
             // Recursively anti-commute creation to the left.
-            var TmpTerms = new Stack<LadderSequence>();
-            var NewTerms = new HashSet<NormalOrderedLadderSequence>();
+            var TmpTerms = new Stack<LadderSequence<TIndex>>();
+            var NewTerms = new HashSet<NormalOrderedSequence<TIndex>>();
 
-            TmpTerms.Push(new LadderSequence(ladderOperator));
+            TmpTerms.Push(new LadderSequence<TIndex>(ladderOperator));
 
             // Anti-commutes creation and annihilation operators to canonical order
             // and creates new terms if spin-orbital indices match.
@@ -69,7 +67,7 @@ namespace Microsoft.Quantum.Chemistry.LadderOperators
                 var tmpTerm = TmpTerms.Pop();
                 if (tmpTerm.IsInNormalOrder())
                 {
-                    NewTerms.Add(new NormalOrderedLadderSequence(tmpTerm));
+                    NewTerms.Add(new NormalOrderedSequence<TIndex>(tmpTerm));
                 }
                 else
                 {
@@ -79,9 +77,9 @@ namespace Microsoft.Quantum.Chemistry.LadderOperators
                         if ((int)tmpTerm.Sequence.ElementAt(i).Type > (int)tmpTerm.Sequence.ElementAt(i + 1).Type)
                         {
                             // If the two elements have the same spin orbital index, generate a new term.
-                            if (tmpTerm.Sequence.ElementAt(i).Index == tmpTerm.Sequence.ElementAt(i + 1).Index)
+                            if (tmpTerm.Sequence.ElementAt(i).Index.Equals(tmpTerm.Sequence.ElementAt(i + 1).Index))
                             {
-                                var newTerm = new LadderSequence(tmpTerm);
+                                var newTerm = new LadderSequence<TIndex>(tmpTerm);
                                 newTerm.Sequence.RemoveRange(i, 2);
                                 TmpTerms.Push(newTerm);
                             }
@@ -103,10 +101,11 @@ namespace Microsoft.Quantum.Chemistry.LadderOperators
         ///  Converts a <see cref="LadderSequence"/> to normal order, then index order. 
         ///  In general, this can generate new terms and modifies the coefficient.
         /// </summary>
-        public static HashSet<IndexOrderedLadderSequence> ToIndexOrder(this LadderSequence ladderOperator)
+        public static HashSet<IndexOrderedSequence<TIndex>> ToIndexOrder<TIndex>(this LadderSequence<TIndex> ladderOperator)
+            where TIndex : IEquatable<TIndex>, IComparable<TIndex>
         {
-            return new HashSet<IndexOrderedLadderSequence>(
-                ladderOperator.ToNormalOrder().Select(o => new IndexOrderedLadderSequence(o))
+            return new HashSet<IndexOrderedSequence<TIndex>>(
+                ladderOperator.ToNormalOrder().Select(o => new IndexOrderedSequence<TIndex>(o))
                 );
         }
         #endregion

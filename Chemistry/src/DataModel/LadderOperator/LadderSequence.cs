@@ -2,22 +2,24 @@
 // Licensed under the MIT License.
 
 using System;
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq;
 
-namespace Microsoft.Quantum.Chemistry.LadderOperators
+namespace Microsoft.Quantum.Chemistry.Generic
 {
-    
+
+
     /// <summary>
     /// Class representing a sequence of raising and lowering operators.
     /// </summary>
-    public class LadderSequence : IEquatable<LadderSequence>
+    public class LadderSequence<TIndex> : IEquatable<LadderSequence<TIndex>>
+        where TIndex : IEquatable<TIndex>
     {
 
         /// <summary>
         /// Sequence of ladder operators.
         /// </summary>
-        public List<LadderOperator> Sequence { get; set; } = new List<LadderOperator>();
+        public List<LadderOperator<TIndex>> Sequence { get; set; } = new List<LadderOperator<TIndex>>();
 
         /// <summary>
         /// sign (-1,+1) coefficient of ladder operators.
@@ -28,40 +30,37 @@ namespace Microsoft.Quantum.Chemistry.LadderOperators
         /// <summary>
         /// Constructor for empty ladder operator sequence.
         /// </summary>
-        public LadderSequence() {
-        }
+        public LadderSequence() : base() { }
 
         /// <summary>
-        /// Construct a copy of the input instance.
+        /// Constructor for an identitcal ladder operator sequence.
         /// </summary>
-        /// <param name="ladderOperators">Sequence of ladder operators.</param>
-        public LadderSequence(LadderSequence ladderOperators)
+        public LadderSequence(LadderSequence<TIndex> setSequence)
         {
-            if (ladderOperators != null)
-            {
-                // All constructions are pass by value. 
-                // ToList() copies values if the underlying object is a value type.
-                Sequence = ladderOperators.Sequence.ToList();
-                Coefficient = ladderOperators.Coefficient;
-            }
+            Coefficient = setSequence.Coefficient;
+            Sequence = setSequence.Sequence.ToList();
         }
-
+        
         /// <summary>
-        /// Construct a sequence of ladder operators from sequence of tuples each
-        /// specifying whether it is a raising or lowering term, and its index.
+        /// Construct instance from sequence of ladder operators.
         /// </summary>
         /// <param name="setSequence">Sequence of ladder operators.</param>
-        /// <param name="setSign">Set the sign coefficient of the sequence.</param>
-        /// <returns>
-        /// Sequence of ladder operators.
-        /// </returns>
-        /// <example>
-        /// // Construct a sequence a ladder operators 1^ 2^ 3 4
-        /// var tmp = new[] { (u, 1), (u, 2), (d, 3), (d, 4) }.ToLadderSequence();
-        /// </example>
-        public static implicit operator LadderSequence((RaisingLowering, int)[] setSequence)
+        public LadderSequence(IEnumerable<LadderOperator<TIndex>> setSequence, int setCoefficient = 1)
         {
-            return new LadderSequence(setSequence.Select(o => new LadderOperator(o)));
+            Sequence = setSequence.ToList();
+            Coefficient = setCoefficient;
+        }
+
+        // This exists as a convenience function for creating fermion terms in samples.
+        /// <summary>
+        /// Implicit operator for creating a Ladder operator.
+        /// </summary>
+        /// <param name="setOperator">Tuple where the first parameter
+        /// is the raising or lowering index, and the second parameter
+        /// is the position index of the ladder operator.</param>
+        public static implicit operator LadderSequence<TIndex>((RaisingLowering, TIndex)[] setSequence)
+        {
+            return new LadderSequence<TIndex>(setSequence.Select(o => new LadderOperator<TIndex>(o)));
         }
 
         /// <summary>
@@ -79,7 +78,7 @@ namespace Microsoft.Quantum.Chemistry.LadderOperators
         /// var expected = new[] { (u, 1), (u, 2), (d, 3), (d, 4) }.ToLadderSequence();
         /// </code>
         /// </example>
-        public static implicit operator LadderSequence(int[] indices)
+        public static implicit operator LadderSequence<TIndex>(TIndex[] indices)
         {
             var length = indices.Count();
             if (length % 2 == 1)
@@ -88,19 +87,9 @@ namespace Microsoft.Quantum.Chemistry.LadderOperators
                     $"Number of terms provided is `{length}` and must be of even length."
                     );
             }
-            Func<int, int, (RaisingLowering, int)> GetLadderOperator = (index, position)
+            Func<TIndex, int, (RaisingLowering, TIndex)> GetLadderOperator = (index, position)
                 => (position < length / 2 ? RaisingLowering.u : RaisingLowering.d, index);
-            return indices.Select((o, idx) => GetLadderOperator(o, idx)).ToLadderSequence();
-        }
-
-        /// <summary>
-        /// Construct instance from sequence of ladder operators.
-        /// </summary>
-        /// <param name="setSequence">Sequence of ladder operators.</param>
-        public LadderSequence(IEnumerable<LadderOperator> setSequence, int setCoefficient = 1)
-        {
-            Sequence = setSequence.ToList();
-            Coefficient = setCoefficient;
+            return indices.Select((o, idx) => GetLadderOperator(o, idx)).ToArray();
         }
         #endregion
 
@@ -112,8 +101,23 @@ namespace Microsoft.Quantum.Chemistry.LadderOperators
         /// Returns <c>true</c> this condition is satisfied.
         /// Returns <c>false</c> otherwise.
         /// </returns>
-        public bool IsInNormalOrder() => Sequence.Count() == 0 ? true : Sequence.Select(o => (int)o.Type).IsInAscendingOrder();
+        public bool IsInNormalOrder() => Sequence.Count() == 0 ? true : Sequence.Select(o => (int)o.GetRaisingLowering()).IsInAscendingOrder();
         #endregion
+
+        /// <summary>
+        /// Creates a new ladder sequence with a different indexing scheme.
+        /// </summary>
+        /// <typeparam name="TNewIndex">Type of the new indexing scheme.</typeparam>
+        /// <param name="indexFunction">Function for mapping the current scheme to the new scheme.</param>
+        /// <returns>Ladder sequence with a new index type.</returns>
+        public LadderSequence<TNewIndex> ToNewIndex<TNewIndex>(Func<TIndex, TNewIndex> indexFunction)
+        where TNewIndex : IEquatable<TNewIndex>
+        {
+            var newIndexing = Sequence
+                .Select(o => new LadderOperator<TNewIndex>
+                (o.GetRaisingLowering(), indexFunction(o.GetIndex())));
+            return new LadderSequence<TNewIndex>(newIndexing, Coefficient);
+        }
 
         /// <summary>
         /// Concatenates two Fermion terms.
@@ -125,75 +129,45 @@ namespace Microsoft.Quantum.Chemistry.LadderOperators
         /// LadderOperatorSequences are multipled together.
         /// </returns>
         // TODO: May decide to overload the * operator.
-        public LadderSequence Multiply(LadderSequence left, LadderSequence right) => new LadderSequence(left.Sequence.Concat(right.Sequence), left.Coefficient * right.Coefficient);
-
-        /// <summary>
-        /// Anti-commutation of ladder operators {x,y}.
-        /// </summary>
-        /// <param name="x">Left ladder operator.</param>
-        /// <param name="y">Right ladder operator.</param>
-        /// <returns>Result of {x,y}.</returns>
-        public virtual (RaisingLowering, int) AntiCommutator(LadderOperator x, LadderOperator y)
-        {
-            // {a_x, a_y^\dag} = \delta_{xy}
-            // {a_x, a_y} = 1
-            // {a_x^\dag, a_y^\dag} = 1
-            if (x.Index == y.Index)
-            {
-                if (x.Type != y.Type)
-                {
-                    if (x.Type == RaisingLowering.d)
-                    {
-                        return (RaisingLowering.identity, 1);
-                    }
-                    else
-                    {
-                        return (RaisingLowering.identity, -1);
-                    }
-                }
-                else
-                {
-                    return (RaisingLowering.identity, 0);
-                }
-            }
-            return (RaisingLowering.identity, 0);
-        }
-
+        public LadderSequence<TIndex> Multiply(
+            LadderSequence<TIndex> left, 
+            LadderSequence<TIndex> right) 
+            => new LadderSequence<TIndex>(left.Sequence.Concat(right.Sequence), left.Coefficient * right.Coefficient);
+        
         /// <summary>
         /// Counts the number of unique system indices across all <see cref="LadderOperator"/> terms
         /// in a <see cref="LadderSequence"/>
         /// </summary>
         /// <returns>Number of unique system indices.</returns>
-        public int UniqueIndices() => Sequence.Select(o => o.Index).Distinct().Count();
+        public int UniqueIndices() => Sequence.Select(o => o.GetIndex()).Distinct().Count();
 
         /// <summary>
         /// Returns a copy of the ladder sequence base class.
         /// </summary>
         /// <returns>Base class of this sequence of ladder operators.</returns>
-        public LadderSequence GetLadderSequence() => new LadderSequence(Sequence); 
+        public LadderSequence<TIndex> ToLadderSequence() => new LadderSequence<TIndex>(Sequence, Coefficient);
 
         /// <summary>
         /// Returns list of indices of the ladder operator sequence.
         /// </summary>
         /// <returns>Sequence of integers. </returns>
-        public IEnumerable<int> Indices() => Sequence.Select(o => o.Index);
+        public IEnumerable<TIndex> ToIndices() => Sequence.Select(o => o.GetIndex());
 
         /// <summary>
         /// Returns sequence of raising and lowering types of the ladder operator sequence.
         /// </summary>
         /// <returns>Sequence of raising an lowering operators.</returns>
-        public IEnumerable<RaisingLowering> SequenceRaisingLowering() =>  Sequence.Select(o => o.Type);
+        public IEnumerable<RaisingLowering> ToRaisingLowering() => Sequence.Select(o => o.GetRaisingLowering());
 
         /// <summary>
         /// Returns a human-readable description this object.
         /// </summary>
-        public override string ToString() => $"{Coefficient} * {string.Join(" ",Sequence)}";
-
+        public override string ToString() => $"{Coefficient} * {string.Join(" ", Sequence)}";
 
         #region Equality Testing
-        public override bool Equals(object obj) => (obj is LadderSequence x) ? Equals(x) : false;
+        public override bool Equals(object obj) => (obj is LadderSequence<TIndex> x) ? Equals(x) : false;
 
-        public bool Equals(LadderSequence x)
+        public bool Equals(LadderSequence<TIndex> x)
         {
             // If parameter is null, return false.
             if (ReferenceEquals(x, null))
@@ -226,7 +200,7 @@ namespace Microsoft.Quantum.Chemistry.LadderOperators
             return h;
         }
 
-        public static bool operator == (LadderSequence x, LadderSequence y)
+        public static bool operator ==(LadderSequence<TIndex> x, LadderSequence<TIndex> y)
         {
             // Check for null on left side.
             if (Object.ReferenceEquals(x, null))
@@ -244,11 +218,11 @@ namespace Microsoft.Quantum.Chemistry.LadderOperators
             return x.Equals(y);
         }
 
-        public static bool operator !=(LadderSequence x, LadderSequence y) => !(x == y);
-        
+        public static bool operator !=(LadderSequence<TIndex> x, LadderSequence<TIndex> y) => !(x == y);
         #endregion
 
     }
+
 
 }
 

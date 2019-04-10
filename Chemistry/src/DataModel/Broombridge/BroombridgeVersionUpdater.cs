@@ -16,6 +16,7 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
 
     public static partial class DataStructures
     {
+        
         /// <summary>
         /// Converts v0.1 Broombridge to v0.2.
         /// </summary>
@@ -25,7 +26,7 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
         {
             var output = new V0_2.Data();
             output.Schema = input.Schema;
-            output.Format = new DataStructure.Format() { Version = V0_2.Strings.VersionNumber };
+            output.Format = input.Format;
             output.Generator = input.Generator;
             output.Bibliography = input.Bibliography;
             output.ProblemDescriptions = new List<V0_2.ProblemDescription>();
@@ -51,7 +52,7 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
                     var initialState = new V0_2.State();
                     initialState.Label = sourceInitialState.SuggestedStateData.Label;
                     initialState.Energy = sourceInitialState.SuggestedStateData.Energy;
-                    initialState.Method = V0_2.Strings.SparseMultiConfigurational;
+                    initialState.Method = V0_2.UpdaterStrings.SparseMultiConfigurational;
                     initialState.Superposition = sourceInitialState.SuggestedStateData.Superposition;
 
                     problemDescription.InitialStates.Add(initialState);

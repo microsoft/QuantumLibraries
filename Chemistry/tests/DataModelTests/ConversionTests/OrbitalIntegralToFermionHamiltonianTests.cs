@@ -42,9 +42,9 @@ namespace Microsoft.Quantum.Chemistry.Tests
             var sourceHamiltonian = new OrbitalIntegralHamiltonian();
             sourceHamiltonian.Add(orbitalIntegrals);
 
-            var targetHamiltonian0 = sourceHamiltonian.ToFermionHamiltonian(SpinOrbital.IndexConvention.HalfUp);
+            var targetHamiltonian0 = sourceHamiltonian.ToFermionHamiltonian(IndexConvention.HalfUp);
 
-            var targetHamiltonian1 = sourceHamiltonian.ToFermionHamiltonian(SpinOrbital.IndexConvention.UpDown);
+            var targetHamiltonian1 = sourceHamiltonian.ToFermionHamiltonian(IndexConvention.UpDown);
         }
         /*
                

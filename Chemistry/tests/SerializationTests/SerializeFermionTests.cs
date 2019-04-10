@@ -11,7 +11,7 @@ using Microsoft.Quantum.Chemistry.Fermion;
 using Microsoft.Quantum.Chemistry.Pauli;
 using Microsoft.Quantum.Chemistry.QSharpFormat;
 using Microsoft.Quantum.Chemistry.Generic;
-using Microsoft.Quantum.Chemistry.LadderOperators;
+
 using Microsoft.Quantum.Chemistry;
 
 using Newtonsoft.Json.Linq;
@@ -28,7 +28,7 @@ namespace SerializationTests
 
             string json = JsonConvert.SerializeObject(term0, Formatting.None);
 
-            HermitianFermionTerm term1 = new HermitianFermionTerm( JsonConvert.DeserializeObject<LadderSequence>(json));
+            HermitianFermionTerm term1 = new HermitianFermionTerm( JsonConvert.DeserializeObject<LadderSequence<int>>(json));
 
             Debug.WriteLine(@json);
         }
@@ -53,9 +53,9 @@ namespace SerializationTests
         {
             var broombridge = Deserializers.DeserializeBroombridge(filename).ProblemDescriptions.First();
 
-            var orbHam = broombridge.ToOrbitalIntegralHamiltonian();
+            var orbHam = broombridge.OrbitalIntegralHamiltonian;
 
-            var ferHam = orbHam.ToFermionHamiltonian(SpinOrbital.IndexConvention.UpDown);
+            var ferHam = orbHam.ToFermionHamiltonian(IndexConvention.UpDown);
 
             string json = JsonConvert.SerializeObject(ferHam);
 

@@ -64,34 +64,34 @@ namespace Magic
             var args = Newtonsoft.Json.JsonConvert.DeserializeObject<Arguments>(input);
 
             // Deserialize Broombridge from file.
-            CurrentVersion.Data broombridge = Deserializers.DeserializeBroombridge(args.broombridge);
+            Data broombridge = Deserializers.DeserializeBroombridge(args.broombridge);
 
             // A single file can contain multiple problem descriptions. Let us pick the first one.
-            CurrentVersion.ProblemDescription problemData = broombridge.ProblemDescriptions.First();
+            Data.ProblemDescription problemData = broombridge.ProblemDescriptions.First();
 
             #region Create wavefunction Ansatzes
             // A list of trial wavefunctions can be provided in the Broombridge file. For instance, the wavefunction
             // may be a single-reference Hartree--Fock state, a multi-reference state, or a unitary coupled-cluster state.
-            Dictionary<string, InputState> inputStates = problemData.ToWavefunctions(SpinOrbital.IndexConvention.UpDown);
+            Dictionary<string, FermionWavefunction<SpinOrbital>> inputStates = problemData.Wavefunctions;
 
-            InputState inputState = new InputState();
+            FermionWavefunction<int> inputState = new FermionWavefunction<int>();
 
             // If no states are provided, use the Hartree--Fock state.
             if (inputStates.Count() != 0)
             {
-                OrbitalIntegralHamiltonian orbitalIntegralHamiltonian = problemData.ToOrbitalIntegralHamiltonian();
-                FermionHamiltonian fermionHamiltonian = orbitalIntegralHamiltonian.ToFermionHamiltonian(SpinOrbital.IndexConvention.UpDown);
+                OrbitalIntegralHamiltonian orbitalIntegralHamiltonian = problemData.OrbitalIntegralHamiltonian;
+                FermionHamiltonian fermionHamiltonian = orbitalIntegralHamiltonian.ToFermionHamiltonian(IndexConvention.UpDown);
                 inputState = fermionHamiltonian.GreedyStatePreparation(problemData.NElectrons);
             }
             else
             {
-                inputState = inputStates[args.wavefunctionLabel];
+                inputState = inputStates[args.wavefunctionLabel].ToIndexing(IndexConvention.UpDown);
             }
             #endregion
 
             // TODO: Implement serialization of fermion Hamiltonian first.
-            var inputStateData = Newtonsoft.Json.JsonConvert.SerializeObject(inputState.SerializationFormat());
-            
+            //var inputStateData = Newtonsoft.Json.JsonConvert.SerializeObject(inputState.SerializationFormat());
+            var inputStateData = "tmp";
             return inputStateData.ToExecutionResult();
         }
     }

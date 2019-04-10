@@ -5,7 +5,7 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 
-using Microsoft.Quantum.Chemistry.LadderOperators;
+
 
 namespace Microsoft.Quantum.Chemistry.Fermion
 {
@@ -14,9 +14,11 @@ namespace Microsoft.Quantum.Chemistry.Fermion
 
     // For now, UCC is a subclass of MCF. It should eventually be a Hamiltonian
     // + a WavefunctionSCF.
-    public class WavefunctionFermionUCC : WavefunctionFermionMCFandUCCPlaceholder
+    // 
+    public class UnitaryCCWavefunction<TIndex> : SparseMultiCFWavefunction<TIndex>
+        where TIndex : IEquatable<TIndex>, IComparable<TIndex>
     {
-        public WavefunctionFermionUCC() : base() { }
+        public UnitaryCCWavefunction() : base() { }
     }
 
 }

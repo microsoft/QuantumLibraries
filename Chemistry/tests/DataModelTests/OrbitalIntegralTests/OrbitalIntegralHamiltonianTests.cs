@@ -107,10 +107,10 @@ namespace Microsoft.Quantum.Chemistry.Tests
         public void JsonEncoding()
         {
             var filename = "Broombridge/broombridge_v0.2.yaml";
-            CurrentVersion.Data broombridge = Deserializers.DeserializeBroombridge(filename);
-            CurrentVersion.ProblemDescription problemData = broombridge.ProblemDescriptions.First();
+            Data broombridge = Deserializers.DeserializeBroombridge(filename);
+            Data.ProblemDescription problemData = broombridge.ProblemDescriptions.First();
 
-            OrbitalIntegralHamiltonian original = problemData.ToOrbitalIntegralHamiltonian();
+            OrbitalIntegralHamiltonian original = problemData.OrbitalIntegralHamiltonian;
 
             var json = JsonConvert.SerializeObject(original);
             File.WriteAllText("oribital.original.json", json);

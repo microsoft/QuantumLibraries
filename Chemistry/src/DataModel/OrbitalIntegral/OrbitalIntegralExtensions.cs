@@ -10,7 +10,7 @@ using Microsoft.Quantum.Chemistry;
 using System.Numerics;
 
 using Microsoft.Quantum.Chemistry.Generic;
-using Microsoft.Quantum.Chemistry.LadderOperators;
+
 using Microsoft.Quantum.Chemistry.Fermion;
 
 namespace Microsoft.Quantum.Chemistry.OrbitalIntegrals
@@ -29,7 +29,7 @@ namespace Microsoft.Quantum.Chemistry.OrbitalIntegrals
         /// <returns>Fermion Hamiltonian constructed from orbital integrals.</returns>
         public static FermionHamiltonian ToFermionHamiltonian(
             this OrbitalIntegralHamiltonian sourceHamiltonian, 
-            SpinOrbital.IndexConvention indexConvention)
+            IndexConvention indexConvention)
         {
             var nOrbitals = sourceHamiltonian.SystemIndices.Max() + 1;
             var hamiltonian = new FermionHamiltonian();
@@ -60,7 +60,7 @@ namespace Microsoft.Quantum.Chemistry.OrbitalIntegrals
         public static IEnumerable<(HermitianFermionTerm, double)> ToHermitianFermionTerms(
             this OrbitalIntegral orbitalIntegral,
             int nOrbitals,
-            SpinOrbital.IndexConvention indexConvention)
+            IndexConvention indexConvention)
         {
             var termType = orbitalIntegral.GetTermType();
             if (termType == TermType.OrbitalIntegral.OneBody)
@@ -91,7 +91,7 @@ namespace Microsoft.Quantum.Chemistry.OrbitalIntegrals
         private static IEnumerable<(HermitianFermionTerm, double)> ToOneBodySpinOrbitalTerms(
             this OrbitalIntegral orbitalIntegral,
             int nOrbitals,
-            SpinOrbital.IndexConvention indexConvention)
+            IndexConvention indexConvention)
         {
             // One-electron orbital integral symmetries
             // ij = ji
@@ -124,7 +124,7 @@ namespace Microsoft.Quantum.Chemistry.OrbitalIntegrals
         private static IEnumerable<(HermitianFermionTerm, double)> ToTwoBodySpinOrbitalTerms(
             this OrbitalIntegral orbitalIntegral,
             int nOrbitals,
-            SpinOrbital.IndexConvention indexConvention)
+            IndexConvention indexConvention)
         {
             List<(HermitianFermionTerm, double)> fermionTerms = new List<(HermitianFermionTerm, double)>();
             // Two-electron orbital integral symmetries
@@ -244,7 +244,7 @@ namespace Microsoft.Quantum.Chemistry.OrbitalIntegrals
         /// <summary>
         /// Converts an array of spin-orbitals into an array of integers representing each spin orbital.
         /// </summary>
-        public static IEnumerable<int> ToInts(this IEnumerable<SpinOrbital> spinOrbitals, SpinOrbital.IndexConvention indexConvention, int nOrbitals)
+        public static IEnumerable<int> ToInts(this IEnumerable<SpinOrbital> spinOrbitals, IndexConvention indexConvention, int nOrbitals)
         {
             return spinOrbitals.Select(x => x.ToInt(indexConvention, nOrbitals));
         }

@@ -73,11 +73,15 @@ namespace Microsoft.Quantum.Chemistry.Generic
             }
             if (Terms[type].ContainsKey(index))
             {
-                Terms[type][index] = Terms[type][index].AddValue(coefficient);
+                // The index can contain a sign coefficient e.g. +-1. 
+                Terms[type][index] = Terms[type][index].AddValue(coefficient, index.GetSign());
+                // Reset index coefficient to 1.
+                index.ResetSign();
             }
             else
             {
-                Terms[type].Add(index, coefficient);
+                Terms[type].Add(index, coefficient.Default());
+                Add(type, index, coefficient);
                 AddToSystemIndices(index);
             }
         }
