@@ -5,6 +5,7 @@ using System.Linq;
 using Microsoft.Jupyter.Core;
 using Microsoft.Quantum.Chemistry.Broombridge;
 using Microsoft.Quantum.Chemistry.Fermion;
+using Microsoft.Quantum.Chemistry.LadderOperators;
 using Microsoft.Quantum.Chemistry.OrbitalIntegrals;
 
 using Newtonsoft.Json;
@@ -152,7 +153,7 @@ namespace Microsoft.Quantum.Chemistry.Magic
             /// <summary>
             /// The list of terms and their coefficient to add.
             /// </summary>
-            public List<(HermitianFermionTerm, double)> fermionTerms { get; set; }
+            public List<(int[], double)> fermionTerms { get; set; }
         }
 
         /// <summary>
@@ -165,7 +166,7 @@ namespace Microsoft.Quantum.Chemistry.Magic
             if (args.hamiltonian == null) throw new ArgumentNullException(nameof(args.hamiltonian));
             if (args.fermionTerms == null) throw new ArgumentNullException(nameof(args.fermionTerms));
 
-            args.hamiltonian.AddRange(args.fermionTerms.Select(t => (t.Item1, t.Item2.ToDoubleCoeff())));
+            args.hamiltonian.AddRange(args.fermionTerms.Select(t => (new HermitianFermionTerm(t.Item1.ToLadderSequence()), t.Item2.ToDoubleCoeff())));
             
             return args.hamiltonian.ToExecutionResult();
         }

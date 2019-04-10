@@ -117,24 +117,24 @@ namespace Microsoft.Quantum.Chemistry.Tests
             Assert.Equal("%fh-add_terms", magic.Name);
 
             var original = createMagic.Run("", channel).Output as FermionHamiltonian;
-            var fermionTerms = new List<(HermitianFermionTerm, double)>
+            var fermionTerms = new List<(int[], double)>
                 {
-                    (new HermitianFermionTerm(new int[] {}.ToLadderSequence()), 10.0),
-                    (new HermitianFermionTerm(new[] {0,0}.ToLadderSequence()), 1.0),
-                    (new HermitianFermionTerm(new[] {1,1}.ToLadderSequence()), 1.0),
-                    (new HermitianFermionTerm(new[] {2,2}.ToLadderSequence()), 1.0),
-                    (new HermitianFermionTerm(new[] {0,2}.ToLadderSequence()), 1.0),
-                    (new HermitianFermionTerm(new[] {1,3}.ToLadderSequence()), 1.0),
-                    (new HermitianFermionTerm(new[] {2,6}.ToLadderSequence()), 1.0),
-                    (new HermitianFermionTerm(new[] {0,2,2,0}.ToLadderSequence()), 1.0),
-                    (new HermitianFermionTerm(new[] {1,3,3,1}.ToLadderSequence()), 1.0),
-                    (new HermitianFermionTerm(new[] {2,6,6,2}.ToLadderSequence()), 1.0),
-                    (new HermitianFermionTerm(new[] {0,2,2,1}.ToLadderSequence()), 1.0),
-                    (new HermitianFermionTerm(new[] {1,3,3,2}.ToLadderSequence()), 1.0),
-                    (new HermitianFermionTerm(new[] {2,6,6,5}.ToLadderSequence()), 1.0),
-                    (new HermitianFermionTerm(new[] {0,2,4,3}.ToLadderSequence()), 1.0),
-                    (new HermitianFermionTerm(new[] {1,4,3,2}.ToLadderSequence()), 1.0),
-                    (new HermitianFermionTerm(new[] {2,4,5,3}.ToLadderSequence()), 1.0)
+                    (new int[] {}, 10.0),
+                    (new[] {0,0}, 1.0),
+                    (new[] {1,1}, 1.0),
+                    (new[] {2,2}, 1.0),
+                    (new[] {0,2}, 1.0),
+                    (new[] {1,3}, 1.0),
+                    (new[] {2,6}, 1.0),
+                    (new[] {0,2,2,0}, 1.0),
+                    (new[] {1,3,3,1}, 1.0),
+                    (new[] {2,6,6,2}, 1.0),
+                    (new[] {0,2,2,1}, 1.0),
+                    (new[] {1,3,3,2}, 1.0),
+                    (new[] {2,6,6,5}, 1.0),
+                    (new[] {0,2,4,3}, 1.0),
+                    (new[] {1,4,3,2}, 1.0),
+                    (new[] {2,4,5,3}, 1.0)
                 };
 
             var args = JsonConvert.SerializeObject(new FermionHamiltonianAddTermsMagic.Arguments
