@@ -25,88 +25,96 @@ namespace Microsoft.Quantum.Chemistry.Magic
     /// <summary>
     /// Loads Broombridge electronic structure problem and returns fermion Hamiltonian.
     /// </summary>
-    public class InputStateFromBroombridge : MagicSymbol
+    public class InputStateMagic : MagicSymbol
     {
-        public InputStateFromBroombridge()
+        public InputStateMagic()
         {
-            this.Name = $"%input_encode";
+            this.Name = $"%inputstate-load";
             this.Documentation = new Documentation() { Summary = "Loads Broombridge electronic structure problem and returns selected input state." };
             this.Kind = SymbolKind.Magic;
             this.Execute = this.Run;
         }
 
+        /// <summary>
+        /// List of arguments
+        /// </summary>
         public class Arguments
         {
-            public Arguments()
-            {
-                this.wavefunctionLabel = "Greedy";
+            /// <summary>
+            /// The name of a .yaml file with a broombridge schema.
+            /// </summary>
+            public string fileName { get; set; }
 
-            }
+            /// <summary>
+            /// A Broombridge ProblemDescription to load the FermionHamiltonian from.
+            /// </summary>
+            public CurrentVersion.ProblemDescription problemDescription { get; set; }
 
-            public string broombridge { get; set; }
+            /// <summary>
+            /// The IndexConvention to use to generate the Hamiltonian from the ProblemDescription.
+            /// </summary>
+            public SpinOrbital.IndexConvention indexConvention { get; set; } = SpinOrbital.IndexConvention.UpDown;
 
+            /// <summary>
+            /// The label of the wavefunctio within the ProblemDescription to use. 
+            /// If no label specified, it will return the Hartree-Fock state.
+            /// </summary>
             public string wavefunctionLabel { get; set; }
         }
 
+        /// <summary>
+        /// Loads a InputState (WaveFunction) from the given Broombridge's ProblemDescription.
+        /// The ProblemDescription can come from a .yaml broombridge file or can be passed down as parameter.
+        /// If the wavefunctionLabel is specified, it will return the corresponding inputstate from the
+        /// ProblemDescription; if the wavefunctionLabel is not specified, then it returns 
+        /// the Hartree--Fock state.
+        /// </summary>
         public ExecutionResult Run(string input, IChannel channel)
         {
             if (string.IsNullOrWhiteSpace(input))
             {
-                channel.Stderr("Please provide the name of a broombridge file to load\n");
+                channel.Stderr("Please provide the name of a broombridge file or a problemDescription to load the FermionHamiltonian from.");
                 return ExecuteStatus.Error.ToExecutionResult();
             }
 
+            // Identify the ProblemDescription with the hamiltonian from the arguments.
             var args = JsonConvert.DeserializeObject<Arguments>(input);
+            var problemData = SelectProblemDescription(args);
 
-            // Deserialize Broombridge from file.
-            CurrentVersion.Data broombridge = Deserializers.DeserializeBroombridge(args.broombridge);
-
-            // A single file can contain multiple problem descriptions. Let us pick the first one.
-            CurrentVersion.ProblemDescription problemData = broombridge.ProblemDescriptions.First();
-
-            #region Create wavefunction Ansatzes
-            // A list of trial wavefunctions can be provided in the Broombridge file. For instance, the wavefunction
-            // may be a single-reference Hartree--Fock state, a multi-reference state, or a unitary coupled-cluster state.
-            Dictionary<string, InputState> inputStates = problemData.ToWavefunctions(SpinOrbital.IndexConvention.UpDown);
-
-            InputState inputState = new InputState();
-
-            // If no states are provided, use the Hartree--Fock state.
-            if (inputStates.Count() != 0)
-            {
-                OrbitalIntegralHamiltonian orbitalIntegralHamiltonian = problemData.ToOrbitalIntegralHamiltonian();
-                FermionHamiltonian fermionHamiltonian = orbitalIntegralHamiltonian.ToFermionHamiltonian(SpinOrbital.IndexConvention.UpDown);
-                inputState = fermionHamiltonian.GreedyStatePreparation(problemData.NElectrons);
-            }
-            else
-            {
-                inputState = inputStates[args.wavefunctionLabel];
-            }
-            #endregion
+            // Based on the argument, return the Hartree--Fock state or the wavefunction with the given label.
+            var inputState = (string.IsNullOrEmpty(args.wavefunctionLabel))
+                ? CreateHartreeFockState(problemData, args.indexConvention)
+                : problemData.ToWavefunctions(args.indexConvention)[args.wavefunctionLabel];
 
             return inputState.ToExecutionResult();
         }
-    }
 
-    /// <summary>
-    /// "Creates an empty fermion Hamiltonian instance." 
-    /// </summary>
-    public class InputStateEncodeMagic: MagicSymbol
-    {
-        public InputStateEncodeMagic()
+        /// <summary>
+        /// Creates a HartreeFork state from the FermionHamiltonian associated with the given ProblemDescription
+        /// </summary>
+        public static InputState CreateHartreeFockState(CurrentVersion.ProblemDescription problemData, SpinOrbital.IndexConvention indexConvention)
         {
-            this.Name = $"%input_encode";
-            this.Documentation = new Documentation() { Summary = "Converts an input state to a format consumable by Q#." };
-            this.Kind = SymbolKind.Magic;
-            this.Execute = this.Run;
+            OrbitalIntegralHamiltonian orbitalIntegralHamiltonian = problemData.ToOrbitalIntegralHamiltonian();
+            FermionHamiltonian fermionHamiltonian = orbitalIntegralHamiltonian.ToFermionHamiltonian(indexConvention);
+            return fermionHamiltonian.GreedyStatePreparation(problemData.NElectrons);
         }
 
-        public ExecutionResult Run(string input, IChannel channel)
-        {
-            // Create empty fermion Hamiltonian instance.
-            FermionHamiltonian fermionHamiltonian = new FermionHamiltonian();
 
-            return fermionHamiltonian.ToExecutionResult();
+        /// <summary>
+        /// Selects the ProblemDescription from the given arguments.
+        /// If the fileName is specified, it will try to load the Broombridge data from the file
+        /// and will use the first ProblemDescription, otherwise, the problemDescription in the arguments is used.
+        /// </summary>
+        protected virtual CurrentVersion.ProblemDescription SelectProblemDescription(Arguments args)
+        {
+            if (string.IsNullOrWhiteSpace(args.fileName))
+            {
+                return args.problemDescription;
+            }
+
+            // A single file can contain multiple problem descriptions. Let us pick the first one.
+            CurrentVersion.Data broombridge = Deserializers.DeserializeBroombridge(args.fileName);
+            return broombridge.ProblemDescriptions.First();
         }
     }
 }

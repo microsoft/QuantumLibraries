@@ -21,7 +21,7 @@ namespace Microsoft.Quantum.Chemistry.Magic
         }
 
         /// <summary>
-        /// This method gets executed when the Jupter magic is invoked.
+        /// Loads the broombridge data from the given .yaml file and returns it.
         /// </summary>
         public ExecutionResult Run(string input, IChannel channel)
         {
