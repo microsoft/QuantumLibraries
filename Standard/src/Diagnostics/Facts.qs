@@ -6,6 +6,19 @@ namespace Microsoft.Quantum.Diagnostics {
     open Microsoft.Quantum.Arrays;
 
     /// # Summary
+    /// Declares that a classical condition is true.
+    ///
+    /// # Input
+    /// ## actual
+    /// The condition to be declared.
+    /// ## message
+    /// Failure message string to be printed in the case that the classical
+    /// condition is false.
+    function Fact(actual : Bool, message : String) : Unit {
+        if (not actual) { fail message; }
+    }
+
+    /// # Summary
     /// Represents the claim that a classical floating point value has the
     /// expected value up to a given
     /// absolute tolerance.

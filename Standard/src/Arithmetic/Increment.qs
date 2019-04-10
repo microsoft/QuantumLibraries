@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 namespace Microsoft.Quantum.Arithmetic {
-    open Microsoft.Quantum.Primitive;
+    open Microsoft.Quantum.Intrinsic;
     open Microsoft.Quantum.Canon;
 
     /// # Summary
@@ -43,7 +43,7 @@ namespace Microsoft.Quantum.Arithmetic {
             let d = Length(target!);
 
             for (j in 0 .. d - 1) {
-                //  Use Microsoft.Quantum.Primitive.R1Frac
+                //  Use Microsoft.Quantum.Intrinsic.R1Frac
                 R1Frac(increment, (d - 1) - j, (target!)[j]);
             }
         }

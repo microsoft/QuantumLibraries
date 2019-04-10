@@ -27,7 +27,7 @@ namespace Microsoft.Quantum.Canon {
     /// <xref:microsoft.quantum.primitive.i>.
     ///
     /// # See Also
-    /// - Microsoft.Quantum.Primitive.I
+    /// - Microsoft.Quantum.Intrinsic.I
     operation NoOp<'T>(input : 'T) : Unit {
         body (...) {}
 

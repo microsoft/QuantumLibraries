@@ -4,7 +4,7 @@
 namespace Microsoft.Quantum.Tests {
     open Microsoft.Quantum.Simulation;
     open Microsoft.Quantum.Arithmetic;
-    open Microsoft.Quantum.Primitive;
+    open Microsoft.Quantum.Intrinsic;
     open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Extensions.Testing;
     open Microsoft.Quantum.Extensions.Math;

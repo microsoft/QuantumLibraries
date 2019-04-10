@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 namespace Microsoft.Quantum.Arithmetic {
-    open Microsoft.Quantum.Primitive;
+    open Microsoft.Quantum.Intrinsic;
     open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Diagnostics;
     open Microsoft.Quantum.Arrays;
@@ -22,17 +22,11 @@ namespace Microsoft.Quantum.Arithmetic {
     /// Second summand qubit, is replaced with the lower bit of the sum of
     /// `summand1` and `summand2`.
     /// ## carryOut
-    /// Carry-out qubit, will be xored with the higher bit of the sum. 
-    operation Carry (carryIn: Qubit, summand1: Qubit, summand2: Qubit, carryOut: Qubit) : Unit
-    {
-        body (...) {
-            CCNOT (summand1, summand2, carryOut);
-            CNOT (summand1, summand2);
-            CCNOT (carryIn, summand2, carryOut);
-        }
-        adjoint auto;
-        controlled auto;
-        adjoint controlled auto;
+    /// Carry-out qubit, will be xored with the higher bit of the sum.
+    operation Carry (carryIn: Qubit, summand1: Qubit, summand2: Qubit, carryOut: Qubit) : Unit is Adj + Ctl {
+        CCNOT (summand1, summand2, carryOut);
+        CNOT (summand1, summand2);
+        CCNOT (carryIn, summand2, carryOut);
     }
 
     /// # Summary
@@ -152,23 +146,24 @@ namespace Microsoft.Quantum.Arithmetic {
             (Controlled RippleCarryAdderD) (new Qubit[0], (xs, ys, carry));
         }
         adjoint auto;
-        controlled ( controls, ... ) { 
+        controlled ( controls, ... ) {
             let nQubits = Length(xs!);
 
-            EqualityFactB(
-                nQubits == Length(ys!), true,
-                "Input registers must have the same number of qubits." );
+            EqualityFactI(
+                nQubits, Length(ys!),
+                "Input registers must have the same number of qubits."
+            );
 
-            using ( ancillas = Qubit[nQubits] ) {
-                for (idx in 0..(nQubits-2) ) {
-                    Carry (ancillas[idx], xs![idx], ys![idx], ancillas[idx+1]);           // (1)
+            using (auxRegister = Qubit[nQubits]) {
+                for (idx in 0..(nQubits-2)) {
+                    Carry(auxRegister[idx], xs![idx], ys![idx], auxRegister[idx+1]);           // (1)
                 }
-                (Controlled Carry) (controls, (ancillas[nQubits-1], xs![nQubits-1], ys![nQubits-1], carry));
+                (Controlled Carry) (controls, (auxRegister[nQubits-1], xs![nQubits-1], ys![nQubits-1], carry));
                 (Controlled CNOT) (controls, (xs![nQubits-1], ys![nQubits-1]));
-                (Controlled Sum) (controls, (ancillas[nQubits-1], xs![nQubits-1], ys![nQubits-1]));
+                (Controlled Sum) (controls, (auxRegister[nQubits-1], xs![nQubits-1], ys![nQubits-1]));
                 for (idx in (nQubits-2)..(-1)..0 ) {
-                    (Adjoint Carry) (ancillas[idx], xs![idx], ys![idx], ancillas[idx+1]); // cancels with (1)
-                    (Controlled Sum) (controls, (ancillas[idx], xs![idx], ys![idx]));
+                    (Adjoint Carry) (auxRegister[idx], xs![idx], ys![idx], auxRegister[idx+1]); // cancels with (1)
+                    (Controlled Sum) (controls, (auxRegister[idx], xs![idx], ys![idx]));
                 }
             }
         }
@@ -199,13 +194,15 @@ namespace Microsoft.Quantum.Arithmetic {
         body (...) {
             let nQubits = Length(xs!);
 
-            EqualityFactB(
-                nQubits == Length(ys!), true,
-                "Input registers must have the same number of qubits." );
+            EqualityFactI(
+                nQubits, Length(ys!),
+                "Input registers must have the same number of qubits."
+            );
 
-            EqualityFactB(
-                nQubits >= 3, true,
-                "Need at least 3 qubits per register.");
+            Fact(
+                nQubits >= 3,
+                "Need at least 3 qubits per register."
+            );
 
             CNOT (xs![2], xs![1]);
             CCNOT (ancilla, ys![1], xs![1]);

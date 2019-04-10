@@ -7,7 +7,7 @@
 
 namespace Microsoft.Quantum.Arithmetic {
     open Microsoft.Quantum.Canon;
-    open Microsoft.Quantum.Primitive;
+    open Microsoft.Quantum.Intrinsic;
 
     /// # Summary
     /// Applies an operation that takes little-endian input to a register encoding

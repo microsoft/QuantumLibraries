@@ -2,10 +2,11 @@
 // Licensed under the MIT License.
 
 namespace Microsoft.Quantum.Arithmetic {
-    open Microsoft.Quantum.Primitive;
+    open Microsoft.Quantum.Intrinsic;
     open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Math;
     open Microsoft.Quantum.Diagnostics;
+    open Microsoft.Quantum.Arrays;
 
     /// # Summary
     /// Performs a modular increment of a qubit register by an integer constant.
@@ -26,15 +27,15 @@ namespace Microsoft.Quantum.Arithmetic {
     /// Integer y in `LittleEndian` format that `increment` a is added to.
     ///
     /// # See Also
-    /// - Microsoft.Quantum.Canon.ModularIncrementPhaseLE
+    /// - IncrementPhaseByModularInteger
     ///
     /// # Remarks
     /// Assumes that the value of target is less than N. Note that
-    /// <xref:microsoft.quantum.canon.modularincrementphasele> implements
+    /// <xref:microsoft.quantum.arithmetic.incrementphasebymodularinteger> implements
     /// the same operation, but in the `PhaseLittleEndian` basis.
     operation IncrementByModularInteger(increment : Int, modulus : Int, target : LittleEndian) : Unit {
         body (...) {
-            let inner = ModularIncrementPhaseLE(increment, modulus, _);
+            let inner = IncrementPhaseByModularInteger(increment, modulus, _);
 
             using (extraZeroBit = Qubit()) {
                 ApplyPhaseLEOperationOnLECA(inner, LittleEndian(target! + [extraZeroBit]));
@@ -64,89 +65,49 @@ namespace Microsoft.Quantum.Arithmetic {
     /// For the circuit diagram and explanation see Figure 5 on [Page 5
     /// of arXiv:quant-ph/0205095v3](https://arxiv.org/pdf/quant-ph/0205095v3.pdf#page=5).
     operation IncrementPhaseByModularInteger(increment : Int, modulus : Int, target : PhaseLittleEndian) : Unit {
-        body (...)
-        {
-            EqualityFactB(modulus <= 2 ^ (Length(target!) - 1), true, $"`multiplier` must be big enough to fit integers modulo `modulus`" + $"with highest bit set to 0");
-            
-            if (_EnableExtraAssertsForArithmetic())
-            {
-                // assert that the highest bit is zero, by switching to computational basis
-                ApplyLEOperationOnPhaseLEA(AssertHighestBit(Zero, _), target);
-                
-                // check that the input is less than modulus
-                AssertLessThanPhaseLE(modulus, target);
-            }
-            
-            using (ancilla = Qubit[1])
-            {
-                let lessThanModulusFlag = ancilla[0];
-                let copyMostSignificantBitPhaseLE = ApplyLEOperationOnPhaseLEA(CopyMostSignificantBitLE(_, lessThanModulusFlag), _);
-                
-                // lets track the state of target register through the computation
-                IntegerIncrementPhaseLE(increment, target);
-                
-                // the state is |x+a⟩ in QFT basis
-                Adjoint IntegerIncrementPhaseLE(modulus, target);
-                
-                // the state is |x+a-N⟩ in QFT basis
-                copyMostSignificantBitPhaseLE(target);
-                
-                // lessThanModulusFlag is set to 1 if x+a < N
-                Controlled IntegerIncrementPhaseLE([lessThanModulusFlag], (modulus, target));
-                
-                // the state is |x+a (mod N)⟩ in QFT basis
-                // Now let us restore the lessThanModulusFlag qubit back to zero
-                Adjoint IntegerIncrementPhaseLE(increment, target);
-                X(lessThanModulusFlag);
-                copyMostSignificantBitPhaseLE(target);
-                IntegerIncrementPhaseLE(increment, target);
-            }
+        body (...) {
+            Controlled IncrementPhaseByModularInteger(new Qubit[0], (increment, modulus, target));
         }
-        
-        adjoint invert;
-        
-        controlled (controls, ...)
-        {
+        adjoint auto;
+
+        controlled (controls, ...) {
             EqualityFactB(modulus <= 2 ^ (Length(target!) - 1), true, $"`multiplier` must be big enough to fit integers modulo `modulus`" + $"with highest bit set to 0");
-            
-            if (_EnableExtraAssertsForArithmetic())
-            {
+
+            if (_EnableExtraAssertsForArithmetic()) {
                 // assert that the highest bit is zero, by switching to computational basis
                 ApplyLEOperationOnPhaseLEA(AssertHighestBit(Zero, _), target);
-                
+
                 // check that the input is less than modulus
-                AssertLessThanPhaseLE(modulus, target);
+                AssertPhaseLessThan(modulus, target);
             }
-            
+
             // note that controlled version is correct only under the assumption
             // that the value of target is less than modulus
-            using (ancilla = Qubit[1])
-            {
-                let lessThanModulusFlag = ancilla[0];
+            using (lessThanModulusFlag = Qubit()) {
                 let copyMostSignificantBitPhaseLE = ApplyLEOperationOnPhaseLEA(CopyMostSignificantBitLE(_, lessThanModulusFlag), _);
-                
+
                 // lets track the state of target register through the computation
-                Controlled IntegerIncrementPhaseLE(controls, (increment, target));
-                
+                Controlled IncrementPhaseByInteger(controls, (increment, target));
+
                 // the state is |x+a⟩ in QFT basis
-                Adjoint IntegerIncrementPhaseLE(modulus, target);
-                
+                Adjoint IncrementPhaseByInteger(modulus, target);
+
                 // the state is |x+a-N⟩ in QFT basis
                 copyMostSignificantBitPhaseLE(target);
-                
+
                 // lessThanModulusFlag is set to 1 if x+a < N
-                Controlled IntegerIncrementPhaseLE([lessThanModulusFlag], (modulus, target));
-                
+                Controlled IncrementPhaseByInteger([lessThanModulusFlag], (modulus, target));
+
                 // the state is |x+a (mod N)⟩ in QFT basis
                 // Now let us restore the lessThanModulusFlag qubit back to zero
-                Controlled (Adjoint IntegerIncrementPhaseLE)(controls, (increment, target));
+                Controlled (Adjoint IncrementPhaseByInteger)(controls, (increment, target));
                 X(lessThanModulusFlag);
                 copyMostSignificantBitPhaseLE(target);
-                Controlled IntegerIncrementPhaseLE(controls, (increment, target));
+                Controlled IncrementPhaseByInteger(controls, (increment, target));
             }
         }
-        
-        controlled adjoint invert;
+
+        controlled adjoint auto;
     }
 
     /// # Summary
@@ -179,7 +140,7 @@ namespace Microsoft.Quantum.Arithmetic {
     ///   [arXiv:quant-ph/0205095v3](https://arxiv.org/pdf/quant-ph/0205095v3.pdf)
     operation MultiplyAndAddByModularInteger(constMultiplier : Int, modulus : Int, multiplier : LittleEndian, summand : LittleEndian) : Unit {
         body (...) {
-            let inner = ModularAddProductPhaseLE(constMultiplier, modulus, multiplier, _);
+            let inner = MultiplyAndAddPhaseByModularInteger(constMultiplier, modulus, multiplier, _);
 
             using (extraZeroBit = Qubit()) {
                 ApplyPhaseLEOperationOnLECA(inner, LittleEndian(summand! + [extraZeroBit]));
@@ -191,7 +152,6 @@ namespace Microsoft.Quantum.Arithmetic {
         controlled adjoint distribute;
     }
 
-    
     /// # Summary
     /// The same as ModularAddProductLE, but assumes that summand encodes
     /// integers in QFT basis
@@ -202,35 +162,24 @@ namespace Microsoft.Quantum.Arithmetic {
     /// # Remarks
     /// Assumes that `phaseSummand` has the highest bit set to 0.
     /// Also assumes that the value of `phaseSummand` is less than N.
-    operation MultiplyAndAddPhaseByModularInteger(constMultiplier : Int, modulus : Int, multiplier : LittleEndian, phaseSummand : PhaseLittleEndian) : Unit
-    {
-        body (...)
-        {
-            EqualityFactB(modulus <= 2 ^ (Length(phaseSummand!) - 1), true, $"`multiplier` must be big enough to fit integers modulo `modulus`" + $"with highest bit set to 0");
-            EqualityFactB(constMultiplier >= 0 and constMultiplier < modulus, true, $"`constMultiplier` must be between 0 and `modulus`-1");
-            
-            if (_EnableExtraAssertsForArithmetic())
-            {
-                // assert that the highest bit is zero, by switching to computational basis
-                ApplyLEOperationOnPhaseLECA(AssertHighestBit(Zero, _), phaseSummand);
-                
-                // check that the input is less than modulus
-                AssertLessThanPhaseLE(modulus, phaseSummand);
-            }
-            
-            for (i in 0 .. Length(multiplier!) - 1)
-            {
-                let summand = (ExpMod(2, i, modulus) * constMultiplier) % modulus;
-                Controlled IncrementPhaseByModularInteger([(multiplier!)[i]], (summand, modulus, phaseSummand));
-            }
+    operation MultiplyAndAddPhaseByModularInteger(constMultiplier : Int, modulus : Int, multiplier : LittleEndian, phaseSummand : PhaseLittleEndian) : Unit is Adj + Ctl {
+        EqualityFactB(modulus <= 2 ^ (Length(phaseSummand!) - 1), true, $"`multiplier` must be big enough to fit integers modulo `modulus`" + $"with highest bit set to 0");
+        EqualityFactB(constMultiplier >= 0 and constMultiplier < modulus, true, $"`constMultiplier` must be between 0 and `modulus`-1");
+
+        if (_EnableExtraAssertsForArithmetic()) {
+            // assert that the highest bit is zero, by switching to computational basis
+            ApplyLEOperationOnPhaseLECA(AssertHighestBit(Zero, _), phaseSummand);
+
+            // check that the input is less than modulus
+            AssertPhaseLessThan(modulus, phaseSummand);
         }
-        
-        adjoint invert;
-        controlled distribute;
-        controlled adjoint distribute;
+
+        for (i in 0 .. Length(multiplier!) - 1) {
+            let summand = (ExpMod(2, i, modulus) * constMultiplier) % modulus;
+            Controlled IncrementPhaseByModularInteger([(multiplier!)[i]], (summand, modulus, phaseSummand));
+        }
     }
-    
-    
+
     /// # Summary
     /// Performs modular multiplication by an integer constant on a qubit register.
     ///
@@ -253,46 +202,34 @@ namespace Microsoft.Quantum.Arithmetic {
     ///        of arXiv:quant-ph/0205095v3](https://arxiv.org/pdf/quant-ph/0205095v3.pdf#page=8)
     /// - This operation corresponds to Uₐ in
     ///   [arXiv:quant-ph/0205095v3](https://arxiv.org/pdf/quant-ph/0205095v3.pdf)
-    operation MultiplyByModularInteger(constMultiplier : Int, modulus : Int, multiplier : LittleEndian) : Unit
-    {
-        body (...)
-        {
-            // Check the preconditions using Microsoft.Quantum.Canon.EqualityFactB
-            EqualityFactB(constMultiplier >= 0 and constMultiplier < modulus, true, $"`constMultiplier` must be between 0 and `modulus`");
-            EqualityFactB(modulus <= 2 ^ Length(multiplier!), true, $"`multiplier` must be big enough to fit integers modulo `modulus`");
-            EqualityFactB(IsCoprime(constMultiplier, modulus), true, $"`constMultiplier` and `modulus` must be co-prime");
-            
-            using (summand = Qubit[Length(multiplier!)])
-            {
-                // recall that newly allocated qubits are all in 0 state
-                // and therefore summandLE encodes 0.
-                let summandLE = LittleEndian(summand);
-                
-                // Let us look at what is the result of operations below assuming
-                // multiplier is in computational basis and encodes x
-                // Currently the joint state of multiplier and summandLE is
-                // |x⟩|0⟩
-                ModularAddProductLE(constMultiplier, modulus, multiplier, summandLE);
-                
-                // now the joint state is |x⟩|x⋅a(mod N)⟩
-                for (i in 0 .. Length(summandLE!) - 1)
-                {
-                    SWAP((summandLE!)[i], (multiplier!)[i]);
-                }
-                
-                // now the joint state is |x⋅a(mod N)⟩|x⟩
-                let inverseMod = InverseMod(constMultiplier, modulus);
-                
-                // note that the operation below implements the following map:
-                // |x⟩|y⟩ ↦ |x⟩|y - a⁻¹⋅x (mod N)⟩
-                Adjoint ModularAddProductLE(inverseMod, modulus, multiplier, summandLE);
-                // now the joint state is |x⋅a(mod N)⟩|x - a⁻¹⋅x⋅a (mod N)⟩ = |x⋅a(mod N)⟩|0⟩
-            }
+    operation MultiplyByModularInteger(constMultiplier : Int, modulus : Int, multiplier : LittleEndian) : Unit is Adj + Ctl {
+        // Check the preconditions using Microsoft.Quantum.Canon.EqualityFactB
+        EqualityFactB(constMultiplier >= 0 and constMultiplier < modulus, true, $"`constMultiplier` must be between 0 and `modulus`");
+        EqualityFactB(modulus <= 2 ^ Length(multiplier!), true, $"`multiplier` must be big enough to fit integers modulo `modulus`");
+        EqualityFactB(IsCoprime(constMultiplier, modulus), true, $"`constMultiplier` and `modulus` must be co-prime");
+
+        using (summand = Qubit[Length(multiplier!)]) {
+            // recall that newly allocated qubits are all in 0 state
+            // and therefore summandLE encodes 0.
+            let summandLE = LittleEndian(summand);
+
+            // Let us look at what is the result of operations below assuming
+            // multiplier is in computational basis and encodes x
+            // Currently the joint state of multiplier and summandLE is
+            // |x⟩|0⟩
+            MultiplyAndAddByModularInteger(constMultiplier, modulus, multiplier, summandLE);
+
+            // now the joint state is |x⟩|x⋅a(mod N)⟩
+            ApplyToEachCA(SWAP, Zip(summandLE!, multiplier!));
+
+            // now the joint state is |x⋅a(mod N)⟩|x⟩
+            let inverseMod = InverseMod(constMultiplier, modulus);
+
+            // note that the operation below implements the following map:
+            // |x⟩|y⟩ ↦ |x⟩|y - a⁻¹⋅x (mod N)⟩
+            Adjoint MultiplyAndAddByModularInteger(inverseMod, modulus, multiplier, summandLE);
+            // now the joint state is |x⋅a(mod N)⟩|x - a⁻¹⋅x⋅a (mod N)⟩ = |x⋅a(mod N)⟩|0⟩
         }
-        
-        adjoint invert;
-        controlled distribute;
-        controlled adjoint distribute;
     }
 
 }

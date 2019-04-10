@@ -3,7 +3,7 @@
 
 namespace Microsoft.Quantum.Simulation {
     open Microsoft.Quantum.Canon;    
-    open Microsoft.Quantum.Primitive;
+    open Microsoft.Quantum.Intrinsic;
     
     
     // Convention for GeneratorIndex = ((Int[],Double[]), Int[])
