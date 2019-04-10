@@ -11,17 +11,6 @@ using Newtonsoft.Json;
 
 namespace Microsoft.Quantum.Chemistry.Magic
 {
-    // Expose function that creates fermion Hamiltonian froom  Broombridge
-    // Expose function to create empty FermionHamiltonian
-    // Expose function to populate FermionHamiltonian
-
-    // Python: 1) Make empty FermionHamiltonian -- this returns serialization of empty Hamiltonian
-    //          2) Python AddTerms to the Hamiltonian -- this passes the Ham back to c#, and returns one populated with terms. Note: Make SetTerms for multiple terms.
-    //          3) Python .ToQSharpFormat -- back to C# and back out.
-
-    // Do the same for quantum states.
-
-
     /// <summary>
     /// Loads Broombridge electronic structure problem and returns fermion Hamiltonian.
     /// </summary>

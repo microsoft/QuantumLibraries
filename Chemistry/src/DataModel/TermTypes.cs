@@ -149,7 +149,7 @@ namespace Microsoft.Quantum.Chemistry
 
         public int CompareTo(object obj)
         {
-            if (obj is DoubleCoeff d) return (int)Math.Floor((d.Value - this.Value) * 10000);
+            if (obj is DoubleCoeff d) return this.Value.CompareTo(d.Value);
 
             return 0;
         }
