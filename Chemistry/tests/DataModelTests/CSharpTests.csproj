@@ -35,4 +35,8 @@
     <ProjectReference Include="..\..\src\Runtime\Runtime.csproj" />
     <ProjectReference Include="..\..\src\DataModel\DataModel.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="MagicTests\" />
+  </ItemGroup>
 </Project>

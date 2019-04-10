@@ -31,7 +31,7 @@ namespace Microsoft.Quantum.Chemistry.Tests
         [Fact]
         public void LoadInvalidFile()
         {
-            var filename = "Broombridge/foo_bar.yaml";
+            var filename = "foo_bar.yaml";
             var magic = new BroombridgeMagic();
             var channel = new MockChannel();
 
@@ -42,7 +42,7 @@ namespace Microsoft.Quantum.Chemistry.Tests
         [Fact]
         public void LoadBroombridgeFile()
         {
-            var filename = "Broombridge/broombridge_v0.2.yaml";
+            var filename = "broombridge_v0.2.yaml";
             var magic = new BroombridgeMagic();
             var channel = new MockChannel();
 
@@ -51,7 +51,7 @@ namespace Microsoft.Quantum.Chemistry.Tests
             Assert.Equal(ExecuteStatus.Ok, result.Status);
             Assert.Equal("0.2", broombridge.Format.Version);
             Assert.Equal(3, broombridge.Bibliography.Count);
-            Assert.Equal(1, broombridge.ProblemDescriptions.Count);
+            Assert.Single(broombridge.ProblemDescriptions);
         }
     }
 }

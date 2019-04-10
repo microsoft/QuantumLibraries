@@ -26,7 +26,7 @@ namespace Microsoft.Quantum.Chemistry.Tests
         public void EncodeBroombridge()
         {
             var (magic, channel) = Init();
-            var fileName = "Broombridge/broombridge_v0.2.yaml";
+            var fileName = "broombridge_v0.2.yaml";
 
             Assert.Equal("%chemistry-encode", magic.Name);
 
@@ -38,7 +38,7 @@ namespace Microsoft.Quantum.Chemistry.Tests
             var inputMagic = new InputStateMagic();
             var args = JsonConvert.SerializeObject(new InputStateMagic.Arguments
             {
-                fileName = "Broombridge/broombridge_v0.2.yaml",
+                fileName = "broombridge_v0.2.yaml",
                 wavefunctionLabel = "UCCSD |G>",
                 indexConvention = SpinOrbital.IndexConvention.HalfUp
             });
