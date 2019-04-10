@@ -7,13 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="FermionTermTests.cs" />
-    <Compile Remove="FermionTermTests\FermionTermTests.cs" />
-    <Compile Remove="ProblemContainerTests.cs" />
-    <Compile Remove="ProblemContainer\ProblemContainerTests.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Content Include="xunit.runner.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -42,11 +35,4 @@
     <ProjectReference Include="..\..\src\Runtime\Runtime.csproj" />
     <ProjectReference Include="..\..\src\DataModel\DataModel.csproj" />
   </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="HamiltonianTests\" />
-    <Folder Include="ProblemContainer\" />
-  </ItemGroup>
-
-
 </Project>
