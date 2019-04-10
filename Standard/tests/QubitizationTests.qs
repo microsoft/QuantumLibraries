@@ -136,7 +136,7 @@ namespace Microsoft.Quantum.Tests {
     }
 
     // Array.qs tests
-    function IntArrayFromRangeTest() : Unit {
+    function RangeAsIntArrayTest() : Unit {
         mutable testCases = new (Int[], Range)[4];
         let e = new Int[0];
         set testCases[0] = ([1, 3, 5, 7], 1..2..8);
@@ -145,7 +145,7 @@ namespace Microsoft.Quantum.Tests {
         set testCases[3] = ([0], 0..4..3);
         for (idxTest in 0..Length(testCases) - 1) {
             let (expected, range) = testCases[idxTest];
-            let output = IntArrayFromRange(range);
+            let output = RangeAsIntArray(range);
             Ignore(Mapped(EqualityFactI(_, _, "Padded failed."), Zip(output, expected)));
         }
     }
