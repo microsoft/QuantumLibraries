@@ -117,7 +117,6 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
     /// ## qubits
     /// Qubits of Hamiltonian.
     operation _ApplyJordanWignerPQandPQQRTerm_ (term : GeneratorIndex, stepSize : Double, qubits : Qubit[]) : Unit {
-        
         body (...) {
             let ((idxTermType, coeff), idxFermions) = term!;
             let angle = (1.0 * coeff[0]) * stepSize;

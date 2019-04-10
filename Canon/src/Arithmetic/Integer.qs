@@ -75,7 +75,7 @@ namespace Microsoft.Quantum.Canon {
         body (...) {
             let nQubits = Length(register);
 
-            for( idx in 0..(nQubits-2) ) {
+            for ( idx in 0..(nQubits-2) ) {
                 CNOT(register[idx], register[idx+1]);
             }
         }
@@ -109,7 +109,7 @@ namespace Microsoft.Quantum.Canon {
                 nQubits == Length(register)+1, true,
                 "Target register must have one more qubit." );
 
-            for( idx in 0..(nQubits-2) ) {
+            for ( idx in 0..(nQubits-2) ) {
                 CCNOT(register[idx], targets[idx], targets[idx+1]);
             }
         }
@@ -206,7 +206,7 @@ namespace Microsoft.Quantum.Canon {
 
             CNOT (xs![2], xs![1]);
             CCNOT (ancilla, ys![1], xs![1]);
-            for( idx in 2..(nQubits-2) ) {
+            for ( idx in 2..(nQubits-2) ) {
                 CNOT (xs![idx+1], xs![idx]);
                 CCNOT (xs![idx-1], ys![idx], xs![idx]);
             }

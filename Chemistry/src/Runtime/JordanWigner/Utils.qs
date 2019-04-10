@@ -22,7 +22,7 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
     /// # Summary
     /// Format of data passed from C# to Q# to represent all information for Hamiltonian simulation.
     /// The meaning of the data represented is determined by the algorithm that receives it.
-    newtype JordanWignerEncodingData = (Int, JWOptimizedHTerms, JordanWignerInputState[], Double);
+    newtype JordanWignerEncodingData = (Int, JWOptimizedHTerms, (Int, JordanWignerInputState[]), Double);
     
 }
 

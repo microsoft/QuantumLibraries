@@ -15,6 +15,8 @@ using Xunit;
 
 namespace SystemTestsOptimizedBlockEncoding
 {
+
+    /*
     using static FermionTermType.Common;
 
     public class TraceConfig
@@ -183,6 +185,6 @@ namespace SystemTestsOptimizedBlockEncoding
             RunOptimizedBlockEncoding.Run(qsim, generalHamiltonian.NOrbitals * 2, termData, targetError).Wait();
         }
 
-
-    }
+    
+    }*/
 }
