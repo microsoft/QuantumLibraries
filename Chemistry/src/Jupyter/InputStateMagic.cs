@@ -18,7 +18,7 @@ namespace Microsoft.Quantum.Chemistry.Magic
     {
         public InputStateMagic()
         {
-            this.Name = $"%inputstate-load";
+            this.Name = $"%chemistry.inputstate.load";
             this.Documentation = new Documentation() { Summary = "Loads Broombridge electronic structure problem and returns selected input state." };
             this.Kind = SymbolKind.Magic;
             this.Execute = this.Run;

@@ -25,7 +25,7 @@ namespace Microsoft.Quantum.Chemistry.Tests
         {
             var (magic, channel) = Init();
 
-            Assert.Equal("%inputstate-load", magic.Name);
+            Assert.Equal("%chemistry.inputstate.load", magic.Name);
             var result = magic.Run("", channel);
 
             Assert.Equal(ExecuteStatus.Error, result.Status);

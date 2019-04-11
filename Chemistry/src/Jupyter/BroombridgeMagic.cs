@@ -14,7 +14,7 @@ namespace Microsoft.Quantum.Chemistry.Magic
         /// </summary>
         public BroombridgeMagic()
         {
-            this.Name = $"%broombridge";
+            this.Name = $"%chemistry.broombridge";
             this.Documentation = new Documentation() { Summary = "Loads and returns Broombridge electronic structure problem representation from a given .yaml file." };
             this.Kind = SymbolKind.Magic;
             this.Execute = this.Run;

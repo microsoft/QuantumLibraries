@@ -27,12 +27,11 @@ namespace Microsoft.Quantum.Chemistry.Tests
         {
             var (magic, channel) = Init();
 
-            Assert.Equal("%fh-load", magic.Name);
+            Assert.Equal("%chemistry.fh.load", magic.Name);
             var result = magic.Run("", channel);
 
             Assert.Equal(ExecuteStatus.Error, result.Status);
         }
-
 
         [Fact]
         public void LoadInvalidFile()
@@ -85,25 +84,6 @@ namespace Microsoft.Quantum.Chemistry.Tests
         }
     }
 
-    public class FermionHamiltonianCreateMagicTests
-    {
-        public (FermionHamiltonianCreateMagic, MockChannel) Init() =>
-            (new FermionHamiltonianCreateMagic(), new MockChannel());
-
-        [Fact]
-        public void CreateHamiltonian()
-        {
-            var (magic, channel) = Init();
-
-            Assert.Equal("%fh-create", magic.Name);
-            var result = magic.Run("", channel);
-            var hamiltonian = result.Output as FermionHamiltonian;
-            Assert.Equal(ExecuteStatus.Ok, result.Status);
-            Assert.Empty(hamiltonian.SystemIndices);
-            Assert.Empty(hamiltonian.Terms);
-        }
-    }
-
     public class FermionHamiltonianAddTermsMagicTests
     {
         public (FermionHamiltonianAddTermsMagic, MockChannel) Init() =>
@@ -113,10 +93,9 @@ namespace Microsoft.Quantum.Chemistry.Tests
         public void AddHamiltonianTerms()
         {
             var (magic, channel) = Init();
-            var createMagic = new FermionHamiltonianCreateMagic();
-            Assert.Equal("%fh-add_terms", magic.Name);
+            Assert.Equal("%chemistry.fh.add_terms", magic.Name);
 
-            var original = createMagic.Run("", channel).Output as FermionHamiltonian;
+            var original = new FermionHamiltonian();
             var fermionTerms = new List<(int[], double)>
                 {
                     (new int[] {}, 10.0),
@@ -147,6 +126,36 @@ namespace Microsoft.Quantum.Chemistry.Tests
             var hamiltonian = result.Output as FermionHamiltonian;
             Assert.Equal(ExecuteStatus.Ok, result.Status);
             Assert.Equal(16, hamiltonian.CountTerms());
+        }
+
+        [Fact]
+        public void AddTermsToExistingHamiltonian()
+        {
+            var (magic, channel) = Init();
+            Assert.Equal("%chemistry.fh.add_terms", magic.Name);
+
+            var loadMagic = new FermionHamiltonianLoadMagic();
+            var args = JsonConvert.SerializeObject(new FermionHamiltonianLoadMagic.Arguments { fileName = "broombridge_v0.2.yaml" });
+            var original = loadMagic.Run(args, channel).Output as FermionHamiltonian;
+            var fermionTerms = new List<(int[], double)>
+            {
+                (new int[] {}, 10.0),
+                (new[] {0,6}, 1.0),
+                (new[] {0,2,2,0}, 1.0)
+            };
+
+
+            args = JsonConvert.SerializeObject(new FermionHamiltonianAddTermsMagic.Arguments
+            {
+                hamiltonian = original,
+                fermionTerms = fermionTerms
+            });
+            File.WriteAllText("add_terms.args.json", args);
+
+            var result = magic.Run(args, channel);
+            var hamiltonian = result.Output as FermionHamiltonian;
+            Assert.Equal(ExecuteStatus.Ok, result.Status);
+            Assert.Equal(original.CountTerms() + 3, hamiltonian.CountTerms());
         }
     }
 }

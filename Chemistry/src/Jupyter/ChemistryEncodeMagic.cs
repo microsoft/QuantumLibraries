@@ -16,7 +16,7 @@ namespace Microsoft.Quantum.Chemistry.Magic
     {
         public ChemistryEncodeMagic()
         {
-            this.Name = $"%chemistry-encode";
+            this.Name = $"%chemistry.encode";
             this.Documentation = new Documentation() { Summary = "Encodes a fermion Hamiltonian to a format consumable by Q#." };
             this.Kind = SymbolKind.Magic;
             this.Execute = this.Run;
