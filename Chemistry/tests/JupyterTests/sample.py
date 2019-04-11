@@ -19,7 +19,7 @@ print("------------\n")
 
 ## Here I show how to add a couple of completely made-up terms to the Hamiltonian:
 args = { 'hamiltonian': fh, 'fermionTerms': [ ([4,6], 1.0), ([0,2,2,0], 1.0)] }
-fh = qsharp.client.execute(f'%chemistry.fh.add_terms {json}', raise_on_stderr=True)
+fh = qsharp.client.execute(f'%chemistry.fh.add_terms {json.dumps(map_tuples(args))}', raise_on_stderr=True)
 print("fh:\n", fh)
 print("------------\n")
 
