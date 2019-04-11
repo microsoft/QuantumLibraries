@@ -26,7 +26,7 @@ namespace Microsoft.Quantum.Tests {
         return (eigenvalues, prob, inverseAngle, statePreparation, selector);
     }
 
-    // This checks that BlockEncodingByLCU encodes the correct Hamiltonian. 
+    // This checks that BlockEncodingByLCU encodes the correct Hamiltonian.
     operation BlockEncodingByLCUTest() : Unit {
         body (...) {
             let (eigenvalues, prob, inverseAngle, statePreparation, selector) = LCUTestHelper();
@@ -80,10 +80,7 @@ namespace Microsoft.Quantum.Tests {
         body (...) {
             let (eigenvalues, prob, inverseAngle, statePreparation, selector) = LCUTestHelper();
             let LCU = QuantumWalkByQubitization(BlockEncodingReflectionByLCU(statePreparation, selector));
-            using(qubits = Qubit[4]){
-                let auxiliary = qubits[2..3];
-                let system = [qubits[0]];
-                let flag = qubits[1];
+            using ((system, flag, auxiliary) = (Qubit[1], Qubit(), Qubit[2])) {
 
                 for(rep in 0..5){
                     LCU(auxiliary, system);
@@ -95,7 +92,9 @@ namespace Microsoft.Quantum.Tests {
                         Exp([PauliY],1.0 * inverseAngle, system);
                         AssertProb([PauliZ], system, Zero, 1.0, "Error1: Z Success probability does not match theory", 1e-10);
                     }
-                    ResetAll(qubits);
+                    ResetAll(system);
+                    Reset(flag);
+                    ResetAll(auxiliary);
                 }
             }
         }
