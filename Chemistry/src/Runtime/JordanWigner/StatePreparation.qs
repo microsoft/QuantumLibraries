@@ -139,13 +139,13 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
     /// Qubits of Hamiltonian.
     operation PrepareTrialStateUnitaryCoupledCluster (initialStatePreparation : (Qubit[] => Unit), clusterOperator : JordanWignerInputState[], trotterStepSize : Double, qubits : Qubit[]) : Unit {
         
-			let clusterOperatorGeneratorSystem = JordanWignerClusterOperatorGeneratorSystem(clusterOperator);
-			let evolutionGenerator = EvolutionGenerator(JordanWignerClusterOperatorEvolutionSet(), clusterOperatorGeneratorSystem);
-			let trotterOrder = 1;
-			let simulationAlgorithm = (TrotterSimulationAlgorithm(trotterStepSize, trotterOrder))!;
-			let oracle = simulationAlgorithm(1.0, evolutionGenerator, _);
-            initialStatePreparation(qubits);
-			oracle(qubits);
+        let clusterOperatorGeneratorSystem = JordanWignerClusterOperatorGeneratorSystem(clusterOperator);
+        let evolutionGenerator = EvolutionGenerator(JordanWignerClusterOperatorEvolutionSet(), clusterOperatorGeneratorSystem);
+        let trotterOrder = 1;
+        let simulationAlgorithm = (TrotterSimulationAlgorithm(trotterStepSize, trotterOrder))!;
+        let oracle = simulationAlgorithm(1.0, evolutionGenerator, _);
+        initialStatePreparation(qubits);
+        oracle(qubits);
 		
 	}
 }
