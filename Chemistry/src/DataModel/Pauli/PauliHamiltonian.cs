@@ -36,7 +36,7 @@ namespace Microsoft.Quantum.Chemistry.Pauli
     /// </list>
     /// </para>
     /// </summary>
-    public class PauliHamiltonian : Hamiltonian<TermType.PauliTerm, PauliTerm, PauliTTermValue>
+    public class PauliHamiltonian : Hamiltonian<TermType.PauliTerm, PauliTerm, PauliTermValue>
     {
         public PauliHamiltonian() : base() { }
     }

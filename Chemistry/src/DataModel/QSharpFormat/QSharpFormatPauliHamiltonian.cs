@@ -18,7 +18,7 @@ namespace Microsoft.Quantum.Chemistry.QSharpFormat
     public static partial class Convert
     {
         
-        public static HTerm FromPauliTerm(PauliTerm term, PauliTTermValue value)
+        public static HTerm FromPauliTerm(PauliTerm term, PauliTermValue value)
         {
             return new HTerm((new QArray<Int64>(term.QubitIndices.Select(o=>(Int64)o)), new QArray<double>(value.Value)));
         }

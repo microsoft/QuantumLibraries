@@ -76,7 +76,8 @@ namespace Microsoft.Quantum.Chemistry.Fermion
         /// <param name="coefficient">Relative amplitude of term.</param>
         public void Set(Complex amplitude, IndexOrderedSequence<TIndex> term)
         {
-            Excitations[term] = amplitude;
+            Excitations[term] = amplitude * (double) term.Coefficient;
+            term.Coefficient = 1;
         }
 
 

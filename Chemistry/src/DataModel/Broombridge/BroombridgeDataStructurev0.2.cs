@@ -48,7 +48,7 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
         {
             { "single_configurational", StateType.SingleConfigurational },
             { "sparse_multi_configurational", StateType.SparseMultiConfigurational },
-            { "unitary_coupled_cluster", StateType.SparseMultiConfigurational }
+            { "unitary_coupled_cluster", StateType.UnitaryCoupledCluster }
         };
             
         internal static class UpdaterStrings

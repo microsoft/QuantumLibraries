@@ -17,9 +17,9 @@ namespace Microsoft.Quantum.Chemistry.Pauli
         /// </summary>
         /// <param name="x">Input double.</param>
         /// <returns>PauliTTermValue representing the input double.</returns>
-        public static PauliTTermValue ToPauliTTermValue(this double x)
+        public static PauliTermValue ToPauliTTermValue(this double x)
         {
-            return new PauliTTermValue(x);
+            return new PauliTermValue(x);
         }
 
         /// <summary>
@@ -27,9 +27,9 @@ namespace Microsoft.Quantum.Chemistry.Pauli
         /// </summary>
         /// <param name="x">Input double  sequence.</param>
         /// <returns>PauliTTermValue representing the input double sequence.</returns>
-        public static PauliTTermValue ToPauliTTermValue(this IEnumerable<double> x)
+        public static PauliTermValue ToPauliTTermValue(this IEnumerable<double> x)
         {
-            return new PauliTTermValue(x);
+            return new PauliTermValue(x);
         }
     }
 }

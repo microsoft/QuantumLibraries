@@ -40,7 +40,8 @@ namespace Microsoft.Quantum.Chemistry.Fermion
              Method = wavefunction.Method,
              Energy = wavefunction.Energy,
              SCFData = wavefunction.SCFData.ToNewIndex<int>((x) => x.ToInt(indexConvention)),
-             MCFData = wavefunction.MCFData.ToNewIndex<int>((x) => x.ToInt(indexConvention))
+             MCFData = wavefunction.MCFData.ToNewIndex<int>((x) => x.ToInt(indexConvention)),
+             UCCData = wavefunction.UCCData.ToNewIndex<int>((x) => x.ToInt(indexConvention))
          };
     }
 }

@@ -15,8 +15,7 @@ namespace Microsoft.Quantum.Chemistry.OrbitalIntegrals
     /// <summary>
     /// LadderType representing orbital overlap integrals.
     /// </summary>
-    public class OrbitalIntegral : 
-        ITermIndex<TermType.OrbitalIntegral>, IEquatable<OrbitalIntegral>
+    public class OrbitalIntegral : ITermIndex<TermType.OrbitalIntegral, OrbitalIntegral>
     {
         public enum Convention
         {
@@ -113,7 +112,7 @@ namespace Microsoft.Quantum.Chemistry.OrbitalIntegrals
         /// <returns>Sign of this term.</returns>
         public int GetSign()
         {
-            return Math.Sign(Coefficient);
+            return 1;
         }
 
         /// <summary>
@@ -175,6 +174,15 @@ namespace Microsoft.Quantum.Chemistry.OrbitalIntegrals
             {
                 throw new System.NotImplementedException();
             }
+        }
+
+        /// <summary>
+        /// Creates a copy of this instance.
+        /// </summary>
+        public OrbitalIntegral Clone()
+        {
+            var newArray = OrbitalIndices.Clone<int>();
+            return new OrbitalIntegral(newArray, Coefficient);
         }
 
         /// <summary>

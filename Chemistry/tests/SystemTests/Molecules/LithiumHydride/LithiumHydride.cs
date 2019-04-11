@@ -65,10 +65,10 @@ namespace SystemTests.Molecules
             {
                 var configuration = Config.Default();
                 var qSharpData = Load(GroundState, configuration);
-                var estEnergy = Helper.SetUpSimulation(filename, configuration, qSharpData, TrotterStepSize, TrotterOrder, 7);
+                var estEnergy = Helper.SetUpSimulation(filename, configuration, qSharpData, TrotterStepSize, TrotterOrder, 6);
                 var error = GroundStateEnergy - estEnergy;
 
-                Assert.True(Math.Abs(error) < 1e-1, "This test is probabilistic.");
+                Assert.True(Math.Abs(error) < 2e-1, "This test is probabilistic.");
             }
 
             [Fact]
@@ -77,10 +77,10 @@ namespace SystemTests.Molecules
                 var configuration = Config.Default();
                 configuration.UseIndexConvention = IndexConvention.UpDown;
                 var qSharpData = Load(GroundState, configuration);
-                var estEnergy = Helper.SetUpSimulation(filename, configuration, qSharpData, TrotterStepSize, TrotterOrder, 6);
+                var estEnergy = Helper.SetUpSimulation(filename, configuration, qSharpData, TrotterStepSize, TrotterOrder, 5);
                 var error = GroundStateEnergy - estEnergy;
 
-                Assert.True(Math.Abs(error) < 2e-1, "This test is probabilistic.");
+                Assert.True(Math.Abs(error) < 4e-1, "This test is probabilistic.");
             }
 
             
@@ -119,10 +119,10 @@ namespace SystemTests.Molecules
             {
                 var configuration = Config.Default();
                 var qSharpData = Load(GroundState, configuration);
-                var estEnergy = Helper.SetUpSimulation(filename, configuration, qSharpData, TrotterStepSize, TrotterOrder, 6);
+                var estEnergy = Helper.SetUpSimulation(filename, configuration, qSharpData, TrotterStepSize, TrotterOrder, 5);
                 var error = GroundStateEnergy - estEnergy;
 
-                Assert.True(Math.Abs(error) < 2e-1);
+                Assert.True(Math.Abs(error) < 4e-1);
             }
 
             [Fact]
@@ -131,10 +131,10 @@ namespace SystemTests.Molecules
                 var configuration = Config.Default();
                 configuration.UseIndexConvention = IndexConvention.UpDown;
                 var qSharpData = Load(GroundState, configuration);
-                var estEnergy = Helper.SetUpSimulation(filename, configuration, qSharpData, TrotterStepSize, TrotterOrder, 7);
+                var estEnergy = Helper.SetUpSimulation(filename, configuration, qSharpData, TrotterStepSize, TrotterOrder, 6);
                 var error = GroundStateEnergy - estEnergy;
 
-                Assert.True(Math.Abs(error) < 1e-1);
+                Assert.True(Math.Abs(error) < 2e-1);
             }
 
             [Fact]
@@ -145,7 +145,7 @@ namespace SystemTests.Molecules
 
                 // This is a ranodm UCCSD state, not the actual one for LiH.
                 var qSharpData = Load("UCCSD |E1>", configuration);
-                var estEnergy = Helper.SetUpSimulation(filename, configuration, qSharpData, TrotterStepSize, TrotterOrder, 9);
+                var estEnergy = Helper.SetUpSimulation(filename, configuration, qSharpData, TrotterStepSize, TrotterOrder, 1);
             }
         }
 

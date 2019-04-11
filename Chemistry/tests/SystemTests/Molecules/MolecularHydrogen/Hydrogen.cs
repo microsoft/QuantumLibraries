@@ -30,9 +30,20 @@ namespace SystemTests.Molecules
         public const double TrotterStepSize = 1.0;
         public const int TrotterOrder = 1;
         public const string GroundState = "|G>";
+        // This energy is only approximately correct.
         public const double GroundStateEnergy = -1.13273749;
 
-        public class Version_v0_2
+        public class Version_v0_1
+        {
+            static string filename = "Molecules/MolecularHydrogen/hydrogen_0.1.yaml";
+
+            public JordanWignerEncodingData Load(string stateName, Config config)
+            {
+                return Helper.GetQSharpData(filename, stateName, config);
+            }
+        }
+
+            public class Version_v0_2
         {
             static string filename = "Molecules/MolecularHydrogen/hydrogen_0.2.yaml";
 
@@ -70,7 +81,7 @@ namespace SystemTests.Molecules
                 var estEnergy = Helper.SetUpSimulation(filename, configuration, qSharpData, TrotterStepSize, TrotterOrder, 9);
                 var error = GroundStateEnergy - estEnergy;
 
-                Assert.True(Math.Abs(error) < 1e-1);
+                Assert.True(Math.Abs(error) < 1e-2);
             }
 
             [Fact]
@@ -80,8 +91,12 @@ namespace SystemTests.Molecules
                 configuration.UseIndexConvention = IndexConvention.UpDown;
 
                 // This is a ranodm UCCSD state, not the actual one for LiH.
-                var qSharpData = Load("UCCSD |E1>", configuration);
+                var qSharpData = Load("UCCSD |G>", configuration);
                 var estEnergy = Helper.SetUpSimulation(filename, configuration, qSharpData, TrotterStepSize, TrotterOrder, 9);
+
+                var error = GroundStateEnergy - estEnergy;
+
+                Assert.True(Math.Abs(error) < 1e-2);
             }
 
 

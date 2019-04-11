@@ -18,7 +18,7 @@ namespace Microsoft.Quantum.Chemistry.Generic
     public class Hamiltonian<TTermClassification, TTermIndexing, TTermValue>
         //TODO: Restore `where TTermClassification: IEquatable<TTermClassification>`
         // in the future if we want more complicated term classifications.
-        where TTermIndexing : ITermIndex<TTermClassification>
+        where TTermIndexing : ITermIndex<TTermClassification, TTermIndexing>
         where TTermValue: ITermValue<TTermValue>
         // TODO: Restore `IEquatable<TTermIndexing>` in the future if we expand to more types of terms.
     {
@@ -65,8 +65,17 @@ namespace Microsoft.Quantum.Chemistry.Generic
         /// <param name="type">Category of term.</param>
         /// <param name="index">Index to term.</param>
         /// <param name="coefficient">Coefficient of term.</param>
+        // Warning be careful of case where coefficient is pass by reference.
         public void Add(TTermClassification type, TTermIndexing index, TTermValue coefficient)
         {
+            
+            var newIndex = index.Clone();
+            var newCoeff = coefficient.Clone();
+            var sign = newIndex.GetSign();
+            newIndex.ResetSign();
+            // Some terms have an internal +- sign that multiples the coefficient.
+            // We reset this sign once it has been accounted for.
+            
             if (!Terms.ContainsKey(type))
             {
                 Terms.Add(type, new HamiltonianTerm());
@@ -74,15 +83,15 @@ namespace Microsoft.Quantum.Chemistry.Generic
             if (Terms[type].ContainsKey(index))
             {
                 // The index can contain a sign coefficient e.g. +-1. 
-                Terms[type][index] = Terms[type][index].AddValue(coefficient, index.GetSign());
-                // Reset index coefficient to 1.
-                index.ResetSign();
+                Terms[type][newIndex] = Terms[type][newIndex].AddValue(newCoeff, sign);
+                //Terms[type][index] = Terms[type][index].AddValue(coefficient, 1);
             }
             else
             {
-                Terms[type].Add(index, coefficient);
-                Terms[type][index].SetValue(coefficient, index.GetSign());
-                index.ResetSign();
+
+                Terms[type][newIndex] = newCoeff.SetValue(newCoeff, sign);
+                //Terms[type][index] = coefficient;
+                //index.ResetSign();
                 AddToSystemIndices(index);
             }
         }

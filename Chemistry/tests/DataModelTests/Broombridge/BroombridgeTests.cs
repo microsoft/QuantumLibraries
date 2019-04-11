@@ -96,9 +96,8 @@ namespace Microsoft.Quantum.Chemistry.Tests
         {
             var filename = "Broombridge/broombridge_v0.2.yaml";
             Data original = Deserializers.DeserializeBroombridge(filename);
-            var rawData = original.Raw;
-
-            var json = JsonConvert.SerializeObject(rawData);
+            
+            var json = JsonConvert.SerializeObject(original);
             File.WriteAllText("original.json", json);
 
             var serialized = JsonConvert.DeserializeObject<Data>(json);

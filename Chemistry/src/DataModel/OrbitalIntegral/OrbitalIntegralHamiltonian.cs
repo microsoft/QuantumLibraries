@@ -22,10 +22,7 @@ namespace Microsoft.Quantum.Chemistry.OrbitalIntegrals
         /// <param name="orbitalIntegral">Orbital integral to add to Hamiltonian.</param>
         public void Add(OrbitalIntegral orbitalIntegral)
         {
-            Add(orbitalIntegral, orbitalIntegral.Coefficient);
-            // Reset coefficient of orbital integral now that it is copied 
-            // to the dictionary.
-            orbitalIntegral.ResetSign();
+            Add(new OrbitalIntegral(orbitalIntegral.OrbitalIndices), orbitalIntegral.Coefficient);
         }
 
         /// <summary>

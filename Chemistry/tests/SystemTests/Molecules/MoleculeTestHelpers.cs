@@ -42,6 +42,12 @@ namespace SystemTests.Molecules
 
             Dictionary<string, FermionWavefunction<SpinOrbital>> inputStates = broombridge.Wavefunctions ?? new Dictionary<string, FermionWavefunction<SpinOrbital>>();
 
+            var tmp = inputStates.ContainsKey(wavefunctionLabel);
+
+            var tmp2 = inputStates[wavefunctionLabel];
+
+            var tmp3 = inputStates[wavefunctionLabel].ToIndexing(configuration.UseIndexConvention);
+
             // If no states are provided, use the Hartree--Fock state.
             // As fermion operators the fermion Hamiltonian are already indexed by, we now apply the desired
             // spin-orbital -> integer indexing convention.

@@ -86,7 +86,7 @@ namespace Microsoft.Quantum.Chemistry
             var useComparer = comparer == null ? Comparer<TElement>.Default : comparer;
             foreach (var item in xArr.Zip(yArr, (x, y) => (x, y)))
             {
-                if (useComparer.Compare( item.y , item.x) > 0)
+                if (useComparer.Compare(item.y, item.x) > 0)
                 {
                     return -1;
                 }
@@ -97,7 +97,7 @@ namespace Microsoft.Quantum.Chemistry
             }
             return 0;
         }
-        
+
 
         /// <summary>
         /// Checks whether a sequence e.g. of integers {x,y,z,...} is sorted in
@@ -209,5 +209,20 @@ namespace Microsoft.Quantum.Chemistry
         }
 
         #endregion
+
+        /// <summary>
+        /// Clones the values of an array, assuming that each element is a value type.
+        /// </summary>
+        /// <returns>A deep copy of this object.</returns>
+        /// <typeparam name="T">Type of array to clone.</typeparam>
+        /// <param name="array">Input array to clone.</param>
+        /// <returns>Clone of the input array.</returns>
+        public static TValue[] Clone<TValue>(this TValue[] array)
+        {
+            var newArray = new TValue[array.Length];
+            for (var i = 0; i < array.Length; i++)
+                newArray[i] = array[i];
+            return newArray;
+        }
     }
 }

@@ -33,7 +33,7 @@ namespace Microsoft.Quantum.Chemistry.Fermion
     /// </description>
     /// </item>
     /// </summary>
-    public class HermitianFermionTerm : FermionTerm, ITermIndex<TermType.Fermion>, IEquatable<HermitianFermionTerm>
+    public class HermitianFermionTerm : FermionTerm, ITermIndex<TermType.Fermion, HermitianFermionTerm>
     {
         #region Constructors
         /// <summary>
@@ -121,6 +121,19 @@ namespace Microsoft.Quantum.Chemistry.Fermion
             {
                 Sequence = Sequence.Select(o => (o.Type == RaisingLowering.d ? RaisingLowering.u : RaisingLowering.d, o.Index)).Select(o => new FermionOperator(o)).Reverse().ToList();
             }
+        }
+
+        /// <summary>
+        /// Creates a copy of this instance.
+        /// </summary>
+        public HermitianFermionTerm Clone()
+        {
+            var newIndices = ToIndices().ToArray().Clone<int>();
+            var newOperators = ToRaisingLowering().ToArray().Clone<RaisingLowering>();
+            var newTerm = new HermitianFermionTerm();
+            newTerm.Coefficient = Coefficient;
+            newTerm.Sequence = newOperators.Zip(newIndices, (a,b) => new LadderOperator<int>(a,b)).ToList();
+            return newTerm;
         }
 
         /// <summary>
