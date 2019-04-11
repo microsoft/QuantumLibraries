@@ -25,7 +25,7 @@ namespace Microsoft.Quantum.Chemistry.Fermion
         /// <summary>
         /// Constructor for empty instance.
         /// </summary>
-        internal WavefunctionFermionSCF() : base() { }
+        public WavefunctionFermionSCF() : base() { }
 
         /// <summary>
         /// Construct a copy of the input instance.

@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 using System;
+using Newtonsoft.Json;
 
 namespace Microsoft.Quantum.Chemistry.LadderOperators
 {
@@ -10,6 +11,7 @@ namespace Microsoft.Quantum.Chemistry.LadderOperators
     /// <summary>
     /// Data strcture for raising and lowering operators.
     /// </summary>
+    [JsonConverter(typeof(LadderOperatorJsonConverter))]
     public struct LadderOperator : IEquatable<LadderOperator>
     {
         /// <summary>

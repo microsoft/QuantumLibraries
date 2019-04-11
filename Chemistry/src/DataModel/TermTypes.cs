@@ -5,6 +5,9 @@ namespace Microsoft.Quantum.Chemistry
 {
     using System;
 
+    using Newtonsoft.Json;
+    using Newtonsoft.Json.Converters;
+
     /// <summary>
     /// All Hamiltonian terms must implement this interface.
     /// </summary>
@@ -38,17 +41,20 @@ namespace Microsoft.Quantum.Chemistry
     // Might want to distribute these to the separate term classes.
     public static class TermType
     {
+        [JsonConverter(typeof(StringEnumConverter))]
         public enum OrbitalIntegral
         {
             
             Identity, OneBody, TwoBody
         }
 
+        [JsonConverter(typeof(StringEnumConverter))]
         public enum Fermion
         {
             Identity = 0, PP = 1, PQ = 2, PQQP = 3, PQQR = 4, PQRS = 5
         }
 
+        [JsonConverter(typeof(StringEnumConverter))]
         public enum PauliTerm
         {
             Identity = 0,   // This has contribution from PP and PQQP terms.
@@ -63,6 +69,7 @@ namespace Microsoft.Quantum.Chemistry
     /// <summary>
     /// Spin index up/dpwn enumeration type.
     /// </summary>
+    [JsonConverter(typeof(StringEnumConverter))]
     public enum Spin : byte
     {
         u = 0, d = 1
@@ -71,6 +78,7 @@ namespace Microsoft.Quantum.Chemistry
     /// <summary>
     /// Wavefunction types
     /// </summary>
+    [JsonConverter(typeof(StringEnumConverter))]
     public enum StateType
     {
         Default = 0, SingleConfigurational = 1, SparseMultiConfigurational = 2, UnitaryCoupledCluster = 3
@@ -79,6 +87,7 @@ namespace Microsoft.Quantum.Chemistry
     /// <summary>
     /// Enum for raising or lowering operator.
     /// </summary>
+    [JsonConverter(typeof(StringEnumConverter))]
     public enum RaisingLowering
     {
         u = 0, d = 1, identity

@@ -38,7 +38,7 @@ namespace Microsoft.Quantum.Chemistry.Fermion
         /// <summary>
         /// Constructor for empty instance.
         /// </summary>
-        internal HermitianFermionTerm() : base() { }
+        public HermitianFermionTerm() : base() { }
 
         /// <summary>
         /// Construct a copy of the input instance.

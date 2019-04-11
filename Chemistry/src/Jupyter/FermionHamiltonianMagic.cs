@@ -146,9 +146,10 @@ namespace Microsoft.Quantum.Chemistry.Magic
             if (args.hamiltonian == null) throw new ArgumentNullException(nameof(args.hamiltonian));
             if (args.fermionTerms == null) throw new ArgumentNullException(nameof(args.fermionTerms));
 
-            args.hamiltonian.AddRange(args.fermionTerms.Select(t => (new HermitianFermionTerm(t.Item1.ToLadderSequence()), t.Item2.ToDoubleCoeff())));
+            var hamiltonian = args.hamiltonian;
+            hamiltonian.AddRange(args.fermionTerms.Select(t => (new HermitianFermionTerm(t.Item1.ToLadderSequence()), t.Item2.ToDoubleCoeff())));
             
-            return JObject.FromObject(args.hamiltonian).ToExecutionResult();
+            return hamiltonian.ToExecutionResult();
         }
     }
 }

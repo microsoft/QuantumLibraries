@@ -4,13 +4,15 @@
 using System;
 using System.Linq;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace Microsoft.Quantum.Chemistry.LadderOperators
 {
-    
+
     /// <summary>
     /// Class representing a sequence of raising and lowering operators.
     /// </summary>
+    [JsonConverter(typeof(LadderSequenceJsonConverter))]
     public class LadderSequence : IEquatable<LadderSequence>
     {
 
