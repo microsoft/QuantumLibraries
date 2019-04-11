@@ -28,7 +28,7 @@ namespace Microsoft.Quantum.Chemistry.Tests
             var (magic, channel) = Init();
             var fileName = "broombridge_v0.2.yaml";
 
-            Assert.Equal("%chemistry-encode", magic.Name);
+            Assert.Equal("%chemistry.encode", magic.Name);
 
             var broombridge = Deserializers.DeserializeBroombridge(fileName);
             var problemData = broombridge.ProblemDescriptions.First();
