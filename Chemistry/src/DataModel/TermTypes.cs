@@ -97,6 +97,7 @@ namespace Microsoft.Quantum.Chemistry
     /// Boxed version of double that implements the <see cref="ITermValue"></see> interface
     /// that requires all values to have a method to compute its norm.
     /// </summary>
+    [JsonConverter(typeof(DoubleCoeff.JsonConverter))]
     public struct DoubleCoeff : ITermValue<DoubleCoeff>, IComparable
     {
         public double Value;
@@ -193,6 +194,29 @@ namespace Microsoft.Quantum.Chemistry
         public enum IntegralDataFormat
         {
             LiQuiD, Broombridge
+        }
+
+        /// <summary>
+        /// This JsonConverter encodes the DoubleCoeff as a double.
+        /// </summary>
+        public class JsonConverter : JsonConverter<DoubleCoeff>
+        {
+            /// <summary>
+            /// Writers the LadderOperator as a (Type, Index) tuple.
+            /// </summary>
+            public override void WriteJson(JsonWriter writer, DoubleCoeff value, JsonSerializer serializer)
+            {
+                serializer.Serialize(writer, value.Value);
+            }
+
+            /// <summary>
+            /// Reads the LadderOperator from a (Type, Index) tuple.
+            /// </summary>
+            public override DoubleCoeff ReadJson(JsonReader reader, Type objectType, DoubleCoeff existingValue, bool hasExistingValue, JsonSerializer serializer)
+            {
+                var value = serializer.Deserialize<Double>(reader);
+                return new DoubleCoeff(value);
+            }
         }
     }
 }

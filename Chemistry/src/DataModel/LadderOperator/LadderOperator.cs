@@ -11,7 +11,7 @@ namespace Microsoft.Quantum.Chemistry.LadderOperators
     /// <summary>
     /// Data strcture for raising and lowering operators.
     /// </summary>
-    [JsonConverter(typeof(LadderOperatorJsonConverter))]
+    [JsonConverter(typeof(LadderOperator.JsonConverter))]
     public struct LadderOperator : IEquatable<LadderOperator>
     {
         /// <summary>
@@ -61,6 +61,36 @@ namespace Microsoft.Quantum.Chemistry.LadderOperators
         public override string ToString() {
             string op = Type.ToString();
             return $"{Index}{op}";
+        }
+
+
+        /// <summary>
+        /// This JsonConverter encodes of a LadderOperator as a Tuple instead of as an object.
+        /// </summary>
+        public class JsonConverter : JsonConverter<LadderOperator>
+        {
+            /// <summary>
+            /// Writers the LadderOperator as a (Type, Index) tuple.
+            /// </summary>
+            public override void WriteJson(JsonWriter writer, LadderOperator value, JsonSerializer serializer)
+            {
+                var item = (value.Type, value.Index);
+                serializer.Serialize(writer, item);
+            }
+
+            /// <summary>
+            /// Reads the LadderOperator from a (Type, Index) tuple.
+            /// </summary>
+            public override LadderOperator ReadJson(JsonReader reader, Type objectType, LadderOperator existingValue, bool hasExistingValue, JsonSerializer serializer)
+            {
+                var item = serializer.Deserialize<ValueTuple<RaisingLowering, int>>(reader);
+
+                var result = (LadderOperator)Activator.CreateInstance(objectType);
+                result.Type = item.Item1;
+                result.Index = item.Item2;
+
+                return result;
+            }
         }
     }
     
