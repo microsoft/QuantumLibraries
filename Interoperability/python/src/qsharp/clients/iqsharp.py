@@ -162,7 +162,7 @@ class IQSharpClient(object):
                     output_hook(msg)
 
         try:
-            if self.busy:
+            if self._busy:
                 # Trying to execute while already executing can corrupt the
                 # ordering of messages internally to ZeroMQ
                 # (see https://github.com/Microsoft/QuantumLibraries/issues/69),
@@ -172,7 +172,7 @@ class IQSharpClient(object):
             self._busy = True
             reply = self.kernel_client.execute_interactive(input, output_hook=_output_hook, **kwargs)
         finally:
-            self.busy = False
+            self._busy = False
 
         logger.debug(f"received:\n{reply}")
 
