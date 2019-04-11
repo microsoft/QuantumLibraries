@@ -70,7 +70,7 @@ namespace Microsoft.Quantum.Chemistry.LadderOperators
         /// </summary>
         public override string ToString() {
             string op = Type.ToString();
-            return $"{Index.ToString()}{op}";
+            return $"{Index}{op}";
         }
     }
     

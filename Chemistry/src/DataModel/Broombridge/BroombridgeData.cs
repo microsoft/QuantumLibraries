@@ -42,7 +42,7 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
         /// <summary>
         /// Collection of electronic structure problem.
         /// </summary>
-        public List<ProblemDescription> ProblemDescriptions = new List<ProblemDescription>();
+        public List<ProblemDescription> ProblemDescriptions { get; set; } = new List<ProblemDescription>();
 
         /// <summary>
         /// Electronic structure problem instance.

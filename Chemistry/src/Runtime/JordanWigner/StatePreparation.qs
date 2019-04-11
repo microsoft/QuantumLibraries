@@ -24,10 +24,10 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
 			}
 			elif (Length(terms) == 1) {
 				let (complex, qubitIndices) = terms[0]!;
-				PrepareTrialStateSingleSiteOccupation(qubitIndices, qubits);
+				PrepareSingleConfigurationalStateSingleSiteOccupation(qubitIndices, qubits);
 			}
 			else {
-				PrepareTrialStateSparseMultiConfigurational(NoOp<Qubit[]>, terms, qubits);
+				PrepareSparseMultiConfigurationalState(NoOp<Qubit[]>, terms, qubits);
 			}
 		}
 		elif(stateType == 3){
@@ -37,7 +37,7 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
 			// The last term is the reference state.
 			let referenceState = PrepareTrialState((2, [terms[nTerms-1]]), _);
 			
-			PrepareTrialStateUnitaryCoupledCluster(referenceState, terms[0..nTerms-2], trotterStepSize, qubits);
+			PrepareUnitaryCoupledClusterState(referenceState, terms[0..nTerms-2], trotterStepSize, qubits);
 		}
     }
     
@@ -51,7 +51,7 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
     /// Indices of qubits to be occupied by electrons.
     /// ## qubits
     /// Qubits of Hamiltonian.
-    operation PrepareTrialStateSingleSiteOccupation (qubitIndices : Int[], qubits : Qubit[]) : Unit {
+    operation PrepareSingleConfigurationalStateSingleSiteOccupation (qubitIndices : Int[], qubits : Qubit[]) : Unit {
         
         body (...) {
             ApplyToEachCA(X, Subarray(qubitIndices, qubits));
@@ -63,9 +63,9 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
     }
     
     
-    function _PrepareTrialStateSingleSiteOccupation_ (qubitIndices : Int[]) : (Qubit[] => Unit : Adjoint, Controlled) {
+    function _PrepareSingleConfigurationalStateSingleSiteOccupation_ (qubitIndices : Int[]) : (Qubit[] => Unit : Adjoint, Controlled) {
         
-        return PrepareTrialStateSingleSiteOccupation(qubitIndices, _);
+        return PrepareSingleConfigurationalStateSingleSiteOccupation(qubitIndices, _);
     }
     
     
@@ -82,7 +82,7 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
     /// the excitation acts on.
     /// ## qubits
     /// Qubits of Hamiltonian.
-    operation PrepareTrialStateSparseMultiConfigurational (initialStatePreparation : (Qubit[] => Unit), excitations : JordanWignerInputState[], qubits : Qubit[]) : Unit {
+    operation PrepareSparseMultiConfigurationalState (initialStatePreparation : (Qubit[] => Unit), excitations : JordanWignerInputState[], qubits : Qubit[]) : Unit {
         
         let nExcitations = Length(excitations);
         
@@ -105,7 +105,7 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
             
             using (auxillary = Qubit[nBitsIndices + 1]) {
                 using (flag = Qubit[1]) {
-                    let multiplexer = MultiplexerBruteForceFromGenerator(nExcitations, LookupFunction(Map(_PrepareTrialStateSingleSiteOccupation_, applyFlips)));
+                    let multiplexer = MultiplexerBruteForceFromGenerator(nExcitations, LookupFunction(Map(_PrepareSingleConfigurationalStateSingleSiteOccupation_, applyFlips)));
                     (StatePreparationComplexCoefficients(coefficientsNewComplexPolar))(BigEndian(auxillary));
                     multiplexer(BigEndian(auxillary), qubits);
                     (Adjoint (StatePreparationPositiveCoefficients(coefficientsSqrtAbs)))(BigEndian(auxillary));
@@ -137,7 +137,7 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
     /// the excitation acts on.
     /// ## qubits
     /// Qubits of Hamiltonian.
-    operation PrepareTrialStateUnitaryCoupledCluster (initialStatePreparation : (Qubit[] => Unit), clusterOperator : JordanWignerInputState[], trotterStepSize : Double, qubits : Qubit[]) : Unit {
+    operation PrepareUnitaryCoupledClusterState (initialStatePreparation : (Qubit[] => Unit), clusterOperator : JordanWignerInputState[], trotterStepSize : Double, qubits : Qubit[]) : Unit {
 		let clusterOperatorGeneratorSystem = JordanWignerClusterOperatorGeneratorSystem(clusterOperator);
 		let evolutionGenerator = EvolutionGenerator(JordanWignerClusterOperatorEvolutionSet(), clusterOperatorGeneratorSystem);
 		let trotterOrder = 1;

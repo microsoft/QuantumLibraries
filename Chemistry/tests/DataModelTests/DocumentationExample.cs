@@ -17,6 +17,11 @@ namespace Microsoft.Quantum.Chemistry.Tests
 
     using OrbitalIntegral = OrbitalIntegral;
  
+    /// <summary>
+    /// These are examples that we may use or are currently using as sample
+    /// code online in the chemistry library prose documentation, or in research
+    /// manuscripts. If these break, those examples are no longer valid and need updating.
+    /// </summary>
     public class DocumentationExamplesTests
     {
         [Fact]

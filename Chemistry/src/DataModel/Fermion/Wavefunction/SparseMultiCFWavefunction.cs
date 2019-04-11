@@ -9,18 +9,7 @@ using System.Numerics;
 
 namespace Microsoft.Quantum.Chemistry.Fermion
 {
-    // This class is for Fermion terms that are not grouped into Hermitian bunches.
-    // Maybe need a stype for quantum state?
-
-    /*public class WavefunctionFermionMCF
-    {
-        public List<((double, double), WavefunctionFermionSCF)> Superposition = new List<((double, double), WavefunctionFermionSCF)>();
-        public WavefunctionFermionSCF reference = new WavefunctionFermionSCF();
-    }*/
-
-    // To do: work in progress
-
-
+    
     /// <summary>
     /// The sparse multi-configurational wavefunction is a superposition of a small number
     /// of single-configurational wavefunctions. In general, the quantum gate complexity of

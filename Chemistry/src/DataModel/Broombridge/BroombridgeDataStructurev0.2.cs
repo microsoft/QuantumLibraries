@@ -35,7 +35,7 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
     /// Broombridge v0.2 format.
     /// 
     /// Changes from v0.1:
-    /// - `format -> version` replaced with `version`.
+    /// // TODO - `format -> version` replaced with `version`.
     /// - `integral_sets` replaced with `problem_description`.
     /// - `metadata` is now optional.
     /// - Initial state suggestion `state` key removed. All values in this key are moved up one level.
