@@ -73,15 +73,8 @@ namespace Microsoft.Quantum.Arithmetic {
     ///
     /// # See Also
     /// - IncrementByIntegerPhaseLE
-    operation IncrementByInteger(increment : Int, target : LittleEndian) : Unit {
-        body (...) {
-            let inner = IntegerIncrementPhaseLE(increment, _);
-            ApplyPhaseLEOperationOnLECA(inner, target);
-        }
-
-        adjoint invert;
-        controlled distribute;
-        controlled adjoint distribute;
+    operation IncrementByInteger(increment : Int, target : LittleEndian) : Unit is Adj + Ctl {
+        ApplyPhaseLEOperationOnLECA(IncrementPhaseByInteger(increment, _), target);
     }
 
 }

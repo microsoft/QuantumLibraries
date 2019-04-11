@@ -96,17 +96,16 @@ namespace Microsoft.Quantum.Arithmetic {
     operation AssertPhaseLessThan(value : Int, number : PhaseLittleEndian) : Unit {
         body (...) {
             let inner = ApplyLEOperationOnPhaseLEA(AssertHighestBit(One, _), _);
-            ApplyWithA(Adjoint IntegerIncrementPhaseLE(value, _), inner, number);
+            ApplyWithA(Adjoint IncrementPhaseByInteger(value, _), inner, number);
         }
-        
+
         adjoint self;
-        
+
         controlled (ctrls, ...) {
             AssertPhaseLessThan(value, number);
         }
-        
+
         controlled adjoint auto;
     }
-    
 
 }

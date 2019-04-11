@@ -131,7 +131,7 @@ namespace Microsoft.Quantum.Canon {
             let (p, array, pNormExpected) = testCases[idxTest];
             NearEqualityFact(PNorm(p, array), pNormExpected);
             
-            // if PNorm fails, PNormalize will fail.
+            // if PNorm fails, PNormalized will fail.
             let arrayNormalized = PNormalized(p, array);
             
             for (idxCoeff in 0 .. Length(array) - 1) {

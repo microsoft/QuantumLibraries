@@ -71,7 +71,7 @@ namespace Microsoft.Quantum.Arithmetic {
         adjoint auto;
 
         controlled (controls, ...) {
-            EqualityFactB(modulus <= 2 ^ (Length(target!) - 1), true, $"`multiplier` must be big enough to fit integers modulo `modulus`" + $"with highest bit set to 0");
+            Fact(modulus <= 2 ^ (Length(target!) - 1), $"`multiplier` must be big enough to fit integers modulo `modulus`" + $"with highest bit set to 0");
 
             if (_EnableExtraAssertsForArithmetic()) {
                 // assert that the highest bit is zero, by switching to computational basis
@@ -84,7 +84,7 @@ namespace Microsoft.Quantum.Arithmetic {
             // note that controlled version is correct only under the assumption
             // that the value of target is less than modulus
             using (lessThanModulusFlag = Qubit()) {
-                let copyMostSignificantBitPhaseLE = ApplyLEOperationOnPhaseLEA(CopyMostSignificantBitLE(_, lessThanModulusFlag), _);
+                let copyMostSignificantBitPhaseLE = ApplyLEOperationOnPhaseLEA(CopyMostSignificantBit(_, lessThanModulusFlag), _);
 
                 // lets track the state of target register through the computation
                 Controlled IncrementPhaseByInteger(controls, (increment, target));

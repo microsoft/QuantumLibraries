@@ -253,9 +253,9 @@ namespace Microsoft.Quantum.Canon {
         body (...) {
             Removed(
                 "Microsoft.Quantum.Canon.ApplyRippleCarryComparatorBE",
-                "ApplyRippleCarryComparatorLE(BigEndianAsLittleEndian(x), BigEndianAsLittleEndian(y), output)"
+                "CompareUsingRippleCarry(BigEndianAsLittleEndian(x), BigEndianAsLittleEndian(y), output)"
             );
-            ApplyRippleCarryComparatorLE(BigEndianAsLittleEndian(x), BigEndianAsLittleEndian(y), output);
+            CompareUsingRippleCarry(BigEndianAsLittleEndian(x), BigEndianAsLittleEndian(y), output);
         }
         adjoint auto;
         controlled auto;

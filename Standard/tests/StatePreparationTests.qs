@@ -102,7 +102,7 @@ namespace Microsoft.Quantum.Tests {
                     set coefficientsPositive[idxCoeff] = coefficientsAmplitude[idxCoeff];
                 }
                 
-                let normalizedCoefficients = PNormalize(2.0, coefficientsAmplitude);
+                let normalizedCoefficients = PNormalized(2.0, coefficientsAmplitude);
                 
                 // Test phase factor on uniform superposition
                 let phase = 0.5 * (coefficientsPhase[0] - coefficientsPhase[1]);
@@ -154,7 +154,7 @@ namespace Microsoft.Quantum.Tests {
                     set coefficientsPositive[idxCoeff] = coefficientsAmplitude[idxCoeff];
                 }
                 
-                let normalizedCoefficients = PNormalize(2.0, coefficientsAmplitude);
+                let normalizedCoefficients = PNormalized(2.0, coefficientsAmplitude);
                 
                 // Test probability and phases of uniform superposition
                 let op = StatePreparationComplexCoefficients(coefficients);
@@ -226,7 +226,7 @@ namespace Microsoft.Quantum.Tests {
                     set coefficientsPositive[idxCoeff] = coefficientsAmplitude[idxCoeff];
                 }
                 
-                let normalizedCoefficients = PNormalize(2.0, coefficientsAmplitude);
+                let normalizedCoefficients = PNormalized(2.0, coefficientsAmplitude);
                 
                 // Test probability and phases of arbitrary superposition
                 let opComplex = StatePreparationComplexCoefficients(coefficients);
