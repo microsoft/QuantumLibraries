@@ -172,7 +172,7 @@ class IQSharpClient(object):
             self._busy = True
             reply = self.kernel_client.execute_interactive(input, output_hook=_output_hook, **kwargs)
         finally:
-            self._busy = False
+            self.busy = False
 
         logger.debug(f"received:\n{reply}")
 
