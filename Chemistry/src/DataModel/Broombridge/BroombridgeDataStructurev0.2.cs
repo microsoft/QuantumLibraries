@@ -44,18 +44,23 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
             {
 
                 [YamlMember(Alias = "$schema", ApplyNamingConventions = false)]
+                [JsonProperty(PropertyName = "$schema")]
                 public string Schema { get; set; }
 
                 [YamlMember(Alias = "format", ApplyNamingConventions = false)]
+                [JsonProperty(PropertyName = "format")]
                 public DataStructure.Format Format { get; set; }
 
                 [YamlMember(Alias = "generator", ApplyNamingConventions = false)]
+                [JsonProperty(PropertyName = "generator")]
                 public DataStructure.Generator Generator { get; set; }
 
                 [YamlMember(Alias = "bibliography", ApplyNamingConventions = false)]
+                [JsonProperty(PropertyName = "bibliography")]
                 public List<DataStructure.BibliographyItem> Bibliography { get; set; }
 
                 [YamlMember(Alias = "problem_description", ApplyNamingConventions = false)]
+                [JsonProperty(PropertyName = "problem_description")]
                 public List<ProblemDescription> ProblemDescriptions { get; set; }
 
             }
@@ -111,6 +116,7 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
                 //public List<Dictionary<string, object>> InitialStateSuggestions { get; set; }
 
                 [YamlMember(Alias = "initial_state_suggestions", ApplyNamingConventions = false)]
+                [JsonProperty(PropertyName = "initial_state_suggestions")]
                 public List<State> InitialStates { get; set; }
             }
 
