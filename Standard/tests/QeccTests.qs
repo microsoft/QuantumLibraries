@@ -3,7 +3,6 @@
 namespace Microsoft.Quantum.Tests {
     open Microsoft.Quantum.Intrinsic;
     open Microsoft.Quantum.Canon;
-    open Microsoft.Quantum.Extensions.Testing;
     open Microsoft.Quantum.ErrorCorrection;
     open Microsoft.Quantum.Diagnostics;
     open Microsoft.Quantum.Arrays;
@@ -37,7 +36,7 @@ namespace Microsoft.Quantum.Tests {
     
     operation AssertCodeCorrectsErrorImpl (code : QECC, nLogical : Int, nScratch : Int, fn : RecoveryFn, error : (Qubit[] => Unit)) : Unit {
         
-        AssertOperationsEqualReferenced(QeccTestCase(code, nScratch, fn, error), NoOp<Qubit[]>, nLogical);
+        AssertOperationsEqualReferenced(nLogical, QeccTestCase(code, nScratch, fn, error), NoOp<Qubit[]>);
     }
     
     
@@ -254,7 +253,7 @@ namespace Microsoft.Quantum.Tests {
             Ry(Microsoft.Quantum.Extensions.Math.PI() / 4.0, anc[1]);
             let expected = ApplyToEachA(Ry(Microsoft.Quantum.Extensions.Math.PI() / 4.0, _), _);
             let actual = ApplyToEach(InjectPi4YRotation(_, anc[1]), _);
-            AssertOperationsEqualReferenced(actual, expected, 1);
+            AssertOperationsEqualReferenced(1, actual, expected);
             
             // NB: we explicitly do not reset the
             //     qubit containing the magic state,
@@ -274,7 +273,7 @@ namespace Microsoft.Quantum.Tests {
             Ry(Microsoft.Quantum.Extensions.Math.PI() / 4.0, anc[1]);
             let expected = ApplyToEachA(Ry(-Microsoft.Quantum.Extensions.Math.PI() / 4.0, _), _);
             let actual = ApplyToEach(Adjoint InjectPi4YRotation(_, anc[1]), _);
-            AssertOperationsEqualReferenced(actual, expected, 1);
+            AssertOperationsEqualReferenced(1, actual, expected);
             
             // NB: we explicitly do not reset the
             //     qubit containing the magic state,
@@ -434,8 +433,7 @@ namespace Microsoft.Quantum.Tests {
     
     
     operation AssertCSSCodeCorrectsErrorImpl (code : CSS, nLogical : Int, nScratch : Int, fnX : RecoveryFn, fnZ : RecoveryFn, error : (Qubit[] => Unit)) : Unit {
-        
-        AssertOperationsEqualReferenced(CSSTestCase(code, nScratch, fnX, fnZ, error), NoOp<Qubit[]>, nLogical);
+        AssertOperationsEqualReferenced(nLogical, CSSTestCase(code, nScratch, fnX, fnZ, error), NoOp<Qubit[]>);
     }
     
     
