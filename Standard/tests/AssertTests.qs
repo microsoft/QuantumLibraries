@@ -64,7 +64,7 @@ namespace Microsoft.Quantum.Tests {
         
         let ops = [I, X, Y, Z, H];
         
-        for (idxOp in 0 .. Length(ops) - 1) {
+        for (idxOp in IndexRange(ops)) {
             AssertOperationsEqualReferenced(ApplyToEach(ops[idxOp], _), ApplyToEachA(ops[idxOp], _), 3);
         }
     }
@@ -80,7 +80,7 @@ namespace Microsoft.Quantum.Tests {
         
         let ops = [I, X, Y, Z, H];
         
-        for (idxOp in 0 .. Length(ops) - 1) {
+        for (idxOp in IndexRange(ops)) {
             let arr = [ops[idxOp], Adjoint ops[idxOp]];
             let bound = BindCA(arr);
             AssertOperationsEqualReferenced(ApplyToEachCA(BindCA(arr), _), ApplyToEachA(I, _), 3);

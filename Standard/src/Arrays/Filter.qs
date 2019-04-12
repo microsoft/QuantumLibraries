@@ -28,7 +28,7 @@ namespace Microsoft.Quantum.Arrays {
         mutable totalFound = 0;
         mutable idxArray = new Int[Length(array)];
 
-        for (idxElement in 0 .. Length(array) - 1) {
+        for (idxElement in IndexRange(array)) {
             if (predicate(array[idxElement])) {
                 set idxArray[totalFound] = idxElement;
                 set totalFound = totalFound + 1;

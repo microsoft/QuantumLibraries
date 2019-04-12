@@ -269,7 +269,7 @@ namespace Microsoft.Quantum.Arrays {
     function Partitioned<'T>(nElements: Int[], arr: 'T[]) : 'T[][] {
         mutable output = new 'T[][Length(nElements)+1];
         mutable currIdx = 0;
-        for (idx in 0..Length(nElements) - 1) {
+        for (idx in IndexRange(nElements)) {
             if(currIdx + nElements[idx] > Length(arr)) {
                 fail "SplitArray argument out of bounds.";
             }

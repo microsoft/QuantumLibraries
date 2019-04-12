@@ -24,7 +24,7 @@ namespace Microsoft.Quantum.Canon
     /// - Microsoft.Quantum.Canon.ApplyToEachIndexCA
     operation ApplyToEachIndex<'T> (singleElementOperation : ((Int, 'T) => Unit), register : 'T[]) : Unit
     {
-        for (idxQubit in 0 .. Length(register) - 1)
+        for (idxQubit in IndexRange(register))
         {
             singleElementOperation(idxQubit, register[idxQubit]);
         }
@@ -51,7 +51,7 @@ namespace Microsoft.Quantum.Canon
     {
         body (...)
         {
-            for (idxQubit in 0 .. Length(register) - 1)
+            for (idxQubit in IndexRange(register))
             {
                 singleElementOperation(idxQubit, register[idxQubit]);
             }
@@ -81,7 +81,7 @@ namespace Microsoft.Quantum.Canon
     {
         body (...)
         {
-            for (idxQubit in 0 .. Length(register) - 1)
+            for (idxQubit in IndexRange(register))
             {
                 singleElementOperation(idxQubit, register[idxQubit]);
             }
@@ -112,7 +112,7 @@ namespace Microsoft.Quantum.Canon
     {
         body (...)
         {
-            for (idxQubit in 0 .. Length(register) - 1)
+            for (idxQubit in IndexRange(register))
             {
                 singleElementOperation(idxQubit, register[idxQubit]);
             }

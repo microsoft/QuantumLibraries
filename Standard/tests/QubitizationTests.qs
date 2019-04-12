@@ -143,7 +143,7 @@ namespace Microsoft.Quantum.Tests {
         set testCases[1] = ([9, 6, 3, 0, -3], 9..-3..-3);
         set testCases[2] = (e, 0..2..-1);
         set testCases[3] = ([0], 0..4..3);
-        for (idxTest in 0..Length(testCases) - 1) {
+        for (idxTest in IndexRange(testCases)) {
             let (expected, range) = testCases[idxTest];
             let output = IntArrayFromRange(range);
             Ignore(Mapped(EqualityFactI(_, _, "Padded failed."), Zip(output, expected)));
@@ -162,7 +162,7 @@ namespace Microsoft.Quantum.Tests {
                                      [ true,  true, false,  true],
                                      [ true,  true,  true,  true]];
             using (qubits = Qubit[3]) {
-                for(idxTest in 0..Length(testCases)-1){
+                for(idxTest in IndexRange(testCases)){
                     let testCase = testCases[idxTest];
                     Message($"Test case {idxTest}.");
                     for(idxQubit in 0..2){

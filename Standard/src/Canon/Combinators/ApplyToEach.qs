@@ -34,7 +34,7 @@ namespace Microsoft.Quantum.Canon
     {
         body (...)
         {
-            for (idxQubit in 0 .. Length(register) - 1)
+            for (idxQubit in IndexRange(register))
             {
                 singleElementOperation(register[idxQubit]);
             }
@@ -75,7 +75,7 @@ namespace Microsoft.Quantum.Canon
     {
         body (...)
         {
-            for (idxQubit in 0 .. Length(register) - 1)
+            for (idxQubit in IndexRange(register))
             {
                 singleElementOperation(register[idxQubit]);
             }
@@ -114,7 +114,7 @@ namespace Microsoft.Quantum.Canon
     {
         body (...)
         {
-            for (idxQubit in 0 .. Length(register) - 1)
+            for (idxQubit in IndexRange(register))
             {
                 singleElementOperation(register[idxQubit]);
             }
@@ -152,7 +152,7 @@ namespace Microsoft.Quantum.Canon
     /// - Microsoft.Quantum.Canon.ApplyToEachCA
     operation ApplyToEach<'T> (singleElementOperation : ('T => Unit), register : 'T[]) : Unit
     {
-        for (idxQubit in 0 .. Length(register) - 1)
+        for (idxQubit in IndexRange(register))
         {
             singleElementOperation(register[idxQubit]);
         }

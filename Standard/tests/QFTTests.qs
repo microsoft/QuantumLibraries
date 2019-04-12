@@ -97,7 +97,7 @@ namespace Microsoft.Quantum.Tests {
         
         let testFunctions = [QFT1, QFT2, QFT3, QFT4];
         
-        for (i in 0 .. Length(testFunctions) - 1) {
+        for (i in IndexRange(testFunctions)) {
             AssertOperationsEqualReferenced(ApplyBEToRegisterA(testFunctions[i], _), ApplyBEToRegisterA(QFT, _), i + 1);
         }
     }

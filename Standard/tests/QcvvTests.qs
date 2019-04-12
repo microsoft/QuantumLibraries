@@ -79,7 +79,7 @@ namespace Microsoft.Quantum.Tests {
             let qubit = register[0];
             let bases = [PauliI, PauliX, PauliY, PauliZ];
             
-            for (idxBasis in 0 .. Length(bases) - 1) {
+            for (idxBasis in IndexRange(bases)) {
                 let basis = bases[idxBasis];
                 PrepareQubit(basis, qubit);
                 Assert([basis], register, Zero, $"Did not prepare in {basis} correctly.");

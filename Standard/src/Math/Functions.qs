@@ -206,7 +206,7 @@ namespace Microsoft.Quantum.Math {
         let powerBitExpansion = IntAsBoolArray(power, BitSize(power));
         let expBaseMod = expBase % modulus;
         
-        for (k in 0 .. Length(powerBitExpansion) - 1)
+        for (k in IndexRange(powerBitExpansion))
         {
             if (powerBitExpansion[k])
             {

@@ -96,7 +96,7 @@ namespace Microsoft.Quantum.Tests {
         
         mutable arrayTestCase = [(-5, 2, [10, 11, 12], [10, 11, 12, 2, 2]), (5, 2, [10, 11, 12], [2, 2, 10, 11, 12]), (-3, -2, [10, 11, 12], [10, 11, 12])];
         
-        for (idxTest in 0 .. Length(arrayTestCase) - 1) {
+        for (idxTest in IndexRange(arrayTestCase)) {
             let (nElementsTotal, defaultElement, inputArray, outputArray) = arrayTestCase[idxTest];
             let paddedArray = Padded(nElementsTotal, defaultElement, inputArray);
             Ignore(Mapped(EqualityFactI(_, _, $"Padded failed."), Zip(outputArray, paddedArray)));

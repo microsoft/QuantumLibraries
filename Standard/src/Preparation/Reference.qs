@@ -25,7 +25,7 @@ namespace Microsoft.Quantum.Preparation {
                 fail $"Left and right registers must be the same length.";
             }
             
-            for (idxQubit in 0 .. Length(left) - 1)
+            for (idxQubit in IndexRange(left))
             {
                 H(left[idxQubit]);
                 Controlled X([left[idxQubit]], right[idxQubit]);
