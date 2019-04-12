@@ -5,7 +5,6 @@ namespace Microsoft.Quantum.Characterization {
     open Microsoft.Quantum.Primitive;
     open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Extensions.Convert;
-    open Microsoft.Quantum.Extensions.Math;
     open Microsoft.Quantum.Preparation;
     open Microsoft.Quantum.Arrays;
 

@@ -3,20 +3,19 @@
 
 namespace Microsoft.Quantum.Canon {
     open Microsoft.Quantum.Math;
-    open Microsoft.Quantum.Extensions.Math;
 
     /// # Deprecated
     /// This function has been removed.
     function IntAbs(input : Int) : Int {
         // TODO: add call to _Removed.
-        return AbsI(input);
+        return Microsoft.Quantum.Extensions.Math.AbsI(input);
     }
 
     /// # Deprecated
     /// This function has been removed.
     function IntMax(a : Int, b : Int) : Int {
         // TODO: add call to _Removed.
-        return MaxI(a, b);
+        return Microsoft.Quantum.Extensions.Math.MaxI(a, b);
     }
 
     /// # Deprecated

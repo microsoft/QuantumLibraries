@@ -4,7 +4,6 @@
 namespace Microsoft.Quantum.ErrorCorrection {
     open Microsoft.Quantum.Primitive;
     open Microsoft.Quantum.Canon;
-    open Microsoft.Quantum.Extensions.Math;
     open Microsoft.Quantum.Measurement;
 
 
