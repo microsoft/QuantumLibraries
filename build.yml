@@ -11,6 +11,7 @@ variables:
   LibrariesRootFolder: $(System.DefaultWorkingDirectory)
   Assembly.Version: $(Build.BuildNumber)
   Nuget.Version: $(Assembly.Version)-preview
+  Python.Version: $(Assembly.Version)
 
 
 jobs:
