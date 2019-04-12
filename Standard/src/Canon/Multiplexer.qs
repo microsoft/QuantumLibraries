@@ -62,8 +62,8 @@ namespace Microsoft.Quantum.Canon {
             
             let (nUnitaries, unitaryOffset, unitaryFunction) = unitaryGenerator;
 
-            let nUnitariesLeft = MinI(nUnitaries, nStates/2);
-            let nUnitariesRight = MinI(nUnitaries, nStates);
+            let nUnitariesLeft = Microsoft.Quantum.Extensions.Math.MinI(nUnitaries, nStates/2);
+            let nUnitariesRight = Microsoft.Quantum.Extensions.Math.MinI(nUnitaries, nStates);
 
             let leftUnitaries = (nUnitariesLeft, unitaryOffset, unitaryFunction);
             let rightUnitaries = (nUnitariesRight-nUnitariesLeft, unitaryOffset + nUnitariesLeft, unitaryFunction);
@@ -140,7 +140,7 @@ namespace Microsoft.Quantum.Canon {
             let nIndex = Length(index!);
             let nStates = 2^nIndex;
             let (nUnitaries, unitaryFunction) = unitaryGenerator;
-            for(idxOp in 0..MinI(nStates,nUnitaries)-1){
+            for(idxOp in 0..Microsoft.Quantum.Extensions.Math.MinI(nStates,nUnitaries)-1){
                 (ControlledOnInt(idxOp, unitaryFunction(idxOp)))(Reversed(index!),target);
             }
         }

@@ -6,7 +6,6 @@ namespace Microsoft.Quantum.Chemistry.Tests {
     open Microsoft.Quantum.Primitive;
     open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Extensions.Testing;
-    open Microsoft.Quantum.Extensions.Math;
     open Microsoft.Quantum.Extensions.Convert;
     open Microsoft.Quantum.Chemistry.JordanWigner;
     open Microsoft.Quantum.Math;
@@ -14,7 +13,7 @@ namespace Microsoft.Quantum.Chemistry.Tests {
 
     // Test OptimizedBEXY operator.
     operation OptimizedBEOperatorZeroTestHelper (pauliBasis : Pauli, targetRegisterSize : Int, targetIndex : Int) : Unit {
-        let indexRegisterSize = Ceiling(Lg(ToDouble(targetRegisterSize)));
+        let indexRegisterSize = Microsoft.Quantum.Extensions.Math.Ceiling(Lg(ToDouble(targetRegisterSize)));
         using (pauliBasisQubit = Qubit[1]) {
             using (indexRegister = Qubit[indexRegisterSize]) {
                 using (targetRegister = Qubit[targetRegisterSize]) {
@@ -85,15 +84,15 @@ namespace Microsoft.Quantum.Chemistry.Tests {
     // Test OptimizedBEXY operator.
     operation OptimizedBEOperatorPlusTestHelper (pauliBasis : Pauli, targetRegisterSize : Int, targetIndex : Int) : Unit {
         
-        let indexRegisterSize = Ceiling(Lg(ToDouble(targetRegisterSize)));
-        using(pauliBasisQubit = Qubit[1]){
-            using(indexRegister = Qubit[indexRegisterSize]){
-                using(targetRegister = Qubit[targetRegisterSize]){            
+        let indexRegisterSize = Microsoft.Quantum.Extensions.Math.Ceiling(Lg(ToDouble(targetRegisterSize)));
+        using (pauliBasisQubit = Qubit[1]) {
+            using (indexRegister = Qubit[indexRegisterSize]) {
+                using (targetRegister = Qubit[targetRegisterSize]) { 
                     // Choose X or Y operator.
-                    if(pauliBasis == PauliX){
+                    if(pauliBasis == PauliX) {
                         // no op
                     }
-                    elif(pauliBasis == PauliY){
+                    elif(pauliBasis == PauliY) {
                         X(pauliBasisQubit[0]);
                     }
 
@@ -191,7 +190,7 @@ namespace Microsoft.Quantum.Chemistry.Tests {
     // Test phase of controlled OptimizedBEXY operator.
     operation ControlledOptimizedBEOperatorTestHelper (pauliBasis : Pauli, targetRegisterSize : Int, targetIndex : Int) : Unit {
         
-        let indexRegisterSize = Ceiling(Lg(ToDouble(targetRegisterSize)));
+        let indexRegisterSize = Microsoft.Quantum.Extensions.Math.Ceiling(Lg(ToDouble(targetRegisterSize)));
         
         using (pauliBasisQubit = Qubit[1]) {
             
@@ -261,7 +260,7 @@ namespace Microsoft.Quantum.Chemistry.Tests {
     operation SelectZTest () : Unit {
         
         let targetRegisterSize = 7;
-        let indexRegisterSize = Ceiling(Lg(ToDouble(targetRegisterSize)));
+        let indexRegisterSize = Microsoft.Quantum.Extensions.Math.Ceiling(Lg(ToDouble(targetRegisterSize)));
         
         using (targetRegister = Qubit[targetRegisterSize]) {
             

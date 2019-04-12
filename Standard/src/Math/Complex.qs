@@ -41,7 +41,7 @@ namespace Microsoft.Quantum.Math {
     /// # Output
     /// Absolute value $|c| = \sqrt{x^2 + y^2}$.
     function AbsComplex (input : Microsoft.Quantum.Extensions.Math.Complex) : Double {
-        return Sqrt(AbsSquaredComplex(input));
+        return Microsoft.Quantum.Extensions.Math.Sqrt(AbsSquaredComplex(input));
     }
 
     /// # Summary
@@ -56,7 +56,7 @@ namespace Microsoft.Quantum.Math {
     /// Phase $\text{Arg}[c] = \text{ArcTan}(y,x) \in (-\pi,\pi]$.
     function ArgComplex (input : Microsoft.Quantum.Extensions.Math.Complex) : Double {
         let (real, imaginary) = input!;
-        return ArcTan2(imaginary, real);
+        return Microsoft.Quantum.Extensions.Math.ArcTan2(imaginary, real);
     }
 
     /// # Summary

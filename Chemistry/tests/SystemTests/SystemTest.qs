@@ -5,7 +5,6 @@ namespace SystemTests {
     open Microsoft.Quantum.Simulation;
     open Microsoft.Quantum.Primitive;
     open Microsoft.Quantum.Canon;
-    open Microsoft.Quantum.Extensions.Math;
     open Microsoft.Quantum.Chemistry.JordanWigner;    
     
     // Test phase of PP term.
@@ -42,7 +41,7 @@ namespace SystemTests {
     operation PQTermABFromGeneralHamiltonianTestOp (data : JWOptimizedHTerms) : Unit {
         
         // Test probability
-        let time = 0.5 * PI();
+        let time = 0.5 * Microsoft.Quantum.Extensions.Math.PI();
         mutable arrPrep = new Int[4];
         set arrPrep = [0, 1, 2, 3];
         mutable arrMeasure = new Int[4];
@@ -75,7 +74,7 @@ namespace SystemTests {
             CNOT(ctrl, qubitsC[0]);
             CNOT(ctrl, qubitsC[1]);
             AssertProb([PauliZ], [qubitsC[arrMeasure[0]]], One, 0.0, "PQTermTest probability failed.", 1E-10);
-            AssertPhase(-0.25 * PI(), ctrl, 1E-10);
+            AssertPhase(-0.25 * Microsoft.Quantum.Extensions.Math.PI(), ctrl, 1E-10);
             ResetAll(qubitsC);
         }
     }
@@ -85,7 +84,7 @@ namespace SystemTests {
     operation PQTermACFromGeneralHamiltonianTestOp (data : JWOptimizedHTerms) : Unit {
         
         // Test probability
-        let time = 0.5 * PI();
+        let time = 0.5 * Microsoft.Quantum.Extensions.Math.PI();
         mutable arrPrep = new Int[4];
         set arrPrep = [0, 2, 3, 5];
         mutable arrMeasure = new Int[4];
@@ -118,7 +117,7 @@ namespace SystemTests {
             CNOT(ctrl, qubitsC[0]);
             CNOT(ctrl, qubitsC[2]);
             AssertProb([PauliZ], [qubitsC[arrMeasure[0]]], One, 0.0, "PQTermTest probability failed.", 1E-10);
-            AssertPhase(-0.25 * PI(), ctrl, 1E-10);
+            AssertPhase(-0.25 * Microsoft.Quantum.Extensions.Math.PI(), ctrl, 1E-10);
             ResetAll(qubitsC);
             H(ctrl);
             X(qubitsC[arrPrep[0]]);
@@ -132,7 +131,7 @@ namespace SystemTests {
             CNOT(ctrl, qubitsC[0]);
             CNOT(ctrl, qubitsC[2]);
             AssertProb([PauliZ], [qubitsC[arrMeasure[0]]], One, 0.0, "PQTermTest probability failed.", 1E-10);
-            AssertPhase(0.25 * PI(), ctrl, 1E-10);
+            AssertPhase(0.25 * Microsoft.Quantum.Extensions.Math.PI(), ctrl, 1E-10);
             ResetAll(qubitsC);
         }
     }
@@ -189,7 +188,7 @@ namespace SystemTests {
     operation PQQRTermFromGeneralHamiltonianTestOp (data : JWOptimizedHTerms) : Unit {
         
         // Test probability
-        mutable time = (4.0 * 0.5) * PI();
+        mutable time = (4.0 * 0.5) * Microsoft.Quantum.Extensions.Math.PI();
         mutable arrPrep = new Int[4];
         set arrPrep = [0, 2, 1, 3];
         mutable arrMeasure = new Int[4];
@@ -206,7 +205,7 @@ namespace SystemTests {
             }
             
             // Create |1100>
-            set time = PI();
+            set time = Microsoft.Quantum.Extensions.Math.PI();
             X(qubits[arrPrep[0]]);
             X(qubits[1]);
             JordanWignerApplyTrotterStep(data, time, 0.01 * time, qubits);
@@ -214,7 +213,7 @@ namespace SystemTests {
             ResetAll(qubits);
             
             // Create |1001>
-            set time = PI();
+            set time = Microsoft.Quantum.Extensions.Math.PI();
             X(qubits[arrPrep[0]]);
             X(qubits[3]);
             JordanWignerApplyTrotterStep(data, time, 0.01 * time, qubits);
@@ -228,7 +227,7 @@ namespace SystemTests {
         
         // Test probability
         mutable time = 1.0;
-        mutable prob = Sin(time) * Sin(time);
+        mutable prob = Microsoft.Quantum.Extensions.Math.Sin(time) * Microsoft.Quantum.Extensions.Math.Sin(time);
         
         using (qubits = Qubit[4]) {
             
@@ -277,7 +276,7 @@ namespace SystemTests {
     operation PQTermABFromLiquidOrbitalTestOp (data : JWOptimizedHTerms) : Unit {
         
         // Test probability
-        let time = 0.5 * PI();
+        let time = 0.5 * Microsoft.Quantum.Extensions.Math.PI();
         mutable arrPrep = new Int[4];
         set arrPrep = [0, 1, 2, 3];
         mutable arrMeasure = new Int[4];
@@ -310,7 +309,7 @@ namespace SystemTests {
             CNOT(ctrl, qubitsC[0]);
             CNOT(ctrl, qubitsC[1]);
             AssertProb([PauliZ], [qubitsC[arrMeasure[0]]], One, 0.0, "PQTermTest probability failed.", 1E-10);
-            AssertPhase(-0.25 * PI(), ctrl, 1E-10);
+            AssertPhase(-0.25 * Microsoft.Quantum.Extensions.Math.PI(), ctrl, 1E-10);
             ResetAll(qubitsC);
         }
     }
@@ -320,7 +319,7 @@ namespace SystemTests {
     operation PQTermACFromLiquidOrbitalTestOp (data : JWOptimizedHTerms) : Unit {
         
         // Test probability
-        let time = 0.5 * PI();
+        let time = 0.5 * Microsoft.Quantum.Extensions.Math.PI();
         mutable arrPrep = new Int[4];
         set arrPrep = [0, 2, 3, 5];
         mutable arrMeasure = new Int[4];
@@ -353,7 +352,7 @@ namespace SystemTests {
             CNOT(ctrl, qubitsC[0]);
             CNOT(ctrl, qubitsC[2]);
             AssertProb([PauliZ], [qubitsC[arrMeasure[0]]], One, 0.0, "PQTermTest probability failed.", 1E-10);
-            AssertPhase(-0.25 * PI(), ctrl, 1E-10);
+            AssertPhase(-0.25 * Microsoft.Quantum.Extensions.Math.PI(), ctrl, 1E-10);
             ResetAll(qubitsC);
             H(ctrl);
             X(qubitsC[arrPrep[0]]);
@@ -367,7 +366,7 @@ namespace SystemTests {
             CNOT(ctrl, qubitsC[0]);
             CNOT(ctrl, qubitsC[2]);
             AssertProb([PauliZ], [qubitsC[arrMeasure[0]]], One, 0.0, "PQTermTest probability failed.", 1E-10);
-            AssertPhase(0.25 * PI(), ctrl, 1E-10);
+            AssertPhase(0.25 * Microsoft.Quantum.Extensions.Math.PI(), ctrl, 1E-10);
             ResetAll(qubitsC);
         }
     }
@@ -424,7 +423,7 @@ namespace SystemTests {
     operation PQQRTermFromLiquidOrbitalTestOp (data : JWOptimizedHTerms) : Unit {
         
         // Test probability
-        mutable time = (4.0 * 0.5) * PI();
+        mutable time = (4.0 * 0.5) * Microsoft.Quantum.Extensions.Math.PI();
         mutable arrPrep = new Int[4];
         set arrPrep = [0, 1, 2, 3];
         mutable arrMeasure = new Int[4];
@@ -441,7 +440,7 @@ namespace SystemTests {
             }
             
             // Create |1010>
-            set time = (0.5 * PI()) / Sqrt(2.0);
+            set time = (0.5 * Microsoft.Quantum.Extensions.Math.PI()) / Microsoft.Quantum.Extensions.Math.Sqrt(2.0);
             X(qubits[arrPrep[0]]);
             X(qubits[2]);
             JordanWignerApplyTrotterStep(data, time, 0.01 * time, qubits);
@@ -449,7 +448,7 @@ namespace SystemTests {
             ResetAll(qubits);
             
             // Create |1001>
-            set time = (0.5 * PI()) / Sqrt(2.0);
+            set time = (0.5 * Microsoft.Quantum.Extensions.Math.PI()) / Microsoft.Quantum.Extensions.Math.Sqrt(2.0);
             X(qubits[arrPrep[0]]);
             X(qubits[3]);
             JordanWignerApplyTrotterStep(data, time, 0.01 * time, qubits);
@@ -463,7 +462,7 @@ namespace SystemTests {
         
         // Test probability
         mutable time = 1.0;
-        mutable prob = Sin(time) * Sin(time);
+        mutable prob = Microsoft.Quantum.Extensions.Math.Sin(time) * Microsoft.Quantum.Extensions.Math.Sin(time);
         
         using (qubits = Qubit[4]) {
             

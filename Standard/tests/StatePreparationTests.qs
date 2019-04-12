@@ -6,10 +6,9 @@ namespace Microsoft.Quantum.Tests {
     open Microsoft.Quantum.Primitive;
     open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Extensions.Convert;
-    open Microsoft.Quantum.Extensions.Math;
     open Microsoft.Quantum.Math;
     open Microsoft.Quantum.Measurement;
-
+    open Microsoft.Quantum.Arrays;
 
     // number of qubits, abs(amplitude), phase
     newtype StatePreparationTestCase = (Int, Double[], Double[]);
@@ -131,7 +130,7 @@ namespace Microsoft.Quantum.Tests {
         set nTests = nTests + 1;
         set testCases[nTests] = StatePreparationTestCase(3, [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]);
         set nTests = nTests + 1;
-        set testCases[nTests] = StatePreparationTestCase(3, [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0], [PI(), PI(), PI(), PI(), PI(), PI(), PI(), PI()]);
+        set testCases[nTests] = StatePreparationTestCase(3, [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0], ConstantArray(8, Microsoft.Quantum.Extensions.Math.PI()));
         set nTests = nTests + 1;
         set testCases[nTests] = StatePreparationTestCase(3, [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.01]);
         set nTests = nTests + 1;
