@@ -10,6 +10,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using YamlDotNet.Core;
 using YamlDotNet.Serialization;
+using Newtonsoft.Json;
 
 namespace Microsoft.Quantum.Chemistry.Broombridge
 {
@@ -62,36 +63,47 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
             public struct ProblemDescription
             {
                 [YamlMember(Alias = "metadata", ApplyNamingConventions = false)]
+                [JsonProperty(PropertyName = "metadata")]
                 public Dictionary<string, object> Metadata { get; set; }
 
                 [YamlMember(Alias = "basis_set", ApplyNamingConventions = false)]
+                [JsonProperty(PropertyName = "basis_set")]
                 public DataStructure.BasisSet BasisSet { get; set; }
 
                 [YamlMember(Alias = "geometry", ApplyNamingConventions = false)]
+                [JsonProperty(PropertyName = "geometry")]
                 public DataStructure.Geometry Geometry { get; set; }
 
                 [YamlMember(Alias = "coulomb_repulsion", ApplyNamingConventions = false)]
+                [JsonProperty(PropertyName = "coulomb_repulsion")]
                 public DataStructure.SimpleQuantity CoulombRepulsion { get; set; }
 
                 [YamlMember(Alias = "scf_energy", ApplyNamingConventions = false)]
+                [JsonProperty(PropertyName = "scf_energy")]
                 public DataStructure.SimpleQuantity ScfEnergy { get; set; }
 
                 [YamlMember(Alias = "scf_energy_offset", ApplyNamingConventions = false)]
+                [JsonProperty(PropertyName = "scf_energy_offset")]
                 public DataStructure.SimpleQuantity ScfEnergyOffset { get; set; }
 
                 [YamlMember(Alias = "fci_energy", ApplyNamingConventions = false)]
+                [JsonProperty(PropertyName = "fci_energy")]
                 public DataStructure.BoundedQuantity FciEnergy { get; set; }
 
                 [YamlMember(Alias = "n_orbitals", ApplyNamingConventions = false)]
+                [JsonProperty(PropertyName = "n_orbitals")]
                 public int NOrbitals { get; set; }
 
                 [YamlMember(Alias = "n_electrons", ApplyNamingConventions = false)]
+                [JsonProperty(PropertyName = "n_electrons")]
                 public int NElectrons { get; set; }
 
                 [YamlMember(Alias = "energy_offset", ApplyNamingConventions = false)]
+                [JsonProperty(PropertyName = "energy_offset")]
                 public DataStructure.SimpleQuantity EnergyOffset { get; set; }
 
                 [YamlMember(Alias = "hamiltonian", ApplyNamingConventions = false)]
+                [JsonProperty(PropertyName = "hamiltonian")]
                 public DataStructure.HamiltonianData Hamiltonian { get; set; }
 
                 // FIXME: actually specify what initial_state_suggestions looks like.
