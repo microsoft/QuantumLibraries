@@ -3,6 +3,7 @@
 
 namespace Microsoft.Quantum.Preparation {
     open Microsoft.Quantum.Intrinsic;
+    open Microsoft.Quantum.Arrays;
 
     /// # Summary
 	/// Pairwise entangles two qubit registers.
@@ -16,28 +17,17 @@ namespace Microsoft.Quantum.Preparation {
     /// A qubit array in the $\ket{0\cdots 0}$ state
     /// ## right
     /// A qubit array in the $\ket{0\cdots 0}$ state
-    operation PrepareEntangledState (left : Qubit[], right : Qubit[]) : Unit
-    {
-        body (...)
-        {
-            if (Length(left) != Length(right))
-            {
-                fail $"Left and right registers must be the same length.";
-            }
-            
-            for (idxQubit in 0 .. Length(left) - 1)
-            {
-                H(left[idxQubit]);
-                Controlled X([left[idxQubit]], right[idxQubit]);
-            }
+    operation PrepareEntangledState (left : Qubit[], right : Qubit[]) : Unit is Adj + Ctl {
+        if (Length(left) != Length(right)) {
+            fail $"Left and right registers must be the same length.";
         }
-        
-        adjoint invert;
-        controlled distribute;
-        controlled adjoint distribute;
+
+        for ((leftQubit, rightQubit) in Zip(left, right)) {
+            H(leftQubit);
+            Controlled X([leftQubit], rightQubit);
+        }
     }
-    
-    
+
     /// # Summary
     /// Prepares the Choi–Jamiłkowski state for a given operation onto given reference
     /// and target registers.

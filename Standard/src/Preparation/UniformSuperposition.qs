@@ -40,39 +40,29 @@ namespace Microsoft.Quantum.Preparation {
     ///     PrepareUniformSuperposition(nIndices, BigEndian(indexRegister));
     /// }
     /// ```
-    operation PrepareUniformSuperposition(nIndices: Int, indexRegister: BigEndian) : Unit {
-        body (...) {
-            if(nIndices == 0) {
-                fail $"Cannot prepare uniform superposition over {nIndices} state.";
+    operation PrepareUniformSuperposition(nIndices: Int, indexRegister: BigEndian) : Unit is Adj + Ctl {
+        if(nIndices == 0) {
+            fail $"Cannot prepare uniform superposition over {nIndices} state.";
+        } elif (nIndices == 1) {
+            // Superposition over one state, so do nothing.
+        } elif (nIndices == 2){
+            H(indexRegister![Length(indexRegister!) - 1]);
+        } else {
+            let nQubits = Ceiling(Lg(ToDouble(nIndices)));
+            if (nQubits > Length(indexRegister!)){
+                fail $"Cannot prepare uniform superposition over {nIndices} states as it is larger than the qubit register.";
             }
-            elif(nIndices == 1) {
-                // Superposition over one state, so do nothing.
-            }
-            elif(nIndices == 2){
-                H(indexRegister![Length(indexRegister!) - 1]);
-            }
-            else{
-                let nQubits = Ceiling(Lg(ToDouble(nIndices)));
-                if (nQubits > Length(indexRegister!)){
-                    fail $"Cannot prepare uniform superposition over {nIndices} states as it is larger than the qubit register.";
-                }
-            
-                using(flagQubit = Qubit[3]){
-                    let targetQubits = indexRegister![Length(indexRegister!) - nQubits..Length(indexRegister!) - 1];
-                    
-                    let qubits = flagQubit + targetQubits;
 
-                    let stateOracle = StateOracle(PrepareUniformSuperposition_(nIndices, nQubits, _, _));
+            using (flagQubit = Qubit[3]) {
+                let targetQubits = indexRegister![Length(indexRegister!) - nQubits..Length(indexRegister!) - 1];
+                let qubits = flagQubit + targetQubits;
+                let stateOracle = StateOracle(PrepareUniformSuperposition_(nIndices, nQubits, _, _));
 
-                    (AmpAmpByOracle(1, stateOracle, 0))(qubits);
-                    
-                    ApplyToEachCA(X, flagQubit);
-                }
+                (AmpAmpByOracle(1, stateOracle, 0))(qubits);
+
+                ApplyToEachCA(X, flagQubit);
             }
         }
-        adjoint auto;
-        controlled auto;
-        adjoint controlled auto;
     }
 
     /// # Summary
@@ -86,7 +76,7 @@ namespace Microsoft.Quantum.Preparation {
             //let theta = PI() * 0.5;
 
             ApplyToEachCA(H, targetQubits);
-            using(compareQubits = Qubit[nQubits]){
+            using(compareQubits = Qubit[nQubits]) {
                 InPlaceXorBE(nIndices - 1, BigEndian(compareQubits));
                 ApplyRippleCarryComparatorBE(BigEndian(targetQubits), BigEndian(compareQubits), auxillaryQubits[0]);
                 X(auxillaryQubits[0]);
