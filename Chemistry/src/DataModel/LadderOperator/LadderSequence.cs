@@ -4,6 +4,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Newtonsoft.Json;
 
 namespace Microsoft.Quantum.Chemistry.LadderOperators
 {
@@ -12,6 +13,7 @@ namespace Microsoft.Quantum.Chemistry.LadderOperators
     /// <summary>
     /// Class representing a sequence of raising and lowering operators.
     /// </summary>
+    [JsonConverter(typeof(LadderSequence.JsonConverter))]
     public class LadderSequence<TIndex> : IEquatable<LadderSequence<TIndex>>
         where TIndex : IEquatable<TIndex>
     {
@@ -218,12 +220,60 @@ namespace Microsoft.Quantum.Chemistry.LadderOperators
             return x.Equals(y);
         }
 
+<<<<<<< HEAD
         public static bool operator !=(LadderSequence<TIndex> x, LadderSequence<TIndex> y) => !(x == y);
+=======
+        public static bool operator !=(LadderSequence x, LadderSequence y) => !(x == y);
+
+>>>>>>> origin/release/v0.7
         #endregion
 
+
+<<<<<<< HEAD
+
+=======
+        #region JsonConverter
+        /// <summary>
+        /// This JsonConverter encodes of a LadderSequence as a Tuple instead of as an object.
+        /// </summary>
+        public class JsonConverter : JsonConverter<LadderSequence>
+        {
+            /// <summary>
+            /// Writers the LadderSequence as a (Sequence, Coefficient) tuple.
+            /// </summary>
+            public override void WriteJson(JsonWriter writer, LadderSequence value, JsonSerializer serializer)
+            {
+                if (value == null)
+                {
+                    serializer.Serialize(writer, null);
+                }
+                else
+                {
+                    var item = (value.Sequence, value.Coefficient);
+                    serializer.Serialize(writer, item);
+                }
+            }
+
+            /// <summary>
+            /// Reads the LadderSequence from aa (Sequence, Coefficient) tuple.
+            /// </summary>
+            public override LadderSequence ReadJson(JsonReader reader, Type objectType, LadderSequence existingValue, bool hasExistingValue, JsonSerializer serializer)
+            {
+                if (reader.TokenType == JsonToken.Null)
+                    return null;
+
+                var item = serializer.Deserialize<ValueTuple<List<LadderOperator>, int>>(reader);
+
+                var result = Activator.CreateInstance(objectType) as LadderSequence;
+                result.Sequence = item.Item1;
+                result.Coefficient = item.Item2;
+
+                return result;
+            }
+        }
+        #endregion
     }
-
-
+>>>>>>> origin/release/v0.7
 }
 
 

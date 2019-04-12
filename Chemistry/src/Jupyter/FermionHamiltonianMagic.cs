@@ -5,10 +5,12 @@ using System.Linq;
 using Microsoft.Jupyter.Core;
 using Microsoft.Quantum.Chemistry.Broombridge;
 using Microsoft.Quantum.Chemistry.Fermion;
+using Microsoft.Quantum.Chemistry.Generic;
 using Microsoft.Quantum.Chemistry.LadderOperators;
 using Microsoft.Quantum.Chemistry.OrbitalIntegrals;
 
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace Microsoft.Quantum.Chemistry.Magic
 {
@@ -22,7 +24,7 @@ namespace Microsoft.Quantum.Chemistry.Magic
         /// </summary>
         public FermionHamiltonianLoadMagic()
         {
-            this.Name = $"%fh-load";
+            this.Name = $"%chemistry.fh.load";
             this.Documentation = new Documentation() { Summary = "Loads the fermion Hamiltonian for an electronic structure problem. The problem is loaded from a file or passed as an argument." };
             this.Kind = SymbolKind.Magic;
             this.Execute = this.Run;
@@ -97,34 +99,6 @@ namespace Microsoft.Quantum.Chemistry.Magic
     }
 
     /// <summary>
-    /// Creates an empty fermion Hamiltonian instance.
-    /// </summary>
-    public class FermionHamiltonianCreateMagic : MagicSymbol
-    {
-        /// <summary>
-        /// Creates an empty fermion Hamiltonian instance.
-        /// </summary>
-        public FermionHamiltonianCreateMagic()
-        {
-            this.Name = $"%fh-create";
-            this.Documentation = new Documentation() { Summary = "Creates an empty fermion Hamiltonian instance." };
-            this.Kind = SymbolKind.Magic;
-            this.Execute = this.Run;
-        }
-
-        /// <summary>
-        /// Simply creates an empty fermion Hamiltonian instance and returns it.
-        /// </summary>
-        public ExecutionResult Run(string input, IChannel channel)
-        {
-            // Create empty fermion Hamiltonian instance.
-            FermionHamiltonian fermionHamiltonian = new FermionHamiltonian();
-
-            return fermionHamiltonian.ToExecutionResult();
-        }
-    }
-
-    /// <summary>
     /// Adds terms to a fermion Hamiltonian.
     /// </summary>
     public class FermionHamiltonianAddTermsMagic : MagicSymbol
@@ -134,7 +108,7 @@ namespace Microsoft.Quantum.Chemistry.Magic
         /// </summary>
         public FermionHamiltonianAddTermsMagic()
         {
-            this.Name = $"%fh-add_terms";
+            this.Name = $"%chemistry.fh.add_terms";
             this.Documentation = new Documentation() { Summary = "Adds terms to a fermion Hamiltonian." };
             this.Kind = SymbolKind.Magic;
             this.Execute = this.Run;
@@ -172,9 +146,10 @@ namespace Microsoft.Quantum.Chemistry.Magic
             if (args.hamiltonian == null) throw new ArgumentNullException(nameof(args.hamiltonian));
             if (args.fermionTerms == null) throw new ArgumentNullException(nameof(args.fermionTerms));
 
-            args.hamiltonian.AddRange(args.fermionTerms.Select(t => (new HermitianFermionTerm(t.Item1.ToLadderSequence()), t.Item2.ToDoubleCoeff())));
+            var hamiltonian = args.hamiltonian;
+            hamiltonian.AddRange(args.fermionTerms.Select(t => (new HermitianFermionTerm(t.Item1.ToLadderSequence()), t.Item2.ToDoubleCoeff())));
             
-            return args.hamiltonian.ToExecutionResult();
+            return hamiltonian.ToExecutionResult();
         }
     }
 }

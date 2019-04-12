@@ -4,7 +4,10 @@
 namespace Microsoft.Quantum.Chemistry
 {
     using System;
-    
+
+    using Newtonsoft.Json;
+    using Newtonsoft.Json.Converters;
+
     /// <summary>
     /// All Hamiltonian terms must implement this interface.
     /// </summary>
@@ -69,17 +72,20 @@ namespace Microsoft.Quantum.Chemistry
     // Might want to distribute these to the separate term classes.
     public static class TermType
     {
+        [JsonConverter(typeof(StringEnumConverter))]
         public enum OrbitalIntegral
         {
             
             Identity, OneBody, TwoBody
         }
 
+        [JsonConverter(typeof(StringEnumConverter))]
         public enum Fermion
         {
             Identity = 0, PP = 1, PQ = 2, PQQP = 3, PQQR = 4, PQRS = 5
         }
 
+        [JsonConverter(typeof(StringEnumConverter))]
         public enum PauliTerm
         {
             Identity = 0,   // This has contribution from PP and PQQP terms.
@@ -94,6 +100,7 @@ namespace Microsoft.Quantum.Chemistry
     /// <summary>
     /// Spin index up/dpwn enumeration type.
     /// </summary>
+    [JsonConverter(typeof(StringEnumConverter))]
     public enum Spin : byte
     {
         u = 0, d = 1
@@ -110,6 +117,7 @@ namespace Microsoft.Quantum.Chemistry
     /// <summary>
     /// Wavefunction types
     /// </summary>
+    [JsonConverter(typeof(StringEnumConverter))]
     public enum StateType
     {
         NotRcegonized = -1, Default = 0, SingleConfigurational = 1, SparseMultiConfigurational = 2, UnitaryCoupledCluster = 3
@@ -118,6 +126,7 @@ namespace Microsoft.Quantum.Chemistry
     /// <summary>
     /// Enum for raising or lowering operator.
     /// </summary>
+    [JsonConverter(typeof(StringEnumConverter))]
     public enum RaisingLowering
     {
         u = 0, d = 1, identity
@@ -127,6 +136,7 @@ namespace Microsoft.Quantum.Chemistry
     /// Boxed version of double that implements the <see cref="ITermValue"></see> interface
     /// that requires all values to have a method to compute its norm.
     /// </summary>
+    [JsonConverter(typeof(DoubleCoeff.JsonConverter))]
     public struct DoubleCoeff : ITermValue<DoubleCoeff>, IComparable
     {
         public double Value;
@@ -231,6 +241,29 @@ namespace Microsoft.Quantum.Chemistry
         public enum IntegralDataFormat
         {
             LiQuiD, Broombridge
+        }
+
+        /// <summary>
+        /// This JsonConverter encodes the DoubleCoeff as a double.
+        /// </summary>
+        public class JsonConverter : JsonConverter<DoubleCoeff>
+        {
+            /// <summary>
+            /// Writers the LadderOperator as a (Type, Index) tuple.
+            /// </summary>
+            public override void WriteJson(JsonWriter writer, DoubleCoeff value, JsonSerializer serializer)
+            {
+                serializer.Serialize(writer, value.Value);
+            }
+
+            /// <summary>
+            /// Reads the LadderOperator from a (Type, Index) tuple.
+            /// </summary>
+            public override DoubleCoeff ReadJson(JsonReader reader, Type objectType, DoubleCoeff existingValue, bool hasExistingValue, JsonSerializer serializer)
+            {
+                var value = serializer.Deserialize<Double>(reader);
+                return new DoubleCoeff(value);
+            }
         }
     }
 }

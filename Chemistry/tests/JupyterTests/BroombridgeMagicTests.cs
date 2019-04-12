@@ -21,7 +21,7 @@ namespace Microsoft.Quantum.Chemistry.Tests
             var magic = new BroombridgeMagic();
             var channel = new MockChannel();
 
-            Assert.Equal("%broombridge", magic.Name);
+            Assert.Equal("%chemistry.broombridge", magic.Name);
             var result = magic.Run("", channel);
 
             Assert.Equal(ExecuteStatus.Error, result.Status);

@@ -39,7 +39,7 @@ namespace Microsoft.Quantum.Chemistry.Fermion
         /// <summary>
         /// Constructor for empty instance.
         /// </summary>
-        internal HermitianFermionTerm() : base() { }
+        public HermitianFermionTerm() : base() { }
 
         /// <summary>
         /// Construct Hermitian fermion term instance from a normal-ordered sequence of ladder operators.
