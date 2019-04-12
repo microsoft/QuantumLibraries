@@ -25,16 +25,16 @@ namespace Microsoft.Quantum.Tests {
             let complexZero = Complex(0.0, 0.0);
             
             for (idxPhase in 0 .. 4) {
-                AssertQubitState((complexOne, complexZero), qPhase[idxPhase], 1E-06);
+                AssertQubitIsInStateWithinTolerance((complexOne, complexZero), qPhase[idxPhase], 1E-06);
             }
             
             X(state);
             QuantumPhaseEstimation(oracle, [state], phase);
-            AssertQubitState((complexOne, complexZero), qPhase[0], 1E-06);
-            AssertQubitState((complexOne, complexZero), qPhase[1], 1E-06);
-            AssertQubitState((complexZero, complexOne), qPhase[2], 1E-06);
-            AssertQubitState((complexOne, complexZero), qPhase[3], 1E-06);
-            AssertQubitState((complexZero, complexOne), qPhase[4], 1E-06);
+            AssertQubitIsInStateWithinTolerance((complexOne, complexZero), qPhase[0], 1E-06);
+            AssertQubitIsInStateWithinTolerance((complexOne, complexZero), qPhase[1], 1E-06);
+            AssertQubitIsInStateWithinTolerance((complexZero, complexOne), qPhase[2], 1E-06);
+            AssertQubitIsInStateWithinTolerance((complexOne, complexZero), qPhase[3], 1E-06);
+            AssertQubitIsInStateWithinTolerance((complexZero, complexOne), qPhase[4], 1E-06);
             ResetAll(qPhase);
         }
     }
