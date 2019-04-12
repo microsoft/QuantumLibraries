@@ -133,7 +133,11 @@ namespace Microsoft.Quantum.Preparation {
         //Message($"Excess bars {bars}.");
         // Uniformly distribute excess bars across coefficients.
         for (idx in 0..Microsoft.Quantum.Extensions.Math.AbsI(bars) - 1) {
-            set keepCoeff[idx] = keepCoeff[idx] + bars > 0 ? -1 | +1;
+            if (bars > 0) {
+                set keepCoeff[idx] = keepCoeff[idx] - 1;
+            } else {
+                set keepCoeff[idx] = keepCoeff[idx] + 1;
+            }
         }
 
         mutable barSink = new Int[nCoefficients];
