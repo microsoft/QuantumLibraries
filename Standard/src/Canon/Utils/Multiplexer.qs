@@ -4,13 +4,11 @@
 namespace Microsoft.Quantum.Canon {
     open Microsoft.Quantum.Arithmetic;
     open Microsoft.Quantum.Intrinsic;
-    open Microsoft.Quantum.Extensions.Math;
     open Microsoft.Quantum.Arrays;
-    
-    
+
     /// # Summary
 	/// Applies a Pauli rotation conditioned on an array of qubits.
-	/// 
+	///
     /// This applies the multiply-controlled unitary operation $U$ that performs
     /// rotations by angle $\theta_j$ about single-qubit Pauli operator $P$
     /// when controlled by the $n$-qubit number state $\ket{j}$.
@@ -279,8 +277,8 @@ namespace Microsoft.Quantum.Canon {
             let nIndex = Length(index!);
             let nStates = 2 ^ nIndex;
             let nUnitaries = Length(unitaries);
-            let nUnitariesRight = MinI(nUnitaries, nStates / 2);
-            let nUnitariesLeft = MinI(nUnitaries, nStates);
+            let nUnitariesRight = Microsoft.Quantum.Extensions.Math.MinI(nUnitaries, nStates / 2);
+            let nUnitariesLeft = Microsoft.Quantum.Extensions.Math.MinI(nUnitaries, nStates);
             let rightUnitaries = unitaries[0 .. nUnitariesRight - 1];
             let leftUnitaries = unitaries[nUnitariesRight .. nUnitariesLeft - 1];
             let newControls = BigEndian((index!)[1 .. nIndex - 1]);

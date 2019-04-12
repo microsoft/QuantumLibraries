@@ -5,16 +5,15 @@ namespace Microsoft.Quantum.Preparation {
     open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Arithmetic;
     open Microsoft.Quantum.Intrinsic;
-    open Microsoft.Quantum.Extensions.Math;
     open Microsoft.Quantum.Math;
     open Microsoft.Quantum.Arrays;
 
     // This library returns operations that prepare a specified quantum state
     // from the computational basis state $\ket{0...0}$.
-    
+
     /// # Summary
 	/// Returns an operation that prepares the given quantum state.
-	/// 
+	///
     /// The returned operation $U$ prepares an arbitrary quantum
     /// state $\ket{\psi}$ with positive coefficients $\alpha_j\ge 0$ from
     /// the $n$-qubit computational basis state $\ket{0...0}$.
@@ -50,20 +49,17 @@ namespace Microsoft.Quantum.Preparation {
     ///     op(qubitsBE);
     /// }
     /// ```
-    function StatePreparationPositiveCoefficients (coefficients : Double[]) : (BigEndian => Unit : Adjoint, Controlled)
-    {
+    function StatePreparationPositiveCoefficients (coefficients : Double[]) : (BigEndian => Unit : Adjoint, Controlled) {
         let nCoefficients = Length(coefficients);
         mutable coefficientsComplexPolar = new ComplexPolar[nCoefficients];
-        
-        for (idx in 0 .. nCoefficients - 1)
-        {
-            set coefficientsComplexPolar[idx] = ComplexPolar(AbsD(coefficients[idx]), 0.0);
+
+        for (idx in 0 .. nCoefficients - 1) {
+            set coefficientsComplexPolar[idx] = ComplexPolar(Microsoft.Quantum.Extensions.Math.AbsD(coefficients[idx]), 0.0);
         }
-        
+
         return PrepareArbitraryState(coefficientsComplexPolar, _);
     }
-    
-    
+
     /// # Summary
 	/// Returns an operation that prepares a specific quantum state.
 	/// 
@@ -148,33 +144,26 @@ namespace Microsoft.Quantum.Preparation {
     /// - Synthesis of Quantum Logic Circuits
     ///   Vivek V. Shende, Stephen S. Bullock, Igor L. Markov
     ///   https://arxiv.org/abs/quant-ph/0406176
-    operation PrepareArbitraryState (coefficients : ComplexPolar[], qubits : BigEndian) : Unit
-    {
-        body (...)
-        {
+    operation PrepareArbitraryState (coefficients : ComplexPolar[], qubits : BigEndian) : Unit {
+        body (...) {
             // pad coefficients at tail length to a power of 2.
             let coefficientsPadded = Padded(-2 ^ Length(qubits!), ComplexPolar(0.0, 0.0), coefficients);
             let target = (qubits!)[Length(qubits!) - 1];
             let op = (Adjoint PrepareArbitraryState_(coefficientsPadded, _, _))(_, target);
-            
-            if (Length(qubits!) > 1)
-            {
-                let control = BigEndian((qubits!)[0 .. Length(qubits!) - 2]);
-                op(control);
-            }
-            else
-            {
-                let control = BigEndian(new Qubit[0]);
-                op(control);
-            }
+
+            op(
+                // Determine what controls to apply to `op`.
+                Length(qubits!) > 1
+                ? BigEndian((qubits!)[0 .. Length(qubits!) - 2])
+                | BigEndian(new Qubit[0])
+            );
         }
-        
+
         adjoint invert;
         controlled distribute;
         controlled adjoint distribute;
     }
-    
-    
+
     /// # Summary
     /// Implementation step of arbitrary state preparation procedure.
     ///
@@ -233,10 +222,10 @@ namespace Microsoft.Quantum.Preparation {
         let abs1 = AbsComplexPolar(a1);
         let arg0 = ArgComplexPolar(a0);
         let arg1 = ArgComplexPolar(a1);
-        let r = Sqrt(abs0 * abs0 + abs1 * abs1);
+        let r = Microsoft.Quantum.Extensions.Math.Sqrt(abs0 * abs0 + abs1 * abs1);
         let t = 0.5 * (arg0 + arg1);
         let phi = arg1 - arg0;
-        let theta = 2.0 * ArcTan2(abs1, abs0);
+        let theta = 2.0 * Microsoft.Quantum.Extensions.Math.ArcTan2(abs1, abs0);
         return (ComplexPolar(r, t), phi, theta);
     }
 

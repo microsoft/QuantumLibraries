@@ -7,7 +7,6 @@ namespace Microsoft.Quantum.Simulation {
     open Microsoft.Quantum.Arithmetic;
     open Microsoft.Quantum.Intrinsic;
     open Microsoft.Quantum.Math;
-    open Microsoft.Quantum.Extensions.Math;
     open Microsoft.Quantum.Extensions.Convert;
     open Microsoft.Quantum.Arrays;
     open Microsoft.Quantum.Convert;
@@ -106,7 +105,7 @@ namespace Microsoft.Quantum.Simulation {
         let (nTerms, intToGenIdx) = generatorSystem!;
         let op = IdxToCoeff_(_, intToGenIdx, PauliCoefficientFromGenIdx);
         let coefficients = Mapped(op, RangeAsIntArray(0..nTerms-1));
-        let oneNorm = PowD(PNorm(2.0, coefficients),2.0);
+        let oneNorm = Microsoft.Quantum.Extensions.Math.PowD(PNorm(2.0, coefficients),2.0);
         let unitaryGenerator = (nTerms, IdxToUnitary_(_, intToGenIdx, PauliLCUUnitary_));
         let statePreparation = statePrepUnitary(coefficients);
         let selector = multiplexer(unitaryGenerator); 
@@ -119,7 +118,7 @@ namespace Microsoft.Quantum.Simulation {
     /// # See Also
     /// - Microsoft.Quantum.Canon.PauliBlockEncoding
     function IdxToCoeff_(idx: Int, genFun: (Int -> GeneratorIndex), genIdxToCoeff: (GeneratorIndex -> Double)) : Double {
-        return Sqrt(AbsD(genIdxToCoeff(genFun(idx))));
+        return Microsoft.Quantum.Extensions.Math.Sqrt(Microsoft.Quantum.Extensions.Math.AbsD(genIdxToCoeff(genFun(idx))));
     }
 
     /// # Summary
@@ -148,12 +147,12 @@ namespace Microsoft.Quantum.Simulation {
             let ((idxPaulis, coeff), idxQubits) = generatorIndex!;
             let pauliString = IntsToPaulis(idxPaulis);
             let pauliQubits = Subarray(idxQubits, qubits);
-            
+
             ApplyPauli(pauliString, pauliQubits);
 
-            if(coeff[0] < 0.0){
+            if (coeff[0] < 0.0) {
                 // -1 phase
-                Exp([PauliI], PI(), [pauliQubits[0]]);
+                Exp([PauliI], Microsoft.Quantum.Extensions.Math.PI(), [pauliQubits[0]]);
             }
         }
         adjoint auto;
