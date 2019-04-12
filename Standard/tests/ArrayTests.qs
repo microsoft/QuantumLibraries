@@ -103,7 +103,17 @@ namespace Microsoft.Quantum.Tests {
         }
     }
 
-    
+    function EnumeratedTest() : Unit  {
+        let example = [37, 12];
+        let expected = [(0, 37), (1, 12)];
+        let actual = Enumerated(example);
+
+        for ((actualElement, expectedElement) in Zip(actual, expected)) {
+            EqualityFactI(Fst(actualElement), Fst(expectedElement), "Indices did not match.");
+            EqualityFactI(Snd(actualElement), Snd(expectedElement), "Elements did not match.");
+        }
+    }
+
 }
 
 
