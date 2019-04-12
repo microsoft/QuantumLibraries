@@ -29,7 +29,6 @@ TrotterEstimateEnergy = qsharp.compile("""
     }
 """)
 
-
 qsharp.packages.add("microsoft.quantum.chemistry.jupyter")
 
 filename = "broombridge_v0.2.yaml"
