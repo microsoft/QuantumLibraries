@@ -10,6 +10,12 @@
 from distutils.version import LooseVersion
 from typing import Iterable, Tuple
 
+## LOGGING ##
+
+import logging
+logger = logging.getLogger(__name__)
+
+
 ## CLASSES ##
 
 class Packages(object):
@@ -37,4 +43,6 @@ class Packages(object):
         session, downloading the package from NuGet.org or any other configured
         feeds as necessary.
         """
-        self._client.add_package(package_name)
+        logger.info("Loading package: " + package_name)
+        pkgs=self._client.add_package(package_name)
+        logger.info("Loading complete: " + ';'.join(str(e) for e in pkgs))

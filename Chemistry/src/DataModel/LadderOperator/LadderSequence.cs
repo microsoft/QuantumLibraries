@@ -219,19 +219,10 @@ namespace Microsoft.Quantum.Chemistry.LadderOperators
             // Equals handles case of null on right side.
             return x.Equals(y);
         }
-
-<<<<<<< HEAD
+        
         public static bool operator !=(LadderSequence<TIndex> x, LadderSequence<TIndex> y) => !(x == y);
-=======
-        public static bool operator !=(LadderSequence x, LadderSequence y) => !(x == y);
 
->>>>>>> origin/release/v0.7
         #endregion
-
-
-<<<<<<< HEAD
-
-=======
         #region JsonConverter
         /// <summary>
         /// This JsonConverter encodes of a LadderSequence as a Tuple instead of as an object.
@@ -273,7 +264,6 @@ namespace Microsoft.Quantum.Chemistry.LadderOperators
         }
         #endregion
     }
->>>>>>> origin/release/v0.7
 }
 
 
