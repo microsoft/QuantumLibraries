@@ -71,7 +71,7 @@ namespace Microsoft.Quantum.Characterization {
                 }
 
                 let deltaTheta = Microsoft.Quantum.Extensions.Math.ArcTan2(pPlus - ToDouble(nRepeats) / 2.0, pZero - ToDouble(nRepeats) / 2.0);
-                let delta = RealMod(deltaTheta - thetaEst * ToDouble(power), 2.0 * PI(), -PI());
+                let delta = RealMod(deltaTheta - thetaEst * ToDouble(power), 2.0 * Microsoft.Quantum.Extensions.Math.PI(), -Microsoft.Quantum.Extensions.Math.PI());
                 set thetaEst = thetaEst + delta / ToDouble(power);
             }
 
