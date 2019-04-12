@@ -4,7 +4,6 @@ namespace Microsoft.Quantum.Tests {
     open Microsoft.Quantum.Arithmetic;
     open Microsoft.Quantum.Intrinsic;
     open Microsoft.Quantum.Canon;
-    open Microsoft.Quantum.Extensions.Testing;
     open Microsoft.Quantum.Diagnostics;
     open Microsoft.Quantum.Arrays;
 

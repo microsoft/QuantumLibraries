@@ -73,7 +73,7 @@ namespace Microsoft.Quantum.Tests {
     /// Marked as ex-fail due to known issues with Bind.
     operation BindSelfAdjointOperationsTestExFail () : Unit {
         for (op in [I, X, Y, Z, H]) {
-            let arr = [ops[idxOp], Adjoint ops[idxOp]];
+            let arr = [op, Adjoint op];
             let bound = BindCA(arr);
             AssertOperationsEqualReferenced(3, ApplyToEachCA(BindCA(arr), _), ApplyToEachA(I, _));
         }

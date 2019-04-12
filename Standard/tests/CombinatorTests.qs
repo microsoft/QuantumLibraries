@@ -26,7 +26,7 @@ namespace Microsoft.Quantum.Tests {
     // something else.
     operation CurryPreTest () : Unit {
         
-        AssertOperationsEqualInPlace(Exp([PauliZ], 1.7, _), Exp([PauliZ], 1.7, _), 1);
+        AssertOperationsEqualInPlace(1, Exp([PauliZ], 1.7, _), Exp([PauliZ], 1.7, _));
         AssertOperationsEqualReferenced(1, Exp([PauliZ], 1.7, _), Exp([PauliZ], 1.7, _));
     }
     
@@ -34,7 +34,7 @@ namespace Microsoft.Quantum.Tests {
     operation CurryTest () : Unit {
         
         let curried = CurryOp(Exp([PauliZ], _, _));
-        AssertOperationsEqualInPlace(curried(1.7), Exp([PauliZ], 1.7, _), 1);
+        AssertOperationsEqualInPlace(1, curried(1.7), Exp([PauliZ], 1.7, _));
         AssertOperationsEqualReferenced(1, curried(1.7), Exp([PauliZ], 1.7, _));
     }
     
