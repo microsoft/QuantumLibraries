@@ -4,7 +4,6 @@ namespace Microsoft.Quantum.Tests {
     open Microsoft.Quantum.Primitive;
     open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Extensions.Convert;
-    open Microsoft.Quantum.Extensions.Math;
     open Microsoft.Quantum.Oracles;
     open Microsoft.Quantum.Characterization;
     open Microsoft.Quantum.Preparation;
@@ -66,7 +65,7 @@ namespace Microsoft.Quantum.Tests {
         let bitsPrecision = 10;
         
         for (idxTest in 0 .. 9) {
-            let phaseSet = ((2.0 * PI()) * ToDouble(idxTest - 5)) / 12.0;
+            let phaseSet = ((2.0 * Microsoft.Quantum.Extensions.Math.PI()) * ToDouble(idxTest - 5)) / 12.0;
             let phaseEst = RobustPhaseEstimationDemoImpl(phaseSet, bitsPrecision);
             EqualityWithinToleranceFact(phaseEst, phaseSet, 0.01);
         }

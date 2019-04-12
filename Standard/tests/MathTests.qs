@@ -3,25 +3,24 @@
 namespace Microsoft.Quantum.Canon {
     open Microsoft.Quantum.Math;
     open Microsoft.Quantum.Primitive;
-    open Microsoft.Quantum.Extensions.Math;
     open Microsoft.Quantum.Diagnostics;
     open Microsoft.Quantum.Arrays;
 
     function NativeFnsAreCallableTest () : Unit {
         
-        let arg = PI() / 2.0;
-        NearEqualityFact(Sin(arg), 1.0);
-        NearEqualityFact(Cos(arg), 0.0);
+        let arg = Microsoft.Quantum.Extensions.Math.PI() / 2.0;
+        NearEqualityFact(Microsoft.Quantum.Extensions.Math.Sin(arg), 1.0);
+        NearEqualityFact(Microsoft.Quantum.Extensions.Math.Cos(arg), 0.0);
         let arcArg = 1.0;
-        NearEqualityFact(ArcCos(arcArg), 0.0);
-        NearEqualityFact(ArcSin(arcArg), arg);
+        NearEqualityFact(Microsoft.Quantum.Extensions.Math.ArcCos(arcArg), 0.0);
+        NearEqualityFact(Microsoft.Quantum.Extensions.Math.ArcSin(arcArg), arg);
     }
     
     
     function RealModTest () : Unit {
         
-        NearEqualityFact(RealMod(5.5 * PI(), 2.0 * PI(), 0.0), 1.5 * PI());
-        NearEqualityFact(RealMod(0.5 * PI(), 2.0 * PI(), -PI() / 2.0), 0.5 * PI());
+        NearEqualityFact(RealMod(5.5 * Microsoft.Quantum.Extensions.Math.PI(), 2.0 * Microsoft.Quantum.Extensions.Math.PI(), 0.0), 1.5 * Microsoft.Quantum.Extensions.Math.PI());
+        NearEqualityFact(RealMod(0.5 * Microsoft.Quantum.Extensions.Math.PI(), 2.0 * Microsoft.Quantum.Extensions.Math.PI(), -Microsoft.Quantum.Extensions.Math.PI() / 2.0), 0.5 * Microsoft.Quantum.Extensions.Math.PI());
     }
     
     
@@ -39,8 +38,8 @@ namespace Microsoft.Quantum.Canon {
         
         Message($"Testing {a}, {b}, {gcd} ");
         let (u, v) = ExtendedGCD(a, b);
-        let expected = AbsI(gcd);
-        let actual = AbsI(u * a + v * b);
+        let expected = Microsoft.Quantum.Extensions.Math.AbsI(gcd);
+        let actual = Microsoft.Quantum.Extensions.Math.AbsI(u * a + v * b);
         EqualityFactI(expected, actual, $"Expected absolute value of gcd to be {expected}, got {actual}");
     }
     
@@ -72,14 +71,14 @@ namespace Microsoft.Quantum.Canon {
         let bitSize = 2 * BitSize(denominator);
         let numeratorDyadic = (numerator * 2 ^ bitSize) / denominator;
         let (u, v) = (ContinuedFractionConvergent(Fraction(numeratorDyadic, 2 ^ bitSize), denominator))!;
-        EqualityFactB(AbsI(u) == numerator and AbsI(v) == denominator, true, $"The result must be ±{numerator}/±{denominator} got {u}/{v}");
+        EqualityFactB(Microsoft.Quantum.Extensions.Math.AbsI(u) == numerator and Microsoft.Quantum.Extensions.Math.AbsI(v) == denominator, true, $"The result must be ±{numerator}/±{denominator} got {u}/{v}");
     }
     
     
     function ContinuedFractionConvergentEdgeCaseTestHelper (numerator : Int, denominator : Int, bound : Int) : Unit {
         
         let (num, denom) = (ContinuedFractionConvergent(Fraction(numerator, denominator), bound))!;
-        EqualityFactB(AbsI(num) == numerator and AbsI(denom) == denominator, true, $"The result must be ±{numerator}/±{denominator} got {num}/{denom}");
+        EqualityFactB(Microsoft.Quantum.Extensions.Math.AbsI(num) == numerator and Microsoft.Quantum.Extensions.Math.AbsI(denom) == denominator, true, $"The result must be ±{numerator}/±{denominator} got {num}/{denom}");
     }
     
     
@@ -98,9 +97,9 @@ namespace Microsoft.Quantum.Canon {
         
         for (idxCases in 0 .. Length(complexCases) - 1) {
             let (complexRe, complexIm) = complexCases[idxCases];
-            let complexAbs = Sqrt(complexRe * complexRe + complexIm * complexIm);
-            let complexArg = ArcTan2(complexIm, complexRe);
-            let complex = Complex(complexRe, complexIm);
+            let complexAbs = Microsoft.Quantum.Extensions.Math.Sqrt(complexRe * complexRe + complexIm * complexIm);
+            let complexArg = Microsoft.Quantum.Extensions.Math.ArcTan2(complexIm, complexRe);
+            let complex = Microsoft.Quantum.Extensions.Math.Complex(complexRe, complexIm);
             let complexPolar = ComplexPolar(complexAbs, complexArg);
             NearEqualityFact(AbsSquaredComplex(complex), complexAbs * complexAbs);
             NearEqualityFact(AbsComplex(complex), complexAbs);

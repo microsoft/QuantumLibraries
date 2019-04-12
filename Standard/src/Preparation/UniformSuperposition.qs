@@ -4,7 +4,6 @@
 namespace Microsoft.Quantum.Preparation {
     open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Primitive;
-    open Microsoft.Quantum.Extensions.Math;
     open Microsoft.Quantum.Extensions.Convert;
     open Microsoft.Quantum.Arithmetic;
     open Microsoft.Quantum.AmplitudeAmplification;
@@ -52,7 +51,7 @@ namespace Microsoft.Quantum.Preparation {
                 H(indexRegister![Length(indexRegister!) - 1]);
             }
             else{
-                let nQubits = Ceiling(Lg(ToDouble(nIndices)));
+                let nQubits = Microsoft.Quantum.Extensions.Math.Ceiling(Lg(ToDouble(nIndices)));
                 if (nQubits > Length(indexRegister!)){
                     fail $"Cannot prepare uniform superposition over {nIndices} states as it is larger than the qubit register.";
                 }
@@ -82,7 +81,7 @@ namespace Microsoft.Quantum.Preparation {
             let targetQubits = qubits[3..3 + nQubits-1];
             let flagQubit = qubits[0];
             let auxillaryQubits = qubits[1..2];
-            let theta = ArcSin(Sqrt(ToDouble(2^nQubits)/ToDouble(nIndices))*Sin(PI() / 6.0));
+            let theta = Microsoft.Quantum.Extensions.Math.ArcSin(Microsoft.Quantum.Extensions.Math.Sqrt(ToDouble(2^nQubits)/ToDouble(nIndices)) * Microsoft.Quantum.Extensions.Math.Sin(Microsoft.Quantum.Extensions.Math.PI() / 6.0));
             //let theta = PI() * 0.5;
 
             ApplyToEachCA(H, targetQubits);

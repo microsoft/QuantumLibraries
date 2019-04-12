@@ -5,7 +5,6 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
     open Microsoft.Quantum.Simulation;
     open Microsoft.Quantum.Primitive;
     open Microsoft.Quantum.Canon;
-    open Microsoft.Quantum.Extensions.Math;
     open Microsoft.Quantum.Chemistry;
     open Microsoft.Quantum.Arrays;
 
@@ -134,7 +133,7 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
             }
             else {
                 
-                if (idxFermions[0] < qubitQidx && qubitQidx < idxFermions[3]) {
+                if (idxFermions[0] < qubitQidx and qubitQidx < idxFermions[3]) {
                     let termPR1 = GeneratorIndex((idxTermType, [1.0]), [idxFermions[0], idxFermions[3] - 1]);
                     _ApplyJordanWignerPQTerm_(termPR1, angle, new Qubit[0], Exclude([qubitQidx], qubits));
                 }
