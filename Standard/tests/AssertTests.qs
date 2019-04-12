@@ -6,6 +6,7 @@ namespace Microsoft.Quantum.Tests {
     open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Extensions.Testing;
     open Microsoft.Quantum.Diagnostics;
+    open Microsoft.Quantum.Arrays;
 
 
     // This file contains very simple tests that should trivially pass

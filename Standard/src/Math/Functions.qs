@@ -6,6 +6,7 @@ namespace Microsoft.Quantum.Math {
     open Microsoft.Quantum.Convert;
     open Microsoft.Quantum.Extensions.Math;
     open Microsoft.Quantum.Diagnostics;
+    open Microsoft.Quantum.Arrays;
 
     /// # Summary
     /// Represents a rational number of the form `p/q`. Integer `p` is

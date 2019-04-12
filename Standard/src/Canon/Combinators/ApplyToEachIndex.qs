@@ -1,8 +1,8 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-namespace Microsoft.Quantum.Canon
-{
+namespace Microsoft.Quantum.Canon {
+    open Microsoft.Quantum.Arrays;
     
     /// # Summary
     /// Applies a single-qubit operation to each indexed element in a register.

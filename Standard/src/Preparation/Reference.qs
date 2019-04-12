@@ -3,6 +3,7 @@
 
 namespace Microsoft.Quantum.Preparation {
     open Microsoft.Quantum.Primitive;
+    open Microsoft.Quantum.Arrays;
 
     /// # Summary
 	/// Pairwise entangles two qubit registers.
@@ -16,8 +17,7 @@ namespace Microsoft.Quantum.Preparation {
     /// A qubit array in the $\ket{0\cdots 0}$ state
     /// ## right
     /// A qubit array in the $\ket{0\cdots 0}$ state
-    operation PrepareEntangledState (left : Qubit[], right : Qubit[]) : Unit
-    {
+    operation PrepareEntangledState (left : Qubit[], right : Qubit[]) : Unit {
         body (...)
         {
             if (Length(left) != Length(right))

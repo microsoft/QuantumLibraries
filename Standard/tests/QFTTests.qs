@@ -6,6 +6,7 @@ namespace Microsoft.Quantum.Tests {
     open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Extensions.Testing;
     open Microsoft.Quantum.Diagnostics;
+    open Microsoft.Quantum.Arrays;
 
     // To test QFT we hard code circuits based on Figure 5.1 on Page 219 of
     // [ *Michael A. Nielsen , Isaac L. Chuang*,
