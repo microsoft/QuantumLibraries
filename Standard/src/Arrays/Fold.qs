@@ -39,7 +39,7 @@ namespace Microsoft.Quantum.Arrays {
     function Fold<'State, 'T> (folder : (('State, 'T) -> 'State), state : 'State, array : 'T[]) : 'State {
         mutable current = state;
 
-        for (idxElement in 0 .. Length(array) - 1) {
+        for (idxElement in IndexRange(array)) {
             set current = folder(current, array[idxElement]);
         }
 

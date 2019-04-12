@@ -93,7 +93,7 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
             let qubitsJW = qubits[idxFermions[0] + 1 .. idxFermions[1] - 1];
             let ops = [[PauliX, PauliX], [PauliY, PauliY]];
             
-            for (idxOp in 0 .. Length(ops) - 1) {
+            for (idxOp in IndexRange(ops)) {
                 Exp(ops[idxOp] + ConstantArray(Length(qubitsJW) + Length(extraParityQubits), PauliZ), angle, (qubitsPQ + qubitsJW) + extraParityQubits);
             }
         }
@@ -173,7 +173,7 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
             let qubitsRSJW = qubits[idxFermions[2] + 1 .. idxFermions[3] - 1];
             let ops = [[PauliX, PauliX, PauliX, PauliX], [PauliX, PauliX, PauliY, PauliY], [PauliX, PauliY, PauliX, PauliY], [PauliY, PauliX, PauliX, PauliY], [PauliY, PauliY, PauliY, PauliY], [PauliY, PauliY, PauliX, PauliX], [PauliY, PauliX, PauliY, PauliX], [PauliX, PauliY, PauliY, PauliX]];
             
-            for (idxOp in 0 .. Length(ops) - 1) {
+            for (idxOp in IndexRange(ops)) {
                 
                 if (IsNotZero(v0123[idxOp % 4])) {
                     Exp(ops[idxOp] + ConstantArray(Length(qubitsPQJW) + Length(qubitsRSJW), PauliZ), angle * v0123[idxOp % 4], ((qubitsPQ + qubitsRS) + qubitsPQJW) + qubitsRSJW);

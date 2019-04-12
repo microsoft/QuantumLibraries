@@ -24,7 +24,7 @@ namespace Microsoft.Quantum.Measurement {
         using (scratch = Qubit()) {
             H(scratch);
 
-            for (idxPauli in 0 .. Length(pauli) - 1) {
+            for (idxPauli in IndexRange(pauli)) {
                 let P = pauli[idxPauli];
                 let src = target[idxPauli];
 

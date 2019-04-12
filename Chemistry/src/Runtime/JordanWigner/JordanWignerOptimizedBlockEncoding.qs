@@ -221,7 +221,7 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
         mutable majIdxes = new OptimizedBETermIndex[((Length(ZData) + Length(ZZData)) + Length(PQandPQQRData)) + 4 * Length(h0123Data)];
         mutable startIdx = 0;
         
-        for (idx in 0 .. Length(ZData) - 1) {
+        for (idx in IndexRange(ZData)) {
             
             // Array of Arrays of Length 1
             set majIdxes[idx] = _ZTermToPauliMajIdx_(HTermToGenIdx(ZData[idx], [0]));
@@ -229,7 +229,7 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
         
         set startIdx = Length(ZData);
         
-        for (idx in 0 .. Length(ZZData) - 1) {
+        for (idx in IndexRange(ZZData)) {
             
             // Array of Arrays of Length 1
             set majIdxes[startIdx + idx] = _ZZTermToPauliMajIdx_(HTermToGenIdx(ZZData[idx], [1]));
@@ -237,7 +237,7 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
         
         set startIdx = startIdx + Length(ZZData);
         
-        for (idx in 0 .. Length(PQandPQQRData) - 1) {
+        for (idx in IndexRange(PQandPQQRData)) {
             
             // Array of Arrays of Length 1
             set majIdxes[startIdx + idx] = _PQandPQQRTermToPauliMajIdx_(HTermToGenIdx(PQandPQQRData[idx], [2]));
@@ -251,7 +251,7 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
             // Array of Arrays of Length up to 4
             let genArr = _V0123TermToPauliMajIdx_(HTermToGenIdx(h0123Data[idx], [3]));
             
-            for (idx0123 in 0 .. Length(genArr) - 1) {
+            for (idx0123 in IndexRange(genArr)) {
                 set majIdxes[finalIdx] = genArr[idx0123];
                 set finalIdx = finalIdx + 1;
             }
@@ -279,7 +279,7 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
             }
             
             // Write bit to activate selectZ operator
-            for (idxSet in 0 .. Length(selectZControlRegistersSet) - 1) {
+            for (idxSet in IndexRange(selectZControlRegistersSet)) {
                 
                 if (selectZControlRegistersSet[idxSet] == true) {
                     X(selectZControlRegisters[idxSet]);
@@ -287,7 +287,7 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
             }
             
             // Write bit to activate OptimizedBEXY operator
-            for (idxSet in 0 .. Length(OptimizedBEControlRegistersSet) - 1) {
+            for (idxSet in IndexRange(OptimizedBEControlRegistersSet)) {
                 
                 if (OptimizedBEControlRegistersSet[idxSet] == true) {
                     X(OptimizedBEControlRegisters[idxSet]);
@@ -295,7 +295,7 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
             }
             
             // Write bitstring to apply desired XZ... or YZ... Pauli string
-            for (idxSet in 0 .. Length(indexRegistersSet) - 1) {
+            for (idxSet in IndexRange(indexRegistersSet)) {
                 InPlaceXorBE(indexRegistersSet[idxSet], indexRegisters[idxSet]);
             }
             

@@ -6,6 +6,7 @@ namespace Microsoft.Quantum.Tests {
     open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Extensions.Testing;
     open Microsoft.Quantum.Diagnostics;
+    open Microsoft.Quantum.Arrays;
 
     // To test QFT we hard code circuits based on Figure 5.1 on Page 219 of
     // [ *Michael A. Nielsen , Isaac L. Chuang*,
@@ -97,7 +98,7 @@ namespace Microsoft.Quantum.Tests {
         
         let testFunctions = [QFT1, QFT2, QFT3, QFT4];
         
-        for (i in 0 .. Length(testFunctions) - 1) {
+        for (i in IndexRange(testFunctions)) {
             AssertOperationsEqualReferenced(ApplyBEToRegisterA(testFunctions[i], _), ApplyBEToRegisterA(QFT, _), i + 1);
         }
     }

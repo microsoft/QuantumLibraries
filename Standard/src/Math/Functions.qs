@@ -5,6 +5,7 @@ namespace Microsoft.Quantum.Math {
     open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Convert;
     open Microsoft.Quantum.Diagnostics;
+    open Microsoft.Quantum.Arrays;
 
     /// # Summary
     /// Represents a rational number of the form `p/q`. Integer `p` is
@@ -205,7 +206,7 @@ namespace Microsoft.Quantum.Math {
         let powerBitExpansion = IntAsBoolArray(power, BitSize(power));
         let expBaseMod = expBase % modulus;
         
-        for (k in 0 .. Length(powerBitExpansion) - 1)
+        for (k in IndexRange(powerBitExpansion))
         {
             if (powerBitExpansion[k])
             {

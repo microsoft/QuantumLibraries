@@ -30,7 +30,7 @@ namespace Microsoft.Quantum.Arrays {
     function Mapped<'T, 'U> (mapper : ('T -> 'U), array : 'T[]) : 'U[] {
         mutable resultArray = new 'U[Length(array)];
 
-        for (idxElement in 0 .. Length(array) - 1) {
+        for (idxElement in IndexRange(array)) {
             set resultArray[idxElement] = mapper(array[idxElement]);
         }
 
@@ -79,7 +79,7 @@ namespace Microsoft.Quantum.Arrays {
     function MappedByIndex<'T, 'U> (mapper : ((Int, 'T) -> 'U), array : 'T[]) : 'U[] {
         mutable resultArray = new 'U[Length(array)];
 
-        for (idxElement in 0 .. Length(array) - 1) {
+        for (idxElement in IndexRange(array)) {
             set resultArray[idxElement] = mapper(idxElement, array[idxElement]);
         }
 
@@ -113,7 +113,7 @@ namespace Microsoft.Quantum.Arrays {
     operation ForEach<'T, 'U> (action : ('T => 'U), array : 'T[]) : 'U[] {
         mutable resultArray = new 'U[Length(array)];
 
-        for (idxElement in 0 .. Length(array) - 1) {
+        for (idxElement in IndexRange(array)) {
             set resultArray[idxElement] = action(array[idxElement]);
         }
 

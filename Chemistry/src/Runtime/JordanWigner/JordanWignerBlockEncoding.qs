@@ -136,7 +136,7 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
         mutable genIdxes = new GeneratorIndex[8];
         mutable nonZero = 0;
         
-        for (idxOp in 0 .. Length(ops) - 1) {
+        for (idxOp in IndexRange(ops)) {
             
             if (IsNotZero(v0123[idxOp % 4])) {
                 let newCoeff = [v0123[idxOp % 4]];
@@ -166,7 +166,7 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
         mutable genIdxes = new GeneratorIndex[((Length(ZData) + Length(ZZData)) + 2 * Length(PQandPQQRData)) + 8 * Length(h0123Data)];
         mutable startIdx = 0;
         
-        for (idx in 0 .. Length(ZData) - 1) {
+        for (idx in IndexRange(ZData)) {
             
             // Array of Arrays of Length 1
             set genIdxes[idx] = (_ZTermToPauliGenIdx(HTermToGenIdx(ZData[idx], [0])))[0];
@@ -174,7 +174,7 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
         
         set startIdx = Length(ZData);
         
-        for (idx in 0 .. Length(ZZData) - 1) {
+        for (idx in IndexRange(ZZData)) {
             
             // Array of Arrays of Length 1
             set genIdxes[startIdx + idx] = (_ZZTermToPauliGenIdx(HTermToGenIdx(ZZData[idx], [1])))[0];
@@ -182,7 +182,7 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
         
         set startIdx = startIdx + Length(ZZData);
         
-        for (idx in 0 .. Length(PQandPQQRData) - 1) {
+        for (idx in IndexRange(PQandPQQRData)) {
             
             // Array of Arrays of Length 2
             let genArr = _PQandPQQRTermToPauliGenIdx_(HTermToGenIdx(PQandPQQRData[idx], [2]));
@@ -198,7 +198,7 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
             // Array of Arrays of Length up to 8
             let genArr = _V0123TermToPauliGenIdx_(HTermToGenIdx(h0123Data[idx], [3]));
             
-            for (idx0123 in 0 .. Length(genArr) - 1) {
+            for (idx0123 in IndexRange(genArr)) {
                 set genIdxes[finalIdx] = genArr[idx0123];
                 set finalIdx = finalIdx + 1;
             }

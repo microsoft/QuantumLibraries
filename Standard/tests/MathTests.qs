@@ -95,7 +95,7 @@ namespace Microsoft.Quantum.Canon {
         
         mutable complexCases = [(0.123, 0.321), (0.123, -0.321), (-0.123, 0.321), (-0.123, -0.321)];
         
-        for (idxCases in 0 .. Length(complexCases) - 1) {
+        for (idxCases in IndexRange(complexCases)) {
             let (complexRe, complexIm) = complexCases[idxCases];
             let complexAbs = Microsoft.Quantum.Extensions.Math.Sqrt(complexRe * complexRe + complexIm * complexIm);
             let complexArg = Microsoft.Quantum.Extensions.Math.ArcTan2(complexIm, complexRe);
@@ -126,14 +126,14 @@ namespace Microsoft.Quantum.Canon {
             (3.0, [0.0, 0.0, -0.0], 0.0)
         ];
         
-        for (idxTest in 0 .. Length(testCases) - 1) {
+        for (idxTest in IndexRange(testCases)) {
             let (p, array, pNormExpected) = testCases[idxTest];
             NearEqualityFact(PNorm(p, array), pNormExpected);
             
             // if PNorm fails, PNormalize will fail.
             let arrayNormalized = PNormalized(p, array);
             
-            for (idxCoeff in 0 .. Length(array) - 1) {
+            for (idxCoeff in IndexRange(array)) {
                 NearEqualityFact(array[idxCoeff] / pNormExpected, arrayNormalized[idxCoeff]);
             }
         }

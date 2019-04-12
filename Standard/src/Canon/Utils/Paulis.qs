@@ -3,6 +3,7 @@
 
 namespace Microsoft.Quantum.Canon {
     open Microsoft.Quantum.Primitive;
+    open Microsoft.Quantum.Arrays;
 
     /// # Summary
     /// Given a multi-qubit Pauli operator, applies the corresponding operation to
@@ -30,7 +31,7 @@ namespace Microsoft.Quantum.Canon {
     {
         body (...)
         {
-            for (idxPauli in 0 .. Length(pauli) - 1)
+            for (idxPauli in IndexRange(pauli))
             {
                 let P = pauli[idxPauli];
                 let targ = target[idxPauli];
@@ -158,10 +159,8 @@ namespace Microsoft.Quantum.Canon {
         mutable paulis = new Pauli[][3 * nQubits];
         let pauliGroup = [PauliX, PauliY, PauliZ];
         
-        for (idxQubit in 0 .. nQubits - 1)
-        {
-            for (idxPauli in 0 .. Length(pauliGroup) - 1)
-            {
+        for (idxQubit in 0 .. nQubits - 1) {
+            for (idxPauli in IndexRange(pauliGroup)) {
                 set paulis[idxQubit * Length(pauliGroup) + idxPauli] = EmbedPauli(pauliGroup[idxPauli], idxQubit, nQubits);
             }
         }
