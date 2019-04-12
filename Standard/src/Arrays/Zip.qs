@@ -2,7 +2,6 @@
 // Licensed under the MIT License.
 
 namespace Microsoft.Quantum.Arrays {
-    open Microsoft.Quantum.Extensions.Math;
     open Microsoft.Quantum.Math;
 
     /// # Summary

@@ -4,7 +4,6 @@
 namespace Microsoft.Quantum.Math {
     open Microsoft.Quantum.Primitive;
     open Microsoft.Quantum.Extensions.Convert;
-    open Microsoft.Quantum.Extensions.Math;
     
     
     // DESIGN NOTES:
@@ -29,12 +28,10 @@ namespace Microsoft.Quantum.Math {
     /// # Remarks
     /// This function calls <xref:microsoft.quantum.primitive.random>, so
     /// its randomness depends on the implementation of `Random`.
-    operation RandomIntPow2 (maxBits : Int) : Int
-    {
+    operation RandomIntPow2 (maxBits : Int) : Int {
         mutable number = 0;
         
-        for (idxBit in 0 .. maxBits - 1)
-        {
+        for (idxBit in 0 .. maxBits - 1) {
             let bit = Random([0.5, 0.5]);
             set number = number + bit * 2 ^ idxBit;
         }
@@ -69,7 +66,7 @@ namespace Microsoft.Quantum.Math {
     {
         mutable nBits = 0;
         mutable output = 0;
-        set nBits = Ceiling(Lg(ToDouble(maxInt)));
+        set nBits = Microsoft.Quantum.Extensions.Math.Ceiling(Lg(ToDouble(maxInt)));
         
         repeat
         {
@@ -108,7 +105,7 @@ namespace Microsoft.Quantum.Math {
             fail $"Number of random bits must be greater than 0.";
         }
         
-        return ToDouble(RandomIntPow2(bitsRandom)) / PowD(2.0, ToDouble(bitsRandom));
+        return ToDouble(RandomIntPow2(bitsRandom)) / Microsoft.Quantum.Extensions.Math.PowD(2.0, ToDouble(bitsRandom));
     }
 
     /// # Summary
