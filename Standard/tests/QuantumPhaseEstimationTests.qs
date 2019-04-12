@@ -7,6 +7,7 @@ namespace Microsoft.Quantum.Tests {
     open Microsoft.Quantum.Characterization;
     open Microsoft.Quantum.Arrays;
     open Microsoft.Quantum.Math;
+    open Microsoft.Quantum.Diagnostics;
     
     
     /// # Summary
