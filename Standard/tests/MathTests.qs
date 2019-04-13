@@ -99,7 +99,7 @@ namespace Microsoft.Quantum.Canon {
             let (complexRe, complexIm) = complexCases[idxCases];
             let complexAbs = Microsoft.Quantum.Extensions.Math.Sqrt(complexRe * complexRe + complexIm * complexIm);
             let complexArg = Microsoft.Quantum.Extensions.Math.ArcTan2(complexIm, complexRe);
-            let complex = Microsoft.Quantum.Extensions.Math.Complex(complexRe, complexIm);
+            let complex = Complex(complexRe, complexIm);
             let complexPolar = ComplexPolar(complexAbs, complexArg);
             NearEqualityFact(AbsSquaredComplex(complex), complexAbs * complexAbs);
             NearEqualityFact(AbsComplex(complex), complexAbs);

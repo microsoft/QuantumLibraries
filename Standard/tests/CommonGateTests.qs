@@ -3,7 +3,6 @@
 namespace Microsoft.Quantum.Tests {
     open Microsoft.Quantum.Intrinsic;
     open Microsoft.Quantum.Canon;
-    open Microsoft.Quantum.Extensions.Testing;
     open Microsoft.Quantum.Diagnostics;
     open Microsoft.Quantum.Arrays;
 
@@ -21,19 +20,19 @@ namespace Microsoft.Quantum.Tests {
     operation CXTest() : Unit {
         let actual = ApplyCShorthandToRegister(CX, _);
         let expected = ApplyControlledOpToRegister(X, _);
-        AssertOperationsEqualReferenced(actual, expected, 2);
+        AssertOperationsEqualReferenced(2, actual, expected);
     }
 
     operation CYTest() : Unit {
         let actual = ApplyCShorthandToRegister(CY, _);
         let expected = ApplyControlledOpToRegister(Y, _);
-        AssertOperationsEqualReferenced(actual, expected, 2);
+        AssertOperationsEqualReferenced(2, actual, expected);
     }
 
     operation CZTest() : Unit {
         let actual = ApplyCShorthandToRegister(CZ, _);
         let expected = ApplyControlledOpToRegister(Z, _);
-        AssertOperationsEqualReferenced(actual, expected, 2);
+        AssertOperationsEqualReferenced(2, actual, expected);
     }
     
 }

@@ -4,7 +4,6 @@ namespace Microsoft.Quantum.Tests {
     open Microsoft.Quantum.Math;
     open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Intrinsic;
-    open Microsoft.Quantum.Extensions.Testing;
     open Microsoft.Quantum.Diagnostics;
     open Microsoft.Quantum.Arrays;
     
@@ -19,7 +18,7 @@ namespace Microsoft.Quantum.Tests {
         
         let actual = ApplyWith(H, X, _);
         let expected = Z;
-        AssertOperationsEqualReferenced(ApplyToEach(actual, _), ApplyToEachA(expected, _), 4);
+        AssertOperationsEqualReferenced(4, ApplyToEach(actual, _), ApplyToEachA(expected, _));
     }
     
     
@@ -27,23 +26,23 @@ namespace Microsoft.Quantum.Tests {
     // something else.
     operation CurryPreTest () : Unit {
         
-        AssertOperationsEqualInPlace(Exp([PauliZ], 1.7, _), Exp([PauliZ], 1.7, _), 1);
-        AssertOperationsEqualReferenced(Exp([PauliZ], 1.7, _), Exp([PauliZ], 1.7, _), 1);
+        AssertOperationsEqualInPlace(1, Exp([PauliZ], 1.7, _), Exp([PauliZ], 1.7, _));
+        AssertOperationsEqualReferenced(1, Exp([PauliZ], 1.7, _), Exp([PauliZ], 1.7, _));
     }
     
     
     operation CurryTest () : Unit {
         
         let curried = CurryOp(Exp([PauliZ], _, _));
-        AssertOperationsEqualInPlace(curried(1.7), Exp([PauliZ], 1.7, _), 1);
-        AssertOperationsEqualReferenced(curried(1.7), Exp([PauliZ], 1.7, _), 1);
+        AssertOperationsEqualInPlace(1, curried(1.7), Exp([PauliZ], 1.7, _));
+        AssertOperationsEqualReferenced(1, curried(1.7), Exp([PauliZ], 1.7, _));
     }
     
     
     operation BindTest () : Unit {
         
         let bound = BindCA([H, X, H]);
-        AssertOperationsEqualReferenced(ApplyToEach(bound, _), ApplyToEachA(Z, _), 3);
+        AssertOperationsEqualReferenced(3, ApplyToEach(bound, _), ApplyToEachA(Z, _));
     }
     
     
@@ -56,8 +55,8 @@ namespace Microsoft.Quantum.Tests {
     operation BindATest () : Unit {
         
         let bound = BindA(Mapped(StripControlled<Qubit>, [T, T]));
-        AssertOperationsEqualReferenced(ApplyToEach(bound, _), ApplyToEachA(S, _), 3);
-        AssertOperationsEqualReferenced(ApplyToEach(Adjoint bound, _), ApplyToEachA(Adjoint S, _), 3);
+        AssertOperationsEqualReferenced(3, ApplyToEach(bound, _), ApplyToEachA(S, _));
+        AssertOperationsEqualReferenced(3, ApplyToEach(Adjoint bound, _), ApplyToEachA(Adjoint S, _));
     }
     
     
@@ -87,30 +86,29 @@ namespace Microsoft.Quantum.Tests {
         
         let stripped = Mapped(StripAdjoint<Qubit>, [T, T]);
         let bound = BindC(stripped);
-        AssertOperationsEqualReferenced(ApplyToEach(bound, _), ApplyToEachA(S, _), 3);
+        AssertOperationsEqualReferenced(3, ApplyToEach(bound, _), ApplyToEachA(S, _));
         let op = BindCTestHelper0(bound, _);
         let target = BindCTestHelper1(S, _);
-        AssertOperationsEqualReferenced(op, target, 6);
+        AssertOperationsEqualReferenced(6, op, target);
     }
     
     
     operation BindCATest () : Unit {
-        
         let bound = BindCA([T, T]);
-        AssertOperationsEqualReferenced(ApplyToEach(bound, _), ApplyToEachA(S, _), 3);
-        AssertOperationsEqualReferenced(ApplyToEach(Adjoint bound, _), ApplyToEachA(Adjoint S, _), 3);
+        AssertOperationsEqualReferenced(3, ApplyToEach(bound, _), ApplyToEachA(S, _));
+        AssertOperationsEqualReferenced(3, ApplyToEach(Adjoint bound, _), ApplyToEachA(Adjoint S, _));
         let op = BindCTestHelper0(Adjoint bound, _);
         let target = BindCTestHelper1(Adjoint S, _);
-        AssertOperationsEqualReferenced(op, target, 4);
+        AssertOperationsEqualReferenced(4, op, target);
     }
     
     
     operation OperationPowTest () : Unit {
         
-        AssertOperationsEqualReferenced(ApplyToEach(OperationPow(H, 2), _), NoOp<Qubit[]>, 3);
-        AssertOperationsEqualReferenced(ApplyToEach(OperationPow(Z, 2), _), NoOp<Qubit[]>, 3);
-        AssertOperationsEqualReferenced(ApplyToEach(OperationPow(S, 4), _), NoOp<Qubit[]>, 3);
-        AssertOperationsEqualReferenced(ApplyToEach(OperationPow(T, 8), _), NoOp<Qubit[]>, 3);
+        AssertOperationsEqualReferenced(3, ApplyToEach(OperationPow(H, 2), _), NoOp<Qubit[]>);
+        AssertOperationsEqualReferenced(3, ApplyToEach(OperationPow(Z, 2), _), NoOp<Qubit[]>);
+        AssertOperationsEqualReferenced(3, ApplyToEach(OperationPow(S, 4), _), NoOp<Qubit[]>);
+        AssertOperationsEqualReferenced(3, ApplyToEach(OperationPow(T, 8), _), NoOp<Qubit[]>);
     }
     
     
@@ -118,14 +116,14 @@ namespace Microsoft.Quantum.Tests {
         
         let bigOp = ApplyPauli([PauliI, PauliX, PauliY, PauliZ, PauliI], _);
         let smallOp = ApplyPauli([PauliX, PauliY, PauliZ], _);
-        AssertOperationsEqualReferenced(ApplyToSubregister(smallOp, [1, 2, 3], _), bigOp, 5);
-        AssertOperationsEqualReferenced(RestrictToSubregister(smallOp, [1, 2, 3]), bigOp, 5);
-        AssertOperationsEqualReferenced(ApplyToSubregisterC(smallOp, [1, 2, 3], _), bigOp, 5);
-        AssertOperationsEqualReferenced(RestrictToSubregisterC(smallOp, [1, 2, 3]), bigOp, 5);
-        AssertOperationsEqualReferenced(ApplyToSubregisterA(smallOp, [1, 2, 3], _), bigOp, 5);
-        AssertOperationsEqualReferenced(RestrictToSubregisterA(smallOp, [1, 2, 3]), bigOp, 5);
-        AssertOperationsEqualReferenced(ApplyToSubregisterCA(smallOp, [1, 2, 3], _), bigOp, 5);
-        AssertOperationsEqualReferenced(RestrictToSubregisterCA(smallOp, [1, 2, 3]), bigOp, 5);
+        AssertOperationsEqualReferenced(5, ApplyToSubregister(smallOp, [1, 2, 3], _), bigOp);
+        AssertOperationsEqualReferenced(5, RestrictToSubregister(smallOp, [1, 2, 3]), bigOp);
+        AssertOperationsEqualReferenced(5, ApplyToSubregisterC(smallOp, [1, 2, 3], _), bigOp);
+        AssertOperationsEqualReferenced(5, RestrictToSubregisterC(smallOp, [1, 2, 3]), bigOp);
+        AssertOperationsEqualReferenced(5, ApplyToSubregisterA(smallOp, [1, 2, 3], _), bigOp);
+        AssertOperationsEqualReferenced(5, RestrictToSubregisterA(smallOp, [1, 2, 3]), bigOp);
+        AssertOperationsEqualReferenced(5, ApplyToSubregisterCA(smallOp, [1, 2, 3], _), bigOp);
+        AssertOperationsEqualReferenced(5, RestrictToSubregisterCA(smallOp, [1, 2, 3]), bigOp);
     }
     
     
@@ -182,37 +180,37 @@ namespace Microsoft.Quantum.Tests {
     
     operation CControlledTest () : Unit {
         
-        AssertOperationsEqualReferenced(CControlledActual(H, _), CControlledExpected(H, _), 3);
-        AssertOperationsEqualReferenced(CControlledActual(Z, _), CControlledExpected(Z, _), 3);
-        AssertOperationsEqualReferenced(CControlledActual(S, _), CControlledExpected(S, _), 3);
-        AssertOperationsEqualReferenced(CControlledActual(T, _), CControlledExpected(T, _), 3);
+        AssertOperationsEqualReferenced(3, CControlledActual(H, _), CControlledExpected(H, _));
+        AssertOperationsEqualReferenced(3, CControlledActual(Z, _), CControlledExpected(Z, _));
+        AssertOperationsEqualReferenced(3, CControlledActual(S, _), CControlledExpected(S, _));
+        AssertOperationsEqualReferenced(3, CControlledActual(T, _), CControlledExpected(T, _));
     }
     
     
     operation CControlledTestC () : Unit {
         
-        AssertOperationsEqualReferenced(CControlledActualC(H, _), CControlledExpected(H, _), 3);
-        AssertOperationsEqualReferenced(CControlledActualC(Z, _), CControlledExpected(Z, _), 3);
-        AssertOperationsEqualReferenced(CControlledActualC(S, _), CControlledExpected(S, _), 3);
-        AssertOperationsEqualReferenced(CControlledActualC(T, _), CControlledExpected(T, _), 3);
+        AssertOperationsEqualReferenced(3, CControlledActualC(H, _), CControlledExpected(H, _));
+        AssertOperationsEqualReferenced(3, CControlledActualC(Z, _), CControlledExpected(Z, _));
+        AssertOperationsEqualReferenced(3, CControlledActualC(S, _), CControlledExpected(S, _));
+        AssertOperationsEqualReferenced(3, CControlledActualC(T, _), CControlledExpected(T, _));
     }
     
     
     operation CControlledTestA () : Unit {
         
-        AssertOperationsEqualReferenced(CControlledActualA(H, _), CControlledExpected(H, _), 3);
-        AssertOperationsEqualReferenced(CControlledActualA(Z, _), CControlledExpected(Z, _), 3);
-        AssertOperationsEqualReferenced(CControlledActualA(S, _), CControlledExpected(S, _), 3);
-        AssertOperationsEqualReferenced(CControlledActualA(T, _), CControlledExpected(T, _), 3);
+        AssertOperationsEqualReferenced(3, CControlledActualA(H, _), CControlledExpected(H, _));
+        AssertOperationsEqualReferenced(3, CControlledActualA(Z, _), CControlledExpected(Z, _));
+        AssertOperationsEqualReferenced(3, CControlledActualA(S, _), CControlledExpected(S, _));
+        AssertOperationsEqualReferenced(3, CControlledActualA(T, _), CControlledExpected(T, _));
     }
     
     
     operation CControlledTestCA () : Unit {
         
-        AssertOperationsEqualReferenced(CControlledActualCA(H, _), CControlledExpected(H, _), 3);
-        AssertOperationsEqualReferenced(CControlledActualCA(Z, _), CControlledExpected(Z, _), 3);
-        AssertOperationsEqualReferenced(CControlledActualCA(S, _), CControlledExpected(S, _), 3);
-        AssertOperationsEqualReferenced(CControlledActualCA(T, _), CControlledExpected(T, _), 3);
+        AssertOperationsEqualReferenced(3, CControlledActualCA(H, _), CControlledExpected(H, _));
+        AssertOperationsEqualReferenced(3, CControlledActualCA(Z, _), CControlledExpected(Z, _));
+        AssertOperationsEqualReferenced(3, CControlledActualCA(S, _), CControlledExpected(S, _));
+        AssertOperationsEqualReferenced(3, CControlledActualCA(T, _), CControlledExpected(T, _));
     }
     
 }

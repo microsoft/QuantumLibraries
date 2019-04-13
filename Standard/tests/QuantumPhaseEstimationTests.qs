@@ -3,9 +3,11 @@ namespace Microsoft.Quantum.Tests {
     open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Arithmetic;
     open Microsoft.Quantum.Extensions.Convert;
-    open Microsoft.Quantum.Extensions.Testing;
     open Microsoft.Quantum.Oracles;
     open Microsoft.Quantum.Characterization;
+    open Microsoft.Quantum.Arrays;
+    open Microsoft.Quantum.Math;
+    open Microsoft.Quantum.Diagnostics;
     
     
     /// # Summary
@@ -20,20 +22,20 @@ namespace Microsoft.Quantum.Tests {
             let phase = BigEndian(qPhase[0 .. 3]);
             let state = qPhase[4];
             QuantumPhaseEstimation(oracle, [state], phase);
-            let complexOne = Microsoft.Quantum.Extensions.Math.Complex(1.0, 0.0);
-            let complexZero = Microsoft.Quantum.Extensions.Math.Complex(0.0, 0.0);
+            let complexOne = Complex(1.0, 0.0);
+            let complexZero = Complex(0.0, 0.0);
             
             for (idxPhase in 0 .. 4) {
-                AssertQubitState((complexOne, complexZero), qPhase[idxPhase], 1E-06);
+                AssertQubitIsInStateWithinTolerance((complexOne, complexZero), qPhase[idxPhase], 1E-06);
             }
             
             X(state);
             QuantumPhaseEstimation(oracle, [state], phase);
-            AssertQubitState((complexOne, complexZero), qPhase[0], 1E-06);
-            AssertQubitState((complexOne, complexZero), qPhase[1], 1E-06);
-            AssertQubitState((complexZero, complexOne), qPhase[2], 1E-06);
-            AssertQubitState((complexOne, complexZero), qPhase[3], 1E-06);
-            AssertQubitState((complexZero, complexOne), qPhase[4], 1E-06);
+            AssertQubitIsInStateWithinTolerance((complexOne, complexZero), qPhase[0], 1E-06);
+            AssertQubitIsInStateWithinTolerance((complexOne, complexZero), qPhase[1], 1E-06);
+            AssertQubitIsInStateWithinTolerance((complexZero, complexOne), qPhase[2], 1E-06);
+            AssertQubitIsInStateWithinTolerance((complexOne, complexZero), qPhase[3], 1E-06);
+            AssertQubitIsInStateWithinTolerance((complexZero, complexOne), qPhase[4], 1E-06);
             ResetAll(qPhase);
         }
     }
@@ -41,17 +43,10 @@ namespace Microsoft.Quantum.Tests {
     
     /// # Summary
     /// Implementation of T-gate for Quantum Phase Estimation Oracle
-    operation _TPhaseEstimation (power : Int, target : Qubit[]) : Unit {
-        
-        body (...) {
-            for (idxPower in 0 .. power - 1) {
-                T(target[0]);
-            }
+    operation _TPhaseEstimation (power : Int, target : Qubit[]) : Unit is Adj + Ctl {
+        for (idxPower in 0 .. power - 1) {
+            T(Head(target));
         }
-        
-        adjoint invert;
-        controlled distribute;
-        controlled adjoint distribute;
     }
     
 }
