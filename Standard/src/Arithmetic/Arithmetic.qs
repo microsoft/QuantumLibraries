@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 namespace Microsoft.Quantum.Arithmetic {
-    open Microsoft.Quantum.Primitive;
+    open Microsoft.Quantum.Intrinsic;
     open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Convert;
     open Microsoft.Quantum.Arrays;
@@ -32,22 +32,6 @@ namespace Microsoft.Quantum.Arithmetic {
         controlled adjoint auto;
     }
 
-    /// # Summary
-    /// Applies `X` operations to qubits in a big-endian register based on 1 bits in an integer.
-    ///
-    /// Let us denote `value` by a and let y be an unsigned integer encoded in `target`,
-    /// then `InPlaceXorBE` performs an operation given by the following map:
-    /// $\ket{y}\rightarrow \ket{y\oplus a}$ , where $\oplus$ is the bitwise exclusive OR operator.
-    ///
-    /// # Input
-    /// ## value
-    /// An integer which is assumed to be non-negative.
-    /// ## target
-    /// A quantum register which is used to store `value` in big-endian encoding.
-    ///
-    /// # See Also
-    /// - InPlaceXorLE
-    
     /// # Summary
     /// This computes the Majority function in-place on 3 qubits.
     ///

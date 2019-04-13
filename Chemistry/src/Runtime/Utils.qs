@@ -3,7 +3,7 @@
 
 namespace Microsoft.Quantum.Chemistry {
     open Microsoft.Quantum.Simulation;
-    open Microsoft.Quantum.Primitive;
+    open Microsoft.Quantum.Intrinsic;
     open Microsoft.Quantum.Canon;
     
     

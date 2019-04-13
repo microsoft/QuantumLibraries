@@ -3,7 +3,7 @@
 
 namespace Microsoft.Quantum.Canon {
     open Microsoft.Quantum.Convert;
-    open Microsoft.Quantum.Primitive;
+    open Microsoft.Quantum.Intrinsic;
     
     /// # Summary
     /// Applies a unitary operator on the target register if the control register state corresponds to a specified bit mask.

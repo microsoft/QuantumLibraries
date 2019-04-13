@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 namespace Microsoft.Quantum.Math {
-    open Microsoft.Quantum.Primitive;
+    open Microsoft.Quantum.Intrinsic;
     open Microsoft.Quantum.Extensions.Convert;
     
     
@@ -26,7 +26,7 @@ namespace Microsoft.Quantum.Math {
     /// that is, with $\Pr(x) = \frac{1}{2^{\texttt{maxBits}}}$.
     ///
     /// # Remarks
-    /// This function calls <xref:microsoft.quantum.primitive.random>, so
+    /// This function calls <xref:microsoft.quantum.intrinsic.random>, so
     /// its randomness depends on the implementation of `Random`.
     operation RandomIntPow2 (maxBits : Int) : Int {
         mutable number = 0;
@@ -60,7 +60,7 @@ namespace Microsoft.Quantum.Math {
     /// underlying source of random classical bits.
     ///
     /// # Remarks
-    /// This function calls <xref:microsoft.quantum.primitive.random>, so
+    /// This function calls <xref:microsoft.quantum.intrinsic.random>, so
     /// its randomness depends on the implementation of `Random`.
     operation RandomInt (maxInt : Int) : Int
     {
@@ -96,7 +96,7 @@ namespace Microsoft.Quantum.Math {
     /// with probability $\Pr(k) = 1 / 2^{\texttt{bitsRandom}}$.
     ///
     /// # Remarks
-    /// This function calls <xref:microsoft.quantum.primitive.random>, so
+    /// This function calls <xref:microsoft.quantum.intrinsic.random>, so
     /// its randomness depends on the implementation of `Random`.
     operation RandomReal (bitsRandom : Int) : Double
     {
@@ -116,7 +116,7 @@ namespace Microsoft.Quantum.Math {
     /// A `Pauli` operator that is one of `[PauliI, PauliX, PauliY, PauliZ]`.
     ///
     /// # Remarks
-    /// This function calls <xref:microsoft.quantum.primitive.random>, so
+    /// This function calls <xref:microsoft.quantum.intrinsic.random>, so
     /// its randomness depends on the implementation of `Random`.
     operation RandomSingleQubitPauli () : Pauli {
         let probs = [0.5, 0.5, 0.5, 0.5];

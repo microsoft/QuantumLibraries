@@ -3,14 +3,14 @@
 namespace Microsoft.Quantum.Tests {
     
     open Microsoft.Quantum.Canon;
-    open Microsoft.Quantum.Primitive;
+    open Microsoft.Quantum.Intrinsic;
     open Microsoft.Quantum.Extensions.Testing;
     
     
     /// # Summary
     /// Tests multiply controlled not implementation that uses
     /// ApplyMultiControlledCA against multiply controlled version of
-    /// the Microsoft.Quantum.Primitive.X
+    /// the Microsoft.Quantum.Intrinsic.X
     operation ApplyMultiControlledTest () : Unit {
         
         let twoQubitOp = CNOT;

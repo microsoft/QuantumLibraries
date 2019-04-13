@@ -3,7 +3,7 @@
 
 namespace Microsoft.Quantum.Characterization {
     open Microsoft.Quantum.Arithmetic;
-    open Microsoft.Quantum.Primitive;
+    open Microsoft.Quantum.Intrinsic;
     open Microsoft.Quantum.Extensions.Testing;
     open Microsoft.Quantum.Oracles;
     open Microsoft.Quantum.Canon;

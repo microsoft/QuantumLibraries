@@ -4,16 +4,16 @@
 namespace Microsoft.Quantum.Preparation {
     open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Arithmetic;
-    open Microsoft.Quantum.Primitive;
+    open Microsoft.Quantum.Intrinsic;
     open Microsoft.Quantum.Math;
     open Microsoft.Quantum.Arrays;
 
     // This library returns operations that prepare a specified quantum state
     // from the computational basis state $\ket{0...0}$.
-    
+
     /// # Summary
 	/// Returns an operation that prepares the given quantum state.
-	/// 
+	///
     /// The returned operation $U$ prepares an arbitrary quantum
     /// state $\ket{\psi}$ with positive coefficients $\alpha_j\ge 0$ from
     /// the $n$-qubit computational basis state $\ket{0...0}$.

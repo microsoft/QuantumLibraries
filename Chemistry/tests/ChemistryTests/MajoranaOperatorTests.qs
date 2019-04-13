@@ -3,7 +3,7 @@
 
 namespace Microsoft.Quantum.Chemistry.Tests {
     open Microsoft.Quantum.Arithmetic;
-    open Microsoft.Quantum.Primitive;
+    open Microsoft.Quantum.Intrinsic;
     open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Extensions.Testing;
     open Microsoft.Quantum.Extensions.Convert;
@@ -254,31 +254,25 @@ namespace Microsoft.Quantum.Chemistry.Tests {
             }
         }
     }
-    
-    
+
     // Test SelectZ operator
     operation SelectZTest () : Unit {
-        
         let targetRegisterSize = 7;
         let indexRegisterSize = Microsoft.Quantum.Extensions.Math.Ceiling(Lg(ToDouble(targetRegisterSize)));
-        
-        using (targetRegister = Qubit[targetRegisterSize]) {
-            
-            using (indexRegister = Qubit[indexRegisterSize]) {
-                
-                for (idxTest in 0 .. targetRegisterSize - 1) {
-                    H(targetRegister[idxTest]);
-                    InPlaceXorLE(idxTest, LittleEndian(Reversed(indexRegister)));
-                    SelectZ(BigEndian(indexRegister), targetRegister);
-                    AssertProb([PauliX], [targetRegister[idxTest]], One, 1.0, $"Error: Test {idxTest} X Pauli |+>", 1E-10);
-                    Z(targetRegister[idxTest]);
-                    Adjoint InPlaceXorLE(idxTest, LittleEndian(Reversed(indexRegister)));
-                    H(targetRegister[idxTest]);
-                }
+
+        using ((targetRegister, indexRegister) = (Qubit[targetRegisterSize], Qubit[indexRegisterSize])) {
+            for (idxTest in 0 .. targetRegisterSize - 1) {
+                H(targetRegister[idxTest]);
+                ApplyXorInPlace(idxTest, LittleEndian(Reversed(indexRegister)));
+                SelectZ(BigEndian(indexRegister), targetRegister);
+                AssertProb([PauliX], [targetRegister[idxTest]], One, 1.0, $"Error: Test {idxTest} X Pauli |+>", 1E-10);
+                Z(targetRegister[idxTest]);
+                Adjoint ApplyXorInPlace(idxTest, LittleEndian(Reversed(indexRegister)));
+                H(targetRegister[idxTest]);
             }
         }
     }
-    
+
 }
 
 

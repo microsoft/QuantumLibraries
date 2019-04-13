@@ -4,12 +4,13 @@
 namespace Microsoft.Quantum.Tests {
     open Microsoft.Quantum.Simulation;
     open Microsoft.Quantum.Arithmetic;
-    open Microsoft.Quantum.Primitive;
+    open Microsoft.Quantum.Intrinsic;
     open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Extensions.Testing;
     open Microsoft.Quantum.Extensions.Convert;
     open Microsoft.Quantum.Arrays;
     open Microsoft.Quantum.Diagnostics;
+    open Microsoft.Quantum.Convert;
 
     // BlockEncoding.qs tests
 
@@ -24,7 +25,7 @@ namespace Microsoft.Quantum.Tests {
         return (eigenvalues, prob, inverseAngle, statePreparation, selector);
     }
 
-    // This checks that BlockEncodingByLCU encodes the correct Hamiltonian. 
+    // This checks that BlockEncodingByLCU encodes the correct Hamiltonian.
     operation BlockEncodingByLCUTest() : Unit {
         body (...) {
             let (eigenvalues, prob, inverseAngle, statePreparation, selector) = LCUTestHelper();
@@ -78,10 +79,7 @@ namespace Microsoft.Quantum.Tests {
         body (...) {
             let (eigenvalues, prob, inverseAngle, statePreparation, selector) = LCUTestHelper();
             let LCU = QuantumWalkByQubitization(BlockEncodingReflectionByLCU(statePreparation, selector));
-            using(qubits = Qubit[4]){
-                let auxiliary = qubits[2..3];
-                let system = [qubits[0]];
-                let flag = qubits[1];
+            using ((system, flag, auxiliary) = (Qubit[1], Qubit(), Qubit[2])) {
 
                 for(rep in 0..5){
                     LCU(auxiliary, system);
@@ -93,7 +91,9 @@ namespace Microsoft.Quantum.Tests {
                         Exp([PauliY],1.0 * inverseAngle, system);
                         AssertProb([PauliZ], system, Zero, 1.0, "Error1: Z Success probability does not match theory", 1e-10);
                     }
-                    ResetAll(qubits);
+                    ResetAll(system);
+                    Reset(flag);
+                    ResetAll(auxiliary);
                 }
             }
         }
@@ -136,7 +136,7 @@ namespace Microsoft.Quantum.Tests {
     }
 
     // Array.qs tests
-    function IntArrayFromRangeTest() : Unit {
+    function RangeAsIntArrayTest() : Unit {
         mutable testCases = new (Int[], Range)[4];
         let e = new Int[0];
         set testCases[0] = ([1, 3, 5, 7], 1..2..8);
@@ -145,7 +145,7 @@ namespace Microsoft.Quantum.Tests {
         set testCases[3] = ([0], 0..4..3);
         for (idxTest in IndexRange(testCases)) {
             let (expected, range) = testCases[idxTest];
-            let output = IntArrayFromRange(range);
+            let output = RangeAsIntArray(range);
             Ignore(Mapped(EqualityFactI(_, _, "Padded failed."), Zip(output, expected)));
         }
     }

@@ -3,7 +3,7 @@
 
 
 namespace Microsoft.Quantum.Tests {
-    open Microsoft.Quantum.Primitive;
+    open Microsoft.Quantum.Intrinsic;
     open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Preparation;
     open Microsoft.Quantum.Extensions.Testing;

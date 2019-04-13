@@ -3,13 +3,12 @@
 
 namespace Microsoft.Quantum.Canon {
     open Microsoft.Quantum.Arithmetic;
-    open Microsoft.Quantum.Primitive;
+    open Microsoft.Quantum.Intrinsic;
     open Microsoft.Quantum.Arrays;
-    
-    
+
     /// # Summary
 	/// Applies a Pauli rotation conditioned on an array of qubits.
-	/// 
+	///
     /// This applies the multiply-controlled unitary operation $U$ that performs
     /// rotations by angle $\theta_j$ about single-qubit Pauli operator $P$
     /// when controlled by the $n$-qubit number state $\ket{j}$.

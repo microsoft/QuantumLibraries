@@ -213,7 +213,7 @@ namespace Microsoft.Quantum.Convert {
     /// ## Example
     /// ```qsharp
     /// // The following returns [1,3,5,7];
-    /// let array = IntArrayFromRange(1..2..8);
+    /// let array = RangeAsIntArray(1..2..8);
     /// ```
     function RangeAsIntArray(range: Range) : Int[] {
         let start = RangeStart(range);

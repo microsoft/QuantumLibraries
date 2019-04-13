@@ -3,7 +3,7 @@
 
 namespace Microsoft.Quantum.AmplitudeAmplification {
     open Microsoft.Quantum.Canon;
-    open Microsoft.Quantum.Primitive;
+    open Microsoft.Quantum.Intrinsic;
     open Microsoft.Quantum.Oracles;
 
     /// # Summary

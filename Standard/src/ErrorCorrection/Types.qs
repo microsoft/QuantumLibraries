@@ -40,16 +40,16 @@ namespace Microsoft.Quantum.ErrorCorrection {
     /// The argument to a DecodeOp is the same as the return from an
     /// EncodeOp, and vice versa.
     newtype DecodeOp = (LogicalRegister => (Qubit[], Qubit[]));
-    
+
     /// # Summary
     /// Represents an operation that is used to measure the syndrome
     /// of an error-correcting code block.
     ///
     /// # Remarks
     /// The signature `(LogicalRegister => Syndrome)` represents an operation
-    /// that acts jointly on the qubits in `LogicalRegister` and some ancilla
-    /// qubits followed by a measurements of the ancilla to extract a `Syndrome`
-    /// type representing the `Result[]` of these measurements.
+    /// that acts jointly on the qubits in `LogicalRegister` and some auxillary
+    /// qubits followed by a measurements of the auxillary qubits to extract a
+    /// `Syndrome` value representing the `Result[]` of these measurements.
     ///
     /// ## Example
     /// Measure syndromes for the bit-flip code
@@ -63,10 +63,10 @@ namespace Microsoft.Quantum.ErrorCorrection {
     /// ```
     ///
     /// # See Also
-    /// - Microsoft.Quantum.Canon.LogicalRegister
-    /// - Microsoft.Quantum.Canon.Syndrome
+    /// - LogicalRegister
+    /// - Syndrome
     newtype SyndromeMeasOp = (LogicalRegister => Syndrome);
-    
+
     /// # Summary
     /// Represents an error-correcting code as defined by its encoder,
     /// decoder, and syndrome measurement procedure.

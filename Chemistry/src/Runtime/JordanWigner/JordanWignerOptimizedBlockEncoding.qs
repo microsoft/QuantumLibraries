@@ -5,12 +5,13 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
     open Microsoft.Quantum.Simulation;
     open Microsoft.Quantum.Arithmetic;
     open Microsoft.Quantum.Preparation;
-    open Microsoft.Quantum.Primitive;
+    open Microsoft.Quantum.Intrinsic;
     open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Extensions.Convert;
     open Microsoft.Quantum.Chemistry;
     open Microsoft.Quantum.Arrays;
     open Microsoft.Quantum.Math;
+    open Microsoft.Quantum.Convert;
 
     /// # Summary
     /// Term data in the optimized block-encoding algorithm.
@@ -176,8 +177,8 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
         let ((idxTermType, v0123), idxFermions) = term!;
         let qubitsPQ = idxFermions[0 .. 1];
         let qubitsRS = idxFermions[2 .. 3];
-        let qubitsPQJW = IntArrayFromRange(qubitsPQ[0] + 1 .. qubitsPQ[1] - 1);
-        let qubitsRSJW = IntArrayFromRange(qubitsRS[0] + 1 .. qubitsRS[1] - 1);
+        let qubitsPQJW = RangeAsIntArray(qubitsPQ[0] + 1 .. qubitsPQ[1] - 1);
+        let qubitsRSJW = RangeAsIntArray(qubitsRS[0] + 1 .. qubitsRS[1] - 1);
         let ops = [[1, 1, 1, 1], [1, 1, 2, 2], [1, 2, 1, 2], [1, 2, 2, 1], [2, 2, 2, 2], [2, 2, 1, 1], [2, 1, 2, 1], [2, 1, 1, 2]];
         mutable majIdxes = new OptimizedBETermIndex[4];
         mutable nonZero = 0;

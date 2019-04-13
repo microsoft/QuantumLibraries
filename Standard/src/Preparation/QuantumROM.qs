@@ -2,12 +2,13 @@
 // Licensed under the MIT License.
 
 namespace Microsoft.Quantum.Preparation {
-    open Microsoft.Quantum.Primitive;
+    open Microsoft.Quantum.Intrinsic;
     open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Arithmetic;
     open Microsoft.Quantum.Extensions.Convert;
     open Microsoft.Quantum.Math;
     open Microsoft.Quantum.Arrays;
+    open Microsoft.Quantum.Convert;
 
     /// # Summary
 	/// Uses the Quantum ROM technique to represent a given density matrix.
@@ -122,7 +123,7 @@ namespace Microsoft.Quantum.Preparation {
 
         let barHeight = 2^bitsPrecision - 1;
 
-        mutable altIndex = IntArrayFromRange(0..nCoefficients-1);
+        mutable altIndex = RangeAsIntArray(0..nCoefficients-1);
         mutable keepCoeff = Mapped(QuantumROMDiscretizationRoundCoefficients_(_, oneNorm, nCoefficients, barHeight), coefficients);
 
         // Calculate difference between number of discretized bars vs. maximum

@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 namespace Microsoft.Quantum.Tests {
     open Microsoft.Quantum.Arithmetic;
-    open Microsoft.Quantum.Primitive;
+    open Microsoft.Quantum.Intrinsic;
     open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Extensions.Testing;
     open Microsoft.Quantum.Diagnostics;
@@ -39,14 +39,12 @@ namespace Microsoft.Quantum.Tests {
     
     
     function AssertBoolEqualTestShouldFail () : Unit {
-        
         EqualityFactB(true, false, $"OK");
     }
     
     
-    function AssertResultEqualTestShouldFail () : Unit {
-        
-        AssertResultEqual(Zero, One, $"OK");
+    function EqualityFactRTestShouldFail () : Unit {
+        EqualityFactR(Zero, One, $"OK");
     }
     
     

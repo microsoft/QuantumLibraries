@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 namespace Microsoft.Quantum.Canon {
     open Microsoft.Quantum.Math;
-    open Microsoft.Quantum.Primitive;
+    open Microsoft.Quantum.Intrinsic;
     open Microsoft.Quantum.Diagnostics;
     open Microsoft.Quantum.Arrays;
 
@@ -130,7 +130,7 @@ namespace Microsoft.Quantum.Canon {
             let (p, array, pNormExpected) = testCases[idxTest];
             NearEqualityFact(PNorm(p, array), pNormExpected);
             
-            // if PNorm fails, PNormalize will fail.
+            // if PNorm fails, PNormalized will fail.
             let arrayNormalized = PNormalized(p, array);
             
             for (idxCoeff in IndexRange(array)) {

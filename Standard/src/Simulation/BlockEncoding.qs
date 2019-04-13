@@ -4,7 +4,7 @@
 namespace Microsoft.Quantum.Simulation {
     open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Arithmetic;
-    open Microsoft.Quantum.Primitive;
+    open Microsoft.Quantum.Intrinsic;
     open Microsoft.Quantum.Arrays;
 
     // This library defines types for block-encoding an arbitrary operator.

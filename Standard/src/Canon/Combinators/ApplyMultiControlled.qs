@@ -105,31 +105,24 @@ namespace Microsoft.Quantum.Canon {
     ///
     /// # See Also
     /// - Microsoft.Quantum.Canon.ApplyMultiControlledC
-    operation ApplyMultiControlledCA (singlyControlledOp : (Qubit[] => Unit : Adjoint), ccnot : CCNOTop, controls : Qubit[], targets : Qubit[]) : Unit
-    {
-        body (...)
-        {
-            EqualityFactB(Length(controls) >= 1, true, $"Length of controls must be at least 1");
-            
-            if (Length(controls) == 1)
-            {
+    operation ApplyMultiControlledCA (singlyControlledOp : (Qubit[] => Unit : Adjoint), ccnot : CCNOTop, controls : Qubit[], targets : Qubit[]) : Unit {
+        body (...) {
+            Fact(Length(controls) >= 1, $"Length of controls must be at least 1");
+
+            if (Length(controls) == 1) {
                 singlyControlledOp(controls + targets);
-            }
-            else
-            {
-                using (ancillas = Qubit[Length(controls) - 1])
-                {
-                    AndLadder(ccnot, controls, ancillas);
-                    singlyControlledOp([Tail(ancillas)] + targets);
-                    Adjoint AndLadder(ccnot, controls, ancillas);
+            } else {
+                using (ladderRegister = Qubit[Length(controls) - 1]) {
+                    AndLadder(ccnot, controls, ladderRegister);
+                    singlyControlledOp([Tail(ladderRegister)] + targets);
+                    Adjoint AndLadder(ccnot, controls, ladderRegister);
                 }
             }
         }
         
         adjoint invert;
         
-        controlled (extraControls, ...)
-        {
+        controlled (extraControls, ...) {
             ApplyMultiControlledCA(singlyControlledOp, ccnot, extraControls + controls, targets);
         }
         
@@ -174,23 +167,16 @@ namespace Microsoft.Quantum.Canon {
     /// - Used as a part of <xref:microsoft.quantum.canon.applymulticontrolledc>
     ///   and <xref:microsoft.quantum.canon.applymulticontrolledca>.
     /// - For the explanation and circuit diagram see Figure 4.10, Section 4.3 in Nielsen & Chuang.
-    operation AndLadder (ccnot : CCNOTop, controls : Qubit[], targets : Qubit[]) : Unit
-    {
-        body (...)
-        {
-            EqualityFactB(Length(controls) == Length(targets) + 1, true, $"Length(controls) must be equal to Length(target) + 1");
-            EqualityFactB(Length(controls) >= 2, true, $"The operation is not defined for less than 2 controls");
-            ccnot!(controls[0], controls[1], targets[0]);
-            
-            for (k in 1 .. Length(targets) - 1)
-            {
-                ccnot!(controls[k + 1], targets[k - 1], targets[k]);
-            }
+    operation AndLadder (ccnot : CCNOTop, controls : Qubit[], targets : Qubit[]) : Unit is Adj {
+        EqualityFactI(Length(controls), Length(targets) + 1, $"Length(controls) must be equal to Length(target) + 1");
+        Fact(Length(controls) >= 2, $"The operation is not defined for less than 2 controls");
+        ccnot!(controls[0], controls[1], targets[0]);
+
+        for (k in 1 .. Length(targets) - 1) {
+            ccnot!(controls[k + 1], targets[k - 1], targets[k]);
         }
-        
-        adjoint invert;
     }
-    
+
 }
 
 

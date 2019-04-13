@@ -4,7 +4,7 @@
 namespace Microsoft.Quantum.Chemistry.JordanWigner {
     open Microsoft.Quantum.Preparation;
     open Microsoft.Quantum.Arithmetic;
-    open Microsoft.Quantum.Primitive;
+    open Microsoft.Quantum.Intrinsic;
     open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Extensions.Convert;
     open Microsoft.Quantum.Arrays;
