@@ -204,7 +204,7 @@ namespace Microsoft.Quantum.Chemistry
                     {
                         globalPhase += 0.5 * generalPPTerm.coeff;
                         var term = generalPPTerm.SpinOrbitalIndices.Take(1).ToInts(nOrbitals: NOrbitals);
-                        hZTerms.Add(new HTerm((new QArray<Int64>(term), new QArray<Double> { -0.5 * generalPPTerm.coeff })));
+                        hZTerms.Add(new HTerm((new QArray<Int64>(term), new QArray<Double>(new[] { -0.5 * generalPPTerm.coeff }))));
                     }
                 }
                 
@@ -216,9 +216,9 @@ namespace Microsoft.Quantum.Chemistry
                         var Zterm0 = generalPQQPTerm.SpinOrbitalIndices.Take(1).ToInts(nOrbitals: NOrbitals);
                         var Zterm1 = generalPQQPTerm.SpinOrbitalIndices.Skip(1).Take(1).ToInts(nOrbitals: NOrbitals);
                         globalPhase += 0.25 * generalPQQPTerm.coeff;
-                        hZTerms.Add(new HTerm((new QArray<Int64>(Zterm0), new QArray<Double> { -0.25 * generalPQQPTerm.coeff })));
-                        hZTerms.Add(new HTerm((new QArray<Int64>(Zterm1), new QArray<Double> { -0.25 * generalPQQPTerm.coeff })));
-                        hZZTerms.Add(new HTerm((new QArray<Int64>(ZZterm), new QArray<Double> { 0.25 * generalPQQPTerm.coeff })));
+                        hZTerms.Add(new HTerm((new QArray<Int64>(Zterm0), new QArray<Double> (new []{ -0.25 * generalPQQPTerm.coeff }))));
+                        hZTerms.Add(new HTerm((new QArray<Int64>(Zterm1), new QArray<Double> (new []{ -0.25 * generalPQQPTerm.coeff }))));
+                        hZZTerms.Add(new HTerm((new QArray<Int64>(ZZterm), new QArray<Double> (new []{ 0.25 * generalPQQPTerm.coeff }))));
                     }
                 }
                 
@@ -227,7 +227,7 @@ namespace Microsoft.Quantum.Chemistry
                     foreach (var generalPQTerm in generalFermionTerms[FermionTermType.Common.PQTermType])
                     {
                         var pqterm = generalPQTerm.SpinOrbitalIndices.ToInts(nOrbitals: NOrbitals);
-                        hPQandPQQRTerms.Add(new HTerm((new QArray<Int64>(pqterm), new QArray<Double> { 0.25 * generalPQTerm.coeff })));
+                        hPQandPQQRTerms.Add(new HTerm((new QArray<Int64>(pqterm), new QArray<Double> (new[] { 0.25 * generalPQTerm.coeff }))));
                     }
                 }
                 
@@ -253,11 +253,11 @@ namespace Microsoft.Quantum.Chemistry
                             pqqrterm[2] = pqqrterm[1];
                             multiplier = -1.0;
                         }
-                        hPQandPQQRTerms.Add(new HTerm((pqqrterm, new QArray<Double> { -0.125 * multiplier* generalPQQRTerm.coeff })));
+                        hPQandPQQRTerms.Add(new HTerm((pqqrterm, new QArray<Double> (new []{ -0.125 * multiplier* generalPQQRTerm.coeff }))));
                         // PQ term
                         var pqterm = new List<Int64>(pqqrterm);
                         pqterm.RemoveRange(1, 2);
-                        hPQandPQQRTerms.Add(new HTerm((new QArray<Int64>(pqterm), new QArray<Double> { 0.125 * multiplier * generalPQQRTerm.coeff })));
+                        hPQandPQQRTerms.Add(new HTerm((new QArray<Int64>(pqterm), new QArray<Double>( new[] { 0.125 * multiplier * generalPQQRTerm.coeff }))));
                     }
                 }
                 
@@ -327,38 +327,38 @@ namespace Microsoft.Quantum.Chemistry
             //We only consider permutations pqrs || psqr || prsq || qprs || spqr || prqs
             var (pqrsSorted, pqrsPermuted, coeff) = term;
             coeff = coeff * 0.5 * 0.125;
-            var h123 = new QArray<Double> { .0, .0, .0 };
-            var v0123 = new QArray<Double> { .0, .0, .0, .0 };
+            var h123 = new QArray<Double> (new[] { .0, .0, .0 });
+            var v0123 = new QArray<Double> (new[] { .0, .0, .0, .0 });
 
             //Console.WriteLine($"{pqrsSorted}, {pqrsPermuted}");
 
-            var prsq = new QArray<Int64> { pqrsSorted[0], pqrsSorted[2], pqrsSorted[3], pqrsSorted[1] };
-            var pqsr = new QArray<Int64> { pqrsSorted[0], pqrsSorted[1], pqrsSorted[3], pqrsSorted[2] };
-            var psrq = new QArray<Int64> { pqrsSorted[0], pqrsSorted[3], pqrsSorted[2], pqrsSorted[1] };
+            var prsq = new QArray<Int64> (new[] { pqrsSorted[0], pqrsSorted[2], pqrsSorted[3], pqrsSorted[1] });
+            var pqsr = new QArray<Int64> (new[] { pqrsSorted[0], pqrsSorted[1], pqrsSorted[3], pqrsSorted[2] });
+            var psrq = new QArray<Int64> (new[] { pqrsSorted[0], pqrsSorted[3], pqrsSorted[2], pqrsSorted[1] });
 
             //Console.WriteLine($"{pqrs}, {psqr}, {prsq}, {qprs}, {spqr}, {prqs}");
 
             if (Enumerable.SequenceEqual(pqrsPermuted, prsq))
             {
-                h123 = new QArray<Double> { 0.0, 0.0, coeff };
+                h123 = new QArray<Double> (new[] { 0.0, 0.0, coeff });
             }
             else if (Enumerable.SequenceEqual(pqrsPermuted, pqsr))
             {
-                h123 = new QArray<Double> { -coeff, 0.0, 0.0 };
+                h123 = new QArray<Double> (new[] { -coeff, 0.0, 0.0 });
             }
             else if (Enumerable.SequenceEqual(pqrsPermuted, psrq))
             {
-                h123 = new QArray<Double> { 0.0, -coeff, 0.0 };
+                h123 = new QArray<Double> (new[] { 0.0, -coeff, 0.0 });
             }
             else
             {
-                h123 = new QArray<Double> { 0.0, 0.0, 0.0 };
+                h123 = new QArray<Double> (new[] { 0.0, 0.0, 0.0 });
             }
 
-            v0123 = new QArray<Double> { -h123[0] - h123[1] + h123[2],
+            v0123 = new QArray<Double> (new[] { -h123[0] - h123[1] + h123[2],
                                         h123[0] - h123[1] + h123[2],
                                         -h123[0] - h123[1] - h123[2],
-                                        -h123[0] + h123[1] + h123[2] };
+                                        -h123[0] + h123[1] + h123[2] });
 
             // DEBUG for output h123
             //v0123 = h123;
