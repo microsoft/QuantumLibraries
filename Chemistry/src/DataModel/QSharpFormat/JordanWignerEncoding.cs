@@ -6,6 +6,7 @@ using Microsoft.Quantum.Simulation.Core;
 using System;
 using System.Linq;
 using System.Collections.Generic;
+using static System.Math;
 
 
 namespace Microsoft.Quantum.Chemistry
@@ -139,7 +140,7 @@ namespace Microsoft.Quantum.Chemistry
         {
             if (data.Any()) { 
                 var dataMax = data.Select(dataidx => dataidx.Item1.Max() + 1).Max();
-                return Math.Max(currentCount, dataMax);
+                return Max(currentCount, dataMax);
             }
             else
             {
