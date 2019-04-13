@@ -4,7 +4,6 @@ namespace Microsoft.Quantum.Tests {
     open Microsoft.Quantum.Arithmetic;
     open Microsoft.Quantum.Intrinsic;
     open Microsoft.Quantum.Canon;
-    open Microsoft.Quantum.Extensions.Testing;
     open Microsoft.Quantum.Diagnostics;
     open Microsoft.Quantum.Arrays;
 
@@ -95,14 +94,12 @@ namespace Microsoft.Quantum.Tests {
     /// # Summary
     /// Compares QFT to the hard-coded implementations
     operation QFTTest () : Unit {
-        
         let testFunctions = [QFT1, QFT2, QFT3, QFT4];
-        
+
         for (i in IndexRange(testFunctions)) {
-            AssertOperationsEqualReferenced(ApplyBEToRegisterA(testFunctions[i], _), ApplyBEToRegisterA(QFT, _), i + 1);
+            AssertOperationsEqualReferenced(i + 1, ApplyBEToRegisterA(testFunctions[i], _), ApplyBEToRegisterA(QFT, _));
         }
     }
-    
-}
 
+}
 

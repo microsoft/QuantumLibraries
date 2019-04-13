@@ -25,7 +25,7 @@ namespace Microsoft.Quantum.Math {
     ///
     /// # Output
     /// Squared absolute value $|c|^2 = x^2 + y^2$.
-    function AbsSquaredComplex (input : Microsoft.Quantum.Extensions.Math.Complex) : Double {
+    function AbsSquaredComplex (input : Complex) : Double {
         let (real, imaginary) = input!;
         return real * real + imaginary * imaginary;
     }
@@ -40,7 +40,7 @@ namespace Microsoft.Quantum.Math {
     ///
     /// # Output
     /// Absolute value $|c| = \sqrt{x^2 + y^2}$.
-    function AbsComplex (input : Microsoft.Quantum.Extensions.Math.Complex) : Double {
+    function AbsComplex (input : Complex) : Double {
         return Microsoft.Quantum.Extensions.Math.Sqrt(AbsSquaredComplex(input));
     }
 
@@ -54,7 +54,7 @@ namespace Microsoft.Quantum.Math {
     ///
     /// # Output
     /// Phase $\text{Arg}[c] = \text{ArcTan}(y,x) \in (-\pi,\pi]$.
-    function ArgComplex (input : Microsoft.Quantum.Extensions.Math.Complex) : Double {
+    function ArgComplex (input : Complex) : Double {
         let (real, imaginary) = input!;
         return Microsoft.Quantum.Extensions.Math.ArcTan2(imaginary, real);
     }
@@ -120,10 +120,10 @@ namespace Microsoft.Quantum.Math {
     ///
     /// # Output
     /// Complex number $c = x + i y$.
-    function ComplexPolarToComplex (input : ComplexPolar) : Microsoft.Quantum.Extensions.Math.Complex
+    function ComplexPolarToComplex (input : ComplexPolar) : Complex
     {
         let (abs, arg) = input!;
-        return Microsoft.Quantum.Extensions.Math.Complex(abs * Microsoft.Quantum.Extensions.Math.Cos(arg), abs * Microsoft.Quantum.Extensions.Math.Sin(arg));
+        return Complex(abs * Microsoft.Quantum.Extensions.Math.Cos(arg), abs * Microsoft.Quantum.Extensions.Math.Sin(arg));
     }
     
     
@@ -137,7 +137,7 @@ namespace Microsoft.Quantum.Math {
     ///
     /// # Output
     /// Complex number $c = r e^{i t}$.
-    function ComplexToComplexPolar (input : Microsoft.Quantum.Extensions.Math.Complex) : ComplexPolar
+    function ComplexToComplexPolar (input : Complex) : ComplexPolar
     {
         return ComplexPolar(AbsComplex(input), ArgComplex(input));
     }

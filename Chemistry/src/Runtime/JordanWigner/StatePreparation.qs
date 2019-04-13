@@ -77,8 +77,8 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
         
         for (idx in 0 .. nExcitations - 1) {
             let (x, excitation) = excitations[idx]!;
-            set coefficientsSqrtAbs[idx] = Microsoft.Quantum.Extensions.Math.Sqrt(AbsComplexPolar(ComplexToComplexPolar(Microsoft.Quantum.Extensions.Math.Complex(x))));
-            set coefficientsNewComplexPolar[idx] = ComplexPolar(coefficientsSqrtAbs[idx], ArgComplexPolar(ComplexToComplexPolar(Microsoft.Quantum.Extensions.Math.Complex(x))));
+            set coefficientsSqrtAbs[idx] = Microsoft.Quantum.Extensions.Math.Sqrt(AbsComplexPolar(ComplexToComplexPolar(Complex(x))));
+            set coefficientsNewComplexPolar[idx] = ComplexPolar(coefficientsSqrtAbs[idx], ArgComplexPolar(ComplexToComplexPolar(Complex(x))));
             set applyFlips[idx] = excitation;
         }
         
