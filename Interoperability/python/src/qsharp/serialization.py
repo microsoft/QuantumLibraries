@@ -18,7 +18,7 @@ def map_tuples(obj):
             '@type': 'tuple'
         }
         for i in range(len(obj)):
-            result[f"item{i+1}"] = map_tuples(obj[i])
+            result[f"Item{i+1}"] = map_tuples(obj[i])
         return result
 
     elif isinstance(obj, list):

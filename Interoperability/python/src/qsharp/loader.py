@@ -22,13 +22,30 @@ class QSharpModuleFinder(MetaPathFinder):
     def find_module(self, full_name : str, path : Optional[str] = None) -> Loader:
         # We expose Q# namespaces as their own root-level packages.
         # E.g.:
-        #     >>> import Microsoft.Quantum.Primitive as prim
+        #     >>> import Microsoft.Quantum.Intrinsic as mqi
         # Thus, we need to check if the full name is one that that we can
         # sensibly load before we proceed.
+
+        # To check the full name, we ask the client rather than going through
+        # the public API for the qsharp package, so that we can check if the
+        # client is currently busy. This can happen if anything below us in
+        # meta_path needs to handle an import during an execute; this is the
+        # case when ZeroMQ needs to import additional functionality from a
+        # Cython module to handle a message.
+        # See https://github.com/Microsoft/QuantumLibraries/issues/69 for an
+        # example of this failure modality.
+
+        # If the client is busy, we'll want to forego this request to find a
+        # module and return None early.
+        if qsharp.client.busy:
+            return None
+
+        # At this point, we should be safe to rely on the public API again.
         ops = qsharp.get_available_operations_by_namespace()
+
         if full_name not in ops:
             # We may have been given part of the qualified name of a namespace.
-            # E.g., if we try to import Microsoft.Quantum.Primitive, we'll
+            # E.g., if we try to import Microsoft.Quantum.Intrinsic, we'll
             # see calls with "Microsoft" and "Microsoft.Quantum" first.
             if not any(
                 ns_name.startswith(full_name + ".")

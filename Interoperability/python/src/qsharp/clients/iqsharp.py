@@ -44,9 +44,14 @@ class IQSharpError(RuntimeError):
         ])
         super().__init__(error_msg.getvalue())
 
+class AlreadyExecutingError(IOError):
+    pass
+
 class IQSharpClient(object):
     kernel_manager = None
     kernel_client = None
+    _busy : bool = False
+
     def __init__(self):
         self.kernel_manager = jupyter_client.KernelManager(kernel_name='iqsharp')
 
@@ -81,32 +86,36 @@ class IQSharpClient(object):
 
     ## Public Interface ##
 
+    @property
+    def busy(self) -> bool:
+        return self._busy
+
     def compile(self, body):
-        return self.execute(body)
+        return self._execute(body)
 
     def get_available_operations(self) -> List[str]:
-        return self.execute('%who', raise_on_stderr=False)
+        return self._execute('%who', raise_on_stderr=False)
 
     def get_operation_metadata(self, name : str) -> Dict[str, Any]:
-        return self.execute(f"?{name}")
+        return self._execute(f"?{name}")
 
     def get_workspace_operations(self) -> List[str]:
-        return self.execute("%workspace")
+        return self._execute("%workspace")
 
     def reload(self) -> None:
-        return self.execute(f"%workspace reload", raise_on_stderr=True)
+        return self._execute(f"%workspace reload", raise_on_stderr=True)
 
     def add_package(self, name : str) -> None:
-        return self.execute(f"%package {name}", raise_on_stderr=True)
+        return self._execute(f"%package {name}", raise_on_stderr=True)
 
     def get_packages(self) -> List[str]:
-        return self.execute("%package", raise_on_stderr=False)
+        return self._execute("%package", raise_on_stderr=False)
 
     def simulate(self, op, **params) -> Any:
-        return self.execute(f'%simulate {op._name} {json.dumps(map_tuples(params))}')
+        return self._execute(f'%simulate {op._name} {json.dumps(map_tuples(params))}')
 
     def estimate(self, op, **params) -> Dict[str, int]:
-        raw_counts = self.execute(f'%estimate {op._name} {json.dumps(map_tuples(params))}')
+        raw_counts = self._execute(f'%estimate {op._name} {json.dumps(map_tuples(params))}')
         # Convert counts to ints, since they get turned to floats by JSON serialization.
         return {
             operation_name: int(count)
@@ -125,10 +134,12 @@ class IQSharpClient(object):
                 data = unmap_tuples(json.loads(msg["content"]["data"]["application/json"]))
                 for component, version in data["rows"]:
                     versions[component] = LooseVersion(version)
-        self.execute("%version", output_hook=capture, **kwargs)
+        self._execute("%version", output_hook=capture, **kwargs)
         return versions
 
-    def execute(self, input, return_full_result=False, raise_on_stderr=False, output_hook=None, **kwargs):
+    ## Internal-Use Methods ##
+
+    def _execute(self, input, return_full_result=False, raise_on_stderr=False, output_hook=None, **kwargs):
         logger.debug(f"sending:\n{input}")
 
         # make sure the server is still running:
@@ -149,7 +160,20 @@ class IQSharpClient(object):
                     errors.append(msg['content']['text'])
                 else:
                     output_hook(msg)
-        reply = self.kernel_client.execute_interactive(input, output_hook=_output_hook, **kwargs)
+
+        try:
+            if self.busy:
+                # Trying to execute while already executing can corrupt the
+                # ordering of messages internally to ZeroMQ
+                # (see https://github.com/Microsoft/QuantumLibraries/issues/69),
+                # so we need to throw early rather than letting the problem
+                # propagate to a Jupyter protocol error.
+                raise AlreadyExecutingError("Cannot execute through the IQ# client while another execution is completing.")
+            self._busy = True
+            reply = self.kernel_client.execute_interactive(input, output_hook=_output_hook, **kwargs)
+        finally:
+            self._busy = False
+
         logger.debug(f"received:\n{reply}")
 
         # There should be either zero or one execute_result messages.
