@@ -3,7 +3,7 @@
 namespace Microsoft.Quantum.Tests {
     open Microsoft.Quantum.Diagnostics;
     open Microsoft.Quantum.Canon;
-    open Microsoft.Quantum.Primitive;
+    open Microsoft.Quantum.Intrinsic;
     open Microsoft.Quantum.Arrays;
     
     
@@ -96,14 +96,24 @@ namespace Microsoft.Quantum.Tests {
         
         mutable arrayTestCase = [(-5, 2, [10, 11, 12], [10, 11, 12, 2, 2]), (5, 2, [10, 11, 12], [2, 2, 10, 11, 12]), (-3, -2, [10, 11, 12], [10, 11, 12])];
         
-        for (idxTest in 0 .. Length(arrayTestCase) - 1) {
+        for (idxTest in IndexRange(arrayTestCase)) {
             let (nElementsTotal, defaultElement, inputArray, outputArray) = arrayTestCase[idxTest];
             let paddedArray = Padded(nElementsTotal, defaultElement, inputArray);
             Ignore(Mapped(EqualityFactI(_, _, $"Padded failed."), Zip(outputArray, paddedArray)));
         }
     }
 
-    
+    function EnumeratedTest() : Unit  {
+        let example = [37, 12];
+        let expected = [(0, 37), (1, 12)];
+        let actual = Enumerated(example);
+
+        for ((actualElement, expectedElement) in Zip(actual, expected)) {
+            EqualityFactI(Fst(actualElement), Fst(expectedElement), "Indices did not match.");
+            EqualityFactI(Snd(actualElement), Snd(expectedElement), "Elements did not match.");
+        }
+    }
+
 }
 
 

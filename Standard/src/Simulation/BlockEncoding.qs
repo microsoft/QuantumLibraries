@@ -4,8 +4,7 @@
 namespace Microsoft.Quantum.Simulation {
     open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Arithmetic;
-    open Microsoft.Quantum.Primitive;
-    open Microsoft.Quantum.Extensions.Math;
+    open Microsoft.Quantum.Intrinsic;
     open Microsoft.Quantum.Arrays;
 
     // This library defines types for block-encoding an arbitrary operator.
@@ -164,8 +163,8 @@ namespace Microsoft.Quantum.Simulation {
     /// Implementation of `Qubitization`.
     operation QuantumWalkByQubitization_(blockEncoding: BlockEncodingReflection, auxiliary: Qubit[], system: Qubit[]) : Unit {    
         body (...){
-            Exp([PauliI], -0.5 * PI(), [system[0]]);
-            RAll0(PI(), auxiliary);
+            Exp([PauliI], -0.5 * Microsoft.Quantum.Extensions.Math.PI(), [system[0]]);
+            RAll0(Microsoft.Quantum.Extensions.Math.PI(), auxiliary);
             // NB: We unwrap twice here, since BlockEncodingReflection wraps BlockEncoding.
             blockEncoding!!(auxiliary, system);    
         }

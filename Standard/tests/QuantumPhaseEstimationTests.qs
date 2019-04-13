@@ -1,10 +1,9 @@
 namespace Microsoft.Quantum.Tests {
-    open Microsoft.Quantum.Primitive;
+    open Microsoft.Quantum.Intrinsic;
     open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Arithmetic;
     open Microsoft.Quantum.Extensions.Convert;
     open Microsoft.Quantum.Extensions.Testing;
-    open Microsoft.Quantum.Extensions.Math;
     open Microsoft.Quantum.Oracles;
     open Microsoft.Quantum.Characterization;
     
@@ -21,8 +20,8 @@ namespace Microsoft.Quantum.Tests {
             let phase = BigEndian(qPhase[0 .. 3]);
             let state = qPhase[4];
             QuantumPhaseEstimation(oracle, [state], phase);
-            let complexOne = Complex(1.0, 0.0);
-            let complexZero = Complex(0.0, 0.0);
+            let complexOne = Microsoft.Quantum.Extensions.Math.Complex(1.0, 0.0);
+            let complexZero = Microsoft.Quantum.Extensions.Math.Complex(0.0, 0.0);
             
             for (idxPhase in 0 .. 4) {
                 AssertQubitState((complexOne, complexZero), qPhase[idxPhase], 1E-06);

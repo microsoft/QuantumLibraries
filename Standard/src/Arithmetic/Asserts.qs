@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 namespace Microsoft.Quantum.Arithmetic {
-    open Microsoft.Quantum.Primitive;
+    open Microsoft.Quantum.Intrinsic;
     open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Convert;
     open Microsoft.Quantum.Arrays;
@@ -66,7 +66,7 @@ namespace Microsoft.Quantum.Arithmetic {
     /// The controlled version of this operation ignores controls.
     ///
     /// # See Also
-    /// - Microsoft.Quantum.Primitive.Assert
+    /// - Microsoft.Quantum.Intrinsic.Assert
     operation AssertMostSignificantBit(value : Result, number : LittleEndian) : Unit {
         body (...) {
             let mostSingificantQubit = Tail(number!);
@@ -96,17 +96,16 @@ namespace Microsoft.Quantum.Arithmetic {
     operation AssertPhaseLessThan(value : Int, number : PhaseLittleEndian) : Unit {
         body (...) {
             let inner = ApplyLEOperationOnPhaseLEA(AssertHighestBit(One, _), _);
-            ApplyWithA(Adjoint IntegerIncrementPhaseLE(value, _), inner, number);
+            ApplyWithA(Adjoint IncrementPhaseByInteger(value, _), inner, number);
         }
-        
+
         adjoint self;
-        
+
         controlled (ctrls, ...) {
             AssertPhaseLessThan(value, number);
         }
-        
+
         controlled adjoint auto;
     }
-    
 
 }

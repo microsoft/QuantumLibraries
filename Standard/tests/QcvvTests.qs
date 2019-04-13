@@ -1,21 +1,19 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 namespace Microsoft.Quantum.Tests {
-    open Microsoft.Quantum.Primitive;
+    open Microsoft.Quantum.Intrinsic;
     open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Extensions.Convert;
-    open Microsoft.Quantum.Extensions.Math;
     open Microsoft.Quantum.Oracles;
     open Microsoft.Quantum.Characterization;
     open Microsoft.Quantum.Preparation;
     open Microsoft.Quantum.Diagnostics;
-    
-    
+    open Microsoft.Quantum.Arrays;
+
     operation ChoiStateTest () : Unit {
-        
         using (register = Qubit[2]) {
             PrepareChoiStateCA(NoOp<Qubit[]>, [register[0]], [register[1]]);
-            
+
             // As usual, the same confusion about {+1, -1} and {0, 1}
             // labeling bites us here.
             Assert([PauliX, PauliX], register, Zero, $"XX");
@@ -23,50 +21,33 @@ namespace Microsoft.Quantum.Tests {
             ResetAll(register);
         }
     }
-    
-    
+
     operation EstimateFrequencyTest () : Unit {
-        
         let freq = EstimateFrequency(ApplyToEach(H, _), MeasureAllZ, 1, 1000);
         EqualityWithinToleranceFact(freq, 0.5, 0.1);
     }
-    
-    
-    operation _RobustPhaseEstimationTestOp (phase : Double, power : Int, qubits : Qubit[]) : Unit {
-        
-        body (...) {
-            //Rz(- 2.0* phase * ToDouble(power), qubits[0])
-            Exp([PauliZ], phase * ToDouble(power), qubits);
-            //Exp([PauliI], phase * ToDouble(power), qubits);
-        }
-        
-        adjoint invert;
-        controlled distribute;
-        controlled adjoint distribute;
+
+    operation _RobustPhaseEstimationTestOp (phase : Double, power : Int, qubits : Qubit[]) : Unit is Adj + Ctl {
+        Exp([PauliZ], phase * ToDouble(power), qubits);
     }
-    
-    
+
     operation RobustPhaseEstimationDemoImpl (phaseSet : Double, bitsPrecision : Int) : Double {
-        
         let op = DiscreteOracle(_RobustPhaseEstimationTestOp(phaseSet, _, _));
-        mutable phaseEst = ToDouble(0);
-        
-        using (q = Qubit[1]) {
-            set phaseEst = RobustPhaseEstimation(bitsPrecision, op, q);
-            ResetAll(q);
+
+        using (q = Qubit()) {
+            let phaseEst = RobustPhaseEstimation(bitsPrecision, op, [q]);
+            Reset(q);
+            return phaseEst;
         }
-        
-        return phaseEst;
     }
-    
-    
+
     // Probabilistic test. Might fail occasionally
     operation RobustPhaseEstimationTest () : Unit {
         
         let bitsPrecision = 10;
         
         for (idxTest in 0 .. 9) {
-            let phaseSet = ((2.0 * PI()) * ToDouble(idxTest - 5)) / 12.0;
+            let phaseSet = ((2.0 * Microsoft.Quantum.Extensions.Math.PI()) * ToDouble(idxTest - 5)) / 12.0;
             let phaseEst = RobustPhaseEstimationDemoImpl(phaseSet, bitsPrecision);
             EqualityWithinToleranceFact(phaseEst, phaseSet, 0.01);
         }
@@ -74,32 +55,27 @@ namespace Microsoft.Quantum.Tests {
     
     
     operation PrepareQubitTest () : Unit {
-        
-        using (register = Qubit[1]) {
-            let qubit = register[0];
+        using (qubit = Qubit()) {
             let bases = [PauliI, PauliX, PauliY, PauliZ];
-            
-            for (idxBasis in 0 .. Length(bases) - 1) {
-                let basis = bases[idxBasis];
+
+            for (basis in bases) {
                 PrepareQubit(basis, qubit);
-                Assert([basis], register, Zero, $"Did not prepare in {basis} correctly.");
+                Assert([basis], [qubit], Zero, $"Did not prepare in {basis} correctly.");
                 Reset(qubit);
             }
         }
     }
-    
-    
+
     operation SingleQubitProcessTomographyMeasurementTest () : Unit {
-        
-        AssertResultEqual(SingleQubitProcessTomographyMeasurement(PauliI, PauliI, H), Zero, $"Failed at ⟪I | H | I⟫.");
-        AssertResultEqual(SingleQubitProcessTomographyMeasurement(PauliX, PauliI, H), Zero, $"Failed at ⟪I | H | X⟫.");
-        AssertResultEqual(SingleQubitProcessTomographyMeasurement(PauliY, PauliI, H), Zero, $"Failed at ⟪I | H | Y⟫.");
-        AssertResultEqual(SingleQubitProcessTomographyMeasurement(PauliZ, PauliI, H), Zero, $"Failed at ⟪I | H | Z⟫.");
-        AssertResultEqual(SingleQubitProcessTomographyMeasurement(PauliX, PauliZ, H), Zero, $"Failed at ⟪Z | H | X⟫.");
-        AssertResultEqual(SingleQubitProcessTomographyMeasurement(PauliY, PauliY, H), One, $"Failed at -⟪Y | H | Y⟫.");
-        AssertResultEqual(SingleQubitProcessTomographyMeasurement(PauliX, PauliZ, H), Zero, $"Failed at ⟪Z | H | X⟫.");
+        EqualityFactR(SingleQubitProcessTomographyMeasurement(PauliI, PauliI, H), Zero, $"Failed at ⟪I | H | I⟫.");
+        EqualityFactR(SingleQubitProcessTomographyMeasurement(PauliX, PauliI, H), Zero, $"Failed at ⟪I | H | X⟫.");
+        EqualityFactR(SingleQubitProcessTomographyMeasurement(PauliY, PauliI, H), Zero, $"Failed at ⟪I | H | Y⟫.");
+        EqualityFactR(SingleQubitProcessTomographyMeasurement(PauliZ, PauliI, H), Zero, $"Failed at ⟪I | H | Z⟫.");
+        EqualityFactR(SingleQubitProcessTomographyMeasurement(PauliX, PauliZ, H), Zero, $"Failed at ⟪Z | H | X⟫.");
+        EqualityFactR(SingleQubitProcessTomographyMeasurement(PauliY, PauliY, H), One, $"Failed at -⟪Y | H | Y⟫.");
+        EqualityFactR(SingleQubitProcessTomographyMeasurement(PauliX, PauliZ, H), Zero, $"Failed at ⟪Z | H | X⟫.");
     }
-    
+
 }
 
 

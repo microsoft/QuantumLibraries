@@ -3,7 +3,7 @@
 
 namespace Microsoft.Quantum.Chemistry.JordanWigner {
     open Microsoft.Quantum.Arithmetic;
-    open Microsoft.Quantum.Primitive;
+    open Microsoft.Quantum.Intrinsic;
     open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Chemistry;
     open Microsoft.Quantum.Arrays;
@@ -146,11 +146,11 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
         body (...) {
             Z(signQubit);
             
-            for (idxRegister in 0 .. Length(OptimizedBEControlRegisters) - 1) {
+            for (idxRegister in IndexRange(OptimizedBEControlRegisters)) {
                 Controlled OptimizedBEXY([OptimizedBEControlRegisters[idxRegister]], (pauliBases[idxRegister], indexRegisters[idxRegister], targetRegister));
             }
             
-            for (idxRegister in 0 .. Length(selectZControlRegisters) - 1) {
+            for (idxRegister in IndexRange(selectZControlRegisters)) {
                 Controlled SelectZ([selectZControlRegisters[idxRegister]], (indexRegisters[idxRegister], targetRegister));
             }
         }
@@ -186,7 +186,7 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
         let rest = registers[Length(registers) - 1];
         mutable indexRegisters = new BigEndian[Length(e)];
         
-        for (idx in 0 .. Length(e) - 1) {
+        for (idx in IndexRange(e)) {
             set indexRegisters[idx] = BigEndian(indexRegistersTmp[idx]);
         }
         

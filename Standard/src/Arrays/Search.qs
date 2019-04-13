@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 namespace Microsoft.Quantum.Arrays {
-    open Microsoft.Quantum.Primitive;
+    open Microsoft.Quantum.Intrinsic;
     open Microsoft.Quantum.Canon;
 
     /// # Summary
@@ -28,7 +28,7 @@ namespace Microsoft.Quantum.Arrays {
     /// let idx = IndexOf(IsEven, items); // returns 3
     /// ```
     function IndexOf<'T>(predicate : ('T -> Bool), arr : 'T[]) : Int {
-        for (idx in 0..Length(arr) - 1) {
+        for (idx in IndexRange(arr)) {
             if (predicate(arr[idx])) {
                 return idx;
             }

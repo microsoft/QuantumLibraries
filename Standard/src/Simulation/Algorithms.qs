@@ -3,7 +3,6 @@
 
 namespace Microsoft.Quantum.Simulation {
     open Microsoft.Quantum.Canon;
-    open Microsoft.Quantum.Extensions.Math;
     open Microsoft.Quantum.Extensions.Convert;
 
     // A simulation technique converts an EvolutionGenerator to time evolution
@@ -22,19 +21,11 @@ namespace Microsoft.Quantum.Simulation {
     /// Multiplier on duration of time-evolution by term indexed by `idx`.
     /// ## qubits
     /// Qubits acted on by simulation.
-    operation TrotterStepImpl (evolutionGenerator : EvolutionGenerator, idx : Int, stepsize : Double, qubits : Qubit[]) : Unit
-    {
-        body (...)
-        {
-            let (evolutionSet, generatorSystem) = evolutionGenerator!;
-            let (nTerms, generatorSystemFunction) = generatorSystem!;
-            let generatorIndex = generatorSystemFunction(idx);
-            (evolutionSet!(generatorIndex))!(stepsize, qubits);
-        }
-        
-        adjoint invert;
-        controlled distribute;
-        controlled adjoint distribute;
+    operation TrotterStepImpl (evolutionGenerator : EvolutionGenerator, idx : Int, stepsize : Double, qubits : Qubit[]) : Unit is Adj + Ctl {
+        let (evolutionSet, generatorSystem) = evolutionGenerator!;
+        let (nTerms, generatorSystemFunction) = generatorSystem!;
+        let generatorIndex = generatorSystemFunction(idx);
+        (evolutionSet!(generatorIndex))!(stepsize, qubits);
     }
     
     
@@ -94,7 +85,7 @@ namespace Microsoft.Quantum.Simulation {
     {
         body (...)
         {
-            let nTimeSlices = Ceiling(maxTime / trotterStepSize);
+            let nTimeSlices = Microsoft.Quantum.Extensions.Math.Ceiling(maxTime / trotterStepSize);
             let resizedTrotterStepSize = maxTime / ToDouble(nTimeSlices);
             
             for (idxTimeSlice in 0 .. nTimeSlices - 1)
@@ -149,7 +140,7 @@ namespace Microsoft.Quantum.Simulation {
     {
         body (...)
         {
-            let nTimeSlices = Ceiling(maxTime / trotterStepSize);
+            let nTimeSlices = Microsoft.Quantum.Extensions.Math.Ceiling(maxTime / trotterStepSize);
             let resizedTrotterStepSize = maxTime / ToDouble(nTimeSlices);
             
             for (idxTimeSlice in 0 .. nTimeSlices - 1)

@@ -4,28 +4,28 @@
 namespace Microsoft.Quantum.Tests {
     open Microsoft.Quantum.Simulation;
     open Microsoft.Quantum.Arithmetic;
-    open Microsoft.Quantum.Primitive;
+    open Microsoft.Quantum.Intrinsic;
     open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Extensions.Testing;
-    open Microsoft.Quantum.Extensions.Math;
     open Microsoft.Quantum.Extensions.Convert;
     open Microsoft.Quantum.Arrays;
     open Microsoft.Quantum.Diagnostics;
+    open Microsoft.Quantum.Convert;
 
     // BlockEncoding.qs tests
 
     // The returned operations encode the Hamiltonian (cos^2(angle) I+sin^2(angle) X)/2.
     function LCUTestHelper() : (Double[], Double, Double, (Qubit[] => Unit : Adjoint, Controlled), ((Qubit[], Qubit[]) => Unit : Adjoint, Controlled)){
         let angle = 1.789;
-        let eigenvalues = [0.5, 0.5 * Cos(angle * 2.0)];
-        let prob = PowD(Cos(angle),4.0)+PowD(Sin(angle),4.0);
-        let inverseAngle = ArcSin(PowD(Sin(angle),2.0)/Sqrt(prob));
+        let eigenvalues = [0.5, 0.5 * Microsoft.Quantum.Extensions.Math.Cos(angle * 2.0)];
+        let prob = Microsoft.Quantum.Extensions.Math.PowD(Microsoft.Quantum.Extensions.Math.Cos(angle),4.0)+Microsoft.Quantum.Extensions.Math.PowD(Microsoft.Quantum.Extensions.Math.Sin(angle),4.0);
+        let inverseAngle = Microsoft.Quantum.Extensions.Math.ArcSin(Microsoft.Quantum.Extensions.Math.PowD(Microsoft.Quantum.Extensions.Math.Sin(angle),2.0)/Microsoft.Quantum.Extensions.Math.Sqrt(prob));
         let statePreparation = Exp([PauliY], angle, _);
         let selector = Controlled (ApplyToEachCA(X, _))(_, _);
         return (eigenvalues, prob, inverseAngle, statePreparation, selector);
     }
 
-    // This checks that BlockEncodingByLCU encodes the correct Hamiltonian. 
+    // This checks that BlockEncodingByLCU encodes the correct Hamiltonian.
     operation BlockEncodingByLCUTest() : Unit {
         body (...) {
             let (eigenvalues, prob, inverseAngle, statePreparation, selector) = LCUTestHelper();
@@ -79,10 +79,7 @@ namespace Microsoft.Quantum.Tests {
         body (...) {
             let (eigenvalues, prob, inverseAngle, statePreparation, selector) = LCUTestHelper();
             let LCU = QuantumWalkByQubitization(BlockEncodingReflectionByLCU(statePreparation, selector));
-            using(qubits = Qubit[4]){
-                let auxiliary = qubits[2..3];
-                let system = [qubits[0]];
-                let flag = qubits[1];
+            using ((system, flag, auxiliary) = (Qubit[1], Qubit(), Qubit[2])) {
 
                 for(rep in 0..5){
                     LCU(auxiliary, system);
@@ -94,7 +91,9 @@ namespace Microsoft.Quantum.Tests {
                         Exp([PauliY],1.0 * inverseAngle, system);
                         AssertProb([PauliZ], system, Zero, 1.0, "Error1: Z Success probability does not match theory", 1e-10);
                     }
-                    ResetAll(qubits);
+                    ResetAll(system);
+                    Reset(flag);
+                    ResetAll(auxiliary);
                 }
             }
         }
@@ -106,13 +105,14 @@ namespace Microsoft.Quantum.Tests {
     operation PauliBlockEncodingLCUTest() : Unit {
         body (...) {
             let angle = 0.123;
-            let cosSquared = Cos(angle) * Cos(angle);
-            let prob = PowD(Cos(angle),4.0)+PowD(Sin(angle),4.0);
-            let inverseAngle = ArcSin(PowD(Sin(angle),2.0)/Sqrt(prob));
+            let cosSquared = Microsoft.Quantum.Extensions.Math.Cos(angle) * Microsoft.Quantum.Extensions.Math.Cos(angle);
+            let prob = Microsoft.Quantum.Extensions.Math.PowD(Microsoft.Quantum.Extensions.Math.Cos(angle),4.0)+Microsoft.Quantum.Extensions.Math.PowD(Microsoft.Quantum.Extensions.Math.Sin(angle),4.0);
+            let inverseAngle = Microsoft.Quantum.Extensions.Math.ArcSin(Microsoft.Quantum.Extensions.Math.PowD(Microsoft.Quantum.Extensions.Math.Sin(angle),2.0)/Microsoft.Quantum.Extensions.Math.Sqrt(prob));
 
-            mutable genIndices = new GeneratorIndex[2];
-            set genIndices[0] = GeneratorIndex(([0],[cosSquared]),[0]);
-            set genIndices[1] = GeneratorIndex(([1],[1.0-cosSquared]),[0]);
+            let genIndices = [
+                GeneratorIndex(([0],[cosSquared]),[0]),
+                GeneratorIndex(([1],[1.0-cosSquared]),[0])
+            ];
             
             let generatorSystem = GeneratorSystem(2, LookupFunction(genIndices));
 
@@ -136,16 +136,16 @@ namespace Microsoft.Quantum.Tests {
     }
 
     // Array.qs tests
-    function IntArrayFromRangeTest() : Unit {
+    function RangeAsIntArrayTest() : Unit {
         mutable testCases = new (Int[], Range)[4];
         let e = new Int[0];
         set testCases[0] = ([1, 3, 5, 7], 1..2..8);
         set testCases[1] = ([9, 6, 3, 0, -3], 9..-3..-3);
         set testCases[2] = (e, 0..2..-1);
         set testCases[3] = ([0], 0..4..3);
-        for (idxTest in 0..Length(testCases) - 1) {
+        for (idxTest in IndexRange(testCases)) {
             let (expected, range) = testCases[idxTest];
-            let output = IntArrayFromRange(range);
+            let output = RangeAsIntArray(range);
             Ignore(Mapped(EqualityFactI(_, _, "Padded failed."), Zip(output, expected)));
         }
     }
@@ -162,7 +162,7 @@ namespace Microsoft.Quantum.Tests {
                                      [ true,  true, false,  true],
                                      [ true,  true,  true,  true]];
             using (qubits = Qubit[3]) {
-                for(idxTest in 0..Length(testCases)-1){
+                for(idxTest in IndexRange(testCases)){
                     let testCase = testCases[idxTest];
                     Message($"Test case {idxTest}.");
                     for(idxQubit in 0..2){

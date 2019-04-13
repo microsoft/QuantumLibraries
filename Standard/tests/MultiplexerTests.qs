@@ -3,7 +3,7 @@
 namespace Microsoft.Quantum.Tests {
     open Microsoft.Quantum.Arithmetic;
     open Microsoft.Quantum.Canon;
-    open Microsoft.Quantum.Primitive;
+    open Microsoft.Quantum.Intrinsic;
     open Microsoft.Quantum.Extensions.Convert;
     open Microsoft.Quantum.Diagnostics;
     open Microsoft.Quantum.Measurement;
@@ -22,13 +22,13 @@ namespace Microsoft.Quantum.Tests {
             H(multiplexerControl![idxMultiplexer]);
         }
 
-        for (idxAdditional in 0 .. Length(additionalControl) - 1) {
+        for (idxAdditional in IndexRange(additionalControl)) {
             H(additionalControl[idxAdditional]);
         }
 
         // For deterministic test of particular number state `idx', we could use the following
         //let bits = Reversed(IntAsBoolArray (idx, Length(multiplexerControl)));
-        //for(idxBits in 0..Length(bits)-1){
+        //for(idxBits in IndexRange(bits)){
         //    if(bits[idxBits]){
         //        X(multiplexerControl[idxBits]);
         //    }
@@ -97,7 +97,7 @@ namespace Microsoft.Quantum.Tests {
                     let nCoefficients = maxCoefficients - missingCoefficients;
                     mutable coefficients = new Double[nCoefficients];
                     
-                    for (idx in 0 .. Length(coefficients) - 1) {
+                    for (idx in IndexRange(coefficients)) {
                         set coefficients[idx] = (1.0 * ToDouble(idx + 1)) * 0.2;
                     }
                     
@@ -136,7 +136,7 @@ namespace Microsoft.Quantum.Tests {
         // using a controlled operation.
         using (control = Qubit[1]) {
             
-            for (idxCoeff in 0 .. Length(coefficients) - 1) {
+            for (idxCoeff in IndexRange(coefficients)) {
                 H(control[0]);
                 
                 //for(idxQubit in 0..nQubits-1){
@@ -147,7 +147,7 @@ namespace Microsoft.Quantum.Tests {
                 // For deterministic test of particular number state `idx', we could use the following
                 let bits = Reversed(IntAsBoolArray(idxCoeff, nQubits));
                 
-                for (idxBits in 0 .. Length(bits) - 1) {
+                for (idxBits in IndexRange(bits)) {
                     
                     if (bits[idxBits]) {
                         X(qubits![idxBits]);
@@ -177,7 +177,7 @@ namespace Microsoft.Quantum.Tests {
             //let nCoefficients = maxCoefficients - missingCoefficients;
             mutable coefficients = new Double[maxCoefficients];
             
-            for (idx in 0 .. Length(coefficients) - 1) {
+            for (idx in IndexRange(coefficients)) {
                 set coefficients[idx] = (1.0 * ToDouble(idx + 1)) * 0.3;
             }
             
@@ -218,7 +218,7 @@ namespace Microsoft.Quantum.Tests {
                 
                 using (index = Qubit[nQubits]) {
                     
-                    for (idxBits in 0 .. Length(bits) - 1) {
+                    for (idxBits in IndexRange(bits)) {
                         
                         if (bits[idxBits]) {
                             X(index[idxBits]);
@@ -241,7 +241,7 @@ namespace Microsoft.Quantum.Tests {
                     if (nQubits == 0) {
                         let index = new Qubit[0];
                         
-                        for (idxControlBits in 0 .. Length(controlBits) - 1) {
+                        for (idxControlBits in IndexRange(controlBits)) {
                             
                             if (controlBits[idxControlBits]) {
                                 X(control[idxControlBits]);
@@ -257,14 +257,14 @@ namespace Microsoft.Quantum.Tests {
                         
                         using (index = Qubit[nQubits]) {
                             
-                            for (idxBits in 0 .. Length(bits) - 1) {
+                            for (idxBits in IndexRange(bits)) {
                                 
                                 if (bits[idxBits]) {
                                     X(index[idxBits]);
                                 }
                             }
                             
-                            for (idxControlBits in 0 .. Length(controlBits) - 1) {
+                            for (idxControlBits in IndexRange(controlBits)) {
                                 
                                 if (controlBits[idxControlBits]) {
                                     X(control[idxControlBits]);
@@ -315,7 +315,7 @@ namespace Microsoft.Quantum.Tests {
             if (nQubits == 0) {
                 let index = new Qubit[0];
                 
-                for (idxBits in 0 .. Length(bits) - 1) {
+                for (idxBits in IndexRange(bits)) {
                     
                     if (bits[idxBits]) {
                         X(index[idxBits]);
@@ -330,7 +330,7 @@ namespace Microsoft.Quantum.Tests {
                 
                 using (index = Qubit[nQubits]) {
                     
-                    for (idxBits in 0 .. Length(bits) - 1) {
+                    for (idxBits in IndexRange(bits)) {
                         
                         if (bits[idxBits]) {
                             X(index[idxBits]);
@@ -461,7 +461,7 @@ namespace Microsoft.Quantum.Tests {
             if(nControls == 0){
                 using(target = Qubit[1]){
                     using(index = Qubit[nQubits]){
-                        for(idxBits in 0..Length(bits)-1){
+                        for(idxBits in IndexRange(bits)){
                             if(bits[idxBits]){
                                 X(index[idxBits]);
                             }
@@ -481,7 +481,7 @@ namespace Microsoft.Quantum.Tests {
                     using(target = Qubit[1]){
                         if(nQubits == 0){
                             let index = new Qubit[0];
-                            for(idxControlBits in 0..Length(controlBits)-1){
+                            for(idxControlBits in IndexRange(controlBits)){
                                 if(controlBits[idxControlBits]){
                                     X(control[idxControlBits]);
                                 }
@@ -496,12 +496,12 @@ namespace Microsoft.Quantum.Tests {
                         }
                         else{
                             using(index = Qubit[nQubits]){
-                                for(idxBits in 0..Length(bits)-1){
+                                for(idxBits in IndexRange(bits)){
                                     if(bits[idxBits]){
                                         X(index[idxBits]);
                                     }
                                 }
-                                for(idxControlBits in 0..Length(controlBits)-1){
+                                for(idxControlBits in IndexRange(controlBits)){
                                     if(controlBits[idxControlBits]){
                                         X(control[idxControlBits]);
                                     }

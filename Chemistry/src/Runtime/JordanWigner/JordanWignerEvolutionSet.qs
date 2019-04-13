@@ -3,9 +3,8 @@
 
 namespace Microsoft.Quantum.Chemistry.JordanWigner {
     open Microsoft.Quantum.Simulation;
-    open Microsoft.Quantum.Primitive;
+    open Microsoft.Quantum.Intrinsic;
     open Microsoft.Quantum.Canon;
-    open Microsoft.Quantum.Extensions.Math;
     open Microsoft.Quantum.Chemistry;
     open Microsoft.Quantum.Arrays;
 
@@ -94,7 +93,7 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
             let qubitsJW = qubits[idxFermions[0] + 1 .. idxFermions[1] - 1];
             let ops = [[PauliX, PauliX], [PauliY, PauliY]];
             
-            for (idxOp in 0 .. Length(ops) - 1) {
+            for (idxOp in IndexRange(ops)) {
                 Exp(ops[idxOp] + ConstantArray(Length(qubitsJW) + Length(extraParityQubits), PauliZ), angle, (qubitsPQ + qubitsJW) + extraParityQubits);
             }
         }
@@ -134,7 +133,7 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
             }
             else {
                 
-                if (idxFermions[0] < qubitQidx && qubitQidx < idxFermions[3]) {
+                if (idxFermions[0] < qubitQidx and qubitQidx < idxFermions[3]) {
                     let termPR1 = GeneratorIndex((idxTermType, [1.0]), [idxFermions[0], idxFermions[3] - 1]);
                     _ApplyJordanWignerPQTerm_(termPR1, angle, new Qubit[0], Exclude([qubitQidx], qubits));
                 }
@@ -174,7 +173,7 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
             let qubitsRSJW = qubits[idxFermions[2] + 1 .. idxFermions[3] - 1];
             let ops = [[PauliX, PauliX, PauliX, PauliX], [PauliX, PauliX, PauliY, PauliY], [PauliX, PauliY, PauliX, PauliY], [PauliY, PauliX, PauliX, PauliY], [PauliY, PauliY, PauliY, PauliY], [PauliY, PauliY, PauliX, PauliX], [PauliY, PauliX, PauliY, PauliX], [PauliX, PauliY, PauliY, PauliX]];
             
-            for (idxOp in 0 .. Length(ops) - 1) {
+            for (idxOp in IndexRange(ops)) {
                 
                 if (IsNotZero(v0123[idxOp % 4])) {
                     Exp(ops[idxOp] + ConstantArray(Length(qubitsPQJW) + Length(qubitsRSJW), PauliZ), angle * v0123[idxOp % 4], ((qubitsPQ + qubitsRS) + qubitsPQJW) + qubitsRSJW);

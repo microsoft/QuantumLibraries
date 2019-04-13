@@ -24,16 +24,11 @@ namespace Microsoft.Quantum.Canon {
     /// # Remarks
     /// In almost all cases, the type parameter for `NoOp` needs to be specified
     /// explicitly. For instance, `NoOp<Qubit>` is identical to
-    /// <xref:microsoft.quantum.primitive.i>.
+    /// <xref:microsoft.quantum.intrinsic.i>.
     ///
     /// # See Also
-    /// - Microsoft.Quantum.Primitive.I
-    operation NoOp<'T>(input : 'T) : Unit {
-        body (...) {}
-
-        adjoint invert;
-        controlled distribute;
-        controlled adjoint distribute;
+    /// - Microsoft.Quantum.Intrinsic.I
+    operation NoOp<'T>(input : 'T) : Unit is Adj + Ctl {
     }
 
 

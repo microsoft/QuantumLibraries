@@ -3,13 +3,12 @@
 
 namespace Microsoft.Quantum.Chemistry.JordanWigner {
     open Microsoft.Quantum.Simulation;
-    open Microsoft.Quantum.Primitive;
+    open Microsoft.Quantum.Intrinsic;
     open Microsoft.Quantum.Canon;
-    open Microsoft.Quantum.Extensions.Math;
     open Microsoft.Quantum.Chemistry;
     open Microsoft.Quantum.Arrays;
-    
-    
+    open Microsoft.Quantum.Convert;
+
     // This block encoding for qubitization runs off data optimized for a jordan-wigner encoding.
     // This collects terms Z, ZZ, PQandPQQR, hpqrs separately.
     // This only apples the needed hpqrs XXXX XXYY terms.
@@ -72,7 +71,7 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
         let newCoeff = [coeff[0]];
         let qubitPidx = idxFermions[0];
         let qubitQidx = idxFermions[1];
-        let qubitIndices = IntArrayFromRange(qubitPidx .. qubitQidx);
+        let qubitIndices = RangeAsIntArray(qubitPidx .. qubitQidx);
         return [GeneratorIndex((([1] + ConstantArray(Length(qubitIndices) - 2, 3)) + [1], newCoeff), qubitIndices), GeneratorIndex((([2] + ConstantArray(Length(qubitIndices) - 2, 3)) + [2], newCoeff), qubitIndices)];
     }
     
@@ -103,13 +102,13 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
             if (qubitPidx < qubitQidx and qubitQidx < qubitRidx) {
                 
                 // Apply XZ..ZIZ..ZX
-                let qubitIndices = IntArrayFromRange(qubitPidx .. qubitQidx - 1) + IntArrayFromRange(qubitQidx + 1 .. qubitRidx);
+                let qubitIndices = RangeAsIntArray(qubitPidx .. qubitQidx - 1) + RangeAsIntArray(qubitQidx + 1 .. qubitRidx);
                 return [GeneratorIndex((([1] + ConstantArray(Length(qubitIndices) - 2, 3)) + [1], newCoeff), qubitIndices), GeneratorIndex((([2] + ConstantArray(Length(qubitIndices) - 2, 3)) + [2], newCoeff), qubitIndices)];
             }
             else {
                 
                 // Apply ZI..IXZ..ZX or XZ..ZXI..IZ
-                let qubitIndices = IntArrayFromRange(qubitPidx .. qubitRidx) + [qubitQidx];
+                let qubitIndices = RangeAsIntArray(qubitPidx .. qubitRidx) + [qubitQidx];
                 return [GeneratorIndex((([1] + ConstantArray(Length(qubitIndices) - 3, 3)) + [1, 3], newCoeff), qubitIndices), GeneratorIndex((([2] + ConstantArray(Length(qubitIndices) - 3, 3)) + [2, 3], newCoeff), qubitIndices)];
             }
         }
@@ -131,13 +130,13 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
         let ((idxTermType, v0123), idxFermions) = term!;
         let qubitsPQ = idxFermions[0 .. 1];
         let qubitsRS = idxFermions[2 .. 3];
-        let qubitsPQJW = IntArrayFromRange(qubitsPQ[0] + 1 .. qubitsPQ[1] - 1);
-        let qubitsRSJW = IntArrayFromRange(qubitsRS[0] + 1 .. qubitsRS[1] - 1);
+        let qubitsPQJW = RangeAsIntArray(qubitsPQ[0] + 1 .. qubitsPQ[1] - 1);
+        let qubitsRSJW = RangeAsIntArray(qubitsRS[0] + 1 .. qubitsRS[1] - 1);
         let ops = [[1, 1, 1, 1], [1, 1, 2, 2], [1, 2, 1, 2], [2, 1, 1, 2], [2, 2, 2, 2], [2, 2, 1, 1], [2, 1, 2, 1], [1, 2, 2, 1]];
         mutable genIdxes = new GeneratorIndex[8];
         mutable nonZero = 0;
         
-        for (idxOp in 0 .. Length(ops) - 1) {
+        for (idxOp in IndexRange(ops)) {
             
             if (IsNotZero(v0123[idxOp % 4])) {
                 let newCoeff = [v0123[idxOp % 4]];
@@ -167,7 +166,7 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
         mutable genIdxes = new GeneratorIndex[((Length(ZData) + Length(ZZData)) + 2 * Length(PQandPQQRData)) + 8 * Length(h0123Data)];
         mutable startIdx = 0;
         
-        for (idx in 0 .. Length(ZData) - 1) {
+        for (idx in IndexRange(ZData)) {
             
             // Array of Arrays of Length 1
             set genIdxes[idx] = (_ZTermToPauliGenIdx(HTermToGenIdx(ZData[idx], [0])))[0];
@@ -175,7 +174,7 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
         
         set startIdx = Length(ZData);
         
-        for (idx in 0 .. Length(ZZData) - 1) {
+        for (idx in IndexRange(ZZData)) {
             
             // Array of Arrays of Length 1
             set genIdxes[startIdx + idx] = (_ZZTermToPauliGenIdx(HTermToGenIdx(ZZData[idx], [1])))[0];
@@ -183,7 +182,7 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
         
         set startIdx = startIdx + Length(ZZData);
         
-        for (idx in 0 .. Length(PQandPQQRData) - 1) {
+        for (idx in IndexRange(PQandPQQRData)) {
             
             // Array of Arrays of Length 2
             let genArr = _PQandPQQRTermToPauliGenIdx_(HTermToGenIdx(PQandPQQRData[idx], [2]));
@@ -199,7 +198,7 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
             // Array of Arrays of Length up to 8
             let genArr = _V0123TermToPauliGenIdx_(HTermToGenIdx(h0123Data[idx], [3]));
             
-            for (idx0123 in 0 .. Length(genArr) - 1) {
+            for (idx0123 in IndexRange(genArr)) {
                 set genIdxes[finalIdx] = genArr[idx0123];
                 set finalIdx = finalIdx + 1;
             }

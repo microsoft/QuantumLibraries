@@ -2,9 +2,10 @@
 // Licensed under the MIT License.
 
 namespace Microsoft.Quantum.ErrorCorrection {
-    open Microsoft.Quantum.Primitive;
+    open Microsoft.Quantum.Intrinsic;
     open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Measurement;
+    open Microsoft.Quantum.Convert;
 
     /// # Summary
     /// Measures the given set of generators of a stabilizer group.
@@ -95,7 +96,7 @@ namespace Microsoft.Quantum.ErrorCorrection {
     
     function TableLookupRecoveryImpl (table : Pauli[][], syndrome : Syndrome) : Pauli[]
     {
-        return table[ResultAsInt(syndrome!)];
+        return table[ResultArrayAsInt(syndrome!)];
     }
     
     

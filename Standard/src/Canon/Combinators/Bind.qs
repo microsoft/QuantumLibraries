@@ -1,14 +1,14 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-namespace Microsoft.Quantum.Canon
-{
+namespace Microsoft.Quantum.Canon {
+    open Microsoft.Quantum.Arrays;
     
     /// # See Also
     /// - Microsoft.Quantum.Canon.Bind
     operation BindImpl<'T> (operations : ('T => Unit)[], target : 'T) : Unit
     {
-        for (idxOperation in 0 .. Length(operations) - 1)
+        for (idxOperation in IndexRange(operations))
         {
             let op = operations[idxOperation];
             op(target);
@@ -61,7 +61,7 @@ namespace Microsoft.Quantum.Canon
     {
         body (...)
         {
-            for (idxOperation in 0 .. Length(operations) - 1)
+            for (idxOperation in IndexRange(operations))
             {
                 let op = operations[idxOperation];
                 op(target);
@@ -124,7 +124,7 @@ namespace Microsoft.Quantum.Canon
     {
         body (...)
         {
-            for (idxOperation in 0 .. Length(operations) - 1)
+            for (idxOperation in IndexRange(operations))
             {
                 let op = operations[idxOperation];
                 op(target);
@@ -133,7 +133,7 @@ namespace Microsoft.Quantum.Canon
         
         controlled (controls, ...)
         {
-            for (idxOperation in 0 .. Length(operations) - 1)
+            for (idxOperation in IndexRange(operations))
             {
                 let op = Controlled operations[idxOperation];
                 op(controls, target);
@@ -186,7 +186,7 @@ namespace Microsoft.Quantum.Canon
     {
         body (...)
         {
-            for (idxOperation in 0 .. Length(operations) - 1)
+            for (idxOperation in IndexRange(operations))
             {
                 let op = operations[idxOperation];
                 op(target);
@@ -204,7 +204,7 @@ namespace Microsoft.Quantum.Canon
         
         controlled (controls, ...)
         {
-            for (idxOperation in 0 .. Length(operations) - 1)
+            for (idxOperation in IndexRange(operations))
             {
                 let op = Controlled operations[idxOperation];
                 op(controls, target);
