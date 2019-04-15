@@ -7,11 +7,10 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
     open Microsoft.Quantum.Preparation;
     open Microsoft.Quantum.Intrinsic;
     open Microsoft.Quantum.Canon;
-    open Microsoft.Quantum.Extensions.Convert;
+    open Microsoft.Quantum.Convert;
     open Microsoft.Quantum.Chemistry;
     open Microsoft.Quantum.Arrays;
     open Microsoft.Quantum.Math;
-    open Microsoft.Quantum.Convert;
 
     /// # Summary
     /// Term data in the optimized block-encoding algorithm.
@@ -441,7 +440,7 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
         let nMaj = 4;
         let optimizedBEGeneratorSystem = OptimizedBlockEncodingGeneratorSystem(data);
         let (nCoeffs, oneNorm, tmp) = optimizedBEGeneratorSystem!;
-        let nIdxRegQubits = Ceiling(Lg(ToDouble(nSpinOrbitals)));
+        let nIdxRegQubits = Ceiling(Lg(IntAsDouble(nSpinOrbitals)));
         let ((nCtrlRegisterQubits, nTargetRegisterQubits), rest) = _JordanWignerOptimizedBlockEncodingQubitCount_(targetError, nCoeffs, nZ, nMaj, nIdxRegQubits, nSpinOrbitals);
         let statePrepOp = _JordanWignerOptimizedBlockEncodingStatePrep_(targetError, nCoeffs, optimizedBEGeneratorSystem, nZ, nMaj, nIdxRegQubits, _);
         let selectOp = _JordanWignerOptimizedBlockEncodingSelect_(targetError, nCoeffs, optimizedBEGeneratorSystem, nZ, nMaj, nIdxRegQubits, _, _);

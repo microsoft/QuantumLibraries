@@ -6,7 +6,7 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
     open Microsoft.Quantum.Arithmetic;
     open Microsoft.Quantum.Intrinsic;
     open Microsoft.Quantum.Canon;
-    open Microsoft.Quantum.Extensions.Convert;
+    open Microsoft.Quantum.Convert;
     open Microsoft.Quantum.Arrays;
     open Microsoft.Quantum.Math;
 
@@ -82,7 +82,7 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
             set applyFlips[idx] = excitation;
         }
         
-        let nBitsIndices = Ceiling(Lg(ToDouble(nExcitations)));
+        let nBitsIndices = Ceiling(Lg(IntAsDouble(nExcitations)));
         
         repeat {
             mutable success = false;

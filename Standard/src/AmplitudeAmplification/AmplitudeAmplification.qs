@@ -3,7 +3,7 @@
 
 namespace Microsoft.Quantum.AmplitudeAmplification {
     open Microsoft.Quantum.Intrinsic;
-    open Microsoft.Quantum.Extensions.Convert;
+    open Microsoft.Quantum.Convert;
     open Microsoft.Quantum.Math;
     open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Oracles;
@@ -113,13 +113,13 @@ namespace Microsoft.Quantum.AmplitudeAmplification {
     function AmpAmpPhasesFixedPoint (nQueries : Int, successMin : Double) : ReflectionPhases
     {
         mutable phasesRot = new Double[nQueries];
-        let nQueriesDouble = ToDouble(nQueries);
+        let nQueriesDouble = IntAsDouble(nQueries);
         set phasesRot[0] = 0.0;
         let beta = Cosh((1.0 / nQueriesDouble) * ArcCosh(Sqrt(successMin)));
         
         for (idxPhases in 1 .. nQueries - 1)
         {
-            set phasesRot[idxPhases] = phasesRot[idxPhases - 1] + 2.0 * ArcTan(Tan((((2.0 * 1.0) * ToDouble(idxPhases)) * PI()) / nQueriesDouble) * Sqrt(1.0 - beta * beta));
+            set phasesRot[idxPhases] = phasesRot[idxPhases - 1] + 2.0 * ArcTan(Tan((((2.0 * 1.0) * IntAsDouble(idxPhases)) * PI()) / nQueriesDouble) * Sqrt(1.0 - beta * beta));
         }
         
         return AmpAmpRotationToReflectionPhases(RotationPhases(phasesRot));
