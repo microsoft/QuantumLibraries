@@ -264,14 +264,14 @@ namespace Microsoft.Quantum.Arrays {
     /// ## Example
     /// ```qsharp
     /// // The following returns [[1,5],[3],[7]];
-    /// let split = SplitArray([2,1], [1,5,3,7]);
+    /// let split = Partitioned([2,1], [1,5,3,7]);
     /// ```
     function Partitioned<'T>(nElements: Int[], arr: 'T[]) : 'T[][] {
         mutable output = new 'T[][Length(nElements)+1];
         mutable currIdx = 0;
         for (idx in IndexRange(nElements)) {
             if(currIdx + nElements[idx] > Length(arr)) {
-                fail "SplitArray argument out of bounds.";
+                fail "Partitioned argument out of bounds.";
             }
             set output[idx] = arr[currIdx..currIdx + nElements[idx]-1];
             set currIdx = currIdx + nElements[idx];

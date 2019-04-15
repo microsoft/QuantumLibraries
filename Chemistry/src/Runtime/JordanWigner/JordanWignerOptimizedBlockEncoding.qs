@@ -392,7 +392,7 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
         
         let ((qROMIdx, qROMGarbage), rest0) = QuantumROMQubitManager_(targetError, nCoeffs, ctrlRegister);
         let ((signQubit, selectZControlRegisters, optimizedBEControlRegisters, pauliBases, indexRegisters, tmp), rest1) = _JordanWignerSelectQubitManager_(nZ, nMaj, nIdxRegQubits, rest0, new Qubit[0]);
-        let registers = SplitArray([3], rest1);
+        let registers = Partitioned([3], rest1);
         let pauliBasesIdx = BigEndian(registers[0]);
         return ((qROMIdx, qROMGarbage, signQubit, selectZControlRegisters, optimizedBEControlRegisters, pauliBases, pauliBasesIdx, indexRegisters), (signQubit, selectZControlRegisters, optimizedBEControlRegisters, pauliBases, indexRegisters), registers[1]);
     }

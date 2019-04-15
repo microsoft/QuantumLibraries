@@ -8,7 +8,6 @@ namespace Microsoft.Quantum.Preparation {
     open Microsoft.Quantum.Convert;
     open Microsoft.Quantum.Math;
     open Microsoft.Quantum.Arrays;
-    open Microsoft.Quantum.Convert;
 
     /// # Summary
 	/// Uses the Quantum ROM technique to represent a given density matrix.
@@ -101,7 +100,7 @@ namespace Microsoft.Quantum.Preparation {
     // qubit array into the subarrays required by the operation.
     function QuantumROMQubitManager_(targetError: Double, nCoeffs: Int, qubits: Qubit[]) : ((BigEndian, Qubit[]), Qubit[]) {
         let (nTotal, (nIndexRegister, nGarbageQubits)) = QuantumROMQubitCount(targetError, nCoeffs);
-        let registers = SplitArray([nIndexRegister, nGarbageQubits], qubits);
+        let registers = Partitioned([nIndexRegister, nGarbageQubits], qubits);
         return((BigEndian(registers[0]), registers[1]), registers[2]);
     }
 
