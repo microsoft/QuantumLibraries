@@ -7,7 +7,7 @@ using Microsoft.Quantum.Chemistry.Generic;
 
 namespace Microsoft.Quantum.Chemistry.Fermion
 {
-    public class FermionHamiltonian : Hamiltonian<TermType.Fermion, HermitianFermionTerm, DoubleCoeff>
+    public partial class FermionHamiltonian : Hamiltonian<TermType.Fermion, HermitianFermionTerm, DoubleCoeff>
     {
         public FermionHamiltonian() : base() { }
 

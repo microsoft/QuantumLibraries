@@ -18,6 +18,55 @@ using Newtonsoft.Json.Linq;
 
 namespace SerializationTests
 {
+    public class SerializeLadderOperatorTests
+    {
+        [Fact]
+        public void SerializeLadderOperatorInt()
+        {
+            LadderOperator<int> op0 = new LadderOperator<int>(RaisingLowering.u, 5);
+
+            string json = JsonConvert.SerializeObject(op0, Formatting.None);
+
+            Debug.WriteLine(@json);
+
+            LadderOperator<int> op1 = JsonConvert.DeserializeObject<LadderOperator<int>>(json);
+
+            Assert.Equal(op0, op1);
+
+        }
+
+        [Fact]
+        public void SerializeLadderOperatorSpinOrbital()
+        {
+            LadderOperator<SpinOrbital> op0 = new LadderOperator<SpinOrbital>(RaisingLowering.u, new SpinOrbital(3,Spin.u));
+
+            string json = JsonConvert.SerializeObject(op0, Formatting.None);
+
+            Debug.WriteLine(@json);
+
+            LadderOperator<SpinOrbital> op1 = JsonConvert.DeserializeObject<LadderOperator<SpinOrbital>>(json);
+
+            Assert.Equal(op0, op1);
+
+        }
+
+        [Fact]
+        public void SerializeLadderSequenceInt()
+        {
+            var op0 = new[] { 1, 2, 3, 4 }.ToLadderSequence();
+
+            string json = JsonConvert.SerializeObject(op0, Formatting.None);
+
+            Debug.WriteLine(@json);
+
+            var op1 = JsonConvert.DeserializeObject<LadderSequence<int>>(json);
+
+            Assert.Equal(op0, op1);
+
+        }
+
+    }
+
     public class SerializeFermionTests
     {
         [Fact]

@@ -95,18 +95,18 @@ namespace Microsoft.Quantum.Chemistry.Tests
         public void JsonEncoding()
         {
             var filename = "Broombridge/broombridge_v0.2.yaml";
-            Data original = Deserializers.DeserializeBroombridge(filename);
+            var original = Deserializers.DeserializeBroombridge(filename).Raw;
             
             var json = JsonConvert.SerializeObject(original);
             File.WriteAllText("original.json", json);
 
-            var serialized = JsonConvert.DeserializeObject<Data>(json);
+            var serialized = JsonConvert.DeserializeObject<V0_2.Data>(json);
                 File.WriteAllText("serialized.json", JsonConvert.SerializeObject(serialized));
 
-            Assert.Equal(original.Raw.Format, serialized.Raw.Format);
-            Assert.Equal(original.Raw.Bibliography.Count, serialized.Raw.Bibliography.Count);
-            Assert.Equal(original.Raw.ProblemDescriptions.Count, serialized.ProblemDescriptions.Count);
-            Assert.Equal(original.Raw.Generator.Source, serialized.Raw.Generator.Source);
+            Assert.Equal(original.Format, serialized.Format);
+            Assert.Equal(original.Bibliography.Count, serialized.Bibliography.Count);
+            Assert.Equal(original.ProblemDescriptions.Count, serialized.ProblemDescriptions.Count);
+            Assert.Equal(original.Generator.Source, serialized.Generator.Source);
             Assert.Equal(original.Schema, serialized.Schema);
         }
     }

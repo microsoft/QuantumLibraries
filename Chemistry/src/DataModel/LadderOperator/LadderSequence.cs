@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
+using Microsoft.Quantum.Chemistry;
 
 namespace Microsoft.Quantum.Chemistry.LadderOperators
 {
@@ -13,8 +14,8 @@ namespace Microsoft.Quantum.Chemistry.LadderOperators
     /// <summary>
     /// Class representing a sequence of raising and lowering operators.
     /// </summary>
-    [JsonConverter(typeof(LadderSequence.JsonConverter))]
-    public class LadderSequence<TIndex> : IEquatable<LadderSequence<TIndex>>
+    [JsonConverter(typeof(Json.LadderSequenceJsonConverter))]
+    public class LadderSequence<TIndex> : IEquatable<LadderSequence<TIndex>>, Json.ILadderSequence
         where TIndex : IEquatable<TIndex>
     {
 
@@ -22,11 +23,43 @@ namespace Microsoft.Quantum.Chemistry.LadderOperators
         /// Sequence of ladder operators.
         /// </summary>
         public List<LadderOperator<TIndex>> Sequence { get; set; } = new List<LadderOperator<TIndex>>();
+        /// <summary>
+        /// Returns ladder operator sequence.
+        /// </summary>
+        /// <returns>Ladder operator sequence.</returns>
+        public object GetSequence() => Sequence;
+         /// <summary>
+         /// Sets ladder operator sequence.
+         /// </summary>
+         /// <param name="set">Set ladder operator sequence to this input.</param>
+        public void SetSequence(object set)
+        {
+            Sequence = (List < LadderOperator < TIndex >>) set;
+        }
 
         /// <summary>
         /// sign (-1,+1) coefficient of ladder operators.
         /// </summary>
         public int Coefficient { get; set; } = 1;
+        /// <summary>
+        /// Returns sign coefficient of ladder operator sequence.
+        /// </summary>
+        /// <returns>Sign of ladder operator sequence.</returns>
+        public int GetCoefficient() => Coefficient;
+        public void SetCoefficient(int set)
+        {
+            Coefficient = set;
+        }
+        /// <summary>
+        /// Sets sign coefficient of ladder operator sequence.
+        /// </summary>
+        /// <param name="set">Set sign coefficient of ladder operator sequence to this.</param>
+        public void SetObject(object set)
+        {
+            var result = (ValueTuple<List<LadderOperator<TIndex>>, int>)set;
+            Sequence = result.Item1;
+            Coefficient = result.Item2;
+        }
 
         #region Constructors
         /// <summary>
@@ -117,7 +150,7 @@ namespace Microsoft.Quantum.Chemistry.LadderOperators
         {
             var newIndexing = Sequence
                 .Select(o => new LadderOperator<TNewIndex>
-                (o.GetRaisingLowering(), indexFunction(o.GetIndex())));
+                (o.GetRaisingLowering(), indexFunction((TIndex) o.GetIndex())));
             return new LadderSequence<TNewIndex>(newIndexing, Coefficient);
         }
 
@@ -153,7 +186,7 @@ namespace Microsoft.Quantum.Chemistry.LadderOperators
         /// Returns list of indices of the ladder operator sequence.
         /// </summary>
         /// <returns>Sequence of integers. </returns>
-        public IEnumerable<TIndex> ToIndices() => Sequence.Select(o => o.GetIndex());
+        public IEnumerable<TIndex> ToIndices() => Sequence.Select(o => (TIndex) o.GetIndex());
 
         /// <summary>
         /// Returns sequence of raising and lowering types of the ladder operator sequence.
@@ -222,46 +255,6 @@ namespace Microsoft.Quantum.Chemistry.LadderOperators
         
         public static bool operator !=(LadderSequence<TIndex> x, LadderSequence<TIndex> y) => !(x == y);
 
-        #endregion
-        #region JsonConverter
-        /// <summary>
-        /// This JsonConverter encodes of a LadderSequence as a Tuple instead of as an object.
-        /// </summary>
-        public class JsonConverter : JsonConverter<LadderSequence>
-        {
-            /// <summary>
-            /// Writers the LadderSequence as a (Sequence, Coefficient) tuple.
-            /// </summary>
-            public override void WriteJson(JsonWriter writer, LadderSequence value, JsonSerializer serializer)
-            {
-                if (value == null)
-                {
-                    serializer.Serialize(writer, null);
-                }
-                else
-                {
-                    var item = (value.Sequence, value.Coefficient);
-                    serializer.Serialize(writer, item);
-                }
-            }
-
-            /// <summary>
-            /// Reads the LadderSequence from aa (Sequence, Coefficient) tuple.
-            /// </summary>
-            public override LadderSequence ReadJson(JsonReader reader, Type objectType, LadderSequence existingValue, bool hasExistingValue, JsonSerializer serializer)
-            {
-                if (reader.TokenType == JsonToken.Null)
-                    return null;
-
-                var item = serializer.Deserialize<ValueTuple<List<LadderOperator>, int>>(reader);
-
-                var result = Activator.CreateInstance(objectType) as LadderSequence;
-                result.Sequence = item.Item1;
-                result.Coefficient = item.Item2;
-
-                return result;
-            }
-        }
         #endregion
     }
 }

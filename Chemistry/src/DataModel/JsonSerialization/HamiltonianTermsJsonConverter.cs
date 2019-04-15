@@ -8,7 +8,7 @@ using Newtonsoft.Json;
 namespace Microsoft.Quantum.Chemistry.Generic
 {
     /// <summary>
-    /// This JsonConverter allows to correctly serialized HamiltonianTerms.
+    /// This JsonConverter allows correctly serialized HamiltonianTerms.
     /// This terms are in general problematic because their keys are not strings, 
     /// but HamiltonianTerms, which json.net doesn't like by default. 
     /// This converts the Dictionaries to List of Tuples, in which the first

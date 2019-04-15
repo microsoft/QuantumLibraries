@@ -3,6 +3,7 @@
 
 using System;
 using Newtonsoft.Json;
+using Microsoft.Quantum.Chemistry;
 
 namespace Microsoft.Quantum.Chemistry.LadderOperators
 {
@@ -11,8 +12,9 @@ namespace Microsoft.Quantum.Chemistry.LadderOperators
     /// <summary>
     /// Data strcture for raising and lowering operators.
     /// </summary>
-    public class LadderOperator<TIndex> : 
-        IEquatable<LadderOperator<TIndex>>
+    [JsonConverter(typeof(Json.LadderOperatorJsonConverter))]
+    public class LadderOperator<TIndex> :
+        IEquatable<LadderOperator<TIndex>>, Json.ILadderOperator
         where TIndex : IEquatable<TIndex>
     {
         /// <summary>
@@ -21,17 +23,35 @@ namespace Microsoft.Quantum.Chemistry.LadderOperators
         public RaisingLowering Type { get; set; }
 
         public RaisingLowering GetRaisingLowering() => Type;
-            
+        public void SetRaisingLowering(object set)
+        {
+            Type = (RaisingLowering) set;
+        }
+        
+
 
         /// <summary>
         /// System index operator acts on.
         /// </summary>
         public TIndex Index { get; set; }
+        public object ObjectGetIndex() => Index;
+        public TIndex GetIndex() => Index;
+        public void SetIndex(object set)
+        {
+            Index = (TIndex)set;
+        }
+        public void SetObject(object set)
+        {
+            var result = (ValueTuple<RaisingLowering, TIndex>) set;
+            SetRaisingLowering(result.Item1);
+            SetIndex(result.Item2);
+        }
+
+
 
         #region Constructors
         public LadderOperator() { }
-
-        public TIndex GetIndex() => Index;
+        
 
 
         /// <summary>
@@ -52,14 +72,14 @@ namespace Microsoft.Quantum.Chemistry.LadderOperators
         /// and the second item indexes the system.</param>
         public LadderOperator((RaisingLowering, TIndex) set) : this(set.Item1, set.Item2) { }
 
-         #endregion
+        #endregion
 
         #region Equality Testing
         public override bool Equals(object obj) => (obj is LadderOperator<TIndex> x) ? Equals(x) : false;
 
         public bool Equals(LadderOperator<TIndex> x) => (Type == x.Type) && (Index.Equals(x.Index));
 
-        public override int GetHashCode() => Index.GetHashCode() * Enum.GetNames(typeof(RaisingLowering)).Length + (int) Type;
+        public override int GetHashCode() => Index.GetHashCode() * Enum.GetNames(typeof(RaisingLowering)).Length + (int)Type;
 
         public static bool operator ==(LadderOperator<TIndex> x, LadderOperator<TIndex> y) => x.Equals(y);
 
@@ -69,43 +89,12 @@ namespace Microsoft.Quantum.Chemistry.LadderOperators
         /// <summary>
         /// Returns a human-readable description this object.
         /// </summary>
-        public override string ToString() {
+        public override string ToString()
+        {
             string op = Type.ToString();
             return $"{Index}{op}";
         }
-
-
-        /// <summary>
-        /// This JsonConverter encodes of a LadderOperator as a Tuple instead of as an object.
-        /// </summary>
-        public class JsonConverter : JsonConverter<LadderOperator>
-        {
-            /// <summary>
-            /// Writers the LadderOperator as a (Type, Index) tuple.
-            /// </summary>
-            public override void WriteJson(JsonWriter writer, LadderOperator value, JsonSerializer serializer)
-            {
-                var item = (value.Type, value.Index);
-                serializer.Serialize(writer, item);
-            }
-
-            /// <summary>
-            /// Reads the LadderOperator from a (Type, Index) tuple.
-            /// </summary>
-            public override LadderOperator ReadJson(JsonReader reader, Type objectType, LadderOperator existingValue, bool hasExistingValue, JsonSerializer serializer)
-            {
-                var item = serializer.Deserialize<ValueTuple<RaisingLowering, int>>(reader);
-
-                var result = (LadderOperator)Activator.CreateInstance(objectType);
-                result.Type = item.Item1;
-                result.Index = item.Item2;
-
-                return result;
-            }
-        }
     }
-    
-
 }
 
 

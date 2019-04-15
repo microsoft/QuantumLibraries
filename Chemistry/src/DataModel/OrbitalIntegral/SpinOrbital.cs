@@ -9,7 +9,6 @@ namespace Microsoft.Quantum.Chemistry.OrbitalIntegrals
     /// <summary>
     /// Indexing scheme representing a spin-orbital.
     /// </summary>
-    [Serializable]
     public class SpinOrbital : 
         IEquatable<SpinOrbital>, 
         IComparable<SpinOrbital>
@@ -61,6 +60,8 @@ namespace Microsoft.Quantum.Chemistry.OrbitalIntegrals
         /// </summary>
         public int ToInt() => ToInt(IndexConvention.UpDown);
 
+
+
         /// <summary>
         /// Spin-orbital constructor.
         /// </summary>
@@ -84,6 +85,14 @@ namespace Microsoft.Quantum.Chemistry.OrbitalIntegrals
         /// </summary>
         /// <param name="idx">Tuple of (orbital index, spin index).</param>
         public SpinOrbital((int, int) idx) : this(idx.Item1, (Spin) idx.Item2) { }
+
+        /// <summary>
+        /// Empty spin-orbital constructor.
+        /// </summary>
+        public SpinOrbital()
+        {
+
+        }
 
         /// <summary>
         /// Throws an exception if spin-orbital is invalid.

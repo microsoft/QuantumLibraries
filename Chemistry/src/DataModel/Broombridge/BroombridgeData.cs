@@ -23,6 +23,14 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
     public class Data
     {
         /// <summary>
+        /// Empty Broombridge constructor.
+        /// </summary>
+        public Data()
+        {
+
+        }
+
+        /// <summary>
         /// Unparsed deserialized Broombridge data.
         /// </summary>
         public V0_2.Data Raw { get; set; }
