@@ -4,6 +4,7 @@
 namespace Microsoft.Quantum.Canon {
     open Microsoft.Quantum.Intrinsic;
     open Microsoft.Quantum.Extensions.Convert;
+    open Microsoft.Quantum.Math;
 
     /// # Summary
 	/// Asserts that the phase of an equal superposition state has the expected value.
@@ -35,8 +36,8 @@ namespace Microsoft.Quantum.Canon {
     /// `qubit` is in state $\ket{\psi}=e^{-i 2.2}\sqrt{1/2}\ket{0}+e^{i 0.2}\sqrt{1/2}\ket{1}$;
     /// - `AssertPhase(-1.2,qubit,10e-10);`
     operation AssertPhase (expected : Double, qubit : Qubit, tolerance : Double) : Unit {
-        let exptectedProbX = Microsoft.Quantum.Extensions.Math.Cos(expected) * Microsoft.Quantum.Extensions.Math.Cos(expected);
-        let exptectedProbY = Microsoft.Quantum.Extensions.Math.Sin(-1.0 * expected + Microsoft.Quantum.Extensions.Math.PI() / 4.0) * Microsoft.Quantum.Extensions.Math.Sin(-1.0 * expected + Microsoft.Quantum.Extensions.Math.PI() / 4.0);
+        let exptectedProbX = Cos(expected) * Cos(expected);
+        let exptectedProbY = Sin(-1.0 * expected + PI() / 4.0) * Sin(-1.0 * expected + PI() / 4.0);
         AssertProb([PauliZ], [qubit], Zero, 0.5, $"AssertPhase failed. Was not given a uniform superposition.", tolerance);
         AssertProb([PauliY], [qubit], Zero, exptectedProbY, $"AssertPhase failed. PauliY Zero basis did not give probability {exptectedProbY}.", tolerance);
         AssertProb([PauliX], [qubit], Zero, exptectedProbX, $"AssertPhase failed. PauliX Zero basis did not give probability {exptectedProbX}.", tolerance);

@@ -261,7 +261,7 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
         mutable oneNorm = 0.0;
         
         for (idx in 0 .. finalIdx - 1) {
-            set oneNorm = oneNorm + Microsoft.Quantum.Extensions.Math.AbsD(_GetOptimizedBETermIndexCoeff_(majIdxes[idx]));
+            set oneNorm = oneNorm + AbsD(_GetOptimizedBETermIndexCoeff_(majIdxes[idx]));
         }
         
         return OptimizedBEGeneratorSystem(finalIdx, oneNorm, LookupFunction(majIdxes[0 .. finalIdx - 1]));
@@ -441,7 +441,7 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
         let nMaj = 4;
         let optimizedBEGeneratorSystem = OptimizedBlockEncodingGeneratorSystem(data);
         let (nCoeffs, oneNorm, tmp) = optimizedBEGeneratorSystem!;
-        let nIdxRegQubits = Microsoft.Quantum.Extensions.Math.Ceiling(Lg(ToDouble(nSpinOrbitals)));
+        let nIdxRegQubits = Ceiling(Lg(ToDouble(nSpinOrbitals)));
         let ((nCtrlRegisterQubits, nTargetRegisterQubits), rest) = _JordanWignerOptimizedBlockEncodingQubitCount_(targetError, nCoeffs, nZ, nMaj, nIdxRegQubits, nSpinOrbitals);
         let statePrepOp = _JordanWignerOptimizedBlockEncodingStatePrep_(targetError, nCoeffs, optimizedBEGeneratorSystem, nZ, nMaj, nIdxRegQubits, _);
         let selectOp = _JordanWignerOptimizedBlockEncodingSelect_(targetError, nCoeffs, optimizedBEGeneratorSystem, nZ, nMaj, nIdxRegQubits, _, _);

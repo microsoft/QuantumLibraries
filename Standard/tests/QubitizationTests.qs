@@ -11,15 +11,16 @@ namespace Microsoft.Quantum.Tests {
     open Microsoft.Quantum.Arrays;
     open Microsoft.Quantum.Diagnostics;
     open Microsoft.Quantum.Convert;
+    open Microsoft.Quantum.Math;
 
     // BlockEncoding.qs tests
 
     // The returned operations encode the Hamiltonian (cos^2(angle) I+sin^2(angle) X)/2.
     function LCUTestHelper() : (Double[], Double, Double, (Qubit[] => Unit : Adjoint, Controlled), ((Qubit[], Qubit[]) => Unit : Adjoint, Controlled)){
         let angle = 1.789;
-        let eigenvalues = [0.5, 0.5 * Microsoft.Quantum.Extensions.Math.Cos(angle * 2.0)];
-        let prob = Microsoft.Quantum.Extensions.Math.PowD(Microsoft.Quantum.Extensions.Math.Cos(angle),4.0)+Microsoft.Quantum.Extensions.Math.PowD(Microsoft.Quantum.Extensions.Math.Sin(angle),4.0);
-        let inverseAngle = Microsoft.Quantum.Extensions.Math.ArcSin(Microsoft.Quantum.Extensions.Math.PowD(Microsoft.Quantum.Extensions.Math.Sin(angle),2.0)/Microsoft.Quantum.Extensions.Math.Sqrt(prob));
+        let eigenvalues = [0.5, 0.5 * Cos(angle * 2.0)];
+        let prob = PowD(Cos(angle),4.0)+PowD(Sin(angle),4.0);
+        let inverseAngle = ArcSin(PowD(Sin(angle),2.0)/Sqrt(prob));
         let statePreparation = Exp([PauliY], angle, _);
         let selector = Controlled (ApplyToEachCA(X, _))(_, _);
         return (eigenvalues, prob, inverseAngle, statePreparation, selector);
@@ -105,9 +106,9 @@ namespace Microsoft.Quantum.Tests {
     operation PauliBlockEncodingLCUTest() : Unit {
         body (...) {
             let angle = 0.123;
-            let cosSquared = Microsoft.Quantum.Extensions.Math.Cos(angle) * Microsoft.Quantum.Extensions.Math.Cos(angle);
-            let prob = Microsoft.Quantum.Extensions.Math.PowD(Microsoft.Quantum.Extensions.Math.Cos(angle),4.0)+Microsoft.Quantum.Extensions.Math.PowD(Microsoft.Quantum.Extensions.Math.Sin(angle),4.0);
-            let inverseAngle = Microsoft.Quantum.Extensions.Math.ArcSin(Microsoft.Quantum.Extensions.Math.PowD(Microsoft.Quantum.Extensions.Math.Sin(angle),2.0)/Microsoft.Quantum.Extensions.Math.Sqrt(prob));
+            let cosSquared = Cos(angle) * Cos(angle);
+            let prob = PowD(Cos(angle),4.0)+PowD(Sin(angle),4.0);
+            let inverseAngle = ArcSin(PowD(Sin(angle),2.0)/Sqrt(prob));
 
             let genIndices = [
                 GeneratorIndex(([0],[cosSquared]),[0]),

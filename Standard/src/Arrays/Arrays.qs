@@ -3,6 +3,7 @@
 
 namespace Microsoft.Quantum.Arrays {
     open Microsoft.Quantum.Diagnostics;
+    open Microsoft.Quantum.Math;
 
     /// # Summary
     /// Create an array that contains the same elements as an input array but in Reversed
@@ -235,7 +236,7 @@ namespace Microsoft.Quantum.Arrays {
     /// ```
     function Padded<'T> (nElementsTotal : Int, defaultElement : 'T, inputArray : 'T[]) : 'T[] {
         let nElementsInitial = Length(inputArray);
-        let nAbsElementsTotal = Microsoft.Quantum.Extensions.Math.AbsI(nElementsTotal);
+        let nAbsElementsTotal = AbsI(nElementsTotal);
         EqualityFactB(nAbsElementsTotal >= nElementsInitial, true, $"Specified output array length must be longer than `inputArray` length.");
         let nElementsPad = nAbsElementsTotal - nElementsInitial;
         let padArray = ConstantArray(nElementsPad, defaultElement);

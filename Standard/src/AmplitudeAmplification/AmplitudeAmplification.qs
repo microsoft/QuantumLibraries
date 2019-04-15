@@ -36,17 +36,17 @@ namespace Microsoft.Quantum.AmplitudeAmplification {
         
         mutable phasesTarget = new Double[nPhasesRef];
         mutable phasesStart = new Double[nPhasesRef];
-        set phasesTarget[0] = ((rotPhases!)[0] - (rotPhases!)[1]) - Microsoft.Quantum.Extensions.Math.PI();
-        set phasesStart[0] = -(rotPhases!)[0] + 0.5 * Microsoft.Quantum.Extensions.Math.PI();
+        set phasesTarget[0] = ((rotPhases!)[0] - (rotPhases!)[1]) - PI();
+        set phasesStart[0] = -(rotPhases!)[0] + 0.5 * PI();
         
         for (idxPhases in 1 .. nPhasesRef - 2)
         {
-            set phasesTarget[idxPhases] = ((rotPhases!)[2 * idxPhases] - (rotPhases!)[2 * idxPhases + 1]) - Microsoft.Quantum.Extensions.Math.PI();
-            set phasesStart[idxPhases] = ((rotPhases!)[2 * idxPhases - 1] - (rotPhases!)[2 * idxPhases]) + Microsoft.Quantum.Extensions.Math.PI();
+            set phasesTarget[idxPhases] = ((rotPhases!)[2 * idxPhases] - (rotPhases!)[2 * idxPhases + 1]) - PI();
+            set phasesStart[idxPhases] = ((rotPhases!)[2 * idxPhases - 1] - (rotPhases!)[2 * idxPhases]) + PI();
         }
         
-        set phasesTarget[nPhasesRef - 1] = (rotPhases!)[2 * nPhasesRef - 2] - 0.5 * Microsoft.Quantum.Extensions.Math.PI();
-        set phasesStart[nPhasesRef - 1] = ((rotPhases!)[2 * nPhasesRef - 3] - (rotPhases!)[2 * nPhasesRef - 2]) + Microsoft.Quantum.Extensions.Math.PI();
+        set phasesTarget[nPhasesRef - 1] = (rotPhases!)[2 * nPhasesRef - 2] - 0.5 * PI();
+        set phasesStart[nPhasesRef - 1] = ((rotPhases!)[2 * nPhasesRef - 3] - (rotPhases!)[2 * nPhasesRef - 2]) + PI();
         return ReflectionPhases(phasesStart, phasesTarget);
     }
     
@@ -73,8 +73,8 @@ namespace Microsoft.Quantum.AmplitudeAmplification {
         
         for (idxPhases in 0 .. nIterations)
         {
-            set phasesTarget[idxPhases] = Microsoft.Quantum.Extensions.Math.PI();
-            set phasesStart[idxPhases] = Microsoft.Quantum.Extensions.Math.PI();
+            set phasesTarget[idxPhases] = PI();
+            set phasesStart[idxPhases] = PI();
         }
         
         set phasesTarget[nIterations] = 0.0;
@@ -115,11 +115,11 @@ namespace Microsoft.Quantum.AmplitudeAmplification {
         mutable phasesRot = new Double[nQueries];
         let nQueriesDouble = ToDouble(nQueries);
         set phasesRot[0] = 0.0;
-        let beta = Microsoft.Quantum.Extensions.Math.Cosh((1.0 / nQueriesDouble) * ArcCosh(Microsoft.Quantum.Extensions.Math.Sqrt(successMin)));
+        let beta = Cosh((1.0 / nQueriesDouble) * ArcCosh(Sqrt(successMin)));
         
         for (idxPhases in 1 .. nQueries - 1)
         {
-            set phasesRot[idxPhases] = phasesRot[idxPhases - 1] + 2.0 * Microsoft.Quantum.Extensions.Math.ArcTan(Microsoft.Quantum.Extensions.Math.Tan((((2.0 * 1.0) * ToDouble(idxPhases)) * Microsoft.Quantum.Extensions.Math.PI()) / nQueriesDouble) * Microsoft.Quantum.Extensions.Math.Sqrt(1.0 - beta * beta));
+            set phasesRot[idxPhases] = phasesRot[idxPhases - 1] + 2.0 * ArcTan(Tan((((2.0 * 1.0) * ToDouble(idxPhases)) * PI()) / nQueriesDouble) * Sqrt(1.0 - beta * beta));
         }
         
         return AmpAmpRotationToReflectionPhases(RotationPhases(phasesRot));
@@ -149,7 +149,7 @@ namespace Microsoft.Quantum.AmplitudeAmplification {
     /// particular ancilla target state $\ket{\text{target}}\_a$, and any
     /// system state $\ket{\psi}\_s$, suppose that
     /// \begin{align}
-    /// O\ket{\text{start}}\_a\ket{\psi}\_s= \lambda\ket{\text{target}}\_a U \ket{\psi}\_s + \Microsoft.Quantum.Extensions.Math.sqrt{1-|\lambda|^2}\ket{\text{target}^\perp}\_a\cdots
+    /// O\ket{\text{start}}\_a\ket{\psi}\_s= \lambda\ket{\text{target}}\_a U \ket{\psi}\_s + \sqrt{1-|\lambda|^2}\ket{\text{target}^\perp}\_a\cdots
     /// \end{align}
     /// for some unitary $U$.
     /// By a sequence of reflections about the start and target states on the
@@ -240,7 +240,7 @@ namespace Microsoft.Quantum.AmplitudeAmplification {
     /// It is assumed that the target state is marked by $\ket{1}\_f$.
     /// It is assumed that
     /// \begin{align}
-    /// O\ket{\text{start}}\_{fa}\ket{\psi}\_s= \lambda\ket{1}\_f\ket{\text{anything}}\_a\ket{\text{target}}\_s U \ket{\psi}\_s + \Microsoft.Quantum.Extensions.Math.sqrt{1-|\lambda|^2}\ket{0}\_f\cdots,
+    /// O\ket{\text{start}}\_{fa}\ket{\psi}\_s= \lambda\ket{1}\_f\ket{\text{anything}}\_a\ket{\text{target}}\_s U \ket{\psi}\_s + \sqrt{1-|\lambda|^2}\ket{0}\_f\cdots,
     /// \end{align}
     /// for some unitary $U$.
     function AmpAmpObliviousByOraclePhases (phases : ReflectionPhases, ancillaOracle : DeterministicStateOracle, signalOracle : ObliviousOracle, idxFlagQubit : Int) : ((Qubit[], Qubit[]) => Unit : Adjoint, Controlled)
@@ -302,7 +302,7 @@ namespace Microsoft.Quantum.AmplitudeAmplification {
     /// It is assumed that the target state is marked by $\ket{1}\_f$.
     /// It is assumed that
     /// \begin{align}
-    /// A\ket{0}\_{f}\ket{0}\_s= \lambda\ket{1}\_f\ket{\text{target}}\_s + \Microsoft.Quantum.Extensions.Math.sqrt{1-|\lambda|^2}\ket{0}\_f\cdots,
+    /// A\ket{0}\_{f}\ket{0}\_s= \lambda\ket{1}\_f\ket{\text{target}}\_s + \sqrt{1-|\lambda|^2}\ket{0}\_f\cdots,
     /// \end{align}
     /// In most cases, `flagQubit` and `ancillaRegister` is initialized in the state $\ket{0}\_{f}\ket{0}\_s$.
     function AmpAmpByOraclePhases (phases : ReflectionPhases, stateOracle : StateOracle, idxFlagQubit : Int) : (Qubit[] => Unit : Adjoint, Controlled)
@@ -334,7 +334,7 @@ namespace Microsoft.Quantum.AmplitudeAmplification {
     /// This is the standard amplitude amplification algorithm obtained by a choice of reflection phases computed by `AmpAmpPhasesStandard`
     /// Assuming that
     /// \begin{align}
-    /// A\ket{0}\_{f}\ket{0}\_s= \lambda\ket{1}\_f\ket{\text{target}}\_s + \Microsoft.Quantum.Extensions.Math.sqrt{1-|\lambda|^2}\ket{0}\_f\cdots,
+    /// A\ket{0}\_{f}\ket{0}\_s= \lambda\ket{1}\_f\ket{\text{target}}\_s + \sqrt{1-|\lambda|^2}\ket{0}\_f\cdots,
     /// \end{align}
     /// this operation prepares the state
     /// \begin{align}
@@ -372,7 +372,7 @@ namespace Microsoft.Quantum.AmplitudeAmplification {
         mutable exponentMax = 0;
         mutable exponentCurrent = 0;
         
-        //Complexity: Let \theta = \mathcal{O}(\Microsoft.Quantum.Extensions.Math.sqrt{lambda})
+        //Complexity: Let \theta = \mathcal{O}(\sqrt{lambda})
         // Number of Measurements = O( Log^2(1/\theta) )
         // Number of Queries = O(1/\theta)
         using (flagQubit = Qubit[1])

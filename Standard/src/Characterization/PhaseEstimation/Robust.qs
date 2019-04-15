@@ -41,7 +41,7 @@ namespace Microsoft.Quantum.Characterization {
 
             for (exponent in 0 .. bitsPrecision - 1) {
                 let power = 2 ^ exponent;
-                mutable nRepeats = Microsoft.Quantum.Extensions.Math.Ceiling(alpha * ToDouble(bitsPrecision - exponent) + beta);
+                mutable nRepeats = Ceiling(alpha * ToDouble(bitsPrecision - exponent) + beta);
 
                 if (nRepeats % 2 == 1) {
                     // Ensures that nRepeats is even.
@@ -54,7 +54,7 @@ namespace Microsoft.Quantum.Characterization {
                 for (idxRep in 0 .. nRepeats - 1) {
                     for (idxExperiment in 0 .. 1) {
                         // Divide rotation by power to cancel the multiplication by power in DiscretePhaseEstimationIteration
-                        let rotation = ((Microsoft.Quantum.Extensions.Math.PI() * ToDouble(idxExperiment)) / 2.0) / ToDouble(power);
+                        let rotation = ((PI() * ToDouble(idxExperiment)) / 2.0) / ToDouble(power);
                         DiscretePhaseEstimationIteration(oracle, power, rotation, targetState, controlQubit);
                         let result = M(controlQubit);
 
@@ -70,8 +70,8 @@ namespace Microsoft.Quantum.Characterization {
                     }
                 }
 
-                let deltaTheta = Microsoft.Quantum.Extensions.Math.ArcTan2(pPlus - ToDouble(nRepeats) / 2.0, pZero - ToDouble(nRepeats) / 2.0);
-                let delta = RealMod(deltaTheta - thetaEst * ToDouble(power), 2.0 * Microsoft.Quantum.Extensions.Math.PI(), -Microsoft.Quantum.Extensions.Math.PI());
+                let deltaTheta = ArcTan2(pPlus - ToDouble(nRepeats) / 2.0, pZero - ToDouble(nRepeats) / 2.0);
+                let delta = RealMod(deltaTheta - thetaEst * ToDouble(power), 2.0 * PI(), -PI());
                 set thetaEst = thetaEst + delta / ToDouble(power);
             }
 

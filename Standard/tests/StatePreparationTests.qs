@@ -130,7 +130,7 @@ namespace Microsoft.Quantum.Tests {
         set nTests = nTests + 1;
         set testCases[nTests] = StatePreparationTestCase(3, [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]);
         set nTests = nTests + 1;
-        set testCases[nTests] = StatePreparationTestCase(3, [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0], ConstantArray(8, Microsoft.Quantum.Extensions.Math.PI()));
+        set testCases[nTests] = StatePreparationTestCase(3, [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0], ConstantArray(8, PI()));
         set nTests = nTests + 1;
         set testCases[nTests] = StatePreparationTestCase(3, [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.01]);
         set nTests = nTests + 1;

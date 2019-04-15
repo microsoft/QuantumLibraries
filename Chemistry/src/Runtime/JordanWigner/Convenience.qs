@@ -47,7 +47,7 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
         let (nTerms, genIdxFunction) = generatorSystem!;
         let (oneNorm, blockEncodingReflection) = PauliBlockEncoding(generatorSystem);
         let nTargetRegisterQubits = nSpinOrbitals;
-        let nCtrlRegisterQubits = Microsoft.Quantum.Extensions.Math.Ceiling(Lg(ToDouble(nTerms)));
+        let nCtrlRegisterQubits = Ceiling(Lg(ToDouble(nTerms)));
         return ((nCtrlRegisterQubits, nTargetRegisterQubits), (oneNorm, QuantumWalkByQubitization(blockEncodingReflection)));
     }
     

@@ -13,7 +13,7 @@ namespace Microsoft.Quantum.Chemistry.Tests {
 
     // Test OptimizedBEXY operator.
     operation OptimizedBEOperatorZeroTestHelper (pauliBasis : Pauli, targetRegisterSize : Int, targetIndex : Int) : Unit {
-        let indexRegisterSize = Microsoft.Quantum.Extensions.Math.Ceiling(Lg(ToDouble(targetRegisterSize)));
+        let indexRegisterSize = Ceiling(Lg(ToDouble(targetRegisterSize)));
         using (pauliBasisQubit = Qubit[1]) {
             using (indexRegister = Qubit[indexRegisterSize]) {
                 using (targetRegister = Qubit[targetRegisterSize]) {
@@ -84,7 +84,7 @@ namespace Microsoft.Quantum.Chemistry.Tests {
     // Test OptimizedBEXY operator.
     operation OptimizedBEOperatorPlusTestHelper (pauliBasis : Pauli, targetRegisterSize : Int, targetIndex : Int) : Unit {
         
-        let indexRegisterSize = Microsoft.Quantum.Extensions.Math.Ceiling(Lg(ToDouble(targetRegisterSize)));
+        let indexRegisterSize = Ceiling(Lg(ToDouble(targetRegisterSize)));
         using (pauliBasisQubit = Qubit[1]) {
             using (indexRegister = Qubit[indexRegisterSize]) {
                 using (targetRegister = Qubit[targetRegisterSize]) { 
@@ -190,7 +190,7 @@ namespace Microsoft.Quantum.Chemistry.Tests {
     // Test phase of controlled OptimizedBEXY operator.
     operation ControlledOptimizedBEOperatorTestHelper (pauliBasis : Pauli, targetRegisterSize : Int, targetIndex : Int) : Unit {
         
-        let indexRegisterSize = Microsoft.Quantum.Extensions.Math.Ceiling(Lg(ToDouble(targetRegisterSize)));
+        let indexRegisterSize = Ceiling(Lg(ToDouble(targetRegisterSize)));
         
         using (pauliBasisQubit = Qubit[1]) {
             
@@ -258,7 +258,7 @@ namespace Microsoft.Quantum.Chemistry.Tests {
     // Test SelectZ operator
     operation SelectZTest () : Unit {
         let targetRegisterSize = 7;
-        let indexRegisterSize = Microsoft.Quantum.Extensions.Math.Ceiling(Lg(ToDouble(targetRegisterSize)));
+        let indexRegisterSize = Ceiling(Lg(ToDouble(targetRegisterSize)));
 
         using ((targetRegister, indexRegister) = (Qubit[targetRegisterSize], Qubit[indexRegisterSize])) {
             for (idxTest in 0 .. targetRegisterSize - 1) {
