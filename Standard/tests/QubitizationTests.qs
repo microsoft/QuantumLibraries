@@ -6,8 +6,8 @@ namespace Microsoft.Quantum.Tests {
     open Microsoft.Quantum.Arithmetic;
     open Microsoft.Quantum.Intrinsic;
     open Microsoft.Quantum.Canon;
-    open Microsoft.Quantum.Extensions.Testing;
-    open Microsoft.Quantum.Extensions.Convert;
+    open Microsoft.Quantum.Diagnostics;
+    open Microsoft.Quantum.Convert;
     open Microsoft.Quantum.Arrays;
     open Microsoft.Quantum.Diagnostics;
     open Microsoft.Quantum.Convert;

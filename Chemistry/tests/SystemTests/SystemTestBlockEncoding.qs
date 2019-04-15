@@ -21,7 +21,7 @@ namespace SystemTestsBlockEncoding {
         let (l1Norm, blockEncodingReflection) = PauliBlockEncoding(generatorSystem);
         let (nTerms, genIdxFunction) = generatorSystem!;
         let systemQubits = nSpinOrbitals;
-        let auxillaryQubits = Ceiling(Lg(ToDouble(nTerms)));
+        let auxillaryQubits = Ceiling(Lg(IntAsDouble(nTerms)));
         let nQubits = systemQubits + auxillaryQubits;
         
         using (qubits = Qubit[nQubits]) {

@@ -3,7 +3,7 @@
 namespace Microsoft.Quantum.Tests {
     open Microsoft.Quantum.Intrinsic;
     open Microsoft.Quantum.Canon;
-    open Microsoft.Quantum.Extensions.Convert;
+    open Microsoft.Quantum.Convert;
     open Microsoft.Quantum.AmplitudeAmplification;
     open Microsoft.Quantum.Oracles;
     open Microsoft.Quantum.Math;
@@ -37,13 +37,13 @@ namespace Microsoft.Quantum.Tests {
             for (nIterations in 0 .. 5) {
                 
                 for (idx in 1 .. 20) {
-                    let lambda = ToDouble(idx) / 20.0;
+                    let lambda = IntAsDouble(idx) / 20.0;
                     let rotAngle = ArcSin(lambda);
                     let idxFlag = 0;
                     let startQubits = qubits;
                     let stateOracle = ExampleStatePrep(lambda);
                     (AmpAmpByOracle(nIterations, stateOracle, idxFlag))(startQubits);
-                    let successAmplitude = Sin(ToDouble(2 * nIterations + 1) * rotAngle);
+                    let successAmplitude = Sin(IntAsDouble(2 * nIterations + 1) * rotAngle);
                     let successProbability = successAmplitude * successAmplitude;
                     AssertProb([PauliZ], [startQubits[idxFlag]], One, successProbability, $"Error: Success probability does not match theory", 1E-10);
                     ResetAll(qubits);
@@ -62,14 +62,14 @@ namespace Microsoft.Quantum.Tests {
                 let phases = AmpAmpPhasesStandard(nIterations);
                 
                 for (idx in 0 .. 20) {
-                    let rotAngle = (ToDouble(idx) * PI()) / 20.0;
+                    let rotAngle = (IntAsDouble(idx) * PI()) / 20.0;
                     let idxFlag = 0;
                     let ancillaRegister = qubits;
                     let systemRegister = new Qubit[0];
                     let ancillaOracle = DeterministicStateOracle(Exp([PauliY], rotAngle * 0.5, _));
                     let signalOracle = ObliviousOracle(NoOp<(Qubit[], Qubit[])>(_, _));
                     (AmpAmpObliviousByOraclePhases(phases, ancillaOracle, signalOracle, idxFlag))(ancillaRegister, systemRegister);
-                    let successAmplitude = Sin((ToDouble(2 * nIterations + 1) * rotAngle) * 0.5);
+                    let successAmplitude = Sin((IntAsDouble(2 * nIterations + 1) * rotAngle) * 0.5);
                     let successProbability = successAmplitude * successAmplitude;
                     AssertProb([PauliZ], [ancillaRegister[idxFlag]], One, successProbability, $"Error: Success probability does not match theory", 1E-10);
                     ResetAll(qubits);
@@ -85,7 +85,7 @@ namespace Microsoft.Quantum.Tests {
             ResetAll(qubits);
             
             for (idx in 0 .. 20) {
-                let rotangle = (ToDouble(idx) * PI()) / 20.0;
+                let rotangle = (IntAsDouble(idx) * PI()) / 20.0;
                 let targetStateReflection = TargetStateReflectionOracle(0);
                 let success = Cos(0.5 * rotangle) * Cos(0.5 * rotangle);
                 H(qubits[0]);

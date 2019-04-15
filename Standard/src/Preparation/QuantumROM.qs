@@ -5,7 +5,7 @@ namespace Microsoft.Quantum.Preparation {
     open Microsoft.Quantum.Intrinsic;
     open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Arithmetic;
-    open Microsoft.Quantum.Extensions.Convert;
+    open Microsoft.Quantum.Convert;
     open Microsoft.Quantum.Math;
     open Microsoft.Quantum.Arrays;
     open Microsoft.Quantum.Convert;
@@ -66,7 +66,7 @@ namespace Microsoft.Quantum.Preparation {
         let nBitsPrecision = -Ceiling(Lg(0.5*targetError))+1;
         let (oneNorm, keepCoeff, altIndex) = _QuantumROMDiscretization(nBitsPrecision, coefficients);
         let nCoeffs = Length(coefficients);
-        let nBitsIndices = Ceiling(Lg(ToDouble(nCoeffs)));
+        let nBitsIndices = Ceiling(Lg(IntAsDouble(nCoeffs)));
 
         let op =  QuantumROMImpl_(nBitsPrecision, nCoeffs, nBitsIndices, keepCoeff, altIndex, _, _);
         let qubitCounts = QuantumROMQubitCount(targetError, nCoeffs);
@@ -91,7 +91,7 @@ namespace Microsoft.Quantum.Preparation {
     function QuantumROMQubitCount(targetError: Double, nCoeffs: Int) : (Int, (Int, Int))
     {
         let nBitsPrecision = -Ceiling(Lg(0.5*targetError))+1;
-        let nBitsIndices = Ceiling(Lg(ToDouble(nCoeffs)));
+        let nBitsIndices = Ceiling(Lg(IntAsDouble(nCoeffs)));
         let nGarbageQubits = nBitsIndices + 2 * nBitsPrecision + 1;
         let nTotal = nGarbageQubits + nBitsIndices;
         return (nTotal, (nBitsIndices, nGarbageQubits));
@@ -193,7 +193,7 @@ namespace Microsoft.Quantum.Preparation {
         
     // Used in QuantumROM implementation.
     function QuantumROMDiscretizationRoundCoefficients_(coefficient: Double, oneNorm: Double, nCoefficients: Int, barHeight: Int) : Int {
-        return Round((AbsD(coefficient) / oneNorm) * ToDouble(nCoefficients) * ToDouble(barHeight));
+        return Round((AbsD(coefficient) / oneNorm) * IntAsDouble(nCoefficients) * IntAsDouble(barHeight));
     }
 
     // Used in QuantumROM implementation.

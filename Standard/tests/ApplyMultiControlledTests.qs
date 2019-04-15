@@ -4,7 +4,7 @@ namespace Microsoft.Quantum.Tests {
     
     open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Intrinsic;
-    open Microsoft.Quantum.Extensions.Testing;
+    open Microsoft.Quantum.Diagnostics;
     
     
     /// # Summary
@@ -36,7 +36,7 @@ namespace Microsoft.Quantum.Tests {
             let expected = ApplyToPartitionCA(multiControlledCNOT, numberOfcontrols, _);
             
             // check equality
-            AssertOperationsEqualReferenced(actual, expected, numberOfcontrols + 2);
+            AssertOperationsEqualReferenced(numberOfcontrols + 2, actual, expected);
         }
     }
     

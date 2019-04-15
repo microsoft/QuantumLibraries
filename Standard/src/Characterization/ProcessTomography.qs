@@ -4,7 +4,7 @@
 namespace Microsoft.Quantum.Characterization {
     open Microsoft.Quantum.Intrinsic;
     open Microsoft.Quantum.Canon;
-    open Microsoft.Quantum.Extensions.Convert;
+    open Microsoft.Quantum.Convert;
     open Microsoft.Quantum.Preparation;
     open Microsoft.Quantum.Arrays;
 
@@ -99,7 +99,7 @@ namespace Microsoft.Quantum.Characterization {
             }
         }
 
-        return ToDouble(nUp) / ToDouble(nMeasurements);
+        return IntAsDouble(nUp) / IntAsDouble(nMeasurements);
     }
 
     /// # Summary

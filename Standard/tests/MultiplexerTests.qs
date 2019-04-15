@@ -4,7 +4,7 @@ namespace Microsoft.Quantum.Tests {
     open Microsoft.Quantum.Arithmetic;
     open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Intrinsic;
-    open Microsoft.Quantum.Extensions.Convert;
+    open Microsoft.Quantum.Convert;
     open Microsoft.Quantum.Diagnostics;
     open Microsoft.Quantum.Measurement;
     open Microsoft.Quantum.Arrays;
@@ -98,7 +98,7 @@ namespace Microsoft.Quantum.Tests {
                     mutable coefficients = new Double[nCoefficients];
                     
                     for (idx in IndexRange(coefficients)) {
-                        set coefficients[idx] = (1.0 * ToDouble(idx + 1)) * 0.2;
+                        set coefficients[idx] = (1.0 * IntAsDouble(idx + 1)) * 0.2;
                     }
                     
                     // Allocate qubits
@@ -178,7 +178,7 @@ namespace Microsoft.Quantum.Tests {
             mutable coefficients = new Double[maxCoefficients];
             
             for (idx in IndexRange(coefficients)) {
-                set coefficients[idx] = (1.0 * ToDouble(idx + 1)) * 0.3;
+                set coefficients[idx] = (1.0 * IntAsDouble(idx + 1)) * 0.3;
             }
             
             // Allocate qubits
