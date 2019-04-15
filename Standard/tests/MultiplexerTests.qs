@@ -8,7 +8,6 @@ namespace Microsoft.Quantum.Tests {
     open Microsoft.Quantum.Diagnostics;
     open Microsoft.Quantum.Measurement;
     open Microsoft.Quantum.Arrays;
-    open Microsoft.Quantum.Convert;
 
     operation MultiplexZTestHelper (coefficients : Double[], multiplexerControl : BigEndian, additionalControl : Qubit[], target : Qubit, tolerance : Double) : Unit {
         let nCoefficients = Length(coefficients);

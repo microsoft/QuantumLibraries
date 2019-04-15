@@ -9,8 +9,6 @@ namespace Microsoft.Quantum.Tests {
     open Microsoft.Quantum.Diagnostics;
     open Microsoft.Quantum.Convert;
     open Microsoft.Quantum.Arrays;
-    open Microsoft.Quantum.Diagnostics;
-    open Microsoft.Quantum.Convert;
     open Microsoft.Quantum.Math;
 
     // BlockEncoding.qs tests
