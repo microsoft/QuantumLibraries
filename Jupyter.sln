@@ -1,0 +1,56 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.572
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Jupyter", "Jupyter\src\Jupyter.csproj", "{B4A8D6BA-6817-4216-B04B-4098A8C5AB44}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JupyterTests", "Jupyter\tests\JupyterTests.csproj", "{8E7EBF9F-B338-4267-9C9C-D92587A24945}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataModel", "Chemistry\src\DataModel\DataModel.csproj", "{DADE9B49-6423-4511-A9BC-DC5C9B02539E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Runtime", "Chemistry\src\Runtime\Runtime.csproj", "{BFBC5FDC-3B20-4221-93BF-9B626636ECEF}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Canon", "Canon\src\Canon.csproj", "{CE140B75-51E5-4008-8305-82C4A063C3B0}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Dependencies", "Dependencies", "{C157F408-2E7F-426D-8425-7633ED4B741C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B4A8D6BA-6817-4216-B04B-4098A8C5AB44}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B4A8D6BA-6817-4216-B04B-4098A8C5AB44}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B4A8D6BA-6817-4216-B04B-4098A8C5AB44}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B4A8D6BA-6817-4216-B04B-4098A8C5AB44}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8E7EBF9F-B338-4267-9C9C-D92587A24945}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8E7EBF9F-B338-4267-9C9C-D92587A24945}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8E7EBF9F-B338-4267-9C9C-D92587A24945}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8E7EBF9F-B338-4267-9C9C-D92587A24945}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DADE9B49-6423-4511-A9BC-DC5C9B02539E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DADE9B49-6423-4511-A9BC-DC5C9B02539E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DADE9B49-6423-4511-A9BC-DC5C9B02539E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DADE9B49-6423-4511-A9BC-DC5C9B02539E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BFBC5FDC-3B20-4221-93BF-9B626636ECEF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BFBC5FDC-3B20-4221-93BF-9B626636ECEF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BFBC5FDC-3B20-4221-93BF-9B626636ECEF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BFBC5FDC-3B20-4221-93BF-9B626636ECEF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CE140B75-51E5-4008-8305-82C4A063C3B0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CE140B75-51E5-4008-8305-82C4A063C3B0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CE140B75-51E5-4008-8305-82C4A063C3B0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CE140B75-51E5-4008-8305-82C4A063C3B0}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{DADE9B49-6423-4511-A9BC-DC5C9B02539E} = {C157F408-2E7F-426D-8425-7633ED4B741C}
+		{BFBC5FDC-3B20-4221-93BF-9B626636ECEF} = {C157F408-2E7F-426D-8425-7633ED4B741C}
+		{CE140B75-51E5-4008-8305-82C4A063C3B0} = {C157F408-2E7F-426D-8425-7633ED4B741C}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {1A526024-D9A8-4B78-AC49-202F9FC1B220}
+	EndGlobalSection
+EndGlobal

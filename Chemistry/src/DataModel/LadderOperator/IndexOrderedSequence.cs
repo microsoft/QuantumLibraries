@@ -30,7 +30,7 @@ namespace Microsoft.Quantum.Chemistry.LadderOperators
         /// <summary>
         /// Constructor for empty ladder operator sequence.
         /// </summary>
-        internal IndexOrderedSequence() : base() { }
+        public IndexOrderedSequence() : base() { }
 
         /// <summary>
         /// Construct instance from a normal-ordered sequence of ladder operators.

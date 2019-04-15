@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="InputStateMagicTests.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.9.0" />
     <PackageReference Include="NETStandard.Library" Version="2.0.3" />
     <PackageReference Include="xunit" Version="2.4.0" />
@@ -14,9 +18,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Jupyter\Jupyter.csproj" />
-    <ProjectReference Include="..\..\src\Runtime\Runtime.csproj" />
+    <ProjectReference Include="..\..\Chemistry\src\Runtime\Runtime.csproj" />
+    <ProjectReference Include="..\src\Jupyter.csproj" />
   </ItemGroup>
+
 
   <ItemGroup>
     <None Update="broombridge_v0.2.yaml">

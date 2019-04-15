@@ -5,6 +5,7 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using Newtonsoft.Json;
+using Microsoft.Quantum.Chemistry;
 
 namespace Microsoft.Quantum.Chemistry.Generic
 {
@@ -25,13 +26,13 @@ namespace Microsoft.Quantum.Chemistry.Generic
         /// <summary>
         /// Represents a single Terms in the Hamiltonian.
         /// </summary>
-        [JsonConverter(typeof(HamiltonianTermsJsonConverter))]
+        [JsonConverter(typeof(Json.HamiltonianTermsJsonConverter))]
         public class HamiltonianTerm : Dictionary<TTermIndexing, TTermValue> { }
 
         /// <summary>
         /// Represents the collection of all Terms in the Hamiltonian.
         /// </summary>
-        [JsonConverter(typeof(HamiltonianTermsJsonConverter))]
+        [JsonConverter(typeof(Json.HamiltonianTermsJsonConverter))]
         public class HamiltonianTerms : Dictionary<TTermClassification, HamiltonianTerm> { }
 
         /// <summary>

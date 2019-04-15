@@ -4,7 +4,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
 using Newtonsoft.Json;
-using Microsoft.Quantum.Chemistry.Generic;
+using Microsoft.Quantum.Chemistry.Fermion;
+using Microsoft.Quantum.Chemistry;
 
 namespace Microsoft.Quantum.Chemistry.Json
 {
@@ -15,15 +16,14 @@ namespace Microsoft.Quantum.Chemistry.Json
     /// This converts the Dictionaries to List of Tuples, in which the first
     /// item of the tuple is the key and the second the value.
     /// </summary>
-    public class HamiltonianTermsJsonConverter : JsonConverter
+    public class FermionWavefunctionJsonConverter : JsonConverter
     {
         /// <summary>
         /// Returns true only if the Type is HamitonianTerm or HamiltonianTerms
         /// </summary>
         public override bool CanConvert(Type objectType) =>
             objectType.IsGenericType
-            && (objectType.GetGenericTypeDefinition() == typeof(Hamiltonian<,,>.HamiltonianTerm)
-                || objectType.GetGenericTypeDefinition() == typeof(Hamiltonian<,,>.HamiltonianTerms));
+            && (objectType.GetGenericTypeDefinition() == typeof(Dictionary<,>));
 
         /// <summary>
         /// Writers the HamiltonianTerms as a list of (Key, Value) tuples.
@@ -48,11 +48,12 @@ namespace Microsoft.Quantum.Chemistry.Json
         {
             Debug.Assert(CanConvert(objectType));
 
-            var keyType = objectType.BaseType.GetGenericArguments()[0];
-            var valueType = objectType.BaseType.GetGenericArguments()[1];
+            var keyType = Helper.GetBasestType(objectType).GetGenericArguments()[0];
+            var valueType = Helper.GetBasestType(objectType).GetGenericArguments()[1];
             var tupleType = typeof(ValueTuple<,>).MakeGenericType(keyType, valueType);
-            
-            var result = (IDictionary)Activator.CreateInstance(objectType);
+            var dictionaryType = typeof(Dictionary<,>).MakeGenericType(keyType, valueType);
+
+            var result = (IDictionary)Activator.CreateInstance(dictionaryType);
 
             if (reader.TokenType == JsonToken.Null)
                 return null;

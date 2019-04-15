@@ -6,6 +6,8 @@ using System.Linq;
 using System.Collections.Generic;
 using Microsoft.Quantum.Chemistry.LadderOperators;
 using System.Numerics;
+using Newtonsoft.Json;
+using Microsoft.Quantum.Chemistry;
 
 namespace Microsoft.Quantum.Chemistry.Fermion
 {
@@ -22,11 +24,13 @@ namespace Microsoft.Quantum.Chemistry.Fermion
         /// <summary>
         /// Reference state that excitations act on.
         /// </summary>
+        [JsonConverter(typeof(Json.LadderSequenceJsonConverter))]
         public SingleCFWavefunction<TIndex> Reference { get; set; }
 
         /// <summary>
         /// Un-normalized amplitudes of excitations applied to reference state.
         /// </summary>
+        [JsonConverter(typeof(Json.FermionWavefunctionJsonConverter))]
         public Dictionary<IndexOrderedSequence<TIndex>, Complex> Excitations { get; set; }
 
 

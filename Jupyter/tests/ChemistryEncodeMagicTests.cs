@@ -22,6 +22,7 @@ namespace Microsoft.Quantum.Chemistry.Tests
         public (ChemistryEncodeMagic, MockChannel) Init() =>
             (new ChemistryEncodeMagic(), new MockChannel());
 
+
         [Fact]
         public void EncodeBroombridge()
         {
@@ -32,29 +33,29 @@ namespace Microsoft.Quantum.Chemistry.Tests
 
             var broombridge = Deserializers.DeserializeBroombridge(fileName);
             var problemData = broombridge.ProblemDescriptions.First();
-            var orbitalIntegralHamiltonian = problemData.ToOrbitalIntegralHamiltonian();
-            var fermionHamiltonian = orbitalIntegralHamiltonian.ToFermionHamiltonian(IndexConvention.HalfUp);
+            var orbitalIntegralHamiltonian = problemData.OrbitalIntegralHamiltonian;
+            var fermionHamiltonian = orbitalIntegralHamiltonian.ToFermionHamiltonian(IndexConvention.UpDown);
 
-            var inputMagic = new InputStateMagic();
-            var args = JsonConvert.SerializeObject(new InputStateMagic.Arguments
+            var wavefunctionMagic = new WavefunctionMagic();
+            var args = JsonConvert.SerializeObject(new WavefunctionMagic.Arguments
             {
                 fileName = "broombridge_v0.2.yaml",
-                wavefunctionLabel = "UCCSD |G>",
-                indexConvention = IndexConvention.HalfUp
+                wavefunctionLabel = "|G>",
+                indexConvention = IndexConvention.UpDown
             });
-            var inputState = (InputState)inputMagic.Run(args, channel).Output;
+            var wavefunction = (FermionWavefunction<int>)wavefunctionMagic.Run(args, channel).Output;
 
             args = JsonConvert.SerializeObject(new ChemistryEncodeMagic.Arguments
             {
                 hamiltonian = fermionHamiltonian,
-                inputState = inputState
+                wavefunction = wavefunction
             });
 
             var result = magic.Run(args, channel);
             Assert.Equal(ExecuteStatus.Ok, result.Status);
             var data = result.Output as JordanWignerEncodingData;
 
-            Assert.Equal(13, data.Item1);
+            Assert.Equal(12, data.Item1);
         }
     }
 }

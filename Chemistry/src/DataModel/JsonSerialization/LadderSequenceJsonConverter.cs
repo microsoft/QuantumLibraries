@@ -57,7 +57,7 @@ namespace Microsoft.Quantum.Chemistry.Json
                 return null;
             }
             
-            var indexType = GetBasestType(objectType).GetGenericArguments()[0];
+            var indexType = Helper.GetBasestType(objectType).GetGenericArguments()[0];
             var tupleType = typeof(ValueTuple<,>).MakeGenericType( 
                 typeof(List<>).MakeGenericType(
                     typeof(LadderOperator<>)
@@ -69,19 +69,6 @@ namespace Microsoft.Quantum.Chemistry.Json
             result.SetObject(item);
 
             return result;
-        }
-
-        internal Type GetBasestType(Type t)
-        {
-            var type = t;
-            if (t.BaseType == typeof(object))
-            {
-                return t;
-            }
-            else
-            {
-                return GetBasestType(t.BaseType);
-            }
         }
     }
     

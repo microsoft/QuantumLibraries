@@ -32,7 +32,7 @@ namespace Microsoft.Quantum.Chemistry.Magic
             /// <summary>
             /// The input state.
             /// </summary>
-            public FermionWavefunction<int> inputState { get; set; }
+            public FermionWavefunction<int> wavefunction { get; set; }
         }
 
         public ExecutionResult Run(string input, IChannel channel)
@@ -46,7 +46,7 @@ namespace Microsoft.Quantum.Chemistry.Magic
             // We now convert this Hamiltonian and a selected state to a format that than be passed onto the QSharp component
             // of the library that implements quantum simulation algorithms.
             var qSharpHamiltonian = pauliHamiltonian.ToQSharpFormat();
-            var qSharpWavefunction = args.inputState.ToQSharpFormat();
+            var qSharpWavefunction = args.wavefunction.ToQSharpFormat();
             var qSharpData = Microsoft.Quantum.Chemistry.QSharpFormat.Convert.ToQSharpFormat(qSharpHamiltonian, qSharpWavefunction);
 
             return qSharpData.ToExecutionResult();

@@ -35,11 +35,6 @@ namespace Microsoft.Quantum.Chemistry.Magic
             public string fileName { get; set; }
 
             /// <summary>
-            /// A Broombridge ProblemDescription to load the FermionHamiltonian from.
-            /// </summary>
-            public Data.ProblemDescription problemDescription { get; set; }
-
-            /// <summary>
             /// The IndexConvention to use to generate the Hamiltonian from the ProblemDescription.
             /// </summary>
             public IndexConvention indexConvention { get; set; } = IndexConvention.UpDown;
@@ -71,24 +66,20 @@ namespace Microsoft.Quantum.Chemistry.Magic
             var problemData = SelectProblemDescription(args);
 
             // Based on the argument, return the Hartree--Fock state or the wavefunction with the given label.
-            var inputState = (string.IsNullOrEmpty(args.wavefunctionLabel))
+            var wavefunction = (string.IsNullOrEmpty(args.wavefunctionLabel))
                 ? problemData.OrbitalIntegralHamiltonian.ToFermionHamiltonian(args.indexConvention).CreateHartreeFockState(problemData.NElectrons)
                 : problemData.Wavefunctions[args.wavefunctionLabel].ToIndexing(args.indexConvention);
 
-            return inputState.ToExecutionResult();
+            return wavefunction.ToExecutionResult();
         }
         
         /// <summary>
         /// Selects the ProblemDescription from the given arguments.
         /// If the fileName is specified, it will try to load the Broombridge data from the file
-        /// and will use the first ProblemDescription, otherwise, the problemDescription in the arguments is used.
+        /// and will use the first ProblemDescription.
         /// </summary>
         protected virtual Data.ProblemDescription SelectProblemDescription(Arguments args)
         {
-            if (string.IsNullOrWhiteSpace(args.fileName))
-            {
-                return args.problemDescription;
-            }
 
             // A single file can contain multiple problem descriptions. Let us pick the first one.
             Data broombridge = Deserializers.DeserializeBroombridge(args.fileName);

@@ -265,5 +265,6 @@ namespace Microsoft.Quantum.Chemistry
                 return new DoubleCoeff(value);
             }
         }
+
     }
 }

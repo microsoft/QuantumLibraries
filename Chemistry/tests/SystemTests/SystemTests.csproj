@@ -22,17 +22,15 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="Molecules\MolecularHydrogen\hydrogen_0 .1.yaml">
+    <None Include="..\BroombridgeExamples\hydrogen_0.1.yaml" Link="Molecules\MolecularHydrogen\hydrogen_0.1.yaml" />
+    <None Include="..\BroombridgeExamples\hydrogen_0.2.yaml" Link="Molecules\MolecularHydrogen\hydrogen_0.2.yaml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Molecules\MolecularHydrogen\hydrogen_0.2.yaml">
+    <None Include="..\BroombridgeExamples\LiH_0.1.yaml" Link="Molecules\LithiumHydride\LiH_0.1.yaml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Molecules\LithiumHydride\LiH_0.1.yaml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Molecules\LithiumHydride\LiH_0.2.yaml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    <None Include="..\BroombridgeExamples\LiH_0.2.yaml" Link="Molecules\LithiumHydride\LiH_0.2.yaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
 

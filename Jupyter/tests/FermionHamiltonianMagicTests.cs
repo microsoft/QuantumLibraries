@@ -62,13 +62,13 @@ namespace Microsoft.Quantum.Chemistry.Tests
             Assert.Equal(64.5730917943, hamiltonian.Norm());
         }
 
-
+        /*
         [Fact]
         public void LoadFromProblemDescription()
         {
             var (magic, channel) = Init();
             var broombridgeMagic = new BroombridgeMagic();
-            var broombridge = (Data.Data)broombridgeMagic.Run("broombridge_v0.2.yaml", channel).Output;
+            var broombridge = (V0_2.Data)broombridgeMagic.Run("broombridge_v0.2.yaml", channel).Output;
 
             var args = JsonConvert.SerializeObject(new FermionHamiltonianLoadMagic.Arguments
             {
@@ -82,6 +82,7 @@ namespace Microsoft.Quantum.Chemistry.Tests
             Assert.Equal(6, hamiltonian.Terms.Count);
             Assert.Equal(64.5730917943, hamiltonian.Norm());
         }
+        */
     }
 
     public class FermionHamiltonianAddTermsMagicTests
