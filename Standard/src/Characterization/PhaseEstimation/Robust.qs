@@ -48,8 +48,7 @@ namespace Microsoft.Quantum.Characterization {
                     set nRepeats = nRepeats + 1;
                 }
 
-                mutable pZero = 0.0;
-                mutable pPlus = 0.0;
+                mutable (pZero, pPlus) = (0.0, 0.0);
 
                 for (idxRep in 0 .. nRepeats - 1) {
                     for (idxExperiment in 0 .. 1) {
