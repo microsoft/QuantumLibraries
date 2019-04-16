@@ -41,6 +41,13 @@ namespace SystemTests.Molecules
             {
                 return Helper.GetQSharpData(filename, stateName, config);
             }
+
+            [Fact]
+            // Test classical computing Stack.
+            public void LoadTest()
+            {
+                Load(GroundState, Config.Default());
+            }
         }
 
             public class Version_v0_2

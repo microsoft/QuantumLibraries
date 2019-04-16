@@ -10,6 +10,9 @@
     <None Include="..\BroombridgeExamples\broombridge_v0.2.yaml" Link="broombridge_v0.2.yaml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="..\BroombridgeExamples\LiH_0.1.yaml" Link="LiH_0.1.yaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
   <ItemGroup>
@@ -21,6 +24,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\DataModel\DataModel.csproj" />
+    <ProjectReference Include="..\..\src\Runtime\Runtime.csproj" />
     <ProjectReference Include="..\DataModelTests\CSharpTests.csproj" />
   </ItemGroup>
 
