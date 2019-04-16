@@ -141,7 +141,7 @@ namespace Microsoft.Quantum.Canon {
             let nIndex = Length(index!);
             let nStates = 2^nIndex;
             let (nUnitaries, unitaryFunction) = unitaryGenerator;
-            for(idxOp in 0..MinI(nStates,nUnitaries)-1){
+            for(idxOp in 0..MinI(nStates,nUnitaries) - 1){
                 (ControlledOnInt(idxOp, unitaryFunction(idxOp)))(index!,target);
             }
         }
