@@ -11,6 +11,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="..\..\Chemistry\tests\BroombridgeExamples\broombridge_v0.2.yaml" Link="broombridge_v0.2.yaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.9.0" />
     <PackageReference Include="NETStandard.Library" Version="2.0.3" />
     <PackageReference Include="xunit" Version="2.4.0" />
@@ -20,13 +26,6 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Chemistry\src\Runtime\Runtime.csproj" />
     <ProjectReference Include="..\src\Jupyter.csproj" />
-  </ItemGroup>
-
-
-  <ItemGroup>
-    <None Update="broombridge_v0.2.yaml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
 
 </Project>
