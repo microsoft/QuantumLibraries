@@ -268,37 +268,6 @@ namespace Microsoft.Quantum.Tests {
         }
     }
 
-    operation PrepareUniformSuperpositionTest() : Unit {
-        body (...) {
-            let nQubits = 5;
-            using(qubits = Qubit[nQubits]) {
-                for(nIndices in 1..2^nQubits)
-                {
-                    Message($"Testing nIndices {nIndices} on {nQubits} qubits");
-                    PrepareUniformSuperposition(nIndices, BigEndian(qubits));
-                
-                    ApplyToEachCA(H,qubits);
-
-                    using(flag = Qubit[1])
-                    {
-                        (ControlledOnInt(0, X))(qubits, flag[0]);
-                        AssertProb([PauliZ], flag, One, IntAsDouble(nIndices)/IntAsDouble(2^nQubits), "", 1e-10);
-                        (ControlledOnInt(0, X))(qubits, flag[0]);
-                        ApplyToEachCA(H,qubits);
-
-                        let measuredInt = MeasureIntegerBE(BigEndian(qubits));
-
-                        if(measuredInt >= nIndices){
-                            fail $"Measured integer {measuredInt} which is bigger than expected of number state {nIndices}.";
-                        }
-
-                        ResetAll(flag);
-                    }
-                    ResetAll(qubits);
-                }
-            }
-        }
-    }
 
 }
 

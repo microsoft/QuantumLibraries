@@ -49,7 +49,7 @@ namespace Microsoft.Quantum.Preparation {
     ///     op(qubitsBE);
     /// }
     /// ```
-    function StatePreparationPositiveCoefficients (coefficients : Double[]) : (BigEndian => Unit : Adjoint, Controlled) {
+    function StatePreparationPositiveCoefficients (coefficients : Double[]) : (LittleEndian => Unit : Adjoint, Controlled) {
         let nCoefficients = Length(coefficients);
         mutable coefficientsComplexPolar = new ComplexPolar[nCoefficients];
 
@@ -105,7 +105,7 @@ namespace Microsoft.Quantum.Preparation {
     ///     op(qubitsBE);
     /// }
     /// ```
-    function StatePreparationComplexCoefficients (coefficients : ComplexPolar[]) : (BigEndian => Unit : Adjoint, Controlled) {
+    function StatePreparationComplexCoefficients (coefficients : ComplexPolar[]) : (LittleEndian => Unit : Adjoint, Controlled) {
         return PrepareArbitraryState(coefficients, _);
     }
     
@@ -144,18 +144,18 @@ namespace Microsoft.Quantum.Preparation {
     /// - Synthesis of Quantum Logic Circuits
     ///   Vivek V. Shende, Stephen S. Bullock, Igor L. Markov
     ///   https://arxiv.org/abs/quant-ph/0406176
-    operation PrepareArbitraryState (coefficients : ComplexPolar[], qubits : BigEndian) : Unit {
+    operation PrepareArbitraryState (coefficients : ComplexPolar[], qubits : LittleEndian) : Unit {
         body (...) {
             // pad coefficients at tail length to a power of 2.
-            let coefficientsPadded = Padded(-2 ^ Length(qubits!), ComplexPolar(0.0, 0.0), coefficients);
-            let target = (qubits!)[Length(qubits!) - 1];
+            let coefficientsPadded = Padded(2 ^ Length(qubits!), ComplexPolar(0.0, 0.0), coefficients);
+            let target = (qubits!)[0];
             let op = (Adjoint PrepareArbitraryState_(coefficientsPadded, _, _))(_, target);
 
             op(
                 // Determine what controls to apply to `op`.
                 Length(qubits!) > 1
-                ? BigEndian((qubits!)[0 .. Length(qubits!) - 2])
-                | BigEndian(new Qubit[0])
+                ? LittleEndian((qubits!)[1 .. Length(qubits!) - 1])
+                | LittleEndian(new Qubit[0])
             );
         }
 
@@ -170,7 +170,7 @@ namespace Microsoft.Quantum.Preparation {
     /// # See Also
     /// - Microsoft.Quantum.Canon.PrepareArbitraryState
     /// - Microsoft.Quantum.Canon.MultiplexPauli
-    operation PrepareArbitraryState_ (coefficients : ComplexPolar[], control : BigEndian, target : Qubit) : Unit
+    operation PrepareArbitraryState_ (coefficients : ComplexPolar[], control : LittleEndian, target : Qubit) : Unit
     {
         body (...)
         {
@@ -189,8 +189,8 @@ namespace Microsoft.Quantum.Preparation {
             }
             else
             {
-                let newControl = BigEndian((control!)[0 .. Length(control!) - 2]);
-                let newTarget = (control!)[Length(control!) - 1];
+                let newControl = LittleEndian((control!)[1 .. Length(control!) - 1]);
+                let newTarget = (control!)[0];
                 PrepareArbitraryState_(newCoefficients, newControl, newTarget);
             }
         }
@@ -239,7 +239,7 @@ namespace Microsoft.Quantum.Preparation {
         mutable newCoefficients = new ComplexPolar[Length(coefficients) / 2];
 
         for (idxCoeff in 0 .. 2 .. Length(coefficients) - 1) {
-            let (rt, phi, theta) = BlochSphereCoordinates(coefficients[idxCoeff], coefficients[idxCoeff + 1]);
+            let (rt, phi, theta) = BlochSphereCoordinates(coefficients[idxCoeff + 1], coefficients[idxCoeff]);
             set disentanglingZ[idxCoeff / 2] = 0.5 * phi;
             set disentanglingY[idxCoeff / 2] = 0.5 * theta;
             set newCoefficients[idxCoeff / 2] = rt;

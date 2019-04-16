@@ -267,7 +267,7 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
     }
     
     
-    operation _ToJordanWignerSelectInput__ (idx : Int, optimizedBEGeneratorSystem : OptimizedBEGeneratorSystem, signQubit : Qubit, selectZControlRegisters : Qubit[], OptimizedBEControlRegisters : Qubit[], pauliBasesIdx : BigEndian, indexRegisters : BigEndian[]) : Unit {
+    operation _ToJordanWignerSelectInput__ (idx : Int, optimizedBEGeneratorSystem : OptimizedBEGeneratorSystem, signQubit : Qubit, selectZControlRegisters : Qubit[], OptimizedBEControlRegisters : Qubit[], pauliBasesIdx : LittleEndian, indexRegisters : LittleEndian[]) : Unit {
         
         body (...) {
             let (nTerms, oneNorm, intToGenIdx) = optimizedBEGeneratorSystem!;
@@ -296,29 +296,29 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
             
             // Write bitstring to apply desired XZ... or YZ... Pauli string
             for (idxSet in IndexRange(indexRegistersSet)) {
-                InPlaceXorBE(indexRegistersSet[idxSet], indexRegisters[idxSet]);
+                InPlaceXor(indexRegistersSet[idxSet], indexRegisters[idxSet]);
             }
             
             // Crete state to select uniform superposition of X and Y operators.
             if (Length(pauliBasesSet) == 2) {
                 
                 // for PQ or PQQR terms, create |00> + |11>
-                InPlaceXorBE(0, pauliBasesIdx);
+                InPlaceXor(0, pauliBasesIdx);
             }
             elif (Length(pauliBasesSet) == 4) {
                 
                 // for PQRS terms, create |abcd> + |a^ b^ c^ d^>
                 if (pauliBasesSet[2] == 1 and pauliBasesSet[3] == 1) {
-                    InPlaceXorBE(1, pauliBasesIdx);
+                    InPlaceXor(1, pauliBasesIdx);
                 }
                 elif (pauliBasesSet[2] == 2 and pauliBasesSet[3] == 2) {
-                    InPlaceXorBE(2, pauliBasesIdx);
+                    InPlaceXor(2, pauliBasesIdx);
                 }
                 elif (pauliBasesSet[2] == 1 and pauliBasesSet[3] == 2) {
-                    InPlaceXorBE(3, pauliBasesIdx);
+                    InPlaceXor(3, pauliBasesIdx);
                 }
                 elif (pauliBasesSet[2] == 2 and pauliBasesSet[3] == 1) {
-                    InPlaceXorBE(4, pauliBasesIdx);
+                    InPlaceXor(4, pauliBasesIdx);
                 }
             }
         }
@@ -329,7 +329,7 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
     }
     
     
-    function _ToJordanWignerSelectInput_ (idx : Int, optimizedBEGeneratorSystem : OptimizedBEGeneratorSystem) : ((Qubit, Qubit[], Qubit[], BigEndian, BigEndian[]) => Unit : Adjoint, Controlled) {
+    function _ToJordanWignerSelectInput_ (idx : Int, optimizedBEGeneratorSystem : OptimizedBEGeneratorSystem) : ((Qubit, Qubit[], Qubit[], LittleEndian, LittleEndian[]) => Unit : Adjoint, Controlled) {
         
         return _ToJordanWignerSelectInput__(idx, optimizedBEGeneratorSystem, _, _, _, _, _);
     }
@@ -367,7 +367,7 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
     
     
     // This prepares the state that selects _JordanWignerSelect_;
-    operation _JordanWignerOptimizedBlockEncodingStatePrep__ (targetError : Double, optimizedBEGeneratorSystem : OptimizedBEGeneratorSystem, qROMIdxRegister : BigEndian, qROMGarbage : Qubit[], signQubit : Qubit, selectZControlRegisters : Qubit[], OptimizedBEControlRegisters : Qubit[], pauliBases : Qubit[], pauliBasesIdx : BigEndian, indexRegisters : BigEndian[]) : Unit {
+    operation _JordanWignerOptimizedBlockEncodingStatePrep__ (targetError : Double, optimizedBEGeneratorSystem : OptimizedBEGeneratorSystem, qROMIdxRegister : LittleEndian, qROMGarbage : Qubit[], signQubit : Qubit, selectZControlRegisters : Qubit[], OptimizedBEControlRegisters : Qubit[], pauliBases : Qubit[], pauliBasesIdx : LittleEndian, indexRegisters : LittleEndian[]) : Unit {
         
         body (...) {
             let (nTerms, oneNorm0, intToGenIdx) = optimizedBEGeneratorSystem!;

@@ -100,8 +100,8 @@ namespace Microsoft.Quantum.Simulation {
     /// <xref:microsoft.quantum.canon.multiplexoperationsfromgenerator>.
     function PauliBlockEncodingImpl(
         generatorSystem: GeneratorSystem,
-        statePrepUnitary: (Double[] -> (BigEndian => Unit : Adjoint, Controlled)), 
-        multiplexer: ((Int, (Int -> (Qubit[] => Unit : Adjoint, Controlled))) -> ((BigEndian, Qubit[]) => Unit : Adjoint, Controlled))) : (Double, BlockEncodingReflection) {
+        statePrepUnitary: (Double[] -> (LittleEndian => Unit : Adjoint, Controlled)), 
+        multiplexer: ((Int, (Int -> (Qubit[] => Unit : Adjoint, Controlled))) -> ((LittleEndian, Qubit[]) => Unit : Adjoint, Controlled))) : (Double, BlockEncodingReflection) {
         let (nTerms, intToGenIdx) = generatorSystem!;
         let op = IdxToCoeff_(_, intToGenIdx, PauliCoefficientFromGenIdx);
         let coefficients = Mapped(op, RangeAsIntArray(0..nTerms-1));

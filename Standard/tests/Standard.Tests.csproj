@@ -11,6 +11,36 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="SimulatorTestTargets.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <QsharpCompile Remove="AmplitudeAmplificationTests.qs" />
+    <QsharpCompile Remove="ApplyMultiControlledTests.qs" />
+    <QsharpCompile Remove="ArithmeticTests.qs" />
+    <QsharpCompile Remove="ArrayTests.qs" />
+    <QsharpCompile Remove="AssertTests.qs" />
+    <QsharpCompile Remove="CombinatorTests.qs" />
+    <QsharpCompile Remove="CommonGateTests.qs" />
+    <QsharpCompile Remove="ConversionTests.qs" />
+    <QsharpCompile Remove="EnumerationTests.qs" />
+    <QsharpCompile Remove="IntegerTests.qs" />
+    <QsharpCompile Remove="MathTests.qs" />
+    <QsharpCompile Remove="MultiplexerTests.qs" />
+    <QsharpCompile Remove="PairTests.qs" />
+    <QsharpCompile Remove="PauliTests.qs" />
+    <QsharpCompile Remove="QcvvTests.qs" />
+    <QsharpCompile Remove="QeccTests.qs" />
+    <QsharpCompile Remove="QFTTests.qs" />
+    <QsharpCompile Remove="QuantumPhaseEstimationTests.qs" />
+    <QsharpCompile Remove="QuantumROMTests.qs" />
+    <QsharpCompile Remove="QubitizationTests.qs" />
+    <QsharpCompile Remove="RandomTests.qs" />
+    <QsharpCompile Remove="StatePreparationTests.qs" />
+    <QsharpCompile Remove="TypeConversionTests.qs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\src\Standard.csproj" />
   </ItemGroup>
 
