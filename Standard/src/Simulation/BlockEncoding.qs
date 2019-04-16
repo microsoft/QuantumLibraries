@@ -258,7 +258,7 @@ namespace Microsoft.Quantum.Simulation {
 
 
     /// # Summary
-    /// Conversion of ((BigEndian, Qubit[]) => () : Adjoint, Controlled) to BlockEncoding
+    /// Conversion of ((LittleEndian, Qubit[]) => () : Adjoint, Controlled) to BlockEncoding
     operation BlockEncodingFromBEandQubit_(
         op: ((LittleEndian, Qubit[]) => Unit : Adjoint, Controlled), 
         auxiliary: Qubit[], 

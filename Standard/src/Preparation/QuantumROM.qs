@@ -34,7 +34,7 @@ namespace Microsoft.Quantum.Preparation {
     /// # Output
     /// ## First parameter
     /// A tuple `(x,(y,z))` where `x = y + z` is the total number of qubits allocated,
-    /// `y` is the number of qubits for the `BigEndian` register, and `z` is the Number
+    /// `y` is the number of qubits for the `LittleEndian` register, and `z` is the Number
     /// of garbage qubits.
     /// ## Second parameter
     /// The one-norm $\sum_j |\alpha_j|$ of the coefficient array.
@@ -52,7 +52,7 @@ namespace Microsoft.Quantum.Preparation {
     /// let ((nTotalQubits, (nIndexQubits, nGarbageQubits)), oneNorm, op) = QuantumROM(targetError, coefficients);
     /// using (indexRegister = Qubit[nIndexQubits]) {
     ///     using (garbageRegister = Qubit[nGarbageQubits]) {
-    ///         op(BigEndian(indexRegister), garbageRegister);
+    ///         op(LittleEndian(indexRegister), garbageRegister);
     ///     }
     /// }
     /// ```
@@ -85,7 +85,7 @@ namespace Microsoft.Quantum.Preparation {
     /// # Output
     /// ## First parameter
     /// A tuple `(x,(y,z))` where `x = y + z` is the total number of qubits allocated,
-    /// `y` is the number of qubits for the `BigEndian` register, and `z` is the Number
+    /// `y` is the number of qubits for the `LittleEndian` register, and `z` is the Number
     /// of garbage qubits.
     function QuantumROMQubitCount(targetError: Double, nCoeffs: Int) : (Int, (Int, Int))
     {

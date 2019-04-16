@@ -19,14 +19,14 @@ namespace Microsoft.Quantum.Canon {
     /// # Input
     /// ## coefficients
     /// Array of up to $2^n$ coefficients $\theta_j$. The $j$th coefficient
-    /// indexes the number state $\ket{j}$ encoded in big-endian format.
+    /// indexes the number state $\ket{j}$ encoded in little-endian format.
     ///
     /// ## pauli
     /// Pauli operator $P$ that determines axis of rotation.
     ///
     /// ## control
     /// $n$-qubit control register that encodes number states $\ket{j}$ in
-    /// big-endian format.
+    /// little-endian format.
     ///
     /// ## target
     /// Single qubit register that is rotated by $e^{i P \theta_j}$.
@@ -81,11 +81,11 @@ namespace Microsoft.Quantum.Canon {
     /// # Input
     /// ## coefficients
     /// Array of up to $2^n$ coefficients $\theta_j$. The $j$th coefficient
-    /// indexes the number state $\ket{j}$ encoded in big-endian format.
+    /// indexes the number state $\ket{j}$ encoded in little-endian format.
     ///
     /// ## control
     /// $n$-qubit control register that encodes number states $\ket{j}$ in
-    /// big-endian format.
+    /// little-endian format.
     ///
     /// ## target
     /// Single qubit register that is rotated by $e^{i P \theta_j}$.
@@ -149,11 +149,11 @@ namespace Microsoft.Quantum.Canon {
     /// # Input
     /// ## coefficients
     /// Array of up to $2^n$ coefficients $\theta_j$. The $j$th coefficient
-    /// indexes the number state $\ket{j}$ encoded in big-endian format.
+    /// indexes the number state $\ket{j}$ encoded in little-endian format.
     ///
     /// ## control
     /// $n$-qubit control register that encodes number states $\ket{j}$ in
-    /// big-endian format.
+    /// little-endian format.
     ///
     /// # Remarks
     /// `coefficients` will be padded with elements $\theta_j = 0.0$ if
@@ -227,11 +227,11 @@ namespace Microsoft.Quantum.Canon {
     /// # Input
     /// ## unitaries
     /// Array of up to $2^n$ unitary operations. The $j$th operation
-    /// is indexed by the number state $\ket{j}$ encoded in big-endian format.
+    /// is indexed by the number state $\ket{j}$ encoded in little-endian format.
     ///
     /// ## index
     /// $n$-qubit control register that encodes number states $\ket{j}$ in
-    /// big-endian format.
+    /// little-endian format.
     ///
     /// ## target
     /// Generic qubit register that $V_j$ acts on.

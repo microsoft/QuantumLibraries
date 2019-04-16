@@ -25,7 +25,7 @@ namespace Microsoft.Quantum.Preparation {
     /// ## nIndices
     /// The desired number of states $M$ in the uniform superposition.
     /// ## indexRegister
-    /// The qubit register that stores the number states in `BigEndian` format.
+    /// The qubit register that stores the number states in `LittleEndian` format.
     /// This register must be able to store the number $M-1$, and is assumed to be
     /// initialized in the state $\ket{0\cdots 0}$.
     ///
@@ -36,7 +36,7 @@ namespace Microsoft.Quantum.Preparation {
     /// ``` Q#
     /// let nIndices = 6;
     /// using(indexRegister = Qubit[3]) {
-    ///     PrepareUniformSuperposition(nIndices, BigEndian(indexRegister));
+    ///     PrepareUniformSuperposition(nIndices, LittleEndian(indexRegister));
     /// }
     /// ```
     operation PrepareUniformSuperposition(nIndices: Int, indexRegister: LittleEndian) : Unit is Adj + Ctl {

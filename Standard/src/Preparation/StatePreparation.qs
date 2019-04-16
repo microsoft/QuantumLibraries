@@ -28,7 +28,7 @@ namespace Microsoft.Quantum.Preparation {
     /// # Input
     /// ## coefficients
     /// Array of up to $2^n$ coefficients $\alpha_j$. The $j$th coefficient
-    /// indexes the number state $\ket{j}$ encoded in big-endian format.
+    /// indexes the number state $\ket{j}$ encoded in little-endian format.
     ///
     /// # Output
     /// A state-preparation unitary operation $U$.
@@ -40,13 +40,13 @@ namespace Microsoft.Quantum.Preparation {
     ///
     /// ## Example
     /// The following snippet prepares the quantum state $\ket{\psi}=\sqrt{1/8}\ket{0}+\sqrt{7/8}\ket{2}$
-    /// in the qubit register `qubitsBE`.
+    /// in the qubit register `qubitsLE`.
     /// ```qsharp
     /// let amplitudes = [Sqrt(0.125), 0.0, Sqrt(0.875), 0.0];
     /// let op = StatePreparationPositiveCoefficients(amplitudes);
     /// using (qubits = Qubit[2]) {
-    ///     let qubitsBE = BigEndian(qubits);
-    ///     op(qubitsBE);
+    ///     let qubitsLE = LittleEndian(qubits);
+    ///     op(qubitsLE);
     /// }
     /// ```
     function StatePreparationPositiveCoefficients (coefficients : Double[]) : (LittleEndian => Unit : Adjoint, Controlled) {
@@ -78,7 +78,7 @@ namespace Microsoft.Quantum.Preparation {
     /// ## coefficients
     /// Array of up to $2^n$ complex coefficients represented by their
     /// absolute value and phase $(r_j, t_j)$. The $j$th coefficient
-    /// indexes the number state $\ket{j}$ encoded in big-endian format.
+    /// indexes the number state $\ket{j}$ encoded in little-endian format.
     ///
     /// # Output
     /// A state-preparation unitary operation $U$.
@@ -91,7 +91,7 @@ namespace Microsoft.Quantum.Preparation {
     ///
     /// ## Example
     /// The following snippet prepares the quantum state $\ket{\psi}=e^{i 0.1}\sqrt{1/8}\ket{0}+\sqrt{7/8}\ket{2}$
-    /// in the qubit register `qubitsBE`.
+    /// in the qubit register `qubitsLE`.
     /// ```qsharp
     /// let amplitudes = [Sqrt(0.125), 0.0, Sqrt(0.875), 0.0];
     /// let phases = [0.1, 0.0, 0.0, 0.0];
@@ -101,8 +101,8 @@ namespace Microsoft.Quantum.Preparation {
     /// }
     /// let op = StatePreparationComplexCoefficients(complexNumbers);
     /// using (qubits = Qubit[2]) {
-    ///     let qubitsBE = BigEndian(qubits);
-    ///     op(qubitsBE);
+    ///     let qubitsLE = LittleEndian(qubits);
+    ///     op(qubitsLE);
     /// }
     /// ```
     function StatePreparationComplexCoefficients (coefficients : ComplexPolar[]) : (LittleEndian => Unit : Adjoint, Controlled) {
@@ -127,10 +127,10 @@ namespace Microsoft.Quantum.Preparation {
     /// ## coefficients
     /// Array of up to $2^n$ complex coefficients represented by their
     /// absolute value and phase $(r_j, t_j)$. The $j$th coefficient
-    /// indexes the number state $\ket{j}$ encoded in big-endian format.
+    /// indexes the number state $\ket{j}$ encoded in little-endian format.
     ///
     /// ## qubits
-    /// Qubit register encoding number states in big-endian format. This is
+    /// Qubit register encoding number states in little-endian format. This is
     /// expected to be initialized in the computational basis state
     /// $\ket{0...0}$.
     ///

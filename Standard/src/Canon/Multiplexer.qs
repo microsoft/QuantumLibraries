@@ -22,7 +22,7 @@ namespace Microsoft.Quantum.Canon {
     ///
     /// ## index
     /// $n$-qubit control register that encodes number states $\ket{j}$ in
-    /// big-endian format.
+    /// little-endian format.
     ///
     /// ## target
     /// Generic qubit register that $V_j$ acts on.
@@ -127,7 +127,7 @@ namespace Microsoft.Quantum.Canon {
     ///
     /// ## index
     /// $n$-qubit control register that encodes number states $\ket{j}$ in
-    /// big-endian format.
+    /// little-endian format.
     ///
     /// ## target
     /// Generic qubit register that $V_j$ acts on.
