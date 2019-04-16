@@ -10,7 +10,7 @@ steps:
   displayName: 'Build Chemistry Magic'
   inputs:
     projects: |
-      $(LibrariesRootFolder)/Magic.sln
+      $(LibrariesRootFolder)/Jupyter.sln
     arguments: '-c $(BuildConfiguration) -v n /p:Version=$(Assembly.Version)'
 
 
@@ -22,6 +22,6 @@ steps:
   inputs:
     command: test
     projects: |
-     $(LibrariesRootFolder)/Chemistry/tests/JupyterTests/JupyterTests.csproj
+     $(LibrariesRootFolder)/Jupyter/tests/JupyterTests.csproj
     arguments: '-c $(BuildConfiguration) -v n /p:Version=$(Assembly.Version)'
 
