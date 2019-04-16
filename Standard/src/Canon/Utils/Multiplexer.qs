@@ -103,7 +103,7 @@ namespace Microsoft.Quantum.Canon {
         body (...)
         {
             // pad coefficients length at tail to a power of 2.
-            let coefficientsPadded = Padded(2 ^ Length(control!), 0.0, coefficients);
+            let coefficientsPadded = Padded(-2 ^ Length(control!), 0.0, coefficients);
             
             if (Length(coefficientsPadded) == 1)
             {
@@ -126,7 +126,7 @@ namespace Microsoft.Quantum.Canon {
         controlled (controlRegister, ...)
         {
             // pad coefficients length to a power of 2.
-            let coefficientsPadded = Padded(-2 ^ (Length(control!) + 1), 0.0, Padded(2 ^ Length(control!), 0.0, coefficients));
+            let coefficientsPadded = Padded(2 ^ (Length(control!) + 1), 0.0, Padded(-2 ^ Length(control!), 0.0, coefficients));
             let (coefficients0, coefficients1) = MultiplexZComputeCoefficients_(coefficientsPadded);
             MultiplexZ(coefficients0, control, target);
             Controlled X(controlRegister, target);
@@ -173,7 +173,7 @@ namespace Microsoft.Quantum.Canon {
             }
             
             // pad coefficients length at tail to a power of 2.
-            let coefficientsPadded = Padded(2 ^ Length(qubits!), 0.0, coefficients);
+            let coefficientsPadded = Padded(-2 ^ Length(qubits!), 0.0, coefficients);
             
             // Compute new coefficients.
             let (coefficients0, coefficients1) = MultiplexZComputeCoefficients_(coefficientsPadded);
@@ -182,7 +182,7 @@ namespace Microsoft.Quantum.Canon {
             if (Length(coefficientsPadded) == 2)
             {
                 // Termination case
-                Exp([PauliI], 1.0 * coefficients0[1], qubits!);
+                Exp([PauliI], 1.0 * coefficients0[0], qubits!);
             }
             else
             {
@@ -208,8 +208,8 @@ namespace Microsoft.Quantum.Canon {
         
         for (idxCoeff in 0 .. newCoefficientsLength - 1)
         {
-            set coefficients0[idxCoeff] = 0.5 * (coefficients[idxCoeff + newCoefficientsLength] + coefficients[idxCoeff]);
-            set coefficients1[idxCoeff] = 0.5 * (coefficients[idxCoeff + newCoefficientsLength] - coefficients[idxCoeff]);
+            set coefficients0[idxCoeff] = 0.5 * (coefficients[idxCoeff] + coefficients[idxCoeff + newCoefficientsLength]);
+            set coefficients1[idxCoeff] = 0.5 * (coefficients[idxCoeff] - coefficients[idxCoeff + newCoefficientsLength]);
         }
         
         return (coefficients0, coefficients1);
@@ -320,7 +320,7 @@ namespace Microsoft.Quantum.Canon {
                         Controlled X(ancilla, newAncilla[0]);
                         MultiplexOperations_(rightUnitaries, newAncilla, newControls, target);
                         Controlled X(ancilla, newAncilla[0]);
-                        Controlled X(ancilla + [(index!)[0]], newAncilla[0]);
+                        Controlled X(ancilla + [(index!)[Length(index!) - 1]], newAncilla[0]);
                     }
                 }
             }

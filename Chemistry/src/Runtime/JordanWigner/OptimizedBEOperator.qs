@@ -31,7 +31,7 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
     /// - Encoding Electronic Spectra in Quantum Circuits with Linear T Complexity
     ///   Ryan Babbush, Craig Gidney, Dominic W. Berry, Nathan Wiebe, Jarrod McClean, Alexandru Paler, Austin Fowler, Hartmut Neven
     ///   https://arxiv.org/abs/1805.03662
-    operation OptimizedBEXY (pauliBasis : Qubit, indexRegister : BigEndian, targetRegister : Qubit[]) : Unit {
+    operation OptimizedBEXY (pauliBasis : Qubit, indexRegister : LittleEndian, targetRegister : Qubit[]) : Unit {
         
         body (...) {
             let op = _OptimizedBEXY_(_);
@@ -100,7 +100,7 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
     /// The state $\ket{p}$ of this register determines the qubit on which $Z$ is applied.
     /// ## targetRegister
     /// Register of qubits on which the Pauli operators are applied.
-    operation SelectZ (indexRegister : BigEndian, targetRegister : Qubit[]) : Unit {
+    operation SelectZ (indexRegister : LittleEndian, targetRegister : Qubit[]) : Unit {
         
         body (...) {
             let op = _SelectZ_(_);
@@ -141,7 +141,7 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
     }
     
     
-    operation _JordanWignerSelect_ (signQubit : Qubit, selectZControlRegisters : Qubit[], OptimizedBEControlRegisters : Qubit[], pauliBases : Qubit[], indexRegisters : BigEndian[], targetRegister : Qubit[]) : Unit {
+    operation _JordanWignerSelect_ (signQubit : Qubit, selectZControlRegisters : Qubit[], OptimizedBEControlRegisters : Qubit[], pauliBases : Qubit[], indexRegisters : LittleEndian[], targetRegister : Qubit[]) : Unit {
         
         body (...) {
             Z(signQubit);
@@ -173,7 +173,7 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
     }
     
     
-    function _JordanWignerSelectQubitManager_ (nZ : Int, nMaj : Int, nIdxRegQubits : Int, ctrlRegister : Qubit[], targetRegister : Qubit[]) : ((Qubit, Qubit[], Qubit[], Qubit[], BigEndian[], Qubit[]), Qubit[]) {
+    function _JordanWignerSelectQubitManager_ (nZ : Int, nMaj : Int, nIdxRegQubits : Int, ctrlRegister : Qubit[], targetRegister : Qubit[]) : ((Qubit, Qubit[], Qubit[], Qubit[], LittleEndian[], Qubit[]), Qubit[]) {
         
         let (nTotal, (a, b, c, d, e)) = _JordanWignerSelectQubitCount_(nZ, nMaj, nIdxRegQubits);
         let split = [a, b, c, d] + e;
@@ -184,10 +184,10 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
         let pauliBases = registers[3];
         let indexRegistersTmp = registers[4 .. (4 + Length(e)) - 1];
         let rest = registers[Length(registers) - 1];
-        mutable indexRegisters = new BigEndian[Length(e)];
+        mutable indexRegisters = new LittleEndian[Length(e)];
         
         for (idx in IndexRange(e)) {
-            set indexRegisters[idx] = BigEndian(indexRegistersTmp[idx]);
+            set indexRegisters[idx] = LittleEndian(indexRegistersTmp[idx]);
         }
         
         return ((signQubit[0], selectZControlRegisters, OptimizedBEControlRegisters, pauliBases, indexRegisters, targetRegister), rest);

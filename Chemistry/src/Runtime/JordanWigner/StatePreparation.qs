@@ -90,9 +90,9 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
             using (auxillary = Qubit[nBitsIndices + 1]) {
                 using (flag = Qubit[1]) {
                     let multiplexer = MultiplexerBruteForceFromGenerator(nExcitations, LookupFunction(Mapped(_PrepareTrialStateSingleSiteOccupation_, applyFlips)));
-                    (StatePreparationComplexCoefficients(coefficientsNewComplexPolar))(BigEndian(auxillary));
-                    multiplexer(BigEndian(auxillary), qubits);
-                    (Adjoint (StatePreparationPositiveCoefficients(coefficientsSqrtAbs)))(BigEndian(auxillary));
+                    (StatePreparationComplexCoefficients(coefficientsNewComplexPolar))(LittleEndian(auxillary));
+                    multiplexer(LittleEndian(auxillary), qubits);
+                    (Adjoint (StatePreparationPositiveCoefficients(coefficientsSqrtAbs)))(LittleEndian(auxillary));
                     (ControlledOnInt(0, X))(auxillary, flag[0]);
                     
                     // if measurement outcome one we prepared required state

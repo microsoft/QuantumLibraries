@@ -55,15 +55,15 @@ namespace Microsoft.Quantum.Tests {
             
             // Test negative coefficients. Should give same results as positive coefficients.
             using (qubits = Qubit[nQubits]) {
-                let qubitsBE = BigEndian(qubits);
+                let qubitsLE = LittleEndian(qubits);
                 let op = StatePreparationPositiveCoefficients(coefficientsAmplitude);
-                op(qubitsBE);
+                op(qubitsLE);
                 let normalizedCoefficients = PNormalized(2.0, coefficientsAmplitude);
                 
                 for (idxCoeff in 0 .. nCoefficients - 1) {
                     let amp = normalizedCoefficients[idxCoeff];
                     let prob = amp * amp;
-                    AssertProbIntBE(idxCoeff, prob, qubitsBE, tolerance);
+                    AssertProbInt(idxCoeff, prob, qubitsLE, tolerance);
                 }
                 
                 ResetAll(qubits);
@@ -92,7 +92,7 @@ namespace Microsoft.Quantum.Tests {
             let nCoefficients = Length(coefficientsAmplitude);
             
             using (qubits = Qubit[nQubits]) {
-                let qubitsBE = BigEndian(qubits);
+                let qubitsLE = LittleEndian(qubits);
                 mutable coefficients = new ComplexPolar[nCoefficients];
                 mutable coefficientsPositive = new Double[nCoefficients];
                 
@@ -108,10 +108,10 @@ namespace Microsoft.Quantum.Tests {
                 let amp = normalizedCoefficients[0];
                 let prob = amp * amp;
                 let op = StatePreparationComplexCoefficients(coefficients);
-                op(qubitsBE);
-                AssertProbIntBE(0, prob, qubitsBE, tolerance);
-                AssertProbIntBE(1, prob, qubitsBE, tolerance);
-                AssertPhase(phase, (qubitsBE!)[0], tolerance);
+                op(qubitsLE);
+                AssertProbInt(0, prob, qubitsLE, tolerance);
+                AssertProbInt(1, prob, qubitsLE, tolerance);
+                AssertPhase(phase, (qubitsLE!)[0], tolerance);
                 ResetAll(qubits);
             }
         }
@@ -144,7 +144,7 @@ namespace Microsoft.Quantum.Tests {
             let nCoefficients = Length(coefficientsAmplitude);
             
             using (qubits = Qubit[nQubits]) {
-                let qubitsBE = BigEndian(qubits);
+                let qubitsLE = LittleEndian(qubits);
                 mutable coefficients = new ComplexPolar[nCoefficients];
                 mutable coefficientsPositive = new Double[nCoefficients];
                 
@@ -162,15 +162,15 @@ namespace Microsoft.Quantum.Tests {
                     
                     // Test probability
                     H(control[0]);
-                    Controlled op(control, qubitsBE);
+                    Controlled op(control, qubitsLE);
                     X(control[0]);
-                    Controlled (ApplyToEachCA(H, _))(control, qubitsBE!);
+                    Controlled (ApplyToEachCA(H, _))(control, qubitsLE!);
                     X(control[0]);
                     
                     for (idxCoeff in 0 .. nCoefficients - 1) {
                         let amp = normalizedCoefficients[idxCoeff];
                         let prob = amp * amp;
-                        AssertProbIntBE(idxCoeff, prob, qubitsBE, tolerance);
+                        AssertProbInt(idxCoeff, prob, qubitsLE, tolerance);
                     }
                     
                     ResetAll(control);
@@ -179,11 +179,11 @@ namespace Microsoft.Quantum.Tests {
                     //Test phase
                     for (repeats in 0 .. nCoefficients / 2) {
                         H(control[0]);
-                        Controlled op(control, qubitsBE);
+                        Controlled op(control, qubitsLE);
                         X(control[0]);
-                        Controlled (ApplyToEachCA(H, _))(control, qubitsBE!);
+                        Controlled (ApplyToEachCA(H, _))(control, qubitsLE!);
                         X(control[0]);
-                        let indexMeasuredInteger = MeasureIntegerBE(qubitsBE);
+                        let indexMeasuredInteger = MeasureInteger(qubitsLE);
                         let phase = coefficientsPhase[indexMeasuredInteger];
                         Message($"StatePreparationComplexCoefficientsTest: expected phase = {phase}.");
                         AssertPhase(-0.5 * phase, control[0], tolerance);
@@ -216,7 +216,7 @@ namespace Microsoft.Quantum.Tests {
             let nCoefficients = Length(coefficientsAmplitude);
             
             using (qubits = Qubit[nQubits]) {
-                let qubitsBE = BigEndian(qubits);
+                let qubitsLE = LittleEndian(qubits);
                 mutable coefficients = new ComplexPolar[nCoefficients];
                 mutable coefficientsPositive = new Double[nCoefficients];
                 
@@ -235,15 +235,15 @@ namespace Microsoft.Quantum.Tests {
                     
                     // Test probability
                     H(control[0]);
-                    Controlled opComplex(control, qubitsBE);
+                    Controlled opComplex(control, qubitsLE);
                     X(control[0]);
-                    Controlled opReal(control, qubitsBE);
+                    Controlled opReal(control, qubitsLE);
                     X(control[0]);
                     
                     for (idxCoeff in 0 .. nCoefficients - 1) {
                         let amp = normalizedCoefficients[idxCoeff];
                         let prob = amp * amp;
-                        AssertProbIntBE(idxCoeff, prob, qubitsBE, tolerance);
+                        AssertProbInt(idxCoeff, prob, qubitsLE, tolerance);
                     }
                     
                     ResetAll(control);
@@ -252,11 +252,11 @@ namespace Microsoft.Quantum.Tests {
                     // Test phase
                     for (repeats in 0 .. nCoefficients / 2) {
                         H(control[0]);
-                        Controlled opComplex(control, qubitsBE);
+                        Controlled opComplex(control, qubitsLE);
                         X(control[0]);
-                        Controlled opReal(control, qubitsBE);
+                        Controlled opReal(control, qubitsLE);
                         X(control[0]);
-                        let indexMeasuredInteger = MeasureIntegerBE(qubitsBE);
+                        let indexMeasuredInteger = MeasureInteger(qubitsLE);
                         let phase = coefficientsPhase[indexMeasuredInteger];
                         Message($"StatePreparationComplexCoefficientsTest: expected phase = {phase}.");
                         AssertPhase(-0.5 * phase, control[0], tolerance);

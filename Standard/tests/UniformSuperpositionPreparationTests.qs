@@ -10,10 +10,6 @@ namespace Microsoft.Quantum.Tests {
     open Microsoft.Quantum.Measurement;
     open Microsoft.Quantum.Arrays;
 
-    // number of qubits, abs(amplitude), phase
-    newtype StatePreparationTestCase = (Int, Double[], Double[]);
-
-
 
     operation PrepareUniformSuperpositionTest() : Unit {
         body (...) {

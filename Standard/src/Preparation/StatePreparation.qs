@@ -147,7 +147,7 @@ namespace Microsoft.Quantum.Preparation {
     operation PrepareArbitraryState (coefficients : ComplexPolar[], qubits : LittleEndian) : Unit {
         body (...) {
             // pad coefficients at tail length to a power of 2.
-            let coefficientsPadded = Padded(2 ^ Length(qubits!), ComplexPolar(0.0, 0.0), coefficients);
+            let coefficientsPadded = Padded(-2 ^ Length(qubits!), ComplexPolar(0.0, 0.0), coefficients);
             let target = (qubits!)[0];
             let op = (Adjoint PrepareArbitraryState_(coefficientsPadded, _, _))(_, target);
 
@@ -239,7 +239,7 @@ namespace Microsoft.Quantum.Preparation {
         mutable newCoefficients = new ComplexPolar[Length(coefficients) / 2];
 
         for (idxCoeff in 0 .. 2 .. Length(coefficients) - 1) {
-            let (rt, phi, theta) = BlochSphereCoordinates(coefficients[idxCoeff + 1], coefficients[idxCoeff]);
+            let (rt, phi, theta) = BlochSphereCoordinates(coefficients[idxCoeff], coefficients[idxCoeff+1]);
             set disentanglingZ[idxCoeff / 2] = 0.5 * phi;
             set disentanglingY[idxCoeff / 2] = 0.5 * theta;
             set newCoefficients[idxCoeff / 2] = rt;
