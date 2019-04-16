@@ -5,7 +5,7 @@ namespace Microsoft.Quantum.Tests {
     open Microsoft.Quantum.Arithmetic;
     open Microsoft.Quantum.Intrinsic;
     open Microsoft.Quantum.Canon;
-    open Microsoft.Quantum.Extensions.Convert;
+    open Microsoft.Quantum.Convert;
     open Microsoft.Quantum.Math;
     open Microsoft.Quantum.Measurement;
     open Microsoft.Quantum.Arrays;
@@ -130,7 +130,7 @@ namespace Microsoft.Quantum.Tests {
         set nTests = nTests + 1;
         set testCases[nTests] = StatePreparationTestCase(3, [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]);
         set nTests = nTests + 1;
-        set testCases[nTests] = StatePreparationTestCase(3, [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0], ConstantArray(8, Microsoft.Quantum.Extensions.Math.PI()));
+        set testCases[nTests] = StatePreparationTestCase(3, [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0], ConstantArray(8, PI()));
         set nTests = nTests + 1;
         set testCases[nTests] = StatePreparationTestCase(3, [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.01]);
         set nTests = nTests + 1;
@@ -282,7 +282,7 @@ namespace Microsoft.Quantum.Tests {
                     using(flag = Qubit[1])
                     {
                         (ControlledOnInt(0, X))(qubits, flag[0]);
-                        AssertProb([PauliZ], flag, One, ToDouble(nIndices)/ToDouble(2^nQubits), "", 1e-10);
+                        AssertProb([PauliZ], flag, One, IntAsDouble(nIndices)/IntAsDouble(2^nQubits), "", 1e-10);
                         (ControlledOnInt(0, X))(qubits, flag[0]);
                         ApplyToEachCA(H,qubits);
 

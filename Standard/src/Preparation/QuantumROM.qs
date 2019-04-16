@@ -5,10 +5,9 @@ namespace Microsoft.Quantum.Preparation {
     open Microsoft.Quantum.Intrinsic;
     open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Arithmetic;
-    open Microsoft.Quantum.Extensions.Convert;
+    open Microsoft.Quantum.Convert;
     open Microsoft.Quantum.Math;
     open Microsoft.Quantum.Arrays;
-    open Microsoft.Quantum.Convert;
 
     /// # Summary
 	/// Uses the Quantum ROM technique to represent a given density matrix.
@@ -63,10 +62,10 @@ namespace Microsoft.Quantum.Preparation {
     ///   Ryan Babbush, Craig Gidney, Dominic W. Berry, Nathan Wiebe, Jarrod McClean, Alexandru Paler, Austin Fowler, Hartmut Neven
     ///   https://arxiv.org/abs/1805.03662
     function QuantumROM(targetError: Double, coefficients: Double[]) : ((Int, (Int, Int)), Double, ((BigEndian, Qubit[]) => Unit : Adjoint, Controlled)) {
-        let nBitsPrecision = -Microsoft.Quantum.Extensions.Math.Ceiling(Lg(0.5*targetError))+1;
+        let nBitsPrecision = -Ceiling(Lg(0.5*targetError))+1;
         let (oneNorm, keepCoeff, altIndex) = _QuantumROMDiscretization(nBitsPrecision, coefficients);
         let nCoeffs = Length(coefficients);
-        let nBitsIndices = Microsoft.Quantum.Extensions.Math.Ceiling(Lg(ToDouble(nCoeffs)));
+        let nBitsIndices = Ceiling(Lg(IntAsDouble(nCoeffs)));
 
         let op =  QuantumROMImpl_(nBitsPrecision, nCoeffs, nBitsIndices, keepCoeff, altIndex, _, _);
         let qubitCounts = QuantumROMQubitCount(targetError, nCoeffs);
@@ -90,8 +89,8 @@ namespace Microsoft.Quantum.Preparation {
     /// of garbage qubits.
     function QuantumROMQubitCount(targetError: Double, nCoeffs: Int) : (Int, (Int, Int))
     {
-        let nBitsPrecision = -Microsoft.Quantum.Extensions.Math.Ceiling(Lg(0.5*targetError))+1;
-        let nBitsIndices = Microsoft.Quantum.Extensions.Math.Ceiling(Lg(ToDouble(nCoeffs)));
+        let nBitsPrecision = -Ceiling(Lg(0.5*targetError))+1;
+        let nBitsIndices = Ceiling(Lg(IntAsDouble(nCoeffs)));
         let nGarbageQubits = nBitsIndices + 2 * nBitsPrecision + 1;
         let nTotal = nGarbageQubits + nBitsIndices;
         return (nTotal, (nBitsIndices, nGarbageQubits));
@@ -101,7 +100,7 @@ namespace Microsoft.Quantum.Preparation {
     // qubit array into the subarrays required by the operation.
     function QuantumROMQubitManager_(targetError: Double, nCoeffs: Int, qubits: Qubit[]) : ((BigEndian, Qubit[]), Qubit[]) {
         let (nTotal, (nIndexRegister, nGarbageQubits)) = QuantumROMQubitCount(targetError, nCoeffs);
-        let registers = SplitArray([nIndexRegister, nGarbageQubits], qubits);
+        let registers = Partitioned([nIndexRegister, nGarbageQubits], qubits);
         return((BigEndian(registers[0]), registers[1]), registers[2]);
     }
 
@@ -133,7 +132,7 @@ namespace Microsoft.Quantum.Preparation {
         }
         //Message($"Excess bars {bars}.");
         // Uniformly distribute excess bars across coefficients.
-        for (idx in 0..Microsoft.Quantum.Extensions.Math.AbsI(bars) - 1) {
+        for (idx in 0..AbsI(bars) - 1) {
             if (bars > 0) {
                 set keepCoeff[idx] = keepCoeff[idx] - 1;
             } else {
@@ -193,7 +192,7 @@ namespace Microsoft.Quantum.Preparation {
         
     // Used in QuantumROM implementation.
     function QuantumROMDiscretizationRoundCoefficients_(coefficient: Double, oneNorm: Double, nCoefficients: Int, barHeight: Int) : Int {
-        return Microsoft.Quantum.Extensions.Math.Round((Microsoft.Quantum.Extensions.Math.AbsD(coefficient) / oneNorm) * ToDouble(nCoefficients) * ToDouble(barHeight));
+        return Round((AbsD(coefficient) / oneNorm) * IntAsDouble(nCoefficients) * IntAsDouble(barHeight));
     }
 
     // Used in QuantumROM implementation.

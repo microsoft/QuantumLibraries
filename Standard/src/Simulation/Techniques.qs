@@ -4,7 +4,7 @@
 namespace Microsoft.Quantum.Simulation {
     open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Intrinsic;
-    open Microsoft.Quantum.Extensions.Convert;
+    open Microsoft.Quantum.Convert;
     open Microsoft.Quantum.Oracles;
     
     
@@ -104,9 +104,8 @@ namespace Microsoft.Quantum.Simulation {
     /// # Output
     /// An estimate $\hat{\phi}$ of the ground state energy $\phi$
     /// of the generator represented by $U$.
-    operation AdiabaticStateEnergyEstimate (nQubits : Int, statePrepUnitary : (Qubit[] => Unit), adiabaticUnitary : (Qubit[] => Unit), qpeUnitary : (Qubit[] => Unit : Adjoint, Controlled), phaseEstAlgorithm : ((DiscreteOracle, Qubit[]) => Double)) : Double
-    {
-        mutable phaseEst = ToDouble(0);
+    operation AdiabaticStateEnergyEstimate (nQubits : Int, statePrepUnitary : (Qubit[] => Unit), adiabaticUnitary : (Qubit[] => Unit), qpeUnitary : (Qubit[] => Unit : Adjoint, Controlled), phaseEstAlgorithm : ((DiscreteOracle, Qubit[]) => Double)) : Double {
+        mutable phaseEst = 0.0;
         
         using (qubits = Qubit[nQubits])
         {

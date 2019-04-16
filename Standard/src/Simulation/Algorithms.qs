@@ -3,7 +3,8 @@
 
 namespace Microsoft.Quantum.Simulation {
     open Microsoft.Quantum.Canon;
-    open Microsoft.Quantum.Extensions.Convert;
+    open Microsoft.Quantum.Convert;
+    open Microsoft.Quantum.Math;
 
     // A simulation technique converts an EvolutionGenerator to time evolution
     // by the encoded system for some time step
@@ -85,8 +86,8 @@ namespace Microsoft.Quantum.Simulation {
     {
         body (...)
         {
-            let nTimeSlices = Microsoft.Quantum.Extensions.Math.Ceiling(maxTime / trotterStepSize);
-            let resizedTrotterStepSize = maxTime / ToDouble(nTimeSlices);
+            let nTimeSlices = Ceiling(maxTime / trotterStepSize);
+            let resizedTrotterStepSize = maxTime / IntAsDouble(nTimeSlices);
             
             for (idxTimeSlice in 0 .. nTimeSlices - 1)
             {
@@ -140,12 +141,12 @@ namespace Microsoft.Quantum.Simulation {
     {
         body (...)
         {
-            let nTimeSlices = Microsoft.Quantum.Extensions.Math.Ceiling(maxTime / trotterStepSize);
-            let resizedTrotterStepSize = maxTime / ToDouble(nTimeSlices);
+            let nTimeSlices = Ceiling(maxTime / trotterStepSize);
+            let resizedTrotterStepSize = maxTime / IntAsDouble(nTimeSlices);
             
             for (idxTimeSlice in 0 .. nTimeSlices - 1)
             {
-                let schedule = ToDouble(idxTimeSlice) / ToDouble(nTimeSlices);
+                let schedule = IntAsDouble(idxTimeSlice) / IntAsDouble(nTimeSlices);
                 let (evolutionSet, generatorSystemTimeDependent) = evolutionSchedule!;
                 let generatorSystem = generatorSystemTimeDependent(schedule);
                 let evolutionGenerator = EvolutionGenerator(evolutionSet, generatorSystem);

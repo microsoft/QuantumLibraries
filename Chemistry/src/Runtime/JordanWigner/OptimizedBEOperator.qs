@@ -177,7 +177,7 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
         
         let (nTotal, (a, b, c, d, e)) = _JordanWignerSelectQubitCount_(nZ, nMaj, nIdxRegQubits);
         let split = [a, b, c, d] + e;
-        let registers = SplitArray(split, ctrlRegister);
+        let registers = Partitioned(split, ctrlRegister);
         let signQubit = registers[0];
         let selectZControlRegisters = registers[1];
         let OptimizedBEControlRegisters = registers[2];

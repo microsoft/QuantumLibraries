@@ -5,10 +5,11 @@ namespace Microsoft.Quantum.Chemistry.Tests {
     open Microsoft.Quantum.Arithmetic;
     open Microsoft.Quantum.Intrinsic;
     open Microsoft.Quantum.Canon;
-    open Microsoft.Quantum.Extensions.Testing;
-    open Microsoft.Quantum.Extensions.Convert;
+    open Microsoft.Quantum.Diagnostics;
+    open Microsoft.Quantum.Convert;
     open Microsoft.Quantum.Chemistry.JordanWigner;
     open Microsoft.Quantum.Arrays;
+    open Microsoft.Quantum.Math;
     
     // Prepare single excitation
     operation PrepareTrialStateCoupledCluster0Test () : Unit {
@@ -22,7 +23,7 @@ namespace Microsoft.Quantum.Chemistry.Tests {
             
 
             for (idx in IndexRange(excitations)) {
-                AssertProbIntBE(intTest[idx], Microsoft.Quantum.Extensions.Math.AbsD(1.0), BigEndian(Reversed(qubits)), 1E-05);
+                AssertProbIntBE(intTest[idx], AbsD(1.0), BigEndian(Reversed(qubits)), 1E-05);
             }
             
             ResetAll(qubits);
@@ -79,19 +80,19 @@ namespace Microsoft.Quantum.Chemistry.Tests {
         let p = [0.3, 0.9, 2.4];
         let excitations = [
             JordanWignerInputState(
-                (0.1 * Microsoft.Quantum.Extensions.Math.Cos(p[0]),
-                0.1 * Microsoft.Quantum.Extensions.Math.Sin(p[0])),
+                (0.1 * Cos(p[0]),
+                0.1 * Sin(p[0])),
                 [0, 1, 2, 5]
             ),
             
             JordanWignerInputState(
-                (0.2 * Microsoft.Quantum.Extensions.Math.Cos(p[1]),
-                0.2 * Microsoft.Quantum.Extensions.Math.Sin(p[1])),
+                (0.2 * Cos(p[1]),
+                0.2 * Sin(p[1])),
                 [0, 2, 4]
             ),
             
             JordanWignerInputState(
-                (0.4 * Microsoft.Quantum.Extensions.Math.Cos(p[2]), 0.4 * Microsoft.Quantum.Extensions.Math.Sin(p[2])),
+                (0.4 * Cos(p[2]), 0.4 * Sin(p[2])),
                 [3, 1]
             )];
         
@@ -113,7 +114,7 @@ namespace Microsoft.Quantum.Chemistry.Tests {
         let nQubits = 1;
         let intTest = [39, 21, 10];
         let phase = 2.453;
-        let excitations = [JordanWignerInputState((0.1, 0.0), new Int[0]), JordanWignerInputState((0.1 * Microsoft.Quantum.Extensions.Math.Cos(phase), 0.1 * Microsoft.Quantum.Extensions.Math.Sin(phase)), [0])];
+        let excitations = [JordanWignerInputState((0.1, 0.0), new Int[0]), JordanWignerInputState((0.1 * Cos(phase), 0.1 * Sin(phase)), [0])];
         
         using (qubits = Qubit[nQubits]) {
             PrepareTrialStateCoupledCluster(NoOp<Qubit[]>, excitations, qubits);

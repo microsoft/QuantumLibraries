@@ -7,11 +7,10 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
     open Microsoft.Quantum.Preparation;
     open Microsoft.Quantum.Intrinsic;
     open Microsoft.Quantum.Canon;
-    open Microsoft.Quantum.Extensions.Convert;
+    open Microsoft.Quantum.Convert;
     open Microsoft.Quantum.Chemistry;
     open Microsoft.Quantum.Arrays;
     open Microsoft.Quantum.Math;
-    open Microsoft.Quantum.Convert;
 
     /// # Summary
     /// Term data in the optimized block-encoding algorithm.
@@ -261,7 +260,7 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
         mutable oneNorm = 0.0;
         
         for (idx in 0 .. finalIdx - 1) {
-            set oneNorm = oneNorm + Microsoft.Quantum.Extensions.Math.AbsD(_GetOptimizedBETermIndexCoeff_(majIdxes[idx]));
+            set oneNorm = oneNorm + AbsD(_GetOptimizedBETermIndexCoeff_(majIdxes[idx]));
         }
         
         return OptimizedBEGeneratorSystem(finalIdx, oneNorm, LookupFunction(majIdxes[0 .. finalIdx - 1]));
@@ -393,7 +392,7 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
         
         let ((qROMIdx, qROMGarbage), rest0) = QuantumROMQubitManager_(targetError, nCoeffs, ctrlRegister);
         let ((signQubit, selectZControlRegisters, optimizedBEControlRegisters, pauliBases, indexRegisters, tmp), rest1) = _JordanWignerSelectQubitManager_(nZ, nMaj, nIdxRegQubits, rest0, new Qubit[0]);
-        let registers = SplitArray([3], rest1);
+        let registers = Partitioned([3], rest1);
         let pauliBasesIdx = BigEndian(registers[0]);
         return ((qROMIdx, qROMGarbage, signQubit, selectZControlRegisters, optimizedBEControlRegisters, pauliBases, pauliBasesIdx, indexRegisters), (signQubit, selectZControlRegisters, optimizedBEControlRegisters, pauliBases, indexRegisters), registers[1]);
     }
@@ -441,7 +440,7 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
         let nMaj = 4;
         let optimizedBEGeneratorSystem = OptimizedBlockEncodingGeneratorSystem(data);
         let (nCoeffs, oneNorm, tmp) = optimizedBEGeneratorSystem!;
-        let nIdxRegQubits = Microsoft.Quantum.Extensions.Math.Ceiling(Lg(ToDouble(nSpinOrbitals)));
+        let nIdxRegQubits = Ceiling(Lg(IntAsDouble(nSpinOrbitals)));
         let ((nCtrlRegisterQubits, nTargetRegisterQubits), rest) = _JordanWignerOptimizedBlockEncodingQubitCount_(targetError, nCoeffs, nZ, nMaj, nIdxRegQubits, nSpinOrbitals);
         let statePrepOp = _JordanWignerOptimizedBlockEncodingStatePrep_(targetError, nCoeffs, optimizedBEGeneratorSystem, nZ, nMaj, nIdxRegQubits, _);
         let selectOp = _JordanWignerOptimizedBlockEncodingSelect_(targetError, nCoeffs, optimizedBEGeneratorSystem, nZ, nMaj, nIdxRegQubits, _, _);

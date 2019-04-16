@@ -5,7 +5,7 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
     open Microsoft.Quantum.Simulation;
     open Microsoft.Quantum.Intrinsic;
     open Microsoft.Quantum.Canon;
-    open Microsoft.Quantum.Extensions.Convert;
+    open Microsoft.Quantum.Convert;
     open Microsoft.Quantum.Chemistry;
     open Microsoft.Quantum.Math;
     
@@ -47,7 +47,7 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
         let (nTerms, genIdxFunction) = generatorSystem!;
         let (oneNorm, blockEncodingReflection) = PauliBlockEncoding(generatorSystem);
         let nTargetRegisterQubits = nSpinOrbitals;
-        let nCtrlRegisterQubits = Microsoft.Quantum.Extensions.Math.Ceiling(Lg(ToDouble(nTerms)));
+        let nCtrlRegisterQubits = Ceiling(Lg(IntAsDouble(nTerms)));
         return ((nCtrlRegisterQubits, nTargetRegisterQubits), (oneNorm, QuantumWalkByQubitization(blockEncodingReflection)));
     }
     

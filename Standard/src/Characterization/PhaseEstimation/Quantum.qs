@@ -4,7 +4,7 @@
 namespace Microsoft.Quantum.Characterization {
     open Microsoft.Quantum.Arithmetic;
     open Microsoft.Quantum.Intrinsic;
-    open Microsoft.Quantum.Extensions.Testing;
+    open Microsoft.Quantum.Diagnostics;
     open Microsoft.Quantum.Oracles;
     open Microsoft.Quantum.Canon;
 
@@ -26,7 +26,7 @@ namespace Microsoft.Quantum.Characterization {
     operation QuantumPhaseEstimation (oracle : DiscreteOracle, targetState : Qubit[], controlRegister : BigEndian) : Unit {
         body (...) {
             let nQubits = Length(controlRegister!);
-            AssertAllZeroTol(controlRegister!, 1E-10);
+            AssertAllZeroWithinTolerance(controlRegister!, 1E-10);
             ApplyToEachCA(H, controlRegister!);
 
             for (idxControlQubit in 0 .. nQubits - 1) {

@@ -6,9 +6,9 @@ namespace Microsoft.Quantum.Tests {
     open Microsoft.Quantum.Intrinsic;
     open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Preparation;
-    open Microsoft.Quantum.Extensions.Testing;
+    open Microsoft.Quantum.Diagnostics;
     open Microsoft.Quantum.Math;
-    open Microsoft.Quantum.Extensions.Convert;
+    open Microsoft.Quantum.Convert;
 
     // Tests the discretization algorithm
     operation _QuantumROMDiscretizationTest() : Unit {
@@ -47,16 +47,16 @@ namespace Microsoft.Quantum.Tests {
             mutable maxError = 0.0;
             for (i in 0..coeffs-1)
             {
-                set coefficientsOut[i] = oneNorm * ToDouble(coefficientsOutInt[i]) / ToDouble(barHeight * coeffs);
-                let error = Microsoft.Quantum.Extensions.Math.AbsD(coefficients[i] - coefficientsOut[i]) / oneNorm  /( Microsoft.Quantum.Extensions.Math.PowD(2.0, ToDouble(-bitsPrecision)) / ToDouble(coeffs));
+                set coefficientsOut[i] = oneNorm * IntAsDouble(coefficientsOutInt[i]) / IntAsDouble(barHeight * coeffs);
+                let error = AbsD(coefficients[i] - coefficientsOut[i]) / oneNorm  /( PowD(2.0, IntAsDouble(-bitsPrecision)) / IntAsDouble(coeffs));
                 set errors[i] = error;
-                if(Microsoft.Quantum.Extensions.Math.AbsD(error) > Microsoft.Quantum.Extensions.Math.AbsD(maxError)){
+                if(AbsD(error) > AbsD(maxError)){
                     set maxError = error;
                 }
             }
             Message($"coeffs {coeffs}, bitsPrecision {bitsPrecision}, maxError {maxError}");
             for(i in 0..coeffs-1){
-                if(errors[i] < ToDouble(3)){
+                if(errors[i] < IntAsDouble(3)){
                     // test passes
                 }
                 else{
@@ -69,8 +69,8 @@ namespace Microsoft.Quantum.Tests {
     operation QuantumROMTest() : Unit {
         for(coeffs in 2..7){
             for(nBitsPrecision in -1..-1..-2){
-                let targetError = Microsoft.Quantum.Extensions.Math.PowD(2.0, ToDouble(nBitsPrecision));
-                let probtargetError = targetError / ToDouble(coeffs);
+                let targetError = PowD(2.0, IntAsDouble(nBitsPrecision));
+                let probtargetError = targetError / IntAsDouble(coeffs);
                 mutable coefficients = new Double[coeffs];
                 for (idx in 0..coeffs-1)
                 {
@@ -80,7 +80,7 @@ namespace Microsoft.Quantum.Tests {
                 Message($"Test case coeffs {coeffs}, bitsPrecision {nCoeffQubits}, global targetError {targetError}, probability error {probtargetError}.");
                 for (idx in 0..coeffs-1)
                 {
-                    let tmp = Microsoft.Quantum.Extensions.Math.AbsD(coefficients[idx]) / oneNorm;
+                    let tmp = AbsD(coefficients[idx]) / oneNorm;
                     Message($"{idx} expected prob = {tmp}.");
                 }
 
@@ -91,9 +91,9 @@ namespace Microsoft.Quantum.Tests {
                     op(register);
                     // Now check that probability of each number state in nCoeffQubits is as expected.
                     for(stateIndex in 0..coeffs-1){
-                        let prob = Microsoft.Quantum.Extensions.Math.AbsD(coefficients[stateIndex]) / oneNorm;
+                        let prob = AbsD(coefficients[stateIndex]) / oneNorm;
                         Message($"Testing probability {prob} on index {stateIndex}");
-                        //BAssertProbIntBE(stateIndex, Microsoft.Quantum.Extensions.Math.AbsD(coefficients[stateIndex]) / oneNorm, BigEndian(coeffQubits), targetError / ToDouble(coeffs));
+                        //BAssertProbIntBE(stateIndex, AbsD(coefficients[stateIndex]) / oneNorm, BigEndian(coeffQubits), targetError / IntAsDouble(coeffs));
                     }
 
                     (Adjoint op)(register);

@@ -8,14 +8,14 @@ namespace Microsoft.Quantum.Canon {
     /// This function has been removed.
     function IntAbs(input : Int) : Int {
         // TODO: add call to _Removed.
-        return Microsoft.Quantum.Extensions.Math.AbsI(input);
+        return AbsI(input);
     }
 
     /// # Deprecated
     /// This function has been removed.
     function IntMax(a : Int, b : Int) : Int {
         // TODO: add call to _Removed.
-        return Microsoft.Quantum.Extensions.Math.MaxI(a, b);
+        return MaxI(a, b);
     }
 
     /// # Deprecated

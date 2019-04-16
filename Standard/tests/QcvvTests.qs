@@ -3,12 +3,13 @@
 namespace Microsoft.Quantum.Tests {
     open Microsoft.Quantum.Intrinsic;
     open Microsoft.Quantum.Canon;
-    open Microsoft.Quantum.Extensions.Convert;
+    open Microsoft.Quantum.Convert;
     open Microsoft.Quantum.Oracles;
     open Microsoft.Quantum.Characterization;
     open Microsoft.Quantum.Preparation;
     open Microsoft.Quantum.Diagnostics;
     open Microsoft.Quantum.Arrays;
+    open Microsoft.Quantum.Math;
 
     operation ChoiStateTest () : Unit {
         using (register = Qubit[2]) {
@@ -28,7 +29,7 @@ namespace Microsoft.Quantum.Tests {
     }
 
     operation _RobustPhaseEstimationTestOp (phase : Double, power : Int, qubits : Qubit[]) : Unit is Adj + Ctl {
-        Exp([PauliZ], phase * ToDouble(power), qubits);
+        Exp([PauliZ], phase * IntAsDouble(power), qubits);
     }
 
     operation RobustPhaseEstimationDemoImpl (phaseSet : Double, bitsPrecision : Int) : Double {
@@ -47,7 +48,7 @@ namespace Microsoft.Quantum.Tests {
         let bitsPrecision = 10;
         
         for (idxTest in 0 .. 9) {
-            let phaseSet = ((2.0 * Microsoft.Quantum.Extensions.Math.PI()) * ToDouble(idxTest - 5)) / 12.0;
+            let phaseSet = ((2.0 * PI()) * IntAsDouble(idxTest - 5)) / 12.0;
             let phaseEst = RobustPhaseEstimationDemoImpl(phaseSet, bitsPrecision);
             EqualityWithinToleranceFact(phaseEst, phaseSet, 0.01);
         }

@@ -3,6 +3,7 @@
 
 namespace Microsoft.Quantum.Arrays {
     open Microsoft.Quantum.Diagnostics;
+    open Microsoft.Quantum.Math;
 
     /// # Summary
     /// Create an array that contains the same elements as an input array but in Reversed
@@ -235,7 +236,7 @@ namespace Microsoft.Quantum.Arrays {
     /// ```
     function Padded<'T> (nElementsTotal : Int, defaultElement : 'T, inputArray : 'T[]) : 'T[] {
         let nElementsInitial = Length(inputArray);
-        let nAbsElementsTotal = Microsoft.Quantum.Extensions.Math.AbsI(nElementsTotal);
+        let nAbsElementsTotal = AbsI(nElementsTotal);
         EqualityFactB(nAbsElementsTotal >= nElementsInitial, true, $"Specified output array length must be longer than `inputArray` length.");
         let nElementsPad = nAbsElementsTotal - nElementsInitial;
         let padArray = ConstantArray(nElementsPad, defaultElement);
@@ -263,14 +264,14 @@ namespace Microsoft.Quantum.Arrays {
     /// ## Example
     /// ```qsharp
     /// // The following returns [[1,5],[3],[7]];
-    /// let split = SplitArray([2,1], [1,5,3,7]);
+    /// let split = Partitioned([2,1], [1,5,3,7]);
     /// ```
     function Partitioned<'T>(nElements: Int[], arr: 'T[]) : 'T[][] {
         mutable output = new 'T[][Length(nElements)+1];
         mutable currIdx = 0;
         for (idx in IndexRange(nElements)) {
             if(currIdx + nElements[idx] > Length(arr)) {
-                fail "SplitArray argument out of bounds.";
+                fail "Partitioned argument out of bounds.";
             }
             set output[idx] = arr[currIdx..currIdx + nElements[idx]-1];
             set currIdx = currIdx + nElements[idx];

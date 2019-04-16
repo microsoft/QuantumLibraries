@@ -54,7 +54,7 @@ namespace Microsoft.Quantum.Preparation {
         mutable coefficientsComplexPolar = new ComplexPolar[nCoefficients];
 
         for (idx in 0 .. nCoefficients - 1) {
-            set coefficientsComplexPolar[idx] = ComplexPolar(Microsoft.Quantum.Extensions.Math.AbsD(coefficients[idx]), 0.0);
+            set coefficientsComplexPolar[idx] = ComplexPolar(AbsD(coefficients[idx]), 0.0);
         }
 
         return PrepareArbitraryState(coefficientsComplexPolar, _);
@@ -222,10 +222,10 @@ namespace Microsoft.Quantum.Preparation {
         let abs1 = AbsComplexPolar(a1);
         let arg0 = ArgComplexPolar(a0);
         let arg1 = ArgComplexPolar(a1);
-        let r = Microsoft.Quantum.Extensions.Math.Sqrt(abs0 * abs0 + abs1 * abs1);
+        let r = Sqrt(abs0 * abs0 + abs1 * abs1);
         let t = 0.5 * (arg0 + arg1);
         let phi = arg1 - arg0;
-        let theta = 2.0 * Microsoft.Quantum.Extensions.Math.ArcTan2(abs1, abs0);
+        let theta = 2.0 * ArcTan2(abs1, abs0);
         return (ComplexPolar(r, t), phi, theta);
     }
 

@@ -3,7 +3,7 @@
 
 namespace Microsoft.Quantum.Math {
     open Microsoft.Quantum.Intrinsic;
-    open Microsoft.Quantum.Extensions.Convert;
+    open Microsoft.Quantum.Convert;
     
     
     // DESIGN NOTES:
@@ -66,7 +66,7 @@ namespace Microsoft.Quantum.Math {
     {
         mutable nBits = 0;
         mutable output = 0;
-        set nBits = Microsoft.Quantum.Extensions.Math.Ceiling(Lg(ToDouble(maxInt)));
+        set nBits = Ceiling(Lg(IntAsDouble(maxInt)));
         
         repeat
         {
@@ -105,7 +105,7 @@ namespace Microsoft.Quantum.Math {
             fail $"Number of random bits must be greater than 0.";
         }
         
-        return ToDouble(RandomIntPow2(bitsRandom)) / Microsoft.Quantum.Extensions.Math.PowD(2.0, ToDouble(bitsRandom));
+        return IntAsDouble(RandomIntPow2(bitsRandom)) / PowD(2.0, IntAsDouble(bitsRandom));
     }
 
     /// # Summary

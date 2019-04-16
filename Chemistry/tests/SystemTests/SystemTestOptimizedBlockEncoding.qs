@@ -5,7 +5,7 @@ namespace SystemTestsOptimizedBlockEncoding {
     
     open Microsoft.Quantum.Intrinsic;
     open Microsoft.Quantum.Canon;
-    open Microsoft.Quantum.Extensions.Convert;
+    open Microsoft.Quantum.Convert;
     open Microsoft.Quantum.Chemistry.JordanWigner;  
     
     //////////////////////////////////////////////////////////////////////////

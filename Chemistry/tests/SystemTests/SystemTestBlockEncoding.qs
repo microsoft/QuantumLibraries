@@ -6,7 +6,7 @@ namespace SystemTestsBlockEncoding {
     open Microsoft.Quantum.Math;
     open Microsoft.Quantum.Intrinsic;
     open Microsoft.Quantum.Canon;
-    open Microsoft.Quantum.Extensions.Convert;
+    open Microsoft.Quantum.Convert;
     open Microsoft.Quantum.Chemistry.JordanWigner;   
     
     //////////////////////////////////////////////////////////////////////////
@@ -21,7 +21,7 @@ namespace SystemTestsBlockEncoding {
         let (l1Norm, blockEncodingReflection) = PauliBlockEncoding(generatorSystem);
         let (nTerms, genIdxFunction) = generatorSystem!;
         let systemQubits = nSpinOrbitals;
-        let auxillaryQubits = Microsoft.Quantum.Extensions.Math.Ceiling(Lg(ToDouble(nTerms)));
+        let auxillaryQubits = Ceiling(Lg(IntAsDouble(nTerms)));
         let nQubits = systemQubits + auxillaryQubits;
         
         using (qubits = Qubit[nQubits]) {

@@ -7,6 +7,7 @@ namespace Microsoft.Quantum.Tests {
     open Microsoft.Quantum.Diagnostics;
     open Microsoft.Quantum.Arrays;
     open Microsoft.Quantum.Measurement;
+    open Microsoft.Quantum.Math;
     
     
     // NB: These tests need to be generalized to allow for unit testing CSS
@@ -86,7 +87,7 @@ namespace Microsoft.Quantum.Tests {
         let s = SyndromeMeasOp(MeasureStabilizerGenerators([[PauliX, PauliZ, PauliZ, PauliX, PauliI], [PauliI, PauliX, PauliZ, PauliZ, PauliX], [PauliX, PauliI, PauliX, PauliZ, PauliZ], [PauliZ, PauliX, PauliI, PauliX, PauliZ]], _, MeasureWithScratch));
         
         using (anc = Qubit[6]) {
-            Ry(Microsoft.Quantum.Extensions.Math.PI() / 2.5, anc[0]);
+            Ry(PI() / 2.5, anc[0]);
             FiveQubitCodeEncoderImpl([anc[0]], anc[1 .. 4]);
             let m = anc[5];
             mutable n = 0;
@@ -171,7 +172,7 @@ namespace Microsoft.Quantum.Tests {
         using (anc = Qubit[5]) {
             
             // let's start with an arbitrary logical state.
-            Ry(Microsoft.Quantum.Extensions.Math.PI() / 2.5, anc[0]);
+            Ry(PI() / 2.5, anc[0]);
             FiveQubitCodeEncoderImpl([anc[0]], anc[1 .. 4]);
             let syn = s!(LogicalRegister(anc));
             let a = ResultAsInt(syn!);
@@ -250,8 +251,8 @@ namespace Microsoft.Quantum.Tests {
         using (anc = Qubit[2]) {
             
             // magic state in anc[1]
-            Ry(Microsoft.Quantum.Extensions.Math.PI() / 4.0, anc[1]);
-            let expected = ApplyToEachA(Ry(Microsoft.Quantum.Extensions.Math.PI() / 4.0, _), _);
+            Ry(PI() / 4.0, anc[1]);
+            let expected = ApplyToEachA(Ry(PI() / 4.0, _), _);
             let actual = ApplyToEach(InjectPi4YRotation(_, anc[1]), _);
             AssertOperationsEqualReferenced(1, actual, expected);
             
@@ -270,8 +271,8 @@ namespace Microsoft.Quantum.Tests {
         using (anc = Qubit[2]) {
             
             // magic state in anc[1]
-            Ry(Microsoft.Quantum.Extensions.Math.PI() / 4.0, anc[1]);
-            let expected = ApplyToEachA(Ry(-Microsoft.Quantum.Extensions.Math.PI() / 4.0, _), _);
+            Ry(PI() / 4.0, anc[1]);
+            let expected = ApplyToEachA(Ry(-PI() / 4.0, _), _);
             let actual = ApplyToEach(Adjoint InjectPi4YRotation(_, anc[1]), _);
             AssertOperationsEqualReferenced(1, actual, expected);
             
@@ -343,9 +344,9 @@ namespace Microsoft.Quantum.Tests {
         using (register = Qubit[15]) {
             
             // Prepare the perfect magic states.
-            ApplyToEach(Ry(Microsoft.Quantum.Extensions.Math.PI() / 4.0, _), register);
+            ApplyToEach(Ry(PI() / 4.0, _), register);
             let accept = KnillDistill(register);
-            Ry(-Microsoft.Quantum.Extensions.Math.PI() / 4.0, register[0]);
+            Ry(-PI() / 4.0, register[0]);
             EqualityFactB(true, accept, $"Distillation failure");
             ApplyToEach(AssertQubit(Zero, _), register);
             // NB: no need to reset, we just asserted everything
@@ -364,20 +365,20 @@ namespace Microsoft.Quantum.Tests {
     operation KDTest () : Unit {
         
         using (rm = Qubit[15]) {
-            ApplyToEach(Ry(Microsoft.Quantum.Extensions.Math.PI() / 4.0, _), rm);
+            ApplyToEach(Ry(PI() / 4.0, _), rm);
             let acc = KnillDistill(rm);
             
             // Check that the rough magic states were
             // successfully reset to |0〉.
             ApplyToEach(AssertQubit(Zero, _), Rest(rm));
-            Ry(-Microsoft.Quantum.Extensions.Math.PI() / 4.0, rm[0]);
+            Ry(-PI() / 4.0, rm[0]);
             EqualityFactB(true, acc, $"Distillation failure");
             AssertQubit(Zero, rm[0]);
             
             // Cases where a single magic state is wrong
             for (idx in 0 .. 14) {
                 ResetAll(rm);
-                ApplyToEach(Ry(Microsoft.Quantum.Extensions.Math.PI() / 4.0, _), rm);
+                ApplyToEach(Ry(PI() / 4.0, _), rm);
                 Y(rm[idx]);
                 let acc1 = KnillDistill(rm);
                 
@@ -392,7 +393,7 @@ namespace Microsoft.Quantum.Tests {
                 
                 for (idxSecond in idxFirst + 1 .. 14) {
                     ResetAll(rm);
-                    ApplyToEach(Ry(Microsoft.Quantum.Extensions.Math.PI() / 4.0, _), rm);
+                    ApplyToEach(Ry(PI() / 4.0, _), rm);
                     Y(rm[idxFirst]);
                     Y(rm[idxSecond]);
                     let acc1 = KnillDistill(rm);

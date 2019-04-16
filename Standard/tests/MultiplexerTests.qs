@@ -4,11 +4,10 @@ namespace Microsoft.Quantum.Tests {
     open Microsoft.Quantum.Arithmetic;
     open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Intrinsic;
-    open Microsoft.Quantum.Extensions.Convert;
+    open Microsoft.Quantum.Convert;
     open Microsoft.Quantum.Diagnostics;
     open Microsoft.Quantum.Measurement;
     open Microsoft.Quantum.Arrays;
-    open Microsoft.Quantum.Convert;
 
     operation MultiplexZTestHelper (coefficients : Double[], multiplexerControl : BigEndian, additionalControl : Qubit[], target : Qubit, tolerance : Double) : Unit {
         let nCoefficients = Length(coefficients);
@@ -18,13 +17,7 @@ namespace Microsoft.Quantum.Tests {
         H(target);
 
         // Generate uniform superposition over control inputs.
-        for (idxMultiplexer in 0 .. Length(multiplexerControl!) - 1) {
-            H(multiplexerControl![idxMultiplexer]);
-        }
-
-        for (idxAdditional in IndexRange(additionalControl)) {
-            H(additionalControl[idxAdditional]);
-        }
+        ApplyToEachCA(H, multiplexerControl! + additionalControl);
 
         // For deterministic test of particular number state `idx', we could use the following
         //let bits = Reversed(IntAsBoolArray (idx, Length(multiplexerControl)));
@@ -47,7 +40,7 @@ namespace Microsoft.Quantum.Tests {
         
         // Sample from control registers and check phase using AssertProb.
         let multiplexerControlInteger = MeasureIntegerBE(multiplexerControl);
-        let additionalControlResults = MultiM(additionalControl);
+        let additionalControlResults = ForEach(MResetZ, additionalControl);
         
         if (Length(additionalControlResults) == 1 and additionalControlResults[0] == Zero) {
             
@@ -73,8 +66,8 @@ namespace Microsoft.Quantum.Tests {
             //AssertPhase(coeff, target, tolerance);
         }
         
-        ResetAll(multiplexerControl!);
-        ResetAll(additionalControl);
+        // Note that MeasureInteger has the effect of resetting its target, so
+        // that we only need to ret target here.
         Reset(target);
     }
     
@@ -98,7 +91,7 @@ namespace Microsoft.Quantum.Tests {
                     mutable coefficients = new Double[nCoefficients];
                     
                     for (idx in IndexRange(coefficients)) {
-                        set coefficients[idx] = (1.0 * ToDouble(idx + 1)) * 0.2;
+                        set coefficients[idx] = (1.0 * IntAsDouble(idx + 1)) * 0.2;
                     }
                     
                     // Allocate qubits
@@ -134,10 +127,10 @@ namespace Microsoft.Quantum.Tests {
         
         // The absolute phase of a diagonal unitary can only be characterized
         // using a controlled operation.
-        using (control = Qubit[1]) {
+        using (control = Qubit()) {
             
             for (idxCoeff in IndexRange(coefficients)) {
-                H(control[0]);
+                H(control);
                 
                 //for(idxQubit in 0..nQubits-1){
                 //    H(qubits[idxQubit]);
@@ -155,10 +148,10 @@ namespace Microsoft.Quantum.Tests {
                 }
                 
                 // Apply MultiplexZ circuit
-                Controlled (ApplyDiagonalUnitary(coefficients, _))(control, qubits);
+                Controlled (ApplyDiagonalUnitary(coefficients, _))([control], qubits);
                 Message($"ApplyDiagonalUnitary test. Qubits: {nQubits}; coefficient {idxCoeff} of {nCoefficients-1}.");
-                AssertPhase(-0.5 * coefficients[idxCoeff], control[0], tolerance);
-                ResetAll(control);
+                AssertPhase(-0.5 * coefficients[idxCoeff], control, tolerance);
+                Reset(control);
                 ResetAll(qubits!);
             }
         }
@@ -178,7 +171,7 @@ namespace Microsoft.Quantum.Tests {
             mutable coefficients = new Double[maxCoefficients];
             
             for (idx in IndexRange(coefficients)) {
-                set coefficients[idx] = (1.0 * ToDouble(idx + 1)) * 0.3;
+                set coefficients[idx] = (1.0 * IntAsDouble(idx + 1)) * 0.3;
             }
             
             // Allocate qubits

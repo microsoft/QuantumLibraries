@@ -3,7 +3,7 @@
 
 namespace Microsoft.Quantum.Characterization {
     open Microsoft.Quantum.Intrinsic;
-    open Microsoft.Quantum.Extensions.Convert;
+    open Microsoft.Quantum.Convert;
     open Microsoft.Quantum.Oracles;
     open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Measurement;
@@ -55,7 +55,7 @@ namespace Microsoft.Quantum.Characterization {
         {
             // Find the actual inversion angle by rescaling with the power of the
             // oracle.
-            let inversionAngle = -theta * ToDouble(power);
+            let inversionAngle = -theta * IntAsDouble(power);
             
             // Prepare the control qubit.
             H(controlQubit);

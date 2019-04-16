@@ -3,7 +3,7 @@
 
 namespace Microsoft.Quantum.Characterization {
     open Microsoft.Quantum.Intrinsic;
-    open Microsoft.Quantum.Extensions.Convert;
+    open Microsoft.Quantum.Convert;
     open Microsoft.Quantum.Oracles;
     open Microsoft.Quantum.Math;
 
@@ -35,26 +35,25 @@ namespace Microsoft.Quantum.Characterization {
     {
         let alpha = 2.5;
         let beta = 0.5;
-        mutable thetaEst = ToDouble(0);
+        mutable thetaEst = 0.0;
 
         using (controlQubit = Qubit()) {
 
             for (exponent in 0 .. bitsPrecision - 1) {
                 let power = 2 ^ exponent;
-                mutable nRepeats = Microsoft.Quantum.Extensions.Math.Ceiling(alpha * ToDouble(bitsPrecision - exponent) + beta);
+                mutable nRepeats = Ceiling(alpha * IntAsDouble(bitsPrecision - exponent) + beta);
 
                 if (nRepeats % 2 == 1) {
                     // Ensures that nRepeats is even.
                     set nRepeats = nRepeats + 1;
                 }
 
-                mutable pZero = ToDouble(0);
-                mutable pPlus = ToDouble(0);
+                mutable (pZero, pPlus) = (0.0, 0.0);
 
                 for (idxRep in 0 .. nRepeats - 1) {
                     for (idxExperiment in 0 .. 1) {
                         // Divide rotation by power to cancel the multiplication by power in DiscretePhaseEstimationIteration
-                        let rotation = ((Microsoft.Quantum.Extensions.Math.PI() * ToDouble(idxExperiment)) / 2.0) / ToDouble(power);
+                        let rotation = ((PI() * IntAsDouble(idxExperiment)) / 2.0) / IntAsDouble(power);
                         DiscretePhaseEstimationIteration(oracle, power, rotation, targetState, controlQubit);
                         let result = M(controlQubit);
 
@@ -70,9 +69,9 @@ namespace Microsoft.Quantum.Characterization {
                     }
                 }
 
-                let deltaTheta = Microsoft.Quantum.Extensions.Math.ArcTan2(pPlus - ToDouble(nRepeats) / 2.0, pZero - ToDouble(nRepeats) / 2.0);
-                let delta = RealMod(deltaTheta - thetaEst * ToDouble(power), 2.0 * Microsoft.Quantum.Extensions.Math.PI(), -Microsoft.Quantum.Extensions.Math.PI());
-                set thetaEst = thetaEst + delta / ToDouble(power);
+                let deltaTheta = ArcTan2(pPlus - IntAsDouble(nRepeats) / 2.0, pZero - IntAsDouble(nRepeats) / 2.0);
+                let delta = RealMod(deltaTheta - thetaEst * IntAsDouble(power), 2.0 * PI(), -PI());
+                set thetaEst = thetaEst + delta / IntAsDouble(power);
             }
 
             Reset(controlQubit);

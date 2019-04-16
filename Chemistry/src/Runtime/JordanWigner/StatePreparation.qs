@@ -6,7 +6,7 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
     open Microsoft.Quantum.Arithmetic;
     open Microsoft.Quantum.Intrinsic;
     open Microsoft.Quantum.Canon;
-    open Microsoft.Quantum.Extensions.Convert;
+    open Microsoft.Quantum.Convert;
     open Microsoft.Quantum.Arrays;
     open Microsoft.Quantum.Math;
 
@@ -77,12 +77,12 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
         
         for (idx in 0 .. nExcitations - 1) {
             let (x, excitation) = excitations[idx]!;
-            set coefficientsSqrtAbs[idx] = Microsoft.Quantum.Extensions.Math.Sqrt(AbsComplexPolar(ComplexToComplexPolar(Complex(x))));
+            set coefficientsSqrtAbs[idx] = Sqrt(AbsComplexPolar(ComplexToComplexPolar(Complex(x))));
             set coefficientsNewComplexPolar[idx] = ComplexPolar(coefficientsSqrtAbs[idx], ArgComplexPolar(ComplexToComplexPolar(Complex(x))));
             set applyFlips[idx] = excitation;
         }
         
-        let nBitsIndices = Microsoft.Quantum.Extensions.Math.Ceiling(Lg(ToDouble(nExcitations)));
+        let nBitsIndices = Ceiling(Lg(IntAsDouble(nExcitations)));
         
         repeat {
             mutable success = false;

@@ -23,7 +23,7 @@ namespace Microsoft.Quantum.Math {
     /// # Output
     /// The base-2 logarithm $y = \log_2(x)$ such that $x = 2^y$.
     function Lg (input : Double) : Double {
-        return Microsoft.Quantum.Extensions.Math.Log(input) / LogOf2();
+        return Log(input) / LogOf2();
     }
 
     /// # Summary
@@ -102,10 +102,10 @@ namespace Microsoft.Quantum.Math {
     /// ```
     function RealMod(value : Double, modulo : Double, minValue : Double) : Double
     {
-        let fractionalValue = (2.0 * Microsoft.Quantum.Extensions.Math.PI()) * ((value - minValue) / modulo - 0.5);
-        let cosFracValue = Microsoft.Quantum.Extensions.Math.Cos(fractionalValue);
-        let sinFracValue = Microsoft.Quantum.Extensions.Math.Sin(fractionalValue);
-        let moduloValue = 0.5 + Microsoft.Quantum.Extensions.Math.ArcTan2(sinFracValue, cosFracValue) / (2.0 * Microsoft.Quantum.Extensions.Math.PI());
+        let fractionalValue = (2.0 * PI()) * ((value - minValue) / modulo - 0.5);
+        let cosFracValue = Cos(fractionalValue);
+        let sinFracValue = Sin(fractionalValue);
+        let moduloValue = 0.5 + ArcTan2(sinFracValue, cosFracValue) / (2.0 * PI());
         let output = moduloValue * modulo + minValue;
         return output;
     }
@@ -123,7 +123,7 @@ namespace Microsoft.Quantum.Math {
     /// # Output
     /// A real number $y$ such that $x = \cosh(y)$.
     function ArcCosh (x : Double) : Double {
-        return Microsoft.Quantum.Extensions.Math.Log(x + Microsoft.Quantum.Extensions.Math.Sqrt(x * x - 1.0));
+        return Log(x + Sqrt(x * x - 1.0));
     }
     
     
@@ -138,7 +138,7 @@ namespace Microsoft.Quantum.Math {
     /// A real number $y$ such that $x = \operatorname{sinh}(y)$.
     function ArcSinh (x : Double) : Double
     {
-        return Microsoft.Quantum.Extensions.Math.Log(x + Microsoft.Quantum.Extensions.Math.Sqrt(x * x + 1.0));
+        return Log(x + Sqrt(x * x + 1.0));
     }
     
     
@@ -153,7 +153,7 @@ namespace Microsoft.Quantum.Math {
     /// A real number $y$ such that $x = \tanh(y)$.
     function ArcTanh (x : Double) : Double
     {
-        return Microsoft.Quantum.Extensions.Math.Log((1.0 + x) / (1.0 - x)) * 0.5;
+        return Log((1.0 + x) / (1.0 - x)) * 0.5;
     }
     
     
@@ -256,8 +256,8 @@ namespace Microsoft.Quantum.Math {
     /// - This implementation is according to https://en.wikipedia.org/wiki/Extended_Euclidean_algorithm
     function ExtendedGCD (a : Int, b : Int) : (Int, Int)
     {
-        let signA = Microsoft.Quantum.Extensions.Math.SignI(a);
-        let signB = Microsoft.Quantum.Extensions.Math.SignI(b);
+        let signA = SignI(a);
+        let signB = SignI(b);
         let s = (1, 0);
         let t = (0, 1);
         let r = (a * signA, b * signB);
@@ -287,9 +287,9 @@ namespace Microsoft.Quantum.Math {
     /// Internal recursive call to calculate the GCD with a bound
     function _gcd_continued (signA : Int, signB : Int, r : (Int, Int), s : (Int, Int), t : (Int, Int), denominatorBound : Int) : Fraction
     {
-        if (Snd(r) == 0 or Microsoft.Quantum.Extensions.Math.AbsI(Snd(s)) > denominatorBound)
+        if (Snd(r) == 0 or AbsI(Snd(s)) > denominatorBound)
         {
-            if (Snd(r) == 0 and Microsoft.Quantum.Extensions.Math.AbsI(Snd(s)) <= denominatorBound)
+            if (Snd(r) == 0 and AbsI(Snd(s)) <= denominatorBound)
             {
                 return Fraction(-Snd(t) * signB, Snd(s) * signA);
             }
@@ -319,8 +319,8 @@ namespace Microsoft.Quantum.Math {
     {
         EqualityFactB(denominatorBound > 0, true, $"Denominator bound must be positive");
         let (a, b) = fraction!;
-        let signA = Microsoft.Quantum.Extensions.Math.SignI(a);
-        let signB = Microsoft.Quantum.Extensions.Math.SignI(b);
+        let signA = SignI(a);
+        let signB = SignI(b);
         let s = (1, 0);
         let t = (0, 1);
         let r = (a * signA, b * signB);
@@ -419,10 +419,10 @@ namespace Microsoft.Quantum.Math {
         mutable norm = 0.0;
         
         for (element in array) {
-            set norm = norm + Microsoft.Quantum.Extensions.Math.PowD(Microsoft.Quantum.Extensions.Math.AbsD(element), p);
+            set norm = norm + PowD(AbsD(element), p);
         }
         
-        return Microsoft.Quantum.Extensions.Math.PowD(norm, 1.0 / p);
+        return PowD(norm, 1.0 / p);
     }
 
     /// # Summary

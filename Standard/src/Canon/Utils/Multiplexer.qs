@@ -5,6 +5,7 @@ namespace Microsoft.Quantum.Canon {
     open Microsoft.Quantum.Arithmetic;
     open Microsoft.Quantum.Intrinsic;
     open Microsoft.Quantum.Arrays;
+    open Microsoft.Quantum.Math;
 
     /// # Summary
 	/// Applies a Pauli rotation conditioned on an array of qubits.
@@ -277,8 +278,8 @@ namespace Microsoft.Quantum.Canon {
             let nIndex = Length(index!);
             let nStates = 2 ^ nIndex;
             let nUnitaries = Length(unitaries);
-            let nUnitariesRight = Microsoft.Quantum.Extensions.Math.MinI(nUnitaries, nStates / 2);
-            let nUnitariesLeft = Microsoft.Quantum.Extensions.Math.MinI(nUnitaries, nStates);
+            let nUnitariesRight = MinI(nUnitaries, nStates / 2);
+            let nUnitariesLeft = MinI(nUnitaries, nStates);
             let rightUnitaries = unitaries[0 .. nUnitariesRight - 1];
             let leftUnitaries = unitaries[nUnitariesRight .. nUnitariesLeft - 1];
             let newControls = BigEndian((index!)[1 .. nIndex - 1]);
