@@ -4,7 +4,7 @@ using Microsoft.Quantum.Chemistry.Fermion;
 using Microsoft.Quantum.Chemistry.Generic;
 using Microsoft.Quantum.Chemistry.Pauli;
 using Microsoft.Quantum.Chemistry.QSharpFormat;
-
+using Microsoft.Quantum.IQSharp;
 using Newtonsoft.Json;
 
 namespace Microsoft.Quantum.Chemistry.Magic
@@ -14,12 +14,15 @@ namespace Microsoft.Quantum.Chemistry.Magic
     /// </summary>
     public class ChemistryEncodeMagic : MagicSymbol
     {
-        public ChemistryEncodeMagic()
+        IReferences References { get; set; }
+
+        public ChemistryEncodeMagic(IReferences globalRefs)
         {
             this.Name = $"%chemistry.encode";
             this.Documentation = new Documentation() { Summary = "Encodes a fermion Hamiltonian to a format consumable by Q#." };
             this.Kind = SymbolKind.Magic;
             this.Execute = this.Run;
+            this.References = globalRefs;
         }
 
         public class Arguments
@@ -28,7 +31,7 @@ namespace Microsoft.Quantum.Chemistry.Magic
             /// The fermion hamiltonian.
             /// </summary>
             [JsonProperty(PropertyName = "hamiltonian")]
-            public FermionHamiltonian hamiltonian { get; set; }
+            public FermionHamiltonian Hamiltonian { get; set; }
 
             /// <summary>
             /// The input state.
@@ -43,7 +46,7 @@ namespace Microsoft.Quantum.Chemistry.Magic
 
             // We target a qubit quantum computer, which requires a Pauli representation of the fermion Hamiltonian.
             // A number of mappings from fermions to qubits are possible. Let us choose the Jordan-Wigner encoding.
-            PauliHamiltonian pauliHamiltonian = args.hamiltonian.ToPauliHamiltonian(QubitEncoding.JordanWigner);
+            PauliHamiltonian pauliHamiltonian = args.Hamiltonian.ToPauliHamiltonian(QubitEncoding.JordanWigner);
 
             // We now convert this Hamiltonian and a selected state to a format that than be passed onto the QSharp component
             // of the library that implements quantum simulation algorithms.
