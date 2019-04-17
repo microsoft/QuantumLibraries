@@ -91,7 +91,7 @@ namespace Microsoft.Quantum.Tests {
                     mutable coefficients = new Double[nCoefficients];
                     
                     for (idx in IndexRange(coefficients)) {
-                        set coefficients[idx] = (1.0 * IntAsDouble(idx + 1)) * 0.2;
+                        set coefficients w/= idx <- (1.0 * IntAsDouble(idx + 1)) * 0.2;
                     }
                     
                     // Allocate qubits
@@ -171,7 +171,7 @@ namespace Microsoft.Quantum.Tests {
             mutable coefficients = new Double[maxCoefficients];
             
             for (idx in IndexRange(coefficients)) {
-                set coefficients[idx] = (1.0 * IntAsDouble(idx + 1)) * 0.3;
+                set coefficients w/= idx <- (1.0 * IntAsDouble(idx + 1)) * 0.3;
             }
             
             // Allocate qubits
@@ -188,10 +188,10 @@ namespace Microsoft.Quantum.Tests {
         mutable unitaries = new (Qubit => Unit : Adjoint, Controlled)[nStates];
         
         for (idxUnitary in 0 .. nStates - 1) {
-            set unitaries[idxUnitary] = I;
+            set unitaries w/= idxUnitary <- I;
         }
         
-        set unitaries[idx] = X;
+        set unitaries w/= idx <- X;
         return unitaries;
     }
     
@@ -284,11 +284,11 @@ namespace Microsoft.Quantum.Tests {
         mutable unitaries = new (Qubit => Unit : Adjoint, Controlled)[nStates];
         
         for (idxUnitary in 0 .. nUnitaries - 1) {
-            set unitaries[idxUnitary] = X;
+            set unitaries w/= idxUnitary <- X;
         }
         
         for (idxUnitary in nUnitaries .. nStates - 1) {
-            set unitaries[idxUnitary] = I;
+            set unitaries w/= idxUnitary <- I;
         }
         
         return unitaries;

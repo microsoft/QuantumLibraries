@@ -140,7 +140,7 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
             
             if (IsNotZero(v0123[idxOp % 4])) {
                 let newCoeff = [v0123[idxOp % 4]];
-                set genIdxes[nonZero] = GeneratorIndex((ops[idxOp] + ConstantArray(Length(qubitsPQJW) + Length(qubitsRSJW), 3), newCoeff), ((qubitsPQ + qubitsRS) + qubitsPQJW) + qubitsRSJW);
+                set genIdxes w/= nonZero <- GeneratorIndex((ops[idxOp] + ConstantArray(Length(qubitsPQJW) + Length(qubitsRSJW), 3), newCoeff), ((qubitsPQ + qubitsRS) + qubitsPQJW) + qubitsRSJW);
                 set nonZero = nonZero + 1;
             }
         }
@@ -169,7 +169,7 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
         for (idx in IndexRange(ZData)) {
             
             // Array of Arrays of Length 1
-            set genIdxes[idx] = (_ZTermToPauliGenIdx(HTermToGenIdx(ZData[idx], [0])))[0];
+            set genIdxes w/= idx <- (_ZTermToPauliGenIdx(HTermToGenIdx(ZData[idx], [0])))[0];
         }
         
         set startIdx = Length(ZData);
@@ -177,7 +177,7 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
         for (idx in IndexRange(ZZData)) {
             
             // Array of Arrays of Length 1
-            set genIdxes[startIdx + idx] = (_ZZTermToPauliGenIdx(HTermToGenIdx(ZZData[idx], [1])))[0];
+            set genIdxes w/= startIdx + idx <- (_ZZTermToPauliGenIdx(HTermToGenIdx(ZZData[idx], [1])))[0];
         }
         
         set startIdx = startIdx + Length(ZZData);
@@ -186,8 +186,8 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
             
             // Array of Arrays of Length 2
             let genArr = _PQandPQQRTermToPauliGenIdx_(HTermToGenIdx(PQandPQQRData[idx], [2]));
-            set genIdxes[startIdx + 2 * idx] = genArr[0];
-            set genIdxes[(startIdx + 2 * idx) + 1] = genArr[1];
+            set genIdxes w/= startIdx + 2 * idx <- genArr[0];
+            set genIdxes w/= (startIdx + 2 * idx) + 1 <- genArr[1];
         }
         
         set startIdx = startIdx + 2 * Length(PQandPQQRData);
@@ -199,7 +199,7 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
             let genArr = _V0123TermToPauliGenIdx_(HTermToGenIdx(h0123Data[idx], [3]));
             
             for (idx0123 in IndexRange(genArr)) {
-                set genIdxes[finalIdx] = genArr[idx0123];
+                set genIdxes w/= finalIdx <- genArr[idx0123];
                 set finalIdx = finalIdx + 1;
             }
         }

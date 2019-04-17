@@ -134,9 +134,9 @@ namespace Microsoft.Quantum.Preparation {
         // Uniformly distribute excess bars across coefficients.
         for (idx in 0..AbsI(bars) - 1) {
             if (bars > 0) {
-                set keepCoeff[idx] = keepCoeff[idx] - 1;
+                set keepCoeff w/= idx <- keepCoeff[idx] - 1;
             } else {
-                set keepCoeff[idx] = keepCoeff[idx] + 1;
+                set keepCoeff w/= idx <- keepCoeff[idx] + 1;
             }
         }
 
@@ -147,11 +147,11 @@ namespace Microsoft.Quantum.Preparation {
 
         for(idxCoeff in 0..nCoefficients-1) {
             if(keepCoeff[idxCoeff] > barHeight){
-                set barSource[nBarSource] = idxCoeff;
+                set barSource w/= nBarSource <- idxCoeff;
                 set nBarSource = nBarSource + 1;
             }
             elif(keepCoeff[idxCoeff] < barHeight){
-                set barSink[nBarSink] = idxCoeff;
+                set barSink w/= nBarSink <- idxCoeff;
                 set nBarSink = nBarSink + 1;
             }
         }
@@ -163,17 +163,17 @@ namespace Microsoft.Quantum.Preparation {
                 set nBarSink = nBarSink - 1;
                 set nBarSource = nBarSource - 1;
 
-                set keepCoeff[idxSource] = keepCoeff[idxSource] - barHeight + keepCoeff[idxSink];
-                set altIndex[idxSink] = idxSource;
+                set keepCoeff w/= idxSource <- keepCoeff[idxSource] - barHeight + keepCoeff[idxSink];
+                set altIndex w/= idxSink <- idxSource;
 
                 if (keepCoeff[idxSource] < barHeight)
                 {
-                    set barSink[nBarSink] = idxSource;
+                    set barSink w/= nBarSink <- idxSource;
                     set nBarSink = nBarSink + 1;
                 }
                 elif(keepCoeff[idxSource] > barHeight)
                 {
-                    set barSource[nBarSource] = idxSource;
+                    set barSource w/= nBarSource <- idxSource;
                     set nBarSource = nBarSource + 1;
                 }
             }
@@ -181,7 +181,7 @@ namespace Microsoft.Quantum.Preparation {
                 //Message($"rep: {rep}, nBarSource {nBarSource}.");
                 let idxSource = barSource[nBarSource-1];
                 set nBarSource = nBarSource - 1;
-                set keepCoeff[idxSource] = barHeight;
+                set keepCoeff w/= idxSource <- barHeight;
             } else {
                 return (oneNorm, keepCoeff, altIndex);
             }

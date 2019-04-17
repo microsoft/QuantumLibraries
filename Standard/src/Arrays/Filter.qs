@@ -30,7 +30,7 @@ namespace Microsoft.Quantum.Arrays {
 
         for (idxElement in IndexRange(array)) {
             if (predicate(array[idxElement])) {
-                set idxArray[totalFound] = idxElement;
+                set idxArray w/= totalFound <- idxElement;
                 set totalFound = totalFound + 1;
             }
         }

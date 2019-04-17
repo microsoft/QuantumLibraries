@@ -27,7 +27,7 @@ namespace Microsoft.Quantum.Arithmetic {
         mutable results = new Result[Length(target!)];
 
         for (idx in 0 .. Length(target!) - 1) {
-            set results[idx] = MResetZ((target!)[idx]);
+            set results w/= idx <- MResetZ((target!)[idx]);
         }
 
         return ResultArrayAsInt(results);

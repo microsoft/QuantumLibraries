@@ -38,7 +38,7 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
         mutable coefficients = new Double[nTerms];
         
         for (idx in 0 .. nTerms - 1) {
-            set coefficients[idx] = _GetOptimizedBETermIndexCoeff_(intToGenIdx(idx));
+            set coefficients w/= idx <- _GetOptimizedBETermIndexCoeff_(intToGenIdx(idx));
         }
         
         return coefficients;
@@ -195,7 +195,7 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
                 }
                 
                 let newCoeff = (2.0 * 0.25) * v0123[idxOp];
-                set majIdxes[nonZero] = OptimizedBETermIndex(newCoeff, signQubit, selectZControlRegisters, OptimizedBEControlRegisters, ops[idxOp], indexRegisters);
+                set majIdxes w/= nonZero <- OptimizedBETermIndex(newCoeff, signQubit, selectZControlRegisters, OptimizedBEControlRegisters, ops[idxOp], indexRegisters);
                 set nonZero = nonZero + 1;
             }
         }
@@ -224,7 +224,7 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
         for (idx in IndexRange(ZData)) {
             
             // Array of Arrays of Length 1
-            set majIdxes[idx] = _ZTermToPauliMajIdx_(HTermToGenIdx(ZData[idx], [0]));
+            set majIdxes w/= idx <- _ZTermToPauliMajIdx_(HTermToGenIdx(ZData[idx], [0]));
         }
         
         set startIdx = Length(ZData);
@@ -232,7 +232,7 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
         for (idx in IndexRange(ZZData)) {
             
             // Array of Arrays of Length 1
-            set majIdxes[startIdx + idx] = _ZZTermToPauliMajIdx_(HTermToGenIdx(ZZData[idx], [1]));
+            set majIdxes w/= startIdx + idx <- _ZZTermToPauliMajIdx_(HTermToGenIdx(ZZData[idx], [1]));
         }
         
         set startIdx = startIdx + Length(ZZData);
@@ -240,7 +240,7 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
         for (idx in IndexRange(PQandPQQRData)) {
             
             // Array of Arrays of Length 1
-            set majIdxes[startIdx + idx] = _PQandPQQRTermToPauliMajIdx_(HTermToGenIdx(PQandPQQRData[idx], [2]));
+            set majIdxes w/= startIdx + idx <- _PQandPQQRTermToPauliMajIdx_(HTermToGenIdx(PQandPQQRData[idx], [2]));
         }
         
         set startIdx = startIdx + Length(PQandPQQRData);
@@ -252,7 +252,7 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
             let genArr = _V0123TermToPauliMajIdx_(HTermToGenIdx(h0123Data[idx], [3]));
             
             for (idx0123 in IndexRange(genArr)) {
-                set majIdxes[finalIdx] = genArr[idx0123];
+                set majIdxes w/= finalIdx <- genArr[idx0123];
                 set finalIdx = finalIdx + 1;
             }
         }

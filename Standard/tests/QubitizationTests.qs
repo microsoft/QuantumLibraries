@@ -138,10 +138,10 @@ namespace Microsoft.Quantum.Tests {
     function RangeAsIntArrayTest() : Unit {
         mutable testCases = new (Int[], Range)[4];
         let e = new Int[0];
-        set testCases[0] = ([1, 3, 5, 7], 1..2..8);
-        set testCases[1] = ([9, 6, 3, 0, -3], 9..-3..-3);
-        set testCases[2] = (e, 0..2..-1);
-        set testCases[3] = ([0], 0..4..3);
+        set testCases w/= 0 <- ([1, 3, 5, 7], 1..2..8);
+        set testCases w/= 1 <- ([9, 6, 3, 0, -3], 9..-3..-3);
+        set testCases w/= 2 <- (e, 0..2..-1);
+        set testCases w/= 3 <- ([0], 0..4..3);
         for (idxTest in IndexRange(testCases)) {
             let (expected, range) = testCases[idxTest];
             let output = RangeAsIntArray(range);

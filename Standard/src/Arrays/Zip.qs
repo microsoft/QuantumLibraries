@@ -43,7 +43,7 @@ namespace Microsoft.Quantum.Arrays {
         mutable output = new ('T, 'U)[nElements];
 
         for (idxElement in 0 .. nElements - 1) {
-            set output[idxElement] = (left[idxElement], right[idxElement]);
+            set output w/= idxElement <- (left[idxElement], right[idxElement]);
         }
 
         return output;
@@ -82,7 +82,7 @@ namespace Microsoft.Quantum.Arrays {
         mutable output = new ('T1, 'T2, 'T3)[nElements];
 
         for (idxElement in 0 .. nElements - 1) {
-            set output[idxElement] = (first[idxElement], second[idxElement], third[idxElement]);
+            set output w/= idxElement <- (first[idxElement], second[idxElement], third[idxElement]);
         }
 
         return output;
@@ -125,7 +125,7 @@ namespace Microsoft.Quantum.Arrays {
         mutable output = new ('T1, 'T2, 'T3, 'T4)[nElements];
 
         for (idxElement in 0 .. nElements - 1) {
-            set output[idxElement] = (first[idxElement], second[idxElement], third[idxElement], fourth[idxElement]);
+            set output w/= idxElement <- (first[idxElement], second[idxElement], third[idxElement], fourth[idxElement]);
         }
 
         return output;

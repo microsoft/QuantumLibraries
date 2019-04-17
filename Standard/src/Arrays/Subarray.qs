@@ -39,7 +39,7 @@ namespace Microsoft.Quantum.Arrays {
         mutable sliced = new 'T[nSliced];
 
         for (idx in 0 .. nSliced - 1) {
-            set sliced[idx] = array[indices[idx]];
+            set sliced w/= idx <- array[indices[idx]];
         }
 
         return sliced;
