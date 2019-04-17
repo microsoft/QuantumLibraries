@@ -127,11 +127,11 @@ namespace Microsoft.Quantum.Canon {
         {
             if (index == location)
             {
-                set pauliArray[index] = pauli;
+                set pauliArray w/= index <- pauli;
             }
             else
             {
-                set pauliArray[index] = PauliI;
+                set pauliArray w/= index <- PauliI;
             }
         }
         
@@ -161,7 +161,7 @@ namespace Microsoft.Quantum.Canon {
         
         for (idxQubit in 0 .. nQubits - 1) {
             for (idxPauli in IndexRange(pauliGroup)) {
-                set paulis[idxQubit * Length(pauliGroup) + idxPauli] = EmbedPauli(pauliGroup[idxPauli], idxQubit, nQubits);
+                set paulis w/= idxQubit * Length(pauliGroup) + idxPauli <- EmbedPauli(pauliGroup[idxPauli], idxQubit, nQubits);
             }
         }
         

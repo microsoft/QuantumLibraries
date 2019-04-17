@@ -52,7 +52,7 @@ namespace Microsoft.Quantum.Simulation {
         
         for (idxInt in 0 .. nInts - 1)
         {
-            set paulis[idxInt] = IntToPauli(ints[idxInt]);
+            set paulis w/= idxInt <- IntToPauli(ints[idxInt]);
         }
         
         return paulis;

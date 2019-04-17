@@ -54,7 +54,7 @@ namespace Microsoft.Quantum.Preparation {
         mutable coefficientsComplexPolar = new ComplexPolar[nCoefficients];
 
         for (idx in 0 .. nCoefficients - 1) {
-            set coefficientsComplexPolar[idx] = ComplexPolar(AbsD(coefficients[idx]), 0.0);
+            set coefficientsComplexPolar w/= idx <- ComplexPolar(AbsD(coefficients[idx]), 0.0);
         }
 
         return PrepareArbitraryState(coefficientsComplexPolar, _);
@@ -240,9 +240,9 @@ namespace Microsoft.Quantum.Preparation {
 
         for (idxCoeff in 0 .. 2 .. Length(coefficients) - 1) {
             let (rt, phi, theta) = BlochSphereCoordinates(coefficients[idxCoeff], coefficients[idxCoeff + 1]);
-            set disentanglingZ[idxCoeff / 2] = 0.5 * phi;
-            set disentanglingY[idxCoeff / 2] = 0.5 * theta;
-            set newCoefficients[idxCoeff / 2] = rt;
+            set disentanglingZ w/= idxCoeff / 2 <- 0.5 * phi;
+            set disentanglingY w/= idxCoeff / 2 <- 0.5 * theta;
+            set newCoefficients w/= idxCoeff / 2 <- rt;
         }
 
         return (disentanglingY, disentanglingZ, newCoefficients);

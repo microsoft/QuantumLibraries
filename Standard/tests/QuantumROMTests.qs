@@ -20,11 +20,11 @@ namespace Microsoft.Quantum.Tests {
             Message($"Test case coeffs {coeffs}, bitsPrecision {bitsPrecision}");
             for (idx in 0..coeffs-1)
             {
-                set coefficients[idx] = 1000.0 * RandomReal(2*bitsPrecision);
+                set coefficients w/= idx <- 1000.0 * RandomReal(2*bitsPrecision);
             }
             // This avoids the case where coefficient are all zeros.
             let rnd = RandomInt(coeffs);
-            set coefficients[rnd] = coefficients[rnd] + 1.0;
+            set coefficients w/= rnd <- coefficients[rnd] + 1.0;
 
             let (oneNorm, keepCoeff, altIndex) = _QuantumROMDiscretization(bitsPrecision, coefficients);
 
@@ -34,10 +34,10 @@ namespace Microsoft.Quantum.Tests {
             mutable coefficientsOutInt = new Int[coeffs];
             for (idx in 0..coeffs-1)
             {
-                set coefficientsOutInt[idx] = coefficientsOutInt[idx] + keepCoeff[idx];
+                set coefficientsOutInt w/= idx <- coefficientsOutInt[idx] + keepCoeff[idx];
                 if (altIndex[idx] >= 0)
                 {
-                    set coefficientsOutInt[altIndex[idx]] = coefficientsOutInt[altIndex[idx]] + barHeight - keepCoeff[idx];
+                    set coefficientsOutInt w/= altIndex[idx] <- coefficientsOutInt[altIndex[idx]] + barHeight - keepCoeff[idx];
                 }
             }
 
@@ -47,9 +47,9 @@ namespace Microsoft.Quantum.Tests {
             mutable maxError = 0.0;
             for (i in 0..coeffs-1)
             {
-                set coefficientsOut[i] = oneNorm * IntAsDouble(coefficientsOutInt[i]) / IntAsDouble(barHeight * coeffs);
+                set coefficientsOut w/= i <- oneNorm * IntAsDouble(coefficientsOutInt[i]) / IntAsDouble(barHeight * coeffs);
                 let error = AbsD(coefficients[i] - coefficientsOut[i]) / oneNorm  /( PowD(2.0, IntAsDouble(-bitsPrecision)) / IntAsDouble(coeffs));
-                set errors[i] = error;
+                set errors w/= i <- error;
                 if(AbsD(error) > AbsD(maxError)){
                     set maxError = error;
                 }
@@ -74,7 +74,7 @@ namespace Microsoft.Quantum.Tests {
                 mutable coefficients = new Double[coeffs];
                 for (idx in 0..coeffs-1)
                 {
-                    set coefficients[idx] = RandomReal(2*32);
+                    set coefficients w/= idx <- RandomReal(2*32);
                 }
                 let ((nTotal, (nCoeffQubits, nGarbageQubits)), oneNorm, op) =  QuantumROM(targetError, coefficients);
                 Message($"Test case coeffs {coeffs}, bitsPrecision {nCoeffQubits}, global targetError {targetError}, probability error {probtargetError}.");

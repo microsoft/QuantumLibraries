@@ -141,7 +141,7 @@ namespace Microsoft.Quantum.Arrays {
         mutable arr = new 'T[length];
 
         for (i in 0 .. length - 1) {
-            set arr[i] = value;
+            set arr w/= i <- value;
         }
 
         return arr;
@@ -186,16 +186,16 @@ namespace Microsoft.Quantum.Arrays {
         mutable counter = 0;
 
         for (idx in 0 .. nElements - 1) {
-            set arrayKeep[idx] = idx;
+            set arrayKeep w/= idx <- idx;
         }
 
         for (idx in 0 .. nSliced - 1) {
-            set arrayKeep[remove[idx]] = -1;
+            set arrayKeep w/= remove[idx] <- -1;
         }
 
         for (idx in 0 .. nElements - 1) {
             if (arrayKeep[idx] >= 0) {
-                set sliced[counter] = array[arrayKeep[idx]];
+                set sliced w/= counter <- array[arrayKeep[idx]];
                 set counter = counter + 1;
             }
         }
@@ -273,10 +273,10 @@ namespace Microsoft.Quantum.Arrays {
             if(currIdx + nElements[idx] > Length(arr)) {
                 fail "Partitioned argument out of bounds.";
             }
-            set output[idx] = arr[currIdx..currIdx + nElements[idx]-1];
+            set output w/= idx <- arr[currIdx..currIdx + nElements[idx]-1];
             set currIdx = currIdx + nElements[idx];
         }
-        set output[Length(nElements)] = arr[currIdx..Length(arr)-1];
+        set output w/= Length(nElements) <- arr[currIdx..Length(arr)-1];
         return output;
     }
 

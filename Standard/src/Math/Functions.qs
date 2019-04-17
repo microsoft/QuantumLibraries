@@ -450,7 +450,7 @@ namespace Microsoft.Quantum.Math {
             mutable output = new Double[nElements];
 
             for (idx in 0 .. nElements - 1) {
-                set output[idx] = array[idx] / norm;
+                set output w/= idx <- array[idx] / norm;
             }
 
             return output;

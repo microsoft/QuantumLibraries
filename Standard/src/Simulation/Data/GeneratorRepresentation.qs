@@ -224,7 +224,7 @@ namespace Microsoft.Quantum.Simulation {
     {
         let ((idxTerms, idxDoubles), idxSystems) = generatorIndex!;
         mutable idxDoublesOut = idxDoubles;
-        set idxDoublesOut[0] = multiplier * idxDoublesOut[0];
+        set idxDoublesOut w/= 0 <- multiplier * idxDoublesOut[0];
         return GeneratorIndex((idxTerms, idxDoublesOut), idxSystems);
     }
     

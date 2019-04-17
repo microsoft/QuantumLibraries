@@ -6,6 +6,7 @@ using Microsoft.Quantum.Simulation.Core;
 using System;
 using System.Linq;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using static System.Math;
 
 
@@ -236,7 +237,8 @@ namespace Microsoft.Quantum.Chemistry
                 {
                     foreach (var generalPQQRTerm in generalFermionTerms[FermionTermType.Common.PQQRTermType])
                     {
-                        var pqqrterm = new QArray<Int64>(generalPQQRTerm.SpinOrbitalIndices.ToInts(nOrbitals: NOrbitals));
+                        var pqqrterm = ImmutableArray.CreateBuilder<Int64>();
+                        pqqrterm.AddRange(generalPQQRTerm.SpinOrbitalIndices.ToInts(nOrbitals: NOrbitals));
                         var multiplier = 1.0;
                         
                         if (pqqrterm.First() == pqqrterm.Last())
@@ -254,7 +256,7 @@ namespace Microsoft.Quantum.Chemistry
                             pqqrterm[2] = pqqrterm[1];
                             multiplier = -1.0;
                         }
-                        hPQandPQQRTerms.Add(new HTerm((pqqrterm, new QArray<Double> (new []{ -0.125 * multiplier* generalPQQRTerm.coeff }))));
+                        hPQandPQQRTerms.Add(new HTerm((new QArray<Int64>(pqqrterm.ToImmutableArray()), new QArray<Double> (new []{ -0.125 * multiplier* generalPQQRTerm.coeff }))));
                         // PQ term
                         var pqterm = new List<Int64>(pqqrterm);
                         pqterm.RemoveRange(1, 2);

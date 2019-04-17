@@ -21,31 +21,31 @@ namespace Microsoft.Quantum.Tests {
         mutable nTests = 0;
         
         // Test positive coefficients.
-        set testCases[nTests] = StatePreparationTestCase(1, [0.773761, 0.633478], [0.0, 0.0]);
+        set testCases w/= nTests <- StatePreparationTestCase(1, [0.773761, 0.633478], [0.0, 0.0]);
         set nTests = nTests + 1;
-        set testCases[nTests] = StatePreparationTestCase(2, [0.183017, 0.406973, 0.604925, 0.659502], [0.0, 0.0, 0.0, 0.0]);
+        set testCases w/= nTests <- StatePreparationTestCase(2, [0.183017, 0.406973, 0.604925, 0.659502], [0.0, 0.0, 0.0, 0.0]);
         set nTests = nTests + 1;
-        set testCases[nTests] = StatePreparationTestCase(3, [0.0986553, 0.359005, 0.465689, 0.467395, 0.419893, 0.118445, 0.461883, 0.149609], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]);
+        set testCases w/= nTests <- StatePreparationTestCase(3, [0.0986553, 0.359005, 0.465689, 0.467395, 0.419893, 0.118445, 0.461883, 0.149609], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]);
         set nTests = nTests + 1;
-        set testCases[nTests] = StatePreparationTestCase(4, [0.271471, 0.0583654, 0.11639, 0.36112, 0.307383, 0.193371, 0.274151, 0.332542, 0.130172, 0.222546, 0.314879, 0.210704, 0.212429, 0.245518, 0.30666, 0.22773], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]);
+        set testCases w/= nTests <- StatePreparationTestCase(4, [0.271471, 0.0583654, 0.11639, 0.36112, 0.307383, 0.193371, 0.274151, 0.332542, 0.130172, 0.222546, 0.314879, 0.210704, 0.212429, 0.245518, 0.30666, 0.22773], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]);
         set nTests = nTests + 1;
         
         // Test negative coefficients. Should give same probabilities as positive coefficients.
-        set testCases[nTests] = StatePreparationTestCase(1, [-0.773761, 0.633478], [0.0, 0.0]);
+        set testCases w/= nTests <- StatePreparationTestCase(1, [-0.773761, 0.633478], [0.0, 0.0]);
         set nTests = nTests + 1;
-        set testCases[nTests] = StatePreparationTestCase(2, [0.183017, -0.406973, 0.604925, 0.659502], [0.0, 0.0, 0.0, 0.0]);
+        set testCases w/= nTests <- StatePreparationTestCase(2, [0.183017, -0.406973, 0.604925, 0.659502], [0.0, 0.0, 0.0, 0.0]);
         set nTests = nTests + 1;
-        set testCases[nTests] = StatePreparationTestCase(3, [0.0986553, -0.359005, 0.465689, -0.467395, 0.419893, 0.118445, -0.461883, 0.149609], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]);
+        set testCases w/= nTests <- StatePreparationTestCase(3, [0.0986553, -0.359005, 0.465689, -0.467395, 0.419893, 0.118445, -0.461883, 0.149609], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]);
         set nTests = nTests + 1;
-        set testCases[nTests] = StatePreparationTestCase(4, [-0.271471, 0.0583654, 0.11639, 0.36112, -0.307383, 0.193371, -0.274151, 0.332542, 0.130172, 0.222546, 0.314879, -0.210704, 0.212429, 0.245518, -0.30666, -0.22773], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]);
+        set testCases w/= nTests <- StatePreparationTestCase(4, [-0.271471, 0.0583654, 0.11639, 0.36112, -0.307383, 0.193371, -0.274151, 0.332542, 0.130172, 0.222546, 0.314879, -0.210704, 0.212429, 0.245518, -0.30666, -0.22773], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]);
         set nTests = nTests + 1;
         
         // Test unnormalized coefficients
-        set testCases[nTests] = StatePreparationTestCase(3, [1.0986553, 0.359005, 0.465689, -0.467395, 0.419893, 0.118445, 0.461883, 0.149609], new Double[0]);
+        set testCases w/= nTests <- StatePreparationTestCase(3, [1.0986553, 0.359005, 0.465689, -0.467395, 0.419893, 0.118445, 0.461883, 0.149609], new Double[0]);
         set nTests = nTests + 1;
         
         // Test missing coefficients
-        set testCases[nTests] = StatePreparationTestCase(3, [1.0986553, 0.359005, 0.465689, -0.467395, 0.419893, 0.118445], new Double[0]);
+        set testCases w/= nTests <- StatePreparationTestCase(3, [1.0986553, 0.359005, 0.465689, -0.467395, 0.419893, 0.118445], new Double[0]);
         set nTests = nTests + 1;
         
         // Loop over multiple qubit tests
@@ -80,9 +80,9 @@ namespace Microsoft.Quantum.Tests {
         mutable nTests = 0;
         
         // Test phase factor on uniform superposition.
-        set testCases[nTests] = StatePreparationTestCase(1, [1.0, 1.0], [0.01, -0.01]);
+        set testCases w/= nTests <- StatePreparationTestCase(1, [1.0, 1.0], [0.01, -0.01]);
         set nTests = nTests + 1;
-        set testCases[nTests] = StatePreparationTestCase(1, [1.0, 1.0], [0.01, -0.05]);
+        set testCases w/= nTests <- StatePreparationTestCase(1, [1.0, 1.0], [0.01, -0.05]);
         set nTests = nTests + 1;
         
         // Loop over tests
@@ -97,8 +97,8 @@ namespace Microsoft.Quantum.Tests {
                 mutable coefficientsPositive = new Double[nCoefficients];
                 
                 for (idxCoeff in 0 .. nCoefficients - 1) {
-                    set coefficients[idxCoeff] = ComplexPolar(coefficientsAmplitude[idxCoeff], coefficientsPhase[idxCoeff]);
-                    set coefficientsPositive[idxCoeff] = coefficientsAmplitude[idxCoeff];
+                    set coefficients w/= idxCoeff <- ComplexPolar(coefficientsAmplitude[idxCoeff], coefficientsPhase[idxCoeff]);
+                    set coefficientsPositive w/= idxCoeff <- coefficientsAmplitude[idxCoeff];
                 }
                 
                 let normalizedCoefficients = PNormalized(2.0, coefficientsAmplitude);
@@ -126,15 +126,15 @@ namespace Microsoft.Quantum.Tests {
         mutable nTests = 0;
         
         // Test probability and phases of uniform superposition.
-        set testCases[nTests] = StatePreparationTestCase(1, [1.0, 1.0], [0.01, -0.01]);
+        set testCases w/= nTests <- StatePreparationTestCase(1, [1.0, 1.0], [0.01, -0.01]);
         set nTests = nTests + 1;
-        set testCases[nTests] = StatePreparationTestCase(3, [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]);
+        set testCases w/= nTests <- StatePreparationTestCase(3, [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]);
         set nTests = nTests + 1;
-        set testCases[nTests] = StatePreparationTestCase(3, [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0], ConstantArray(8, PI()));
+        set testCases w/= nTests <- StatePreparationTestCase(3, [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0], ConstantArray(8, PI()));
         set nTests = nTests + 1;
-        set testCases[nTests] = StatePreparationTestCase(3, [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.01]);
+        set testCases w/= nTests <- StatePreparationTestCase(3, [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.01]);
         set nTests = nTests + 1;
-        set testCases[nTests] = StatePreparationTestCase(3, [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0], [1.0986553, 0.359005, 0.465689, -0.467395, 0.419893, 0.118445, 0.461883, 0.149609]);
+        set testCases w/= nTests <- StatePreparationTestCase(3, [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0], [1.0986553, 0.359005, 0.465689, -0.467395, 0.419893, 0.118445, 0.461883, 0.149609]);
         set nTests = nTests + 1;
         
         // Loop over tests
@@ -149,8 +149,8 @@ namespace Microsoft.Quantum.Tests {
                 mutable coefficientsPositive = new Double[nCoefficients];
                 
                 for (idxCoeff in 0 .. nCoefficients - 1) {
-                    set coefficients[idxCoeff] = ComplexPolar(coefficientsAmplitude[idxCoeff], coefficientsPhase[idxCoeff]);
-                    set coefficientsPositive[idxCoeff] = coefficientsAmplitude[idxCoeff];
+                    set coefficients w/= idxCoeff <- ComplexPolar(coefficientsAmplitude[idxCoeff], coefficientsPhase[idxCoeff]);
+                    set coefficientsPositive w/= idxCoeff <- coefficientsAmplitude[idxCoeff];
                 }
                 
                 let normalizedCoefficients = PNormalized(2.0, coefficientsAmplitude);
@@ -202,11 +202,11 @@ namespace Microsoft.Quantum.Tests {
         let tolerance = 1E-09;
         mutable testCases = new StatePreparationTestCase[10];
         mutable nTests = 0;
-        set testCases[nTests] = StatePreparationTestCase(1, [1.0986553, 0.359005], [0.419893, 0.118445]);
+        set testCases w/= nTests <- StatePreparationTestCase(1, [1.0986553, 0.359005], [0.419893, 0.118445]);
         set nTests = nTests + 1;
-        set testCases[nTests] = StatePreparationTestCase(2, [1.0986553, 0.359005, -0.123, 9.238], [0.419893, 0.118445, -0.467395, 0.419893]);
+        set testCases w/= nTests <- StatePreparationTestCase(2, [1.0986553, 0.359005, -0.123, 9.238], [0.419893, 0.118445, -0.467395, 0.419893]);
         set nTests = nTests + 1;
-        set testCases[nTests] = StatePreparationTestCase(3, [1.0986553, 0.359005, 0.465689, 0.467395, 0.419893, 0.118445, 0.123, 9.238], [1.0986553, 0.359005, 0.465689, -0.467395, 0.419893, 0.118445, 0.461883, 0.149609]);
+        set testCases w/= nTests <- StatePreparationTestCase(3, [1.0986553, 0.359005, 0.465689, 0.467395, 0.419893, 0.118445, 0.123, 9.238], [1.0986553, 0.359005, 0.465689, -0.467395, 0.419893, 0.118445, 0.461883, 0.149609]);
         set nTests = nTests + 1;
         
         // Loop over tests
@@ -221,8 +221,8 @@ namespace Microsoft.Quantum.Tests {
                 mutable coefficientsPositive = new Double[nCoefficients];
                 
                 for (idxCoeff in 0 .. nCoefficients - 1) {
-                    set coefficients[idxCoeff] = ComplexPolar(coefficientsAmplitude[idxCoeff], coefficientsPhase[idxCoeff]);
-                    set coefficientsPositive[idxCoeff] = coefficientsAmplitude[idxCoeff];
+                    set coefficients w/= idxCoeff <- ComplexPolar(coefficientsAmplitude[idxCoeff], coefficientsPhase[idxCoeff]);
+                    set coefficientsPositive w/= idxCoeff <- coefficientsAmplitude[idxCoeff];
                 }
                 
                 let normalizedCoefficients = PNormalized(2.0, coefficientsAmplitude);

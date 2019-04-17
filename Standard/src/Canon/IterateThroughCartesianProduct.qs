@@ -24,14 +24,14 @@ namespace Microsoft.Quantum.Canon {
         fixup
         {
             //computes the next element in the Cartesian product
-            set arr[0] = arr[0] + 1;
+            set arr w/= 0 <- arr[0] + 1;
             
             for (i in 0 .. Length(arr) - 2)
             {
                 if (arr[i] == bounds[i])
                 {
-                    set arr[i + 1] = arr[i + 1] + 1;
-                    set arr[i] = 0;
+                    set arr w/= i + 1 <- arr[i + 1] + 1;
+                    set arr w/= i <- 0;
                 }
             }
             

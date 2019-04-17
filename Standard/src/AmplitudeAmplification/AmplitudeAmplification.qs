@@ -36,17 +36,17 @@ namespace Microsoft.Quantum.AmplitudeAmplification {
         
         mutable phasesTarget = new Double[nPhasesRef];
         mutable phasesStart = new Double[nPhasesRef];
-        set phasesTarget[0] = ((rotPhases!)[0] - (rotPhases!)[1]) - PI();
-        set phasesStart[0] = -(rotPhases!)[0] + 0.5 * PI();
+        set phasesTarget w/= 0 <- ((rotPhases!)[0] - (rotPhases!)[1]) - PI();
+        set phasesStart w/= 0 <- -(rotPhases!)[0] + 0.5 * PI();
         
         for (idxPhases in 1 .. nPhasesRef - 2)
         {
-            set phasesTarget[idxPhases] = ((rotPhases!)[2 * idxPhases] - (rotPhases!)[2 * idxPhases + 1]) - PI();
-            set phasesStart[idxPhases] = ((rotPhases!)[2 * idxPhases - 1] - (rotPhases!)[2 * idxPhases]) + PI();
+            set phasesTarget w/= idxPhases <- ((rotPhases!)[2 * idxPhases] - (rotPhases!)[2 * idxPhases + 1]) - PI();
+            set phasesStart w/= idxPhases <- ((rotPhases!)[2 * idxPhases - 1] - (rotPhases!)[2 * idxPhases]) + PI();
         }
         
-        set phasesTarget[nPhasesRef - 1] = (rotPhases!)[2 * nPhasesRef - 2] - 0.5 * PI();
-        set phasesStart[nPhasesRef - 1] = ((rotPhases!)[2 * nPhasesRef - 3] - (rotPhases!)[2 * nPhasesRef - 2]) + PI();
+        set phasesTarget w/= nPhasesRef - 1 <- (rotPhases!)[2 * nPhasesRef - 2] - 0.5 * PI();
+        set phasesStart w/= nPhasesRef - 1 <- ((rotPhases!)[2 * nPhasesRef - 3] - (rotPhases!)[2 * nPhasesRef - 2]) + PI();
         return ReflectionPhases(phasesStart, phasesTarget);
     }
     
@@ -73,12 +73,12 @@ namespace Microsoft.Quantum.AmplitudeAmplification {
         
         for (idxPhases in 0 .. nIterations)
         {
-            set phasesTarget[idxPhases] = PI();
-            set phasesStart[idxPhases] = PI();
+            set phasesTarget w/= idxPhases <- PI();
+            set phasesStart w/= idxPhases <- PI();
         }
         
-        set phasesTarget[nIterations] = 0.0;
-        set phasesStart[0] = 0.0;
+        set phasesTarget w/= nIterations <- 0.0;
+        set phasesStart w/= 0 <- 0.0;
         return ReflectionPhases(phasesStart, phasesTarget);
     }
     
@@ -114,12 +114,12 @@ namespace Microsoft.Quantum.AmplitudeAmplification {
     {
         mutable phasesRot = new Double[nQueries];
         let nQueriesDouble = IntAsDouble(nQueries);
-        set phasesRot[0] = 0.0;
+        set phasesRot w/= 0 <- 0.0;
         let beta = Cosh((1.0 / nQueriesDouble) * ArcCosh(Sqrt(successMin)));
         
         for (idxPhases in 1 .. nQueries - 1)
         {
-            set phasesRot[idxPhases] = phasesRot[idxPhases - 1] + 2.0 * ArcTan(Tan((((2.0 * 1.0) * IntAsDouble(idxPhases)) * PI()) / nQueriesDouble) * Sqrt(1.0 - beta * beta));
+            set phasesRot w/= idxPhases <- phasesRot[idxPhases - 1] + 2.0 * ArcTan(Tan((((2.0 * 1.0) * IntAsDouble(idxPhases)) * PI()) / nQueriesDouble) * Sqrt(1.0 - beta * beta));
         }
         
         return AmpAmpRotationToReflectionPhases(RotationPhases(phasesRot));

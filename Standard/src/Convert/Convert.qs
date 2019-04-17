@@ -83,7 +83,7 @@ namespace Microsoft.Quantum.Convert {
         mutable tempInt = number;
 
         for (idxBit in 0 .. bits - 1) {
-            set outputBits[idxBit] = tempInt % 2 == 0 ? false | true;
+            set outputBits w/= idxBit <- tempInt % 2 == 0 ? false | true;
             set tempInt = tempInt / 2;
         }
 
@@ -193,7 +193,7 @@ namespace Microsoft.Quantum.Convert {
         mutable paulis = new Pauli[nBits];
 
         for (idxBit in 0 .. nBits - 1) {
-            set paulis[idxBit] = bits[idxBit] == bitApply ? pauli | PauliI;
+            set paulis w/= idxBit <- bits[idxBit] == bitApply ? pauli | PauliI;
         }
 
         return paulis;
@@ -223,7 +223,7 @@ namespace Microsoft.Quantum.Convert {
             let nTerms = (end - start) / step + 1;
             mutable array = new Int[nTerms];
             for(idx in 0..nTerms - 1){
-               set array[idx] = start + idx * step;
+               set array w/= idx <- start + idx * step;
             }
             return array;
         }

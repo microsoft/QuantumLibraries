@@ -1,11 +1,11 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-using Microsoft.Quantum.Simulation.Core;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using Microsoft.Quantum.Simulation.Core;
+
 
 namespace Microsoft.Quantum.Chemistry
 {
@@ -153,14 +153,14 @@ namespace Microsoft.Quantum.Chemistry
                 var nElements = 1;
                 foreach (var next in term.Skip(1))
                 {
-                    var curr = output[nElements - 1];
+                    HTerm curr = output[nElements - 1];
 
                     if (Enumerable.SequenceEqual(curr.Item1, next.Item1))
                     {
                         var (pqrsSorted, coeffs) = next;
                         for (var idxCoeff = 0; idxCoeff < coeffs.Length; idxCoeff++)
                         {
-                            curr.Item2[idxCoeff] += coeffs[idxCoeff];
+                            curr = new HTerm((curr.Item1, new QArray<double>(curr.Item2).SetItem(idxCoeff, curr.Item2[idxCoeff] + coeffs[idxCoeff])));
                             output[nElements - 1] = curr;
                         }
                     }

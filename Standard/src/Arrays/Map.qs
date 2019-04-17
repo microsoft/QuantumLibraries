@@ -31,7 +31,7 @@ namespace Microsoft.Quantum.Arrays {
         mutable resultArray = new 'U[Length(array)];
 
         for (idxElement in IndexRange(array)) {
-            set resultArray[idxElement] = mapper(array[idxElement]);
+            set resultArray w/= idxElement <- mapper(array[idxElement]);
         }
 
         return resultArray;
@@ -80,7 +80,7 @@ namespace Microsoft.Quantum.Arrays {
         mutable resultArray = new 'U[Length(array)];
 
         for (idxElement in IndexRange(array)) {
-            set resultArray[idxElement] = mapper(idxElement, array[idxElement]);
+            set resultArray w/= idxElement <- mapper(idxElement, array[idxElement]);
         }
 
         return resultArray;
@@ -114,7 +114,7 @@ namespace Microsoft.Quantum.Arrays {
         mutable resultArray = new 'U[Length(array)];
 
         for (idxElement in IndexRange(array)) {
-            set resultArray[idxElement] = action(array[idxElement]);
+            set resultArray w/= idxElement <- action(array[idxElement]);
         }
 
         return resultArray;
