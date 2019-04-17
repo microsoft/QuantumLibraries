@@ -103,20 +103,6 @@ class ProblemDescription(object):
         data = qsharp.client._execute(f'%chemistry.inputstate.load {args_json}', raise_on_stderr=True)
         return InputState(data)
 
-class JordanWignerEncodingData(object):
-    """
-    Represents chemistry simulation hamiltonian and input state encoded using
-    the Jodran-Wigner encoding.
-    """
-    def __init__(self, data: Tuple):
-        self.data = data
-
-    def __eq__(self, other): 
-        if not isinstance(other, FermionHamiltonian):
-            # don't attempt to compare against unrelated types
-            return NotImplemented
-        return self.data == other.data
-
 
 class Broombridge(object):
     """
@@ -171,7 +157,7 @@ def load_broombridge(file_name: str) -> Broombridge:
     return Broombridge(data)
 
     
-def encode(hamiltonian : FermionHamiltonian, input_state : InputState) -> JordanWignerEncodingData:
+def encode(hamiltonian : FermionHamiltonian, input_state : InputState) -> Tuple:
     """
     Encodes the given hamiltonian and input state using the Jordan Wigner encoding
     that can be used to run chemistry simulations using Q#'s chemistry library.
@@ -180,5 +166,5 @@ def encode(hamiltonian : FermionHamiltonian, input_state : InputState) -> Jordan
     args = { 'hamiltonian': hamiltonian.__dict__, 'input_state': input_state.__dict__ }
     args_json = json.dumps(map_tuples(args))
     data = qsharp.client._execute(f'%chemistry.encode {args_json}', raise_on_stderr=True)
-    return JordanWignerEncodingData(data)
+    return data
 

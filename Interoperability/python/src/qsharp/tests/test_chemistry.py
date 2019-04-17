@@ -79,4 +79,4 @@ def test_jw_encode():
     is1 = broombridge.problem_description[0].load_input_state()
 
     jw = encode(fh1, is1)
-    assert(len(jw.data) == 4)
+    assert(len(jw) == 4)

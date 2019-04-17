@@ -34,13 +34,28 @@ is2 = broombridge.problem_description[0].load_input_state("|E1>")
 logging.info("is2 ready.")
 logging.debug(is2)
 
+
+####
+# An end-to-end example of how to simulate H2:
+####
+
+# load the broombridge data for H2:
+h2 = load_broombridge("h2.yaml")
+problem = h2.problem_description[0]
+fh = problem.load_fermion_hamiltonian()
+input_state = problem.load_input_state()
+
+
 # Once we have the hamiltonian and input state, we can call 'encode' to generate a Jordan-Wigner
 # representation, suitable for quantum simulation:
-qsharp_encoding = encode(fh1, is1)
+qsharp_encoding = encode(fh, input_state)
+
 
 # Compile a Q# function on the fly as an entry point for our simulation.
 # For now, it is better if you compile the entry-point operation from Python (instead of using a .qs file):
 TrotterEstimateEnergy = qsharp.compile("""
+
+
     open Microsoft.Quantum.Chemistry.JordanWigner;
     
     operation TrotterEstimateEnergy (qSharpData: JordanWignerEncodingData, nBitsPrecision : Int, trotterStepSize : Double) : (Double, Double) {
