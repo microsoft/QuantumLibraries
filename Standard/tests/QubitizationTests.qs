@@ -196,21 +196,21 @@ namespace Microsoft.Quantum.Tests {
                 
                     Message($"Test case. {x} > {y} = {result}");
                     using(qubits = Qubit[nQubits*2 + 1]){
-                        let xRegister = BigEndian(qubits[0..nQubits-1]);
-                        let yRegister = BigEndian(qubits[nQubits..2*nQubits-1]);
+                        let xRegister = LittleEndian(qubits[0..nQubits-1]);
+                        let yRegister = LittleEndian(qubits[nQubits..2*nQubits-1]);
                         let output = qubits[2*nQubits];
 
-                        InPlaceXorBE(x, xRegister);
-                        InPlaceXorBE(y, yRegister);
-                        ApplyRippleCarryComparatorBE(xRegister, yRegister, output);
+                        ApplyXorInPlace(x, xRegister);
+                        ApplyXorInPlace(y, yRegister);
+                        CompareUsingRippleCarry(xRegister, yRegister, output);
 
                         AssertProb([PauliZ], [output], result, 1.0, "", 1e-10);
                         if(result == One){
                             X(output);
                         }
 
-                        (Adjoint InPlaceXorBE)(y, yRegister);
-                        (Adjoint InPlaceXorBE)(x, xRegister);
+                        (Adjoint ApplyXorInPlace)(y, yRegister);
+                        (Adjoint ApplyXorInPlace)(x, xRegister);
 
                     
                     }

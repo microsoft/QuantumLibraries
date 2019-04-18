@@ -9,7 +9,7 @@ namespace Microsoft.Quantum.Tests {
     open Microsoft.Quantum.Measurement;
     open Microsoft.Quantum.Arrays;
 
-    operation MultiplexZTestHelper (coefficients : Double[], multiplexerControl : BigEndian, additionalControl : Qubit[], target : Qubit, tolerance : Double) : Unit {
+    operation MultiplexZTestHelper (coefficients : Double[], multiplexerControl : LittleEndian, additionalControl : Qubit[], target : Qubit, tolerance : Double) : Unit {
         let nCoefficients = Length(coefficients);
         let nQubits = (Length(multiplexerControl!) + Length(additionalControl)) + 1;
 
@@ -39,7 +39,7 @@ namespace Microsoft.Quantum.Tests {
         }
         
         // Sample from control registers and check phase using AssertProb.
-        let multiplexerControlInteger = MeasureIntegerBE(multiplexerControl);
+        let multiplexerControlInteger = MeasureInteger(multiplexerControl);
         let additionalControlResults = ForEach(MResetZ, additionalControl);
         
         if (Length(additionalControlResults) == 1 and additionalControlResults[0] == Zero) {
@@ -96,7 +96,7 @@ namespace Microsoft.Quantum.Tests {
                     
                     // Allocate qubits
                     using (qubits = Qubit[(nMultiplexerControl + 1) + nAdditionalControl]) {
-                        let multiplexerControl = BigEndian(qubits[0 .. nMultiplexerControl - 1]);
+                        let multiplexerControl = LittleEndian(qubits[0 .. nMultiplexerControl - 1]);
                         let target = qubits[nMultiplexerControl];
                         mutable additionalControl = new Qubit[1];
                         
@@ -120,7 +120,7 @@ namespace Microsoft.Quantum.Tests {
     }
     
     
-    operation ApplyDiagonalUnitaryTestHelper (coefficients : Double[], qubits : BigEndian, tolerance : Double) : Unit {
+    operation ApplyDiagonalUnitaryTestHelper (coefficients : Double[], qubits : LittleEndian, tolerance : Double) : Unit {
         
         let nCoefficients = Length(coefficients);
         let nQubits = Length(qubits!);
@@ -135,17 +135,7 @@ namespace Microsoft.Quantum.Tests {
                 //for(idxQubit in 0..nQubits-1){
                 //    H(qubits[idxQubit]);
                 //}
-                
-                
-                // For deterministic test of particular number state `idx', we could use the following
-                let bits = Reversed(IntAsBoolArray(idxCoeff, nQubits));
-                
-                for (idxBits in IndexRange(bits)) {
-                    
-                    if (bits[idxBits]) {
-                        X(qubits![idxBits]);
-                    }
-                }
+                ApplyXorInPlace(idxCoeff, qubits);
                 
                 // Apply MultiplexZ circuit
                 Controlled (ApplyDiagonalUnitary(coefficients, _))([control], qubits);
@@ -177,7 +167,7 @@ namespace Microsoft.Quantum.Tests {
             // Allocate qubits
             using (qubits = Qubit[nqubits]) {
                 let tolerance = 1E-09;
-                ApplyDiagonalUnitaryTestHelper(coefficients, BigEndian(qubits), tolerance);
+                ApplyDiagonalUnitaryTestHelper(coefficients, LittleEndian(qubits), tolerance);
             }
         }
     }
@@ -200,9 +190,9 @@ namespace Microsoft.Quantum.Tests {
         
         let unitaries = MultiplexOperationsTestUnitary(2 ^ nQubits, idxTarget);
         
-        // BigEndian
-        let bits = Reversed(IntAsBoolArray(idxTest, nQubits));
-        let controlBits = Reversed(IntAsBoolArray(idxControl, nControls));
+        // LittleEndian
+        let bits = IntAsBoolArray(idxTest, nQubits);
+        let controlBits = IntAsBoolArray(idxControl, nControls);
         mutable result = Zero;
         
         if (nControls == 0) {
@@ -218,7 +208,7 @@ namespace Microsoft.Quantum.Tests {
                         }
                     }
                     
-                    MultiplexOperations(unitaries, BigEndian(index), target[0]);
+                    MultiplexOperations(unitaries, LittleEndian(index), target[0]);
                     set result = M(target[0]);
                     ResetAll(target);
                     ResetAll(index);
@@ -241,7 +231,7 @@ namespace Microsoft.Quantum.Tests {
                             }
                         }
                         
-                        Controlled (MultiplexOperations(unitaries, BigEndian(index), _))(control, target[0]);
+                        Controlled (MultiplexOperations(unitaries, LittleEndian(index), _))(control, target[0]);
                         set result = M(target[0]);
                         ResetAll(target);
                         ResetAll(control);
@@ -264,7 +254,7 @@ namespace Microsoft.Quantum.Tests {
                                 }
                             }
                             
-                            Controlled (MultiplexOperations(unitaries, BigEndian(index), _))(control, target[0]);
+                            Controlled (MultiplexOperations(unitaries, LittleEndian(index), _))(control, target[0]);
                             set result = M(target[0]);
                             ResetAll(target);
                             ResetAll(index);
@@ -299,8 +289,8 @@ namespace Microsoft.Quantum.Tests {
         
         let unitaries = MultiplexOperationsTestMissingUnitary(2 ^ nQubits, nUnitaries);
         
-        // BigEndian
-        let bits = Reversed(IntAsBoolArray(idxTest, nQubits));
+        // LittleEndian
+        let bits = IntAsBoolArray(idxTest, nQubits);
         mutable result = Zero;
         
         using (target = Qubit[1]) {
@@ -315,7 +305,7 @@ namespace Microsoft.Quantum.Tests {
                     }
                 }
                 
-                MultiplexOperations(unitaries, BigEndian(index), target[0]);
+                MultiplexOperations(unitaries, LittleEndian(index), target[0]);
                 set result = M(target[0]);
                 ResetAll(target);
             }
@@ -330,7 +320,7 @@ namespace Microsoft.Quantum.Tests {
                         }
                     }
                     
-                    MultiplexOperations(unitaries, BigEndian(index), target[0]);
+                    MultiplexOperations(unitaries, LittleEndian(index), target[0]);
                     set result = M(target[0]);
                     ResetAll(target);
                     ResetAll(index);
@@ -445,9 +435,9 @@ namespace Microsoft.Quantum.Tests {
         body (...) {
             let unitaries = MultiplexOperationsFromGeneratorTestUnitary(2^nQubits, idxTarget);
     
-            // BigEndian
-            let bits = Reversed(IntAsBoolArray (idxTest, nQubits));
-            let controlBits = Reversed(IntAsBoolArray (idxControl, nControls));
+            // LittleEndian
+            let bits = IntAsBoolArray (idxTest, nQubits);
+            let controlBits = IntAsBoolArray (idxControl, nControls);
 
             mutable result = Zero;
 
@@ -460,7 +450,7 @@ namespace Microsoft.Quantum.Tests {
                             }
                         }
 
-                        MultiplexOperationsFromGenerator(unitaries, BigEndian(index), [target[0]]);
+                        MultiplexOperationsFromGenerator(unitaries, LittleEndian(index), [target[0]]);
 
                         set result = M(target[0]);
                         ResetAll(target);
@@ -480,7 +470,7 @@ namespace Microsoft.Quantum.Tests {
                                 }
                             }
 
-                            Controlled (MultiplexOperationsFromGenerator(unitaries, BigEndian(index), _))(control, [target[0]]);
+                            Controlled (MultiplexOperationsFromGenerator(unitaries, LittleEndian(index), _))(control, [target[0]]);
 
                             set result = M(target[0]);
                             ResetAll(target);
@@ -500,7 +490,7 @@ namespace Microsoft.Quantum.Tests {
                                     }
                                 }
 
-                                Controlled (MultiplexOperationsFromGenerator(unitaries, BigEndian(index), _))(control, [target[0]]);
+                                Controlled (MultiplexOperationsFromGenerator(unitaries, LittleEndian(index), _))(control, [target[0]]);
 
                                 set result = M(target[0]);
                                 ResetAll(target);

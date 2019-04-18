@@ -25,7 +25,7 @@ namespace Microsoft.Quantum.Preparation {
     /// ## nIndices
     /// The desired number of states $M$ in the uniform superposition.
     /// ## indexRegister
-    /// The qubit register that stores the number states in `BigEndian` format.
+    /// The qubit register that stores the number states in `LittleEndian` format.
     /// This register must be able to store the number $M-1$, and is assumed to be
     /// initialized in the state $\ket{0\cdots 0}$.
     ///
@@ -36,16 +36,16 @@ namespace Microsoft.Quantum.Preparation {
     /// ``` Q#
     /// let nIndices = 6;
     /// using(indexRegister = Qubit[3]) {
-    ///     PrepareUniformSuperposition(nIndices, BigEndian(indexRegister));
+    ///     PrepareUniformSuperposition(nIndices, LittleEndian(indexRegister));
     /// }
     /// ```
-    operation PrepareUniformSuperposition(nIndices: Int, indexRegister: BigEndian) : Unit is Adj + Ctl {
+    operation PrepareUniformSuperposition(nIndices: Int, indexRegister: LittleEndian) : Unit is Adj + Ctl {
         if(nIndices == 0) {
             fail $"Cannot prepare uniform superposition over {nIndices} state.";
         } elif (nIndices == 1) {
             // Superposition over one state, so do nothing.
         } elif (nIndices == 2){
-            H(indexRegister![Length(indexRegister!) - 1]);
+            H(indexRegister![0]);
         } else {
             let nQubits = Ceiling(Lg(IntAsDouble(nIndices)));
             if (nQubits > Length(indexRegister!)){
@@ -53,7 +53,7 @@ namespace Microsoft.Quantum.Preparation {
             }
 
             using (flagQubit = Qubit[3]) {
-                let targetQubits = indexRegister![Length(indexRegister!) - nQubits..Length(indexRegister!) - 1];
+                let targetQubits = indexRegister![0..nQubits - 1];
                 let qubits = flagQubit + targetQubits;
                 let stateOracle = StateOracle(PrepareUniformSuperposition_(nIndices, nQubits, _, _));
 
@@ -76,10 +76,10 @@ namespace Microsoft.Quantum.Preparation {
 
             ApplyToEachCA(H, targetQubits);
             using(compareQubits = Qubit[nQubits]) {
-                InPlaceXorBE(nIndices - 1, BigEndian(compareQubits));
-                ApplyRippleCarryComparatorBE(BigEndian(targetQubits), BigEndian(compareQubits), auxillaryQubits[0]);
+                ApplyXorInPlace(nIndices - 1, LittleEndian(compareQubits));
+                CompareUsingRippleCarry(LittleEndian(targetQubits), LittleEndian(compareQubits), auxillaryQubits[0]);
                 X(auxillaryQubits[0]);
-                InPlaceXorBE(nIndices - 1, BigEndian(compareQubits));
+                ApplyXorInPlace(nIndices - 1, LittleEndian(compareQubits));
             }
             Exp([PauliY], -theta, [auxillaryQubits[1]]);
             (Controlled X)(auxillaryQubits, flagQubit);
