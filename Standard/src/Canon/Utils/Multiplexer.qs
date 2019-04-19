@@ -19,14 +19,14 @@ namespace Microsoft.Quantum.Canon {
     /// # Input
     /// ## coefficients
     /// Array of up to $2^n$ coefficients $\theta_j$. The $j$th coefficient
-    /// indexes the number state $\ket{j}$ encoded in big-endian format.
+    /// indexes the number state $\ket{j}$ encoded in little-endian format.
     ///
     /// ## pauli
     /// Pauli operator $P$ that determines axis of rotation.
     ///
     /// ## control
     /// $n$-qubit control register that encodes number states $\ket{j}$ in
-    /// big-endian format.
+    /// little-endian format.
     ///
     /// ## target
     /// Single qubit register that is rotated by $e^{i P \theta_j}$.
@@ -34,7 +34,7 @@ namespace Microsoft.Quantum.Canon {
     /// # Remarks
     /// `coefficients` will be padded with elements $\theta_j = 0.0$ if
     /// fewer than $2^n$ are specified.
-    operation MultiplexPauli (coefficients : Double[], pauli : Pauli, control : BigEndian, target : Qubit) : Unit
+    operation MultiplexPauli (coefficients : Double[], pauli : Pauli, control : LittleEndian, target : Qubit) : Unit
     {
         body (...)
         {
@@ -81,11 +81,11 @@ namespace Microsoft.Quantum.Canon {
     /// # Input
     /// ## coefficients
     /// Array of up to $2^n$ coefficients $\theta_j$. The $j$th coefficient
-    /// indexes the number state $\ket{j}$ encoded in big-endian format.
+    /// indexes the number state $\ket{j}$ encoded in little-endian format.
     ///
     /// ## control
     /// $n$-qubit control register that encodes number states $\ket{j}$ in
-    /// big-endian format.
+    /// little-endian format.
     ///
     /// ## target
     /// Single qubit register that is rotated by $e^{i P \theta_j}$.
@@ -98,7 +98,7 @@ namespace Microsoft.Quantum.Canon {
     /// - Synthesis of Quantum Logic Circuits
     ///   Vivek V. Shende, Stephen S. Bullock, Igor L. Markov
     ///   https://arxiv.org/abs/quant-ph/0406176
-    operation MultiplexZ (coefficients : Double[], control : BigEndian, target : Qubit) : Unit
+    operation MultiplexZ (coefficients : Double[], control : LittleEndian, target : Qubit) : Unit
     {
         body (...)
         {
@@ -114,10 +114,10 @@ namespace Microsoft.Quantum.Canon {
             {
                 // Compute new coefficients.
                 let (coefficients0, coefficients1) = MultiplexZComputeCoefficients_(coefficientsPadded);
-                MultiplexZ(coefficients0, BigEndian((control!)[1 .. Length(control!) - 1]), target);
-                CNOT((control!)[0], target);
-                MultiplexZ(coefficients1, BigEndian((control!)[1 .. Length(control!) - 1]), target);
-                CNOT((control!)[0], target);
+                MultiplexZ(coefficients0, LittleEndian((control!)[0 .. Length(control!) - 2]), target);
+                CNOT((control!)[Length(control!) - 1], target);
+                MultiplexZ(coefficients1, LittleEndian((control!)[0 .. Length(control!) - 2]), target);
+                CNOT((control!)[Length(control!) - 1], target);
             }
         }
         
@@ -149,11 +149,11 @@ namespace Microsoft.Quantum.Canon {
     /// # Input
     /// ## coefficients
     /// Array of up to $2^n$ coefficients $\theta_j$. The $j$th coefficient
-    /// indexes the number state $\ket{j}$ encoded in big-endian format.
+    /// indexes the number state $\ket{j}$ encoded in little-endian format.
     ///
     /// ## control
     /// $n$-qubit control register that encodes number states $\ket{j}$ in
-    /// big-endian format.
+    /// little-endian format.
     ///
     /// # Remarks
     /// `coefficients` will be padded with elements $\theta_j = 0.0$ if
@@ -163,7 +163,7 @@ namespace Microsoft.Quantum.Canon {
     /// - Synthesis of Quantum Logic Circuits
     ///   Vivek V. Shende, Stephen S. Bullock, Igor L. Markov
     ///   https://arxiv.org/abs/quant-ph/0406176
-    operation ApplyDiagonalUnitary (coefficients : Double[], qubits : BigEndian) : Unit
+    operation ApplyDiagonalUnitary (coefficients : Double[], qubits : LittleEndian) : Unit
     {
         body (...)
         {
@@ -177,7 +177,7 @@ namespace Microsoft.Quantum.Canon {
             
             // Compute new coefficients.
             let (coefficients0, coefficients1) = MultiplexZComputeCoefficients_(coefficientsPadded);
-            MultiplexZ(coefficients1, BigEndian((qubits!)[1 .. Length(qubits!) - 1]), (qubits!)[0]);
+            MultiplexZ(coefficients1, LittleEndian((qubits!)[0 .. Length(qubits!) - 2]), (qubits!)[Length(qubits!) - 1]);
             
             if (Length(coefficientsPadded) == 2)
             {
@@ -186,7 +186,7 @@ namespace Microsoft.Quantum.Canon {
             }
             else
             {
-                ApplyDiagonalUnitary(coefficients0, BigEndian((qubits!)[1 .. Length(qubits!) - 1]));
+                ApplyDiagonalUnitary(coefficients0, LittleEndian((qubits!)[0 .. Length(qubits!) - 2]));
             }
         }
         
@@ -227,11 +227,11 @@ namespace Microsoft.Quantum.Canon {
     /// # Input
     /// ## unitaries
     /// Array of up to $2^n$ unitary operations. The $j$th operation
-    /// is indexed by the number state $\ket{j}$ encoded in big-endian format.
+    /// is indexed by the number state $\ket{j}$ encoded in little-endian format.
     ///
     /// ## index
     /// $n$-qubit control register that encodes number states $\ket{j}$ in
-    /// big-endian format.
+    /// little-endian format.
     ///
     /// ## target
     /// Generic qubit register that $V_j$ acts on.
@@ -245,7 +245,7 @@ namespace Microsoft.Quantum.Canon {
     /// - Toward the first quantum simulation with quantum speedup
     ///   Andrew M. Childs, Dmitri Maslov, Yunseong Nam, Neil J. Ross, Yuan Su
     ///   https://arxiv.org/abs/1711.10980
-    operation MultiplexOperations<'T> (unitaries : ('T => Unit : Adjoint, Controlled)[], index : BigEndian, target : 'T) : Unit
+    operation MultiplexOperations<'T> (unitaries : ('T => Unit : Adjoint, Controlled)[], index : LittleEndian, target : 'T) : Unit
     {
         body (...)
         {
@@ -271,7 +271,7 @@ namespace Microsoft.Quantum.Canon {
     /// Implementation step of MultiplexOperations.
     /// # See Also
     /// - Microsoft.Quantum.Canon.MultiplexOperations
-    operation MultiplexOperations_<'T> (unitaries : ('T => Unit : Adjoint, Controlled)[], ancilla : Qubit[], index : BigEndian, target : 'T) : Unit
+    operation MultiplexOperations_<'T> (unitaries : ('T => Unit : Adjoint, Controlled)[], ancilla : Qubit[], index : LittleEndian, target : 'T) : Unit
     {
         body (...)
         {
@@ -282,7 +282,7 @@ namespace Microsoft.Quantum.Canon {
             let nUnitariesLeft = MinI(nUnitaries, nStates);
             let rightUnitaries = unitaries[0 .. nUnitariesRight - 1];
             let leftUnitaries = unitaries[nUnitariesRight .. nUnitariesLeft - 1];
-            let newControls = BigEndian((index!)[1 .. nIndex - 1]);
+            let newControls = LittleEndian((index!)[0 .. nIndex - 2]);
             
             if (nUnitaries > 0)
             {
@@ -294,7 +294,7 @@ namespace Microsoft.Quantum.Canon {
                 elif (Length(ancilla) == 0 and nIndex >= 1)
                 {
                     // Start case
-                    let newAncilla = [(index!)[0]];
+                    let newAncilla = [(index!)[Length(index!) - 1]];
                     
                     if (nUnitariesLeft > 0)
                     {
@@ -310,7 +310,7 @@ namespace Microsoft.Quantum.Canon {
                     // Recursion that reduces nIndex by 1 & sets Length(ancilla) to 1.
                     using (newAncilla = Qubit[1])
                     {
-                        Controlled X(ancilla + [(index!)[0]], newAncilla[0]);
+                        Controlled X(ancilla + [(index!)[Length(index!) - 1]], newAncilla[0]);
                         
                         if (nUnitariesLeft > 0)
                         {
@@ -320,7 +320,7 @@ namespace Microsoft.Quantum.Canon {
                         Controlled X(ancilla, newAncilla[0]);
                         MultiplexOperations_(rightUnitaries, newAncilla, newControls, target);
                         Controlled X(ancilla, newAncilla[0]);
-                        Controlled X(ancilla + [(index!)[0]], newAncilla[0]);
+                        Controlled X(ancilla + [(index!)[Length(index!) - 1]], newAncilla[0]);
                     }
                 }
             }

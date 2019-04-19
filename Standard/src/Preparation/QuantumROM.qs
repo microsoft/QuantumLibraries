@@ -34,7 +34,7 @@ namespace Microsoft.Quantum.Preparation {
     /// # Output
     /// ## First parameter
     /// A tuple `(x,(y,z))` where `x = y + z` is the total number of qubits allocated,
-    /// `y` is the number of qubits for the `BigEndian` register, and `z` is the Number
+    /// `y` is the number of qubits for the `LittleEndian` register, and `z` is the Number
     /// of garbage qubits.
     /// ## Second parameter
     /// The one-norm $\sum_j |\alpha_j|$ of the coefficient array.
@@ -52,7 +52,7 @@ namespace Microsoft.Quantum.Preparation {
     /// let ((nTotalQubits, (nIndexQubits, nGarbageQubits)), oneNorm, op) = QuantumROM(targetError, coefficients);
     /// using (indexRegister = Qubit[nIndexQubits]) {
     ///     using (garbageRegister = Qubit[nGarbageQubits]) {
-    ///         op(BigEndian(indexRegister), garbageRegister);
+    ///         op(LittleEndian(indexRegister), garbageRegister);
     ///     }
     /// }
     /// ```
@@ -61,7 +61,7 @@ namespace Microsoft.Quantum.Preparation {
     /// - Encoding Electronic Spectra in Quantum Circuits with Linear T Complexity
     ///   Ryan Babbush, Craig Gidney, Dominic W. Berry, Nathan Wiebe, Jarrod McClean, Alexandru Paler, Austin Fowler, Hartmut Neven
     ///   https://arxiv.org/abs/1805.03662
-    function QuantumROM(targetError: Double, coefficients: Double[]) : ((Int, (Int, Int)), Double, ((BigEndian, Qubit[]) => Unit : Adjoint, Controlled)) {
+    function QuantumROM(targetError: Double, coefficients: Double[]) : ((Int, (Int, Int)), Double, ((LittleEndian, Qubit[]) => Unit : Adjoint, Controlled)) {
         let nBitsPrecision = -Ceiling(Lg(0.5*targetError))+1;
         let (oneNorm, keepCoeff, altIndex) = _QuantumROMDiscretization(nBitsPrecision, coefficients);
         let nCoeffs = Length(coefficients);
@@ -85,7 +85,7 @@ namespace Microsoft.Quantum.Preparation {
     /// # Output
     /// ## First parameter
     /// A tuple `(x,(y,z))` where `x = y + z` is the total number of qubits allocated,
-    /// `y` is the number of qubits for the `BigEndian` register, and `z` is the Number
+    /// `y` is the number of qubits for the `LittleEndian` register, and `z` is the Number
     /// of garbage qubits.
     function QuantumROMQubitCount(targetError: Double, nCoeffs: Int) : (Int, (Int, Int))
     {
@@ -98,10 +98,10 @@ namespace Microsoft.Quantum.Preparation {
 
     // Implementation step of `QuantumROM`. This splits a single
     // qubit array into the subarrays required by the operation.
-    function QuantumROMQubitManager_(targetError: Double, nCoeffs: Int, qubits: Qubit[]) : ((BigEndian, Qubit[]), Qubit[]) {
+    function QuantumROMQubitManager_(targetError: Double, nCoeffs: Int, qubits: Qubit[]) : ((LittleEndian, Qubit[]), Qubit[]) {
         let (nTotal, (nIndexRegister, nGarbageQubits)) = QuantumROMQubitCount(targetError, nCoeffs);
         let registers = Partitioned([nIndexRegister, nGarbageQubits], qubits);
-        return((BigEndian(registers[0]), registers[1]), registers[2]);
+        return((LittleEndian(registers[0]), registers[1]), registers[2]);
     }
 
     // Classical processing
@@ -196,7 +196,7 @@ namespace Microsoft.Quantum.Preparation {
     }
 
     // Used in QuantumROM implementation.
-    operation QuantumROMImpl_(nBitsPrecision: Int, nCoeffs: Int, nBitsIndices: Int, keepCoeff: Int[], altIndex: Int[], indexRegister: BigEndian, garbageRegister: Qubit[]) : Unit {
+    operation QuantumROMImpl_(nBitsPrecision: Int, nCoeffs: Int, nBitsIndices: Int, keepCoeff: Int[], altIndex: Int[], indexRegister: LittleEndian, garbageRegister: Qubit[]) : Unit {
         body (...) {
             let unitaryGenerator = (nCoeffs, QuantumROMWriteBitStringUnitary_(_, keepCoeff, altIndex));
             let garbageIdx0 = nBitsIndices;
@@ -204,9 +204,9 @@ namespace Microsoft.Quantum.Preparation {
             let garbageIdx2 = garbageIdx1 + nBitsPrecision;
             let garbageIdx3 = garbageIdx2 + 1;
 
-            let altIndexRegister = BigEndian(garbageRegister[0..garbageIdx0-1]);
-            let keepCoeffRegister = BigEndian(garbageRegister[garbageIdx0..garbageIdx1 - 1]);
-            let uniformKeepCoeffRegister = BigEndian(garbageRegister[garbageIdx1..garbageIdx2 - 1]);
+            let altIndexRegister = LittleEndian(garbageRegister[0..garbageIdx0-1]);
+            let keepCoeffRegister = LittleEndian(garbageRegister[garbageIdx0..garbageIdx1 - 1]);
+            let uniformKeepCoeffRegister = LittleEndian(garbageRegister[garbageIdx1..garbageIdx2 - 1]);
             let flagQubit = garbageRegister[garbageIdx3 - 1];
 
             // Create uniform superposition over index and alt coeff register.
@@ -217,13 +217,13 @@ namespace Microsoft.Quantum.Preparation {
             MultiplexOperationsFromGenerator(unitaryGenerator, indexRegister, (keepCoeffRegister, altIndexRegister));
 
             // Perform comparison
-            ApplyRippleCarryComparatorBE(uniformKeepCoeffRegister, keepCoeffRegister, flagQubit);
+            CompareUsingRippleCarry(uniformKeepCoeffRegister, keepCoeffRegister, flagQubit);
 
             let indexRegisterSize = Length(indexRegister!);
             
             // Swap in register based on comparison
             for(idx in 0..nBitsIndices-1){
-                (Controlled SWAP)([flagQubit], (indexRegister![Length(indexRegister!) - nBitsIndices + idx], altIndexRegister![idx]));
+                (Controlled SWAP)([flagQubit], (indexRegister![nBitsIndices - idx - 1], altIndexRegister![idx]));
             }
         }
         adjoint auto;
@@ -232,15 +232,15 @@ namespace Microsoft.Quantum.Preparation {
     }
 
     // Used in QuantumROM implementation.
-    function QuantumROMWriteBitStringUnitary_(idx: Int, keepCoeff: Int[], altIndex: Int[]) : ((BigEndian, BigEndian) => Unit : Adjoint, Controlled) {
+    function QuantumROMWriteBitStringUnitary_(idx: Int, keepCoeff: Int[], altIndex: Int[]) : ((LittleEndian, LittleEndian) => Unit : Adjoint, Controlled) {
         return QuantumROMWriteBitString_(idx, keepCoeff, altIndex, _, _);
     }
 
     // Used in QuantumROM implementation.
-    operation QuantumROMWriteBitString_(idx: Int, keepCoeff: Int[], altIndex: Int[], keepCoeffRegister: BigEndian, altIndexRegister: BigEndian) : Unit {
+    operation QuantumROMWriteBitString_(idx: Int, keepCoeff: Int[], altIndex: Int[], keepCoeffRegister: LittleEndian, altIndexRegister: LittleEndian) : Unit {
         body (...) {
-            InPlaceXorBE(keepCoeff[idx], keepCoeffRegister);
-            InPlaceXorBE(altIndex[idx], altIndexRegister);
+            ApplyXorInPlace(keepCoeff[idx], keepCoeffRegister);
+            ApplyXorInPlace(altIndex[idx], altIndexRegister);
         }
         adjoint auto;
         controlled auto;

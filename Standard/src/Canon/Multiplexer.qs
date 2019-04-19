@@ -22,7 +22,7 @@ namespace Microsoft.Quantum.Canon {
     ///
     /// ## index
     /// $n$-qubit control register that encodes number states $\ket{j}$ in
-    /// big-endian format.
+    /// little-endian format.
     ///
     /// ## target
     /// Generic qubit register that $V_j$ acts on.
@@ -35,7 +35,7 @@ namespace Microsoft.Quantum.Canon {
     /// # References
     /// - [ *Andrew M. Childs, Dmitri Maslov, Yunseong Nam, Neil J. Ross, Yuan Su*,
     ///      arXiv:1711.10980](https://arxiv.org/abs/1711.10980)
-    operation MultiplexOperationsFromGenerator<'T>(unitaryGenerator : (Int, (Int -> ('T => Unit : Adjoint, Controlled))), index: BigEndian, target: 'T) : Unit {
+    operation MultiplexOperationsFromGenerator<'T>(unitaryGenerator : (Int, (Int -> ('T => Unit : Adjoint, Controlled))), index: LittleEndian, target: 'T) : Unit {
         body (...) {
             let (nUnitaries, unitaryFunction) = unitaryGenerator;
             let unitaryGeneratorWithOffset = (nUnitaries, 0, unitaryFunction);
@@ -56,7 +56,7 @@ namespace Microsoft.Quantum.Canon {
     /// Implementation step of `MultiplexOperationsFromGenerator`.
     /// # See Also
     /// - Microsoft.Quantum.Canon.MultiplexOperationsFromGenerator
-    operation MultiplexOperationsFromGenerator_<'T>(unitaryGenerator : (Int, Int, (Int -> ('T => Unit : Adjoint, Controlled))), auxiliary: Qubit[], index: BigEndian, target: 'T) : Unit {
+    operation MultiplexOperationsFromGenerator_<'T>(unitaryGenerator : (Int, Int, (Int -> ('T => Unit : Adjoint, Controlled))), auxiliary: Qubit[], index: LittleEndian, target: 'T) : Unit {
         body (...) {
             let nIndex = Length(index!);
             let nStates = 2^nIndex;
@@ -69,7 +69,7 @@ namespace Microsoft.Quantum.Canon {
             let leftUnitaries = (nUnitariesLeft, unitaryOffset, unitaryFunction);
             let rightUnitaries = (nUnitariesRight-nUnitariesLeft, unitaryOffset + nUnitariesLeft, unitaryFunction);
             
-            let newControls = BigEndian(index![1..nIndex-1]);
+            let newControls = LittleEndian(index![0..nIndex-2]);
 
             if(nUnitaries > 0){
                 if(Length(auxiliary) == 1 and nIndex==0){
@@ -79,7 +79,7 @@ namespace Microsoft.Quantum.Canon {
                 }
                 elif(Length(auxiliary) == 0 and nIndex>=1){
                     // Start case
-                    let newauxiliary = [index![0]];
+                    let newauxiliary = [index![Length(index!) - 1]];
                     if(nUnitariesRight > 0){
                         MultiplexOperationsFromGenerator_(rightUnitaries, newauxiliary, newControls, target);
                     }
@@ -93,14 +93,14 @@ namespace Microsoft.Quantum.Canon {
                         let op = LogicalANDMeasAndFix_(_, _);
                         // Naive measurement-free approach uses 4x more T gates with 
                         // let op = (Controlled X);
-                        op(auxiliary + [index![0]], newauxiliary[0]);
+                        op([index![Length(index!) - 1]] + auxiliary, newauxiliary[0]);
                         if(nUnitariesRight > 0){
                             MultiplexOperationsFromGenerator_(rightUnitaries, newauxiliary, newControls, target);
                         }
                         (Controlled X)(auxiliary, newauxiliary[0]);
                         MultiplexOperationsFromGenerator_(leftUnitaries, newauxiliary, newControls, target);
                         (Controlled X)(auxiliary, newauxiliary[0]);
-                        (Adjoint op)(auxiliary + [index![0]], newauxiliary[0]);
+                        (Adjoint op)([index![Length(index!) - 1]] + auxiliary, newauxiliary[0]);
                     }
                 }
             }
@@ -127,7 +127,7 @@ namespace Microsoft.Quantum.Canon {
     ///
     /// ## index
     /// $n$-qubit control register that encodes number states $\ket{j}$ in
-    /// big-endian format.
+    /// little-endian format.
     ///
     /// ## target
     /// Generic qubit register that $V_j$ acts on.
@@ -136,13 +136,13 @@ namespace Microsoft.Quantum.Canon {
     /// `coefficients` will be padded with identity elements if 
     /// fewer than $2^n$ are specified. This version is implemented 
     /// directly by looping through n-controlled unitary operators.
-    operation MultiplexOperationsBruteForceFromGenerator<'T>(unitaryGenerator : (Int, (Int -> ('T => Unit : Adjoint, Controlled))), index: BigEndian, target: 'T) : Unit {
+    operation MultiplexOperationsBruteForceFromGenerator<'T>(unitaryGenerator : (Int, (Int -> ('T => Unit : Adjoint, Controlled))), index: LittleEndian, target: 'T) : Unit {
         body (...) {
             let nIndex = Length(index!);
             let nStates = 2^nIndex;
             let (nUnitaries, unitaryFunction) = unitaryGenerator;
-            for(idxOp in 0..MinI(nStates,nUnitaries)-1){
-                (ControlledOnInt(idxOp, unitaryFunction(idxOp)))(Reversed(index!),target);
+            for(idxOp in 0..MinI(nStates,nUnitaries) - 1){
+                (ControlledOnInt(idxOp, unitaryFunction(idxOp)))(index!,target);
             }
         }
         adjoint auto;
@@ -169,7 +169,7 @@ namespace Microsoft.Quantum.Canon {
     ///
     /// # See Also
     /// - Microsoft.Quantum.Canon.MultiplexOperationsFromGenerator
-    function MultiplexerFromGenerator(unitaryGenerator : (Int, (Int -> (Qubit[] => Unit : Adjoint, Controlled)))) : ((BigEndian, Qubit[]) => Unit : Adjoint, Controlled) {
+    function MultiplexerFromGenerator(unitaryGenerator : (Int, (Int -> (Qubit[] => Unit : Adjoint, Controlled)))) : ((LittleEndian, Qubit[]) => Unit : Adjoint, Controlled) {
         return MultiplexOperationsFromGenerator(unitaryGenerator, _, _);
     }
 
@@ -192,7 +192,7 @@ namespace Microsoft.Quantum.Canon {
     ///
     /// # See Also
     /// - Microsoft.Quantum.Canon.MultiplexerBruteForceFromGenerator
-    function MultiplexerBruteForceFromGenerator(unitaryGenerator : (Int, (Int -> (Qubit[] => Unit : Adjoint, Controlled)))) : ((BigEndian, Qubit[]) => Unit : Adjoint, Controlled) {
+    function MultiplexerBruteForceFromGenerator(unitaryGenerator : (Int, (Int -> (Qubit[] => Unit : Adjoint, Controlled)))) : ((LittleEndian, Qubit[]) => Unit : Adjoint, Controlled) {
         return MultiplexOperationsBruteForceFromGenerator(unitaryGenerator, _, _);
     }
 
