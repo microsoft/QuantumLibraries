@@ -170,34 +170,27 @@ namespace Microsoft.Quantum.Preparation {
     /// # See Also
     /// - Microsoft.Quantum.Canon.PrepareArbitraryState
     /// - Microsoft.Quantum.Canon.MultiplexPauli
-    operation PrepareArbitraryState_ (coefficients : ComplexPolar[], control : LittleEndian, target : Qubit) : Unit
+    operation PrepareArbitraryState_ (coefficients : ComplexPolar[], control : LittleEndian, target : Qubit) : Unit is Adj + Ctl
     {
-        body (...)
-        {
-            // For each 2D block, compute disentangling single-qubit rotation parameters
-            let (disentanglingY, disentanglingZ, newCoefficients) = _StatePreparationSBMComputeCoefficients(coefficients);
-            MultiplexPauli(disentanglingZ, PauliZ, control, target);
-            MultiplexPauli(disentanglingY, PauliY, control, target);
-            
-            // target is now in |0> state up to the phase given by arg of newCoefficients.
-            
-            // Continue recursion while there are control qubits.
-            if (Length(control!) == 0)
-            {
-                let (abs, arg) = newCoefficients[0]!;
-                Exp([PauliI], -1.0 * arg, [target]);
-            }
-            else
-            {
-                let newControl = LittleEndian((control!)[1 .. Length(control!) - 1]);
-                let newTarget = (control!)[0];
-                PrepareArbitraryState_(newCoefficients, newControl, newTarget);
-            }
-        }
+        // For each 2D block, compute disentangling single-qubit rotation parameters
+        let (disentanglingY, disentanglingZ, newCoefficients) = _StatePreparationSBMComputeCoefficients(coefficients);
+        MultiplexPauli(disentanglingZ, PauliZ, control, target);
+        MultiplexPauli(disentanglingY, PauliY, control, target);
         
-        adjoint invert;
-        controlled distribute;
-        controlled adjoint distribute;
+        // target is now in |0> state up to the phase given by arg of newCoefficients.
+        
+        // Continue recursion while there are control qubits.
+        if (Length(control!) == 0)
+        {
+            let (abs, arg) = newCoefficients[0]!;
+            Exp([PauliI], -1.0 * arg, [target]);
+        }
+        else
+        {
+            let newControl = LittleEndian((control!)[1 .. Length(control!) - 1]);
+            let newTarget = (control!)[0];
+            PrepareArbitraryState_(newCoefficients, newControl, newTarget);
+        }
     }
     
     
@@ -240,9 +233,9 @@ namespace Microsoft.Quantum.Preparation {
 
         for (idxCoeff in 0 .. 2 .. Length(coefficients) - 1) {
             let (rt, phi, theta) = BlochSphereCoordinates(coefficients[idxCoeff], coefficients[idxCoeff + 1]);
-            set disentanglingZ[idxCoeff / 2] = 0.5 * phi;
-            set disentanglingY[idxCoeff / 2] = 0.5 * theta;
-            set newCoefficients[idxCoeff / 2] = rt;
+            set disentanglingZ w/= idxCoeff / 2 <- 0.5 * phi;
+            set disentanglingY w/= idxCoeff / 2 <- 0.5 * theta;
+            set newCoefficients w/= idxCoeff / 2 <- rt;
         }
 
         return (disentanglingY, disentanglingZ, newCoefficients);
