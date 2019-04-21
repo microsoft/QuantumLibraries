@@ -187,7 +187,7 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
         mutable indexRegisters = new LittleEndian[Length(e)];
         
         for (idx in IndexRange(e)) {
-            set indexRegisters w/= idx <- BigEndian(indexRegistersTmp[idx]);
+            set indexRegisters w/= idx <- LittleEndian(indexRegistersTmp[idx]);
         }
         
         return ((signQubit[0], selectZControlRegisters, OptimizedBEControlRegisters, pauliBases, indexRegisters, targetRegister), rest);
