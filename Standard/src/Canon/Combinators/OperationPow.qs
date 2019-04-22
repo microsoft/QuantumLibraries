@@ -4,7 +4,23 @@
 namespace Microsoft.Quantum.Canon
 {
     
-    operation OperationPowImpl<'T> (oracle : ('T => Unit), power : Int, target : 'T) : Unit
+    operation OperationPowImpl<'T> (oracle : ('T => Unit), power : Int, target : 'T) : Unit {
+        for (idxApplication in 0 .. power - 1)
+        {
+            oracle(target);
+        }
+    }
+    
+    
+    operation OperationPowImplC<'T> (oracle : ('T => Unit is Ctl), power : Int, target : 'T) : Unit is Ctl {
+        for (idxApplication in 0 .. power - 1)
+        {
+            oracle(target);
+        }
+    }
+    
+    
+    operation OperationPowImplA<'T> (oracle : ('T => Unit is Adj), power : Int, target : 'T) : Unit is Adj 
     {
         for (idxApplication in 0 .. power - 1)
         {
@@ -13,47 +29,12 @@ namespace Microsoft.Quantum.Canon
     }
     
     
-    operation OperationPowImplC<'T> (oracle : ('T => Unit : Controlled), power : Int, target : 'T) : Unit
+    operation OperationPowImplCA<'T> (oracle : ('T => Unit is Adj + Ctl), power : Int, target : 'T) : Unit is Adj + Ctl
     {
-        body (...)
+        for (idxApplication in 0 .. power - 1)
         {
-            for (idxApplication in 0 .. power - 1)
-            {
-                oracle(target);
-            }
+            oracle(target);
         }
-        
-        controlled distribute;
-    }
-    
-    
-    operation OperationPowImplA<'T> (oracle : ('T => Unit : Adjoint), power : Int, target : 'T) : Unit
-    {
-        body (...)
-        {
-            for (idxApplication in 0 .. power - 1)
-            {
-                oracle(target);
-            }
-        }
-        
-        adjoint invert;
-    }
-    
-    
-    operation OperationPowImplCA<'T> (oracle : ('T => Unit : Controlled, Adjoint), power : Int, target : 'T) : Unit
-    {
-        body (...)
-        {
-            for (idxApplication in 0 .. power - 1)
-            {
-                oracle(target);
-            }
-        }
-        
-        adjoint invert;
-        controlled distribute;
-        controlled adjoint distribute;
     }
     
     
@@ -108,7 +89,7 @@ namespace Microsoft.Quantum.Canon
     ///
     /// # See Also
     /// - @"microsoft.quantum.canon.operationpow"
-    function OperationPowC<'T> (oracle : ('T => Unit : Controlled), power : Int) : ('T => Unit : Controlled)
+    function OperationPowC<'T> (oracle : ('T => Unit is Ctl), power : Int) : ('T => Unit is Ctl)
     {
         return OperationPowImplC(oracle, power, _);
     }
@@ -136,7 +117,7 @@ namespace Microsoft.Quantum.Canon
     ///
     /// # See Also
     /// - @"microsoft.quantum.canon.operationpow"
-    function OperationPowA<'T> (oracle : ('T => Unit : Adjoint), power : Int) : ('T => Unit : Adjoint)
+    function OperationPowA<'T> (oracle : ('T => Unit is Adj), power : Int) : ('T => Unit is Adj)
     {
         return OperationPowImplA(oracle, power, _);
     }
@@ -164,7 +145,7 @@ namespace Microsoft.Quantum.Canon
     ///
     /// # See Also
     /// - @"microsoft.quantum.canon.operationpow"
-    function OperationPowCA<'T> (oracle : ('T => Unit : Controlled, Adjoint), power : Int) : ('T => Unit : Controlled, Adjoint)
+    function OperationPowCA<'T> (oracle : ('T => Unit is Ctl + Adj), power : Int) : ('T => Unit is Ctl + Adj)
     {
         return OperationPowImplCA(oracle, power, _);
     }

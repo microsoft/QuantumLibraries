@@ -6,8 +6,7 @@ namespace Microsoft.Quantum.Simulation {
     open Microsoft.Quantum.Intrinsic;
     open Microsoft.Quantum.Convert;
     open Microsoft.Quantum.Oracles;
-    
-    
+
     /// # Summary
     /// Interpolates between two generators with a uniform schedule,
     /// returning an operation that applies simulated evolution under
@@ -28,8 +27,12 @@ namespace Microsoft.Quantum.Simulation {
     /// If the interpolation time is chosen to meet the adiabatic conditions,
     /// then this function returns an operation which performs adiabatic
     /// state preparation for the final dynamical generator.
-    function InterpolatedEvolution (inerpolationTime : Double, evolutionGeneratorStart : EvolutionGenerator, evolutionGeneratorEnd : EvolutionGenerator, timeDependentSimulationAlgorithm : TimeDependentSimulationAlgorithm) : (Qubit[] => Unit : Adjoint, Controlled)
-    {
+    function InterpolatedEvolution(
+            inerpolationTime : Double,
+            evolutionGeneratorStart : EvolutionGenerator,
+            evolutionGeneratorEnd : EvolutionGenerator,
+            timeDependentSimulationAlgorithm : TimeDependentSimulationAlgorithm
+    ) : (Qubit[] => Unit is Adj + Ctl) {
         //   evolutionSetStart and evolutionSetEnd must be identical
         let (evolutionSetStart, generatorSystemStart) = evolutionGeneratorStart!;
         let (evolutionSetEnd, generatorSystemEnd) = evolutionGeneratorEnd!;
@@ -67,15 +70,14 @@ namespace Microsoft.Quantum.Simulation {
     /// # Output
     /// An estimate $\hat{\phi}$ of the ground state energy $\phi$
     /// of the generator represented by $U$.
-    operation AdiabaticStateEnergyUnitary (statePrepUnitary : (Qubit[] => Unit), adiabaticUnitary : (Qubit[] => Unit), qpeUnitary : (Qubit[] => Unit : Adjoint, Controlled), phaseEstAlgorithm : ((DiscreteOracle, Qubit[]) => Double), qubits : Qubit[]) : Double
-    {
+    operation AdiabaticStateEnergyUnitary(statePrepUnitary : (Qubit[] => Unit), adiabaticUnitary : (Qubit[] => Unit), qpeUnitary : (Qubit[] => Unit is Adj + Ctl), phaseEstAlgorithm : ((DiscreteOracle, Qubit[]) => Double), qubits : Qubit[]) : Double {
         statePrepUnitary(qubits);
         adiabaticUnitary(qubits);
         let phaseEst = phaseEstAlgorithm(OracleToDiscrete(qpeUnitary), qubits);
         return phaseEst;
     }
-    
-    
+
+
     /// # Summary
     /// Performs state preparation by applying a
     /// `statePrepUnitary` on an automatically allocated input state, 
@@ -104,19 +106,15 @@ namespace Microsoft.Quantum.Simulation {
     /// # Output
     /// An estimate $\hat{\phi}$ of the ground state energy $\phi$
     /// of the generator represented by $U$.
-    operation AdiabaticStateEnergyEstimate (nQubits : Int, statePrepUnitary : (Qubit[] => Unit), adiabaticUnitary : (Qubit[] => Unit), qpeUnitary : (Qubit[] => Unit : Adjoint, Controlled), phaseEstAlgorithm : ((DiscreteOracle, Qubit[]) => Double)) : Double {
-        mutable phaseEst = 0.0;
-        
-        using (qubits = Qubit[nQubits])
-        {
-            set phaseEst = AdiabaticStateEnergyUnitary(statePrepUnitary, adiabaticUnitary, qpeUnitary, phaseEstAlgorithm, qubits);
+    operation EstimateEnergyWithAdiabaticEvolution(nQubits : Int, statePrepUnitary : (Qubit[] => Unit), adiabaticUnitary : (Qubit[] => Unit), qpeUnitary : (Qubit[] => Unit is Adj + Ctl), phaseEstAlgorithm : ((DiscreteOracle, Qubit[]) => Double)) : Double {
+        using (qubits = Qubit[nQubits]) {
+            let phaseEst = AdiabaticStateEnergyUnitary(statePrepUnitary, adiabaticUnitary, qpeUnitary, phaseEstAlgorithm, qubits);
             ResetAll(qubits);
+            return phaseEst;
         }
-        
-        return phaseEst;
     }
-    
-    
+
+
     /// # Summary
     /// Performs state preparation by applying a
     /// `statePrepUnitary` on an automatically allocated input state
@@ -143,10 +141,10 @@ namespace Microsoft.Quantum.Simulation {
     /// of the ground state energy of the generator represented by $U$.
     operation EstimateEnergy (nQubits : Int, statePrepUnitary : (Qubit[] => Unit), qpeUnitary : (Qubit[] => Unit : Adjoint, Controlled), phaseEstAlgorithm : ((DiscreteOracle, Qubit[]) => Double)) : Double
     {
-        let phaseEst = AdiabaticStateEnergyEstimate(nQubits, statePrepUnitary, NoOp<Qubit[]>, qpeUnitary, phaseEstAlgorithm);
+        // We can estimate the energy of the state prepared by statePrepUnitary
+        // in this case by passing a NoOp as the adiabatic evolution step.
+        let phaseEst = EstimateEnergyWithAdiabaticEvolution(nQubits, statePrepUnitary, NoOp<Qubit[]>, qpeUnitary, phaseEstAlgorithm);
         return phaseEst;
     }
-    
+
 }
-
-

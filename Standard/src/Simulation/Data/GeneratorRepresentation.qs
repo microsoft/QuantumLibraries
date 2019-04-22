@@ -57,7 +57,7 @@ namespace Microsoft.Quantum.Simulation {
     
     /// # Summary
     /// Represents evolution under a unitary operator.
-    newtype Unitary = (Qubit[] => Unit : Adjoint, Controlled);
+    newtype Unitary = (Qubit[] => Unit is Adj + Ctl);
     
     /// # Summary
     /// Represents a unitary time-evolution operator. 
@@ -65,7 +65,7 @@ namespace Microsoft.Quantum.Simulation {
     /// The first parameter is
     /// is duration of time-evolution, and the second parameter is the qubit
     /// register acted upon by the unitary.
-    newtype EvolutionUnitary = ((Double, Qubit[]) => Unit : Adjoint, Controlled);
+    newtype EvolutionUnitary = ((Double, Qubit[]) => Unit is Adj + Ctl);
     
     /// # Summary
     /// Represents a set of gates that can be readily implemented and used
