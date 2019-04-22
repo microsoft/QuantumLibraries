@@ -42,4 +42,32 @@ namespace Microsoft.Quantum.Canon {
         controlled adjoint auto;
     }
 
+    /// # Deprecated
+    /// Please use @"microsoft.quantum.canon.restrictedtosubregister".
+    function RestrictToSubregister(op : (Qubit[] => Unit), idxs : Int[]) : (Qubit[] => Unit) {
+        Renamed("Microsoft.Quantum.Canon.RestrictToSubregister", "Microsoft.Quantum.Canon.RestrictedToSubregister");
+        return RestrictedToSubregister(op, idxs);
+    }
+
+    /// # Deprecated
+    /// Please use @"microsoft.quantum.canon.restrictedtosubregistera".
+    function RestrictToSubregisterA(op : (Qubit[] => Unit is Adj), idxs : Int[]) : (Qubit[] => Unit) {
+        Renamed("Microsoft.Quantum.Canon.RestrictToSubregisterA", "Microsoft.Quantum.Canon.RestrictedToSubregisterA");
+        return RestrictedToSubregisterA(op, idxs);
+    }
+
+    /// # Deprecated
+    /// Please use @"microsoft.quantum.canon.restrictedtosubregisterc".
+    function RestrictToSubregisterC(op : (Qubit[] => Unit is Ctl), idxs : Int[]) : (Qubit[] => Unit) {
+        Renamed("Microsoft.Quantum.Canon.RestrictToSubregisterC", "Microsoft.Quantum.Canon.RestrictedToSubregisterC");
+        return RestrictedToSubregisterC(op, idxs);
+    }
+
+    /// # Deprecated
+    /// Please use @"microsoft.quantum.canon.restrictedtosubregisterca".
+    function RestrictToSubregisterCA(op : (Qubit[] => Unit is Adj + Ctl), idxs : Int[]) : (Qubit[] => Unit) {
+        Renamed("Microsoft.Quantum.Canon.RestrictToSubregisterCA", "Microsoft.Quantum.Canon.RestrictedToSubregisterCA");
+        return RestrictedToSubregisterCA(op, idxs);
+    }
+
 }

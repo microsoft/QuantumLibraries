@@ -36,7 +36,7 @@ namespace Microsoft.Quantum.Canon {
     /// - ApplyWithA
     /// - ApplyWithC
     /// - ApplyWithCA
-    operation ApplyWith<'T>(outerOperation : ('T => Unit : Adjoint), innerOperation : ('T => Unit), target : 'T) : Unit {
+    operation ApplyWith<'T>(outerOperation : ('T => Unit is Adj), innerOperation : ('T => Unit), target : 'T) : Unit {
         outerOperation(target);
         innerOperation(target);
         Adjoint outerOperation(target);
@@ -72,7 +72,7 @@ namespace Microsoft.Quantum.Canon {
     /// - ConjugatedByC
     /// - ConjugatedByCA
     /// - ApplyWith
-    function ConjugatedBy<'T>(outerOperation : ('T => Unit : Adjoint), innerOperation : ('T => Unit)) : ('T => Unit) {
+    function ConjugatedBy<'T>(outerOperation : ('T => Unit is Adj), innerOperation : ('T => Unit)) : ('T => Unit) {
         return ApplyWith(outerOperation, innerOperation, _);
     }
 
@@ -108,7 +108,7 @@ namespace Microsoft.Quantum.Canon {
     /// - ApplyWith
     /// - ApplyWithC
     /// - ApplyWithCA
-    operation ApplyWithA<'T>(outerOperation : ('T => Unit : Adjoint), innerOperation : ('T => Unit : Adjoint), target : 'T) : Unit {
+    operation ApplyWithA<'T>(outerOperation : ('T => Unit is Adj), innerOperation : ('T => Unit is Adj), target : 'T) : Unit {
         body (...) {
             outerOperation(target);
             innerOperation(target);
@@ -149,7 +149,7 @@ namespace Microsoft.Quantum.Canon {
     /// - ConjugatedByC
     /// - ConjugatedByCA
     /// - ApplyWith
-    function ConjugatedByA<'T>(outerOperation : ('T => Unit : Adjoint), innerOperation : ('T => Unit : Adjoint)) : ('T => Unit : Adjoint) {
+    function ConjugatedByA<'T>(outerOperation : ('T => Unit is Adj), innerOperation : ('T => Unit is Adj)) : ('T => Unit is Adj) {
         return ApplyWithA(outerOperation, innerOperation, _);
     }
 
@@ -185,7 +185,7 @@ namespace Microsoft.Quantum.Canon {
     /// - ApplyWith
     /// - ApplyWithA
     /// - ApplyWithCA
-    operation ApplyWithC<'T>(outerOperation : ('T => Unit : Adjoint), innerOperation : ('T => Unit : Controlled), target : 'T) : Unit {
+    operation ApplyWithC<'T>(outerOperation : ('T => Unit is Adj), innerOperation : ('T => Unit is Ctl), target : 'T) : Unit {
         body (...) {
             outerOperation(target);
             innerOperation(target);
@@ -230,7 +230,7 @@ namespace Microsoft.Quantum.Canon {
     /// - ConjugatedByA
     /// - ConjugatedByCA
     /// - ApplyWith
-    function ConjugatedByC<'T>(outerOperation : ('T => Unit : Adjoint), innerOperation : ('T => Unit : Controlled)) : ('T => Unit : Controlled) {
+    function ConjugatedByC<'T>(outerOperation : ('T => Unit is Adj), innerOperation : ('T => Unit is Ctl)) : ('T => Unit is Ctl) {
         return ApplyWithC(outerOperation, innerOperation, _);
     }
 
@@ -267,7 +267,7 @@ namespace Microsoft.Quantum.Canon {
     /// - ApplyWith
     /// - ApplyWithA
     /// - ApplyWithC
-    operation ApplyWithCA<'T>(outerOperation : ('T => Unit : Adjoint), innerOperation : ('T => Unit : Adjoint, Controlled), target : 'T) : Unit {
+    operation ApplyWithCA<'T>(outerOperation : ('T => Unit is Adj), innerOperation : ('T => Unit is Adj, Controlled), target : 'T) : Unit {
         body (...) {
             outerOperation(target);
             innerOperation(target);
@@ -317,7 +317,7 @@ namespace Microsoft.Quantum.Canon {
     /// - ConjugatedByC
     /// - ConjugatedByCA
     /// - ApplyWith
-    function ConjugatedByCA<'T>(outerOperation : ('T => Unit : Adjoint), innerOperation : ('T => Unit : Controlled, Adjoint)) : ('T => Unit : Controlled, Adjoint) {
+    function ConjugatedByCA<'T>(outerOperation : ('T => Unit is Adj), innerOperation : ('T => Unit is Adj + Ctl)) : ('T => Unit is Adj + Ctl) {
         return ApplyWithCA(outerOperation, innerOperation, _);
     }
 

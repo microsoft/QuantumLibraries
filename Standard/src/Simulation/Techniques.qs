@@ -139,7 +139,7 @@ namespace Microsoft.Quantum.Simulation {
     /// # Output
     /// An estimate $\hat{\phi}$ of the ground state energy $\phi$
     /// of the ground state energy of the generator represented by $U$.
-    operation EstimateEnergy (nQubits : Int, statePrepUnitary : (Qubit[] => Unit), qpeUnitary : (Qubit[] => Unit : Adjoint, Controlled), phaseEstAlgorithm : ((DiscreteOracle, Qubit[]) => Double)) : Double
+    operation EstimateEnergy (nQubits : Int, statePrepUnitary : (Qubit[] => Unit), qpeUnitary : (Qubit[] => Unit is Adj + Ctl), phaseEstAlgorithm : ((DiscreteOracle, Qubit[]) => Double)) : Double
     {
         // We can estimate the energy of the state prepared by statePrepUnitary
         // in this case by passing a NoOp as the adiabatic evolution step.

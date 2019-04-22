@@ -117,13 +117,13 @@ namespace Microsoft.Quantum.Tests {
         let bigOp = ApplyPauli([PauliI, PauliX, PauliY, PauliZ, PauliI], _);
         let smallOp = ApplyPauli([PauliX, PauliY, PauliZ], _);
         AssertOperationsEqualReferenced(5, ApplyToSubregister(smallOp, [1, 2, 3], _), bigOp);
-        AssertOperationsEqualReferenced(5, RestrictToSubregister(smallOp, [1, 2, 3]), bigOp);
+        AssertOperationsEqualReferenced(5, RestrictedToSubregister(smallOp, [1, 2, 3]), bigOp);
         AssertOperationsEqualReferenced(5, ApplyToSubregisterC(smallOp, [1, 2, 3], _), bigOp);
-        AssertOperationsEqualReferenced(5, RestrictToSubregisterC(smallOp, [1, 2, 3]), bigOp);
+        AssertOperationsEqualReferenced(5, RestrictedToSubregisterC(smallOp, [1, 2, 3]), bigOp);
         AssertOperationsEqualReferenced(5, ApplyToSubregisterA(smallOp, [1, 2, 3], _), bigOp);
-        AssertOperationsEqualReferenced(5, RestrictToSubregisterA(smallOp, [1, 2, 3]), bigOp);
+        AssertOperationsEqualReferenced(5, RestrictedToSubregisterA(smallOp, [1, 2, 3]), bigOp);
         AssertOperationsEqualReferenced(5, ApplyToSubregisterCA(smallOp, [1, 2, 3], _), bigOp);
-        AssertOperationsEqualReferenced(5, RestrictToSubregisterCA(smallOp, [1, 2, 3]), bigOp);
+        AssertOperationsEqualReferenced(5, RestrictedToSubregisterCA(smallOp, [1, 2, 3]), bigOp);
     }
     
     

@@ -82,7 +82,7 @@ namespace Microsoft.Quantum.Simulation {
             let ((idxPaulis, idxDoubles), idxQubits) = generatorIndex!;
             let pauliString = IntsToPaulis(idxPaulis);
             let op = Exp(pauliString, delta * idxDoubles[0], _);
-            (RestrictToSubregisterCA(op, idxQubits))(qubits);
+            (RestrictedToSubregisterCA(op, idxQubits))(qubits);
         }
         
         adjoint invert;
