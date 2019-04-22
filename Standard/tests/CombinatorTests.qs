@@ -46,7 +46,7 @@ namespace Microsoft.Quantum.Tests {
     }
     
     
-    function StripControlled<'T> (op : ('T => Unit : Adjoint, Controlled)) : ('T => Unit : Adjoint) {
+    function StripControlled<'T> (op : ('T => Unit is Adj + Ctl)) : ('T => Unit is Adj) {
         
         return op;
     }
@@ -60,13 +60,13 @@ namespace Microsoft.Quantum.Tests {
     }
     
     
-    operation BindCTestHelper0 (op : (Qubit => Unit : Controlled), qubits : Qubit[]) : Unit {
+    operation BindCTestHelper0 (op : (Qubit => Unit is Ctl), qubits : Qubit[]) : Unit {
         
         Controlled op([qubits[0]], qubits[1]);
     }
     
     
-    operation BindCTestHelper1 (op : (Qubit => Unit : Adjoint, Controlled), qubits : Qubit[]) : Unit {
+    operation BindCTestHelper1 (op : (Qubit => Unit is Adj + Ctl), qubits : Qubit[]) : Unit {
         
         body (...) {
             Controlled op([qubits[0]], qubits[1]);
@@ -76,7 +76,7 @@ namespace Microsoft.Quantum.Tests {
     }
     
     
-    function StripAdjoint<'T> (op : ('T => Unit : Adjoint, Controlled)) : ('T => Unit : Controlled) {
+    function StripAdjoint<'T> (op : ('T => Unit is Adj + Ctl)) : ('T => Unit is Ctl) {
         
         return op;
     }
@@ -127,7 +127,7 @@ namespace Microsoft.Quantum.Tests {
     }
     
     
-    operation CControlledExpected (op : (Qubit => Unit : Adjoint, Controlled), target : Qubit[]) : Unit {
+    operation CControlledExpected (op : (Qubit => Unit is Adj + Ctl), target : Qubit[]) : Unit {
         
         body (...) {
             op(target[0]);
@@ -146,7 +146,7 @@ namespace Microsoft.Quantum.Tests {
     }
     
     
-    operation CControlledActualC (op : (Qubit => Unit : Controlled), target : Qubit[]) : Unit {
+    operation CControlledActualC (op : (Qubit => Unit is Ctl), target : Qubit[]) : Unit {
         
         body (...) {
             ApplyToEachC(CControlledC(op), Zip([true, false, true], target));
@@ -156,7 +156,7 @@ namespace Microsoft.Quantum.Tests {
     }
     
     
-    operation CControlledActualA (op : (Qubit => Unit : Adjoint), target : Qubit[]) : Unit {
+    operation CControlledActualA (op : (Qubit => Unit is Adj), target : Qubit[]) : Unit {
         
         body (...) {
             ApplyToEachA(CControlledA(op), Zip([true, false, true], target));
@@ -166,7 +166,7 @@ namespace Microsoft.Quantum.Tests {
     }
     
     
-    operation CControlledActualCA (op : (Qubit => Unit : Adjoint, Controlled), target : Qubit[]) : Unit {
+    operation CControlledActualCA (op : (Qubit => Unit is Adj + Ctl), target : Qubit[]) : Unit {
         
         body (...) {
             ApplyToEachCA(CControlledCA(op), Zip([true, false, true], target));

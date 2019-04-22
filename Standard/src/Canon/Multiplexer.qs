@@ -85,7 +85,7 @@ namespace Microsoft.Quantum.Canon {
                 else{
                     // Recursion that reduces nIndex by 1 & sets Length(auxiliary) to 1.
                     using(newauxiliary = Qubit[1]){
-                        let op = LogicalANDMeasAndFix_(_, _);
+                        let op = _LogicalANDMeasAndFix(_, _);
                         // Naive measurement-free approach uses 4x more T gates with 
                         // let op = (Controlled X);
                         op([index![Length(index!) - 1]] + auxiliary, newauxiliary[0]);
@@ -209,7 +209,7 @@ namespace Microsoft.Quantum.Canon {
     ///
     /// # References
     /// - [ *Craig Gidney*, 1709.06648](https://arxiv.org/abs/1709.06648)
-    operation LogicalANDMeasAndFix_ (ctrlRegister: Qubit[], target: Qubit) : Unit
+    operation _LogicalANDMeasAndFix(ctrlRegister: Qubit[], target: Qubit) : Unit
     {
         body (...) 
         {
@@ -233,7 +233,6 @@ namespace Microsoft.Quantum.Canon {
             else{
                 (Controlled X)(ctrlRegister, target);
             }
-            
         }
         adjoint (...)  {
             if(Length(ctrlRegister) == 2){
