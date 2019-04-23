@@ -33,7 +33,7 @@ namespace Microsoft.Quantum.Tests {
     
     operation CurryTest () : Unit {
         
-        let curried = CurryOp(Exp([PauliZ], _, _));
+        let curried = CurriedOp(Exp([PauliZ], _, _));
         AssertOperationsEqualInPlace(1, curried(1.7), Exp([PauliZ], 1.7, _));
         AssertOperationsEqualReferenced(1, curried(1.7), Exp([PauliZ], 1.7, _));
     }
@@ -41,7 +41,7 @@ namespace Microsoft.Quantum.Tests {
     
     operation BindTest () : Unit {
         
-        let bound = BindCA([H, X, H]);
+        let bound = BoundCA([H, X, H]);
         AssertOperationsEqualReferenced(3, ApplyToEach(bound, _), ApplyToEachA(Z, _));
     }
     
@@ -54,7 +54,7 @@ namespace Microsoft.Quantum.Tests {
     
     operation BindATest () : Unit {
         
-        let bound = BindA(Mapped(StripControlled<Qubit>, [T, T]));
+        let bound = BoundA(Mapped(StripControlled<Qubit>, [T, T]));
         AssertOperationsEqualReferenced(3, ApplyToEach(bound, _), ApplyToEachA(S, _));
         AssertOperationsEqualReferenced(3, ApplyToEach(Adjoint bound, _), ApplyToEachA(Adjoint S, _));
     }
@@ -85,7 +85,7 @@ namespace Microsoft.Quantum.Tests {
     operation BindCTest () : Unit {
         
         let stripped = Mapped(StripAdjoint<Qubit>, [T, T]);
-        let bound = BindC(stripped);
+        let bound = BoundC(stripped);
         AssertOperationsEqualReferenced(3, ApplyToEach(bound, _), ApplyToEachA(S, _));
         let op = BindCTestHelper0(bound, _);
         let target = BindCTestHelper1(S, _);
@@ -94,7 +94,7 @@ namespace Microsoft.Quantum.Tests {
     
     
     operation BindCATest () : Unit {
-        let bound = BindCA([T, T]);
+        let bound = BoundCA([T, T]);
         AssertOperationsEqualReferenced(3, ApplyToEach(bound, _), ApplyToEachA(S, _));
         AssertOperationsEqualReferenced(3, ApplyToEach(Adjoint bound, _), ApplyToEachA(Adjoint S, _));
         let op = BindCTestHelper0(Adjoint bound, _);

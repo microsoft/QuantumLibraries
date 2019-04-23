@@ -60,7 +60,7 @@ namespace Microsoft.Quantum.Arithmetic {
     /// - ApplyReversedOpLE
     /// - ApplyReversedOpLEC
     /// - ApplyReversedOpLECA
-    operation ApplyReversedOpLEA (op : (LittleEndian => Unit : Adjoint), register : BigEndian) : Unit {
+    operation ApplyReversedOpLEA (op : (LittleEndian => Unit is Adj), register : BigEndian) : Unit {
         body (...) {
             ApplyWithInputTransformationA(BigEndianAsLittleEndian, op, register);
         }
@@ -85,7 +85,7 @@ namespace Microsoft.Quantum.Arithmetic {
     /// - ReversedOpLE
     /// - ReversedOpLEC
     /// - ReversedOpLECA
-    function ReversedOpLEA(op : (LittleEndian => Unit : Adjoint)) : (BigEndian => Unit : Adjoint) {
+    function ReversedOpLEA(op : (LittleEndian => Unit is Adj)) : (BigEndian => Unit is Adj) {
         return ApplyReversedOpLEA(op, _);
     }
 
@@ -103,7 +103,7 @@ namespace Microsoft.Quantum.Arithmetic {
     /// - ApplyReversedOpLE
     /// - ApplyReversedOpLEA
     /// - ApplyReversedOpLECA
-    operation ApplyReversedOpLEC(op : (LittleEndian => Unit : Controlled), register : BigEndian) : Unit {
+    operation ApplyReversedOpLEC(op : (LittleEndian => Unit is Ctl), register : BigEndian) : Unit {
         body (...) {
             ApplyWithInputTransformationC(BigEndianAsLittleEndian, op, register);
         }
@@ -127,7 +127,7 @@ namespace Microsoft.Quantum.Arithmetic {
     /// - ReversedOpLE
     /// - ReversedOpLEA
     /// - ReversedOpLECA
-    function ReversedOpLEC(op : (LittleEndian => Unit : Controlled)) : (BigEndian => Unit : Controlled) {
+    function ReversedOpLEC(op : (LittleEndian => Unit is Ctl)) : (BigEndian => Unit is Ctl) {
         return ApplyReversedOpLEC(op, _);
     }
 
@@ -145,7 +145,7 @@ namespace Microsoft.Quantum.Arithmetic {
     /// - ApplyReversedOpLE
     /// - ApplyReversedOpLEA
     /// - ApplyReversedOpLEC
-    operation ApplyReversedOpLECA(op : (LittleEndian => Unit : Controlled, Adjoint), register : BigEndian) : Unit {
+    operation ApplyReversedOpLECA(op : (LittleEndian => Unit is Ctl + Adj), register : BigEndian) : Unit {
         body (...) {
             ApplyWithInputTransformationCA(BigEndianAsLittleEndian, op, register);
         }
@@ -171,7 +171,7 @@ namespace Microsoft.Quantum.Arithmetic {
     /// - ReversedOpLE
     /// - ReversedOpLEA
     /// - ReversedOpLEC
-    function ReversedOpLECA(op : (LittleEndian => Unit : Adjoint, Controlled)) : (BigEndian => Unit : Adjoint, Controlled) {
+    function ReversedOpLECA(op : (LittleEndian => Unit is Adj, Controlled)) : (BigEndian => Unit is Adj, Controlled) {
         return ApplyReversedOpLECA(op, _);
     }
 
@@ -227,7 +227,7 @@ namespace Microsoft.Quantum.Arithmetic {
     /// - ApplyReversedOpBE
     /// - ApplyReversedOpBEC
     /// - ApplyReversedOpBECA
-    operation ApplyReversedOpBEA (op : (BigEndian => Unit : Adjoint), register : LittleEndian) : Unit {
+    operation ApplyReversedOpBEA (op : (BigEndian => Unit is Adj), register : LittleEndian) : Unit {
         body (...) {
             ApplyWithInputTransformationA(LittleEndianAsBigEndian, op, register);
         }
@@ -251,7 +251,7 @@ namespace Microsoft.Quantum.Arithmetic {
     /// - ReversedOpBE
     /// - ReversedOpBEC
     /// - ReversedOpBECA
-    function ReversedOpBEA(op : (BigEndian => Unit : Adjoint)) : (LittleEndian => Unit : Adjoint) {
+    function ReversedOpBEA(op : (BigEndian => Unit is Adj)) : (LittleEndian => Unit is Adj) {
         return ApplyReversedOpBEA(op, _);
     }
 
@@ -269,7 +269,7 @@ namespace Microsoft.Quantum.Arithmetic {
     /// - ApplyReversedOpBE
     /// - ApplyReversedOpBEA
     /// - ApplyReversedOpBECA
-    operation ApplyReversedOpBEC(op : (BigEndian => Unit : Controlled), register : LittleEndian) : Unit {
+    operation ApplyReversedOpBEC(op : (BigEndian => Unit is Ctl), register : LittleEndian) : Unit {
         body (...) {
             ApplyWithInputTransformationC(LittleEndianAsBigEndian, op, register);
         }
@@ -293,7 +293,7 @@ namespace Microsoft.Quantum.Arithmetic {
     /// - ReversedOpBE
     /// - ReversedOpBEA
     /// - ReversedOpBECA
-    function ReversedOpBEC(op : (BigEndian => Unit : Controlled)) : (LittleEndian => Unit : Controlled) {
+    function ReversedOpBEC(op : (BigEndian => Unit is Ctl)) : (LittleEndian => Unit is Ctl) {
         return ApplyReversedOpBEC(op, _);
     }
 
@@ -311,7 +311,7 @@ namespace Microsoft.Quantum.Arithmetic {
     /// - ApplyReversedOpBE
     /// - ApplyReversedOpBEA
     /// - ApplyReversedOpBEC
-    operation ApplyReversedOpBECA(op : (BigEndian => Unit : Controlled, Adjoint), register : LittleEndian) : Unit {
+    operation ApplyReversedOpBECA(op : (BigEndian => Unit is Ctl + Adj), register : LittleEndian) : Unit {
         body (...) {
             ApplyWithInputTransformationCA(LittleEndianAsBigEndian, op, register);
         }
@@ -337,7 +337,7 @@ namespace Microsoft.Quantum.Arithmetic {
     /// - ReversedOpBE
     /// - ReversedOpBEA
     /// - ReversedOpBEC
-    function ReversedOpBECA(op : (BigEndian => Unit : Adjoint, Controlled)) : (LittleEndian => Unit : Adjoint, Controlled) {
+    function ReversedOpBECA(op : (BigEndian => Unit is Adj, Controlled)) : (LittleEndian => Unit is Adj, Controlled) {
         return ApplyReversedOpBECA(op, _);
     }
 

@@ -3,9 +3,9 @@
 
 namespace Microsoft.Quantum.Canon {
     open Microsoft.Quantum.Arrays;
-    
+
     /// # See Also
-    /// - Microsoft.Quantum.Canon.Bind
+    /// - Microsoft.Quantum.Canon.Bound
     operation BindImpl<'T> (operations : ('T => Unit)[], target : 'T) : Unit
     {
         for (idxOperation in IndexRange(operations))
@@ -37,7 +37,7 @@ namespace Microsoft.Quantum.Canon {
     /// ## Example
     /// The following are equivalent:
     /// ```qsharp
-    /// let bound = Bind([U, V]);
+    /// let bound = Bound([U, V]);
     /// bound(x);
     /// ```
 	/// and
@@ -46,18 +46,18 @@ namespace Microsoft.Quantum.Canon {
     /// ```
     ///
     /// # See Also
-    /// - Microsoft.Quantum.Canon.BindC
-    /// - Microsoft.Quantum.Canon.BindA
-    /// - Microsoft.Quantum.Canon.BindCA
-    function Bind<'T> (operations : ('T => Unit)[]) : ('T => Unit)
+    /// - Microsoft.Quantum.Canon.BoundC
+    /// - Microsoft.Quantum.Canon.BoundA
+    /// - Microsoft.Quantum.Canon.BoundCA
+    function Bound<'T> (operations : ('T => Unit)[]) : ('T => Unit)
     {
         return BindImpl(operations, _);
     }
     
     
     /// # See Also
-    /// - Microsoft.Quantum.Canon.BindA
-    operation BindAImpl<'T> (operations : ('T => Unit : Adjoint)[], target : 'T) : Unit
+    /// - Microsoft.Quantum.Canon.BoundA
+    operation BindAImpl<'T> (operations : ('T => Unit is Adj)[], target : 'T) : Unit
     {
         body (...)
         {
@@ -70,7 +70,7 @@ namespace Microsoft.Quantum.Canon {
         
         adjoint (...) {
             // TODO: replace with an implementation based on Reversed : 'T[] -> 'T[]
-            //       and AdjointAll : ('T => () : Adjointable)[] -> ('T => () : Adjointable).
+            //       and AdjointAll : ('T => () is Adj)[] -> ('T => () is Adj).
             for (idxOperation in Length(operations) - 1 .. -1 .. 0)
             {
                 let op = Adjoint operations[idxOperation];
@@ -102,7 +102,7 @@ namespace Microsoft.Quantum.Canon {
     /// ## Example
     /// The following are equivalent:
     /// ```qsharp
-    /// let bound = Bind([U, V]);
+    /// let bound = Bound([U, V]);
     /// bound(x);
     /// ```
 	/// and
@@ -111,16 +111,16 @@ namespace Microsoft.Quantum.Canon {
     /// ```
     ///
     /// # See Also
-    /// - Microsoft.Quantum.Canon.Bind
-    function BindA<'T> (operations : ('T => Unit : Adjoint)[]) : ('T => Unit : Adjoint)
+    /// - Microsoft.Quantum.Canon.Bound
+    function BoundA<'T> (operations : ('T => Unit is Adj)[]) : ('T => Unit is Adj)
     {
         return BindAImpl(operations, _);
     }
     
     
     /// # See Also
-    /// - Microsoft.Quantum.Canon.BindC
-    operation BindCImpl<'T> (operations : ('T => Unit : Controlled)[], target : 'T) : Unit
+    /// - Microsoft.Quantum.Canon.BoundC
+    operation BindCImpl<'T> (operations : ('T => Unit is Ctl)[], target : 'T) : Unit
     {
         body (...)
         {
@@ -164,7 +164,7 @@ namespace Microsoft.Quantum.Canon {
     /// ## Example
     /// The following are equivalent:
     /// ```qsharp
-    /// let bound = Bind([U, V]);
+    /// let bound = Bound([U, V]);
     /// bound(x);
     /// ```
 	/// and
@@ -173,16 +173,16 @@ namespace Microsoft.Quantum.Canon {
     /// ```
     ///
     /// # See Also
-    /// - Microsoft.Quantum.Canon.Bind
-    function BindC<'T> (operations : ('T => Unit : Controlled)[]) : ('T => Unit : Controlled)
+    /// - Microsoft.Quantum.Canon.Bound
+    function BoundC<'T> (operations : ('T => Unit is Ctl)[]) : ('T => Unit is Ctl)
     {
         return BindCImpl(operations, _);
     }
     
     
     /// # See Also
-    /// - Microsoft.Quantum.Canon.BindCA
-    operation BindCAImpl<'T> (operations : ('T => Unit : Adjoint, Controlled)[], target : 'T) : Unit
+    /// - Microsoft.Quantum.Canon.BoundCA
+    operation BindCAImpl<'T> (operations : ('T => Unit is Adj + Ctl)[], target : 'T) : Unit
     {
         body (...)
         {
@@ -245,7 +245,7 @@ namespace Microsoft.Quantum.Canon {
     /// ## Example
     /// The following are equivalent:
     /// ```qsharp
-    /// let bound = Bind([U, V]);
+    /// let bound = Bound([U, V]);
     /// bound(x);
     /// ```
 	/// and
@@ -254,8 +254,8 @@ namespace Microsoft.Quantum.Canon {
     /// ```
     ///
     /// # See Also
-    /// - Microsoft.Quantum.Canon.Bind
-    function BindCA<'T> (operations : ('T => Unit : Adjoint, Controlled)[]) : ('T => Unit : Adjoint, Controlled)
+    /// - Microsoft.Quantum.Canon.Bound
+    function BoundCA<'T> (operations : ('T => Unit is Adj + Ctl)[]) : ('T => Unit is Adj + Ctl)
     {
         return BindCAImpl(operations, _);
     }

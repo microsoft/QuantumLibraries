@@ -1,9 +1,8 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-namespace Microsoft.Quantum.Canon
-{
-    
+namespace Microsoft.Quantum.Canon {
+
     function CurryOpImpl<'T, 'U> (op : (('T, 'U) => Unit), arg1 : 'T) : ('U => Unit)
     {
         return op(arg1, _);
@@ -37,11 +36,11 @@ namespace Microsoft.Quantum.Canon
     /// ```qsharp
     /// op(x, y);
     ///
-    /// let curried = CurryOp(op);
+    /// let curried = CurriedOp(op);
     /// let partial = curried(x);
     /// partial(y);
     /// ```
-    function CurryOp<'T, 'U> (op : (('T, 'U) => Unit)) : ('T -> ('U => Unit))
+    function CurriedOp<'T, 'U> (op : (('T, 'U) => Unit)) : ('T -> ('U => Unit))
     {
         return CurryOpImpl(op, _);
     }
@@ -76,13 +75,13 @@ namespace Microsoft.Quantum.Canon
     /// - @"microsoft.quantum.canon.uncurryopc"
     /// - @"microsoft.quantum.canon.uncurryopa"
     /// - @"microsoft.quantum.canon.uncurryopca"
-    function UncurryOp<'T, 'U> (curriedOp : ('T -> ('U => Unit))) : (('T, 'U) => Unit)
+    function UncurriedOp<'T, 'U> (curriedOp : ('T -> ('U => Unit))) : (('T, 'U) => Unit)
     {
         return UncurryOpImpl(curriedOp, _, _);
     }
     
     
-    operation UncurryOpCImpl<'T, 'U> (curriedOp : ('T -> ('U => Unit : Controlled)), first : 'T, second : 'U) : Unit
+    operation UncurryOpCImpl<'T, 'U> (curriedOp : ('T -> ('U => Unit is Ctl)), first : 'T, second : 'U) : Unit
     {
         body (...)
         {
@@ -116,13 +115,13 @@ namespace Microsoft.Quantum.Canon
     ///
     /// # See Also
     /// - @"microsoft.quantum.canon.uncurryop"
-    function UncurryOpC<'T, 'U> (curriedOp : ('T -> ('U => Unit : Controlled))) : (('T, 'U) => Unit : Controlled)
+    function UncurriedOpC<'T, 'U> (curriedOp : ('T -> ('U => Unit is Ctl))) : (('T, 'U) => Unit is Ctl)
     {
         return UncurryOpCImpl(curriedOp, _, _);
     }
     
     
-    operation UncurryOpAImpl<'T, 'U> (curriedOp : ('T -> ('U => Unit : Adjoint)), first : 'T, second : 'U) : Unit
+    operation UncurryOpAImpl<'T, 'U> (curriedOp : ('T -> ('U => Unit is Adj)), first : 'T, second : 'U) : Unit
     {
         body (...)
         {
@@ -156,13 +155,13 @@ namespace Microsoft.Quantum.Canon
     ///
     /// # See Also
     /// - @"microsoft.quantum.canon.uncurryop"
-    function UncurryOpA<'T, 'U> (curriedOp : ('T -> ('U => Unit : Adjoint))) : (('T, 'U) => Unit : Adjoint)
+    function UncurriedOpA<'T, 'U> (curriedOp : ('T -> ('U => Unit is Adj))) : (('T, 'U) => Unit is Adj)
     {
         return UncurryOpAImpl(curriedOp, _, _);
     }
     
     
-    operation UncurryOpCAImpl<'T, 'U> (curriedOp : ('T -> ('U => Unit : Controlled, Adjoint)), first : 'T, second : 'U) : Unit
+    operation UncurryOpCAImpl<'T, 'U> (curriedOp : ('T -> ('U => Unit is Ctl + Adj)), first : 'T, second : 'U) : Unit
     {
         body (...)
         {
@@ -198,7 +197,7 @@ namespace Microsoft.Quantum.Canon
     ///
     /// # See Also
     /// - @"microsoft.quantum.canon.uncurryop"
-    function UncurryOpCA<'T, 'U> (curriedOp : ('T -> ('U => Unit : Controlled, Adjoint))) : (('T, 'U) => Unit : Controlled, Adjoint)
+    function UncurriedOpCA<'T, 'U> (curriedOp : ('T -> ('U => Unit is Ctl + Adj))) : (('T, 'U) => Unit is Ctl + Adj)
     {
         return UncurryOpCAImpl(curriedOp, _, _);
     }

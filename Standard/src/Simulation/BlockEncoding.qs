@@ -37,7 +37,7 @@ namespace Microsoft.Quantum.Simulation {
     /// # Output
     /// A unitary $U$ acting jointly on registers `a` and `s` that block-
     /// encodes $H$.
-    newtype BlockEncoding = ((Qubit[], Qubit[]) => Unit : Adjoint, Controlled);
+    newtype BlockEncoding = ((Qubit[], Qubit[]) => Unit is Adj + Ctl);
 
     /// # Summary
     /// Represents a `BlockEncoding` that is also a reflection.
@@ -83,7 +83,7 @@ namespace Microsoft.Quantum.Simulation {
     /// # Output
     /// A unitary $U$ acting jointly on registers `d`, `a`, and `s` that block-
     /// encodes $H_k$.
-    newtype TimeDependentBlockEncoding = ((Qubit[], Qubit[], Qubit[]) => Unit : Adjoint, Controlled);
+    newtype TimeDependentBlockEncoding = ((Qubit[], Qubit[], Qubit[]) => Unit is Adj + Ctl);
 
     /// # Summary
 	/// Converts a `BlockEncoding` into an equivalent `BLockEncodingReflection`.
@@ -156,7 +156,7 @@ namespace Microsoft.Quantum.Simulation {
     /// # See Also
     /// - Microsoft.Quantum.Canon.BlockEncoding
     /// - Microsoft.Quantum.Canon.BlockEncodingReflection
-    function QuantumWalkByQubitization(blockEncoding: BlockEncodingReflection) : ((Qubit[], Qubit[]) => Unit : Adjoint, Controlled) {
+    function QuantumWalkByQubitization(blockEncoding: BlockEncodingReflection) : ((Qubit[], Qubit[]) => Unit is Adj + Ctl) {
         return QuantumWalkByQubitization_(blockEncoding, _, _);
     }
 
@@ -201,17 +201,17 @@ namespace Microsoft.Quantum.Simulation {
     /// - Microsoft.Quantum.Canon.BlockEncoding
     /// - Microsoft.Quantum.Canon.BlockEncodingReflection
     function BlockEncodingByLCU<'T,'S>(
-        statePreparation: ('T => Unit : Adjoint, Controlled), 
-        selector: (('T, 'S) => Unit : Adjoint, Controlled))
-        : (('T, 'S) => Unit : Adjoint, Controlled) {
+        statePreparation: ('T => Unit is Adj + Ctl), 
+        selector: (('T, 'S) => Unit is Adj + Ctl))
+        : (('T, 'S) => Unit is Adj + Ctl) {
         return BlockEncodingByLCU_(statePreparation, selector, _, _);
     } 
 
     /// # Summary
     /// Implementation of `BlockEncodingByLCU`.
     operation BlockEncodingByLCU_<'T,'S>(
-        statePreparation: ('T => Unit : Adjoint, Controlled), 
-        selector: (('T, 'S) => Unit : Adjoint, Controlled),
+        statePreparation: ('T => Unit is Adj + Ctl), 
+        selector: (('T, 'S) => Unit is Adj + Ctl),
         auxiliary: 'T, 
         system: 'S) 
         : Unit {
@@ -250,17 +250,17 @@ namespace Microsoft.Quantum.Simulation {
     /// - Microsoft.Quantum.Canon.BlockEncoding
     /// - Microsoft.Quantum.Canon.BlockEncodingReflection
     function BlockEncodingReflectionByLCU(
-        statePreparation: (Qubit[] => Unit : Adjoint, Controlled), 
-        selector: ((Qubit[], Qubit[]) => Unit : Adjoint, Controlled)
+        statePreparation: (Qubit[] => Unit is Adj + Ctl), 
+        selector: ((Qubit[], Qubit[]) => Unit is Adj + Ctl)
         ) : BlockEncodingReflection {
         return BlockEncodingToReflection(BlockEncoding(BlockEncodingByLCU(statePreparation, selector)));
     }
 
 
     /// # Summary
-    /// Conversion of ((LittleEndian, Qubit[]) => () : Adjoint, Controlled) to BlockEncoding
+    /// Conversion of ((LittleEndian, Qubit[]) => () is Adj + Ctl) to BlockEncoding
     operation BlockEncodingFromBEandQubit_(
-        op: ((LittleEndian, Qubit[]) => Unit : Adjoint, Controlled), 
+        op: ((LittleEndian, Qubit[]) => Unit is Adj + Ctl), 
         auxiliary: Qubit[], 
         system: Qubit[])  : Unit
     {

@@ -50,7 +50,7 @@ namespace Microsoft.Quantum.Canon {
     ///
     /// # See Also
     /// - @"microsoft.quantum.canon.applytosubregister"
-    operation ApplyToSubregisterA (op : (Qubit[] => Unit : Adjoint), idxs : Int[], target : Qubit[]) : Unit
+    operation ApplyToSubregisterA (op : (Qubit[] => Unit is Adj), idxs : Int[], target : Qubit[]) : Unit
     {
         body (...)
         {
@@ -79,7 +79,7 @@ namespace Microsoft.Quantum.Canon {
     ///
     /// # See Also
     /// - @"microsoft.quantum.canon.applytosubregister"
-    operation ApplyToSubregisterC (op : (Qubit[] => Unit : Controlled), idxs : Int[], target : Qubit[]) : Unit
+    operation ApplyToSubregisterC (op : (Qubit[] => Unit is Ctl), idxs : Int[], target : Qubit[]) : Unit
     {
         body (...)
         {
@@ -109,7 +109,7 @@ namespace Microsoft.Quantum.Canon {
     ///
     /// # See Also
     /// - @"microsoft.quantum.canon.applytosubregister"
-    operation ApplyToSubregisterCA (op : (Qubit[] => Unit : Controlled, Adjoint), idxs : Int[], target : Qubit[]) : Unit
+    operation ApplyToSubregisterCA (op : (Qubit[] => Unit is Ctl + Adj), idxs : Int[], target : Qubit[]) : Unit
     {
         body (...)
         {
@@ -169,7 +169,7 @@ namespace Microsoft.Quantum.Canon {
     ///
     /// # See Also
     /// - RestrictedToSubregister
-    function RestrictedToSubregisterA (op : (Qubit[] => Unit : Adjoint), idxs : Int[]) : (Qubit[] => Unit : Adjoint)
+    function RestrictedToSubregisterA (op : (Qubit[] => Unit is Adj), idxs : Int[]) : (Qubit[] => Unit is Adj)
     {
         return ApplyToSubregisterA(op, idxs, _);
     }
@@ -189,7 +189,7 @@ namespace Microsoft.Quantum.Canon {
     ///
     /// # See Also
     /// - Microsoft.Quantum.Canon.RestrictedToSubregister
-    function RestrictedToSubregisterC (op : (Qubit[] => Unit : Controlled), idxs : Int[]) : (Qubit[] => Unit : Controlled)
+    function RestrictedToSubregisterC (op : (Qubit[] => Unit is Ctl), idxs : Int[]) : (Qubit[] => Unit is Ctl)
     {
         return ApplyToSubregisterC(op, idxs, _);
     }
@@ -209,7 +209,7 @@ namespace Microsoft.Quantum.Canon {
     ///
     /// # See Also
     /// - Microsoft.Quantum.Canon.RestrictedToSubregister
-    function RestrictedToSubregisterCA (op : (Qubit[] => Unit : Adjoint, Controlled), idxs : Int[]) : (Qubit[] => Unit : Adjoint, Controlled)
+    function RestrictedToSubregisterCA (op : (Qubit[] => Unit is Adj + Ctl), idxs : Int[]) : (Qubit[] => Unit is Adj + Ctl)
     {
         return ApplyToSubregisterCA(op, idxs, _);
     }

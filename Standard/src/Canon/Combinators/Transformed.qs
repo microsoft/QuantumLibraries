@@ -110,7 +110,7 @@ namespace Microsoft.Quantum.Canon {
     /// ```qsharp
     /// ApplyWithInputTransformation(LittleEndianAsBigEndian, ApplyXorInPlaceBE, LittleEndian(qubits));
     /// ```
-    operation ApplyWithInputTransformationA<'T, 'U>(fn : ('U -> 'T), op : ('T => Unit : Adjoint), input : 'U) : Unit {
+    operation ApplyWithInputTransformationA<'T, 'U>(fn : ('U -> 'T), op : ('T => Unit is Adj), input : 'U) : Unit {
         body (...) { op(fn(input)); }
         adjoint auto;
     }
@@ -147,7 +147,7 @@ namespace Microsoft.Quantum.Canon {
     /// ```qsharp
     /// let leOp = TransformedOperation(LittleEndianAsBigEndian, ApplyXorInPlaceBE);
     /// ```
-    function TransformedOperationA<'T, 'U>(fn : ('U -> 'T), op : ('T => Unit : Adjoint)) : ('U => Unit : Adjoint) {
+    function TransformedOperationA<'T, 'U>(fn : ('U -> 'T), op : ('T => Unit is Adj)) : ('U => Unit is Adj) {
         return ApplyWithInputTransformationA(fn, op, _);
     }
 
@@ -187,7 +187,7 @@ namespace Microsoft.Quantum.Canon {
     /// ```qsharp
     /// ApplyWithInputTransformation(LittleEndianAsBigEndian, ApplyXorInPlaceBE, LittleEndian(qubits));
     /// ```
-    operation ApplyWithInputTransformationC<'T, 'U>(fn : ('U -> 'T), op : ('T => Unit : Controlled), input : 'U) : Unit {
+    operation ApplyWithInputTransformationC<'T, 'U>(fn : ('U -> 'T), op : ('T => Unit is Ctl), input : 'U) : Unit {
         body (...) { op(fn(input)); }
         controlled auto;
     }
@@ -224,7 +224,7 @@ namespace Microsoft.Quantum.Canon {
     /// ```qsharp
     /// let leOp = TransformedOperation(LittleEndianAsBigEndian, ApplyXorInPlaceBE);
     /// ```
-    function TransformedOperationC<'T, 'U>(fn : ('U -> 'T), op : ('T => Unit : Controlled)) : ('U => Unit : Controlled) {
+    function TransformedOperationC<'T, 'U>(fn : ('U -> 'T), op : ('T => Unit is Ctl)) : ('U => Unit is Ctl) {
         return ApplyWithInputTransformationC(fn, op, _);
     }
 
@@ -263,7 +263,7 @@ namespace Microsoft.Quantum.Canon {
     /// ```qsharp
     /// ApplyWithInputTransformation(LittleEndianAsBigEndian, ApplyXorInPlaceBE, LittleEndian(qubits));
     /// ```
-    operation ApplyWithInputTransformationCA<'T, 'U>(fn : ('U -> 'T), op : ('T => Unit : Adjoint, Controlled), input : 'U) : Unit {
+    operation ApplyWithInputTransformationCA<'T, 'U>(fn : ('U -> 'T), op : ('T => Unit is Adj + Ctl), input : 'U) : Unit {
         body (...) { op(fn(input)); }
         adjoint auto;
         controlled auto;
@@ -302,7 +302,7 @@ namespace Microsoft.Quantum.Canon {
     /// ```qsharp
     /// let leOp = TransformedOperation(LittleEndianAsBigEndian, ApplyXorInPlaceBE);
     /// ```
-    function TransformedOperationCA<'T, 'U>(fn : ('U -> 'T), op : ('T => Unit : Controlled, Adjoint)) : ('U => Unit : Controlled, Adjoint) {
+    function TransformedOperationCA<'T, 'U>(fn : ('U -> 'T), op : ('T => Unit is Adj + Ctl)) : ('U => Unit is Adj + Ctl) {
         return ApplyWithInputTransformationCA(fn, op, _);
     }
 

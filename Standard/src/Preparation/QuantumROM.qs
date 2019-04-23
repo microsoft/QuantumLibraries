@@ -219,7 +219,7 @@ namespace Microsoft.Quantum.Preparation {
             CompareUsingRippleCarry(uniformKeepCoeffRegister, keepCoeffRegister, flagQubit);
 
             let indexRegisterSize = Length(indexRegister!);
-            
+
             // Swap in register based on comparison
             for(idx in 0..nBitsIndices-1){
                 (Controlled SWAP)([flagQubit], (indexRegister![nBitsIndices - idx - 1], altIndexRegister![idx]));
@@ -232,11 +232,11 @@ namespace Microsoft.Quantum.Preparation {
 
     // Used in QuantumROM implementation.
     function _QuantumROMWriteBitStringUnitary(idx: Int, keepCoeff: Int[], altIndex: Int[]) : ((LittleEndian, LittleEndian) => Unit : Adjoint, Controlled) {
-        return QuantumROMWriteBitString_(idx, keepCoeff, altIndex, _, _);
+        return _QuantumROMWriteBitString(idx, keepCoeff, altIndex, _, _);
     }
 
     // Used in QuantumROM implementation.
-    operation QuantumROMWriteBitString_(idx: Int, keepCoeff: Int[], altIndex: Int[], keepCoeffRegister: LittleEndian, altIndexRegister: LittleEndian) : Unit {
+    operation _QuantumROMWriteBitString(idx: Int, keepCoeff: Int[], altIndex: Int[], keepCoeffRegister: LittleEndian, altIndexRegister: LittleEndian) : Unit {
         body (...) {
             ApplyXorInPlace(keepCoeff[idx], keepCoeffRegister);
             ApplyXorInPlace(altIndex[idx], altIndexRegister);
