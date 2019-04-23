@@ -21,7 +21,7 @@ namespace Microsoft.Quantum.Canon {
     /// # Deprecated
     /// Please use @"microsoft.quantum.math.pnormalized".
     function PNormalize(p : Double, array : Double[]) : Double[] {
-        Renamed("Microsoft.Quantum.Canon.PNormalize", "Microsoft.Quantum.Math.PNormalized");
+        _Renamed("Microsoft.Quantum.Canon.PNormalize", "Microsoft.Quantum.Math.PNormalized");
         return PNormalized(p, array);
     }
 }

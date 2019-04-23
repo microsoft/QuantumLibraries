@@ -289,7 +289,7 @@ namespace Microsoft.Quantum.Canon {
     /// Please use @"Microsoft.Quantum.Arithmetic.CopyMostSignificantBit".
      operation CopyMostSignificantBitLE(from : LittleEndian, target : Qubit) : Unit {
         body (...) {
-            Renamed("Microsoft.Quantum.Canon.CopyMostSignificantBitLE", "Microsoft.Quantum.Arithmetic.CopyMostSignificantBit");
+            _Renamed("Microsoft.Quantum.Canon.CopyMostSignificantBitLE", "Microsoft.Quantum.Arithmetic.CopyMostSignificantBit");
             CopyMostSignificantBit(from, target);
         }
 

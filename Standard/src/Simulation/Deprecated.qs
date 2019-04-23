@@ -8,7 +8,7 @@ namespace Microsoft.Quantum.Canon {
     /// # Deprecated
     /// Please use @"microsoft.quantum.simuilation.pnormalized".
     operation AdiabaticStateEnergyUnitary(nQubits : Int, statePrepUnitary : (Qubit[] => Unit), adiabaticUnitary : (Qubit[] => Unit), qpeUnitary : (Qubit[] => Unit is Adj + Ctl), phaseEstAlgorithm : ((DiscreteOracle, Qubit[]) => Double)) : Double {
-        Renamed("Microsoft.Quantum.Canon.AdiabaticStateEnergyUnitary", "Microsoft.Quantum.Simulation.EstimateEnergyWithAdiabaticEvolution");
+        _Renamed("Microsoft.Quantum.Canon.AdiabaticStateEnergyUnitary", "Microsoft.Quantum.Simulation.EstimateEnergyWithAdiabaticEvolution");
         return EstimateEnergyWithAdiabaticEvolution(nQubits, statePrepUnitary, adiabaticUnitary, qpeUnitary, phaseEstAlgorithm);
     }
 }
