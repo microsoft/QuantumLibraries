@@ -3,6 +3,7 @@
 
 namespace Microsoft.Quantum.ErrorCorrection {
     open Microsoft.Quantum.Canon;
+    open Microsoft.Quantum.Warnings;
 
     /// # Deprecated
     /// Please use @"microsoft.quantum.errorcorrection.encodeintobitflipcode".

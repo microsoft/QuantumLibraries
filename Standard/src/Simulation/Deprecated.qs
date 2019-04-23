@@ -4,6 +4,7 @@
 namespace Microsoft.Quantum.Canon {
     open Microsoft.Quantum.Simulation;
     open Microsoft.Quantum.Oracles;
+    open Microsoft.Quantum.Warnings;
 
     /// # Deprecated
     /// Please use @"microsoft.quantum.simuilation.pnormalized".

@@ -4,6 +4,7 @@
 namespace Microsoft.Quantum.Canon {
     open Microsoft.Quantum.Intrinsic;
     open Microsoft.Quantum.Diagnostics;
+    open Microsoft.Quantum.Warnings;
 
     /// # Deprecated
     /// Please use @"Microsoft.Quantum.Diagnostics.EqualityWithinToleranceFact" instead.

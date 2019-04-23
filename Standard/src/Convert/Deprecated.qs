@@ -3,6 +3,7 @@
 
 namespace Microsoft.Quantum.Canon {
     open Microsoft.Quantum.Convert;
+    open Microsoft.Quantum.Warnings;
 
     /// # Deprecated
     /// This function has been removed.

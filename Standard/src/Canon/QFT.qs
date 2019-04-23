@@ -86,14 +86,8 @@ namespace Microsoft.Quantum.Canon {
     ///
     /// # See Also
     /// - ApplyQuantumFourierTransformBE
-    operation ApplyQuantumFourierTransform(qs : LittleEndian) : Unit {
-        body (...) {
-            ApplyReversedOpBECA(_ApplyQuantumFourierTransformBE, qs);
-        }
-
-        adjoint invert;
-        controlled distribute;
-        controlled adjoint distribute;
+    operation ApplyQuantumFourierTransform(qs : LittleEndian) : Unit is Adj + Ctl {
+        ApplyReversedOpBECA(_ApplyQuantumFourierTransformBE, qs);
     }
 
 }
