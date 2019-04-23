@@ -47,7 +47,7 @@ namespace Microsoft.Quantum.Canon {
     ///
     /// # See Also
     /// - Microsoft.Quantum.Canon.ApplyToEachIndex
-    operation ApplyToEachIndexC<'T> (singleElementOperation : ((Int, 'T) => Unit : Controlled), register : 'T[]) : Unit
+    operation ApplyToEachIndexC<'T> (singleElementOperation : ((Int, 'T) => Unit is Ctl), register : 'T[]) : Unit
     {
         body (...)
         {
@@ -77,7 +77,7 @@ namespace Microsoft.Quantum.Canon {
     ///
     /// # See Also
     /// - Microsoft.Quantum.Canon.ApplyToEachIndex
-    operation ApplyToEachIndexA<'T> (singleElementOperation : ((Int, 'T) => Unit : Adjoint), register : 'T[]) : Unit
+    operation ApplyToEachIndexA<'T> (singleElementOperation : ((Int, 'T) => Unit is Adj), register : 'T[]) : Unit
     {
         body (...)
         {
@@ -108,7 +108,7 @@ namespace Microsoft.Quantum.Canon {
     ///
     /// # See Also
     /// - Microsoft.Quantum.Canon.ApplyToEachIndex
-    operation ApplyToEachIndexCA<'T> (singleElementOperation : ((Int, 'T) => Unit : Adjoint, Controlled), register : 'T[]) : Unit
+    operation ApplyToEachIndexCA<'T> (singleElementOperation : ((Int, 'T) => Unit is Adj + Ctl), register : 'T[]) : Unit
     {
         body (...)
         {

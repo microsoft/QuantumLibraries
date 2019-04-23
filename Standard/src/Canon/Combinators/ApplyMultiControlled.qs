@@ -11,7 +11,7 @@ namespace Microsoft.Quantum.Canon {
     
     /// # Summary
     /// The signature type of CCNOT gate.
-    newtype CCNOTop = ((Qubit, Qubit, Qubit) => Unit : Adjoint);
+    newtype CCNOTop = ((Qubit, Qubit, Qubit) => Unit is Adj);
     
     
     /// # Summary
@@ -105,7 +105,7 @@ namespace Microsoft.Quantum.Canon {
     ///
     /// # See Also
     /// - Microsoft.Quantum.Canon.ApplyMultiControlledC
-    operation ApplyMultiControlledCA (singlyControlledOp : (Qubit[] => Unit : Adjoint), ccnot : CCNOTop, controls : Qubit[], targets : Qubit[]) : Unit {
+    operation ApplyMultiControlledCA (singlyControlledOp : (Qubit[] => Unit is Adj), ccnot : CCNOTop, controls : Qubit[], targets : Qubit[]) : Unit {
         body (...) {
             Fact(Length(controls) >= 1, $"Length of controls must be at least 1");
 

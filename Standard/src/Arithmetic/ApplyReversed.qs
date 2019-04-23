@@ -171,7 +171,7 @@ namespace Microsoft.Quantum.Arithmetic {
     /// - ReversedOpLE
     /// - ReversedOpLEA
     /// - ReversedOpLEC
-    function ReversedOpLECA(op : (LittleEndian => Unit is Adj, Controlled)) : (BigEndian => Unit is Adj, Controlled) {
+    function ReversedOpLECA(op : (LittleEndian => Unit is Adj + Ctl)) : (BigEndian => Unit is Adj + Ctl) {
         return ApplyReversedOpLECA(op, _);
     }
 
@@ -337,7 +337,7 @@ namespace Microsoft.Quantum.Arithmetic {
     /// - ReversedOpBE
     /// - ReversedOpBEA
     /// - ReversedOpBEC
-    function ReversedOpBECA(op : (BigEndian => Unit is Adj, Controlled)) : (LittleEndian => Unit is Adj, Controlled) {
+    function ReversedOpBECA(op : (BigEndian => Unit is Adj + Ctl)) : (LittleEndian => Unit is Adj + Ctl) {
         return ApplyReversedOpBECA(op, _);
     }
 

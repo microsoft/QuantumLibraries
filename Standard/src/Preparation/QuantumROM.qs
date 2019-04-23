@@ -231,7 +231,7 @@ namespace Microsoft.Quantum.Preparation {
     }
 
     // Used in QuantumROM implementation.
-    function _QuantumROMWriteBitStringUnitary(idx: Int, keepCoeff: Int[], altIndex: Int[]) : ((LittleEndian, LittleEndian) => Unit : Adjoint, Controlled) {
+    function _QuantumROMWriteBitStringUnitary(idx: Int, keepCoeff: Int[], altIndex: Int[]) : ((LittleEndian, LittleEndian) => Unit is Adj + Ctl) {
         return _QuantumROMWriteBitString(idx, keepCoeff, altIndex, _, _);
     }
 

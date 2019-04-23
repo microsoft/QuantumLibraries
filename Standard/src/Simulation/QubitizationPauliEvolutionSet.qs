@@ -9,7 +9,6 @@ namespace Microsoft.Quantum.Simulation {
     open Microsoft.Quantum.Math;
     open Microsoft.Quantum.Convert;
     open Microsoft.Quantum.Arrays;
-    open Microsoft.Quantum.Convert;
 
     /// # Summary
     /// Extracts the coefficient of a Pauli term described by a `GeneratorIndex`.

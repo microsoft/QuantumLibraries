@@ -267,7 +267,7 @@ namespace Microsoft.Quantum.Canon {
     /// - ApplyWith
     /// - ApplyWithA
     /// - ApplyWithC
-    operation ApplyWithCA<'T>(outerOperation : ('T => Unit is Adj), innerOperation : ('T => Unit is Adj, Controlled), target : 'T) : Unit {
+    operation ApplyWithCA<'T>(outerOperation : ('T => Unit is Adj), innerOperation : ('T => Unit is Adj + Ctl), target : 'T) : Unit {
         body (...) {
             outerOperation(target);
             innerOperation(target);
