@@ -329,7 +329,7 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
     }
     
     
-    function _ToJordanWignerSelectInput_ (idx : Int, optimizedBEGeneratorSystem : OptimizedBEGeneratorSystem) : ((Qubit, Qubit[], Qubit[], LittleEndian, LittleEndian[]) => Unit : Adjoint, Controlled) {
+    function _ToJordanWignerSelectInput_ (idx : Int, optimizedBEGeneratorSystem : OptimizedBEGeneratorSystem) : ((Qubit, Qubit[], Qubit[], LittleEndian, LittleEndian[]) => Unit is Adj + Ctl) {
         
         return _ToJordanWignerSelectInput__(idx, optimizedBEGeneratorSystem, _, _, _, _, _);
     }
@@ -360,7 +360,7 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
     }
     
     
-    function _ToPauliBases_ (idx : Int) : (Qubit[] => Unit : Adjoint, Controlled) {
+    function _ToPauliBases_ (idx : Int) : (Qubit[] => Unit is Adj + Ctl) {
         
         return _ToPauliBases__(idx, _);
     }
@@ -449,7 +449,7 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
     }
     
     
-    function _JordanWignerOptimizedQuantumWalkByQubitization_ (targetError : Double, data : JWOptimizedHTerms, nSpinOrbitals : Int) : ((Int, Int), (Double, ((Qubit[], Qubit[]) => Unit : Adjoint, Controlled))) {
+    function _JordanWignerOptimizedQuantumWalkByQubitization_ (targetError : Double, data : JWOptimizedHTerms, nSpinOrbitals : Int) : ((Int, Int), (Double, ((Qubit[], Qubit[]) => Unit is Adj + Ctl))) {
         
         let ((nCtrlRegisterQubits, nTargetRegisterQubits), (oneNorm, blockEncodingReflection)) = _JordanWignerOptimizedBlockEncoding_(targetError, data, nSpinOrbitals);
         return ((nCtrlRegisterQubits, nTargetRegisterQubits), (oneNorm, QuantumWalkByQubitization(blockEncodingReflection)));

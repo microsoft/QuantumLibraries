@@ -27,7 +27,7 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
     /// A tuple where: `Int` is the number of qubits allocated,
     /// `Double` is `1.0/trotterStepSize`, and the operation
     /// is the Trotter step.
-    function TrotterStepOracle (qSharpData : JordanWignerEncodingData, trotterStepSize : Double, trotterOrder : Int) : (Int, (Double, (Qubit[] => Unit : Adjoint, Controlled))) {
+    function TrotterStepOracle (qSharpData : JordanWignerEncodingData, trotterStepSize : Double, trotterOrder : Int) : (Int, (Double, (Qubit[] => Unit is Adj + Ctl))) {
         
         let (nSpinOrbitals, data, statePrepData, energyShift) = qSharpData!;
         let generatorSystem = JordanWignerGeneratorSystem(data);
@@ -40,7 +40,7 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
     }
     
     
-    function _QubitizationOracleSeperatedRegisters (qSharpData : JordanWignerEncodingData) : ((Int, Int), (Double, ((Qubit[], Qubit[]) => Unit : Adjoint, Controlled))) {
+    function _QubitizationOracleSeperatedRegisters (qSharpData : JordanWignerEncodingData) : ((Int, Int), (Double, ((Qubit[], Qubit[]) => Unit is Adj + Ctl))) {
         
         let (nSpinOrbitals, data, statePrepData, energyShift) = qSharpData!;
         let generatorSystem = JordanWignerBlockEncodingGeneratorSystem(data);
@@ -63,7 +63,7 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
     /// A tuple where: `Int` is the number of qubits allocated,
     /// `Double` is the one-norm of Hamiltonian coefficients, and the operation
     /// is the Quantum walk created by Qubitization.
-    function QubitizationOracle (qSharpData : JordanWignerEncodingData) : (Int, (Double, (Qubit[] => Unit : Adjoint, Controlled))) {
+    function QubitizationOracle (qSharpData : JordanWignerEncodingData) : (Int, (Double, (Qubit[] => Unit is Adj + Ctl))) {
 
         let ((nCtrlRegisterQubits, nTargetRegisterQubits), (oneNorm, oracle)) = (_QubitizationOracleSeperatedRegisters(qSharpData));
         let nQubits = nCtrlRegisterQubits + nTargetRegisterQubits;
@@ -71,7 +71,7 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
     }
     
     
-    operation _MergeTwoRegisters_ (oracle : ((Qubit[], Qubit[]) => Unit : Adjoint, Controlled), nSystemQubits : Int, allQubits : Qubit[]) : Unit {
+    operation _MergeTwoRegisters_ (oracle : ((Qubit[], Qubit[]) => Unit is Adj + Ctl), nSystemQubits : Int, allQubits : Qubit[]) : Unit {
         
         body (...) {
             oracle(allQubits[nSystemQubits .. Length(allQubits) - 1], allQubits[0 .. nSystemQubits - 1]);
@@ -83,7 +83,7 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
     }
     
     
-    function _OptimizedQubitizationOracleSeperatedRegisters_ (qSharpData : JordanWignerEncodingData, targetError : Double) : ((Int, Int), (Double, ((Qubit[], Qubit[]) => Unit : Adjoint, Controlled))) {
+    function _OptimizedQubitizationOracleSeperatedRegisters_ (qSharpData : JordanWignerEncodingData, targetError : Double) : ((Int, Int), (Double, ((Qubit[], Qubit[]) => Unit is Adj + Ctl))) {
         
         let (nSpinOrbitals, data, statePrepData, energyShift) = qSharpData!;
         let ((nCtrlRegisterQubits, nTargetRegisterQubits), (oneNorm, blockEncodingReflection)) = (_JordanWignerOptimizedBlockEncoding_(targetError, data, nSpinOrbitals));
@@ -105,7 +105,7 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
     /// A tuple where: `Int` is the number of qubits allocated,
     /// `Double` is the one-norm of Hamiltonian coefficients, and the operation
     /// is the Quantum walk created by Qubitization.
-    function OptimizedQubitizationOracle (qSharpData : JordanWignerEncodingData, targetError : Double) : (Int, (Double, (Qubit[] => Unit : Adjoint, Controlled))) {
+    function OptimizedQubitizationOracle (qSharpData : JordanWignerEncodingData, targetError : Double) : (Int, (Double, (Qubit[] => Unit is Adj + Ctl))) {
         
         let ((nCtrlRegisterQubits, nTargetRegisterQubits), (oneNorm, oracle)) = (_OptimizedQubitizationOracleSeperatedRegisters_(qSharpData, targetError));
         let nQubits = nCtrlRegisterQubits + nTargetRegisterQubits;
