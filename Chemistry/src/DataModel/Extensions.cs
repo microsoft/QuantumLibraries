@@ -167,7 +167,7 @@ namespace Microsoft.Quantum.Chemistry
                             newCoefficients[idxCoeff] += coeffs[idxCoeff];
                         }
                         // Package the newly modified coefficients back up as a new Q# array.
-                        curr = new HTerm((currentIndexes, newCoefficients.ToQArray()));
+                        curr = new HTerm((currentIndexes, new QArray<double> (newCoefficients)));
                         output[nElements - 1] = curr;
                     }
                     else
