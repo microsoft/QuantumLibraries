@@ -56,7 +56,6 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
 
     // Subroutine of OptimizedBEXY.
     function _OptimizedBEXY_ (targetIndex : Int) : ((Qubit, Qubit, Qubit[]) => Unit is Adj + Ctl) {
-
         //Message($"OptimizedBEXY {targetIndex}");
         return _OptimizedBEXY__(targetIndex, _, _, _);
     }
@@ -119,7 +118,6 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
 
     // Subroutine of SelectZ.
     function _SelectZ_ (targetIndex : Int) : (Qubit[] => Unit is Adj + Ctl) {
-
         return _SelectZ__(targetIndex, _);
     }
 

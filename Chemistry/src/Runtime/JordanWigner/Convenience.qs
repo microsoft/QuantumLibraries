@@ -28,7 +28,6 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
     /// `Double` is `1.0/trotterStepSize`, and the operation
     /// is the Trotter step.
     function TrotterStepOracle (qSharpData : JordanWignerEncodingData, trotterStepSize : Double, trotterOrder : Int) : (Int, (Double, (Qubit[] => Unit is Adj + Ctl))) {
-
         let (nSpinOrbitals, data, statePrepData, energyShift) = qSharpData!;
         let generatorSystem = JordanWignerGeneratorSystem(data);
         let evolutionGenerator = EvolutionGenerator(JordanWignerFermionEvolutionSet(), generatorSystem);
@@ -106,7 +105,6 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
     /// `Double` is the one-norm of Hamiltonian coefficients, and the operation
     /// is the Quantum walk created by Qubitization.
     function OptimizedQubitizationOracle (qSharpData : JordanWignerEncodingData, targetError : Double) : (Int, (Double, (Qubit[] => Unit is Adj + Ctl))) {
-
         let ((nCtrlRegisterQubits, nTargetRegisterQubits), (oneNorm, oracle)) = (_OptimizedQubitizationOracleSeperatedRegisters_(qSharpData, targetError));
         let nQubits = nCtrlRegisterQubits + nTargetRegisterQubits;
         return (nQubits, (oneNorm, _MergeTwoRegisters_(oracle, nTargetRegisterQubits, _)));
