@@ -154,15 +154,21 @@ namespace Microsoft.Quantum.Chemistry
                 foreach (var next in term.Skip(1))
                 {
                     HTerm curr = output[nElements - 1];
+                    var (currentIndexes, currentCoefficients) = curr;
 
                     if (Enumerable.SequenceEqual(curr.Item1, next.Item1))
                     {
                         var (pqrsSorted, coeffs) = next;
-                        for (var idxCoeff = 0; idxCoeff < coeffs.Length; idxCoeff++)
+                        // Process the new coefficients as a .NET array, as
+                        // Q# arrays are immutable.
+                        var newCoefficients = currentCoefficients.ToArray();
+                        foreach (var idxCoeff in Enumerable.Range(0, (int)coeffs.Length))
                         {
-                            curr = new HTerm((curr.Item1, new QArray<double>(curr.Item2).SetItem(idxCoeff, curr.Item2[idxCoeff] + coeffs[idxCoeff])));
-                            output[nElements - 1] = curr;
+                            newCoefficients[idxCoeff] += coeffs[idxCoeff];
                         }
+                        // Package the newly modified coefficients back up as a new Q# array.
+                        curr = new HTerm((currentIndexes, new QArray<double> (newCoefficients)));
+                        output[nElements - 1] = curr;
                     }
                     else
                     {
