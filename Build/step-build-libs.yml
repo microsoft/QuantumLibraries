@@ -12,7 +12,12 @@ steps:
     projects: |
       $(LibrariesRootFolder)/Standard.sln
       $(LibrariesRootFolder)/Chemistry.sln
-    arguments: '-c $(BuildConfiguration) -v n /p:Version=$(Assembly.Version)'
+    arguments: >
+        -c $(BuildConfiguration)
+        -v n
+        /p:Version=$(Assembly.Version)
+        /p:QsharpDocsOutDir=$(DocsOutDir)
+
 
 
 ##
@@ -27,7 +32,11 @@ steps:
      $(LibrariesRootFolder)/Chemistry/tests/ChemistryTests/ChemistryTests.csproj
      $(LibrariesRootFolder)/Chemistry/tests/SystemTests/SystemTests.csproj
      $(LibrariesRootFolder)/Chemistry/tests/DataModelTests/DataModelTests.csproj
-    arguments: '-c $(BuildConfiguration) -v n /p:Version=$(Assembly.Version)'
+    arguments: >
+        -c $(BuildConfiguration)
+        -v n
+        /p:Version=$(Assembly.Version)
+        /p:QsharpDocsOutDir=$(DocsOutDir)
 
 ##
 # Create Nuget.
