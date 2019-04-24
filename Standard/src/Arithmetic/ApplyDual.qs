@@ -38,7 +38,7 @@ namespace Microsoft.Quantum.Arithmetic {
 
     /// # See Also
     /// - ApplyPhaseLEOperationOnLE
-    operation ApplyPhaseLEOperationOnLEA (op : (PhaseLittleEndian => Unit : Adjoint), target : LittleEndian) : Unit
+    operation ApplyPhaseLEOperationOnLEA (op : (PhaseLittleEndian => Unit is Adj), target : LittleEndian) : Unit
     {
         body (...)
         {
@@ -54,7 +54,7 @@ namespace Microsoft.Quantum.Arithmetic {
     
     /// # See Also
     /// - @"microsoft.quantum.canon.applyphaseleoperationonle"
-    operation ApplyPhaseLEOperationOnLEC (op : (PhaseLittleEndian => Unit : Controlled), target : LittleEndian) : Unit
+    operation ApplyPhaseLEOperationOnLEC (op : (PhaseLittleEndian => Unit is Ctl), target : LittleEndian) : Unit
     {
         body (...)
         {
@@ -76,7 +76,7 @@ namespace Microsoft.Quantum.Arithmetic {
     
     /// # See Also
     /// - @"microsoft.quantum.canon.applyphaseleoperationonle"
-    operation ApplyPhaseLEOperationOnLECA (op : (PhaseLittleEndian => Unit : Controlled, Adjoint), target : LittleEndian) : Unit
+    operation ApplyPhaseLEOperationOnLECA (op : (PhaseLittleEndian => Unit is Adj + Ctl), target : LittleEndian) : Unit
     {
         body (...)
         {
@@ -129,7 +129,7 @@ namespace Microsoft.Quantum.Arithmetic {
     
     /// # See Also
     /// - Microsoft.Quantum.Canon.ApplyLEOperationonPhaseLE
-    operation ApplyLEOperationOnPhaseLEA (op : (LittleEndian => Unit : Adjoint), target : PhaseLittleEndian) : Unit
+    operation ApplyLEOperationOnPhaseLEA (op : (LittleEndian => Unit is Adj), target : PhaseLittleEndian) : Unit
     {
         body (...)
         {
@@ -143,7 +143,7 @@ namespace Microsoft.Quantum.Arithmetic {
     
     /// # See Also
     /// - Microsoft.Quantum.Canon.ApplyLEOperationonPhaseLE
-    operation ApplyLEOperationOnPhaseLEC (op : (LittleEndian => Unit : Controlled), target : PhaseLittleEndian) : Unit
+    operation ApplyLEOperationOnPhaseLEC (op : (LittleEndian => Unit is Ctl), target : PhaseLittleEndian) : Unit
     {
         body (...)
         {
@@ -157,7 +157,7 @@ namespace Microsoft.Quantum.Arithmetic {
     
     /// # See Also
     /// - Microsoft.Quantum.Canon.ApplyLEOperationonPhaseLE
-    operation ApplyLEOperationOnPhaseLECA (op : (LittleEndian => Unit : Controlled, Adjoint), target : PhaseLittleEndian) : Unit
+    operation ApplyLEOperationOnPhaseLECA (op : (LittleEndian => Unit is Adj + Ctl), target : PhaseLittleEndian) : Unit
     {
         body (...)
         {

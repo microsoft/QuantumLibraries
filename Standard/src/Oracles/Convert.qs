@@ -169,7 +169,7 @@ namespace Microsoft.Quantum.Oracles {
     /// # Remarks
     /// ## Example
     /// `OracleToDiscrete(U)(3, target)` is equivalent to `U(target)` repeated three times.
-    function OracleToDiscrete (blackBoxOracle : (Qubit[] => Unit : Adjoint, Controlled)) : DiscreteOracle {
+    function OracleToDiscrete (blackBoxOracle : (Qubit[] => Unit is Adj + Ctl)) : DiscreteOracle {
         return DiscreteOracle(OperationPowImplCA(blackBoxOracle, _, _));
     }
 

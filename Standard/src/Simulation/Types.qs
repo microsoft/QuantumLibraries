@@ -23,7 +23,7 @@ namespace Microsoft.Quantum.Simulation {
     ///
     /// # Output
     /// Unitary evolution by generator for time `Double`.
-    newtype SimulationAlgorithm = ((Double, EvolutionGenerator, Qubit[]) => Unit : Adjoint, Controlled);
+    newtype SimulationAlgorithm = ((Double, EvolutionGenerator, Qubit[]) => Unit is Adj + Ctl);
     
     /// # Summary
 	/// Represents a time-dependent simulation algorithm.
@@ -42,7 +42,7 @@ namespace Microsoft.Quantum.Simulation {
     ///
     /// # Output
     /// Unitary evolution by time-dependent generator for time `Double`.
-    newtype TimeDependentSimulationAlgorithm = ((Double, EvolutionSchedule, Qubit[]) => Unit : Adjoint, Controlled);
+    newtype TimeDependentSimulationAlgorithm = ((Double, EvolutionSchedule, Qubit[]) => Unit is Adj + Ctl);
     
 }
 

@@ -60,67 +60,48 @@ namespace Microsoft.Quantum.Preparation {
     /// *quantum process tomography*.
     ///
     /// # See Also
-    /// - @"microsoft.quantum.canon.preparechoistatec"
-    /// - @"microsoft.quantum.canon.preparechoistatea"
-    /// - @"microsoft.quantum.canon.preparechoistateca"
-    operation PrepareChoiState (op : (Qubit[] => Unit), reference : Qubit[], target : Qubit[]) : Unit
-    {
+    /// - PrepareChoiStateA
+    /// - PrepareChoiStateC
+    /// - PrepareChoiStateCA
+    operation PrepareChoiState (op : (Qubit[] => Unit), reference : Qubit[], target : Qubit[]) : Unit {
         PrepareEntangledState(reference, target);
         op(target);
     }
-    
-    
+
+
     /// # Summary
     /// Prepares the Choi–Jamiłkowski state for a given operation with a controlled variant onto given reference
     /// and target registers.
+    ///
     /// # See Also
-    /// - @"microsoft.quantum.canon.preparechoistate"
-    operation PrepareChoiStateC (op : (Qubit[] => Unit : Controlled), reference : Qubit[], target : Qubit[]) : Unit
-    {
-        body (...)
-        {
-            PrepareEntangledState(reference, target);
-            op(target);
-        }
-        
-        controlled distribute;
+    /// - PrepareChoiState
+    operation PrepareChoiStateC(op : (Qubit[] => Unit is Ctl), reference : Qubit[], target : Qubit[]) : Unit is Ctl {
+        PrepareEntangledState(reference, target);
+        op(target);
     }
-    
-    
+
+
     /// # Summary
     /// Prepares the Choi–Jamiłkowski state for a given operation with an adjoint variant onto given reference
     /// and target registers.
+    ///
     /// # See Also
-    /// - @"microsoft.quantum.canon.preparechoistate"
-    operation PrepareChoiStateA (op : (Qubit[] => Unit : Adjoint), reference : Qubit[], target : Qubit[]) : Unit
-    {
-        body (...)
-        {
-            PrepareEntangledState(reference, target);
-            op(target);
-        }
-        
-        adjoint invert;
+    /// - PrepareChoiState
+    operation PrepareChoiStateA (op : (Qubit[] => Unit is Adj), reference : Qubit[], target : Qubit[]) : Unit is Adj {
+        PrepareEntangledState(reference, target);
+        op(target);
     }
-    
-    
+
+
     /// # Summary
     /// Prepares the Choi–Jamiłkowski state for a given operation with both controlled and adjoint variants onto given reference
     /// and target registers.
     ///
     /// # See Also
-    /// - @"microsoft.quantum.canon.preparechoistate"
-    operation PrepareChoiStateCA (op : (Qubit[] => Unit : Controlled, Adjoint), reference : Qubit[], target : Qubit[]) : Unit
-    {
-        body (...)
-        {
-            PrepareEntangledState(reference, target);
-            op(target);
-        }
-
-        adjoint invert;
-        controlled distribute;
-        controlled adjoint distribute;
+    /// - PrepareChoiState
+    operation PrepareChoiStateCA(op : (Qubit[] => Unit is Adj + Ctl), reference : Qubit[], target : Qubit[]) : Unit is Adj + Ctl {
+        PrepareEntangledState(reference, target);
+        op(target);
     }
 
 }

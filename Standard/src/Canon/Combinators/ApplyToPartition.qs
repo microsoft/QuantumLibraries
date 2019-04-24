@@ -45,7 +45,7 @@ namespace Microsoft.Quantum.Canon {
     ///
     /// # See Also
     /// - @"microsoft.quantum.canon.applytopartition"
-    operation ApplyToPartitionA (op : ((Qubit[], Qubit[]) => Unit : Adjoint), numberOfQubitsToFirstArgument : Int, target : Qubit[]) : Unit
+    operation ApplyToPartitionA (op : ((Qubit[], Qubit[]) => Unit is Adj), numberOfQubitsToFirstArgument : Int, target : Qubit[]) : Unit
     {
         body (...)
         {
@@ -74,7 +74,7 @@ namespace Microsoft.Quantum.Canon {
     ///
     /// # See Also
     /// - @"microsoft.quantum.canon.applytopartition"
-    operation ApplyToPartitionC (op : ((Qubit[], Qubit[]) => Unit : Controlled), numberOfQubitsToFirstArgument : Int, target : Qubit[]) : Unit
+    operation ApplyToPartitionC (op : ((Qubit[], Qubit[]) => Unit is Ctl), numberOfQubitsToFirstArgument : Int, target : Qubit[]) : Unit
     {
         body (...)
         {
@@ -103,7 +103,7 @@ namespace Microsoft.Quantum.Canon {
     ///
     /// # See Also
     /// - @"microsoft.quantum.canon.applytopartition"
-    operation ApplyToPartitionCA (op : ((Qubit[], Qubit[]) => Unit : Controlled, Adjoint), numberOfQubitsToFirstArgument : Int, target : Qubit[]) : Unit
+    operation ApplyToPartitionCA (op : ((Qubit[], Qubit[]) => Unit is Ctl + Adj), numberOfQubitsToFirstArgument : Int, target : Qubit[]) : Unit
     {
         body (...)
         {

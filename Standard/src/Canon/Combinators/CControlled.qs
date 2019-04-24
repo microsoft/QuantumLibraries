@@ -52,7 +52,7 @@ namespace Microsoft.Quantum.Canon
     ///
     /// # See Also
     /// - Microsoft.Quantum.Canon.ApplyIf
-    operation ApplyIfC<'T> (op : ('T => Unit : Controlled), bit : Bool, target : 'T) : Unit
+    operation ApplyIfC<'T> (op : ('T => Unit is Ctl), bit : Bool, target : 'T) : Unit
     {
         body (...)
         {
@@ -85,7 +85,7 @@ namespace Microsoft.Quantum.Canon
     ///
     /// # See Also
     /// - Microsoft.Quantum.Canon.ApplyIf
-    operation ApplyIfA<'T> (op : ('T => Unit : Adjoint), bit : Bool, target : 'T) : Unit
+    operation ApplyIfA<'T> (op : ('T => Unit is Adj), bit : Bool, target : 'T) : Unit
     {
         body (...)
         {
@@ -118,7 +118,7 @@ namespace Microsoft.Quantum.Canon
     ///
     /// # See Also
     /// - Microsoft.Quantum.Canon.ApplyIf
-    operation ApplyIfCA<'T> (op : ('T => Unit : Controlled, Adjoint), bit : Bool, target : 'T) : Unit
+    operation ApplyIfCA<'T> (op : ('T => Unit is Ctl + Adj), bit : Bool, target : 'T) : Unit
     {
         body (...)
         {
@@ -177,7 +177,7 @@ namespace Microsoft.Quantum.Canon
     ///
     /// # See Also
     /// - Microsoft.Quantum.Canon.CControlled
-    function CControlledC<'T> (op : ('T => Unit : Controlled)) : ((Bool, 'T) => Unit : Controlled)
+    function CControlledC<'T> (op : ('T => Unit is Ctl)) : ((Bool, 'T) => Unit is Ctl)
     {
         return ApplyIfC(op, _, _);
     }
@@ -201,7 +201,7 @@ namespace Microsoft.Quantum.Canon
     ///
     /// # See Also
     /// - Microsoft.Quantum.Canon.CControlled
-    function CControlledA<'T> (op : ('T => Unit : Adjoint)) : ((Bool, 'T) => Unit : Adjoint)
+    function CControlledA<'T> (op : ('T => Unit is Adj)) : ((Bool, 'T) => Unit is Adj)
     {
         return ApplyIfA(op, _, _);
     }
@@ -225,7 +225,7 @@ namespace Microsoft.Quantum.Canon
     ///
     /// # See Also
     /// - Microsoft.Quantum.Canon.CControlled
-    function CControlledCA<'T> (op : ('T => Unit : Controlled, Adjoint)) : ((Bool, 'T) => Unit : Controlled, Adjoint)
+    function CControlledCA<'T> (op : ('T => Unit is Ctl + Adj)) : ((Bool, 'T) => Unit is Ctl + Adj)
     {
         return ApplyIfCA(op, _, _);
     }

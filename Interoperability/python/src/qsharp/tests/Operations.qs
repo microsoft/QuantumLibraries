@@ -3,24 +3,22 @@
 /// in the same directory as the python clasical driver.
 ///
 
-namespace Microsoft.Quantum.SanityTests
-{
-    open Microsoft.Quantum.Primitive;
+namespace Microsoft.Quantum.SanityTests {
+    open Microsoft.Quantum.Intrinsic;
     open Microsoft.Quantum.Canon;
 
-    /// # Summary: 
-    ///     The simplest program. Just generate a debug Message on the console.
+    /// # Summary
+    /// The simplest program. Just generate a debug Message on the console.
     operation HelloQ() : Unit
     {
         Message($"Hello from quantum world!"); 
     }
 
-    /// # Summary: 
-    ///     A more sophisticated program that shows how to 
-    ///     specify parameters, instantiate qubits, and return values.
-    operation HelloAgain(count: Int, name: String) : Result[]
-    {
-        Message($"Hello {name} again!"); 
+    /// # Summary
+    /// A more sophisticated program that shows how to 
+    /// specify parameters, instantiate qubits, and return values.
+    operation HelloAgain(count: Int, name: String) : Result[] {
+        Message($"Hello {name} again!");
 
         mutable r = new Result[count];
         using (q = Qubit()) {
@@ -34,10 +32,9 @@ namespace Microsoft.Quantum.SanityTests
         return r;
     }
 
-    /// # Summary: 
-    ///     Checks that built-in complex types (can be used as arguments.
-    operation HelloTuple(count: Int, tuples: (Result, String)[]) : (Result, String)
-    {
+    /// # Summary
+    /// Checks that built-in complex types can be used as arguments.
+    operation HelloTuple(count: Int, tuples: (Result, String)[]) : (Result, String) {
         return tuples[count];
     }
 }

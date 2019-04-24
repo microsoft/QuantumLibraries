@@ -147,7 +147,7 @@ namespace Microsoft.Quantum.Canon {
     /// - @"microsoft.quantum.canon.qft"
     operation QFTLE(qs : LittleEndian) : Unit {
         body (...) {
-            ApplyQuantumFourierTransformLE(qs);
+            ApplyQuantumFourierTransform(qs);
         }
 
         adjoint invert;
@@ -204,7 +204,7 @@ namespace Microsoft.Quantum.Canon {
     /// # Summary
 	/// Applies the Y-basis analog to the Hadamard transformation
 	/// that interchanges the Z and Y axes.
-	/// 
+	///
     /// The Y Hadamard transformation $H_Y = S H$ on a single qubit is:
     ///
     /// \begin{align}
@@ -228,7 +228,7 @@ namespace Microsoft.Quantum.Canon {
             H(target);
             S(target);
         }
-        
+
         adjoint invert;
         controlled distribute;
         controlled adjoint distribute;

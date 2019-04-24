@@ -49,7 +49,7 @@ namespace Microsoft.Quantum.Preparation {
     ///     op(qubitsLE);
     /// }
     /// ```
-    function StatePreparationPositiveCoefficients (coefficients : Double[]) : (LittleEndian => Unit : Adjoint, Controlled) {
+    function StatePreparationPositiveCoefficients (coefficients : Double[]) : (LittleEndian => Unit is Adj + Ctl) {
         let nCoefficients = Length(coefficients);
         mutable coefficientsComplexPolar = new ComplexPolar[nCoefficients];
 
@@ -105,7 +105,7 @@ namespace Microsoft.Quantum.Preparation {
     ///     op(qubitsLE);
     /// }
     /// ```
-    function StatePreparationComplexCoefficients (coefficients : ComplexPolar[]) : (LittleEndian => Unit : Adjoint, Controlled) {
+    function StatePreparationComplexCoefficients (coefficients : ComplexPolar[]) : (LittleEndian => Unit is Adj + Ctl) {
         return PrepareArbitraryState(coefficients, _);
     }
     
@@ -144,33 +144,28 @@ namespace Microsoft.Quantum.Preparation {
     /// - Synthesis of Quantum Logic Circuits
     ///   Vivek V. Shende, Stephen S. Bullock, Igor L. Markov
     ///   https://arxiv.org/abs/quant-ph/0406176
-    operation PrepareArbitraryState (coefficients : ComplexPolar[], qubits : LittleEndian) : Unit {
-        body (...) {
-            // pad coefficients at tail length to a power of 2.
-            let coefficientsPadded = Padded(-2 ^ Length(qubits!), ComplexPolar(0.0, 0.0), coefficients);
-            let target = (qubits!)[0];
-            let op = (Adjoint PrepareArbitraryState_(coefficientsPadded, _, _))(_, target);
+    operation PrepareArbitraryState (coefficients : ComplexPolar[], qubits : LittleEndian) : Unit is Adj + Ctl {
+        // pad coefficients at tail length to a power of 2.
+        let coefficientsPadded = Padded(-2 ^ Length(qubits!), ComplexPolar(0.0, 0.0), coefficients);
+        let target = (qubits!)[0];
+        let op = (Adjoint _PrepareArbitraryState(coefficientsPadded, _, _))(_, target);
 
-            op(
-                // Determine what controls to apply to `op`.
-                Length(qubits!) > 1
-                ? LittleEndian((qubits!)[1 .. Length(qubits!) - 1])
-                | LittleEndian(new Qubit[0])
-            );
-        }
-
-        adjoint invert;
-        controlled distribute;
-        controlled adjoint distribute;
+        op(
+            // Determine what controls to apply to `op`.
+            Length(qubits!) > 1
+            ? LittleEndian((qubits!)[1 .. Length(qubits!) - 1])
+            | LittleEndian(new Qubit[0])
+        );
     }
+
 
     /// # Summary
     /// Implementation step of arbitrary state preparation procedure.
     ///
     /// # See Also
-    /// - Microsoft.Quantum.Canon.PrepareArbitraryState
+    /// - PrepareArbitraryState
     /// - Microsoft.Quantum.Canon.MultiplexPauli
-    operation PrepareArbitraryState_ (coefficients : ComplexPolar[], control : LittleEndian, target : Qubit) : Unit is Adj + Ctl
+    operation _PrepareArbitraryState(coefficients : ComplexPolar[], control : LittleEndian, target : Qubit) : Unit is Adj + Ctl
     {
         // For each 2D block, compute disentangling single-qubit rotation parameters
         let (disentanglingY, disentanglingZ, newCoefficients) = _StatePreparationSBMComputeCoefficients(coefficients);
@@ -189,7 +184,7 @@ namespace Microsoft.Quantum.Preparation {
         {
             let newControl = LittleEndian((control!)[1 .. Length(control!) - 1]);
             let newTarget = (control!)[0];
-            PrepareArbitraryState_(newCoefficients, newControl, newTarget);
+            _PrepareArbitraryState(newCoefficients, newControl, newTarget);
         }
     }
     

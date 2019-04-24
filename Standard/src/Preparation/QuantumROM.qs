@@ -61,13 +61,13 @@ namespace Microsoft.Quantum.Preparation {
     /// - Encoding Electronic Spectra in Quantum Circuits with Linear T Complexity
     ///   Ryan Babbush, Craig Gidney, Dominic W. Berry, Nathan Wiebe, Jarrod McClean, Alexandru Paler, Austin Fowler, Hartmut Neven
     ///   https://arxiv.org/abs/1805.03662
-    function QuantumROM(targetError: Double, coefficients: Double[]) : ((Int, (Int, Int)), Double, ((LittleEndian, Qubit[]) => Unit : Adjoint, Controlled)) {
-        let nBitsPrecision = -Ceiling(Lg(0.5*targetError))+1;
+    function QuantumROM(targetError: Double, coefficients: Double[]) : ((Int, (Int, Int)), Double, ((LittleEndian, Qubit[]) => Unit is Adj + Ctl)) {
+        let nBitsPrecision = -Ceiling(Lg(0.5 * targetError)) + 1;
         let (oneNorm, keepCoeff, altIndex) = _QuantumROMDiscretization(nBitsPrecision, coefficients);
         let nCoeffs = Length(coefficients);
         let nBitsIndices = Ceiling(Lg(IntAsDouble(nCoeffs)));
 
-        let op =  QuantumROMImpl_(nBitsPrecision, nCoeffs, nBitsIndices, keepCoeff, altIndex, _, _);
+        let op =  _QuantumROMImpl(nBitsPrecision, nCoeffs, nBitsIndices, keepCoeff, altIndex, _, _);
         let qubitCounts = QuantumROMQubitCount(targetError, nCoeffs);
         return (qubitCounts, oneNorm, op);
     }
@@ -98,7 +98,7 @@ namespace Microsoft.Quantum.Preparation {
 
     // Implementation step of `QuantumROM`. This splits a single
     // qubit array into the subarrays required by the operation.
-    function QuantumROMQubitManager_(targetError: Double, nCoeffs: Int, qubits: Qubit[]) : ((LittleEndian, Qubit[]), Qubit[]) {
+    function _QuantumROMQubitManager(targetError: Double, nCoeffs: Int, qubits: Qubit[]) : ((LittleEndian, Qubit[]), Qubit[]) {
         let (nTotal, (nIndexRegister, nGarbageQubits)) = QuantumROMQubitCount(targetError, nCoeffs);
         let registers = Partitioned([nIndexRegister, nGarbageQubits], qubits);
         return((LittleEndian(registers[0]), registers[1]), registers[2]);
@@ -110,25 +110,25 @@ namespace Microsoft.Quantum.Preparation {
     function _QuantumROMDiscretization(bitsPrecision: Int, coefficients: Double[]) : (Double, Int[], Int[]) {
         let oneNorm = PNorm(1.0, coefficients);
         let nCoefficients = Length(coefficients);
-        if(bitsPrecision > 31){
+        if (bitsPrecision > 31) {
             fail $"Bits of precision {bitsPrecision} unsupported. Max is 31.";
         }
-        if(nCoefficients <= 1){
+        if (nCoefficients <= 1) {
             fail $"Cannot prepare state with less than 2 coefficients.";
         }
-        if(oneNorm == 0.0){
+        if (oneNorm == 0.0) {
             fail $"State must have at least one coefficient > 0";
         }
 
         let barHeight = 2^bitsPrecision - 1;
 
         mutable altIndex = RangeAsIntArray(0..nCoefficients-1);
-        mutable keepCoeff = Mapped(QuantumROMDiscretizationRoundCoefficients_(_, oneNorm, nCoefficients, barHeight), coefficients);
+        mutable keepCoeff = Mapped(_QuantumROMDiscretizationRoundCoefficients(_, oneNorm, nCoefficients, barHeight), coefficients);
 
         // Calculate difference between number of discretized bars vs. maximum
         mutable bars = 0;
-        for(idxCoeff in 0..nCoefficients-1){
-            set bars = bars + keepCoeff[idxCoeff] - barHeight;
+        for (idxCoeff in IndexRange(keepCoeff)) {
+            set bars += keepCoeff[idxCoeff] - barHeight;
         }
         //Message($"Excess bars {bars}.");
         // Uniformly distribute excess bars across coefficients.
@@ -145,12 +145,11 @@ namespace Microsoft.Quantum.Preparation {
         mutable nBarSink = 0;
         mutable nBarSource = 0;
 
-        for(idxCoeff in 0..nCoefficients-1) {
-            if(keepCoeff[idxCoeff] > barHeight){
+        for (idxCoeff in IndexRange(keepCoeff)) {
+            if (keepCoeff[idxCoeff] > barHeight) {
                 set barSource w/= nBarSource <- idxCoeff;
                 set nBarSource = nBarSource + 1;
-            }
-            elif(keepCoeff[idxCoeff] < barHeight){
+            } elif (keepCoeff[idxCoeff] < barHeight) {
                 set barSink w/= nBarSink <- idxCoeff;
                 set nBarSink = nBarSink + 1;
             }
@@ -191,14 +190,14 @@ namespace Microsoft.Quantum.Preparation {
     }
         
     // Used in QuantumROM implementation.
-    function QuantumROMDiscretizationRoundCoefficients_(coefficient: Double, oneNorm: Double, nCoefficients: Int, barHeight: Int) : Int {
+    function _QuantumROMDiscretizationRoundCoefficients(coefficient: Double, oneNorm: Double, nCoefficients: Int, barHeight: Int) : Int {
         return Round((AbsD(coefficient) / oneNorm) * IntAsDouble(nCoefficients) * IntAsDouble(barHeight));
     }
 
     // Used in QuantumROM implementation.
-    operation QuantumROMImpl_(nBitsPrecision: Int, nCoeffs: Int, nBitsIndices: Int, keepCoeff: Int[], altIndex: Int[], indexRegister: LittleEndian, garbageRegister: Qubit[]) : Unit {
+    operation _QuantumROMImpl(nBitsPrecision: Int, nCoeffs: Int, nBitsIndices: Int, keepCoeff: Int[], altIndex: Int[], indexRegister: LittleEndian, garbageRegister: Qubit[]) : Unit {
         body (...) {
-            let unitaryGenerator = (nCoeffs, QuantumROMWriteBitStringUnitary_(_, keepCoeff, altIndex));
+            let unitaryGenerator = (nCoeffs, _QuantumROMWriteBitStringUnitary(_, keepCoeff, altIndex));
             let garbageIdx0 = nBitsIndices;
             let garbageIdx1 = garbageIdx0 + nBitsPrecision;
             let garbageIdx2 = garbageIdx1 + nBitsPrecision;
@@ -220,7 +219,7 @@ namespace Microsoft.Quantum.Preparation {
             CompareUsingRippleCarry(uniformKeepCoeffRegister, keepCoeffRegister, flagQubit);
 
             let indexRegisterSize = Length(indexRegister!);
-            
+
             // Swap in register based on comparison
             for(idx in 0..nBitsIndices-1){
                 (Controlled SWAP)([flagQubit], (indexRegister![nBitsIndices - idx - 1], altIndexRegister![idx]));
@@ -232,12 +231,12 @@ namespace Microsoft.Quantum.Preparation {
     }
 
     // Used in QuantumROM implementation.
-    function QuantumROMWriteBitStringUnitary_(idx: Int, keepCoeff: Int[], altIndex: Int[]) : ((LittleEndian, LittleEndian) => Unit : Adjoint, Controlled) {
-        return QuantumROMWriteBitString_(idx, keepCoeff, altIndex, _, _);
+    function _QuantumROMWriteBitStringUnitary(idx: Int, keepCoeff: Int[], altIndex: Int[]) : ((LittleEndian, LittleEndian) => Unit is Adj + Ctl) {
+        return _QuantumROMWriteBitString(idx, keepCoeff, altIndex, _, _);
     }
 
     // Used in QuantumROM implementation.
-    operation QuantumROMWriteBitString_(idx: Int, keepCoeff: Int[], altIndex: Int[], keepCoeffRegister: LittleEndian, altIndexRegister: LittleEndian) : Unit {
+    operation _QuantumROMWriteBitString(idx: Int, keepCoeff: Int[], altIndex: Int[], keepCoeffRegister: LittleEndian, altIndexRegister: LittleEndian) : Unit {
         body (...) {
             ApplyXorInPlace(keepCoeff[idx], keepCoeffRegister);
             ApplyXorInPlace(altIndex[idx], altIndexRegister);

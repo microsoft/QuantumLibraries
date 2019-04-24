@@ -8,8 +8,8 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
     open Microsoft.Quantum.Chemistry;
     open Microsoft.Quantum.Arrays;
     open Microsoft.Quantum.Math;
-    
-    
+
+
     /// # Summary
     /// A unitary $U$ that applies the Pauli string on $(X^{z+1}\_pY^{z}\_p)Z\_{p-1}...Z_0$ on qubits $0..p$ conditioned
     /// on an index $z\in\{0,1\}$ and $p$. That is,
@@ -32,13 +32,13 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
     ///   Ryan Babbush, Craig Gidney, Dominic W. Berry, Nathan Wiebe, Jarrod McClean, Alexandru Paler, Austin Fowler, Hartmut Neven
     ///   https://arxiv.org/abs/1805.03662
     operation OptimizedBEXY (pauliBasis : Qubit, indexRegister : LittleEndian, targetRegister : Qubit[]) : Unit {
-        
+
         body (...) {
             let op = _OptimizedBEXY_(_);
             let unitaryGenerator = (Length(targetRegister), op);
-            
+
             using (accumulator = Qubit[1]) {
-                
+
                 // This assumes that MultiplexOperationsFromGenerator applies unitaries indexed in unitaryGenerator in ascending order.
                 X(accumulator[0]);
                 MultiplexOperationsFromGenerator(unitaryGenerator, indexRegister, (pauliBasis, accumulator[0], targetRegister));
@@ -47,45 +47,41 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
                 // releasing the accumulator qubit will throw an error as it will be in the One state.
             }
         }
-        
+
         adjoint invert;
         controlled distribute;
         controlled adjoint distribute;
     }
-    
-    
+
+
     // Subroutine of OptimizedBEXY.
-    function _OptimizedBEXY_ (targetIndex : Int) : ((Qubit, Qubit, Qubit[]) => Unit : Adjoint, Controlled) {
-        
+    function _OptimizedBEXY_ (targetIndex : Int) : ((Qubit, Qubit, Qubit[]) => Unit is Adj + Ctl) {
         //Message($"OptimizedBEXY {targetIndex}");
         return _OptimizedBEXY__(targetIndex, _, _, _);
     }
-    
-    
+
+
     // Subroutine of OptimizedBEXY.
-    operation _OptimizedBEXY__ (targetIndex : Int, pauliBasis : Qubit, accumulator : Qubit, targetRegister : Qubit[]) : Unit {
-        
+    operation _OptimizedBEXY__ (targetIndex : Int, pauliBasis : Qubit, accumulator : Qubit, targetRegister : Qubit[]) : Unit is Adj {
+
         body (...) {
             // This should always be called as a controlled operation.
             fail "_OptimizedBEXY__ should always be called as a controlled operation.";
         }
-        
-        adjoint invert;
-        
+
         controlled (ctrl, ...) {
             if (Length(targetRegister) <= targetIndex) {
                 fail "targetIndex out of range.";
             }
-            
+
             Controlled X(ctrl, accumulator);
             ApplyWithCA(Controlled (Adjoint S)([pauliBasis], _), Controlled X(ctrl, _), targetRegister[targetIndex]);
             Controlled Z([accumulator], targetRegister[targetIndex]);
         }
-        
-        controlled adjoint invert;
+
     }
-    
-    
+
+
     /// # Summary
     /// A unitary $U$ that applies the Pauli $Z$ gate on a qubits $p$ conditioned
     /// on an index state $\ket{p}$. That is,
@@ -100,69 +96,55 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
     /// The state $\ket{p}$ of this register determines the qubit on which $Z$ is applied.
     /// ## targetRegister
     /// Register of qubits on which the Pauli operators are applied.
-    operation SelectZ (indexRegister : LittleEndian, targetRegister : Qubit[]) : Unit {
-        
-        body (...) {
-            let op = _SelectZ_(_);
-            let unitaryGenerator = (Length(targetRegister), op);
-            MultiplexOperationsFromGenerator(unitaryGenerator, indexRegister, targetRegister);
-            // If indexRegister encodes an integer that is larger than Length(targetRegister),
-            // _SelectZ_ will fail due to an out of range error. In this situation,
-            // releasing the accumulator qubit will throw an error as it will be in the One state.
-        }
-        
-        adjoint invert;
-        controlled distribute;
-        controlled adjoint distribute;
+    operation SelectZ (indexRegister : LittleEndian, targetRegister : Qubit[]) : Unit is Adj + Ctl {
+
+        let op = _SelectZ_(_);
+        let unitaryGenerator = (Length(targetRegister), op);
+        MultiplexOperationsFromGenerator(unitaryGenerator, indexRegister, targetRegister);
+        // If indexRegister encodes an integer that is larger than Length(targetRegister),
+        // _SelectZ_ will fail due to an out of range error. In this situation,
+        // releasing the accumulator qubit will throw an error as it will be in the One state.
     }
-    
-    
+
+
     // Subroutine of SelectZ.
-    function _SelectZ_ (targetIndex : Int) : (Qubit[] => Unit : Adjoint, Controlled) {
-        
+    function _SelectZ_ (targetIndex : Int) : (Qubit[] => Unit is Adj + Ctl) {
         return _SelectZ__(targetIndex, _);
     }
-    
-    
+
+
     // Subroutine of SelectZ
-    operation _SelectZ__ (targetIndex : Int, targetRegister : Qubit[]) : Unit {
-        
-        body (...) {
-            if (Length(targetRegister) <= targetIndex) {
-                fail "targetIndex out of range.";
-            }
-            
-            Z(targetRegister[targetIndex]);
+    operation _SelectZ__ (targetIndex : Int, targetRegister : Qubit[]) : Unit is Adj + Ctl {
+        if (Length(targetRegister) <= targetIndex) {
+            fail "targetIndex out of range.";
         }
-        
-        adjoint invert;
-        controlled distribute;
-        controlled adjoint distribute;
+
+        Z(targetRegister[targetIndex]);
     }
-    
-    
+
+
     operation _JordanWignerSelect_ (signQubit : Qubit, selectZControlRegisters : Qubit[], OptimizedBEControlRegisters : Qubit[], pauliBases : Qubit[], indexRegisters : LittleEndian[], targetRegister : Qubit[]) : Unit {
-        
+
         body (...) {
             Z(signQubit);
-            
+
             for (idxRegister in IndexRange(OptimizedBEControlRegisters)) {
                 Controlled OptimizedBEXY([OptimizedBEControlRegisters[idxRegister]], (pauliBases[idxRegister], indexRegisters[idxRegister], targetRegister));
             }
-            
+
             for (idxRegister in IndexRange(selectZControlRegisters)) {
                 Controlled SelectZ([selectZControlRegisters[idxRegister]], (indexRegisters[idxRegister], targetRegister));
             }
         }
-        
+
         adjoint invert;
         controlled distribute;
         controlled adjoint distribute;
     }
-    
-    
+
+
     function _JordanWignerSelectQubitCount_ (nZ : Int, nMaj : Int, nIdxRegQubits : Int) : (Int, (Int, Int, Int, Int, Int[])) {
-        
+
         let signQubit = 1;
         let selectZControlRegisters = nZ;
         let OptimizedBEControlRegisters = nMaj;
@@ -171,10 +153,10 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
         let nTotal = ((1 + nZ) + 2 * nMaj) + Max([nZ, nMaj]) * nIdxRegQubits;
         return (nTotal, (signQubit, selectZControlRegisters, OptimizedBEControlRegisters, pauliBases, indexRegisters));
     }
-    
-    
+
+
     function _JordanWignerSelectQubitManager_ (nZ : Int, nMaj : Int, nIdxRegQubits : Int, ctrlRegister : Qubit[], targetRegister : Qubit[]) : ((Qubit, Qubit[], Qubit[], Qubit[], LittleEndian[], Qubit[]), Qubit[]) {
-        
+
         let (nTotal, (a, b, c, d, e)) = _JordanWignerSelectQubitCount_(nZ, nMaj, nIdxRegQubits);
         let split = [a, b, c, d] + e;
         let registers = Partitioned(split, ctrlRegister);
@@ -185,27 +167,27 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
         let indexRegistersTmp = registers[4 .. (4 + Length(e)) - 1];
         let rest = registers[Length(registers) - 1];
         mutable indexRegisters = new LittleEndian[Length(e)];
-        
+
         for (idx in IndexRange(e)) {
             set indexRegisters w/= idx <- LittleEndian(indexRegistersTmp[idx]);
         }
-        
+
         return ((signQubit[0], selectZControlRegisters, OptimizedBEControlRegisters, pauliBases, indexRegisters, targetRegister), rest);
     }
-    
-    
+
+
     operation _JordanWignerSelect__ (nZ : Int, nMaj : Int, nIdxRegQubits : Int, ctrlRegister : Qubit[], targetRegister : Qubit[]) : Unit {
-        
+
         body (...) {
             let (registers, rest) = _JordanWignerSelectQubitManager_(nZ, nMaj, nIdxRegQubits, ctrlRegister, targetRegister);
             _JordanWignerSelect_(registers);
         }
-        
+
         adjoint invert;
         controlled distribute;
         controlled adjoint distribute;
     }
-    
+
 }
 
 

@@ -50,13 +50,13 @@ namespace Microsoft.Quantum.Simulation {
     /// # Remarks
     /// For more on the Trotter–Suzuki decomposition, see
     /// [Time-Ordered Composition](/quantum/libraries/control-flow#time-ordered-composition).
-    function TrotterStep (evolutionGenerator : EvolutionGenerator, trotterOrder : Int, trotterStepSize : Double) : (Qubit[] => Unit : Adjoint, Controlled)
+    function TrotterStep (evolutionGenerator : EvolutionGenerator, trotterOrder : Int, trotterStepSize : Double) : (Qubit[] => Unit is Adj + Ctl)
     {
         let (evolutionSet, generatorSystem) = evolutionGenerator!;
         let (nTerms, generatorSystemFunction) = generatorSystem!;
         
         // The input to DecomposeIntoTimeStepsCA has signature
-        // (Int, ((Int, Double, Qubit[]) => () : Adjoint, Controlled))
+        // (Int, ((Int, Double, Qubit[]) => () is Adj + Ctl))
         let trotterForm = (nTerms, TrotterStepImpl(evolutionGenerator, _, _, _));
         return (DecomposeIntoTimeStepsCA(trotterForm, trotterOrder))(trotterStepSize, _);
     }

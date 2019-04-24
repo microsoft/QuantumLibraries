@@ -245,7 +245,7 @@ namespace Microsoft.Quantum.Canon {
     /// - Toward the first quantum simulation with quantum speedup
     ///   Andrew M. Childs, Dmitri Maslov, Yunseong Nam, Neil J. Ross, Yuan Su
     ///   https://arxiv.org/abs/1711.10980
-    operation MultiplexOperations<'T> (unitaries : ('T => Unit : Adjoint, Controlled)[], index : LittleEndian, target : 'T) : Unit
+    operation MultiplexOperations<'T> (unitaries : ('T => Unit is Adj + Ctl)[], index : LittleEndian, target : 'T) : Unit
     {
         body (...)
         {
@@ -257,7 +257,7 @@ namespace Microsoft.Quantum.Canon {
             if (Length(unitaries) > 0)
             {
                 let ancilla = new Qubit[0];
-                MultiplexOperations_(unitaries, ancilla, index, target);
+                _MultiplexOperations(unitaries, ancilla, index, target);
             }
         }
         
@@ -271,7 +271,7 @@ namespace Microsoft.Quantum.Canon {
     /// Implementation step of MultiplexOperations.
     /// # See Also
     /// - Microsoft.Quantum.Canon.MultiplexOperations
-    operation MultiplexOperations_<'T> (unitaries : ('T => Unit : Adjoint, Controlled)[], ancilla : Qubit[], index : LittleEndian, target : 'T) : Unit
+    operation _MultiplexOperations<'T>(unitaries : ('T => Unit is Adj + Ctl)[], ancilla : Qubit[], index : LittleEndian, target : 'T) : Unit
     {
         body (...)
         {
@@ -298,11 +298,11 @@ namespace Microsoft.Quantum.Canon {
                     
                     if (nUnitariesLeft > 0)
                     {
-                        MultiplexOperations_(leftUnitaries, newAncilla, newControls, target);
+                        _MultiplexOperations(leftUnitaries, newAncilla, newControls, target);
                     }
                     
                     X(newAncilla[0]);
-                    MultiplexOperations_(rightUnitaries, newAncilla, newControls, target);
+                    _MultiplexOperations(rightUnitaries, newAncilla, newControls, target);
                     X(newAncilla[0]);
                 }
                 else
@@ -314,11 +314,11 @@ namespace Microsoft.Quantum.Canon {
                         
                         if (nUnitariesLeft > 0)
                         {
-                            MultiplexOperations_(leftUnitaries, newAncilla, newControls, target);
+                            _MultiplexOperations(leftUnitaries, newAncilla, newControls, target);
                         }
                         
                         Controlled X(ancilla, newAncilla[0]);
-                        MultiplexOperations_(rightUnitaries, newAncilla, newControls, target);
+                        _MultiplexOperations(rightUnitaries, newAncilla, newControls, target);
                         Controlled X(ancilla, newAncilla[0]);
                         Controlled X(ancilla + [(index!)[Length(index!) - 1]], newAncilla[0]);
                     }
@@ -330,7 +330,7 @@ namespace Microsoft.Quantum.Canon {
         
         controlled (controlRegister, ...)
         {
-            MultiplexOperations_(unitaries, controlRegister, index, target);
+            _MultiplexOperations(unitaries, controlRegister, index, target);
         }
         
         controlled adjoint invert;

@@ -23,24 +23,18 @@ namespace Microsoft.Quantum.Characterization {
     /// to control the provided oracle, and that will contain the a representation of $\phi$ following
     /// the application of this operation. The controlRegister is assumed to start in the initial
     /// state $\ket{00\cdots 0}$, where the length of the register indicates the desired precision.
-    operation QuantumPhaseEstimation (oracle : DiscreteOracle, targetState : Qubit[], controlRegister : BigEndian) : Unit {
-        body (...) {
-            let nQubits = Length(controlRegister!);
-            AssertAllZeroWithinTolerance(controlRegister!, 1E-10);
-            ApplyToEachCA(H, controlRegister!);
+    operation QuantumPhaseEstimation (oracle : DiscreteOracle, targetState : Qubit[], controlRegister : BigEndian) : Unit is Adj + Ctl {
+        let nQubits = Length(controlRegister!);
+        AssertAllZeroWithinTolerance(controlRegister!, 1E-10);
+        ApplyToEachCA(H, controlRegister!);
 
-            for (idxControlQubit in 0 .. nQubits - 1) {
-                let control = (controlRegister!)[idxControlQubit];
-                let power = 2 ^ ((nQubits - idxControlQubit) - 1);
-                Controlled oracle!([control], (power, targetState));
-            }
-
-            Adjoint QFT(controlRegister);
+        for (idxControlQubit in 0 .. nQubits - 1) {
+            let control = (controlRegister!)[idxControlQubit];
+            let power = 2 ^ ((nQubits - idxControlQubit) - 1);
+            Controlled oracle!([control], (power, targetState));
         }
 
-        adjoint invert;
-        controlled distribute;
-        controlled adjoint distribute;
+        Adjoint QFT(controlRegister);
     }
 
 }
