@@ -63,8 +63,8 @@ namespace Microsoft.Quantum.Tests {
         let array0 = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
         let subarrayOdd = Subarray([1, 3, 5, 7, 9], array0);
         let subarrayEven = Subarray([0, 2, 4, 6, 8, 10], array0);
-        EqualityFactB(ForAll(IsEven, subarrayEven), true, $"the even elements of [1..10] were not correctly sliced.");
-        EqualityFactB(ForAny(IsEven, subarrayOdd), false, $"the odd elements of [1..10] were not correctly sliced.");
+        EqualityFactB(All(IsEven, subarrayEven), true, $"the even elements of [1..10] were not correctly sliced.");
+        EqualityFactB(Any(IsEven, subarrayOdd), false, $"the odd elements of [1..10] were not correctly sliced.");
         let array1 = [10, 11, 12, 13];
         Ignore(Mapped(EqualityFactI(_, _, $"Subarray failed: subpermutation case."), Zip([12, 11], Subarray([2, 1], array1))));
     }
@@ -74,7 +74,7 @@ namespace Microsoft.Quantum.Tests {
         
         let array = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
         let evenArray = Filter(IsEven, array);
-        EqualityFactB(ForAll(IsEven, evenArray), true, $"the even elements of [1..10] were not correctly filtered.");
+        EqualityFactB(All(IsEven, evenArray), true, $"the even elements of [1..10] were not correctly filtered.");
     }
     
     
