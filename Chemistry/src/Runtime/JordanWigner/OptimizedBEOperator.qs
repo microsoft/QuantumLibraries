@@ -62,14 +62,12 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
 
 
     // Subroutine of OptimizedBEXY.
-    operation _OptimizedBEXY__ (targetIndex : Int, pauliBasis : Qubit, accumulator : Qubit, targetRegister : Qubit[]) : Unit {
+    operation _OptimizedBEXY__ (targetIndex : Int, pauliBasis : Qubit, accumulator : Qubit, targetRegister : Qubit[]) : Unit is Adj {
 
         body (...) {
             // This should always be called as a controlled operation.
             fail "_OptimizedBEXY__ should always be called as a controlled operation.";
         }
-
-        adjoint invert;
 
         controlled (ctrl, ...) {
             if (Length(targetRegister) <= targetIndex) {
@@ -81,7 +79,6 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
             Controlled Z([accumulator], targetRegister[targetIndex]);
         }
 
-        controlled adjoint invert;
     }
 
 
@@ -99,20 +96,14 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
     /// The state $\ket{p}$ of this register determines the qubit on which $Z$ is applied.
     /// ## targetRegister
     /// Register of qubits on which the Pauli operators are applied.
-    operation SelectZ (indexRegister : LittleEndian, targetRegister : Qubit[]) : Unit {
+    operation SelectZ (indexRegister : LittleEndian, targetRegister : Qubit[]) : Unit is Adj + Ctl {
 
-        body (...) {
-            let op = _SelectZ_(_);
-            let unitaryGenerator = (Length(targetRegister), op);
-            MultiplexOperationsFromGenerator(unitaryGenerator, indexRegister, targetRegister);
-            // If indexRegister encodes an integer that is larger than Length(targetRegister),
-            // _SelectZ_ will fail due to an out of range error. In this situation,
-            // releasing the accumulator qubit will throw an error as it will be in the One state.
-        }
-
-        adjoint invert;
-        controlled distribute;
-        controlled adjoint distribute;
+        let op = _SelectZ_(_);
+        let unitaryGenerator = (Length(targetRegister), op);
+        MultiplexOperationsFromGenerator(unitaryGenerator, indexRegister, targetRegister);
+        // If indexRegister encodes an integer that is larger than Length(targetRegister),
+        // _SelectZ_ will fail due to an out of range error. In this situation,
+        // releasing the accumulator qubit will throw an error as it will be in the One state.
     }
 
 
@@ -123,19 +114,12 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
 
 
     // Subroutine of SelectZ
-    operation _SelectZ__ (targetIndex : Int, targetRegister : Qubit[]) : Unit {
-
-        body (...) {
-            if (Length(targetRegister) <= targetIndex) {
-                fail "targetIndex out of range.";
-            }
-
-            Z(targetRegister[targetIndex]);
+    operation _SelectZ__ (targetIndex : Int, targetRegister : Qubit[]) : Unit is Adj + Ctl {
+        if (Length(targetRegister) <= targetIndex) {
+            fail "targetIndex out of range.";
         }
 
-        adjoint invert;
-        controlled distribute;
-        controlled adjoint distribute;
+        Z(targetRegister[targetIndex]);
     }
 
 
