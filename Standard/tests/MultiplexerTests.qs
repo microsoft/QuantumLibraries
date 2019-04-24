@@ -173,9 +173,9 @@ namespace Microsoft.Quantum.Tests {
     }
     
     
-    function MultiplexOperationsTestUnitary (nStates : Int, idx : Int) : (Qubit => Unit : Adjoint, Controlled)[] {
+    function MultiplexOperationsTestUnitary (nStates : Int, idx : Int) : (Qubit => Unit is Adj + Ctl)[] {
         
-        mutable unitaries = new (Qubit => Unit : Adjoint, Controlled)[nStates];
+        mutable unitaries = new (Qubit => Unit is Adj + Ctl)[nStates];
         
         for (idxUnitary in 0 .. nStates - 1) {
             set unitaries w/= idxUnitary <- I;
@@ -269,9 +269,9 @@ namespace Microsoft.Quantum.Tests {
     }
     
     
-    function MultiplexOperationsTestMissingUnitary (nStates : Int, nUnitaries : Int) : (Qubit => Unit : Adjoint, Controlled)[] {
+    function MultiplexOperationsTestMissingUnitary (nStates : Int, nUnitaries : Int) : (Qubit => Unit is Adj + Ctl)[] {
         
-        mutable unitaries = new (Qubit => Unit : Adjoint, Controlled)[nStates];
+        mutable unitaries = new (Qubit => Unit is Adj + Ctl)[nStates];
         
         for (idxUnitary in 0 .. nUnitaries - 1) {
             set unitaries w/= idxUnitary <- X;
@@ -415,7 +415,7 @@ namespace Microsoft.Quantum.Tests {
         }
     }
 
-    function MultiplexOperationsFromGeneratorTestUnitary_(nStates: Int, idx: Int, idxX: Int) : (Qubit[] => Unit : Adjoint, Controlled) {
+    function MultiplexOperationsFromGeneratorTestUnitary_(nStates: Int, idx: Int, idxX: Int) : (Qubit[] => Unit is Adj + Ctl) {
         if(idx == idxX ){
             return ApplyToEachCA(X,_);
         }
@@ -427,7 +427,7 @@ namespace Microsoft.Quantum.Tests {
         }
     }
 
-    function MultiplexOperationsFromGeneratorTestUnitary(nStates: Int, idx: Int) : (Int, (Int -> (Qubit[] => Unit : Adjoint, Controlled))) {
+    function MultiplexOperationsFromGeneratorTestUnitary(nStates: Int, idx: Int) : (Int, (Int -> (Qubit[] => Unit is Adj + Ctl))) {
         return (nStates, MultiplexOperationsFromGeneratorTestUnitary_(nStates, _, idx));
     }
 

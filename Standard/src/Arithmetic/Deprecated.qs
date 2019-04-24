@@ -4,19 +4,20 @@
 namespace Microsoft.Quantum.Canon {
     open Microsoft.Quantum.Arithmetic;
     open Microsoft.Quantum.Measurement;
+    open Microsoft.Quantum.Warnings;
 
     /// # Deprecated
     /// Please use @"Microsoft.Quantum.Arithmetic.ApplyReversedOpLE".
     operation ApplyReversedOpLittleEndian(op : (LittleEndian => Unit), register : BigEndian) : Unit {
-        Renamed("ApplyReversedOpLittleEndian", "ApplyReversedOpLE");
+        _Renamed("ApplyReversedOpLittleEndian", "ApplyReversedOpLE");
         ApplyReversedOpLE(op, register);
     }
 
     /// # Deprecated
     /// Please use @"Microsoft.Quantum.Arithmetic.ApplyReversedOpLEA".
-    operation ApplyReversedOpLittleEndianA(op : (LittleEndian => Unit : Adjoint), register : BigEndian) : Unit {
+    operation ApplyReversedOpLittleEndianA(op : (LittleEndian => Unit is Adj), register : BigEndian) : Unit {
         body (...) {
-            Renamed("ApplyReversedOpLittleEndianA", "ApplyReversedOpLEA");
+            _Renamed("ApplyReversedOpLittleEndianA", "ApplyReversedOpLEA");
             ApplyReversedOpLEA(op, register);
         }
         adjoint auto;
@@ -24,9 +25,9 @@ namespace Microsoft.Quantum.Canon {
 
     /// # Deprecated
     /// Please use @"Microsoft.Quantum.Arithmetic.ApplyReversedOpLEC".
-    operation ApplyReversedOpLittleEndianC(op : (LittleEndian => Unit : Controlled), register : BigEndian) : Unit {
+    operation ApplyReversedOpLittleEndianC(op : (LittleEndian => Unit is Ctl), register : BigEndian) : Unit {
         body (...) {
-            Renamed("ApplyReversedOpLittleEndianC", "ApplyReversedOpLEC");
+            _Renamed("ApplyReversedOpLittleEndianC", "ApplyReversedOpLEC");
             ApplyReversedOpLEC(op, register);
         }
         controlled auto;
@@ -34,9 +35,9 @@ namespace Microsoft.Quantum.Canon {
 
     /// # Deprecated
     /// Please use @"Microsoft.Quantum.Arithmetic.ApplyReversedOpLEC".
-    operation ApplyReversedOpLittleEndianCA(op : (LittleEndian => Unit : Adjoint, Controlled), register : BigEndian) : Unit {
+    operation ApplyReversedOpLittleEndianCA(op : (LittleEndian => Unit is Adj + Ctl), register : BigEndian) : Unit {
         body (...) {
-            Renamed("ApplyReversedOpLittleEndianCA", "ApplyReversedOpLECA");
+            _Renamed("ApplyReversedOpLittleEndianCA", "ApplyReversedOpLECA");
             ApplyReversedOpLECA(op, register);
         }
         adjoint auto;
@@ -47,15 +48,15 @@ namespace Microsoft.Quantum.Canon {
     /// # Deprecated
     /// Please use @"Microsoft.Quantum.Arithmetic.ApplyReversedOpBE".
     operation ApplyReversedOpBigEndian(op : (BigEndian => Unit), register : LittleEndian) : Unit {
-        Renamed("ApplyReversedOpBigEndian", "ApplyReversedOpBE");
+        _Renamed("ApplyReversedOpBigEndian", "ApplyReversedOpBE");
         ApplyReversedOpBE(op, register);
     }
 
     /// # Deprecated
     /// Please use @"Microsoft.Quantum.Arithmetic.ApplyReversedOpBEA".
-    operation ApplyReversedOpBigEndianA(op : (BigEndian => Unit : Adjoint), register : LittleEndian) : Unit {
+    operation ApplyReversedOpBigEndianA(op : (BigEndian => Unit is Adj), register : LittleEndian) : Unit {
         body (...) {
-            Renamed("ApplyReversedOpBigEndianA", "ApplyReversedOpBEA");
+            _Renamed("ApplyReversedOpBigEndianA", "ApplyReversedOpBEA");
             ApplyReversedOpBEA(op, register);
         }
         adjoint auto;
@@ -63,9 +64,9 @@ namespace Microsoft.Quantum.Canon {
     
     /// # Deprecated
     /// Please use @"Microsoft.Quantum.Arithmetic.ApplyReversedOpBEC".
-    operation ApplyReversedOpBigEndianC(op : (BigEndian => Unit : Controlled), register : LittleEndian) : Unit {
+    operation ApplyReversedOpBigEndianC(op : (BigEndian => Unit is Ctl), register : LittleEndian) : Unit {
         body (...) {
-            Renamed("ApplyReversedOpBigEndianC", "ApplyReversedOpBEC");
+            _Renamed("ApplyReversedOpBigEndianC", "ApplyReversedOpBEC");
             ApplyReversedOpBEC(op, register);
         }
         controlled auto;
@@ -73,9 +74,9 @@ namespace Microsoft.Quantum.Canon {
 
     /// # Deprecated
     /// Please use @"Microsoft.Quantum.Arithmetic.ApplyReversedOpBEC".
-    operation ApplyReversedOpBigEndianCA(op : (BigEndian => Unit : Adjoint, Controlled), register : LittleEndian) : Unit {
+    operation ApplyReversedOpBigEndianCA(op : (BigEndian => Unit is Adj + Ctl), register : LittleEndian) : Unit {
         body (...) {
-            Renamed("ApplyReversedOpBigEndianCA", "ApplyReversedOpBECA");
+            _Renamed("ApplyReversedOpBigEndianCA", "ApplyReversedOpBECA");
             ApplyReversedOpBECA(op, register);
         }
         adjoint auto;
@@ -87,7 +88,7 @@ namespace Microsoft.Quantum.Canon {
     /// Please use @"Microsoft.Quantum.Arithmetic.AssertMostSignificantBit".
     operation AssertHighestBit(value : Result, number : LittleEndian) : Unit {
         body (...) {
-            Renamed("Microsoft.Quantum.Arithmetic.AssertHighestBit", "Microsoft.Quantum.Arithmetic.AssertMostSignificantBit");
+            _Renamed("Microsoft.Quantum.Arithmetic.AssertHighestBit", "Microsoft.Quantum.Arithmetic.AssertMostSignificantBit");
             AssertMostSignificantBit(value, number);
         }
         adjoint auto;
@@ -98,14 +99,14 @@ namespace Microsoft.Quantum.Canon {
     /// # Deprecated
     /// Please use @"Microsoft.Quantum.Arithmetic.LittleEndianAsBigEndian".
     function LittleEndianToBigEndian(input: LittleEndian) : BigEndian {
-        Renamed("LittleEndianToBigEndian", "LittleEndianAsBigEndian");
+        _Renamed("LittleEndianToBigEndian", "LittleEndianAsBigEndian");
         return LittleEndianAsBigEndian(input);
     }
 
     /// # Deprecated
     /// Please use @"Microsoft.Quantum.Arithmetic.BigEndianAsLittleEndian".
     function BigEndianToLittleEndian(input: BigEndian) : LittleEndian {
-        Renamed("BigEndianToLittleEndian", "BigEndianAsLittleEndian");
+        _Renamed("BigEndianToLittleEndian", "BigEndianAsLittleEndian");
         return BigEndianAsLittleEndian(input);
     }
 
@@ -113,7 +114,7 @@ namespace Microsoft.Quantum.Canon {
     /// Please use @"Microsoft.Quantum.Arithmetic.IncrementPhaseByInteger".
     operation IntegerIncrementPhaseLE (increment : Int, target : PhaseLittleEndian) : Unit {
         body (...) {
-            Renamed("Microsoft.Quantum.Arithmetic.IntegerIncrementPhaseLE", "Microsoft.Quantum.Arithmetic.IncrementPhaseByInteger");
+            _Renamed("Microsoft.Quantum.Arithmetic.IntegerIncrementPhaseLE", "Microsoft.Quantum.Arithmetic.IncrementPhaseByInteger");
             IncrementPhaseByInteger(increment, target);
         }
 
@@ -126,7 +127,7 @@ namespace Microsoft.Quantum.Canon {
     /// Please use @"Microsoft.Quantum.Arithmetic.IncrementByInteger".
     operation IntegerIncrementLE(increment : Int, target : LittleEndian) : Unit {
         body (...) {
-            Renamed("Microsoft.Quantum.Arithmetic.IntegerIncrementLE", "Microsoft.Quantum.Arithmetic.IncrementByInteger");
+            _Renamed("Microsoft.Quantum.Arithmetic.IntegerIncrementLE", "Microsoft.Quantum.Arithmetic.IncrementByInteger");
             IncrementByInteger(increment, target);
         }
 
@@ -139,7 +140,7 @@ namespace Microsoft.Quantum.Canon {
     /// Please use @"Microsoft.Quantum.Measurement.ApplyXorInPlace".
     operation InPlaceXorLE(value : Int, target : LittleEndian) : Unit {
         body (...) {
-            Renamed("Microsoft.Quantum.Canon.InPlaceXorLE", "Microsoft.Quantum.Arithmetic.ApplyXorInPlace");
+            _Renamed("Microsoft.Quantum.Canon.InPlaceXorLE", "Microsoft.Quantum.Arithmetic.ApplyXorInPlace");
             ApplyXorInPlace(value, target);
         }
         adjoint auto;
@@ -151,7 +152,7 @@ namespace Microsoft.Quantum.Canon {
     /// Please use @"Microsoft.Quantum.Arithmetic.CompareUsingRippleCarry".
     operation ApplyRippleCarryComparatorLE(x: LittleEndian, y: LittleEndian, output: Qubit) : Unit {
         body (...) {
-            Renamed("Microsoft.Quantum.Canon.ApplyRippleCarryComparatorLE", "Microsoft.Quantum.Arithmetic.CompareUsingRippleCarry");
+            _Renamed("Microsoft.Quantum.Canon.ApplyRippleCarryComparatorLE", "Microsoft.Quantum.Arithmetic.CompareUsingRippleCarry");
             CompareUsingRippleCarry(x, y, output);
         }
         adjoint auto;
@@ -163,7 +164,7 @@ namespace Microsoft.Quantum.Canon {
     /// Please use @"Microsoft.Quantum.Arithmetic.ModularIncrementByInteger".
     operation ModularIncrementLE (increment : Int, modulus : Int, target : LittleEndian) : Unit {
         body (...) {
-            Renamed("Microsoft.Quantum.Canon.ModularIncrementLE", "Microsoft.Quantum.Arithmetic.IncrementByModularInteger");
+            _Renamed("Microsoft.Quantum.Canon.ModularIncrementLE", "Microsoft.Quantum.Arithmetic.IncrementByModularInteger");
             IncrementByModularInteger(increment, modulus, target);
         }
         adjoint auto;
@@ -175,7 +176,7 @@ namespace Microsoft.Quantum.Canon {
     /// Please use @"Microsoft.Quantum.Arithmetic.IncrementPhaseByModularInteger".
     operation ModularIncrementPhaseLE (increment : Int, modulus : Int, target : PhaseLittleEndian) : Unit {
         body (...) {
-            Renamed("Microsoft.Quantum.Canon.ModularIncrementPhaseLE", "Microsoft.Quantum.Arithmetic.IncrementPhaseByModularInteger");
+            _Renamed("Microsoft.Quantum.Canon.ModularIncrementPhaseLE", "Microsoft.Quantum.Arithmetic.IncrementPhaseByModularInteger");
             IncrementPhaseByModularInteger(increment, modulus, target);
         }
         adjoint auto;
@@ -187,7 +188,7 @@ namespace Microsoft.Quantum.Canon {
     /// Please use @"Microsoft.Quantum.Arithmetic.MultiplyAndAddByModularInteger".
     operation ModularAddProductLE (constMultiplier : Int, modulus : Int, multiplier : LittleEndian, summand : LittleEndian) : Unit {
         body (...) {
-            Renamed("Microsoft.Quantum.Canon.ModularIncrementPhaseLE", "Microsoft.Quantum.Arithmetic.MultiplyAndAddByModularInteger");
+            _Renamed("Microsoft.Quantum.Canon.ModularIncrementPhaseLE", "Microsoft.Quantum.Arithmetic.MultiplyAndAddByModularInteger");
             MultiplyAndAddByModularInteger(constMultiplier, modulus, multiplier, summand);
         }
         adjoint auto;
@@ -199,7 +200,7 @@ namespace Microsoft.Quantum.Canon {
     /// Please use @"Microsoft.Quantum.Arithmetic.MultiplyAndAddPhaseByModularInteger".
     operation ModularAddProductPhaseLE (constMultiplier : Int, modulus : Int, multiplier : LittleEndian, phaseSummand : PhaseLittleEndian) : Unit {
         body (...) {
-            Renamed("Microsoft.Quantum.Canon.ModularAddProductPhaseLE", "Microsoft.Quantum.Arithmetic.MultiplyAndAddPhaseByModularInteger");
+            _Renamed("Microsoft.Quantum.Canon.ModularAddProductPhaseLE", "Microsoft.Quantum.Arithmetic.MultiplyAndAddPhaseByModularInteger");
             MultiplyAndAddPhaseByModularInteger(constMultiplier, modulus, multiplier, phaseSummand);
         }
         adjoint auto;
@@ -211,7 +212,7 @@ namespace Microsoft.Quantum.Canon {
     /// Please use @"Microsoft.Quantum.Arithmetic.MultiplyByModularInteger".
     operation ModularMultiplyByConstantLE(constMultiplier : Int, modulus : Int, multiplier : LittleEndian) : Unit {
         body (...) {
-            Renamed("Microsoft.Quantum.Canon.ModularMultiplyByConstantLE", "Microsoft.Quantum.Arithmetic.MultiplyByModularInteger");
+            _Renamed("Microsoft.Quantum.Canon.ModularMultiplyByConstantLE", "Microsoft.Quantum.Arithmetic.MultiplyByModularInteger");
             MultiplyByModularInteger(constMultiplier, modulus, multiplier);
         }
         adjoint auto;
@@ -223,7 +224,7 @@ namespace Microsoft.Quantum.Canon {
     /// Please use @"Microsoft.Quantum.Arithmetic.AssertPhaseLessThan".
     operation AssertLessThanPhaseLE(value : Int, number : PhaseLittleEndian) : Unit {
         body (...) {
-            Renamed("Microsoft.Quantum.Canon.AssertPhaseLessThan", "Microsoft.Quantum.Arithmetic.AssertPhaseLessThan");
+            _Renamed("Microsoft.Quantum.Canon.AssertPhaseLessThan", "Microsoft.Quantum.Arithmetic.AssertPhaseLessThan");
             AssertPhaseLessThan(value, number);
         }
         adjoint auto;
@@ -239,7 +240,7 @@ namespace Microsoft.Quantum.Canon {
     /// This operation has been removed.
     operation InPlaceXorBE(value : Int, target : BigEndian) : Unit {
         body (...) {
-            Removed("Microsoft.Quantum.Canon.InPlaceXorBE", "ApplyReversedOpLECA(ApplyXorInPlace(value, _), target)");
+            _Removed("Microsoft.Quantum.Canon.InPlaceXorBE", "ApplyReversedOpLECA(ApplyXorInPlace(value, _), target)");
             ApplyReversedOpLECA(ApplyXorInPlace(value, _), target);
         }
         adjoint auto;
@@ -251,7 +252,7 @@ namespace Microsoft.Quantum.Canon {
     /// This operation has been removed.
     operation ApplyRippleCarryComparatorBE(x : BigEndian, y : BigEndian, output : Qubit) : Unit {
         body (...) {
-            Removed(
+            _Removed(
                 "Microsoft.Quantum.Canon.ApplyRippleCarryComparatorBE",
                 "CompareUsingRippleCarry(BigEndianAsLittleEndian(x), BigEndianAsLittleEndian(y), output)"
             );
@@ -265,7 +266,7 @@ namespace Microsoft.Quantum.Canon {
     /// # Deprecated
     /// This operation has been removed.
     operation MeasureIntegerBE(target : BigEndian) : Int {
-        Removed(
+        _Removed(
             "Microsoft.Quantum.Canon.MeasureIntegerBE",
             "MeasureInteger(BigEndianAsLittleEndian(target))"
         );
@@ -275,7 +276,7 @@ namespace Microsoft.Quantum.Canon {
     /// # Deprecated
     /// This operation has been removed.
     operation AssertProbIntBE (stateIndex : Int, prob : Double, qubits : BigEndian, tolerance : Double) : Unit {
-        Removed(
+        _Removed(
             "Microsoft.Quantum.Canon.AssertProbIntBE",
             "AssertProbInt(stateIndex, prob, BigEndianAsLittleEndian(qubits), tolerance)"
         );
@@ -288,7 +289,7 @@ namespace Microsoft.Quantum.Canon {
     /// Please use @"Microsoft.Quantum.Arithmetic.CopyMostSignificantBit".
      operation CopyMostSignificantBitLE(from : LittleEndian, target : Qubit) : Unit {
         body (...) {
-            Renamed("Microsoft.Quantum.Canon.CopyMostSignificantBitLE", "Microsoft.Quantum.Arithmetic.CopyMostSignificantBit");
+            _Renamed("Microsoft.Quantum.Canon.CopyMostSignificantBitLE", "Microsoft.Quantum.Arithmetic.CopyMostSignificantBit");
             CopyMostSignificantBit(from, target);
         }
 

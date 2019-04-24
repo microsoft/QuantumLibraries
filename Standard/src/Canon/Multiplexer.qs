@@ -16,7 +16,7 @@ namespace Microsoft.Quantum.Canon {
     /// # Input
     /// ## unitaryGenerator
     /// A tuple where the first element `Int` is the number of unitaries $N$,
-    /// and the second element `(Int -> ('T => () : Adjoint, Controlled))`
+    /// and the second element `(Int -> ('T => () is Adj + Ctl))`
     /// is a function that takes an integer $j$ in $[0,N-1]$ and outputs the unitary
     /// operation $V_j$. 
     ///
@@ -35,28 +35,23 @@ namespace Microsoft.Quantum.Canon {
     /// # References
     /// - [ *Andrew M. Childs, Dmitri Maslov, Yunseong Nam, Neil J. Ross, Yuan Su*,
     ///      arXiv:1711.10980](https://arxiv.org/abs/1711.10980)
-    operation MultiplexOperationsFromGenerator<'T>(unitaryGenerator : (Int, (Int -> ('T => Unit : Adjoint, Controlled))), index: LittleEndian, target: 'T) : Unit {
-        body (...) {
-            let (nUnitaries, unitaryFunction) = unitaryGenerator;
-            let unitaryGeneratorWithOffset = (nUnitaries, 0, unitaryFunction);
-            if (Length(index!) == 0) {
-                fail "MultiplexOperations failed. Number of index qubits must be greater than 0.";
-            }
-            if (nUnitaries > 0) {
-                let auxiliary = new Qubit[0];
-                Adjoint MultiplexOperationsFromGenerator_(unitaryGeneratorWithOffset, auxiliary, index, target);
-            }
+    operation MultiplexOperationsFromGenerator<'T>(unitaryGenerator : (Int, (Int -> ('T => Unit is Adj + Ctl))), index: LittleEndian, target: 'T) : Unit is Ctl + Adj {
+        let (nUnitaries, unitaryFunction) = unitaryGenerator;
+        let unitaryGeneratorWithOffset = (nUnitaries, 0, unitaryFunction);
+        if (Length(index!) == 0) {
+            fail "MultiplexOperations failed. Number of index qubits must be greater than 0.";
         }
-        adjoint auto;
-        controlled auto;
-        adjoint controlled auto;
+        if (nUnitaries > 0) {
+            let auxiliary = new Qubit[0];
+            Adjoint _MultiplexOperationsFromGenerator(unitaryGeneratorWithOffset, auxiliary, index, target);
+        }
     }
 
     /// # Summary
     /// Implementation step of `MultiplexOperationsFromGenerator`.
     /// # See Also
     /// - Microsoft.Quantum.Canon.MultiplexOperationsFromGenerator
-    operation MultiplexOperationsFromGenerator_<'T>(unitaryGenerator : (Int, Int, (Int -> ('T => Unit : Adjoint, Controlled))), auxiliary: Qubit[], index: LittleEndian, target: 'T) : Unit {
+    operation _MultiplexOperationsFromGenerator<'T>(unitaryGenerator : (Int, Int, (Int -> ('T => Unit is Adj + Ctl))), auxiliary: Qubit[], index: LittleEndian, target: 'T) : Unit {
         body (...) {
             let nIndex = Length(index!);
             let nStates = 2^nIndex;
@@ -81,24 +76,24 @@ namespace Microsoft.Quantum.Canon {
                     // Start case
                     let newauxiliary = [index![Length(index!) - 1]];
                     if(nUnitariesRight > 0){
-                        MultiplexOperationsFromGenerator_(rightUnitaries, newauxiliary, newControls, target);
+                        _MultiplexOperationsFromGenerator(rightUnitaries, newauxiliary, newControls, target);
                     }
                     X(newauxiliary[0]);
-                    MultiplexOperationsFromGenerator_(leftUnitaries, newauxiliary, newControls, target);
+                    _MultiplexOperationsFromGenerator(leftUnitaries, newauxiliary, newControls, target);
                     X(newauxiliary[0]);
                 }
                 else{
                     // Recursion that reduces nIndex by 1 & sets Length(auxiliary) to 1.
                     using(newauxiliary = Qubit[1]){
-                        let op = LogicalANDMeasAndFix_(_, _);
+                        let op = _LogicalANDMeasAndFix(_, _);
                         // Naive measurement-free approach uses 4x more T gates with 
                         // let op = (Controlled X);
                         op([index![Length(index!) - 1]] + auxiliary, newauxiliary[0]);
                         if(nUnitariesRight > 0){
-                            MultiplexOperationsFromGenerator_(rightUnitaries, newauxiliary, newControls, target);
+                            _MultiplexOperationsFromGenerator(rightUnitaries, newauxiliary, newControls, target);
                         }
                         (Controlled X)(auxiliary, newauxiliary[0]);
-                        MultiplexOperationsFromGenerator_(leftUnitaries, newauxiliary, newControls, target);
+                        _MultiplexOperationsFromGenerator(leftUnitaries, newauxiliary, newControls, target);
                         (Controlled X)(auxiliary, newauxiliary[0]);
                         (Adjoint op)([index![Length(index!) - 1]] + auxiliary, newauxiliary[0]);
                     }
@@ -107,7 +102,7 @@ namespace Microsoft.Quantum.Canon {
         }
         adjoint auto;
         controlled (controlRegister, (...)) {
-            MultiplexOperationsFromGenerator_(unitaryGenerator, auxiliary + controlRegister, index, target);
+            _MultiplexOperationsFromGenerator(unitaryGenerator, auxiliary + controlRegister, index, target);
         }
         adjoint controlled auto;
     }
@@ -121,7 +116,7 @@ namespace Microsoft.Quantum.Canon {
     /// # Input
     /// ## unitaryGenerator
     /// A tuple where the first element `Int` is the number of unitaries $N$,
-    /// and the second element `(Int -> ('T => () : Adjoint, Controlled))`
+    /// and the second element `(Int -> ('T => () is Adj + Ctl))`
     /// is a function that takes an integer $j$ in $[0,N-1]$ and outputs the unitary
     /// operation $V_j$. 
     ///
@@ -136,7 +131,7 @@ namespace Microsoft.Quantum.Canon {
     /// `coefficients` will be padded with identity elements if 
     /// fewer than $2^n$ are specified. This version is implemented 
     /// directly by looping through n-controlled unitary operators.
-    operation MultiplexOperationsBruteForceFromGenerator<'T>(unitaryGenerator : (Int, (Int -> ('T => Unit : Adjoint, Controlled))), index: LittleEndian, target: 'T) : Unit {
+    operation MultiplexOperationsBruteForceFromGenerator<'T>(unitaryGenerator : (Int, (Int -> ('T => Unit is Adj + Ctl))), index: LittleEndian, target: 'T) : Unit {
         body (...) {
             let nIndex = Length(index!);
             let nStates = 2^nIndex;
@@ -159,7 +154,7 @@ namespace Microsoft.Quantum.Canon {
     /// # Input
     /// ## unitaryGenerator
     /// A tuple where the first element `Int` is the number of unitaries $N$,
-    /// and the second element `(Int -> ('T => () : Adjoint, Controlled))`
+    /// and the second element `(Int -> ('T => () is Adj + Ctl))`
     /// is a function that takes an integer $j$ in $[0,N-1]$ and outputs the unitary
     /// operation $V_j$. 
     ///
@@ -169,7 +164,7 @@ namespace Microsoft.Quantum.Canon {
     ///
     /// # See Also
     /// - Microsoft.Quantum.Canon.MultiplexOperationsFromGenerator
-    function MultiplexerFromGenerator(unitaryGenerator : (Int, (Int -> (Qubit[] => Unit : Adjoint, Controlled)))) : ((LittleEndian, Qubit[]) => Unit : Adjoint, Controlled) {
+    function MultiplexerFromGenerator(unitaryGenerator : (Int, (Int -> (Qubit[] => Unit is Adj + Ctl)))) : ((LittleEndian, Qubit[]) => Unit is Adj + Ctl) {
         return MultiplexOperationsFromGenerator(unitaryGenerator, _, _);
     }
 
@@ -182,7 +177,7 @@ namespace Microsoft.Quantum.Canon {
     /// # Input
     /// ## unitaryGenerator
     /// A tuple where the first element `Int` is the number of unitaries $N$,
-    /// and the second element `(Int -> ('T => () : Adjoint, Controlled))`
+    /// and the second element `(Int -> ('T => () is Adj + Ctl))`
     /// is a function that takes an integer $j$ in $[0,N-1]$ and outputs the unitary
     /// operation $V_j$. 
     ///
@@ -192,7 +187,7 @@ namespace Microsoft.Quantum.Canon {
     ///
     /// # See Also
     /// - Microsoft.Quantum.Canon.MultiplexerBruteForceFromGenerator
-    function MultiplexerBruteForceFromGenerator(unitaryGenerator : (Int, (Int -> (Qubit[] => Unit : Adjoint, Controlled)))) : ((LittleEndian, Qubit[]) => Unit : Adjoint, Controlled) {
+    function MultiplexerBruteForceFromGenerator(unitaryGenerator : (Int, (Int -> (Qubit[] => Unit is Adj + Ctl)))) : ((LittleEndian, Qubit[]) => Unit is Adj + Ctl) {
         return MultiplexOperationsBruteForceFromGenerator(unitaryGenerator, _, _);
     }
 
@@ -214,7 +209,7 @@ namespace Microsoft.Quantum.Canon {
     ///
     /// # References
     /// - [ *Craig Gidney*, 1709.06648](https://arxiv.org/abs/1709.06648)
-    operation LogicalANDMeasAndFix_ (ctrlRegister: Qubit[], target: Qubit) : Unit
+    operation _LogicalANDMeasAndFix(ctrlRegister: Qubit[], target: Qubit) : Unit
     {
         body (...) 
         {
@@ -238,7 +233,6 @@ namespace Microsoft.Quantum.Canon {
             else{
                 (Controlled X)(ctrlRegister, target);
             }
-            
         }
         adjoint (...)  {
             if(Length(ctrlRegister) == 2){

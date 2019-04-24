@@ -8,7 +8,7 @@ namespace Microsoft.Quantum.Arithmetic {
     open Microsoft.Quantum.Diagnostics;
     open Microsoft.Quantum.Measurement;
 
-    operation IntegerAdderTestHelper( IntegerAdder : ( (LittleEndian, LittleEndian, Qubit) => Unit : Controlled), summand1 : Int, summand2 : Int, numberOfQubits : Int ) : Unit {
+    operation IntegerAdderTestHelper( IntegerAdder : ( (LittleEndian, LittleEndian, Qubit) => Unit is Ctl), summand1 : Int, summand2 : Int, numberOfQubits : Int ) : Unit {
         body (...) {
             using (register = Qubit[2*numberOfQubits + 1]) {
                 mutable actual_carry = 0;
@@ -67,7 +67,7 @@ namespace Microsoft.Quantum.Arithmetic {
         }
     }
  
-    operation IntegerAdderExhaustiveTestHelper (IntegerAdder : ( (LittleEndian, LittleEndian, Qubit) => Unit : Controlled), numberOfQubits : Int) : Unit {
+    operation IntegerAdderExhaustiveTestHelper (IntegerAdder : ( (LittleEndian, LittleEndian, Qubit) => Unit is Ctl), numberOfQubits : Int) : Unit {
         for( summand1 in 0 .. 2^numberOfQubits - 1 ) {
             for( summand2 in 0 .. 2^numberOfQubits - 1 ) {
                 IntegerAdderTestHelper(IntegerAdder, summand1, summand2, numberOfQubits);
@@ -125,7 +125,7 @@ namespace Microsoft.Quantum.Arithmetic {
     }
 
 
-    operation IntegerAdderNoCarryTestHelper( IntegerAdder : ( (LittleEndian, LittleEndian) => Unit : Controlled), summand1 : Int, summand2 : Int, numberOfQubits : Int ) : Unit {
+    operation IntegerAdderNoCarryTestHelper( IntegerAdder : ( (LittleEndian, LittleEndian) => Unit is Ctl), summand1 : Int, summand2 : Int, numberOfQubits : Int ) : Unit {
         using (register = Qubit[2*numberOfQubits]) {
             mutable actual1 = 0;
             mutable actual2 = 0;
@@ -170,7 +170,7 @@ namespace Microsoft.Quantum.Arithmetic {
         }
     }
 
-    operation IntegerAdderNoCarryExhaustiveTestHelper (IntegerAdder : ( (LittleEndian, LittleEndian) => Unit : Controlled), numberOfQubits : Int) : Unit {
+    operation IntegerAdderNoCarryExhaustiveTestHelper (IntegerAdder : ( (LittleEndian, LittleEndian) => Unit is Ctl), numberOfQubits : Int) : Unit {
         for( summand1 in 0 .. 2^numberOfQubits - 1 ) {
             for( summand2 in 0 .. 2^numberOfQubits - 1 ) {
                 IntegerAdderNoCarryTestHelper(IntegerAdder, summand1, summand2, numberOfQubits);

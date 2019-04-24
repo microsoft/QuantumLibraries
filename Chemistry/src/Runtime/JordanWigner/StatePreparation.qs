@@ -47,7 +47,7 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
     }
     
     
-    function _PrepareTrialStateSingleSiteOccupation_ (qubitIndices : Int[]) : (Qubit[] => Unit : Adjoint, Controlled) {
+    function _PrepareTrialStateSingleSiteOccupation(qubitIndices : Int[]) : (Qubit[] => Unit is Adj + Ctl) {
         
         return PrepareTrialStateSingleSiteOccupation(qubitIndices, _);
     }
@@ -89,7 +89,7 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
             
             using (auxillary = Qubit[nBitsIndices + 1]) {
                 using (flag = Qubit[1]) {
-                    let multiplexer = MultiplexerBruteForceFromGenerator(nExcitations, LookupFunction(Mapped(_PrepareTrialStateSingleSiteOccupation_, applyFlips)));
+                    let multiplexer = MultiplexerBruteForceFromGenerator(nExcitations, LookupFunction(Mapped(_PrepareTrialStateSingleSiteOccupation, applyFlips)));
                     (StatePreparationComplexCoefficients(coefficientsNewComplexPolar))(LittleEndian(auxillary));
                     multiplexer(LittleEndian(auxillary), qubits);
                     (Adjoint (StatePreparationPositiveCoefficients(coefficientsSqrtAbs)))(LittleEndian(auxillary));

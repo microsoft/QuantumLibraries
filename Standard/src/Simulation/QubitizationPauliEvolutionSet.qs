@@ -9,7 +9,6 @@ namespace Microsoft.Quantum.Simulation {
     open Microsoft.Quantum.Math;
     open Microsoft.Quantum.Convert;
     open Microsoft.Quantum.Arrays;
-    open Microsoft.Quantum.Convert;
 
     /// # Summary
     /// Extracts the coefficient of a Pauli term described by a `GeneratorIndex`.
@@ -100,8 +99,8 @@ namespace Microsoft.Quantum.Simulation {
     /// <xref:microsoft.quantum.canon.multiplexoperationsfromgenerator>.
     function PauliBlockEncodingImpl(
         generatorSystem: GeneratorSystem,
-        statePrepUnitary: (Double[] -> (LittleEndian => Unit : Adjoint, Controlled)), 
-        multiplexer: ((Int, (Int -> (Qubit[] => Unit : Adjoint, Controlled))) -> ((LittleEndian, Qubit[]) => Unit : Adjoint, Controlled))) : (Double, BlockEncodingReflection) {
+        statePrepUnitary: (Double[] -> (LittleEndian => Unit is Adj + Ctl)), 
+        multiplexer: ((Int, (Int -> (Qubit[] => Unit is Adj + Ctl))) -> ((LittleEndian, Qubit[]) => Unit is Adj + Ctl))) : (Double, BlockEncodingReflection) {
         let (nTerms, intToGenIdx) = generatorSystem!;
         let op = IdxToCoeff_(_, intToGenIdx, PauliCoefficientFromGenIdx);
         let coefficients = Mapped(op, RangeAsIntArray(0..nTerms-1));
@@ -125,7 +124,7 @@ namespace Microsoft.Quantum.Simulation {
     /// Used in implementation of `PauliBlockEncoding`
     /// # See Also
     /// - Microsoft.Quantum.Canon.PauliBlockEncoding
-    function IdxToUnitary_(idx: Int, genFun: (Int -> GeneratorIndex), genIdxToUnitary: (GeneratorIndex -> (Qubit[] => Unit : Adjoint, Controlled))) : (Qubit[] => Unit : Adjoint, Controlled) {
+    function IdxToUnitary_(idx: Int, genFun: (Int -> GeneratorIndex), genIdxToUnitary: (GeneratorIndex -> (Qubit[] => Unit is Adj + Ctl))) : (Qubit[] => Unit is Adj + Ctl) {
         return genIdxToUnitary(genFun(idx));
     }
 
@@ -134,7 +133,7 @@ namespace Microsoft.Quantum.Simulation {
     /// Used in implementation of `PauliBlockEncoding`
     /// # See Also
     /// - Microsoft.Quantum.Canon.PauliBlockEncoding
-    function PauliLCUUnitary_(generatorIndex: GeneratorIndex) : (Qubit[] => Unit : Adjoint, Controlled) {
+    function PauliLCUUnitary_(generatorIndex: GeneratorIndex) : (Qubit[] => Unit is Adj + Ctl) {
         return ApplyPauliLCUUnitary_(generatorIndex,_);
     }
 

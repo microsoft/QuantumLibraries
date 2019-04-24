@@ -33,7 +33,7 @@ namespace Microsoft.Quantum.Tests {
     
     operation CurryTest () : Unit {
         
-        let curried = CurryOp(Exp([PauliZ], _, _));
+        let curried = CurriedOp(Exp([PauliZ], _, _));
         AssertOperationsEqualInPlace(1, curried(1.7), Exp([PauliZ], 1.7, _));
         AssertOperationsEqualReferenced(1, curried(1.7), Exp([PauliZ], 1.7, _));
     }
@@ -41,12 +41,12 @@ namespace Microsoft.Quantum.Tests {
     
     operation BindTest () : Unit {
         
-        let bound = BindCA([H, X, H]);
+        let bound = BoundCA([H, X, H]);
         AssertOperationsEqualReferenced(3, ApplyToEach(bound, _), ApplyToEachA(Z, _));
     }
     
     
-    function StripControlled<'T> (op : ('T => Unit : Adjoint, Controlled)) : ('T => Unit : Adjoint) {
+    function StripControlled<'T> (op : ('T => Unit is Adj + Ctl)) : ('T => Unit is Adj) {
         
         return op;
     }
@@ -54,19 +54,19 @@ namespace Microsoft.Quantum.Tests {
     
     operation BindATest () : Unit {
         
-        let bound = BindA(Mapped(StripControlled<Qubit>, [T, T]));
+        let bound = BoundA(Mapped(StripControlled<Qubit>, [T, T]));
         AssertOperationsEqualReferenced(3, ApplyToEach(bound, _), ApplyToEachA(S, _));
         AssertOperationsEqualReferenced(3, ApplyToEach(Adjoint bound, _), ApplyToEachA(Adjoint S, _));
     }
     
     
-    operation BindCTestHelper0 (op : (Qubit => Unit : Controlled), qubits : Qubit[]) : Unit {
+    operation BindCTestHelper0 (op : (Qubit => Unit is Ctl), qubits : Qubit[]) : Unit {
         
         Controlled op([qubits[0]], qubits[1]);
     }
     
     
-    operation BindCTestHelper1 (op : (Qubit => Unit : Adjoint, Controlled), qubits : Qubit[]) : Unit {
+    operation BindCTestHelper1 (op : (Qubit => Unit is Adj + Ctl), qubits : Qubit[]) : Unit {
         
         body (...) {
             Controlled op([qubits[0]], qubits[1]);
@@ -76,7 +76,7 @@ namespace Microsoft.Quantum.Tests {
     }
     
     
-    function StripAdjoint<'T> (op : ('T => Unit : Adjoint, Controlled)) : ('T => Unit : Controlled) {
+    function StripAdjoint<'T> (op : ('T => Unit is Adj + Ctl)) : ('T => Unit is Ctl) {
         
         return op;
     }
@@ -85,7 +85,7 @@ namespace Microsoft.Quantum.Tests {
     operation BindCTest () : Unit {
         
         let stripped = Mapped(StripAdjoint<Qubit>, [T, T]);
-        let bound = BindC(stripped);
+        let bound = BoundC(stripped);
         AssertOperationsEqualReferenced(3, ApplyToEach(bound, _), ApplyToEachA(S, _));
         let op = BindCTestHelper0(bound, _);
         let target = BindCTestHelper1(S, _);
@@ -94,7 +94,7 @@ namespace Microsoft.Quantum.Tests {
     
     
     operation BindCATest () : Unit {
-        let bound = BindCA([T, T]);
+        let bound = BoundCA([T, T]);
         AssertOperationsEqualReferenced(3, ApplyToEach(bound, _), ApplyToEachA(S, _));
         AssertOperationsEqualReferenced(3, ApplyToEach(Adjoint bound, _), ApplyToEachA(Adjoint S, _));
         let op = BindCTestHelper0(Adjoint bound, _);
@@ -117,17 +117,17 @@ namespace Microsoft.Quantum.Tests {
         let bigOp = ApplyPauli([PauliI, PauliX, PauliY, PauliZ, PauliI], _);
         let smallOp = ApplyPauli([PauliX, PauliY, PauliZ], _);
         AssertOperationsEqualReferenced(5, ApplyToSubregister(smallOp, [1, 2, 3], _), bigOp);
-        AssertOperationsEqualReferenced(5, RestrictToSubregister(smallOp, [1, 2, 3]), bigOp);
+        AssertOperationsEqualReferenced(5, RestrictedToSubregister(smallOp, [1, 2, 3]), bigOp);
         AssertOperationsEqualReferenced(5, ApplyToSubregisterC(smallOp, [1, 2, 3], _), bigOp);
-        AssertOperationsEqualReferenced(5, RestrictToSubregisterC(smallOp, [1, 2, 3]), bigOp);
+        AssertOperationsEqualReferenced(5, RestrictedToSubregisterC(smallOp, [1, 2, 3]), bigOp);
         AssertOperationsEqualReferenced(5, ApplyToSubregisterA(smallOp, [1, 2, 3], _), bigOp);
-        AssertOperationsEqualReferenced(5, RestrictToSubregisterA(smallOp, [1, 2, 3]), bigOp);
+        AssertOperationsEqualReferenced(5, RestrictedToSubregisterA(smallOp, [1, 2, 3]), bigOp);
         AssertOperationsEqualReferenced(5, ApplyToSubregisterCA(smallOp, [1, 2, 3], _), bigOp);
-        AssertOperationsEqualReferenced(5, RestrictToSubregisterCA(smallOp, [1, 2, 3]), bigOp);
+        AssertOperationsEqualReferenced(5, RestrictedToSubregisterCA(smallOp, [1, 2, 3]), bigOp);
     }
     
     
-    operation CControlledExpected (op : (Qubit => Unit : Adjoint, Controlled), target : Qubit[]) : Unit {
+    operation CControlledExpected (op : (Qubit => Unit is Adj + Ctl), target : Qubit[]) : Unit {
         
         body (...) {
             op(target[0]);
@@ -146,7 +146,7 @@ namespace Microsoft.Quantum.Tests {
     }
     
     
-    operation CControlledActualC (op : (Qubit => Unit : Controlled), target : Qubit[]) : Unit {
+    operation CControlledActualC (op : (Qubit => Unit is Ctl), target : Qubit[]) : Unit {
         
         body (...) {
             ApplyToEachC(CControlledC(op), Zip([true, false, true], target));
@@ -156,7 +156,7 @@ namespace Microsoft.Quantum.Tests {
     }
     
     
-    operation CControlledActualA (op : (Qubit => Unit : Adjoint), target : Qubit[]) : Unit {
+    operation CControlledActualA (op : (Qubit => Unit is Adj), target : Qubit[]) : Unit {
         
         body (...) {
             ApplyToEachA(CControlledA(op), Zip([true, false, true], target));
@@ -166,7 +166,7 @@ namespace Microsoft.Quantum.Tests {
     }
     
     
-    operation CControlledActualCA (op : (Qubit => Unit : Adjoint, Controlled), target : Qubit[]) : Unit {
+    operation CControlledActualCA (op : (Qubit => Unit is Adj + Ctl), target : Qubit[]) : Unit {
         
         body (...) {
             ApplyToEachCA(CControlledCA(op), Zip([true, false, true], target));

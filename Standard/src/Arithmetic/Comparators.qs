@@ -39,7 +39,7 @@ namespace Microsoft.Quantum.Arithmetic {
             using (auxiliary = Qubit()) {
                 ApplyWithCA(
                     _ApplyRippleCarryComparatorLE(x, y, [auxiliary], _),
-                    BindCA([X, CNOT(Tail(x!), _)]),
+                    BoundCA([X, CNOT(Tail(x!), _)]),
                     output
                 );
             }

@@ -33,37 +33,27 @@ namespace Microsoft.Quantum.Canon {
     ///      Appl. Algebra Eng. Commun. Comput.
     ///      19(3): 177-193 (2008) ](http://doi.org/10.1007/s00200-008-0072-2)
     /// - [ *D. Coppersmith* arXiv:quant-ph/0201067v1 ](https://arxiv.org/abs/quant-ph/0201067)
-    operation ApproximateQFT (a : Int, qs : BigEndian) : Unit {
-        body (...) {
-            let nQubits = Length(qs!);
-            EqualityFactB(nQubits > 0, true, $"`Length(qs)` must be least 1");
-            EqualityFactB(a > 0 and a <= nQubits, true, $"`a` must be positive and less than `Length(qs)`");
+    operation ApproximateQFT (a : Int, qs : BigEndian) : Unit is Adj + Ctl {
+        let nQubits = Length(qs!);
+        Fact(nQubits > 0, $"`Length(qs)` must be least 1");
+        Fact(a > 0 and a <= nQubits, $"`a` must be positive and less than `Length(qs)`");
 
-            for (i in 0 .. nQubits - 1)
-            {
-                for (j in 0 .. i - 1)
-                {
-                    if (i - j < a)
-                    {
-                        Controlled R1Frac([(qs!)[i]], (1, i - j, (qs!)[j]));
-                    }
+        for (i in 0 .. nQubits - 1) {
+            for (j in 0 .. i - 1) {
+                if (i - j < a) {
+                    Controlled R1Frac([(qs!)[i]], (1, i - j, (qs!)[j]));
                 }
-                
-                H((qs!)[i]);
             }
-            
-            // Apply the bit reversal permutation to the quantum register as
-            // a side effect, such that we enforce the invariants specified
-            // by the BigEndian UDT.
-            SwapReverseRegister(qs!);
+
+            H((qs!)[i]);
         }
-        
-        adjoint invert;
-        controlled distribute;
-        controlled adjoint distribute;
+
+        // Apply the bit reversal permutation to the quantum register as
+        // a side effect, such that we enforce the invariants specified
+        // by the BigEndian UDT.
+        SwapReverseRegister(qs!);
     }
-    
-    
+
     /// # Summary
     /// Performs the Quantum Fourier Transform on a quantum register containing an
     /// integer in the big-endian representation.
@@ -78,14 +68,8 @@ namespace Microsoft.Quantum.Canon {
     /// # See Also
     /// - Microsoft.Quantum.Canon.ApproximateQFT
     /// - Microsoft.Quantum.Canon.QFTLE
-    operation ApplyQuantumFourierTransformBE(qs : BigEndian) : Unit {
-        body (...) {
-            ApproximateQFT(Length(qs!), qs);
-        }
-
-        adjoint invert;
-        controlled distribute;
-        controlled adjoint distribute;
+    operation _ApplyQuantumFourierTransformBE(qs : BigEndian) : Unit is Adj + Ctl {
+        ApproximateQFT(Length(qs!), qs);
     }
 
     /// # Summary
@@ -102,16 +86,8 @@ namespace Microsoft.Quantum.Canon {
     ///
     /// # See Also
     /// - ApplyQuantumFourierTransformBE
-    operation ApplyQuantumFourierTransformLE(qs : LittleEndian) : Unit {
-        body (...) {
-            ApplyReversedOpBigEndianCA(ApplyQuantumFourierTransformBE, qs);
-        }
-
-        adjoint invert;
-        controlled distribute;
-        controlled adjoint distribute;
+    operation ApplyQuantumFourierTransform(qs : LittleEndian) : Unit is Adj + Ctl {
+        ApplyReversedOpBECA(_ApplyQuantumFourierTransformBE, qs);
     }
 
 }
-
-

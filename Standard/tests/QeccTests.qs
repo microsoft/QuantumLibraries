@@ -60,7 +60,7 @@ namespace Microsoft.Quantum.Tests {
         
         let code = BitFlipCode();
         let fn = BitFlipRecoveryFn();
-        let errors = Mapped(CurryOp(ApplyPauli), [[PauliX, PauliI, PauliI], [PauliI, PauliX, PauliI], [PauliI, PauliI, PauliX]]);
+        let errors = Mapped(CurriedOp(ApplyPauli), [[PauliX, PauliI, PauliI], [PauliI, PauliX, PauliI], [PauliI, PauliI, PauliX]]);
         let assertionGenerator = AssertCodeCorrectsError(code, 1, 2, fn);
         assertionGenerator(NoOp<Qubit[]>);
         ApplyToEach(assertionGenerator, errors);
@@ -75,7 +75,7 @@ namespace Microsoft.Quantum.Tests {
         let code = FiveQubitCode();
         let fn = FiveQubitCodeRecoveryFn();
         let assertionGenerator = AssertCodeCorrectsError(code, 1, 4, fn);
-        let errors = Mapped(CurryOp(ApplyPauli), WeightOnePaulis(5));
+        let errors = Mapped(CurriedOp(ApplyPauli), WeightOnePaulis(5));
         assertionGenerator(NoOp<Qubit[]>);
         ApplyToEach(assertionGenerator, errors);
     }
@@ -452,7 +452,7 @@ namespace Microsoft.Quantum.Tests {
         let code = SteaneCode();
         let (fnX, fnZ) = SteaneCodeRecoveryFns();
         let assertionGenerator = AssertCSSCodeCorrectsError(code, 1, 6, fnX, fnZ);
-        let errors = Mapped(CurryOp(ApplyPauli), WeightOnePaulis(7));
+        let errors = Mapped(CurriedOp(ApplyPauli), WeightOnePaulis(7));
         assertionGenerator(NoOp<Qubit[]>);
         ApplyToEach(assertionGenerator, errors);
     }

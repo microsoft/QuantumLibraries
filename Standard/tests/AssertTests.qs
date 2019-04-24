@@ -67,15 +67,15 @@ namespace Microsoft.Quantum.Tests {
     
     /// # Summary
     /// Performs the same test as SelfAdjointOperationsTest,
-    /// but using Bind to gather the self-adjoint operations.
+    /// but using Bound to gather the self-adjoint operations.
     ///
     /// # Remarks
-    /// Marked as ex-fail due to known issues with Bind.
+    /// Marked as ex-fail due to known issues with Bound.
     operation BindSelfAdjointOperationsTestExFail () : Unit {
         for (op in [I, X, Y, Z, H]) {
             let arr = [op, Adjoint op];
-            let bound = BindCA(arr);
-            AssertOperationsEqualReferenced(3, ApplyToEachCA(BindCA(arr), _), ApplyToEachA(I, _));
+            let bound = BoundCA(arr);
+            AssertOperationsEqualReferenced(3, ApplyToEachCA(BoundCA(arr), _), ApplyToEachA(I, _));
         }
     }
     

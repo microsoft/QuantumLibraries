@@ -81,7 +81,7 @@ namespace Microsoft.Quantum.Tests {
     }
     
     
-    operation ApplyBEToRegisterA (op : (BigEndian => Unit : Adjoint), target : Qubit[]) : Unit {
+    operation ApplyBEToRegisterA (op : (BigEndian => Unit is Adj), target : Qubit[]) : Unit {
         
         body (...) {
             op(BigEndian(target));

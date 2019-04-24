@@ -10,7 +10,7 @@ namespace Microsoft.Quantum.Tests {
         cGate(target[0], target[1]);
     }
 
-    operation ApplyControlledOpToRegister(op : (Qubit => Unit : Adjoint, Controlled), target : Qubit[]) : Unit {
+    operation ApplyControlledOpToRegister(op : (Qubit => Unit is Adj + Ctl), target : Qubit[]) : Unit {
         body (...) {
             Controlled op(Most(target), Tail(target));
         }

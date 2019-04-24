@@ -42,7 +42,7 @@ namespace Microsoft.Quantum.Canon
     ///
     /// # See Also
     /// - @"microsoft.quantum.canon.applytofirstqubit"
-    operation ApplyToFirstQubitA (op : (Qubit => Unit : Adjoint), register : Qubit[]) : Unit
+    operation ApplyToFirstQubitA (op : (Qubit => Unit is Adj), register : Qubit[]) : Unit
     {
         body (...)
         {
@@ -69,7 +69,7 @@ namespace Microsoft.Quantum.Canon
     ///
     /// # See Also
     /// - @"microsoft.quantum.canon.applytofirstqubit"
-    operation ApplyToFirstQubitC (op : (Qubit => Unit : Controlled), register : Qubit[]) : Unit
+    operation ApplyToFirstQubitC (op : (Qubit => Unit is Ctl), register : Qubit[]) : Unit
     {
         body (...)
         {
@@ -96,7 +96,7 @@ namespace Microsoft.Quantum.Canon
     ///
     /// # See Also
     /// - @"microsoft.quantum.canon.applytofirstqubit"
-    operation ApplyToFirstQubitCA (op : (Qubit => Unit : Adjoint, Controlled), register : Qubit[]) : Unit
+    operation ApplyToFirstQubitCA (op : (Qubit => Unit is Adj + Ctl), register : Qubit[]) : Unit
     {
         body (...)
         {
@@ -162,7 +162,7 @@ namespace Microsoft.Quantum.Canon
     ///
     /// # See Also
     /// - @"microsoft.quantum.canon.applytofirsttwoqubits"
-    operation ApplyToFirstTwoQubitsA (op : ((Qubit, Qubit) => Unit : Adjoint), register : Qubit[]) : Unit
+    operation ApplyToFirstTwoQubitsA (op : ((Qubit, Qubit) => Unit is Adj), register : Qubit[]) : Unit
     {
         body (...)
         {
@@ -196,7 +196,7 @@ namespace Microsoft.Quantum.Canon
     ///
     /// # See Also
     /// - @"microsoft.quantum.canon.applytofirsttwoqubits"
-    operation ApplyToFirstTwoQubitsC (op : ((Qubit, Qubit) => Unit : Controlled), register : Qubit[]) : Unit
+    operation ApplyToFirstTwoQubitsC (op : ((Qubit, Qubit) => Unit is Ctl), register : Qubit[]) : Unit
     {
         body (...)
         {
@@ -230,7 +230,7 @@ namespace Microsoft.Quantum.Canon
     ///
     /// # See Also
     /// - @"microsoft.quantum.canon.applytofirsttwoqubits"
-    operation ApplyToFirstTwoQubitsCA (op : ((Qubit, Qubit) => Unit : Adjoint, Controlled), register : Qubit[]) : Unit
+    operation ApplyToFirstTwoQubitsCA (op : ((Qubit, Qubit) => Unit is Adj + Ctl), register : Qubit[]) : Unit
     {
         body (...)
         {
@@ -293,7 +293,7 @@ namespace Microsoft.Quantum.Canon
     ///
     /// # See Also
     /// - Microsoft.Quantum.Canon.ApplyToFirstThreeQubits
-    operation ApplyToFirstThreeQubitsA (op : ((Qubit, Qubit, Qubit) => Unit : Adjoint), register : Qubit[]) : Unit
+    operation ApplyToFirstThreeQubitsA (op : ((Qubit, Qubit, Qubit) => Unit is Adj), register : Qubit[]) : Unit
     {
         body (...)
         {
@@ -326,7 +326,7 @@ namespace Microsoft.Quantum.Canon
     ///
     /// # See Also
     /// - Microsoft.Quantum.Canon.ApplyToFirstThreeQubits
-    operation ApplyToFirstThreeQubitsC (op : ((Qubit, Qubit, Qubit) => Unit : Controlled), register : Qubit[]) : Unit
+    operation ApplyToFirstThreeQubitsC (op : ((Qubit, Qubit, Qubit) => Unit is Ctl), register : Qubit[]) : Unit
     {
         body (...)
         {
@@ -359,7 +359,7 @@ namespace Microsoft.Quantum.Canon
     ///
     /// # See Also
     /// - Microsoft.Quantum.Canon.ApplyToFirstThreeQubits
-    operation ApplyToFirstThreeQubitsCA (op : ((Qubit, Qubit, Qubit) => Unit : Adjoint, Controlled), register : Qubit[]) : Unit
+    operation ApplyToFirstThreeQubitsCA (op : ((Qubit, Qubit, Qubit) => Unit is Adj + Ctl), register : Qubit[]) : Unit
     {
         body (...)
         {

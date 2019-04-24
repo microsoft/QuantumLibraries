@@ -212,7 +212,7 @@ namespace Microsoft.Quantum.AmplitudeAmplification {
     
     /// # Summary
     /// Returns a unitary that implements oblivious amplitude amplification by specifying for partial reflections.
-    function AmpAmpObliviousByReflectionPhases (phases : ReflectionPhases, ancillaReflection : ReflectionOracle, targetStateReflection : ReflectionOracle, signalOracle : ObliviousOracle) : ((Qubit[], Qubit[]) => Unit : Adjoint, Controlled)
+    function AmpAmpObliviousByReflectionPhases (phases : ReflectionPhases, ancillaReflection : ReflectionOracle, targetStateReflection : ReflectionOracle, signalOracle : ObliviousOracle) : ((Qubit[], Qubit[]) => Unit is Adj + Ctl)
     {
         return AmpAmpObliviousByReflectionPhasesImpl(phases, ancillaReflection, targetStateReflection, signalOracle, _, _);
     }
@@ -243,7 +243,7 @@ namespace Microsoft.Quantum.AmplitudeAmplification {
     /// O\ket{\text{start}}\_{fa}\ket{\psi}\_s= \lambda\ket{1}\_f\ket{\text{anything}}\_a\ket{\text{target}}\_s U \ket{\psi}\_s + \sqrt{1-|\lambda|^2}\ket{0}\_f\cdots,
     /// \end{align}
     /// for some unitary $U$.
-    function AmpAmpObliviousByOraclePhases (phases : ReflectionPhases, ancillaOracle : DeterministicStateOracle, signalOracle : ObliviousOracle, idxFlagQubit : Int) : ((Qubit[], Qubit[]) => Unit : Adjoint, Controlled)
+    function AmpAmpObliviousByOraclePhases (phases : ReflectionPhases, ancillaOracle : DeterministicStateOracle, signalOracle : ObliviousOracle, idxFlagQubit : Int) : ((Qubit[], Qubit[]) => Unit is Adj + Ctl)
     {
         let ancillaReflection = ReflectionStart();
         let targetStateReflection = TargetStateReflectionOracle(idxFlagQubit);
@@ -271,7 +271,7 @@ namespace Microsoft.Quantum.AmplitudeAmplification {
     /// # Remarks
     /// Amplitude amplification is a special case of oblivious amplitude amplification where there are no system qubits and the oblivious oracle is set to identity.
     /// In most cases, `startQubits` is initialized in the state $\ket{\text{start}}\_1$, which is the $-1$ eigenstate of `startStateReflection`.
-    function AmpAmpByReflectionsPhases (phases : ReflectionPhases, startStateReflection : ReflectionOracle, targetStateReflection : ReflectionOracle) : (Qubit[] => Unit : Adjoint, Controlled)
+    function AmpAmpByReflectionsPhases (phases : ReflectionPhases, startStateReflection : ReflectionOracle, targetStateReflection : ReflectionOracle) : (Qubit[] => Unit is Adj + Ctl)
     {
         // Pass empty qubit array using fact that NoOp does nothing.
         let qubitEmpty = new Qubit[0];
@@ -305,7 +305,7 @@ namespace Microsoft.Quantum.AmplitudeAmplification {
     /// A\ket{0}\_{f}\ket{0}\_s= \lambda\ket{1}\_f\ket{\text{target}}\_s + \sqrt{1-|\lambda|^2}\ket{0}\_f\cdots,
     /// \end{align}
     /// In most cases, `flagQubit` and `ancillaRegister` is initialized in the state $\ket{0}\_{f}\ket{0}\_s$.
-    function AmpAmpByOraclePhases (phases : ReflectionPhases, stateOracle : StateOracle, idxFlagQubit : Int) : (Qubit[] => Unit : Adjoint, Controlled)
+    function AmpAmpByOraclePhases (phases : ReflectionPhases, stateOracle : StateOracle, idxFlagQubit : Int) : (Qubit[] => Unit is Adj + Ctl)
     {
         let qubitEmpty = new Qubit[0];
         let signalOracle = ObliviousOracle(NoOp<(Qubit[], Qubit[])>);
@@ -344,7 +344,7 @@ namespace Microsoft.Quantum.AmplitudeAmplification {
     ///
     /// # References
     /// - [ *G. Brassard, P. Hoyer, M. Mosca, A. Tapp* ](https://arxiv.org/abs/quant-ph/0005055)
-    function AmpAmpByOracle (nIterations : Int, stateOracle : StateOracle, idxFlagQubit : Int) : (Qubit[] => Unit : Adjoint, Controlled)
+    function AmpAmpByOracle (nIterations : Int, stateOracle : StateOracle, idxFlagQubit : Int) : (Qubit[] => Unit is Adj + Ctl)
     {
         let phases = AmpAmpPhasesStandard(nIterations);
         return AmpAmpByOraclePhases(phases, stateOracle, idxFlagQubit);

@@ -30,7 +30,7 @@ namespace Microsoft.Quantum.Canon {
     ///
     /// # See Also
     /// - Microsoft.Quantum.Canon.ApplyToEach
-    operation ApplyToEachCA<'T> (singleElementOperation : ('T => Unit : Adjoint, Controlled), register : 'T[]) : Unit
+    operation ApplyToEachCA<'T> (singleElementOperation : ('T => Unit is Adj + Ctl), register : 'T[]) : Unit
     {
         body (...)
         {
@@ -71,7 +71,7 @@ namespace Microsoft.Quantum.Canon {
     ///
     /// # See Also
     /// - Microsoft.Quantum.Canon.ApplyToEach
-    operation ApplyToEachA<'T> (singleElementOperation : ('T => Unit : Adjoint), register : 'T[]) : Unit
+    operation ApplyToEachA<'T> (singleElementOperation : ('T => Unit is Adj), register : 'T[]) : Unit
     {
         body (...)
         {
@@ -110,7 +110,7 @@ namespace Microsoft.Quantum.Canon {
     ///
     /// # See Also
     /// - Microsoft.Quantum.Canon.ApplyToEach
-    operation ApplyToEachC<'T> (singleElementOperation : ('T => Unit : Controlled), register : 'T[]) : Unit
+    operation ApplyToEachC<'T> (singleElementOperation : ('T => Unit is Ctl), register : 'T[]) : Unit
     {
         body (...)
         {
