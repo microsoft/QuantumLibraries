@@ -9,6 +9,7 @@ variables:
   Build.Major: 0
   Build.Minor: 0
   LibrariesRootFolder: $(System.DefaultWorkingDirectory)
+  DocsOutDir: ''
   Assembly.Version: $(Build.BuildNumber)
   Nuget.Version: $(Assembly.Version)-preview
   Python.Version: $(Assembly.Version)
