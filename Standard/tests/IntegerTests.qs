@@ -25,7 +25,7 @@ namespace Microsoft.Quantum.Arithmetic {
                 IntegerAdder(summand1LE, summand2LE, carry);
  
                 let sum = summand1 + summand2;
-                let expected = Modulus(sum, 2^numberOfQubits);
+                let expected = ModulusI(sum, 2^numberOfQubits);
                 set actual1 = MeasureInteger(summand1LE);
                 EqualityFactI(summand1, actual1, $"Expected {summand1}, got {actual1}");
                 set actual2 = MeasureInteger(summand2LE);
@@ -138,7 +138,7 @@ namespace Microsoft.Quantum.Arithmetic {
             IntegerAdder(summand1LE, summand2LE);
  
             let sum = summand1 + summand2;
-            let expected = Modulus(sum, 2^numberOfQubits);
+            let expected = ModulusI(sum, 2^numberOfQubits);
             set actual1 = MeasureInteger(summand1LE);
             EqualityFactI(summand1, actual1, $"Expected {summand1}, got {actual1}");
             set actual2 = MeasureInteger(summand2LE);

@@ -175,7 +175,7 @@ namespace Microsoft.Quantum.Arithmetic {
         }
 
         for (i in 0 .. Length(multiplier!) - 1) {
-            let summand = (ExpMod(2, i, modulus) * constMultiplier) % modulus;
+            let summand = (ExpModI(2, i, modulus) * constMultiplier) % modulus;
             Controlled IncrementPhaseByModularInteger([(multiplier!)[i]], (summand, modulus, phaseSummand));
         }
     }
@@ -206,7 +206,7 @@ namespace Microsoft.Quantum.Arithmetic {
         // Check the preconditions using Microsoft.Quantum.Canon.EqualityFactB
         EqualityFactB(constMultiplier >= 0 and constMultiplier < modulus, true, $"`constMultiplier` must be between 0 and `modulus`");
         EqualityFactB(modulus <= 2 ^ Length(multiplier!), true, $"`multiplier` must be big enough to fit integers modulo `modulus`");
-        EqualityFactB(IsCoprime(constMultiplier, modulus), true, $"`constMultiplier` and `modulus` must be co-prime");
+        EqualityFactB(IsCoprimeI(constMultiplier, modulus), true, $"`constMultiplier` and `modulus` must be co-prime");
 
         using (summand = Qubit[Length(multiplier!)]) {
             // recall that newly allocated qubits are all in 0 state

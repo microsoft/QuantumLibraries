@@ -8,12 +8,6 @@ namespace Microsoft.Quantum.Math {
     open Microsoft.Quantum.Arrays;
 
     /// # Summary
-    /// Represents a rational number of the form `p/q`. Integer `p` is
-    /// the first element of the tuple and `q` is the second element
-    /// of the tuple.
-    newtype Fraction = (Int, Int);
-
-    /// # Summary
     /// Computes the base-2 logarithm of a number.
     ///
     /// # Input
@@ -170,40 +164,49 @@ namespace Microsoft.Quantum.Math {
     /// # Remarks
     /// This function behaves different to how the operator `%` behaves in C# and Q# as in the result
     /// is always a positive integer between 0 and `modulus - 1`, even if value is negative.
-    function Modulus (value : Int, modulus : Int) : Int
-    {
-        EqualityFactB(modulus > 0, true, $"`modulus` must be positive");
+    function ModulusI(value : Int, modulus : Int) : Int {
+        Fact(modulus > 0, $"`modulus` must be positive");
         let r = value % modulus;
-        
-        if (r < 0)
-        {
-            return r + modulus;
-        }
-        else
-        {
-            return r;
-        }
+        return (r < 0) ? (r + modulus) | r;
+    }
+
+    /// # Summary
+    /// Computes the canonical residue of `value` modulo `modulus`.
+    /// # Input
+    /// ## value
+    /// The value of which residue is computed
+    /// ## modulus
+    /// The modulus by which residues are take, must be positive
+    /// # Output
+    /// Integer $r$ between 0 and `modulus - 1` such that `value - r` is divisible by modulus
+    ///
+    /// # Remarks
+    /// This function behaves different to how the operator `%` behaves in C# and Q# as in the result
+    /// is always a positive integer between 0 and `modulus - 1`, even if value is negative.
+    function ModulusL(value : BigInt, modulus : BigInt) : BigInt {
+        Fact(modulus > 0L, $"`modulus` must be positive");
+        let r = value % modulus;
+        return (r < 0L) ? (r + modulus) | r;
     }
     
     
     /// # Summary
-    /// Let us denote expBase by x, power by p and modulus by N.
-    /// The function returns xᵖ mod N.
-    /// 
+    /// Let us denote expBase by $x$, power by $p$ and modulus by $N$.
+    /// The function returns $x^p \operatorname{mod} N$.
+    ///
     /// We assume that $N$, $x$ are positive and power is non-negative.
     ///
     /// # Remarks
     /// Takes time proportional to the number of bits in `power`, not the `power` itself.
-    function ExpMod (expBase : Int, power : Int, modulus : Int) : Int
-    {
-        EqualityFactB(power >= 0, true, $"`power` must be non-negative");
-        EqualityFactB(modulus > 0, true, $"`modulus` must be positive");
-        EqualityFactB(expBase > 0, true, $"`expBase` must be positive");
+    function ExpModI(expBase : Int, power : Int, modulus : Int) : Int {
+        Fact(power >= 0, $"`power` must be non-negative");
+        Fact(modulus > 0, $"`modulus` must be positive");
+        Fact(expBase > 0, $"`expBase` must be positive");
         mutable res = 1;
         mutable expPow2mod = expBase;
         
         // express p as bit-string pₙ … p₀
-        let powerBitExpansion = IntAsBoolArray(power, BitSize(power));
+        let powerBitExpansion = IntAsBoolArray(power, BitSizeI(power));
         let expBaseMod = expBase % modulus;
         
         for (k in IndexRange(powerBitExpansion))
@@ -220,14 +223,45 @@ namespace Microsoft.Quantum.Math {
         
         return res;
     }
-    
-    
+
+    /// # Summary
+    /// Let us denote expBase by $x$, power by $p$ and modulus by $N$.
+    /// The function returns $x^p \operatorname{mod} N$.
+    ///
+    /// We assume that $N$, $x$ are positive and power is non-negative.
+    ///
+    /// # Remarks
+    /// Takes time proportional to the number of bits in `power`, not the `power` itself.
+    function ExpModL(expBase : BigInt, power : BigInt, modulus : BigInt) : BigInt {
+        Fact(power >= 0L, $"`power` must be non-negative");
+        Fact(modulus > 0L, $"`modulus` must be positive");
+        Fact(expBase > 0L, $"`expBase` must be positive");
+        mutable res = 1L;
+        mutable expPow2mod = expBase;
+        
+        // express p as bit-string pₙ … p₀
+        let powerBitExpansion = BigIntAsBoolArray(power, BitSizeI(power));
+        let expBaseMod = expBase % modulus;
+        
+        for (k in IndexRange(powerBitExpansion))
+        {
+            if (powerBitExpansion[k])
+            {
+                // if bit pₖ is 1, multiply res by expBase^(2ᵏ) (mod `modulus`)
+                set res = (res * expPow2mod) % modulus;
+            }
+            
+            // update value of expBase^(2ᵏ) (mod `modulus`)
+            set expPow2mod = (expPow2mod * expPow2mod) % modulus;
+        }
+        
+        return res;
+    }
+
     /// # Summary
     /// Internal recursive call to calculate the GCD.
-    function _gcd (signA : Int, signB : Int, r : (Int, Int), s : (Int, Int), t : (Int, Int)) : (Int, Int)
-    {
-        if (Snd(r) == 0)
-        {
+    function _ExtendedGreatestCommonDivisorI(signA : Int, signB : Int, r : (Int, Int), s : (Int, Int), t : (Int, Int)) : (Int, Int) {
+        if (Snd(r) == 0) {
             return (Fst(s) * signA, Fst(t) * signB);
         }
         
@@ -240,8 +274,9 @@ namespace Microsoft.Quantum.Math {
     
     
     /// # Summary
-    /// Computes a tuple (u,v) such that u⋅a + v⋅b = GCD(a,b), where GCD is a
-    /// greatest common divisor of a and b. The GCD is always positive.
+    /// Computes a tuple $(u,v)$ such that $u \cdot a + v \cdot b = \operatorname{GCD}(a, b)$,
+    /// where $\operatorname{GCD}$ is $a$
+    /// greatest common divisor of $a$ and $b$. The GCD is always positive.
     ///
     /// # Input
     /// ## a
@@ -250,23 +285,38 @@ namespace Microsoft.Quantum.Math {
     /// the second number of which extended greatest common divisor is being computed
     ///
     /// # Output
-    /// Tuple (u,v) with the property u⋅a + v⋅b = GCD(a,b)
+    /// Tuple $(u,v)$ with the property $u \cdot a + v \cdot b = \operatorname{GCD}(a, b)$.
     ///
     /// # References
     /// - This implementation is according to https://en.wikipedia.org/wiki/Extended_Euclidean_algorithm
-    function ExtendedGCD (a : Int, b : Int) : (Int, Int)
-    {
+    function ExtendedGreatestCommonDivisorI(a : Int, b : Int) : (Int, Int) {
         let signA = SignI(a);
         let signB = SignI(b);
         let s = (1, 0);
         let t = (0, 1);
         let r = (a * signA, b * signB);
-        return _gcd(signA, signB, r, s, t);
+        return _ExtendedGreatestCommonDivisorI(signA, signB, r, s, t);
+    }
+
+    /// # Summary
+    /// Internal recursive call to calculate the GCD.
+    function _ExtendedGreatestCommonDivisorL(signA : BigInt, signB : BigInt, r : (BigInt, BigInt), s : (BigInt, BigInt), t : (BigInt, BigInt)) : (BigInt, BigInt) {
+        if (Snd(r) == 0L) {
+            return (Fst(s) * signA, Fst(t) * signB);
+        }
+        
+        let quotient = Fst(r) / Snd(r);
+        let r_ = (Snd(r), Fst(r) - quotient * Snd(r));
+        let s_ = (Snd(s), Fst(s) - quotient * Snd(s));
+        let t_ = (Snd(t), Fst(t) - quotient * Snd(t));
+        return _gcd_big(signA, signB, r_, s_, t_);
     }
     
     
     /// # Summary
-    /// Computes the greatest common divisor of a and b. The GCD is always positive.
+    /// Computes a tuple $(u,v)$ such that $u \cdot a + v \cdot b = \operatorname{GCD}(a, b)$,
+    /// where $\operatorname{GCD}$ is $a$
+    /// greatest common divisor of $a$ and $b$. The GCD is always positive.
     ///
     /// # Input
     /// ## a
@@ -275,17 +325,56 @@ namespace Microsoft.Quantum.Math {
     /// the second number of which extended greatest common divisor is being computed
     ///
     /// # Output
-    /// Greatest common divisor of a and b
-    function GCD (a : Int, b : Int) : Int
-    {
-        let (u, v) = ExtendedGCD(a, b);
+    /// Tuple $(u,v)$ with the property $u \cdot a + v \cdot b = \operatorname{GCD}(a, b)$.
+    ///
+    /// # References
+    /// - This implementation is according to https://en.wikipedia.org/wiki/Extended_Euclidean_algorithm
+    function ExtendedGreatestCommonDivisorL(a : BigInt, b : BigInt) : (BigInt, BigInt) {
+        let signA = SignL(a);
+        let signB = SignL(b);
+        let s = (1l, 0L);
+        let t = (0l, 1L);
+        let r = (a * signA, b * signB);
+        return _ExtendedGreatestCommonDivisorL(signA, signB, r, s, t);
+    }
+
+    
+    /// # Summary
+    /// Computes the greatest common divisor of $a$ and $b$. The GCD is always positive.
+    ///
+    /// # Input
+    /// ## a
+    /// the first number of which extended greatest common divisor is being computed
+    /// ## b
+    /// the second number of which extended greatest common divisor is being computed
+    ///
+    /// # Output
+    /// Greatest common divisor of $a$ and $b$
+    function GreatestCommonDivisorI(a : Int, b : Int) : Int {
+        let (u, v) = ExtendedGreatestCommonDivisorI(a, b);
+        return u * a + v * b;
+    }
+
+    /// # Summary
+    /// Computes the greatest common divisor of $a$ and $b$. The GCD is always positive.
+    ///
+    /// # Input
+    /// ## a
+    /// the first number of which extended greatest common divisor is being computed
+    /// ## b
+    /// the second number of which extended greatest common divisor is being computed
+    ///
+    /// # Output
+    /// Greatest common divisor of $a$ and $b$
+    function GreatestCommonDivisorL(a : BigInt, b : BigInt) : BigInt {
+        let (u, v) = ExtendedGreatestCommonDivisorL(a, b);
         return u * a + v * b;
     }
     
     
     /// # Summary
     /// Internal recursive call to calculate the GCD with a bound
-    function _gcd_continued (signA : Int, signB : Int, r : (Int, Int), s : (Int, Int), t : (Int, Int), denominatorBound : Int) : Fraction
+    function _ContinuedFractionConvergentI(signA : Int, signB : Int, r : (Int, Int), s : (Int, Int), t : (Int, Int), denominatorBound : Int) : Fraction
     {
         if (Snd(r) == 0 or AbsI(Snd(s)) > denominatorBound)
         {
@@ -301,7 +390,7 @@ namespace Microsoft.Quantum.Math {
         let r_ = (Snd(r), Fst(r) - quotient * Snd(r));
         let s_ = (Snd(s), Fst(s) - quotient * Snd(s));
         let t_ = (Snd(t), Fst(t) - quotient * Snd(t));
-        return _gcd_continued(signA, signB, r_, s_, t_, denominatorBound);
+        return _ContinuedFractionConvergentI(signA, signB, r_, s_, t_, denominatorBound);
     }
     
     
@@ -315,21 +404,64 @@ namespace Microsoft.Quantum.Math {
     /// # Output
     /// Continued fraction closest to `fraction`
     /// with the denominator less or equal to `denominatorBound`
-    function ContinuedFractionConvergent (fraction : Fraction, denominatorBound : Int) : Fraction
+    function ContinuedFractionConvergentI(fraction : Fraction, denominatorBound : Int) : Fraction
     {
-        EqualityFactB(denominatorBound > 0, true, $"Denominator bound must be positive");
+        Fact(denominatorBound > 0, $"Denominator bound must be positive");
         let (a, b) = fraction!;
         let signA = SignI(a);
         let signB = SignI(b);
         let s = (1, 0);
         let t = (0, 1);
         let r = (a * signA, b * signB);
-        return _gcd_continued(signA, signB, r, s, t, denominatorBound);
+        return _ContinuedFractionConvergentI(signA, signB, r, s, t, denominatorBound);
+    }
+    
+    /// # Summary
+    /// Internal recursive call to calculate the GCD with a bound
+    function _ContinuedFractionConvergentL(signA : BigInt, signB : BigInt, r : (BigInt, BigInt), s : (BigInt, BigInt), t : (BigInt, BigInt), denominatorBound : BigInt) : BigsFraction
+    {
+        if (Snd(r) == 0L or AbsL(Snd(s)) > denominatorBound)
+        {
+            if (Snd(r) == 0L and AbsL(Snd(s)) <= denominatorBound)
+            {
+                return BigFraction(-Snd(t) * signB, Snd(s) * signA);
+            }
+            
+            return BigFraction(-Fst(t) * signB, Fst(s) * signA);
+        }
+        
+        let quotient = Fst(r) / Snd(r);
+        let r_ = (Snd(r), Fst(r) - quotient * Snd(r));
+        let s_ = (Snd(s), Fst(s) - quotient * Snd(s));
+        let t_ = (Snd(t), Fst(t) - quotient * Snd(t));
+        return _ContinuedFractionConvergentL(signA, signB, r_, s_, t_, denominatorBound);
     }
     
     
     /// # Summary
-    /// Returns  true if a and b are co-prime and false otherwise.
+    /// Finds the continued fraction convergent closest to `fraction`
+    /// with the denominator less or equal to `denominatorBound`
+    ///
+    /// # Input
+    ///
+    ///
+    /// # Output
+    /// Continued fraction closest to `fraction`
+    /// with the denominator less or equal to `denominatorBound`
+    function ContinuedFractionConvergentL(fraction : Fraction, denominatorBound : BigInt) : BigFraction
+    {
+        Fact(denominatorBound > 0, $"Denominator bound must be positive");
+        let (a, b) = fraction!;
+        let signA = SignL(a);
+        let signB = SignL(b);
+        let s = (1L, 0L);
+        let t = (0L, 1L);
+        let r = (a * signA, b * signB);
+        return _ContinuedFractionConvergentL(signA, signB, r, s, t, denominatorBound);
+    }
+    
+    /// # Summary
+    /// Returns true if $a$ and $b$ are co-prime and false otherwise.
     ///
     /// # Input
     /// ## a
@@ -338,17 +470,32 @@ namespace Microsoft.Quantum.Math {
     /// the second number of which co-primality is being tested
     ///
     /// # Output
-    /// True, if a and b are co-prime (e.g. their greatest common divisor is 1 ),
+    /// True, if $a$ and $b$ are co-prime (e.g. their greatest common divisor is 1 ),
     /// and false otherwise
-    function IsCoprime (a : Int, b : Int) : Bool
-    {
-        let (u, v) = ExtendedGCD(a, b);
+    function IsCoprimeI(a : Int, b : Int) : Bool {
+        let (u, v) = ExtendedGreatestCommonDivisorI(a, b);
         return u * a + v * b == 1;
     }
-    
-    
+
     /// # Summary
-    /// Returns b such that `a`⋅b = 1 (mod `modulus`)
+    /// Returns true if $a$ and $b$ are co-prime and false otherwise.
+    ///
+    /// # Input
+    /// ## a
+    /// the first number of which co-primality is being tested
+    /// ## b
+    /// the second number of which co-primality is being tested
+    ///
+    /// # Output
+    /// True, if $a$ and $b$ are co-prime (e.g. their greatest common divisor is 1 ),
+    /// and false otherwise
+    function IsCoprimeL(a : BigInt, b : BigInt) : Bool {
+        let (u, v) = ExtendedGreatestCommonDivisorL(a, b);
+        return u * a + v * b == 1L;
+    }
+
+    /// # Summary
+    /// Returns $b$ such that $a \cdot b = 1 (\operatorname{mod} \texttt{modulus})$.
     ///
     /// # Input
     /// ## a
@@ -357,13 +504,32 @@ namespace Microsoft.Quantum.Math {
     /// The modulus according to which the numbers are inverted
     ///
     /// # Output
-    /// Integer b such that a⋅`b` = 1 (mod `modulus`)
-    function InverseMod (a : Int, modulus : Int) : Int
+    /// Integer $b$ such that $a \cdot b = 1 (\operatorname{mod} \texttt{modulus})$.
+    function InverseModI(a : Int, modulus : Int) : Int
     {
-        let (u, v) = ExtendedGCD(a, modulus);
+        let (u, v) = ExtendedGreatestCommonDivisorI(a, modulus);
         let gcd = u * a + v * modulus;
-        EqualityFactB(gcd == 1, true, $"`a` and `modulus` must be co-prime");
-        return Modulus(u, modulus);
+        EqualityFactI(gcd, 1, $"`a` and `modulus` must be co-prime");
+        return ModulusI(u, modulus);
+    }
+
+    /// # Summary
+    /// Returns $b$ such that $a \cdot b = 1 (\operatorname{mod} \texttt{modulus})$.
+    ///
+    /// # Input
+    /// ## a
+    /// The number being inverted
+    /// ## modulus
+    /// The modulus according to which the numbers are inverted
+    ///
+    /// # Output
+    /// Integer $b$ such that $a \cdot b = 1 (\operatorname{mod} \texttt{modulus})$.
+    function InverseModL(a : Int, modulus : Int) : Int
+    {
+        let (u, v) = ExtendedGreatestCommonDivisorL(a, modulus);
+        let gcd = u * a + v * modulus;
+        EqualityFactL(gcd, 1, $"`a` and `modulus` must be co-prime");
+        return ModulusL(u, modulus);
     }
     
     
@@ -392,10 +558,41 @@ namespace Microsoft.Quantum.Math {
     ///
     /// # Output
     /// The bit-size of `a`.
-    function BitSize(a : Int) : Int
+    function BitSizeI(a : Int) : Int
     {
-        EqualityFactB(a >= 0, true, $"`a` must be non-negative");
+        Fact(a >= 0, $"`a` must be non-negative");
         return _bitsize(a, 0);
+    }
+
+    /// # Summary
+    /// Helper function used to recursively calculate the bitsize of a value.
+    function _bitsize_l(val : BigInt, bitsize : Int) : Int
+    {
+        if (val == 0L)
+        {
+            return bitsize;
+        }
+        
+        return _bitsize(val / 2L, bitsize + 1);
+    }
+    
+    
+    /// # Summary
+    /// For a non-negative integer `a`, returns the number of bits required to represent `a`.
+    ///
+    /// That is, returns the smallest $n$ such
+    /// that $a < 2^n$.
+    ///
+    /// # Input
+    /// ## a
+    /// The integer whose bit-size is to be computed.
+    ///
+    /// # Output
+    /// The bit-size of `a`.
+    function BitSizeL(a : BigInt) : Int
+    {
+        Fact(a >= 0L, $"`a` must be non-negative");
+        return _bitsize_l(a, 0);
     }
     
     
@@ -444,7 +641,7 @@ namespace Microsoft.Quantum.Math {
         let nElements = Length(array);
         let norm = PNorm(p, array);
 
-        if (norm == 0.0){
+        if (norm == 0.0) {
             return array;
         } else {
             mutable output = new Double[nElements];
