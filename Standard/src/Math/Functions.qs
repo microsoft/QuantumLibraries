@@ -191,6 +191,10 @@ namespace Microsoft.Quantum.Math {
     
     
     /// # Summary
+    /// Returns an integer raised to a given power, with respect to a given
+    /// modulus.
+    ///
+    /// # Description
     /// Let us denote expBase by $x$, power by $p$ and modulus by $N$.
     /// The function returns $x^p \operatorname{mod} N$.
     ///
@@ -225,6 +229,10 @@ namespace Microsoft.Quantum.Math {
     }
 
     /// # Summary
+    /// Returns an integer raised to a given power, with respect to a given
+    /// modulus.
+    ///
+    /// # Description
     /// Let us denote expBase by $x$, power by $p$ and modulus by $N$.
     /// The function returns $x^p \operatorname{mod} N$.
     ///
@@ -376,16 +384,12 @@ namespace Microsoft.Quantum.Math {
     /// Internal recursive call to calculate the GCD with a bound
     function _ContinuedFractionConvergentI(signA : Int, signB : Int, r : (Int, Int), s : (Int, Int), t : (Int, Int), denominatorBound : Int) : Fraction
     {
-        if (Snd(r) == 0 or AbsI(Snd(s)) > denominatorBound)
-        {
-            if (Snd(r) == 0 and AbsI(Snd(s)) <= denominatorBound)
-            {
-                return Fraction(-Snd(t) * signB, Snd(s) * signA);
-            }
-            
-            return Fraction(-Fst(t) * signB, Fst(s) * signA);
+        if (Snd(r) == 0 or AbsI(Snd(s)) > denominatorBound) {
+            return (Snd(r) == 0 and AbsI(Snd(s)) <= denominatorBound)
+                   ? Fraction(-Snd(t) * signB, Snd(s) * signA)
+                   | Fraction(-Fst(t) * signB, Fst(s) * signA);
         }
-        
+
         let quotient = Fst(r) / Snd(r);
         let r_ = (Snd(r), Fst(r) - quotient * Snd(r));
         let s_ = (Snd(s), Fst(s) - quotient * Snd(s));
@@ -420,16 +424,12 @@ namespace Microsoft.Quantum.Math {
     /// Internal recursive call to calculate the GCD with a bound
     function _ContinuedFractionConvergentL(signA : BigInt, signB : BigInt, r : (BigInt, BigInt), s : (BigInt, BigInt), t : (BigInt, BigInt), denominatorBound : BigInt) : BigsFraction
     {
-        if (Snd(r) == 0L or AbsL(Snd(s)) > denominatorBound)
-        {
-            if (Snd(r) == 0L and AbsL(Snd(s)) <= denominatorBound)
-            {
-                return BigFraction(-Snd(t) * signB, Snd(s) * signA);
-            }
-            
-            return BigFraction(-Fst(t) * signB, Fst(s) * signA);
+        if (Snd(r) == 0L or AbsL(Snd(s)) > denominatorBound) {
+            return (Snd(r) == 0L and AbsL(Snd(s)) <= denominatorBound)
+                   ? Fraction(-Snd(t) * signB, Snd(s) * signA)
+                   | Fraction(-Fst(t) * signB, Fst(s) * signA);
         }
-        
+
         let quotient = Fst(r) / Snd(r);
         let r_ = (Snd(r), Fst(r) - quotient * Snd(r));
         let s_ = (Snd(s), Fst(s) - quotient * Snd(s));
@@ -535,14 +535,8 @@ namespace Microsoft.Quantum.Math {
     
     /// # Summary
     /// Helper function used to recursively calculate the bitsize of a value.
-    function _bitsize (val : Int, bitsize : Int) : Int
-    {
-        if (val == 0)
-        {
-            return bitsize;
-        }
-        
-        return _bitsize(val / 2, bitsize + 1);
+    function _bitsize (val : Int, bitsize : Int) : Int {
+        return val == 0 ? bitsize | _bitsize(val / 2, bitsize + 1);
     }
     
     
@@ -566,14 +560,8 @@ namespace Microsoft.Quantum.Math {
 
     /// # Summary
     /// Helper function used to recursively calculate the bitsize of a value.
-    function _bitsize_l(val : BigInt, bitsize : Int) : Int
-    {
-        if (val == 0L)
-        {
-            return bitsize;
-        }
-        
-        return _bitsize(val / 2L, bitsize + 1);
+    function _bitsize_l(val : BigInt, bitsize : Int) : Int {
+        return val == 0L ? bitsize | _bitsize(val / 2L, bitsize + 1);
     }
     
     
