@@ -10,7 +10,7 @@ namespace Microsoft.Quantum.Tests {
     
     function ComposeTest () : Unit {
         let target = [3, 17, 2];
-        EqualityFactI((Compose(Modulus(_, 14), Max))(target), 3, $"Compose(Modulus(_, 14), Max) did not return expected result.");
+        EqualityFactI((Compose(ModulusI(_, 14), Max))(target), 3, $"Compose(ModulusI(_, 14), Max) did not return expected result.");
     }
     
     

@@ -34,50 +34,62 @@ namespace Microsoft.Quantum.Canon {
     }
     
     
-    function ExtendedGCDTestHelper (a : Int, b : Int, gcd : Int) : Unit {
+    function ExtendedGreatestCommonDivisorITestHelper (a : Int, b : Int, gcd : Int) : Unit {
         
         Message($"Testing {a}, {b}, {gcd} ");
-        let (u, v) = ExtendedGCD(a, b);
+        let (u, v) = ExtendedGreatestCommonDivisorI(a, b);
         let expected = AbsI(gcd);
         let actual = AbsI(u * a + v * b);
         EqualityFactI(expected, actual, $"Expected absolute value of gcd to be {expected}, got {actual}");
     }
     
     
-    function ExtendedGCDTest () : Unit {
+    function ExtendedGreatestCommonDivisorITest () : Unit {
         
         let testTuples = [(1, 1, 1), (1, -1, 1), (-1, 1, 1), (-1, -1, 1), (5, 7, 1), (-5, 7, 1), (3, 15, 3)];
-        Ignore(Mapped(ExtendedGCDTestHelper, testTuples));
+        Ignore(Mapped(ExtendedGreatestCommonDivisorITestHelper, testTuples));
     }
+
+    function GreatestCommonDivisorLTest() : Unit {
+        EqualityFactL(
+            GreatestCommonDivisorL(
+                44958225298979240833230460209285719018635426448048959524915L,
+                935899140510257015115572178639093206049354855486377228520740L
+            ),
+            5L,
+            "GCD returned wrong result for BigInt inputs."
+        );
+    }
+
     
     
     function BitSizeTest () : Unit {
         
-        EqualityFactI(BitSize(3), 2, $"BitSize(3) must be 2");
-        EqualityFactI(BitSize(7), 3, $"BitSize(7) must be 2");
+        EqualityFactI(BitSizeI(3), 2, $"BitSizeI(3) must be 2");
+        EqualityFactI(BitSizeI(7), 3, $"BitSizeI(7) must be 2");
     }
     
     
     function ExpModTest () : Unit {
         
         // this test is generated using Mathematica PowerMod function
-        let result = ExpMod(5, 4611686018427387903, 7);
+        let result = ExpModI(5, 4611686018427387903, 7);
         EqualityFactI(result, 6, $"The result must be 6, got {result}");
     }
     
     
     function ContinuedFractionConvergentTestHelper (numerator : Int, denominator : Int) : Unit {
         
-        let bitSize = 2 * BitSize(denominator);
+        let bitSize = 2 * BitSizeI(denominator);
         let numeratorDyadic = (numerator * 2 ^ bitSize) / denominator;
-        let (u, v) = (ContinuedFractionConvergent(Fraction(numeratorDyadic, 2 ^ bitSize), denominator))!;
+        let (u, v) = (ContinuedFractionConvergentI(Fraction(numeratorDyadic, 2 ^ bitSize), denominator))!;
         EqualityFactB(AbsI(u) == numerator and AbsI(v) == denominator, true, $"The result must be ±{numerator}/±{denominator} got {u}/{v}");
     }
     
     
     function ContinuedFractionConvergentEdgeCaseTestHelper (numerator : Int, denominator : Int, bound : Int) : Unit {
         
-        let (num, denom) = (ContinuedFractionConvergent(Fraction(numerator, denominator), bound))!;
+        let (num, denom) = (ContinuedFractionConvergentI(Fraction(numerator, denominator), bound))!;
         EqualityFactB(AbsI(num) == numerator and AbsI(denom) == denominator, true, $"The result must be ±{numerator}/±{denominator} got {num}/{denom}");
     }
     

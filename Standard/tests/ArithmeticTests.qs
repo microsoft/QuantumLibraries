@@ -31,7 +31,7 @@ namespace Microsoft.Quantum.Tests {
             let registerLE = LittleEndian(register);
             ApplyXorInPlace(summand1, registerLE);
             IntegerIncrementLE(summand2, registerLE);
-            let expected = Modulus(summand1 + summand2, 2 ^ numberOfQubits);
+            let expected = ModulusI(summand1 + summand2, 2 ^ numberOfQubits);
             let actual = MeasureInteger(registerLE);
             EqualityFactI(expected, actual, $"Expected {expected}, got {actual}");
         }
@@ -60,7 +60,7 @@ namespace Microsoft.Quantum.Tests {
             let registerLE = LittleEndian(register);
             ApplyXorInPlace(summand1, registerLE);
             ModularIncrementLE(summand2, modulus, registerLE);
-            let expected = Modulus(summand1 + summand2, modulus);
+            let expected = ModulusI(summand1 + summand2, modulus);
             let actual = MeasureInteger(registerLE);
             EqualityFactI(expected, actual, $"Expected {expected}, got {actual}");
             
@@ -106,7 +106,7 @@ namespace Microsoft.Quantum.Tests {
             ApplyXorInPlace(summand, summandLE);
             ApplyXorInPlace(multiplier1, multiplierLE);
             ModularAddProductLE(multiplier2, modulus, multiplierLE, summandLE);
-            let expected = Modulus(summand + multiplier1 * multiplier2, modulus);
+            let expected = ModulusI(summand + multiplier1 * multiplier2, modulus);
             let actual = MeasureInteger(summandLE);
             let actualMult = MeasureInteger(multiplierLE);
             EqualityFactI(expected, actual, $"Expected {expected}, got {actual}");
@@ -139,11 +139,11 @@ namespace Microsoft.Quantum.Tests {
         
         using (register = Qubit[numberOfQubits]) {
             
-            if (IsCoprime(multiplier2, modulus)) {
+            if (IsCoprimeI(multiplier2, modulus)) {
                 let multiplierLE = LittleEndian(register);
                 ApplyXorInPlace(multiplier1, multiplierLE);
                 ModularMultiplyByConstantLE(multiplier2, modulus, multiplierLE);
-                let expected = Modulus(multiplier1 * multiplier2, modulus);
+                let expected = ModulusI(multiplier1 * multiplier2, modulus);
                 let actualMult = MeasureInteger(multiplierLE);
                 EqualityFactI(expected, actualMult, $"Expected {expected}, got {actualMult}");
             }

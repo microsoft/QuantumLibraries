@@ -74,6 +74,25 @@ namespace Microsoft.Quantum.Diagnostics {
     }
 
     /// # Summary
+    /// Asserts that a classical BigInt variable has the expected value.
+    ///
+    /// # Input
+    /// ## actual
+    /// The number to be checked.
+    /// ## expected
+    /// The expected value.
+    ///
+    /// ## message
+    /// Failure message string to be used when the assertion is triggered.
+    function EqualityFactL(actual : BigInt, expected : BigInt, message : String) : Unit
+    {
+        if (actual != expected)
+        {
+            fail message;
+        }
+    }
+
+    /// # Summary
     /// Asserts that a classical Bool variable has the expected value.
     ///
     /// # Input
