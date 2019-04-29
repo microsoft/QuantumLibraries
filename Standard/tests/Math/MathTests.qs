@@ -49,6 +49,18 @@ namespace Microsoft.Quantum.Canon {
         let testTuples = [(1, 1, 1), (1, -1, 1), (-1, 1, 1), (-1, -1, 1), (5, 7, 1), (-5, 7, 1), (3, 15, 3)];
         Ignore(Mapped(ExtendedGreatestCommonDivisorITestHelper, testTuples));
     }
+
+    function GreatestCommonDivisorLTest() : Unit {
+        EqualityFactL(
+            GreatestCommonDivisorL(
+                44958225298979240833230460209285719018635426448048959524915L,
+                935899140510257015115572178639093206049354855486377228520740L
+            ),
+            5L,
+            "GCD returned wrong result for BigInt inputs."
+        );
+    }
+
     
     
     function BitSizeTest () : Unit {

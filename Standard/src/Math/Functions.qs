@@ -248,7 +248,7 @@ namespace Microsoft.Quantum.Math {
         mutable expPow2mod = expBase;
         
         // express p as bit-string pₙ … p₀
-        let powerBitExpansion = BigIntAsBoolArray(power, BitSizeI(power));
+        let powerBitExpansion = BigIntAsBoolArray(power);
         let expBaseMod = expBase % modulus;
         
         for (k in IndexRange(powerBitExpansion))
@@ -277,7 +277,7 @@ namespace Microsoft.Quantum.Math {
         let r_ = (Snd(r), Fst(r) - quotient * Snd(r));
         let s_ = (Snd(s), Fst(s) - quotient * Snd(s));
         let t_ = (Snd(t), Fst(t) - quotient * Snd(t));
-        return _gcd(signA, signB, r_, s_, t_);
+        return _ExtendedGreatestCommonDivisorI(signA, signB, r_, s_, t_);
     }
     
     
@@ -317,7 +317,7 @@ namespace Microsoft.Quantum.Math {
         let r_ = (Snd(r), Fst(r) - quotient * Snd(r));
         let s_ = (Snd(s), Fst(s) - quotient * Snd(s));
         let t_ = (Snd(t), Fst(t) - quotient * Snd(t));
-        return _gcd_big(signA, signB, r_, s_, t_);
+        return _ExtendedGreatestCommonDivisorL(signA, signB, r_, s_, t_);
     }
     
     
@@ -422,12 +422,12 @@ namespace Microsoft.Quantum.Math {
     
     /// # Summary
     /// Internal recursive call to calculate the GCD with a bound
-    function _ContinuedFractionConvergentL(signA : BigInt, signB : BigInt, r : (BigInt, BigInt), s : (BigInt, BigInt), t : (BigInt, BigInt), denominatorBound : BigInt) : BigsFraction
+    function _ContinuedFractionConvergentL(signA : BigInt, signB : BigInt, r : (BigInt, BigInt), s : (BigInt, BigInt), t : (BigInt, BigInt), denominatorBound : BigInt) : BigFraction
     {
         if (Snd(r) == 0L or AbsL(Snd(s)) > denominatorBound) {
             return (Snd(r) == 0L and AbsL(Snd(s)) <= denominatorBound)
-                   ? Fraction(-Snd(t) * signB, Snd(s) * signA)
-                   | Fraction(-Fst(t) * signB, Fst(s) * signA);
+                   ? BigFraction(-Snd(t) * signB, Snd(s) * signA)
+                   | BigFraction(-Fst(t) * signB, Fst(s) * signA);
         }
 
         let quotient = Fst(r) / Snd(r);
@@ -448,9 +448,9 @@ namespace Microsoft.Quantum.Math {
     /// # Output
     /// Continued fraction closest to `fraction`
     /// with the denominator less or equal to `denominatorBound`
-    function ContinuedFractionConvergentL(fraction : Fraction, denominatorBound : BigInt) : BigFraction
+    function ContinuedFractionConvergentL(fraction : BigFraction, denominatorBound : BigInt) : BigFraction
     {
-        Fact(denominatorBound > 0, $"Denominator bound must be positive");
+        Fact(denominatorBound > 0L, $"Denominator bound must be positive");
         let (a, b) = fraction!;
         let signA = SignL(a);
         let signB = SignL(b);
@@ -524,11 +524,11 @@ namespace Microsoft.Quantum.Math {
     ///
     /// # Output
     /// Integer $b$ such that $a \cdot b = 1 (\operatorname{mod} \texttt{modulus})$.
-    function InverseModL(a : Int, modulus : Int) : Int
+    function InverseModL(a : BigInt, modulus : BigInt) : BigInt
     {
         let (u, v) = ExtendedGreatestCommonDivisorL(a, modulus);
         let gcd = u * a + v * modulus;
-        EqualityFactL(gcd, 1, $"`a` and `modulus` must be co-prime");
+        EqualityFactL(gcd, 1L, $"`a` and `modulus` must be co-prime");
         return ModulusL(u, modulus);
     }
     
@@ -561,7 +561,7 @@ namespace Microsoft.Quantum.Math {
     /// # Summary
     /// Helper function used to recursively calculate the bitsize of a value.
     function _bitsize_l(val : BigInt, bitsize : Int) : Int {
-        return val == 0L ? bitsize | _bitsize(val / 2L, bitsize + 1);
+        return val == 0L ? bitsize | _bitsize_l(val / 2L, bitsize + 1);
     }
     
     
