@@ -308,11 +308,11 @@ namespace Microsoft.Quantum.Math {
 
     /// # Summary
     /// Internal recursive call to calculate the GCD.
-    function _ExtendedGreatestCommonDivisorL(signA : BigInt, signB : BigInt, r : (BigInt, BigInt), s : (BigInt, BigInt), t : (BigInt, BigInt)) : (BigInt, BigInt) {
+    function _ExtendedGreatestCommonDivisorL(signA : Int, signB : Int, r : (BigInt, BigInt), s : (BigInt, BigInt), t : (BigInt, BigInt)) : (BigInt, BigInt) {
         if (Snd(r) == 0L) {
-            return (Fst(s) * signA, Fst(t) * signB);
+            return (Fst(s) * IntAsBigInt(signA), Fst(t) * IntAsBigInt(signB));
         }
-        
+
         let quotient = Fst(r) / Snd(r);
         let r_ = (Snd(r), Fst(r) - quotient * Snd(r));
         let s_ = (Snd(s), Fst(s) - quotient * Snd(s));
@@ -342,7 +342,7 @@ namespace Microsoft.Quantum.Math {
         let signB = SignL(b);
         let s = (1l, 0L);
         let t = (0l, 1L);
-        let r = (IntAsBigInt(a) * signA, IntAsBigInt(b) * signB);
+        let r = (a * IntAsBigInt(signA), b * IntAsBigInt(signB));
         return _ExtendedGreatestCommonDivisorL(signA, signB, r, s, t);
     }
 
@@ -422,12 +422,12 @@ namespace Microsoft.Quantum.Math {
     
     /// # Summary
     /// Internal recursive call to calculate the GCD with a bound
-    function _ContinuedFractionConvergentL(signA : BigInt, signB : BigInt, r : (BigInt, BigInt), s : (BigInt, BigInt), t : (BigInt, BigInt), denominatorBound : BigInt) : BigFraction
+    function _ContinuedFractionConvergentL(signA : Int, signB : Int, r : (BigInt, BigInt), s : (BigInt, BigInt), t : (BigInt, BigInt), denominatorBound : BigInt) : BigFraction
     {
         if (Snd(r) == 0L or AbsL(Snd(s)) > denominatorBound) {
             return (Snd(r) == 0L and AbsL(Snd(s)) <= denominatorBound)
-                   ? BigFraction(-Snd(t) * signB, Snd(s) * signA)
-                   | BigFraction(-Fst(t) * signB, Fst(s) * signA);
+                   ? BigFraction(-Snd(t) * IntAsBigInt(signB), Snd(s) * IntAsBigInt(signA))
+                   | BigFraction(-Fst(t) * IntAsBigInt(signB), Fst(s) * IntAsBigInt(signA));
         }
 
         let quotient = Fst(r) / Snd(r);
@@ -456,7 +456,7 @@ namespace Microsoft.Quantum.Math {
         let signB = SignL(b);
         let s = (1L, 0L);
         let t = (0L, 1L);
-        let r = (IntAsBigInt(a) * signA, IntAsBigInt(b) * signB);
+        let r = (a * IntAsBigInt(signA), b * IntAsBigInt(signB));
         return _ContinuedFractionConvergentL(signA, signB, r, s, t, denominatorBound);
     }
     
