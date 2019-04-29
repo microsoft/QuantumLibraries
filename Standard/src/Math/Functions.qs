@@ -342,7 +342,7 @@ namespace Microsoft.Quantum.Math {
         let signB = SignL(b);
         let s = (1l, 0L);
         let t = (0l, 1L);
-        let r = (a * signA, b * signB);
+        let r = (IntAsBigInt(a) * signA, IntAsBigInt(b) * signB);
         return _ExtendedGreatestCommonDivisorL(signA, signB, r, s, t);
     }
 
@@ -456,7 +456,7 @@ namespace Microsoft.Quantum.Math {
         let signB = SignL(b);
         let s = (1L, 0L);
         let t = (0L, 1L);
-        let r = (a * signA, b * signB);
+        let r = (IntAsBigInt(a) * signA, IntAsBigInt(b) * signB);
         return _ContinuedFractionConvergentL(signA, signB, r, s, t, denominatorBound);
     }
     
