@@ -89,7 +89,13 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
             for (idxOp in 0 .. Length(ops) - 1) {
                 let pauliString = _ComputeJordanWignerPauliString(Length(qubits), idxFermions, ops[idxOp]);
                 let sign = signs[idxOp];
-            Exp(pauliString, sign * angle, qubits);
+                if(p<q){
+                    Exp(pauliString, sign * angle, qubits);
+                }
+                else{
+                    Exp(pauliString, -1.0 * sign * angle, qubits);
+                }
+
             }
         }
         adjoint invert;
@@ -160,12 +166,12 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
             let y = PauliY;
 
             let ops = [[y,y,x,y],[x,x,x,y],[x,y,y,y],[y,x,y,y],[x,y,x,x],[y,x,x,x],[y,y,y,x],[x,x,y,x]];
-            let signs = [1.0, -1.0, -1.0, -1.0, 1.0, 1.0, 1.0, -1.0];
+            let (sortedIndices, signs, globalsign) = _JordanWignerClusterOperatorPQRSTermSigns([p,q,r,s]);
 
             for (idxOp in 0 .. Length(ops) - 1) {
                 let pauliString = _ComputeJordanWignerPauliString(Length(qubits), idxFermions, ops[idxOp]);
                 let sign = signs[idxOp];
-                Exp(pauliString, sign * angle, qubits);
+                Exp(pauliString, globalsign*sign * angle, qubits);
             }
         }
         
@@ -173,7 +179,57 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
         controlled distribute;
         controlled adjoint distribute;
     }
+    
+    function _JordanWignerClusterOperatorPQRSTermSigns(indices: Int[]) : (Int[], Double[], Double)
+    {
+        let p = indices[0];
+        let q = indices[1];
+        let r = indices[2];
+        let s = indices[3];
+        mutable sorted = new Int[4];
+        mutable signs = new Double[8];
+        mutable sign = 1.0;
 
+        if(p>q){
+            set sign = sign * -1.0;
+        }
+        if(r>s){
+            set sign = sign * -1.0;
+        }
+        if(Min([p,q]) > Min([r,s])){
+            set sign = sign * -1.0;
+            set sorted = [Min([r,s]), Max([r,s]), Min([p,q]), Max([p,q])];
+        }
+        else{
+            set sorted = [Min([p,q]), Max([p,q]), Min([r,s]), Max([r,s])];
+        }
+        // sorted is now in the order
+        // [p`,q`,r`,s`], where p`<q`; r`<s`, and Min(p`,q`) is smaller than Min(r`,s`).
+
+        let p1 = sorted[0];
+        let q1 = sorted[1];
+        let r1 = sorted[2];
+        let s1 = sorted[3];
+
+        // Case (p,q) < (r,s) and (p,q) > (r,s)
+        if(q1 < r1){
+            // p1 < q1 < r1 < s1
+            return ([p1,q1,r1,s1],[1.0, -1.0, -1.0, -1.0, 1.0, 1.0, 1.0, -1.0], sign);
+        }
+        // Case interleaved
+        elif(q1 > r1 && q1 < s1){
+            // p1 < r1 < q1 < s1
+            return ([p1,r1,q1,s1],[-1.0, -1.0, -1.0, 1.0, -1.0, 1.0, 1.0, 1.0], sign);
+        }
+        // Case contained
+        elif(q1 > r1 && q1 > s1){
+            // p1 < r1 < s1 < q1
+            return ([p1,r1,s1,q1],[1.0, 1.0, -1.0, 1.0, -1.0, 1.0, -1.0, -1.0], sign);
+        }
+        else{
+            fail("Completely invalid cluster operator specified.");
+        }
+    }
 
     /// # Summary
     /// Converts a Hamiltonian described by `JWOptimizedHTerms`
