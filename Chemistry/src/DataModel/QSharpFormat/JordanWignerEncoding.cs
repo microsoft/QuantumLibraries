@@ -1,4 +1,4 @@
-﻿// Copyright (c) Microsoft Corporation. All rights reserved.
+// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
 using Microsoft.Quantum.Simulation.Core;
@@ -255,6 +255,7 @@ namespace Microsoft.Quantum.Chemistry
                             multiplier = -1.0;
                         }
                         hPQandPQQRTerms.Add(new HTerm((new QArray<Int64>(pqqrterm), new QArray<Double> (new []{ -0.125 * multiplier* generalPQQRTerm.coeff }))));
+
                         // PQ term
                         var pqterm = new List<Int64>(pqqrterm);
                         pqterm.RemoveRange(1, 2);

@@ -1,4 +1,6 @@
-﻿///
+// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License.
+
 /// Q# code should be in one or more .qs files that live 
 /// in the same directory as the python clasical driver.
 ///
@@ -19,7 +21,6 @@ namespace Microsoft.Quantum.SanityTests {
     /// specify parameters, instantiate qubits, and return values.
     operation HelloAgain(count: Int, name: String) : Result[] {
         Message($"Hello {name} again!");
-
         mutable r = new Result[count];
         using (q = Qubit()) {
             for (i in 1..count) {
