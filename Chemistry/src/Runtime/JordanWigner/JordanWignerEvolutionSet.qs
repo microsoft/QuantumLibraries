@@ -2,28 +2,27 @@
 // Licensed under the MIT License.
 
 namespace Microsoft.Quantum.Chemistry.JordanWigner {
-    
-    open Microsoft.Quantum.Primitive;
+    open Microsoft.Quantum.Simulation;
+    open Microsoft.Quantum.Intrinsic;
     open Microsoft.Quantum.Canon;
-    open Microsoft.Quantum.Extensions.Math;
     open Microsoft.Quantum.Chemistry;
-    
-    
+    open Microsoft.Quantum.Arrays;
+
     // This evolution set runs off data optimized for a jordan-wigner encoding.
     // This collects terms Z, ZZ, PQandPQQR, hpqrs separately.
     // This only apples the needed hpqrs XXXX XXYY terms.
     // Operations here are expressed in terms of Exp([...])
-    
+
     // Convention for GeneratorIndex = ((Int[],Double[]), Int[])
     // We index single Paulis as 0 for I, 1 for X, 2 for Y, 3 for Z.
     // We index Pauli strings with arrays of integers e.g. a = [3,1,1,2] for ZXXY.
     // We assume the zeroth element of Double[] is the angle of rotation
     // We index the qubits that Pauli strings act on with arrays of integers e.g. q = [2,4,5,8] for Z_2 X_4 X_5, Y_8
     // An example of a Pauli string GeneratorIndex is thus ((a,b), q)
-    
+
     // Consider the Hamiltonian H = 0.1 XI + 0.2 IX + 0.3 ZY
     // Its GeneratorTerms are (([1],b),[0]), 0.1),  (([1],b),[1]), 0.2),  (([3,2],b),[0,1]), 0.3).
-    
+
     /// # Summary
     /// Applies time-evolution by a Z term described by a `GeneratorIndex`.
     ///
@@ -35,7 +34,6 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
     /// ## qubits
     /// Qubits of Hamiltonian.
     operation _ApplyJordanWignerZTerm_ (term : GeneratorIndex, stepSize : Double, qubits : Qubit[]) : Unit {
-        
         body (...) {
             let ((idxTermType, coeff), idxFermions) = term!;
             let angle = (1.0 * coeff[0]) * stepSize;
@@ -95,7 +93,7 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
             let qubitsJW = qubits[idxFermions[0] + 1 .. idxFermions[1] - 1];
             let ops = [[PauliX, PauliX], [PauliY, PauliY]];
             
-            for (idxOp in 0 .. Length(ops) - 1) {
+            for (idxOp in IndexRange(ops)) {
                 Exp(ops[idxOp] + ConstantArray(Length(qubitsJW) + Length(extraParityQubits), PauliZ), angle, (qubitsPQ + qubitsJW) + extraParityQubits);
             }
         }
@@ -135,7 +133,7 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
             }
             else {
                 
-                if (idxFermions[0] < qubitQidx && qubitQidx < idxFermions[3]) {
+                if (idxFermions[0] < qubitQidx and qubitQidx < idxFermions[3]) {
                     let termPR1 = GeneratorIndex((idxTermType, [1.0]), [idxFermions[0], idxFermions[3] - 1]);
                     _ApplyJordanWignerPQTerm_(termPR1, angle, new Qubit[0], Exclude([qubitQidx], qubits));
                 }
@@ -175,7 +173,7 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
             let qubitsRSJW = qubits[idxFermions[2] + 1 .. idxFermions[3] - 1];
             let ops = [[PauliX, PauliX, PauliX, PauliX], [PauliX, PauliX, PauliY, PauliY], [PauliX, PauliY, PauliX, PauliY], [PauliY, PauliX, PauliX, PauliY], [PauliY, PauliY, PauliY, PauliY], [PauliY, PauliY, PauliX, PauliX], [PauliY, PauliX, PauliY, PauliX], [PauliX, PauliY, PauliY, PauliX]];
             
-            for (idxOp in 0 .. Length(ops) - 1) {
+            for (idxOp in IndexRange(ops)) {
                 
                 if (IsNotZero(v0123[idxOp % 4])) {
                     Exp(ops[idxOp] + ConstantArray(Length(qubitsPQJW) + Length(qubitsRSJW), PauliZ), angle * v0123[idxOp % 4], ((qubitsPQ + qubitsRS) + qubitsPQJW) + qubitsRSJW);

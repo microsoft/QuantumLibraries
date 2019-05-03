@@ -1,11 +1,11 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-using Microsoft.Quantum.Simulation.Core;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using Microsoft.Quantum.Simulation.Core;
+
 
 namespace Microsoft.Quantum.Chemistry
 {
@@ -153,16 +153,22 @@ namespace Microsoft.Quantum.Chemistry
                 var nElements = 1;
                 foreach (var next in term.Skip(1))
                 {
-                    var curr = output[nElements - 1];
+                    HTerm curr = output[nElements - 1];
+                    var (currentIndexes, currentCoefficients) = curr;
 
                     if (Enumerable.SequenceEqual(curr.Item1, next.Item1))
                     {
                         var (pqrsSorted, coeffs) = next;
-                        for (var idxCoeff = 0; idxCoeff < coeffs.Length; idxCoeff++)
+                        // Process the new coefficients as a .NET array, as
+                        // Q# arrays are immutable.
+                        var newCoefficients = currentCoefficients.ToArray();
+                        foreach (var idxCoeff in Enumerable.Range(0, (int)coeffs.Length))
                         {
-                            curr.Item2[idxCoeff] += coeffs[idxCoeff];
-                            output[nElements - 1] = curr;
+                            newCoefficients[idxCoeff] += coeffs[idxCoeff];
                         }
+                        // Package the newly modified coefficients back up as a new Q# array.
+                        curr = new HTerm((currentIndexes, new QArray<double> (newCoefficients)));
+                        output[nElements - 1] = curr;
                     }
                     else
                     {
@@ -259,7 +265,7 @@ namespace Microsoft.Quantum.Chemistry
         /// </summary>
         public class IntIComparer : IComparer<Int64>
         {
-            public int Compare(Int64 x, Int64 y) => Math.Sign(x - y);
+            public int Compare(Int64 x, Int64 y) => System.Math.Sign(x - y);
         }
 
 
