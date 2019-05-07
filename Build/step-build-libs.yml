@@ -17,7 +17,7 @@ steps:
         -v n
         /p:Version=$(Assembly.Version)
         /p:QsharpDocsOutDir=$(DocsOutDir)
-
+        /p:DefineConstants=$(Assembly.Constants)
 
 
 ##
@@ -37,6 +37,7 @@ steps:
         -v n
         /p:Version=$(Assembly.Version)
         /p:QsharpDocsOutDir=$(DocsOutDir)
+        /p:DefineConstants=$(Assembly.Constants)
 
 ##
 # Create Nuget.
@@ -49,5 +50,10 @@ steps:
     projects: |
      $(LibrariesRootFolder)/Standard/src/Standard.csproj
      $(LibrariesRootFolder)/Chemistry/src/DataModel/DataModel.csproj
-    arguments: ' --no-build -c $(BuildConfiguration) -v n -o $(System.DefaultWorkingDirectory) /p:PackageVersion=$(Nuget.Version)'
+    arguments: >
+      --no-build
+      -c $(BuildConfiguration)
+      -v n
+      -o $(System.DefaultWorkingDirectory)
+      /p:PackageVersion=$(Nuget.Version)'
 
