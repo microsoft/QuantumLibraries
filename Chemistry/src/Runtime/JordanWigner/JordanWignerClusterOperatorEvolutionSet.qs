@@ -89,13 +89,7 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
             for (idxOp in 0 .. Length(ops) - 1) {
                 let pauliString = _ComputeJordanWignerPauliString(Length(qubits), idxFermions, ops[idxOp]);
                 let sign = signs[idxOp];
-                if(p<q){
-                    Exp(pauliString, sign * angle, qubits);
-                }
-                else{
-                    Exp(pauliString, -1.0 * sign * angle, qubits);
-                }
-
+                Exp(pauliString, (p < q ? 1.0 | -1.0) * sign * angle, qubits);
             }
         }
         adjoint invert;
@@ -166,12 +160,12 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
             let y = PauliY;
 
             let ops = [[y,y,x,y],[x,x,x,y],[x,y,y,y],[y,x,y,y],[x,y,x,x],[y,x,x,x],[y,y,y,x],[x,x,y,x]];
-            let (sortedIndices, signs, globalsign) = _JordanWignerClusterOperatorPQRSTermSigns([p,q,r,s]);
+            let (sortedIndices, signs, globalSign) = _JordanWignerClusterOperatorPQRSTermSigns([p,q,r,s]);
 
             for (idxOp in 0 .. Length(ops) - 1) {
                 let pauliString = _ComputeJordanWignerPauliString(Length(qubits), idxFermions, ops[idxOp]);
                 let sign = signs[idxOp];
-                Exp(pauliString, globalsign*sign * angle, qubits);
+                Exp(pauliString, globalSign * sign * angle, qubits);
             }
         }
         
@@ -196,7 +190,7 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
         if(r>s){
             set sign = sign * -1.0;
         }
-        if(Min([p,q]) > Min([r,s])){
+        if( Min([p,q]) > Min([r,s]) ){
             set sign = sign * -1.0;
             set sorted = [Min([r,s]), Max([r,s]), Min([p,q]), Max([p,q])];
         }
