@@ -2,23 +2,20 @@
 // Licensed under the MIT License.
 
 namespace Microsoft.Quantum.Chemistry.Tests {
-    
-    open Microsoft.Quantum.Primitive;
+    open Microsoft.Quantum.Arithmetic;
+    open Microsoft.Quantum.Intrinsic;
     open Microsoft.Quantum.Canon;
-    open Microsoft.Quantum.Extensions.Testing;
-    open Microsoft.Quantum.Extensions.Math;
-    open Microsoft.Quantum.Extensions.Convert;
+    open Microsoft.Quantum.Diagnostics;
+    open Microsoft.Quantum.Convert;
     open Microsoft.Quantum.Chemistry.JordanWigner;
-    
+    open Microsoft.Quantum.Math;
+    open Microsoft.Quantum.Arrays;
+
     // Test OptimizedBEXY operator.
     operation OptimizedBEOperatorZeroTestHelper (pauliBasis : Pauli, targetRegisterSize : Int, targetIndex : Int) : Unit {
-        
-        let indexRegisterSize = Ceiling(Lg(ToDouble(targetRegisterSize)));
-        
+        let indexRegisterSize = Ceiling(Lg(IntAsDouble(targetRegisterSize)));
         using (pauliBasisQubit = Qubit[1]) {
-            
             using (indexRegister = Qubit[indexRegisterSize]) {
-                
                 using (targetRegister = Qubit[targetRegisterSize]) {
                     
                     // Choose X or Y operator.
@@ -30,10 +27,10 @@ namespace Microsoft.Quantum.Chemistry.Tests {
                     }
                     
                     // Create indexRegister state.
-                    InPlaceXorBE(targetIndex, BigEndian(indexRegister));
+                    ApplyXorInPlace(targetIndex, LittleEndian(indexRegister));
                     
                     // Initialize targetRegister states in |0>
-                    OptimizedBEXY(pauliBasisQubit[0], BigEndian(indexRegister), targetRegister);
+                    OptimizedBEXY(pauliBasisQubit[0], LittleEndian(indexRegister), targetRegister);
                     
                     for (idxTest in 0 .. targetRegisterSize - 1) {
                         let testQubit = targetRegister[idxTest];
@@ -68,8 +65,8 @@ namespace Microsoft.Quantum.Chemistry.Tests {
                         }
                     }
                     
-                    OptimizedBEXY(pauliBasisQubit[0], BigEndian(indexRegister), targetRegister);
-                    Adjoint InPlaceXorBE(targetIndex, BigEndian(indexRegister));
+                    OptimizedBEXY(pauliBasisQubit[0], LittleEndian(indexRegister), targetRegister);
+                    Adjoint ApplyXorInPlace(targetIndex, LittleEndian(indexRegister));
                     
                     // Choose X or Y operator.
                     if (pauliBasis == PauliX) {
@@ -87,24 +84,24 @@ namespace Microsoft.Quantum.Chemistry.Tests {
     // Test OptimizedBEXY operator.
     operation OptimizedBEOperatorPlusTestHelper (pauliBasis : Pauli, targetRegisterSize : Int, targetIndex : Int) : Unit {
         
-        let indexRegisterSize = Ceiling(Lg(ToDouble(targetRegisterSize)));
-        using(pauliBasisQubit = Qubit[1]){
-            using(indexRegister = Qubit[indexRegisterSize]){
-                using(targetRegister = Qubit[targetRegisterSize]){            
+        let indexRegisterSize = Ceiling(Lg(IntAsDouble(targetRegisterSize)));
+        using (pauliBasisQubit = Qubit[1]) {
+            using (indexRegister = Qubit[indexRegisterSize]) {
+                using (targetRegister = Qubit[targetRegisterSize]) { 
                     // Choose X or Y operator.
-                    if(pauliBasis == PauliX){
+                    if(pauliBasis == PauliX) {
                         // no op
                     }
-                    elif(pauliBasis == PauliY){
+                    elif(pauliBasis == PauliY) {
                         X(pauliBasisQubit[0]);
                     }
 
                     // Create indexRegister state.
-                    InPlaceXorBE(targetIndex, BigEndian(indexRegister));
+                    ApplyXorInPlace(targetIndex, LittleEndian(indexRegister));
                         
                     // Initialize targetRegister states in |+>
                     ApplyToEachCA(H, targetRegister);
-                    OptimizedBEXY(pauliBasisQubit[0], BigEndian(indexRegister), targetRegister);
+                    OptimizedBEXY(pauliBasisQubit[0], LittleEndian(indexRegister), targetRegister);
                     for(idxTest in 0..targetRegisterSize-1){
                         let testQubit = targetRegister[idxTest];
                         if(targetIndex > idxTest){
@@ -140,10 +137,10 @@ namespace Microsoft.Quantum.Chemistry.Tests {
                             AssertProb([PauliX], [testQubit], Zero, 1.0, $"Error: Test {idxTest} I Pauli |+>", 1e-10);
                         }
                     }
-                    OptimizedBEXY(pauliBasisQubit[0], BigEndian(indexRegister), targetRegister);
+                    OptimizedBEXY(pauliBasisQubit[0], LittleEndian(indexRegister), targetRegister);
                     ApplyToEachCA(H, targetRegister);
 
-                    (Adjoint InPlaceXorBE)(targetIndex, BigEndian(indexRegister));
+                    (Adjoint ApplyXorInPlace)(targetIndex, LittleEndian(indexRegister));
 
                     // Choose X or Y operator.
                     if(pauliBasis == PauliX){
@@ -193,7 +190,7 @@ namespace Microsoft.Quantum.Chemistry.Tests {
     // Test phase of controlled OptimizedBEXY operator.
     operation ControlledOptimizedBEOperatorTestHelper (pauliBasis : Pauli, targetRegisterSize : Int, targetIndex : Int) : Unit {
         
-        let indexRegisterSize = Ceiling(Lg(ToDouble(targetRegisterSize)));
+        let indexRegisterSize = Ceiling(Lg(IntAsDouble(targetRegisterSize)));
         
         using (pauliBasisQubit = Qubit[1]) {
             
@@ -205,7 +202,7 @@ namespace Microsoft.Quantum.Chemistry.Tests {
                         let testQubit = targetRegister[targetIndex];
                         
                         // Create indexRegister state.
-                        InPlaceXorBE(targetIndex, BigEndian(indexRegister));
+                        ApplyXorInPlace(targetIndex, LittleEndian(indexRegister));
                         
                         // Initialize control in |+> state.
                         H(controlRegister[0]);
@@ -215,9 +212,9 @@ namespace Microsoft.Quantum.Chemistry.Tests {
                             
                             // Initialize testQubit state in X +1 eigenstate
                             H(testQubit);
-                            Controlled OptimizedBEXY(controlRegister, (pauliBasisQubit[0], BigEndian(indexRegister), targetRegister));
+                            Controlled OptimizedBEXY(controlRegister, (pauliBasisQubit[0], LittleEndian(indexRegister), targetRegister));
                             AssertPhase(0.0, controlRegister[0], 1E-10);
-                            Adjoint Controlled OptimizedBEXY(controlRegister, (pauliBasisQubit[0], BigEndian(indexRegister), targetRegister));
+                            Adjoint Controlled OptimizedBEXY(controlRegister, (pauliBasisQubit[0], LittleEndian(indexRegister), targetRegister));
                             H(testQubit);
                         }
                         elif (pauliBasis == PauliY) {
@@ -226,16 +223,16 @@ namespace Microsoft.Quantum.Chemistry.Tests {
                             // Initialize testQubit state Y +1 eigenstate
                             H(testQubit);
                             S(testQubit);
-                            Controlled OptimizedBEXY(controlRegister, (pauliBasisQubit[0], BigEndian(indexRegister), targetRegister));
+                            Controlled OptimizedBEXY(controlRegister, (pauliBasisQubit[0], LittleEndian(indexRegister), targetRegister));
                             AssertPhase(0.0, controlRegister[0], 1E-10);
-                            Adjoint Controlled OptimizedBEXY(controlRegister, (pauliBasisQubit[0], BigEndian(indexRegister), targetRegister));
+                            Adjoint Controlled OptimizedBEXY(controlRegister, (pauliBasisQubit[0], LittleEndian(indexRegister), targetRegister));
                             Adjoint S(testQubit);
                             H(testQubit);
                             X(pauliBasisQubit[0]);
                         }
                         
                         H(controlRegister[0]);
-                        Adjoint InPlaceXorBE(targetIndex, BigEndian(indexRegister));
+                        Adjoint ApplyXorInPlace(targetIndex, LittleEndian(indexRegister));
                     }
                 }
             }
@@ -257,31 +254,25 @@ namespace Microsoft.Quantum.Chemistry.Tests {
             }
         }
     }
-    
-    
+
     // Test SelectZ operator
     operation SelectZTest () : Unit {
-        
         let targetRegisterSize = 7;
-        let indexRegisterSize = Ceiling(Lg(ToDouble(targetRegisterSize)));
-        
-        using (targetRegister = Qubit[targetRegisterSize]) {
-            
-            using (indexRegister = Qubit[indexRegisterSize]) {
-                
-                for (idxTest in 0 .. targetRegisterSize - 1) {
-                    H(targetRegister[idxTest]);
-                    InPlaceXorLE(idxTest, LittleEndian(Reverse(indexRegister)));
-                    SelectZ(BigEndian(indexRegister), targetRegister);
-                    AssertProb([PauliX], [targetRegister[idxTest]], One, 1.0, $"Error: Test {idxTest} X Pauli |+>", 1E-10);
-                    Z(targetRegister[idxTest]);
-                    Adjoint InPlaceXorLE(idxTest, LittleEndian(Reverse(indexRegister)));
-                    H(targetRegister[idxTest]);
-                }
+        let indexRegisterSize = Ceiling(Lg(IntAsDouble(targetRegisterSize)));
+
+        using ((targetRegister, indexRegister) = (Qubit[targetRegisterSize], Qubit[indexRegisterSize])) {
+            for (idxTest in 0 .. targetRegisterSize - 1) {
+                H(targetRegister[idxTest]);
+                ApplyXorInPlace(idxTest, LittleEndian(indexRegister));
+                SelectZ(LittleEndian(indexRegister), targetRegister);
+                AssertProb([PauliX], [targetRegister[idxTest]], One, 1.0, $"Error: Test {idxTest} X Pauli |+>", 1E-10);
+                Z(targetRegister[idxTest]);
+                Adjoint ApplyXorInPlace(idxTest, LittleEndian(indexRegister));
+                H(targetRegister[idxTest]);
             }
         }
     }
-    
+
 }
 
 

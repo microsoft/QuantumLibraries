@@ -11,12 +11,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Quantum.Development.Kit" Version="0.5.1904.1302" />
-    <PackageReference Include="Microsoft.Quantum.Xunit" Version="0.5.1904.1302" />
+    <PackageReference Include="Microsoft.Quantum.Development.Kit" Version="0.6.1905.301" />
+    <PackageReference Include="Microsoft.Quantum.Xunit" Version="0.6.1905.301" />
   </ItemGroup>
-  
+
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Canon\src\Canon.csproj" />
+    <ProjectReference Include="..\..\..\Standard\src\Standard.csproj" />
   </ItemGroup>
 
 </Project>
