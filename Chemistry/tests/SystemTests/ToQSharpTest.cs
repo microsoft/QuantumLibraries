@@ -79,7 +79,7 @@ namespace Microsoft.Quantum.Chemistry.Tests
             Assert.Contains(new HTerm((new QArray<Int64>(new[] { 1L, 3L, 3L, 2L }), new QArray<Double>(new[] { -0.125 * 1.0 }))), termData.Item3, new Convert.HTermArrayComparer());
             Assert.Contains(new HTerm((new QArray<Int64>(new[] { 2L, 6L, 6L, 5L }), new QArray<Double>(new[] { -0.125 * 1.0 }))), termData.Item3, new Convert.HTermArrayComparer());
 
-            // Test incomplete
+            // Add more terms to this test
         }
        
 

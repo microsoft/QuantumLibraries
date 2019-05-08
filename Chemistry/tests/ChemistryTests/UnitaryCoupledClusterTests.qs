@@ -67,10 +67,10 @@ namespace Microsoft.Quantum.Chemistry.Tests {
             let r = sortedIndices[2];
             let s = sortedIndices[3];
 
-            AssertBoolEqual(true, p<q and q<r and r<s, "Expected p<q<r<s");
-            AssertAlmostEqual(globalSign, expectedGlobalSign);
+            Fact(p<q and q<r and r<s, "Expected p<q<r<s");
+            NearEqualityFact(globalSign, expectedGlobalSign);
             for (signIdx in 0..Length(signs)-1) {
-                AssertAlmostEqual(signs[signIdx], expectedSigns[signIdx]);
+                NearEqualityFact(signs[signIdx], expectedSigns[signIdx]);
             }
         }
     }

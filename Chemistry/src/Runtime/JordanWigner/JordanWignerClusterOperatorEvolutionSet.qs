@@ -8,6 +8,7 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
     open Microsoft.Quantum.Convert;
     open Microsoft.Quantum.Simulation;
     open Microsoft.Quantum.Arrays;
+    open Microsoft.Quantum.Math;
 
 	/// # Summary
     /// Computes Z component of Jordan-Wigner string between
@@ -213,12 +214,12 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
             return ([p1,q1,r1,s1],[1.0, -1.0, -1.0, -1.0, 1.0, 1.0, 1.0, -1.0], sign);
         }
         // Case interleaved
-        elif(q1 > r1 && q1 < s1){
+        elif(q1 > r1 and q1 < s1){
             // p1 < r1 < q1 < s1
             return ([p1,r1,q1,s1],[-1.0, -1.0, -1.0, 1.0, -1.0, 1.0, 1.0, 1.0], sign);
         }
         // Case contained
-        elif(q1 > r1 && q1 > s1){
+        elif(q1 > r1 and q1 > s1){
             // p1 < r1 < s1 < q1
             return ([p1,r1,s1,q1],[1.0, 1.0, -1.0, 1.0, -1.0, 1.0, -1.0, -1.0], sign);
         }
