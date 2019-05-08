@@ -42,6 +42,39 @@ namespace Microsoft.Quantum.Chemistry.Tests {
         
         AllEqualityFactB (product, expected, "Bit strings not equal");
     }
+
+    function _JordanWignerClusterOperatorPQRSTermSignsTestHelper(idx : Int) : (Int[], Double[], Double){
+        let cases = [
+        ([1,2,3,4],[1.0,-1.0,-1.0,-1.0,1.0,1.0,1.0,-1.0],1.0),
+        ([2,1,4,3],[1.0,-1.0,-1.0,-1.0,1.0,1.0,1.0,-1.0],1.0),
+        ([3,4,1,2],[1.0,-1.0,-1.0,-1.0,1.0,1.0,1.0,-1.0],-1.0),
+        ([2,1,3,4],[1.0,-1.0,-1.0,-1.0,1.0,1.0,1.0,-1.0],-1.0),
+        ([1,3,2,4],[-1.0,-1.0,-1.0,1.0,-1.0,1.0,1.0,1.0],1.0),
+        ([4,2,3,1],[-1.0,-1.0,-1.0,1.0,-1.0,1.0,1.0,1.0],-1.0),
+        ([1,4,2,3],[1.0,1.0,-1.0,1.0,-1.0,1.0,-1.0,-1.0],1.0),
+        ([2,3,4,1],[1.0,1.0,-1.0,1.0,-1.0,1.0,-1.0,-1.0],1.0)
+        ];
+        return cases[idx];
+    }
+
+    function _JordanWignerClusterOperatorPQRSTermSignsTest() : Unit{
+        for (idx in 0..7) {
+            let (testCase, expectedSigns, expectedGlobalSign) = _JordanWignerClusterOperatorPQRSTermSignsTestHelper(idx);
+            let (sortedIndices, signs, globalSign) = _JordanWignerClusterOperatorPQRSTermSigns(testCase);
+
+            let p = sortedIndices[0];
+            let q = sortedIndices[1];
+            let r = sortedIndices[2];
+            let s = sortedIndices[3];
+
+            AssertBoolEqual(true, p<q and q<r and r<s, "Expected p<q<r<s");
+            AssertAlmostEqual(globalSign, expectedGlobalSign);
+            for (signIdx in 0..Length(signs)-1) {
+                AssertAlmostEqual(signs[signIdx], expectedSigns[signIdx]);
+            }
+        }
+    }
 }
+
 
 
