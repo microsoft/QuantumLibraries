@@ -3,9 +3,11 @@
 
 namespace Microsoft.Quantum.Chemistry.JordanWigner {
     open Microsoft.Quantum.Primitive;
-    open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Extensions.Math;
     open Microsoft.Quantum.Chemistry;
+    open Microsoft.Quantum.Convert;
+    open Microsoft.Quantum.Simulation;
+    open Microsoft.Quantum.Arrays;
 
 	/// # Summary
     /// Computes Z component of Jordan-Wigner string between
@@ -31,16 +33,16 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
         
         mutable zString = new Bool[nFermions];
         for (fermionIdx in idxFermions){
-            if(fermionIdx >= nFermions){
-                fail $"ComputeJordanWignerString failed. fermionIdx {fermionIdx} out of range.";
-        }
-        for(idx in 0..fermionIdx){
-            set zString[idx] = zString[idx] ? false | true;
-        }
+                if(fermionIdx >= nFermions){
+                    fail $"ComputeJordanWignerString failed. fermionIdx {fermionIdx} out of range.";
+            }
+            for(idx in 0..fermionIdx){
+                set zString w/= idx <- zString[idx] ? false | true;
+            }
         }
         
         for (fermionIdx in idxFermions){
-            set zString[fermionIdx] = false;
+            set zString w/= fermionIdx <- false;
         }
         return zString;
     }
@@ -49,7 +51,7 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
     // false -> PauliI and true -> PauliZ
     function _ComputeJordanWignerPauliZString(nFermions: Int,  idxFermions: Int[]) : Pauli[] {
         let bitString = _ComputeJordanWignerBitString(nFermions, idxFermions);
-        return PauliFromBitString (PauliZ, true, bitString);
+        return BoolArrayAsPauli (PauliZ, true, bitString);
     }
 
     // Identical to `_ComputeJordanWignerPauliZString`, except that some
@@ -60,7 +62,7 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
         for(idx in 0..Length(idxFermions)-1){
             let idxFermion = idxFermions[idx];
             let op = pauliReplacements[idx];
-            set pauliString[idxFermion] = op;
+            set pauliString w/= idxFermion <- op;
         }
         
         return pauliString;

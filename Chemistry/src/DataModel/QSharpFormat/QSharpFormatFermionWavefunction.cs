@@ -99,12 +99,15 @@ namespace Microsoft.Quantum.Chemistry.QSharpFormat
             // The last term is the reference state.
             var referenceState = (terms.Last());
             var clusterOperator = terms.Take(terms.Count() - 1);
-            
-            var stateQSharp = new QArray<JordanWignerInputState>(clusterOperator.Select(o =>
+
+            var stateElements = clusterOperator.Select(o =>
             new JordanWignerInputState(
                 (((Double)o.complexCoeff.Item1, (Double)o.complexCoeff.Item2),
-                 new QArray<Int64>(o.Item2.Sequence.Select(y => (Int64)y.Index))))));
-            stateQSharp.Add(InitialStatePrep(referenceState.complexCoeff, referenceState.Item2));
+                 new QArray<Int64>(o.Item2.Sequence.Select(y => (Int64)y.Index))))).ToList();
+            stateElements.Add(InitialStatePrep(referenceState.complexCoeff, referenceState.Item2));
+
+            var stateQSharp = new QArray<JordanWignerInputState>(stateElements);
+            
             return stateQSharp;
         }
     }

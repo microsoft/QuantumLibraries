@@ -4,11 +4,11 @@
 namespace Microsoft.Quantum.Chemistry.Tests {
     
     open Microsoft.Quantum.Primitive;
-    open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Extensions.Testing;
     open Microsoft.Quantum.Extensions.Math;
     open Microsoft.Quantum.Extensions.Convert;
     open Microsoft.Quantum.Chemistry.JordanWigner; 
+    open Microsoft.Quantum.Diagnostics;
     
     // Check that correct Pauli Z string is computed
     function _ComputeJordanWignerBitString_0Test() : Unit {
@@ -16,7 +16,7 @@ namespace Microsoft.Quantum.Chemistry.Tests {
         let fermionIndices = [0, 3];
         let expectedBitString = [false, true, true, false,false];
         let bitString = _ComputeJordanWignerBitString(nFermions, fermionIndices);
-        AssertBoolArrayEqual (bitString, expectedBitString, "Bit strings not equal");
+        AllEqualityFactB (bitString, expectedBitString, "Bit strings not equal");
     }
 
     function _ComputeJordanWignerBitString_1Test() : Unit {
@@ -24,7 +24,7 @@ namespace Microsoft.Quantum.Chemistry.Tests {
         let fermionIndices = [0, 4, 2, 6];
         let expectedBitString = [false, true, false, false, false, true, false];
         let bitString = _ComputeJordanWignerBitString(nFermions, fermionIndices);
-        AssertBoolArrayEqual (bitString, expectedBitString, "Bit strings not equal");
+        AllEqualityFactB (bitString, expectedBitString, "Bit strings not equal");
     }
 
     function _ComputeJordanWignerPauliZString_0Test() : Unit {
@@ -36,11 +36,11 @@ namespace Microsoft.Quantum.Chemistry.Tests {
         mutable product = new Bool[nFermions];
         mutable expected = new Bool[nFermions];
         for(idx in 0..nFermions - 1){
-            set product[idx] = expectedBitString[idx] == bitString[idx] ? true | false;
-            set expected[idx] = true;
+            set product w/= idx <- expectedBitString[idx] == bitString[idx] ? true | false;
+            set expected w/= idx <- true;
         }
         
-        AssertBoolArrayEqual (product, expected, "Bit strings not equal");
+        AllEqualityFactB (product, expected, "Bit strings not equal");
     }
 }
 

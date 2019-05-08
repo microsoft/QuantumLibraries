@@ -24,7 +24,7 @@
     <PackageReference Include="Microsoft.Extensions.Logging" Version="2.1.1" />
     <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="2.1.1" />
     <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="2.1.1" />
-    <PackageReference Include="Microsoft.Quantum.Development.Kit" Version="0.5.1904.1302" />
+    <PackageReference Include="Microsoft.Quantum.Development.Kit" Version="0.6.1905.301" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
     <PackageReference Include="YamlDotNet" Version="6.0.0" />
     <PackageReference Include="Serilog.Extensions.Logging.File" Version="1.1.0" />
@@ -32,7 +32,7 @@
 
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Canon\src\Canon.csproj" />
+    <ProjectReference Include="..\..\..\Standard\src\Standard.csproj" />
     <ProjectReference Include="..\Runtime\Runtime.csproj" PrivateAssets="all" />
 
     <BuildOutputInPackage Include="..\Runtime\bin\$(Configuration)\netstandard2.0\Microsoft.Quantum.Chemistry.*" />

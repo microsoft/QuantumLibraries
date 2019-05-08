@@ -65,19 +65,19 @@ namespace Microsoft.Quantum.Chemistry.Tests
             var (hZ, hZZ, hPQandPQQR, v01234) = termData;
             
             //Assert.Equal(3.0 * 0.5 + 0.25 * 3.0, energyOffset);
-            Assert.Contains(new HTerm((new QArray<Int64> { 0 }, new QArray<Double> { -0.5 * 1.0 -0.25 * 1.0 })), termData.Item1, new Convert.HTermArrayComparer());
-            Assert.Contains(new HTerm((new QArray<Int64> { 1 }, new QArray<Double> { -0.5 * 1.0 - 0.25 * 1.0 })), termData.Item1, new Convert.HTermArrayComparer());
-            Assert.Contains(new HTerm((new QArray<Int64> { 2 }, new QArray<Double> { -0.5 * 1.0 - 2.0 * 0.25 * 1.0 })), termData.Item1, new Convert.HTermArrayComparer());
-            Assert.Contains(new HTerm((new QArray<Int64> { 3 }, new QArray<Double> { - 0.25 * 1.0 })), termData.Item1, new Convert.HTermArrayComparer());
-            Assert.Contains(new HTerm((new QArray<Int64> { 6 }, new QArray<Double> { - 0.25 * 1.0 })), termData.Item1, new Convert.HTermArrayComparer());
+            Assert.Contains(new HTerm((new QArray<Int64>(new[] { 0L }), new QArray<Double>(new[] { -0.5 * 1.0 -0.25 * 1.0 }))), termData.Item1, new Convert.HTermArrayComparer());
+            Assert.Contains(new HTerm((new QArray<Int64>(new[] { 1L }), new QArray<Double>(new[] { -0.5 * 1.0 - 0.25 * 1.0 }))), termData.Item1, new Convert.HTermArrayComparer());
+            Assert.Contains(new HTerm((new QArray<Int64>(new[] { 2L }), new QArray<Double>(new[] { -0.5 * 1.0 - 2.0 * 0.25 * 1.0 }))), termData.Item1, new Convert.HTermArrayComparer());
+            Assert.Contains(new HTerm((new QArray<Int64>(new[] { 3L }), new QArray<Double>(new[] { - 0.25 * 1.0 }))), termData.Item1, new Convert.HTermArrayComparer());
+            Assert.Contains(new HTerm((new QArray<Int64>(new[] { 6L }), new QArray<Double>(new[] { - 0.25 * 1.0 }))), termData.Item1, new Convert.HTermArrayComparer());
 
-            Assert.Contains(new HTerm((new QArray<Int64> { 0, 2 }, new QArray<Double> { 0.25 * 1.0 })), termData.Item2, new Convert.HTermArrayComparer());
-            Assert.Contains(new HTerm((new QArray<Int64> { 1, 3 }, new QArray<Double> { 0.25 * 1.0 })), termData.Item2, new Convert.HTermArrayComparer());
-            Assert.Contains(new HTerm((new QArray<Int64> { 2, 6 }, new QArray<Double> { 0.25 * 1.0 })), termData.Item2, new Convert.HTermArrayComparer());
+            Assert.Contains(new HTerm((new QArray<Int64>(new[] { 0L, 2L }), new QArray<Double>(new[] { 0.25 * 1.0 }))), termData.Item2, new Convert.HTermArrayComparer());
+            Assert.Contains(new HTerm((new QArray<Int64>(new[] { 1L, 3L }), new QArray<Double>(new[] { 0.25 * 1.0 }))), termData.Item2, new Convert.HTermArrayComparer());
+            Assert.Contains(new HTerm((new QArray<Int64>(new[] { 2L, 6L }), new QArray<Double>(new[] { 0.25 * 1.0 }))), termData.Item2, new Convert.HTermArrayComparer());
 
-            Assert.Contains(new HTerm((new QArray<Int64> { 0, 2, 2, 1 }, new QArray<Double> { -0.125 * 1.0 })), termData.Item3, new Convert.HTermArrayComparer());
-            Assert.Contains(new HTerm((new QArray<Int64> { 1, 3, 3, 2 }, new QArray<Double> { -0.125 * 1.0 })), termData.Item3, new Convert.HTermArrayComparer());
-            Assert.Contains(new HTerm((new QArray<Int64> { 2, 6, 6, 5 }, new QArray<Double> { -0.125 * 1.0 })), termData.Item3, new Convert.HTermArrayComparer());
+            Assert.Contains(new HTerm((new QArray<Int64>(new[] { 0L, 2L, 2L, 1L }), new QArray<Double>(new[] { -0.125 * 1.0 }))), termData.Item3, new Convert.HTermArrayComparer());
+            Assert.Contains(new HTerm((new QArray<Int64>(new[] { 1L, 3L, 3L, 2L }), new QArray<Double>(new[] { -0.125 * 1.0 }))), termData.Item3, new Convert.HTermArrayComparer());
+            Assert.Contains(new HTerm((new QArray<Int64>(new[] { 2L, 6L, 6L, 5L }), new QArray<Double>(new[] { -0.125 * 1.0 }))), termData.Item3, new Convert.HTermArrayComparer());
 
             // Test incomplete
         }
