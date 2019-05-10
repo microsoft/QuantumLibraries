@@ -60,7 +60,7 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
     function _ComputeJordanWignerPauliString(nFermions: Int,  idxFermions: Int[], pauliReplacements : Pauli[]) : Pauli[] {
         mutable pauliString = _ComputeJordanWignerPauliZString(nFermions, idxFermions);
 
-        for(idx in 0..Length(idxFermions)-1){
+        for(idx in IndexRange(idxFermions)){
             let idxFermion = idxFermions[idx];
             let op = pauliReplacements[idx];
             set pauliString w/= idxFermion <- op;
