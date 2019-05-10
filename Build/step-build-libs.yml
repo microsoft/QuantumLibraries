@@ -12,6 +12,7 @@ steps:
     projects: |
       $(LibrariesRootFolder)/Standard.sln
       $(LibrariesRootFolder)/Chemistry.sln
+      $(LibrariesRootFolder)/Numerics.sln
     arguments: >
         -c $(BuildConfiguration)
         -v n
@@ -32,6 +33,7 @@ steps:
      $(LibrariesRootFolder)/Chemistry/tests/ChemistryTests/ChemistryTests.csproj
      $(LibrariesRootFolder)/Chemistry/tests/SystemTests/SystemTests.csproj
      $(LibrariesRootFolder)/Chemistry/tests/DataModelTests/DataModelTests.csproj
+     $(LibrariesRootFolder)/Numerics/tests/NumericsTests.csproj
     arguments: >
         -c $(BuildConfiguration)
         -v n
