@@ -1,33 +1,29 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-
-
 using System;
-using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Runtime.CompilerServices;
+using System.Security.Cryptography;
 using System.Text;
-using System.Threading.Tasks;
 
 using Microsoft.Quantum.Chemistry;
-using Microsoft.Quantum.Simulation.Core;
-using Microsoft.Quantum.Simulation.Simulators;
 using Microsoft.Quantum.Chemistry.Broombridge;
-using Microsoft.Quantum.Chemistry.OrbitalIntegrals;
 using Microsoft.Quantum.Chemistry.Fermion;
-using Microsoft.Quantum.Chemistry.Pauli;
-using Microsoft.Quantum.Chemistry.QSharpFormat;
-using Microsoft.Quantum.Chemistry.Generic;
 using Microsoft.Quantum.Chemistry.JordanWigner;
+using Microsoft.Quantum.Chemistry.OrbitalIntegrals;
+using Microsoft.Quantum.Chemistry.QSharpFormat;
+using Microsoft.Quantum.Simulation.Simulators;
 
 using Xunit;
-
-
 
 namespace SystemTestsLiH
 {
     public class LithiumHydride
     {
+        private static readonly SHA256Managed hashMethod = new SHA256Managed();
+
         public static JordanWignerEncodingData TestStack(string filename, Config configuration)
         {
             var broombridge = Deserializers.DeserializeBroombridge(filename).ProblemDescriptions.First();
@@ -48,7 +44,7 @@ namespace SystemTestsLiH
             return qSharpData;
         }
 
-        public static Double SetUpLiHSimulation(string filename, Config configuration, int bits, string wavefunction = "|G>")
+        public static Double SetUpLiHSimulation(string testName, string filename, Config configuration, int bits, string wavefunction = "|G>")
         {
             var qSharpData = TestStack(filename, configuration);
 
@@ -61,7 +57,7 @@ namespace SystemTestsLiH
             // Choose the Trotter integrator order
             Int64 trotterOrder = 1;
 
-            using (var qsim = new QuantumSimulator())
+            using (var qsim = new QuantumSimulator(randomNumberGeneratorSeed: GenerateSeed(testName)))
             {
 
                 // EstimateEnergyByTrotterization
@@ -72,10 +68,30 @@ namespace SystemTestsLiH
             }
         }
 
+        /// <summary>
+        /// Returns a seed to use for the test run based on the class
+        /// </summary>
+        public static uint? GenerateSeed(string testName)
+        {
+            byte[] bytes = Encoding.Unicode.GetBytes(testName);
+            byte[] hash = hashMethod.ComputeHash(bytes);
+            uint seed = BitConverter.ToUInt32(hash, 0);
+
+            string msg = $"Using generated seed: (\"{testName}\",{ seed })";
+            Console.WriteLine(msg);
+            Debug.WriteLine(msg);
+
+            return seed;
+        }
+
+
 
         public class Version_v0_1
         {
             static string filename = "LithiumHydride/LiH_0.1.yaml";
+
+            private string TestName([CallerMemberName] string callerName = "") =>
+                $"{this.GetType().FullName}.{callerName}";
 
             [Fact]
             // Test classical computing Stack.
@@ -90,7 +106,7 @@ namespace SystemTestsLiH
             {
                 var configuration = Config.Default();
 
-                var error = SetUpLiHSimulation(filename, configuration, 9);
+                var error = SetUpLiHSimulation(TestName(), filename, configuration, 9);
 
                 Assert.True(Math.Abs(error) < 1e-2, "This test is probabilistic.");
             }
@@ -101,7 +117,7 @@ namespace SystemTestsLiH
             {
                 var configuration = Config.Default();
 
-                var error = SetUpLiHSimulation(filename, configuration, 6);
+                var error = SetUpLiHSimulation(TestName(), filename, configuration, 6);
 
                 Assert.True(Math.Abs(error) < 1e-1, "This test is probabilistic.");
             }
@@ -112,7 +128,7 @@ namespace SystemTestsLiH
                 var configuration = Config.Default();
                 configuration.UseIndexConvention = SpinOrbital.IndexConvention.UpDown;
 
-                var error = SetUpLiHSimulation(filename, configuration, 6);
+                var error = SetUpLiHSimulation(TestName(), filename, configuration, 6);
 
                 Assert.True(Math.Abs(error) < 1e-1, "This test is probabilistic.");
             }
@@ -125,6 +141,9 @@ namespace SystemTestsLiH
         {
             static string filename = "LithiumHydride/LiH_0.2.yaml";
 
+            private string TestName([CallerMemberName] string callerName = "") =>
+                $"{this.GetType().FullName}.{callerName}";
+
             [Fact]
             public void Load()
             {
@@ -136,7 +155,7 @@ namespace SystemTestsLiH
             {
                 var configuration = Config.Default();
 
-                var error = SetUpLiHSimulation(filename, configuration, 9);
+                var error = SetUpLiHSimulation(TestName(), filename, configuration, 9);
 
                 Assert.True(Math.Abs(error) < 1e-2);
             }
@@ -147,7 +166,7 @@ namespace SystemTestsLiH
             {
                 var configuration = Config.Default();
 
-                var error = SetUpLiHSimulation(filename, configuration, 6);
+                var error = SetUpLiHSimulation(TestName(), filename, configuration, 6);
 
                 Assert.True(Math.Abs(error) < 1e-1);
             }
@@ -158,7 +177,7 @@ namespace SystemTestsLiH
                 var configuration = Config.Default();
                 configuration.UseIndexConvention = SpinOrbital.IndexConvention.UpDown;
 
-                var error = SetUpLiHSimulation(filename, configuration, 6);
+                var error = SetUpLiHSimulation(TestName(), filename, configuration, 6);
 
                 Assert.True(Math.Abs(error) < 1e-1);
             }
@@ -170,9 +189,8 @@ namespace SystemTestsLiH
                 configuration.UseIndexConvention = SpinOrbital.IndexConvention.UpDown;
 
                 // This is a ranodm UCCSD state, not the actual one for LiH.
-                var error = SetUpLiHSimulation(filename, configuration, 1, "UCCSD |E1>");
+                var error = SetUpLiHSimulation(TestName(), filename, configuration, 1, "UCCSD |E1>");
             }
         }
-
     }
 }
