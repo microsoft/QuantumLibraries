@@ -123,7 +123,7 @@ namespace Microsoft.Quantum.Canon {
     /// - Microsoft.Quantum.Canon.ApplyQuantumFourierTransformBE
     operation QFT(qs : BigEndian) : Unit {
         body (...) {
-            ApplyQuantumFourierTransformBE(qs);
+            ApplyQuantumFourierTransform(BigEndianAsLittleEndian(qs));
         }
 
         adjoint invert;

@@ -33,7 +33,7 @@ namespace Microsoft.Quantum.Tests {
     
     function AssertBoolArrayEqualTestShouldFail () : Unit {
         
-        AssertBoolArrayEqual([true, false], [false, true], $"OK");
+        AllEqualityFactB([true, false], [false, true], $"OK");
     }
     
     
@@ -92,8 +92,6 @@ namespace Microsoft.Quantum.Tests {
             Exp([PauliX], theta, [qubits[3]]);
             AssertProbInt(5, 1.0 - prob, LittleEndian(qubits), tolerance);
             AssertProbInt(13, prob, LittleEndian(qubits), tolerance);
-            AssertProbIntBE(10, 1.0 - prob, BigEndian(qubits), tolerance);
-            AssertProbIntBE(11, prob, BigEndian(qubits), tolerance);
             ResetAll(qubits);
         }
     }
