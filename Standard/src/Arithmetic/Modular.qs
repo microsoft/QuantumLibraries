@@ -223,7 +223,7 @@ namespace Microsoft.Quantum.Arithmetic {
             ApplyToEachCA(SWAP, Zip(summandLE!, multiplier!));
 
             // now the joint state is |x⋅a(mod N)⟩|x⟩
-            let inverseMod = InverseMod(constMultiplier, modulus);
+            let inverseMod = InverseModI(constMultiplier, modulus);
 
             // note that the operation below implements the following map:
             // |x⟩|y⟩ ↦ |x⟩|y - a⁻¹⋅x (mod N)⟩
