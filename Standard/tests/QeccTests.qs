@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 namespace Microsoft.Quantum.Tests {
+    open Microsoft.Quantum.Convert;
     open Microsoft.Quantum.Intrinsic;
     open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.ErrorCorrection;
@@ -175,7 +176,7 @@ namespace Microsoft.Quantum.Tests {
             Ry(PI() / 2.5, anc[0]);
             FiveQubitCodeEncoderImpl([anc[0]], anc[1 .. 4]);
             let syn = s!(LogicalRegister(anc));
-            let a = ResultAsInt(syn!);
+            let a = ResultArrayAsInt(syn!);
             EqualityFactI(a, 0, $"syndrome failure");
             let (encode, decode, syndMeas) = (FiveQubitCode())!;
             let recovery = FiveQubitCodeRecoveryFn();
@@ -185,7 +186,7 @@ namespace Microsoft.Quantum.Tests {
                 let syndrome = syndMeas!(LogicalRegister(anc));
                 let recoveryOp = recovery!(syndrome);
                 ApplyPauli(recoveryOp, anc);
-                let ans = ResultAsInt((syndMeas!(LogicalRegister(anc)))!);
+                let ans = ResultArrayAsInt((syndMeas!(LogicalRegister(anc)))!);
                 EqualityFactI(ans, 0, $"Correction failure");
             }
             
@@ -194,7 +195,7 @@ namespace Microsoft.Quantum.Tests {
                 let syndrome = syndMeas!(LogicalRegister(anc));
                 let recoveryOp = recovery!(syndrome);
                 ApplyPauli(recoveryOp, anc);
-                let ans = ResultAsInt((syndMeas!(LogicalRegister(anc)))!);
+                let ans = ResultArrayAsInt((syndMeas!(LogicalRegister(anc)))!);
                 EqualityFactI(ans, 0, $"Correction failure");
             }
             
@@ -203,7 +204,7 @@ namespace Microsoft.Quantum.Tests {
                 let syndrome = syndMeas!(LogicalRegister(anc));
                 let recoveryOp = recovery!(syndrome);
                 ApplyPauli(recoveryOp, anc);
-                let ans = ResultAsInt((syndMeas!(LogicalRegister(anc)))!);
+                let ans = ResultArrayAsInt((syndMeas!(LogicalRegister(anc)))!);
                 EqualityFactI(ans, 0, $"Correction failure");
             }
             
