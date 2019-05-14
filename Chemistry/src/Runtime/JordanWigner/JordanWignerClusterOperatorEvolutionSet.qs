@@ -3,9 +3,12 @@
 
 namespace Microsoft.Quantum.Chemistry.JordanWigner {
     open Microsoft.Quantum.Primitive;
-    open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Extensions.Math;
     open Microsoft.Quantum.Chemistry;
+    open Microsoft.Quantum.Convert;
+    open Microsoft.Quantum.Simulation;
+    open Microsoft.Quantum.Arrays;
+    open Microsoft.Quantum.Math;
 
     /// # Summary
     /// Computes Z component of Jordan-Wigner string between
@@ -31,16 +34,16 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
         
         mutable zString = new Bool[nFermions];
         for (fermionIdx in idxFermions){
-            if(fermionIdx >= nFermions){
-                fail $"ComputeJordanWignerString failed. fermionIdx {fermionIdx} out of range.";
-        }
-        for(idx in 0..fermionIdx){
-            set zString[idx] = zString[idx] ? false | true;
-        }
+                if(fermionIdx >= nFermions){
+                    fail $"ComputeJordanWignerString failed. fermionIdx {fermionIdx} out of range.";
+            }
+            for(idx in 0..fermionIdx){
+                set zString w/= idx <- zString[idx] ? false | true;
+            }
         }
         
         for (fermionIdx in idxFermions){
-            set zString[fermionIdx] = false;
+            set zString w/= fermionIdx <- false;
         }
         return zString;
     }
@@ -49,7 +52,7 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
     // false -> PauliI and true -> PauliZ
     function _ComputeJordanWignerPauliZString(nFermions: Int,  idxFermions: Int[]) : Pauli[] {
         let bitString = _ComputeJordanWignerBitString(nFermions, idxFermions);
-        return PauliFromBitString (PauliZ, true, bitString);
+        return BoolArrayAsPauli (PauliZ, true, bitString);
     }
 
     // Identical to `_ComputeJordanWignerPauliZString`, except that some
@@ -57,10 +60,10 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
     function _ComputeJordanWignerPauliString(nFermions: Int,  idxFermions: Int[], pauliReplacements : Pauli[]) : Pauli[] {
         mutable pauliString = _ComputeJordanWignerPauliZString(nFermions, idxFermions);
 
-        for(idx in 0..Length(idxFermions)-1){
+        for(idx in IndexRange(idxFermions)){
             let idxFermion = idxFermions[idx];
             let op = pauliReplacements[idx];
-            set pauliString[idxFermion] = op;
+            set pauliString w/= idxFermion <- op;
         }
         
         return pauliString;
@@ -89,7 +92,7 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
             for (idxOp in 0 .. Length(ops) - 1) {
                 let pauliString = _ComputeJordanWignerPauliString(Length(qubits), idxFermions, ops[idxOp]);
                 let sign = signs[idxOp];
-            Exp(pauliString, sign * angle, qubits);
+                Exp(pauliString, (p < q ? 1.0 | -1.0) * sign * angle, qubits);
             }
         }
         adjoint invert;
@@ -160,12 +163,12 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
             let y = PauliY;
 
             let ops = [[y,y,x,y],[x,x,x,y],[x,y,y,y],[y,x,y,y],[x,y,x,x],[y,x,x,x],[y,y,y,x],[x,x,y,x]];
-            let signs = [1.0, -1.0, -1.0, -1.0, 1.0, 1.0, 1.0, -1.0];
+            let (sortedIndices, signs, globalSign) = _JordanWignerClusterOperatorPQRSTermSigns([p,q,r,s]);
 
             for (idxOp in 0 .. Length(ops) - 1) {
                 let pauliString = _ComputeJordanWignerPauliString(Length(qubits), idxFermions, ops[idxOp]);
                 let sign = signs[idxOp];
-                Exp(pauliString, sign * angle, qubits);
+                Exp(pauliString, globalSign * sign * angle, qubits);
             }
         }
         
@@ -173,7 +176,57 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
         controlled distribute;
         controlled adjoint distribute;
     }
+    
+    function _JordanWignerClusterOperatorPQRSTermSigns(indices: Int[]) : (Int[], Double[], Double)
+    {
+        let p = indices[0];
+        let q = indices[1];
+        let r = indices[2];
+        let s = indices[3];
+        mutable sorted = new Int[4];
+        mutable signs = new Double[8];
+        mutable sign = 1.0;
 
+        if(p>q){
+            set sign = sign * -1.0;
+        }
+        if(r>s){
+            set sign = sign * -1.0;
+        }
+        if( Min([p,q]) > Min([r,s]) ){
+            set sign = sign * -1.0;
+            set sorted = [Min([r,s]), Max([r,s]), Min([p,q]), Max([p,q])];
+        }
+        else{
+            set sorted = [Min([p,q]), Max([p,q]), Min([r,s]), Max([r,s])];
+        }
+        // sorted is now in the order
+        // [p`,q`,r`,s`], where p`<q`; r`<s`, and Min(p`,q`) is smaller than Min(r`,s`).
+
+        let p1 = sorted[0];
+        let q1 = sorted[1];
+        let r1 = sorted[2];
+        let s1 = sorted[3];
+
+        // Case (p,q) < (r,s) and (p,q) > (r,s)
+        if(q1 < r1){
+            // p1 < q1 < r1 < s1
+            return ([p1,q1,r1,s1],[1.0, -1.0, -1.0, -1.0, 1.0, 1.0, 1.0, -1.0], sign);
+        }
+        // Case interleaved
+        elif(q1 > r1 and q1 < s1){
+            // p1 < r1 < q1 < s1
+            return ([p1,r1,q1,s1],[-1.0, -1.0, -1.0, 1.0, -1.0, 1.0, 1.0, 1.0], sign);
+        }
+        // Case contained
+        elif(q1 > r1 and q1 > s1){
+            // p1 < r1 < s1 < q1
+            return ([p1,r1,s1,q1],[1.0, 1.0, -1.0, 1.0, -1.0, 1.0, -1.0, -1.0], sign);
+        }
+        else{
+            fail("Completely invalid cluster operator specified.");
+        }
+    }
 
     /// # Summary
     /// Converts a Hamiltonian described by `JWOptimizedHTerms`

@@ -22,7 +22,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CSharpTests", "Chemistry\te
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QSharpTests", "Chemistry\tests\ChemistryTests\QSharpTests.csproj", "{F723F015-C78C-46A2-BB9D-CD2FD3D1DDCD}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Canon", "Canon\src\Canon.csproj", "{4EE69CC7-1158-49A2-A28F-9443B06D4A32}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Standard", "Standard\src\Standard.csproj", "{4EE69CC7-1158-49A2-A28F-9443B06D4A32}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SerializationTests", "Chemistry\tests\SerializationTests\SerializationTests.csproj", "{364D11CE-AB4E-4727-ADA7-EFF3DCD92096}"
 EndProject

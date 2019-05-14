@@ -4,11 +4,11 @@
 namespace Microsoft.Quantum.Chemistry.Tests {
     
     open Microsoft.Quantum.Primitive;
-    open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Extensions.Testing;
     open Microsoft.Quantum.Extensions.Math;
     open Microsoft.Quantum.Extensions.Convert;
     open Microsoft.Quantum.Chemistry.JordanWigner; 
+    open Microsoft.Quantum.Diagnostics;
     
     // Check that correct Pauli Z string is computed
     function _ComputeJordanWignerBitString_0Test() : Unit {
@@ -16,7 +16,7 @@ namespace Microsoft.Quantum.Chemistry.Tests {
         let fermionIndices = [0, 3];
         let expectedBitString = [false, true, true, false,false];
         let bitString = _ComputeJordanWignerBitString(nFermions, fermionIndices);
-        AssertBoolArrayEqual (bitString, expectedBitString, "Bit strings not equal");
+        AllEqualityFactB (bitString, expectedBitString, "Bit strings not equal");
     }
 
     function _ComputeJordanWignerBitString_1Test() : Unit {
@@ -24,7 +24,7 @@ namespace Microsoft.Quantum.Chemistry.Tests {
         let fermionIndices = [0, 4, 2, 6];
         let expectedBitString = [false, true, false, false, false, true, false];
         let bitString = _ComputeJordanWignerBitString(nFermions, fermionIndices);
-        AssertBoolArrayEqual (bitString, expectedBitString, "Bit strings not equal");
+        AllEqualityFactB (bitString, expectedBitString, "Bit strings not equal");
     }
 
     function _ComputeJordanWignerPauliZString_0Test() : Unit {
@@ -36,12 +36,45 @@ namespace Microsoft.Quantum.Chemistry.Tests {
         mutable product = new Bool[nFermions];
         mutable expected = new Bool[nFermions];
         for(idx in 0..nFermions - 1){
-            set product[idx] = expectedBitString[idx] == bitString[idx] ? true | false;
-            set expected[idx] = true;
+            set product w/= idx <- expectedBitString[idx] == bitString[idx] ? true | false;
+            set expected w/= idx <- true;
         }
         
-        AssertBoolArrayEqual (product, expected, "Bit strings not equal");
+        AllEqualityFactB (product, expected, "Bit strings not equal");
+    }
+
+    function _JordanWignerClusterOperatorPQRSTermSignsTestHelper(idx : Int) : (Int[], Double[], Double){
+        let cases = [
+        ([1,2,3,4],[1.0,-1.0,-1.0,-1.0,1.0,1.0,1.0,-1.0],1.0),
+        ([2,1,4,3],[1.0,-1.0,-1.0,-1.0,1.0,1.0,1.0,-1.0],1.0),
+        ([3,4,1,2],[1.0,-1.0,-1.0,-1.0,1.0,1.0,1.0,-1.0],-1.0),
+        ([2,1,3,4],[1.0,-1.0,-1.0,-1.0,1.0,1.0,1.0,-1.0],-1.0),
+        ([1,3,2,4],[-1.0,-1.0,-1.0,1.0,-1.0,1.0,1.0,1.0],1.0),
+        ([4,2,3,1],[-1.0,-1.0,-1.0,1.0,-1.0,1.0,1.0,1.0],-1.0),
+        ([1,4,2,3],[1.0,1.0,-1.0,1.0,-1.0,1.0,-1.0,-1.0],1.0),
+        ([2,3,4,1],[1.0,1.0,-1.0,1.0,-1.0,1.0,-1.0,-1.0],1.0)
+        ];
+        return cases[idx];
+    }
+
+    function _JordanWignerClusterOperatorPQRSTermSignsTest() : Unit{
+        for (idx in 0..7) {
+            let (testCase, expectedSigns, expectedGlobalSign) = _JordanWignerClusterOperatorPQRSTermSignsTestHelper(idx);
+            let (sortedIndices, signs, globalSign) = _JordanWignerClusterOperatorPQRSTermSigns(testCase);
+
+            let p = sortedIndices[0];
+            let q = sortedIndices[1];
+            let r = sortedIndices[2];
+            let s = sortedIndices[3];
+
+            Fact(p<q and q<r and r<s, "Expected p<q<r<s");
+            NearEqualityFact(globalSign, expectedGlobalSign);
+            for (signIdx in 0..Length(signs)-1) {
+                NearEqualityFact(signs[signIdx], expectedSigns[signIdx]);
+            }
+        }
     }
 }
+
 
 

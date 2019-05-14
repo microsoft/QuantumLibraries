@@ -2,7 +2,8 @@
 // Licensed under the MIT License.
 namespace SystemTests.Molecules {
     open Microsoft.Quantum.Primitive;
-    open Microsoft.Quantum.Canon;
+    open Microsoft.Quantum.Simulation;
+    open Microsoft.Quantum.Characterization;
     open Microsoft.Quantum.Extensions.Convert;
     open Microsoft.Quantum.Extensions.Math;
     open Microsoft.Quantum.Chemistry.JordanWigner;   

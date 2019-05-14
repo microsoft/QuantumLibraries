@@ -2,13 +2,15 @@
 // Licensed under the MIT License.
 
 namespace Microsoft.Quantum.Chemistry.JordanWigner {
-    
-    open Microsoft.Quantum.Primitive;
+    open Microsoft.Quantum.Preparation;
+    open Microsoft.Quantum.Arithmetic;
+    open Microsoft.Quantum.Intrinsic;
     open Microsoft.Quantum.Canon;
-    open Microsoft.Quantum.Extensions.Math;
-    open Microsoft.Quantum.Extensions.Convert;
-    
-    
+    open Microsoft.Quantum.Convert;
+    open Microsoft.Quantum.Arrays;
+    open Microsoft.Quantum.Math;
+    open Microsoft.Quantum.Simulation;
+
     //newtype JordanWignerInputState = ((Double, Double), Int[]);
     operation PrepareTrialState (stateData : (Int, JordanWignerInputState[]), qubits : Qubit[]) : Unit {
         let (stateType, terms) = stateData;
@@ -63,7 +65,7 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
     }
     
     
-    function _PrepareSingleConfigurationalStateSingleSiteOccupation_ (qubitIndices : Int[]) : (Qubit[] => Unit : Adjoint, Controlled) {
+    function _PrepareSingleConfigurationalStateSingleSiteOccupation_ (qubitIndices : Int[]) : (Qubit[] => Unit is Adj + Ctl) {
         
         return PrepareSingleConfigurationalStateSingleSiteOccupation(qubitIndices, _);
     }
@@ -86,29 +88,29 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
         
         let nExcitations = Length(excitations);
         
-        //FIXME compile error let coefficientsSqrtAbs = Map(Compose(Compose(Sqrt, Fst),Fst), excitations);
+        //FIXME compile error let coefficientsSqrtAbs = Mapped(Compose(Compose(Sqrt, Fst),Fst), excitations);
         mutable coefficientsSqrtAbs = new Double[nExcitations];
         mutable coefficientsNewComplexPolar = new ComplexPolar[nExcitations];
         mutable applyFlips = new Int[][nExcitations];
         
         for (idx in 0 .. nExcitations - 1) {
             let (x, excitation) = excitations[idx]!;
-            set coefficientsSqrtAbs[idx] = Sqrt(AbsComplexPolar(ComplexToComplexPolar(Complex(x))));
-            set coefficientsNewComplexPolar[idx] = ComplexPolar(coefficientsSqrtAbs[idx], ArgComplexPolar(ComplexToComplexPolar(Complex(x))));
-            set applyFlips[idx] = excitation;
+            set coefficientsSqrtAbs w/= idx <- Sqrt(AbsComplexPolar(ComplexToComplexPolar(Complex(x))));
+            set coefficientsNewComplexPolar w/= idx <- ComplexPolar(coefficientsSqrtAbs[idx], ArgComplexPolar(ComplexToComplexPolar(Complex(x))));
+            set applyFlips w/= idx <- excitation;
         }
         
-        let nBitsIndices = Ceiling(Lg(ToDouble(nExcitations)));
+        let nBitsIndices = Ceiling(Lg(IntAsDouble(nExcitations)));
         
         repeat {
             mutable success = false;
             
             using (auxillary = Qubit[nBitsIndices + 1]) {
                 using (flag = Qubit[1]) {
-                    let multiplexer = MultiplexerBruteForceFromGenerator(nExcitations, LookupFunction(Map(_PrepareSingleConfigurationalStateSingleSiteOccupation_, applyFlips)));
-                    (StatePreparationComplexCoefficients(coefficientsNewComplexPolar))(BigEndian(auxillary));
-                    multiplexer(BigEndian(auxillary), qubits);
-                    (Adjoint (StatePreparationPositiveCoefficients(coefficientsSqrtAbs)))(BigEndian(auxillary));
+                    let multiplexer = MultiplexerBruteForceFromGenerator(nExcitations, LookupFunction(Mapped(_PrepareSingleConfigurationalStateSingleSiteOccupation_, applyFlips)));
+                    (StatePreparationComplexCoefficients(coefficientsNewComplexPolar))(LittleEndian(auxillary));
+                    multiplexer(LittleEndian(auxillary), qubits);
+                    (Adjoint (StatePreparationPositiveCoefficients(coefficientsSqrtAbs)))(LittleEndian(auxillary));
                     (ControlledOnInt(0, X))(auxillary, flag[0]);
                     
                     // if measurement outcome one we prepared required state

@@ -106,12 +106,16 @@ namespace Microsoft.Quantum.Chemistry.QSharpFormat
         internal static QArray<JordanWignerInputState> InitialStateUnitaryCoupledCluster(
             UnitaryCCWavefunction<int> wavefunction)
         {
-            var qSharpWavefunction =new QArray<JordanWignerInputState>(wavefunction.Excitations
-                .Select(o => InitialStatePrep(o.Value, o.Key, checkAnnihilation: false)));
-            qSharpWavefunction.Add(InitialStatePrep(new System.Numerics.Complex(1.0, 0.0), wavefunction.Reference, checkAnnihilation: true));
             // The last term is the reference state.
-            return qSharpWavefunction;
+            var referenceState = wavefunction.Reference;
+            var clusterOperator = wavefunction.Excitations;
+
+            var stateElements = clusterOperator.Select(o => InitialStatePrep(o.Value, o.Key, checkAnnihilation: false)).ToList();
+            stateElements.Add(InitialStatePrep(referenceState.complexCoeff, referenceState, checkAnnihilation: true);
+
+            var stateQSharp = new QArray<JordanWignerInputState>(stateElements);
             
+            return stateQSharp;
         }
     }
 

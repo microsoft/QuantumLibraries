@@ -2,10 +2,10 @@
 // Licensed under the MIT License.
 
 namespace Microsoft.Quantum.Chemistry {
-    
-    open Microsoft.Quantum.Primitive;
+    open Microsoft.Quantum.Simulation;
+    open Microsoft.Quantum.Intrinsic;
     open Microsoft.Quantum.Canon;
-    open Microsoft.Quantum.Extensions.Math;
+    open Microsoft.Quantum.Math;
     
     
     /// # Summary
@@ -81,13 +81,7 @@ namespace Microsoft.Quantum.Chemistry {
     /// # Output
     /// Returns true if `number` has an absolute value greater than `1e-15`.
     function IsNotZero (number : Double) : Bool {
-        
-        if (AbsD(number) > PowD(10.0, -15.0)) {
-            return true;
-        }
-        else {
-            return false;
-        }
+        return (AbsD(number) > PowD(10.0, -15.0));
     }
     
 }

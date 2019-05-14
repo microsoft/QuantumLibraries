@@ -2,13 +2,14 @@
 // Licensed under the MIT License.
 
 namespace Microsoft.Quantum.Chemistry.Tests {
-    
-    open Microsoft.Quantum.Primitive;
+    open Microsoft.Quantum.Arithmetic;
+    open Microsoft.Quantum.Intrinsic;
     open Microsoft.Quantum.Canon;
-    open Microsoft.Quantum.Extensions.Testing;
-    open Microsoft.Quantum.Extensions.Math;
-    open Microsoft.Quantum.Extensions.Convert;
-    open Microsoft.Quantum.Chemistry.JordanWigner; 
+    open Microsoft.Quantum.Diagnostics;
+    open Microsoft.Quantum.Convert;
+    open Microsoft.Quantum.Chemistry.JordanWigner;
+    open Microsoft.Quantum.Arrays;
+    open Microsoft.Quantum.Math;
     
     // Prepare single excitation
     operation PrepareSparseMultiConfigurationalState0Test () : Unit {
@@ -20,8 +21,9 @@ namespace Microsoft.Quantum.Chemistry.Tests {
         using (qubits = Qubit[nQubits]) {
             PrepareSparseMultiConfigurationalState(NoOp<Qubit[]>, excitations, qubits);
             
-            for (idx in 0 .. Length(excitations) - 1) {
-                AssertProbIntBE(intTest[idx], AbsD(1.0), BigEndian(Reverse(qubits)), 1E-05);
+
+            for (idx in IndexRange(excitations)) {
+                AssertProbInt(intTest[idx], AbsD(1.0), LittleEndian(qubits), 1E-05);
             }
             
             ResetAll(qubits);
@@ -40,8 +42,8 @@ namespace Microsoft.Quantum.Chemistry.Tests {
         using (qubits = Qubit[nQubits]) {
             PrepareSparseMultiConfigurationalState(NoOp<Qubit[]>, excitations, qubits);
             
-            for (idx in 0 .. Length(excitations) - 1) {
-                AssertProbIntBE(intTest[idx], expectedProb[idx], BigEndian(Reverse(qubits)), 1E-05);
+            for (idx in IndexRange(excitations)) {
+                AssertProbInt(intTest[idx], expectedProb[idx], LittleEndian(qubits), 1E-05);
             }
             
             ResetAll(qubits);
@@ -60,8 +62,8 @@ namespace Microsoft.Quantum.Chemistry.Tests {
         using (qubits = Qubit[nQubits]) {
             PrepareSparseMultiConfigurationalState(NoOp<Qubit[]>, excitations, qubits);
             
-            for (idx in 0 .. Length(excitations) - 1) {
-                AssertProbIntBE(intTest[idx], expectedProb[idx], BigEndian(Reverse(qubits)), 1E-05);
+            for (idx in IndexRange(excitations)) {
+                AssertProbInt(intTest[idx], expectedProb[idx], LittleEndian(qubits), 1E-05);
             }
             
             ResetAll(qubits);
@@ -76,13 +78,29 @@ namespace Microsoft.Quantum.Chemistry.Tests {
         let intTest = [39, 21, 10];
         let expectedProb = [0.047619, 0.190476, 0.761905];
         let p = [0.3, 0.9, 2.4];
-        let excitations = [JordanWignerInputState((0.1 * Cos(p[0]), 0.1 * Sin(p[0])), [0, 1, 2, 5]), JordanWignerInputState((0.2 * Cos(p[1]), 0.2 * Sin(p[1])), [0, 2, 4]), JordanWignerInputState((0.4 * Cos(p[2]), 0.4 * Sin(p[2])), [3, 1])];
+        let excitations = [
+            JordanWignerInputState(
+                (0.1 * Cos(p[0]),
+                0.1 * Sin(p[0])),
+                [0, 1, 2, 5]
+            ),
+            
+            JordanWignerInputState(
+                (0.2 * Cos(p[1]),
+                0.2 * Sin(p[1])),
+                [0, 2, 4]
+            ),
+            
+            JordanWignerInputState(
+                (0.4 * Cos(p[2]), 0.4 * Sin(p[2])),
+                [3, 1]
+            )];
         
         using (qubits = Qubit[nQubits]) {
             PrepareSparseMultiConfigurationalState(NoOp<Qubit[]>, excitations, qubits);
             
-            for (idx in 0 .. Length(excitations) - 1) {
-                AssertProbIntBE(intTest[idx], expectedProb[idx], BigEndian(Reverse(qubits)), 1E-05);
+            for (idx in IndexRange(excitations)) {
+                AssertProbInt(intTest[idx], expectedProb[idx], LittleEndian(qubits), 1E-05);
             }
             
             ResetAll(qubits);

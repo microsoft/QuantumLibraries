@@ -2,11 +2,11 @@
 // Licensed under the MIT License.
 
 namespace SystemTests {
-    
-    open Microsoft.Quantum.Primitive;
+    open Microsoft.Quantum.Simulation;
+    open Microsoft.Quantum.Intrinsic;
     open Microsoft.Quantum.Canon;
-    open Microsoft.Quantum.Extensions.Math;
     open Microsoft.Quantum.Chemistry.JordanWigner;    
+    open Microsoft.Quantum.Math;
     
     // Test phase of PP term.
     operation PPTermFromGeneralHamiltonianTestOp (identity : Double, data : JWOptimizedHTerms) : Unit {
