@@ -17,16 +17,16 @@ namespace Microsoft.Quantum.Arithmetic {
     /// # Remarks
     /// The current implementation requires the two fixed-point numbers
     /// to have the same point position and the same number of qubits.
-    operation FixedPointGreaterThan(fp1 : FixedPoint, fp2 : FixedPoint,
+    operation CompareGTFxP(fp1 : FixedPoint, fp2 : FixedPoint,
                                     result : Qubit) : Unit {
         body(...) {
             let (px, xs) = fp1!;
             let (py, ys) = fp2!;
 
-            IdenticalFormatFactFP([fp1, fp2]);
-            SignedIntegerGreaterThan(SignedLittleEndian(LittleEndian(xs)),
-                                     SignedLittleEndian(LittleEndian(ys)),
-                                     result);
+            IdenticalFormatFactFxP([fp1, fp2]);
+            CompareGTSI(SignedLittleEndian(LittleEndian(xs)),
+                        SignedLittleEndian(LittleEndian(ys)),
+                        result);
         }
         adjoint auto;
         controlled auto;

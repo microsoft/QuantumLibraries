@@ -14,16 +14,16 @@ namespace Microsoft.Quantum.Arithmetic {
     /// ## xs
     /// n-bit signed integer (SignedLittleEndian), will be inverted modulo
     /// 2's complement.
-    operation IntegerInversion2s (xs: SignedLittleEndian) : Unit {
+    operation Invert2sI (xs: SignedLittleEndian) : Unit {
         body (...) {
-            (Controlled IntegerInversion2s) (new Qubit[0], xs);
+            (Controlled Invert2sI) (new Qubit[0], xs);
         }
         controlled (controls, ...) {
             ApplyToEachCA((Controlled X)(controls, _), xs!!);
 
             using (ancillas = Qubit[Length(xs!!)]) {
                 (Controlled X)(controls, ancillas[0]);
-                IntegerAddition(LittleEndian(ancillas), xs!);
+                AddI(LittleEndian(ancillas), xs!);
                 (Controlled X)(controls, ancillas[0]);
             }
         }
@@ -44,10 +44,10 @@ namespace Microsoft.Quantum.Arithmetic {
     ///
     /// # Remarks
     /// For the input x=0, the output will be all-ones.
-    operation IntegerReciprocal (xs: LittleEndian,
-                                 result: LittleEndian) : Unit {
+    operation ComputeReciprocalI (xs: LittleEndian,
+                                  result: LittleEndian) : Unit {
         body (...) {
-            (Controlled IntegerReciprocal) (new Qubit[0], (xs, result));
+            (Controlled ComputeReciprocalI) (new Qubit[0], (xs, result));
         }
         controlled (controls, ...) {
             let n = Length(xs!);
@@ -58,11 +58,11 @@ namespace Microsoft.Quantum.Arithmetic {
                 let paddedxs = LittleEndian(xs! + padding);
                 X(Tail(lhs)); // initialize left-hand side to 2^{2n-1}
                 // ... and divide:
-                (Controlled IntegerDivision) (controls,
+                (Controlled DivideI) (controls,
                     (LittleEndian(lhs), paddedxs, result));
                 // uncompute lhs
                 for (i in 0..2*n-1) {
-                    (Controlled IntegerAddition) ([result![i]],
+                    (Controlled AddI) ([result![i]],
                         (LittleEndian(paddedxs![0..2*n-1-i]),
                          LittleEndian(lhs[i..2*n-1])));
                 }

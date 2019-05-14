@@ -23,10 +23,10 @@ namespace Microsoft.Quantum.Arithmetic {
     /// Uses a standard shift-and-subtract approach to implement the division.
     /// The controlled version is specialized such the subtraction does not
     /// require additional controls.
-    operation IntegerDivision (xs: LittleEndian, ys: LittleEndian,
+    operation DivideI (xs: LittleEndian, ys: LittleEndian,
                                result: LittleEndian) : Unit {
         body (...) {
-            (Controlled IntegerDivision) (new Qubit[0], (xs, ys, result));
+            (Controlled DivideI) (new Qubit[0], (xs, ys, result));
         }
         controlled (controls, ...) {
             let n = Length(result!);
@@ -41,12 +41,10 @@ namespace Microsoft.Quantum.Arithmetic {
 
 			for (i in (n-1)..(-1)..0) {
                 let xtrunc = LittleEndian(xpadded![i..i+n-1]);
-                (Controlled IntegerGreaterThan) (controls,
-                                                 (ys, xtrunc, result![i]));
+                (Controlled CompareGTI) (controls, (ys, xtrunc, result![i]));
                 // if ys > xtrunc, we don't subtract:
                 (Controlled X) (controls, result![i]);
-                (Controlled Adjoint IntegerAddition) ([result![i]],
-                                                      (ys, xtrunc));
+                (Controlled Adjoint AddI) ([result![i]], (ys, xtrunc));
             }
         }
         adjoint auto;

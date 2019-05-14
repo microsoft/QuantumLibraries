@@ -12,7 +12,7 @@ namespace Microsoft.Quantum.Arithmetic {
     /// # Input
     /// ## fp
     /// Fixed-point number to measure.
-    operation MeasureFixedPoint(fp : FixedPoint) : Double {
+    operation MeasureFxP(fp : FixedPoint) : Double {
         let (p, xs) = fp!;
         let n = Length(xs);
         let sign = MResetZ(xs[n-1]) == One;

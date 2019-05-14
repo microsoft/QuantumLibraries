@@ -14,7 +14,7 @@ namespace Microsoft.Quantum.Arithmetic {
     /// $n$-bit addend (LittleEndian)
     /// ## ys
     /// Addend with at least $n$ qubits (LittleEndian). Will hold the result.
-    operation IntegerAddition (xs: LittleEndian, ys: LittleEndian) : Unit {
+    operation AddI (xs: LittleEndian, ys: LittleEndian) : Unit {
         body (...) {
             if (Length(xs!) == Length(ys!)) {
                 RippleCarryAdderNoCarryTTK(xs, ys);
@@ -44,8 +44,8 @@ namespace Microsoft.Quantum.Arithmetic {
     /// Second $n$-bit number
     /// ## result
     /// Will be flipped if $x > y$
-    operation IntegerGreaterThan (xs: LittleEndian, ys: LittleEndian,
-                                  result: Qubit) : Unit {
+    operation CompareGTI (xs: LittleEndian, ys: LittleEndian,
+							result: Qubit) : Unit {
         body (...) {
             GreaterThan(xs, ys, result);
         }
@@ -64,15 +64,15 @@ namespace Microsoft.Quantum.Arithmetic {
     /// Second $n$-bit number
     /// ## result
     /// Will be flipped if $xs > ys$
-    operation SignedIntegerGreaterThan (xs: SignedLittleEndian,
-                                        ys: SignedLittleEndian,
-                                        result: Qubit) : Unit {
+    operation CompareGTSI (xs: SignedLittleEndian,
+							ys: SignedLittleEndian,
+							result: Qubit) : Unit {
         body (...) {
             using (tmp = Qubit()) {
                 CNOT(Tail(xs!!), tmp);
                 CNOT(Tail(ys!!), tmp);
                 X(tmp);
-                (Controlled IntegerGreaterThan)([tmp], (xs!, ys!, result));
+                (Controlled CompareGTI)([tmp], (xs!, ys!, result));
                 X(tmp);
                 CCNOT(tmp, Tail(ys!!), result);
                 CNOT(Tail(xs!!), tmp);

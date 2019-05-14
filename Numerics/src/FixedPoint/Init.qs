@@ -14,7 +14,7 @@ namespace Microsoft.Quantum.Arithmetic {
     /// Constant to which to initialize the quantum fixed-point number.
     /// ## fp
     /// Fixed-point number (of type FixedPoint) to initialize.
-    operation FixedPointInit(constant : Double, fp : FixedPoint) : Unit{
+    operation InitFxP(constant : Double, fp : FixedPoint) : Unit{
         body (...) {
             let (p, q) = fp!;
             let n = Length(q);

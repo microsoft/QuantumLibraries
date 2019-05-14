@@ -13,13 +13,13 @@ namespace Microsoft.Quantum.Arithmetic {
     /// ## fp
     /// Fixed-point number (of type FixedPoint), to which the constant will
     /// be added.
-    operation FixedPointAdditionConstant(constant : Double, fp : FixedPoint) : Unit {
+    operation AddConstantFxP(constant : Double, fp : FixedPoint) : Unit {
         body(...) {
             let (px, xs) = fp!;
             let n = Length(xs);
             using (ys = Qubit[n]){
                 let tmpFp = FixedPoint(px, ys);
-                ApplyWithCA(FixedPointInit(constant, _), FixedPointAddition(_, fp), tmpFp);
+                ApplyWithCA(InitFxP(constant, _), AddFxP(_, fp), tmpFp);
             }
         }
         adjoint auto;
@@ -41,14 +41,14 @@ namespace Microsoft.Quantum.Arithmetic {
     /// The current implementation requires the two fixed-point numbers
     /// to have the same point position counting from the least-significant
     /// bit, i.e., n_i - p_i must be equal.
-    operation FixedPointAddition(fp1 : FixedPoint, fp2 : FixedPoint) : Unit {
+    operation AddFxP(fp1 : FixedPoint, fp2 : FixedPoint) : Unit {
         body(...) {
             let (px, xs) = fp1!;
             let (py, ys) = fp2!;
 
-            IdenticalPointPosFactFP([fp1, fp2]);
+            IdenticalPointPosFactFxP([fp1, fp2]);
 
-            IntegerAddition(LittleEndian(xs), LittleEndian(ys));
+            AddI(LittleEndian(xs), LittleEndian(ys));
         }
         adjoint auto;
         controlled auto;

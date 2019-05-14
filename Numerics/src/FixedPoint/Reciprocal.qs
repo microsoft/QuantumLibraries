@@ -16,9 +16,9 @@ namespace Microsoft.Quantum.Arithmetic {
     /// FixedPoint number to invert
     /// ## result
     /// FixedPoint number that will hold the result. Must be initialized to 0.
-    operation FixedPointReciprocal(x : FixedPoint, result : FixedPoint) : Unit {
+    operation ComputeReciprocalFxP(x : FixedPoint, result : FixedPoint) : Unit {
         body (...) {
-            (Controlled FixedPointReciprocal) (new Qubit[0], (x, result));
+            (Controlled ComputeReciprocalFxP) (new Qubit[0], (x, result));
         }
         controlled (controls, ...) {
             let (p, xs) = x!;
@@ -29,14 +29,14 @@ namespace Microsoft.Quantum.Arithmetic {
                             "Output register is too wide.");
             using ((sign, tmpRes) = (Qubit(), Qubit[2*n])) {
                 CNOT(Tail(xs), sign);
-                (Controlled IntegerInversion2s)
+                (Controlled Invert2sI)
                     ([sign], SignedLittleEndian(LittleEndian(xs)));
-                IntegerReciprocal(LittleEndian(xs), LittleEndian(tmpRes));
+                ComputeReciprocalI(LittleEndian(xs), LittleEndian(tmpRes));
                 (Controlled ApplyToEachCA)(controls,
                     (CNOT, Zip(tmpRes[p+pRes-1+n-Length(rs)..Min([n+p+pRes, 2*n-1])], rs)));
-                (Controlled IntegerInversion2s)([sign], SignedLittleEndian(LittleEndian(rs)));
-                (Adjoint IntegerReciprocal)(LittleEndian(xs), LittleEndian(tmpRes));
-                (Controlled Adjoint IntegerInversion2s)
+                (Controlled Invert2sI)([sign], SignedLittleEndian(LittleEndian(rs)));
+                (Adjoint ComputeReciprocalI)(LittleEndian(xs), LittleEndian(tmpRes));
+                (Controlled Adjoint Invert2sI)
                     ([sign], SignedLittleEndian(LittleEndian(xs)));
                 CNOT(Tail(xs), sign);
             }

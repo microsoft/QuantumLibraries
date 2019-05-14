@@ -7,31 +7,31 @@ namespace Microsoft.Quantum.Numerics.ToffoliTests {
     open Microsoft.Quantum.Arithmetic;
     open Microsoft.Quantum.Extensions.Math;
 
-    operation IntegerMultiplicationExhaustiveTest () : Unit {
+    operation MultiplyIExhaustiveTest () : Unit {
         ExhaustiveTestHelper2Args(IntegerMultiplicationRun(false, _, _, _, _));
     }
 
-    operation IntegerSquareExhaustiveTest () : Unit {
+    operation SquareIExhaustiveTest () : Unit {
         ExhaustiveTestHelper1Arg(IntegerSquareRun(false, _, _, _));
     }
 
-    operation IntegerDivisionExhaustiveTest () : Unit {
+    operation DivideIExhaustiveTest () : Unit {
         ExhaustiveTestHelper2Args(IntegerDivisionRun);
     }
 
-    operation SignedIntegerSquareExhaustiveTest () : Unit {
+    operation SquareSIExhaustiveTest () : Unit {
         ExhaustiveTestHelper1Arg(IntegerSquareRun(true, _, _, _));
     }
 
-    operation SignedIntegerGreaterThanExhaustiveTest () : Unit {
+    operation CompareGTSIExhaustiveTest () : Unit {
         ExhaustiveTestHelper2Args(IntegerGreaterThanRun(true, _, _, _, _));
     }
 
-    operation SignedIntegerMultiplicationExhaustiveTest () : Unit {
+    operation MultiplySIExhaustiveTest () : Unit {
         ExhaustiveTestHelper2Args(IntegerMultiplicationRun(true, _, _, _, _));
     }
 
-    operation IntegerReciprocalExhaustiveTest () : Unit {
+    operation ComputeReciprocalIExhaustiveTest () : Unit {
         ExhaustiveTestHelper1Arg(IntegerReciprocalRun(false, _, _, _));
     }
 
@@ -42,13 +42,13 @@ namespace Microsoft.Quantum.Numerics.ToffoliTests {
             ApplyXorInPlace(a, LittleEndian(aqs));
             ApplyXorInPlace(b, LittleEndian(bqs));
             if (signed) {
-                SignedIntegerGreaterThan(
+                CompareGTSI(
                     SignedLittleEndian(LittleEndian(aqs)),
                     SignedLittleEndian(LittleEndian(bqs)),
                     result);
             }
             else {
-                IntegerGreaterThan(LittleEndian(aqs),
+                CompareGTI(LittleEndian(aqs),
                     LittleEndian(bqs),
                     result);
             }
@@ -71,13 +71,13 @@ namespace Microsoft.Quantum.Numerics.ToffoliTests {
                 ApplyXorInPlace(a, LittleEndian(aqs));
                 ApplyXorInPlace(b, LittleEndian(bqs));
                 if (signed) {
-                    (Controlled SignedIntegerGreaterThan) (ctrlqs,
+                    (Controlled CompareGTSI) (ctrlqs,
                         (SignedLittleEndian(LittleEndian(aqs)),
                          SignedLittleEndian(LittleEndian(bqs)),
                          result));
                 }
                 else {
-                    (Controlled IntegerGreaterThan) (ctrlqs,
+                    (Controlled CompareGTI) (ctrlqs,
                         (LittleEndian(aqs),
                          LittleEndian(bqs),
                          result));
@@ -101,13 +101,13 @@ namespace Microsoft.Quantum.Numerics.ToffoliTests {
             ApplyXorInPlace(a, LittleEndian(aqs));
             ApplyXorInPlace(b, LittleEndian(bqs));
             if (signed) {
-                SignedIntegerMultiplication(
+                MultiplySI(
                         SignedLittleEndian(LittleEndian(aqs)),
                         SignedLittleEndian(LittleEndian(bqs)),
                         SignedLittleEndian(LittleEndian(cqs)));
             }
             else {
-                IntegerMultiplication (LittleEndian(aqs),
+                MultiplyI (LittleEndian(aqs),
                         LittleEndian(bqs),
                         LittleEndian(cqs));
             }
@@ -133,13 +133,13 @@ namespace Microsoft.Quantum.Numerics.ToffoliTests {
                 ApplyXorInPlace(a, LittleEndian(aqs));
                 ApplyXorInPlace(b, LittleEndian(bqs));
                 if (signed) {
-                    (Controlled SignedIntegerMultiplication) (ctrlqs,
+                    (Controlled MultiplySI) (ctrlqs,
                         (SignedLittleEndian(LittleEndian(aqs)),
                          SignedLittleEndian(LittleEndian(bqs)),
                          SignedLittleEndian(LittleEndian(cqs))));
                 }
                 else {
-                    (Controlled IntegerMultiplication) (ctrlqs,
+                    (Controlled MultiplyI) (ctrlqs,
                         (LittleEndian(aqs),
                          LittleEndian(bqs),
                          LittleEndian(cqs)));
@@ -165,11 +165,11 @@ namespace Microsoft.Quantum.Numerics.ToffoliTests {
                                      Qubit[numCtrl])) {
             ApplyXorInPlace(a, LittleEndian(aqs));
             if (signed) {
-                SignedIntegerSquare(SignedLittleEndian(LittleEndian(aqs)),
-                                    SignedLittleEndian(LittleEndian(cqs)));
+                SquareSI(SignedLittleEndian(LittleEndian(aqs)),
+                         SignedLittleEndian(LittleEndian(cqs)));
             }
             else {
-                IntegerSquare(LittleEndian(aqs), LittleEndian(cqs));
+                SquareI(LittleEndian(aqs), LittleEndian(cqs));
             }
             mutable signeda = a;
             if (signed and a >= 2^(n-1)) {
@@ -187,12 +187,12 @@ namespace Microsoft.Quantum.Numerics.ToffoliTests {
                 ApplyXorInPlace(ctrlState, LittleEndian(ctrlqs));
                 ApplyXorInPlace(a, LittleEndian(aqs));
                 if (signed) {
-                    (Controlled SignedIntegerSquare) (ctrlqs,
+                    (Controlled SquareSI) (ctrlqs,
                         (SignedLittleEndian(LittleEndian(aqs)),
                          SignedLittleEndian(LittleEndian(cqs))));
                 }
                 else {
-                    (Controlled IntegerSquare) (ctrlqs,
+                    (Controlled SquareI) (ctrlqs,
                         (LittleEndian(aqs), LittleEndian(cqs)));
                 }
                 set c = signeda * signeda;
@@ -215,7 +215,7 @@ namespace Microsoft.Quantum.Numerics.ToffoliTests {
         using ((aqs, cqs, ctrlqs) = (Qubit[n], Qubit[2*n],
                                      Qubit[numCtrl])) {
             ApplyXorInPlace(a, LittleEndian(aqs));
-            IntegerReciprocal(LittleEndian(aqs), LittleEndian(cqs));
+            ComputeReciprocalI(LittleEndian(aqs), LittleEndian(cqs));
             mutable c = a > 0 ? 2^(2*n-1) / a | (2^(2*n)-1);
             mutable cMeasured = MeasureInteger(LittleEndian(cqs));
             mutable aMeasured = MeasureInteger(LittleEndian(aqs));
@@ -228,7 +228,7 @@ namespace Microsoft.Quantum.Numerics.ToffoliTests {
             for (ctrlState in 0..2^numCtrl-1) {
                 ApplyXorInPlace(ctrlState, LittleEndian(ctrlqs));
                 ApplyXorInPlace(a, LittleEndian(aqs));
-                (Controlled IntegerReciprocal) (ctrlqs,
+                (Controlled ComputeReciprocalI) (ctrlqs,
                     (LittleEndian(aqs), LittleEndian(cqs)));
                 set c = a > 0 ? 2^(2*n-1) / a | (2^(2*n)-1);
                 if (ctrlState != 2^numCtrl-1) {
@@ -259,7 +259,7 @@ namespace Microsoft.Quantum.Numerics.ToffoliTests {
             let rem = a - c * b;
             ApplyXorInPlace(a, LittleEndian(aqs));
             ApplyXorInPlace(b, LittleEndian(bqs));
-            IntegerDivision (LittleEndian(aqs), LittleEndian(bqs),
+            DivideI (LittleEndian(aqs), LittleEndian(bqs),
                              LittleEndian(cqs));
             mutable resMeasured = MeasureInteger(LittleEndian(cqs));
             mutable remMeasured = MeasureInteger(LittleEndian(aqs));
@@ -274,7 +274,7 @@ namespace Microsoft.Quantum.Numerics.ToffoliTests {
                 ApplyXorInPlace(ctrlState, LittleEndian(ctrlqs));
                 ApplyXorInPlace(a, LittleEndian(aqs));
                 ApplyXorInPlace(b, LittleEndian(bqs));
-                (Controlled IntegerDivision) (ctrlqs,
+                (Controlled DivideI) (ctrlqs,
                     (LittleEndian(aqs), LittleEndian(bqs), LittleEndian(cqs)));
                 set resMeasured = MeasureInteger(LittleEndian(cqs));
                 set remMeasured = MeasureInteger(LittleEndian(aqs));

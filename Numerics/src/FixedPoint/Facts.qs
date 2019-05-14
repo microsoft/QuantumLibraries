@@ -7,7 +7,7 @@ namespace Microsoft.Quantum.Arithmetic {
     /// # Summary
     /// Helper function to assert that a quantum fixed-point number is
     /// initialized to zero, i.e., all qubits are in state $\ket{0}$.
-    operation AssertAllZeroFP(fp : FixedPoint) : Unit {
+    operation AssertAllZeroFxP(fp : FixedPoint) : Unit {
         body (...) {
             let (p, xs) = fp!;
             AssertAllZero(xs);
@@ -25,7 +25,7 @@ namespace Microsoft.Quantum.Arithmetic {
     /// ## fixedPoints
     /// Array of quantum fixed-point numbers that will be checked for
     /// compatibility (using assertions).
-    function IdenticalFormatFactFP(fixedPoints : FixedPoint[]) : Unit {
+    function IdenticalFormatFactFxP(fixedPoints : FixedPoint[]) : Unit {
         if (Length(fixedPoints) == 0){
             return ();
         }
@@ -52,7 +52,7 @@ namespace Microsoft.Quantum.Arithmetic {
     /// ## fixedPoints
     /// Array of quantum fixed-point numbers that will be checked for
     /// compatibility (using assertions).
-    function IdenticalPointPosFactFP(fixedPoints : FixedPoint[]) : Unit {
+    function IdenticalPointPosFactFxP(fixedPoints : FixedPoint[]) : Unit {
         if (Length(fixedPoints) == 0){
             return ();
         }

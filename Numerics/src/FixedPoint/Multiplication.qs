@@ -21,15 +21,15 @@ namespace Microsoft.Quantum.Arithmetic {
     /// # Remarks
     /// The current implementation requires the three fixed-point numbers
     /// to have the same point position and the same number of qubits.
-    operation FixedPointMultiplication(fp1 : FixedPoint, fp2 : FixedPoint,
+    operation MultiplyFxP(fp1 : FixedPoint, fp2 : FixedPoint,
                                        result : FixedPoint) : Unit {
         body(...) {
-            (Controlled FixedPointMultiplication) (new Qubit[0],
+            (Controlled MultiplyFxP) (new Qubit[0],
                                                    (fp1, fp2, result));
         }
         controlled (controls, ...){
-            IdenticalFormatFactFP([fp1, fp2, result]);
-            AssertAllZeroFP(result);
+            IdenticalFormatFactFxP([fp1, fp2, result]);
+            AssertAllZeroFxP(result);
             let (px, xs) = fp1!;
             let (py, ys) = fp2!;
             let (pz, zs) = result!;
@@ -40,13 +40,11 @@ namespace Microsoft.Quantum.Arithmetic {
                 let ysInt = SignedLittleEndian(LittleEndian(ys));
                 let tmpResultInt = SignedLittleEndian(
                     LittleEndian(tmpResult));
-                SignedIntegerMultiplication(xsInt, ysInt,
-                                            tmpResultInt);
+                MultiplySI(xsInt, ysInt, tmpResultInt);
                 (Controlled ApplyToEachCA)(controls,
                                            (CNOT,
                                             Zip(tmpResult[n-px..2*n-px-1], zs)));
-                (Adjoint SignedIntegerMultiplication)(xsInt, ysInt,
-                                                      tmpResultInt);
+                (Adjoint MultiplySI)(xsInt, ysInt, tmpResultInt);
             }
         }
         adjoint auto;
@@ -62,14 +60,14 @@ namespace Microsoft.Quantum.Arithmetic {
     /// ## result
     /// Result fixed-point number (of type FixedPoint),
     /// must be in state $\ket{0}$ initially.
-    operation FixedPointSquare(fp : FixedPoint, result : FixedPoint) : Unit {
+    operation SquareFxP(fp : FixedPoint, result : FixedPoint) : Unit {
         body(...) {
-            (Controlled FixedPointSquare) (new Qubit[0],
+            (Controlled SquareFxP) (new Qubit[0],
                                            (fp, result));
         }
         controlled (controls, ...){
-            IdenticalFormatFactFP([fp, result]);
-            AssertAllZeroFP(result);
+            IdenticalFormatFactFxP([fp, result]);
+            AssertAllZeroFxP(result);
             let (px, xs) = fp!;
             let (py, ys) = result!;
             let n = Length(xs);
@@ -78,11 +76,11 @@ namespace Microsoft.Quantum.Arithmetic {
                 let xsInt = SignedLittleEndian(LittleEndian(xs));
                 let tmpResultInt = SignedLittleEndian(
                     LittleEndian(tmpResult));
-                SignedIntegerSquare(xsInt, tmpResultInt);
+                SquareSI(xsInt, tmpResultInt);
                 (Controlled ApplyToEachCA)(controls,
                                            (CNOT,
                                             Zip(tmpResult[n-px..2*n-px-1], ys)));
-                (Adjoint SignedIntegerSquare)(xsInt, tmpResultInt);
+                (Adjoint SquareSI)(xsInt, tmpResultInt);
             }
         }
         adjoint auto;
