@@ -106,10 +106,10 @@ namespace Microsoft.Quantum.Arithmetic {
                 // initialize ancillary register to a_d
                 using (xsSquared = Qubit[n]){
                     let fpxSquared = FixedPoint(p, xsSquared);
-					ApplyWithCA(SquareFxP(fpx, _),
-						(Controlled EvaluatePolynomialFxP)(controls,
-							(coefficients, _, result)),
-						fpxSquared);
+                    ApplyWithCA(SquareFxP(fpx, _),
+                        (Controlled EvaluatePolynomialFxP)(controls,
+                            (coefficients, _, result)),
+                        fpxSquared);
                 }
             }
         }
@@ -145,10 +145,10 @@ namespace Microsoft.Quantum.Arithmetic {
             if (halfDegree >= 0) {
                 using (tmpResult = Qubit[n]) {
                     let tmpResultFp = FixedPoint(p, tmpResult);
-					ApplyWithCA(EvaluateEvenPolynomialFxP(coefficients, _, _),
-						   (Controlled MultiplyFxP)(controls,
-													(_, _, result)),
-						   (fpx, tmpResultFp));
+                    ApplyWithCA(EvaluateEvenPolynomialFxP(coefficients, _, _),
+                           (Controlled MultiplyFxP)(controls,
+                                                    (_, _, result)),
+                           (fpx, tmpResultFp));
                 }
             }
         }

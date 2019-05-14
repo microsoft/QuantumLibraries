@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 namespace Microsoft.Quantum.Arithmetic {
-	open Microsoft.Quantum.Diagnostics;
+    open Microsoft.Quantum.Diagnostics;
 
     /// # Summary
     /// Helper function to assert that a quantum fixed-point number is

@@ -39,7 +39,7 @@ namespace Microsoft.Quantum.Arithmetic {
 
             let xpadded = LittleEndian(xs! + result!);
 
-			for (i in (n-1)..(-1)..0) {
+            for (i in (n-1)..(-1)..0) {
                 let xtrunc = LittleEndian(xpadded![i..i+n-1]);
                 (Controlled CompareGTI) (controls, (ys, xtrunc, result![i]));
                 // if ys > xtrunc, we don't subtract:

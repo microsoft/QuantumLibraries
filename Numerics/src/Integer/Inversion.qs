@@ -2,10 +2,10 @@
 // Licensed under the MIT License.
 
 namespace Microsoft.Quantum.Arithmetic {
-	open Microsoft.Quantum.Arrays;
-	open Microsoft.Quantum.Diagnostics;
-	open Microsoft.Quantum.Canon;
-	open Microsoft.Quantum.Intrinsic;
+    open Microsoft.Quantum.Arrays;
+    open Microsoft.Quantum.Diagnostics;
+    open Microsoft.Quantum.Canon;
+    open Microsoft.Quantum.Intrinsic;
 
     /// # Summary
     /// Inverts a given integer modulo 2's complement.

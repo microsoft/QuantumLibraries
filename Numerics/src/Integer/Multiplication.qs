@@ -2,9 +2,9 @@
 // Licensed under the MIT License.
 
 namespace Microsoft.Quantum.Arithmetic {
-	open Microsoft.Quantum.Arrays;
-	open Microsoft.Quantum.Intrinsic;
-	open Microsoft.Quantum.Diagnostics;
+    open Microsoft.Quantum.Arrays;
+    open Microsoft.Quantum.Intrinsic;
+    open Microsoft.Quantum.Diagnostics;
 
     /// # Summary
     /// Multiply integer `xs` by integer `ys` and store the result in `result`,
@@ -34,7 +34,7 @@ namespace Microsoft.Quantum.Arithmetic {
                             requires a 2n-bit result registers.");
             AssertAllZero(result!);
 
-			for (i in 0..n-1) {
+            for (i in 0..n-1) {
                 (Controlled AddI) ([xs![i]], (ys, LittleEndian(result![i..i+n])));
             }
         }
@@ -48,7 +48,7 @@ namespace Microsoft.Quantum.Arithmetic {
             AssertAllZero(result!);
 
             using (anc = Qubit()) {
-			    for (i in 0..n-1) {
+                for (i in 0..n-1) {
                     (Controlled CNOT) (controls, (xs![i], anc));
                     (Controlled AddI) ([anc], (ys, LittleEndian(result![i..i+n])));
                     (Controlled CNOT) (controls, (xs![i], anc));
@@ -86,7 +86,7 @@ namespace Microsoft.Quantum.Arithmetic {
             AssertAllZero(result!);
 
             using (anc = Qubit()) {
-			    for (i in 0..n-1) {
+                for (i in 0..n-1) {
                     (Controlled CNOT) (controls, (xs![i], anc));
                     (Controlled AddI) ([anc], (xs,
                         LittleEndian(result![i..i+n])));

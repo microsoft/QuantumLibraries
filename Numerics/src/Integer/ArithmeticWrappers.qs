@@ -2,8 +2,8 @@
 // Licensed under the MIT License.
 
 namespace Microsoft.Quantum.Arithmetic {
-	open Microsoft.Quantum.Intrinsic;
-	open Microsoft.Quantum.Arrays;
+    open Microsoft.Quantum.Intrinsic;
+    open Microsoft.Quantum.Arrays;
 
     /// # Summary
     /// Wrapper for addition: Automatically chooses between addition with
@@ -45,7 +45,7 @@ namespace Microsoft.Quantum.Arithmetic {
     /// ## result
     /// Will be flipped if $x > y$
     operation CompareGTI (xs: LittleEndian, ys: LittleEndian,
-							result: Qubit) : Unit {
+                            result: Qubit) : Unit {
         body (...) {
             GreaterThan(xs, ys, result);
         }
@@ -54,7 +54,7 @@ namespace Microsoft.Quantum.Arithmetic {
         adjoint controlled auto;
     }
 
-	/// # Summary
+    /// # Summary
     /// Wrapper for signed integer comparison: `result = xs > ys`.
     ///
     /// # Input
@@ -65,8 +65,8 @@ namespace Microsoft.Quantum.Arithmetic {
     /// ## result
     /// Will be flipped if $xs > ys$
     operation CompareGTSI (xs: SignedLittleEndian,
-							ys: SignedLittleEndian,
-							result: Qubit) : Unit {
+                            ys: SignedLittleEndian,
+                            result: Qubit) : Unit {
         body (...) {
             using (tmp = Qubit()) {
                 CNOT(Tail(xs!!), tmp);
