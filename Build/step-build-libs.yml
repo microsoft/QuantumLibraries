@@ -51,5 +51,6 @@ steps:
     projects: |
      $(LibrariesRootFolder)/Standard/src/Standard.csproj
      $(LibrariesRootFolder)/Chemistry/src/DataModel/DataModel.csproj
+     $(LibrariesRootFolder)/Numerics/src/Numerics.csproj
     arguments: ' --no-build -c $(BuildConfiguration) -v n -o $(System.DefaultWorkingDirectory) /p:PackageVersion=$(Nuget.Version)'
 
