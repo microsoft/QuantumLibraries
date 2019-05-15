@@ -29,14 +29,14 @@ namespace Microsoft.Quantum.Arithmetic {
                             "Output register is too wide.");
             using ((sign, tmpRes) = (Qubit(), Qubit[2*n])) {
                 CNOT(Tail(xs), sign);
-                (Controlled Invert2sI)
+                (Controlled Invert2sSI)
                     ([sign], SignedLittleEndian(LittleEndian(xs)));
                 ComputeReciprocalI(LittleEndian(xs), LittleEndian(tmpRes));
                 (Controlled ApplyToEachCA)(controls,
                     (CNOT, Zip(tmpRes[p+pRes-1+n-Length(rs)..Min([n+p+pRes, 2*n-1])], rs)));
-                (Controlled Invert2sI)([sign], SignedLittleEndian(LittleEndian(rs)));
+                (Controlled Invert2sSI)([sign], SignedLittleEndian(LittleEndian(rs)));
                 (Adjoint ComputeReciprocalI)(LittleEndian(xs), LittleEndian(tmpRes));
-                (Controlled Adjoint Invert2sI)
+                (Controlled Adjoint Invert2sSI)
                     ([sign], SignedLittleEndian(LittleEndian(xs)));
                 CNOT(Tail(xs), sign);
             }

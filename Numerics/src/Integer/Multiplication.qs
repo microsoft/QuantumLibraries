@@ -121,18 +121,18 @@ namespace Microsoft.Quantum.Arithmetic {
             using ((signx, signy) = (Qubit(), Qubit())) {
                 CNOT(Tail(xs!!), signx);
                 CNOT(Tail(ys!!), signy);
-                (Controlled Invert2sI)([signx], xs);
-                (Controlled Invert2sI)([signy], ys);
+                (Controlled Invert2sSI)([signx], xs);
+                (Controlled Invert2sSI)([signy], ys);
 
                 (Controlled MultiplyI) (controls, (xs!, ys!, result!));
                 CNOT(signx, signy);
                 // No controls required since `result` will still be zero
                 // if we did not perform the multiplication above.
-                (Controlled Invert2sI)([signy], result);
+                (Controlled Invert2sSI)([signy], result);
                 CNOT(signx, signy);
 
-                (Controlled Adjoint Invert2sI)([signx], xs);
-                (Controlled Adjoint Invert2sI)([signy], ys);
+                (Controlled Adjoint Invert2sSI)([signx], xs);
+                (Controlled Adjoint Invert2sSI)([signy], ys);
                 CNOT(Tail(xs!!), signx);
                 CNOT(Tail(ys!!), signy);
             }
@@ -163,11 +163,11 @@ namespace Microsoft.Quantum.Arithmetic {
             let n = Length(xs!!);
             using ((signx, signy) = (Qubit(), Qubit())) {
                 CNOT(Tail(xs!!), signx);
-                (Controlled Invert2sI)([signx], xs);
+                (Controlled Invert2sSI)([signx], xs);
 
                 (Controlled SquareI) (controls, (xs!, result!));
 
-                (Controlled Adjoint Invert2sI)([signx], xs);
+                (Controlled Adjoint Invert2sSI)([signx], xs);
                 CNOT(Tail(xs!!), signx);
             }
         }

@@ -14,9 +14,9 @@ namespace Microsoft.Quantum.Arithmetic {
     /// ## xs
     /// n-bit signed integer (SignedLittleEndian), will be inverted modulo
     /// 2's complement.
-    operation Invert2sI (xs: SignedLittleEndian) : Unit {
+    operation Invert2sSI (xs: SignedLittleEndian) : Unit {
         body (...) {
-            (Controlled Invert2sI) (new Qubit[0], xs);
+            (Controlled Invert2sSI) (new Qubit[0], xs);
         }
         controlled (controls, ...) {
             ApplyToEachCA((Controlled X)(controls, _), xs!!);
