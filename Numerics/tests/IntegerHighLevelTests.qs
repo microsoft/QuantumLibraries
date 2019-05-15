@@ -3,7 +3,7 @@
 
 namespace Microsoft.Quantum.Numerics.ToffoliTests {
     open Microsoft.Quantum.Diagnostics;
-    open Microsoft.Quantum.Primitive;
+    open Microsoft.Quantum.Intrinsic;
     open Microsoft.Quantum.Arithmetic;
     open Microsoft.Quantum.Extensions.Math;
 
