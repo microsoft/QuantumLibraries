@@ -246,8 +246,8 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
                 foreach (var value in ((IEnumerable<object>)data["values"]))
                 {
                     var entries = (IEnumerable<object>)value;
-                    var a = entries.Take(entries.Count() - 1).Select(e => (TIndex)Convert.ChangeType(e, typeof(TIndex))).ToArray();
-                    var q = (TValue)Convert.ChangeType(entries.Last(), typeof(TValue));
+                    var a = entries.Take(entries.Count() - 1).Select(e => (TIndex)System.Convert.ChangeType(e, typeof(TIndex))).ToArray();
+                    var q = (TValue)System.Convert.ChangeType(entries.Last(), typeof(TValue));
                     Values.Add((a, q));
                 }
             }

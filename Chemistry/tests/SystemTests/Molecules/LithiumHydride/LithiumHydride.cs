@@ -4,10 +4,7 @@
 
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Runtime.CompilerServices;
 
 using Microsoft.Quantum.Chemistry;
 using Microsoft.Quantum.Simulation.Core;
@@ -27,6 +24,7 @@ namespace SystemTests.Molecules
 {
     public class LithiumHydride
     {
+
         public const double TrotterStepSize = 0.5;
         public const int TrotterOrder = 1;
         public const string GroundState = "|G>";
@@ -35,6 +33,8 @@ namespace SystemTests.Molecules
         public class Version_v0_1
         {
             static string filename = "Molecules/LithiumHydride/LiH_0.1.yaml";
+            private string TestName([CallerMemberName] string callerName = "") =>
+                $"{this.GetType().FullName}.{callerName}";
 
             public JordanWignerEncodingData Load(string stateName, Config config)
             {
@@ -53,7 +53,7 @@ namespace SystemTests.Molecules
             {
                 var configuration = Config.Default();
                 var qSharpData = Load(GroundState, configuration);
-                var estEnergy = Helper.SetUpSimulation(filename, configuration, qSharpData, TrotterStepSize, TrotterOrder, 9);
+                var estEnergy = Helper.SetUpSimulation(filename, configuration, qSharpData, TrotterStepSize, TrotterOrder, 9, TestName());
                 var error = GroundStateEnergy - estEnergy;
 
                 Assert.True(Math.Abs(error) < 1e-2, "This test is probabilistic.");
@@ -65,7 +65,7 @@ namespace SystemTests.Molecules
             {
                 var configuration = Config.Default();
                 var qSharpData = Load(GroundState, configuration);
-                var estEnergy = Helper.SetUpSimulation(filename, configuration, qSharpData, TrotterStepSize, TrotterOrder, 6);
+                var estEnergy = Helper.SetUpSimulation(filename, configuration, qSharpData, TrotterStepSize, TrotterOrder, 6, TestName());
                 var error = GroundStateEnergy - estEnergy;
 
                 Assert.True(Math.Abs(error) < 2e-1, "This test is probabilistic.");
@@ -90,6 +90,8 @@ namespace SystemTests.Molecules
         public class Version_v0_2
         {
             static string filename = "Molecules/LithiumHydride/LiH_0.2.yaml";
+            private string TestName([CallerMemberName] string callerName = "") =>
+                $"{this.GetType().FullName}.{callerName}";
 
             public JordanWignerEncodingData Load(string stateName, Config config)
             {
@@ -107,7 +109,7 @@ namespace SystemTests.Molecules
             {
                 var configuration = Config.Default();
                 var qSharpData = Load(GroundState, configuration);
-                var estEnergy = Helper.SetUpSimulation(filename, configuration, qSharpData, TrotterStepSize, TrotterOrder, 9);
+                var estEnergy = Helper.SetUpSimulation(filename, configuration, qSharpData, TrotterStepSize, TrotterOrder, 9, TestName());
                 var error = GroundStateEnergy - estEnergy;
 
                 Assert.True(Math.Abs(error) < 1e-2);
@@ -119,7 +121,7 @@ namespace SystemTests.Molecules
             {
                 var configuration = Config.Default();
                 var qSharpData = Load(GroundState, configuration);
-                var estEnergy = Helper.SetUpSimulation(filename, configuration, qSharpData, TrotterStepSize, TrotterOrder, 5);
+                var estEnergy = Helper.SetUpSimulation(filename, configuration, qSharpData, TrotterStepSize, TrotterOrder, 5, TestName());
                 var error = GroundStateEnergy - estEnergy;
 
                 Assert.True(Math.Abs(error) < 4e-1);
@@ -131,7 +133,7 @@ namespace SystemTests.Molecules
                 var configuration = Config.Default();
                 configuration.UseIndexConvention = IndexConvention.UpDown;
                 var qSharpData = Load(GroundState, configuration);
-                var estEnergy = Helper.SetUpSimulation(filename, configuration, qSharpData, TrotterStepSize, TrotterOrder, 6);
+                var estEnergy = Helper.SetUpSimulation(filename, configuration, qSharpData, TrotterStepSize, TrotterOrder, 6, TestName());
                 var error = GroundStateEnergy - estEnergy;
 
                 Assert.True(Math.Abs(error) < 2e-1);
@@ -145,7 +147,7 @@ namespace SystemTests.Molecules
 
                 // This is a ranodm UCCSD state, not the actual one for LiH.
                 var qSharpData = Load("UCCSD |E1>", configuration);
-                var estEnergy = Helper.SetUpSimulation(filename, configuration, qSharpData, TrotterStepSize, TrotterOrder, 1);
+                var estEnergy = Helper.SetUpSimulation(filename, configuration, qSharpData, TrotterStepSize, TrotterOrder, 1, TestName());
             }
         }
 

@@ -111,7 +111,7 @@ namespace Microsoft.Quantum.Chemistry.QSharpFormat
             var clusterOperator = wavefunction.Excitations;
 
             var stateElements = clusterOperator.Select(o => InitialStatePrep(o.Value, o.Key, checkAnnihilation: false)).ToList();
-            stateElements.Add(InitialStatePrep(referenceState.complexCoeff, referenceState, checkAnnihilation: true);
+            stateElements.Add(InitialStatePrep(new System.Numerics.Complex(1.0, 0.0), referenceState, checkAnnihilation: true));
 
             var stateQSharp = new QArray<JordanWignerInputState>(stateElements);
             

@@ -8,6 +8,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Diagnostics;
+using System.Runtime.CompilerServices;
+using System.Security.Cryptography;
+
 
 using Microsoft.Quantum.Chemistry;
 using Microsoft.Quantum.Simulation.Core;
@@ -28,6 +32,26 @@ namespace SystemTests.Molecules
 {
     public static class Helper
     {
+
+        private static readonly SHA256Managed hashMethod = new SHA256Managed();
+
+        /// <summary>
+        /// Returns a seed to use for the test run based on the class
+        /// </summary>
+        public static uint? GenerateSeed(string testName)
+        {
+            byte[] bytes = Encoding.Unicode.GetBytes(testName);
+            byte[] hash = hashMethod.ComputeHash(bytes);
+            uint seed = BitConverter.ToUInt32(hash, 0);
+
+            string msg = $"Using generated seed: (\"{testName}\",{ seed })";
+            Console.WriteLine(msg);
+            Debug.WriteLine(msg);
+
+            return seed;
+        }
+
+
         public static JordanWignerEncodingData GetQSharpData(string filename, string wavefunctionLabel, Config configuration)
         {
             var broombridge = Deserializers.DeserializeBroombridge(filename).ProblemDescriptions.First();
@@ -59,7 +83,8 @@ namespace SystemTests.Molecules
             JordanWignerEncodingData qSharpData,
             double trotterStep,
             int trotterOrder,
-            int bits
+            int bits,
+            string testName = "Default"
             )
         {
             
@@ -70,7 +95,7 @@ namespace SystemTests.Molecules
             
             // Choose the Trotter integrator order
             
-            using (var qsim = new QuantumSimulator())
+            using (var qsim = new QuantumSimulator(randomNumberGeneratorSeed: GenerateSeed(testName)))
             {
 
                 // EstimateEnergyByTrotterization
@@ -82,3 +107,6 @@ namespace SystemTests.Molecules
 
     }
 }
+
+
+
