@@ -20,7 +20,7 @@ namespace Microsoft.Quantum.Chemistry.Tests
     public class ChemistryEncodeMagicTests
     {
         public (ChemistryEncodeMagic, MockChannel) Init() =>
-            (new ChemistryEncodeMagic(null), new MockChannel());
+            (new ChemistryEncodeMagic(), new MockChannel());
 
         [Fact]
         public void EncodeBroombridge()
