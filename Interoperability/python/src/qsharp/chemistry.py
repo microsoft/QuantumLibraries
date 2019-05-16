@@ -139,20 +139,20 @@ class Broombridge(object):
         return self.__dict__ == other.__dict__
 
 
-def load_fermion_hamiltonian(file_name: str, index_convention = 'UpDown') -> FermionHamiltonian:
+def load_fermion_hamiltonian(file_name: str, index_convention : IndexConvention = IndexConvention.UpDown) -> FermionHamiltonian:
     """
     Loads the fermion Hamiltonian from the given file that contains broombridge data.
 
     `index_convention` can be 'UpDown' or 'HalfUp'
     """
-    logger.info(f"Loading fermion Hamiltonian from '{file_name}' using index_convention '{index_convention}'.")
-    args = { 'file_name': file_name, 'index_convention': index_convention }
+    logger.info(f"Loading fermion Hamiltonian from '{file_name}' using index_convention '{index_convention.name}'.")
+    args = { 'file_name': file_name, 'index_convention': index_convention.name }
     args_json = json.dumps(map_tuples(args))
     data = qsharp.client._execute(f'%chemistry.fh.load {args_json}', raise_on_stderr=True)
     return FermionHamiltonian(data)
 
 
-def load_input_state(file_name: str, wavefunction_label : str = None, index_convention = 'UpDown') -> FermionHamiltonian:
+def load_input_state(file_name: str, wavefunction_label : str = None, index_convention : IndexConvention = IndexConvention.UpDown) -> FermionHamiltonian:
     """
     Loads the input state associated with the given labe from the given file that contains broombridge data..
 
@@ -160,8 +160,8 @@ def load_input_state(file_name: str, wavefunction_label : str = None, index_conv
 
     `index_convention` can be 'UpDown' or 'HalfUp'
     """
-    logger.info(f"Loading input state '{wavefunction_label}' from '{file_name}' using index_convention '{index_convention}'.")
-    args = { 'file_name': file_name, 'wavefunction_label': wavefunction_label, 'index_convention': index_convention }
+    logger.info(f"Loading input state '{wavefunction_label}' from '{file_name}' using index_convention '{index_convention.name}'.")
+    args = { 'file_name': file_name, 'wavefunction_label': wavefunction_label, 'index_convention': index_convention.name }
     args_json = json.dumps(map_tuples(args))
     data = qsharp.client._execute(f'%chemistry.inputstate.load {args_json}', raise_on_stderr=True)
     return InputState(data)

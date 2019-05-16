@@ -2,7 +2,7 @@ import logging
 logging.basicConfig(level=logging.INFO)
 
 import qsharp.chemistry
-from qsharp.chemistry import load_broombridge, load_fermion_hamiltonian, load_input_state, encode
+from qsharp.chemistry import load_broombridge, load_fermion_hamiltonian, load_input_state, encode, IndexConvention
 
 print ( qsharp.component_versions() )
 
@@ -27,8 +27,8 @@ def test_load_fermion_hamiltonian():
     assert(len(fh1.terms) == 6)
     assert(fh1 == fh2)
     
-    fh3 = broombridge.problem_description[0].load_fermion_hamiltonian("HalfUp")
-    fh4 = load_fermion_hamiltonian("broombridge.yaml", "HalfUp")
+    fh3 = broombridge.problem_description[0].load_fermion_hamiltonian(IndexConvention.HalfUp)
+    fh4 = load_fermion_hamiltonian("broombridge.yaml", IndexConvention.HalfUp)
 
     assert(len(fh3.terms) == 6)
     assert(fh3 == fh4)
@@ -48,8 +48,8 @@ def test_load_input_state():
     assert(is1.label == "UCCSD |G>")
     assert(is1 == is2)
     
-    is3 = broombridge.problem_description[0].load_input_state("UCCSD |G>", "HalfUp")
-    is4 = load_input_state("broombridge.yaml", "UCCSD |G>", "HalfUp")
+    is3 = broombridge.problem_description[0].load_input_state("UCCSD |G>", IndexConvention.HalfUp)
+    is4 = load_input_state("broombridge.yaml", "UCCSD |G>", IndexConvention.HalfUp)
 
     assert(is3.label == "UCCSD |G>")
     assert(is3 == is4)
@@ -62,8 +62,8 @@ def test_load_greedy_state():
     """
     broombridge = qsharp.chemistry.load_broombridge("broombridge.yaml")
 
-    is1 = broombridge.problem_description[0].load_input_state("", "HalfUp")
-    is2 = load_input_state("broombridge.yaml", "", "HalfUp")
+    is1 = broombridge.problem_description[0].load_input_state("", IndexConvention.HalfUp)
+    is2 = load_input_state("broombridge.yaml", "", IndexConvention.HalfUp)
 
     assert(is1.label == "Greedy")
     assert(is1 == is2)
