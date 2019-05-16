@@ -14,15 +14,12 @@ namespace Microsoft.Quantum.Chemistry.Magic
     /// </summary>
     public class ChemistryEncodeMagic : MagicSymbol
     {
-        IReferences References { get; set; }
-
-        public ChemistryEncodeMagic(IReferences globalRefs)
+        public ChemistryEncodeMagic()
         {
             this.Name = $"%chemistry.encode";
             this.Documentation = new Documentation() { Summary = "Encodes a fermion Hamiltonian to a format consumable by Q#." };
             this.Kind = SymbolKind.Magic;
             this.Execute = this.Run;
-            this.References = globalRefs;
         }
 
         public class Arguments

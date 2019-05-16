@@ -2,7 +2,7 @@ import logging
 logging.basicConfig(level=logging.INFO)
 
 import qsharp.chemistry
-from qsharp.chemistry import load_broombridge, load_fermion_hamiltonian, load_input_state, encode
+from qsharp.chemistry import load_broombridge, load_fermion_hamiltonian, load_input_state, encode, IndexConvention
 
 # Load a fermion hamiltonian:
 fh1 = load_fermion_hamiltonian("broombridge.yaml")
@@ -24,13 +24,13 @@ logging.debug(fh2)
 
 
 
-# Simularly, you can load an input state either directly from a broombridge.yaml file,
+# Similarly, you can load an input state either directly from a broombridge.yaml file,
 is1 = load_input_state("broombridge.yaml", "|E1>")
 logging.info("is1 ready.")
 logging.debug(is1)
 
 # or from the problem description:
-is2 = broombridge.problem_description[0].load_input_state("|E1>")
+is2 = broombridge.problem_description[0].load_input_state("|E1>", index_convention=IndexConvention.HalfUp)
 logging.info("is2 ready.")
 logging.debug(is2)
 
@@ -54,10 +54,10 @@ qsharp_encoding = encode(fh, input_state)
 # Compile a Q# function on the fly as an entry point for our simulation.
 # For now, it is better if you compile the entry-point operation from Python (instead of using a .qs file):
 TrotterEstimateEnergy = qsharp.compile("""
-
-
     open Microsoft.Quantum.Chemistry.JordanWigner;
-    
+    open Microsoft.Quantum.Characterization;
+    open Microsoft.Quantum.Simulation;
+
     operation TrotterEstimateEnergy (qSharpData: JordanWignerEncodingData, nBitsPrecision : Int, trotterStepSize : Double) : (Double, Double) {
         
         let (nSpinOrbitals, data, statePrepData, energyShift) = qSharpData!;
