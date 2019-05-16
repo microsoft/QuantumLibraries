@@ -38,19 +38,17 @@ namespace Microsoft.Quantum.Arithmetic {
                 using (qubits = Qubit[n * degree]){
                     let firstIterate = FixedPoint(p,
                         qubits[(degree-1)*n..degree*n-1]);
-                    (Controlled InitFxP)(controls,
-                        (coefficients[degree], firstIterate));
+                    InitFxP(coefficients[degree], firstIterate);
                     for (d in degree..(-1)..2) {
                         let currentIterate = FixedPoint(p, qubits[(d-1)*n..d*n-1]);
                         let nextIterate = FixedPoint(p, qubits[(d-2)*n..(d-1)*n-1]);
                         // multiply by x and then add current coefficient
                         MultiplyFxP(currentIterate, fpx, nextIterate);
-                        (Controlled AddConstantFxP)(controls,
-                            (coefficients[d-1], nextIterate));
+                        AddConstantFxP(coefficients[d-1], nextIterate);
                     }
                     let finalIterate = FixedPoint(p, qubits[0..n-1]);
                     // final multiplication into the result register
-                    MultiplyFxP(finalIterate, fpx, result);
+                    (Controlled MultiplyFxP)(controls, (finalIterate, fpx, result));
                     // add a_0 to complete polynomial evaluation and
                     (Controlled AddConstantFxP)(controls,
                         (coefficients[0], result));
@@ -58,13 +56,11 @@ namespace Microsoft.Quantum.Arithmetic {
                     for (d in 2..degree) {
                         let currentIterate = FixedPoint(p, qubits[(d-1)*n..d*n-1]);
                         let nextIterate = FixedPoint(p, qubits[(d-2)*n..(d-1)*n-1]);
-                        (Controlled Adjoint AddConstantFxP)(controls,
-                            (coefficients[d-1], nextIterate));
+                        (Adjoint AddConstantFxP)(coefficients[d-1], nextIterate);
                         (Adjoint MultiplyFxP)(currentIterate, fpx,
                                               nextIterate);
                     }
-                    (Controlled InitFxP)(controls,
-                        (coefficients[degree], firstIterate));
+                    InitFxP(coefficients[degree], firstIterate);
                 }
             }
         }
