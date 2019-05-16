@@ -46,15 +46,19 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
                 problemDescription.Hamiltonian = integralSet.Hamiltonian;
 
                 problemDescription.InitialStates = new List<V0_2.State>();
-                foreach (var sourceInitialState in integralSet.SuggestedState)
+                if (integralSet.SuggestedState != null)
                 {
-                    var initialState = new V0_2.State();
-                    initialState.Label = sourceInitialState.SuggestedStateData.Label;
-                    initialState.Energy = sourceInitialState.SuggestedStateData.Energy;
-                    initialState.Method = V0_2.Strings.SparseMultiConfigurational;
-                    initialState.Superposition = sourceInitialState.SuggestedStateData.Superposition;
+                    foreach (var sourceInitialState in integralSet.SuggestedState)
+                    {
+                        var initialState = new V0_2.State();
+                        initialState.Label = sourceInitialState.SuggestedStateData.Label;
+                        initialState.Energy = sourceInitialState.SuggestedStateData.Energy;
+                        initialState.Method = V0_2.Strings.SparseMultiConfigurational;
+                        initialState.Superposition = sourceInitialState.SuggestedStateData.Superposition;
 
-                    problemDescription.InitialStates.Add(initialState);
+                        problemDescription.InitialStates.Add(initialState);
+                    }
+
                 }
 
                 output.ProblemDescriptions.Add(problemDescription);

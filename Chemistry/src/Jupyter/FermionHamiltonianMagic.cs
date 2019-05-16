@@ -38,17 +38,20 @@ namespace Microsoft.Quantum.Chemistry.Magic
             /// <summary>
             /// The name of a .yaml file with a broombridge schema.
             /// </summary>
-            public string fileName { get; set; }
+            [JsonProperty(PropertyName = "file_name")]
+            public string FileName { get; set; }
 
             /// <summary>
             /// A Broombridge ProblemDescription to load the FermionHamiltonian from.
             /// </summary>
-            public CurrentVersion.ProblemDescription problemDescription { get; set; }
+            [JsonProperty(PropertyName = "problem_description")]
+            public CurrentVersion.ProblemDescription ProblemDescription { get; set; }
 
             /// <summary>
             /// The IndexConvention to use to generate the Hamiltonian from the ProblemDescription.
             /// </summary>
-            public SpinOrbital.IndexConvention indexConvention { get; set; } = SpinOrbital.IndexConvention.UpDown;
+            [JsonProperty(PropertyName = "index_convention")]
+            public SpinOrbital.IndexConvention IndexConvention { get; set; } = SpinOrbital.IndexConvention.UpDown;
         }
 
         /// <summary>
@@ -87,13 +90,13 @@ namespace Microsoft.Quantum.Chemistry.Magic
         /// </summary>
         protected virtual CurrentVersion.ProblemDescription SelectProblemDescription(Arguments args)
         {
-            if (string.IsNullOrWhiteSpace(args.fileName))
+            if (string.IsNullOrWhiteSpace(args.FileName))
             {
-                return args.problemDescription;
+                return args.ProblemDescription;
             }
 
             // A single file can contain multiple problem descriptions. Let us pick the first one.
-            CurrentVersion.Data broombridge = Deserializers.DeserializeBroombridge(args.fileName);
+            CurrentVersion.Data broombridge = Deserializers.DeserializeBroombridge(args.FileName);
             return broombridge.ProblemDescriptions.First();
         }
     }
@@ -122,12 +125,14 @@ namespace Microsoft.Quantum.Chemistry.Magic
             /// <summary>
             /// The fermion hamiltonian to add terms to.
             /// </summary>
-            public FermionHamiltonian hamiltonian { get; set; }
+            [JsonProperty(PropertyName = "hamiltonian")]
+            public FermionHamiltonian Hamiltonian { get; set; }
 
             /// <summary>
             /// The list of terms and their coefficient to add.
             /// </summary>
-            public List<(int[], double)> fermionTerms { get; set; }
+            [JsonProperty(PropertyName = "fermion_terms")]
+            public List<(int[], double)> FermionTerms { get; set; }
         }
 
         /// <summary>
@@ -143,11 +148,11 @@ namespace Microsoft.Quantum.Chemistry.Magic
 
             var args = JsonConvert.DeserializeObject<Arguments>(input);
 
-            if (args.hamiltonian == null) throw new ArgumentNullException(nameof(args.hamiltonian));
-            if (args.fermionTerms == null) throw new ArgumentNullException(nameof(args.fermionTerms));
+            if (args.Hamiltonian == null) throw new ArgumentNullException(nameof(args.Hamiltonian));
+            if (args.FermionTerms == null) throw new ArgumentNullException(nameof(args.FermionTerms));
 
-            var hamiltonian = args.hamiltonian;
-            hamiltonian.AddRange(args.fermionTerms.Select(t => (new HermitianFermionTerm(t.Item1.ToLadderSequence()), t.Item2.ToDoubleCoeff())));
+            var hamiltonian = args.Hamiltonian;
+            hamiltonian.AddRange(args.FermionTerms.Select(t => (new HermitianFermionTerm(t.Item1.ToLadderSequence()), t.Item2.ToDoubleCoeff())));
             
             return hamiltonian.ToExecutionResult();
         }

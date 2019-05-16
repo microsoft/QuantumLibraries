@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 
 using Microsoft.Quantum.Chemistry.Fermion;
 using Microsoft.Quantum.Chemistry.LadderOperators;
+using Newtonsoft.Json;
 
 namespace Microsoft.Quantum.Chemistry.Generic
 {
@@ -19,11 +20,20 @@ namespace Microsoft.Quantum.Chemistry.Generic
     /// </summary>
     public class InputState
     {
+        [JsonProperty(PropertyName = "type_of_state")]
         public StateType TypeOfState;
+
+        [JsonProperty(PropertyName = "label")]
         public string Label;
+
+        [JsonProperty(PropertyName = "energy")]
         public DoubleCoeff Energy;
+
+        [JsonProperty(PropertyName = "superposition")]
         public List<((double, double), IndexOrderedLadderSequence)> Superposition = new List<((double, double), IndexOrderedLadderSequence)>();
-        public WavefunctionFermionSCF reference = new WavefunctionFermionSCF();
+
+        [JsonProperty(PropertyName = "reference")]
+        public WavefunctionFermionSCF Reference = new WavefunctionFermionSCF();
 
 
         /// <summary>

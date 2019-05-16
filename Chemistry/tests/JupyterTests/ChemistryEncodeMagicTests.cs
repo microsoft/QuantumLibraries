@@ -38,16 +38,16 @@ namespace Microsoft.Quantum.Chemistry.Tests
             var inputMagic = new InputStateMagic();
             var args = JsonConvert.SerializeObject(new InputStateMagic.Arguments
             {
-                fileName = "broombridge_v0.2.yaml",
-                wavefunctionLabel = "UCCSD |G>",
-                indexConvention = SpinOrbital.IndexConvention.HalfUp
+                FileName = "broombridge_v0.2.yaml",
+                WavefunctionLabel = "UCCSD |G>",
+                IndexConvention = SpinOrbital.IndexConvention.HalfUp
             });
             var inputState = (InputState)inputMagic.Run(args, channel).Output;
 
             args = JsonConvert.SerializeObject(new ChemistryEncodeMagic.Arguments
             {
-                hamiltonian = fermionHamiltonian,
-                inputState = inputState
+                Hamiltonian = fermionHamiltonian,
+                InputState = inputState
             });
 
             var result = magic.Run(args, channel);

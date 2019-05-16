@@ -39,7 +39,7 @@ namespace Microsoft.Quantum.Chemistry.Tests
             var (magic, channel) = Init();
             var args = JsonConvert.SerializeObject(new FermionHamiltonianLoadMagic.Arguments
             {
-                fileName = "foo_bar.yaml"
+                FileName = "foo_bar.yaml"
             });
 
             Assert.Throws<FileNotFoundException>(() => magic.Run(args, channel));
@@ -51,7 +51,7 @@ namespace Microsoft.Quantum.Chemistry.Tests
             var (magic, channel) = Init();
             var args = JsonConvert.SerializeObject(new FermionHamiltonianLoadMagic.Arguments
             {
-                fileName = "broombridge_v0.2.yaml"
+                FileName = "broombridge_v0.2.yaml"
             });
 
             var result = magic.Run(args, channel);
@@ -72,7 +72,7 @@ namespace Microsoft.Quantum.Chemistry.Tests
 
             var args = JsonConvert.SerializeObject(new FermionHamiltonianLoadMagic.Arguments
             {
-                problemDescription = broombridge.ProblemDescriptions.First()
+                ProblemDescription = broombridge.ProblemDescriptions.First()
             });
 
             var result = magic.Run(args, channel);
@@ -118,8 +118,8 @@ namespace Microsoft.Quantum.Chemistry.Tests
 
             var args = JsonConvert.SerializeObject(new FermionHamiltonianAddTermsMagic.Arguments
             {
-                hamiltonian = original,
-                fermionTerms = fermionTerms
+                Hamiltonian = original,
+                FermionTerms = fermionTerms
             });
 
             var result = magic.Run(args, channel);
@@ -135,7 +135,7 @@ namespace Microsoft.Quantum.Chemistry.Tests
             Assert.Equal("%chemistry.fh.add_terms", magic.Name);
 
             var loadMagic = new FermionHamiltonianLoadMagic();
-            var args = JsonConvert.SerializeObject(new FermionHamiltonianLoadMagic.Arguments { fileName = "broombridge_v0.2.yaml" });
+            var args = JsonConvert.SerializeObject(new FermionHamiltonianLoadMagic.Arguments { FileName = "broombridge_v0.2.yaml" });
             var original = loadMagic.Run(args, channel).Output as FermionHamiltonian;
             var fermionTerms = new List<(int[], double)>
             {
@@ -146,8 +146,8 @@ namespace Microsoft.Quantum.Chemistry.Tests
 
             args = JsonConvert.SerializeObject(new FermionHamiltonianAddTermsMagic.Arguments
             {
-                hamiltonian = original,
-                fermionTerms = fermionTerms
+                Hamiltonian = original,
+                FermionTerms = fermionTerms
             });
             File.WriteAllText("add_terms.args.json", args);
 

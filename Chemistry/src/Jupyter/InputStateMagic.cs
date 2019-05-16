@@ -32,23 +32,27 @@ namespace Microsoft.Quantum.Chemistry.Magic
             /// <summary>
             /// The name of a .yaml file with a broombridge schema.
             /// </summary>
-            public string fileName { get; set; }
+            [JsonProperty(PropertyName = "file_name")]
+            public string FileName { get; set; }
 
             /// <summary>
             /// A Broombridge ProblemDescription to load the FermionHamiltonian from.
             /// </summary>
-            public CurrentVersion.ProblemDescription problemDescription { get; set; }
+            [JsonProperty(PropertyName = "problem_description")]
+            public CurrentVersion.ProblemDescription ProblemDescription { get; set; }
 
             /// <summary>
             /// The IndexConvention to use to generate the Hamiltonian from the ProblemDescription.
             /// </summary>
-            public SpinOrbital.IndexConvention indexConvention { get; set; } = SpinOrbital.IndexConvention.UpDown;
+            [JsonProperty(PropertyName = "index_convention")]
+            public SpinOrbital.IndexConvention IndexConvention { get; set; } = SpinOrbital.IndexConvention.UpDown;
 
             /// <summary>
             /// The label of the wavefunctio within the ProblemDescription to use. 
             /// If no label specified, it will return the Hartree-Fock state.
             /// </summary>
-            public string wavefunctionLabel { get; set; }
+            [JsonProperty(PropertyName = "wavefunction_label")]
+            public string WavefunctionLabel { get; set; }
         }
 
         /// <summary>
@@ -71,9 +75,9 @@ namespace Microsoft.Quantum.Chemistry.Magic
             var problemData = SelectProblemDescription(args);
 
             // Based on the argument, return the Hartree--Fock state or the wavefunction with the given label.
-            var inputState = (string.IsNullOrEmpty(args.wavefunctionLabel))
-                ? problemData.CreateHartreeFockState(args.indexConvention)
-                : problemData.ToWavefunctions(args.indexConvention)[args.wavefunctionLabel];
+            var inputState = (string.IsNullOrEmpty(args.WavefunctionLabel))
+                ? problemData.CreateHartreeFockState(args.IndexConvention)
+                : problemData.ToWavefunctions(args.IndexConvention)[args.WavefunctionLabel];
 
             return inputState.ToExecutionResult();
         }
@@ -85,13 +89,13 @@ namespace Microsoft.Quantum.Chemistry.Magic
         /// </summary>
         protected virtual CurrentVersion.ProblemDescription SelectProblemDescription(Arguments args)
         {
-            if (string.IsNullOrWhiteSpace(args.fileName))
+            if (string.IsNullOrWhiteSpace(args.FileName))
             {
-                return args.problemDescription;
+                return args.ProblemDescription;
             }
 
             // A single file can contain multiple problem descriptions. Let us pick the first one.
-            CurrentVersion.Data broombridge = Deserializers.DeserializeBroombridge(args.fileName);
+            CurrentVersion.Data broombridge = Deserializers.DeserializeBroombridge(args.FileName);
             return broombridge.ProblemDescriptions.First();
         }
     }

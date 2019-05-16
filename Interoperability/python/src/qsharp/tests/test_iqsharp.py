@@ -75,8 +75,10 @@ def test_chemistry_compile():
     """
     qsharp.packages.add("microsoft.quantum.chemistry")
     op = qsharp.compile( """
+    open Microsoft.Quantum.Characterization;
     open Microsoft.Quantum.Chemistry.JordanWigner;    
-    
+    open Microsoft.Quantum.Simulation;
+
     /// # Summary
     /// We can now use Canon's phase estimation algorithms to
     /// learn the ground state energy using the above simulation.
@@ -91,7 +93,7 @@ def test_chemistry_compile():
         // Prepare ProductState
         let statePrep =  PrepareTrialState(statePrepData, _);
         let phaseEstAlgorithm = RobustPhaseEstimation(nBitsPrecision, _, _);
-        let estPhase = EstimateEnergy(nQubits, statePrep, oracle, phaseEstAlgorithm);
+        let estPhase = EstimateEnergyWithAdiabaticEvolution(nQubits, statePrep, NoOp<Qubit[]>, oracle, phaseEstAlgorithm);
         let estEnergy = estPhase * rescaleFactor + energyShift;
         return (estPhase, estEnergy);
     }
