@@ -54,7 +54,7 @@ qsharp_encoding = encode(fh, input_state)
 # Compile a Q# function on the fly as an entry point for our simulation.
 # For now, it is better if you compile the entry-point operation from Python (instead of using a .qs file):
 TrotterEstimateEnergy = qsharp.compile("""
-    open Microsoft.Quantum.Chemistry.JordanWigner;
+    open Microsoft.Quantum.Chemistry.JordanWigner;    
     open Microsoft.Quantum.Characterization;
     open Microsoft.Quantum.Simulation;
 
@@ -69,7 +69,7 @@ TrotterEstimateEnergy = qsharp.compile("""
         // Prepare ProductState
         let statePrep =  PrepareTrialState(statePrepData, _);
         let phaseEstAlgorithm = RobustPhaseEstimation(nBitsPrecision, _, _);
-        let estPhase = EstimateEnergy(nQubits, statePrep, oracle, phaseEstAlgorithm);
+        let estPhase = EstimateEnergyWithAdiabaticEvolution(nQubits, statePrep, NoOp<Qubit[]>, oracle, phaseEstAlgorithm);
         let estEnergy = estPhase * rescaleFactor + energyShift;
         return (estPhase, estEnergy);
     }
