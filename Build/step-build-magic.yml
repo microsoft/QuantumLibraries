@@ -9,10 +9,11 @@ steps:
 - task: DotNetCoreCLI@2
   displayName: 'Build Chemistry Magic'
   inputs:
-    projects: |
-      $(LibrariesRootFolder)/Magic.sln
-    arguments: '-c $(BuildConfiguration) -v n /p:Version=$(Assembly.Version)'
-
+    projects: '$(LibrariesRootFolder)/Magic.sln'
+    arguments: >
+      -c $(BuildConfiguration)
+      -v n
+      /p:Version=$(Assembly.Version)
 
 ##
 # Test
@@ -21,7 +22,8 @@ steps:
   displayName: 'Test Chemistry Magic'
   inputs:
     command: test
-    projects: |
-     $(LibrariesRootFolder)/Chemistry/tests/JupyterTests/JupyterTests.csproj
-    arguments: '-c $(BuildConfiguration) -v n /p:Version=$(Assembly.Version)'
-
+    projects: '$(LibrariesRootFolder)/Chemistry/tests/JupyterTests/JupyterTests.csproj'
+    arguments: >
+      -c $(BuildConfiguration)
+      -v n
+      /p:Version=$(Assembly.Version)
