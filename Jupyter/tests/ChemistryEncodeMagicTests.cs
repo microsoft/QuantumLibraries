@@ -9,9 +9,7 @@ using Microsoft.Quantum.Chemistry.Broombridge;
 using Microsoft.Quantum.Chemistry.Fermion;
 using Microsoft.Quantum.Chemistry.Magic;
 using Newtonsoft.Json;
-using Microsoft.Quantum.Chemistry.LadderOperators;
 using Xunit;
-using Microsoft.Quantum.Chemistry.LadderOperators;
 using Microsoft.Quantum.Chemistry.JordanWigner;
 using Microsoft.Quantum.Chemistry.OrbitalIntegrals;
 
@@ -47,8 +45,8 @@ namespace Microsoft.Quantum.Chemistry.Tests
 
             args = JsonConvert.SerializeObject(new ChemistryEncodeMagic.Arguments
             {
-                hamiltonian = fermionHamiltonian,
-                wavefunction = wavefunction
+                Hamiltonian = fermionHamiltonian,
+                Wavefunction = wavefunction
             });
 
             var result = magic.Run(args, channel);

@@ -3,9 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.28803.156
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Jupyter", "Jupyter\src\Jupyter.csproj", "{B4A8D6BA-6817-4216-B04B-4098A8C5AB44}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JupyterTests", "Jupyter\tests\JupyterTests.csproj", "{8E7EBF9F-B338-4267-9C9C-D92587A24945}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Magic", "Jupyter\src\Magic.csproj", "{B4A8D6BA-6817-4216-B04B-4098A8C5AB44}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataModel", "Chemistry\src\DataModel\DataModel.csproj", "{DADE9B49-6423-4511-A9BC-DC5C9B02539E}"
 EndProject
@@ -14,6 +12,8 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Dependencies", "Dependencies", "{C157F408-2E7F-426D-8425-7633ED4B741C}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Standard", "Standard\src\Standard.csproj", "{92975222-D5AE-4A4C-82F1-026AF50F8E42}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JupyterTests", "Jupyter\tests\JupyterTests.csproj", "{5E9CD30E-2425-4E2D-81CC-8E5D0C87A210}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -25,10 +25,6 @@ Global
 		{B4A8D6BA-6817-4216-B04B-4098A8C5AB44}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B4A8D6BA-6817-4216-B04B-4098A8C5AB44}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B4A8D6BA-6817-4216-B04B-4098A8C5AB44}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8E7EBF9F-B338-4267-9C9C-D92587A24945}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8E7EBF9F-B338-4267-9C9C-D92587A24945}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8E7EBF9F-B338-4267-9C9C-D92587A24945}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8E7EBF9F-B338-4267-9C9C-D92587A24945}.Release|Any CPU.Build.0 = Release|Any CPU
 		{DADE9B49-6423-4511-A9BC-DC5C9B02539E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{DADE9B49-6423-4511-A9BC-DC5C9B02539E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DADE9B49-6423-4511-A9BC-DC5C9B02539E}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -41,6 +37,10 @@ Global
 		{92975222-D5AE-4A4C-82F1-026AF50F8E42}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{92975222-D5AE-4A4C-82F1-026AF50F8E42}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{92975222-D5AE-4A4C-82F1-026AF50F8E42}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5E9CD30E-2425-4E2D-81CC-8E5D0C87A210}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5E9CD30E-2425-4E2D-81CC-8E5D0C87A210}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5E9CD30E-2425-4E2D-81CC-8E5D0C87A210}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5E9CD30E-2425-4E2D-81CC-8E5D0C87A210}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -11,7 +11,6 @@ using Microsoft.Quantum.Chemistry.Magic;
 using Newtonsoft.Json;
 using Microsoft.Quantum.Chemistry.LadderOperators;
 using Xunit;
-using Microsoft.Quantum.Chemistry.LadderOperators;
 using Microsoft.Quantum.Chemistry.JordanWigner;
 using Microsoft.Quantum.Chemistry.OrbitalIntegrals;
 

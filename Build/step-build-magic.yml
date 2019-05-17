@@ -22,7 +22,7 @@ steps:
   displayName: 'Test Chemistry Magic'
   inputs:
     command: test
-    projects: '$(LibrariesRootFolder)/Magic/tests/JupyterTests.csproj'
+    projects: '$(LibrariesRootFolder)/Jupyter/tests/JupyterTests.csproj'
     arguments: >
       -c $(BuildConfiguration)
       -v n
