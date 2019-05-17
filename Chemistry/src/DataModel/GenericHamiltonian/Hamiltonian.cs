@@ -66,13 +66,12 @@ namespace Microsoft.Quantum.Chemistry.Generic
         /// <param name="type">Category of term.</param>
         /// <param name="index">Index to term.</param>
         /// <param name="coefficient">Coefficient of term.</param>
-        // Warning be careful of case where coefficient is pass by reference.
         public void Add(TTermClassification type, TTermIndexing index, TTermValue coefficient)
         {
             
             var newIndex = index.Clone();
             var newCoeff = coefficient.Clone();
-            var sign = newIndex.GetSign();
+            var sign = newIndex.Sign;
             newIndex.ResetSign();
             // Some terms have an internal +- sign that multiples the coefficient.
             // We reset this sign once it has been accounted for.
@@ -118,7 +117,7 @@ namespace Microsoft.Quantum.Chemistry.Generic
         /// <param name="coefficient">Coefficient of term.</param>
         public void Add(TTermIndexing index, TTermValue coefficient)
         {
-            Add(index.GetTermType(), index, coefficient);
+            Add(index.TermType, index, coefficient);
         }
 
         /// <summary>
@@ -143,7 +142,7 @@ namespace Microsoft.Quantum.Chemistry.Generic
         /// <param name="index">Index to term.</param>
         public TTermValue GetTerm(TTermIndexing index)
         {
-            var type = index.GetTermType();
+            var type = index.TermType;
             if (!Terms.ContainsKey(type))
             {
                 return default;

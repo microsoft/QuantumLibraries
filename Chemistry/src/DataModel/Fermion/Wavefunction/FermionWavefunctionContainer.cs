@@ -18,16 +18,31 @@ using Microsoft.Quantum.Chemistry.OrbitalIntegrals;
 namespace Microsoft.Quantum.Chemistry.Fermion
 {
     /// <summary>
-    /// Container containing references to all fermion wavefunction types.
+    /// Class for storing any fermion wavefunction type.
     /// </summary>
     /// <typeparam name="TIndex">Index type used for all fermion operators.</typeparam>
     public class FermionWavefunction<TIndex>
     where TIndex : IEquatable<TIndex>, IComparable<TIndex>
     {
+        /// <summary>
+        /// Type of wavefunction.
+        /// </summary>
         public StateType Method { get; set; } = StateType.NotRcegonized;
+        /// <summary>
+        /// Energy of wavefunction relative to a Hamiltonian containing this object.
+        /// </summary>
         public double Energy { get; set; } = 0;
+        /// <summary>
+        /// Single configurational wavefunction data.
+        /// </summary>
         public SingleCFWavefunction<TIndex> SCFData { get; set; } = new SingleCFWavefunction<TIndex>();
+        /// <summary>
+        /// Sparse multi configurational wavefunction data.
+        /// </summary>
         public SparseMultiCFWavefunction<TIndex> MCFData { get; set; } = new SparseMultiCFWavefunction<TIndex>();
+        /// <summary>
+        /// Unitary coupled-cluster wavefunction data.
+        /// </summary>
         public UnitaryCCWavefunction<TIndex> UCCData { get; set; } = new UnitaryCCWavefunction<TIndex>();
     }
 
@@ -39,9 +54,9 @@ namespace Microsoft.Quantum.Chemistry.Fermion
          {
              Method = wavefunction.Method,
              Energy = wavefunction.Energy,
-             SCFData = wavefunction.SCFData.ToNewIndex<int>((x) => x.ToInt(indexConvention)),
-             MCFData = wavefunction.MCFData.ToNewIndex<int>((x) => x.ToInt(indexConvention)),
-             UCCData = wavefunction.UCCData.ToNewIndex<int>((x) => x.ToInt(indexConvention))
+             SCFData = wavefunction.SCFData.SelectIndex<int>((x) => x.ToInt(indexConvention)),
+             MCFData = wavefunction.MCFData.SelectIndex<int>((x) => x.ToInt(indexConvention)),
+             UCCData = wavefunction.UCCData.SelectIndex<int>((x) => x.ToInt(indexConvention))
          };
     }
 }

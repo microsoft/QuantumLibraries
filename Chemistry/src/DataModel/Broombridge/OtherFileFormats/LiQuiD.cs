@@ -165,9 +165,9 @@ namespace Microsoft.Quantum.Chemistry
                 }
             }
 
-            hamiltonian.Add(fileHIJTerms.Select(o => new OrbitalIntegral(o.Key, o.Value)));
+            hamiltonian.Add(fileHIJTerms.Select(o => new OrbitalIntegral(o.Key, o.Value)).ToList());
 
-            hamiltonian.Add(fileHIJKLTerms.Select(o => new OrbitalIntegral(o.Key, o.Value)));
+            hamiltonian.Add(fileHIJKLTerms.Select(o => new OrbitalIntegral(o.Key, o.Value)).ToList());
 
             problem.OrbitalIntegralHamiltonian = hamiltonian;
             problem.NOrbitals = System.Convert.ToInt32 ( nOrbitals);

@@ -23,15 +23,15 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
     public class Data
     {
         /// <summary>
-        /// Empty Broombridge constructor.
+        /// Constructor for empty Broombridge data structure.
         /// </summary>
         public Data()
         {
-
+            ProblemDescriptions = new List<ProblemDescription>();
         }
 
         /// <summary>
-        /// Unparsed deserialized Broombridge data.
+        /// Raw deserialized Broombridge data.
         /// </summary>
         public V0_2.Data Raw { get; set; }
 
@@ -43,49 +43,18 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
         public string Schema { get; set; }
 
         /// <summary>
-        /// Broombridge version number
+        /// Broombridge instance version number
         /// </summary>
         public VersionNumber VersionNumber { get; set; }
 
         /// <summary>
-        /// Collection of electronic structure problem.
+        /// Collection of electronic structure problems.
         /// </summary>
-        public List<ProblemDescription> ProblemDescriptions { get; set; } = new List<ProblemDescription>();
+        public IEnumerable<ProblemDescription> ProblemDescriptions { get; set; }
 
+        
         /// <summary>
-        /// Electronic structure problem instance.
-        /// </summary>
-        public struct ProblemDescription
-        {
-            /// <summary>
-            /// Identity term of the Hamilonian.
-            /// </summary>
-            public double EnergyOffset { get; set; }
-
-            /// <summary>
-            /// Number of orbitals.
-            /// </summary>
-            public int NOrbitals { get; set; }
-
-            /// <summary>
-            /// Number of electroncs.
-            /// </summary>
-            public int NElectrons { get; set; }
-
-            /// <summary>
-            /// Hamiltonian represented by orbital integrals.
-            /// </summary>
-            public OrbitalIntegralHamiltonian OrbitalIntegralHamiltonian { get; set; }
-
-            /// <summary>
-            /// Collection of trial wavefunctions.
-            /// </summary>
-            public Dictionary<string,FermionWavefunction<SpinOrbital>> Wavefunctions { get; set; }
-
-        }
-
-        /// <summary>
-        /// Parses deserialized Broombridge
+        /// Deserialized Broombridge data
         /// </summary>
         /// <param name="broombridgeV0_2">Broombridge data structure.</param>
         internal Data(Broombridge.V0_2.Data broombridgeV0_2)
@@ -94,36 +63,77 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
             Schema = broombridgeV0_2.Schema;
             VersionNumber = VersionNumber.v0_2;
 
-            foreach (var problem in Raw.ProblemDescriptions)
+            ProblemDescriptions = Raw.ProblemDescriptions.Select(problem => ProblemDescription.ProcessRawProblemDescription(problem));
+        }
+
+    }
+
+    /// <summary>
+    /// Electronic structure problem instance.
+    /// </summary>
+    public struct ProblemDescription
+    {
+        /// <summary>
+        /// Identity term of the Hamilonian.
+        /// </summary>
+        public double EnergyOffset { get; set; }
+
+        /// <summary>
+        /// Number of orbitals.
+        /// </summary>
+        public int NOrbitals { get; set; }
+
+        /// <summary>
+        /// Number of electroncs.
+        /// </summary>
+        public int NElectrons { get; set; }
+
+        /// <summary>
+        /// Hamiltonian represented by orbital integrals.
+        /// </summary>
+        public OrbitalIntegralHamiltonian OrbitalIntegralHamiltonian { get; set; }
+
+        /// <summary>
+        /// Collection of trial wavefunctions.
+        /// </summary>
+        public Dictionary<string, FermionWavefunction<SpinOrbital>> Wavefunctions { get; set; }
+
+        internal static ProblemDescription ProcessRawProblemDescription(Broombridge.V0_2.ProblemDescription problem)
+        {
+            var problemDescription = new ProblemDescription
             {
-                var problemDescription = new ProblemDescription();
-                problemDescription.EnergyOffset = problem.EnergyOffset.Value + problem.CoulombRepulsion.Value;
-                problemDescription.NElectrons = problem.NElectrons;
-                problemDescription.NOrbitals = problem.NOrbitals;
-                problemDescription.OrbitalIntegralHamiltonian = V0_2.ToOrbitalIntegralHamiltonian(problem);
-                problemDescription.Wavefunctions = new Dictionary<string, FermionWavefunction<SpinOrbital>>();
-                foreach (var initialState in problem.InitialStates)
+                EnergyOffset = problem.EnergyOffset.Value + problem.CoulombRepulsion.Value,
+                NElectrons = problem.NElectrons,
+                NOrbitals = problem.NOrbitals,
+                OrbitalIntegralHamiltonian = V0_2.ToOrbitalIntegralHamiltonian(problem),
+                Wavefunctions = new Dictionary<string, FermionWavefunction<SpinOrbital>>()
+            };
+            foreach (var initialState in problem.InitialStates)
+            {
+                var state = new FermionWavefunction<SpinOrbital>();
+
+                var (method, energy, outputState) = V0_2.ToWavefunction(initialState);
+
+                state.Method = V0_2.ParseInitialStateMethod(initialState.Method);
+                state.Energy = energy;
+
+                if (state.Method == StateType.SparseMultiConfigurational)
                 {
-                    var state = new FermionWavefunction<SpinOrbital>();
-
-                    var (method, energy, outputState) = V0_2.ToWavefunction(initialState);
-                    
-                    state.Method = V0_2.ParseInitialStateMethod(initialState.Method);
-                    state.Energy = energy;
-
-                    if(state.Method == StateType.SparseMultiConfigurational)
-                    {
-                        state.MCFData = (SparseMultiCFWavefunction<SpinOrbital>) outputState;
-                    }
-                    else if(state.Method == StateType.UnitaryCoupledCluster)
-                    {
-                        state.UCCData = (UnitaryCCWavefunction<SpinOrbital>) outputState;
-                    }
-
-                    problemDescription.Wavefunctions.Add(initialState.Label, state);
+                    state.MCFData = (SparseMultiCFWavefunction<SpinOrbital>)outputState;
                 }
-                ProblemDescriptions.Add(problemDescription);
+                else if (state.Method == StateType.UnitaryCoupledCluster)
+                {
+                    state.UCCData = (UnitaryCCWavefunction<SpinOrbital>)outputState;
+                }
+                else
+                {
+                    throw new System.ArgumentException($"Wavefunction type {state.Method} not recognized");
+                }
+
+                problemDescription.Wavefunctions.Add(initialState.Label, state);
             }
+            return problemDescription;
         }
     }
+
 }

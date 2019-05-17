@@ -51,13 +51,11 @@ namespace Microsoft.Quantum.Chemistry.Fermion
         /// <summary>
         /// Implicit operator for creating a Ladder operator.
         /// </summary>
-        /// <param name="setOperator">Tuple where the first parameter
+        /// <param name="setSequence">Tuple where the first parameter
         /// is the raising or lowering index, and the second parameter
         /// is the position index of the ladder operator.</param>
-        public static implicit operator FermionTerm((RaisingLowering, int)[] setSequence)
-        {
-            return new FermionTerm(setSequence.Select(o => new FermionOperator(o)));
-        }
+        public static implicit operator FermionTerm((RaisingLowering, int)[] setSequence) =>
+            new FermionTerm(setSequence.Select(o => new FermionOperator(o)));
 
         /// <summary>
         /// Construct a sequence of ladder operators from an even-length sequence of integers.

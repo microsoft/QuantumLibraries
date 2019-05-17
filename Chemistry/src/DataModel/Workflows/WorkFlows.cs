@@ -13,6 +13,10 @@ using Microsoft.Quantum.Chemistry.Generic;
 
 namespace Microsoft.Quantum.Chemistry
 {
+    /// <summary>
+    /// Collection of convenience functions that package common
+    /// chemistry problem workflows.
+    /// </summary>
     public class Workflows
     {
         /// <summary>
@@ -29,7 +33,7 @@ namespace Microsoft.Quantum.Chemistry
             Data broombridge = Deserializers.DeserializeBroombridge(filename);
 
             // A single file can contain multiple problem descriptions. Let us pick the first one.
-            Data.ProblemDescription problemData = broombridge.ProblemDescriptions.First();
+            var problemData = broombridge.ProblemDescriptions.First();
 
             #region Create electronic structure Hamiltonian
             // Electronic structure Hamiltonians are usually represented compactly by orbital integrals. Let us construct

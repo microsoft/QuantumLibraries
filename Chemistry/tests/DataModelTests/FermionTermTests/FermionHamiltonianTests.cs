@@ -102,7 +102,7 @@ namespace Microsoft.Quantum.Chemistry.Tests
         {
             var filename = "Broombridge/broombridge_v0.2.yaml";
             Data broombridge = Deserializers.DeserializeBroombridge(filename);
-            Data.ProblemDescription problemData = broombridge.ProblemDescriptions.First();
+            var problemData = broombridge.ProblemDescriptions.First();
 
             OrbitalIntegralHamiltonian orbitalIntegralHamiltonian = problemData.OrbitalIntegralHamiltonian;
             FermionHamiltonian original = orbitalIntegralHamiltonian.ToFermionHamiltonian(IndexConvention.HalfUp);

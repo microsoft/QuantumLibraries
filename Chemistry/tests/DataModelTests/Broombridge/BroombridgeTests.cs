@@ -32,7 +32,7 @@ namespace Microsoft.Quantum.Chemistry.Tests
             var filename = "Broombridge/broombridge_v0.1.yaml";
 
 
-            var broombridge = Broombridge.Deserializers.DeserializeBroombridgev0_1(filename);
+            var broombridge = Broombridge.Deserializers.Deserialize<V0_1.Data>(filename);
 
             Assert.Equal("0.1", broombridge.Format.Version);
         }
@@ -41,7 +41,7 @@ namespace Microsoft.Quantum.Chemistry.Tests
     public class Broombridgev0_2Tests
     {
         static string filename = "Broombridge/broombridge_v0.2.yaml";
-        static V0_2.Data broombridge = Deserializers.DeserializeBroombridgev0_2(filename);
+        static V0_2.Data broombridge = Deserializers.Deserialize<V0_2.Data>(filename);
 
         [Fact]
         public void Version()
@@ -84,7 +84,7 @@ namespace Microsoft.Quantum.Chemistry.Tests
         public void UpdateFrom_v0_1()
         {
             var filename = "Broombridge/broombridge_v0.1.yaml";
-            var broombridge_v0_1 = Deserializers.DeserializeBroombridgev0_1(filename);
+            var broombridge_v0_1 = Deserializers.Deserialize<V0_1.Data>(filename);
             var broombridge_v0_2 = DataStructures.Update(broombridge_v0_1);
 
             Broombridge.Serializers.SerializeBroombridgev0_2(broombridge_v0_2, "");

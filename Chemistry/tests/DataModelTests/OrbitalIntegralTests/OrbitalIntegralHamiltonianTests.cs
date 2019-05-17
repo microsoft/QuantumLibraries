@@ -67,11 +67,11 @@ namespace Microsoft.Quantum.Chemistry.Tests
             Assert.Equal(new[] { 0, 1, 1, 0 }, orb.OrbitalIndices);
             Assert.Equal(addTerms0[4].o.OrbitalIndices, orb.OrbitalIndices);
 
-            Debug.WriteLine($"Term type is { orb.GetTermType().ToString()}");
-            Debug.WriteLine($"Coefficient is { hamiltonian.Terms[orb.GetTermType()][new OrbitalIntegral(orb.OrbitalIndices, orb.Coefficient)]}");
-            Debug.WriteLine($"Coefficient is { hamiltonian.Terms[orb.GetTermType()][addTerms0[4].o]}");
+            Debug.WriteLine($"Term type is { orb.TermType.ToString()}");
+            Debug.WriteLine($"Coefficient is { hamiltonian.Terms[orb.TermType][new OrbitalIntegral(orb.OrbitalIndices, orb.Coefficient)]}");
+            Debug.WriteLine($"Coefficient is { hamiltonian.Terms[orb.TermType][addTerms0[4].o]}");
 
-            Assert.True(0.663472101 == hamiltonian.Terms[orb.GetTermType()][new OrbitalIntegral(orb.OrbitalIndices, orb.Coefficient)]);
+            Assert.True(0.663472101 == hamiltonian.Terms[orb.TermType][new OrbitalIntegral(orb.OrbitalIndices, orb.Coefficient)]);
         }
 
         [Fact]
@@ -114,7 +114,7 @@ namespace Microsoft.Quantum.Chemistry.Tests
         {
             var filename = "Broombridge/broombridge_v0.2.yaml";
             Data broombridge = Deserializers.DeserializeBroombridge(filename);
-            Data.ProblemDescription problemData = broombridge.ProblemDescriptions.First();
+            var problemData = broombridge.ProblemDescriptions.First();
 
             OrbitalIntegralHamiltonian original = problemData.OrbitalIntegralHamiltonian;
 

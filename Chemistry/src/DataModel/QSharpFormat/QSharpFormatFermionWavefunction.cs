@@ -63,7 +63,8 @@ namespace Microsoft.Quantum.Chemistry.QSharpFormat
         /// the vacuum state to a format consumable by Q#
         /// </summary>
         /// <param name="term">Sequence of creation operations acting on vacuum state.</param>
-        /// <param name="complexCoeff"></param>
+        /// <param name="complexCoeff">coefficient of term.</param>
+        /// <param name="checkAnnihilation">If true, throws an exception if annihilation operators act on the vacuum state.</param>
         /// <returns>Q# description of initial state</returns>
         public static JordanWignerInputState InitialStatePrep(System.Numerics.Complex complexCoeff, IndexOrderedSequence<int> term, bool checkAnnihilation)
         {

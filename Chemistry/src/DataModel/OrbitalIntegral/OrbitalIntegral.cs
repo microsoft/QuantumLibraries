@@ -91,29 +91,28 @@ namespace Microsoft.Quantum.Chemistry.OrbitalIntegrals
             }
         }
 
-        public TermType.OrbitalIntegral GetTermType()
+        public TermType.OrbitalIntegral TermType
         {
-            switch (Length)
+            get
             {
-                case 0:
-                    return TermType.OrbitalIntegral.Identity;
-                case 2:
-                    return TermType.OrbitalIntegral.OneBody;
-                case 4:
-                    return TermType.OrbitalIntegral.TwoBody;
-                default:
-                    throw new ArgumentException("Attempted to classify unimplemented orbital integral.");
+                switch (Length)
+                {
+                    case 0:
+                        return Chemistry.TermType.OrbitalIntegral.Identity;
+                    case 2:
+                        return Chemistry.TermType.OrbitalIntegral.OneBody;
+                    case 4:
+                        return Chemistry.TermType.OrbitalIntegral.TwoBody;
+                    default:
+                        throw new ArgumentException("Attempted to classify unimplemented orbital integral.");
+                }
             }
         }
-
         /// <summary>
         /// Returns the sign of this term.
         /// </summary>
         /// <returns>Sign of this term.</returns>
-        public int GetSign()
-        {
-            return 1;
-        }
+        public int Sign => 1;
 
         /// <summary>
         /// Sets the sign of this fermion term to one.

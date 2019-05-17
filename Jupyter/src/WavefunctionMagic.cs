@@ -12,7 +12,7 @@ using Newtonsoft.Json;
 namespace Microsoft.Quantum.Chemistry.Magic
 {
     /// <summary>
-    /// Loads Broombridge electronic structure problem and returns fermion Hamiltonian.
+    /// Loads Broombridge electronic structure problem and returns trial wavefunction description.
     /// </summary>
     public class WavefunctionMagic : MagicSymbol
     {
@@ -78,7 +78,7 @@ namespace Microsoft.Quantum.Chemistry.Magic
         /// If the fileName is specified, it will try to load the Broombridge data from the file
         /// and will use the first ProblemDescription.
         /// </summary>
-        protected virtual Data.ProblemDescription SelectProblemDescription(Arguments args)
+        protected virtual ProblemDescription SelectProblemDescription(Arguments args)
         {
 
             // A single file can contain multiple problem descriptions. Let us pick the first one.

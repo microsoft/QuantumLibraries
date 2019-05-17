@@ -10,9 +10,9 @@ using Microsoft.Quantum.Chemistry;
 namespace Microsoft.Quantum.Chemistry.Json
 {
     /// <summary>
-    /// This JsonConverter allows correctly serialized HamiltonianTerms.
+    ///  This <see href="Newtonsoft.Json.JsonConverter" /> allows correctly serialized HamiltonianTerms.
     /// This terms are in general problematic because their keys are not strings, 
-    /// but HamiltonianTerms, which json.net doesn't like by default. 
+    /// but <see href="HamiltonianTerm" /> instances, which <see href="Newtonsoft.Json" /> doesn't like by default.
     /// This converts the Dictionaries to List of Tuples, in which the first
     /// item of the tuple is the key and the second the value.
     /// </summary>
@@ -48,8 +48,8 @@ namespace Microsoft.Quantum.Chemistry.Json
         {
             Debug.Assert(CanConvert(objectType));
 
-            var keyType = Helper.GetBasestType(objectType).GetGenericArguments()[0];
-            var valueType = Helper.GetBasestType(objectType).GetGenericArguments()[1];
+            var keyType = objectType.GetBasestType().GetGenericArguments()[0];
+            var valueType = objectType.GetBasestType().GetGenericArguments()[1];
             var tupleType = typeof(ValueTuple<,>).MakeGenericType(keyType, valueType);
             var dictionaryType = typeof(Dictionary<,>).MakeGenericType(keyType, valueType);
 

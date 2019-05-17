@@ -133,6 +133,9 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
             [YamlMember(Alias = "method", ApplyNamingConventions = false)]
             public string Method { get; set; }
 
+            /// <summary>
+            /// Expectation energy of state relative to ProblemDescription Hamiltonian.
+            /// </summary>
             [YamlMember(Alias = "energy", ApplyNamingConventions = false)]
             public SimpleQuantity Energy { get; set; }
 
@@ -150,7 +153,12 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
         }
 
         /// <summary>
-        /// Coupled-cluster operator
+        /// Coupled-cluster operator `e^(T_1 + T_2)|reference>` where
+        /// `|reference>` is the reference state.
+        /// `OneBodyAmplitudes` are coefficients of one-body unitary cluster terms
+        /// `t^{p}_{q}(a^\dag_p a_q- a^\dag_q a_p)`.
+        /// `TwoBodyAmplitudes` are coefficients of two-body unitary cluster terms
+        /// t^{pq}_{rs}(a^\dag_p a^\dag_q a_r a_s - a^\dag_s a^\dag_r a_q a_p)`.
         /// </summary>
         public struct ClusterOperator
         {
@@ -175,12 +183,12 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
             hamiltonian.Add(new OrbitalIntegral(), identityterm);
             return hamiltonian;
         }
-        
+
         /// <summary>
         /// Parses the method field to determine the initial state.
         /// </summary>
         /// <param name="state">String in method field.</param>
-        /// <returns>Initial state enum type.</returns>
+        /// <returns>The initial state preparation algorithm described by the given method.</returns>
         internal static StateType ParseInitialStateMethod(string state) =>
             StateTypeDictionary.ContainsKey(state) ? StateTypeDictionary[state] : StateType.Default;
         
@@ -209,7 +217,7 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
                 // Only select the shortest term with no repeated indices.
                 IndexOrderedSequence<SpinOrbital> sortedOperator = sortedOperators.ToList().OrderBy(o => o.UniqueIndices()).First();
 
-                outputState.Set(new Complex(amplitude, 0.0), sortedOperator);
+                outputState.Set(sortedOperator, new Complex(amplitude, 0.0));
             }
             return outputState;
         }
@@ -235,7 +243,7 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
                 // Terms are assumed to be in normal order.
                 var sortedOperator = new IndexOrderedSequence<SpinOrbital>(operators);
 
-                outputState.Set(new Complex(amplitude, 0.0), sortedOperator);
+                outputState.Set(sortedOperator, new Complex(amplitude, 0.0));
             }
 
             var reference = new List<List<string>>() { clusterOperator.Reference };

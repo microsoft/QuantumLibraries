@@ -80,7 +80,7 @@ namespace Microsoft.Quantum.Chemistry.Magic
         /// If the fileName is specified, it will try to load the Broombridge data from the file
         /// and will use the first ProblemDescription.
         /// </summary>
-        protected virtual Data.ProblemDescription SelectProblemDescription(Arguments args)
+        protected virtual ProblemDescription SelectProblemDescription(Arguments args)
         {
             // A single file can contain multiple problem descriptions. Let us pick the first one.
             Data broombridge = Deserializers.DeserializeBroombridge(args.fileName);

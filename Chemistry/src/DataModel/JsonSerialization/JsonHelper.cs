@@ -20,20 +20,14 @@ using Microsoft.Quantum.Chemistry.LadderOperators;
 namespace Microsoft.Quantum.Chemistry.Json
 {
   
-    internal static class Helper
+    internal static class TypeExtensions
     {
-        internal static Type GetBasestType(Type t)
-        {
-            var type = t;
-            if (t.BaseType == typeof(object))
-            {
-                return t;
-            }
-            else
-            {
-                return GetBasestType(t.BaseType);
-            }
-        }
+        /// <summary>
+        ///       Searches base types of a given type to find the type that immediately derives from
+        ///       <see href="System.Object" />.
+        /// </summary>
+        internal static Type GetBasestType(this Type t) =>
+            (t.BaseType == typeof(object) || t == typeof(object)) ? t : GetBasestType(t.BaseType);
     }
 
 }

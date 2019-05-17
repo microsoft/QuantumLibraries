@@ -53,7 +53,7 @@ namespace Microsoft.Quantum.Chemistry.Fermion
                 Method = StateType.SparseMultiConfigurational,
                 MCFData = new SparseMultiCFWavefunction<int>()
             };
-            wavefunction.MCFData.Set(new System.Numerics.Complex(1.0, 0.0), greedyState);
+            wavefunction.MCFData.Set(greedyState, new System.Numerics.Complex(1.0, 0.0));
 
             return wavefunction;
         }

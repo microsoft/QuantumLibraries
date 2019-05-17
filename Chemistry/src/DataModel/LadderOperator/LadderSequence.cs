@@ -23,43 +23,51 @@ namespace Microsoft.Quantum.Chemistry.LadderOperators
         /// Sequence of ladder operators.
         /// </summary>
         public List<LadderOperator<TIndex>> Sequence { get; set; } = new List<LadderOperator<TIndex>>();
-        /// <summary>
-        /// Returns ladder operator sequence.
-        /// </summary>
-        /// <returns>Ladder operator sequence.</returns>
-        public object GetSequence() => Sequence;
-         /// <summary>
-         /// Sets ladder operator sequence.
-         /// </summary>
-         /// <param name="set">Set ladder operator sequence to this input.</param>
-        public void SetSequence(object set)
-        {
-            Sequence = (List < LadderOperator < TIndex >>) set;
-        }
 
         /// <summary>
         /// sign (-1,+1) coefficient of ladder operators.
         /// </summary>
         public int Coefficient { get; set; } = 1;
+
+        #region Json serialization
+        /// <summary>
+        /// Returns ladder operator sequence.
+        /// </summary>
+        /// <returns>Ladder operator sequence.</returns>
+        public object _JsonGetSequence() => Sequence;
+         /// <summary>
+         /// Sets ladder operator sequence.
+         /// </summary>
+         /// <param name="set">Set ladder operator sequence to this input.</param>
+        public void _JsonSetSequence(object set)
+        {
+            Sequence = (List < LadderOperator < TIndex >>) set;
+        }
+
         /// <summary>
         /// Returns sign coefficient of ladder operator sequence.
         /// </summary>
         /// <returns>Sign of ladder operator sequence.</returns>
-        public int GetCoefficient() => Coefficient;
-        public void SetCoefficient(int set)
+        public int _JsonGetCoefficient() => Coefficient;
+
+        /// <summary>
+        /// Sets sign coefficient of ladder operator sequence.
+        /// </summary>
+        /// <returns>Sign of ladder operator sequence.</returns>
+        public void _JsonSetCoefficient(int set)
         {
             Coefficient = set;
         }
         /// <summary>
-        /// Sets sign coefficient of ladder operator sequence.
+        /// Used only for JSON serialization.
         /// </summary>
-        /// <param name="set">Set sign coefficient of ladder operator sequence to this.</param>
-        public void SetObject(object set)
+        public void _JsonSetObject(object set)
         {
             var result = (ValueTuple<List<LadderOperator<TIndex>>, int>)set;
             Sequence = result.Item1;
             Coefficient = result.Item2;
         }
+        #endregion
 
         #region Constructors
         /// <summary>
@@ -122,9 +130,11 @@ namespace Microsoft.Quantum.Chemistry.LadderOperators
                     $"Number of terms provided is `{length}` and must be of even length."
                     );
             }
-            Func<TIndex, int, (RaisingLowering, TIndex)> GetLadderOperator = (index, position)
-                => (position < length / 2 ? RaisingLowering.u : RaisingLowering.d, index);
-            return indices.Select((o, idx) => GetLadderOperator(o, idx)).ToArray();
+            (RaisingLowering, TIndex) GetLadderOperator(TIndex index, int position)
+            {
+                return (position < length / 2 ? RaisingLowering.u : RaisingLowering.d, index);
+            }
+            return indices.Select(GetLadderOperator).ToArray();
         }
         #endregion
 
@@ -136,7 +146,7 @@ namespace Microsoft.Quantum.Chemistry.LadderOperators
         /// Returns <c>true</c> this condition is satisfied.
         /// Returns <c>false</c> otherwise.
         /// </returns>
-        public bool IsInNormalOrder() => Sequence.Count() == 0 ? true : Sequence.Select(o => (int)o.GetRaisingLowering()).IsInAscendingOrder();
+        public bool IsInNormalOrder() => Sequence.Count() == 0 ? true : Sequence.Select(o => (int)o.Type).IsInAscendingOrder();
         #endregion
 
         /// <summary>
@@ -145,12 +155,12 @@ namespace Microsoft.Quantum.Chemistry.LadderOperators
         /// <typeparam name="TNewIndex">Type of the new indexing scheme.</typeparam>
         /// <param name="indexFunction">Function for mapping the current scheme to the new scheme.</param>
         /// <returns>Ladder sequence with a new index type.</returns>
-        public LadderSequence<TNewIndex> ToNewIndex<TNewIndex>(Func<TIndex, TNewIndex> indexFunction)
+        public LadderSequence<TNewIndex> SelectIndex<TNewIndex>(Func<TIndex, TNewIndex> indexFunction)
         where TNewIndex : IEquatable<TNewIndex>
         {
             var newIndexing = Sequence
                 .Select(o => new LadderOperator<TNewIndex>
-                (o.GetRaisingLowering(), indexFunction((TIndex) o.GetIndex())));
+                (o.Type, indexFunction((TIndex) o.Index)));
             return new LadderSequence<TNewIndex>(newIndexing, Coefficient);
         }
 
@@ -174,7 +184,7 @@ namespace Microsoft.Quantum.Chemistry.LadderOperators
         /// in a <see cref="LadderSequence"/>
         /// </summary>
         /// <returns>Number of unique system indices.</returns>
-        public int UniqueIndices() => Sequence.Select(o => o.GetIndex()).Distinct().Count();
+        public int UniqueIndices() => Sequence.Select(o => o.Index).Distinct().Count();
 
         /// <summary>
         /// Returns a copy of the ladder sequence base class.
@@ -186,16 +196,16 @@ namespace Microsoft.Quantum.Chemistry.LadderOperators
         /// Returns list of indices of the ladder operator sequence.
         /// </summary>
         /// <returns>Sequence of integers. </returns>
-        public IEnumerable<TIndex> ToIndices() => Sequence.Select(o => (TIndex) o.GetIndex());
+        public IEnumerable<TIndex> ToIndices() => Sequence.Select(o => (TIndex) o.Index);
 
         /// <summary>
         /// Returns sequence of raising and lowering types of the ladder operator sequence.
         /// </summary>
         /// <returns>Sequence of raising an lowering operators.</returns>
-        public IEnumerable<RaisingLowering> ToRaisingLowering() => Sequence.Select(o => o.GetRaisingLowering());
+        public IEnumerable<RaisingLowering> ToRaisingLowering() => Sequence.Select(o => o.Type);
 
         /// <summary>
-        /// Returns a human-readable description this object.
+        /// Returns a human-readable description of this object.
         /// </summary>
         public override string ToString() => $"{Coefficient} * {string.Join(" ", Sequence)}";
 

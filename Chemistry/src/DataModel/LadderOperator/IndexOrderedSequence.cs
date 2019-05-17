@@ -33,7 +33,7 @@ namespace Microsoft.Quantum.Chemistry.LadderOperators
         public IndexOrderedSequence() : base() { }
 
         /// <summary>
-        /// Construct instance from a normal-ordered sequence of ladder operators.
+        /// Constructs an instance from a normal-ordered sequence of ladder operators.
         /// </summary>
         /// <param name="ladderOperators">Normal-ordered sequence of ladder operators.</param>
         public IndexOrderedSequence(LadderSequence<TIndex> ladderOperators) : base(ladderOperators)
@@ -42,7 +42,7 @@ namespace Microsoft.Quantum.Chemistry.LadderOperators
         }
 
         /// <summary>
-        /// Construct instance from a normal-ordered sequence of ladder operators.
+        /// Constructs an instance from a normal-ordered sequence of ladder operators.
         /// </summary>
         /// <param name="ladderOperators">Normal-ordered sequence of ladder operators.</param>
         public IndexOrderedSequence(IEnumerable<LadderOperator<TIndex>> ladderOperators, int setSign = 1) : base(ladderOperators, setSign)
@@ -61,18 +61,18 @@ namespace Microsoft.Quantum.Chemistry.LadderOperators
             var tmp = new NormalOrderedSequence<TIndex>(this);
             if (!tmp.IsInIndexOrder())
             {
-                var left = tmp.Sequence.Select((op, idx) => new { op, idx }).Where(x => x.op.GetRaisingLowering() == RaisingLowering.u);
-                var right = tmp.Sequence.Select((op, idx) => new { op, idx }).Where(x => x.op.GetRaisingLowering() == RaisingLowering.d);
+                var left = tmp.Sequence.Select((op, idx) => new { op, idx }).Where(x => x.op._JsonGetRaisingLowering() == RaisingLowering.u);
+                var right = tmp.Sequence.Select((op, idx) => new { op, idx }).Where(x => x.op._JsonGetRaisingLowering() == RaisingLowering.d);
 
-                var upArrayIndices = tmp.Sequence.Select((op, idx) => new { op, idx }).Where(x => x.op.GetRaisingLowering() == RaisingLowering.u).Select(x => x.idx).ToArray();
-                var downArrayIndices = tmp.Sequence.Select((op, idx) => new { op, idx }).Where(x => x.op.GetRaisingLowering() == RaisingLowering.d).Select(x => x.idx).ToArray();
+                var upArrayIndices = tmp.Sequence.Select((op, idx) => new { op, idx }).Where(x => x.op._JsonGetRaisingLowering() == RaisingLowering.u).Select(x => x.idx).ToArray();
+                var downArrayIndices = tmp.Sequence.Select((op, idx) => new { op, idx }).Where(x => x.op._JsonGetRaisingLowering() == RaisingLowering.d).Select(x => x.idx).ToArray();
 
                 // Bubble sort spin-orbital indices of creation operator.
                 while (!tmp.IsInIndexCreationCanonicalOrder())
                 {
                     for (int idx = 0; idx < upArrayIndices.Count() - 1; idx++)
                     {
-                        if (tmp.Sequence.ElementAt(upArrayIndices.ElementAt(idx)).GetIndex().CompareTo(tmp.Sequence.ElementAt(upArrayIndices.ElementAt(idx + 1)).GetIndex()) > 0)
+                        if (tmp.Sequence.ElementAt(upArrayIndices.ElementAt(idx)).Index.CompareTo(tmp.Sequence.ElementAt(upArrayIndices.ElementAt(idx + 1)).Index) > 0)
                         {
                             var tmpLadderOperator = tmp.Sequence.ElementAt(upArrayIndices.ElementAt(idx));
                             tmp.Sequence[upArrayIndices.ElementAt(idx)] = tmp.Sequence[upArrayIndices.ElementAt(idx + 1)];
@@ -87,7 +87,7 @@ namespace Microsoft.Quantum.Chemistry.LadderOperators
                 {
                     for (int idx = 0; idx < downArrayIndices.Length - 1; idx++)
                     {
-                        if (tmp.Sequence.ElementAt(downArrayIndices.ElementAt(idx)).GetIndex().CompareTo(tmp.Sequence.ElementAt(downArrayIndices.ElementAt(idx + 1)).GetIndex()) < 0)
+                        if (tmp.Sequence.ElementAt(downArrayIndices.ElementAt(idx)).Index.CompareTo(tmp.Sequence.ElementAt(downArrayIndices.ElementAt(idx + 1)).Index) < 0)
                         {
                             var tmpLadderOperator = tmp.Sequence.ElementAt(downArrayIndices.ElementAt(idx));
                             tmp.Sequence[downArrayIndices.ElementAt(idx)] = tmp.Sequence[downArrayIndices.ElementAt(idx + 1)];

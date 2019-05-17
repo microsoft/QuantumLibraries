@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28307.572
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28803.156
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Jupyter", "Jupyter\src\Jupyter.csproj", "{B4A8D6BA-6817-4216-B04B-4098A8C5AB44}"
 EndProject
@@ -11,9 +11,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataModel", "Chemistry\src\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Runtime", "Chemistry\src\Runtime\Runtime.csproj", "{BFBC5FDC-3B20-4221-93BF-9B626636ECEF}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Canon", "Canon\src\Canon.csproj", "{CE140B75-51E5-4008-8305-82C4A063C3B0}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Dependencies", "Dependencies", "{C157F408-2E7F-426D-8425-7633ED4B741C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Standard", "Standard\src\Standard.csproj", "{92975222-D5AE-4A4C-82F1-026AF50F8E42}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -37,10 +37,10 @@ Global
 		{BFBC5FDC-3B20-4221-93BF-9B626636ECEF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BFBC5FDC-3B20-4221-93BF-9B626636ECEF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BFBC5FDC-3B20-4221-93BF-9B626636ECEF}.Release|Any CPU.Build.0 = Release|Any CPU
-		{CE140B75-51E5-4008-8305-82C4A063C3B0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{CE140B75-51E5-4008-8305-82C4A063C3B0}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{CE140B75-51E5-4008-8305-82C4A063C3B0}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{CE140B75-51E5-4008-8305-82C4A063C3B0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{92975222-D5AE-4A4C-82F1-026AF50F8E42}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{92975222-D5AE-4A4C-82F1-026AF50F8E42}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{92975222-D5AE-4A4C-82F1-026AF50F8E42}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{92975222-D5AE-4A4C-82F1-026AF50F8E42}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -48,7 +48,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{DADE9B49-6423-4511-A9BC-DC5C9B02539E} = {C157F408-2E7F-426D-8425-7633ED4B741C}
 		{BFBC5FDC-3B20-4221-93BF-9B626636ECEF} = {C157F408-2E7F-426D-8425-7633ED4B741C}
-		{CE140B75-51E5-4008-8305-82C4A063C3B0} = {C157F408-2E7F-426D-8425-7633ED4B741C}
+		{92975222-D5AE-4A4C-82F1-026AF50F8E42} = {C157F408-2E7F-426D-8425-7633ED4B741C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {1A526024-D9A8-4B78-AC49-202F9FC1B220}

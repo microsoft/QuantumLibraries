@@ -42,7 +42,7 @@ namespace Microsoft.Quantum.Chemistry.Fermion
         public HermitianFermionTerm() : base() { }
 
         /// <summary>
-        /// Construct Hermitian fermion term instance from a normal-ordered sequence of ladder operators.
+        /// Constructs a Hermitian fermion term from a normal-ordered sequence of ladder operators.
         /// </summary>
         /// <param name="ladderOperators">Normal-ordered sequence of ladder operators.</param>
         public HermitianFermionTerm(LadderSequence<int> ladderOperators) : base(ladderOperators) {
@@ -50,7 +50,7 @@ namespace Microsoft.Quantum.Chemistry.Fermion
         }
 
         /// <summary>
-        /// Construct Hermitian instance from a normal-ordered sequence of ladder operators.
+        /// Constructs a Hermitian fermion term from a normal-ordered sequence of ladder operators.
         /// </summary>
         /// <param name="ladderOperators">Hermitian normal-ordered sequence of ladder operators.</param>
         public HermitianFermionTerm(IEnumerable<FermionOperator> ladderOperators, int setSign = 1) : base(ladderOperators, setSign) {
@@ -65,10 +65,7 @@ namespace Microsoft.Quantum.Chemistry.Fermion
         /// Returns the sign of this fermion term.
         /// </summary>
         /// <returns>The sign of the fermion term.</returns>
-        public int GetSign()
-        {
-            return Coefficient;
-        }
+        public int Sign => Coefficient;
 
         /// <summary>
         /// Sets the sign of this fermion term to one.
@@ -130,52 +127,55 @@ namespace Microsoft.Quantum.Chemistry.Fermion
         {
             var newIndices = ToIndices().ToArray().Clone<int>();
             var newOperators = ToRaisingLowering().ToArray().Clone<RaisingLowering>();
-            var newTerm = new HermitianFermionTerm();
-            newTerm.Coefficient = Coefficient;
-            newTerm.Sequence = newOperators.Zip(newIndices, (a,b) => new LadderOperator<int>(a,b)).ToList();
-            return newTerm;
+            return new HermitianFermionTerm()
+            {
+                Coefficient = Coefficient,
+                Sequence = newOperators.Zip(newIndices, (a, b) => new LadderOperator<int>(a, b)).ToList()
+            };
         }
 
         /// <summary>
         /// Return the category of this fermion term.
         /// </summary>
         /// <returns>Category of fermion term.</returns>
-        public TermType.Fermion GetTermType()
+        public TermType.Fermion TermType
         {
-            var length = Sequence.Count();
-            var uniqueIndices = this.UniqueIndices();
-
-            switch (length)
+            get
             {
-                case 0:
-                    return TermType.Fermion.Identity;
-                case 2:
-                    switch (uniqueIndices)
-                    {
-                        case 1:
-                            return TermType.Fermion.PP;
-                        case 2:
-                            return TermType.Fermion.PQ;
-                        default:
-                            throw new ArgumentException("Attempted to classify unknown fermion term.");
-                    }
-                case 4:
-                    switch (uniqueIndices)
-                    {
-                        case 2:
-                            return TermType.Fermion.PQQP;
-                        case 3:
-                            return TermType.Fermion.PQQR;
-                        case 4:
-                            return TermType.Fermion.PQRS;
-                        default:
-                            throw new ArgumentException("Attempted to classify unknown fermion term.");
-                    }
-                default:
-                    throw new ArgumentException("Attempted to classify unknown fermion term.");
+                var length = Sequence.Count();
+                var uniqueIndices = this.UniqueIndices();
+
+                switch (length)
+                {
+                    case 0:
+                        return Chemistry.TermType.Fermion.Identity;
+                    case 2:
+                        switch (uniqueIndices)
+                        {
+                            case 1:
+                                return Chemistry.TermType.Fermion.PP;
+                            case 2:
+                                return Chemistry.TermType.Fermion.PQ;
+                            default:
+                                throw new ArgumentException("Attempted to classify unknown fermion term.");
+                        }
+                    case 4:
+                        switch (uniqueIndices)
+                        {
+                            case 2:
+                                return Chemistry.TermType.Fermion.PQQP;
+                            case 3:
+                                return Chemistry.TermType.Fermion.PQQR;
+                            case 4:
+                                return Chemistry.TermType.Fermion.PQRS;
+                            default:
+                                throw new ArgumentException("Attempted to classify unknown fermion term.");
+                        }
+                    default:
+                        throw new ArgumentException("Attempted to classify unknown fermion term.");
+                }
             }
         }
-
         
         #region Equality Testing
         public override bool Equals(object obj) => (obj is HermitianFermionTerm x) ? Equals(x) : false;

@@ -63,9 +63,9 @@ namespace Microsoft.Quantum.Chemistry.Fermion
         /// <typeparam name="TNewIndex">Type of the new indexing scheme.</typeparam>
         /// <param name="indexFunction">Function for mapping the current scheme to the new scheme.</param>
         /// <returns>Instance with a new index type.</returns>
-        public SingleCFWavefunction<TNewIndex> ToNewIndex<TNewIndex>(Func<TIndex, TNewIndex> indexFunction)
+        public SingleCFWavefunction<TNewIndex> SelectIndex<TNewIndex>(Func<TIndex, TNewIndex> indexFunction)
         where TNewIndex : IEquatable<TNewIndex>, IComparable<TNewIndex>
-            => new SingleCFWavefunction<TNewIndex>(base.ToNewIndex(indexFunction).ToIndices());
+            => new SingleCFWavefunction<TNewIndex>(base.SelectIndex(indexFunction).ToIndices());
 
         /// <summary>
         /// This throws an ArgumentException if the operators in NormalOrderedLadderSequence are not normal-ordered.

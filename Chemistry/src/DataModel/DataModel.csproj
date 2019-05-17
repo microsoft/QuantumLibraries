@@ -8,6 +8,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
+    <RunQDocGen>True</RunQDocGen>
     <Authors>Microsoft</Authors>
     <Description>Microsoft's Quantum Chemistry Libraries.</Description>
     <Copyright>© Microsoft Corporation. All rights reserved.</Copyright>
@@ -32,7 +33,6 @@
 
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Standard\src\Standard.csproj" />
     <ProjectReference Include="..\Runtime\Runtime.csproj" PrivateAssets="all" />
 
     <BuildOutputInPackage Include="..\Runtime\bin\$(Configuration)\netstandard2.0\Microsoft.Quantum.Chemistry.*" />

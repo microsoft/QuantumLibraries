@@ -28,7 +28,7 @@ namespace Microsoft.Quantum.Chemistry.Pauli
         /// <summary>
         /// LadderType of Pauli string encoded by list of qubit indices.
         /// </summary>
-        public TermType.PauliTerm TermType;
+        public TermType.PauliTerm TermType { get; set; }
 
         #region Constructors
         /// <summary>
@@ -38,7 +38,7 @@ namespace Microsoft.Quantum.Chemistry.Pauli
         public PauliTerm(PauliTerm pauliString)
         {
             // All constructions are pass by value.
-            QubitIndices = pauliString.QubitIndices.ToArray().Clone<int>();
+            QubitIndices = pauliString.QubitIndices.Clone<int>();
             TermType = pauliString.TermType;
         }
 
@@ -53,23 +53,12 @@ namespace Microsoft.Quantum.Chemistry.Pauli
         }
         #endregion
         
-        /// <summary>
-        /// Return the category of this fermion term.
-        /// </summary>
-        /// <returns>Category of fermion term.</returns>
-        public TermType.PauliTerm GetTermType()
-        {
-            return TermType;
-        }
 
         /// <summary>
         /// Returns the sign of this term.
         /// </summary>
         /// <returns>Sign of this term.</returns>
-        public int GetSign()
-        {
-            return 1;
-        }
+        public int Sign => 1;
 
         /// <summary>
         /// Sets the sign of this fermion term to one.
@@ -80,12 +69,9 @@ namespace Microsoft.Quantum.Chemistry.Pauli
         }
 
         /// <summary>
-        /// Returns a human-readable description this object.
+        /// Returns a human-readable description of this object.
         /// </summary>
-        public override string ToString()
-        {
-            return $"{TermType}: [ {string.Join(" ", QubitIndices)} ]";
-        }
+        public override string ToString() => $"{TermType}: [ {string.Join(" ", QubitIndices)} ]";
 
         /// <summary>
         /// Creates a copy of this instance.
@@ -94,10 +80,7 @@ namespace Microsoft.Quantum.Chemistry.Pauli
 
         #region Equality Testing
 
-        public override bool Equals(object obj)
-        {
-            return (obj is PauliTerm x) ? Equals(x) : false;
-        }
+        public override bool Equals(object obj) => (obj is PauliTerm x) ? Equals(x) : false;
 
         public bool Equals(PauliTerm x)
         {
@@ -150,10 +133,7 @@ namespace Microsoft.Quantum.Chemistry.Pauli
             return x.Equals(y);
         }
 
-        public static bool operator !=(PauliTerm x, PauliTerm y)
-        {
-            return !(x == y);
-        }
+        public static bool operator !=(PauliTerm x, PauliTerm y) => !(x == y);
         #endregion
 
     }

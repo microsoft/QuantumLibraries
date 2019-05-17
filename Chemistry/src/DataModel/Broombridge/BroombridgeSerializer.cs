@@ -77,25 +77,15 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
         /// <returns>Deserializer Broombridge data strauture.</returns>
         public static Data DeserializeBroombridge(string filename)
         {
-            /*
-            var tmp = GetVersionNumber(filename)
-                .Map(
-                new[] {
-                    (VersionNumber.v0_1, () => DataStructures.Update(DeserializeBroombridgev0_1(filename))),
-                    (VersionNumber.v0_2, () => Deserializers.DeserializeBroombridge0_2(filename)),
-                    (VersionNumber.NotRecognized, () => System.InvalidOperationException("Unrecognized Broombridge version number."))
-                });
-        }*/
-        
             VersionNumber versionNumber = GetVersionNumber(filename);
             var output = new V0_2.Data();
             if (versionNumber == VersionNumber.v0_1)
             {
-                output = DataStructures.Update(DeserializeBroombridgev0_1(filename));
+                output = DataStructures.Update(Deserialize<V0_1.Data>(filename));
             }
             else if (versionNumber == VersionNumber.v0_2)
             {
-                output = DeserializeBroombridgev0_2(filename);
+                output = Deserialize<V0_2.Data>(filename);
             }
             else
             {
@@ -105,30 +95,18 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
         }
 
         /// <summary>
-        /// Deserialize Broombridge v0.1 from a file into the Broombridge v0.1 data structure.
+        /// Generic deserializer from a file into a data structure of type `TData`.
         /// </summary>
-        /// <param name="filename">Broombridge filename to deserialize</param>
-        /// <returns>Deserialized Broombridge v0.1 data.</returns>
-        public static V0_1.Data DeserializeBroombridgev0_1(string filename)
+        /// <typeparam name="TData">Type of data to be deserialized.</typeparam>
+        /// <param name="filename">Path to data to be deserialized.</param>
+        /// <returns></returns>
+        public static TData Deserialize<TData>(string filename)
         {
             using (var reader = File.OpenText(filename))
             {
-                var deserializer = new DeserializerBuilder().Build();
-                return deserializer.Deserialize<V0_1.Data>(reader);
-            }
-        }
-
-        /// <summary>
-        /// Deserialize Broombridge v0.2 from a file into the Broombridge v0.2 data structure.
-        /// </summary>
-        /// <param name="filename">Broombridge filename to deserialize</param>
-        /// <returns>Deserialized Broombridge v0.2 data.</returns>
-        public static V0_2.Data DeserializeBroombridgev0_2(string filename)
-        {
-            using (var reader = File.OpenText(filename))
-            {
-                var deserializer = new DeserializerBuilder().Build();
-                return deserializer.Deserialize<V0_2.Data>(reader);
+                return new DeserializerBuilder()
+                    .Build()
+                    .Deserialize<TData>(reader);
             }
         }
     }

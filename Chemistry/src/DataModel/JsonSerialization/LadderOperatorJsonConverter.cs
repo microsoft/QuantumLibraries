@@ -20,7 +20,7 @@ using Microsoft.Quantum.Chemistry.LadderOperators;
 namespace Microsoft.Quantum.Chemistry.Json
 {
     /// <summary>
-    /// This JsonConverter encodes of a LadderOperator as a Tuple instead of as an object.
+    /// This JsonConverter encodes of a LadderOperator as a System.ValueTuple instead of as an object.
     /// </summary>
     public class LadderOperatorJsonConverter : JsonConverter
     {
@@ -35,7 +35,7 @@ namespace Microsoft.Quantum.Chemistry.Json
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
             var thing = (ILadderOperator)value;
-            var item = (thing.GetRaisingLowering(), thing.ObjectGetIndex());
+            var item = (thing._JsonGetRaisingLowering(), thing._JsonObjectGetIndex());
             serializer.Serialize(writer, item);
         }
 
@@ -52,7 +52,7 @@ namespace Microsoft.Quantum.Chemistry.Json
             var ladderOperatorType = typeof(LadderOperator<>).MakeGenericType(indexType);
             var result = (ILadderOperator)Activator.CreateInstance(ladderOperatorType);
 
-            result.SetObject(item);
+            result._JsonSetObject(item);
 
             return result;
         }
@@ -62,14 +62,34 @@ namespace Microsoft.Quantum.Chemistry.Json
     /// Ladder operators implement this interface. This interface is used to
     /// enable generic Json serialization.
     /// </summary>
-    /// <typeparam name="TIndex">Ladder operator index type.</typeparam>
-    public interface ILadderOperator
+    internal interface ILadderOperator
     {
-        void SetObject(object set);
-        object ObjectGetIndex();
-        void SetIndex(object set);
-        RaisingLowering GetRaisingLowering();
-        void SetRaisingLowering(object set);
+        /// <summary>
+        /// Sets the ladder operator parameters to be an instance 
+        /// represented by this `object`.
+        /// </summary>
+        /// <param name="set">Ladder operator parameters settings.</param>
+        void _JsonSetObject(object set);
+        /// <summary>
+        /// Returns the index of this ladder operator as an `object`.
+        /// </summary>
+        object _JsonObjectGetIndex();
+        /// <summary>
+        /// Sets the ladder operator index to be an instance 
+        /// represented by this `object`.
+        /// </summary>
+        /// <param name="set">Ladder operator index settings.</param>
+        void _JsonSetIndex(object set);
+        /// <summary>
+        /// Returns the type of this ladder operator.
+        /// </summary>
+        RaisingLowering _JsonGetRaisingLowering();
+        /// <summary>
+        /// Sets the ladder operator type to be an instance 
+        /// represented by this `object`.
+        /// </summary>
+        /// <param name="set">Ladder operator type settings.</param>
+        void _JsonSetRaisingLowering(object set);
 
     }
 }

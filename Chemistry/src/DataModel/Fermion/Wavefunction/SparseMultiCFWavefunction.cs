@@ -51,23 +51,23 @@ namespace Microsoft.Quantum.Chemistry.Fermion
         /// <typeparam name="TNewIndex">Type of the new indexing scheme.</typeparam>
         /// <param name="indexFunction">Function for mapping the current scheme to the new scheme.</param>
         /// <returns>Instance with a new index type.</returns>
-        public SparseMultiCFWavefunction<TNewIndex> ToNewIndex<TNewIndex>(Func<TIndex, TNewIndex> indexFunction)
+        public SparseMultiCFWavefunction<TNewIndex> SelectIndex<TNewIndex>(Func<TIndex, TNewIndex> indexFunction)
         where TNewIndex : IEquatable<TNewIndex>, IComparable<TNewIndex>
         => new SparseMultiCFWavefunction<TNewIndex>()
         {
-            Reference = this.Reference.ToNewIndex(indexFunction),
+            Reference = this.Reference.SelectIndex(indexFunction),
             Excitations = this.Excitations
                 .ToDictionary(kv => new IndexOrderedSequence<TNewIndex>(
-                    kv.Key.ToNewIndex(indexFunction).Sequence, 1), kv => kv.Value * (double)kv.Key.Coefficient)
+                    kv.Key.SelectIndex(indexFunction).Sequence, 1), kv => kv.Value * (double)kv.Key.Coefficient)
         };
 
 
         /// <summary>
         /// Set a term of the wavefunction.
         /// </summary>
-        /// <param name="index">Index to term to set.</param>
-        /// <param name="coefficient">Relative amplitude of term.</param>
-        public void Set(Complex amplitude, IndexOrderedSequence<TIndex> term)
+        /// <param name="term">Index to term to set amplitude of.</param>
+        /// <param name="amplitude">Relative amplitude of term.</param>
+        public void Set(IndexOrderedSequence<TIndex> term, Complex amplitude)
         {
             Excitations[term] = amplitude * (double) term.Coefficient;
             term.Coefficient = 1;

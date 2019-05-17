@@ -42,7 +42,7 @@ namespace Microsoft.Quantum.Chemistry.Json
             {
                 var thing = (ILadderSequence)value;
 
-                var item = (thing.GetSequence(), thing.GetCoefficient());
+                var item = (thing._JsonGetSequence(), thing._JsonGetCoefficient());
                 serializer.Serialize(writer, item);
             }
         }
@@ -57,7 +57,7 @@ namespace Microsoft.Quantum.Chemistry.Json
                 return null;
             }
             
-            var indexType = Helper.GetBasestType(objectType).GetGenericArguments()[0];
+            var indexType = objectType.GetBasestType().GetGenericArguments()[0];
             var tupleType = typeof(ValueTuple<,>).MakeGenericType( 
                 typeof(List<>).MakeGenericType(
                     typeof(LadderOperator<>)
@@ -66,7 +66,7 @@ namespace Microsoft.Quantum.Chemistry.Json
             var item = serializer.Deserialize(reader, tupleType);
 
             var result = (ILadderSequence)Activator.CreateInstance(objectType);
-            result.SetObject(item);
+            result._JsonSetObject(item);
 
             return result;
         }
@@ -76,14 +76,13 @@ namespace Microsoft.Quantum.Chemistry.Json
     /// Ladder sequences implement this interface. This interface is used to
     /// enable generic Json serialization.
     /// </summary>
-    /// <typeparam name="TIndex">Ladder sequence index type.</typeparam>
-    public interface ILadderSequence
+    internal interface ILadderSequence
     {
-        void SetObject(object set);
-        object GetSequence();
-        void SetSequence(object set);
-        int GetCoefficient();
-        void SetCoefficient(int set);
+        void _JsonSetObject(object set);
+        object _JsonGetSequence();
+        void _JsonSetSequence(object set);
+        int _JsonGetCoefficient();
+        void _JsonSetCoefficient(int set);
 
     }
 

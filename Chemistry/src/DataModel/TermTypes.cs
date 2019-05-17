@@ -18,7 +18,7 @@ namespace Microsoft.Quantum.Chemistry
         /// Compute the classification of the Hamiltonian term.
         /// </summary>
         /// <returns>Classification of Hamiltonian term.</returns>
-        TTermClassification GetTermType();
+        TTermClassification TermType { get; }
 
         /// <summary>
         /// Clones the values of this object.
@@ -29,7 +29,7 @@ namespace Microsoft.Quantum.Chemistry
         /// Obtain the sign of the Hamiltonian term, if any.
         /// </summary>
         /// <returns>Sign of the term.</returns>
-        int GetSign();
+        int Sign { get; }
 
         /// <summary>
         /// Sets the sign of the Hamiltonian term to one.
@@ -240,7 +240,14 @@ namespace Microsoft.Quantum.Chemistry
         /// </summary>
         public enum IntegralDataFormat
         {
-            LiQuiD, Broombridge
+            /// <summary>
+            /// Liquid format
+            /// </summary>
+            LiQuiD,
+            /// <summary>
+            /// Broombridge format
+            /// </summary>
+            Broombridge
         }
 
         /// <summary>

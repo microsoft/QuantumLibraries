@@ -22,31 +22,49 @@ namespace Microsoft.Quantum.Chemistry.LadderOperators
         /// </summary>
         public RaisingLowering Type { get; set; }
 
-        public RaisingLowering GetRaisingLowering() => Type;
-        public void SetRaisingLowering(object set)
+        /// <summary>
+        /// System index operator acts on.
+        /// </summary>
+        public TIndex Index { get; set; }
+        #region Json serialization
+
+        /// <summary>
+        /// This is used only for JSON serialization.
+        /// </summary>
+        public RaisingLowering _JsonGetRaisingLowering() => Type;
+
+        /// <summary>
+        /// This is used only for JSON serialization.
+        /// </summary>
+        public void _JsonSetRaisingLowering(object set)
         {
             Type = (RaisingLowering) set;
         }
         
 
 
+
         /// <summary>
-        /// System index operator acts on.
+        /// Used only for JSON serialization.
         /// </summary>
-        public TIndex Index { get; set; }
-        public object ObjectGetIndex() => Index;
-        public TIndex GetIndex() => Index;
-        public void SetIndex(object set)
+        public object _JsonObjectGetIndex() => Index;
+        /// <summary>
+        /// Used only for JSON serialization.
+        /// </summary>
+        public void _JsonSetIndex(object set)
         {
             Index = (TIndex)set;
         }
-        public void SetObject(object set)
+        /// <summary>
+        /// Used only for JSON serialization.
+        /// </summary>
+        public void _JsonSetObject(object set)
         {
-            var result = (ValueTuple<RaisingLowering, TIndex>) set;
-            SetRaisingLowering(result.Item1);
-            SetIndex(result.Item2);
+            var (raisingLowering, index) = (ValueTuple<RaisingLowering, TIndex>) set;
+            _JsonSetRaisingLowering(raisingLowering);
+            _JsonSetIndex(index);
         }
-
+        #endregion
 
 
         #region Constructors
@@ -87,13 +105,9 @@ namespace Microsoft.Quantum.Chemistry.LadderOperators
         #endregion
 
         /// <summary>
-        /// Returns a human-readable description this object.
+        /// Returns a human-readable description of this object.
         /// </summary>
-        public override string ToString()
-        {
-            string op = Type.ToString();
-            return $"{Index}{op}";
-        }
+        public override string ToString() => $"{Index}{Type.ToString()}";
     }
 }
 

@@ -132,7 +132,7 @@ namespace Microsoft.Quantum.Chemistry.Tests
 
 
             var fermionTerm = new HermitianFermionTerm(idx.ToLadderSequence());
-            var fermionTermType = fermionTerm.GetTermType();
+            var fermionTermType = fermionTerm.TermType;
             Assert.True(fermionTermType == tmp[type]);
         }
 

@@ -217,12 +217,7 @@ namespace Microsoft.Quantum.Chemistry
         /// <typeparam name="T">Type of array to clone.</typeparam>
         /// <param name="array">Input array to clone.</param>
         /// <returns>Clone of the input array.</returns>
-        public static TValue[] Clone<TValue>(this TValue[] array)
-        {
-            var newArray = new TValue[array.Length];
-            for (var i = 0; i < array.Length; i++)
-                newArray[i] = array[i];
-            return newArray;
-        }
+        public static TValue[] Clone<TValue>(this TValue[] array) => array.Select(el => el).ToArray();
+
     }
 }

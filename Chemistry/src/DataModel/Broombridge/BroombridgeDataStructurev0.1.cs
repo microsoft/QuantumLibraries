@@ -140,18 +140,21 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
                 var kind = dict.Keys.ElementAt(0);
 
                 Value = dict[kind];
-                if (kind.ToLowerInvariant() == "arxiv")
+
+                switch (kind.ToLowerInvariant())
                 {
-                    Kind = BibliographyKind.arXiv;
+                    case "arxiv":
+                        Kind = BibliographyKind.arXiv;
+                        break;
+                    case "doi":
+                        Kind = BibliographyKind.DOI;
+                        break;
+                    default:
+                        Kind = BibliographyKind.URL;
+                        break;
+
                 }
-                else if (kind.ToLowerInvariant() == "doi")
-                {
-                    Kind = BibliographyKind.DOI;
-                }
-                else
-                {
-                    Kind = BibliographyKind.URL;
-                }
+
             }
 
             public void Write(IEmitter emitter, ObjectSerializer nestedObjectSerializer)
@@ -199,9 +202,8 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
         public struct HamiltonianData
         {
             [YamlMember(Alias = "particle_hole_representation", ApplyNamingConventions = false)]
-            // TODO: make this not object
-            // FIXME: currently strips off the last element as the "value", but the
-            //        present schema requires us to pull off the last two as a (double, string).
+            // TODO: Placeholder object for ParticleHoleRepresentation, which we do not
+            // yet support.
             public ArrayQuantity<object, object> ParticleHoleRepresentation { get; set; }
 
             [YamlMember(Alias = "one_electron_integrals", ApplyNamingConventions = false)]
