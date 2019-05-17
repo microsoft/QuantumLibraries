@@ -39,9 +39,9 @@ namespace Microsoft.Quantum.Chemistry.Tests
             var wavefunctionMagic = new WavefunctionMagic();
             var args = JsonConvert.SerializeObject(new WavefunctionMagic.Arguments
             {
-                fileName = "broombridge_v0.2.yaml",
-                wavefunctionLabel = "|G>",
-                indexConvention = IndexConvention.UpDown
+                FileName = "broombridge_v0.2.yaml",
+                WavefunctionLabel = "UCCSD |G>",
+                IndexConvention = IndexConvention.HalfUp
             });
             var wavefunction = (FermionWavefunction<int>)wavefunctionMagic.Run(args, channel).Output;
 

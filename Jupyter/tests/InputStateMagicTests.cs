@@ -37,7 +37,7 @@ namespace Microsoft.Quantum.Chemistry.Tests
             var (magic, channel) = Init();
             var args = JsonConvert.SerializeObject(new InputStateMagic.Arguments
             {
-                fileName = "foo_bar.yaml"
+                FileName = "foo_bar.yaml"
             });
 
             Assert.Throws<FileNotFoundException>(() => magic.Run(args, channel));
@@ -49,8 +49,8 @@ namespace Microsoft.Quantum.Chemistry.Tests
             var (magic, channel) = Init();
             var args = JsonConvert.SerializeObject(new InputStateMagic.Arguments
             {
-                fileName = "broombridge_v0.2.yaml",
-                wavefunctionLabel = "UCCSD |G>"
+                FileName = "broombridge_v0.2.yaml",
+                WavefunctionLabel = "UCCSD |G>"
             });
 
             var result = magic.Run(args, channel);
@@ -70,7 +70,7 @@ namespace Microsoft.Quantum.Chemistry.Tests
 
             var args = JsonConvert.SerializeObject(new FermionHamiltonianLoadMagic.Arguments
             {
-                problemDescription = broombridge.ProblemDescriptions.First()
+                ProblemDescription = broombridge.ProblemDescriptions.First()
             });
 
             var result = magic.Run(args, channel);

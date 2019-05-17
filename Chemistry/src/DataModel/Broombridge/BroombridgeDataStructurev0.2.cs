@@ -15,6 +15,7 @@ using System.Numerics;
 using Microsoft.Quantum.Chemistry.OrbitalIntegrals;
 using Microsoft.Quantum.Chemistry.Fermion;
 using Microsoft.Quantum.Chemistry.LadderOperators;
+using Newtonsoft.Json;
 
 namespace Microsoft.Quantum.Chemistry.Broombridge
 {
@@ -64,18 +65,23 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
         {
 
             [YamlMember(Alias = "$schema", ApplyNamingConventions = false)]
+            [JsonProperty(PropertyName = "$schema")]
             public string Schema { get; set; }
 
             [YamlMember(Alias = "format", ApplyNamingConventions = false)]
+            [JsonProperty(PropertyName = "format")]
             public Format Format { get; set; }
 
             [YamlMember(Alias = "generator", ApplyNamingConventions = false)]
+            [JsonProperty(PropertyName = "generator")]
             public Generator Generator { get; set; }
 
             [YamlMember(Alias = "bibliography", ApplyNamingConventions = false)]
+            [JsonProperty(PropertyName = "bibliography")]
             public List<BibliographyItem> Bibliography { get; set; }
 
             [YamlMember(Alias = "problem_description", ApplyNamingConventions = false)]
+            [JsonProperty(PropertyName = "problem_description")]
             public List<ProblemDescription> ProblemDescriptions { get; set; }
 
         }
@@ -83,43 +89,51 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
         public struct ProblemDescription
         {
             [YamlMember(Alias = "metadata", ApplyNamingConventions = false)]
+            [JsonProperty(PropertyName = "metadata")]
             public Dictionary<string, object> Metadata { get; set; }
 
             [YamlMember(Alias = "basis_set", ApplyNamingConventions = false)]
+            [JsonProperty(PropertyName = "basis_set")]
             public BasisSet BasisSet { get; set; }
 
             [YamlMember(Alias = "geometry", ApplyNamingConventions = false)]
+            [JsonProperty(PropertyName = "geometry")]
             public Geometry Geometry { get; set; }
 
             [YamlMember(Alias = "coulomb_repulsion", ApplyNamingConventions = false)]
+            [JsonProperty(PropertyName = "coulomb_repulsion")]
             public SimpleQuantity CoulombRepulsion { get; set; }
 
             [YamlMember(Alias = "scf_energy", ApplyNamingConventions = false)]
+            [JsonProperty(PropertyName = "scf_energy")]
             public SimpleQuantity ScfEnergy { get; set; }
 
             [YamlMember(Alias = "scf_energy_offset", ApplyNamingConventions = false)]
+            [JsonProperty(PropertyName = "scf_energy_offset")]
             public SimpleQuantity ScfEnergyOffset { get; set; }
 
             [YamlMember(Alias = "fci_energy", ApplyNamingConventions = false)]
+            [JsonProperty(PropertyName = "fci_energy")]
             public BoundedQuantity FciEnergy { get; set; }
 
             [YamlMember(Alias = "n_orbitals", ApplyNamingConventions = false)]
+            [JsonProperty(PropertyName = "n_orbitals")]
             public int NOrbitals { get; set; }
 
             [YamlMember(Alias = "n_electrons", ApplyNamingConventions = false)]
+            [JsonProperty(PropertyName = "n_electrons")]
             public int NElectrons { get; set; }
 
             [YamlMember(Alias = "energy_offset", ApplyNamingConventions = false)]
+            [JsonProperty(PropertyName = "energy_offset")]
             public SimpleQuantity EnergyOffset { get; set; }
 
             [YamlMember(Alias = "hamiltonian", ApplyNamingConventions = false)]
+            [JsonProperty(PropertyName = "hamiltonian")]
             public HamiltonianData Hamiltonian { get; set; }
 
-            // FIXME: actually specify what initial_state_suggestions looks like.
-            //[YamlMember(Alias = "initial_state_suggestions", ApplyNamingConventions = false)]
-            //public List<Dictionary<string, object>> InitialStateSuggestions { get; set; }
-
             [YamlMember(Alias = "initial_state_suggestions", ApplyNamingConventions = false)]
+            [JsonProperty(PropertyName = "initial_state_suggestions")]
             public List<State> InitialStates { get; set; }
         }
 

@@ -38,11 +38,13 @@ namespace Microsoft.Quantum.Chemistry.Generic
         /// <summary>
         /// Container for all terms in a Hamiltonian.
         /// </summary>
+        [JsonProperty(PropertyName = "terms")]
         public HamiltonianTerms Terms = new HamiltonianTerms();
 
         /// <summary>
         /// Indices to systems (e.g. fermions, qubits, or orbitals) the Hamiltonian acts on.
         /// </summary>
+        [JsonProperty(PropertyName = "system_indices")]
         public HashSet<int> SystemIndices = new HashSet<int>();
 
         /// <summary>

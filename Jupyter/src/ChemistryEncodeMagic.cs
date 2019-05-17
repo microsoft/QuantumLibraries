@@ -4,7 +4,7 @@ using Microsoft.Quantum.Chemistry.Fermion;
 using Microsoft.Quantum.Chemistry.LadderOperators;
 using Microsoft.Quantum.Chemistry.Pauli;
 using Microsoft.Quantum.Chemistry.QSharpFormat;
-
+using Microsoft.Quantum.IQSharp;
 using Newtonsoft.Json;
 
 namespace Microsoft.Quantum.Chemistry.Magic
@@ -27,11 +27,13 @@ namespace Microsoft.Quantum.Chemistry.Magic
             /// <summary>
             /// The fermion hamiltonian.
             /// </summary>
-            public FermionHamiltonian hamiltonian { get; set; }
+            [JsonProperty(PropertyName = "hamiltonian")]
+            public FermionHamiltonian Hamiltonian { get; set; }
 
             /// <summary>
             /// The input state.
             /// </summary>
+            [JsonProperty(PropertyName = "input_state")]
             public FermionWavefunction<int> wavefunction { get; set; }
         }
 
@@ -41,7 +43,7 @@ namespace Microsoft.Quantum.Chemistry.Magic
 
             // We target a qubit quantum computer, which requires a Pauli representation of the fermion Hamiltonian.
             // A number of mappings from fermions to qubits are possible. Let us choose the Jordan-Wigner encoding.
-            PauliHamiltonian pauliHamiltonian = args.hamiltonian.ToPauliHamiltonian(QubitEncoding.JordanWigner);
+            PauliHamiltonian pauliHamiltonian = args.Hamiltonian.ToPauliHamiltonian(QubitEncoding.JordanWigner);
 
             // We now convert this Hamiltonian and a selected state to a format that than be passed onto the QSharp component
             // of the library that implements quantum simulation algorithms.
