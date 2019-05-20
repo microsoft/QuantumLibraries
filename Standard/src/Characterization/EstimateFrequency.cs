@@ -6,6 +6,7 @@ using Microsoft.Quantum.Intrinsic;
 using Microsoft.Quantum.Simulation;
 using Microsoft.Quantum.Simulation.Core;
 using Microsoft.Quantum.Simulation.Simulators;
+using Microsoft.Quantum.Standard.Emulation;
 
 namespace Microsoft.Quantum.Characterization
 {
@@ -73,7 +74,8 @@ namespace Microsoft.Quantum.Characterization
                     var p = 1.0 - JointEnsembleProbability(Simulator.Id, (uint)count, paulis, qubits.GetIds());
                     preparation.Adjoint.Apply(qubits);
 
-                    return BinomialSampling(p, samples);
+                    var dist = new BinomialDistribution(samples, p);
+                    return dist.NextSample();
                 }
                 finally
                 {
@@ -105,22 +107,6 @@ namespace Microsoft.Quantum.Characterization
                     this.Simulator != null &&
                     (preparation.Qubits == null || !preparation.Qubits.Where(q => q != null).Any()) &&
                     (measure.FullName == typeof(Primitive.Measure).FullName);
-
-            /// <summary>
-            /// Performs a binomial sampling based on the given probability and number of samples.
-            /// </summary>
-            private double BinomialSampling(double probability, long samples)
-            {
-                var success = 0L;
-
-                for (var i = 0L; i < samples; i++)
-                {
-                    var c = _random.NextDouble();
-                    if (c <= probability) success++;
-                }
-
-                return (double)success / (double)samples;
-            }
         }
     }
 }
