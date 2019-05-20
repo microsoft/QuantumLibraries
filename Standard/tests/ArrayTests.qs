@@ -73,7 +73,7 @@ namespace Microsoft.Quantum.Tests {
     function FilterTest () : Unit {
         
         let array = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-        let evenArray = Filter(IsEven, array);
+        let evenArray = Filtered(IsEven, array);
         EqualityFactB(All(IsEven, evenArray), true, $"the even elements of [1..10] were not correctly filtered.");
     }
     
