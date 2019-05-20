@@ -2,13 +2,11 @@
 // Licensed under the MIT License.
 
 namespace Microsoft.Quantum.Chemistry.Tests {
-    
-    open Microsoft.Quantum.Primitive;
-    open Microsoft.Quantum.Extensions.Testing;
-    open Microsoft.Quantum.Extensions.Math;
-    open Microsoft.Quantum.Extensions.Convert;
-    open Microsoft.Quantum.Chemistry.JordanWigner; 
+    open Microsoft.Quantum.Intrinsic;
     open Microsoft.Quantum.Diagnostics;
+    open Microsoft.Quantum.Math;
+    open Microsoft.Quantum.Convert;
+    open Microsoft.Quantum.Chemistry.JordanWigner;
     
     // Check that correct Pauli Z string is computed
     function _ComputeJordanWignerBitString_0Test() : Unit {
@@ -75,6 +73,3 @@ namespace Microsoft.Quantum.Chemistry.Tests {
         }
     }
 }
-
-
-
