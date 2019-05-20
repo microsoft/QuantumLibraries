@@ -4,6 +4,7 @@
     <PlatformTarget>x64</PlatformTarget>
     <IsPackable>false</IsPackable>
     <LangVersion>latest</LangVersion>
+    <AssemblyName>Microsoft.Quantum.Standard.Tests</AssemblyName>
   </PropertyGroup>
 
   <PropertyGroup>
