@@ -1,0 +1,15 @@
+{
+    "Registrations": [
+        {
+            "Component": {
+                "Type": "other",
+                "Other": {
+                    "Name": "NumPy",
+                    "Version": "4a2b6a7d8e389abe06d5d7f2fbfa6ebd03b9092a",
+                    "DownloadUrl": "https://raw.githubusercontent.com/numpy/numpy/4a2b6a7d8e389abe06d5d7f2fbfa6ebd03b9092a/numpy/random/mtrand/distributions.c"
+                }
+            }
+        }
+    ],
+    "Version": 1
+}
