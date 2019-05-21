@@ -59,7 +59,7 @@ class IQSharpClient(object):
 
     def start(self):
         logger.info("Starting IQ# kernel...")
-        self.kernel_manager.start_kernel()
+        self.kernel_manager.start_kernel(extra_arguments=["--user-agent", "qsharp.py"])
         self.kernel_client = self.kernel_manager.client()
         atexit.register(self.stop)
 
