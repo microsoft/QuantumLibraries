@@ -91,7 +91,7 @@ class IQSharpClient(object):
         return self._busy
 
     def compile(self, body):
-        return "E.F.G"
+        return self._execute(body)
 
     def get_available_operations(self) -> List[str]:
         return self._execute('%who', raise_on_stderr=False)
