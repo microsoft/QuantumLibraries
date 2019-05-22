@@ -10,7 +10,7 @@ using Microsoft.Quantum.Standard.Emulation;
 
 namespace Microsoft.Quantum.Characterization
 {
-    public class EstimateFrequencyA_Native
+    public partial class EstimateFrequencyA
     {
         /// <summary>
         ///  Provides a native emulation of the EstimateFrequency operation for adjointable operations when
@@ -20,8 +20,8 @@ namespace Microsoft.Quantum.Characterization
         /// The way the emulation works is to invoke the state-preparation only once, and then look 
         /// into the resulting QuantumSimulator's state to get the JointProbability and then
         /// use a classical binomial sampling to get a sample for the resulting probability.
-        /// This is typically a lot faster compared to run the state-preparation operation and
-        /// run the binomial estimation from it.
+        /// This is typically faster compared to run the state-preparation operation n-times and
+        /// calculate the binomial estimation from it.
         /// </summary>
         public class Native : EstimateFrequencyA
         {
