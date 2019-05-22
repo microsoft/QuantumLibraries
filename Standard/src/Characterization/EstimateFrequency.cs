@@ -34,7 +34,6 @@ namespace Microsoft.Quantum.Characterization
 
             protected Allocate Allocate { get; set; }
             protected Release Release { get; set; }
-            protected ICallable<Qubit, QVoid> Reset { get; set; }
 
             public Native(IOperationFactory m) : base(m)
             {
@@ -47,7 +46,6 @@ namespace Microsoft.Quantum.Characterization
 
                 this.Allocate = this.Factory.Get<Allocate>(typeof(Microsoft.Quantum.Intrinsic.Allocate));
                 this.Release = this.Factory.Get<Release>(typeof(Microsoft.Quantum.Intrinsic.Release));
-                this.Reset = this.Factory.Get<ICallable<Qubit, QVoid>>(typeof(Microsoft.Quantum.Intrinsic.Reset));
             }
 
             /// <summary>
@@ -64,7 +62,7 @@ namespace Microsoft.Quantum.Characterization
                 }
 
                 // Find the basis used for measurement from the captured Paulis:
-                var paulis = FindPaulis(measure);
+                var paulis = FindPaulis(measure, count);
                 if (paulis.Length != count) throw new InvalidOperationException("The number of paulis must match the number of qubits.");
 
                 var qubits = this.Allocate.Apply(count);
@@ -75,11 +73,10 @@ namespace Microsoft.Quantum.Characterization
                     preparation.Adjoint.Apply(qubits);
 
                     var dist = new BinomialDistribution(samples, p);
-                    return dist.NextSample();
+                    return (double)dist.NextSample() / (double)samples;
                 }
                 finally
                 {
-                    foreach (var q in qubits) { Reset.Apply(q); }
                     Release.Apply(qubits);
                 }
             };
@@ -88,10 +85,17 @@ namespace Microsoft.Quantum.Characterization
             ///  Helper method to extract the array of Paulis. It requires the measurement operation
             ///  is a Partial application of Primitive.Measure
             /// </summary>
-            private static Pauli[] FindPaulis(ICallable measure)
+            private static Pauli[] FindPaulis(ICallable measure, long count)
             {
-                var p = measure as OperationPartial<QArray<Qubit>, (QArray<Pauli>, QArray<Qubit>), Result>;
-                return p.Mapper(null).Item1.ToArray();
+                if (measure.FullName == typeof(MeasureAllZ).FullName)
+                {
+                    return Enumerable.Repeat<Pauli>(Pauli.PauliZ, (int)count).ToArray();
+                }
+                else
+                {
+                    var p = measure as OperationPartial<IQArray<Qubit>, (IQArray<Pauli>, IQArray<Qubit>), Result>;
+                    return p.Mapper(null).Item1.ToArray();
+                }
             }
 
             /// <summary>
@@ -106,7 +110,7 @@ namespace Microsoft.Quantum.Characterization
             public virtual bool CanEmulate(IAdjointable preparation, ICallable measure) =>
                     this.Simulator != null &&
                     (preparation.Qubits == null || !preparation.Qubits.Where(q => q != null).Any()) &&
-                    (measure.FullName == typeof(Primitive.Measure).FullName);
+                    (measure.FullName == typeof(Primitive.Measure).FullName || measure.FullName == typeof(Intrinsic.Measure).FullName || measure.FullName == typeof(MeasureAllZ).FullName);
         }
     }
 }

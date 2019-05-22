@@ -23,9 +23,23 @@ namespace Microsoft.Quantum.Tests {
         }
     }
 
+    operation _trivialStatePrepration(qubits : Qubit[]) : Unit is Adj {
+        Message("stage prepared");
+    }
+
     operation EstimateFrequencyTest () : Unit {
-        let freq = EstimateFrequency(ApplyToEach(H, _), MeasureAllZ, 1, 1000);
-        EqualityWithinToleranceFact(freq, 0.5, 0.1);
+        let freq1 = EstimateFrequency(ApplyToEach(H, _), MeasureAllZ, 1, 1000);
+        EqualityWithinToleranceFact(freq1, 0.5, 0.1);
+
+        let freq2 = EstimateFrequencyA(ApplyToEachA(H, _), MeasureAllZ, 3, 10000);
+        EqualityWithinToleranceFact(freq2, 0.5, 0.1);
+    }
+    
+    // Calls EstimateFrequency with a TrivialStatePreparation to make sure
+    // Emulation is actually kicking in.
+    operation EstimateFrequencyEmulationTest() : Unit {
+        let freq = EstimateFrequencyA(_trivialStatePrepration, MeasureAllZ, 3, 2000);
+        NearEqualityFact(freq, 1.0);
     }
 
     operation _RobustPhaseEstimationTestOp (phase : Double, power : Int, qubits : Qubit[]) : Unit is Adj + Ctl {
