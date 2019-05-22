@@ -59,7 +59,7 @@ class IQSharpClient(object):
 
     def start(self):
         logger.info("Starting IQ# kernel...")
-        self.kernel_manager.start_kernel()
+        self.kernel_manager.start_kernel(extra_arguments=["--user-agent", "qsharp.py"])
         self.kernel_client = self.kernel_manager.client()
         atexit.register(self.stop)
 
@@ -162,7 +162,7 @@ class IQSharpClient(object):
                     output_hook(msg)
 
         try:
-            if self.busy:
+            if self._busy:
                 # Trying to execute while already executing can corrupt the
                 # ordering of messages internally to ZeroMQ
                 # (see https://github.com/Microsoft/QuantumLibraries/issues/69),

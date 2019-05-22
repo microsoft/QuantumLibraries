@@ -9,20 +9,38 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
     open Microsoft.Quantum.Convert;
     open Microsoft.Quantum.Arrays;
     open Microsoft.Quantum.Math;
+    open Microsoft.Quantum.Simulation;
 
     //newtype JordanWignerInputState = ((Double, Double), Int[]);
-    operation PrepareTrialState (superposition : JordanWignerInputState[], qubits : Qubit[]) : Unit {
-        
-        if (Length(superposition) == 0) {
+    operation PrepareTrialState (stateData : (Int, JordanWignerInputState[]), qubits : Qubit[]) : Unit {
+        let (stateType, terms) = stateData;
+
+        // State type indexing from FermionHamiltonianStatePrep
+        // public enum StateType
+        //{
+        //    Default = 0, Single_Configurational = 1, Sparse_Multi_Configurational = 2, Unitary_Coupled_Cluster = 3
+        //}
+		if(stateType == 2){
+			if (Length(terms) == 0) {
             // Do nothing
-        }
-        elif (Length(superposition) == 1) {
-            let (complex, qubitIndices) = superposition[0]!;
-            PrepareTrialStateSingleSiteOccupation(qubitIndices, qubits);
-        }
-        else {
-            PrepareTrialStateCoupledCluster(NoOp<Qubit[]>, superposition, qubits);
-        }
+			}
+			elif (Length(terms) == 1) {
+				let (complex, qubitIndices) = terms[0]!;
+				PrepareTrialStateSingleSiteOccupation(qubitIndices, qubits);
+			}
+			else {
+				PrepareTrialStateSparseMultiConfigurational(NoOp<Qubit[]>, terms, qubits);
+			}
+		}
+		elif(stateType == 3){
+			let nTerms = Length(terms);
+			let trotterStepSize = 1.0;
+
+			// The last term is the reference state.
+			let referenceState = PrepareTrialState((2, [terms[nTerms-1]]), _);
+			
+			PrepareTrialStateUnitaryCoupledCluster(referenceState, terms[0..nTerms-2], trotterStepSize, qubits);
+		}
     }
     
     
@@ -54,7 +72,7 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
     
     
     /// # Summary
-    /// Coupled-cluster state preparation of trial state by adding excitations
+    /// Sparse multi-configurational state preparation of trial state by adding excitations
     /// to initial trial state.
     ///
     /// # Input
@@ -66,7 +84,7 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
     /// the excitation acts on.
     /// ## qubits
     /// Qubits of Hamiltonian.
-    operation PrepareTrialStateCoupledCluster (initialStatePreparation : (Qubit[] => Unit), excitations : JordanWignerInputState[], qubits : Qubit[]) : Unit {
+    operation PrepareTrialStateSparseMultiConfigurational (initialStatePreparation : (Qubit[] => Unit), excitations : JordanWignerInputState[], qubits : Qubit[]) : Unit {
         
         let nExcitations = Length(excitations);
         
@@ -109,6 +127,29 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
         }
     }
     
+	/// # Summary
+    /// Unitary coupled-cluster state preparation of trial state 
+    ///
+    /// # Input
+    /// ## initialStatePreparation
+    /// Unitary to prepare initial trial state.
+    /// ## excitations
+    /// Excitations of initial trial state represented by
+    /// the amplitude of the excitation and the qubit indices
+    /// the excitation acts on.
+    /// ## qubits
+    /// Qubits of Hamiltonian.
+    operation PrepareTrialStateUnitaryCoupledCluster (initialStatePreparation : (Qubit[] => Unit), clusterOperator : JordanWignerInputState[], trotterStepSize : Double, qubits : Qubit[]) : Unit {
+        
+        let clusterOperatorGeneratorSystem = JordanWignerClusterOperatorGeneratorSystem(clusterOperator);
+        let evolutionGenerator = EvolutionGenerator(JordanWignerClusterOperatorEvolutionSet(), clusterOperatorGeneratorSystem);
+        let trotterOrder = 1;
+        let simulationAlgorithm = (TrotterSimulationAlgorithm(trotterStepSize, trotterOrder))!;
+        let oracle = simulationAlgorithm(1.0, evolutionGenerator, _);
+        initialStatePreparation(qubits);
+        oracle(qubits);
+		
+	}
 }
 
 

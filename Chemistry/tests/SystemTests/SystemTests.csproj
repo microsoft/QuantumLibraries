@@ -13,16 +13,21 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="..\..\Common\DelaySign.cs" Link="Properties\DelaySign.cs" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.7.2" />
+    <PackageReference Include="Microsoft.Quantum.Development.Kit" Version="0.6.1905.301" />
+        <PackageReference Include="Microsoft.Quantum.Xunit" Version="0.6.1905.301" />
+    <PackageReference Include="xunit" Version="2.3.1" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.3.1" />
+    <DotNetCliToolReference Include="dotnet-xunit" Version="2.3.1" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.7.0" />
-    <PackageReference Include="Microsoft.Quantum.Development.Kit" Version="0.6.1905.301" />
-    <PackageReference Include="xunit" Version="2.3.1" />
-    <PackageReference Include="xunit.abstractions" Version="2.0.3" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="2.3.1" />
-    <DotNetCliToolReference Include="dotnet-xunit" Version="2.3.1" />
+    <None Include="LithiumHydride\LiH_0.1.yaml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="LithiumHydride\LiH_0.2.yaml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
   <ItemGroup>
