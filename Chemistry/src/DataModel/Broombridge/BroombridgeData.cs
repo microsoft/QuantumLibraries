@@ -98,7 +98,13 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
         /// </summary>
         public Dictionary<string, FermionWavefunction<SpinOrbital>> Wavefunctions { get; set; }
 
-        internal static ProblemDescription ProcessRawProblemDescription(Broombridge.V0_2.ProblemDescription problem)
+        /// <summary>
+        /// Converts the raw problem description in V0_2 Broombridge into
+        /// in internal data format.
+        /// </summary>
+        /// <param name="problem">Problem description to be converted</param>
+        /// <returns>The internal problem description data structure.</returns>
+        public static ProblemDescription ProcessRawProblemDescription(Broombridge.V0_2.ProblemDescription problem)
         {
             var problemDescription = new ProblemDescription
             {
