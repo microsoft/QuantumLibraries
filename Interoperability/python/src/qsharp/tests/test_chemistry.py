@@ -45,13 +45,13 @@ def test_load_input_state():
     is1 = broombridge.problem_description[0].load_input_state("UCCSD |G>")
     is2 = load_input_state("broombridge.yaml", "UCCSD |G>")
 
-    assert(is1.label == "UCCSD |G>")
+    assert(is1.Method == "UnitaryCoupledCluster")
     assert(is1 == is2)
     
     is3 = broombridge.problem_description[0].load_input_state("UCCSD |G>", IndexConvention.HalfUp)
     is4 = load_input_state("broombridge.yaml", "UCCSD |G>", IndexConvention.HalfUp)
 
-    assert(is3.label == "UCCSD |G>")
+    assert(is3.Method == "UnitaryCoupledCluster")
     assert(is3 == is4)
     assert(is1 != is4)
 
@@ -65,7 +65,7 @@ def test_load_greedy_state():
     is1 = broombridge.problem_description[0].load_input_state("", IndexConvention.HalfUp)
     is2 = load_input_state("broombridge.yaml", "", IndexConvention.HalfUp)
 
-    assert(is1.label == "Greedy")
+    assert(is1.Method == "SparseMultiConfigurational")
     assert(is1 == is2)
 
     
