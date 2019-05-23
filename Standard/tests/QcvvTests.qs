@@ -34,6 +34,44 @@ namespace Microsoft.Quantum.Tests {
         let freq2 = EstimateFrequencyA(ApplyToEachA(H, _), MeasureAllZ, 3, 10000);
         EqualityWithinToleranceFact(freq2, 0.5, 0.1);
     }
+
+    operation PrepareBiasedCoin(successProbability : Double, qubit : Qubit) : Unit is Adj {
+        let rotationAngle = 2.0 * ArcCos(Sqrt(successProbability));
+        Ry(rotationAngle, qubit);
+    }
+
+    operation EstimateFrequencyBinomialCase(nSamples : Int, successProbability : Double, nStandardDeviations : Double) : Unit {
+        let expectation = successProbability;
+        let tolerance = nStandardDeviations * Sqrt(
+            (successProbability * (1.0 - successProbability)) / IntAsDouble(nSamples)
+        );
+        let actualFreq = EstimateFrequencyA(
+            ApplyToEachA(PrepareBiasedCoin(successProbability, _), _),
+            Measure([PauliZ], _),
+            1,
+            nSamples
+        );
+        EqualityWithinToleranceFact(expectation, actualFreq, tolerance);
+    }
+
+    operation EstimateFrequencyBinomialTest() : Unit {
+        // If this is larger, tests fail less often, but more false negatives
+        // slip through.
+        let nStdDevs = 3.0;
+        for (testCase in [
+            // 𝑛𝑝 <= 30
+            (45, 0.5, nStdDevs),
+            (100, 0.2, nStdDevs),
+            (1000, 0.02, nStdDevs),
+            // 𝑛𝑝 > 30
+            (10000, 0.5, nStdDevs),
+            (100000, 0.5, nStdDevs),
+            (100000, 0.3, nStdDevs),
+            (100000, 0.95, nStdDevs)
+        ]) {
+            EstimateFrequencyBinomialCase(testCase);
+        }
+    }
     
     // Calls EstimateFrequency with a TrivialStatePreparation to make sure
     // Emulation is actually kicking in.
