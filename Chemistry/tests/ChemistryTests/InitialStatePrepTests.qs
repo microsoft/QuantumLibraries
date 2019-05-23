@@ -12,14 +12,14 @@ namespace Microsoft.Quantum.Chemistry.Tests {
     open Microsoft.Quantum.Math;
     
     // Prepare single excitation
-    operation PrepareTrialStateSparseMultiConfigurational0Test () : Unit {
+    operation PrepareSparseMultiConfigurationalState0Test () : Unit {
         
         let nQubits = 6;
         let intTest = [39];
         let excitations = [JordanWignerInputState((0.1, 0.0), [0, 1, 2, 5])];
         
         using (qubits = Qubit[nQubits]) {
-            PrepareTrialStateSparseMultiConfigurational(NoOp<Qubit[]>, excitations, qubits);
+            PrepareSparseMultiConfigurationalState(NoOp<Qubit[]>, excitations, qubits);
             
 
             for (idx in IndexRange(excitations)) {
@@ -32,7 +32,7 @@ namespace Microsoft.Quantum.Chemistry.Tests {
     
     
     // Prepare multiple excitations with equal positive weights
-    operation PrepareTrialStateSparseMultiConfigurational1Test () : Unit {
+    operation PrepareSparseMultiConfigurationalState1Test () : Unit {
         
         let nQubits = 6;
         let intTest = [39, 21, 10];
@@ -40,7 +40,7 @@ namespace Microsoft.Quantum.Chemistry.Tests {
         let excitations = [JordanWignerInputState((0.1, 0.0), [0, 1, 2, 5]), JordanWignerInputState((0.1, 0.0), [0, 2, 4]), JordanWignerInputState((0.1, 0.0), [3, 1])];
         
         using (qubits = Qubit[nQubits]) {
-            PrepareTrialStateSparseMultiConfigurational(NoOp<Qubit[]>, excitations, qubits);
+            PrepareSparseMultiConfigurationalState(NoOp<Qubit[]>, excitations, qubits);
             
             for (idx in IndexRange(excitations)) {
                 AssertProbInt(intTest[idx], expectedProb[idx], LittleEndian(qubits), 1E-05);
@@ -52,7 +52,7 @@ namespace Microsoft.Quantum.Chemistry.Tests {
     
     
     // Prepare multiple excitations with unequal positive weights
-    operation PrepareTrialStateSparseMultiConfigurational2Test () : Unit {
+    operation PrepareSparseMultiConfigurationalState2Test () : Unit {
         
         let nQubits = 6;
         let intTest = [39, 21, 10];
@@ -60,7 +60,7 @@ namespace Microsoft.Quantum.Chemistry.Tests {
         let excitations = [JordanWignerInputState((0.1, 0.0), [0, 1, 2, 5]), JordanWignerInputState((0.2, 0.0), [0, 2, 4]), JordanWignerInputState((0.4, 0.0), [3, 1])];
         
         using (qubits = Qubit[nQubits]) {
-            PrepareTrialStateSparseMultiConfigurational(NoOp<Qubit[]>, excitations, qubits);
+            PrepareSparseMultiConfigurationalState(NoOp<Qubit[]>, excitations, qubits);
             
             for (idx in IndexRange(excitations)) {
                 AssertProbInt(intTest[idx], expectedProb[idx], LittleEndian(qubits), 1E-05);
@@ -72,7 +72,7 @@ namespace Microsoft.Quantum.Chemistry.Tests {
     
     
     // Prepare multiple excitations with unequal complex weights
-    operation PrepareTrialStateSparseMultiConfigurational3Test () : Unit {
+    operation PrepareSparseMultiConfigurationalState3Test () : Unit {
         
         let nQubits = 6;
         let intTest = [39, 21, 10];
@@ -97,7 +97,7 @@ namespace Microsoft.Quantum.Chemistry.Tests {
             )];
         
         using (qubits = Qubit[nQubits]) {
-            PrepareTrialStateSparseMultiConfigurational(NoOp<Qubit[]>, excitations, qubits);
+            PrepareSparseMultiConfigurationalState(NoOp<Qubit[]>, excitations, qubits);
             
             for (idx in IndexRange(excitations)) {
                 AssertProbInt(intTest[idx], expectedProb[idx], LittleEndian(qubits), 1E-05);
@@ -109,7 +109,7 @@ namespace Microsoft.Quantum.Chemistry.Tests {
     
     
     // Prepare multiple excitations with complex weights
-    operation PrepareTrialStateSparseMultiConfigurational4Test () : Unit {
+    operation PrepareSparseMultiConfigurationalState4Test () : Unit {
         
         let nQubits = 1;
         let intTest = [39, 21, 10];
@@ -117,7 +117,7 @@ namespace Microsoft.Quantum.Chemistry.Tests {
         let excitations = [JordanWignerInputState((0.1, 0.0), new Int[0]), JordanWignerInputState((0.1 * Cos(phase), 0.1 * Sin(phase)), [0])];
         
         using (qubits = Qubit[nQubits]) {
-            PrepareTrialStateSparseMultiConfigurational(NoOp<Qubit[]>, excitations, qubits);
+            PrepareSparseMultiConfigurationalState(NoOp<Qubit[]>, excitations, qubits);
             AssertPhase(-phase / 2.0, qubits[0], 1E-09);
             ResetAll(qubits);
         }

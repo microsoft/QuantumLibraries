@@ -9,16 +9,10 @@ namespace Microsoft.Quantum.Chemistry.OrbitalIntegrals
     /// <summary>
     /// Indexing scheme representing a spin-orbital.
     /// </summary>
-    [Serializable]
-    public class SpinOrbital
+    public class SpinOrbital : 
+        IEquatable<SpinOrbital>, 
+        IComparable<SpinOrbital>
     {
-        /// <summary>
-        /// Available indexing convention from a spin-orbital index to an integer.
-        /// </summary>
-        public enum IndexConvention
-        {
-            NotApplicable, UpDown, HalfUp
-        }
 
         IndexConvention IdxConvention;
 
@@ -66,6 +60,8 @@ namespace Microsoft.Quantum.Chemistry.OrbitalIntegrals
         /// </summary>
         public int ToInt() => ToInt(IndexConvention.UpDown);
 
+
+
         /// <summary>
         /// Spin-orbital constructor.
         /// </summary>
@@ -89,6 +85,14 @@ namespace Microsoft.Quantum.Chemistry.OrbitalIntegrals
         /// </summary>
         /// <param name="idx">Tuple of (orbital index, spin index).</param>
         public SpinOrbital((int, int) idx) : this(idx.Item1, (Spin) idx.Item2) { }
+
+        /// <summary>
+        /// Empty spin-orbital constructor.
+        /// </summary>
+        public SpinOrbital()
+        {
+
+        }
 
         /// <summary>
         /// Throws an exception if spin-orbital is invalid.
@@ -147,6 +151,18 @@ namespace Microsoft.Quantum.Chemistry.OrbitalIntegrals
         /// Boolean inequality operator definition.
         /// </summary>
         public static bool operator != (SpinOrbital x, SpinOrbital y) => !(x == y);
+
+        /// <summary>
+        /// Default comparer for spin orbitals first compares the orbital
+        /// index, then second compares the spin index.
+        /// </summary>
+        /// <param name="x">Spin orbital to compare with.</param>
+        /// <returns>Result of the comparison.</returns>
+        public int CompareTo(SpinOrbital x)
+        {
+            var orbCompare = Orbital.CompareTo(x.Orbital);
+            return orbCompare != 0 ? orbCompare : Spin.CompareTo(x.Spin);
+        }
 
         /*
         /// <summary>

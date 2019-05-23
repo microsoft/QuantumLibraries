@@ -7,6 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="MagicTests\**" />
+    <EmbeddedResource Remove="MagicTests\**" />
+    <QsharpCompile Remove="MagicTests\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Include="xunit.runner.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -23,20 +29,16 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="Broombridge\broombridge_v0.1.yaml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    <None Include="..\BroombridgeExamples\broombridge_v0.1.yaml" Link="Broombridge\broombridge_v0.1.yaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Broombridge\broombridge_v0.2.yaml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    <None Include="..\BroombridgeExamples\broombridge_v0.2.yaml" Link="Broombridge\broombridge_v0.2.yaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\Runtime\Runtime.csproj" />
     <ProjectReference Include="..\..\src\DataModel\DataModel.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="MagicTests\" />
   </ItemGroup>
 </Project>

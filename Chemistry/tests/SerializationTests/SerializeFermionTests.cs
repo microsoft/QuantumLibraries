@@ -10,14 +10,63 @@ using Microsoft.Quantum.Chemistry.OrbitalIntegrals;
 using Microsoft.Quantum.Chemistry.Fermion;
 using Microsoft.Quantum.Chemistry.Pauli;
 using Microsoft.Quantum.Chemistry.QSharpFormat;
-using Microsoft.Quantum.Chemistry.Generic;
 using Microsoft.Quantum.Chemistry.LadderOperators;
+
 using Microsoft.Quantum.Chemistry;
 
 using Newtonsoft.Json.Linq;
 
 namespace SerializationTests
 {
+    public class SerializeLadderOperatorTests
+    {
+        [Fact]
+        public void SerializeLadderOperatorInt()
+        {
+            LadderOperator<int> op0 = new LadderOperator<int>(RaisingLowering.u, 5);
+
+            string json = JsonConvert.SerializeObject(op0, Formatting.None);
+
+            Debug.WriteLine(@json);
+
+            LadderOperator<int> op1 = JsonConvert.DeserializeObject<LadderOperator<int>>(json);
+
+            Assert.Equal(op0, op1);
+
+        }
+
+        [Fact]
+        public void SerializeLadderOperatorSpinOrbital()
+        {
+            LadderOperator<SpinOrbital> op0 = new LadderOperator<SpinOrbital>(RaisingLowering.u, new SpinOrbital(3,Spin.u));
+
+            string json = JsonConvert.SerializeObject(op0, Formatting.None);
+
+            Debug.WriteLine(@json);
+
+            LadderOperator<SpinOrbital> op1 = JsonConvert.DeserializeObject<LadderOperator<SpinOrbital>>(json);
+
+            Assert.Equal(op0, op1);
+
+        }
+
+        [Fact]
+        public void SerializeLadderSequenceInt()
+        {
+            var op0 = new[] { 1, 2, 3, 4 }.ToLadderSequence();
+
+            string json = JsonConvert.SerializeObject(op0, Formatting.None);
+
+            Debug.WriteLine(@json);
+
+            var op1 = JsonConvert.DeserializeObject<LadderSequence<int>>(json);
+
+            Assert.Equal(op0, op1);
+
+        }
+
+    }
+
     public class SerializeFermionTests
     {
         [Fact]
@@ -28,7 +77,7 @@ namespace SerializationTests
 
             string json = JsonConvert.SerializeObject(term0, Formatting.None);
 
-            HermitianFermionTerm term1 = new HermitianFermionTerm( JsonConvert.DeserializeObject<LadderSequence>(json));
+            HermitianFermionTerm term1 = new HermitianFermionTerm( JsonConvert.DeserializeObject<LadderSequence<int>>(json));
 
             Debug.WriteLine(@json);
         }
@@ -53,9 +102,9 @@ namespace SerializationTests
         {
             var broombridge = Deserializers.DeserializeBroombridge(filename).ProblemDescriptions.First();
 
-            var orbHam = broombridge.ToOrbitalIntegralHamiltonian();
+            var orbHam = broombridge.OrbitalIntegralHamiltonian;
 
-            var ferHam = orbHam.ToFermionHamiltonian(SpinOrbital.IndexConvention.UpDown);
+            var ferHam = orbHam.ToFermionHamiltonian(IndexConvention.UpDown);
 
             string json = JsonConvert.SerializeObject(ferHam);
 

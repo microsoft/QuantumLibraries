@@ -13,7 +13,7 @@ using Microsoft.Quantum.Chemistry.Pauli;
 using Microsoft.Quantum.Chemistry.QSharpFormat;
 using Microsoft.Quantum.Chemistry.JordanWigner;
 using Microsoft.Quantum.Chemistry.Generic;
-using Microsoft.Quantum.Chemistry.LadderOperators;
+
 
 namespace Microsoft.Quantum.Chemistry
 {
@@ -67,68 +67,17 @@ namespace Microsoft.Quantum.Chemistry
         /// </returns>
         public static IEnumerable<FermionHamiltonian> LoadFromBroombridge(
             string filename,
-            SpinOrbital.IndexConvention indexConvention)
+            IndexConvention indexConvention)
         {
             var broombridgeData = Deserializers.DeserializeBroombridge(filename);
             
-            IEnumerable<CurrentVersion.ProblemDescription> problemData = broombridgeData.ProblemDescriptions;
-
             // Create electronic structure Hamiltonian
-            var fermionHamiltonians = problemData
-                .Select(o => o
-                .ToOrbitalIntegralHamiltonian()
+            var fermionHamiltonians = broombridgeData.ProblemDescriptions
+                .Select(o => o.OrbitalIntegralHamiltonian
                 .ToFermionHamiltonian(indexConvention));
 
             return fermionHamiltonians;
         }
 
-        /// <summary>
-        /// This approximates the Hamiltonian ground state by a greedy algorithm  
-        /// that minimizes only the PP term energies. If there are no PP terms,
-        /// states will be occupied in lexicographic order.
-        /// </summary>
-        /// <returns>
-        /// Greedy trial state for minimizing Hamiltonian diagonal one-electron energy.
-        /// </returns>
-        public static InputState GreedyStatePreparation(this FermionHamiltonian hamiltonian, int nElectrons)
-        {
-            InputState state = new InputState();
-            WavefunctionFermionSCF greedyState = hamiltonian.GreedyStatePreparationSCF(nElectrons);
-
-            state.Label = "Greedy";
-
-            // Currently not used
-            // state.reference = null;
-
-            state.TypeOfState = StateType.SparseMultiConfigurational;
-
-            state.Superposition.Add(((1.0, 0.0), new IndexOrderedLadderSequence(greedyState.GetLadderSequence())));
-
-            return state;
-        }
-
-        /*
-        /// <summary>
-        /// Extracts only the required information from a Broombridge problem instance.
-        /// </summary>
-        /// <param name="broombridgeProblem">A Broombridge problem description.</param>
-        /// <param name="indexConvention">The indexing convention used to map a spin-orbital indicx to a single integer.</param>
-        public BroombridgeTyped(Broombridge.Current.ProblemDescription broombridgeProblem, SpinOrbital.Config.IndexConvention.IndexConvention indexConvention = SpinOrbital.Config.IndexConvention.Default)
-        {
-            IndexConvention = indexConvention;
-            NOrbitals = broombridgeProblem.NOrbitals;
-            NElectrons = broombridgeProblem.NElectrons;
-
-            IdentityTerm = broombridgeProblem.CoulombRepulsion.Value + broombridgeProblem.EnergyOffset.Value;
-
-            InitialStates = broombridgeProblem.InitialStates.ToDictionary(
-                o => o.Label,
-                o => ParseInitialState(o, indexConvention)
-                );
-        }
-
-
-        // Make LoadFromBroombridge with hamiltonian & states.
-        */
     }
 }

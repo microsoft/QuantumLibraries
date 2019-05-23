@@ -10,15 +10,15 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 
-using Microsoft.Quantum.Chemistry.LadderOperators;
+
 using Microsoft.Quantum.Chemistry.Fermion;
 using Microsoft.Quantum.Chemistry.OrbitalIntegrals;
+using Microsoft.Quantum.Chemistry.LadderOperators;
 
 namespace Microsoft.Quantum.Chemistry.Tests
 {
     using HermitianFermionTerm = HermitianFermionTerm;
     using static TermType.Fermion;
-    using Op = LadderSequence;
     using static RaisingLowering;
 
     public class HermitianFermionTermTests
@@ -26,8 +26,8 @@ namespace Microsoft.Quantum.Chemistry.Tests
         [Fact]
         public void EmptyHermitianFermionTerm()
         {
-            var term = new HermitianFermionTerm(new LadderSequence());
-            var term2 = new HermitianFermionTerm(new LadderSequence());
+            var term = new HermitianFermionTerm(new LadderSequence<int>());
+            var term2 = new HermitianFermionTerm(new LadderSequence<int>());
 
             Dictionary<HermitianFermionTerm, double> dictionary = new Dictionary<HermitianFermionTerm, double>();
             dictionary.Add(term, 0.5);
@@ -38,7 +38,7 @@ namespace Microsoft.Quantum.Chemistry.Tests
         [Fact]
         public void Inheritance()
         {
-            var term = new NormalOrderedLadderSequence(new LadderSequence());
+            var term = new NormalOrderedSequence<int>(new LadderSequence<int>());
             var term2 = new HermitianFermionTerm(term);
         }
 
@@ -132,7 +132,7 @@ namespace Microsoft.Quantum.Chemistry.Tests
 
 
             var fermionTerm = new HermitianFermionTerm(idx.ToLadderSequence());
-            var fermionTermType = fermionTerm.GetTermType();
+            var fermionTermType = fermionTerm.TermType;
             Assert.True(fermionTermType == tmp[type]);
         }
 
@@ -146,7 +146,7 @@ namespace Microsoft.Quantum.Chemistry.Tests
             Assert.Equal(term0, term1);
         }
 
-        public (LadderSequence, LadderSequence) CanonicalOrderCorrectnessHelper(int test)
+        public (LadderSequence<int>, LadderSequence<int>) CanonicalOrderCorrectnessHelper(int test)
         {
             switch (test)
             {

@@ -17,6 +17,13 @@ namespace Microsoft.Quantum.Chemistry
     /// </summary>
     public class LiQuiD
     {
+        public struct ProblemDescription
+        {
+            public int NOrbitals { get; set; }
+            public double CoulombRepulation { get; set; }
+            public OrbitalIntegralHamiltonian OrbitalIntegralHamiltonian { get; set; }
+        }
+
         /// <summary>
         ///      Loads a Hamiltonian from integral data represented
         ///      in LIQ𝑈𝑖|⟩ format.
@@ -26,16 +33,15 @@ namespace Microsoft.Quantum.Chemistry
         /// </summary>
         /// <param name="filename">The name of the file to be loaded.</param>
         /// <returns>
-        ///      An instance of <see cref="FermionHamiltonian"/> representing the
-        ///      data contained in <paramref name="filename"/>.
+        ///      List of electronic structure problem deserialized from the file.
         /// </returns>
-        public static IEnumerable<OrbitalIntegralHamiltonian> LoadMultipleFromLiquid(string filename)
+        public static IEnumerable<ProblemDescription> Deserialize(string filename)
         {
             var name = filename;
             var allText = System.IO.File.ReadAllText(filename, System.Text.Encoding.ASCII);
             string[] delimiters = { "tst" };
             var lines = allText.Split(delimiters, System.StringSplitOptions.RemoveEmptyEntries);
-            var hamiltonians = lines.Select(o => LoadFromLiquid(o));
+            var hamiltonians = lines.Select(o => DeserializeSingle(o));
             return hamiltonians;
         }
 
@@ -48,11 +54,12 @@ namespace Microsoft.Quantum.Chemistry
         /// </summary>
         /// <param name="lines">Sequence of text describing terms of Hamiltonian.</param>
         /// <returns>
-        ///      An instance of <see cref="FermionHamiltonian"/> representing the
-        ///      data contained in <paramref name="lines"/>.
+        ///      Single electronic structure problem deserialized from the file.
         /// </returns>
-        public static OrbitalIntegralHamiltonian LoadFromLiquid(string line)
+        public static ProblemDescription DeserializeSingle(string line)
         {
+            var problem = new LiQuiD.ProblemDescription();
+
             var regexMiscellaneous = new Regex(@"((info=(?<info>[^\s]*)))");
             var regexnuc = new Regex(@"nuc=(?<nuc>-?\s*\d*.\d*)");
             var regexPQ = new Regex(@"(^|\s+)(?<p>\d+),(?<q>\d+)\D*=\s*(?<coeff>-?\s*\d*.\d*)e?(?<exponent>-?\d*)");
@@ -69,7 +76,8 @@ namespace Microsoft.Quantum.Chemistry
             Match stringnuc = regexnuc.Match(line);
             if (stringnuc.Success)
             {
-                hamiltonian.Add(TermType.OrbitalIntegral.Identity, new OrbitalIntegral(),  double.Parse(stringnuc.Groups["nuc"].ToString()).ToDoubleCoeff());
+                coulombRepulsion = double.Parse(stringnuc.Groups["nuc"].ToString()).ToDoubleCoeff();
+                hamiltonian.Add(TermType.OrbitalIntegral.Identity, new OrbitalIntegral(),  coulombRepulsion);
             }
             foreach (Match stringPQ in regexPQ.Matches(line))
             {
@@ -157,16 +165,16 @@ namespace Microsoft.Quantum.Chemistry
                 }
             }
 
-            //hamiltonian.NOrbitals = nOrbitals;
-            foreach (var ijTerm in fileHIJTerms)
-            {
-                hamiltonian.Add(new OrbitalIntegral(ijTerm.Key, ijTerm.Value));
-            }
-            foreach (var ijklTerm in fileHIJKLTerms)
-            {
-                hamiltonian.Add(new OrbitalIntegral(ijklTerm.Key, ijklTerm.Value));
-            }
-            return hamiltonian;
+            hamiltonian.Add(fileHIJTerms.Select(o => new OrbitalIntegral(o.Key, o.Value)).ToList());
+
+            hamiltonian.Add(fileHIJKLTerms.Select(o => new OrbitalIntegral(o.Key, o.Value)).ToList());
+
+            problem.OrbitalIntegralHamiltonian = hamiltonian;
+            problem.NOrbitals = System.Convert.ToInt32 ( nOrbitals);
+            problem.CoulombRepulation = coulombRepulsion;
+
+            return problem;
+
         }
     }
 }

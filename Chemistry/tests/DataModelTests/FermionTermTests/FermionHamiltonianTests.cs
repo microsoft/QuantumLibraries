@@ -7,11 +7,11 @@ using System.Linq;
 
 using Microsoft.Quantum.Chemistry.Broombridge;
 using Microsoft.Quantum.Chemistry.Fermion;
-using Microsoft.Quantum.Chemistry.LadderOperators;
+
 using Microsoft.Quantum.Chemistry.OrbitalIntegrals;
 
 using Newtonsoft.Json;
-
+using Microsoft.Quantum.Chemistry.LadderOperators;
 using Xunit;
 
 namespace Microsoft.Quantum.Chemistry.Tests
@@ -101,11 +101,11 @@ namespace Microsoft.Quantum.Chemistry.Tests
         public void JsonEncoding()
         {
             var filename = "Broombridge/broombridge_v0.2.yaml";
-            CurrentVersion.Data broombridge = Deserializers.DeserializeBroombridge(filename);
-            CurrentVersion.ProblemDescription problemData = broombridge.ProblemDescriptions.First();
+            Data broombridge = Deserializers.DeserializeBroombridge(filename);
+            var problemData = broombridge.ProblemDescriptions.First();
 
-            OrbitalIntegralHamiltonian orbitalIntegralHamiltonian = problemData.ToOrbitalIntegralHamiltonian();
-            FermionHamiltonian original = orbitalIntegralHamiltonian.ToFermionHamiltonian(SpinOrbital.IndexConvention.HalfUp);
+            OrbitalIntegralHamiltonian orbitalIntegralHamiltonian = problemData.OrbitalIntegralHamiltonian;
+            FermionHamiltonian original = orbitalIntegralHamiltonian.ToFermionHamiltonian(IndexConvention.HalfUp);
 
             var json = JsonConvert.SerializeObject(original);
             File.WriteAllText("fermion.original.json", json);
@@ -129,7 +129,7 @@ namespace Microsoft.Quantum.Chemistry.Tests
             var terms = termsRaw.Select(o => (new HermitianFermionTerm(o.Item2.ToLadderSequence()),o.Item3));
             var orbitalhamiltonian = new OrbitalIntegralHamiltonian();
             orbitalhamiltonian.Add(orbitalIntegral);
-            var hamiltonian = orbitalhamiltonian.ToFermionHamiltonian(SpinOrbital.IndexConvention.HalfUp);
+            var hamiltonian = orbitalhamiltonian.ToFermionHamiltonian(IndexConvention.HalfUp);
 
             Assert.True(hamiltonian.Terms.ContainsKey(termType));
             // Check that expected terms are found

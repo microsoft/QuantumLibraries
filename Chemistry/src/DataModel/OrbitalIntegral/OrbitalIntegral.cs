@@ -6,7 +6,7 @@ using System.Linq;
 using System.Collections.Generic;
 
 using Microsoft.Quantum.Chemistry;
-using Microsoft.Quantum.Chemistry.Generic;
+using Microsoft.Quantum.Chemistry.LadderOperators;
 
 namespace Microsoft.Quantum.Chemistry.OrbitalIntegrals
 {
@@ -15,8 +15,7 @@ namespace Microsoft.Quantum.Chemistry.OrbitalIntegrals
     /// <summary>
     /// LadderType representing orbital overlap integrals.
     /// </summary>
-    public class OrbitalIntegral : 
-        ITermIndex<TermType.OrbitalIntegral>//, IEquatable<OrbitalIntegral>
+    public class OrbitalIntegral : ITermIndex<TermType.OrbitalIntegral, OrbitalIntegral>
     {
         public enum Convention
         {
@@ -92,19 +91,35 @@ namespace Microsoft.Quantum.Chemistry.OrbitalIntegrals
             }
         }
 
-        public TermType.OrbitalIntegral GetTermType()
+        public TermType.OrbitalIntegral TermType
         {
-            switch (Length)
+            get
             {
-                case 0:
-                    return TermType.OrbitalIntegral.Identity;
-                case 2:
-                    return TermType.OrbitalIntegral.OneBody;
-                case 4:
-                    return TermType.OrbitalIntegral.TwoBody;
-                default:
-                    throw new ArgumentException("Attempted to classify unimplemented orbital integral.");
+                switch (Length)
+                {
+                    case 0:
+                        return Chemistry.TermType.OrbitalIntegral.Identity;
+                    case 2:
+                        return Chemistry.TermType.OrbitalIntegral.OneBody;
+                    case 4:
+                        return Chemistry.TermType.OrbitalIntegral.TwoBody;
+                    default:
+                        throw new ArgumentException("Attempted to classify unimplemented orbital integral.");
+                }
             }
+        }
+        /// <summary>
+        /// Returns the sign of this term.
+        /// </summary>
+        /// <returns>Sign of this term.</returns>
+        public int Sign => 1;
+
+        /// <summary>
+        /// Sets the sign of this fermion term to one.
+        /// </summary>
+        public void ResetSign()
+        {
+            Coefficient = 1.0;
         }
 
         /// <summary>
@@ -158,6 +173,15 @@ namespace Microsoft.Quantum.Chemistry.OrbitalIntegrals
             {
                 throw new System.NotImplementedException();
             }
+        }
+
+        /// <summary>
+        /// Creates a copy of this instance.
+        /// </summary>
+        public OrbitalIntegral Clone()
+        {
+            var newArray = OrbitalIndices.Clone<int>();
+            return new OrbitalIntegral(newArray, Coefficient);
         }
 
         /// <summary>

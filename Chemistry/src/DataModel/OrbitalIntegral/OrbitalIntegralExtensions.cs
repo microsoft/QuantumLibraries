@@ -9,8 +9,8 @@ using System.Collections.Generic;
 using Microsoft.Quantum.Chemistry;
 using System.Numerics;
 
-using Microsoft.Quantum.Chemistry.Generic;
 using Microsoft.Quantum.Chemistry.LadderOperators;
+
 using Microsoft.Quantum.Chemistry.Fermion;
 
 namespace Microsoft.Quantum.Chemistry.OrbitalIntegrals
@@ -29,7 +29,7 @@ namespace Microsoft.Quantum.Chemistry.OrbitalIntegrals
         /// <returns>Fermion Hamiltonian constructed from orbital integrals.</returns>
         public static FermionHamiltonian ToFermionHamiltonian(
             this OrbitalIntegralHamiltonian sourceHamiltonian, 
-            SpinOrbital.IndexConvention indexConvention)
+            IndexConvention indexConvention)
         {
             var nOrbitals = sourceHamiltonian.SystemIndices.Max() + 1;
             var hamiltonian = new FermionHamiltonian();
@@ -60,9 +60,9 @@ namespace Microsoft.Quantum.Chemistry.OrbitalIntegrals
         public static IEnumerable<(HermitianFermionTerm, double)> ToHermitianFermionTerms(
             this OrbitalIntegral orbitalIntegral,
             int nOrbitals,
-            SpinOrbital.IndexConvention indexConvention)
+            IndexConvention indexConvention)
         {
-            var termType = orbitalIntegral.GetTermType();
+            var termType = orbitalIntegral.TermType;
             if (termType == TermType.OrbitalIntegral.OneBody)
             {
                 return orbitalIntegral.ToOneBodySpinOrbitalTerms(nOrbitals, indexConvention);
@@ -91,7 +91,7 @@ namespace Microsoft.Quantum.Chemistry.OrbitalIntegrals
         private static IEnumerable<(HermitianFermionTerm, double)> ToOneBodySpinOrbitalTerms(
             this OrbitalIntegral orbitalIntegral,
             int nOrbitals,
-            SpinOrbital.IndexConvention indexConvention)
+            IndexConvention indexConvention)
         {
             // One-electron orbital integral symmetries
             // ij = ji
@@ -124,7 +124,7 @@ namespace Microsoft.Quantum.Chemistry.OrbitalIntegrals
         private static IEnumerable<(HermitianFermionTerm, double)> ToTwoBodySpinOrbitalTerms(
             this OrbitalIntegral orbitalIntegral,
             int nOrbitals,
-            SpinOrbital.IndexConvention indexConvention)
+            IndexConvention indexConvention)
         {
             List<(HermitianFermionTerm, double)> fermionTerms = new List<(HermitianFermionTerm, double)>();
             // Two-electron orbital integral symmetries
@@ -244,25 +244,19 @@ namespace Microsoft.Quantum.Chemistry.OrbitalIntegrals
         /// <summary>
         /// Converts an array of spin-orbitals into an array of integers representing each spin orbital.
         /// </summary>
-        public static IEnumerable<int> ToInts(this IEnumerable<SpinOrbital> spinOrbitals, SpinOrbital.IndexConvention indexConvention, int nOrbitals)
-        {
-            return spinOrbitals.Select(x => x.ToInt(indexConvention, nOrbitals));
-        }
+        public static IEnumerable<int> ToInts(this IEnumerable<SpinOrbital> spinOrbitals, IndexConvention indexConvention, int nOrbitals) =>
+            spinOrbitals.Select(x => x.ToInt(indexConvention, nOrbitals));
         
         /// <summary>
         /// Converts an array of orbital index and spin index tuples into an array of spin-orbitals.
         /// </summary>
-        public static SpinOrbital[] ToSpinOrbitals(this IEnumerable<(int, Spin)> spinOrbitalIndices)
-        {
-            return spinOrbitalIndices.Select(o => new SpinOrbital(o)).ToArray();
-        }
+        public static SpinOrbital[] ToSpinOrbitals(this IEnumerable<(int, Spin)> spinOrbitalIndices) => spinOrbitalIndices.Select(o => new SpinOrbital(o)).ToArray();
+
         /// <summary>
         /// Converts an array of orbital index and spin index tuples into an array of spin-orbitals.
         /// </summary>
-        public static SpinOrbital[] ToSpinOrbitals(this IEnumerable<(int, int)> spinOrbitalIndices)
-        {
-            return spinOrbitalIndices.Select(o => new SpinOrbital(o)).ToArray();
-        }
+        public static SpinOrbital[] ToSpinOrbitals(this IEnumerable<(int, int)> spinOrbitalIndices) =>
+            spinOrbitalIndices.Select(o => new SpinOrbital(o)).ToArray();
 
         /// <summary>
         /// Enumerates all spin-orbitals described by an array of orbital integrals by
@@ -270,10 +264,7 @@ namespace Microsoft.Quantum.Chemistry.OrbitalIntegrals
         /// </summary>
         /// <param name="orbitalIntegrals">Array of orbital integrals.</param>
         /// <returns>Array of Array of spin-orbitals.</returns>
-        public static SpinOrbital[][] EnumerateSpinOrbitals(this IEnumerable<OrbitalIntegral> orbitalIntegrals)
-        {
-            return orbitalIntegrals.SelectMany(o => o.EnumerateSpinOrbitals()).ToArray();
-        }
+        public static SpinOrbital[][] EnumerateSpinOrbitals(this IEnumerable<OrbitalIntegral> orbitalIntegrals) => orbitalIntegrals.SelectMany(o => o.EnumerateSpinOrbitals()).ToArray();
     }
 }
 

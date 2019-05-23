@@ -4,14 +4,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Quantum.Chemistry.Generic;
-using Microsoft.Quantum.Chemistry.LadderOperators;
 
 namespace Microsoft.Quantum.Chemistry.Fermion
 {
-    public class FermionHamiltonian : Hamiltonian<TermType.Fermion, HermitianFermionTerm, DoubleCoeff>
+    public partial class FermionHamiltonian : Hamiltonian<TermType.Fermion, HermitianFermionTerm, DoubleCoeff>
     {
         public FermionHamiltonian() : base() { }
-        
 
         /// <summary>
         /// Method for collecting all distinct system (orbital) indices.

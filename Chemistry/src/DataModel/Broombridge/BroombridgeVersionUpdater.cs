@@ -16,6 +16,7 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
 
     public static partial class DataStructures
     {
+        
         /// <summary>
         /// Converts v0.1 Broombridge to v0.2.
         /// </summary>
@@ -23,42 +24,49 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
         /// <returns>Converted Broombridge in v0.2 format.</returns>
         public static V0_2.Data Update(V0_1.Data input)
         {
-            var output = new V0_2.Data();
-            output.Schema = input.Schema;
-            output.Format = new DataStructure.Format() { Version = V0_2.Strings.VersionNumber };
-            output.Generator = input.Generator;
-            output.Bibliography = input.Bibliography;
-            output.ProblemDescriptions = new List<V0_2.ProblemDescription>();
+            var output = new V0_2.Data()
+            {
+                Schema = input.Schema,
+                Format = input.Format,
+                Generator = input.Generator,
+                Bibliography = input.Bibliography,
+                ProblemDescriptions = new List<V0_2.ProblemDescription>()
+            };
 
             foreach (var integralSet in input.IntegralSets)
             {
-                var problemDescription = new V0_2.ProblemDescription();
-                problemDescription.Metadata = integralSet.Metadata;
-                problemDescription.BasisSet = integralSet.BasisSet;
-                problemDescription.Geometry = integralSet.Geometry;
-                problemDescription.CoulombRepulsion = integralSet.CoulombRepulsion;
-                problemDescription.ScfEnergy = integralSet.ScfEnergy;
-                problemDescription.ScfEnergyOffset = integralSet.ScfEnergyOffset;
-                problemDescription.FciEnergy = integralSet.FciEnergy;
-                problemDescription.NOrbitals = integralSet.NOrbitals;
-                problemDescription.NElectrons = integralSet.NElectrons;
-                problemDescription.EnergyOffset = integralSet.EnergyOffset;
-                problemDescription.Hamiltonian = integralSet.Hamiltonian;
+                var problemDescription = new V0_2.ProblemDescription()
+                {
+                    Metadata = integralSet.Metadata,
+                    BasisSet = integralSet.BasisSet,
+                    Geometry = integralSet.Geometry,
+                    CoulombRepulsion = integralSet.CoulombRepulsion,
+                    ScfEnergy = integralSet.ScfEnergy,
+                    ScfEnergyOffset = integralSet.ScfEnergyOffset,
+                    FciEnergy = integralSet.FciEnergy,
+                    NOrbitals = integralSet.NOrbitals,
+                    NElectrons = integralSet.NElectrons,
+                    EnergyOffset = integralSet.EnergyOffset,
+                    Hamiltonian = integralSet.Hamiltonian,
+                    InitialStates = new List<V0_2.State>()
+                };
+            
 
-                problemDescription.InitialStates = new List<V0_2.State>();
+                
                 if (integralSet.SuggestedState != null)
                 {
                     foreach (var sourceInitialState in integralSet.SuggestedState)
                     {
-                        var initialState = new V0_2.State();
-                        initialState.Label = sourceInitialState.SuggestedStateData.Label;
-                        initialState.Energy = sourceInitialState.SuggestedStateData.Energy;
-                        initialState.Method = V0_2.Strings.SparseMultiConfigurational;
-                        initialState.Superposition = sourceInitialState.SuggestedStateData.Superposition;
+                        var initialState = new V0_2.State()
+                        {
+                            Label = sourceInitialState.SuggestedStateData.Label,
+                            Energy = sourceInitialState.SuggestedStateData.Energy,
+                            Method = V0_2.UpdaterStrings.SparseMultiConfigurational,
+                            Superposition = sourceInitialState.SuggestedStateData.Superposition
+                        };
 
                         problemDescription.InitialStates.Add(initialState);
                     }
-
                 }
 
                 output.ProblemDescriptions.Add(problemDescription);

@@ -12,19 +12,49 @@ namespace Microsoft.Quantum.Chemistry
     /// All Hamiltonian terms must implement this interface.
     /// </summary>
     /// <typeparam name="TTermClassification">Index to categories of terms.</typeparam>
-    public interface ITermIndex <TTermClassification>
+    public interface ITermIndex <TTermClassification, TTermIndex> : IEquatable<TTermIndex>
     {
-        TTermClassification GetTermType();
+        /// <summary>
+        /// Compute the classification of the Hamiltonian term.
+        /// </summary>
+        /// <returns>Classification of Hamiltonian term.</returns>
+        TTermClassification TermType { get; }
+
+        /// <summary>
+        /// Clones the values of this object.
+        /// </summary>
+        /// <returns>A deep copy of this object.</returns>
+        TTermIndex Clone();
+        /// <summary>
+        /// Obtain the sign of the Hamiltonian term, if any.
+        /// </summary>
+        /// <returns>Sign of the term.</returns>
+        int Sign { get; }
+
+        /// <summary>
+        /// Sets the sign of the Hamiltonian term to one.
+        /// </summary>
+        void ResetSign();
     }
 
     /// <summary>
     /// All Hamiltonian terms must implement this interface.
     /// </summary>
     /// <typeparam name="TTermClassification">Index to categories of terms.</typeparam>
-    public interface ITermValue<TTermValue>
+    public interface ITermValue<TTermValue> : IEquatable<TTermValue>
     {
-        TTermValue AddValue(TTermValue addThis);
+        /// <summary>
+        /// Sets the value of the Hamiltonian term.
+        /// </summary>
+        /// <param name="setThis">Desired value of term.</param>
+        /// <param name="sign">Multiply the applied value by this parameter.</param>
+        /// <returns></returns>
+        TTermValue SetValue(TTermValue setThis, int sign);
+        TTermValue AddValue(TTermValue addThis, int sign);
         TTermValue Default();
+
+        TTermValue Clone();
+        
 
         /// <summary>
         /// Computes the L_p norm of term.
@@ -33,6 +63,7 @@ namespace Microsoft.Quantum.Chemistry
         /// <returns>L_p norm of term.</returns>
         double Norm(double power);
     }
+
 
 
     /// <summary>
@@ -76,12 +107,20 @@ namespace Microsoft.Quantum.Chemistry
     };
 
     /// <summary>
+    /// Available indexing convention from a spin-orbital index to an integer.
+    /// </summary>
+    public enum IndexConvention
+    {
+        NotApplicable, UpDown, HalfUp
+    }
+
+    /// <summary>
     /// Wavefunction types
     /// </summary>
     [JsonConverter(typeof(StringEnumConverter))]
     public enum StateType
     {
-        Default = 0, SingleConfigurational = 1, SparseMultiConfigurational = 2, UnitaryCoupledCluster = 3
+        NotRecognized = -1, Default = 0, SingleConfigurational = 1, SparseMultiConfigurational = 2, UnitaryCoupledCluster = 3
     }
 
     /// <summary>
@@ -112,7 +151,8 @@ namespace Microsoft.Quantum.Chemistry
 
         public DoubleCoeff Default() => 0.0;
 
-        public DoubleCoeff AddValue(DoubleCoeff addThis) => Value + addThis.Value;
+        public DoubleCoeff AddValue(DoubleCoeff addThis, int sign) => Value + (addThis.Value * (double)sign);
+        public DoubleCoeff SetValue(DoubleCoeff setThis, int sign) => setThis * (double)sign;
 
         /// <summary>
         /// Computes the L_p norm of term.
@@ -127,6 +167,13 @@ namespace Microsoft.Quantum.Chemistry
         /// <returns>String representation of Double</returns>
         public override string ToString() => Value.ToString();
 
+        /// <summary>
+        /// Creates a copy of this instance.
+        /// </summary>
+        public DoubleCoeff Clone()
+        {
+            return Value;
+        }
 
         #region Equality Testing
 
@@ -193,7 +240,14 @@ namespace Microsoft.Quantum.Chemistry
         /// </summary>
         public enum IntegralDataFormat
         {
-            LiQuiD, Broombridge
+            /// <summary>
+            /// Liquid format
+            /// </summary>
+            LiQuiD,
+            /// <summary>
+            /// Broombridge format
+            /// </summary>
+            Broombridge
         }
 
         /// <summary>
@@ -218,5 +272,6 @@ namespace Microsoft.Quantum.Chemistry
                 return new DoubleCoeff(value);
             }
         }
+
     }
 }

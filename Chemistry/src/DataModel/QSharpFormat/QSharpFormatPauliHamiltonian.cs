@@ -18,7 +18,7 @@ namespace Microsoft.Quantum.Chemistry.QSharpFormat
     public static partial class Convert
     {
         
-        public static HTerm FromPauliTerm(PauliTerm term, PauliTTermValue value)
+        public static HTerm FromPauliTerm(PauliTerm term, PauliTermValue value)
         {
             return new HTerm((new QArray<Int64>(term.QubitIndices.Select(o=>(Int64)o)), new QArray<double>(value.Value)));
         }
@@ -45,7 +45,7 @@ namespace Microsoft.Quantum.Chemistry.QSharpFormat
                 energyOffset = pauliHamiltonian.Terms[TermType.PauliTerm.Identity].Values.First().Value.First();
             }
             
-            var nSpinOrbitals = pauliHamiltonian.SystemIndices.Count() + 1;
+            var nSpinOrbitals = pauliHamiltonian.SystemIndices.Max() + 1;
             var hZ = CreateHTermList(pauliHamiltonian,TermType.PauliTerm.Z);
             var hZZ = CreateHTermList(pauliHamiltonian,TermType.PauliTerm.ZZ);
             var hPQ = CreateHTermList(pauliHamiltonian,TermType.PauliTerm.PQ);

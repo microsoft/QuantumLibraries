@@ -4,6 +4,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Diagnostics;
 
 using Microsoft.Quantum.Chemistry.Broombridge;
 using Microsoft.Quantum.Chemistry.OrbitalIntegrals;
@@ -55,7 +56,7 @@ namespace Microsoft.Quantum.Chemistry.Tests
                 new[] { 0,0,0,0 },
                 new[] { 0,1,0,1 },
                 new[] { 0,1,1,0 },
-                new[] { 1,1,1,1 } }.Select(o => new OrbitalIntegral(o));
+                new[] { 1,1,1,1 } }.Select(o => new OrbitalIntegral(o, 0.123));
             foreach (var term in addTerms0.Zip(newTerms0Copy, (a,b) => (a.Item2.Value, b)))
             {
                 Assert.Equal(term.Item1, hamiltonian.GetTerm(term.b).Value);
@@ -64,8 +65,13 @@ namespace Microsoft.Quantum.Chemistry.Tests
 
             var orb = new OrbitalIntegral(new[] { 0,1,1,0}, 4.0);
             Assert.Equal(new[] { 0, 1, 1, 0 }, orb.OrbitalIndices);
-            
-            Assert.Equal(0.663472101.ToDoubleCoeff(), hamiltonian.Terms[orb.GetTermType()][new OrbitalIntegral(orb.OrbitalIndices, orb.Coefficient)]);
+            Assert.Equal(addTerms0[4].o.OrbitalIndices, orb.OrbitalIndices);
+
+            Debug.WriteLine($"Term type is { orb.TermType.ToString()}");
+            Debug.WriteLine($"Coefficient is { hamiltonian.Terms[orb.TermType][new OrbitalIntegral(orb.OrbitalIndices, orb.Coefficient)]}");
+            Debug.WriteLine($"Coefficient is { hamiltonian.Terms[orb.TermType][addTerms0[4].o]}");
+
+            Assert.True(0.663472101 == hamiltonian.Terms[orb.TermType][new OrbitalIntegral(orb.OrbitalIndices, orb.Coefficient)]);
         }
 
         [Fact]
@@ -107,10 +113,10 @@ namespace Microsoft.Quantum.Chemistry.Tests
         public void JsonEncoding()
         {
             var filename = "Broombridge/broombridge_v0.2.yaml";
-            CurrentVersion.Data broombridge = Deserializers.DeserializeBroombridge(filename);
-            CurrentVersion.ProblemDescription problemData = broombridge.ProblemDescriptions.First();
+            Data broombridge = Deserializers.DeserializeBroombridge(filename);
+            var problemData = broombridge.ProblemDescriptions.First();
 
-            OrbitalIntegralHamiltonian original = problemData.ToOrbitalIntegralHamiltonian();
+            OrbitalIntegralHamiltonian original = problemData.OrbitalIntegralHamiltonian;
 
             var json = JsonConvert.SerializeObject(original);
             File.WriteAllText("oribital.original.json", json);

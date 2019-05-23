@@ -28,10 +28,11 @@ steps:
   inputs:
     command: test
     projects: |
-     $(LibrariesRootFolder)/Standard/tests
-     $(LibrariesRootFolder)/Chemistry/tests/ChemistryTests/ChemistryTests.csproj
-     $(LibrariesRootFolder)/Chemistry/tests/SystemTests/SystemTests.csproj
-     $(LibrariesRootFolder)/Chemistry/tests/DataModelTests/DataModelTests.csproj
+      $(LibrariesRootFolder)/Standard/tests
+      $(LibrariesRootFolder)/Chemistry/tests/ChemistryTests/ChemistryTests.csproj
+      $(LibrariesRootFolder)/Chemistry/tests/SystemTests/SystemTests.csproj
+      $(LibrariesRootFolder)/Chemistry/tests/DataModelTests/DataModelTests.csproj
+      $(LibrariesRootFolder)/Chemistry/tests/SerializationTests/SerializationTests.csproj
     arguments: >
         -c $(BuildConfiguration)
         -v n

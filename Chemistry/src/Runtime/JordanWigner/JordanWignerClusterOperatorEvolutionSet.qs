@@ -9,7 +9,7 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
     open Microsoft.Quantum.Simulation;
     open Microsoft.Quantum.Arrays;
 
-	/// # Summary
+    /// # Summary
     /// Computes Z component of Jordan-Wigner string between
     /// fermion indices in a fermionic operator with an even
     /// number of creation / annihilation operators.

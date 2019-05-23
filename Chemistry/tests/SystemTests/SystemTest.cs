@@ -18,10 +18,13 @@ using Xunit;
 using Microsoft.Quantum.Chemistry.Fermion;
 using Microsoft.Quantum.Chemistry.LadderOperators;
 using Microsoft.Quantum.Chemistry.QSharpFormat;
-using Microsoft.Quantum.Chemistry.JordanWigner;   
+using Microsoft.Quantum.Chemistry.JordanWigner;
 
 namespace SystemTests
 {
+    //static Microsoft.Quantum.Chemistry.Generic.Extensions;
+
+
     // All following examples assume Jordan-Wigner encoding.
     public class SystemTestFromGeneralHamiltonian
     {

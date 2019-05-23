@@ -16,21 +16,19 @@ namespace Microsoft.Quantum.Chemistry.Pauli
     /// <summary>
     /// Data structure for sparse representations of Pauli terms.
     /// </summary>
-    public struct PauliTerm : 
-        ITermIndex<TermType.PauliTerm>, 
-        IEquatable<PauliTerm>
+    public struct PauliTerm : ITermIndex<TermType.PauliTerm, PauliTerm> 
     {
 
 
         /// <summary>
         /// Qubit indices that represent this Pauli string.
         /// </summary>
-        public List<int> QubitIndices { get; set; }
+        public int[] QubitIndices { get; set; }
 
         /// <summary>
         /// LadderType of Pauli string encoded by list of qubit indices.
         /// </summary>
-        public TermType.PauliTerm TermType;
+        public TermType.PauliTerm TermType { get; set; }
 
         #region Constructors
         /// <summary>
@@ -40,7 +38,7 @@ namespace Microsoft.Quantum.Chemistry.Pauli
         public PauliTerm(PauliTerm pauliString)
         {
             // All constructions are pass by value.
-            QubitIndices = pauliString.QubitIndices.ToList();
+            QubitIndices = pauliString.QubitIndices.Clone<int>();
             TermType = pauliString.TermType;
         }
 
@@ -50,34 +48,39 @@ namespace Microsoft.Quantum.Chemistry.Pauli
         /// <param name="pauliString">Input.</param>
         public PauliTerm(IEnumerable<int> qubitIndices, TermType.PauliTerm type)
         {
-            QubitIndices = qubitIndices.ToList();
+            QubitIndices = qubitIndices.ToArray().Clone<int>();
             TermType = type;
         }
         #endregion
         
+
         /// <summary>
-        /// Return the category of this fermion term.
+        /// Returns the sign of this term.
         /// </summary>
-        /// <returns>Category of fermion term.</returns>
-        public TermType.PauliTerm GetTermType()
+        /// <returns>Sign of this term.</returns>
+        public int Sign => 1;
+
+        /// <summary>
+        /// Sets the sign of this fermion term to one.
+        /// </summary>
+        public void ResetSign()
         {
-            return TermType;
+            // All Pauli terms currently have no sign.
         }
 
         /// <summary>
-        /// Returns a human-readable description this object.
+        /// Returns a human-readable description of this object.
         /// </summary>
-        public override string ToString()
-        {
-            return $"{TermType}: [ {string.Join(" ", QubitIndices)} ]";
-        }
+        public override string ToString() => $"{TermType}: [ {string.Join(" ", QubitIndices)} ]";
+
+        /// <summary>
+        /// Creates a copy of this instance.
+        /// </summary>
+        public PauliTerm Clone() => new PauliTerm(QubitIndices.ToArray().Clone<int>(), TermType);
 
         #region Equality Testing
 
-        public override bool Equals(object obj)
-        {
-            return (obj is PauliTerm x) ? Equals(x) : false;
-        }
+        public override bool Equals(object obj) => (obj is PauliTerm x) ? Equals(x) : false;
 
         public bool Equals(PauliTerm x)
         {
@@ -130,37 +133,32 @@ namespace Microsoft.Quantum.Chemistry.Pauli
             return x.Equals(y);
         }
 
-        public static bool operator !=(PauliTerm x, PauliTerm y)
-        {
-            return !(x == y);
-        }
+        public static bool operator !=(PauliTerm x, PauliTerm y) => !(x == y);
         #endregion
 
     }
 
-    public struct PauliTTermValue : ITermValue<PauliTTermValue>
+    public struct PauliTermValue : ITermValue<PauliTermValue>
     {
         public double[] Value;
 
-        public PauliTTermValue(double value)
+        public PauliTermValue(double value)
         {
             Value = new[] { value };
         }
 
-        public PauliTTermValue(IEnumerable<double> value)
+        public PauliTermValue(IEnumerable<double> value)
         {
-            Value = value.ToArray();
+            Value = value.ToArray().Clone<double>();
         }
 
-        public PauliTTermValue Default()
-        {
-            return new PauliTTermValue(0.0);
-        }
+        public PauliTermValue Default() => new PauliTermValue(0.0);
 
-        public PauliTTermValue AddValue(PauliTTermValue addThis)
-        {
-            return new PauliTTermValue( Value.Zip(addThis.Value, (a, b) => (a + b)));
-        }
+        public PauliTermValue AddValue(PauliTermValue addThis, int sign = 1) =>
+            new PauliTermValue( Value.Zip(addThis.Value, (a, b) => a + (b * (double) sign)));
+        
+        public PauliTermValue SetValue(PauliTermValue setThis, int sign = 1) =>
+            new PauliTermValue(setThis.Value.Select( a => a * (double)sign));
 
         public override string ToString()
         {
@@ -177,14 +175,19 @@ namespace Microsoft.Quantum.Chemistry.Pauli
             return Value.Norm(power);
         }
 
+        /// <summary>
+        /// Creates a copy of this instance.
+        /// </summary>
+        public PauliTermValue Clone() => new PauliTermValue(Value.Clone<double>());
+
         #region Equality Testing
 
         public override bool Equals(object obj)
         {
-            return (obj is PauliTTermValue x) ? Equals(x) : false;
+            return (obj is PauliTermValue x) ? Equals(x) : false;
         }
 
-        public bool Equals(PauliTTermValue x)
+        public bool Equals(PauliTermValue x)
         {
             // If parameter is null, return false.
             if (ReferenceEquals(x, null))
@@ -212,7 +215,7 @@ namespace Microsoft.Quantum.Chemistry.Pauli
             return Value.GetHashCode();
         }
 
-        public static bool operator ==(PauliTTermValue x, PauliTTermValue y)
+        public static bool operator ==(PauliTermValue x, PauliTermValue y)
         {
             // Check for null on left side.
             if (Object.ReferenceEquals(x, null))
@@ -230,24 +233,24 @@ namespace Microsoft.Quantum.Chemistry.Pauli
             return x.Equals(y);
         }
 
-        public static bool operator !=(PauliTTermValue x, PauliTTermValue y)
+        public static bool operator !=(PauliTermValue x, PauliTermValue y)
         {
             return !(x == y);
         }
 
-        public static PauliTTermValue operator +(PauliTTermValue x, PauliTTermValue y)
+        public static PauliTermValue operator +(PauliTermValue x, PauliTermValue y)
         {
-            return new PauliTTermValue(x.Value.Zip(y.Value, (a, b) => (a + b)));
+            return new PauliTermValue(x.Value.Zip(y.Value, (a, b) => (a + b)));
         }
 
-        public static PauliTTermValue operator -(PauliTTermValue x, PauliTTermValue y)
+        public static PauliTermValue operator -(PauliTermValue x, PauliTermValue y)
         {
-            return new PauliTTermValue(x.Value.Zip(y.Value, (a, b) => (a - b)));
+            return new PauliTermValue(x.Value.Zip(y.Value, (a, b) => (a - b)));
         }
 
-        public static PauliTTermValue operator *(PauliTTermValue x, PauliTTermValue y)
+        public static PauliTermValue operator *(PauliTermValue x, PauliTermValue y)
         {
-            return new PauliTTermValue(x.Value.Zip(y.Value, (a, b) => (a * b)));
+            return new PauliTermValue(x.Value.Zip(y.Value, (a, b) => (a * b)));
         }
         #endregion
     }
