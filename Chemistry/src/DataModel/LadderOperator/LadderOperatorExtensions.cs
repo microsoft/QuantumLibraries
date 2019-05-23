@@ -4,6 +4,7 @@
 using System;
 using System.Linq;
 using System.Collections.Generic;
+using Microsoft.Quantum.Chemistry.OrbitalIntegrals;
 
 namespace Microsoft.Quantum.Chemistry.LadderOperators
 { 
@@ -43,7 +44,20 @@ namespace Microsoft.Quantum.Chemistry.LadderOperators
         /// </code>
         /// </example>
         public static LadderSequence<int> ToLadderSequence(this IEnumerable<int> indices) => indices.ToArray();
+
+        internal static LadderSequence<SpinOrbital> ToLadderSequence(this IEnumerable<SpinOrbital> indices) => indices.ToArray();
+
+        /// <summary>
+        /// Construct a sequence of ladder operators from an even-length sequence of spin-orbit indices.
+        /// </summary>
+        /// <param name="indices">Even-length sequence of spin-orbit indices.</param>
+        /// <returns>
+        /// Sequence of ladder operators with an equal number of creation and annihilation terms
+        /// that are normal-ordered.
+        /// </returns>
+        public static LadderSequence<SpinOrbital> ToLadderSequence(this IEnumerable<(int, Spin)> indices) => indices.Select(x => new SpinOrbital(x)).ToLadderSequence();
         #endregion
+
 
         #region Reordering methods
 
