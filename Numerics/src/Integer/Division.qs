@@ -6,17 +6,20 @@ namespace Microsoft.Quantum.Arithmetic {
     open Microsoft.Quantum.Diagnostics;
 
     /// # Summary
-    /// Integer division of integer `xs` by integer `ys`. `xs` will hold the
+    /// Divides two quantum integers.
+    ///
+    /// # Description
+    /// `xs` will hold the
     /// remainder `xs - floor(xs/ys) * ys` and `result` will hold
     /// `floor(xs/ys)`.
     ///
     /// # Input
     /// ## xs
-    /// n-bit dividend (LittleEndian), will be replaced by the remainder.
+    /// $n$-bit dividend, will be replaced by the remainder.
     /// ## ys
-    /// n-bit divisor (LittleEndian)
+    /// $n$-bit divisor
     /// ## result
-    /// n-bit result (LittleEndian), must be in state $\ket{0}$ initially
+    /// $n$-bit result, must be in state $\ket{0}$ initially
     /// and will be replaced by the result of the integer division.
     ///
     /// # Remarks

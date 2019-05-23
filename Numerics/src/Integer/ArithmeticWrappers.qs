@@ -6,32 +6,27 @@ namespace Microsoft.Quantum.Arithmetic {
     open Microsoft.Quantum.Arrays;
 
     /// # Summary
-    /// Wrapper for addition: Automatically chooses between addition with
+    /// Automatically chooses between addition with
     /// carry and without, depending on the register size of `ys`.
     ///
     /// # Input
     /// ## xs
-    /// $n$-bit addend (LittleEndian)
+    /// $n$-bit addend.
     /// ## ys
-    /// Addend with at least $n$ qubits (LittleEndian). Will hold the result.
-    operation AddI (xs: LittleEndian, ys: LittleEndian) : Unit {
-        body (...) {
-            if (Length(xs!) == Length(ys!)) {
-                RippleCarryAdderNoCarryTTK(xs, ys);
-            }
-            elif (Length(ys!) > Length(xs!)) {
-                using (qs = Qubit[Length(ys!) - Length(xs!) - 1]){
-                    RippleCarryAdderTTK(LittleEndian(xs! + qs),
-                                        LittleEndian(Most(ys!)), Tail(ys!));
-                }
-            }
-            else{
-                fail "xs must not contain more qubits than ys!";
+    /// Addend with at least $n$ qubits. Will hold the result.
+    operation AddI (xs: LittleEndian, ys: LittleEndian) : Unit is Adj + Ctl {
+        if (Length(xs!) == Length(ys!)) {
+            RippleCarryAdderNoCarryTTK(xs, ys);
+        }
+        elif (Length(ys!) > Length(xs!)) {
+            using (qs = Qubit[Length(ys!) - Length(xs!) - 1]){
+                RippleCarryAdderTTK(LittleEndian(xs! + qs),
+                                    LittleEndian(Most(ys!)), Tail(ys!));
             }
         }
-        controlled auto;
-        adjoint auto;
-        adjoint controlled auto;
+        else {
+            fail "xs must not contain more qubits than ys!";
+        }
     }
 
     /// # Summary
@@ -45,13 +40,8 @@ namespace Microsoft.Quantum.Arithmetic {
     /// ## result
     /// Will be flipped if $x > y$
     operation CompareGTI (xs: LittleEndian, ys: LittleEndian,
-                            result: Qubit) : Unit {
-        body (...) {
-            GreaterThan(xs, ys, result);
-        }
-        controlled auto;
-        adjoint auto;
-        adjoint controlled auto;
+                            result: Qubit) : Unit is Adj + Ctl {
+        GreaterThan(xs, ys, result);
     }
 
     /// # Summary
@@ -65,22 +55,17 @@ namespace Microsoft.Quantum.Arithmetic {
     /// ## result
     /// Will be flipped if $xs > ys$
     operation CompareGTSI (xs: SignedLittleEndian,
-                            ys: SignedLittleEndian,
-                            result: Qubit) : Unit {
-        body (...) {
-            using (tmp = Qubit()) {
-                CNOT(Tail(xs!!), tmp);
-                CNOT(Tail(ys!!), tmp);
-                X(tmp);
-                (Controlled CompareGTI)([tmp], (xs!, ys!, result));
-                X(tmp);
-                CCNOT(tmp, Tail(ys!!), result);
-                CNOT(Tail(xs!!), tmp);
-                CNOT(Tail(ys!!), tmp);
-            }
+                           ys: SignedLittleEndian,
+                           result: Qubit) : Unit is Adj + Ctl {
+        using (tmp = Qubit()) {
+            CNOT(Tail(xs!!), tmp);
+            CNOT(Tail(ys!!), tmp);
+            X(tmp);
+            (Controlled CompareGTI)([tmp], (xs!, ys!, result));
+            X(tmp);
+            CCNOT(tmp, Tail(ys!!), result);
+            CNOT(Tail(xs!!), tmp);
+            CNOT(Tail(ys!!), tmp);
         }
-        controlled auto;
-        adjoint auto;
-        adjoint controlled auto;
     }
 }

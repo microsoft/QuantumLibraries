@@ -3,18 +3,14 @@
 
 namespace Microsoft.Quantum.Arithmetic {
     open Microsoft.Quantum.Diagnostics;
+    open Microsoft.Quantum.Arrays;
 
     /// # Summary
     /// Helper function to assert that a quantum fixed-point number is
     /// initialized to zero, i.e., all qubits are in state $\ket{0}$.
-    operation AssertAllZeroFxP(fp : FixedPoint) : Unit {
-        body (...) {
-            let (p, xs) = fp!;
-            AssertAllZero(xs);
-        }
-        adjoint auto;
-        controlled auto;
-        adjoint controlled auto;
+    operation AssertAllZeroFxP(fp : FixedPoint) : Unit is Adj + Ctl {
+        let (p, xs) = fp!;
+        AssertAllZero(xs);
     }
 
     /// # Summary
@@ -26,14 +22,13 @@ namespace Microsoft.Quantum.Arithmetic {
     /// Array of quantum fixed-point numbers that will be checked for
     /// compatibility (using assertions).
     function IdenticalFormatFactFxP(fixedPoints : FixedPoint[]) : Unit {
-        if (Length(fixedPoints) == 0){
+        if (Length(fixedPoints) == 0) {
             return ();
         }
         let (position, register) = fixedPoints[0]!;
-        EqualityFactB(position > 0, true,
-            "Point position must be greater than zero.");
+        Fact(position > 0, "Point position must be greater than zero.");
         let n = Length(register);
-        for (fp in fixedPoints[1..Length(fixedPoints)-1]) {
+        for (fp in Most(fixedPoints)) {
             let (pos, reg) = fp!;
             EqualityFactI(pos, position,
                 "FixedPoint numbers must have identical binary point position.");
@@ -53,16 +48,15 @@ namespace Microsoft.Quantum.Arithmetic {
     /// Array of quantum fixed-point numbers that will be checked for
     /// compatibility (using assertions).
     function IdenticalPointPosFactFxP(fixedPoints : FixedPoint[]) : Unit {
-        if (Length(fixedPoints) == 0){
+        if (Length(fixedPoints) == 0) {
             return ();
         }
         let (position, register) = fixedPoints[0]!;
-        EqualityFactB(position > 0, true,
-            "Point position must be greater than zero.");
+        Fact(position > 0, "Point position must be greater than zero.");
         let n = Length(register);
-        for (fp in fixedPoints[1..Length(fixedPoints)-1]) {
+        for (fp in Most(fixedPoints)) {
             let (pos, reg) = fp!;
-            EqualityFactI(Length(reg)-pos, n-position,
+            EqualityFactI(Length(reg) - pos, n - position,
                 "FixedPoint numbers must have identical point alignment.");
         }
     }

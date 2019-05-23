@@ -9,14 +9,14 @@ namespace Microsoft.Quantum.Arithmetic {
     open Microsoft.Quantum.Diagnostics;
 
     /// # Summary
-    /// Computes 1/x for a fixed-point number x.
+    /// Computes $1/x$ for a fixed-point number $x$.
     ///
     /// # Input
     /// ## x
-    /// FixedPoint number to invert
+    /// Fixed-point number to be inverted.
     /// ## result
-    /// FixedPoint number that will hold the result. Must be initialized to 0.
-    operation ComputeReciprocalFxP(x : FixedPoint, result : FixedPoint) : Unit {
+    /// Fixed-point number that will hold the result. Must be initialized to $\ket{0.0}$.
+    operation ComputeReciprocalFxP(x : FixedPoint, result : FixedPoint) : Unit is Adj {
         body (...) {
             (Controlled ComputeReciprocalFxP) (new Qubit[0], (x, result));
         }
@@ -25,8 +25,7 @@ namespace Microsoft.Quantum.Arithmetic {
             let (pRes, rs) = result!;
             let n = Length(xs);
             AssertAllZero(rs);
-            EqualityFactB(p+pRes-1+n >= Length(rs), true,
-                            "Output register is too wide.");
+            Fact(p + pRes - 1 + n >= Length(rs), "Output register is too wide.");
             using ((sign, tmpRes) = (Qubit(), Qubit[2*n])) {
                 CNOT(Tail(xs), sign);
                 (Controlled Invert2sSI)
@@ -41,7 +40,5 @@ namespace Microsoft.Quantum.Arithmetic {
                 CNOT(Tail(xs), sign);
             }
         }
-        adjoint auto;
-        adjoint controlled auto;
     }
 }

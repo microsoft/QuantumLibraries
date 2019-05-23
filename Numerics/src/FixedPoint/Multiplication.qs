@@ -7,22 +7,22 @@ namespace Microsoft.Quantum.Arithmetic {
     open Microsoft.Quantum.Canon;
 
     /// # Summary
-    /// Multiplication of two fixed-point numbers
+    /// Multiplies two fixed-point numbers in quantum registers.
     ///
     /// # Input
     /// ## fp1
-    /// First fixed-point number (of type FixedPoint)
+    /// First fixed-point number.
     /// ## fp2
-    /// Second fixed-point number (of type FixedPoint)
+    /// Second fixed-point number.
     /// ## result
-    /// Result fixed-point number (of type FixedPoint),
-    /// must be in state $\ket{0}$ initially.
+    /// Result fixed-point number, must be in state $\ket{0}$ initially.
     ///
     /// # Remarks
     /// The current implementation requires the three fixed-point numbers
     /// to have the same point position and the same number of qubits.
     operation MultiplyFxP(fp1 : FixedPoint, fp2 : FixedPoint,
-                                       result : FixedPoint) : Unit {
+                                       result : FixedPoint) : Unit is Adj {
+
         body(...) {
             (Controlled MultiplyFxP) (new Qubit[0],
                                                    (fp1, fp2, result));
@@ -47,20 +47,18 @@ namespace Microsoft.Quantum.Arithmetic {
                 (Adjoint MultiplySI)(xsInt, ysInt, tmpResultInt);
             }
         }
-        adjoint auto;
-        adjoint controlled auto;
     }
 
     /// # Summary
-    /// Square a fixed-point number
+    /// Squares a fixed-point number.
     ///
     /// # Input
     /// ## fp
-    /// Fixed-point number (of type FixedPoint)
+    /// Fixed-point number.
     /// ## result
-    /// Result fixed-point number (of type FixedPoint),
+    /// Result fixed-point number,
     /// must be in state $\ket{0}$ initially.
-    operation SquareFxP(fp : FixedPoint, result : FixedPoint) : Unit {
+    operation SquareFxP(fp : FixedPoint, result : FixedPoint) : Unit is Adj {
         body(...) {
             (Controlled SquareFxP) (new Qubit[0],
                                            (fp, result));
@@ -83,7 +81,5 @@ namespace Microsoft.Quantum.Arithmetic {
                 (Adjoint SquareSI)(xsInt, tmpResultInt);
             }
         }
-        adjoint auto;
-        adjoint controlled auto;
     }
 }

@@ -7,7 +7,7 @@ namespace Microsoft.Quantum.Numerics.ToffoliTests {
     open Microsoft.Quantum.Math;
     open Microsoft.Quantum.Intrinsic;
     open Microsoft.Quantum.Arithmetic;
-	open Microsoft.Quantum.Diagnostics;
+    open Microsoft.Quantum.Diagnostics;
 
     operation InitFxPTest() : Unit {
         for (a in [1.2, 3.9, 3.14159, -0.6, -4.5, -3.1931, 0.0]){
@@ -48,9 +48,7 @@ namespace Microsoft.Quantum.Numerics.ToffoliTests {
                     InitFxP(a, fp);
                     AddConstantFxP(b, fp);
                     let measured = MeasureFxP(fp);
-                    EqualityFactB(AbsD(measured - (a+b)) <= 1./IntAsDouble(2^6),
-                        true,
-                        $"FixedPoint addition {a}+{b} != {measured}.");
+                    EqualityWithinToleranceFact(measured, (a+b), 1. / IntAsDouble(2^6));
                 }
             }
         }
@@ -66,9 +64,7 @@ namespace Microsoft.Quantum.Numerics.ToffoliTests {
                     InitFxP(b, fp2);
                     AddFxP(fp1, fp2);
                     let measured = MeasureFxP(fp2);
-                    EqualityFactB(AbsD(measured - (a+b)) <= 1./IntAsDouble(2^6),
-                        true,
-                        $"FixedPoint addition {a}+{b} != {measured}.");
+                    EqualityWithinToleranceFact(measured, (a+b), 1. / IntAsDouble(2^6));
                     ResetAll(xs + ys);
                 }
             }
@@ -89,9 +85,7 @@ namespace Microsoft.Quantum.Numerics.ToffoliTests {
                         let measured = MeasureFxP(fp3);
                         let eps = 1./IntAsDouble(2^(13-pos));
                         let epsTotal = AbsD(a) * eps + AbsD(b) * eps + eps * eps;
-                        EqualityFactB(AbsD(measured - (a*b)) <= epsTotal,
-                            true,
-                            $"FixedPoint multiplication {a}*{b} != {measured}.");
+                        EqualityWithinToleranceFact(measured, a * b, epsTotal);
                         ResetAll(xs + ys + zs);
                     }
                 }
@@ -110,9 +104,7 @@ namespace Microsoft.Quantum.Numerics.ToffoliTests {
                     let measured = MeasureFxP(fp2);
                     let eps = 1./IntAsDouble(2^(13-pos));
                     let epsTotal = 2. * AbsD(a) * eps + eps * eps;
-                    EqualityFactB(AbsD(measured - (a*a)) <= epsTotal,
-                        true,
-                        $"FixedPoint square {a}^2 != {measured}.");
+                    EqualityWithinToleranceFact(measured, a * b, epsTotal);
                     ResetAll(xs + ys);
                 }
             }
@@ -172,12 +164,10 @@ namespace Microsoft.Quantum.Numerics.ToffoliTests {
                         let measured = MeasureFxP(fp2);
                         let eps = 1./IntAsDouble(2^(13-pos));
                         let epsTotal = 2. * AbsD(a) * eps + eps * eps;
-                        if (ctrl == 3){
-                            EqualityFactB(AbsD(measured - (a*a)) <= epsTotal,
-                                true,
-                                $"FixedPoint square {a}^2 != {measured}.");
+                        if (ctrl == 3) {
+                            EqualityWithinToleranceFact(measured, a * a, epsTotal);
                         }
-                        else{
+                        else {
                             let measuredI = MeasureInteger(LittleEndian(ys));
                             EqualityFactI(measuredI, 0,
                                 "Controlled FixedPoint square changed the result register!");
@@ -206,11 +196,9 @@ namespace Microsoft.Quantum.Numerics.ToffoliTests {
                             let eps = 1./IntAsDouble(2^(13-pos));
                             let epsTotal = AbsD(a) * eps + AbsD(b) * eps + eps * eps;
                             if (ctrl == 3) {
-                                EqualityFactB(AbsD(measured - (a*b)) <= epsTotal,
-                                    true,
-                                    $"FixedPoint multiplication {a}*{b} != {measured}.");
+                                EqualityWithinToleranceFact(measured, a * b, epsTotal);
                             }
-                            else{
+                            else {
                                 let measuredI = MeasureInteger(LittleEndian(zs));
                                 EqualityFactI(measuredI, 0,
                                     "Controlled FixedPoint multiplication changed the output register!");
@@ -249,9 +237,7 @@ namespace Microsoft.Quantum.Numerics.ToffoliTests {
                             set result = result * a + coeff;
                             set epsTotal = epsTotal + eps;
                         }
-                        EqualityFactB(AbsD(measured - result) <= epsTotal,
-                            true,
-                            $"FixedPoint polynomial evaluation: {measured} != {result}.");
+                        EqualityWithinToleranceFact(measured, result, epsTotal);
                         ResetAll(xs + ys);
                     }
                 }
@@ -287,9 +273,7 @@ namespace Microsoft.Quantum.Numerics.ToffoliTests {
                                 set epsTotal = epsTotal + eps;
                             }
                             if (ctrl == 3) {
-                                EqualityFactB(AbsD(measured - result) <= epsTotal,
-                                    true,
-                                    $"FixedPoint polynomial evaluation: {measured} != {result}.");
+                                EqualityWithinToleranceFact(measured, result, epsTotal);
                             }
                             else{
                                 let measuredI = MeasureInteger(LittleEndian(ys));
@@ -334,9 +318,7 @@ namespace Microsoft.Quantum.Numerics.ToffoliTests {
                                        + eps * epsTotal;
                         set result = result * a;
 
-                        EqualityFactB(AbsD(measured - result) <= epsTotal,
-                            true,
-                            $"FixedPoint odd polynomial evaluation: {measured} != {result}.");
+                        EqualityWithinToleranceFact(measured, result, epsTotal);
                         ResetAll(xs + ys);
                     }
                 }
@@ -376,9 +358,7 @@ namespace Microsoft.Quantum.Numerics.ToffoliTests {
                                            + eps * epsTotal;
                             set result = result * a;
                             if (ctrl == 3) {
-                                EqualityFactB(AbsD(measured - result) <= epsTotal,
-                                    true,
-                                    $"FixedPoint polynomial evaluation: {measured} != {result}.");
+                                EqualityWithinToleranceFact(measured, result, epsTotal);
                             }
                             else{
                                 let measuredI = MeasureInteger(LittleEndian(ys));

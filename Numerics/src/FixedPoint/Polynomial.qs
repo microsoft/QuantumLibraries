@@ -3,9 +3,9 @@
 
 namespace Microsoft.Quantum.Arithmetic {
     open Microsoft.Quantum.Canon;
-    
+
     /// # Summary
-    /// Polynomial evaluation in a fixed-point representation
+    /// Evaluates a polynomial in a fixed-point representation.
     ///
     /// # Input
     /// ## coefficients
@@ -13,12 +13,12 @@ namespace Microsoft.Quantum.Arithmetic {
     /// $[a_0, a_1, ..., a_d]$ for the polynomial
     /// $P(x) = a_0 + a_1 x + \cdots + a_d x^d$.
     /// ## fpx
-    /// Input FixedPoint number for which to evaluate the polynomial.
+    /// Input fixed-point number for which to evaluate the polynomial.
     /// ## result
-    /// Output FixedPoint number which will hold P(x). Must be in state
+    /// Output fixed-point number which will hold $P(x)$. Must be in state
     /// $\ket{0}$ initially.
     operation EvaluatePolynomialFxP(coefficients : Double[], fpx : FixedPoint,
-                                   result : FixedPoint) : Unit {
+                                   result : FixedPoint) : Unit is Adj {
         body (...) {
             (Controlled EvaluatePolynomialFxP) (new Qubit[0],
                 (coefficients, fpx, result));
@@ -64,12 +64,10 @@ namespace Microsoft.Quantum.Arithmetic {
                 }
             }
         }
-        adjoint auto;
-        adjoint controlled auto;
     }
 
     /// # Summary
-    /// Evaluation of an even polynomial in a fixed-point representation
+    /// Evaluates an even polynomial in a fixed-point representation.
     ///
     /// # Input
     /// ## coefficients
@@ -77,12 +75,12 @@ namespace Microsoft.Quantum.Arithmetic {
     /// $[a_0, a_1, ..., a_k]$ for the even polynomial
     /// $P(x) = a_0 + a_1 x^2 + \cdots + a_k x^{2k}$.
     /// ## fpx
-    /// Input FixedPoint number for which to evaluate the polynomial.
+    /// Input fixed-point number for which to evaluate the polynomial.
     /// ## result
-    /// Output FixedPoint number which will hold P(x). Must be in state
+    /// Output fixed-point number which will hold $P(x)$. Must be in state
     /// $\ket{0}$ initially.
     operation EvaluateEvenPolynomialFxP(coefficients : Double[], fpx : FixedPoint,
-                                       result : FixedPoint) : Unit {
+                                       result : FixedPoint) : Unit is Adj {
         body (...) {
             (Controlled EvaluateEvenPolynomialFxP) (new Qubit[0],
                 (coefficients, fpx, result));
@@ -109,12 +107,10 @@ namespace Microsoft.Quantum.Arithmetic {
                 }
             }
         }
-        adjoint auto;
-        adjoint controlled auto;
     }
 
     /// # Summary
-    /// Evaluation of an odd polynomial in a fixed-point representation
+    /// Evaluates an odd polynomial in a fixed-point representation.
     ///
     /// # Input
     /// ## coefficients
@@ -122,12 +118,12 @@ namespace Microsoft.Quantum.Arithmetic {
     /// $[a_0, a_1, ..., a_k]$ for the odd polynomial
     /// $P(x) = a_0 x + a_1 x^3 + \cdots + a_k x^{2k+1}$.
     /// ## fpx
-    /// Input FixedPoint number for which to evaluate the polynomial.
+    /// Input fixed-point number for which to evaluate the polynomial.
     /// ## result
-    /// Output FixedPoint number which will hold P(x). Must be in state
+    /// Output fixed-point number which will hold P(x). Must be in state
     /// $\ket{0}$ initially.
     operation EvaluateOddPolynomialFxP(coefficients : Double[], fpx : FixedPoint,
-                                      result : FixedPoint) : Unit {
+                                      result : FixedPoint) : Unit is Adj {
         body (...) {
             (Controlled EvaluateOddPolynomialFxP) (new Qubit[0],
                 (coefficients, fpx, result));
@@ -148,7 +144,5 @@ namespace Microsoft.Quantum.Arithmetic {
                 }
             }
         }
-        adjoint auto;
-        adjoint controlled auto;
     }
 }

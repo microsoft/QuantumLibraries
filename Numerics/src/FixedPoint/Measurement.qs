@@ -7,7 +7,8 @@ namespace Microsoft.Quantum.Arithmetic {
     open Microsoft.Quantum.Math;
 
     /// # Summary
-    /// Measure a fixed-point number and return its value as Double.
+    /// Measure a fixed-point number, returns its value as Double, and resets
+    /// all the register to zero.
     ///
     /// # Input
     /// ## fp
