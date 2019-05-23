@@ -104,7 +104,7 @@ namespace Microsoft.Quantum.Numerics.ToffoliTests {
                     let measured = MeasureFxP(fp2);
                     let eps = 1./IntAsDouble(2^(13-pos));
                     let epsTotal = 2. * AbsD(a) * eps + eps * eps;
-                    EqualityWithinToleranceFact(measured, a * b, epsTotal);
+                    EqualityWithinToleranceFact(measured, a * a, epsTotal);
                     ResetAll(xs + ys);
                 }
             }
