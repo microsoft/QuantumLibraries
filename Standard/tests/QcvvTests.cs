@@ -16,7 +16,7 @@ namespace Microsoft.Quantum.Tests
     public class EstimateFrequency
     {
         [Fact]
-        public void TestEmulation()
+        public void EstimateFrequencyWithAndWithoutEmulation()
         {
             void TestOne(SimulatorBase sim, int expected)
             {
@@ -29,7 +29,7 @@ namespace Microsoft.Quantum.Tests
                 if (sim is IDisposable dis) dis.Dispose();
             }
 
-            TestOne(new QuantumSimulator(), 1);
+            TestOne(new QuantumSimulator(), 2);
             TestOne(new ToffoliSimulator(), 2000);
         }
     }
