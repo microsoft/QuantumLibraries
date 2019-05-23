@@ -188,7 +188,7 @@ namespace Microsoft.Quantum.Canon {
     /// Please use @"Microsoft.Quantum.Arithmetic.MultiplyAndAddByModularInteger".
     operation ModularAddProductLE (constMultiplier : Int, modulus : Int, multiplier : LittleEndian, summand : LittleEndian) : Unit {
         body (...) {
-            _Renamed("Microsoft.Quantum.Canon.ModularIncrementPhaseLE", "Microsoft.Quantum.Arithmetic.MultiplyAndAddByModularInteger");
+            _Renamed("Microsoft.Quantum.Canon.ModularAddProductLE", "Microsoft.Quantum.Arithmetic.MultiplyAndAddByModularInteger");
             MultiplyAndAddByModularInteger(constMultiplier, modulus, multiplier, summand);
         }
         adjoint auto;
