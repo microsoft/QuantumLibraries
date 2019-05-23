@@ -246,7 +246,13 @@ namespace Microsoft.Quantum.Chemistry.OrbitalIntegrals
         /// </summary>
         public static IEnumerable<int> ToInts(this IEnumerable<SpinOrbital> spinOrbitals, IndexConvention indexConvention, int nOrbitals) =>
             spinOrbitals.Select(x => x.ToInt(indexConvention, nOrbitals));
-        
+
+        /// <summary>
+        /// Converts an array of spin-orbitals into an array of integers representing each spin orbital.
+        /// </summary>
+        public static IEnumerable<int> ToInts(this IEnumerable<SpinOrbital> spinOrbitals) =>
+            spinOrbitals.Select(x => x.ToInt());
+
         /// <summary>
         /// Converts an array of orbital index and spin index tuples into an array of spin-orbitals.
         /// </summary>
