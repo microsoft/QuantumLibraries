@@ -2,13 +2,12 @@
 // Licensed under the MIT License.
 
 namespace Microsoft.Quantum.Chemistry.JordanWigner {
-    open Microsoft.Quantum.Primitive;
-    open Microsoft.Quantum.Extensions.Math;
+    open Microsoft.Quantum.Intrinsic;
+    open Microsoft.Quantum.Math;
     open Microsoft.Quantum.Chemistry;
     open Microsoft.Quantum.Convert;
     open Microsoft.Quantum.Simulation;
     open Microsoft.Quantum.Arrays;
-    open Microsoft.Quantum.Math;
 
     /// # Summary
     /// Computes Z component of Jordan-Wigner string between
@@ -28,20 +27,20 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
     /// let bitString = _ComputeJordanWignerBitString(6, [0,1,2,6]) ;
     /// // bitString is [false, false, false ,true, true, true, false].
     function _ComputeJordanWignerBitString(nFermions: Int,  idxFermions: Int[]) : Bool[] {
-        if(Length(idxFermions) % 2 != 0){
+        if (Length(idxFermions) % 2 != 0) {
             fail $"ComputeJordanWignerString failed. `idxFermions` must contain an even number of terms.";
         }
-        
+
         mutable zString = new Bool[nFermions];
-        for (fermionIdx in idxFermions){
-                if(fermionIdx >= nFermions){
-                    fail $"ComputeJordanWignerString failed. fermionIdx {fermionIdx} out of range.";
+        for (fermionIdx in idxFermions) {
+            if (fermionIdx >= nFermions) {
+                fail $"ComputeJordanWignerString failed. fermionIdx {fermionIdx} out of range.";
             }
-            for(idx in 0..fermionIdx){
-                set zString w/= idx <- zString[idx] ? false | true;
+            for (idx in 0..fermionIdx) {
+                set zString w/= idx <- not zString[idx];
             }
         }
-        
+
         for (fermionIdx in idxFermions){
             set zString w/= fermionIdx <- false;
         }
@@ -60,12 +59,12 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
     function _ComputeJordanWignerPauliString(nFermions: Int,  idxFermions: Int[], pauliReplacements : Pauli[]) : Pauli[] {
         mutable pauliString = _ComputeJordanWignerPauliZString(nFermions, idxFermions);
 
-        for(idx in IndexRange(idxFermions)){
+        for (idx in IndexRange(idxFermions)) {
             let idxFermion = idxFermions[idx];
             let op = pauliReplacements[idx];
             set pauliString w/= idxFermion <- op;
         }
-        
+
         return pauliString;
     }
 
@@ -79,25 +78,18 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
     /// Duration of time-evolution.
     /// ## qubits
     /// Qubits of Hamiltonian.
-    operation _ApplyJordanWignerClusterOperatorPQTerm (term : GeneratorIndex, stepSize: Double, qubits : Qubit[]) : Unit {
-        
-        body (...) {
-            let ((idxTermType, coeff), idxFermions) = term!;
-            let p = idxFermions[0];
-            let q = idxFermions[1];
-            let angle = 0.5 * coeff[0] * stepSize;
-            let ops = [[PauliX, PauliY], [PauliY, PauliX]];
-            let signs = [+1.0, -1.0];
+    operation _ApplyJordanWignerClusterOperatorPQTerm (term : GeneratorIndex, stepSize: Double, qubits : Qubit[]) : Unit is Adj + Ctl {
+        let ((idxTermType, coeff), idxFermions) = term!;
+        let p = idxFermions[0];
+        let q = idxFermions[1];
+        let angle = 0.5 * coeff[0] * stepSize;
+        let ops = [[PauliX, PauliY], [PauliY, PauliX]];
+        let signs = [+1.0, -1.0];
 
-            for (idxOp in 0 .. Length(ops) - 1) {
-                let pauliString = _ComputeJordanWignerPauliString(Length(qubits), idxFermions, ops[idxOp]);
-                let sign = signs[idxOp];
-                Exp(pauliString, (p < q ? 1.0 | -1.0) * sign * angle, qubits);
-            }
+        for ((op, sign) in Zip(ops, signs)) {
+            let pauliString = _ComputeJordanWignerPauliString(Length(qubits), idxFermions, op);
+            Exp(pauliString, (p < q ? 1.0 | -1.0) * sign * angle, qubits);
         }
-        adjoint invert;
-        controlled distribute;
-        controlled adjoint distribute;
     }
 
     /// # Summary
@@ -110,33 +102,26 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
     /// Duration of time-evolution.
     /// ## qubits
     /// Qubits of Hamiltonian.
-    operation _ApplyJordanWignerClusterOperatorPQQRTerm (term : GeneratorIndex, stepSize: Double, qubits : Qubit[]) : Unit {
-        
-        body (...) {
-            let ((idxTermType, coeff), idxFermions) = term!;
-            let angle = (0.25 * coeff[0]);
-            let p = idxFermions[0];
-            let q = idxFermions[1];
-            let r = idxFermions[3];
+    operation _ApplyJordanWignerClusterOperatorPQQRTerm (term : GeneratorIndex, stepSize: Double, qubits : Qubit[]) : Unit is Adj + Ctl {
+        let ((idxTermType, coeff), idxFermions) = term!;
+        let angle = (0.25 * coeff[0]);
+        let p = idxFermions[0];
+        let q = idxFermions[1];
+        let r = idxFermions[3];
 
-            // For all cases, do the same thing:
-            // p < r < q (1/4)(1-Z_q)(Z_{r-1,p+1})(X_p Y_r - Y_p X_r) (same as Hermitian conjugate of r < p < q)
-            // q < p < r (1/4)(1-Z_q)(Z_{r-1,p+1})(X_p Y_r - Y_p X_r)
-            // p < q < r (1/4)(1-Z_q)(Z_{r-1,p+1})(X_p Y_r - Y_p X_r)
-            
-            // This amounts to applying a PQ term, followed by same PQ term after a CNOT from q to the parity bit.
-            let termPR0 = GeneratorIndex((idxTermType, [angle * 2.0]), [p, r]);
-            _ApplyJordanWignerClusterOperatorPQTerm(termPR0, stepSize, qubits);
+        // For all cases, do the same thing:
+        // p < r < q (1/4)(1-Z_q)(Z_{r-1,p+1})(X_p Y_r - Y_p X_r) (same as Hermitian conjugate of r < p < q)
+        // q < p < r (1/4)(1-Z_q)(Z_{r-1,p+1})(X_p Y_r - Y_p X_r)
+        // p < q < r (1/4)(1-Z_q)(Z_{r-1,p+1})(X_p Y_r - Y_p X_r)
 
-            let pNew = q > p ? p | p - 1;
-            let rNew = q > r ? r | r - 1;
-            let termPR1 = GeneratorIndex((idxTermType, [-1.0 * angle * 2.0]), [pNew, rNew]);
-            _ApplyJordanWignerClusterOperatorPQTerm(termPR1, stepSize, Exclude([q], qubits));
-        }
-        
-        adjoint invert;
-        controlled distribute;
-        controlled adjoint distribute;
+        // This amounts to applying a PQ term, followed by same PQ term after a CNOT from q to the parity bit.
+        let termPR0 = GeneratorIndex((idxTermType, [angle * 2.0]), [p, r]);
+        _ApplyJordanWignerClusterOperatorPQTerm(termPR0, stepSize, qubits);
+
+        let pNew = q > p ? p | p - 1;
+        let rNew = q > r ? r | r - 1;
+        let termPR1 = GeneratorIndex((idxTermType, [-1.0 * angle * 2.0]), [pNew, rNew]);
+        _ApplyJordanWignerClusterOperatorPQTerm(termPR1, stepSize, Exclude([q], qubits));
     }
 
     /// # Summary
@@ -149,36 +134,28 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
     /// Duration of time-evolution.
     /// ## qubits
     /// Qubits of Hamiltonian.
-    operation _ApplyJordanWignerClusterOperatorPQRSTerm (term : GeneratorIndex, stepSize: Double, qubits : Qubit[]) : Unit {
+    operation _ApplyJordanWignerClusterOperatorPQRSTerm (term : GeneratorIndex, stepSize: Double, qubits : Qubit[]) : Unit is Adj + Ctl {
+        let ((idxTermType, coeff), idxFermions) = term!;
+        let p = idxFermions[0];
+        let q = idxFermions[1];
+        let r = idxFermions[2];
+        let s = idxFermions[3];
+        let angle = 0.125 * coeff[0] * stepSize;
         
-        body (...) {
-            let ((idxTermType, coeff), idxFermions) = term!;
-            let p = idxFermions[0];
-            let q = idxFermions[1];
-            let r = idxFermions[2];
-            let s = idxFermions[3];
-            let angle = 0.125 * coeff[0] * stepSize;
-            
-            let x = PauliX;
-            let y = PauliY;
+        let x = PauliX;
+        let y = PauliY;
 
-            let ops = [[y,y,x,y],[x,x,x,y],[x,y,y,y],[y,x,y,y],[x,y,x,x],[y,x,x,x],[y,y,y,x],[x,x,y,x]];
-            let (sortedIndices, signs, globalSign) = _JordanWignerClusterOperatorPQRSTermSigns([p,q,r,s]);
+        let ops = [[y,y,x,y],[x,x,x,y],[x,y,y,y],[y,x,y,y],[x,y,x,x],[y,x,x,x],[y,y,y,x],[x,x,y,x]];
+        let (sortedIndices, signs, globalSign) = _JordanWignerClusterOperatorPQRSTermSigns([p,q,r,s]);
 
-            for (idxOp in 0 .. Length(ops) - 1) {
-                let pauliString = _ComputeJordanWignerPauliString(Length(qubits), idxFermions, ops[idxOp]);
-                let sign = signs[idxOp];
-                Exp(pauliString, globalSign * sign * angle, qubits);
-            }
+        for (idxOp in 0 .. Length(ops) - 1) {
+            let pauliString = _ComputeJordanWignerPauliString(Length(qubits), idxFermions, ops[idxOp]);
+            let sign = signs[idxOp];
+            Exp(pauliString, globalSign * sign * angle, qubits);
         }
-        
-        adjoint invert;
-        controlled distribute;
-        controlled adjoint distribute;
     }
     
-    function _JordanWignerClusterOperatorPQRSTermSigns(indices: Int[]) : (Int[], Double[], Double)
-    {
+    function _JordanWignerClusterOperatorPQRSTermSigns(indices: Int[]) : (Int[], Double[], Double) {
         let p = indices[0];
         let q = indices[1];
         let r = indices[2];
@@ -249,12 +226,11 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
 
     function _JordanWignerClusterOperatorGeneratorIndex(data: JordanWignerInputState): GeneratorIndex {
         let ((real, imaginary), idxFermions) = data!;
-        if(Length(idxFermions) == 2){
+        if (Length(idxFermions) == 2) {
             // PQ term
             return GeneratorIndex(([0],[real]),idxFermions);
-        }
-        elif(Length(idxFermions) == 4){
-            if(idxFermions[1] == idxFermions[2]){
+        } elif (Length(idxFermions) == 4) {
+            if (idxFermions[1] == idxFermions[2]){
                 // PQQR term
                 return GeneratorIndex(([1],[real]),idxFermions);
             }
@@ -283,26 +259,19 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
     /// Dummy variable to match signature of simulation algorithms.
     /// ## qubits
     /// Register acted upon by time-evolution operator.
-    operation _JordanWignerClusterOperatorImpl(generatorIndex : GeneratorIndex, stepSize : Double, qubits : Qubit[]) : Unit {
+    operation _JordanWignerClusterOperatorImpl(generatorIndex : GeneratorIndex, stepSize : Double, qubits : Qubit[]) : Unit is Adj + Ctl {
+        let ((idxTermType, idxDoubles), idxFermions) = generatorIndex!;
+        let termType = idxTermType[0];
         
-        body (...) {
-            let ((idxTermType, idxDoubles), idxFermions) = generatorIndex!;
-            let termType = idxTermType[0];
-            
-            if (termType == 0) {
-                _ApplyJordanWignerClusterOperatorPQTerm (generatorIndex, stepSize, qubits);
-            }
-            elif (termType == 1) {
-                _ApplyJordanWignerClusterOperatorPQQRTerm(generatorIndex, stepSize, qubits);
-            }
-            elif (termType == 2) {
-                _ApplyJordanWignerClusterOperatorPQRSTerm (generatorIndex, stepSize, qubits);
-            }
+        if (termType == 0) {
+            _ApplyJordanWignerClusterOperatorPQTerm (generatorIndex, stepSize, qubits);
         }
-        
-        adjoint invert;
-        controlled distribute;
-        controlled adjoint distribute;
+        elif (termType == 1) {
+            _ApplyJordanWignerClusterOperatorPQQRTerm(generatorIndex, stepSize, qubits);
+        }
+        elif (termType == 2) {
+            _ApplyJordanWignerClusterOperatorPQRSTerm (generatorIndex, stepSize, qubits);
+        }
     }
     
     
