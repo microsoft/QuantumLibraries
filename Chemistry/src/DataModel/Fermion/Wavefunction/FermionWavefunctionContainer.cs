@@ -27,7 +27,7 @@ namespace Microsoft.Quantum.Chemistry.Fermion
         /// <summary>
         /// Type of wavefunction.
         /// </summary>
-        public StateType Method { get; set; } = StateType.NotRcegonized;
+        public StateType Method { get; set; } = StateType.NotRecognized;
         /// <summary>
         /// Energy of wavefunction relative to a Hamiltonian containing this object.
         /// </summary>
