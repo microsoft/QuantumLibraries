@@ -26,8 +26,8 @@
 
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Chemistry\src\DataModel\DataModel.csproj" />
-    <ProjectReference Include="..\..\Chemistry\src\Runtime\Runtime.csproj" />
+    <ProjectReference Include="..\DataModel\DataModel.csproj" />
+    <ProjectReference Include="..\Runtime\Runtime.csproj" PrivateAssets="all" />
   </ItemGroup>
 
 
