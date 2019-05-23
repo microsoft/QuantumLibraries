@@ -84,6 +84,7 @@ namespace Microsoft.Quantum.Characterization {
     /// n\_{\uparrow} / n\_{\text{measurements}}$, where $n\_{\uparrow}$ is
     /// the number of `Zero` results observed.
     ///
+    /// # Remarks
     /// For adjointable operations, certain assumptions can be made such like
     /// calling the operation will prepare the qubits to exactly the same state,
     /// which allow target machines to make some performance optimizations.
