@@ -168,11 +168,7 @@ namespace Microsoft.Quantum.Chemistry.OrbitalIntegrals
         /// </summary>
         /// <param name="x">Spin orbital to compare with.</param>
         /// <returns>Result of the comparison.</returns>
-        public int CompareTo(SpinOrbital x)
-        {
-            var orbCompare = Orbital.CompareTo(x.Orbital);
-            return orbCompare != 0 ? orbCompare : Spin.CompareTo(x.Spin);
-        }
+        public int CompareTo(SpinOrbital x) => ToInt().CompareTo(x.ToInt());
 
         /*
         /// <summary>

@@ -3,49 +3,79 @@
 
 using System;
 using System.Linq;
+using System.Numerics;
 using System.Collections.Generic;
 using Microsoft.Quantum.Chemistry.OrbitalIntegrals;
 using Microsoft.Quantum.Chemistry.Fermion;
+using Microsoft.Quantum.Chemistry.LadderOperators;
 
 namespace Microsoft.Quantum.Chemistry.Fermion
 { 
     public static partial class Extensions
     {
-
         /// <summary>
         /// Populates the Unitary coupled-cluster wavefunction with all possible spin-preserving exitations
         /// from occupied orbitals to virtual orbitals.
         /// </summary>
         /// <param name="occupiedOrbitals">Occupied orbitals that annihilation operators act on.</param>
-        /// <param name="virtualOrbitals">Virtual orbitals that excitation operators act on.</param>
-        public void AddAllUCCSDSingletExcitations(List<int> occupiedOrbitals, List<int> virtualOrbitals)
+        /// <param name="nOrbitals">Number of orbitals.</param>
+        /// <example>
+        /// <code>
+        /// 
+        /// </code>
+        /// </example>
+        public static UnitaryCCWavefunction<SpinOrbital> AddAllUCCSDSingletExcitations(this SingleCFWavefunction<SpinOrbital> occupiedOrbitals, int nOrbitals)
         {
-            var singlesSinglet = new[] { (Spin.u, Spin.u), (Spin.d, Spin.d) };
-            var doublesSinglet = new[] { (Spin.u, Spin.u, Spin.u, Spin.u), (Spin.u, Spin.d, Spin.d, Spin.u), (Spin.d, Spin.d, Spin.d, Spin.d) };
+            // Create list of unoccupied spin-orbitals
+            var virtualOrbitals = Enumerable.Range(0, nOrbitals).Select(x => new SpinOrbital(x, Spin.u))
+                .Concat(Enumerable.Range(0, nOrbitals).Select(x => new SpinOrbital(x, Spin.d)))
+                .Except(occupiedOrbitals.Sequence.Select(o => o.Index));
+
+            var outputState = new UnitaryCCWavefunction<SpinOrbital>()
+            {
+                Reference = occupiedOrbitals
+            };
 
             // Populate singles excitations.
-            foreach (var occupiedIdx in occupiedOrbitals)
+            foreach (var occupiedIdx in occupiedOrbitals.Sequence.Select(o => o.Index))
             {
                 foreach (var virtualIdx in virtualOrbitals)
                 {
-                    foreach (var spins in singlesSinglet)
+                    if (occupiedIdx.Spin == virtualIdx.Spin)
                     {
-                        Set(new[] { (virtualIdx, spins.Item1), (occupiedIdx, spins.Item2) }.ToLadderSequence(), new Complex());
+                        var term = new IndexOrderedSequence<SpinOrbital>(new[] { virtualIdx, occupiedIdx }.ToLadderSequence());
+                        outputState.Set(term, new Complex());
                     }
                 }
             }
 
-
-            /// <summary>
-            /// Set a term of the wavefunction.
-            /// </summary>
-            /// <param name="term">Index to term to set amplitude of.</param>
-            /// <param name="amplitude">Relative amplitude of term.</param>
-            public void Set(IndexOrderedSequence<TIndex> term, Complex amplitude)
+            // Populate doubles excitations.
+            foreach (var occupiedIdx0 in occupiedOrbitals.Sequence.Select(o => o.Index))
             {
-                Excitations[term] = amplitude * (double)term.Coefficient;
-                term.Coefficient = 1;
+                foreach (var occupiedIdx1 in occupiedOrbitals.Sequence.Select(o => o.Index))
+                {
+                    // Only loop over distinct pairs of occupied spin orbitals
+                    if (occupiedIdx0.ToInt() < occupiedIdx1.ToInt())
+                    {
+                        foreach (var virtualIdx0 in virtualOrbitals)
+                        {
+                            foreach (var virtualIdx1 in virtualOrbitals)
+                            {
+                                // Only loop over distinct pairs of occupied spin orbitals
+                                if (virtualIdx0.ToInt() < virtualIdx1.ToInt())
+                                {
+                                    if (virtualIdx0.Spin + virtualIdx1.Spin == occupiedIdx0.Spin + occupiedIdx1.Spin)
+                                    {
+                                        var term = new IndexOrderedSequence<SpinOrbital>(new[] { virtualIdx1, virtualIdx0, occupiedIdx1, occupiedIdx0 }.ToLadderSequence());
+                                        outputState.Set(term, new Complex());
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
             }
+            return outputState;
         }
     }
 

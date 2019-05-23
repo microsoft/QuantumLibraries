@@ -57,7 +57,7 @@ namespace Microsoft.Quantum.Chemistry.LadderOperators
         /// </summary>
         /// <returns><c>true</c> if the creation opeartor sequence of a <c>LadderSequence</c> is in 
         /// canonical order. <c>false</c> otherwise</returns>
-        public bool IsInIndexCreationCanonicalOrder() => Sequence.Where(o => o._JsonGetRaisingLowering() == RaisingLowering.u).Select(o => o.Index).IsInAscendingOrder();
+        public bool IsInIndexCreationCanonicalOrder() => Sequence.Where(o => o.Type == RaisingLowering.u).Select(o => o.Index).IsInAscendingOrder();
 
         /// <summary>
         ///  Checks whether the annihilation operator sequence of a <see cref="LadderSequence"/> is in 
@@ -66,7 +66,7 @@ namespace Microsoft.Quantum.Chemistry.LadderOperators
         /// </summary>
         /// <returns><c>true</c> if the annihilation opeartor sequence of a <c>LadderSequence</c> is in 
         /// canonical order. <c>false</c> otherwise</returns>
-        public bool IsInIndexAnnihilationCanonicalOrder() => Sequence.Where(o => o._JsonGetRaisingLowering() == RaisingLowering.d).Select(o => o.Index).Reverse().IsInAscendingOrder();
+        public bool IsInIndexAnnihilationCanonicalOrder() => Sequence.Where(o => o.Type == RaisingLowering.d).Select(o => o.Index).Reverse().IsInAscendingOrder();
         #endregion
         
         /// <summary>

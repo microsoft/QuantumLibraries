@@ -7,7 +7,7 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using Microsoft.Quantum.Chemistry.LadderOperators;
-
+using Microsoft.Quantum.Chemistry.OrbitalIntegrals;
 
 namespace Microsoft.Quantum.Chemistry.Tests
 {
@@ -180,6 +180,21 @@ namespace Microsoft.Quantum.Chemistry.Tests
             var output = term.ToIndexOrder();
             Assert.Contains(expected[0].Sequence, output.Select(o => o.Sequence));
             Assert.Contains(expected[1].Sequence, output.Select(o => o.Sequence));
+        }
+
+
+        [Fact]
+        public void ToSpinOrbitalIndexOrder()
+        {
+
+            var term = new[] { (2, Spin.u), (1, Spin.u) };
+
+            // Test after indexing
+            var termInts = term.Select(o => new SpinOrbital(o).ToInt());
+
+            var orderedSpinOrbitals = new IndexOrderedSequence<SpinOrbital>(term.ToLadderSequence());
+            var orderedInts = new IndexOrderedSequence<int>(termInts.ToLadderSequence());
+
         }
 
     }
