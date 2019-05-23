@@ -121,7 +121,7 @@ namespace Microsoft.Quantum.Standard.Emulation
             /* initialize */
             r = Min(SuccessProbability, FailureProbability);
             q = 1.0 - r;
-            fm = SuccessProbability * r + r;
+            fm = NSamples * r + r;
             m = (long)Floor(fm);
             p1 = Floor(2.195 * Sqrt(NSamples * r * q) - 4.6 * q) + 0.5;
             xm = m + 0.5;
