@@ -1,6 +1,9 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
+// This test ensures that any chemistry library syntax changes
+// that affect samples are detected.
+
 #region Using Statements
 // We will need several different libraries in this sample.
 // Here, we expose these libraries to our program using the
@@ -12,6 +15,7 @@
 using Microsoft.Quantum.Chemistry;
 using Microsoft.Quantum.Chemistry.OrbitalIntegrals;
 using Microsoft.Quantum.Chemistry.Fermion;
+using Microsoft.Quantum.Chemistry.LadderOperators;
 
 // To count gates, we'll use the trace simulator provided with
 // the Quantum Development Kit.
@@ -36,13 +40,17 @@ using Microsoft.Extensions.Logging;
 
 // We use this for convnience functions for manipulation arrays.
 using System.Linq;
+
+//
+using Xunit;
 #endregion
 
-namespace Microsoft.Quantum.Chemistry.Samples.Hubbard
+namespace Microsoft.Quantum.Chemistry.Tests.Samples.Hubbard
 {
-    class Program
+    public static class CreateHubbardHamiltonian
     {
-        static void Main(string[] args)
+        [Fact]
+        static void CreateHubbardHamiltonianTest()
         {
             //////////////////////////////////////////////////////////////////////////
             // Introduction //////////////////////////////////////////////////////////
@@ -91,7 +99,7 @@ namespace Microsoft.Quantum.Chemistry.Samples.Hubbard
             var spinOrbital0 = new SpinOrbital(orbitalIdx, spin);
 
             // We may also map the composite spin-orbital index into a single integer `x`
-            // using the default formula `x = 2 * orbitalIdx + spin;
+            // using the default formula `x = 2 * orbitalIdx + spin`;
             var spinOrbital0Int = spinOrbital0.ToInt();
 
             // Other indexing schemes are possible. For example, we may use the formula
@@ -115,7 +123,7 @@ namespace Microsoft.Quantum.Chemistry.Samples.Hubbard
             // are also assumed to be equal as chemistry Hamiltonian often conserve
             // particle number.
 
-            // Let us represent the fermion term 0.5 a†ᵢₛ aᵢ₊₁ₛ, where `i` is 5 and `s`
+            // Let us represent the Hermitian fermion term 0.5 (a†ᵢₛ aᵢ₊₁ₛ + a†ᵢ₊₁ₛ aᵢₛ), where `i` is 5 and `s`
             // is spin up. As mentioned, we require a coefficient
 
             var coefficient = 0.5;
@@ -143,6 +151,7 @@ namespace Microsoft.Quantum.Chemistry.Samples.Hubbard
             var fermionTerm1 = new HermitianFermionTerm(spinOrbitals1.ToInts());
             var fermionTerm2 = new HermitianFermionTerm(new[] { (2, 0), (2, 1), (2, 1), (2, 0) }.ToSpinOrbitals().ToInts());
 
+
             // Let us print these FermionTerms to see what they contain.
             // Note that Conjugation is an array describing the sequence of creation and annihilation operators.;
             Console.WriteLine($"Hamiltonian term representation:");
@@ -157,7 +166,7 @@ namespace Microsoft.Quantum.Chemistry.Samples.Hubbard
             // the same sequence in reverse order. To illustrate,
             var fermionTerm0Reversed = new HermitianFermionTerm(spinOrbitals0.ToInts().Reverse());//, coefficient);
 
-            Console.WriteLine($"Fermion terms with reverse spin-orbital indices:");
+            Console.WriteLine($"Hermitian fermion term with reversed spin-orbital indices:");
             Console.WriteLine($"Original term                      : {fermionTerm0}");
             Console.WriteLine($"Reversed spin-orbital sequence term: {fermionTerm0Reversed}");
             Console.WriteLine($"");
@@ -176,17 +185,12 @@ namespace Microsoft.Quantum.Chemistry.Samples.Hubbard
             hamiltonian.Add(fermionTerm1, 0.123);
             hamiltonian.Add(fermionTerm2, 0.456);
 
+            // Note that we have two repeated terms -- their coefficients are automatically
+            // added. This also sorts the terms in a certain canonical order.
             // Let us print this Hamiltonian.
             Console.WriteLine($"Hamiltonian representation:");
             Console.WriteLine(hamiltonian);
 
-            // Note that we have two repeated terms -- their coefficients are automatically
-            // combined. This also sorts the terms in a certain canonical order.
-
-            // Let us print this sorted Hamiltonian with repeated terms
-            // combined/
-            Console.WriteLine($"After sorting and accumulating terms:");
-            Console.WriteLine(hamiltonian);
             #endregion
 
             #region Building the Hubbard Hamiltonian 
@@ -205,24 +209,18 @@ namespace Microsoft.Quantum.Chemistry.Samples.Hubbard
                 foreach (Spin s in Enum.GetValues(typeof(Spin)))
                 {
                     // Hopping Terms
-                    var hoppingTerm = new FermionTerm(new[] { (i, s), ((i + 1) % nSites, s) }.ToSpinOrbitals(), -0.5 * t);
-                    var hoppingTermConjugate = new FermionTerm(new[] { ((i + 1) % nSites, s), (i, s) }.ToSpinOrbitals(), -0.5 * t);
-                    hubbardHamiltonian.AddFermionTerm(hoppingTerm);
-                    hubbardHamiltonian.AddFermionTerm(hoppingTermConjugate);
+                    var hoppingTerm = new HermitianFermionTerm(new[] { (i, s), ((i + 1) % nSites, s) }.ToSpinOrbitals().ToInts());
+                    hubbardHamiltonian.Add(hoppingTerm, -1.0 * t);
                 }
                 // Repulsion terms
-                var repulsionTerm = new FermionTerm(new[] { (i, Spin.u), (i, Spin.d), (i, Spin.d), (i, Spin.u) }.ToSpinOrbitals(), u);
-                hubbardHamiltonian.AddFermionTerm(repulsionTerm);
+                var repulsionTerm = new HermitianFermionTerm(new[] { (i, Spin.u), (i, Spin.d), (i, Spin.d), (i, Spin.u) }.ToSpinOrbitals().ToInts());
+                hubbardHamiltonian.Add(repulsionTerm, u);
             }
 
             // Let us print the Hamiltonian so far.
             Console.WriteLine($"Hubbard Hamiltonian representation:");
             Console.WriteLine(hubbardHamiltonian);
 
-            // We may collect terms and sort them in canonical order as follows.
-            hubbardHamiltonian.SortAndAccumulate();
-            Console.WriteLine($"After sorting and accumulating Hubbard terms:");
-            Console.WriteLine(hubbardHamiltonian);
             #endregion
 
             #region Building the Hubbard Hamiltonian through orbital integrals 
@@ -258,19 +256,25 @@ namespace Microsoft.Quantum.Chemistry.Samples.Hubbard
             // Let us print the result.
             Console.WriteLine($"Two-electron orbital integrals with the same coefficient:");
             Console.WriteLine($"Original orbital integral:\n\t{twoElectronIntegral}");
-            Console.WriteLine($"Enumerated orbital integrals:\n\t{String.Join("\n\t", twoElectronOrbitalIntegrals)}");
+            Console.WriteLine($"Enumerated orbital integrals:\n\t{string.Join<OrbitalIntegral>("\n\t", twoElectronOrbitalIntegrals)}");
 
             // This allows us to compactly construct the Hubbard Hamiltonian as follows.
-            var anotherHubbardHamiltonian = new FermionHamiltonian();
+            // First, we create an orbital integral representation of the Hamiltonian
+            var orbitalIntegralHamiltonian = new OrbitalIntegralHamiltonian();
 
             foreach (var i in Enumerable.Range(0, nSites))
             {
-                anotherHubbardHamiltonian.AddFermionTerm(new OrbitalIntegral(new[] { i, (i + 1) % nSites }, -0.5 * t));
-                anotherHubbardHamiltonian.AddFermionTerm(new OrbitalIntegral(new[] { i, i, i, i }, u));
+                orbitalIntegralHamiltonian.Add(new OrbitalIntegral(new[] { i, (i + 1) % nSites }, -0.5 * t));
+                orbitalIntegralHamiltonian.Add(new OrbitalIntegral(new[] { i, i, i, i }, u));
             }
 
+            // Second, we use convenience methods of the orbital integral Hamiltonain
+            // to create a fermion Hamiltonian, using the spin-orbital to integer
+            // indexing convention `x = 2 * orbitalIdx + spin`;
+            FermionHamiltonian anotherHubbardHamiltonian = orbitalIntegralHamiltonian.ToFermionHamiltonian(IndexConvention.UpDown);
+
+
             // Let us verify that both Hamiltonians are identical
-            anotherHubbardHamiltonian.SortAndAccumulate();
             Console.WriteLine($"Hubbard Hamiltonian constructed using orbital integrals");
             Console.WriteLine(anotherHubbardHamiltonian);
             #endregion
@@ -282,7 +286,11 @@ namespace Microsoft.Quantum.Chemistry.Samples.Hubbard
             // expressed in terms of Pauli matrices. This is an essential step
             // for simulating our constructed Hamiltonians on a qubit quantum
             // computer.
-            var jordanWignerEncoding = JordanWignerEncoding.Create(hubbardHamiltonian);
+            var jordanWignerEncoding = hubbardHamiltonian.ToPauliHamiltonian(Pauli.QubitEncoding.JordanWigner);
+
+            // Let us print this Hamiltonian
+            Console.WriteLine($"Hubbard Hamiltonian in Jordan-Wigner representation");
+            Console.WriteLine(jordanWignerEncoding);
 
             Console.WriteLine("Press Enter to continue...");
             if (System.Diagnostics.Debugger.IsAttached)
@@ -291,12 +299,6 @@ namespace Microsoft.Quantum.Chemistry.Samples.Hubbard
             }
             #endregion
 
-            #region Printing to file 
-            // We may print the Hamiltonians to file using the following commands.
-            Logging.LogPath = "log.txt";
-            anotherHubbardHamiltonian.LogSpinOrbitals(LogLevel.Information);
-            jordanWignerEncoding.LogSpinOrbitals(LogLevel.Information);
-            #endregion
         }
     }
 }

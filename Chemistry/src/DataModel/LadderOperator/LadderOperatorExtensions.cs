@@ -43,9 +43,9 @@ namespace Microsoft.Quantum.Chemistry.LadderOperators
         /// var expected = new[] { (u, 1), (u, 2), (d, 3), (d, 4) }.ToLadderSequence();
         /// </code>
         /// </example>
-        public static LadderSequence<int> ToLadderSequence(this IEnumerable<int> indices) => indices.ToArray();
+        public static LadderSequence<int> ToLadderSequence(this IEnumerable<int> indices) => new LadderSequence<int>(indices);
 
-        internal static LadderSequence<SpinOrbital> ToLadderSequence(this IEnumerable<SpinOrbital> indices) => indices.ToArray();
+        internal static LadderSequence<SpinOrbital> ToLadderSequence(this IEnumerable<SpinOrbital> indices) => new LadderSequence<SpinOrbital>(indices);
 
         /// <summary>
         /// Construct a sequence of ladder operators from an even-length sequence of spin-orbit indices.

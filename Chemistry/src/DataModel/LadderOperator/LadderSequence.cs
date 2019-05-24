@@ -121,7 +121,7 @@ namespace Microsoft.Quantum.Chemistry.LadderOperators
         /// var expected = new[] { (u, 1), (u, 2), (d, 3), (d, 4) }.ToLadderSequence();
         /// </code>
         /// </example>
-        public static implicit operator LadderSequence<TIndex>(TIndex[] indices)
+        public LadderSequence(IEnumerable<TIndex> indices)
         {
             var length = indices.Count();
             if (length % 2 == 1)
@@ -130,11 +130,12 @@ namespace Microsoft.Quantum.Chemistry.LadderOperators
                     $"Number of terms provided is `{length}` and must be of even length."
                     );
             }
-            (RaisingLowering, TIndex) GetLadderOperator(TIndex index, int position)
+            LadderOperator<TIndex> GetLadderOperator(TIndex index, int position)
             {
-                return (position < length / 2 ? RaisingLowering.u : RaisingLowering.d, index);
+                var ladderOperatorData = (position < length / 2 ? RaisingLowering.u : RaisingLowering.d, index);
+                return new LadderOperator<TIndex>(ladderOperatorData);
             }
-            return indices.Select(GetLadderOperator).ToArray();
+            Sequence = indices.Select(GetLadderOperator).ToList();
         }
         #endregion
 
