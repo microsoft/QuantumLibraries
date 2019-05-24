@@ -102,7 +102,7 @@ namespace Microsoft.Quantum.Canon {
     /// ## Example
     /// The following are equivalent:
     /// ```qsharp
-    /// let bound = Bound([U, V]);
+    /// let bound = BoundA([U, V]);
     /// bound(x);
     /// ```
 	/// and
@@ -164,7 +164,7 @@ namespace Microsoft.Quantum.Canon {
     /// ## Example
     /// The following are equivalent:
     /// ```qsharp
-    /// let bound = Bound([U, V]);
+    /// let bound = BoundC([U, V]);
     /// bound(x);
     /// ```
 	/// and
@@ -245,7 +245,7 @@ namespace Microsoft.Quantum.Canon {
     /// ## Example
     /// The following are equivalent:
     /// ```qsharp
-    /// let bound = Bound([U, V]);
+    /// let bound = BoundCA([U, V]);
     /// bound(x);
     /// ```
 	/// and
