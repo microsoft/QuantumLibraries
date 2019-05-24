@@ -16,8 +16,15 @@ from distutils.util import strtobool
 
 def _start_client():
     logger = logging.getLogger(__name__)
-    import qsharp.clients.iqsharp
-    client = qsharp.clients.iqsharp.IQSharpClient()
+
+    client_name =  os.getenv("QSHARP_PY_CLIENT", "iqsharp")
+
+    if client_name == "iqsharp":
+        import qsharp.clients.iqsharp
+        client = qsharp.clients.iqsharp.IQSharpClient()
+    elif client_name == "mock":
+        import qsharp.clients.mock
+        client = qsharp.clients.mock.MockClient()
     client.start()
 
     # Check if the server is up and running:
