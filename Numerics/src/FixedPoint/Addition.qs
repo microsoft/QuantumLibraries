@@ -18,12 +18,16 @@ namespace Microsoft.Quantum.Arithmetic {
         let n = Length(xs);
         using (ys = Qubit[n]){
             let tmpFp = FixedPoint(px, ys);
-            ApplyWithCA(InitFxP(constant, _), AddFxP(_, fp), tmpFp);
+            ApplyWithCA(PrepareFxP(constant, _), AddFxP(_, fp), tmpFp);
         }
     }
 
     /// # Summary
     /// Adds two fixed-point numbers stored in quantum registers.
+    ///
+    /// # Description
+    /// Given two fixed-point registers respectively in states $\ket{f_1}$ and $\ket{f_2}$,
+    /// performs the operation $\ket{f_1} \ket{f_2} \mapsto \ket{f_1} \ket{f_1 + f_2}$.
     ///
     /// # Input
     /// ## fp1

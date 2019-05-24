@@ -30,7 +30,7 @@ namespace Microsoft.Quantum.Arithmetic {
             let (p, q) = fpx!;
             let n = Length(q);
             if (degree == 0){
-                (Controlled InitFxP)(controls,
+                (Controlled PrepareFxP)(controls,
                     (coefficients[0], result));
             }
             elif (degree > 0) {
@@ -38,7 +38,7 @@ namespace Microsoft.Quantum.Arithmetic {
                 using (qubits = Qubit[n * degree]){
                     let firstIterate = FixedPoint(p,
                         qubits[(degree-1)*n..degree*n-1]);
-                    InitFxP(coefficients[degree], firstIterate);
+                    PrepareFxP(coefficients[degree], firstIterate);
                     for (d in degree..(-1)..2) {
                         let currentIterate = FixedPoint(p, qubits[(d-1)*n..d*n-1]);
                         let nextIterate = FixedPoint(p, qubits[(d-2)*n..(d-1)*n-1]);
@@ -60,7 +60,7 @@ namespace Microsoft.Quantum.Arithmetic {
                         (Adjoint MultiplyFxP)(currentIterate, fpx,
                                               nextIterate);
                     }
-                    InitFxP(coefficients[degree], firstIterate);
+                    PrepareFxP(coefficients[degree], firstIterate);
                 }
             }
         }
@@ -93,7 +93,7 @@ namespace Microsoft.Quantum.Arithmetic {
             let n = Length(q);
 
             if (halfDegree == 0){
-                (Controlled InitFxP)(controls,
+                (Controlled PrepareFxP)(controls,
                     (coefficients[0], result));
             }
             elif (halfDegree > 0) {
