@@ -19,11 +19,6 @@ namespace Microsoft.Quantum.Chemistry.Fermion
         /// </summary>
         /// <param name="occupiedOrbitals">Occupied orbitals that annihilation operators act on.</param>
         /// <param name="nOrbitals">Number of orbitals.</param>
-        /// <example>
-        /// <code>
-        /// 
-        /// </code>
-        /// </example>
         public static UnitaryCCWavefunction<SpinOrbital> AddAllUCCSDSingletExcitations(this SingleCFWavefunction<SpinOrbital> occupiedOrbitals, int nOrbitals)
         {
             // Create list of unoccupied spin-orbitals
