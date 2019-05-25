@@ -135,7 +135,7 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
             let (sortedIndices, signs, globalSign) = _JordanWignerClusterOperatorPQRSTermSigns([p,q,r,s]);
 
             for (idxOp in 0 .. Length(ops) - 1) {
-                let pauliString = _ComputeJordanWignerPauliString(Length(qubits), idxFermions, ops[idxOp]);
+                let pauliString = _ComputeJordanWignerPauliString(Length(qubits), sortedIndices, ops[idxOp]);
                 let sign = signs[idxOp];
                 Exp(pauliString, globalSign * sign * angle, qubits);
             }

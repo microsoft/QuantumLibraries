@@ -135,17 +135,20 @@ namespace Microsoft.Quantum.Chemistry.Tests {
         _JordanWignerUCCTermTestHelper(5, [0,1,3], term2, state2);
     }
 
-    operation JordanWignerUCCDTermPRSQTest() : Unit {
-        let term0 = [JordanWignerInputState((2.0,0.0), [0,3,1,2])];
-        let state0 = [0.,0.,0.,0.,0.,0.,0.909297,0.,0.,-0.416147,0.,0.,0.,0.,0.,0.];
-        //_JordanWignerUCCTermTestHelper(5, [0,3], term0, state0);
+    operation JordanWignerUCCDTermPRQSTest() : Unit {
+        let term0 = [JordanWignerInputState((2.0,0.0), [2,0,4,1])];
+        let state0 = [0.,0.,0.,0.,0.,-0.416147,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.909297,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.];
+        _JordanWignerUCCTermTestHelper(5, [0,2], term0, state0);
+
+        let term1 = [JordanWignerInputState((2.0,0.0), [2,0,4,1])];
+        let state1 = [0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,-0.416147,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,-0.909297,0.,0.,0.,0.,0.];
+        _JordanWignerUCCTermTestHelper(5, [0,2,3], term1, state1);
     }
 
-    operation JordanWignerUCCDTermPRQSTest() : Unit {
-        // test using Exp(2.0 (a^\dag_2 a^\dag_0 a_4 a_1 - h.c.)) 
-        let term3 = [JordanWignerInputState((2.0,0.0), [2,0,3,1])];
-        let state3 = [0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,-0.416147,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,-0.909297,0.,0.,0.,0.,0.];
-        //_JordanWignerUCCTermTestHelper(4, [0,1], term3, state3);
+    operation JordanWignerUCCDTermPRSQTest() : Unit {
+        let term3 = [JordanWignerInputState((2.0,0.0), [0,4,2,3])];
+        let state3 = [0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.909297,0.,0.,0.,0.,-0.416147,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.];
+        _JordanWignerUCCTermTestHelper(5, [0,4], term3, state3);
     }
 
 }
