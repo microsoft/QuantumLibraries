@@ -47,7 +47,7 @@ namespace Microsoft.Quantum.Chemistry.Tests
             var channel = new MockChannel();
 
             var result = magic.Run(filename, channel);
-            var broombridge = ((Data)result.Output).Raw;
+            var broombridge = (V0_2.Data)result.Output;
             Assert.Equal(ExecuteStatus.Ok, result.Status);
             Assert.Equal("0.2", broombridge.Format.Version);
             Assert.Equal(3, broombridge.Bibliography.Count);

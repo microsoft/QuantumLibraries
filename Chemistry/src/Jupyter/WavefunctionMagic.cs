@@ -39,7 +39,7 @@ namespace Microsoft.Quantum.Chemistry.Magic
             /// A Broombridge ProblemDescription to load the FermionHamiltonian from.
             /// </summary>
             [JsonProperty(PropertyName = "problem_description")]
-            public ProblemDescription ProblemDescription { get; set; }
+            public V0_2.ProblemDescription ProblemDescription { get; set; }
 
             /// <summary>
             /// The IndexConvention to use to generate the Hamiltonian from the ProblemDescription.
@@ -91,7 +91,7 @@ namespace Microsoft.Quantum.Chemistry.Magic
         {
             if (string.IsNullOrWhiteSpace(args.FileName))
             {
-                return args.ProblemDescription;
+                return Broombridge.ProblemDescription.ProcessRawProblemDescription(args.ProblemDescription);
             }
 
             // A single file can contain multiple problem descriptions. Let us pick the first one.

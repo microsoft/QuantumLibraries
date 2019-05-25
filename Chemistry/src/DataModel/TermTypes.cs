@@ -120,7 +120,7 @@ namespace Microsoft.Quantum.Chemistry
     [JsonConverter(typeof(StringEnumConverter))]
     public enum StateType
     {
-        NotRcegonized = -1, Default = 0, SingleConfigurational = 1, SparseMultiConfigurational = 2, UnitaryCoupledCluster = 3
+        NotRecognized = -1, Default = 0, SingleConfigurational = 1, SparseMultiConfigurational = 2, UnitaryCoupledCluster = 3
     }
 
     /// <summary>

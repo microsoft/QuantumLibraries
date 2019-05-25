@@ -34,9 +34,12 @@ namespace Microsoft.Quantum.Chemistry.Fermion
                 .ToDictionary(kv => new IndexOrderedSequence<TNewIndex>(
                     kv.Key.SelectIndex(indexFunction).Sequence, 1), kv => kv.Value * (double)kv.Key.Coefficient)
         };
+<<<<<<< HEAD
 
 
         
+=======
+>>>>>>> origin/release/v0.7
     }
 
 }
