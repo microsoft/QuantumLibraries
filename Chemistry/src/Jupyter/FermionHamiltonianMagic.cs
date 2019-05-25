@@ -78,7 +78,7 @@ namespace Microsoft.Quantum.Chemistry.Magic
             // We can obtain the full fermion Hamiltonian from the more compact orbital integral representation.
             // This transformation requires us to pick a convention for converting a spin-orbital index to a single integer.
             // Let us pick one according to the formula `integer = 2 * orbitalIndex + spinIndex`.
-            FermionHamiltonian fermionHamiltonian = orbitalIntegralHamiltonian.ToFermionHamiltonian(IndexConvention.UpDown);
+            FermionHamiltonian fermionHamiltonian = orbitalIntegralHamiltonian.ToFermionHamiltonian(args.IndexConvention);
             
             return fermionHamiltonian.ToExecutionResult();
         }
