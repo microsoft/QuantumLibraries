@@ -89,9 +89,8 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
         let ops = [[PauliX, PauliY], [PauliY, PauliX]];
         let signs = [+1.0, -1.0];
 
-        for (idxOp in 0 .. Length(ops) - 1) {
-            let pauliString = _ComputeJordanWignerPauliString(Length(qubits), idxFermions, ops[idxOp]);
-            let sign = signs[idxOp];
+        for ((op, sign) in Zip(ops, signs)) {
+            let pauliString = _ComputeJordanWignerPauliString(Length(qubits), idxFermions, op);
             Exp(pauliString, sign * angle, qubits);
         }
     }
@@ -125,9 +124,8 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
         let ops = [[y,y,x,y],[x,x,x,y],[x,y,y,y],[y,x,y,y],[x,y,x,x],[y,x,x,x],[y,y,y,x],[x,x,y,x]];
         let (sortedIndices, signs, globalSign) = _JordanWignerClusterOperatorPQRSTermSigns([p,q,r,s]);
 
-        for (idxOp in 0 .. Length(ops) - 1) {
-            let pauliString = _ComputeJordanWignerPauliString(Length(qubits), sortedIndices, ops[idxOp]);
-            let sign = signs[idxOp];
+        for ((op, sign) in Zip(ops, signs)) {
+            let pauliString = _ComputeJordanWignerPauliString(Length(qubits), sortedIndices, op);
             Exp(pauliString, globalSign * sign * angle, qubits);
         }
     }

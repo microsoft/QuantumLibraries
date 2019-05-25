@@ -27,7 +27,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DataModel\DataModel.csproj" />
-    <ProjectReference Include="..\Runtime\Runtime.csproj" />
+    <ProjectReference Include="..\Runtime\Runtime.csproj" PrivateAssets="all" />
   </ItemGroup>
 
 
