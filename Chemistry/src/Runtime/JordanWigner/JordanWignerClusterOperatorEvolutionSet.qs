@@ -93,7 +93,6 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
             let pauliString = _ComputeJordanWignerPauliString(Length(qubits), idxFermions, ops[idxOp]);
             let sign = signs[idxOp];
             Exp(pauliString, sign * angle, qubits);
-            }
         }
     }
 
@@ -162,7 +161,6 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
         let q1 = sorted[1];
         let r1 = sorted[2];
         let s1 = sorted[3];
-        //2041
         // Case (p,q) < (r,s) and (p,q) > (r,s)
         if(q1 < r1){
             // p1 < q1 < r1 < s1
@@ -235,17 +233,12 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
     operation _JordanWignerClusterOperatorImpl(generatorIndex : GeneratorIndex, stepSize : Double, qubits : Qubit[]) : Unit is Adj + Ctl {
         let ((idxTermType, idxDoubles), idxFermions) = generatorIndex!;
         let termType = idxTermType[0];
-        
-        body (...) {
-            let ((idxTermType, idxDoubles), idxFermions) = generatorIndex!;
-            let termType = idxTermType[0];
             
-            if (termType == 0) {
-                _ApplyJordanWignerClusterOperatorPQTerm (generatorIndex, stepSize, qubits);
-            }
-            elif (termType == 2) {
-                _ApplyJordanWignerClusterOperatorPQRSTerm (generatorIndex, stepSize, qubits);
-            }
+        if (termType == 0) {
+            _ApplyJordanWignerClusterOperatorPQTerm (generatorIndex, stepSize, qubits);
+        }
+        elif (termType == 2) {
+            _ApplyJordanWignerClusterOperatorPQRSTerm (generatorIndex, stepSize, qubits);
         }
     }
     

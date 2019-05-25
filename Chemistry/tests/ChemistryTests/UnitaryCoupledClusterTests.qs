@@ -9,6 +9,7 @@ namespace Microsoft.Quantum.Chemistry.Tests {
     open Microsoft.Quantum.Arithmetic;
     open Microsoft.Quantum.Math;
     open Microsoft.Quantum.Arrays;
+    open Microsoft.Quantum.Chemistry.JordanWigner;
     
     // Check that correct Pauli Z string is computed
     function _ComputeJordanWignerBitString_0Test() : Unit {
