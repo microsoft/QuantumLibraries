@@ -57,6 +57,16 @@ namespace Microsoft.Quantum.Chemistry.Fermion
             NormalizeToCanonicalOrder();
         }
 
+        /// <summary>
+        /// Constructs a Hermitian fermion term with an equal number of creation and annihilation operators
+        /// from a sequence of integers.
+        /// </summary>
+        /// <param name="ladderOperators">Hermitian normal-ordered sequence of ladder operators.</param>
+        public HermitianFermionTerm(IEnumerable<int> indices) : base(indices.ToLadderSequence())
+        {
+            NormalizeToCanonicalOrder();
+        }
+
         public static implicit operator HermitianFermionTerm((RaisingLowering, int)[] setSequence)
             => new HermitianFermionTerm(setSequence.Select(o => new FermionOperator(o)));
         #endregion

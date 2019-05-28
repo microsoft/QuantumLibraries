@@ -15,6 +15,16 @@ namespace Microsoft.Quantum.Chemistry.OrbitalIntegrals
         /// Constructor for empty orbital integral Hamiltonian.
         /// </summary>
         public OrbitalIntegralHamiltonian() : base() {}
+        
+        /// <summary>
+        /// Constructor for orbital integral Hamiltonian from list of 
+        /// orbital integral terms.
+        /// </summary>
+        /// <param name="terms">Terms to add to Hamiltonian.</param>
+        public OrbitalIntegralHamiltonian(IEnumerable<OrbitalIntegral> terms) : base()
+        {
+            Add(terms);
+        }
 
         /// <summary>
         /// Method for adding an orbital integral term to a Hamiltonian.

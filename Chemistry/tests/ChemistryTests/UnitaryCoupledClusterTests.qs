@@ -4,8 +4,11 @@
 namespace Microsoft.Quantum.Chemistry.Tests {
     open Microsoft.Quantum.Intrinsic;
     open Microsoft.Quantum.Diagnostics;
+    open Microsoft.Quantum.Canon;
+    open Microsoft.Quantum.Preparation;
+    open Microsoft.Quantum.Arithmetic;
     open Microsoft.Quantum.Math;
-    open Microsoft.Quantum.Convert;
+    open Microsoft.Quantum.Arrays;
     open Microsoft.Quantum.Chemistry.JordanWigner;
     
     // Check that correct Pauli Z string is computed
@@ -72,4 +75,76 @@ namespace Microsoft.Quantum.Chemistry.Tests {
             }
         }
     }
+
+    function _DoublesToComplexPolar(input: Double[]) : ComplexPolar[]{
+        mutable arr = new ComplexPolar[Length(input)];
+        for(idx in 0..Length(input)-1){
+            set arr w/= idx <- ComplexToComplexPolar(Complex((input[idx],0.)));
+        }
+        return arr;
+    }
+
+    operation _JordanWignerUCCTermTestHelper(nQubits: Int, excitations: Int[], term: JordanWignerInputState[], result: Double[]) : Unit{
+        using(qubits = Qubit[nQubits]){
+            for(idx in excitations){
+                X(qubits[idx]);
+            }
+            PrepareUnitaryCoupledClusterState (NoOp<Qubit[]>, term, 1.0, qubits);
+            DumpRegister ((), qubits);
+            (Adjoint PrepareArbitraryState)(_DoublesToComplexPolar(result), LittleEndian(qubits));
+            AssertAllZeroWithinTolerance (qubits, 1e-5);
+            ResetAll(qubits);
+        }
+    }
+
+    operation JordanWignerUCCSTermTest() : Unit{
+        // test using Exp(2.0 (a^\dag_1 a_3 - h.c.)) 
+        let term0 = [JordanWignerInputState((2.0,0.0), [1,3])];
+        let state0 = [0.,0.,-0.416147,0.,0.,0.,0.,0.,-0.909297,0.,0.,0.,0.,0.,0.,0.];
+        _JordanWignerUCCTermTestHelper(4, [1], term0, state0);
+
+        // test using Exp(2.0 (a^\dag_3 a_1 - h.c.)) 
+        let term1 = [JordanWignerInputState((2.0,0.0), [3,1])];
+        let state1 = [0.,0.,-0.416147,0.,0.,0.,0.,0.,0.909297,0.,0.,0.,0.,0.,0.,0.];
+        _JordanWignerUCCTermTestHelper(4, [1], term1, state1);
+    }
+
+    operation JordanWignerUCCDTermPQRSTest() : Unit{
+        // test using Exp(2.0 (a^\dag_0 a^\dag_1 a_3 a_4 - h.c.)) 
+        let term0 = [JordanWignerInputState((2.0,0.0), [0,1,2,4])];
+        let state0 = [0.,0.,0.,-0.416147,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.909297,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.];
+        _JordanWignerUCCTermTestHelper(5, [0,1], term0, state0);
+
+        // test using Exp(2.0 (a^\dag_0 a^\dag_1 a_3 a_4 - h.c.)) 
+        let term1 = [JordanWignerInputState((2.0,0.0), [0,1,2,4])];
+        let state1 = [0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,-0.416147,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,-0.909297,0.,0.,0.];
+        _JordanWignerUCCTermTestHelper(5, [0,1,3], term1, state1);
+
+        // test using Exp(2.0 (a^\dag_1 a^\dag_0 a_2 a_4 - h.c.)) 
+        let term2 = [JordanWignerInputState((2.0,0.0), [1,0,2,4])];
+        let state2 = [0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,-0.416147,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.909297,0.,0.,0.];
+        _JordanWignerUCCTermTestHelper(5, [0,1,3], term2, state2);
+
+        // test using Exp(2.0 (a^\dag_1 a^\dag_0 a_2 a_4 - h.c.)) 
+        let term3 = [JordanWignerInputState((-2.0,0.0), [4,2,1,0])];
+        let state3 = [0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,-0.416147,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.909297,0.,0.,0.];
+        _JordanWignerUCCTermTestHelper(5, [0,1,3], term2, state2);
+    }
+
+    operation JordanWignerUCCDTermPRQSTest() : Unit {
+        let term0 = [JordanWignerInputState((2.0,0.0), [2,0,4,1])];
+        let state0 = [0.,0.,0.,0.,0.,-0.416147,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.909297,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.];
+        _JordanWignerUCCTermTestHelper(5, [0,2], term0, state0);
+
+        let term1 = [JordanWignerInputState((2.0,0.0), [2,0,4,1])];
+        let state1 = [0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,-0.416147,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,-0.909297,0.,0.,0.,0.,0.];
+        _JordanWignerUCCTermTestHelper(5, [0,2,3], term1, state1);
+    }
+
+    operation JordanWignerUCCDTermPRSQTest() : Unit {
+        let term3 = [JordanWignerInputState((2.0,0.0), [0,4,2,3])];
+        let state3 = [0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.909297,0.,0.,0.,0.,-0.416147,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.];
+        _JordanWignerUCCTermTestHelper(5, [0,4], term3, state3);
+    }
+
 }

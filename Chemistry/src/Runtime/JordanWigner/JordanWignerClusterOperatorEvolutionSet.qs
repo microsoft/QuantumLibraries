@@ -82,47 +82,19 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
         let ((idxTermType, coeff), idxFermions) = term!;
         let p = idxFermions[0];
         let q = idxFermions[1];
+        if(p == q){
+            fail($"Unitary coupled-cluster PQ failed: indices {p}, {q} must be distinct");
+        }
         let angle = 0.5 * coeff[0] * stepSize;
         let ops = [[PauliX, PauliY], [PauliY, PauliX]];
         let signs = [+1.0, -1.0];
 
         for ((op, sign) in Zip(ops, signs)) {
             let pauliString = _ComputeJordanWignerPauliString(Length(qubits), idxFermions, op);
-            Exp(pauliString, (p < q ? 1.0 | -1.0) * sign * angle, qubits);
+            Exp(pauliString, sign * angle, qubits);
         }
     }
 
-    /// # Summary
-    /// Applies time-evolution by a cluster operator PQQR term described by a `GeneratorIndex`.
-    ///
-    /// # Input
-    /// ## term
-    /// `GeneratorIndex` representing a cluster operator PQQR term.
-    /// ## stepSize
-    /// Duration of time-evolution.
-    /// ## qubits
-    /// Qubits of Hamiltonian.
-    operation _ApplyJordanWignerClusterOperatorPQQRTerm (term : GeneratorIndex, stepSize: Double, qubits : Qubit[]) : Unit is Adj + Ctl {
-        let ((idxTermType, coeff), idxFermions) = term!;
-        let angle = (0.25 * coeff[0]);
-        let p = idxFermions[0];
-        let q = idxFermions[1];
-        let r = idxFermions[3];
-
-        // For all cases, do the same thing:
-        // p < r < q (1/4)(1-Z_q)(Z_{r-1,p+1})(X_p Y_r - Y_p X_r) (same as Hermitian conjugate of r < p < q)
-        // q < p < r (1/4)(1-Z_q)(Z_{r-1,p+1})(X_p Y_r - Y_p X_r)
-        // p < q < r (1/4)(1-Z_q)(Z_{r-1,p+1})(X_p Y_r - Y_p X_r)
-
-        // This amounts to applying a PQ term, followed by same PQ term after a CNOT from q to the parity bit.
-        let termPR0 = GeneratorIndex((idxTermType, [angle * 2.0]), [p, r]);
-        _ApplyJordanWignerClusterOperatorPQTerm(termPR0, stepSize, qubits);
-
-        let pNew = q > p ? p | p - 1;
-        let rNew = q > r ? r | r - 1;
-        let termPR1 = GeneratorIndex((idxTermType, [-1.0 * angle * 2.0]), [pNew, rNew]);
-        _ApplyJordanWignerClusterOperatorPQTerm(termPR1, stepSize, Exclude([q], qubits));
-    }
 
     /// # Summary
     /// Applies time-evolution by a cluster operator PQRS term described by a `GeneratorIndex`.
@@ -142,15 +114,18 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
         let s = idxFermions[3];
         let angle = 0.125 * coeff[0] * stepSize;
         
+        if(p == q or p==r or p==s or q==r or q==s or r==s){
+            fail($"Unitary coupled-cluster PQRS failed: indices {p}, {q}, {r}, {s} must be distinct");
+        }
+
         let x = PauliX;
         let y = PauliY;
 
         let ops = [[y,y,x,y],[x,x,x,y],[x,y,y,y],[y,x,y,y],[x,y,x,x],[y,x,x,x],[y,y,y,x],[x,x,y,x]];
         let (sortedIndices, signs, globalSign) = _JordanWignerClusterOperatorPQRSTermSigns([p,q,r,s]);
 
-        for (idxOp in 0 .. Length(ops) - 1) {
-            let pauliString = _ComputeJordanWignerPauliString(Length(qubits), idxFermions, ops[idxOp]);
-            let sign = signs[idxOp];
+        for ((op, sign) in Zip(ops, signs)) {
+            let pauliString = _ComputeJordanWignerPauliString(Length(qubits), sortedIndices, op);
             Exp(pauliString, globalSign * sign * angle, qubits);
         }
     }
@@ -184,7 +159,6 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
         let q1 = sorted[1];
         let r1 = sorted[2];
         let s1 = sorted[3];
-
         // Case (p,q) < (r,s) and (p,q) > (r,s)
         if(q1 < r1){
             // p1 < q1 < r1 < s1
@@ -229,15 +203,10 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
         if (Length(idxFermions) == 2) {
             // PQ term
             return GeneratorIndex(([0],[real]),idxFermions);
-        } elif (Length(idxFermions) == 4) {
-            if (idxFermions[1] == idxFermions[2]){
-                // PQQR term
-                return GeneratorIndex(([1],[real]),idxFermions);
-            }
-            else{
-                // PQRS term
-                return GeneratorIndex(([2],[real]),idxFermions);
-            }
+        }
+        elif(Length(idxFermions) == 4){
+            // PQRS term
+            return GeneratorIndex(([2],[real]),idxFermions);
         }
         else{
             // Any other term in invalid
@@ -262,12 +231,9 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
     operation _JordanWignerClusterOperatorImpl(generatorIndex : GeneratorIndex, stepSize : Double, qubits : Qubit[]) : Unit is Adj + Ctl {
         let ((idxTermType, idxDoubles), idxFermions) = generatorIndex!;
         let termType = idxTermType[0];
-        
+            
         if (termType == 0) {
             _ApplyJordanWignerClusterOperatorPQTerm (generatorIndex, stepSize, qubits);
-        }
-        elif (termType == 1) {
-            _ApplyJordanWignerClusterOperatorPQQRTerm(generatorIndex, stepSize, qubits);
         }
         elif (termType == 2) {
             _ApplyJordanWignerClusterOperatorPQRSTerm (generatorIndex, stepSize, qubits);

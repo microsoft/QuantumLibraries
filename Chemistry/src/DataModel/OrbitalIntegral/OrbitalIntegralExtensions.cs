@@ -29,7 +29,7 @@ namespace Microsoft.Quantum.Chemistry.OrbitalIntegrals
         /// <returns>Fermion Hamiltonian constructed from orbital integrals.</returns>
         public static FermionHamiltonian ToFermionHamiltonian(
             this OrbitalIntegralHamiltonian sourceHamiltonian, 
-            IndexConvention indexConvention)
+            IndexConvention indexConvention = IndexConvention.UpDown)
         {
             var nOrbitals = sourceHamiltonian.SystemIndices.Max() + 1;
             var hamiltonian = new FermionHamiltonian();
@@ -60,7 +60,7 @@ namespace Microsoft.Quantum.Chemistry.OrbitalIntegrals
         public static IEnumerable<(HermitianFermionTerm, double)> ToHermitianFermionTerms(
             this OrbitalIntegral orbitalIntegral,
             int nOrbitals,
-            IndexConvention indexConvention)
+            IndexConvention indexConvention = IndexConvention.UpDown)
         {
             var termType = orbitalIntegral.TermType;
             if (termType == TermType.OrbitalIntegral.OneBody)
@@ -246,7 +246,13 @@ namespace Microsoft.Quantum.Chemistry.OrbitalIntegrals
         /// </summary>
         public static IEnumerable<int> ToInts(this IEnumerable<SpinOrbital> spinOrbitals, IndexConvention indexConvention, int nOrbitals) =>
             spinOrbitals.Select(x => x.ToInt(indexConvention, nOrbitals));
-        
+
+        /// <summary>
+        /// Converts an array of spin-orbitals into an array of integers representing each spin orbital.
+        /// </summary>
+        public static IEnumerable<int> ToInts(this IEnumerable<SpinOrbital> spinOrbitals) =>
+            spinOrbitals.Select(x => x.ToInt());
+
         /// <summary>
         /// Converts an array of orbital index and spin index tuples into an array of spin-orbitals.
         /// </summary>

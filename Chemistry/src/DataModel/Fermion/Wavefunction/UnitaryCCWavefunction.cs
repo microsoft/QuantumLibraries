@@ -2,16 +2,14 @@
 // Licensed under the MIT License.
 
 using System;
+using System.Numerics;
 using System.Linq;
 using System.Collections.Generic;
 using Microsoft.Quantum.Chemistry.LadderOperators;
-
+using Microsoft.Quantum.Chemistry.OrbitalIntegrals;
 
 namespace Microsoft.Quantum.Chemistry.Fermion
 {
-    // This class is for Fermion terms that are not grouped into Hermitian bunches.
-    // Maybe need a stype for quantum state?
-
     // For now, UCC is a subclass of MCF. It should eventually be a Hamiltonian
     // + a WavefunctionSCF.
     // 
