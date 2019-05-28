@@ -14,6 +14,7 @@ steps:
       -c $(BuildConfiguration)
       -v n
       /p:Version=$(Assembly.Version)
+      /p:DefineConstants=$(Assembly.Constants)
 
 ##
 # Test
@@ -27,3 +28,4 @@ steps:
       -c $(BuildConfiguration)
       -v n
       /p:Version=$(Assembly.Version)
+      /p:DefineConstants=$(Assembly.Constants)
