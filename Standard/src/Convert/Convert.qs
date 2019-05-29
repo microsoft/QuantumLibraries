@@ -121,6 +121,93 @@ namespace Microsoft.Quantum.Convert {
     }
 
     /// # Summary
+    /// Applies an operation to a given input.
+    ///
+    /// # Description
+    /// Given an operation and an input to that operation, applies the operation
+    /// and returns its output.
+    ///
+    /// # Input
+    /// ## op
+    /// An operation to be applied
+    /// ## input
+    /// The input to be passed to the operation.
+    ///
+    /// # Output
+    /// The result of calling `op`.
+    ///
+    /// # See Also
+    /// - ApplyA
+    /// - ApplyC
+    /// - ApplyCA
+    operation Apply<'Input, 'Output>(op : ('Input => 'Output), input : 'Input) : 'Output {
+        return op(input);
+    }
+
+    /// # Summary
+    /// Applies an operation to a given input.
+    ///
+    /// # Description
+    /// Given an operation and an input to that operation, applies the operation.
+    ///
+    /// # Input
+    /// ## op
+    /// An operation to be applied
+    /// ## input
+    /// The input to be passed to the operation.
+    ///
+    /// # See Also
+    /// - Apply
+    /// - ApplyC
+    /// - ApplyCA
+    operation ApplyA<'Input>(op : ('Input => Unit is Adj), input : 'Input) : Unit
+    is Adj {
+        op(input);
+    }
+
+    /// # Summary
+    /// Applies an operation to a given input.
+    ///
+    /// # Description
+    /// Given an operation and an input to that operation, applies the operation.
+    ///
+    /// # Input
+    /// ## op
+    /// An operation to be applied
+    /// ## input
+    /// The input to be passed to the operation.
+    ///
+    /// # See Also
+    /// - Apply
+    /// - ApplyA
+    /// - ApplyCA
+    operation ApplyC<'Input>(op : ('Input => Unit is Ctl), input : 'Input) : Unit
+    is Ctl {
+        op(input);
+    }
+
+    /// # Summary
+    /// Applies an operation to a given input.
+    ///
+    /// # Description
+    /// Given an operation and an input to that operation, applies the operation.
+    ///
+    /// # Input
+    /// ## op
+    /// An operation to be applied
+    /// ## input
+    /// The input to be passed to the operation.
+    ///
+    /// # See Also
+    /// - Apply
+    /// - ApplyA
+    /// - ApplyC
+    operation ApplyCA<'Input>(op : ('Input => Unit is Adj + Ctl), input : 'Input) : Unit
+    is Adj + Ctl {
+        op(input);
+    }
+
+    /// # Summary
     /// Calls a function with a given input.
     ///
     /// # Description
