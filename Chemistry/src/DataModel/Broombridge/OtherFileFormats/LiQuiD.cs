@@ -20,7 +20,9 @@ namespace Microsoft.Quantum.Chemistry
         public struct ProblemDescription
         {
             public int NOrbitals { get; set; }
+            public int NElectrons { get; set; }
             public double CoulombRepulation { get; set; }
+            public string MiscellaneousInformation { get; set; }
             public OrbitalIntegralHamiltonian OrbitalIntegralHamiltonian { get; set; }
         }
 
@@ -71,7 +73,13 @@ namespace Microsoft.Quantum.Chemistry
             var hamiltonian = new OrbitalIntegralHamiltonian();
 
             var nOrbitals = 0L;
-            
+
+            Match stringMisc = regexMiscellaneous.Match(line);
+            if (stringMisc.Success)
+            {
+                problem.MiscellaneousInformation = stringMisc.Groups["info"].ToString();
+            }
+
 
             Match stringnuc = regexnuc.Match(line);
             if (stringnuc.Success)

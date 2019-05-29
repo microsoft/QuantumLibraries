@@ -46,7 +46,7 @@ problem_description:
     cluster_operator:             # Initial state that cluster operator is applied to.
         reference_state: [1.0, (1a)+, (1b)+, '|vacuum>']             # A one-body cluster term is t^{q}_{p} a^\dag_q a_p             # A one-body unitary cluster term is t^{q}_{p}(a^\dag_q a_p- a^\dag_p a_q)
         one_body_amplitudes:             # t^{q}_{p} p q 
-            - [0.001, "(2a)+", "(1a)"]
+            - [-8.8e-2, "(2a)+", "(1a)"]
             - [-0.001, "(2b)+", "(1b)"]
         two_body_amplitudes: 			# t^{pq}_{rs} p q r s 			# If this is a PQQR term, the middle two indices must coincide.
             - [0.001, "(2a)+", "(2b)+", "(1a)", "(1b)"]

@@ -58,7 +58,7 @@ namespace Microsoft.Quantum.Chemistry.Tests.Docs
             // expressed in terms of Pauli matrices. This is an essential step
             // for simulating our constructed Hamiltonians on a qubit quantum
             // computer.
-            var jordanWignerEncoding = fermionHamiltonian.ToPauliHamiltonian(Pauli.QubitEncoding.JordanWigner);
+            var jordanWignerEncoding = fermionHamiltonian.ToPauliHamiltonian(Paulis.QubitEncoding.JordanWigner);
 
             // We also need to create an input quantum state to this Hamiltonian.
             // Let us use the Hartree-Fock state.
@@ -96,7 +96,7 @@ namespace Microsoft.Quantum.Chemistry.Tests.Docs
             // representation.
             var orbitalIntegralHamiltonian = problem.OrbitalIntegralHamiltonian;
             var fermionHamiltonian = orbitalIntegralHamiltonian.ToFermionHamiltonian(IndexConvention.UpDown);
-            var jordanWignerEncoding = fermionHamiltonian.ToPauliHamiltonian(Pauli.QubitEncoding.JordanWigner);
+            var jordanWignerEncoding = fermionHamiltonian.ToPauliHamiltonian(Paulis.QubitEncoding.JordanWigner);
 
             // The desired initial state, assuming that a description of it is present in the
             // Broombridge schema.

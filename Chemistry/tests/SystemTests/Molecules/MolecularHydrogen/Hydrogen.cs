@@ -28,7 +28,7 @@ namespace SystemTests.Molecules
         public const int TrotterOrder = 1;
         public const string GroundState = "|G>";
         // This energy is only approximately correct.
-        public const double GroundStateEnergy = -1.13273749;
+        public const double GroundStateEnergy = -1.1372704;
 
 
         public class Version_v0_1

@@ -97,7 +97,7 @@ namespace Microsoft.Quantum.Chemistry.Tests.Samples.Hubbard
             var jordanWignerEncoding = hubbardFermionHamiltonian.ToPauliHamiltonian();
 
             // Create data structure to pass to QSharp.
-            var qSharpData = jordanWignerEncoding.ToQSharpFormat();
+            var qSharpData = jordanWignerEncoding.ToQSharpFormat().Pad();
 
             Console.WriteLine($"Estimate Hubbard Hamiltonian energy:");
             // Bits of precision in phase estimation.
