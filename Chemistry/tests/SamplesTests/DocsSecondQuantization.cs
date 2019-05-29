@@ -53,6 +53,8 @@ namespace Microsoft.Quantum.Chemistry.Tests.Docs
             // We explicitly specify the type of `spinOrbital1` to demonstrate
             // the implicit cast to `SpinOrbital`.
             SpinOrbital spinOrbital1 = tuple;
+
+            Assert.True(spinOrbital1 == spinOrbital0);
         }
 
         [Fact]
@@ -75,6 +77,9 @@ namespace Microsoft.Quantum.Chemistry.Tests.Docs
             // The default conversion uses the formula `h(j,σ)`, in this case `11`.
             var integerIndexDefault = spinOrbital.ToInt();
 
+            Assert.True(integerIndexDefault == 11);
+
+            Assert.True(integerIndexHalfUp == 12);
         }
 
         [Fact]
@@ -97,6 +102,8 @@ namespace Microsoft.Quantum.Chemistry.Tests.Docs
             // An alternate constructor for a LadderOperator instead uses
             // a tuple.
             var ladderOperator1 = new LadderOperator<int>((creationEnum, spinOrbitalInteger));
+
+            Assert.True(ladderOperator0 == ladderOperator1);
         }
 
         [Fact]
@@ -115,6 +122,9 @@ namespace Microsoft.Quantum.Chemistry.Tests.Docs
             // We specialize them by constructing a `FermionTerm` representing 
             // a fermion creation operator on the index `2` followed by `1`.
             var fermionTerm = new FermionTerm(ladderSequences);
+
+            Assert.True(fermionTerm.Sequence.SequenceEqual(ladderSequences.Sequence));
+            Assert.True(fermionTerm.Coefficient == 1);
         }
 
         [Fact]
@@ -130,6 +140,11 @@ namespace Microsoft.Quantum.Chemistry.Tests.Docs
             // We now construct a `FermionTerm` representing an annihilation operator
             // on the index 1 followed by the creation operator on the index 1.
             var fermionTerm0 = new FermionTerm(indices);
+
+            Assert.True(fermionTerm0.Sequence.SequenceEqual(indices.Sequence));
+            Assert.True(indices.Sequence[0].Type == RaisingLowering.u);
+
+            Assert.True(indices.Sequence[1].Type == RaisingLowering.d);
         }
 
         [Fact]
@@ -146,6 +161,8 @@ namespace Microsoft.Quantum.Chemistry.Tests.Docs
 
             // The following Boolean is `false`.
             var equal = laddderSeqeunce == laddderSeqeunceReversed;
+
+            Assert.False(equal);
         }
 
         [Fact]
@@ -166,6 +183,8 @@ namespace Microsoft.Quantum.Chemistry.Tests.Docs
 
             // The following Boolean is `false`.
             var signEqual = sign0 == sign1;
+
+            Assert.False(signEqual);
         }
 
         [Fact]
@@ -194,6 +213,8 @@ namespace Microsoft.Quantum.Chemistry.Tests.Docs
             // Note that these terms are identical.
             hamiltonian.Add(hermitianFermionTerm0, 1.0);
             hamiltonian.Add(hermitianFermionTerm1, 1.0);
+
+            Assert.True(hamiltonian.CountTerms() == 1);
         }
 
         [Fact]
@@ -204,6 +225,8 @@ namespace Microsoft.Quantum.Chemistry.Tests.Docs
 
             // We construct the term to be added -- note the doubled coefficient.
             hamiltonian.Add(new HermitianFermionTerm(new[] { 1, 0 }), 2.0);
+
+            Assert.True(hamiltonian.CountTerms() == 1);
         }
 
         [Fact]
@@ -224,6 +247,8 @@ namespace Microsoft.Quantum.Chemistry.Tests.Docs
 
             // There is only one unique term. `nTerms == 1` is `true`.
             var nTerms = hamiltonian.CountTerms();
+
+            Assert.True(nTerms == 1);
         }
     }
 
@@ -256,6 +281,9 @@ namespace Microsoft.Quantum.Chemistry.Tests.Docs
             // this case, there are 8 elements.
             var twoElectronIntegrals = twoElectronIntegral.EnumerateOrbitalSymmetries();
 
+            Assert.True(oneElectronIntegrals.Count() == 2);
+
+            Assert.True(twoElectronIntegrals.Count() == 8);
         }
 
         [Fact]
@@ -269,6 +297,8 @@ namespace Microsoft.Quantum.Chemistry.Tests.Docs
             // Hamiltonian represented by this integral -- this is an array of array 
             // of `SpinOrbital` instances.
             var twoElectronSpinOrbitalIndices = twoElectronIntegral.EnumerateSpinOrbitals();
+
+            Assert.True(twoElectronSpinOrbitalIndices.Count() == 4);
 
         }
 
@@ -302,6 +332,8 @@ namespace Microsoft.Quantum.Chemistry.Tests.Docs
             fermionHamiltonian.AddRange(orbitalIntegral
                 .ToHermitianFermionTerms(0, IndexConvention.UpDown)
                 .Select(o => (o.Item1, o.Item2.ToDoubleCoeff())));
+
+            Assert.True(fermionHamiltonian.CountTerms() == 8);
         }
 
     }

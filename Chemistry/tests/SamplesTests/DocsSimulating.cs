@@ -50,6 +50,8 @@ namespace Microsoft.Quantum.Chemistry.Tests.Docs
             // We now convert this representation into a format consumable by Q#.
             var qSharpData = jordanWignerEncoding.ToQSharpFormat();
 
+            Assert.True(hamiltonian.CountTerms() == 10);
+            Assert.True(jordanWignerEncoding.CountTerms() == 6);
         }
     }
 }

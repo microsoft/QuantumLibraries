@@ -40,6 +40,8 @@ namespace Microsoft.Quantum.Chemistry.Tests.Docs
 
             // Convert the list of indices to a `FermionWavefunction` object.
             var wavefunction = new FermionWavefunction<int>(indices);
+
+            Assert.True(wavefunction.Method == StateType.SparseMultiConfigurational);
         }
 
         [Fact]
@@ -54,6 +56,9 @@ namespace Microsoft.Quantum.Chemistry.Tests.Docs
             // Convert a wavefunction indexed by spin orbitals to
             // one indexed by integers
             var wavefunctionInt = wavefunctionSpinOrbital.ToIndexing(IndexConvention.UpDown);
+
+            Assert.True(wavefunctionInt.MCFData.Excitations.Single().Key.ToIndices()
+                .SequenceEqual(new[] { 1, 2, 6 }));
         }
 
         [Fact]
@@ -65,6 +70,8 @@ namespace Microsoft.Quantum.Chemistry.Tests.Docs
             // Create a Hartree-Fock state from the Hamiltonian 
             // with, say, `4` occupied spin orbitals.
             var wavefunction = fermionHamiltonian.CreateHartreeFockState(nElectrons: 4);
+
+            Assert.True(wavefunction.MCFData.Excitations.Keys.Single().Sequence.Count() == 4);
         }
 
         [Fact]
@@ -80,6 +87,9 @@ namespace Microsoft.Quantum.Chemistry.Tests.Docs
 
             // Create a fermion wavefunction object that represents the superposition.
             var wavefunction = new FermionWavefunction<int>(superposition);
+
+            Assert.True(wavefunction.Method == StateType.SparseMultiConfigurational);
+            Assert.True(wavefunction.MCFData.Excitations.Count() == 2);
         }
 
         [Fact]
@@ -105,6 +115,9 @@ namespace Microsoft.Quantum.Chemistry.Tests.Docs
             // that the exponent of the unitary coupled-cluster operator
             // is the cluster operator minus its Hermitian conjugate.
             var wavefunction = new FermionWavefunction<int>(reference, clusterOperator);
+
+            Assert.True(wavefunction.Method == StateType.UnitaryCoupledCluster);
+            Assert.True(wavefunction.UCCData.Excitations.Count() == 3);
         }
 
         [Fact]
@@ -134,6 +147,9 @@ namespace Microsoft.Quantum.Chemistry.Tests.Docs
             // Convert the wavefunction indexed by spin-orbitals to one indexed
             // by integers
             var wavefunctionInteger = wavefunctionSpinOrbital.ToIndexing(IndexConvention.UpDown);
+
+            Assert.True(wavefunctionInteger.Method == StateType.UnitaryCoupledCluster);
+            Assert.True(wavefunctionInteger.UCCData.Excitations.Count() == 3);
         }
 
         [Fact]
@@ -164,6 +180,9 @@ namespace Microsoft.Quantum.Chemistry.Tests.Docs
             // excitations exactly match the expected excitations.
             var bool0 = generatedExcitations.Keys.All(expectedExcitations.Contains);
             var bool1 = generatedExcitations.Count() == expectedExcitations.Count();
+
+            Assert.True(bool0);
+            Assert.True(bool1);
         }
     }
 

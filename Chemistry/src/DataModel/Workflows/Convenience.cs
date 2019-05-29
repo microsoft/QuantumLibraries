@@ -107,7 +107,7 @@ namespace Microsoft.Quantum.Chemistry
                 problem.Wavefunctions[state].ToIndexing(indexConvention) :
                 fermionHamiltonian.CreateHartreeFockState(problem.NElectrons);
 
-            var pauliHamiltonian = fermionHamiltonian.ToPauliHamiltonian(QubitEncoding.JordanWigner);
+            var pauliHamiltonian = fermionHamiltonian.ToPauliHamiltonian(qubitEncoding);
 
             var pauliHamiltonianQSharpFormat = pauliHamiltonian.ToQSharpFormat();
             var wavefunctionQSharpFormat = wavefunction.ToQSharpFormat();

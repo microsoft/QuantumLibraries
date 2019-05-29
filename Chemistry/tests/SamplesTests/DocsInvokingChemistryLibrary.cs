@@ -69,6 +69,10 @@ namespace Microsoft.Quantum.Chemistry.Tests.Docs
             var qSharpHamiltonianData = jordanWignerEncoding.ToQSharpFormat();
             var qSharpWavefunctionData = fermionWavefunction.ToQSharpFormat();
             var qSharpData = QSharpFormat.Convert.ToQSharpFormat(qSharpHamiltonianData, qSharpWavefunctionData);
+
+            Assert.True(fermionWavefunction.MCFData.Excitations.Keys.Single()
+                .ToIndices().SequenceEqual(new[] { 0, 1 })
+                );
         }
 
         [Fact]
@@ -104,6 +108,8 @@ namespace Microsoft.Quantum.Chemistry.Tests.Docs
             var qSharpWavefunctionData = wavefunction.ToQSharpFormat();
             var qSharpData = QSharpFormat.Convert.ToQSharpFormat(qSharpHamiltonianData, qSharpWavefunctionData);
 
+            Assert.True(wavefunction.Method == StateType.SparseMultiConfigurational);
+            Assert.True(jordanWignerEncoding.SystemIndices.Count() == 12);
         }
 
 
@@ -121,6 +127,8 @@ namespace Microsoft.Quantum.Chemistry.Tests.Docs
             // This extracts the `OrbitalIntegralHamiltonian` from problem
             // description format.
             var orbitalIntegralHamiltonian = problem.OrbitalIntegralHamiltonian;
+
+            Assert.True(orbitalIntegralHamiltonian.CountTerms() > 10);
         }
 
         [Fact]
@@ -135,21 +143,11 @@ namespace Microsoft.Quantum.Chemistry.Tests.Docs
             // This is a data structure representing the Jordan-Wigner encoding 
             // of the Hamiltonian that we may pass to a Q# algorithm.
             var qSharpData = problem.ToQSharpFormat();
+
+            // Number of spin orbitals;
+            Assert.True(qSharpData.Item1 == 12);
         }
 
-        [Fact]
-        static void AbbreviatedResourceEstimate()
-        {
-            // Filename of Hamiltonian to be loaded.
-            var filename = "Molecules/LiH_0.2.yaml";
-
-            // This deserializes Broombridge.
-            var problem = Broombridge.Deserializers.DeserializeBroombridge(filename).ProblemDescriptions.First();
-
-            // This is a data structure representing the Jordan-Wigner encoding 
-            // of the Hamiltonian that we may pass to a Q# algorithm.
-            var qSharpData = problem.ToQSharpFormat();
-        }
     }
 
 }
