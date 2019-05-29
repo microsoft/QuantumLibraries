@@ -75,9 +75,9 @@ namespace Microsoft.Quantum.Chemistry.Tests.Docs
         static void LoadFromBroombridgeFile()
         {
             // This is the name of the file we want to load
-            var filename = @"n2_1_00Re_sto3g.nw.out.yaml";
+            var filename = @"LiH_0.2.yaml";
             // This is the directory containing the file
-            var root = @"IntegralData\YAML";
+            var root = @"Molecules";
 
             // This deserializes Broombridge.
             var broombridge = Broombridge.Deserializers.DeserializeBroombridge($@"{root}\{filename}");
@@ -111,9 +111,9 @@ namespace Microsoft.Quantum.Chemistry.Tests.Docs
         static void LoadFromLiquidFile()
         {
             // This is the name of the file we want to load
-            var filename = @"fe2s2_sto3g.dat"; // This is Ferrodoxin.
+            var filename = @"B_sto6g.dat"; // This is Ferrodoxin.
             // This is the directory containing the file
-            var root = @"IntegralData\Liquid";
+            var root = @"Molecules";
 
             // Deserialize the LiQuiD format.
             var problem = LiQuiD.Deserialize($@"{root}\{filename}").First();
@@ -127,7 +127,7 @@ namespace Microsoft.Quantum.Chemistry.Tests.Docs
         static void ResourceEstimate()
         {
             // Filename of Hamiltonian to be loaded.
-            var filename = "...";
+            var filename = "Molecules/LiH_0.2.yaml";
 
             // This deserializes Broombridge.
             var problem = Broombridge.Deserializers.DeserializeBroombridge(filename).ProblemDescriptions.First();
@@ -141,7 +141,7 @@ namespace Microsoft.Quantum.Chemistry.Tests.Docs
         static void AbbreviatedResourceEstimate()
         {
             // Filename of Hamiltonian to be loaded.
-            var filename = "...";
+            var filename = "Molecules/LiH_0.2.yaml";
 
             // This deserializes Broombridge.
             var problem = Broombridge.Deserializers.DeserializeBroombridge(filename).ProblemDescriptions.First();

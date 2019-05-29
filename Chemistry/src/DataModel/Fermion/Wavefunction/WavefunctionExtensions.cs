@@ -17,22 +17,22 @@ namespace Microsoft.Quantum.Chemistry.Fermion
         /// Populates the Unitary coupled-cluster wavefunction with all possible spin-preserving exitations
         /// from occupied orbitals to virtual orbitals.
         /// </summary>
-        /// <param name="occupiedOrbitals">Occupied orbitals that annihilation operators act on.</param>
+        /// <param name="occupiedSpinOrbitals">Occupied orbitals that annihilation operators act on.</param>
         /// <param name="nOrbitals">Number of orbitals.</param>
-        public static UnitaryCCWavefunction<SpinOrbital> AddAllUCCSDSingletExcitations(this SingleCFWavefunction<SpinOrbital> occupiedOrbitals, int nOrbitals)
+        public static UnitaryCCWavefunction<SpinOrbital> CreateAllUCCSDSingletExcitations(this IEnumerable<SpinOrbital> occupiedSpinOrbitals, int nOrbitals)
         {
             // Create list of unoccupied spin-orbitals
             var virtualOrbitals = Enumerable.Range(0, nOrbitals).Select(x => new SpinOrbital(x, Spin.u))
                 .Concat(Enumerable.Range(0, nOrbitals).Select(x => new SpinOrbital(x, Spin.d)))
-                .Except(occupiedOrbitals.Sequence.Select(o => o.Index));
+                .Except(occupiedSpinOrbitals);
 
             var outputState = new UnitaryCCWavefunction<SpinOrbital>()
             {
-                Reference = occupiedOrbitals
+                Reference = new SingleCFWavefunction<SpinOrbital>(occupiedSpinOrbitals)
             };
 
             // Populate singles excitations.
-            foreach (var occupiedIdx in occupiedOrbitals.Sequence.Select(o => o.Index))
+            foreach (var occupiedIdx in occupiedSpinOrbitals)
             {
                 foreach (var virtualIdx in virtualOrbitals)
                 {
@@ -45,9 +45,9 @@ namespace Microsoft.Quantum.Chemistry.Fermion
             }
 
             // Populate doubles excitations.
-            foreach (var occupiedIdx0 in occupiedOrbitals.Sequence.Select(o => o.Index))
+            foreach (var occupiedIdx0 in occupiedSpinOrbitals)
             {
-                foreach (var occupiedIdx1 in occupiedOrbitals.Sequence.Select(o => o.Index))
+                foreach (var occupiedIdx1 in occupiedSpinOrbitals)
                 {
                     // Only loop over distinct pairs of occupied spin orbitals
                     if (occupiedIdx0.ToInt() < occupiedIdx1.ToInt())
@@ -71,6 +71,7 @@ namespace Microsoft.Quantum.Chemistry.Fermion
                 }
             }
             return outputState;
+
         }
     }
 

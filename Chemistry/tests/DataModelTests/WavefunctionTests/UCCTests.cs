@@ -26,8 +26,8 @@ namespace Microsoft.Quantum.Chemistry.Tests
         [Fact]
         public void MakeUCCSDExcitationsTest0()
         {
-            var reference = new SingleCFWavefunction<SpinOrbital>(new[] { (1, Spin.u) }.Select(o => new SpinOrbital(o)));
-            var state = reference.AddAllUCCSDSingletExcitations(3);
+            var reference = new[] { (1, Spin.u) }.ToSpinOrbitals();
+            var state = reference.CreateAllUCCSDSingletExcitations(3);
 
             var excitations = new[]
             {
@@ -43,8 +43,8 @@ namespace Microsoft.Quantum.Chemistry.Tests
         [Fact]
         public void MakeUCCSDExcitationsTest1()
         {
-            var reference = new SingleCFWavefunction<SpinOrbital>(new[] { (1, Spin.d), (2, Spin.d) }.Select(o => new SpinOrbital(o)));
-            var state = reference.AddAllUCCSDSingletExcitations(3);
+            var reference = new[] { (1, Spin.d), (2, Spin.d) }.ToSpinOrbitals();
+            var state = reference.CreateAllUCCSDSingletExcitations(3);
 
             var excitations = new[]
             {
@@ -60,8 +60,8 @@ namespace Microsoft.Quantum.Chemistry.Tests
         [Fact]
         public void MakeUCCSDExcitationsTest2()
         {
-            var reference = new SingleCFWavefunction<SpinOrbital>(new[] { (1, Spin.u), (2, Spin.d) }.Select(o => new SpinOrbital(o)));
-            var state = reference.AddAllUCCSDSingletExcitations(3);
+            var reference = new[] { (1, Spin.u), (2, Spin.d) }.ToSpinOrbitals();
+            var state = reference.CreateAllUCCSDSingletExcitations(3);
 
             var excitations = new[]
             {
