@@ -119,7 +119,14 @@ namespace Microsoft.Quantum.Chemistry.Fermion
 
     public static partial class Extensions
     {
-
+        /// <summary>
+        /// Convert spin-orbital indices to integer indices
+        /// </summary>
+        /// <param name="wavefunction">Change indexing scheme of this wavefunction.</param>
+        /// <param name="indexConvention">Convention for mapping spin-orbitals to indices.</param>
+        /// <returns>A fermion wavefunction where spin-orbitals are indexed by integers
+        /// according to the chosen indexing scheme.
+        /// </returns>
         public static FermionWavefunction<int> ToIndexing(this FermionWavefunction<SpinOrbital> wavefunction, IndexConvention indexConvention)
          => new FermionWavefunction<int>()
          {
