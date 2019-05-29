@@ -32,7 +32,7 @@ namespace Microsoft.Quantum.Chemistry.Tests.Docs
     public static class InvokingChemistryLibrary
     {
         [Fact]
-        static void MakeHamiltoniam()
+        static void MakeHamiltonian()
         {
             // These orbital integrals are represented using the OrbitalIntegral
             // data structure.
