@@ -5,7 +5,7 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 
-using Microsoft.Quantum.Chemistry.Pauli;
+using Microsoft.Quantum.Chemistry.Paulis;
 
 namespace Microsoft.Quantum.Chemistry.Fermion
 {
