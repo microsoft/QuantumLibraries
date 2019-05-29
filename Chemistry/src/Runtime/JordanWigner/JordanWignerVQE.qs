@@ -9,28 +9,6 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner.VQE
     open Microsoft.Quantum.Simulation;
     open Microsoft.Quantum.Math;
 
-    /// # Summary:
-    ///     Wrapper around PrepareTrialState to make it compatible with EstimateFrequencyA by defining an adjoint
-    ///
-    /// # Input
-    /// ## inputState
-    /// The Jordan-Wigner input required for PrepareTrialState to run
-    /// ## qubits
-    /// A qubit register
-    operation PrepareTrialStateWrapper(inputState : (Int, JordanWignerInputState[]), qubits : Qubit[]) : Unit is Adj
-    {
-        body (...)
-        {
-            Microsoft.Quantum.Diagnostics.AssertAllZero(qubits);
-            PrepareTrialState(inputState, qubits);
-        }
-
-        adjoint (...)
-        {
-            ResetAll(qubits);
-        }
-    }
-
 
     /// # Summary:
     ///     Estimate the expectation value of the term through sampling
