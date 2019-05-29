@@ -50,31 +50,42 @@ namespace Microsoft.Quantum.Chemistry.Fermion
         /// <summary>
         /// Constructor for empty fermion wavefunction object.
         /// </summary>
-        internal FermionWavefunction(){}
+        internal FermionWavefunction() { }
 
 
         /// <summary>
-        /// Construct a single-reference wave function
+        /// Constructs a single-reference wave function. This 
+        /// is treated as sparse multi-reference wave function with only
+        /// one term.
         /// </summary>
         /// <param name="term">
         /// Sequence of indices of creation operators acting
         /// on the vacuum state.
         /// </param>
+        /// <example>
+        /// <code>
+        /// // Create a list of indices of the creation operators
+        /// var indices = new[] { 1, 2, 6 };
+        ///
+        /// // Convert the list of indices to a `FermionWavefunction` object.
+        /// var wavefunction = new FermionWavefunction<int>(indices);
+        /// </code>
+        /// </example>
         public FermionWavefunction(IEnumerable<TIndex> term)
         {
             // This is deliberately set to SparseMultiConfigurational
-            // instead of SingleConfigurational.
+            // instead of SingleConfigurational as it is equivalent
+            // to a sparse multi-reference wavefunciton with only 
+            // one term.
             Method = StateType.SparseMultiConfigurational;
 
             var singleReferenceWavefunction = new SingleCFWavefunction<TIndex>(term);
 
-            // We use Single() to throw an exception if multiple terms
-            // are specified for this type of state.
             MCFData.Set(singleReferenceWavefunction, new Complex(1.0, 0.0));
         }
 
         /// <summary>
-        /// Construct a sparse multi-reference wave function
+        /// Constructs a sparse multi-reference wave function
         /// </summary>
         /// <param name="terms">
         /// List of tuples specifying an unnormalized superposition of
@@ -83,21 +94,62 @@ namespace Microsoft.Quantum.Chemistry.Fermion
         /// The second item of each tuple is the unnormalized amplitude of the
         /// specified basis state.
         /// </param>
-        public FermionWavefunction(IEnumerable<(TIndex[], double)> terms) {
+        /// <example>
+        /// <code>
+        /// // Create a list of tuples where the first item of each 
+        /// // tuple are indices to the creation operators acting on the
+        /// // vacuum state, and the second item is the coefficient
+        /// // of that basis state.
+        /// var superposition = new[] {
+        ///     (new[] {1, 2, 6}, 0.1),
+        ///     (new[] {2, 1, 5}, -0.2) };
+        ///
+        /// // Create a fermion wavefunction object that represents the superposition.
+        /// var wavefunction = new FermionWavefunction<int>(superposition);
+        /// </code>
+        /// </example>
+        public FermionWavefunction(IEnumerable<(TIndex[], double)> terms)
+        {
             Method = StateType.SparseMultiConfigurational;
-            foreach (var term in terms) {
+            foreach (var term in terms)
+            {
                 MCFData.Set(new SingleCFWavefunction<TIndex>(term.Item1), new Complex(term.Item2, 0.0));    
             }
         }
 
         /// <summary>
-        /// Construct a unitary coupled-cluster wave function represented
+        /// Constructs a unitary coupled-cluster wave function represented
         /// by a unitary coupled-cluster operator acting on a single-reference
         /// state.
         /// </summary>
         /// <param name="reference"> Sequence of indices of creation operators acting
         /// on the vacuum state.</param>
         /// <param name="excitations"></param>
+        /// 
+        /// <example>
+        /// <code>
+        /// // Create a list of indices of the creation operators
+        /// // for the single-reference state
+        /// var reference = new[] { 1, 2 };
+        /// 
+        /// // Create a list describing the cluster operator
+        /// // The first half of each list of integers will be
+        /// // associated with the creation operators, and
+        /// // the second half with the annihilation operators.
+        /// var clusterOperator = new[]
+        /// {
+        ///     (new [] {0, 1}, 0.123),
+        ///     (new [] {0, 3, 1, 2}, 0.456),
+        ///     (new [] {3, 2, 1, 0}, 0.789)
+        /// };
+        /// 
+        /// // Create a fermion wavefunction object that represents the 
+        /// // unitary coupled-cluster wavefunction. It is assumed implicity
+        /// // that the exponent of the unitary coupled-cluster operator
+        /// // is the cluster operator minus its Hermitian conjugate.
+        /// var wavefunction = new FermionWavefunction<int>(reference, clusterOperator);
+        /// </code>
+        /// </example>
         public FermionWavefunction(
             IEnumerable<TIndex> reference,
             IEnumerable<(TIndex[], double)> excitations
@@ -120,11 +172,12 @@ namespace Microsoft.Quantum.Chemistry.Fermion
     public static partial class Extensions
     {
         /// <summary>
-        /// Convert spin-orbital indices to integer indices
+        /// Converts spin-orbital indices to integer indices
         /// </summary>
-        /// <param name="wavefunction">Change indexing scheme of this wavefunction.</param>
-        /// <param name="indexConvention">Convention for mapping spin-orbitals to indices.</param>
-        /// <returns>A fermion wavefunction where spin-orbitals are indexed by integers
+        /// <param name="wavefunction">A fermionic wavefunction whose spin-orbital indices are to be converted.</param>
+        /// <param name="indexConvention">The convention for mapping spin-orbitals to indices to be used in converting the spin-orbital indices of <paramref name="wavefunction" />.</param>
+        /// <returns>
+        /// A fermion wavefunction where spin-orbitals are indexed by integers
         /// according to the chosen indexing scheme.
         /// </returns>
         public static FermionWavefunction<int> ToIndexing(this FermionWavefunction<SpinOrbital> wavefunction, IndexConvention indexConvention)

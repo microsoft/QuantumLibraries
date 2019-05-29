@@ -44,14 +44,14 @@ namespace Microsoft.Quantum.Chemistry.Tests.Docs
                 )
                 .ToFermionHamiltonian(IndexConvention.UpDown);
 
-            // We convert this fermion Hamiltonian to a Jordan-Wigner representation.
+            // We convert this fermion Hamiltonian to a Jordan–Wigner representation.
             var jordanWignerEncoding = hamiltonian.ToPauliHamiltonian(QubitEncoding.JordanWigner);
 
             // We now convert this representation into a format consumable by Q#.
             var qSharpData = jordanWignerEncoding.ToQSharpFormat();
 
-            Assert.True(hamiltonian.CountTerms() == 10);
-            Assert.True(jordanWignerEncoding.CountTerms() == 6);
+            Assert.Equal(10, hamiltonian.CountTerms());
+            Assert.Equal(6, jordanWignerEncoding.CountTerms());
         }
     }
 }

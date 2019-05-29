@@ -50,10 +50,10 @@ namespace Microsoft.Quantum.Chemistry.Tests.Docs
                 new OrbitalIntegral(new int[] { }, energyOffset)
             };
 
-            // We initialize a fermion Hamiltonian data structure and add terms to it
+            // We initialize a fermion Hamiltonian data structure and add terms to it.
             var fermionHamiltonian = new OrbitalIntegralHamiltonian(orbitalIntegrals).ToFermionHamiltonian();
 
-            // The Jordan-Wigner encoding converts the Fermion Hamiltonian, 
+            // The Jordan–Wigner encoding converts the fermion Hamiltonian, 
             // expressed in terms of Fermionic operators, to a qubit Hamiltonian,
             // expressed in terms of Pauli matrices. This is an essential step
             // for simulating our constructed Hamiltonians on a qubit quantum
@@ -61,10 +61,10 @@ namespace Microsoft.Quantum.Chemistry.Tests.Docs
             var jordanWignerEncoding = fermionHamiltonian.ToPauliHamiltonian(Paulis.QubitEncoding.JordanWigner);
 
             // We also need to create an input quantum state to this Hamiltonian.
-            // Let us use the Hartree-Fock state.
+            // Let us use the Hartree–Fock state.
             var fermionWavefunction = fermionHamiltonian.CreateHartreeFockState(nElectrons);
 
-            // This Jordan-Wigner data structure also contains a representation 
+            // This Jordan–Wigner data structure also contains a representation 
             // of the Hamiltonian and wavefunction made for consumption by the Q# algorithms.
             var qSharpHamiltonianData = jordanWignerEncoding.ToQSharpFormat();
             var qSharpWavefunctionData = fermionWavefunction.ToQSharpFormat();
@@ -88,11 +88,11 @@ namespace Microsoft.Quantum.Chemistry.Tests.Docs
 
             // Note that the deserializer returns a list of `ProblemDescriptions` instances 
             // as the file might describe multiple Hamiltonians. In this example, there is 
-            // only one Hamiltonian. So we use `.First()`, which selects the first element of the list.
-            var problem = broombridge.ProblemDescriptions.First();
+            // only one Hamiltonian. So we use `.Single()`, which selects the only element of the list.
+            var problem = broombridge.ProblemDescriptions.Single();
 
             // This extracts the `OrbitalIntegralHamiltonian` from Broombridge format,
-            // then converts it to a fermion Hamiltonian, then to a Jordan-Wigner
+            // then converts it to a fermion Hamiltonian, then to a Jordan–Wigner
             // representation.
             var orbitalIntegralHamiltonian = problem.OrbitalIntegralHamiltonian;
             var fermionHamiltonian = orbitalIntegralHamiltonian.ToFermionHamiltonian(IndexConvention.UpDown);
@@ -140,7 +140,7 @@ namespace Microsoft.Quantum.Chemistry.Tests.Docs
             // This deserializes Broombridge.
             var problem = Broombridge.Deserializers.DeserializeBroombridge(filename).ProblemDescriptions.First();
 
-            // This is a data structure representing the Jordan-Wigner encoding 
+            // This is a data structure representing the Jordan–Wigner encoding 
             // of the Hamiltonian that we may pass to a Q# algorithm.
             var qSharpData = problem.ToQSharpFormat();
 

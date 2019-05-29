@@ -53,7 +53,8 @@ namespace Microsoft.Quantum.Chemistry.Fermion
         /// that are normal-ordered.
         /// </returns>
         public SingleCFWavefunction(IEnumerable<TIndex> indices) : base(indices
-            .Select(o => new LadderOperator<TIndex>(RaisingLowering.u, o))) {
+            .Select(o => new LadderOperator<TIndex>(RaisingLowering.u, o)))
+        {
             ThrowExceptionIfNotOnlyRaising();
         }
 

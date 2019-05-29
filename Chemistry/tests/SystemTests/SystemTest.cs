@@ -25,7 +25,7 @@ namespace SystemTests
     //static Microsoft.Quantum.Chemistry.Generic.Extensions;
 
 
-    // All following examples assume Jordan-Wigner encoding.
+    // All following examples assume Jordan–Wigner encoding.
     public class SystemTestFromGeneralHamiltonian
     {
 

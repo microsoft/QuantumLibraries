@@ -86,14 +86,14 @@ namespace Microsoft.Quantum.Chemistry.Tests.Samples.Hubbard
             // Create fermion representation of Hamiltonian
             // In this case, we use the spin-orbital to integer
             // indexing convention `x = orbitalIdx + spin * nSites`; as it 
-            // minimizes the length of Jordan-Wigner strings
+            // minimizes the length of Jordan–Wigner strings
             var hubbardFermionHamiltonian = hubbardOrbitalIntegralHamiltonian.ToFermionHamiltonian(IndexConvention.HalfUp);
 
             #endregion
 
 
             #region Estimating energies by simulating quantum phase estimation
-            // Create Jordan-Wigner representation of Hamiltonian
+            // Create Jordan–Wigner representation of Hamiltonian
             var jordanWignerEncoding = hubbardFermionHamiltonian.ToPauliHamiltonian();
 
             // Create data structure to pass to QSharp.

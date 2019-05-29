@@ -9,8 +9,8 @@
 // Here, we expose these libraries to our program using the
 // C# "using" statement, similar to the Q# "open" statement.
 
-// We will use the data model implemented by the Quantum Development Kit Chemistry
-// Libraries. This model defines what a fermionic Hamiltonian is, and how to
+// We will use the data model implemented by the Quantum Development Kit chemistry
+// libraries. This model defines what a fermionic Hamiltonian is, and how to
 // represent Hamiltonians on disk.
 using Microsoft.Quantum.Chemistry;
 using Microsoft.Quantum.Chemistry.OrbitalIntegrals;
@@ -78,7 +78,7 @@ namespace Microsoft.Quantum.Chemistry.Tests.Samples.Hubbard
             // - Hamiltonian representation
             // - Building the Hubbard Hamiltonian
             // - Building the Hubbard Hamiltonian through orbital integrals
-            // - Jordan-Wigner representation
+            // - Jordan–Wigner representation
 
             #region Spin-orbital representation
 
@@ -279,9 +279,9 @@ namespace Microsoft.Quantum.Chemistry.Tests.Samples.Hubbard
             Console.WriteLine(anotherHubbardHamiltonian);
             #endregion
 
-            #region Jordan-Wigner representation 
+            #region Jordan–Wigner representation 
 
-            // The Jordan-Wigner encoding converts the Fermion Hamiltonian, 
+            // The Jordan–Wigner encoding converts the fermion Hamiltonian, 
             // expressed in terms of Fermionic operators, to a qubit Hamiltonian,
             // expressed in terms of Pauli matrices. This is an essential step
             // for simulating our constructed Hamiltonians on a qubit quantum
@@ -289,7 +289,7 @@ namespace Microsoft.Quantum.Chemistry.Tests.Samples.Hubbard
             var jordanWignerEncoding = hubbardHamiltonian.ToPauliHamiltonian(Paulis.QubitEncoding.JordanWigner);
 
             // Let us print this Hamiltonian
-            Console.WriteLine($"Hubbard Hamiltonian in Jordan-Wigner representation");
+            Console.WriteLine($"Hubbard Hamiltonian in Jordan–Wigner representation");
             Console.WriteLine(jordanWignerEncoding);
 
             Console.WriteLine("Press Enter to continue...");
