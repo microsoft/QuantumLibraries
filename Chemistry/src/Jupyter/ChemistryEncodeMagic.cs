@@ -1,10 +1,9 @@
 ﻿
 using Microsoft.Jupyter.Core;
 using Microsoft.Quantum.Chemistry.Fermion;
-using Microsoft.Quantum.Chemistry.LadderOperators;
-using Microsoft.Quantum.Chemistry.Pauli;
+using Microsoft.Quantum.Chemistry.Paulis;
 using Microsoft.Quantum.Chemistry.QSharpFormat;
-using Microsoft.Quantum.IQSharp;
+
 using Newtonsoft.Json;
 
 namespace Microsoft.Quantum.Chemistry.Magic
