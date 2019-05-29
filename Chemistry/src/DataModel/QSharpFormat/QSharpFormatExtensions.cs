@@ -57,14 +57,7 @@ namespace Microsoft.Quantum.Chemistry.QSharpFormat
         {
             (Int64, QArray<JordanWignerInputState>) wavefunctionQSharpFormat = (0, new QArray<JordanWignerInputState>());
 
-            var energyOffset = pauliHamiltonianQSharpFormat.Item1;
-            var nSpinOrbitals = pauliHamiltonianQSharpFormat.Item2;
-
-            return new JordanWignerEncodingData(
-                (nSpinOrbitals
-                , pauliHamiltonianQSharpFormat.Item3
-                , wavefunctionQSharpFormat
-                , energyOffset));
+            return Convert.ToQSharpFormat(pauliHamiltonianQSharpFormat, wavefunctionQSharpFormat);
         }
 
         /// <summary>
@@ -73,20 +66,13 @@ namespace Microsoft.Quantum.Chemistry.QSharpFormat
         /// </summary>
         /// <param name="wavefunctionQSharpFormat">Wavefunction data in Q# format.</param>
         /// <returns>Combined Hamiltonian and wave function data in Q# format.</returns>
-        public static JordanWignerEncodingData ToQSharpFormat(
+        public static JordanWignerEncodingData Pad(
             this (Int64, QArray<JordanWignerInputState>) wavefunctionQSharpFormat
             )
         {
 
             (Double, Int64, JWOptimizedHTerms) pauliHamiltonianQSharpFormat = (0.0, 0, new JWOptimizedHTerms());
-            var energyOffset = pauliHamiltonianQSharpFormat.Item1;
-            var nSpinOrbitals = pauliHamiltonianQSharpFormat.Item2;
-
-            return new JordanWignerEncodingData(
-                (nSpinOrbitals
-                , pauliHamiltonianQSharpFormat.Item3
-                , wavefunctionQSharpFormat
-                , energyOffset));
+            return Convert.ToQSharpFormat(pauliHamiltonianQSharpFormat, wavefunctionQSharpFormat);
         }
     }
 
