@@ -7,7 +7,7 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 
-using Microsoft.Quantum.Chemistry.Pauli;
+using Microsoft.Quantum.Chemistry.Paulis;
 using Microsoft.Quantum.Chemistry.JordanWigner;
 
 namespace Microsoft.Quantum.Chemistry.QSharpFormat

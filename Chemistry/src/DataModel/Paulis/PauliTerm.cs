@@ -6,7 +6,7 @@ using System.Linq;
 using System.Collections.Generic;
 
 
-namespace Microsoft.Quantum.Chemistry.Pauli
+namespace Microsoft.Quantum.Chemistry.Paulis
 {
     public enum QubitEncoding
     {

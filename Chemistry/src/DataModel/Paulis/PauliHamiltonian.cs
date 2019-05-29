@@ -3,7 +3,7 @@
 
 using Microsoft.Quantum.Chemistry.Generic;
 
-namespace Microsoft.Quantum.Chemistry.Pauli
+namespace Microsoft.Quantum.Chemistry.Paulis
 {
 
     /// <summary>

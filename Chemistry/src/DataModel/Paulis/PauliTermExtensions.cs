@@ -4,7 +4,7 @@
 using System.Collections.Generic;
 
 
-namespace Microsoft.Quantum.Chemistry.Pauli
+namespace Microsoft.Quantum.Chemistry.Paulis
 {
 
     /// <summary>

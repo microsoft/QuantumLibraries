@@ -14,7 +14,7 @@
 // represent Hamiltonians on disk.
 using Microsoft.Quantum.Chemistry.OrbitalIntegrals;
 using Microsoft.Quantum.Chemistry.Fermion;
-using Microsoft.Quantum.Chemistry.Pauli;
+using Microsoft.Quantum.Chemistry.Paulis;
 using Microsoft.Quantum.Chemistry.QSharpFormat;
 
 // The System namespace provides a number of useful built-in
