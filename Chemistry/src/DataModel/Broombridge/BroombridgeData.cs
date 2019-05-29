@@ -116,27 +116,50 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
             };
             foreach (var initialState in problem.InitialStates)
             {
-                var state = new FermionWavefunction<SpinOrbital>();
+                var finalState = new FermionWavefunction<SpinOrbital>();
 
                 var (method, energy, outputState) = V0_2.ToWavefunction(initialState);
 
-                state.Method = V0_2.ParseInitialStateMethod(initialState.Method);
-                state.Energy = energy;
+                var setMethod = V0_2.ParseInitialStateMethod(initialState.Method);
+                var setEnergy = energy;
 
-                if (state.Method == StateType.SparseMultiConfigurational)
+                if (setMethod == StateType.SparseMultiConfigurational)
                 {
-                    state.MCFData = (SparseMultiCFWavefunction<SpinOrbital>)outputState;
+                    var mcfData = (SparseMultiCFWavefunction<SpinOrbital>)outputState;
+
+                    finalState = new FermionWavefunction<SpinOrbital>(
+                        mcfData.Excitations
+                            .Select(o => (
+                                o.Key.ToIndices().ToArray(),
+                                o.Value.Real
+                            )));
                 }
-                else if (state.Method == StateType.UnitaryCoupledCluster)
+                else if (setMethod == StateType.UnitaryCoupledCluster)
                 {
-                    state.UCCData = (UnitaryCCWavefunction<SpinOrbital>)outputState;
+                    var uccData = (UnitaryCCWavefunction<SpinOrbital>)outputState;
+
+                    var reference = uccData.Reference;
+
+                    var excitations = uccData.Excitations;
+
+                    finalState = new FermionWavefunction<SpinOrbital>(
+                        reference.ToIndices(),
+                        excitations
+                            .Select(o => (
+                                o.Key.ToIndices().ToArray(),
+                                o.Value.Real
+                            ))
+                        );
                 }
                 else
                 {
-                    throw new System.ArgumentException($"Wavefunction type {state.Method} not recognized");
+                    throw new System.ArgumentException($"Wavefunction type {setMethod} not recognized");
                 }
 
-                problemDescription.Wavefunctions.Add(initialState.Label, state);
+                finalState.Method = setMethod;
+                finalState.Energy = setEnergy;
+
+                problemDescription.Wavefunctions.Add(initialState.Label, finalState);
             }
             return problemDescription;
         }

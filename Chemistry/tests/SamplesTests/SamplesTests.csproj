@@ -7,12 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="MagicTests\**" />
-    <EmbeddedResource Remove="MagicTests\**" />
-    <QsharpCompile Remove="MagicTests\**" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Content Include="xunit.runner.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -31,5 +25,18 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\Runtime\Runtime.csproj" />
     <ProjectReference Include="..\..\src\DataModel\DataModel.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Molecules\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\BroombridgeExamples\LiH_0.2.yaml" Link="Molecules\LiH_0.2.yaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\LiQuiDExamples\B_sto6g.dat" Link="Molecules\B_sto6g.dat">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 </Project>

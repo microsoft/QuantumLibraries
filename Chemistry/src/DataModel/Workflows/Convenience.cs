@@ -80,4 +80,39 @@ namespace Microsoft.Quantum.Chemistry
         }
 
     }
+
+    public static partial class Extensions
+    {
+        /// <summary>
+        /// Converts an electronic structure problem description
+        /// into a format consumable by Q# using default settings.
+        /// </summary>
+        /// <param name="problem">Input electronic structure problem description.</param>
+        /// <param name="state">Selected wavefunction ansatz. This uses the Hartree-Fock state by default.</param>
+        /// <param name="indexConvention">Convention for mapping spin-orbit indices to integer indices.</param>
+        /// <param name="qubitEncoding">Scheme for mapping fermions to qubits.</param>
+        /// <returns></returns>
+        public static JordanWignerEncodingData ToQSharpFormat(
+            this ProblemDescription problem,
+            string state = "",
+            IndexConvention indexConvention = IndexConvention.UpDown,
+            QubitEncoding qubitEncoding = QubitEncoding.JordanWigner
+            )
+        {
+            var fermionHamiltonian = problem
+                .OrbitalIntegralHamiltonian
+                .ToFermionHamiltonian(indexConvention);
+
+            var wavefunction = problem.Wavefunctions.ContainsKey(state) ?
+                problem.Wavefunctions[state].ToIndexing(indexConvention) :
+                fermionHamiltonian.CreateHartreeFockState(problem.NElectrons);
+
+            var pauliHamiltonian = fermionHamiltonian.ToPauliHamiltonian(qubitEncoding);
+
+            var pauliHamiltonianQSharpFormat = pauliHamiltonian.ToQSharpFormat();
+            var wavefunctionQSharpFormat = wavefunction.ToQSharpFormat();
+
+            return QSharpFormat.Convert.ToQSharpFormat(pauliHamiltonianQSharpFormat, wavefunctionQSharpFormat);
+        }
+    }
 }

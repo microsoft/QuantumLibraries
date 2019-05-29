@@ -103,7 +103,7 @@ namespace Microsoft.Quantum.Chemistry.Tests.Samples.Hydrogen
                 new OrbitalIntegral(new[] { 1,1,1,1 }, 0.697398010),
                 // Add the identity term
                 new OrbitalIntegral(new int[] { }, energyOffset)
-        };
+            };
 
             // We initialize a fermion Hamiltonian data structure and add terms to it
             var fermionHamiltonian = new OrbitalIntegralHamiltonian(orbitalIntegrals).ToFermionHamiltonian();
