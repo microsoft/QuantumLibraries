@@ -16,6 +16,7 @@ using Microsoft.Quantum.Chemistry.Pauli;
 using Microsoft.Quantum.Chemistry.QSharpFormat;
 using Microsoft.Quantum.Chemistry.Generic;
 using Microsoft.Quantum.Chemistry.JordanWigner;
+using Microsoft.Quantum.Chemistry.JordanWigner.VQE;
 using SystemTests;
 using Xunit;
 
@@ -106,6 +107,25 @@ namespace SystemTests.Molecules
                 Assert.True(Math.Abs(error) < 1e-2);
             }
 
+            [Fact]
+            public void EstimateEnergyUCCSD()
+            {
+                var configuration = Config.Default();
+                configuration.UseIndexConvention = IndexConvention.UpDown;
+
+                // Loads a given UCCSD state
+                var qSharpData = Load("UCCSD |G>", configuration);
+
+		using (var qsim = new QuantumSimulator())
+		{
+		    // Estimate the energy of the molecule with UCCSD
+		    var nSamples = 1000000000000000000;
+                    var estEnergy = EstimateEnergy.Run(qsim, qSharpData, nSamples).Result;
+
+		    // Compare to reference value
+                    Assert.True(Math.Abs(-1.13727 - estEnergy) < 1e-3);
+		}
+            }
 
         }
 
