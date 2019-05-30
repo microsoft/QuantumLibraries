@@ -43,6 +43,7 @@ namespace Microsoft.Quantum.Chemistry.Tests
         static string filename = "Broombridge/broombridge_v0.2.yaml";
         static V0_2.Data broombridge = Deserializers.Deserialize<V0_2.Data>(filename);
 
+
         [Fact]
         public void Version()
         {
@@ -78,6 +79,15 @@ namespace Microsoft.Quantum.Chemistry.Tests
                 }.ToList();
             Assert.Equal(twoBodyAmplitudeTruth, twoBodyAmplitude);
 
+        }
+
+        [Fact]
+        public void CheckNullUnitaryCoupledCluster()
+        {
+            var broombridge_internal = Deserializers.DeserializeBroombridge(filename).ProblemDescriptions.First();
+
+            Assert.Contains("UCCSD nullTwo", broombridge_internal.Wavefunctions.Keys);
+            Assert.Contains("UCCSD nullOne", broombridge_internal.Wavefunctions.Keys);
         }
 
         [Fact]

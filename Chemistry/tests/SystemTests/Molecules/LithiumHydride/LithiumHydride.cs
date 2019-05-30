@@ -145,10 +145,11 @@ namespace SystemTests.Molecules
                 var configuration = Config.Default();
                 configuration.UseIndexConvention = IndexConvention.UpDown;
 
-                // This is a ranodm UCCSD state, not the actual one for LiH.
+                // This is a random UCCSD state, not the actual one for LiH.
                 var qSharpData = Load("UCCSD |E1>", configuration);
                 var estEnergy = Helper.SetUpSimulation(filename, configuration, qSharpData, TrotterStepSize, TrotterOrder, 1, TestName());
             }
+
         }
 
     }

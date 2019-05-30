@@ -261,8 +261,8 @@ problem_description:
             - [-0.0028268405466578515, "(3b)+", "(3a)+", "(2b)", "(2a)"]
             - [0.00479535357617056, "(4a)+", "(4b)+", "(2a)", "(2b)"]
             - [0.00479535357617056, "(4b)+", "(4a)+", "(2b)", "(2a)"]
+            # A one-body cluster term is t^{q}_{p} a^\dag_q a_p             # A one-body unitary cluster term is t^{q}_{p}(a^\dag_q a_p- a^\dag_p a_q)
   metadata: {molecule_name: unknown}
   n_electrons: 4
-  n_orbitals: 6
   scf_energy: {units: hartree, value: -7.86099161}
   scf_energy_offset: {units: hartree, value: -0.0}
