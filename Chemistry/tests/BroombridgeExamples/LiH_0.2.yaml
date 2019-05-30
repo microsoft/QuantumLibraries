@@ -221,7 +221,7 @@ problem_description:
         '|vacuum>']
       - [-0.204713071553843, (6a)+, (3b)+, (2b), (2a), (1a)+, (2a)+, (1b)+, (2b)+,
         '|vacuum>']
-  - label: "UCCSD |E1>"
+  - label: "UCCSD test1"
     method: unitary_coupled_cluster
     energy: {units: hartree, value: -7.228223222812073}
     cluster_operator:             # Initial state that cluster operator is applied to.
@@ -234,9 +234,9 @@ problem_description:
             - [0.5, "(1a)+", "(3a)+", "(2a)", "(4b)"]
   - label: "UCCSD test0"
     method: unitary_coupled_cluster
-    energy: {units: hartree, value: -7.228223222812073}
+    energy: {units: hartree, value: -7.86029}
     cluster_operator:             # Initial state that cluster operator is applied to.
-        reference_state: [1.0, "(1a)+", "(2a)+", "(1b)+", "(2b)+", '|vacuum>']             # A one-body cluster term is t^{q}_{p} a^\dag_q a_p             # A one-body unitary cluster term is t^{q}_{p}(a^\dag_q a_p- a^\dag_p a_q)
+        reference_state: [1.0, "(1a)+", "(2a)+", "(1b)+", "(2b)+", '|vacuum>']            
         one_body_amplitudes:             # t^{q}_{p} p q
             - [0.007531733272953348, "(3a)+", "(1a)"]
             - [0.007531733272953348, "(3b)+", "(1b)"]
@@ -261,8 +261,7 @@ problem_description:
             - [-0.0028268405466578515, "(3b)+", "(3a)+", "(2b)", "(2a)"]
             - [0.00479535357617056, "(4a)+", "(4b)+", "(2a)", "(2b)"]
             - [0.00479535357617056, "(4b)+", "(4a)+", "(2b)", "(2a)"]
-            # A one-body cluster term is t^{q}_{p} a^\dag_q a_p             # A one-body unitary cluster term is t^{q}_{p}(a^\dag_q a_p- a^\dag_p a_q)
-  metadata: {molecule_name: unknown}
+  metadata: {molecule_name: LiH}
   n_electrons: 4
   scf_energy: {units: hartree, value: -7.86099161}
   scf_energy_offset: {units: hartree, value: -0.0}
