@@ -13,8 +13,8 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner.VQE {
 
 
     /// # Summary
-    /// Wrapper around PrepareTrialState to make it compatible with EstimateFrequencyA by defining an adjoint.
-    /// EstimateFrequencyA has built-in emulation feature when targeting the QuantumSimulator which speeds up its execution.
+    /// Private wrapper around PrepareTrialState to make it compatible with EstimateFrequencyA by defining an adjoint.
+    /// EstimateFrequencyA has built-in emulation feature when targeting the QuantumSimulator, which speeds up its execution.
     ///
     /// # Input
     /// ## inputState
@@ -58,7 +58,6 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner.VQE {
         let (nQubits, jwTerms, inputState, energyOffset) = jwHamiltonian!;
 
         // Loop over all qubit Hamiltonian terms
-	//let dummy = JordanWignerGeneratorSystem(jwTerms);
 	let (nTerms, indexFunction) = (JordanWignerGeneratorSystem(jwTerms))!;
 
         for (idxTerm in 0..nTerms-1) {
