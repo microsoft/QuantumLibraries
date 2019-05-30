@@ -54,7 +54,7 @@ namespace Microsoft.Quantum.Chemistry.Tests
         [Fact]
         public void UnitaryCoupledCluster()
         {
-            var state = broombridge.ProblemDescriptions.First().InitialStates.ElementAt(3);
+            var state = broombridge.ProblemDescriptions.Single().InitialStates.ElementAt(3);
 
             Assert.Equal("UCCSD |G>", state.Label);
 
@@ -84,7 +84,7 @@ namespace Microsoft.Quantum.Chemistry.Tests
         [Fact]
         public void CheckNullUnitaryCoupledCluster()
         {
-            var broombridge_internal = Deserializers.DeserializeBroombridge(filename).ProblemDescriptions.First();
+            var broombridge_internal = Deserializers.DeserializeBroombridge(filename).ProblemDescriptions.Single();
 
             Assert.Contains("UCCSD nullTwo", broombridge_internal.Wavefunctions.Keys);
             Assert.Contains("UCCSD nullOne", broombridge_internal.Wavefunctions.Keys);

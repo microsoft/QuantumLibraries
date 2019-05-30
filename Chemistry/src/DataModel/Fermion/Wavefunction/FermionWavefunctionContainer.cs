@@ -63,12 +63,11 @@ namespace Microsoft.Quantum.Chemistry.Fermion
         /// on the vacuum state.
         /// </param>
         /// <example>
+        /// Create a list of indices of the creation operators, then
+        /// Convert the list of indices to a `FermionWavefunction` instance.
         /// <code>
-        /// // Create a list of indices of the creation operators
         /// var indices = new[] { 1, 2, 6 };
-        ///
-        /// // Convert the list of indices to a `FermionWavefunction` object.
-        /// var wavefunction = new FermionWavefunction<int>(indices);
+        /// var wavefunction = new FermionWavefunction&lt;int&gt;(indices);
         /// </code>
         /// </example>
         public FermionWavefunction(IEnumerable<TIndex> term)
@@ -95,17 +94,18 @@ namespace Microsoft.Quantum.Chemistry.Fermion
         /// specified basis state.
         /// </param>
         /// <example>
+        /// Create a list of tuples where the first item of each 
+        /// tuple are indices to the creation operators acting on the
+        /// vacuum state, and the second item is the coefficient
+        /// of that basis state. Next, create a fermion wavefunction object 
+        /// that represents the superposition.
         /// <code>
-        /// // Create a list of tuples where the first item of each 
-        /// // tuple are indices to the creation operators acting on the
-        /// // vacuum state, and the second item is the coefficient
-        /// // of that basis state.
-        /// var superposition = new[] {
+        /// var superposition = new[] 
+        /// {
         ///     (new[] {1, 2, 6}, 0.1),
-        ///     (new[] {2, 1, 5}, -0.2) };
-        ///
-        /// // Create a fermion wavefunction object that represents the superposition.
-        /// var wavefunction = new FermionWavefunction<int>(superposition);
+        ///     (new[] {2, 1, 5}, -0.2) 
+        /// };
+        /// var wavefunction = new FermionWavefunction&lt;int&gt;(superposition);
         /// </code>
         /// </example>
         public FermionWavefunction(IEnumerable<(TIndex[], double)> terms)
@@ -127,27 +127,27 @@ namespace Microsoft.Quantum.Chemistry.Fermion
         /// <param name="excitations"></param>
         /// 
         /// <example>
-        /// <code>
-        /// // Create a list of indices of the creation operators
-        /// // for the single-reference state
-        /// var reference = new[] { 1, 2 };
+        /// Create a list of indices of the creation operators
+        /// for the single-reference state.
         /// 
-        /// // Create a list describing the cluster operator
-        /// // The first half of each list of integers will be
-        /// // associated with the creation operators, and
-        /// // the second half with the annihilation operators.
+        /// Then create a list describing the cluster operator.
+        /// The first half of each list of integers will be
+        /// associated with the creation operators, and
+        /// the second half with the annihilation operators.
+        /// 
+        /// Finally, create a fermion wavefunction object that represents the 
+        /// unitary coupled-cluster wavefunction. It is assumed implicity
+        /// that the exponent of the unitary coupled-cluster operator
+        /// is the cluster operator minus its Hermitian conjugate.
+        /// <code>
+        /// var reference = new[] { 1, 2 };
         /// var clusterOperator = new[]
         /// {
         ///     (new [] {0, 1}, 0.123),
         ///     (new [] {0, 3, 1, 2}, 0.456),
         ///     (new [] {3, 2, 1, 0}, 0.789)
         /// };
-        /// 
-        /// // Create a fermion wavefunction object that represents the 
-        /// // unitary coupled-cluster wavefunction. It is assumed implicity
-        /// // that the exponent of the unitary coupled-cluster operator
-        /// // is the cluster operator minus its Hermitian conjugate.
-        /// var wavefunction = new FermionWavefunction<int>(reference, clusterOperator);
+        /// var wavefunction = new FermionWavefunction&lt;int&gt;(reference, clusterOperator);
         /// </code>
         /// </example>
         public FermionWavefunction(

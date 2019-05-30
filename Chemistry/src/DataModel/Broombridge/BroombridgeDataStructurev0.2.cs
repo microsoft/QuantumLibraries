@@ -241,16 +241,13 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
         {
             var outputState = new UnitaryCCWavefunction<SpinOrbital>();
 
-            var termsOne = clusterOperator.OneBodyAmplitudes == null ?
-                new List<List<string>>() :
-                clusterOperator.OneBodyAmplitudes;
+            var oneBodyTerms = clusterOperator.OneBodyAmplitudes ??
+                new List<List<string>>();
 
-            var termsTwo = clusterOperator.TwoBodyAmplitudes == null ?
-                new List<List<string>>() :
-                clusterOperator.TwoBodyAmplitudes;
+            var twoBodyTerms = clusterOperator.TwoBodyAmplitudes ??
+                new List<List<string>>();
 
-
-            foreach (var element in termsOne.Concat(termsTwo))
+            foreach (var element in oneBodyTerms.Concat(twoBodyTerms))
             {
                 // First item is the amplitude.
                 double amplitude = double.Parse(element.First().ToString(), System.Globalization.CultureInfo.InvariantCulture);
