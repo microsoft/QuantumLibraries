@@ -236,7 +236,7 @@ problem_description:
     method: unitary_coupled_cluster
     energy: {units: hartree, value: -7.86029}
     cluster_operator:             # Initial state that cluster operator is applied to.
-        reference_state: [1.0, "(1a)+", "(2a)+", "(1b)+", "(2b)+", '|vacuum>']             # A one-body cluster term is t^{q}_{p} a^\dag_q a_p             # A one-body unitary cluster term is t^{q}_{p}(a^\dag_q a_p- a^\dag_p a_q)
+        reference_state: [1.0, "(1a)+", "(2a)+", "(1b)+", "(2b)+", '|vacuum>']            
         one_body_amplitudes:             # t^{q}_{p} p q
             - [0.007531733272953348, "(3a)+", "(1a)"]
             - [0.007531733272953348, "(3b)+", "(1b)"]
@@ -263,6 +263,5 @@ problem_description:
             - [0.00479535357617056, "(4b)+", "(4a)+", "(2b)", "(2a)"]
   metadata: {molecule_name: LiH}
   n_electrons: 4
-  n_orbitals: 6
   scf_energy: {units: hartree, value: -7.86099161}
   scf_energy_offset: {units: hartree, value: -0.0}

@@ -8,7 +8,7 @@ namespace Microsoft.Quantum.Chemistry.Paulis
 
     /// <summary>
     /// <para>
-    /// Jordan-Wigner representation of a general Fermion Hamiltonian <see cref="FermionHamiltonian"/>.
+    /// Jordan–Wigner representation of a general fermion Hamiltonian <see cref="FermionHamiltonian"/>.
     /// This representation may only be created from instances of <see cref="FermionHamiltonian"/>,
     /// and stores term data in a format suitable for consumption by Q#,
     /// and optimized for a product formula Hamiltonian simulation algorithm.

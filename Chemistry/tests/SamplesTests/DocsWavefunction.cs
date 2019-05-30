@@ -41,7 +41,7 @@ namespace Microsoft.Quantum.Chemistry.Tests.Docs
             // Convert the list of indices to a `FermionWavefunction` object.
             var wavefunction = new FermionWavefunction<int>(indices);
 
-            Assert.True(wavefunction.Method == StateType.SparseMultiConfigurational);
+            Assert.Equal(StateType.SparseMultiConfigurational, wavefunction.Method);
         }
 
         [Fact]
@@ -57,8 +57,7 @@ namespace Microsoft.Quantum.Chemistry.Tests.Docs
             // one indexed by integers
             var wavefunctionInt = wavefunctionSpinOrbital.ToIndexing(IndexConvention.UpDown);
 
-            Assert.True(wavefunctionInt.MCFData.Excitations.Single().Key.ToIndices()
-                .SequenceEqual(new[] { 1, 2, 6 }));
+            Assert.Equal(new[] { 1, 2, 6 }, wavefunctionInt.MCFData.Excitations.Single().Key.ToIndices());
         }
 
         [Fact]
@@ -67,11 +66,11 @@ namespace Microsoft.Quantum.Chemistry.Tests.Docs
             // We initialize a fermion Hamiltonian.
             var fermionHamiltonian = new FermionHamiltonian();
 
-            // Create a Hartree-Fock state from the Hamiltonian 
+            // Create a Hartree–Fock state from the Hamiltonian 
             // with, say, `4` occupied spin orbitals.
             var wavefunction = fermionHamiltonian.CreateHartreeFockState(nElectrons: 4);
 
-            Assert.True(wavefunction.MCFData.Excitations.Keys.Single().Sequence.Count() == 4);
+            Assert.Equal(4, wavefunction.MCFData.Excitations.Keys.Single().Sequence.Count());
         }
 
         [Fact]
@@ -88,8 +87,8 @@ namespace Microsoft.Quantum.Chemistry.Tests.Docs
             // Create a fermion wavefunction object that represents the superposition.
             var wavefunction = new FermionWavefunction<int>(superposition);
 
-            Assert.True(wavefunction.Method == StateType.SparseMultiConfigurational);
-            Assert.True(wavefunction.MCFData.Excitations.Count() == 2);
+            Assert.Equal(StateType.SparseMultiConfigurational, wavefunction.Method);
+            Assert.Equal(2, wavefunction.MCFData.Excitations.Count());
         }
 
         [Fact]
@@ -116,8 +115,8 @@ namespace Microsoft.Quantum.Chemistry.Tests.Docs
             // is the cluster operator minus its Hermitian conjugate.
             var wavefunction = new FermionWavefunction<int>(reference, clusterOperator);
 
-            Assert.True(wavefunction.Method == StateType.UnitaryCoupledCluster);
-            Assert.True(wavefunction.UCCData.Excitations.Count() == 3);
+            Assert.Equal(StateType.UnitaryCoupledCluster, wavefunction.Method);
+            Assert.Equal(3, wavefunction.UCCData.Excitations.Count());
         }
 
         [Fact]
@@ -148,8 +147,8 @@ namespace Microsoft.Quantum.Chemistry.Tests.Docs
             // by integers
             var wavefunctionInteger = wavefunctionSpinOrbital.ToIndexing(IndexConvention.UpDown);
 
-            Assert.True(wavefunctionInteger.Method == StateType.UnitaryCoupledCluster);
-            Assert.True(wavefunctionInteger.UCCData.Excitations.Count() == 3);
+            Assert.Equal(StateType.UnitaryCoupledCluster, wavefunctionInteger.Method);
+            Assert.Equal(3, wavefunctionInteger.UCCData.Excitations.Count());
         }
 
         [Fact]

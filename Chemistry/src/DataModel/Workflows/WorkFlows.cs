@@ -46,7 +46,7 @@ namespace Microsoft.Quantum.Chemistry
             FermionHamiltonian fermionHamiltonian = orbitalIntegralHamiltonian.ToFermionHamiltonian(indexConvention);
 
             // We target a qubit quantum computer, which requires a Pauli representation of the fermion Hamiltonian.
-            // A number of mappings from fermions to qubits are possible. Let us choose the Jordan-Wigner encoding.
+            // A number of mappings from fermions to qubits are possible. Let us choose the Jordan–Wigner encoding.
             PauliHamiltonian pauliHamiltonian = fermionHamiltonian.ToPauliHamiltonian(QubitEncoding.JordanWigner);
             #endregion
 

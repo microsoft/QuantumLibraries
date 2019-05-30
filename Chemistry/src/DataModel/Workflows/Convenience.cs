@@ -88,10 +88,12 @@ namespace Microsoft.Quantum.Chemistry
         /// into a format consumable by Q# using default settings.
         /// </summary>
         /// <param name="problem">Input electronic structure problem description.</param>
-        /// <param name="state">Selected wavefunction ansatz. This uses the Hartree-Fock state by default.</param>
+        /// <param name="state">Selected wavefunction ansatz. This uses the Hartree–Fock state by default.</param>
         /// <param name="indexConvention">Convention for mapping spin-orbit indices to integer indices.</param>
         /// <param name="qubitEncoding">Scheme for mapping fermions to qubits.</param>
-        /// <returns></returns>
+        /// <returns>
+        /// A representation of <paramref name="problem" /> suitable for passing to Q# simulation operations.
+        /// </returns>
         public static JordanWignerEncodingData ToQSharpFormat(
             this ProblemDescription problem,
             string state = "",

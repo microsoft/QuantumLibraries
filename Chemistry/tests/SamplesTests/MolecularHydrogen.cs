@@ -115,19 +115,19 @@ namespace Microsoft.Quantum.Chemistry.Tests.Samples.Hydrogen
             Console.WriteLine("----- End Print Hamiltonian \n");
 
             // We also need to create an input quantum state to this Hamiltonian.
-            // Let us use the Hartree-Fock state.
+            // Let us use the Hartree–Fock state.
             var fermionWavefunction = fermionHamiltonian.CreateHartreeFockState(nElectrons);
             #endregion
 
-            #region Jordan-Wigner representation 
-            // The Jordan-Wigner encoding converts the Fermion Hamiltonian, 
+            #region Jordan–Wigner representation 
+            // The Jordan–Wigner encoding converts the fermion Hamiltonian, 
             // expressed in terms of Fermionic operators, to a qubit Hamiltonian,
             // expressed in terms of Pauli matrices. This is an essential step
             // for simulating our constructed Hamiltonians on a qubit quantum
             // computer.
-            Console.WriteLine("----- Creating Jordan-Wigner encoding");
+            Console.WriteLine("----- Creating Jordan–Wigner encoding");
             var jordanWignerEncoding = fermionHamiltonian.ToPauliHamiltonian(Paulis.QubitEncoding.JordanWigner);
-            Console.WriteLine("----- End Creating Jordan-Wigner encoding \n");
+            Console.WriteLine("----- End Creating Jordan–Wigner encoding \n");
             #endregion
 
             #region Performing the simulation 
@@ -135,7 +135,7 @@ namespace Microsoft.Quantum.Chemistry.Tests.Samples.Hydrogen
             // We will use this to obtain an estimate of its ground state energy.
 
 
-                // This Jordan-Wigner data structure also contains a representation 
+                // This Jordan–Wigner data structure also contains a representation 
                 // of the Hamiltonian and wavefunction made for consumption by the Q# algorithms.
                 var qSharpHamiltonianData = jordanWignerEncoding.ToQSharpFormat();
                 var qSharpWavefunctionData = fermionWavefunction.ToQSharpFormat();

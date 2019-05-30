@@ -146,7 +146,7 @@ namespace SystemTests.Molecules
                 var configuration = Config.Default();
                 configuration.UseIndexConvention = IndexConvention.UpDown;
 
-                // This is a ranodm UCCSD state, not the actual one for LiH.
+                // This is a random UCCSD state, not the actual one for LiH.
                 var qSharpData = Load("UCCSD |E1>", configuration);
                 var estEnergy = Helper.SetUpSimulation(filename, configuration, qSharpData, TrotterStepSize, TrotterOrder, 1, TestName());
             }
@@ -167,9 +167,9 @@ namespace SystemTests.Molecules
                     var estEnergy = EstimateEnergy.Run(qsim, qSharpData, nSamples).Result;
 
                     // Compare to reference value
-		    Assert.Equal(-7.8602, estEnergy, 2);
+		            Assert.Equal(-7.8602, estEnergy, 2);
                 }
             }
-	}
+	        }
     }
 }

@@ -29,7 +29,7 @@ namespace SystemTests.Molecules
         public const int TrotterOrder = 1;
         public const string GroundState = "|G>";
         // This energy is only approximately correct.
-        public const double GroundStateEnergy = -1.13273749;
+        public const double GroundStateEnergy = -1.1372704;
 
 
         public class Version_v0_1
@@ -116,15 +116,15 @@ namespace SystemTests.Molecules
                 // Loads a given UCCSD state
                 var qSharpData = Load("UCCSD |G>", configuration);
 
-		using (var qsim = new QuantumSimulator())
-		{
-		    // Estimate the energy of the molecule with UCCSD
-		    var nSamples = 1000000000000000000;
-		    var estEnergy = EstimateEnergy.Run(qsim, qSharpData, nSamples).Result;
+		        using (var qsim = new QuantumSimulator())
+		        {
+		            // Estimate the energy of the molecule with UCCSD
+		            var nSamples = 1000000000000000000;
+		            var estEnergy = EstimateEnergy.Run(qsim, qSharpData, nSamples).Result;
 
-		    // Compare to reference value
-		    Assert.Equal(-1.13727, estEnergy, 3);
-		}
+		            // Compare to reference value
+		            Assert.Equal(-1.13727, estEnergy, 3);
+		        }
             }
 
         }
