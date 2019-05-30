@@ -10,7 +10,7 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner.VQE
 
 
     /// # Summary:
-    ///     Wrapper around PrepareTrialState to make it compatible with EstimateFrequencyA by defining an adjoint.
+    ///     Private wrapper around PrepareTrialState to make it compatible with EstimateFrequencyA by defining a non-matching adjoint. Note that this private wrapper should not be used outside this context.
     ///     EstimateFrequencyA has built-in emulation on the QuantumSimulator which makes its execution much faster
     ///
     /// # Input
