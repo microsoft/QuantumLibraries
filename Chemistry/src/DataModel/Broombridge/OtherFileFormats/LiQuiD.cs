@@ -21,7 +21,7 @@ namespace Microsoft.Quantum.Chemistry
         {
             public int NOrbitals { get; set; }
             public int NElectrons { get; set; }
-            public double CoulombRepulation { get; set; }
+            public double CoulombRepulsion { get; set; }
             public string MiscellaneousInformation { get; set; }
             public OrbitalIntegralHamiltonian OrbitalIntegralHamiltonian { get; set; }
         }
@@ -179,7 +179,7 @@ namespace Microsoft.Quantum.Chemistry
 
             problem.OrbitalIntegralHamiltonian = hamiltonian;
             problem.NOrbitals = System.Convert.ToInt32 ( nOrbitals);
-            problem.CoulombRepulation = coulombRepulsion;
+            problem.CoulombRepulsion = coulombRepulsion;
 
             return problem;
 
