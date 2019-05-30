@@ -17,7 +17,7 @@ namespace Microsoft.Quantum.Chemistry.QSharpFormat
     public static partial class Convert
     {
         /// <summary>
-        /// Combine Q# Hamiltonian and wavefunciton data to a format consumed
+        /// Combine Q# Hamiltonian and wavefunction data to a format consumed
         /// by the Q# chemistry libraries.
         /// </summary>
         /// <param name="pauliHamiltonianQSharpFormat">Hamiltonian data in Q# format.</param>
