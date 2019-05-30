@@ -9,7 +9,7 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
     open Microsoft.Quantum.Arrays;
     open Microsoft.Quantum.Convert;
 
-    // This block encoding for qubitization runs off data optimized for a Jordan–Wigner encoding.
+    // This block encoding for qubitization runs off data optimized for a Jordanâ€“Wigner encoding.
     // This collects terms Z, ZZ, PQandPQQR, hpqrs separately.
     // This only apples the needed hpqrs XXXX XXYY terms.
     
