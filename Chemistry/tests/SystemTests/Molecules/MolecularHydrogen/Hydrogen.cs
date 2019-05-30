@@ -120,10 +120,10 @@ namespace SystemTests.Molecules
 		{
 		    // Estimate the energy of the molecule with UCCSD
 		    var nSamples = 1000000000000000000;
-                    var estEnergy = EstimateEnergy.Run(qsim, qSharpData, nSamples).Result;
+		    var estEnergy = EstimateEnergy.Run(qsim, qSharpData, nSamples).Result;
 
 		    // Compare to reference value
-                    Assert.True(Math.Abs(-1.13727 - estEnergy) < 1e-3);
+		    Assert.Equal(-1.13727, estEnergy, 3);
 		}
             }
 

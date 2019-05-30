@@ -50,7 +50,7 @@ problem_description:
             - [1.52745368e-07, "(2b)+", "(1b)"]
         two_body_amplitudes: 			# t^{pq}_{rs} p q r s 			# If this is a PQQR term, the middle two indices must coincide.
             - [1.13070239e-01, "(2a)+", "(2b)+", "(1a)", "(1b)"]
-  metadata: {molecule_name: unknown}
+  metadata: {molecule_name: H2}
   n_electrons: 2
   n_orbitals: 2
   scf_energy: {units: hartree, value: -7.86099161}

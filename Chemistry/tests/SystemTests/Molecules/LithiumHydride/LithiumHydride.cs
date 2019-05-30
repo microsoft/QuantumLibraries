@@ -167,7 +167,7 @@ namespace SystemTests.Molecules
                     var estEnergy = EstimateEnergy.Run(qsim, qSharpData, nSamples).Result;
 
                     // Compare to reference value
-                    Assert.True(Math.Abs(-7.8602 - estEnergy) < 1e-2);
+		    Assert.Equal(-7.8602, estEnergy, 2);
                 }
             }
 	}

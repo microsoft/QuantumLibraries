@@ -261,7 +261,7 @@ problem_description:
             - [-0.0028268405466578515, "(3b)+", "(3a)+", "(2b)", "(2a)"]
             - [0.00479535357617056, "(4a)+", "(4b)+", "(2a)", "(2b)"]
             - [0.00479535357617056, "(4b)+", "(4a)+", "(2b)", "(2a)"]
-  metadata: {molecule_name: unknown}
+  metadata: {molecule_name: LiH}
   n_electrons: 4
   n_orbitals: 6
   scf_energy: {units: hartree, value: -7.86099161}
