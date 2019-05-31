@@ -31,9 +31,9 @@ steps:
     command: test
     projects: |
       $(LibrariesRootFolder)/Standard/tests
-      $(LibrariesRootFolder)/Chemistry/tests/ChemistryTests/ChemistryTests.csproj
+      $(LibrariesRootFolder)/Chemistry/tests/ChemistryTests/QSharpTests.csproj
       $(LibrariesRootFolder)/Chemistry/tests/SystemTests/SystemTests.csproj
-      $(LibrariesRootFolder)/Chemistry/tests/DataModelTests/DataModelTests.csproj
+      $(LibrariesRootFolder)/Chemistry/tests/DataModelTests/CSharpTests.csproj
       $(LibrariesRootFolder)/Chemistry/tests/SerializationTests/SerializationTests.csproj
       $(LibrariesRootFolder)/Numerics/tests/NumericsTests.csproj
     arguments: >
