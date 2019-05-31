@@ -12,6 +12,7 @@ steps:
     projects: |
       $(LibrariesRootFolder)/Standard.sln
       $(LibrariesRootFolder)/Chemistry.sln
+      $(LibrariesRootFolder)/Numerics.sln
     arguments: >
         -c $(BuildConfiguration)
         -v n
@@ -34,6 +35,7 @@ steps:
       $(LibrariesRootFolder)/Chemistry/tests/SystemTests/SystemTests.csproj
       $(LibrariesRootFolder)/Chemistry/tests/DataModelTests/DataModelTests.csproj
       $(LibrariesRootFolder)/Chemistry/tests/SerializationTests/SerializationTests.csproj
+      $(LibrariesRootFolder)/Numerics/tests/NumericsTests.csproj
     arguments: >
         -c $(BuildConfiguration)
         -v n
@@ -52,10 +54,10 @@ steps:
     projects: |
      $(LibrariesRootFolder)/Standard/src/Standard.csproj
      $(LibrariesRootFolder)/Chemistry/src/DataModel/DataModel.csproj
+     $(LibrariesRootFolder)/Numerics/src/Numerics.csproj
     arguments: >
       --no-build
       -c $(BuildConfiguration)
       -v n
       -o $(System.DefaultWorkingDirectory)
       /p:PackageVersion=$(Nuget.Version)
-
