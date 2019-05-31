@@ -23,6 +23,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Quantum.Development.Kit" Version="0.7.1905.2101-beta" />
+    <PackageReference Include="Microsoft.Quantum.Development.Kit" Version="0.7.1905.3109" />
   </ItemGroup>
 </Project>
