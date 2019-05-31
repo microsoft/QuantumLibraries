@@ -8,7 +8,7 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
     open Microsoft.Quantum.Chemistry;
     open Microsoft.Quantum.Arrays;
 
-    // This evolution set runs off data optimized for a jordan-wigner encoding.
+    // This evolution set runs off data optimized for a Jordan–Wigner encoding.
     // This collects terms Z, ZZ, PQandPQQR, hpqrs separately.
     // This only apples the needed hpqrs XXXX XXYY terms.
     // Operations here are expressed in terms of Exp([...])
@@ -115,7 +115,6 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
     /// ## qubits
     /// Qubits of Hamiltonian.
     operation _ApplyJordanWignerPQandPQQRTerm_ (term : GeneratorIndex, stepSize : Double, qubits : Qubit[]) : Unit {
-        
         body (...) {
             let ((idxTermType, coeff), idxFermions) = term!;
             let angle = (1.0 * coeff[0]) * stepSize;

@@ -1,5 +1,6 @@
 # Python temporary files
 .ipynb_checkpoints
+.pytest_cache
 
 # Git ignore file for the Solid project
 
@@ -334,3 +335,4 @@ __pycache__/
 *.btm.cs
 *.odx.cs
 *.xsd.cs
+

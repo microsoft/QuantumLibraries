@@ -8,6 +8,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
+    <RunQDocGen>True</RunQDocGen>
     <Authors>Microsoft</Authors>
     <Description>Microsoft's Quantum Chemistry Libraries.</Description>
     <Copyright>© Microsoft Corporation. All rights reserved.</Copyright>
@@ -27,20 +28,20 @@
     <PackageReference Include="Microsoft.Extensions.Logging" Version="2.1.1" />
     <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="2.1.1" />
     <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="2.1.1" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.7.0" />
-    <PackageReference Include="Microsoft.Quantum.Development.Kit" Version="0.6.1905.301" />
-    <PackageReference Include="xunit.abstractions" Version="2.0.1" />
-    <PackageReference Include="xunit.runner.console" Version="2.3.1" />
-    <PackageReference Include="YamlDotNet" Version="5.0.1" />
+    <PackageReference Include="Microsoft.Quantum.Development.Kit" Version="0.7.1905.3109" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
+    <PackageReference Include="YamlDotNet" Version="6.0.0" />
     <PackageReference Include="Serilog.Extensions.Logging.File" Version="1.1.0" />
   </ItemGroup>
 
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Standard\src\Standard.csproj" />
     <ProjectReference Include="..\Runtime\Runtime.csproj" PrivateAssets="all" />
 
     <BuildOutputInPackage Include="..\Runtime\bin\$(Configuration)\netstandard2.0\Microsoft.Quantum.Chemistry.*" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Include="Analysis\README.txt" />
+  </ItemGroup>
 </Project>

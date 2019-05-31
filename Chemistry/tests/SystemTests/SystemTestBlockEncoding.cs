@@ -15,8 +15,7 @@ using Xunit;
 
 namespace SystemTestsBlockEncoding
 {
-    using static FermionTermType.Common;
-
+    /*
     public class SystemTestFromGeneralHamiltonian
     {
 
@@ -207,5 +206,5 @@ namespace SystemTestsBlockEncoding
         }
 
 
-    }
+    }*/
 }

@@ -48,11 +48,8 @@ namespace Microsoft.Quantum.Diagnostics {
     /// The expected value.
     ///
     /// # Remarks
-    /// This is equivalent to <xref:microsoft.quantum.diagnostics.equalitywithintolerancefact> with
+    /// This is equivalent to <xref:microsoft.quantum.diagnostics.claimequalwithtolerance> with
     /// hardcoded tolerance of $10^{-10}$.
-    ///
-    /// # See Also
-    /// - EqualityWithinToleranceFact
     function NearEqualityFact(actual : Double, expected : Double) : Unit {
         EqualityWithinToleranceFact(actual, expected, 1E-10);
     }
@@ -65,15 +62,13 @@ namespace Microsoft.Quantum.Diagnostics {
     /// The number to be checked.
     /// ## expected
     /// The expected value.
+    ///
     /// ## message
     /// Failure message string to be used when the assertion is triggered.
-    ///
-    /// # See Also
-    /// - EqualityFactL
-    /// - EqualityFactB
-    /// - EqualityFactR
-    function EqualityFactI(actual : Int, expected : Int, message : String) : Unit {
-        if (actual != expected) {
+    function EqualityFactI(actual : Int, expected : Int, message : String) : Unit
+    {
+        if (actual != expected)
+        {
             fail message;
         }
     }
@@ -86,13 +81,9 @@ namespace Microsoft.Quantum.Diagnostics {
     /// The number to be checked.
     /// ## expected
     /// The expected value.
+    ///
     /// ## message
     /// Failure message string to be used when the assertion is triggered.
-    ///
-    /// # See Also
-    /// - EqualityFactI
-    /// - EqualityFactB
-    /// - EqualityFactR
     function EqualityFactL(actual : BigInt, expected : BigInt, message : String) : Unit
     {
         if (actual != expected)
@@ -107,15 +98,12 @@ namespace Microsoft.Quantum.Diagnostics {
     /// # Input
     /// ## actual
     /// The variable to be checked.
+    ///
     /// ## expected
     /// The expected value.
+    ///
     /// ## message
     /// Failure message string to be used when the assertion is triggered.
-    ///
-    /// # See Also
-    /// - EqualityFactL
-    /// - EqualityFactI
-    /// - EqualityFactR
     function EqualityFactB(actual : Bool, expected : Bool, message : String) : Unit
     {
         if (actual != expected)
@@ -130,15 +118,12 @@ namespace Microsoft.Quantum.Diagnostics {
     /// # Input
     /// ## actual
     /// The variable to be checked.
+    ///
     /// ## expected
     /// The expected value.
+    ///
     /// ## message
     /// Failure message string to be used when the assertion is triggered.
-    ///
-    /// # See Also
-    /// - EqualityFactL
-    /// - EqualityFactB
-    /// - EqualityFactI
     function EqualityFactR (actual : Result, expected : Result, message : String) : Unit {
         if (actual != expected)
         {

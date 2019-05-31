@@ -1,0 +1,56 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28803.156
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataModel", "Chemistry\src\DataModel\DataModel.csproj", "{DADE9B49-6423-4511-A9BC-DC5C9B02539E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Runtime", "Chemistry\src\Runtime\Runtime.csproj", "{BFBC5FDC-3B20-4221-93BF-9B626636ECEF}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Dependencies", "Dependencies", "{C157F408-2E7F-426D-8425-7633ED4B741C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Standard", "Standard\src\Standard.csproj", "{92975222-D5AE-4A4C-82F1-026AF50F8E42}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Jupyter", "Chemistry\src\Jupyter\Jupyter.csproj", "{C9100FBF-9433-4D14-9617-1FBD206C6E3D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JupyterTests", "Chemistry\tests\JupyterTests\JupyterTests.csproj", "{EDEF6A06-6002-4311-AFBC-807AD718DE6E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DADE9B49-6423-4511-A9BC-DC5C9B02539E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DADE9B49-6423-4511-A9BC-DC5C9B02539E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DADE9B49-6423-4511-A9BC-DC5C9B02539E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DADE9B49-6423-4511-A9BC-DC5C9B02539E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BFBC5FDC-3B20-4221-93BF-9B626636ECEF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BFBC5FDC-3B20-4221-93BF-9B626636ECEF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BFBC5FDC-3B20-4221-93BF-9B626636ECEF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BFBC5FDC-3B20-4221-93BF-9B626636ECEF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{92975222-D5AE-4A4C-82F1-026AF50F8E42}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{92975222-D5AE-4A4C-82F1-026AF50F8E42}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{92975222-D5AE-4A4C-82F1-026AF50F8E42}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{92975222-D5AE-4A4C-82F1-026AF50F8E42}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C9100FBF-9433-4D14-9617-1FBD206C6E3D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C9100FBF-9433-4D14-9617-1FBD206C6E3D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C9100FBF-9433-4D14-9617-1FBD206C6E3D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C9100FBF-9433-4D14-9617-1FBD206C6E3D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EDEF6A06-6002-4311-AFBC-807AD718DE6E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EDEF6A06-6002-4311-AFBC-807AD718DE6E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EDEF6A06-6002-4311-AFBC-807AD718DE6E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EDEF6A06-6002-4311-AFBC-807AD718DE6E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{DADE9B49-6423-4511-A9BC-DC5C9B02539E} = {C157F408-2E7F-426D-8425-7633ED4B741C}
+		{BFBC5FDC-3B20-4221-93BF-9B626636ECEF} = {C157F408-2E7F-426D-8425-7633ED4B741C}
+		{92975222-D5AE-4A4C-82F1-026AF50F8E42} = {C157F408-2E7F-426D-8425-7633ED4B741C}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {1A526024-D9A8-4B78-AC49-202F9FC1B220}
+	EndGlobalSection
+EndGlobal

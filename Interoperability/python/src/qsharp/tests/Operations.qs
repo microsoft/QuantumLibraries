@@ -25,7 +25,7 @@ namespace Microsoft.Quantum.SanityTests {
         using (q = Qubit()) {
             for (i in 1..count) {
                 ApplyIf(X, i == 2, q);
-                set r[i-1] = M(q);
+                set r w/= i-1 <- M(q);
                 Reset(q);
             }
         }
