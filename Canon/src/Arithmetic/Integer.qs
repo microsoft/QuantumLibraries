@@ -161,8 +161,8 @@ namespace Microsoft.Quantum.Canon {
                     Carry (ancillas[idx], xs![idx], ys![idx], ancillas[idx+1]);           // (1)
                 }
                 (Controlled Carry) (controls, (ancillas[nQubits-1], xs![nQubits-1], ys![nQubits-1], carry));
-                (Controlled CNOT) (controls, (xs![nQubits-1], ys![nQubits-1]));
-                (Controlled Sum) (controls, (ancillas[nQubits-1], xs![nQubits-1], ys![nQubits-1]));
+                (Controlled CNOT) (controls, (ancillas[nQubits-1], ys![nQubits-1]));
+                //(Controlled Sum) (controls, (ancillas[nQubits-1], xs![nQubits-1], ys![nQubits-1]));
                 for (idx in (nQubits-2)..(-1)..0 ) {
                     (Adjoint Carry) (ancillas[idx], xs![idx], ys![idx], ancillas[idx+1]); // cancels with (1)
                     (Controlled Sum) (controls, (ancillas[idx], xs![idx], ys![idx]));
