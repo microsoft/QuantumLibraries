@@ -2,6 +2,7 @@
 # Builds, tests & package all libraries.
 ##
 
+steps:
 ##
 # Build
 ##
