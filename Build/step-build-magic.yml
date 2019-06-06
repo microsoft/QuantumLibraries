@@ -21,6 +21,7 @@ steps:
 ##
 - task: DotNetCoreCLI@2
   displayName: 'Test Chemistry Magic'
+  condition: and(succeeded(), ne(variables['Skip.Tests'], 'true'))
   inputs:
     command: test
     projects: '$(LibrariesRootFolder)/Chemistry/tests/JupyterTests/JupyterTests.csproj'

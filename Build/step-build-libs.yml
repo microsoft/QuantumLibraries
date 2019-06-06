@@ -2,10 +2,6 @@
 # Builds, tests & package all libraries.
 ##
 
-steps:
-- script: |
-    echo Skip.Tests is $(Skip.Tests)
-
 ##
 # Build
 ##
