@@ -14,6 +14,7 @@ variables:
   Assembly.Version: $(Build.BuildNumber)
   Nuget.Version: $(Assembly.Version)-preview
   Python.Version: $(Assembly.Version)
+  Skip.Tests: "false"
 
 
 jobs:
