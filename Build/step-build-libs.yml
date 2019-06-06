@@ -3,6 +3,9 @@
 ##
 
 steps:
+- script: |
+    echo Skip.Tests is $(Skip.Tests)
+
 ##
 # Build
 ##
