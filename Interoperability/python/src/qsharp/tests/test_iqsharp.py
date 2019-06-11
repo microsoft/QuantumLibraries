@@ -11,6 +11,19 @@ def test_simulate():
     assert r == ()
 
 
+def test_toffoli_simulate():
+    foo = qsharp.compile("""
+        open Microsoft.Quantum.Measurement;
+
+        operation Foo() : Result {
+            using (q = Qubit()) {
+                X(q);
+                return MResetZ(q);
+            }
+        }
+    """)
+    assert foo.toffoli_simulate() == 1
+
 def test_tuples():
     """
     Checks that tuples are correctly encoded both ways.
