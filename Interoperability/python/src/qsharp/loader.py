@@ -83,6 +83,13 @@ class QSharpCallable(object):
         """
         return qsharp.client.simulate(self, **kwargs)
 
+    def toffoli_simulate(self, **kwargs) -> Any:
+        """
+        Executes this function or operation on the ToffoliSimulator target
+        machine, returning its output as a Python object.
+        """
+        return qsharp.client.toffoli_simulate(self, **kwargs)
+
     def estimate_resources(self, **kwargs) -> Dict[str, int]:
         return qsharp.client.estimate(self, **kwargs)
 
