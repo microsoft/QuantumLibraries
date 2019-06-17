@@ -112,10 +112,13 @@ class IQSharpClient(object):
         return self._execute("%package", raise_on_stderr=False)
 
     def simulate(self, op, **params) -> Any:
-        return self._execute(f'%simulate {op._name} {json.dumps(map_tuples(params))}')
+        return self._execute_callable_magic('simulate', op, **params)
+
+    def toffoli_simulate(self, op, **params) -> Any:
+        return self._execute_callable_magic('toffoli', op, **params)
 
     def estimate(self, op, **params) -> Dict[str, int]:
-        raw_counts = self._execute(f'%estimate {op._name} {json.dumps(map_tuples(params))}')
+        raw_counts = self._execute_callable_magic('estimate', op, **params)
         # Convert counts to ints, since they get turned to floats by JSON serialization.
         return {
             operation_name: int(count)
@@ -138,6 +141,9 @@ class IQSharpClient(object):
         return versions
 
     ## Internal-Use Methods ##
+
+    def _execute_callable_magic(self, magic : str, op, **params) -> Any:
+        return self._execute(f'%{magic} {op._name} {json.dumps(map_tuples(params))}')
 
     def _execute(self, input, return_full_result=False, raise_on_stderr=False, output_hook=None, **kwargs):
         logger.debug(f"sending:\n{input}")

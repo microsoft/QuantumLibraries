@@ -81,6 +81,10 @@ class MockClient(object):
         logger.debug(f"MockClient.simulate called with operation {op} and params:\n{params}")
         return ()
 
+    def toffoli_simulate(self, op, **params) -> Any:
+        logger.debug(f"MockClient.toffoli_simulate called with operation {op} and params:\n{params}")
+        return ()
+
     def estimate(self, op, **params) -> Dict[str, int]:
         logger.debug(f"MockClient.estimate called with operation {op} and params:\n{params}")
         return {
