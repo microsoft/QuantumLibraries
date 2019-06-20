@@ -60,7 +60,7 @@ namespace Microsoft.Quantum.Simulation {
     /// # Remarks
     /// This is obtained by preparing and unpreparing the state $\sum_{j}\sqrt{\alpha_j/\alpha}\ket{j}$,
     /// and constructing a multiply-controlled unitary 
-    /// <xref:microsoft.quantum.canon.statepreparationpositivecoefficients> and
+    /// <xref:microsoft.quantum.preparation.statepreparationpositivecoefficients> and
     /// <xref:microsoft.quantum.canon.multiplexoperationsfromgenerator>.
     function PauliBlockEncoding(generatorSystem: GeneratorSystem) : (Double, BlockEncodingReflection) {
         let statePrepUnitary = StatePreparationPositiveCoefficients;
