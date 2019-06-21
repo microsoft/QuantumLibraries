@@ -8,7 +8,7 @@ assignees: ''
 ---
 
 **Describe the bug**
-A clear and concise description of what the bug is, and which sample or samples you encountered the bug in.
+A clear and concise description of what the bug is, and which package or packages you encountered the bug in.
 
 **To Reproduce**
 Steps to reproduce the behavior:
@@ -25,7 +25,7 @@ If applicable, add screenshots to help explain your problem.
 
 **System information**
  - OS: [e.g. Windows, macOS, or Linux]
- - Version of affected NuGet package or packages [e.g. 0.7.1905.3109]
+ - Version of affected NuGet or PyPI package or packages [e.g. [Microsoft.Quantum.Standard](https://www.nuget.org/packages/Microsoft.Quantum.Standard) 0.7.1905.3109]
 
 **Additional context**
 Add any other context about the problem here.

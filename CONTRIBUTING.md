@@ -32,7 +32,7 @@ The more information you can provide, the more likely someone will be successful
 
 Please include the following with each issue:
 
-* Which sample or samples are affected
+* Which NuGet or PyPI package or packages are affected (e.g. [Microsoft.Quantum.Standard](https://www.nuget.org/packages/Microsoft.Quantum.Standard))
 
 * Component versions
     - .NET Core SDK version
