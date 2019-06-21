@@ -42,7 +42,10 @@ class Packages(object):
         Adds a NuGet package with the given package name to the current Q#
         session, downloading the package from NuGet.org or any other configured
         feeds as necessary.
+
+        :param package_name: The name of the NuGet package to be added to the
+            current session.
         """
         logger.info("Loading package: " + package_name)
-        pkgs=self._client.add_package(package_name)
+        pkgs = self._client.add_package(package_name)
         logger.info("Loading complete: " + ';'.join(str(e) for e in pkgs))
