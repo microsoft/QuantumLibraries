@@ -103,8 +103,7 @@ namespace Microsoft.Quantum.Simulation {
     /// # Output
     /// An `EvolutionUnitary` representing time-evolution by the term
     /// referenced in `generatorIndex.
-    function PauliEvolutionFunction (generatorIndex : GeneratorIndex) : EvolutionUnitary
-    {
+    function PauliEvolutionFunction (generatorIndex : GeneratorIndex) : EvolutionUnitary {
         return EvolutionUnitary(PauliEvolutionImpl(generatorIndex, _, _));
     }
     
@@ -119,9 +118,8 @@ namespace Microsoft.Quantum.Simulation {
     ///
     /// # Remarks
     /// This is obtained by partial application of
-    /// <xref:microsoft.quantum.canon.paulievolutionfunction>.
-    function PauliEvolutionSet () : EvolutionSet
-    {
+    /// <xref:microsoft.quantum.simulation.paulievolutionfunction>.
+    function PauliEvolutionSet () : EvolutionSet {
         return EvolutionSet(PauliEvolutionFunction);
     }
     

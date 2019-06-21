@@ -136,8 +136,8 @@ namespace Microsoft.Quantum.Oracles {
     /// Constructs reflection about a given state from an oracle.
 	///
 	/// Given the oracle $O$ of type
-    /// <xref:microsoft.quantum.canon.deterministicstateoracle>, 
-	/// the result of this function is a reflection around the state $\ket{\psi}$ 
+    /// <xref:microsoft.quantum.oracles.deterministicstateoracle>,
+	/// the result of this function is a reflection around the state $\ket{\psi}$
 	/// where $O\ket{0} = \ket{\psi}$.
     ///
     /// # Input
@@ -148,8 +148,8 @@ namespace Microsoft.Quantum.Oracles {
     /// A `ReflectionOracle` that reflects about the state $\ket{\psi}$.
     ///
     /// # See Also
-    /// - Microsoft.Quantum.Canon.DeterministicStateOracle
-    /// - Microsoft.Quantum.Canon.ReflectionOracle
+    /// - DeterministicStateOracle
+    /// - ReflectionOracle
     function ReflectionOracleFromDeterministicStateOracle (oracle : DeterministicStateOracle) : ReflectionOracle
     {
         return ReflectionOracle(ReflectionOracleFromDeterministicStateOracleImpl(_, oracle, _));
