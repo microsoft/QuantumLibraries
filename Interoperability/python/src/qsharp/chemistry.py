@@ -53,20 +53,23 @@ class FermionHamiltonian(object):
     def __init__(self, data):
         self.__dict__ = data
 
-    def __eq__(self, other): 
+    def __eq__(self, other):
         if not isinstance(other, FermionHamiltonian):
             # don't attempt to compare against unrelated types
             return NotImplemented
         return self.__dict__ == other.__dict__
 
     def add_terms(self, fermion_terms : Iterable[Tuple[List[int], float]]) -> None:
-        """ 
+        """
         Adds terms to the fermion Hamiltonian.
         """
         logger.info(f"Adding {len(fermion_terms)} terms to fermion Hamiltonian.")
-        args = { 'hamiltonian': self.__dict__, 'fermion_terms': fermion_terms }
-        args_json = json.dumps(map_tuples(args))
-        result = qsharp.client._execute(f'%chemistry.fh.add_terms {args_json}', raise_on_stderr=True)
+        result = qsharp.client._execute_magic(
+            'chemistry.fh.add_terms',
+            raise_on_stderr=True,
+            hamiltonian=self.__dict__,
+            fermion_terms=fermion_terms
+        )
         self.__dict__ = result
 
 class InputState(object):
@@ -76,7 +79,7 @@ class InputState(object):
     def __init__(self, data: Dict):
         self.__dict__ = data
 
-    def __eq__(self, other): 
+    def __eq__(self, other):
         if not isinstance(other, InputState):
             # don't attempt to compare against unrelated types
             return NotImplemented
@@ -88,8 +91,8 @@ class ProblemDescription(object):
     """
     def __init__ (self, data : Dict):
         self.__dict__ = data
-    
-    def __eq__(self, other): 
+
+    def __eq__(self, other):
         if not isinstance(other, ProblemDescription):
             # don't attempt to compare against unrelated types
             return NotImplemented
@@ -102,13 +105,16 @@ class ProblemDescription(object):
         `index_convention` can be 'UpDown' or 'HalfUp'
         """
         logger.info(f"Loading fermion Hamiltonian from problem description using index_convention '{index_convention.name}'.")
-        args = { 'problem_description': self.__dict__, 'index_convention': index_convention.name }
-        args_json = json.dumps(map_tuples(args))
-        data = qsharp.client._execute(f'%chemistry.fh.load {args_json}', raise_on_stderr=True)
+        data = qsharp.client._execute_magic(
+            'chemistry.fh.load',
+            raise_on_stderr=True,
+            problem_description=self.__dict__,
+            index_convention=index_convention.name
+        )
         return FermionHamiltonian(data)
 
-        
-    def load_input_state(self, wavefunction_label ='', index_convention : IndexConvention = IndexConvention.UpDown) -> FermionHamiltonian:
+
+    def load_input_state(self, wavefunction_label : str = '', index_convention : IndexConvention = IndexConvention.UpDown) -> FermionHamiltonian:
         """
         Loads the input state associated from this electronic structure problem with the corresponding label.
 
@@ -117,9 +123,13 @@ class ProblemDescription(object):
         `index_convention` can be 'UpDown' or 'HalfUp'
         """
         logger.info(f"Loading input state '{wavefunction_label}' from problem description using index_convention '{index_convention.name}'.")
-        args = { 'problem_description': self.__dict__, 'wavefunction_label': wavefunction_label, 'index_convention': index_convention.name }
-        args_json = json.dumps(map_tuples(args))
-        data = qsharp.client._execute(f'%chemistry.inputstate.load {args_json}', raise_on_stderr=True)
+        data = qsharp.client._execute_magic(
+            'chemistry.inputstate.load',
+            raise_on_stderr=True,
+            problem_description=self.__dict__,
+            wavefunction_label=wavefunction_label,
+            index_convention=index_convention.name
+        )
         return InputState(data)
 
 
@@ -132,7 +142,7 @@ class Broombridge(object):
         # translate problem_descriptions into the actual datastructure:
         self.problem_description = [ ProblemDescription(p) for p in data["problem_description"] ]
 
-    def __eq__(self, other): 
+    def __eq__(self, other):
         if not isinstance(other, FermionHamiltonian):
             # don't attempt to compare against unrelated types
             return NotImplemented
@@ -146,9 +156,12 @@ def load_fermion_hamiltonian(file_name: str, index_convention : IndexConvention 
     `index_convention` can be 'UpDown' or 'HalfUp'
     """
     logger.info(f"Loading fermion Hamiltonian from '{file_name}' using index_convention '{index_convention.name}'.")
-    args = { 'file_name': file_name, 'index_convention': index_convention.name }
-    args_json = json.dumps(map_tuples(args))
-    data = qsharp.client._execute(f'%chemistry.fh.load {args_json}', raise_on_stderr=True)
+    data = qsharp.client._execute_magic(
+        'chemistry.fh.load',
+        raise_on_stderr=True,
+        file_name=file_name,
+        index_convention=index_convention.name
+    )
     return FermionHamiltonian(data)
 
 
@@ -161,9 +174,13 @@ def load_input_state(file_name: str, wavefunction_label : str = None, index_conv
     `index_convention` can be 'UpDown' or 'HalfUp'
     """
     logger.info(f"Loading input state '{wavefunction_label}' from '{file_name}' using index_convention '{index_convention.name}'.")
-    args = { 'file_name': file_name, 'wavefunction_label': wavefunction_label, 'index_convention': index_convention.name }
-    args_json = json.dumps(map_tuples(args))
-    data = qsharp.client._execute(f'%chemistry.inputstate.load {args_json}', raise_on_stderr=True)
+    data = qsharp.client._execute_magic(
+        'chemistry.inputstate.load',
+        raise_on_stderr=True,
+        file_name=file_name,
+        wavefunction_label=wavefunction_label,
+        index_convention=index_convention.name
+    )
     return InputState(data)
 
 
@@ -172,18 +189,23 @@ def load_broombridge(file_name: str) -> Broombridge:
     Loads a Broombridge data file.
     """
     logger.info(f"Loading broombridge data from '{file_name}'.")
+    # NB: we don't use the execute_magic method here, since we don't need to
+    #     JSON serialize any arguments in this case.
     data = qsharp.client._execute(f'%chemistry.broombridge {file_name}', raise_on_stderr=True)
     return Broombridge(data)
 
-    
+
 def encode(hamiltonian : FermionHamiltonian, input_state : InputState) -> Tuple:
     """
     Encodes the given Hamiltonian and input state using the Jordan Wigner encoding
     that can be used to run chemistry simulations using Q#'s chemistry library.
     """
     logger.info(f"Doing jw encoding.")
-    args = { 'hamiltonian': hamiltonian.__dict__, 'input_state': input_state.__dict__ }
-    args_json = json.dumps(map_tuples(args))
-    data = qsharp.client._execute(f'%chemistry.encode {args_json}', raise_on_stderr=True)
+    data = qsharp.client._execute_magic(
+        'chemistry.encode',
+        raise_on_stderr=True,
+        hamiltonian=hamiltonian.__dict__,
+        input_state=input_state.__dict__
+    )
     return data
 
