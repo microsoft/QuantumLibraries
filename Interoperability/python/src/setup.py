@@ -50,7 +50,7 @@ setuptools.setup(
     description="Python client for Q#, a domain-specific quantum programming language",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/Quantum/QuantumLibraries",
+    url="https://github.com/microsoft/QuantumLibraries",
     packages=setuptools.find_packages(),
     classifiers=[
         "Programming Language :: Python :: 3",
