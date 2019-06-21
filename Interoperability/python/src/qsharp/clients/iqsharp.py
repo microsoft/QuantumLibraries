@@ -24,7 +24,6 @@ from typing import List, Dict, Callable, Any
 from pathlib import Path
 from distutils.version import LooseVersion
 
-from qsharp.utils import log_messages
 from qsharp.serialization import map_tuples, unmap_tuples
 
 ## LOGGING ##
@@ -153,7 +152,7 @@ class IQSharpClient(object):
         return self._execute(f'%{magic} {json.dumps(map_tuples(params))}', raise_on_stderr=raise_on_stderr)
 
     def _execute_callable_magic(self, magic : str, op, raise_on_stderr : bool = False, **params) -> Any:
-        return self._execute_magic(f"{magic} {op._name}", raise_on_stderr=raise_on_stderr=, **params)
+        return self._execute_magic(f"{magic} {op._name}", raise_on_stderr=raise_on_stderr, **params)
 
     def _execute(self, input, return_full_result=False, raise_on_stderr : bool = False, output_hook=None, **kwargs):
         logger.debug(f"sending:\n{input}")
