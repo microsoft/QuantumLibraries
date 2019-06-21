@@ -60,11 +60,11 @@ namespace Microsoft.Quantum.Preparation {
 	///
     /// If the qubit was initially in the $\ket{0}$ state, this operation prepares the
     /// qubit in the $+1$ eigenstate of a given Pauli operator, or, for `PauliI`,
-    /// in the maximally mixed state instead (see <xref:microsoft.quantum.canon.preparesinglequbitidentity>).
+    /// in the maximally mixed state instead (see <xref:microsoft.quantum.preparation.preparesinglequbitidentity>).
     ///
     /// If the qubit was in a state other than $\ket{0}$, this operation applies the following gates:
     /// $H$ for `PauliX`, $HS$ for `PauliY`, $I$ for `PauliZ` and
-    /// <xref:microsoft.quantum.canon.preparesinglequbitidentity> for `PauliI`.
+    /// <xref:microsoft.quantum.preparation.preparesinglequbitidentity> for `PauliI`.
     ///
     /// # Input
     /// ## basis

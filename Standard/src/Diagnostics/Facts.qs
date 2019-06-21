@@ -48,7 +48,7 @@ namespace Microsoft.Quantum.Diagnostics {
     /// The expected value.
     ///
     /// # Remarks
-    /// This is equivalent to <xref:microsoft.quantum.diagnostics.claimequalwithtolerance> with
+    /// This is equivalent to <xref:microsoft.quantum.diagnostics.equalitywithintolerancefact> with
     /// hardcoded tolerance of $10^{-10}$.
     function NearEqualityFact(actual : Double, expected : Double) : Unit {
         EqualityWithinToleranceFact(actual, expected, 1E-10);
