@@ -51,8 +51,8 @@ namespace Microsoft.Quantum.Arithmetic {
         }
         controlled (controls, ...) {
             let n = Length(xs!);
-            AssertIntEqual(Length(result!), 2*n,
-                           "Result register must contain 2n qubits.");
+            EqualityFactI(Length(result!), 2*n,
+                          "Result register must contain 2n qubits.");
             AssertAllZero(result!);
             using ((lhs, padding) = (Qubit[2*n], Qubit[n])) {
                 let paddedxs = LittleEndian(xs! + padding);

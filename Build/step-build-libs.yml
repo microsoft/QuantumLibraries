@@ -20,13 +20,12 @@ steps:
         /p:QsharpDocsOutDir=$(DocsOutDir)
         /p:DefineConstants=$(Assembly.Constants)
 
-
-
 ##
 # Test
 ##
 - task: DotNetCoreCLI@2
   displayName: 'Test Libraries'
+  condition: and(succeeded(), ne(variables['Skip.Tests'], 'true'))
   inputs:
     command: test
     projects: |

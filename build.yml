@@ -15,7 +15,6 @@ variables:
   Nuget.Version: $(Assembly.Version)-preview
   Python.Version: $(Assembly.Version)
 
-
 jobs:
 - job: Windows
   pool: 'Hosted VS2017'

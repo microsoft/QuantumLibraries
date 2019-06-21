@@ -35,6 +35,9 @@ logger = logging.getLogger(__name__)
 ## CLASSES ##
 
 class IQSharpError(RuntimeError):
+    """
+    Represents a Q# error passed by the IQ# kernel to the Python host.
+    """
     def __init__(self, iqsharp_errors : List[str]):
         self.iqsharp_errors = iqsharp_errors
         error_msg = StringIO()
@@ -45,6 +48,10 @@ class IQSharpError(RuntimeError):
         super().__init__(error_msg.getvalue())
 
 class AlreadyExecutingError(IOError):
+    """
+    Raised when the IQ# client is already executing a command and cannot safely
+    process an additional command.
+    """
     pass
 
 class IQSharpClient(object):
