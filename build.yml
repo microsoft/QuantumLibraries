@@ -8,7 +8,6 @@ trigger:
 variables:
   Build.Major: 0
   Build.Minor: 0
-  Libraries.WorkingDirectory: $(System.DefaultWorkingDirectory)
   Drops.Dir: $(Build.ArtifactStagingDirectory)/drops
 
 

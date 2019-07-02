@@ -8,14 +8,14 @@ steps:
   condition: succeededOrFailed()
   inputs:
     testResultsFormat: VSTest
-    testResultsFiles: '$(Libraries.WorkingDirectory)/**/*.trx'
+    testResultsFiles: '$(System.DefaultWorkingDirectory)/**/*.trx'
     testRunTitle: 'Q# Libraries tests'
 
 - task: PublishSymbols@1
   displayName: 'Publish symbols'
   condition: and(succeeded(), eq(variables['Agent.OS'], 'Windows_NT'))
   inputs:
-    SearchPattern: '$(Libraries.WorkingDirectory)/src/**/*.pdb'
+    SearchPattern: '$(System.DefaultWorkingDirectory)/src/**/*.pdb'
 
 - task: PublishBuildArtifacts@1
   displayName: 'Publish Artifact: qsharp-runtime'
