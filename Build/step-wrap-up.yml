@@ -13,7 +13,7 @@ steps:
 
 - task: PublishSymbols@1
   displayName: 'Publish symbols'
-  continueOnError: true
+  condition: and(succeeded(), eq(variables['Agent.OS'], 'Windows_NT'))
   inputs:
     SearchPattern: '$(Libraries.WorkingDirectory)/src/**/*.pdb'
 

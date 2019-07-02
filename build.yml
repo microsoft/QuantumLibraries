@@ -9,8 +9,7 @@ variables:
   Build.Major: 0
   Build.Minor: 0
   Libraries.WorkingDirectory: $(System.DefaultWorkingDirectory)
-  Nuget.Outdir: $(Build.ArtifactStagingDirectory)/drops/nugets
-  Docs.Outdir: $(Build.ArtifactStagingDirectory)/drops/docs
+  Drops.Dir: $(Build.ArtifactStagingDirectory)/drops
 
 
 jobs:

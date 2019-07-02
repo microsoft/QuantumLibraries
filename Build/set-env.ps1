@@ -11,5 +11,11 @@ If ($Env:BUILD_VERBOSITY -eq $null) { $Env:BUILD_VERBOSITY ="m" }
 If ($Env:ASSEMBLY_VERSION -eq $null) { $Env:ASSEMBLY_VERSION ="$Env:BUILD_BUILDNUMBER" }
 If ($Env:NUGET_VERSION -eq $null) { $Env:NUGET_VERSION ="$Env:ASSEMBLY_VERSION-alpha" }
 
-If ($Env:NUGET_OUTDIR -eq $null) { $Env:NUGET_OUTDIR =  Resolve-Path ".." }
+If ($Env:DROPS_DIR -eq $null) { $Env:DROPS_DIR =  [IO.Path]::GetFullPath((Join-Path $PSScriptRoot "..\drops")) }
+
+If ($Env:NUGET_OUTDIR -eq $null) { $Env:NUGET_OUTDIR =  (Join-Path $Env:DROPS_DIR "nugets") }
 If (-not (Test-Path -Path $Env:NUGET_OUTDIR)) { md -Force $Env:NUGET_OUTDIR }
+
+If ($Env:DOCS_OUTDIR -eq $null) { $Env:DOCS_OUTDIR =  (Join-Path $Env:DROPS_DIR "docs") }
+If (-not (Test-Path -Path $Env:DOCS_OUTDIR)) { md -Force $Env:DOCS_OUTDIR }
+
