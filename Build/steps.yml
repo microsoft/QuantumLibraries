@@ -16,4 +16,4 @@ steps:
   workingDirectory: $(Libraries.WorkingDirectory)/Build
 
 
-- template: wrap-up.yml
+- template: step-wrap-up.yml
