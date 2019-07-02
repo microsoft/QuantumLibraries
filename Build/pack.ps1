@@ -28,7 +28,7 @@ Pack-One '../Chemistry/src/DataModel/DataModel.csproj'
 Write-Host "##[info]Pack Numerics library"
 Pack-One '../Numerics/src/Numerics.csproj'
 
-Write-Host "##[info]Pack Standard library"
+Write-Host "##[info]Pack chemistry magics library"
 Pack-One '../Chemistry/src/Jupyter/Jupyter.csproj'
 
 if (-not $all_ok) {
