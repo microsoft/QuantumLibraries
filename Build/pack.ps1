@@ -16,20 +16,20 @@ function Pack-One() {
         -o $Env:NUGET_OUTDIR `
         /property:PackageVersion=$Env:NUGET_VERSION 
 
-    return ($LastExitCode -eq 0)
+    $script:all_ok = ($LastExitCode -eq 0) -and $script:all_ok
 }
 
 Write-Host "##[info]Pack Standard library"
-$all_ok = (Pack-One '../Standard/src/Standard.csproj') -and $all_ok
+Pack-One '../Standard/src/Standard.csproj'
 
 Write-Host "##[info]Pack Chemistry library"
-$all_ok = (Pack-One '../Chemistry/src/DataModel/DataModel.csproj') -and $all_ok
+Pack-One '../Chemistry/src/DataModel/DataModel.csproj'
 
 Write-Host "##[info]Pack Numerics library"
-$all_ok = (Pack-One '../Numerics/src/Numerics.csproj') -and $all_ok
+Pack-One '../Numerics/src/Numerics.csproj'
 
 Write-Host "##[info]Pack Standard library"
-$all_ok = (Pack-One '../Chemistry/src/Jupyter/Jupyter.csproj') -and $all_ok
+Pack-One '../Chemistry/src/Jupyter/Jupyter.csproj'
 
 if (-not $all_ok) {
     throw "At least one test failed execution. Check the logs."

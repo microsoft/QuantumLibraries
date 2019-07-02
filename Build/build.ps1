@@ -19,20 +19,20 @@ function Build-One {
         /property:Version=$Env:ASSEMBLY_VERSION `
         /property:QsharpDocsOutDir=$Env:DOCS_OUTDIR
 
-    return ($LastExitCode -eq 0)
+    $script:all_ok = ($LastExitCode -eq 0) -and $script:all_ok
 }
 
 Write-Host "##[info]Build Standard library"
-$all_ok = (Build-One 'publish' '../Standard.sln') -and $all_ok
+Build-One 'publish' '../Standard.sln'
 
 Write-Host "##[info]Build Chemistry library"
-$all_ok = (Build-One 'publish' '../Chemistry.sln') -and $all_ok
+Build-One 'publish' '../Chemistry.sln'
 
 Write-Host "##[info]Build Numerics library"
-$all_ok = (Build-One 'publish' '../Numerics.sln') -and $all_ok
+Build-One 'publish' '../Numerics.sln'
 
 Write-Host "##[info]Build Standard library"
-$all_ok = (Build-One 'publish' '../Magic.sln') -and $all_ok
+Build-One 'publish' '../Magic.sln'
 
 if (-not $all_ok) {
     throw "At least one test failed execution. Check the logs."
