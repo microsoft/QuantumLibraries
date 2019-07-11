@@ -24,17 +24,17 @@ namespace Microsoft.Quantum.Simulation {
     /// > with reference to a particular set of generators.
     ///
     /// ## Example
-    /// Using  <xref:microsoft.quantum.canon.paulievolutionset>, the operator
+    /// Using  <xref:microsoft.quantum.simulation.paulievolutionset>, the operator
     /// $\pi X_2 X_5 Y_9$ is represented as:
     /// ```qsharp
     /// let index = GeneratorIndex(([1, 1, 2], [PI()]), [2, 5, 9]);
     /// ```
     ///
     /// # See Also
-    /// - @"microsoft.quantum.canon.paulievolutionset"
-    /// - @"microsoft.quantum.canon.evolutionset"
+    /// - EvolutionSet
+    /// - PauliEvolutionSet
     newtype GeneratorIndex = ((Int[], Double[]), Int[]);
-    
+
     /// # Summary
     /// Represents a collection of `GeneratorIndex`es. 
     ///
@@ -44,7 +44,7 @@ namespace Microsoft.Quantum.Simulation {
     ///
     /// # Remarks
     /// Instances of `GeneratorSystem` can be defined easily using the
-    /// <xref:microsoft.quantum.canon.lookupfunction> function.
+    /// <xref:microsoft.quantum.arrays.lookupfunction> function.
     ///
     /// # See Also
     /// - @"microsoft.quantum.canon.lookupfunction"
@@ -72,9 +72,9 @@ namespace Microsoft.Quantum.Simulation {
     /// to implement simulation algorithms.
     /// 
     /// Elements in the set are indexed
-    /// by a  <xref:microsoft.quantum.canon.generatorindex>,
+    /// by a  <xref:microsoft.quantum.simulation.generatorindex>,
     /// and each set is described by a function
-    /// from `GeneratorIndex` to  <xref:microsoft.quantum.canon.evolutionunitary>,
+    /// from `GeneratorIndex` to  <xref:microsoft.quantum.simulation.evolutionunitary>,
     /// which are operations
     /// parameterized by a real number representing time
     newtype EvolutionSet = (GeneratorIndex -> EvolutionUnitary);
@@ -101,7 +101,7 @@ namespace Microsoft.Quantum.Simulation {
     /// # Input
     /// ## idxTerm
     /// This input is ignored, and is defined for consistency with the
-    /// <xref:microsoft.quantum.canon.generatorsystem> user-defined type.
+    /// <xref:microsoft.quantum.simulation.generatorsystem> user-defined type.
     ///
     /// # Output
     /// A generator index representing evolution under the Hamiltonian

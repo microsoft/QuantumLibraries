@@ -11,8 +11,8 @@ namespace Microsoft.Quantum.Arithmetic {
 
     /// # Summary
     /// Applies an operation that takes a
-    /// <xref:microsoft.quantum.canon.littleendian> register as input
-    /// on a target register of type <xref:microsoft.quantum.canon.phaselittleendian>.
+    /// <xref:microsoft.quantum.arithmetic.littleendian> register as input
+    /// on a target register of type <xref:microsoft.quantum.arithmetic.phaselittleendian>.
     ///
     /// # Input
     /// ## op
@@ -102,8 +102,8 @@ namespace Microsoft.Quantum.Arithmetic {
     
     /// # Summary
     /// Applies an operation that takes a
-    /// <xref:microsoft.quantum.canon.phaselittleendian> register as input
-    /// on a target register of type <xref:microsoft.quantum.canon.littleendian>.
+    /// <xref:microsoft.quantum.arithmetic.phaselittleendian> register as input
+    /// on a target register of type <xref:microsoft.quantum.arithmetic.littleendian>.
     ///
     /// # Input
     /// ## op

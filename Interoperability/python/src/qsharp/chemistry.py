@@ -41,7 +41,7 @@ qsharp.packages.add("microsoft.quantum.chemistry.jupyter")
 
 ## Enums ##
 class IndexConvention(Enum):
-    UpDown = 1,
+    UpDown = 1
     HalfUp = 2
 
 ## CLASSES ##
@@ -156,7 +156,7 @@ def load_input_state(file_name: str, wavefunction_label : str = None, index_conv
     """
     Loads the input state associated with the given labe from the given file that contains broombridge data..
 
-    If `wavefunction_label` is not specified, it loads the greedy (Hartree-Fock) state.
+    If `wavefunction_label` is not specified, it loads the greedy (Hartree–Fock) state.
 
     `index_convention` can be 'UpDown' or 'HalfUp'
     """
