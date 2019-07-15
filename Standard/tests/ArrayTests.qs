@@ -114,6 +114,18 @@ namespace Microsoft.Quantum.Tests {
         }
     }
 
+    function SequenceITest() : Unit {
+        let example = [(0, 3), (23, 29)];
+        let expected = [[0, 1, 2, 3], [23, 24, 25, 26, 27, 28, 29]];
+        let actual = Map(SequenceI, example);
+
+        for ((exp, act) in Zip(expected, actual)) {
+            for ((i, j) in Zip(exp, act)) {
+                EqualityFactI(i, j, "Elements did not match.");
+            }
+        }
+    }
+
 }
 
 
