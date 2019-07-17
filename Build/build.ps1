@@ -19,7 +19,10 @@ function Build-One {
         /property:Version=$Env:ASSEMBLY_VERSION `
         /property:QsharpDocsOutDir=$Env:DOCS_OUTDIR
 
-    $script:all_ok = ($LastExitCode -eq 0) -and $script:all_ok
+    if  ($LastExitCode -ne 0) {
+        Write-Host "##vso[task.logissue type=error;]Failed to build $project."
+        $script:all_ok = $False
+    }
 }
 
 Write-Host "##[info]Build Standard library"

@@ -16,7 +16,10 @@ function Test-One {
         /property:DefineConstants=$Env:ASSEMBLY_CONSTANTS `
         /property:Version=$Env:ASSEMBLY_VERSION
 
-    $script:all_ok = ($LastExitCode -eq 0) -and $script:all_ok
+    if  ($LastExitCode -ne 0) {
+        Write-Host "##vso[task.logissue type=error;]Failed to test $project."
+        $script:all_ok = $False
+    }
 }
 
 Write-Host "##[info]Testing Standard/tests/Standard.Tests.csproj"

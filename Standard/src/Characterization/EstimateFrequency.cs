@@ -72,7 +72,8 @@ namespace Microsoft.Quantum.Characterization
                     var p = 1.0 - JointEnsembleProbability(Simulator.Id, (uint)count, paulis, qubits.GetIds());
                     preparation.Adjoint.Apply(qubits);
 
-                    var dist = new BinomialDistribution(samples, p);
+                    var random = this.Simulator.Seed == 0 ? new System.Random() : new System.Random((int)this.Simulator.Seed);
+                    var dist = new BinomialDistribution(samples, p, random);
                     return (double)dist.NextSample() / (double)samples;
                 }
                 finally
