@@ -115,13 +115,27 @@ namespace Microsoft.Quantum.Tests {
     }
 
     function SequenceITest() : Unit {
-        let example = [(0, 3), (23, 29)];
-        let expected = [[0, 1, 2, 3], [23, 24, 25, 26, 27, 28, 29]];
-        let actual = Map(SequenceI, example);
+        let example = [(0, 3), (23, 29), (-5, -2)];
+        let expected = [[0, 1, 2, 3], [23, 24, 25, 26, 27, 28, 29], [-5, -4, -3, -2]];
+        let actual = Mapped(SequenceI, example);
 
         for ((exp, act) in Zip(expected, actual)) {
+            EqualityFactI(Length(exp), Length(act), "Lengths of arrays did not match.");
             for ((i, j) in Zip(exp, act)) {
                 EqualityFactI(i, j, "Elements did not match.");
+            }
+        }
+    }
+
+    function SequenceLTest() : Unit {
+        let example = [(0L, 4), (23L, 7), (-5L, 4), (10L, 0)];
+        let expected = [[0L, 1L, 2L, 3L], [23L, 24L, 25L, 26L, 27L, 28L, 29L], [-5L, -4L, -3L, -2L], new BigInt[0]];
+        let actual = Mapped(SequenceL, example);
+
+        for ((exp, act) in Zip(expected, actual)) {
+            EqualityFactI(Length(exp), Length(act), "Lengths of arrays did not match.");
+            for ((i, j) in Zip(exp, act)) {
+                EqualityFactL(i, j, "Elements did not match.");
             }
         }
     }
