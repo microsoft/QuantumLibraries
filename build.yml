@@ -10,7 +10,6 @@ variables:
   Build.Minor: 0
   Drops.Dir: $(Build.ArtifactStagingDirectory)/drops
 
-
 jobs:
 - job: Windows
   pool: 'Hosted VS2017'
