@@ -3,27 +3,25 @@
 ##
 
 steps:
-- task: PublishSymbols@1
-  displayName: 'Publish symbols path: '
-
-
-- task: CopyFiles@2
-  displayName: 'Copy Files to: $(build.artifactstagingdirectory)'
-  inputs:
-    SourceFolder: '$(build.sourcesdirectory)'
-    Contents: |
-     **/bin/$(BuildConfiguration)/**
-     *.nupkg
-    TargetFolder: '$(build.artifactstagingdirectory)'
+- task: PublishTestResults@2
+  displayName: 'Publish tests results'
   condition: succeededOrFailed()
+  inputs:
+    testResultsFormat: VSTest
+    testResultsFiles: '$(System.DefaultWorkingDirectory)/**/*.trx'
+    testRunTitle: 'Q# Libraries tests'
 
-
+- task: PublishSymbols@1
+  displayName: 'Publish symbols'
+  condition: and(succeeded(), eq(variables['Agent.OS'], 'Windows_NT'))
+  inputs:
+    SearchPattern: '$(System.DefaultWorkingDirectory)/src/**/*.pdb'
 
 - task: PublishBuildArtifacts@1
-  displayName: 'Publish Artifact: drop'
-  inputs:
-    PathtoPublish: '$(build.artifactstagingdirectory)'
+  displayName: 'Publish Artifact: qsharp-runtime'
   condition: succeededOrFailed()
-
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    artifactName: QuantumLibraries
 
 

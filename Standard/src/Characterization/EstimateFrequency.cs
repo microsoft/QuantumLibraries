@@ -25,7 +25,7 @@ namespace Microsoft.Quantum.Characterization
         /// </summary>
         public class Native : EstimateFrequencyA
         {
-            [DllImport(QuantumSimulator.QSIM_DLL_NAME, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl, EntryPoint = "sim_JointEnsembleProbability")]
+            [DllImport(QuantumSimulator.QSIM_DLL_NAME, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl, EntryPoint = "JointEnsembleProbability")]
             private static extern double JointEnsembleProbability(uint id, uint n, Pauli[] b, uint[] q);
 
             private System.Random _random = new System.Random();
@@ -72,7 +72,8 @@ namespace Microsoft.Quantum.Characterization
                     var p = 1.0 - JointEnsembleProbability(Simulator.Id, (uint)count, paulis, qubits.GetIds());
                     preparation.Adjoint.Apply(qubits);
 
-                    var dist = new BinomialDistribution(samples, p);
+                    var random = this.Simulator.Seed == 0 ? new System.Random() : new System.Random((int)this.Simulator.Seed);
+                    var dist = new BinomialDistribution(samples, p, random);
                     return (double)dist.NextSample() / (double)samples;
                 }
                 finally
