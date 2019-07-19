@@ -70,4 +70,73 @@ namespace Microsoft.Quantum.Arrays {
 
         return array;
     }
+
+    /// # Summary
+    /// Get a sequence of numbers starting from 0.
+    ///
+    /// # Input
+    /// ## count
+    /// A nonnegative number of how many elements the resulting array should
+    /// contain.
+    ///
+    /// # Output
+    /// An array with the elements `0`, `1`, ..., `count - 1`.
+    ///
+    /// # Remarks
+    /// ## Example
+    /// ```qsharp
+    /// let arr1 = Numbers(3); // [0, 1, 2]
+    /// let arr2 = Numbers(5); // [0, 1, 2, 3, 4]
+    /// let arr3 = Numbers(0); // []
+    /// ```
+    function Numbers (count : Int) : Int[] {
+        Fact(count >= 0, $"`count` must be nonnegative");
+
+        if (count == 0) {
+            return new Int[0];
+        } else {
+            return SequenceI(0, count - 1);
+        }
+    }
+
+    function _RangeLength (range : Range) : Int {
+        mutable length = 0;
+        for (i in range) {
+            set length = length + 1;
+        }
+        return length;
+    }
+
+    /// # Summary
+    /// Given a range, returns an array containing the numbers visited in the
+    /// range.
+    ///
+    /// # Input
+    /// ## range
+    /// A Q# range
+    ///
+    /// # Output
+    /// An array containing each number visited in the range in the same order.
+    ///
+    /// # Remarks
+    /// This function needs to iterate through the range twice.  For simple
+    /// ranges with an increment of `1`, it's faster to use `SequenceI`.
+    ///
+    /// ## Example
+    /// ```qsharp
+    /// let arr1 = ArrayFromRange(1..5); // [1, 2, 3, 4, 5]
+    /// let arr2 = ArrayFromRange(5..-1..1); // [5, 4, 3, 2, 1]
+    /// let arr3 = ArrayFromRange(13..2..19); // [13, 15, 17, 19]
+    /// ```
+    function ArrayFromRange (range : Range) : Int[] {
+        mutable array = new Int[_RangeLength(range)];
+        mutable i = 0;
+
+        for (elem in range) {
+            set array w/= i <- elem;
+            set i = i + 1;
+        }
+
+        return array;
+    }
 }
