@@ -157,8 +157,8 @@ namespace SystemTests.Molecules
                 var configuration = Config.Default();
                 configuration.UseIndexConvention = IndexConvention.UpDown;
 
-		// Loads a given UCCSD state
- 		var qSharpData = Load("UCCSD test0", configuration);
+                // Loads a given UCCSD state
+                var qSharpData = Load("UCCSD test0", configuration);
 
                 using (var qsim = new QuantumSimulator())
                 {
@@ -167,9 +167,9 @@ namespace SystemTests.Molecules
                     var estEnergy = EstimateEnergy.Run(qsim, qSharpData, nSamples).Result;
 
                     // Compare to reference value
-		            Assert.Equal(-7.8602, estEnergy, 2);
+                    Assert.Equal(-7.8602, estEnergy, 2);
                 }
             }
-	        }
+        }
     }
 }
