@@ -128,8 +128,8 @@ namespace Microsoft.Quantum.Tests {
     }
 
     function SequenceLTest() : Unit {
-        let example = [(0L, 4), (23L, 7), (-5L, 4), (10L, 0)];
-        let expected = [[0L, 1L, 2L, 3L], [23L, 24L, 25L, 26L, 27L, 28L, 29L], [-5L, -4L, -3L, -2L], new BigInt[0]];
+        let example = [(0L, 3L), (23L, 29L), (-5L, -2L)];
+        let expected = [[0L, 1L, 2L, 3L], [23L, 24L, 25L, 26L, 27L, 28L, 29L], [-5L, -4L, -3L, -2L]];
         let actual = Mapped(SequenceL, example);
 
         for ((exp, act) in Zip(expected, actual)) {
@@ -140,10 +140,10 @@ namespace Microsoft.Quantum.Tests {
         }
     }
 
-    function NumbersTest() : Unit {
+    function SequenceForNumbersTest() : Unit {
         let example = [3, 5, 0];
-        let expected = [[0, 1, 2], [0, 1, 2, 3, 4], new Int[0]];
-        let actual = Mapped(Numbers, example);
+        let expected = [[0, 1, 2, 3], [0, 1, 2, 3, 4, 5], [0]];
+        let actual = Mapped(SequenceI(0, _), example);
 
         for ((exp, act) in Zip(expected, actual)) {
             EqualityFactI(Length(exp), Length(act), "Lengths of arrays did not match.");
@@ -154,10 +154,10 @@ namespace Microsoft.Quantum.Tests {
     }
 
     function ArrayFromRangeTest() : Unit {
-        let example = [1..5, 5..-1..1, 13..2..19];
-        let expected = [[1, 2, 3, 4, 5], [5, 4, 3, 2, 1], [13, 15, 17, 19]];
+        let example = [1..5, 5..-1..1, 13..2..19, -2..-2..-9, -2..5..17];
+        let expected = [[1, 2, 3, 4, 5], [5, 4, 3, 2, 1], [13, 15, 17, 19], [-2, -4, -6, -8], [-2, 3, 8, 13]];
         let actual = Mapped(ArrayFromRange, example);
-
+        
         for ((exp, act) in Zip(expected, actual)) {
             EqualityFactI(Length(exp), Length(act), "Lengths of arrays did not match.");
             for ((i, j) in Zip(exp, act)) {
