@@ -153,19 +153,6 @@ namespace Microsoft.Quantum.Tests {
         }
     }
 
-    function ArrayFromRangeTest() : Unit {
-        let example = [1..5, 5..-1..1, 13..2..19, -2..-2..-9, -2..5..17];
-        let expected = [[1, 2, 3, 4, 5], [5, 4, 3, 2, 1], [13, 15, 17, 19], [-2, -4, -6, -8], [-2, 3, 8, 13]];
-        let actual = Mapped(ArrayFromRange, example);
-        
-        for ((exp, act) in Zip(expected, actual)) {
-            EqualityFactI(Length(exp), Length(act), "Lengths of arrays did not match.");
-            for ((i, j) in Zip(exp, act)) {
-                EqualityFactI(i, j, "Elements did not match.");
-            }
-        }
-    }
-
 }
 
 

@@ -77,46 +77,4 @@ namespace Microsoft.Quantum.Arrays {
         return array;
     }
 
-    function _RangeLength (range : Range) : Int {
-        let start = RangeStart(range);
-        let end = RangeEnd(range);
-        let step = RangeStep(range);
-
-        return ((end - start) / step) + 1;
-    }
-
-    /// # Summary
-    /// Given a range, returns an array containing the numbers visited in the
-    /// range.
-    ///
-    /// # Input
-    /// ## range
-    /// A Q# range
-    ///
-    /// # Output
-    /// An array containing each number visited in the range in the same order.
-    ///
-    /// # Remarks
-    /// This function needs to iterate through the range twice.  For simple
-    /// ranges with an increment of `1`, it's faster to use `SequenceI`.
-    ///
-    /// ## Example
-    /// ```qsharp
-    /// let arr1 = ArrayFromRange(1..5); // [1, 2, 3, 4, 5]
-    /// let arr2 = ArrayFromRange(5..-1..1); // [5, 4, 3, 2, 1]
-    /// let arr3 = ArrayFromRange(13..2..19); // [13, 15, 17, 19]
-    /// let arr4 = ArrayFromRange(-2..-2..-9); // [-2, -4, -6, -8]
-    /// let arr5 = ArrayFromRange(-2..5..17); // [-2, 3, 8, 13]
-    /// ```
-    function ArrayFromRange (range : Range) : Int[] {
-        mutable array = new Int[_RangeLength(range)];
-        mutable i = 0;
-
-        for (elem in range) {
-            set array w/= i <- elem;
-            set i = i + 1;
-        }
-
-        return array;
-    }
 }
