@@ -16,12 +16,6 @@ packages/
 *.exe
 *.chm
 
-# Python interop build outputs:
-Interoperability/python/build
-Interoperability/python/dist
-Interoperability/python/qsharp.egg-info
-Interoperability/python/qsharp/version.py
-
 # test outputs
 TestResults/
 *.qxe
