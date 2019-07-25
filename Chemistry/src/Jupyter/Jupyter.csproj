@@ -19,8 +19,8 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Jupyter.Core" Version="1.1.12077" />
-    <PackageReference Include="Microsoft.Quantum.Simulators" Version="0.8.1906.2007-beta" />
-    <PackageReference Include="Microsoft.Quantum.IQSharp.Core" Version="0.8.1906.2007-beta" />
+    <PackageReference Include="Microsoft.Quantum.Simulators" Version="0.8.1907.1701" />
+    <PackageReference Include="Microsoft.Quantum.IQSharp.Core" Version="0.8.1907.1701" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
   </ItemGroup>
 
