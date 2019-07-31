@@ -98,6 +98,7 @@ namespace Microsoft.Quantum.Canon
         adjoint invert;
     }
     
+
     /// # Summary
     /// Given an operation `op` and a bit value `bit`, applies `op` to the `target`
     /// if `bit` is true. If false, nothing happens to the `target`.
