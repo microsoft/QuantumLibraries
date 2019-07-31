@@ -538,7 +538,7 @@ namespace Microsoft.Quantum.Canon
         return ApplyIfC(op, _, _);
     }
     
-
+    
     /// # Summary
     /// Given an operation op, returns a new operation which
     /// applies the op if a classical control bit is true. If false, nothing happens.
