@@ -238,7 +238,7 @@ namespace Microsoft.Quantum.Canon
         }
     }
 
-	/// # Summary
+    /// # Summary
     /// Given an operation `op` and a Result value `result`, applies `op` to the `target`
     /// if `result` is Zero. If result is One, nothing happens to the `target`.
     ///
@@ -323,7 +323,7 @@ namespace Microsoft.Quantum.Canon
     /// if `result` is Zero. If result is One, nothing happens to the `target`.
     ///
     /// # Input
-	/// ## result
+    /// ## result
     /// a measurement result that controls whether op is applied or not.
     /// ## op
     /// An operation to be conditionally applied.
@@ -344,18 +344,18 @@ namespace Microsoft.Quantum.Canon
         }
     }
 
-	/// # Summary
+    /// # Summary
     /// Given operations `opZero`, `opOne` and a Result value `result`, applies `op` to the `targetZero`
     /// if `result` is Zero. If result is One, applies `opOne` to the `targetOne`.
     ///
     /// # Input
-	/// ## result
+    /// ## result
     /// a measurement result that controls whether op is applied or not.
     /// ## opZero
     /// An operation to be conditionally applied if result is Zero
     /// ## targetZero
     /// The input to which the operation `opZero` is applied.
-	/// ## opOne
+    /// ## opOne
     /// An operation to be conditionally applied if result is One
     /// ## targetOne
     /// The input to which the operation `opOne` is applied.
@@ -363,7 +363,7 @@ namespace Microsoft.Quantum.Canon
     /// # Type Parameters
     /// ## 'T
     /// The input type of the operation `opZero` to be conditionally applied.
-	/// ## 'U
+    /// ## 'U
     /// The input type of the operation `opOne` to be conditionally applied.
     ///
     /// # See Also
@@ -376,24 +376,24 @@ namespace Microsoft.Quantum.Canon
         {
             opZero(targetZero);
         }
-		else
-		{
-			opOne(targetOne);
-		}
+        else
+        {
+            opOne(targetOne);
+        }
     }
 
-	/// # Summary
+    /// # Summary
     /// Given operations `opZero`, `opOne` and a Result value `result`, applies `op` to the `targetZero`
     /// if `result` is Zero. If result is One, applies `opOne` to the `targetOne`.
     ///
     /// # Input
-	/// ## result
+    /// ## result
     /// a measurement result that controls whether op is applied or not.
     /// ## opZero
     /// An operation to be conditionally applied if result is Zero
     /// ## targetZero
     /// The input to which the operation `opZero` is applied.
-	/// ## opOne
+    /// ## opOne
     /// An operation to be conditionally applied if result is One
     /// ## targetOne
     /// The input to which the operation `opOne` is applied.
@@ -401,7 +401,7 @@ namespace Microsoft.Quantum.Canon
     /// # Type Parameters
     /// ## 'T
     /// The input type of the operation `opZero` to be conditionally applied.
-	/// ## 'U
+    /// ## 'U
     /// The input type of the operation `opOne` to be conditionally applied.
     ///
     /// # See Also
@@ -412,24 +412,24 @@ namespace Microsoft.Quantum.Canon
         {
             opZero(targetZero);
         }
-		else
-		{
-			opOne(targetOne);
-		}
+        else
+        {
+            opOne(targetOne);
+        }
     }
 
-	/// # Summary
+    /// # Summary
     /// Given operations `opZero`, `opOne` and a Result value `result`, applies `op` to the `targetZero`
     /// if `result` is Zero. If result is One, applies `opOne` to the `targetOne`.
     ///
     /// # Input
-	/// ## result
+    /// ## result
     /// a measurement result that controls whether op is applied or not.
     /// ## opZero
     /// An operation to be conditionally applied if result is Zero
     /// ## targetZero
     /// The input to which the operation `opZero` is applied.
-	/// ## opOne
+    /// ## opOne
     /// An operation to be conditionally applied if result is One
     /// ## targetOne
     /// The input to which the operation `opOne` is applied.
@@ -437,7 +437,7 @@ namespace Microsoft.Quantum.Canon
     /// # Type Parameters
     /// ## 'T
     /// The input type of the operation `opZero` to be conditionally applied.
-	/// ## 'U
+    /// ## 'U
     /// The input type of the operation `opOne` to be conditionally applied.
     ///
     /// # See Also
@@ -448,24 +448,24 @@ namespace Microsoft.Quantum.Canon
         {
             opZero(targetZero);
         }
-		else
-		{
-			opOne(targetOne);
-		}
+        else
+        {
+            opOne(targetOne);
+        }
     }
 
-	/// # Summary
+    /// # Summary
     /// Given operations `opZero`, `opOne` and a Result value `result`, applies `op` to the `targetZero`
     /// if `result` is Zero. If result is One, applies `opOne` to the `targetOne`.
     ///
     /// # Input
-	/// ## result
+    /// ## result
     /// a measurement result that controls whether op is applied or not.
     /// ## opZero
     /// An operation to be conditionally applied if result is Zero
     /// ## targetZero
     /// The input to which the operation `opZero` is applied.
-	/// ## opOne
+    /// ## opOne
     /// An operation to be conditionally applied if result is One
     /// ## targetOne
     /// The input to which the operation `opOne` is applied.
@@ -473,7 +473,7 @@ namespace Microsoft.Quantum.Canon
     /// # Type Parameters
     /// ## 'T
     /// The input type of the operation `opZero` to be conditionally applied.
-	/// ## 'U
+    /// ## 'U
     /// The input type of the operation `opOne` to be conditionally applied.
     ///
     /// # See Also
@@ -484,10 +484,10 @@ namespace Microsoft.Quantum.Canon
         {
             opZero(targetZero);
         }
-		else
-		{
-			opOne(targetOne);
-		}
+        else
+        {
+            opOne(targetOne);
+        }
     }
     
     /// # Summary
