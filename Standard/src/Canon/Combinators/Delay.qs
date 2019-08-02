@@ -134,6 +134,7 @@ namespace Microsoft.Quantum.Canon
     /// - Microsoft.Quantum.Canon.DelayedC
     /// - Microsoft.Quantum.Canon.DelayedA
     /// - Microsoft.Quantum.Canon.DelayedCA    
+    /// - Delay
     function Delayed<'T> ( op : ('T => Unit), arg : 'T) : (Unit => Unit)
     {
         return Delay(op, arg, _);
