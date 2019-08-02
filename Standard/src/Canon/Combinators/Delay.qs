@@ -5,7 +5,13 @@ namespace Microsoft.Quantum.Canon
 {
 
     /// # Summary
-    /// Applies operation `op` with argument `arg`.
+    /// Applies a given operation with a delay.
+    ///
+    /// # Description
+    /// Given an operation and an input to that operation, applies
+    /// the operation once an additional input is provided.
+    /// In particular, the expression `Delay(op, arg, _)` is an operation that
+    /// applies `op` to `arg` when called.
     /// Expression `Delay(op,arg,_)` allows to delay the application of `op`.
     ///
     /// # Input
