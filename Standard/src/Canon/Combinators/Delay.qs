@@ -30,7 +30,8 @@ namespace Microsoft.Quantum.Canon
     /// # See Also
     /// - Microsoft.Quantum.Canon.DelayC
     /// - Microsoft.Quantum.Canon.DelayA
-    /// - Microsoft.Quantum.Canon.DelayCA    
+    /// - Microsoft.Quantum.Canon.DelayCA
+    /// - Delayed
     operation Delay<'T> ( op : ('T => Unit), arg : 'T, aux : Unit) : Unit
     {
         op(arg);
