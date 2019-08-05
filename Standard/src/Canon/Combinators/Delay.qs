@@ -20,26 +20,33 @@ namespace Microsoft.Quantum.Canon
     /// ## arg
     /// The input to which the operation is applied.
     /// ## aux
-    /// Argument of type Unit used to delay the application of operation by using 
+    /// Argument used to delay the application of operation by using 
     /// partial application.
     ///
     /// # Type Parameters
-    /// ## 'T
+    /// ## 'TIn
     /// The input type of the operation to be delayed.
+    /// ## 'TOut
+    /// The return type of the operation to be delayed.
     ///
     /// # See Also
     /// - Microsoft.Quantum.Canon.DelayC
     /// - Microsoft.Quantum.Canon.DelayA
     /// - Microsoft.Quantum.Canon.DelayCA
-    /// - Delayed
-    operation Delay<'T> ( op : ('T => Unit), arg : 'T, aux : Unit) : Unit
-    {
-        op(arg);
+    /// - Microsoft.Quantum.Canon.Delayed
+    operation Delay<'TIn, 'TOut> ( op : ('TIn => 'TOut), arg : 'Tin, aux : Unit) : 'TOut {
+        return op(arg);
     }
 
 
     /// # Summary
-    /// Applies operation `op` with argument `arg`.
+    /// Applies a given operation with a delay.
+    ///
+    /// # Description
+    /// Given an operation and an input to that operation, applies
+    /// the operation once an additional input is provided.
+    /// In particular, the expression `Delay(op, arg, _)` is an operation that
+    /// applies `op` to `arg` when called.
     /// Expression `Delay(op,arg,_)` allows to delay the application of `op`.
     ///
     /// # Input
@@ -48,7 +55,7 @@ namespace Microsoft.Quantum.Canon
     /// ## arg
     /// The input to which the operation is applied.
     /// ## aux
-    /// Argument of type Unit used to delay the application of operation by using 
+    /// Argument used to delay the application of operation by using 
     /// partial application.
     ///
     /// # Type Parameters
@@ -56,15 +63,21 @@ namespace Microsoft.Quantum.Canon
     /// The input type of the operation to be delayed.
     ///
     /// # See Also
-    /// - Microsoft.Quantum.Canon.Delay    
-    operation DelayA<'T> ( op : ('T => Unit is Adj), arg : 'T, aux : Unit) : Unit is Adj
-    {
+    /// - Microsoft.Quantum.Canon.Delay
+    /// - Microsoft.Quantum.Canon.Delayed
+    operation DelayA<'T> ( op : ('T => Unit is Adj), arg : 'T, aux : Unit) : Unit is Adj {
         op(arg);
     }
 
 
     /// # Summary
-    /// Applies operation `op` with argument `arg`.
+    /// Applies a given operation with a delay.
+    ///
+    /// # Description
+    /// Given an operation and an input to that operation, applies
+    /// the operation once an additional input is provided.
+    /// In particular, the expression `Delay(op, arg, _)` is an operation that
+    /// applies `op` to `arg` when called.
     /// Expression `Delay(op,arg,_)` allows to delay the application of `op`.
     ///
     /// # Input
@@ -73,32 +86,7 @@ namespace Microsoft.Quantum.Canon
     /// ## arg
     /// The input to which the operation is applied.
     /// ## aux
-    /// Argument of type Unit used to delay the application of operation by using 
-    /// partial application.
-    ///
-    /// # Type Parameters
-    /// ## 'T
-    /// The input type of the operation to be delayed.
-    ///
-    /// # See Also
-    /// - Microsoft.Quantum.Canon.Delay 
-    operation DelayC<'T> ( op : ('T => Unit is Ctl), arg : 'T, aux : Unit) : Unit is Ctl
-    {
-        op(arg);
-    }
-
-
-    /// # Summary
-    /// Applies operation `op` with argument `arg`.
-    /// Expression `Delay(op,arg,_)` allows to delay the application of `op`.
-    ///
-    /// # Input
-    /// ## op
-    /// An operation to be applied.
-    /// ## arg
-    /// The input to which the operation is applied.
-    /// ## aux
-    /// Argument of type Unit used to delay the application of operation by using 
+    /// Argument used to delay the application of operation by using 
     /// partial application.
     ///
     /// # Type Parameters
@@ -107,21 +95,52 @@ namespace Microsoft.Quantum.Canon
     ///
     /// # See Also
     /// - Microsoft.Quantum.Canon.Delay 
-    operation DelayCA<'T> ( op : ('T => Unit is Ctl + Adj), arg : 'T, aux : Unit) : Unit is Ctl + Adj
-    {
+    /// - Microsoft.Quantum.Canon.Delayed
+    operation DelayC<'T> ( op : ('T => Unit is Ctl), arg : 'T, aux : Unit) : Unit is Ctl {
         op(arg);
     }
 
 
     /// # Summary
-    /// Returns an operation of type `Unit => Unit` that applies 
-    /// operation `op` with argument `arg`.
+    /// Applies a given operation with a delay.
+    ///
+    /// # Description
+    /// Given an operation and an input to that operation, applies
+    /// the operation once an additional input is provided.
+    /// In particular, the expression `Delay(op, arg, _)` is an operation that
+    /// applies `op` to `arg` when called.
+    /// Expression `Delay(op,arg,_)` allows to delay the application of `op`.
     ///
     /// # Input
     /// ## op
-    /// An operation to be applied as a result of applying return value
+    /// An operation to be applied.
     /// ## arg
-    /// The input to which the operation `op` is applied.
+    /// The input to which the operation is applied.
+    /// ## aux
+    /// Argument used to delay the application of operation by using 
+    /// partial application.
+    ///
+    /// # Type Parameters
+    /// ## 'T
+    /// The input type of the operation to be delayed.
+    ///
+    /// # See Also
+    /// - Microsoft.Quantum.Canon.Delay
+    /// - Microsoft.Quantum.Canon.Delayed
+    operation DelayCA<'T> ( op : ('T => Unit is Ctl + Adj), arg : 'T, aux : Unit) : Unit is Ctl + Adj {
+        op(arg);
+    }
+
+
+    /// # Summary
+    /// Returns an operation of type Unit to Unit that applies 
+    /// operation op with argument arg.
+    ///
+    /// # Type Parameters
+    /// ## 'TIn
+    /// The input type of the operation to be delayed.
+    /// ## 'TOut
+    /// The return type of the operation to be delayed.
     ///
     /// # Output
     /// A new operation which applies `op` with input `arg`
@@ -134,16 +153,15 @@ namespace Microsoft.Quantum.Canon
     /// - Microsoft.Quantum.Canon.DelayedC
     /// - Microsoft.Quantum.Canon.DelayedA
     /// - Microsoft.Quantum.Canon.DelayedCA    
-    /// - Delay
-    function Delayed<'T> ( op : ('T => Unit), arg : 'T) : (Unit => Unit)
-    {
+    /// - Microsoft.Quantum.Canon.Delay
+    function Delayed<'TIn, 'TOut> ( op : ('TIn => 'TOut), arg : 'TIn) : (Unit => 'TOut) {
         return Delay(op, arg, _);
     }
 
 
     /// # Summary
-    /// Returns an operation of type `Unit => Unit is Adj` that applies 
-    /// operation `op` with argument `arg`.
+    /// Returns an operation of type Unit to Unit that applies 
+    /// operation op with argument arg.
     ///
     /// # Input
     /// ## op
@@ -160,15 +178,15 @@ namespace Microsoft.Quantum.Canon
     ///
     /// # See Also
     /// - Microsoft.Quantum.Canon.Delayed 
-    function DelayedA<'T> ( op : ('T => Unit is Adj), arg : 'T) : (Unit => Unit is Adj)
-    {
+    /// - Microsoft.Quantum.Canon.Delay
+    function DelayedA<'T> ( op : ('T => Unit is Adj), arg : 'T) : (Unit => Unit is Adj) {
         return DelayA(op, arg, _);
     }
 
 
     /// # Summary
-    /// Returns an operation of type `Unit => Unit is Ctl` that applies 
-    /// operation `op` with argument `arg`.
+    /// Returns an operation of type Unit to Unit that applies 
+    /// operation op with argument arg.
     ///
     /// # Input
     /// ## op
@@ -184,16 +202,16 @@ namespace Microsoft.Quantum.Canon
     /// The input type of the operation to be delayed.
     ///
     /// # See Also
-    /// - Microsoft.Quantum.Canon.Delayed  
-    function DelayedC<'T> ( op : ('T => Unit is Ctl), arg : 'T) : (Unit => Unit is Ctl)
-    {
+    /// - Microsoft.Quantum.Canon.Delayed 
+    /// - Microsoft.Quantum.Canon.Delay
+    function DelayedC<'T> ( op : ('T => Unit is Ctl), arg : 'T) : (Unit => Unit is Ctl) {
         return DelayC(op, arg, _);
     }
 
 
     /// # Summary
-    /// Returns an operation of type `Unit => Unit is Ctl + Adj` that applies 
-    /// operation `op` with argument `arg`.
+    /// Returns an operation of type Unit to Unit that applies 
+    /// operation op with argument arg.
     ///
     /// # Input
     /// ## op
@@ -210,8 +228,8 @@ namespace Microsoft.Quantum.Canon
     ///
     /// # See Also
     /// - Microsoft.Quantum.Canon.Delayed
-    function DelayedCA<'T> ( op : ('T => Unit is Ctl + Adj), arg : 'T) : (Unit => Unit is Ctl + Adj)
-    {
+    /// - Microsoft.Quantum.Canon.Delay
+    function DelayedCA<'T> ( op : ('T => Unit is Ctl + Adj), arg : 'T) : (Unit => Unit is Ctl + Adj) {
         return DelayCA(op, arg, _);
     }
 }
