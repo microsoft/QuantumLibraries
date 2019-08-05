@@ -133,8 +133,8 @@ namespace Microsoft.Quantum.Canon
 
 
     /// # Summary
-    /// Returns an operation of type Unit to Unit that applies 
-    /// operation op with argument arg.
+    /// Returns an operation that applies 
+    /// given operation with given argument.
     ///
     /// # Type Parameters
     /// ## 'TIn
@@ -160,8 +160,8 @@ namespace Microsoft.Quantum.Canon
 
 
     /// # Summary
-    /// Returns an operation of type Unit to Unit that applies 
-    /// operation op with argument arg.
+    /// Returns an operation that applies 
+    /// given operation with given argument.
     ///
     /// # Input
     /// ## op
@@ -185,8 +185,8 @@ namespace Microsoft.Quantum.Canon
 
 
     /// # Summary
-    /// Returns an operation of type Unit to Unit that applies 
-    /// operation op with argument arg.
+    /// Returns an operation that applies 
+    /// given operation with given argument.
     ///
     /// # Input
     /// ## op
@@ -210,8 +210,8 @@ namespace Microsoft.Quantum.Canon
 
 
     /// # Summary
-    /// Returns an operation of type Unit to Unit that applies 
-    /// operation op with argument arg.
+    /// Returns an operation that applies 
+    /// given operation with given argument.
     ///
     /// # Input
     /// ## op
