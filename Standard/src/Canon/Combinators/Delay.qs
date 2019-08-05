@@ -24,9 +24,9 @@ namespace Microsoft.Quantum.Canon
     /// partial application.
     ///
     /// # Type Parameters
-    /// ## 'TIn
+    /// ## 'T
     /// The input type of the operation to be delayed.
-    /// ## 'TOut
+    /// ## 'U
     /// The return type of the operation to be delayed.
     ///
     /// # See Also
@@ -34,7 +34,7 @@ namespace Microsoft.Quantum.Canon
     /// - Microsoft.Quantum.Canon.DelayA
     /// - Microsoft.Quantum.Canon.DelayCA
     /// - Microsoft.Quantum.Canon.Delayed
-    operation Delay<'TIn, 'TOut> ( op : ('TIn => 'TOut), arg : 'Tin, aux : Unit) : 'TOut {
+    operation Delay<'T, 'U> ( op : ('T => 'U), arg : 'T, aux : Unit) : 'U {
         return op(arg);
     }
 
@@ -149,9 +149,9 @@ namespace Microsoft.Quantum.Canon
     /// A new operation which applies `op` with input `arg`
     ///
     /// # Type Parameters
-    /// ## 'TIn
+    /// ## 'T
     /// The input type of the operation to be delayed.
-    /// ## 'TOut
+    /// ## 'U
     /// The return type of the operation to be delayed.
     ///
     /// # See Also
@@ -159,7 +159,7 @@ namespace Microsoft.Quantum.Canon
     /// - Microsoft.Quantum.Canon.DelayedA
     /// - Microsoft.Quantum.Canon.DelayedCA    
     /// - Microsoft.Quantum.Canon.Delay
-    function Delayed<'TIn, 'TOut> ( op : ('TIn => 'TOut), arg : 'TIn) : (Unit => 'TOut) {
+    function Delayed<'T, 'U> ( op : ('T => 'U), arg : 'T) : (Unit => 'U) {
         return Delay(op, arg, _);
     }
 
