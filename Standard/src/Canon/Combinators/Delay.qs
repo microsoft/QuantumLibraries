@@ -136,18 +136,23 @@ namespace Microsoft.Quantum.Canon
     /// Returns an operation that applies 
     /// given operation with given argument.
     ///
-    /// # Type Parameters
-    /// ## 'TIn
-    /// The input type of the operation to be delayed.
-    /// ## 'TOut
-    /// The return type of the operation to be delayed.
+    /// # Input
+    /// ## op
+    /// An operation to be applied.
+    /// ## arg
+    /// The input to which the operation is applied.
+    /// ## aux
+    /// Argument used to delay the application of operation by using 
+    /// partial application.
     ///
     /// # Output
     /// A new operation which applies `op` with input `arg`
     ///
     /// # Type Parameters
-    /// ## 'T
+    /// ## 'TIn
     /// The input type of the operation to be delayed.
+    /// ## 'TOut
+    /// The return type of the operation to be delayed.
     ///
     /// # See Also
     /// - Microsoft.Quantum.Canon.DelayedC
