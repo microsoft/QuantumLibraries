@@ -141,7 +141,7 @@ namespace Microsoft.Quantum.Canon
     /// ## op
     /// An operation to be conditionally applied.
     /// ## result
-    /// a measurement result that controls whether op is applied or not.
+    /// A measurement result that controls whether op is applied or not.
     /// ## target
     /// The input to which the operation is applied.
     ///
