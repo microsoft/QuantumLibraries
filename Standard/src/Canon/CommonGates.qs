@@ -234,4 +234,40 @@ namespace Microsoft.Quantum.Canon {
         controlled adjoint distribute;
     }
 
+    /// # Summary
+	/// Applies the Fermionic SWAP.
+	///
+    /// This essentially swaps the qubits while applying a global phase of -1 
+    /// if both qubits are 1s. Preserves anti-symmetrization of orbitals. 
+    /// See https://arxiv.org/pdf/1706.00023.pdf for more information.
+    ///
+    /// \begin{align}
+    ///     f_{swap} \mathrel{:=}
+    ///     \begin{bmatrix}
+    ///         1 & 0 & 0 & 0 \\\\
+    ///         0 & 0 & 1 & 0 \\\\
+    ///         0 & 1 & 0 & 0 \\\\
+    ///         0 & 0 & 0 & -1 \\\\
+    ///     \end{bmatrix}.
+    /// \end{align}
+    ///
+    /// # Input
+    /// ## qubit1
+    /// First qubit to be swapped.
+    /// 
+    /// ## qubit2
+    /// Second qubit to be swapped.
+    ///
+    /// # See Also
+    operation FermionicSWAP (qubit1 : Qubit, qubit2 : Qubit) : Unit {
+        body (...) {
+            SWAP(qubit1, qubit2);
+            CZ(qubit1, qubit2);
+        }
+
+        adjoint self;
+        controlled auto;
+        controlled adjoint auto;
+    }
+
 }
