@@ -35,6 +35,10 @@ namespace Microsoft.Quantum.Tests {
         AssertOperationsEqualReferenced(2, actual, expected);
     }
     
+    operation ApplyFermionicSWAPTest() : Unit {
+        //
+    }
+
 }
 
 

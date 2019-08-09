@@ -235,11 +235,12 @@ namespace Microsoft.Quantum.Canon {
     }
 
     /// # Summary
-	/// Applies the Fermionic SWAP.
-	///
+    /// Applies the Fermionic SWAP.
+    ///
+    /// # Description
     /// This essentially swaps the qubits while applying a global phase of -1
     /// if both qubits are 1s. Preserves anti-symmetrization of orbitals.
-    /// See https://arxiv.org/pdf/1706.00023.pdf for more information.
+    /// See  for more information.
     ///
     /// This operation is represented by the unitary operator
     /// \begin{align}
@@ -258,17 +259,17 @@ namespace Microsoft.Quantum.Canon {
     /// ## qubit2
     /// The second qubit to be swapped.
     ///
+    /// # References
+    /// - [ *Ryan Babbush, Nathan Wiebe, Jarrod McClean, James McClain, 
+    ///     Hartmut Neven, Garnet Kin-Lic Chan*,
+    ///     arXiv:1706.00023 ](https://arxiv.org/pdf/1706.00023.pdf)
+    ///
     /// # See Also
-    /// - Miicrosoft.Quantum.Intrinsic.SWAP
-    operation FermionicSWAP (qubit1 : Qubit, qubit2 : Qubit) : Unit {
-        body (...) {
-            SWAP(qubit1, qubit2);
-            CZ(qubit1, qubit2);
-        }
-
-        adjoint self;
-        controlled auto;
-        controlled adjoint auto;
+    /// - Microsoft.Quantum.Intrinsic.SWAP
+    operation ApplyFermionicSWAP (qubit1 : Qubit, qubit2 : Qubit) : Unit 
+    is Adj + Ctl {
+        SWAP(qubit1, qubit2);
+        CZ(qubit1, qubit2);
     }
 
 }
