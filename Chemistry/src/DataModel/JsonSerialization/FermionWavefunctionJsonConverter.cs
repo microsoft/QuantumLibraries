@@ -12,7 +12,7 @@ namespace Microsoft.Quantum.Chemistry.Json
     /// <summary>
     ///  This <see href="Newtonsoft.Json.JsonConverter" /> allows correctly serialized HamiltonianTerms.
     /// This terms are in general problematic because their keys are not strings, 
-    /// but <see href="HamiltonianTerm" /> instances, which <see href="Newtonsoft.Json" /> doesn't like by default.
+    /// but <see href="Microsoft.Quantum.Chemistry.Generic.HamiltonianTerm" /> instances, which <see href="Newtonsoft.Json" /> doesn't like by default.
     /// This converts the Dictionaries to List of Tuples, in which the first
     /// item of the tuple is the key and the second the value.
     /// </summary>
