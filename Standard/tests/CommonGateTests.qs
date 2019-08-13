@@ -37,32 +37,32 @@ namespace Microsoft.Quantum.Tests {
 
     // Verify Fermionic SWAP gives the correct qubit values
     operation ApplyFermionicSWAPValueTest() : Unit {
-        using (ancilla = Qubit[2]) {
+        using ((left, right) = (Qubit(), Qubit())) {
             // 00
-            ApplyFermionicSWAP(ancilla[0], ancilla[1]);
-            AssertAllZero(ancilla);
+            ApplyFermionicSWAP(left, right);
+            AssertAllZero([left, right]);
 
             // 01
-            X(ancilla[1]);
-            ApplyFermionicSWAP(ancilla[0], ancilla[1]);
-            X(ancilla[0]);
-            AssertAllZero(ancilla);
+            X(right);
+            ApplyFermionicSWAP(left, right);
+            X(left);
+            AssertAllZero([left, right]);
 
             // 10
-            X(ancilla[0]);
-            ApplyFermionicSWAP(ancilla[0], ancilla[1]);
-            X(ancilla[1]);
-            AssertAllZero(ancilla);
+            X(left);
+            ApplyFermionicSWAP(left, right);
+            X(right);
+            AssertAllZero([left, right]);
 
             // 11
-            ApplyToEachCA(X, ancilla);
-            ApplyFermionicSWAP(ancilla[0], ancilla[1]);
-            ApplyToEachCA(X, ancilla);
-            AssertAllZero(ancilla);
+            ApplyToEachCA(X, [left, right]);
+            ApplyFermionicSWAP(left, right);
+            ApplyToEachCA(X, [left, right]);
+            AssertAllZero([left, right]);
         }
     }
 
-    operation VerifyFermionicSWAPPhaseHelper(qubit1 : Qubit, qubit2: Qubit, phase : Result) : Unit {
+    operation VerifyFermionicSWAPPhaseHelper(phase : Result, qubit1 : Qubit, qubit2: Qubit) : Unit {
         ApplyFermionicSWAP(qubit1, qubit2);
         Assert([PauliZ, PauliZ], [qubit1, qubit2], phase,
             "The Fermionic SWAP applies an incorrect phase");
@@ -70,25 +70,25 @@ namespace Microsoft.Quantum.Tests {
     
     // Verify Fermionic SWAP gives the correct phase change
     operation ApplyFermionicSWAPPhaseTest() : Unit {
-        using (ancilla = Qubit[2]) {
+        using ((left, right) = (Qubit(), Qubit())) {
             // 00
-            VerifyFermionicSWAPPhaseHelper(ancilla[0], ancilla[1], Zero);
-            ResetAll(ancilla);
+            VerifyFermionicSWAPPhaseHelper(Zero, left, right);
+            ResetAll([left, right]);
 
             // 01
-            X(ancilla[1]);
-            VerifyFermionicSWAPPhaseHelper(ancilla[0], ancilla[1], One);
-            ResetAll(ancilla);
+            X(right);
+            VerifyFermionicSWAPPhaseHelper(One, left, right);
+            ResetAll([left, right]);
 
             // 10
-            X(ancilla[0]);
-            VerifyFermionicSWAPPhaseHelper(ancilla[0], ancilla[1], One);
-            ResetAll(ancilla);
+            X(left);
+            VerifyFermionicSWAPPhaseHelper(One, left, right);
+            ResetAll([left, right]);
 
             // 11
-            ApplyToEachCA(X, ancilla);
-            VerifyFermionicSWAPPhaseHelper(ancilla[0], ancilla[1], Zero);
-            ResetAll(ancilla);
+            ApplyToEachCA(X, [left, right]);
+            VerifyFermionicSWAPPhaseHelper(Zero, left, right);
+            ResetAll([left, right]);
         }
     }
 
