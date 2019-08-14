@@ -33,7 +33,7 @@ namespace Microsoft.Quantum.Simulation {
     /// # See Also
     /// - EvolutionSet
     /// - PauliEvolutionSet
-    newtype GeneratorIndex = ((Int[], Double[]), Int[]);
+    newtype GeneratorIndex = (Data: (Int[], Double[]), Subsystems: Int[]);
 
     /// # Summary
     /// Represents a collection of `GeneratorIndex`es. 
@@ -84,7 +84,7 @@ namespace Microsoft.Quantum.Simulation {
     /// an expansion in terms of that basis.
     /// 
     /// Last parameter for number of terms.
-    newtype EvolutionGenerator = (EvolutionSet, GeneratorSystem);
+    newtype EvolutionGenerator = (EvolutionSet: EvolutionSet, Generator: GeneratorSystem);
     
     /// # Summary
     /// Represents a time-dependent dynamical generator. 
@@ -154,29 +154,6 @@ namespace Microsoft.Quantum.Simulation {
         return TimeDependentGeneratorSystem(_IdentityTimeDependentGeneratorSystem);
     }
     
-    
-    /// # Deprecated
-    /// Use `::NTerms` instead.
-    function GetGeneratorSystemNTerms (generatorSystem : GeneratorSystem) : Int {
-        _Removed(
-            "Microsoft.Quantum.Simulation.GetGeneratorSystemNTerms",
-            "Use ::NTerms instead."
-        );
-        return generatorSystem::NTerms;
-    }
-    
-    
-    /// # Deprecated
-    /// Use `::Term` instead.
-    function GetGeneratorSystemFunction (generatorSystem : GeneratorSystem) : (Int -> GeneratorIndex) {
-        _Removed(
-            "Microsoft.Quantum.Simulation.GetGeneratorSystemFunction",
-            "Use ::Term instead."
-        );
-        return generatorSystem::Term;
-    }
-    
-    
     // We should be able to do some algebra on representations of the system
     
     /// # Summary
@@ -202,12 +179,10 @@ namespace Microsoft.Quantum.Simulation {
     ///
     /// # See Also
     /// - Microsoft.Quantum.Simulation.GeneratorIndex
-    function MultiplyGeneratorIndex (multiplier : Double, generatorIndex : GeneratorIndex) : GeneratorIndex
-    {
-        let ((idxTerms, idxDoubles), idxSystems) = generatorIndex!;
-        mutable idxDoublesOut = idxDoubles;
-        set idxDoublesOut w/= 0 <- multiplier * idxDoublesOut[0];
-        return GeneratorIndex((idxTerms, idxDoublesOut), idxSystems);
+    function MultiplyGeneratorIndex (multiplier : Double, generatorIndex : GeneratorIndex) : GeneratorIndex {
+        let (idxTerms, idxDoubles) = generatorIndex::Data;
+        let idxDoublesOut = idxDoubles w/ 0 <- multiplier * Head(idxDoubles);
+        return GeneratorIndex((idxTerms, idxDoublesOut), generatorIndex::Subsystems);
     }
     
     
@@ -216,7 +191,7 @@ namespace Microsoft.Quantum.Simulation {
     ///
     /// # Remarks
     /// This is an intermediate step and should not be called.
-    function _MultiplyGeneratorSystem (multiplier : Double, idxTerm : Int, generatorSystem : GeneratorSystem) : GeneratorIndex {
+    function _MultiplyGeneratorSystem(multiplier : Double, idxTerm : Int, generatorSystem : GeneratorSystem) : GeneratorIndex {
         return MultiplyGeneratorIndex(multiplier, generatorSystem::Term(idxTerm));
     }
     
@@ -236,10 +211,11 @@ namespace Microsoft.Quantum.Simulation {
     ///
     /// # See Also
     /// - Microsoft.Quantum.Canon.GeneratorSystem
-    function MultiplyGeneratorSystem (multiplier : Double, generatorSystem : GeneratorSystem) : GeneratorSystem
-    {
-        let nTerms = generatorSystem::NTerms;
-        return GeneratorSystem(nTerms, _MultiplyGeneratorSystem(multiplier, _, generatorSystem));
+    function MultiplyGeneratorSystem(multiplier : Double, generatorSystem : GeneratorSystem) : GeneratorSystem {
+        return GeneratorSystem(
+            generatorSystem::NTerms,
+            _MultiplyGeneratorSystem(multiplier, _, generatorSystem)
+        );
     }
     
     
@@ -248,19 +224,13 @@ namespace Microsoft.Quantum.Simulation {
     ///
     /// # Remarks
     /// This is an intermediate step and should not be called.
-    function _AddGeneratorSystems (idxTerm : Int, nTermsA : Int, nTermsB : Int, generatorIndexFunctionA : (Int -> GeneratorIndex), generatorIndexFunctionB : (Int -> GeneratorIndex)) : GeneratorIndex
-    {
-        if (idxTerm < nTermsA)
-        {
-            return generatorIndexFunctionA(idxTerm);
-        }
-        else
-        {
-            return generatorIndexFunctionB(idxTerm - nTermsA);
-        }
+    function _AddGeneratorSystems (idxTerm : Int, nTermsA : Int, nTermsB : Int, generatorIndexFunctionA : (Int -> GeneratorIndex), generatorIndexFunctionB : (Int -> GeneratorIndex)) : GeneratorIndex {
+        return idxTerm < nTermsA
+        ? generatorIndexFunctionA(idxTerm)
+        |  generatorIndexFunctionB(idxTerm - nTermsA);
     }
-    
-    
+
+
     /// # Summary
     /// Adds two `GeneratorSystem`s to create a new `GeneratorSystem`.
     ///

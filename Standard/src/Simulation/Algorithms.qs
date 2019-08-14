@@ -82,22 +82,14 @@ namespace Microsoft.Quantum.Simulation {
     /// A complete description of the system to be simulated.
     /// ## qubits
     /// Qubits acted on by simulation.
-    operation TrotterSimulationAlgorithmImpl (trotterStepSize : Double, trotterOrder : Int, maxTime : Double, evolutionGenerator : EvolutionGenerator, qubits : Qubit[]) : Unit
-    {
-        body (...)
-        {
-            let nTimeSlices = Ceiling(maxTime / trotterStepSize);
-            let resizedTrotterStepSize = maxTime / IntAsDouble(nTimeSlices);
-            
-            for (idxTimeSlice in 0 .. nTimeSlices - 1)
-            {
-                (TrotterStep(evolutionGenerator, trotterOrder, resizedTrotterStepSize))(qubits);
-            }
+    operation TrotterSimulationAlgorithmImpl(trotterStepSize : Double, trotterOrder : Int, maxTime : Double, evolutionGenerator : EvolutionGenerator, qubits : Qubit[]) : Unit
+    is Adj + Ctl {
+        let nTimeSlices = Ceiling(maxTime / trotterStepSize);
+        let resizedTrotterStepSize = maxTime / IntAsDouble(nTimeSlices);
+
+        for (idxTimeSlice in 0 .. nTimeSlices - 1) {
+            (TrotterStep(evolutionGenerator, trotterOrder, resizedTrotterStepSize))(qubits);
         }
-        
-        adjoint invert;
-        controlled distribute;
-        controlled adjoint distribute;
     }
     
     
@@ -113,8 +105,7 @@ namespace Microsoft.Quantum.Simulation {
     ///
     /// # Output
     /// A `SimulationAlgorithm` type.
-    function TrotterSimulationAlgorithm (trotterStepSize : Double, trotterOrder : Int) : SimulationAlgorithm
-    {
+    function TrotterSimulationAlgorithm (trotterStepSize : Double, trotterOrder : Int) : SimulationAlgorithm {
         return SimulationAlgorithm(TrotterSimulationAlgorithmImpl(trotterStepSize, trotterOrder, _, _, _));
     }
     
@@ -138,25 +129,18 @@ namespace Microsoft.Quantum.Simulation {
     /// ## qubits
     /// Qubits acted on by simulation.
     operation TimeDependentTrotterSimulationAlgorithmImpl (trotterStepSize : Double, trotterOrder : Int, maxTime : Double, evolutionSchedule : EvolutionSchedule, qubits : Qubit[]) : Unit
-    {
-        body (...)
-        {
-            let nTimeSlices = Ceiling(maxTime / trotterStepSize);
-            let resizedTrotterStepSize = maxTime / IntAsDouble(nTimeSlices);
-            
-            for (idxTimeSlice in 0 .. nTimeSlices - 1)
-            {
-                let schedule = IntAsDouble(idxTimeSlice) / IntAsDouble(nTimeSlices);
-                let (evolutionSet, generatorSystemTimeDependent) = evolutionSchedule!;
-                let generatorSystem = generatorSystemTimeDependent(schedule);
-                let evolutionGenerator = EvolutionGenerator(evolutionSet, generatorSystem);
-                (TrotterSimulationAlgorithm(resizedTrotterStepSize, trotterOrder))!(resizedTrotterStepSize, evolutionGenerator, qubits);
-            }
-        }
+    is Adj + Ctl {
+        let nTimeSlices = Ceiling(maxTime / trotterStepSize);
+        let resizedTrotterStepSize = maxTime / IntAsDouble(nTimeSlices);
         
-        adjoint invert;
-        controlled distribute;
-        controlled adjoint distribute;
+        for (idxTimeSlice in 0 .. nTimeSlices - 1)
+        {
+            let schedule = IntAsDouble(idxTimeSlice) / IntAsDouble(nTimeSlices);
+            let (evolutionSet, generatorSystemTimeDependent) = evolutionSchedule!;
+            let generatorSystem = generatorSystemTimeDependent(schedule);
+            let evolutionGenerator = EvolutionGenerator(evolutionSet, generatorSystem);
+            (TrotterSimulationAlgorithm(resizedTrotterStepSize, trotterOrder))!(resizedTrotterStepSize, evolutionGenerator, qubits);
+        }
     }
     
     
@@ -173,8 +157,7 @@ namespace Microsoft.Quantum.Simulation {
     ///
     /// # Output
     /// A `TimeDependentSimulationAlgorithm` type.
-    function TimeDependentTrotterSimulationAlgorithm (trotterStepSize : Double, trotterOrder : Int) : TimeDependentSimulationAlgorithm
-    {
+    function TimeDependentTrotterSimulationAlgorithm (trotterStepSize : Double, trotterOrder : Int) : TimeDependentSimulationAlgorithm {
         return TimeDependentSimulationAlgorithm(TimeDependentTrotterSimulationAlgorithmImpl(trotterStepSize, trotterOrder, _, _, _));
     }
     

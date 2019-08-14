@@ -259,7 +259,7 @@ namespace Microsoft.Quantum.Simulation {
 
     /// # Summary
     /// Conversion of ((LittleEndian, Qubit[]) => () is Adj + Ctl) to BlockEncoding
-    operation BlockEncodingFromBEandQubit_(
+    operation _BlockEncodingFromBEandQubit(
         op: ((LittleEndian, Qubit[]) => Unit is Adj + Ctl), 
         auxiliary: Qubit[], 
         system: Qubit[])  : Unit

@@ -28,4 +28,26 @@ namespace Microsoft.Quantum.Canon {
         return IntArrayAsPauliArray(ints);
     }
 
+    /// # Deprecated
+    /// Use `::NTerms` instead.
+    function GetGeneratorSystemNTerms (generatorSystem : GeneratorSystem) : Int {
+        _Removed(
+            "Microsoft.Quantum.Simulation.GetGeneratorSystemNTerms",
+            "Use ::NTerms instead."
+        );
+        return generatorSystem::NTerms;
+    }
+
+
+    /// # Deprecated
+    /// Use `::Term` instead.
+    function GetGeneratorSystemFunction (generatorSystem : GeneratorSystem) : (Int -> GeneratorIndex) {
+        _Removed(
+            "Microsoft.Quantum.Simulation.GetGeneratorSystemFunction",
+            "Use ::Term instead."
+        );
+        return generatorSystem::Term;
+    }
+
+
 }

@@ -20,7 +20,7 @@ namespace Microsoft.Quantum.Simulation {
     /// # Output
     /// The coefficient of the term described by a `GeneratorIndex`.
     function PauliCoefficientFromGenIdx(generatorIndex: GeneratorIndex) : Double {
-        let ((idxPaulis, coeff), idxQubits) = generatorIndex!;
+        let (idxPaulis, coeff) = generatorIndex::Data;
         return coeff[0];
     }
 
@@ -36,8 +36,8 @@ namespace Microsoft.Quantum.Simulation {
     /// The Pauli string of the term described by a `GeneratorIndex`, and
     /// indices to the qubits it acts on.
     function PauliStringFromGenIdx(generatorIndex: GeneratorIndex) : (Pauli[], Int[]) {
-        let ((idxPaulis, coeff), idxQubits) = generatorIndex!;
-        return (IntsToPaulis(idxPaulis), idxQubits);
+        let (idxPaulis, coeff) = generatorIndex::Data;
+        return (IntArrayAsPauliArray(idxPaulis), generatorIndex::Subsystems);
     }
 
     /// # Summary
@@ -100,15 +100,15 @@ namespace Microsoft.Quantum.Simulation {
     function PauliBlockEncodingImpl(
         generatorSystem: GeneratorSystem,
         statePrepUnitary: (Double[] -> (LittleEndian => Unit is Adj + Ctl)), 
-        multiplexer: ((Int, (Int -> (Qubit[] => Unit is Adj + Ctl))) -> ((LittleEndian, Qubit[]) => Unit is Adj + Ctl))) : (Double, BlockEncodingReflection) {
-        let (nTerms, intToGenIdx) = generatorSystem!;
-        let op = IdxToCoeff_(_, intToGenIdx, PauliCoefficientFromGenIdx);
-        let coefficients = Mapped(op, RangeAsIntArray(0..nTerms-1));
-        let oneNorm = PowD(PNorm(2.0, coefficients),2.0);
-        let unitaryGenerator = (nTerms, IdxToUnitary_(_, intToGenIdx, PauliLCUUnitary_));
+        multiplexer: ((Int, (Int -> (Qubit[] => Unit is Adj + Ctl))) -> ((LittleEndian, Qubit[]) => Unit is Adj + Ctl))) : (Double, BlockEncodingReflection)
+    {
+        let op = _IdxToCoeff(_, generatorSystem::Term, PauliCoefficientFromGenIdx);
+        let coefficients = Mapped(op, RangeAsIntArray(0..generatorSystem::NTerms - 1));
+        let oneNorm = PowD(PNorm(2.0, coefficients), 2.0);
+        let unitaryGenerator = (generatorSystem::NTerms, _IdxToUnitary(_, generatorSystem::Term, _PauliLCUUnitary));
         let statePreparation = statePrepUnitary(coefficients);
-        let selector = multiplexer(unitaryGenerator); 
-        let blockEncoding = BlockEncodingReflection(BlockEncoding(BlockEncodingFromBEandQubit_(BlockEncodingByLCU(statePreparation, selector),_,_)));
+        let selector = multiplexer(unitaryGenerator);
+        let blockEncoding = BlockEncodingReflection(BlockEncoding(_BlockEncodingFromBEandQubit(BlockEncodingByLCU(statePreparation, selector),_,_)));
         return (oneNorm, blockEncoding);
     }
 
@@ -116,7 +116,7 @@ namespace Microsoft.Quantum.Simulation {
     /// Used in implementation of `PauliBlockEncoding`
     /// # See Also
     /// - Microsoft.Quantum.Canon.PauliBlockEncoding
-    function IdxToCoeff_(idx: Int, genFun: (Int -> GeneratorIndex), genIdxToCoeff: (GeneratorIndex -> Double)) : Double {
+    function _IdxToCoeff(idx: Int, genFun: (Int -> GeneratorIndex), genIdxToCoeff: (GeneratorIndex -> Double)) : Double {
         return Sqrt(AbsD(genIdxToCoeff(genFun(idx))));
     }
 
@@ -124,7 +124,7 @@ namespace Microsoft.Quantum.Simulation {
     /// Used in implementation of `PauliBlockEncoding`
     /// # See Also
     /// - Microsoft.Quantum.Canon.PauliBlockEncoding
-    function IdxToUnitary_(idx: Int, genFun: (Int -> GeneratorIndex), genIdxToUnitary: (GeneratorIndex -> (Qubit[] => Unit is Adj + Ctl))) : (Qubit[] => Unit is Adj + Ctl) {
+    function _IdxToUnitary(idx: Int, genFun: (Int -> GeneratorIndex), genIdxToUnitary: (GeneratorIndex -> (Qubit[] => Unit is Adj + Ctl))) : (Qubit[] => Unit is Adj + Ctl) {
         return genIdxToUnitary(genFun(idx));
     }
 
@@ -133,30 +133,26 @@ namespace Microsoft.Quantum.Simulation {
     /// Used in implementation of `PauliBlockEncoding`
     /// # See Also
     /// - Microsoft.Quantum.Canon.PauliBlockEncoding
-    function PauliLCUUnitary_(generatorIndex: GeneratorIndex) : (Qubit[] => Unit is Adj + Ctl) {
-        return ApplyPauliLCUUnitary_(generatorIndex,_);
+    function _PauliLCUUnitary(generatorIndex: GeneratorIndex) : (Qubit[] => Unit is Adj + Ctl) {
+        return _ApplyPauliLCUUnitary(generatorIndex,_);
     }
 
     /// # Summary
     /// Used in implementation of `PauliBlockEncoding`
     /// # See Also
     /// - Microsoft.Quantum.Canon.PauliBlockEncoding
-    operation ApplyPauliLCUUnitary_(generatorIndex: GeneratorIndex, qubits: Qubit[]) : Unit {
-        body (...) {
-            let ((idxPaulis, coeff), idxQubits) = generatorIndex!;
-            let pauliString = IntsToPaulis(idxPaulis);
-            let pauliQubits = Subarray(idxQubits, qubits);
+    operation _ApplyPauliLCUUnitary(generatorIndex: GeneratorIndex, qubits: Qubit[]) : Unit
+    is Adj + Ctl {
+        let (idxPaulis, coeff) = generatorIndex::Data;
+        let pauliString = IntArrayAsPauliArray(idxPaulis);
+        let pauliQubits = Subarray(generatorIndex::Subsystems, qubits);
 
-            ApplyPauli(pauliString, pauliQubits);
+        ApplyPauli(pauliString, pauliQubits);
 
-            if (coeff[0] < 0.0) {
-                // -1 phase
-                Exp([PauliI], PI(), [pauliQubits[0]]);
-            }
+        if (coeff[0] < 0.0) {
+            // -1 phase
+            Exp([PauliI], PI(), [Head(pauliQubits)]);
         }
-        adjoint auto;
-        controlled auto;
-        adjoint controlled auto;
     }
 
 }

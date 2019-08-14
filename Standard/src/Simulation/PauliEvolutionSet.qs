@@ -4,6 +4,7 @@
 namespace Microsoft.Quantum.Simulation {
     open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Intrinsic;
+    open Microsoft.Quantum.Convert;
 
     // Convention for GeneratorIndex = ((Int[],Double[]), Int[])
     // We index single Paulis as 0 for I, 1 for X, 2 for Y, 3 for Z.
@@ -33,13 +34,12 @@ namespace Microsoft.Quantum.Simulation {
     /// Register acted upon by time-evolution operator.
     operation PauliEvolutionImpl (generatorIndex : GeneratorIndex, delta : Double, qubits : Qubit[]) : Unit
     is Adj + Ctl {
-        let ((idxPaulis, idxDoubles), idxQubits) = generatorIndex!;
-        let pauliString = IntsToPaulis(idxPaulis);
+        let (idxPaulis, idxDoubles) = generatorIndex::Data;
+        let pauliString = IntArrayAsPauliArray(idxPaulis);
         let op = Exp(pauliString, delta * idxDoubles[0], _);
-        (RestrictedToSubregisterCA(op, idxQubits))(qubits);
+        (RestrictedToSubregisterCA(op, generatorIndex::Subsystems))(qubits);
     }
-    
-    
+
     /// # Summary
     /// Represents a dynamical generator as a set of simulatable gates and an
     /// expansion in the Pauli basis.
@@ -71,7 +71,5 @@ namespace Microsoft.Quantum.Simulation {
     function PauliEvolutionSet() : EvolutionSet {
         return EvolutionSet(PauliEvolutionFunction);
     }
-    
+
 }
-
-
