@@ -7,7 +7,7 @@ namespace Microsoft.Quantum.Canon {
 
     /// # Summary
     /// Applies the controlled-X (CX) gate to a pair of qubits.
-	///
+    ///
     /// $$
     /// \begin{align}
     ///     1 & 0 & 0 & 0 \\\\
@@ -44,7 +44,7 @@ namespace Microsoft.Quantum.Canon {
 
     /// # Summary
     /// Applies the controlled-Y (CY) gate to a pair of qubits.
-	///
+    ///
     /// $$
     /// \begin{align}
     ///     1 & 0 & 0 & 0 \\\\
@@ -77,7 +77,7 @@ namespace Microsoft.Quantum.Canon {
 
     /// # Summary
     /// Applies the controlled-Z (CZ) gate to a pair of qubits.
-	///
+    ///
     /// $$
     /// \begin{align}
     ///     1 & 0 & 0 & 0 \\\\
@@ -157,8 +157,8 @@ namespace Microsoft.Quantum.Canon {
 
     /// # Summary
     /// Performs a phase shift operation.
-	///
-	/// $R=\boldone-(1-e^{i \phi})\ket{1\cdots 1}\bra{1\cdots 1}$.
+    ///
+    /// $R=\boldone-(1-e^{i \phi})\ket{1\cdots 1}\bra{1\cdots 1}$.
     ///
     /// # Input
     /// ## phase
@@ -180,8 +180,8 @@ namespace Microsoft.Quantum.Canon {
 
     /// # Summary
     /// Performs a phase shift operation.
-	///
-	/// $R=\boldone-(1-e^{i \phi})\ket{0\cdots 0}\bra{0\cdots 0}$.
+    ///
+    /// $R=\boldone-(1-e^{i \phi})\ket{0\cdots 0}\bra{0\cdots 0}$.
     ///
     /// # Input
     /// ## phase
@@ -202,9 +202,9 @@ namespace Microsoft.Quantum.Canon {
     }
 
     /// # Summary
-	/// Applies the Y-basis analog to the Hadamard transformation
-	/// that interchanges the Z and Y axes.
-	///
+    /// Applies the Y-basis analog to the Hadamard transformation
+    /// that interchanges the Z and Y axes.
+    ///
     /// The Y Hadamard transformation $H_Y = S H$ on a single qubit is:
     ///
     /// \begin{align}
@@ -232,6 +232,44 @@ namespace Microsoft.Quantum.Canon {
         adjoint invert;
         controlled distribute;
         controlled adjoint distribute;
+    }
+
+    /// # Summary
+    /// Applies the Fermionic SWAP.
+    ///
+    /// # Description
+    /// This essentially swaps the qubits while applying a global phase of -1
+    /// if both qubits are 1s. Preserves anti-symmetrization of orbitals.
+    /// See  for more information.
+    ///
+    /// This operation is represented by the unitary operator
+    /// \begin{align}
+    ///     f_{swap} \mathrel{:=}
+    ///     \begin{bmatrix}
+    ///         1 & 0 & 0 & 0 \\\\
+    ///         0 & 0 & 1 & 0 \\\\
+    ///         0 & 1 & 0 & 0 \\\\
+    ///         0 & 0 & 0 & -1 \\\\
+    ///     \end{bmatrix}.
+    /// \end{align}
+    ///
+    /// # Input
+    /// ## qubit1
+    /// The first qubit to be swapped.
+    /// ## qubit2
+    /// The second qubit to be swapped.
+    ///
+    /// # References
+    /// - [ *Ryan Babbush, Nathan Wiebe, Jarrod McClean, James McClain, 
+    ///     Hartmut Neven, Garnet Kin-Lic Chan*,
+    ///     arXiv:1706.00023 ](https://arxiv.org/pdf/1706.00023.pdf)
+    ///
+    /// # See Also
+    /// - Microsoft.Quantum.Intrinsic.SWAP
+    operation ApplyFermionicSWAP (qubit1 : Qubit, qubit2 : Qubit) : Unit 
+    is Adj + Ctl {
+        SWAP(qubit1, qubit2);
+        CZ(qubit1, qubit2);
     }
 
 }
