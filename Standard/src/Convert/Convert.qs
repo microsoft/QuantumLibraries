@@ -232,4 +232,55 @@ namespace Microsoft.Quantum.Convert {
         }
     }
 
+    /// # Summary
+    /// Converts an integer to a single-qubit Pauli operator.
+    ///
+    /// # Description
+    /// Converts an integer to a single-qubit Pauli operator as follows:
+    ///
+    /// | `idx` | output   |
+    /// |-------|----------|
+    /// | `0`   | `PauliI` |
+    /// | `1`   | `PauliX` |
+    /// | `2`   | `PauliY` |
+    /// | `3`   | `PauliZ` |
+    ///
+    /// # Input
+    /// ## idx
+    /// An integer in the range `0..3`.
+    ///
+    /// # Output
+    /// A Pauli operator corresponding to `idx` as in the above table.
+    function IntAsPauli (idx : Int) : Pauli {
+        if (idx < 0 or idx > 3) {
+            fail $"{idx} does not a valid Pauli operator; expected an integer in the range 0..3.";
+        }
+        return [PauliI, PauliX, PauliY, PauliZ][idx];
+    }
+
+    /// # Summary
+    /// Converts an array of integers to an array of single-qubit Pauli
+    /// operators.
+    ///
+    /// # Description
+    /// Converts an array of integers to an array of single-qubit Pauli
+    /// operators as follows:
+    ///
+    /// | `idx` | output   |
+    /// |-------|----------|
+    /// | `0`   | `PauliI` |
+    /// | `1`   | `PauliX` |
+    /// | `2`   | `PauliY` |
+    /// | `3`   | `PauliZ` |
+    ///
+    /// # Input
+    /// ## idxs
+    /// An array of integers in the range `0..3`.
+    ///
+    /// # Output
+    /// An array of Pauli operator corresponding to `idxs` as in the above table.
+    function IntArrayAsPauliArray (idxs : Int[]) : Pauli[] {
+        return Mapped(IntAsPauli, idxs);
+    }
+
 }

@@ -5,11 +5,27 @@ namespace Microsoft.Quantum.Canon {
     open Microsoft.Quantum.Simulation;
     open Microsoft.Quantum.Oracles;
     open Microsoft.Quantum.Warnings;
+    open Microsoft.Quantum.Convert;
 
     /// # Deprecated
-    /// Please use @"microsoft.quantum.simuilation.pnormalized".
+    /// Please use @"microsoft.quantum.simulation.estimateenergywithadiabaticevolution".
     operation AdiabaticStateEnergyUnitary(nQubits : Int, statePrepUnitary : (Qubit[] => Unit), adiabaticUnitary : (Qubit[] => Unit), qpeUnitary : (Qubit[] => Unit is Adj + Ctl), phaseEstAlgorithm : ((DiscreteOracle, Qubit[]) => Double)) : Double {
         _Renamed("Microsoft.Quantum.Canon.AdiabaticStateEnergyUnitary", "Microsoft.Quantum.Simulation.EstimateEnergyWithAdiabaticEvolution");
         return EstimateEnergyWithAdiabaticEvolution(nQubits, statePrepUnitary, adiabaticUnitary, qpeUnitary, phaseEstAlgorithm);
     }
+
+    /// # Deprecated
+    /// Please use @"microsoft.quantum.convert.intaspauli".
+    function IntToPauli(idx : Int) : Pauli {
+        _Renamed("Microsoft.Quantum.Simulation.IntToPauli", "Microsoft.Quantum.Convert.IntAsPauli");
+        return IntAsPauli(idx);
+    }
+
+    /// # Deprecated
+    /// Please use @"microsoft.quantum.convert.intarrayaspauliarray".
+    function IntsToPaulis(ints : Int[]) : Pauli[] {
+        _Renamed("Microsoft.Quantum.Simulation.IntsToPaulis", "Microsoft.Quantum.Convert.IntArrayAsPauliArray");
+        return IntArrayAsPauliArray(ints);
+    }
+
 }

@@ -4,7 +4,7 @@
 namespace Microsoft.Quantum.Simulation {
     open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Arrays;
-
+    open Microsoft.Quantum.Warnings;
 
     /// # Summary
     /// Represents a single primitive term in the set of all dynamical generators, e.g.
@@ -48,17 +48,17 @@ namespace Microsoft.Quantum.Simulation {
     ///
     /// # See Also
     /// - @"microsoft.quantum.canon.lookupfunction"
-    newtype GeneratorSystem = (Int, (Int -> GeneratorIndex));
-    
+    newtype GeneratorSystem = (NTerms: Int, Term: (Int -> GeneratorIndex));
+
     /// # Summary
     /// Represents a time-dependent dynamical generator as a function
     /// from time to the value of the dynamical generator at that time.
     newtype TimeDependentGeneratorSystem = (Double -> GeneratorSystem);
-    
+
     /// # Summary
     /// Represents evolution under a unitary operator.
     newtype Unitary = (Qubit[] => Unit is Adj + Ctl);
-    
+
     /// # Summary
     /// Represents a unitary time-evolution operator. 
     /// 
@@ -119,8 +119,7 @@ namespace Microsoft.Quantum.Simulation {
     /// # Output
     /// A generator system representing evolution under the Hamiltonian
     /// $H = 0$.
-    function IdentityGeneratorSystem () : GeneratorSystem
-    {
+    function IdentityGeneratorSystem () : GeneratorSystem {
         return GeneratorSystem(0, IdentityGeneratorIndex);
     }
     
@@ -156,42 +155,25 @@ namespace Microsoft.Quantum.Simulation {
     }
     
     
-    /// # Summary
-    /// Retrieves the number of terms in a `GeneratorSystem`.
-    ///
-    /// # Input
-    /// ## generatorSystem
-    /// The `GeneratorSystem` of interest.
-    ///
-    /// # Output
-    /// The number of terms in a `GeneratorSystem`.
-    ///
-    /// # See Also
-    /// - @"microsoft.quantum.canon.generatorsystem"
-    function GetGeneratorSystemNTerms (generatorSystem : GeneratorSystem) : Int
-    {
-        let (nTerms, generatorIndexFunction) = generatorSystem!;
-        return nTerms;
+    /// # Deprecated
+    /// Use `::NTerms` instead.
+    function GetGeneratorSystemNTerms (generatorSystem : GeneratorSystem) : Int {
+        _Removed(
+            "Microsoft.Quantum.Simulation.GetGeneratorSystemNTerms",
+            "Use ::NTerms instead."
+        );
+        return generatorSystem::NTerms;
     }
     
     
-    /// # Summary
-    /// Retrieves the `GeneratorIndex` function in a `GeneratorSystem`.
-    ///
-    /// # Input
-    /// ## generatorSystem
-    /// The `GeneratorSystem` of interest.
-    ///
-    /// # Output
-    /// An function that indexes each `GeneratorIndex` term in a Hamiltonian.
-    ///
-    /// # See Also
-    /// - @"microsoft.quantum.canon.generatorindex"
-    /// - @"microsoft.quantum.canon.generatorsystem"
-    function GetGeneratorSystemFunction (generatorSystem : GeneratorSystem) : (Int -> GeneratorIndex)
-    {
-        let (nTerms, generatorIndexFunction) = generatorSystem!;
-        return generatorIndexFunction;
+    /// # Deprecated
+    /// Use `::Term` instead.
+    function GetGeneratorSystemFunction (generatorSystem : GeneratorSystem) : (Int -> GeneratorIndex) {
+        _Removed(
+            "Microsoft.Quantum.Simulation.GetGeneratorSystemFunction",
+            "Use ::Term instead."
+        );
+        return generatorSystem::Term;
     }
     
     
@@ -219,7 +201,7 @@ namespace Microsoft.Quantum.Simulation {
     /// ```
     ///
     /// # See Also
-    /// - @"microsoft.quantum.canon.generatorindex"
+    /// - Microsoft.Quantum.Simulation.GeneratorIndex
     function MultiplyGeneratorIndex (multiplier : Double, generatorIndex : GeneratorIndex) : GeneratorIndex
     {
         let ((idxTerms, idxDoubles), idxSystems) = generatorIndex!;
@@ -234,10 +216,8 @@ namespace Microsoft.Quantum.Simulation {
     ///
     /// # Remarks
     /// This is an intermediate step and should not be called.
-    function _MultiplyGeneratorSystem (multiplier : Double, idxTerm : Int, generatorSystem : GeneratorSystem) : GeneratorIndex
-    {
-        let (nTerms, generatorIndexFunction) = generatorSystem!;
-        return MultiplyGeneratorIndex(multiplier, generatorIndexFunction(idxTerm));
+    function _MultiplyGeneratorSystem (multiplier : Double, idxTerm : Int, generatorSystem : GeneratorSystem) : GeneratorIndex {
+        return MultiplyGeneratorIndex(multiplier, generatorSystem::Term(idxTerm));
     }
     
     
@@ -258,7 +238,7 @@ namespace Microsoft.Quantum.Simulation {
     /// - Microsoft.Quantum.Canon.GeneratorSystem
     function MultiplyGeneratorSystem (multiplier : Double, generatorSystem : GeneratorSystem) : GeneratorSystem
     {
-        let nTerms = GetGeneratorSystemNTerms(generatorSystem);
+        let nTerms = generatorSystem::NTerms;
         return GeneratorSystem(nTerms, _MultiplyGeneratorSystem(multiplier, _, generatorSystem));
     }
     
@@ -298,12 +278,16 @@ namespace Microsoft.Quantum.Simulation {
     /// - Microsoft.Quantum.Canon.GeneratorSystem
     function AddGeneratorSystems (generatorSystemA : GeneratorSystem, generatorSystemB : GeneratorSystem) : GeneratorSystem
     {
-        let nTermsA = GetGeneratorSystemNTerms(generatorSystemA);
-        let nTermsB = GetGeneratorSystemNTerms(generatorSystemB);
-        let generatorIndexFunctionA = GetGeneratorSystemFunction(generatorSystemA);
-        let generatorIndexFunctionB = GetGeneratorSystemFunction(generatorSystemB);
-        let generatorIndexFunction = _AddGeneratorSystems(_, nTermsA, nTermsB, generatorIndexFunctionA, generatorIndexFunctionB);
-        return GeneratorSystem(nTermsA + nTermsB, generatorIndexFunction);
+        let nTermsA = generatorSystemA::NTerms;
+        let nTermsB = generatorSystemB::NTerms;
+        return GeneratorSystem(
+            nTermsA + nTermsB,
+            _AddGeneratorSystems(
+                _,
+                nTermsA, nTermsB,
+                generatorSystemA::Term, generatorSystemB::Term
+            )
+        );
     }
     
     
