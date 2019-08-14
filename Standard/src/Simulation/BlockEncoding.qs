@@ -54,12 +54,12 @@ namespace Microsoft.Quantum.Simulation {
     /// encodes $H$.
     ///
     /// # See Also
-    /// - Microsoft.Quantum.Canon.BlockEncoding
+    /// - Microsoft.Quantum.Simulation.BlockEncoding
     newtype BlockEncodingReflection = BlockEncoding;
 
     /// # Summary
 	/// Represents a `BlockEncoding` that is controlled by a clock register.
-	/// 
+	///
     /// That is, a `TimeDependentBlockEncoding` is a unitary $U$ controlled by a state 
     /// $\ket{k}_d$ in clock register `d` such that an arbitrary operator $H_k$ of 
     /// interest that acts on the system register `s` is encoded in the top-
@@ -87,10 +87,10 @@ namespace Microsoft.Quantum.Simulation {
 
     /// # Summary
 	/// Converts a `BlockEncoding` into an equivalent `BLockEncodingReflection`.
-	/// 
+	///
     /// That is, given a `BlockEncoding` unitary $U$ that encodes some
     /// operator $H$ of interest, converts it into a `BlockEncodingReflection` $U'$ that
-    /// encodes the same operator, but also satisfies $U'^\dagger = U'$. 
+    /// encodes the same operator, but also satisfies $U'^\dagger = U'$.
     /// This increases the size of the auxiliary register of $U$ by one qubit.
     ///
     /// # Input
@@ -102,7 +102,7 @@ namespace Microsoft.Quantum.Simulation {
     /// encodes $H$, and satisfies $U'^\dagger = U'$.
     ///
     /// # Remarks
-    /// This increases the size of the auxiliary register of $U$ by one qubit.  
+    /// This increases the size of the auxiliary register of $U$ by one qubit.
     ///
     /// # References
     /// - Hamiltonian Simulation by Qubitization
@@ -112,24 +112,22 @@ namespace Microsoft.Quantum.Simulation {
     /// # See Also
     /// - Microsoft.Quantum.Canon.BlockEncoding
     /// - Microsoft.Quantum.Canon.BlockEncodingReflection
-    function BlockEncodingToReflection(blockEncoding: BlockEncoding) : BlockEncodingReflection
-    {
-        return BlockEncodingReflection(BlockEncoding(BlockEncodingToReflection_(blockEncoding, _, _)));
+    function BlockEncodingToReflection(blockEncoding: BlockEncoding) : BlockEncodingReflection {
+        return BlockEncodingReflection(BlockEncoding(_BlockEncodingToReflection(blockEncoding, _, _)));
     }
-    
+
     /// # Summary
     /// Implementation of `BlockEncodingToReflection`.
-    operation BlockEncodingToReflection_(blockEncoding: BlockEncoding, auxiliary: Qubit[], system: Qubit[]) : Unit {
-        body (...) {
-            let prep = auxiliary[0];
-            let blockEncodingAncilla = Rest(auxiliary);
-            let op1 = Controlled blockEncoding!(_, (blockEncodingAncilla, system));
-            let op0 = ApplyToEachCA(H,_);
-            ApplyWithCA(op0, ApplyWithCA(op1, ApplyToEachCA(X,_), _), [prep]);
-        }
-        adjoint auto;
-        controlled auto;
-        adjoint controlled auto;
+    operation _BlockEncodingToReflection(blockEncoding: BlockEncoding, auxiliary: Qubit[], system: Qubit[]) : Unit
+    is Adj + Ctl {
+        let prep = Head(auxiliary);
+        let blockEncodingAncilla = Rest(auxiliary);
+        let op1 = Controlled blockEncoding!(_, (blockEncodingAncilla, system));
+        ApplyWithCA(
+            ApplyToEachCA(H, _),
+            ApplyWithCA(op1, ApplyToEachCA(X,_), _),
+            [prep]
+        );
     }
 
     /// # Summary
@@ -154,24 +152,20 @@ namespace Microsoft.Quantum.Simulation {
     ///   https://arxiv.org/abs/1610.06546
     ///
     /// # See Also
-    /// - Microsoft.Quantum.Canon.BlockEncoding
-    /// - Microsoft.Quantum.Canon.BlockEncodingReflection
+    /// - Microsoft.Quantum.Simulation.BlockEncoding
+    /// - Microsoft.Quantum.Simulation.BlockEncodingReflection
     function QuantumWalkByQubitization(blockEncoding: BlockEncodingReflection) : ((Qubit[], Qubit[]) => Unit is Adj + Ctl) {
         return QuantumWalkByQubitization_(blockEncoding, _, _);
     }
 
     /// # Summary
     /// Implementation of `Qubitization`.
-    operation QuantumWalkByQubitization_(blockEncoding: BlockEncodingReflection, auxiliary: Qubit[], system: Qubit[]) : Unit {    
-        body (...){
-            Exp([PauliI], -0.5 * PI(), [system[0]]);
-            RAll0(PI(), auxiliary);
-            // NB: We unwrap twice here, since BlockEncodingReflection wraps BlockEncoding.
-            blockEncoding!!(auxiliary, system);    
-        }
-        adjoint auto;
-        controlled auto;
-        adjoint controlled auto;
+    operation QuantumWalkByQubitization_(blockEncoding: BlockEncodingReflection, auxiliary: Qubit[], system: Qubit[]) : Unit 
+    is Adj + Ctl {
+        Exp([PauliI], -0.5 * PI(), [system[0]]);
+        RAll0(PI(), auxiliary);
+        // NB: We unwrap twice here, since BlockEncodingReflection wraps BlockEncoding.
+        blockEncoding!!(auxiliary, system);
     }
 
     /// # Summary
@@ -204,23 +198,20 @@ namespace Microsoft.Quantum.Simulation {
         statePreparation: ('T => Unit is Adj + Ctl), 
         selector: (('T, 'S) => Unit is Adj + Ctl))
         : (('T, 'S) => Unit is Adj + Ctl) {
-        return BlockEncodingByLCU_(statePreparation, selector, _, _);
+        return _BlockEncodingByLCU(statePreparation, selector, _, _);
     } 
 
     /// # Summary
     /// Implementation of `BlockEncodingByLCU`.
-    operation BlockEncodingByLCU_<'T,'S>(
-        statePreparation: ('T => Unit is Adj + Ctl), 
+    operation _BlockEncodingByLCU<'T,'S>(
+        statePreparation: ('T => Unit is Adj + Ctl),
         selector: (('T, 'S) => Unit is Adj + Ctl),
-        auxiliary: 'T, 
-        system: 'S) 
-        : Unit {
-        body (...){
-            ApplyWithCA(statePreparation, selector(_, system), auxiliary);
-        }
-        adjoint auto;
-        controlled auto;
-        adjoint controlled auto;
+        auxiliary: 'T,
+        system: 'S
+    )
+    : Unit
+    is Adj + Ctl {
+        ApplyWithCA(statePreparation, selector(_, system), auxiliary);
     }
 
     /// # Summary
@@ -260,16 +251,13 @@ namespace Microsoft.Quantum.Simulation {
     /// # Summary
     /// Conversion of ((LittleEndian, Qubit[]) => () is Adj + Ctl) to BlockEncoding
     operation _BlockEncodingFromBEandQubit(
-        op: ((LittleEndian, Qubit[]) => Unit is Adj + Ctl), 
-        auxiliary: Qubit[], 
-        system: Qubit[])  : Unit
-    {
-        body (...) {
-            op(LittleEndian(auxiliary), system);
-        }
-        adjoint auto;
-        controlled auto;
-        adjoint controlled auto;
+        op: ((LittleEndian, Qubit[]) => Unit is Adj + Ctl),
+        auxiliary: Qubit[],
+        system: Qubit[]
+    )
+    : Unit
+    is Adj + Ctl {
+        op(LittleEndian(auxiliary), system);
     }
-        
+
 }

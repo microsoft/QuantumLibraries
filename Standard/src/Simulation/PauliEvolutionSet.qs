@@ -32,7 +32,7 @@ namespace Microsoft.Quantum.Simulation {
     /// in `generatorIndex`.
     /// ## qubits
     /// Register acted upon by time-evolution operator.
-    operation PauliEvolutionImpl (generatorIndex : GeneratorIndex, delta : Double, qubits : Qubit[]) : Unit
+    operation PauliEvolutionImpl(generatorIndex : GeneratorIndex, delta : Double, qubits : Qubit[]) : Unit
     is Adj + Ctl {
         let (idxPaulis, idxDoubles) = generatorIndex::Data;
         let pauliString = IntArrayAsPauliArray(idxPaulis);

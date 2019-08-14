@@ -91,7 +91,7 @@ namespace Microsoft.Quantum.Simulation {
     /// 
     /// The `Double`
     /// parameter is a schedule in $[0, 1]$.
-    newtype EvolutionSchedule = (EvolutionSet, (Double -> GeneratorSystem));
+    newtype EvolutionSchedule = (EvolutionSet: EvolutionSet, Schedule: (Double -> GeneratorSystem));
     
     
     /// # Summary

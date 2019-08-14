@@ -23,13 +23,10 @@ namespace Microsoft.Quantum.Simulation {
     /// ## qubits
     /// Qubits acted on by simulation.
     operation TrotterStepImpl (evolutionGenerator : EvolutionGenerator, idx : Int, stepsize : Double, qubits : Qubit[]) : Unit is Adj + Ctl {
-        let (evolutionSet, generatorSystem) = evolutionGenerator!;
-        let (nTerms, generatorSystemFunction) = generatorSystem!;
-        let generatorIndex = generatorSystemFunction(idx);
-        (evolutionSet!(generatorIndex))!(stepsize, qubits);
+        let generatorIndex = evolutionGenerator::Generator::Term(idx);
+        (evolutionGenerator::EvolutionSet!(generatorIndex))!(stepsize, qubits);
     }
-    
-    
+
     /// # Summary
     /// Implements a single time-step of time-evolution by the system
     /// described in an `EvolutionGenerator` using a Trotter–Suzuki
@@ -50,18 +47,15 @@ namespace Microsoft.Quantum.Simulation {
     /// # Remarks
     /// For more on the Trotter–Suzuki decomposition, see
     /// [Time-Ordered Composition](/quantum/libraries/control-flow#time-ordered-composition).
-    function TrotterStep (evolutionGenerator : EvolutionGenerator, trotterOrder : Int, trotterStepSize : Double) : (Qubit[] => Unit is Adj + Ctl)
-    {
-        let (evolutionSet, generatorSystem) = evolutionGenerator!;
-        let (nTerms, generatorSystemFunction) = generatorSystem!;
-        
+    function TrotterStep(evolutionGenerator : EvolutionGenerator, trotterOrder : Int, trotterStepSize : Double) : (Qubit[] => Unit is Adj + Ctl) {
         // The input to DecomposeIntoTimeStepsCA has signature
         // (Int, ((Int, Double, Qubit[]) => () is Adj + Ctl))
-        let trotterForm = (nTerms, TrotterStepImpl(evolutionGenerator, _, _, _));
-        return (DecomposeIntoTimeStepsCA(trotterForm, trotterOrder))(trotterStepSize, _);
+        let trotterForm = (evolutionGenerator::Generator::NTerms, TrotterStepImpl(evolutionGenerator, _, _, _));
+        return (DecomposeIntoTimeStepsCA(
+            trotterForm, trotterOrder
+        ))(trotterStepSize, _);
     }
-    
-    
+
     // This simulation algorithm takes (timeMax, EvolutionGenerator,
     // register) and other algorithm-specific parameters (trotterStepSize,
     // trotterOrder), and performs evolution under the EvolutionGenerator
@@ -105,14 +99,13 @@ namespace Microsoft.Quantum.Simulation {
     ///
     /// # Output
     /// A `SimulationAlgorithm` type.
-    function TrotterSimulationAlgorithm (trotterStepSize : Double, trotterOrder : Int) : SimulationAlgorithm {
+    function TrotterSimulationAlgorithm(trotterStepSize : Double, trotterOrder : Int) : SimulationAlgorithm {
         return SimulationAlgorithm(TrotterSimulationAlgorithmImpl(trotterStepSize, trotterOrder, _, _, _));
     }
-    
-    
+
     // This simple time-dependent simulation algorithm implements a
     // sequence of uniformly-sized trotter steps
-    
+
     /// # Summary
     /// Implementation of multiple Trotter steps to approximate a unitary
     /// operator that solves the time-dependent Schrödinger equation.
@@ -132,18 +125,16 @@ namespace Microsoft.Quantum.Simulation {
     is Adj + Ctl {
         let nTimeSlices = Ceiling(maxTime / trotterStepSize);
         let resizedTrotterStepSize = maxTime / IntAsDouble(nTimeSlices);
-        
-        for (idxTimeSlice in 0 .. nTimeSlices - 1)
-        {
+
+        for (idxTimeSlice in 0 .. nTimeSlices - 1) {
             let schedule = IntAsDouble(idxTimeSlice) / IntAsDouble(nTimeSlices);
-            let (evolutionSet, generatorSystemTimeDependent) = evolutionSchedule!;
-            let generatorSystem = generatorSystemTimeDependent(schedule);
-            let evolutionGenerator = EvolutionGenerator(evolutionSet, generatorSystem);
+            let evolutionGenerator = EvolutionGenerator(
+                evolutionSchedule::EvolutionSet, evolutionSchedule::Schedule(schedule)
+            );
             (TrotterSimulationAlgorithm(resizedTrotterStepSize, trotterOrder))!(resizedTrotterStepSize, evolutionGenerator, qubits);
         }
     }
-    
-    
+
     /// # Summary
     /// `TimeDependentSimulationAlgorithm` function that uses a Trotter–Suzuki
     /// decomposition to approximate a unitary operator that solves the
@@ -158,9 +149,11 @@ namespace Microsoft.Quantum.Simulation {
     /// # Output
     /// A `TimeDependentSimulationAlgorithm` type.
     function TimeDependentTrotterSimulationAlgorithm (trotterStepSize : Double, trotterOrder : Int) : TimeDependentSimulationAlgorithm {
-        return TimeDependentSimulationAlgorithm(TimeDependentTrotterSimulationAlgorithmImpl(trotterStepSize, trotterOrder, _, _, _));
+        return TimeDependentSimulationAlgorithm(
+            TimeDependentTrotterSimulationAlgorithmImpl(trotterStepSize, trotterOrder, _, _, _)
+        );
     }
-    
+
 }
 
 

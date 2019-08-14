@@ -20,8 +20,7 @@ namespace Microsoft.Quantum.Simulation {
     /// # Output
     /// The coefficient of the term described by a `GeneratorIndex`.
     function PauliCoefficientFromGenIdx(generatorIndex: GeneratorIndex) : Double {
-        let (idxPaulis, coeff) = generatorIndex::Data;
-        return coeff[0];
+        return Head(Snd(generatorIndex::Data));
     }
 
     /// # Summary
