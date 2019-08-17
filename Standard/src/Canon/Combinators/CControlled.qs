@@ -1,12 +1,14 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-namespace Microsoft.Quantum.Canon
-{
-    
+namespace Microsoft.Quantum.Canon {
+
     /// # Summary
+    /// Applies an operation conditioned on a classical bit.
+    ///
+    /// # Description
     /// Given an operation `op` and a bit value `bit`, applies `op` to the `target`
-    /// if `bit` is true. If false, nothing happens to the `target`.
+    /// if `bit` is `true`. If `false`, nothing happens to the `target`.
     ///
     /// # Input
     /// ## op
@@ -24,18 +26,32 @@ namespace Microsoft.Quantum.Canon
     /// - Microsoft.Quantum.Canon.ApplyIfC
     /// - Microsoft.Quantum.Canon.ApplyIfA
     /// - Microsoft.Quantum.Canon.ApplyIfCA
+    ///
+    /// # Example
+    /// The following prepares a register of qubits into a computational basis
+    /// state represented by a classical bit string given as an array of `Bool`
+    /// values:
+    /// ```Q#
+    /// let bitstring = [true, false, true];
+    /// using (register = Qubit(3)) {
+    ///     ApplyToEach(ApplyIf(X, _, _), Zip(bitstring, register));
+    ///     // register should now be in the state |101⟩.
+    ///     ...
+    /// }
+    /// ```
     operation ApplyIf<'T> (op : ('T => Unit), bit : Bool, target : 'T) : Unit {
-        if (bit)
-        {
+        if (bit) {
             op(target);
         }
     }
-    
-    
+
     /// # Summary
+    /// Applies a controllable operation conditioned on a classical bit.
+    ///
+    /// # Description
     /// Given an operation `op` and a bit value `bit`, applies `op` to the `target`
-    /// if `bit` is true. If false, nothing happens to the `target`.
-    /// The modifier `C` indicates that the operation is controllable.
+    /// if `bit` is `true`. If `false`, nothing happens to the `target`.
+    /// The suffix `C` indicates that the operation to be applied is controllable.
     ///
     /// # Input
     /// ## op
@@ -50,88 +66,121 @@ namespace Microsoft.Quantum.Canon
     /// The input type of the operation to be conditionally applied.
     ///
     /// # See Also
-    /// - Microsoft.Quantum.Canon.ApplyIf
-    operation ApplyIfC<'T> (op : ('T => Unit is Ctl), bit : Bool, target : 'T) : Unit {
-        body (...)
-        {
-            if (bit)
-            {
-                op(target);
-            }
+    /// - Microsoft.Quantum.Canon.ApplyIfC
+    /// - Microsoft.Quantum.Canon.ApplyIfA
+    /// - Microsoft.Quantum.Canon.ApplyIfCA
+    ///
+    /// # Example
+    /// The following prepares a register of qubits into a computational basis
+    /// state represented by a classical bit string given as an array of `Bool`
+    /// values:
+    /// ```Q#
+    /// let bitstring = [true, false, true];
+    /// using (register = Qubit(3)) {
+    ///     ApplyToEach(ApplyIf(X, _, _), Zip(bitstring, register));
+    ///     // register should now be in the state |101⟩.
+    ///     ...
+    /// }
+    /// ```
+    operation ApplyIfC<'T> (op : ('T => Unit is Ctl), bit : Bool, target : 'T) : Unit is Ctl {
+        if (bit) {
+            op(target);
         }
-        
-        controlled distribute;
-    }
-    
-    
-    /// # Summary
-    /// Given an operation `op` and a bit value `bit`, applies `op` to the `target`
-    /// if `bit` is true. If false, nothing happens to the `target`.
-    /// The modifier `A` indicates that the operation is adjointable.
-    ///
-    /// # Input
-    /// ## op
-    /// An operation to be conditionally applied.
-    /// ## bit
-    /// a boolean that controls whether op is applied or not.
-    /// ## target
-    /// The input to which the operation is applied.
-    ///
-    /// # Type Parameters
-    /// ## 'T
-    /// The input type of the operation to be conditionally applied.
-    ///
-    /// # See Also
-    /// - Microsoft.Quantum.Canon.ApplyIf
-    operation ApplyIfA<'T> (op : ('T => Unit is Adj), bit : Bool, target : 'T) : Unit {
-        body (...)
-        {
-            if (bit)
-            {
-                op(target);
-            }
-        }
-        
-        adjoint invert;
-    }
-    
-    
-    /// # Summary
-    /// Given an operation `op` and a bit value `bit`, applies `op` to the `target`
-    /// if `bit` is true. If false, nothing happens to the `target`.
-    /// The modifier `CA` indicates that the operation is controllable and adjointable.
-    ///
-    /// # Input
-    /// ## op
-    /// An operation to be conditionally applied.
-    /// ## bit
-    /// a boolean that controls whether op is applied or not.
-    /// ## target
-    /// The input to which the operation is applied.
-    ///
-    /// # Type Parameters
-    /// ## 'T
-    /// The input type of the operation to be conditionally applied.
-    ///
-    /// # See Also
-    /// - Microsoft.Quantum.Canon.ApplyIf
-    operation ApplyIfCA<'T> (op : ('T => Unit is Ctl + Adj), bit : Bool, target : 'T) : Unit {
-        body (...)
-        {
-            if (bit)
-            {
-                op(target);
-            }
-        }
-        
-        adjoint invert;
-        controlled distribute;
-        controlled adjoint distribute;
     }
 
     /// # Summary
-    /// Given an operation and a Result value, applies the operation
-    /// if the Result value is One. If the Result value is Zero, nothing happens.
+    /// Applies a adjointable operation conditioned on a classical bit.
+    ///
+    /// # Description
+    /// Given an operation `op` and a bit value `bit`, applies `op` to the `target`
+    /// if `bit` is `true`. If `false`, nothing happens to the `target`.
+    /// The suffix `A` indicates that the operation to be applied is adjointable.
+    ///
+    /// # Input
+    /// ## op
+    /// An operation to be conditionally applied.
+    /// ## bit
+    /// a boolean that controls whether op is applied or not.
+    /// ## target
+    /// The input to which the operation is applied.
+    ///
+    /// # Type Parameters
+    /// ## 'T
+    /// The input type of the operation to be conditionally applied.
+    ///
+    /// # See Also
+    /// - Microsoft.Quantum.Canon.ApplyIfC
+    /// - Microsoft.Quantum.Canon.ApplyIfA
+    /// - Microsoft.Quantum.Canon.ApplyIfCA
+    ///
+    /// # Example
+    /// The following prepares a register of qubits into a computational basis
+    /// state represented by a classical bit string given as an array of `Bool`
+    /// values:
+    /// ```Q#
+    /// let bitstring = [true, false, true];
+    /// using (register = Qubit(3)) {
+    ///     ApplyToEach(ApplyIf(X, _, _), Zip(bitstring, register));
+    ///     // register should now be in the state |101⟩.
+    ///     ...
+    /// }
+    /// ```
+    operation ApplyIfA<'T> (op : ('T => Unit is Adj), bit : Bool, target : 'T) : Unit is Adj {
+        if (bit) {
+            op(target);
+        }
+    }
+
+    /// # Summary
+    /// Applies a unitary operation conditioned on a classical bit.
+    ///
+    /// # Description
+    /// Given an operation `op` and a bit value `bit`, applies `op` to the `target`
+    /// if `bit` is `true`. If `false`, nothing happens to the `target`.
+    /// The suffix `CA` indicates that the operation to be applied is unitary
+    /// (controllable and adjointable).
+    ///
+    /// # Input
+    /// ## op
+    /// An operation to be conditionally applied.
+    /// ## bit
+    /// a boolean that controls whether op is applied or not.
+    /// ## target
+    /// The input to which the operation is applied.
+    ///
+    /// # Type Parameters
+    /// ## 'T
+    /// The input type of the operation to be conditionally applied.
+    ///
+    /// # See Also
+    /// - Microsoft.Quantum.Canon.ApplyIfC
+    /// - Microsoft.Quantum.Canon.ApplyIfA
+    /// - Microsoft.Quantum.Canon.ApplyIfCA
+    ///
+    /// # Example
+    /// The following prepares a register of qubits into a computational basis
+    /// state represented by a classical bit string given as an array of `Bool`
+    /// values:
+    /// ```Q#
+    /// let bitstring = [true, false, true];
+    /// using (register = Qubit(3)) {
+    ///     ApplyToEach(ApplyIf(X, _, _), Zip(bitstring, register));
+    ///     // register should now be in the state |101⟩.
+    ///     ...
+    /// }
+    /// ```
+    operation ApplyIfCA<'T> (op : ('T => Unit is Ctl + Adj), bit : Bool, target : 'T) : Unit is Ctl + Adj {
+        if (bit) {
+            op(target);
+        }
+    }
+
+    /// # Summary
+    /// Applies an operation conditioned on a classical result value being one.
+    ///
+    /// # Description
+    /// Given an operation `op` and a result value `result`, applies `op` to the `target`
+    /// if `result` is `One`. If `Zero`, nothing happens to the `target`.
     ///
     /// # Input
     /// ## op
@@ -150,22 +199,24 @@ namespace Microsoft.Quantum.Canon
     /// - Microsoft.Quantum.Canon.ApplyIfOneA
     /// - Microsoft.Quantum.Canon.ApplyIfOneCA
     operation ApplyIfOne<'T> (result : Result, (op : ('T => Unit), target : 'T)) : Unit {
-        if (result == One)
-        {
+        if (result == One) {
             op(target);
         }
     }
-    
+
     /// # Summary
-    /// Given an operation and a Result value, applies the operation
-    /// if the Result value is One. If the Result value is Zero, nothing happens.
-    /// The modifier C indicates that the operation is controllable.
+    /// Applies a controllable operation conditioned on a classical result value being one.
+    ///
+    /// # Description
+    /// Given an operation `op` and a result value `result`, applies `op` to the `target`
+    /// if `result` is `One`. If `Zero`, nothing happens to the `target`.
+    /// The suffix `C` indicates that the operation to be applied is controllable.
     ///
     /// # Input
     /// ## op
     /// An operation to be conditionally applied.
     /// ## result
-    /// a measurement result that controls whether op is applied or not.
+    /// A measurement result that controls whether op is applied or not.
     /// ## target
     /// The input to which the operation is applied.
     ///
@@ -174,24 +225,28 @@ namespace Microsoft.Quantum.Canon
     /// The input type of the operation to be conditionally applied.
     ///
     /// # See Also
-    /// - Microsoft.Quantum.Canon.ApplyIfOne
+    /// - Microsoft.Quantum.Canon.ApplyIfOneC
+    /// - Microsoft.Quantum.Canon.ApplyIfOneA
+    /// - Microsoft.Quantum.Canon.ApplyIfOneCA
     operation ApplyIfOneC<'T> (result : Result, (op : ('T => Unit is Ctl), target : 'T)) : Unit is Ctl {
-        if (result == One)
-        {
+        if (result == One) {
             op(target);
         }
     }
-    
+
     /// # Summary
-    /// Given an operation and a Result value, applies the operation
-    /// if the Result value is One. If the Result value is Zero, nothing happens.
-    /// The modifier A indicates that the operation is adjointable.
+    /// Applies an adjointable operation conditioned on a classical result value being one.
+    ///
+    /// # Description
+    /// Given an operation `op` and a result value `result`, applies `op` to the `target`
+    /// if `result` is `One`. If `Zero`, nothing happens to the `target`.
+    /// The suffix `A` indicates that the operation to be applied is adjointable.
     ///
     /// # Input
     /// ## op
     /// An operation to be conditionally applied.
     /// ## result
-    /// a measurement result that controls whether op is applied or not.
+    /// A measurement result that controls whether op is applied or not.
     /// ## target
     /// The input to which the operation is applied.
     ///
@@ -200,24 +255,29 @@ namespace Microsoft.Quantum.Canon
     /// The input type of the operation to be conditionally applied.
     ///
     /// # See Also
-    /// - Microsoft.Quantum.Canon.ApplyIfOne
+    /// - Microsoft.Quantum.Canon.ApplyIfOneC
+    /// - Microsoft.Quantum.Canon.ApplyIfOneA
+    /// - Microsoft.Quantum.Canon.ApplyIfOneCA
     operation ApplyIfOneA<'T> (result : Result, (op : ('T => Unit is Adj + Ctl), target : 'T)) : Unit is Adj + Ctl {
-        if (result == One)
-        {
+        if (result == One) {
             op(target);
         }
     }
 
     /// # Summary
-    /// Given an operation and a Result value, applies the operation
-    /// if the Result value is One. If the Result value is Zero, nothing happens.
-    /// The modifier CA indicates that the operation is controllable and adjointable.
+    /// Applies a unitary operation conditioned on a classical result value being one.
+    ///
+    /// # Description
+    /// Given an operation `op` and a result value `result`, applies `op` to the `target`
+    /// if `result` is `One`. If `Zero`, nothing happens to the `target`.
+    /// The suffix `CA` indicates that the operation to be applied is unitary
+    /// (controllable and adjointable).
     ///
     /// # Input
     /// ## op
     /// An operation to be conditionally applied.
     /// ## result
-    /// a measurement result that controls whether op is applied or not.
+    /// A measurement result that controls whether op is applied or not.
     /// ## target
     /// The input to which the operation is applied.
     ///
@@ -226,23 +286,27 @@ namespace Microsoft.Quantum.Canon
     /// The input type of the operation to be conditionally applied.
     ///
     /// # See Also
-    /// - Microsoft.Quantum.Canon.ApplyIfOne
+    /// - Microsoft.Quantum.Canon.ApplyIfOneC
+    /// - Microsoft.Quantum.Canon.ApplyIfOneA
+    /// - Microsoft.Quantum.Canon.ApplyIfOneCA
     operation ApplyIfOneCA<'T> (result : Result, (op : ('T => Unit is Adj), target : 'T)) : Unit is Adj {
-        if (result == One)
-        {
+        if (result == One) {
             op(target);
         }
     }
 
     /// # Summary
-    /// Given an operation and a Result value, applies the operation
-    /// if the Result value is Zero. If the Result value is One, nothing happens.
+    /// Applies an operation conditioned on a classical result value being zero.
+    ///
+    /// # Description
+    /// Given an operation `op` and a result value `result`, applies `op` to the `target`
+    /// if `result` is `Zero`. If `One`, nothing happens to the `target`.
     ///
     /// # Input
     /// ## op
     /// An operation to be conditionally applied.
     /// ## result
-    /// a measurement result that controls whether op is applied or not.
+    /// A measurement result that controls whether op is applied or not.
     /// ## target
     /// The input to which the operation is applied.
     ///
@@ -255,74 +319,24 @@ namespace Microsoft.Quantum.Canon
     /// - Microsoft.Quantum.Canon.ApplyIfZeroA
     /// - Microsoft.Quantum.Canon.ApplyIfZeroCA
     operation ApplyIfZero<'T> (result : Result, (op : ('T => Unit), target : 'T)) : Unit {
-        if (result == Zero)
-        {
-            op(target);
-        }
-    }
-    
-    /// # Summary
-    /// Given an operation and a Result value, applies the operation
-    /// if the Result value is Zero. If the Result value is One, nothing happens.
-    /// The modifier C indicates that the operation is controllable.
-    ///
-    /// # Input
-    /// ## op
-    /// An operation to be conditionally applied.
-    /// ## result
-    /// a measurement result that controls whether op is applied or not.
-    /// ## target
-    /// The input to which the operation is applied.
-    ///
-    /// # Type Parameters
-    /// ## 'T
-    /// The input type of the operation to be conditionally applied.
-    ///
-    /// # See Also
-    /// - Microsoft.Quantum.Canon.ApplyIfZero
-    operation ApplyIfZeroC<'T> (result : Result, (op : ('T => Unit is Ctl), target : 'T)) : Unit is Ctl {
-        if (result == Zero)
-        {
-            op(target);
-        }
-    }
-    
-    /// # Summary
-    /// Given an operation and a Result value, applies the operation
-    /// if the Result value is Zero. If the Result value is One, nothing happens.
-    /// The modifier A indicates that the operation is adjointable.
-    ///
-    /// # Input
-    /// ## op
-    /// An operation to be conditionally applied.
-    /// ## result
-    /// a measurement result that controls whether op is applied or not.
-    /// ## target
-    /// The input to which the operation is applied.
-    ///
-    /// # Type Parameters
-    /// ## 'T
-    /// The input type of the operation to be conditionally applied.
-    ///
-    /// # See Also
-    /// - Microsoft.Quantum.Canon.ApplyIfZero
-    operation ApplyIfZeroA<'T> (result : Result, (op : ('T => Unit is Adj), target : 'T)) : Unit is Adj {
-        if (result == Zero)
-        {
+        if (result == Zero) {
             op(target);
         }
     }
 
     /// # Summary
-    /// Given an operation and a Result value, applies the operation
-    /// if the Result value is Zero. If the Result value is One, nothing happens.
-    /// The modifier CA indicates that the operation is controllable and adjointable.
+    /// Applies a controllable operation conditioned on a classical result value being zero.
+    ///
+    /// # Description
+    /// Given an operation `op` and a result value `result`, applies `op` to the `target`
+    /// if `result` is `Zero`. If `One`, nothing happens to the `target`.
+    /// The suffix `C` indicates that the operation to be applied is controllable.
     ///
     /// # Input
-    /// ## result
-    /// a measurement result that controls whether op is applied or not.
     /// ## op
     /// An operation to be conditionally applied.
+    /// ## result
+    /// A measurement result that controls whether op is applied or not.
     /// ## target
     /// The input to which the operation is applied.
     ///
@@ -331,10 +345,72 @@ namespace Microsoft.Quantum.Canon
     /// The input type of the operation to be conditionally applied.
     ///
     /// # See Also
-    /// - Microsoft.Quantum.Canon.ApplyIfZero
-    operation ApplyIfZeroCA<'T> (result : Result, (op : ('T => Unit is Ctl + Adj), target : 'T)) : Unit is Ctl + Adj {
-        if (result == Zero)
-        {
+    /// - Microsoft.Quantum.Canon.ApplyIfZeroC
+    /// - Microsoft.Quantum.Canon.ApplyIfZeroA
+    /// - Microsoft.Quantum.Canon.ApplyIfZeroCA
+    operation ApplyIfZeroC<'T> (result : Result, (op : ('T => Unit is Ctl), target : 'T)) : Unit is Ctl {
+        if (result == Zero) {
+            op(target);
+        }
+    }
+
+    /// # Summary
+    /// Applies an adjointable operation conditioned on a classical result value being zero.
+    ///
+    /// # Description
+    /// Given an operation `op` and a result value `result`, applies `op` to the `target`
+    /// if `result` is `Zero`. If `One`, nothing happens to the `target`.
+    /// The suffix `A` indicates that the operation to be applied is adjointable.
+    ///
+    /// # Input
+    /// ## op
+    /// An operation to be conditionally applied.
+    /// ## result
+    /// A measurement result that controls whether op is applied or not.
+    /// ## target
+    /// The input to which the operation is applied.
+    ///
+    /// # Type Parameters
+    /// ## 'T
+    /// The input type of the operation to be conditionally applied.
+    ///
+    /// # See Also
+    /// - Microsoft.Quantum.Canon.ApplyIfZeroC
+    /// - Microsoft.Quantum.Canon.ApplyIfZeroA
+    /// - Microsoft.Quantum.Canon.ApplyIfZeroCA
+    operation ApplyIfZeroA<'T> (result : Result, (op : ('T => Unit is Adj + Ctl), target : 'T)) : Unit is Adj + Ctl {
+        if (result == Zero) {
+            op(target);
+        }
+    }
+
+    /// # Summary
+    /// Applies a unitary operation conditioned on a classical result value being zero.
+    ///
+    /// # Description
+    /// Given an operation `op` and a result value `result`, applies `op` to the `target`
+    /// if `result` is `Zero`. If `One`, nothing happens to the `target`.
+    /// The suffix `CA` indicates that the operation to be applied is unitary
+    /// (controllable and adjointable).
+    ///
+    /// # Input
+    /// ## op
+    /// An operation to be conditionally applied.
+    /// ## result
+    /// A measurement result that controls whether op is applied or not.
+    /// ## target
+    /// The input to which the operation is applied.
+    ///
+    /// # Type Parameters
+    /// ## 'T
+    /// The input type of the operation to be conditionally applied.
+    ///
+    /// # See Also
+    /// - Microsoft.Quantum.Canon.ApplyIfZeroC
+    /// - Microsoft.Quantum.Canon.ApplyIfZeroA
+    /// - Microsoft.Quantum.Canon.ApplyIfZeroCA
+    operation ApplyIfZeroCA<'T> (result : Result, (op : ('T => Unit is Adj), target : 'T)) : Unit is Adj {
+        if (result == Zero) {
             op(target);
         }
     }
@@ -635,7 +711,7 @@ namespace Microsoft.Quantum.Canon
     
     /// # Summary
     /// Given an operation op, returns a new operation which
-    /// applies the op if a classical control bit is true. If false, nothing happens.
+    /// applies the op if a classical control bit is true. If `false`, nothing happens.
     ///
     /// # Input
     /// ## op
@@ -659,7 +735,7 @@ namespace Microsoft.Quantum.Canon
     
     /// # Summary
     /// Given an operation op, returns a new operation which
-    /// applies the op if a classical control bit is true. If false, nothing happens.
+    /// applies the op if a classical control bit is true. If `false`, nothing happens.
     /// The modifier `C` indicates that the operation is controllable.
     ///
     /// # Input
@@ -682,7 +758,7 @@ namespace Microsoft.Quantum.Canon
     
     /// # Summary
     /// Given an operation op, returns a new operation which
-    /// applies the op if a classical control bit is true. If false, nothing happens.
+    /// applies the op if a classical control bit is true. If `false`, nothing happens.
     /// The modifier `A` indicates that the operation is adjointable.
     ///
     /// # Input
@@ -705,7 +781,7 @@ namespace Microsoft.Quantum.Canon
     
     /// # Summary
     /// Given an operation op, returns a new operation which
-    /// applies the op if a classical control bit is true. If false, nothing happens.
+    /// applies the op if a classical control bit is true. If `false`, nothing happens.
     /// The modifier `CA` indicates that the operation is controllable and adjointable.
     ///
     /// # Input
