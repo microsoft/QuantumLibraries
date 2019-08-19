@@ -20,7 +20,7 @@ namespace Microsoft.Quantum.Simulation {
     /// # Output
     /// The coefficient of the term described by a `GeneratorIndex`.
     function PauliCoefficientFromGenIdx(generatorIndex: GeneratorIndex) : Double {
-        return Head(Snd(generatorIndex::Data));
+        return Head(Snd(generatorIndex::IndexData));
     }
 
     /// # Summary
@@ -35,7 +35,7 @@ namespace Microsoft.Quantum.Simulation {
     /// The Pauli string of the term described by a `GeneratorIndex`, and
     /// indices to the qubits it acts on.
     function PauliStringFromGenIdx(generatorIndex: GeneratorIndex) : (Pauli[], Int[]) {
-        let (idxPaulis, coeff) = generatorIndex::Data;
+        let (idxPaulis, coeff) = generatorIndex::IndexData;
         return (IntArrayAsPauliArray(idxPaulis), generatorIndex::Subsystems);
     }
 
@@ -142,7 +142,7 @@ namespace Microsoft.Quantum.Simulation {
     /// - Microsoft.Quantum.Canon.PauliBlockEncoding
     operation _ApplyPauliLCUUnitary(generatorIndex: GeneratorIndex, qubits: Qubit[]) : Unit
     is Adj + Ctl {
-        let (idxPaulis, coeff) = generatorIndex::Data;
+        let (idxPaulis, coeff) = generatorIndex::IndexData;
         let pauliString = IntArrayAsPauliArray(idxPaulis);
         let pauliQubits = Subarray(generatorIndex::Subsystems, qubits);
 

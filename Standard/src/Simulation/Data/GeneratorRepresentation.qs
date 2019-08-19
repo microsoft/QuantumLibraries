@@ -33,10 +33,10 @@ namespace Microsoft.Quantum.Simulation {
     /// # See Also
     /// - EvolutionSet
     /// - PauliEvolutionSet
-    newtype GeneratorIndex = (Data: (Int[], Double[]), Subsystems: Int[]);
+    newtype GeneratorIndex = (IndexData: (Int[], Double[]), Subsystems: Int[]);
 
     /// # Summary
-    /// Represents a collection of `GeneratorIndex`es. 
+    /// Represents a collection of `GeneratorIndex`es.
     ///
     /// We iterate over this
     /// collection using a single-index integer, and the size of the
@@ -60,17 +60,17 @@ namespace Microsoft.Quantum.Simulation {
     newtype Unitary = (Qubit[] => Unit is Adj + Ctl);
 
     /// # Summary
-    /// Represents a unitary time-evolution operator. 
-    /// 
+    /// Represents a unitary time-evolution operator.
+    ///
     /// The first parameter is
     /// is duration of time-evolution, and the second parameter is the qubit
     /// register acted upon by the unitary.
     newtype EvolutionUnitary = ((Double, Qubit[]) => Unit is Adj + Ctl);
-    
+
     /// # Summary
     /// Represents a set of gates that can be readily implemented and used
     /// to implement simulation algorithms.
-    /// 
+    ///
     /// Elements in the set are indexed
     /// by a  <xref:microsoft.quantum.simulation.generatorindex>,
     /// and each set is described by a function
@@ -78,22 +78,22 @@ namespace Microsoft.Quantum.Simulation {
     /// which are operations
     /// parameterized by a real number representing time
     newtype EvolutionSet = (GeneratorIndex -> EvolutionUnitary);
-    
+
     /// # Summary
     /// Represents a dynamical generator as a set of simulatable gates and
     /// an expansion in terms of that basis.
-    /// 
+    ///
     /// Last parameter for number of terms.
     newtype EvolutionGenerator = (EvolutionSet: EvolutionSet, Generator: GeneratorSystem);
-    
+
     /// # Summary
-    /// Represents a time-dependent dynamical generator. 
-    /// 
+    /// Represents a time-dependent dynamical generator.
+    ///
     /// The `Double`
     /// parameter is a schedule in $[0, 1]$.
     newtype EvolutionSchedule = (EvolutionSet: EvolutionSet, Schedule: (Double -> GeneratorSystem));
-    
-    
+
+
     /// # Summary
     /// Returns a generator index consistent with the zero
     /// Hamiltonian, `H = 0`, which corresponds to the identity evolution operation.
@@ -110,8 +110,8 @@ namespace Microsoft.Quantum.Simulation {
     {
         return GeneratorIndex(([0], [0.0]), [0]);
     }
-    
-    
+
+
     /// # Summary
     /// Returns a generator system consistent with the zero
     /// Hamiltonian `H = 0`, which corresponds to the identity evolution operation.
@@ -122,8 +122,8 @@ namespace Microsoft.Quantum.Simulation {
     function IdentityGeneratorSystem () : GeneratorSystem {
         return GeneratorSystem(0, IdentityGeneratorIndex);
     }
-    
-    
+
+
     /// # Summary
     /// Returns a generator system consistent with the
     /// Hamiltonian `H(s) = 0`, where `s` is a schedule parameter.
@@ -140,8 +140,8 @@ namespace Microsoft.Quantum.Simulation {
     {
         return IdentityGeneratorSystem();
     }
-    
-    
+
+
     /// # Summary
     /// Returns a time-dependent generator system consistent with the
     /// Hamiltonian `H(s) = 0`.
@@ -153,9 +153,9 @@ namespace Microsoft.Quantum.Simulation {
     {
         return TimeDependentGeneratorSystem(_IdentityTimeDependentGeneratorSystem);
     }
-    
+
     // We should be able to do some algebra on representations of the system
-    
+
     /// # Summary
     /// Multiplies the coefficient in a `GeneratorIndex`.
     ///
@@ -180,12 +180,12 @@ namespace Microsoft.Quantum.Simulation {
     /// # See Also
     /// - Microsoft.Quantum.Simulation.GeneratorIndex
     function MultiplyGeneratorIndex (multiplier : Double, generatorIndex : GeneratorIndex) : GeneratorIndex {
-        let (idxTerms, idxDoubles) = generatorIndex::Data;
+        let (idxTerms, idxDoubles) = generatorIndex::IndexData;
         let idxDoublesOut = idxDoubles w/ 0 <- multiplier * Head(idxDoubles);
         return GeneratorIndex((idxTerms, idxDoublesOut), generatorIndex::Subsystems);
     }
-    
-    
+
+
     /// # Summary
     /// Multiplies the coefficient of all terms in a `GeneratorSystem`.
     ///
@@ -194,8 +194,8 @@ namespace Microsoft.Quantum.Simulation {
     function _MultiplyGeneratorSystem(multiplier : Double, idxTerm : Int, generatorSystem : GeneratorSystem) : GeneratorIndex {
         return MultiplyGeneratorIndex(multiplier, generatorSystem::Term(idxTerm));
     }
-    
-    
+
+
     /// # Summary
     /// Multiplies the coefficient of all terms in a `GeneratorSystem`.
     ///
@@ -217,8 +217,8 @@ namespace Microsoft.Quantum.Simulation {
             _MultiplyGeneratorSystem(multiplier, _, generatorSystem)
         );
     }
-    
-    
+
+
     /// # Summary
     /// Adds two `GeneratorSystem`s to create a new `GeneratorSystem`.
     ///
@@ -259,8 +259,8 @@ namespace Microsoft.Quantum.Simulation {
             )
         );
     }
-    
-    
+
+
     // Create description of system that interpolates between two GeneratorSystems based on a schedule parameter in [0,1]
     //
     /// # Summary
@@ -288,8 +288,8 @@ namespace Microsoft.Quantum.Simulation {
         let sysEnd = MultiplyGeneratorSystem(schedule, generatorSystemEnd);
         return AddGeneratorSystems(sysStart, sysEnd);
     }
-    
-    
+
+
     /// # Summary
     /// Returns a `TimeDependentGeneratorSystem` representing the linear
     /// interpolation between two `GeneratorSystem`s.

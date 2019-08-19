@@ -155,12 +155,12 @@ namespace Microsoft.Quantum.Simulation {
     /// - Microsoft.Quantum.Simulation.BlockEncoding
     /// - Microsoft.Quantum.Simulation.BlockEncodingReflection
     function QuantumWalkByQubitization(blockEncoding: BlockEncodingReflection) : ((Qubit[], Qubit[]) => Unit is Adj + Ctl) {
-        return QuantumWalkByQubitization_(blockEncoding, _, _);
+        return _QuantumWalkByQubitization(blockEncoding, _, _);
     }
 
     /// # Summary
     /// Implementation of `Qubitization`.
-    operation QuantumWalkByQubitization_(blockEncoding: BlockEncodingReflection, auxiliary: Qubit[], system: Qubit[]) : Unit 
+    operation _QuantumWalkByQubitization(blockEncoding: BlockEncodingReflection, auxiliary: Qubit[], system: Qubit[]) : Unit 
     is Adj + Ctl {
         Exp([PauliI], -0.5 * PI(), [system[0]]);
         RAll0(PI(), auxiliary);

@@ -34,7 +34,7 @@ namespace Microsoft.Quantum.Simulation {
     /// Register acted upon by time-evolution operator.
     operation PauliEvolutionImpl(generatorIndex : GeneratorIndex, delta : Double, qubits : Qubit[]) : Unit
     is Adj + Ctl {
-        let (idxPaulis, idxDoubles) = generatorIndex::Data;
+        let (idxPaulis, idxDoubles) = generatorIndex::IndexData;
         let pauliString = IntArrayAsPauliArray(idxPaulis);
         let op = Exp(pauliString, delta * idxDoubles[0], _);
         (RestrictedToSubregisterCA(op, generatorIndex::Subsystems))(qubits);

@@ -9,7 +9,7 @@ namespace Microsoft.Quantum.Simulation {
     // A simulation technique converts an EvolutionGenerator to time evolution
     // by the encoded system for some time step
     // Here is an example of a simulation technique.
-    
+
     /// # Summary
     /// Implements time-evolution by a term contained in a `GeneratorSystem`.
     ///
@@ -60,7 +60,7 @@ namespace Microsoft.Quantum.Simulation {
     // register) and other algorithm-specific parameters (trotterStepSize,
     // trotterOrder), and performs evolution under the EvolutionGenerator
     // for time = timeMax.
-    
+
     /// # Summary
     /// Makes repeated calls to `TrotterStep` to approximate the
     /// time-evolution operator exp(_-iHt_).
@@ -85,8 +85,8 @@ namespace Microsoft.Quantum.Simulation {
             (TrotterStep(evolutionGenerator, trotterOrder, resizedTrotterStepSize))(qubits);
         }
     }
-    
-    
+
+
     /// # Summary
     /// `SimulationAlgorithm` function that uses a Trotter–Suzuki
     /// decomposition to approximate the time-evolution operator _exp(-iHt)_.
