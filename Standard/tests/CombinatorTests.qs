@@ -245,6 +245,108 @@ namespace Microsoft.Quantum.Tests {
         AssertOperationsEqualReferenced(2, ApplyIfOneA(Zero, (ApplyToEachA(H, _), _)), ApplyToEachA(I, _));
     }
 
+    operation ApplyIfElseRCase(result : Result, register : Qubit[]) : Unit {
+        ApplyIfElseR(
+            result,
+            (ApplyToEach(H, _), register),
+            (ApplyToEach(X, _), register)
+        );
+    }
+
+    operation ApplyIfElseRTest() : Unit {
+        AssertOperationsEqualReferenced(2, ApplyIfElseRCase(Zero, _), ApplyToEachA(H, _));
+        AssertOperationsEqualReferenced(2, ApplyIfElseRCase(One, _), ApplyToEachA(X, _));
+    }
+
+    operation ApplyIfElseRACase(result : Result, register : Qubit[]) : Unit is Adj {
+        ApplyIfElseRA(
+            result,
+            (ApplyToEachA(H, _), register),
+            (ApplyToEachA(X, _), register)
+        );
+    }
+
+    operation ApplyIfElseRATest() : Unit {
+        AssertOperationsEqualReferenced(2, ApplyIfElseRACase(Zero, _), ApplyToEachA(H, _));
+        AssertOperationsEqualReferenced(2, ApplyIfElseRACase(One, _), ApplyToEachA(X, _));
+    }
+
+    operation ApplyIfElseRCCase(result : Result, register : Qubit[]) : Unit is Ctl {
+        ApplyIfElseRC(
+            result,
+            (ApplyToEachC(H, _), register),
+            (ApplyToEachC(X, _), register)
+        );
+    }
+
+    operation ApplyIfElseRCTest() : Unit {
+        AssertOperationsEqualReferenced(2, ApplyIfElseRCCase(Zero, _), ApplyToEachA(H, _));
+        AssertOperationsEqualReferenced(2, ApplyIfElseRCCase(One, _), ApplyToEachA(X, _));
+    }
+
+    operation ApplyIfElseRCACase(result : Result, register : Qubit[]) : Unit is Adj + Ctl {
+        ApplyIfElseRCA(
+            result,
+            (ApplyToEachCA(H, _), register),
+            (ApplyToEachCA(X, _), register)
+        );
+    }
+
+    operation ApplyIfElseRCATest() : Unit {
+        AssertOperationsEqualReferenced(2, ApplyIfElseRCACase(Zero, _), ApplyToEachA(H, _));
+        AssertOperationsEqualReferenced(2, ApplyIfElseRCACase(One, _), ApplyToEachA(X, _));
+    }
+
+    operation ApplyIfElseBCase(bit : Bool, register : Qubit[]) : Unit {
+        ApplyIfElseB(
+            bit,
+            (ApplyToEach(H, _), register),
+            (ApplyToEach(X, _), register)
+        );
+    }
+
+    operation ApplyIfElseBTest() : Unit {
+        AssertOperationsEqualReferenced(2, ApplyIfElseBCase(true, _), ApplyToEachA(H, _));
+        AssertOperationsEqualReferenced(2, ApplyIfElseBCase(false, _), ApplyToEachA(X, _));
+    }
+
+    operation ApplyIfElseBACase(bit : Bool, register : Qubit[]) : Unit is Adj {
+        ApplyIfElseBA(
+            bit,
+            (ApplyToEachA(H, _), register),
+            (ApplyToEachA(X, _), register)
+        );
+    }
+
+    operation ApplyIfElseBATest() : Unit {
+        AssertOperationsEqualReferenced(2, ApplyIfElseBACase(true, _), ApplyToEachA(H, _));
+        AssertOperationsEqualReferenced(2, ApplyIfElseBACase(false, _), ApplyToEachA(X, _));
+    }
+
+    operation ApplyIfElseBCCase(bit : Bool, register : Qubit[]) : Unit is Ctl {
+        ApplyIfElseBC(
+            bit,
+            (ApplyToEachC(H, _), register),
+            (ApplyToEachC(X, _), register)
+        );
+    }
+
+    operation ApplyIfElseBCTest() : Unit {
+        AssertOperationsEqualReferenced(2, ApplyIfElseBCCase(true, _), ApplyToEachA(H, _));
+        AssertOperationsEqualReferenced(2, ApplyIfElseBCCase(false, _), ApplyToEachA(X, _));
+    }
+
+    operation ApplyIfElseBCACase(bit : Bool, register : Qubit[]) : Unit is Adj + Ctl {
+        ApplyIfElseBCA(
+            bit,
+            (ApplyToEachCA(H, _), register),
+            (ApplyToEachCA(X, _), register)
+        );
+    }
+
+    operation ApplyIfElseBCATest() : Unit {
+        AssertOperationsEqualReferenced(2, ApplyIfElseBCACase(true, _), ApplyToEachA(H, _));
+        AssertOperationsEqualReferenced(2, ApplyIfElseBCACase(false, _), ApplyToEachA(X, _));
+    }
+
 }
-
-
