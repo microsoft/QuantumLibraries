@@ -258,7 +258,7 @@ namespace Microsoft.Quantum.Canon {
     /// - Microsoft.Quantum.Canon.ApplyIfOneC
     /// - Microsoft.Quantum.Canon.ApplyIfOneA
     /// - Microsoft.Quantum.Canon.ApplyIfOneCA
-    operation ApplyIfOneA<'T> (result : Result, (op : ('T => Unit is Adj + Ctl), target : 'T)) : Unit is Adj + Ctl {
+    operation ApplyIfOneA<'T> (result : Result, (op : ('T => Unit is Adj), target : 'T)) : Unit is Adj {
         if (result == One) {
             op(target);
         }
@@ -378,7 +378,7 @@ namespace Microsoft.Quantum.Canon {
     /// - Microsoft.Quantum.Canon.ApplyIfZeroC
     /// - Microsoft.Quantum.Canon.ApplyIfZeroA
     /// - Microsoft.Quantum.Canon.ApplyIfZeroCA
-    operation ApplyIfZeroA<'T> (result : Result, (op : ('T => Unit is Adj + Ctl), target : 'T)) : Unit is Adj + Ctl {
+    operation ApplyIfZeroA<'T> (result : Result, (op : ('T => Unit is Adj), target : 'T)) : Unit is Adj {
         if (result == Zero) {
             op(target);
         }
