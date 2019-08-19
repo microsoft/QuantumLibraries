@@ -34,7 +34,64 @@ namespace Microsoft.Quantum.Tests {
         let expected = ApplyControlledOpToRegister(Z, _);
         AssertOperationsEqualReferenced(2, actual, expected);
     }
+
+    // Verify Fermionic SWAP gives the correct qubit values
+    operation ApplyFermionicSWAPValueTest() : Unit {
+        using ((left, right) = (Qubit(), Qubit())) {
+            // 00
+            ApplyFermionicSWAP(left, right);
+            AssertAllZero([left, right]);
+
+            // 01
+            X(right);
+            ApplyFermionicSWAP(left, right);
+            X(left);
+            AssertAllZero([left, right]);
+
+            // 10
+            X(left);
+            ApplyFermionicSWAP(left, right);
+            X(right);
+            AssertAllZero([left, right]);
+
+            // 11
+            ApplyToEachCA(X, [left, right]);
+            ApplyFermionicSWAP(left, right);
+            ApplyToEachCA(X, [left, right]);
+            AssertAllZero([left, right]);
+        }
+    }
+
+    operation VerifyFermionicSWAPPhaseHelper(phase : Result, qubit1 : Qubit, qubit2: Qubit) : Unit {
+        ApplyFermionicSWAP(qubit1, qubit2);
+        Assert([PauliZ, PauliZ], [qubit1, qubit2], phase,
+            "The Fermionic SWAP applies an incorrect phase");
+    }
     
+    // Verify Fermionic SWAP gives the correct phase change
+    operation ApplyFermionicSWAPPhaseTest() : Unit {
+        using ((left, right) = (Qubit(), Qubit())) {
+            // 00
+            VerifyFermionicSWAPPhaseHelper(Zero, left, right);
+            ResetAll([left, right]);
+
+            // 01
+            X(right);
+            VerifyFermionicSWAPPhaseHelper(One, left, right);
+            ResetAll([left, right]);
+
+            // 10
+            X(left);
+            VerifyFermionicSWAPPhaseHelper(One, left, right);
+            ResetAll([left, right]);
+
+            // 11
+            ApplyToEachCA(X, [left, right]);
+            VerifyFermionicSWAPPhaseHelper(Zero, left, right);
+            ResetAll([left, right]);
+        }
+    }
+
 }
 
 
