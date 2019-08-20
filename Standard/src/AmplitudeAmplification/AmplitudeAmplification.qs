@@ -2,55 +2,13 @@
 // Licensed under the MIT License.
 
 namespace Microsoft.Quantum.AmplitudeAmplification {
+    open Microsoft.Quantum.Arrays;
     open Microsoft.Quantum.Intrinsic;
     open Microsoft.Quantum.Convert;
     open Microsoft.Quantum.Math;
     open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Oracles;
 
-    /// # Summary
-    /// Converts phases specified as single-qubit rotations to phases
-    /// specified as partial reflections.
-    ///
-    /// # Input
-    /// ## rotPhases
-    /// Array of single-qubit rotations to be converted to partial
-    /// reflections.
-    ///
-    /// # Output
-    /// An operation that implements phases specified as partial reflections.
-    ///
-    /// # References
-    /// We use the convention in
-    /// - [ *G.H. Low, I. L. Chuang* ](https://arxiv.org/abs/1707.05391)
-    /// for relating single-qubit rotation phases to reflection operator phases.
-    function AmpAmpRotationToReflectionPhases (rotPhases : RotationPhases) : ReflectionPhases
-    {
-        let nPhasesRot = Length(rotPhases!);
-        let nPhasesRef = (nPhasesRot + 1) / 2;
-        
-        if (nPhasesRot % 2 == 0)
-        {
-            fail $"Number of rotations must be odd.";
-        }
-        
-        mutable phasesTarget = new Double[nPhasesRef];
-        mutable phasesStart = new Double[nPhasesRef];
-        set phasesTarget w/= 0 <- ((rotPhases!)[0] - (rotPhases!)[1]) - PI();
-        set phasesStart w/= 0 <- -(rotPhases!)[0] + 0.5 * PI();
-        
-        for (idxPhases in 1 .. nPhasesRef - 2)
-        {
-            set phasesTarget w/= idxPhases <- ((rotPhases!)[2 * idxPhases] - (rotPhases!)[2 * idxPhases + 1]) - PI();
-            set phasesStart w/= idxPhases <- ((rotPhases!)[2 * idxPhases - 1] - (rotPhases!)[2 * idxPhases]) + PI();
-        }
-        
-        set phasesTarget w/= nPhasesRef - 1 <- (rotPhases!)[2 * nPhasesRef - 2] - 0.5 * PI();
-        set phasesStart w/= nPhasesRef - 1 <- ((rotPhases!)[2 * nPhasesRef - 3] - (rotPhases!)[2 * nPhasesRef - 2]) + PI();
-        return ReflectionPhases(phasesStart, phasesTarget);
-    }
-    
-    
     /// # Summary
     /// Computes partial reflection phases for standard amplitude
     /// amplification.
@@ -70,24 +28,24 @@ namespace Microsoft.Quantum.AmplitudeAmplification {
     {
         mutable phasesTarget = new Double[nIterations + 1];
         mutable phasesStart = new Double[nIterations + 1];
-        
+
         for (idxPhases in 0 .. nIterations)
         {
             set phasesTarget w/= idxPhases <- PI();
             set phasesStart w/= idxPhases <- PI();
         }
-        
+
         set phasesTarget w/= nIterations <- 0.0;
         set phasesStart w/= 0 <- 0.0;
         return ReflectionPhases(phasesStart, phasesTarget);
     }
-    
-    
+
+
     // We use the phases in "Fixed-Point Amplitude Amplification with an
     // Optimal Number of Queires" [YoderLowChuang2014]
     // See also "Methodology of composite quantum gates" [LowYoderChuang2016]
     // for phases in the `RotationPhases` format
-    
+
     /// # Summary
     /// Computes partial reflection phases for fixed-point amplitude
     /// amplification.
@@ -116,16 +74,16 @@ namespace Microsoft.Quantum.AmplitudeAmplification {
         let nQueriesDouble = IntAsDouble(nQueries);
         set phasesRot w/= 0 <- 0.0;
         let beta = Cosh((1.0 / nQueriesDouble) * ArcCosh(Sqrt(successMin)));
-        
+
         for (idxPhases in 1 .. nQueries - 1)
         {
             set phasesRot w/= idxPhases <- phasesRot[idxPhases - 1] + 2.0 * ArcTan(Tan((((2.0 * 1.0) * IntAsDouble(idxPhases)) * PI()) / nQueriesDouble) * Sqrt(1.0 - beta * beta));
         }
-        
-        return AmpAmpRotationToReflectionPhases(RotationPhases(phasesRot));
+
+        return RotationPhasesAsReflectionPhases(RotationPhases(phasesRot));
     }
-    
-    
+
+
     /// # Summary
     /// Oblivious amplitude amplification by specifying partial reflections.
     ///
@@ -165,59 +123,52 @@ namespace Microsoft.Quantum.AmplitudeAmplification {
     /// See
     /// - [ *G.H. Low, I.L. Chuang* ](https://arxiv.org/abs/1610.06546)
     /// for a generalization to partial reflections.
-    operation AmpAmpObliviousByReflectionPhasesImpl (phases : ReflectionPhases, ancillaReflection : ReflectionOracle, targetStateReflection : ReflectionOracle, signalOracle : ObliviousOracle, ancillaRegister : Qubit[], systemRegister : Qubit[]) : Unit
+    operation AmpAmpObliviousByReflectionPhasesImpl (phases : ReflectionPhases, ancillaReflection : ReflectionOracle, targetStateReflection : ReflectionOracle, signalOracle : ObliviousOracle, ancillaRegister : Qubit[], systemRegister : Qubit[]) : Unit is Adj + Ctl
     {
-        body (...)
+        let (phasesAncilla, phasesTarget) = phases!;
+        let nphases = 2 * Length(phasesTarget);
+
+        //FailOn(nphases != Length(phasesAncilla), "Phase array lengths not equal.")
+        if (phasesAncilla[0] != 0.0)
         {
-            let (phasesAncilla, phasesTarget) = phases!;
-            let nphases = 2 * Length(phasesTarget);
-            
-            //FailOn(nphases != Length(phasesAncilla), "Phase array lengths not equal.")
-            if (phasesAncilla[0] != 0.0)
+            ancillaReflection!(phasesAncilla[0], ancillaRegister);
+        }
+
+        for (idxPhases in 1 .. nphases - 1)
+        {
+            let idxPhaseAncilla = idxPhases / 2;
+            let idxPhaseTarget = idxPhases / 2;
+
+            if (idxPhases % 2 == 1)
             {
-                ancillaReflection!(phasesAncilla[0], ancillaRegister);
-            }
-            
-            for (idxPhases in 1 .. nphases - 1)
-            {
-                let idxPhaseAncilla = idxPhases / 2;
-                let idxPhaseTarget = idxPhases / 2;
-                
-                if (idxPhases % 2 == 1)
+                signalOracle!(ancillaRegister, systemRegister);
+
+                if (phasesTarget[idxPhaseTarget] != 0.0)
                 {
-                    signalOracle!(ancillaRegister, systemRegister);
-                    
-                    if (phasesTarget[idxPhaseTarget] != 0.0)
-                    {
-                        targetStateReflection!(phasesTarget[idxPhaseTarget], ancillaRegister);
-                    }
+                    targetStateReflection!(phasesTarget[idxPhaseTarget], ancillaRegister);
                 }
-                else
+            }
+            else
+            {
+                Adjoint signalOracle!(ancillaRegister, systemRegister);
+
+                if (phasesAncilla[idxPhaseAncilla] != 0.0)
                 {
-                    Adjoint signalOracle!(ancillaRegister, systemRegister);
-                    
-                    if (phasesAncilla[idxPhaseAncilla] != 0.0)
-                    {
-                        ancillaReflection!(phasesAncilla[idxPhaseAncilla], ancillaRegister);
-                    }
+                    ancillaReflection!(phasesAncilla[idxPhaseAncilla], ancillaRegister);
                 }
             }
         }
-        
-        adjoint invert;
-        controlled distribute;
-        controlled adjoint distribute;
     }
-    
-    
+
+
     /// # Summary
     /// Returns a unitary that implements oblivious amplitude amplification by specifying for partial reflections.
     function AmpAmpObliviousByReflectionPhases (phases : ReflectionPhases, ancillaReflection : ReflectionOracle, targetStateReflection : ReflectionOracle, signalOracle : ObliviousOracle) : ((Qubit[], Qubit[]) => Unit is Adj + Ctl)
     {
         return AmpAmpObliviousByReflectionPhasesImpl(phases, ancillaReflection, targetStateReflection, signalOracle, _, _);
     }
-    
-    
+
+
     /// # Summary
     /// Oblivious amplitude amplification by oracles for partial reflections.
     ///
@@ -250,8 +201,8 @@ namespace Microsoft.Quantum.AmplitudeAmplification {
         let oracleObliviousNew = ObliviousOracleFromDeterministicStateOracle(ancillaOracle, signalOracle);
         return AmpAmpObliviousByReflectionPhases(phases, ancillaReflection, targetStateReflection, oracleObliviousNew);
     }
-    
-    
+
+
     /// # Summary
     /// Amplitude amplification by partial reflections.
     ///
@@ -278,8 +229,8 @@ namespace Microsoft.Quantum.AmplitudeAmplification {
         let signalOracle = ObliviousOracle(NoOp<(Qubit[], Qubit[])>);
         return (AmpAmpObliviousByReflectionPhases(phases, startStateReflection, targetStateReflection, signalOracle))(_, qubitEmpty);
     }
-    
-    
+
+
     /// # Summary
     /// Amplitude amplification by oracles for partial reflections.
     ///
@@ -312,8 +263,8 @@ namespace Microsoft.Quantum.AmplitudeAmplification {
         let ancillaOracle = DeterministicStateOracleFromStateOracle(idxFlagQubit, stateOracle);
         return (AmpAmpObliviousByOraclePhases(phases, ancillaOracle, signalOracle, idxFlagQubit))(_, qubitEmpty);
     }
-    
-    
+
+
     /// # Summary
     /// Standard Amplitude Amplification algorithm
     ///
@@ -349,8 +300,7 @@ namespace Microsoft.Quantum.AmplitudeAmplification {
         let phases = AmpAmpPhasesStandard(nIterations);
         return AmpAmpByOraclePhases(phases, stateOracle, idxFlagQubit);
     }
-    
-    
+
     /// # Summary
     /// Fixed-Point Amplitude Amplification algorithm
     ///
@@ -371,7 +321,7 @@ namespace Microsoft.Quantum.AmplitudeAmplification {
         mutable finished = Zero;
         mutable exponentMax = 0;
         mutable exponentCurrent = 0;
-        
+
         //Complexity: Let \theta = \mathcal{O}(\sqrt{lambda})
         // Number of Measurements = O( Log^2(1/\theta) )
         // Number of Queries = O(1/\theta)
@@ -379,14 +329,14 @@ namespace Microsoft.Quantum.AmplitudeAmplification {
         {
             let qubits = flagQubit + startQubits;
             let idxFlagQubit = 0;
-            
+
             repeat
             {
                 if (2 ^ exponentMax > queriesMax)
                 {
                     fail $"Target state not found. Maximum number of queries exceeded.";
                 }
-                
+
                 repeat
                 {
                     let queries = 2 ^ exponentCurrent;
@@ -401,7 +351,7 @@ namespace Microsoft.Quantum.AmplitudeAmplification {
                     // flagQubit is already in Zero for fixup to apply
                     ResetAll(startQubits);
                 }
-                
+
                 set exponentCurrent = 0;
                 set exponentMax = exponentMax + 1;
             }
@@ -412,7 +362,7 @@ namespace Microsoft.Quantum.AmplitudeAmplification {
             }
         }
     }
-    
+
 }
 
 
