@@ -104,6 +104,169 @@ namespace Microsoft.Quantum.Math {
         return input::Argument;
     }
 
+    /// # Summary
+    /// Returns the unary negation of an input.
+    ///
+    /// # Input
+    /// ## input
+    /// A value whose negation is to be returned.
+    ///
+    /// # Output
+    /// The unary negation of `input`.
+    function NegationC(input : Complex) : Complex {
+        let (re, im) = input!;
+        return Complex(-re, -im);
+    }
+
+    /// # Summary
+    /// Returns the unary negation of an input.
+    ///
+    /// # Input
+    /// ## input
+    /// A value whose negation is to be returned.
+    ///
+    /// # Output
+    /// The unary negation of `input`.
+    function NegationCP(input : ComplexPolar) : ComplexPolar {
+        return ComplexPolar(input::Magnitude, input::Argument + PI());
+    }
+
+    /// # Summary
+    /// Returns the sum of two inputs.
+    ///
+    /// # Input
+    /// ## a
+    /// The first input $a$ to be summed.
+    /// ## b
+    /// The second input $b$ to be summed.
+    ///
+    /// # Output
+    /// The sum $a + b$.
+    function PlusC(a : Complex, b : Complex) : Complex {
+        let ((reA, imA), (reB, imB)) = (a!, b!);
+        return Complex(reA + reB, imA + imB);
+    }
+
+    /// # Summary
+    /// Returns the sum of two inputs.
+    ///
+    /// # Input
+    /// ## a
+    /// The first input $a$ to be summed.
+    /// ## b
+    /// The second input $b$ to be summed.
+    ///
+    /// # Output
+    /// The sum $a + b$.
+    function PlusCP(a : ComplexPolar, b : ComplexPolar) : ComplexPolar {
+        return ComplexAsComplexPolar(
+            PlusC(
+                ComplexPolarAsComplex(a),
+                ComplexPolarAsComplex(b)
+            )
+        );
+    }
+
+    /// # Summary
+    /// Returns the difference between two inputs.
+    ///
+    /// # Input
+    /// ## a
+    /// The first input $a$ to be subtracted.
+    /// ## b
+    /// The second input $b$ to be subtracted.
+    ///
+    /// # Output
+    /// The difference $a - b$.
+    function MinusC(a : Complex, b : Complex) : Complex {
+        return PlusC(a, NegationC(b));
+    }
+
+    /// # Summary
+    /// Returns the difference between two inputs.
+    ///
+    /// # Input
+    /// ## a
+    /// The first input $a$ to be subtracted.
+    /// ## b
+    /// The second input $b$ to be subtracted.
+    ///
+    /// # Output
+    /// The difference $a - b$.
+    function MinusCP(a : ComplexPolar, b : ComplexPolar) : ComplexPolar {
+        return PlusCP(a, NegationCP(b));
+    }
+
+    /// # Summary
+    /// Returns the product of two inputs.
+    ///
+    /// # Input
+    /// ## a
+    /// The first input $a$ to be multiplied.
+    /// ## b
+    /// The second input $b$ to be multiplied.
+    ///
+    /// # Output
+    /// The product $a \times b$.
+    function TimesC(a : Complex, b : Complex) : Complex {
+        let ((reA, imA), (reB, imB)) = (a!, b!);
+        return Complex(
+            reA * reB - imA * imB,
+            reA * imB + imA * reB
+        );
+    }
+
+    /// # Summary
+    /// Returns the product of two inputs.
+    ///
+    /// # Input
+    /// ## a
+    /// The first input $a$ to be multiplied.
+    /// ## b
+    /// The second input $b$ to be multiplied.
+    ///
+    /// # Output
+    /// The product $a \times b$.
+    function TimesCP(a : ComplexPolar, b : ComplexPolar) : ComplexPolar {
+        return ComplexPolar(
+            a::Magnitude * b::Magnitude,
+            a::Argument + b::Argument
+        );
+    }
+
+    /// # Summary
+    /// Returns a number raised to a given power.
+    ///
+    /// # Input
+    /// ## base
+    /// The number $a$ that is to be raised.
+    /// ## power
+    /// The power $b$ to which $a$ should be raised.
+    ///
+    /// # Output
+    /// The power $a^b$
+    function PowC(a : Complex, power : Double) : Complex {
+        return ComplexPolarAsComplex(
+            PowCP(ComplexAsComplexPolar(a), power)
+        );
+    }
+
+    /// # Summary
+    /// Returns a number raised to a given power.
+    ///
+    /// # Input
+    /// ## base
+    /// The number $a$ that is to be raised.
+    /// ## power
+    /// The power $b$ to which $a$ should be raised.
+    ///
+    /// # Output
+    /// The power $a^b$
+    function PowCP(a : ComplexPolar, power : Double) : ComplexPolar {
+        return ComplexPolar(
+            PowD(a::Magnitude, power),
+            a::Argument * power
+        );
+    }
+
 }
-
-
