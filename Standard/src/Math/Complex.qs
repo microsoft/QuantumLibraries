@@ -13,7 +13,7 @@ namespace Microsoft.Quantum.Math {
     /// `Double` is absolute value $r \ge 0$.
     /// ## Second Parameter
     /// `Double` is the phase $t \in \mathbb R$.
-    newtype ComplexPolar = (Double, Double);
+    newtype ComplexPolar = (Magnitude: Double, Argument: Double);
 
     /// # Summary
     /// Returns the squared absolute value of a complex number of type
@@ -69,8 +69,7 @@ namespace Microsoft.Quantum.Math {
     ///
     /// # Output
     /// Squared absolute value $|c|^2 = r^2$.
-    function AbsSquaredComplexPolar (input : ComplexPolar) : Double
-    {
+    function AbsSquaredComplexPolar (input : ComplexPolar) : Double {
         let (abs, arg) = input!;
         return abs * abs;
     }
@@ -86,10 +85,8 @@ namespace Microsoft.Quantum.Math {
     ///
     /// # Output
     /// Absolute value $|c| = r$.
-    function AbsComplexPolar (input : ComplexPolar) : Double
-    {
-        let (abs, arg) = input!;
-        return abs;
+    function AbsComplexPolar (input : ComplexPolar) : Double {
+        return input::Magnitude;
     }
     
     
@@ -103,45 +100,10 @@ namespace Microsoft.Quantum.Math {
     ///
     /// # Output
     /// Phase $\text{Arg}[c] = t$.
-    function ArgComplexPolar (input : ComplexPolar) : Double
-    {
-        let (abs, arg) = input!;
-        return arg;
+    function ArgComplexPolar (input : ComplexPolar) : Double {
+        return input::Argument;
     }
-    
-    
-    /// # Summary
-    /// Converts a complex number of type `ComplexPolar` to a complex
-    /// number of type `Complex`.
-    ///
-    /// # Input
-    /// ## input
-    /// Complex number $c = r e^{i t}$.
-    ///
-    /// # Output
-    /// Complex number $c = x + i y$.
-    function ComplexPolarToComplex (input : ComplexPolar) : Complex
-    {
-        let (abs, arg) = input!;
-        return Complex(abs * Cos(arg), abs * Sin(arg));
-    }
-    
-    
-    /// # Summary
-    /// Converts a complex number of type `Complex` to a complex
-    /// number of type `ComplexPolar`.
-    ///
-    /// # Input
-    /// ## input
-    /// Complex number $c = x + i y$.
-    ///
-    /// # Output
-    /// Complex number $c = r e^{i t}$.
-    function ComplexToComplexPolar (input : Complex) : ComplexPolar
-    {
-        return ComplexPolar(AbsComplex(input), ArgComplex(input));
-    }
-    
+
 }
 
 
