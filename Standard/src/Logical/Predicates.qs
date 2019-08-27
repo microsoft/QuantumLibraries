@@ -207,7 +207,7 @@ namespace Microsoft.Quantum.Logical {
     /// let cond = a != b;
     /// let cond = NotEqualD(a, b);
     /// ```
-    function NotEqualD(a : BigInt, b : BigInt) : Bool {
+    function NotEqualD(a : Double, b : Double) : Bool {
         return a != b;
     }
 

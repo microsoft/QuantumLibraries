@@ -65,11 +65,9 @@ namespace Microsoft.Quantum.Diagnostics {
     ///
     /// ## message
     /// Failure message string to be used when the assertion is triggered.
-    function EqualityFactI(actual : Int, expected : Int, message : String) : Unit
-    {
-        if (actual != expected)
-        {
-            fail message;
+    function EqualityFactI(actual : Int, expected : Int, message : String) : Unit {
+        if (actual != expected) {
+            fail $"{actual} ≠ {expected}: {message}";
         }
     }
 
@@ -84,11 +82,9 @@ namespace Microsoft.Quantum.Diagnostics {
     ///
     /// ## message
     /// Failure message string to be used when the assertion is triggered.
-    function EqualityFactL(actual : BigInt, expected : BigInt, message : String) : Unit
-    {
-        if (actual != expected)
-        {
-            fail message;
+    function EqualityFactL(actual : BigInt, expected : BigInt, message : String) : Unit {
+        if (actual != expected) {
+            fail $"{actual} ≠ {expected}: {message}";
         }
     }
 
@@ -104,11 +100,9 @@ namespace Microsoft.Quantum.Diagnostics {
     ///
     /// ## message
     /// Failure message string to be used when the assertion is triggered.
-    function EqualityFactB(actual : Bool, expected : Bool, message : String) : Unit
-    {
-        if (actual != expected)
-        {
-            fail message;
+    function EqualityFactB(actual : Bool, expected : Bool, message : String) : Unit {
+        if (actual != expected) {
+            fail $"{actual} ≠ {expected}: {message}";
         }
     }
 
@@ -125,9 +119,8 @@ namespace Microsoft.Quantum.Diagnostics {
     /// ## message
     /// Failure message string to be used when the assertion is triggered.
     function EqualityFactR (actual : Result, expected : Result, message : String) : Unit {
-        if (actual != expected)
-        {
-            fail message;
+        if (actual != expected) {
+            fail $"{actual} ≠ {expected}: {message}";
         }
     }
 
