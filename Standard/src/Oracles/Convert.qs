@@ -7,55 +7,55 @@ namespace Microsoft.Quantum.Oracles {
     /// # Summary
     /// Implementation of <xref:microsoft.quantum.canon.obliviousoraclefromdeterministicstateoracle>.
     operation _ObliviousOracleFromDeterministicStateOracle (ancillaOracle : DeterministicStateOracle, signalOracle : ObliviousOracle, ancillaRegister : Qubit[], systemRegister : Qubit[]) : Unit
-    {
-        body (...)
-        {
-            ancillaOracle!(ancillaRegister);
-            signalOracle!(ancillaRegister, systemRegister);
-        }
-        
-        adjoint invert;
-        controlled distribute;
-        controlled adjoint distribute;
+    is Adj + Ctl {
+        ancillaOracle::Apply(ancillaRegister);
+        signalOracle::Apply(ancillaRegister, systemRegister);
     }
-    
-    
+
+
     /// # Summary
-    /// Combines the oracles `DeterministicStateOracle` and `ObliviousOracle`.
+    /// Given an oblivious oracle, returns an oblivious oracle that calls a
+    /// given determinsitic state oracle on its auxillary register.
     ///
     /// # Input
-    /// ## ancillaOracle
-    /// A state preparation oracle $A$ of type `DeterministicStateOracle` acting on register $a$.
+    /// ## statePreparationOracle
+    /// A state preparation oracle.
     /// ## signalOracle
-    /// A oracle $U$ of type `ObliviousOracle` acting jointly on register $a,s$.
+    /// An oblivious oracle.
     ///
     /// # Output
-    /// An oracle $O=UA$ of type `ObliviousOracle`.
+    /// An oblivious oracle that when applied, first applies
+    /// `statePreparationOracle` on the auxillary register, and then applies
+    /// the original `signalOracle` jointly on the auxillary and system
+    /// registers.
+    ///
+    /// # Remarks
+    /// Let `statePreparationOracle` be represented by a unitary operator $A$
+    /// acting on the state of an auxillary register $a$, and let `signalOracle`
+    /// be represented by a unitary operator $U$ acting jointly on a register
+    /// $a, s$. Then the oracle returned by this function can be represented by
+    /// a unitary operator $O = U \cdot (A \otimes \id_s)$.
     ///
     /// # See Also
+    /// - Microsoft.Quantum.Canon.Bound
     /// - Microsoft.Quantum.Canon.DeterministicStateOracle
     /// - Microsoft.Quantum.Canon.ObliviousOracle
-    function ObliviousOracleFromDeterministicStateOracle (ancillaOracle : DeterministicStateOracle, signalOracle : ObliviousOracle) : ObliviousOracle
-    {
-        return ObliviousOracle(_ObliviousOracleFromDeterministicStateOracle(ancillaOracle, signalOracle, _, _));
+    function BoundWithDeterministicStateOracle(
+        statePreparationOracle : DeterministicStateOracle,
+        signalOracle : ObliviousOracle
+    ) : ObliviousOracle {
+        return ObliviousOracle(_ObliviousOracleFromDeterministicStateOracle(statePreparationOracle, signalOracle, _, _));
     }
-    
-    
+
+
     /// # Summary
     /// Implementation of <xref:microsoft.quantum.canon.deterministicstateoraclefromstateoracle>.
     operation _DeterministicStateOracleFromStateOracle (idxFlagQubit : Int, stateOracle : StateOracle, startQubits : Qubit[]) : Unit
-    {
-        body (...)
-        {
-            stateOracle!(idxFlagQubit, startQubits);
-        }
-        
-        adjoint invert;
-        controlled distribute;
-        controlled adjoint distribute;
+    is Adj + Ctl {
+        stateOracle::Apply(idxFlagQubit, startQubits);
     }
-    
-    
+
+
     /// # Summary
     /// Converts an oracle of type `StateOracle` to `DeterministicStateOracle`.
     ///
@@ -75,27 +75,19 @@ namespace Microsoft.Quantum.Oracles {
     /// # See Also
     /// - Microsoft.Quantum.Canon.StateOracle
     /// - Microsoft.Quantum.Canon.DeterministicStateOracle
-    function DeterministicStateOracleFromStateOracle (idxFlagQubit : Int, stateOracle : StateOracle) : DeterministicStateOracle
-    {
+    function DeterministicStateOracleFromStateOracle (idxFlagQubit : Int, stateOracle : StateOracle) : DeterministicStateOracle {
         return DeterministicStateOracle(_DeterministicStateOracleFromStateOracle(idxFlagQubit, stateOracle, _));
     }
-    
-    
+
+
     /// # Summary
     /// Implementation of <xref:microsoft.quantum.canon.stateoraclefromdeterministicstateoracle>.
     operation _StateOracleFromDeterministicStateOracle (idxFlagQubit : Int, oracleStateDeterministic : DeterministicStateOracle, qubits : Qubit[]) : Unit
-    {
-        body (...)
-        {
-            oracleStateDeterministic!(qubits);
-        }
-        
-        adjoint invert;
-        controlled distribute;
-        controlled adjoint distribute;
+    is Adj + Ctl {
+        oracleStateDeterministic::Apply(qubits);
     }
-    
-    
+
+
     /// # Summary
     /// Converts an oracle of type `DeterministicStateOracle` to `StateOracle`.
     ///
@@ -115,8 +107,8 @@ namespace Microsoft.Quantum.Oracles {
     {
         return StateOracle(_StateOracleFromDeterministicStateOracle(_, deterministicStateOracle, _));
     }
-    
-    
+
+
     /// # Summary
     /// Implementation of <xref:microsoft.quantum.canon.reflectionoraclefromdeterministicstateoracle>.
     operation ReflectionOracleFromDeterministicStateOracleImpl (phase : Double, oracle : DeterministicStateOracle, systemRegister : Qubit[]) : Unit
@@ -125,13 +117,13 @@ namespace Microsoft.Quantum.Oracles {
         {
             ApplyWithCA(Adjoint oracle!, RAll0(phase, _), systemRegister);
         }
-        
+
         adjoint invert;
         controlled distribute;
         controlled adjoint distribute;
     }
-    
-    
+
+
     /// # Summary
     /// Constructs reflection about a given state from an oracle.
 	///
