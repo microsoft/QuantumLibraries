@@ -3,7 +3,9 @@
 
 namespace Microsoft.Quantum.Diagnostics {
     open Microsoft.Quantum.Canon;
+    open Microsoft.Quantum.Math;
     open Microsoft.Quantum.Arrays;
+    open Microsoft.Quantum.Logical;
 
     /// # Summary
     /// Declares that a classical condition is true.
@@ -66,9 +68,7 @@ namespace Microsoft.Quantum.Diagnostics {
     /// ## message
     /// Failure message string to be used when the assertion is triggered.
     function EqualityFactI(actual : Int, expected : Int, message : String) : Unit {
-        if (actual != expected) {
-            fail $"{actual} ≠ {expected}: {message}";
-        }
+        Fact(actual == expected, $"{actual} ≠ {expected}: {message}");
     }
 
     /// # Summary
@@ -83,9 +83,7 @@ namespace Microsoft.Quantum.Diagnostics {
     /// ## message
     /// Failure message string to be used when the assertion is triggered.
     function EqualityFactL(actual : BigInt, expected : BigInt, message : String) : Unit {
-        if (actual != expected) {
-            fail $"{actual} ≠ {expected}: {message}";
-        }
+        Fact(actual == expected, $"{actual} ≠ {expected}: {message}");
     }
 
     /// # Summary
@@ -101,9 +99,7 @@ namespace Microsoft.Quantum.Diagnostics {
     /// ## message
     /// Failure message string to be used when the assertion is triggered.
     function EqualityFactB(actual : Bool, expected : Bool, message : String) : Unit {
-        if (actual != expected) {
-            fail $"{actual} ≠ {expected}: {message}";
-        }
+        Fact(actual == expected, $"{actual} ≠ {expected}: {message}");
     }
 
     /// # Summary
@@ -119,9 +115,39 @@ namespace Microsoft.Quantum.Diagnostics {
     /// ## message
     /// Failure message string to be used when the assertion is triggered.
     function EqualityFactR (actual : Result, expected : Result, message : String) : Unit {
-        if (actual != expected) {
-            fail $"{actual} ≠ {expected}: {message}";
-        }
+        Fact(actual == expected, $"{actual} ≠ {expected}: {message}");
+    }
+
+    /// # Summary
+    /// Asserts that a complex number has the expected value.
+    ///
+    /// # Input
+    /// ## actual
+    /// The value to be checked.
+    ///
+    /// ## expected
+    /// The expected value.
+    ///
+    /// ## message
+    /// Failure message string to be used when the assertion is triggered.
+    function EqualityFactC(actual : Complex, expected : Complex, message : String) : Unit {
+        Fact(EqualC(actual, expected), $"{actual} ≠ {expected}: {message}");
+    }
+
+    /// # Summary
+    /// Asserts that a complex number has the expected value.
+    ///
+    /// # Input
+    /// ## actual
+    /// The value to be checked.
+    ///
+    /// ## expected
+    /// The expected value.
+    ///
+    /// ## message
+    /// Failure message string to be used when the assertion is triggered.
+    function EqualityFactCP(actual : ComplexPolar, expected : ComplexPolar, message : String) : Unit {
+        Fact(EqualCP(actual, expected), $"{actual} ≠ {expected}: {message}");
     }
 
     /// # Summary
