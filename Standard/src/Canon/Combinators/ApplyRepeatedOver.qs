@@ -18,7 +18,7 @@ namespace Microsoft.Quantum.Canon {
                 fail "There are too many targets!";
             }
             let opToApply = listOfOps[index];
-            let qubitTargets = Subarray(targets[index, register]);
+            let qubitTargets = Subarray(targets[index], register);
             opToApply(qubitTargets);
         }
     }
@@ -92,7 +92,7 @@ namespace Microsoft.Quantum.Canon {
     }
 
     operation PermuteQubits(targets : Int[][], register : Qubit[]) : Unit {
-        ApplyOpRepeatedlyOverCA(ApplyToFirstTwoQubits(SWAP, _), targets, register);
+        ApplyOpRepeatedlyOver(ApplyToFirstTwoQubits(SWAP, _), targets, register);
     }
 
 }
