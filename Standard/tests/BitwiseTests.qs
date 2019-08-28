@@ -11,9 +11,9 @@ namespace Microsoft.Quantum.Tests {
         EqualityFactI(2, RightShiftedI(smallValue, 1), "Shifted values incorrect.");
 
         // 0b‭1111111011011100101110101001100001110110010101000011001000010000‬
-        let bigValue = 0xdb97530eca864200L;
+        let bigValue = 0xfedcba9876543210L;
         EqualityFactL(
-            0xffdb97530eca8642L,
+            0xdb97530eca864200L,
             LeftShiftedL(bigValue, 5),
             "LeftShfitedL returned wrong output."
         );
