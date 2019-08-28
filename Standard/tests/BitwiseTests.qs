@@ -13,7 +13,7 @@ namespace Microsoft.Quantum.Tests {
         // 0b‭1111111011011100101110101001100001110110010101000011001000010000‬
         let bigValue = 0xfedcba9876543210L;
         EqualityFactL(
-            0xdb97530eca864200L,
+            0x1fdb97530eca864200L,
             LeftShiftedL(bigValue, 5),
             "LeftShfitedL returned wrong output."
         );
