@@ -8,19 +8,19 @@ namespace Microsoft.Quantum.Tests {
     function ShiftTest() : Unit {
         let smallValue = 5; // 0b101
         EqualityFactI(20, LeftShiftedI(smallValue, 2), "Shifted values incorrect.");
-        EqualityFactI(4, RightShiftedI(smallValue, 1), "Shifted values incorrect.");
+        EqualityFactI(2, RightShiftedI(smallValue, 1), "Shifted values incorrect.");
 
         // 0b‭1111111011011100101110101001100001110110010101000011001000010000‬
         let bigValue = 0xdb97530eca864200L;
         EqualityFactL(
             0xffdb97530eca8642L,
             LeftShiftedL(bigValue, 5),
-            "Shfited values incorrect."
+            "LeftShfitedL returned wrong output."
         );
         EqualityFactL(
             0xffdb97530eca8642L,
             RightShiftedL(bigValue, 3),
-            "Shfited values incorrect."
+            "RightShiftedL returned wrong output."
         );
     }
 

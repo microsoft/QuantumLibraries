@@ -8,6 +8,12 @@ namespace Microsoft.Quantum.Diagnostics {
     open Microsoft.Quantum.Logical;
 
     /// # Summary
+    /// Private function used to generate meaningful error messages.
+    function _FormattedExpectation<'T>(actual : 'T, expected : 'T) : String {
+        return $"Expected: '{expected}'. Actual: '{actual}'";
+    }
+
+    /// # Summary
     /// Declares that a classical condition is true.
     ///
     /// # Input
@@ -35,12 +41,12 @@ namespace Microsoft.Quantum.Diagnostics {
     function EqualityWithinToleranceFact(actual : Double, expected : Double, tolerance : Double) : Unit {
         let delta = actual - expected;
         if (delta > tolerance or delta < -tolerance) {
-            fail $"Fact was false. Expected: '{expected}'. Actual: '{actual}'";
+            fail _FormattedExpectation(actual, expected);
         }
     }
 
     /// # Summary
-    /// Asserts that a classical floating point variable has the expected value up to a
+    /// Asserts that a classical floating point value has the expected value up to a
     /// small tolerance of 1e-10.
     ///
     /// # Input
@@ -52,8 +58,42 @@ namespace Microsoft.Quantum.Diagnostics {
     /// # Remarks
     /// This is equivalent to <xref:microsoft.quantum.diagnostics.equalitywithintolerancefact> with
     /// hardcoded tolerance of $10^{-10}$.
-    function NearEqualityFact(actual : Double, expected : Double) : Unit {
+    function NearEqualityFactD(actual : Double, expected : Double) : Unit {
         EqualityWithinToleranceFact(actual, expected, 1E-10);
+    }
+
+    /// # Summary
+    /// Asserts that a classical complex number has the expected value up to a
+    /// small tolerance of 1e-10.
+    ///
+    /// # Input
+    /// ## actual
+    /// The number to be checked.
+    /// ## expected
+    /// The expected value.
+    function NearEqualityFactC(actual : Complex, expected : Complex) : Unit {
+        // Don't reduce to the base case of Fact, since we need to check two
+        // conditions.
+        let ((reA, imA), (reE, imE)) = (actual!, expected!);
+        if (AbsD(reA - reE) >= 1e-10 or AbsD(imA - imE) >= 1e-10) {
+            fail _FormattedExpectation(actual, expected);
+        }
+    }
+
+    /// # Summary
+    /// Asserts that a classical complex number has the expected value up to a
+    /// small tolerance of 1e-10.
+    ///
+    /// # Input
+    /// ## actual
+    /// The number to be checked.
+    /// ## expected
+    /// The expected value.
+    function NearEqualityFactCP(actual : ComplexPolar, expected : ComplexPolar) : Unit {
+        return NearEqualityFactC(
+            ComplexPolarAsComplex(actual),
+            ComplexPolarAsComplex(expected)
+        );
     }
 
     /// # Summary

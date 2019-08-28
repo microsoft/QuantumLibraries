@@ -237,35 +237,6 @@ namespace Microsoft.Quantum.Math {
         return a / b;
     }
 
-    /// # Summary
-    /// Returns the quotient of two inputs.
-    ///
-    /// # Input
-    /// ## a
-    /// The first input $a$ to be divided.
-    /// ## b
-    /// The second input $b$ to be divided.
-    ///
-    /// # Output
-    /// The quotient $a / b$.
-    function DividedByC(a : Complex, b : Complex) : Complex {
-        return TimesC(a, PowC(b, -1.0));
-    }
-
-    /// # Summary
-    /// Returns the quotient of two inputs.
-    ///
-    /// # Input
-    /// ## a
-    /// The first input $a$ to be divided.
-    /// ## b
-    /// The second input $b$ to be divided.
-    ///
-    /// # Output
-    /// The quotient $a / b$.
-    function DividedByCP(a : ComplexPolar, b : ComplexPolar) : ComplexPolar {
-        return TimesCP(a, PowCP(b, -1.0));
-    }
 
     /// # Summary
     /// Returns the modulus of a number with respect to another number.

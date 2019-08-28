@@ -27,7 +27,7 @@ namespace Microsoft.Quantum.Tests {
     }
 
     function AssertEqualTestShouldFail () : Unit {
-        NearEqualityFact(1.0, 0.0);
+        NearEqualityFactD(1.0, 0.0);
     }
     
     

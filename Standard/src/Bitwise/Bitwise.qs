@@ -72,7 +72,7 @@ namespace Microsoft.Quantum.Bitwise {
     /// let c = RightShiftedI(a, b);
     /// ```
     function RightShiftedI(value : Int, amount : Int) : Int {
-        return value <<< amount;
+        return value >>> amount;
     }
 
     /// # Summary
@@ -96,6 +96,6 @@ namespace Microsoft.Quantum.Bitwise {
     /// let c = RightShiftedI(a, b);
     /// ```
     function RightShiftedL(value : BigInt, amount : Int) : BigInt {
-        return value <<< amount;
+        return value >>> amount;
     }
 }

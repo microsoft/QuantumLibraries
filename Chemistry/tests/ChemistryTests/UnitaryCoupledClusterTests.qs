@@ -69,9 +69,9 @@ namespace Microsoft.Quantum.Chemistry.Tests {
             let s = sortedIndices[3];
 
             Fact(p<q and q<r and r<s, "Expected p<q<r<s");
-            NearEqualityFact(globalSign, expectedGlobalSign);
+            NearEqualityFactD(globalSign, expectedGlobalSign);
             for (signIdx in 0..Length(signs)-1) {
-                NearEqualityFact(signs[signIdx], expectedSigns[signIdx]);
+                NearEqualityFactD(signs[signIdx], expectedSigns[signIdx]);
             }
         }
     }

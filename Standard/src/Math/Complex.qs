@@ -235,19 +235,20 @@ namespace Microsoft.Quantum.Math {
     }
 
     /// # Summary
-    /// Returns a number raised to a given power.
-    ///
-    /// # Input
-    /// ## base
-    /// The number $a$ that is to be raised.
-    /// ## power
-    /// The power $b$ to which $a$ should be raised.
-    ///
-    /// # Output
-    /// The power $a^b$
-    function PowC(a : Complex, power : Double) : Complex {
-        return ComplexPolarAsComplex(
-            PowCP(ComplexAsComplexPolar(a), power)
+    /// Private. Since it is easiest to define the power of two complex numbers
+    /// in cartesian form as returning in polar form, we define that here, then
+    /// convert as needed.
+    function _PowC(base_ : Complex, power : Complex) : ComplexPolar {
+        let ((a, b), (c, d)) = (base_!, power!);
+        // Re: https://www.wolframalpha.com/input/?i=simplify+re+%28%28a+%2B+b+i%29%5E%28c+%2B+d+i%29%29
+        // Im: https://www.wolframalpha.com/input/?i=simplify+im+%28%28a+%2B+b+i%29%5E%28c+%2B+d+i%29%29
+        let norm = PNorm(2.0, [a, b]);
+        let sqNorm = PowD(norm, 2.0);
+        let baseArg = ArgComplex(base_);
+        let prefactor = PowD(norm, c) * ExpD(-d * baseArg);
+        let angle = 0.5 * d * Log(sqNorm) + c * baseArg;
+        return ComplexPolar(
+            prefactor, angle
         );
     }
 
@@ -262,11 +263,62 @@ namespace Microsoft.Quantum.Math {
     ///
     /// # Output
     /// The power $a^b$
-    function PowCP(a : ComplexPolar, power : Double) : ComplexPolar {
-        return ComplexPolar(
-            PowD(a::Magnitude, power),
-            a::Argument * power
+    function PowC(base_ : Complex, power : Complex) : Complex {
+        return ComplexPolarAsComplex(
+            _PowC(base_, power)
         );
+    }
+
+    /// # Summary
+    /// Returns a number raised to a given power.
+    ///
+    /// # Input
+    /// ## base
+    /// The number $a$ that is to be raised.
+    /// ## power
+    /// The power $b$ to which $a$ should be raised.
+    ///
+    /// # Output
+    /// The power $a^b$
+    function PowCP(a : ComplexPolar, power : ComplexPolar) : ComplexPolar {
+        return _PowC(
+            ComplexPolarAsComplex(a),
+            ComplexPolarAsComplex(power)
+        );
+    }
+
+    /// # Summary
+    /// Returns the quotient of two inputs.
+    ///
+    /// # Input
+    /// ## a
+    /// The first input $a$ to be divided.
+    /// ## b
+    /// The second input $b$ to be divided.
+    ///
+    /// # Output
+    /// The quotient $a / b$.
+    function DividedByC(a : Complex, b : Complex) : Complex {
+        let foo = PowC(b, Complex(-1.0, 0.0));
+        return TimesC(
+            a,
+            PowC(b, Complex(-1.0, 0.0))
+        );
+    }
+
+    /// # Summary
+    /// Returns the quotient of two inputs.
+    ///
+    /// # Input
+    /// ## a
+    /// The first input $a$ to be divided.
+    /// ## b
+    /// The second input $b$ to be divided.
+    ///
+    /// # Output
+    /// The quotient $a / b$.
+    function DividedByCP(a : ComplexPolar, b : ComplexPolar) : ComplexPolar {
+        return TimesCP(a, PowCP(b, ComplexPolar(1.0, PI())));
     }
 
 }
