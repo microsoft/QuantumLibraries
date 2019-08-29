@@ -248,7 +248,7 @@ namespace Microsoft.Quantum.Math {
     /// The number with respect to which the modulus of $a$ is to be returned.
     ///
     /// # Output
-    /// The modulus $a \operatorname{mod} b$.
+    /// The modulus $a \bmod b$.
     function ModI(a : Int, b : Int) : Int {
         return a % b;
     }
@@ -263,7 +263,7 @@ namespace Microsoft.Quantum.Math {
     /// The number with respect to which the modulus of $a$ is to be returned.
     ///
     /// # Output
-    /// The modulus $a \operatorname{mod} b$.
+    /// The modulus $a \bmod b$.
     function ModL(a : BigInt, b : BigInt) : BigInt {
         return a % b;
     }

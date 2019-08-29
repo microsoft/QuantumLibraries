@@ -18,7 +18,7 @@ namespace Microsoft.Quantum.Tests {
             "LeftShfitedL returned wrong output."
         );
         EqualityFactL(
-            0xffdb97530eca8642L,
+            0x1fdb97530eca8642L,
             RightShiftedL(bigValue, 3),
             "RightShiftedL returned wrong output."
         );
