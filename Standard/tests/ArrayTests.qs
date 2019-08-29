@@ -153,6 +153,33 @@ namespace Microsoft.Quantum.Tests {
         }
     }
 
+    function SwappedTest() : Unit {
+        let example = [2, 4, 6, 8, 10];
+        let expected = [2, 8, 6, 4, 10];
+        let leftIndex = 1;
+        let rightIndex = 3;
+        let newArray = Swapped(leftIndex, rightIndex, example);
+
+        EqualityFactI(Length(expected), Length(actual));
+        for ((exp, act) in Zip(expected, actual)) {
+            EqualityFactI(exp, act, "Elements did not match");
+        }
+    }
+
+    function TupleListToNestedArray() : Unit {
+        let example = [(0, 1), (2, 3), (4, 5), (6, 7)];
+        let expected = [[0, 1], [2, 3], [4, 5], [6, 7]];
+
+        let actual = TupleListToNestedArray(example);
+        EqualityFactI(Length(expected), Length(actual));
+        for ((exp, act) in Zip(expected, actual)) {
+            for ((elementExp, elementAct) in Zip(exp, act)) {
+                EqualityFactI(elementExp, elementAct, "Elements did not match");
+            }
+        }
+
+    }
+
 }
 
 
