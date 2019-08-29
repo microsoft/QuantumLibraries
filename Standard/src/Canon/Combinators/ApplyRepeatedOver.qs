@@ -245,7 +245,7 @@ namespace Microsoft.Quantum.Canon {
     /// Describes the new ordering of the qubits, where the qubit at index i will now be at ordering[i].
     /// ## register
     /// Qubit register to be acted upon.
-    operation PermuteQubits(ordering : Int[], register : Qubit[]) : Unit {
+    operation PermuteQubits(ordering : Int[], register : Qubit[]) : Unit is Adj+Ctl {
         // Do something!
         if (Length(ordering) != Length(register)) {
             fail "The new ordering array has an incorrect number of elements";
