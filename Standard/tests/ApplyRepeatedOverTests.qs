@@ -31,7 +31,7 @@ namespace Microsoft.Quantum.Tests {
         X(register[0]);
         CNOT(register[0], register[4]);
         Exp([PauliX, PauliZ, PauliY], 0.2002, Subarray([2, 3, 5], register));
-        ApplyToEachA(H, Subarray([1, 2, 3, 4], register));
+        ApplyToEachCA(H, Subarray([1, 2, 3, 4], register));
     }
     
     operation ApplyRepeatedOpTest() : Unit {

@@ -160,18 +160,18 @@ namespace Microsoft.Quantum.Tests {
         let rightIndex = 3;
         let newArray = Swapped(leftIndex, rightIndex, example);
 
-        EqualityFactI(Length(expected), Length(actual));
-        for ((exp, act) in Zip(expected, actual)) {
+        EqualityFactI(Length(expected), Length(newArray), "Swapped array is a different size than original");
+        for ((exp, act) in Zip(expected, newArray)) {
             EqualityFactI(exp, act, "Elements did not match");
         }
     }
 
-    function TupleListToNestedArray() : Unit {
+    function TupleListToNestedArrayTest() : Unit {
         let example = [(0, 1), (2, 3), (4, 5), (6, 7)];
         let expected = [[0, 1], [2, 3], [4, 5], [6, 7]];
 
         let actual = TupleListToNestedArray(example);
-        EqualityFactI(Length(expected), Length(actual));
+        EqualityFactI(Length(expected), Length(actual), "Arrays are of different sizes");
         for ((exp, act) in Zip(expected, actual)) {
             for ((elementExp, elementAct) in Zip(exp, act)) {
                 EqualityFactI(elementExp, elementAct, "Elements did not match");
