@@ -272,4 +272,20 @@ namespace Microsoft.Quantum.Canon {
         CZ(qubit1, qubit2);
     }
 
+    /// # Summary
+    /// Permutes qubits by using the SWAP operator.
+    ///
+    /// # Input
+    /// ## ordering
+    /// Describes the new ordering of the qubits, where the qubit at index i will now be at ordering[i].
+    /// ## register
+    /// Qubit register to be acted upon.
+    operation PermuteQubits(ordering : Int[], register : Qubit[]) : Unit is Adj+Ctl {
+        EqualityFactI(Length(ordering), Length(register), "The new ordering has an incorrect number of elements");
+
+        for ((left, right) in SwapOrderToPermuteArray(ordering)) {
+            SWAP(register[left], register[right]);
+        }
+    }
+
 }

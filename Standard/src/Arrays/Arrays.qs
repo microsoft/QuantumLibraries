@@ -2,7 +2,9 @@
 // Licensed under the MIT License.
 
 namespace Microsoft.Quantum.Arrays {
+    open Microsoft.Quantum.Convert;
     open Microsoft.Quantum.Diagnostics;
+    open Microsoft.Quantum.Intrinsic;
     open Microsoft.Quantum.Math;
 
     /// # Summary
@@ -280,6 +282,15 @@ namespace Microsoft.Quantum.Arrays {
         return output;
     }
 
+    function _IsPermutationPred(permutation : Int[], value : Int) : Bool {
+        let index = IndexOf(ClaimEqualInt(value, _), permutation);
+        return index != -1;
+    }
+
+    function _IsPermutation(permuation : Int[]) : Bool {
+        return All(_IsPermutationPred(permuation, _), RangeAsIntArray(IndexRange(permuation)));
+    }
+
     /// # Summary
     /// Returns the order elements in an array need to be swapped to produce an ordered array. 
     /// Assumes swaps occur in place.
@@ -309,36 +320,24 @@ namespace Microsoft.Quantum.Arrays {
     /// }
     function SwapOrderToPermuteArray(newOrder : Int[]) : (Int, Int)[] {
         // Check to verify the new ordering actually is a permutation of the indices
-        for (index in 0..Length(newOrder) - 1) {
-            if (IndexOf(ClaimEqualInt(index, _), newOrder) == -1) {
-                fail "The new ordering is not a permuation of the arrays indices";
-            }
-        }
+        Fact(_IsPermutation(newOrder), $"The new ordering is not a permutation");
 
         // The maximum number of swaps is n - 1
-        let maxSwaps = Length(newOrder) - 1;
-        mutable leftSwap = new Int[maxSwaps];
-        mutable rightSwap = new Int[maxSwaps];
+        mutable swaps = new (Int, Int)[Length(newOrder) - 1];
         mutable order = newOrder;
         mutable swapIndex = 0;
 
         for (index in 0..Length(order) - 1) {
             while (not ClaimEqualInt(order[index], index))
             {
-                set leftSwap w/= swapIndex <- index;
-                set rightSwap w/= swapIndex <- order[index];
+                set swaps w/= swapIndex <- (index, order[index]);
                 set order = Swapped(order[index], index, order);
                 set swapIndex = swapIndex + 1;
             }
         }
 
         // Remove (0, 0) swaps at the end
-        while ((leftSwap[Length(leftSwap) - 1] == 0) and (rightSwap[Length(rightSwap) - 1] == 0)) {
-            set leftSwap = Most(leftSwap);
-            set rightSwap = Most(rightSwap);
-        }
-
-        return Zip(leftSwap, rightSwap);
+        return Filtered(ClaimDifferentInt, swaps);
     }
 
     /// # Summary

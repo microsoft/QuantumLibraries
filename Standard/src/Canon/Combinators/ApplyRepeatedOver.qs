@@ -233,29 +233,4 @@ namespace Microsoft.Quantum.Canon {
         }
     }
 
-    // operation PermuteQubits(targets : Int[][], register : Qubit[]) : Unit {
-    //     ApplyOpRepeatedlyOver(ApplyToFirstTwoQubits(SWAP, _), targets, register);
-    // }
-
-    /// # Summary
-    /// Permutes qubits by using the SWAP operator.
-    ///
-    /// # Input
-    /// ## ordering
-    /// Describes the new ordering of the qubits, where the qubit at index i will now be at ordering[i].
-    /// ## register
-    /// Qubit register to be acted upon.
-    operation PermuteQubits(ordering : Int[], register : Qubit[]) : Unit is Adj+Ctl {
-        // Do something!
-        if (Length(ordering) != Length(register)) {
-            fail "The new ordering array has an incorrect number of elements";
-        }
-
-        let swapOrder = SwapOrderToPermuteArray(ordering);
-        let swapTargets = TupleListToNestedArray(swapOrder);
-
-        let SwapOp = ApplyToFirstTwoQubitsCA(SWAP, _);
-        ApplyOpRepeatedlyOverCA(SwapOp, swapTargets, register);
-    }
-
 }
