@@ -68,7 +68,7 @@ namespace Microsoft.Quantum.Bitwise {
     /// # Remarks
     /// The following are equivalent:
     /// ```Q#
-    /// let c = a <<< b;
+    /// let c = a >>> b;
     /// let c = RightShiftedI(a, b);
     /// ```
     function RightShiftedI(value : Int, amount : Int) : Int {
@@ -92,7 +92,7 @@ namespace Microsoft.Quantum.Bitwise {
     /// # Remarks
     /// The following are equivalent:
     /// ```Q#
-    /// let c = a <<< b;
+    /// let c = a >>> b;
     /// let c = RightShiftedL(a, b);
     /// ```
     function RightShiftedL(value : BigInt, amount : Int) : BigInt {
