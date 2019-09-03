@@ -62,6 +62,6 @@ namespace Microsoft.Quantum.Tests {
         SWAP(register[0], register[4]);
         SWAP(register[0], register[1]);
         SWAP(register[0], register[3]);
-    } 
+    }
     
 }
