@@ -7,7 +7,7 @@ namespace Microsoft.Quantum.Canon {
     open Microsoft.Quantum.Intrinsic;
     
     ///////////////////////////////////////////////////////////////////////////////////////////////
-    // Helpers to repeatedly apply functions over qubit arrays
+    // Helpers to repeatedly apply operations over qubit arrays
     ///////////////////////////////////////////////////////////////////////////////////////////////
 
     /// # Summary
@@ -24,11 +24,11 @@ namespace Microsoft.Quantum.Canon {
     ///
     /// # See Also
     /// - Microsoft.Quantum.Canon.ApplyOpRepeatedlyOver
-    operation ApplySeriesOfOps(listOfOps : (Qubit[] => Unit)[], targets : Int[][], register : Qubit[]) : Unit {
+    operation ApplySeriesOfOps<'T>(listOfOps : ('T[] => Unit)[], targets : Int[][], register : 'T[]) : Unit {
         if (Length(listOfOps) != Length(targets)) {
             fail "The number of ops and number of targets do not match!";
         }
-        for (index in 0..Length(listOfOps) - 1) {
+        for ((op, targetIndices) in Zip(listOfOps, targets)) {
             if (Length(targets[index]) > Length(register)) {
                 fail "There are too many targets!";
             }

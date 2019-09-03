@@ -275,7 +275,7 @@ namespace Microsoft.Quantum.Canon {
     }
 
     /// # Summary
-    /// Permutes qubits by using the SWAP operator.
+    /// Permutes qubits by using the SWAP operation.
     ///
     /// # Input
     /// ## ordering

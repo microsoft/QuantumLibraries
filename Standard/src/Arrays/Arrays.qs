@@ -357,7 +357,9 @@ namespace Microsoft.Quantum.Arrays {
     /// The array with the in place swapp applied.
     function Swapped<'T>(firstIndex: Int, secondIndex: Int, arr: 'T[]) : 'T[] {
         mutable newArray = arr;
-        let firstIndexVal = arr[firstIndex];
+        return arr
+            w/ firstIndex <- arr[secondIndex]
+            w/ secondIndex <- arr[firstIndex];
         set newArray w/= firstIndex <- newArray[secondIndex];
         set newArray w/= secondIndex <- firstIndexVal;
         return newArray;
