@@ -357,9 +357,10 @@ namespace Microsoft.Quantum.Arrays {
     /// # Output
     /// The array with the in place swapp applied.
     ///
-    /// # Example
-    /// Given an array [0, 1, 2, 3, 4], and two indices 1, 3
-    /// Returns [0, 3, 2, 1, 4]
+    /// ## Example
+    /// ```qsharp
+    /// // The following returns [0, 3, 2, 1, 4]
+    /// Swapped(1, 3, [0, 1, 2, 3, 4]);
     function Swapped<'T>(firstIndex: Int, secondIndex: Int, arr: 'T[]) : 'T[] {
         mutable newArray = arr;
         return arr
@@ -377,9 +378,11 @@ namespace Microsoft.Quantum.Arrays {
     /// # Output
     /// A nested array with length matching the tupleList.
     ///
-    /// # Example
-    /// Given [(2, 3), (4, 5)], TupleListToNestedArray will output
-    /// [[2, 3], [4, 5]]
+    /// ## Example
+    /// ```qsharp
+    /// // The following returns [[2, 3], [4, 5]]
+    /// TupleListToNestedArray([(2, 3), (4, 5)]);
+    /// ```
     function TupleListToNestedArray<'T>(tupleList : ('T, 'T)[]) : 'T[][] {
         mutable newArray = new 'T[][Length(tupleList)];
         for (idx in IndexRange(tupleList)) {

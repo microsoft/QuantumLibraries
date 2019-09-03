@@ -22,10 +22,12 @@ namespace Microsoft.Quantum.Canon {
     /// ## register
     /// Qubit register to be acted upon.
     ///
-    /// # Example
-    /// Given a list of ops ([Exp([PauliX, PauliY], 0.5, _), ApplyToFirstQubit(X, _)]) and the indices of their targets
-    /// in the register ([[0, 1], [2]]), ApplySeriesOfOps will apply Exp([PauliX, PauliY], 0.5) to qubits 0, 1 and then
-    /// X to qubit 2.
+    /// ## Example
+    /// // The following applies Exp([PauliX, PauliY], 0.5) to qubits 0, 1
+    /// // then X to qubit 2
+    /// let ops = [Exp([PauliX, PauliY], 0.5, _), ApplyToFirstQubit(X, _)];
+    /// let indices = [[0, 1], [2]];
+    /// ApplySeriesOfOps(ops, indices, qubitArray);
     ///
     /// # See Also
     /// - Microsoft.Quantum.Canon.ApplyOpRepeatedlyOver
