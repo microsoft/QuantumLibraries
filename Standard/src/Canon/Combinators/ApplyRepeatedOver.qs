@@ -29,12 +29,10 @@ namespace Microsoft.Quantum.Canon {
             fail "The number of ops and number of targets do not match!";
         }
         for ((op, targetIndices) in Zip(listOfOps, targets)) {
-            if (Length(targets[index]) > Length(register)) {
+            if (Length(targetIndices) > Length(register)) {
                 fail "There are too many targets!";
             }
-            let opToApply = listOfOps[index];
-            let qubitTargets = Subarray(targets[index], register);
-            opToApply(qubitTargets);
+            op(Subarray(targetIndices, register));
         }
     }
 

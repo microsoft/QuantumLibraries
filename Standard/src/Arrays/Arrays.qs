@@ -297,8 +297,8 @@ namespace Microsoft.Quantum.Arrays {
     ///
     /// # Input
     /// ## newOrder
-    /// Array with the permutation of the indices of the new array. There should be n elements, 
-    /// each being a unique integer from 0 to n-1.
+    /// Array with the permutation of the indices of the new array. There should be $n$ elements, 
+    /// each being a unique integer from $0$ to $n-1$.
     ///
     /// # Output
     /// The tuple represents the two indices to be swapped. The swaps begin at the lowest index.
@@ -341,7 +341,7 @@ namespace Microsoft.Quantum.Arrays {
     }
 
     /// # Summary
-    /// Applies an in-place swap of two elements in an array.
+    /// Applies a swap of two elements in an array.
     ///
     /// # Input
     /// ## firstIndex
@@ -360,9 +360,6 @@ namespace Microsoft.Quantum.Arrays {
         return arr
             w/ firstIndex <- arr[secondIndex]
             w/ secondIndex <- arr[firstIndex];
-        set newArray w/= firstIndex <- newArray[secondIndex];
-        set newArray w/= secondIndex <- firstIndexVal;
-        return newArray;
     }
 
     /// # Summary
