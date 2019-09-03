@@ -299,7 +299,6 @@ namespace Microsoft.Quantum.Math {
     /// # Output
     /// The quotient $a / b$.
     function DividedByC(a : Complex, b : Complex) : Complex {
-        let foo = PowC(b, Complex(-1.0, 0.0));
         return TimesC(
             a,
             PowC(b, Complex(-1.0, 0.0))

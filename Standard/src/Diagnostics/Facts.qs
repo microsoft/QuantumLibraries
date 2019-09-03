@@ -59,7 +59,7 @@ namespace Microsoft.Quantum.Diagnostics {
     /// This is equivalent to <xref:microsoft.quantum.diagnostics.equalitywithintolerancefact> with
     /// hardcoded tolerance of $10^{-10}$.
     function NearEqualityFactD(actual : Double, expected : Double) : Unit {
-        EqualityWithinToleranceFact(actual, expected, 1E-10);
+        EqualityWithinToleranceFact(actual, expected, 1e-10);
     }
 
     /// # Summary

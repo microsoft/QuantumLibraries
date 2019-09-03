@@ -13,7 +13,7 @@ namespace Microsoft.Quantum.Logical {
     /// The value to be negated.
     ///
     /// # Output
-    /// `true` if and only if `value` is `false`
+    /// `true` if and only if `value` is `false`.
     ///
     /// # Remarks
     /// The following are equivalent:

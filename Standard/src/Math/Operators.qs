@@ -88,7 +88,7 @@ namespace Microsoft.Quantum.Math {
     }
 
     /// # Summary
-    /// Returns the sum of two inputs.
+    /// Returns the sum (concatenation) of two inputs.
     ///
     /// # Input
     /// ## a
@@ -98,6 +98,10 @@ namespace Microsoft.Quantum.Math {
     ///
     /// # Output
     /// The sum $a + b$.
+    ///
+    /// # Type Parameters
+    /// ## 'Element
+    /// The type of each element in each of the two input arrays.
     function PlusA<'Element>(a : 'Element[], b : 'Element[]) : 'Element[] {
         return a + b;
     }
