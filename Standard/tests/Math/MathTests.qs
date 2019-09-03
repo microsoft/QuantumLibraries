@@ -9,18 +9,18 @@ namespace Microsoft.Quantum.Canon {
     function NativeFnsAreCallableTest () : Unit {
         
         let arg = PI() / 2.0;
-        NearEqualityFact(Sin(arg), 1.0);
-        NearEqualityFact(Cos(arg), 0.0);
+        NearEqualityFactD(Sin(arg), 1.0);
+        NearEqualityFactD(Cos(arg), 0.0);
         let arcArg = 1.0;
-        NearEqualityFact(ArcCos(arcArg), 0.0);
-        NearEqualityFact(ArcSin(arcArg), arg);
+        NearEqualityFactD(ArcCos(arcArg), 0.0);
+        NearEqualityFactD(ArcSin(arcArg), arg);
     }
     
     
     function RealModTest () : Unit {
         
-        NearEqualityFact(RealMod(5.5 * PI(), 2.0 * PI(), 0.0), 1.5 * PI());
-        NearEqualityFact(RealMod(0.5 * PI(), 2.0 * PI(), -PI() / 2.0), 0.5 * PI());
+        NearEqualityFactD(RealMod(5.5 * PI(), 2.0 * PI(), 0.0), 1.5 * PI());
+        NearEqualityFactD(RealMod(0.5 * PI(), 2.0 * PI(), -PI() / 2.0), 0.5 * PI());
     }
     
     
@@ -28,9 +28,9 @@ namespace Microsoft.Quantum.Canon {
         
         // These tests were generated using NumPy's implementations
         // of the inverse hyperbolic functions.
-        NearEqualityFact(ArcTanh(0.3), 0.30951960420311175);
-        NearEqualityFact(ArcCosh(1.3), 0.75643291085695963);
-        NearEqualityFact(ArcSinh(-0.7), -0.65266656608235574);
+        NearEqualityFactD(ArcTanh(0.3), 0.30951960420311175);
+        NearEqualityFactD(ArcCosh(1.3), 0.75643291085695963);
+        NearEqualityFactD(ArcSinh(-0.7), -0.65266656608235574);
     }
     
     
@@ -113,18 +113,18 @@ namespace Microsoft.Quantum.Canon {
             let complexArg = ArcTan2(complexIm, complexRe);
             let complex = Complex(complexRe, complexIm);
             let complexPolar = ComplexPolar(complexAbs, complexArg);
-            NearEqualityFact(AbsSquaredComplex(complex), complexAbs * complexAbs);
-            NearEqualityFact(AbsComplex(complex), complexAbs);
-            NearEqualityFact(ArgComplex(complex), complexArg);
-            NearEqualityFact(AbsSquaredComplexPolar(complexPolar), complexAbs * complexAbs);
-            NearEqualityFact(AbsComplexPolar(complexPolar), complexAbs);
-            NearEqualityFact(ArgComplexPolar(complexPolar), complexArg);
+            NearEqualityFactD(AbsSquaredComplex(complex), complexAbs * complexAbs);
+            NearEqualityFactD(AbsComplex(complex), complexAbs);
+            NearEqualityFactD(ArgComplex(complex), complexArg);
+            NearEqualityFactD(AbsSquaredComplexPolar(complexPolar), complexAbs * complexAbs);
+            NearEqualityFactD(AbsComplexPolar(complexPolar), complexAbs);
+            NearEqualityFactD(ArgComplexPolar(complexPolar), complexArg);
             let (x, y) = (ComplexPolarToComplex(complexPolar))!;
-            NearEqualityFact(x, complexRe);
-            NearEqualityFact(y, complexIm);
+            NearEqualityFactD(x, complexRe);
+            NearEqualityFactD(y, complexIm);
             let (r, t) = (ComplexToComplexPolar(complex))!;
-            NearEqualityFact(r, complexAbs);
-            NearEqualityFact(t, complexArg);
+            NearEqualityFactD(r, complexAbs);
+            NearEqualityFactD(t, complexArg);
         }
     }
     
@@ -140,13 +140,13 @@ namespace Microsoft.Quantum.Canon {
         
         for (idxTest in IndexRange(testCases)) {
             let (p, array, pNormExpected) = testCases[idxTest];
-            NearEqualityFact(PNorm(p, array), pNormExpected);
+            NearEqualityFactD(PNorm(p, array), pNormExpected);
             
             // if PNorm fails, PNormalized will fail.
             let arrayNormalized = PNormalized(p, array);
             
             for (idxCoeff in IndexRange(array)) {
-                NearEqualityFact(array[idxCoeff] / pNormExpected, arrayNormalized[idxCoeff]);
+                NearEqualityFactD(array[idxCoeff] / pNormExpected, arrayNormalized[idxCoeff]);
             }
         }
     }

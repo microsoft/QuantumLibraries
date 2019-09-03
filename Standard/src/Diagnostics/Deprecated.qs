@@ -14,10 +14,17 @@ namespace Microsoft.Quantum.Canon {
     }
 
     /// # Deprecated
-    /// Please use @"Microsoft.Quantum.Diagnostics.NearEqualityFact" instead.
+    /// Please use @"Microsoft.Quantum.Diagnostics.NearEqualityFactD" instead.
     function AssertAlmostEqual(actual : Double, expected : Double) : Unit {
-        _Renamed("Microsoft.Quantum.Canon.AssertAlmostEqual", "Microsoft.Quantum.Diagnostics.NearEqualityFact");
-        NearEqualityFact(actual, expected);
+        _Renamed("Microsoft.Quantum.Canon.AssertAlmostEqual", "Microsoft.Quantum.Diagnostics.NearEqualityFactD");
+        NearEqualityFactD(actual, expected);
+    }
+
+    /// # Deprecated
+    /// Please use @"Microsoft.Quantum.Diagnostics.NearEqualityFactD" instead.
+    function NearEqualityFact(actual : Double, expected : Double) : Unit {
+        _Renamed("Microsoft.Quantum.Diagnostics.NearEqualityFact", "Microsoft.Quantum.Diagnostics.NearEqualityFactD");
+        NearEqualityFactD(actual, expected);
     }
 
     /// # Deprecated
