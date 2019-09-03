@@ -6,6 +6,7 @@ namespace Microsoft.Quantum.Arrays {
     open Microsoft.Quantum.Diagnostics;
     open Microsoft.Quantum.Intrinsic;
     open Microsoft.Quantum.Math;
+    open Microsoft.Quantum.Logical;
 
     /// # Summary
     /// Create an array that contains the same elements as an input array but in Reversed
@@ -283,7 +284,7 @@ namespace Microsoft.Quantum.Arrays {
     }
 
     function _IsPermutationPred(permutation : Int[], value : Int) : Bool {
-        let index = IndexOf(ClaimEqualInt(value, _), permutation);
+        let index = IndexOf(EqualI(value, _), permutation);
         return index != -1;
     }
 
@@ -328,7 +329,7 @@ namespace Microsoft.Quantum.Arrays {
         mutable swapIndex = 0;
 
         for (index in 0..Length(order) - 1) {
-            while (not ClaimEqualInt(order[index], index))
+            while (not EqualI(order[index], index))
             {
                 set swaps w/= swapIndex <- (index, order[index]);
                 set order = Swapped(order[index], index, order);
@@ -337,7 +338,7 @@ namespace Microsoft.Quantum.Arrays {
         }
 
         // Remove (0, 0) swaps at the end
-        return Filtered(ClaimDifferentInt, swaps);
+        return Filtered(NotEqualI, swaps);
     }
 
     /// # Summary
@@ -355,6 +356,10 @@ namespace Microsoft.Quantum.Arrays {
     ///
     /// # Output
     /// The array with the in place swapp applied.
+    ///
+    /// # Example
+    /// Given an array [0, 1, 2, 3, 4], and two indices 1, 3
+    /// Returns [0, 3, 2, 1, 4]
     function Swapped<'T>(firstIndex: Int, secondIndex: Int, arr: 'T[]) : 'T[] {
         mutable newArray = arr;
         return arr
@@ -371,6 +376,10 @@ namespace Microsoft.Quantum.Arrays {
     ///
     /// # Output
     /// A nested array with length matching the tupleList.
+    ///
+    /// # Example
+    /// Given [(2, 3), (4, 5)], TupleListToNestedArray will output
+    /// [[2, 3], [4, 5]]
     function TupleListToNestedArray<'T>(tupleList : ('T, 'T)[]) : 'T[][] {
         mutable newArray = new 'T[][Length(tupleList)];
         for (idx in IndexRange(tupleList)) {
@@ -381,5 +390,3 @@ namespace Microsoft.Quantum.Arrays {
     } 
 
 }
-
-
