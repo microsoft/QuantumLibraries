@@ -81,4 +81,24 @@ namespace Microsoft.Quantum.Canon {
         _Renamed("Microsoft.Quantum.Canon.BitSize", "Microsoft.Quantum.Math.BitSizeI");
         return BitSizeI(a);
     }
+
+}
+
+namespace Microsoft.Quantum.Math {
+    open Microsoft.Quantum.Warnings;
+
+    /// # Deprecated.
+    /// Please use @"microsoft.quantum.math.complexpolarascomplex".
+    function ComplexPolarToComplex(input : ComplexPolar) : Complex {
+        _Renamed("Microsoft.Quantum.Math.ComplexPolarToComplex", "Microsoft.Quantum.Math.ComplexPolarAsComplex");
+        return ComplexPolarAsComplex(input);
+    }
+
+    /// # Deprecated.
+    /// Please use @"microsoft.quantum.math.complexascomplexpolar".
+    function ComplexToComplexPolar(input : Complex) : ComplexPolar {
+        _Renamed("Microsoft.Quantum.Math.ComplexToComplexPolar", "Microsoft.Quantum.Math.ComplexAsComplexPolar");
+        return ComplexAsComplexPolar(input);
+    }
+
 }

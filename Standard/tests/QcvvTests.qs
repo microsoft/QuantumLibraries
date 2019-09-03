@@ -77,7 +77,7 @@ namespace Microsoft.Quantum.Tests {
     // Emulation is actually kicking in.
     operation EstimateFrequencyEmulationTest() : Unit {
         let freq = EstimateFrequencyA(_trivialStatePrepration, Measure([PauliZ, PauliZ, PauliZ], _), 3, 2000);
-        NearEqualityFact(freq, 1.0);
+        NearEqualityFactD(freq, 1.0);
     }
 
     operation _RobustPhaseEstimationTestOp (phase : Double, power : Int, qubits : Qubit[]) : Unit is Adj + Ctl {
