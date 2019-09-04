@@ -286,6 +286,12 @@ namespace Microsoft.Quantum.Canon {
     /// # Example
     /// Given ordering = [2, 1, 0] and register $\ket{\alpha_0} \ket{\alpha_1} \ket{\alpha_2}$, PermuteQubits
     /// changes the register into $\ket{\alpha_2} \ket{\alpha_1} \ket{\alpha_0}$
+    ///
+    /// ```qsharp
+    /// // The following two lines are equivalent
+    /// PermuteQubits([2, 1, 0], register);
+    /// SWAP(register[0], register[2]);
+    /// ```
     operation PermuteQubits(ordering : Int[], register : Qubit[]) : Unit is Adj+Ctl {
         EqualityFactI(Length(ordering), Length(register), "The new ordering has an incorrect number of elements");
 
