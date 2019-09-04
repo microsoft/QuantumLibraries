@@ -153,6 +153,21 @@ namespace Microsoft.Quantum.Tests {
         }
     }
 
+    function SwapOrderToPermuteArrayTest() : Unit {
+        let newOrder = [0, 4, 2, 1, 3];
+        let expected = [(1, 4), (1, 3)];
+        let actual = SwapOrderToPermuteArray(newOrder);
+
+        EqualityFactI(Length(expected), Length(actual), "Number of swaps does not match");
+        for ((exp, act) in Zip(expected, actual)) {
+            let (leftExp, rightExp) = exp;
+            let (leftAct, rightAct) = act;
+
+            EqualityFactI(leftExp, leftAct, "SWAP doesn't match");
+            EqualityFactI(rightExp, rightAct, "SWAP doesn't match");
+        }
+    }
+
     function SwappedTest() : Unit {
         let example = [2, 4, 6, 8, 10];
         let expected = [2, 8, 6, 4, 10];

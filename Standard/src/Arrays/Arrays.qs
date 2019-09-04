@@ -324,21 +324,20 @@ namespace Microsoft.Quantum.Arrays {
         Fact(_IsPermutation(newOrder), $"The new ordering is not a permutation");
 
         // The maximum number of swaps is n - 1
-        mutable swaps = new (Int, Int)[Length(newOrder) - 1];
+        mutable swaps = new (Int, Int)[0];
         mutable order = newOrder;
         mutable swapIndex = 0;
 
         for (index in 0..Length(order) - 1) {
             while (not EqualI(order[index], index))
             {
-                set swaps w/= swapIndex <- (index, order[index]);
+                set swaps += [(index, order[index])];
                 set order = Swapped(order[index], index, order);
-                set swapIndex = swapIndex + 1;
             }
         }
 
         // Remove (0, 0) swaps at the end
-        return Filtered(NotEqualI, swaps);
+        return swaps;
     }
 
     /// # Summary
