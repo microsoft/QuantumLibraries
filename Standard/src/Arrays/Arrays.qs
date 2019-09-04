@@ -323,11 +323,10 @@ namespace Microsoft.Quantum.Arrays {
         // Check to verify the new ordering actually is a permutation of the indices
         Fact(_IsPermutation(newOrder), $"The new ordering is not a permutation");
 
-        // The maximum number of swaps is n - 1
         mutable swaps = new (Int, Int)[0];
         mutable order = newOrder;
-        mutable swapIndex = 0;
 
+        // for each value, whenever the index and value don't match, swap until it does
         for (index in 0..Length(order) - 1) {
             while (not EqualI(order[index], index))
             {
@@ -336,7 +335,6 @@ namespace Microsoft.Quantum.Arrays {
             }
         }
 
-        // Remove (0, 0) swaps at the end
         return swaps;
     }
 
