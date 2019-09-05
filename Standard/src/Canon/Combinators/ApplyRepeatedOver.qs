@@ -161,13 +161,13 @@ namespace Microsoft.Quantum.Canon {
     /// - Microsoft.Quantum.Canon.ApplySeriesOfOps
     operation ApplyOpRepeatedlyOver(op : (Qubit[] => Unit), targets : Int[][], register : Qubit[]) : Unit 
     {
-        for (index in 0..Length(targets) - 1) 
+        for (target in targets) 
         {
-            if (Length(targets[index]) > Length(register)) 
+            if (Length(target) > Length(register)) 
             {
                 fail "Too many targets!";
             }
-            let opTargets = Subarray(targets[index], register);
+            let opTargets = Subarray(target, register);
             op(opTargets);
         }
     }
@@ -188,13 +188,13 @@ namespace Microsoft.Quantum.Canon {
     /// - Microsoft.Quantum.Canon.ApplySeriesOfOps
     operation ApplyOpRepeatedlyOverA(op : (Qubit[] => Unit is Adj), targets : Int[][], register : Qubit[]) : Unit is Adj
     {
-        for (index in 0..Length(targets) - 1) 
+        for (target in targets) 
         {
-            if (Length(targets[index]) > Length(register)) 
+            if (Length(target) > Length(register)) 
             {
                 fail "Too many targets!";
             }
-            let opTargets = Subarray(targets[index], register);
+            let opTargets = Subarray(target, register);
             op(opTargets);
         }
     }
@@ -215,13 +215,13 @@ namespace Microsoft.Quantum.Canon {
     /// - Microsoft.Quantum.Canon.ApplySeriesOfOps
     operation ApplyOpRepeatedlyOverC(op : (Qubit[] => Unit is Ctl), targets : Int[][], register : Qubit[]) : Unit is Ctl
     {
-        for (index in 0..Length(targets) - 1) 
+        for (target in targets) 
         {
-            if (Length(targets[index]) > Length(register)) 
+            if (Length(target) > Length(register)) 
             {
                 fail "Too many targets!";
             }
-            let opTargets = Subarray(targets[index], register);
+            let opTargets = Subarray(target, register);
             op(opTargets);
         }
     }
@@ -242,13 +242,13 @@ namespace Microsoft.Quantum.Canon {
     /// - Microsoft.Quantum.Canon.ApplySeriesOfOps
     operation ApplyOpRepeatedlyOverCA(op : (Qubit[] => Unit is Adj+Ctl), targets : Int[][], register : Qubit[]) : Unit is Adj+Ctl
     {
-        for (index in 0..Length(targets) - 1) 
+        for (target in targets) 
         {
-            if (Length(targets[index]) > Length(register)) 
+            if (Length(target) > Length(register)) 
             {
                 fail "Too many targets!";
             }
-            let opTargets = Subarray(targets[index], register);
+            let opTargets = Subarray(target, register);
             op(opTargets);
         }
     }

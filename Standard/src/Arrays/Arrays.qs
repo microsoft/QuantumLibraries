@@ -308,7 +308,7 @@ namespace Microsoft.Quantum.Arrays {
     /// ## Example
     /// ```qsharp
     /// // The following returns [(0, 5),(0, 4),(0, 1),(0, 3)];
-    /// let swapOrder = SwapOrderToPermuteArray([5, 3, 2, 0, 1, 4]);
+    /// let swapOrder = _SwapOrderToPermuteArray([5, 3, 2, 0, 1, 4]);
     /// ```
     ///
     /// ## Psuedocode
@@ -319,7 +319,7 @@ namespace Microsoft.Quantum.Arrays {
     ///         Switch newOrder[index] with newOrder[newOrder[index]]
     ///     }
     /// }
-    function SwapOrderToPermuteArray(newOrder : Int[]) : (Int, Int)[] {
+    function _SwapOrderToPermuteArray(newOrder : Int[]) : (Int, Int)[] {
         // Check to verify the new ordering actually is a permutation of the indices
         Fact(_IsPermutation(newOrder), $"The new ordering is not a permutation");
 
@@ -327,7 +327,7 @@ namespace Microsoft.Quantum.Arrays {
         mutable order = newOrder;
 
         // for each value, whenever the index and value don't match, swap until it does
-        for (index in 0..Length(order) - 1) {
+        for (index in IndexRange(order)) {
             while (not EqualI(order[index], index))
             {
                 set swaps += [(index, order[index])];
@@ -359,7 +359,6 @@ namespace Microsoft.Quantum.Arrays {
     /// // The following returns [0, 3, 2, 1, 4]
     /// Swapped(1, 3, [0, 1, 2, 3, 4]);
     function Swapped<'T>(firstIndex: Int, secondIndex: Int, arr: 'T[]) : 'T[] {
-        mutable newArray = arr;
         return arr
             w/ firstIndex <- arr[secondIndex]
             w/ secondIndex <- arr[firstIndex];

@@ -153,10 +153,10 @@ namespace Microsoft.Quantum.Tests {
         }
     }
 
-    function SwapOrderToPermuteArrayTest() : Unit {
+    function _SwapOrderToPermuteArrayTest() : Unit {
         let newOrder = [0, 4, 2, 1, 3];
         let expected = [(1, 4), (1, 3)];
-        let actual = SwapOrderToPermuteArray(newOrder);
+        let actual = _SwapOrderToPermuteArray(newOrder);
 
         EqualityFactI(Length(expected), Length(actual), "Number of swaps does not match");
         for ((exp, act) in Zip(expected, actual)) {
