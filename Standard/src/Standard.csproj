@@ -7,7 +7,7 @@
 
   <PropertyGroup>
     <NoWarn>0162</NoWarn>
-    <RunQDocGen>False</RunQDocGen>
+    <RunQDocGen>True</RunQDocGen>
     <Authors>Microsoft</Authors>
     <Description>Microsoft's Quantum standard libraries.</Description>
     <Copyright>© Microsoft Corporation. All rights reserved.</Copyright>
