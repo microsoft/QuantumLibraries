@@ -181,11 +181,11 @@ namespace Microsoft.Quantum.Tests {
         }
     }
 
-    function TupleListToNestedArrayTest() : Unit {
+    function TupleArrayAsNestedArrayTest() : Unit {
         let example = [(0, 1), (2, 3), (4, 5), (6, 7)];
         let expected = [[0, 1], [2, 3], [4, 5], [6, 7]];
 
-        let actual = TupleListToNestedArray(example);
+        let actual = TupleArrayAsNestedArray(example);
         EqualityFactI(Length(expected), Length(actual), "Arrays are of different sizes");
         for ((exp, act) in Zip(expected, actual)) {
             for ((elementExp, elementAct) in Zip(exp, act)) {

@@ -377,9 +377,9 @@ namespace Microsoft.Quantum.Arrays {
     /// ## Example
     /// ```qsharp
     /// // The following returns [[2, 3], [4, 5]]
-    /// TupleListToNestedArray([(2, 3), (4, 5)]);
+    /// TupleArrayAsNestedArray([(2, 3), (4, 5)]);
     /// ```
-    function TupleListToNestedArray<'T>(tupleList : ('T, 'T)[]) : 'T[][] {
+    function TupleArrayAsNestedArray<'T>(tupleList : ('T, 'T)[]) : 'T[][] {
         mutable newArray = new 'T[][Length(tupleList)];
         for (idx in IndexRange(tupleList)) {
             let (tupleLeft, tupleRight) = tupleList[idx];
