@@ -1,5 +1,12 @@
 steps:
 
+- task: UseDotNet@2
+  displayName: 'Use .NET Core SDK 3.0.100'
+  inputs:
+    packageType: sdk
+    version: '3.0.100'
+
+
 - powershell: ./build.ps1
   displayName: "Building"
   workingDirectory: $(System.DefaultWorkingDirectory)/Build
