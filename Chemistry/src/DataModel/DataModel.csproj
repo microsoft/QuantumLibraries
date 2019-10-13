@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>netstandard2.1</TargetFramework>
     <PlatformTarget>x64</PlatformTarget>
     <AssemblyName>Microsoft.Quantum.Chemistry.DataModel</AssemblyName>
     <DocumentationFile>bin\$(BuildConfiguration)\$(PlatformTarget)\$(AssemblyName).xml</DocumentationFile>
@@ -35,7 +35,7 @@
     <PackageReference Include="Microsoft.Extensions.Logging" Version="2.1.1" />
     <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="2.1.1" />
     <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="2.1.1" />
-    <PackageReference Include="Microsoft.Quantum.Development.Kit" Version="0.8.1907.1701" />
+    <PackageReference Include="Microsoft.Quantum.Development.Kit" Version="0.9.1910.1107-alpha" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
     <PackageReference Include="YamlDotNet" Version="6.0.0" />
     <PackageReference Include="Serilog.Extensions.Logging.File" Version="1.1.0" />
@@ -45,7 +45,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Runtime\Runtime.csproj" PrivateAssets="all" />
 
-    <BuildOutputInPackage Include="..\Runtime\bin\$(Configuration)\netstandard2.0\Microsoft.Quantum.Chemistry.*" />
+    <BuildOutputInPackage Include="..\Runtime\bin\$(Configuration)\netstandard2.1\Microsoft.Quantum.Chemistry.*" />
   </ItemGroup>
 
   <ItemGroup>
