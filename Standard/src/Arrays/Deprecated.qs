@@ -4,61 +4,60 @@
 namespace Microsoft.Quantum.Canon {
     open Microsoft.Quantum.Intrinsic;
     open Microsoft.Quantum.Arrays;
-    open Microsoft.Quantum.Warnings;
 
     /// # Deprecated
     /// Please use @"Microsoft.Quantum.Arrays.Reversed" instead.
+    @Deprecated("Microsoft.Quantum.Arrays.Reversed")
     function Reverse<'T>(array : 'T[]) : 'T[] {
-        _Renamed("Microsoft.Quantum.Canon.Reverse", "Microsoft.Quantum.Arrays.Reversed");
         return Reversed(array);
     }
 
     /// # Deprecated
     /// Please use @"Microsoft.Quantum.Arrays.Filtered" instead.
+    @Deprecated("Microsoft.Quantum.Arrays.Filtered")
     function Filter<'T> (predicate : ('T -> Bool), array : 'T[]) : 'T[] {
-        _Renamed("Microsoft.Quantum.Canon.Filter", "Microsoft.Quantum.Arrays.Filtered");
         return Filtered(predicate, array);
     }
 
     /// # Deprecated
     /// Please use @"Microsoft.Quantum.Arrays.All" instead.
+    @Deprecated("Microsoft.Quantum.Arrays.All")
     function ForAll<'T> (predicate : ('T -> Bool), array : 'T[]) : Bool {
-        _Renamed("Microsoft.Quantum.Canon.ForAll", "Microsoft.Quantum.Arrays.All");
         return All(predicate, array);
     }
 
     /// # Deprecated
     /// Please use @"Microsoft.Quantum.Arrays.Any" instead.
+    @Deprecated("Microsoft.Quantum.Arrays.Any")
     function ForAny<'T> (predicate : ('T -> Bool), array : 'T[]) : Bool {
-        _Renamed("Microsoft.Quantum.Canon.ForAny", "Microsoft.Quantum.Arrays.Any");
         return Any(predicate, array);
     }
 
     /// # Deprecated
     /// Please use @"Microsoft.Quantum.Arrays.Mapped" instead.
+    @Deprecated("Microsoft.Quantum.Arrays.Mapped")
     function Map<'T, 'U> (mapper : ('T -> 'U), array : 'T[]) : 'U[] {
-        _Renamed("Microsoft.Quantum.Canon.Map", "Microsoft.Quantum.Arrays.Mapped");
         return Mapped(mapper, array);
     }
 
     /// # Deprecated
     /// Please use @"Microsoft.Quantum.Arrays.MappedByIndex" instead.
+    @Deprecated("Microsoft.Quantum.Arrays.MappedByIndex")
     function MapIndex<'T, 'U> (mapper : ((Int, 'T) -> 'U), array : 'T[]) : 'U[] {
-        _Renamed("Microsoft.Quantum.Canon.MapIndex", "Microsoft.Quantum.Arrays.MappedByIndex");
         return MappedByIndex(mapper, array);
     }
 
     /// # Deprecated
     /// Please use @"Microsoft.Quantum.Arrays.Padded" instead.
+    @Deprecated("Microsoft.Quantum.Arrays.Padded")
     function Pad<'T> (nElementsTotal : Int, defaultElement : 'T, inputArray : 'T[]) : 'T[] {
-        _Renamed("Microsoft.Quantum.Canon.Pad", "Microsoft.Quantum.Arrays.Padded");
         return Padded(nElementsTotal, defaultElement, inputArray);
     }
 
     /// # Deprecated
     /// Please use @"Microsoft.Quantum.Arrays.Partitioned" instead.
+    @Deprecated("Microsoft.Quantum.Arrays.Partitioned")
     function SplitArray<'T>(nElements: Int[], arr: 'T[]) : 'T[][] {
-        _Renamed("Microsoft.Quantum.Canon.SplitArray", "Microsoft.Quantum.Arrays.Partitioned");
         return Partitioned(nElements, arr);
     }
 

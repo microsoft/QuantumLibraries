@@ -2,24 +2,19 @@
 // Licensed under the MIT License.
 
 namespace Microsoft.Quantum.Canon {
-    open Microsoft.Quantum.Warnings;
     open Microsoft.Quantum.Arithmetic;
 
     /// # Deprecated
     /// This operation has been removed.
+    @Deprecated("ApplyQuantumFourierTransform(BigEndianAsLittleEndian(qs))")
     operation ApplyQuantumFourierTransformBE(qs : BigEndian) : Unit is Adj + Ctl {
-        _Removed(
-            "Microsoft.Quantum.Canon.ApplyQuantumFourierTransformBE",
-            "ApplyQuantumFourierTransform(BigEndianAsLittleEndian(qs))"
-        );
         ApplyQuantumFourierTransform(BigEndianAsLittleEndian(qs));
     }
 
+    /// # Deprecated
+    /// Please use @"microsoft.quantum.canon.applyquantumfouriertransform".
+    @Deprecated("Microsoft.Quantum.Canon.ApplyQuantumFourierTransform")
     operation ApplyQuantumFourierTransformLE(qs : LittleEndian) : Unit is Adj + Ctl {
-        _Renamed(
-            "Microsoft.Quantum.Canon.ApplyQuantumFourierTransformLE",
-            "Microsoft.Quantum.Canon.ApplyQuantumFourierTransform"
-        );
         ApplyQuantumFourierTransform(qs);
     }
 
