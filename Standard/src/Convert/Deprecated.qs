@@ -3,7 +3,6 @@
 
 namespace Microsoft.Quantum.Canon {
     open Microsoft.Quantum.Convert;
-    open Microsoft.Quantum.Warnings;
 
     /// # Deprecated
     /// This function has been removed.
@@ -14,78 +13,78 @@ namespace Microsoft.Quantum.Canon {
 
     /// # Deprecated
     /// Please use @"microsoft.quantum.convert.resultarrayasint".
+    @Deprecated("Microsoft.Quantum.Convert.ResultArrayAsInt")
     function ResultAsInt (results : Result[]) : Int {
-        _Renamed("Microsoft.Quantum.Canon.ResultAsInt", "Microsoft.Quantum.Convert.ResultArrayAsInt");
         return ResultArrayAsInt(results);
     }
 
     /// # Deprecated
     /// Please use @"microsoft.quantum.convert.resultasbool".
+    @Deprecated("Microsoft.Quantum.Convert.ResultAsBool")
     function BoolFromResult (input : Result) : Bool {
-        _Renamed("Microsoft.Quantum.Canon.BoolFromResult", "Microsoft.Quantum.Convert.ResultAsBool");
         return ResultAsBool(input);
     }
 
     /// # Deprecated
     /// Please use @"microsoft.quantum.convert.boolasresult".
+    @Deprecated("Microsoft.Quantum.Convert.BoolAsResult")
     function ResultFromBool (input : Bool) : Result {
-        _Renamed("Microsoft.Quantum.Canon.ResultFromBool", "Microsoft.Quantum.Convert.BoolAsResult");
         return BoolAsResult(input);
     }
 
     /// # Deprecated
     /// Please use @"microsoft.quantum.convert.intasboolarray".
+    @Deprecated("Microsoft.Quantum.Convert.IntAsBoolArray")
     function BoolArrFromPositiveInt (number : Int, bits : Int) : Bool[] {
-        _Renamed("Microsoft.Quantum.Canon.BoolArrFromPositiveInt", "Microsoft.Quantum.Convert.IntAsBoolArray");
         return IntAsBoolArray(number, bits);
     }
 
     /// # Deprecated
     /// Please use @"microsoft.quantum.convert.resultarrayasboolarray".
+    @Deprecated("Microsoft.Quantum.Convert.ResultArrayAsBoolArray")
     function BoolArrFromResultArr(input : Result[]) : Bool[] {
-        _Renamed("Microsoft.Quantum.Canon.BoolArrFromResultArr", "Microsoft.Quantum.Convert.ResultArrayAsBoolArray");
         return ResultArrayAsBoolArray(input);
     }
 
     /// # Deprecated
     /// Please use @"microsoft.quantum.convert.resultarrayasboolarray".
+    @Deprecated("Microsoft.Quantum.Convert.BoolArrayAsResultArray")
     function ResultArrFromBoolArr(input : Bool[]) : Result[] {
-        _Renamed("Microsoft.Quantum.Canon.ResultArrFromBoolArr", "Microsoft.Quantum.Convert.BoolArrayAsResultArray");
         return BoolArrayAsResultArray(input);
     }
 
     /// # Deprecated
     /// Please use @"microsoft.quantum.convert.boolarrayasint".
+    @Deprecated("Microsoft.Quantum.Convert.BoolArrayAsInt")
     function PositiveIntFromBoolArr(bits : Bool[]) : Int {
-        _Renamed("Microsoft.Quantum.Canon.PositiveIntFromBoolArr", "Microsoft.Quantum.Convert.BoolArrayAsInt");
         return BoolArrayAsInt(bits);
     }
 
     /// # Deprecated
     /// Please use @"microsoft.quantum.canon.resultarrayasint".
+    @Deprecated("Microsoft.Quantum.Convert.ResultArrayAsInt")
     function PositiveIntFromResultArr(results : Result[]) : Int {
-        _Renamed("Microsoft.Quantum.Canon.PositiveIntFromResultArr", "Microsoft.Quantum.Convert.ResultArrayAsInt");
         return ResultArrayAsInt(results);
     }
 
     /// # Deprecated
     /// Please use @"microsoft.quantum.convert.boolarrayaspauli".
+    @Deprecated("Microsoft.Quantum.Convert.BoolArrayAsPauli")
     function PauliFromBitString(pauli : Pauli, bitApply : Bool, bits : Bool[]) : Pauli[] {
-        _Renamed("Microsoft.Quantum.Canon.PauliFromBitString", "Microsoft.Quantum.Convert.BoolArrayAsPauli");
         return BoolArrayAsPauli(pauli, bitApply, bits);
     }
 
     /// # Deprecated
     /// Please use @"microsoft.quantum.convert.rangeasintarray".
+    @Deprecated("Microsoft.Quantum.Convert.RangeAsIntArray")
     function IntArrayFromRange (range: Range) : Int[] {
-        _Renamed("Microsoft.Quantum.Canon.IntArrayFromRange", "Microsoft.Quantum.Convert.RangeAsIntArray");
         return RangeAsIntArray(range);
     }
 
     /// # Deprecated
     /// Please use @"microsoft.quantum.convert.functionasoperation".
+    @Deprecated("Microsoft.Quantum.Convert.FunctionAsOperation")
     function ToOperation<'Input, 'Output>(fn : ('Input -> 'Output)) : ('Input => 'Output) {
-        _Renamed("Microsoft.Quantum.Canon.ToOperation", "Microsoft.Quantum.Convert.FunctionAsOperation");
         return FunctionAsOperation(fn);
     }
 
