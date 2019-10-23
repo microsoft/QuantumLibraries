@@ -95,8 +95,8 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
         
         for (idx in 0 .. nExcitations - 1) {
             let (x, excitation) = excitations[idx]!;
-            set coefficientsSqrtAbs w/= idx <- Sqrt(AbsComplexPolar(ComplexToComplexPolar(Complex(x))));
-            set coefficientsNewComplexPolar w/= idx <- ComplexPolar(coefficientsSqrtAbs[idx], ArgComplexPolar(ComplexToComplexPolar(Complex(x))));
+            set coefficientsSqrtAbs w/= idx <- Sqrt(AbsComplexPolar(ComplexAsComplexPolar(Complex(x))));
+            set coefficientsNewComplexPolar w/= idx <- ComplexPolar(coefficientsSqrtAbs[idx], ArgComplexPolar(ComplexAsComplexPolar(Complex(x))));
             set applyFlips w/= idx <- excitation;
         }
         
