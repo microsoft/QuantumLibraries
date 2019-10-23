@@ -28,7 +28,7 @@ namespace Microsoft.Quantum.Canon {
 
     /// # Deprecated
     /// Please use @"Microsoft.Quantum.Arithmetic.ApplyReversedOpLEC".
-    @Deprecated("Microsoft.Quantum.Arithmetic.ApplyReversedOpLEC")
+    @Deprecated("Microsoft.Quantum.Arithmetic.ApplyReversedOpLECA")
     operation ApplyReversedOpLittleEndianCA(op : (LittleEndian => Unit is Adj + Ctl), register : BigEndian) : Unit is Adj + Ctl {
         ApplyReversedOpLECA(op, register);
     }
