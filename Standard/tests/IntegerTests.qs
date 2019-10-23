@@ -19,8 +19,8 @@ namespace Microsoft.Quantum.Arithmetic {
                 let summand2LE = LittleEndian(register[numberOfQubits .. 2*numberOfQubits - 1]);
                 let carry = register[2*numberOfQubits];
  
-                InPlaceXorLE(summand1, summand1LE);
-                InPlaceXorLE(summand2, summand2LE);
+                ApplyXorInPlace(summand1, summand1LE);
+                ApplyXorInPlace(summand2, summand2LE);
 
                 IntegerAdder(summand1LE, summand2LE, carry);
  
@@ -37,8 +37,8 @@ namespace Microsoft.Quantum.Arithmetic {
 
                 for (numberOfControls in 1..2) { 
                     using (controls = Qubit[numberOfControls]) {
-                        InPlaceXorLE(summand1, summand1LE);
-                        InPlaceXorLE(summand2, summand2LE);
+                        ApplyXorInPlace(summand1, summand1LE);
+                        ApplyXorInPlace(summand2, summand2LE);
                         // controls are |0>, no addition is computed
                         (Controlled IntegerAdder) (controls, (summand1LE, summand2LE, carry));
                         set actual1 = MeasureInteger(summand1LE);
@@ -48,8 +48,8 @@ namespace Microsoft.Quantum.Arithmetic {
                         set measured_carry = MResetZ(carry);
                         if (measured_carry == One) {set actual_carry = 1;} else {set actual_carry = 0;}
                         EqualityFactI(0, actual_carry, $"Expected {0}, got {actual_carry}");
-                        InPlaceXorLE(summand1, summand1LE);
-                        InPlaceXorLE(summand2, summand2LE);
+                        ApplyXorInPlace(summand1, summand1LE);
+                        ApplyXorInPlace(summand2, summand2LE);
                         // now controls are set to |1>, addition is computed
                         ApplyToEach(X, controls);
                         (Controlled IntegerAdder) (controls, (summand1LE, summand2LE, carry));
@@ -132,8 +132,8 @@ namespace Microsoft.Quantum.Arithmetic {
             let summand1LE = LittleEndian(register[0 .. numberOfQubits - 1]);
             let summand2LE = LittleEndian(register[numberOfQubits .. 2*numberOfQubits - 1]);
  
-            InPlaceXorLE(summand1, summand1LE);
-            InPlaceXorLE(summand2, summand2LE);
+            ApplyXorInPlace(summand1, summand1LE);
+            ApplyXorInPlace(summand2, summand2LE);
 
             IntegerAdder(summand1LE, summand2LE);
  
@@ -147,16 +147,16 @@ namespace Microsoft.Quantum.Arithmetic {
 
             for (numberOfControls in 1..2) { 
                 using (controls = Qubit[numberOfControls]) {
-                    InPlaceXorLE(summand1, summand1LE);
-                    InPlaceXorLE(summand2, summand2LE);
+                    ApplyXorInPlace(summand1, summand1LE);
+                    ApplyXorInPlace(summand2, summand2LE);
                     // controls are |0>, no addition is computed
                     (Controlled IntegerAdder) (controls, (summand1LE, summand2LE));
                     set actual1 = MeasureInteger(summand1LE);
                     EqualityFactI(summand1, actual1, $"Expected {summand1}, got {actual1}");
                     set actual2 = MeasureInteger(summand2LE);
                     EqualityFactI(summand2, actual2, $"Expected {expected}, got {actual2}");
-                    InPlaceXorLE(summand1, summand1LE);
-                    InPlaceXorLE(summand2, summand2LE);
+                    ApplyXorInPlace(summand1, summand1LE);
+                    ApplyXorInPlace(summand2, summand2LE);
                     // now controls are set to |1>, addition is computed
                     ApplyToEach(X, controls);
                     (Controlled IntegerAdder) (controls, (summand1LE, summand2LE));
@@ -207,8 +207,8 @@ namespace Microsoft.Quantum.Arithmetic {
             let integer2LE = LittleEndian(register[numberOfQubits .. 2*numberOfQubits - 1]);
             let result = register[2*numberOfQubits];
  
-            InPlaceXorLE(integer1, integer1LE);
-            InPlaceXorLE(integer2, integer2LE);
+            ApplyXorInPlace(integer1, integer1LE);
+            ApplyXorInPlace(integer2, integer2LE);
 
             GreaterThan(integer1LE, integer2LE, result);
 
@@ -223,8 +223,8 @@ namespace Microsoft.Quantum.Arithmetic {
             Reset(result);
             for (numberOfControls in 1..2) { 
                 using (controls = Qubit[numberOfControls]) {
-                    InPlaceXorLE(integer1, integer1LE);
-                    InPlaceXorLE(integer2, integer2LE);
+                    ApplyXorInPlace(integer1, integer1LE);
+                    ApplyXorInPlace(integer2, integer2LE);
                     (Controlled GreaterThan) (controls, (integer1LE, integer2LE, result));
 
                     set actual1 = MeasureInteger(integer1LE);
@@ -235,8 +235,8 @@ namespace Microsoft.Quantum.Arithmetic {
                     EqualityFactB((actualr == Zero), true, $"Expected Zero, got {actualr}");
 
                     ApplyToEach(X, controls);
-                    InPlaceXorLE(integer1, integer1LE);
-                    InPlaceXorLE(integer2, integer2LE);
+                    ApplyXorInPlace(integer1, integer1LE);
+                    ApplyXorInPlace(integer2, integer2LE);
                     (Controlled GreaterThan) (controls, (integer1LE, integer2LE, result));
 
                     set actual1 = MeasureInteger(integer1LE);
