@@ -148,7 +148,7 @@ namespace Microsoft.Quantum.Arithmetic {
         body (...)
         {
             let targetLE = LittleEndian(target!);
-            WithC(Adjoint QFTLE, op, targetLE);
+            ApplyWithC(Adjoint QFTLE, op, targetLE);
         }
         
         controlled distribute;

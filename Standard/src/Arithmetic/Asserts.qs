@@ -95,7 +95,7 @@ namespace Microsoft.Quantum.Arithmetic {
     /// The controlled version of this operation ignores controls.
     operation AssertPhaseLessThan(value : Int, number : PhaseLittleEndian) : Unit {
         body (...) {
-            let inner = ApplyLEOperationOnPhaseLEA(AssertHighestBit(One, _), _);
+            let inner = ApplyLEOperationOnPhaseLEA(AssertMostSignificantBit(One, _), _);
             ApplyWithA(Adjoint IncrementPhaseByInteger(value, _), inner, number);
         }
 
