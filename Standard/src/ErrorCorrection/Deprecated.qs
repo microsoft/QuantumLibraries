@@ -3,47 +3,46 @@
 
 namespace Microsoft.Quantum.ErrorCorrection {
     open Microsoft.Quantum.Canon;
-    open Microsoft.Quantum.Warnings;
 
     /// # Deprecated
     /// Please use @"microsoft.quantum.errorcorrection.encodeintobitflipcode".
+    @Deprecated("Microsoft.Quantum.ErrorCorrection.EncodeIntoBitFlipCode")
     operation BitFlipEncoder(physRegister : Qubit[], auxQubits : Qubit[]) : LogicalRegister {
-        _Renamed("Microsoft.Quantum.Canon.BitFlipEncoder", "Microsoft.Quantum.ErrorCorrection.EncodeIntoBitFlipCode");
         return Microsoft.Quantum.ErrorCorrection.EncodeIntoBitFlipCode(physRegister, auxQubits);
     }
 
     /// # Deprecated
     /// Please use @"microsoft.quantum.errorcorrection.encodeintobitflipcode".
+    @Deprecated("Microsoft.Quantum.ErrorCorrection.DecodeFromBitFlipCode")
     operation BitFlipDecoder(logicalRegister : LogicalRegister) : (Qubit[], Qubit[]) {
-        _Renamed("Microsoft.Quantum.Canon.BitFlipDecoder", "Microsoft.Quantum.ErrorCorrection.DecodeFromBitFlipCode");
         return Microsoft.Quantum.ErrorCorrection.DecodeFromBitFlipCode(logicalRegister);
     }
 
     /// # Deprecated
     /// Please use @"microsoft.quantum.errorcorrection.encodeintofivequbitcode".
+    @Deprecated("Microsoft.Quantum.ErrorCorrection.EncodeIntoFiveQubitCode")
     operation FiveQubitCodeEncoder(physRegister : Qubit[], auxQubits : Qubit[]) : LogicalRegister {
-        _Renamed("Microsoft.Quantum.Canon.FiveQubitCodeEncoder", "Microsoft.Quantum.ErrorCorrection.EncodeIntoFiveQubitCode");
         return EncodeIntoFiveQubitCode(physRegister, auxQubits);
     }
 
     /// # Deprecated
     /// Please use @"microsoft.quantum.errorcorrection.decodefromfivequbitcode".
+    @Deprecated("Microsoft.Quantum.ErrorCorrection.DecodeFromFiveQubitCode")
     operation FiveQubitCodeDecoder(logicalRegister : LogicalRegister) : (Qubit[], Qubit[]) {
-        _Renamed("Microsoft.Quantum.Canon.FiveQubitCodeDecoder", "Microsoft.Quantum.ErrorCorrection.DecodeFromFiveQubitCode");
         return DecodeFromFiveQubitCode(logicalRegister);
     }
 
     /// # Deprecated
     /// Please use @"microsoft.quantum.errorcorrection.decodefromfivequbitcode".
+    @Deprecated("Microsoft.Quantum.ErrorCorrection.EncodeIntoSteaneCode")
     operation SteaneCodeEncoder (physRegister : Qubit[], auxQubits : Qubit[]) : LogicalRegister {
-        _Renamed("Microsoft.Quantum.Canon.SteaneCodeEncoder", "Microsoft.Quantum.ErrorCorrection.EncodeIntoSteaneCode");
         return EncodeIntoSteaneCode(physRegister, auxQubits);
     }
 
     /// # Deprecated
     /// Please use @"microsoft.quantum.errorcorrection.decodefromfivequbitcode".
+    @Deprecated("Microsoft.Quantum.ErrorCorrection.DecodeFromSteaneCode")
     operation SteaneCodeDecoder (logicalRegister : LogicalRegister) : (Qubit[], Qubit[]) {
-        _Renamed("Microsoft.Quantum.Canon.SteaneCodeDecoder", "Microsoft.Quantum.ErrorCorrection.DecodeFromSteaneCode");
         return DecodeFromSteaneCode(logicalRegister);
     }
 

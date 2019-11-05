@@ -4,54 +4,53 @@
 namespace Microsoft.Quantum.Canon {
     open Microsoft.Quantum.Intrinsic;
     open Microsoft.Quantum.Diagnostics;
-    open Microsoft.Quantum.Warnings;
 
     /// # Deprecated
     /// Please use @"Microsoft.Quantum.Diagnostics.EqualityWithinToleranceFact" instead.
+    @Deprecated("Microsoft.Quantum.Diagnostics.EqualityWithinToleranceFact")
     function AssertAlmostEqualTol (actual : Double, expected : Double, tolerance : Double) : Unit {
-        _Renamed("Microsoft.Quantum.Canon.AssertAlmostEqualTol", "Microsoft.Quantum.Diagnostics.EqualityWithinToleranceFact");
         return EqualityWithinToleranceFact(actual, expected, tolerance);
     }
 
     /// # Deprecated
     /// Please use @"Microsoft.Quantum.Diagnostics.NearEqualityFactD" instead.
+    @Deprecated("Microsoft.Quantum.Diagnostics.NearEqualityFactD")
     function AssertAlmostEqual(actual : Double, expected : Double) : Unit {
-        _Renamed("Microsoft.Quantum.Canon.AssertAlmostEqual", "Microsoft.Quantum.Diagnostics.NearEqualityFactD");
         NearEqualityFactD(actual, expected);
     }
 
     /// # Deprecated
     /// Please use @"Microsoft.Quantum.Diagnostics.NearEqualityFactD" instead.
+    @Deprecated("Microsoft.Quantum.Diagnostics.NearEqualityFactD")
     function NearEqualityFact(actual : Double, expected : Double) : Unit {
-        _Renamed("Microsoft.Quantum.Diagnostics.NearEqualityFact", "Microsoft.Quantum.Diagnostics.NearEqualityFactD");
         NearEqualityFactD(actual, expected);
     }
 
     /// # Deprecated
     /// Please use @"Microsoft.Quantum.Diagnostics.EqualityFactI" instead.
+    @Deprecated("Microsoft.Quantum.Diagnostics.EqualityFactI")
     function AssertIntEqual (actual : Int, expected : Int, message : String) : Unit {
-        _Renamed("Microsoft.Quantum.Canon.AssertIntEqual", "Microsoft.Quantum.Diagnostics.EqualityFactI");
         EqualityFactI(actual, expected, message);
     }
 
     /// # Deprecated
     /// Please use @"Microsoft.Quantum.Diagnostics.EqualityFactB" instead.
+    @Deprecated("Microsoft.Quantum.Diagnostics.EqualityFactB")
     function AssertBoolEqual(actual : Bool, expected : Bool, message : String) : Unit {
-        _Renamed("Microsoft.Quantum.Canon.AssertBoolEqual", "Microsoft.Quantum.Diagnostics.EqualityFactB");
         EqualityFactB(actual, expected, message);
     }
 
     /// # Deprecated
     /// Please use @"Microsoft.Quantum.Diagnostics.EqualityFactR" instead.
+    @Deprecated("Microsoft.Quantum.Diagnostics.EqualityFactR")
     function AssertResultEqual(actual : Result, expected : Result, message : String) : Unit {
-        _Renamed("Microsoft.Quantum.Canon.AssertResultEqual", "Microsoft.Quantum.Diagnostics.EqualityFactR");
         EqualityFactR(actual, expected, message);
     }
 
     /// # Deprecated
     /// Please use @"Microsoft.Quantum.Diagnostics.AllEqualityFactB" instead.
+    @Deprecated("Microsoft.Quantum.Diagnostics.AllEqualityFactB")
     function AssertBoolArrayEqual (actual : Bool[], expected : Bool[], message : String) : Unit {
-        _Renamed("Microsoft.Quantum.Canon.AssertBoolArrayEqual", "Microsoft.Quantum.Diagnostics.AllEqualityFactB");
         AllEqualityFactB(actual, expected, message);
     }
 
