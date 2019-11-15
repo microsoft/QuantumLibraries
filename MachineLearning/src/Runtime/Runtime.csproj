@@ -2,6 +2,11 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
     <PlatformTarget>x64</PlatformTarget>
+    <AssemblyName>Microsoft.Quantum.MachineLearning.Runtime</AssemblyName>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <RunQDocGen>True</RunQDocGen>
   </PropertyGroup>
 
   <ItemGroup>
