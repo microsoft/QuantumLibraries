@@ -28,6 +28,9 @@ Pack-One '../Standard/src/Standard.csproj'
 Write-Host "##[info]Pack Chemistry library"
 Pack-One '../Chemistry/src/DataModel/DataModel.csproj'
 
+Write-Host "##[info]Pack QML library"
+Pack-One '../MachineLearning/src/DataModel/DataModel.csproj'
+
 Write-Host "##[info]Pack Numerics library"
 Pack-One '../Numerics/src/Numerics.csproj'
 

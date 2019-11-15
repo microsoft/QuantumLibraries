@@ -34,7 +34,10 @@ Build-One 'publish' '../Chemistry.sln'
 Write-Host "##[info]Build Numerics library"
 Build-One 'publish' '../Numerics.sln'
 
-Write-Host "##[info]Build Standard library"
+Write-Host "##[info]Build QML library"
+Build-One 'publish' '../MachineLearning.sln'
+
+Write-Host "##[info]Build Jupyter magic library"
 Build-One 'publish' '../Magic.sln'
 
 if (-not $all_ok) {

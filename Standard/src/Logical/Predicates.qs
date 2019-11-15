@@ -71,6 +71,29 @@ namespace Microsoft.Quantum.Logical {
     }
 
     /// # Summary
+    /// Returns true if and only if two inputs are nearly equal (that is, within
+    /// a tolerance of 1e-12).
+    ///
+    /// # Input
+    /// ## a
+    /// The first value to be compared.
+    /// ## b
+    /// The second value to be compared.
+    ///
+    /// # Output
+    /// `true` if and only if `a` is nearly equal to `b`.
+    ///
+    /// # Remarks
+    /// The following are equivalent:
+    /// ```Q#
+    /// let cond = Microsoft.Quantum.Math.AbsD(a - b) < 1e-12;
+    /// let cond = NearlyEqualD(a, b);
+    /// ```
+    function NearlyEqualD(a : Double, b : Double) : Bool {
+        return AbsD(a - b) < 1e-12;
+    }
+
+    /// # Summary
     /// Returns true if and only if two inputs are equal.
     ///
     /// # Input
@@ -209,6 +232,29 @@ namespace Microsoft.Quantum.Logical {
     /// ```
     function NotEqualD(a : Double, b : Double) : Bool {
         return a != b;
+    }
+
+    /// # Summary
+    /// Returns true if and only if two inputs are not nearly equal (that is,
+    /// are not within a tolerance of 1e-12).
+    ///
+    /// # Input
+    /// ## a
+    /// The first value to be compared.
+    /// ## b
+    /// The second value to be compared.
+    ///
+    /// # Output
+    /// `true` if and only if `a` is not nearly equal to `b`.
+    ///
+    /// # Remarks
+    /// The following are equivalent:
+    /// ```Q#
+    /// let cond = Microsoft.Quantum.Math.AbsD(a - b) >= 1e-12;
+    /// let cond = NotNearlyEqualD(a, b);
+    /// ```
+    function NotNearlyEqualD(a : Double, b : Double) : Bool {
+        return not NearlyEqualD(a, b);
     }
 
     /// # Summary

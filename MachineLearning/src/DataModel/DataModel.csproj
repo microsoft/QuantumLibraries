@@ -1,19 +1,21 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
-    <AssemblyName>Microsoft.Quantum.Numerics</AssemblyName>
     <PlatformTarget>x64</PlatformTarget>
+    <AssemblyName>Microsoft.Quantum.MachineLearning.DataModel</AssemblyName>
+    <DocumentationFile>bin\$(BuildConfiguration)\$(PlatformTarget)\$(AssemblyName).xml</DocumentationFile>
   </PropertyGroup>
 
   <PropertyGroup>
-    <NoWarn>0162</NoWarn>
     <RunQDocGen>True</RunQDocGen>
     <Authors>Microsoft</Authors>
-    <Description>Microsoft's Quantum numerics libraries.</Description>
+    <Description>Microsoft's Quantum ML Libraries.</Description>
     <Copyright>© Microsoft Corporation. All rights reserved.</Copyright>
+    <PackageId>Microsoft.Quantum.MachineLearning</PackageId>
     <PackageReleaseNotes>See: https://docs.microsoft.com/en-us/quantum/relnotes/</PackageReleaseNotes>
     <PackageLicenseUrl>https://github.com/Microsoft/QuantumLibraries/raw/master/LICENSE.txt</PackageLicenseUrl>
-    <PackageProjectUrl>https://github.com/Microsoft/QuantumLibraries</PackageProjectUrl>
+    <PackageProjectUrl>https://github.com/Microsoft/QuantumLibraries/tree/master/Chemistry</PackageProjectUrl>
     <PackageIconUrl>https://secure.gravatar.com/avatar/bd1f02955b2853ba0a3b1cdc2434e8ec.png</PackageIconUrl>
     <PackageTags>Quantum Q# Qsharp</PackageTags>
     <NoWarn>1591</NoWarn>
@@ -26,11 +28,17 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Standard\src\Standard.csproj" />
+    <Compile Include="..\..\Common\DelaySign.cs" Link="Properties\DelaySign.cs" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Quantum.Development.Kit" Version="0.10.1911.307" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <ProjectReference Include="..\Runtime\Runtime.csproj" PrivateAssets="all" />
+    <BuildOutputInPackage Include="..\Runtime\bin\$(Configuration)\netstandard2.1\Microsoft.Quantum.MachineLearning.*" />
   </ItemGroup>
 
   <ItemGroup>

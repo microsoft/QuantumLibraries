@@ -16,6 +16,26 @@ namespace Microsoft.Quantum.Measurement {
         controlled adjoint distribute;
     }
 
+
+	/// # Summary
+    /// Sets a qubit to a given computational basis state by measuring the
+    /// qubit and applying a bit flip if needed.
+    ///
+    /// # Input
+    /// ## desired
+    /// The basis state that the qubit should be set to.
+    /// ## target
+    /// The qubit whose state is to be set.
+    ///
+    /// # Remarks
+    /// As an invariant of this operation, calling `M(q)` immediately
+    /// after `SetToBasisState(result, q)` will return `result`.
+	operation SetToBasisState(desired : Result, target : Qubit) : Unit {
+        if (desired != M(target)) {
+            X(target);
+        }
+    }
+
     /// # Summary
     /// Measures a single qubit in the `Z` basis,
     /// and resets it to the standard basis state
