@@ -153,6 +153,14 @@ namespace Microsoft.Quantum.Tests {
         }
     }
 
+    function IsEmptyTest() : Unit {
+        Fact(IsEmpty(new Int[0]));
+        Fact(IsEmpty(new Qubit[0]));
+        Fact(IsEmpty(new (Double, Int -> String)[0]));
+        Fact(not IsEmpty([PauliX, PauliZ]));
+        Fact(not IsEmpty([""]));
+    }
+
 }
 
 
