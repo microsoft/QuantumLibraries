@@ -154,7 +154,7 @@ namespace Microsoft.Quantum.Canon {
     function SquaredNormTest() : Unit {
         NearEqualityFactD(SquaredNorm([2.0]), 4.0);
         NearEqualityFactD(SquaredNorm([1.0, 1.0]), 2.0);
-        NearEqualityFactD(SquaredNorm([3.0, 4.0], 25.0));
+        NearEqualityFactD(SquaredNorm([3.0, 4.0]), 25.0);
     }
     
 }

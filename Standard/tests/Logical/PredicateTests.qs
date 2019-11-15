@@ -98,7 +98,7 @@ namespace Microsoft.Quantum.Tests {
 
     function NearlyEqualDTest() : Unit {
         Fact(NearlyEqualD(1.0, 1.0), "Exactly equal numbers marked as not nearly equal.");
-        Fact(NearlyEqualDTest(1.0, 1.0 + 1e-15), "Nearly equal numbers marked as not nearly equal.");
+        Fact(NearlyEqualD(1.0, 1.0 + 1e-15), "Nearly equal numbers marked as not nearly equal.");
         Fact(not NearlyEqualD(1.0, 1000.0), "Not nearly equal numbers marked as nearly equal.");
     }
 

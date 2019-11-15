@@ -156,7 +156,7 @@ namespace Microsoft.Quantum.Tests {
     function IsEmptyTest() : Unit {
         Fact(IsEmpty(new Int[0]), "Empty array marked as non-empty.");
         Fact(IsEmpty(new Qubit[0]), "Empty array marked as non-empty.");
-        Fact(IsEmpty(new (Double, Int -> String)[0]), "Empty array marked as non-empty.");
+        Fact(IsEmpty(new (Double, (Int -> String))[0]), "Empty array marked as non-empty.");
         Fact(not IsEmpty([PauliX, PauliZ]), "Non-empty array marked as empty.");
         Fact(not IsEmpty([""]), "Non-empty array marked as empty.");
     }
