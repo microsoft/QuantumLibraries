@@ -3,27 +3,39 @@ namespace Microsoft.Quantum.Arithmetic {
     open Microsoft.Quantum.Convert;
     open Microsoft.Quantum.Intrinsic;
     open Microsoft.Quantum.Canon;
+    open Microsoft.Quantum.Logical;
 
-	///Flip the sign of just one amplitude
-	operation ReflectAboutInteger(index : Int, reg : LittleEndian): Unit is Adj + Ctl {
-        let nQubits = Length(reg!);
-        let bitstring = IntAsBoolArray(index, nQubits);
-        if (nQubits < 2) {
-            within {
-                if (not bitstring[0]) {
-                    X(reg![0]);
-                }
-            } apply {
-                Z(reg![0]);
-            }
-        } else {
-            within {
-                ApplyToEachCA(CControlledCA(X), Zip(bitstring, reg!));
-            } apply {
-                (Controlled Z)(Most(reg!), Tail(reg!)); //The true complexity of this operation is in O(nQubits)
-            }
+	/// # Summary
+    /// Reflects a quantum register about a given classical integer.
+    ///
+    /// # Description
+    /// Given a quantum register initially in the state $\sum_i \alpha_i \ket{i}$,
+    /// where each $\ket{i}$ is a basis state representing an integer $i$,
+    /// reflects the state of the register about the basis state for a given
+    /// integer $\ket{j}$,
+    /// $$
+    ///     \sum_i (-1)^{ \delta_{ij} } \alpha_i \ket{i}
+    /// $$
+    ///
+    /// # Input
+    /// ## index
+    /// The classical integer indexing the basis state about which to reflect.
+    ///
+    /// # Remarks
+    /// This operation is implemented in-place, without explicit allocation of
+    /// additional auxillary qubits.
+	operation ReflectAboutInteger(index : Int, reg : LittleEndian) : Unit is Adj + Ctl {
+        within {
+            // We want to reduce to the problem of reflecting about the all-ones
+            // state. To do that, we apply our reflection within an application
+            // of X instructions that flip all the zeros in our index.
+            ApplyToEachCA(
+                CControlledCA(X),
+                Zip(Mapped(Not, IntAsBoolArray(index, Length(reg!))), reg!)
+            );
+        } apply {
+            (Controlled Z)(Most(reg!), Tail(reg!));
         }
-	} //_amplitudeSignFlip
-
+	}
 
 }
