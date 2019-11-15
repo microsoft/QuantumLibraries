@@ -611,7 +611,7 @@ namespace Microsoft.Quantum.Math {
     }
 
 
-	/// # Summary
+    /// # Summary
     /// Returns the squared 2-norm of a vector.
     ///
     /// # Description
@@ -625,12 +625,12 @@ namespace Microsoft.Quantum.Math {
     /// # Output
     /// The squared 2-norm of `array`.
     function SquaredNorm(array : Double[]) : Double {
-		mutable ret = 0.0;
-		for (element in array) {
-			set ret += element * element;
-		}
-		return ret;
-	}
+        mutable ret = 0.0;
+        for (element in array) {
+            set ret += element * element;
+        }
+        return ret;
+    }
 
 
     /// # Summary
