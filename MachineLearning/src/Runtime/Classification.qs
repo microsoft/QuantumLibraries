@@ -2,7 +2,7 @@ namespace Microsoft.Quantum.MachineLearning {
     open Microsoft.Quantum.Intrinsic;
     open Microsoft.Quantum.Canon;
 
-    
+
 	/// # Summary
 	/// Using a flat description of a classification model, assign estimated probability of the top class label
 	/// to each vector in the test set
