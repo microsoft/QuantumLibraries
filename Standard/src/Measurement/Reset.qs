@@ -17,7 +17,7 @@ namespace Microsoft.Quantum.Measurement {
     }
 
 
-	/// # Summary
+    /// # Summary
     /// Sets a qubit to a given computational basis state by measuring the
     /// qubit and applying a bit flip if needed.
     ///
@@ -30,7 +30,7 @@ namespace Microsoft.Quantum.Measurement {
     /// # Remarks
     /// As an invariant of this operation, calling `M(q)` immediately
     /// after `SetToBasisState(result, q)` will return `result`.
-	operation SetToBasisState(desired : Result, target : Qubit) : Unit {
+    operation SetToBasisState(desired : Result, target : Qubit) : Unit {
         if (desired != M(target)) {
             X(target);
         }
