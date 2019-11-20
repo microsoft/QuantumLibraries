@@ -219,49 +219,28 @@ namespace Microsoft.Quantum.MachineLearning {
 	/// ## gates
 	/// the sequence of gates in the circuit
 	///
-	/// ## measCount
+	/// ## nMeasurements
 	/// the maximum number of quantum measurements used in the probability estimation
-	/// IMPORTANT: measCount==0 implies deployment to simulator
 	///
 	/// # Output
-	/// (no.hits, no.misses) pair
-	///
-	operation ClassificationProbabilitiesClassicalData(samples: LabeledSample[], sched: SamplingSchedule, param: Double[], gates: GateSequence, measCount: Int):
-		(Double,Int)[]
-	{
-		mutable ret = [(0.0,0)];
-		mutable sC = 0;
-		for (rg in sched!)
-		{
-			for (ix in rg)
-			{
-				 set sC += 1;
-			}
-		}
-		mutable N = qubitSpan(gates);
-		if (Length(samples)>0)
-		{
-			let dL =Microsoft.Quantum.Math.Ceiling(Lg(IntAsDouble (Length(getData(Head(samples))))));
-			if (N < dL)
-			{
-				set N = dL;
-			}
-		}
-		set ret = new (Double,Int)[sC];
-		mutable ir = 0;
+	/// TODO
+	operation ClassificationProbabilitiesClassicalData(samples: LabeledSample[], sched: SamplingSchedule, param: Double[], gates: GateSequence, nMeasurements: Int):
+		(Double,Int)[] {
+		mutable N = IsEmpty(samples)
+		            ? NQubitsRequired(gates)
+		            | MaxI(NQubitsRequired(gates), FeatureRegisterSize(_Features(Head(samples))));
+		mutable ret = new (Double, Int)[0];
 		for (rg in sched!) {
 			for (ix in rg) {
-				let samp = samples[ix];
+				let sample = samples[ix];
 				//agnostic w.r.t. simulator (may still be simulable)
-				let prob1 = CircuitResultClassical(1E-12,param, gates, getData(samp),measCount);
-				set ret w/= ir <- (prob1, getLabel(samp));
-				set ir += 1;
+				let prob1 = CircuitResultClassical(1E-12, param, gates, sample::Features, nMeasurements);
+				set ret += [(prob1, sample::Label)];
 			}
 		}
 
 		return ret;
 	}
-
 
 	operation EstimateClassificationProbabilitiesClassicalDataAdapter(tolerance: Double, samples: Double[][], schedule: Int[][], nQubits: Int,  gates: Int[][], param: Double[], measCount: Int): Double[]
 	{
