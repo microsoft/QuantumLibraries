@@ -97,64 +97,6 @@ namespace Microsoft.Quantum.MachineLearning {
 
 	}
 
-
-	/// # Summary
-	/// Quantum-lawful estimation of postselection probability of |1>
-	///
-	/// # Input
-	/// ## measCount
-	/// the number of measurements used
-	///
-	/// ## sg
-	/// generates quantum encoding of a subject sample (either simulated or true)
-	///
-	/// ## param
-	/// circuit parameters
-	///
-	/// ## gates
-	/// sequence of gates in the circuit
-	///
-	/// # Output
-	/// the probability estimate
-	///
-	operation CircuitResult (measCount: Int, sg: StateGenerator, parameters : Double[], gates: GateSequence) : Double {
-
-			mutable countOne = 0.0;
-			mutable qCount = qubitSpan(gates);
-			if (qCount < Fst(sg!))
-			{
-				set qCount = Fst(sg!);
-			}
-			let measIdx = qCount - 1;
-			let circEnc = Snd(sg!);
-			for (ep in 1..measCount)
-			{
-				using (qubits = Qubit[qCount])
-				{
-					//let circEnc = InputEncoder(coefficients); //usage insights
-					//let qubitsBE = LittleEndian(qubits);
-					circEnc(LittleEndian(qubits));
-					_ApplyGates(parameters, gates, qubits);
-					//dumpRegisterToConsole(qubits);
-
-					let rslt = M(qubits[measIdx]);
-					if (rslt == One)
-					{
-						set countOne = countOne + 1.0;
-					}
-
-					for(i in 0..qCount-1)
-					{
-						Set(Zero, qubits[i]);
-					}
-				}
-			}
-
-			// Return number of times we saw a |1>
-            return countOne/IntAsDouble (measCount);
-
-    }
-
 	/// # Summary
 	/// polymorphic classical/quantum gradient estimator
 	///
