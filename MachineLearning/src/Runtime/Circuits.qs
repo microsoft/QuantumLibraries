@@ -247,10 +247,6 @@ namespace Microsoft.Quantum.MachineLearning {
 		return EstimateClassificationProbabilitiesClassicalData(tolerance, samples, unFlattenSchedule(schedule), nQubits, unFlattenGateSequence(gates), param, measCount);
 	}
 
-	operation PrepareUniformSuperpositionLE(reg : LittleEndian) : Unit is Adj + Ctl {
-        ApplyToEachCA(H, reg!);
-	}
-
 	/// # Summary
 	/// tallies hits and misses off a list of probability estimates
 	///
