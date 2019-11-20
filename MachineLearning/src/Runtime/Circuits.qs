@@ -99,42 +99,6 @@ namespace Microsoft.Quantum.MachineLearning {
 
 
 	/// # Summary
-	/// Classify one sample;  the label part of the container is ignored
-	///
-	/// # Input
-	/// ## measCount
-	/// the number of measurements used
-	///
-	/// ## sg
-	/// generates quantum encoding of a subject sample (either simulated or true)
-	///
-	/// ## param
-	/// circuit parameters
-	///
-	/// ## gates
-	/// sequence of gates in the circuit
-	///
-	/// ## bias
-	/// postselection bias of the model
-	///
-	/// # Output
-	/// post-selected class label
-	///
-	operation ClassifyOneSimulated(tolerance: Double, sample: LabeledSample, parameters : Double[], gates: GateSequence, bias: Double, nMeasurements: Int): Int
-	{
-		let dL = IntAsDouble (Length(getData(sample)));
-		mutable N = Microsoft.Quantum.Math.Ceiling(Lg(dL));
-		let qsp = qubitSpan(gates);
-		if (N < qsp)
-		{
-			set N = qsp;
-		}
-		let circEnc = NoisyInputEncoder(tolerance/IntAsDouble(Length(gates!)), getData(sample));
-		return bias + QubitProbPhysical(circEnc, parameters, gates, N, nMeasurements) > 0.5 ? 1 | 0;
-	}
-
-
-	/// # Summary
 	/// Quantum-lawful estimation of postselection probability of |1>
 	///
 	/// # Input
@@ -192,34 +156,6 @@ namespace Microsoft.Quantum.MachineLearning {
     }
 
 	/// # Summary
-	/// Classify one sample represented as a state generator
-	///
-	/// # Input
-	/// ## measCount
-	/// the number of measurements used
-	///
-	/// ## sg
-	/// generates quantum encoding of a subject sample (either simulated or true)
-	///
-	/// ## param
-	/// circuit parameters
-	///
-	/// ## gates
-	/// sequence of gates in the circuit
-	///
-	/// ## bias
-	/// postselection bias of the model
-	///
-	/// # Output
-	/// post-selected class label
-	///
-	operation ClassifyOne (measCount: Int, sg: StateGenerator, parameters : Double[], gates: GateSequence, bias: Double) : (Int)
-	{
-		return CircuitResult(measCount,sg,parameters,gates)+bias > 0.5 ? 1 | 0;
-	}
-
-
-	/// # Summary
 	/// polymorphic classical/quantum gradient estimator
 	///
 	/// # Input
@@ -256,7 +192,6 @@ namespace Microsoft.Quantum.MachineLearning {
 		let pC = Length(param);
 		mutable grad = ConstantArray(pC, 0.0);
 		mutable paramShift = param + [0.0];
-		// let sqNorm0 = CircuitResultHack(param, gates, register);
 		let nQubits = MaxI(NQubitsRequired(gates), sg::NQubits);
 
 		for (gate in gates!) {
@@ -386,50 +321,6 @@ namespace Microsoft.Quantum.MachineLearning {
 	}
 
 
-
-	/// # Summary
-	/// Get a list of all the classification probabilities. In the from of (prob1,label) pairs. THIS operation is IN DEPRECATION
-	///
-	/// # Input
-	/// ## samples
-	/// a container of labeled samples
-	///
-	/// ## sched
-	/// a schedule to define a subset of samples
-	///
-	/// ## nQubits
-	/// number of cubits in the classification circuit
-	///
-	/// ## gates
-	/// the sequence of gates in the circuit
-	///
-	/// ## param
-	/// parameters of the circuits
-	///
-	/// ## measCount
-	///
-	/// # Output
-	/// array of corresponding estimated probabilities of the top class label
-	///
-	operation EstimateClassificationProbabilitiesClassicalData(
-		tolerance : Double, samples : Double[][], sched : SamplingSchedule,
-		nQubits : Int, gates : GateSequence, param : Double[],
-		nMeasurements : Int
-	) : Double[] {
-		let effectiveTolerance = tolerance / IntAsDouble(Length(gates!));
-		mutable ret = new Double[0];
-		for (rg in sched!) {
-			for (ix in rg) {
-				let samp = samples[ix];
-				let circEnc = NoisyInputEncoder(effectiveTolerance, samp);
-				set ret += [QubitProbPhysical(circEnc, param, gates, nQubits, nMeasurements)];
-			}
-		}
-
-		return ret;
-	} //EstimateClassificationProbabilitiesClassicalData
-
-
 	operation EstimateClassificationProbabilitiesClassicalDataAdapter(tolerance: Double, samples: Double[][], schedule: Int[][], nQubits: Int,  gates: Int[][], param: Double[], measCount: Int): Double[]
 	{
 		return EstimateClassificationProbabilitiesClassicalData(tolerance, samples, unFlattenSchedule(schedule), nQubits, unFlattenGateSequence(gates), param, measCount);
@@ -437,68 +328,6 @@ namespace Microsoft.Quantum.MachineLearning {
 
 	operation PrepareUniformSuperpositionLE(reg : LittleEndian) : Unit is Adj + Ctl {
         ApplyToEachCA(H, reg!);
-	}
-
-	/// # Summary
-	/// Get a list of all the classification probabilities. In the from of (prob1,label) pairs.
-	///
-	/// # Input
-	/// ## samples
-	/// a container of labeled samples
-	///
-	/// ## sched
-	/// a schedule to define a subset of samples
-	///
-	/// ## param
-	/// parameters of the circuits
-	///
-	/// ## gates
-	/// the sequence of gates in the circuit
-	///
-	/// ## measCount
-	/// the maximum number of quantum measurements used in the probability estimation
-	/// IMPORTANT: measCount==0 implies deployment to simulator
-	///
-	/// # Output
-	/// List if triplets of the form (sample index, sample probaility, sample label)
-	///
-	operation ClassificationTripletsClassicalData(samples: LabeledSample[], sched: SamplingSchedule, param: Double[], gates: GateSequence, measCount: Int):
-		(Int, Double, Int)[]
-	{
-		mutable ret = [(-1,0.0,0)];
-		mutable sC = 0;
-		for (rg in sched!)
-		{
-			for (ix in rg)
-			{
-				 set sC = sC +1;
-			}
-		}
-		mutable N = qubitSpan(gates);
-		if (not IsEmpty(samples)) {
-			let dL =Microsoft.Quantum.Math.Ceiling(Lg(IntAsDouble (Length(getData(Head(samples))))));
-			if (N < dL)
-			{
-				set N = dL;
-			}
-		}
-		set ret = new (Int,Double,Int)[sC];
-		mutable ir = 0;
-		for (rg in sched!)
-		{
-			for (ix in rg)
-			{
-				let samp = samples[ix];
-				let data = getData(samp);
-				let circEnc = InputEncoder(data);
-				let sg = StateGenerator((N,circEnc));
-				let prob1 = CircuitResult(measCount, sg, param, gates);
-				set ret w/=ir<-(ix,prob1,getLabel(samp));
-				set ir = ir+1;
-			}
-		}
-
-		return ret;
 	}
 
 	/// # Summary

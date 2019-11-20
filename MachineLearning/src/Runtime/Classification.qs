@@ -1,36 +1,49 @@
 namespace Microsoft.Quantum.MachineLearning {
     open Microsoft.Quantum.Intrinsic;
     open Microsoft.Quantum.Canon;
-
+	open Microsoft.Quantum.Convert;
 
 	/// # Summary
-	/// Using a flat description of a classification model, assign estimated probability of the top class label
-	/// to each vector in the test set
+	/// Get a list of all the classification probabilities. In the from of (prob1,label) pairs. THIS operation is IN DEPRECATION
 	///
 	/// # Input
+	/// ## samples
+	/// a container of labeled samples
+	///
+	/// ## sched
+	/// a schedule to define a subset of samples
+	///
 	/// ## nQubits
-	/// the number of qubits used for data encoding
+	/// number of qubits in the classification circuit
 	///
 	/// ## gates
-	/// flat characterization of  circuit  structure. Each element is [parameterIndex, pauliCode, targetQubit\,sequence of control qubits\]
+	/// the sequence of gates in the circuit
 	///
-	/// ## parameters
-	/// an array of circuit parameters
+	/// ## param
+	/// parameters of the circuits
 	///
-	/// ## testSet
-	/// the set of vectors to be labeled
-	///
-	/// ## nMeasurenets
-	/// number of the measurement cycles to be used for estimation of each probability
+	/// ## measCount
 	///
 	/// # Output
-	/// Array of estimated probabilities of top class label (for each sample in the test set)
+	/// array of corresponding estimated probabilities of the top class label
 	///
-	operation EstimateClassificationProbabilities(tolerance: Double, nQubits: Int, gates: Int[][], parameters: Double[], testSet: Double[][], nMeasurements: Int) : Double[]
-	{
-		let segSched = [0..1..Length(testSet)-1];
-		return EstimateClassificationProbabilitiesClassicalData(tolerance, testSet, SamplingSchedule(segSched), nQubits, unFlattenGateSequence(gates), parameters, nMeasurements);
-	}
+	operation EstimateClassificationProbabilitiesClassicalData(
+		tolerance : Double, samples : Double[][], sched : SamplingSchedule,
+		nQubits : Int, gates : GateSequence, param : Double[],
+		nMeasurements : Int
+	) : Double[] {
+		let effectiveTolerance = tolerance / IntAsDouble(Length(gates!));
+		mutable ret = new Double[0];
+		for (rg in sched!) {
+			for (ix in rg) {
+				let samp = samples[ix];
+				let circEnc = NoisyInputEncoder(effectiveTolerance, samp);
+				set ret += [QubitProbPhysical(circEnc, param, gates, nQubits, nMeasurements)];
+			}
+		}
+
+		return ret;
+	} //EstimateClassificationProbabilitiesClassicalData
 
 	/// # Summary
 	/// Using a flat description of a classification model, assign estimated probability of top class label
@@ -47,7 +60,7 @@ namespace Microsoft.Quantum.MachineLearning {
 	/// ## parameters
 	/// an array of circuit parameters
 	///
-	/// ## testSet
+	/// ## samples
 	/// the set of vectors to be labeled
 	///
 	/// ## bias
@@ -59,9 +72,12 @@ namespace Microsoft.Quantum.MachineLearning {
 	/// # Output
 	/// Array of predicted class labels for each sample of the test set
 	///
-    operation DoClassification(tolerance: Double, nQubits: Int, gates: Int[][], parameters: Double[], bias: Double, testSet: Double[][], nMeasurements: Int) : Int[]
-	{
-		let probs = EstimateClassificationProbabilities(tolerance, nQubits,gates,parameters,testSet,nMeasurements);
+    operation DoClassification(tolerance: Double, nQubits: Int, gates: Int[][], parameters: Double[], bias: Double, samples : Double[][], nMeasurements: Int) : Int[] {
+		let schedule = SamplingSchedule([0..Length(samples) - 1]);
+		let sequence = unFlattenGateSequence(gates);
+		let probs = EstimateClassificationProbabilitiesClassicalData(
+			tolerance, samples, schedule, nQubits, sequence, parameters, nMeasurements
+		);
 		return InferredLabels(probs, bias);
 	}
 

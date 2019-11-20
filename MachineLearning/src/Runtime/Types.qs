@@ -45,6 +45,25 @@ namespace Microsoft.Quantum.MachineLearning {
 	/// Abstraction for a two-level range of indices
 	newtype SamplingSchedule = Range[];
 
+	/// # Summary
+	/// Returns the number of elements in a given sampling schedule.
+	///
+	/// # Input
+	/// ## schedule
+	/// A sampling schedule whose length is to be returned.
+	///
+	/// # Output
+	/// The number of elements in the given sampling schedule.
+	function ScheduleLength(schedule : SamplingSchedule) : Int {
+		mutable length = 0;
+		for (range in schedule!) {
+			for (index in range) {
+				set length += 1;
+			}
+		}
+		return length;
+	}
+
 	newtype ValidationResults = (
 		NMisclassifications: Int
 	);
