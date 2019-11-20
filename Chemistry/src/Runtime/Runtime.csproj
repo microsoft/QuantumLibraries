@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>netstandard2.1</TargetFramework>
     <AssemblyName>Microsoft.Quantum.Chemistry.Runtime</AssemblyName>
     <DocumentationFile>bin\$(BuildConfiguration)\$(PlatformTarget)\$(AssemblyName).xml</DocumentationFile>
     <PlatformTarget>x64</PlatformTarget>
@@ -15,7 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Quantum.Development.Kit" Version="0.8.1907.1701" />
+    <PackageReference Include="Microsoft.Quantum.Development.Kit" Version="0.10.1911.307" />
   </ItemGroup>
 
   <ItemGroup>

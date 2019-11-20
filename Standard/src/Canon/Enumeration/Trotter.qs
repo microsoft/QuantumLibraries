@@ -159,7 +159,7 @@ namespace Microsoft.Quantum.Canon {
     /// input (type `Double`) for decomposition.
     /// ## trotterOrder
     /// Selects the order of the Trotter–Suzuki integrator to be used.
-    /// Order 1 and 2 are currently supported.
+    /// Order 1 and even orders 2,4,6,... are currently supported.
     ///
     /// # Output
     /// Returns a unitary implementing the Trotter–Suzuki integrator, where

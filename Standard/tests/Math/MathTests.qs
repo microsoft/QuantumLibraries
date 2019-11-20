@@ -119,10 +119,10 @@ namespace Microsoft.Quantum.Canon {
             NearEqualityFactD(AbsSquaredComplexPolar(complexPolar), complexAbs * complexAbs);
             NearEqualityFactD(AbsComplexPolar(complexPolar), complexAbs);
             NearEqualityFactD(ArgComplexPolar(complexPolar), complexArg);
-            let (x, y) = (ComplexPolarToComplex(complexPolar))!;
+            let (x, y) = (ComplexPolarAsComplex(complexPolar))!;
             NearEqualityFactD(x, complexRe);
             NearEqualityFactD(y, complexIm);
-            let (r, t) = (ComplexToComplexPolar(complex))!;
+            let (r, t) = (ComplexAsComplexPolar(complex))!;
             NearEqualityFactD(r, complexAbs);
             NearEqualityFactD(t, complexArg);
         }

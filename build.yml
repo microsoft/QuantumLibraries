@@ -7,7 +7,7 @@ trigger:
 
 variables:
   Build.Major: 0
-  Build.Minor: 9
+  Build.Minor: 10
   Drops.Dir: $(Build.ArtifactStagingDirectory)/drops
 
 jobs:

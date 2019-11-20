@@ -75,7 +75,7 @@ namespace Microsoft.Quantum.Arithmetic {
 
             if (_EnableExtraAssertsForArithmetic()) {
                 // assert that the highest bit is zero, by switching to computational basis
-                ApplyLEOperationOnPhaseLEA(AssertHighestBit(Zero, _), target);
+                ApplyLEOperationOnPhaseLEA(AssertMostSignificantBit(Zero, _), target);
 
                 // check that the input is less than modulus
                 AssertPhaseLessThan(modulus, target);
@@ -168,7 +168,7 @@ namespace Microsoft.Quantum.Arithmetic {
 
         if (_EnableExtraAssertsForArithmetic()) {
             // assert that the highest bit is zero, by switching to computational basis
-            ApplyLEOperationOnPhaseLECA(AssertHighestBit(Zero, _), phaseSummand);
+            ApplyLEOperationOnPhaseLECA(AssertMostSignificantBit(Zero, _), phaseSummand);
 
             // check that the input is less than modulus
             AssertPhaseLessThan(modulus, phaseSummand);
