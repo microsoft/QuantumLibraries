@@ -245,34 +245,14 @@ namespace Microsoft.Quantum.MachineLearning {
 	function TallyHitsMisses(pls: (Double, Int)[], bias: Double) : (Int, Int) {
 		mutable hits = 0;
 		mutable misses = 0;
-		for (pl in pls)
-		{
-			if (Fst(pl)+bias>0.5)
-			{
-				if (Snd(pl)<1)
-				{
-					//Misclassification
-					set misses=misses+1;
-				}
-				else
-				{
-					set hits=hits+1;
-				}
-			}
-			else
-			{
-				if (Snd(pl)>0)
-				{
-					//Misclassification
-					set misses=misses+1;
-				}
-				else
-				{
-					set hits=hits+1;
-				}
+		for ((classificationProbability, label) in pls) {
+			if (label == InferredLabel(bias, classificationProbability)) {
+				set hits += 1;
+			} else {
+				set misses += 1;
 			}
 		}
-		return (hits,misses);
+		return (hits, misses);
 	}
 
 	/// # Summary
