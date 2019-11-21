@@ -25,9 +25,11 @@ namespace Microsoft.Quantum.MachineLearning {
 	function _Unnegate(negLocs: Int[], coefficients : ComplexPolar[]) : ComplexPolar[] {
 		mutable ret = coefficients;
 		for (idxNegative in negLocs) {
-			let jx = negLocs[idxNegative];
-			let coefficient = coefficients[jx];
-			set ret w/= jx <- ComplexPolar(coefficient::Magnitude, 0.0);
+			if (idxNegative >= Length(coefficients)) {
+				fail $"Cannot set the phase at index {idxNegative}, only {Length(coefficients)} coefficients were provided.";
+			}
+			let coefficient = coefficients[idxNegative];
+			set ret w/= idxNegative <- ComplexPolar(coefficient::Magnitude, 0.0);
 		}
 		return ret;
 	}
