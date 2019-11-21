@@ -77,25 +77,7 @@ namespace Microsoft.Quantum.MachineLearning {
 		return 1.0-EstimateFrequencyA(endToEndHTcircuit(enc2,param1,gates1,param2,gates2),measureLastQubit(nQubits), nQubits, nMeasurements);
 	}
 
-	operation QubitProbPhysical(enc: (LittleEndian => Unit is Adj + Ctl), parameters: Double[], gates: GateSequence, nQubits: Int, nMeasurements : Int)
-	: Double {
-		return 1.0 - EstimateFrequencyA(
-			endToEndPreparation(enc,parameters,gates),
-			measureLastQubit(nQubits),
-			nQubits,
-			nMeasurements
-		);
-	}
 
-	operation CircuitResultClassical(tolerance: Double, parameters : Double[], gates: GateSequence, sample: Double[], nMeasurements: Int) : Double
-	{
-		let dL = IntAsDouble (Length(sample));
-		let N = Microsoft.Quantum.Math.Ceiling(Lg(dL));
-		let circEnc = NoisyInputEncoder(tolerance/IntAsDouble(Length(gates!)),sample);
-		let rslt = QubitProbPhysical(circEnc, parameters,gates, N, nMeasurements);
-		return rslt;
-
-	}
 
 	/// # Summary
 	/// polymorphic classical/quantum gradient estimator
@@ -234,7 +216,7 @@ namespace Microsoft.Quantum.MachineLearning {
 			for (ix in rg) {
 				let sample = samples[ix];
 				//agnostic w.r.t. simulator (may still be simulable)
-				let prob1 = CircuitResultClassical(1E-12, param, gates, sample::Features, nMeasurements);
+				let prob1 = EstimateClassificationProbabilityFromSample(1E-12, param, gates, sample::Features, nMeasurements);
 				set ret += [(prob1, sample::Label)];
 			}
 		}

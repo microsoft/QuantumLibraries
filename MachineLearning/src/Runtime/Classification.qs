@@ -1,8 +1,35 @@
 namespace Microsoft.Quantum.MachineLearning {
+    open Microsoft.Quantum.Math;
+    open Microsoft.Quantum.Characterization;
+    open Microsoft.Quantum.Arithmetic;
     open Microsoft.Quantum.Arrays;
     open Microsoft.Quantum.Intrinsic;
     open Microsoft.Quantum.Canon;
 	open Microsoft.Quantum.Convert;
+
+	operation EstimateClassificationProbabilityFromEncodedSample(
+		encodedSample : StateGenerator,
+		parameters: Double[],
+		gates: GateSequence, nMeasurements : Int
+	)
+	: Double {
+		return 1.0 - EstimateFrequencyA(
+			endToEndPreparation(encodedSample::Apply, parameters,gates),
+			measureLastQubit(encodedSample::NQubits),
+			encodedSample::NQubits,
+			nMeasurements
+		);
+	}
+
+	operation EstimateClassificationProbabilityFromSample(tolerance: Double, parameters : Double[], gates: GateSequence, sample: Double[], nMeasurements: Int)
+	: Double {
+		let nQubits = FeatureRegisterSize(sample);
+		let circEnc = NoisyInputEncoder(tolerance / IntAsDouble(Length(gates!)), sample);
+		return EstimateClassificationProbabilityFromEncodedSample(
+			StateGenerator(nQubits, circEnc), parameters, gates, nMeasurements
+		);
+
+	}
 
 	/// # Summary
 	/// Given a of classification probability and a bias, returns the
@@ -74,8 +101,10 @@ namespace Microsoft.Quantum.MachineLearning {
 		for (rg in sched!) {
 			for (ix in rg) {
 				let samp = samples[ix];
-				let circEnc = NoisyInputEncoder(effectiveTolerance, samp);
-				set ret += [QubitProbPhysical(circEnc, param, gates, nQubits, nMeasurements)];
+				set ret += [EstimateClassificationProbabilityFromEncodedSample(
+					StateGenerator(nQubits, NoisyInputEncoder(effectiveTolerance, samp)),
+					param, gates, nMeasurements
+				)];
 			}
 		}
 
@@ -117,6 +146,5 @@ namespace Microsoft.Quantum.MachineLearning {
 		);
 		return InferredLabels(bias, probs);
 	}
-
 
 }
