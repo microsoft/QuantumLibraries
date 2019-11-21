@@ -376,7 +376,7 @@ namespace Microsoft.Quantum.MachineLearning {
 	/// # Summary
 	/// Semi-greedily find a bias value that leads to near-minimum misclassification score
 	///
-	operation recomputeBias(probabilities: Double[], labels: Int[], sched: SamplingSchedule, bias: Double, tolerance: Double, maxIter: Int) : Double
+	function recomputeBias(probabilities: Double[], labels: Int[], sched: SamplingSchedule, bias: Double, tolerance: Double, maxIter: Int) : Double
 	{
 		mutable min1 = 1.0;
 		mutable max0 = 0.0;
@@ -413,7 +413,7 @@ namespace Microsoft.Quantum.MachineLearning {
 		mutable bLeft = 0.5-max0;
 		mutable bRight = 0.5-min1;
 		mutable bestDir = 0;
-		mutable proposedLabels = InferredLabels(probabilities,bLeft);
+		mutable proposedLabels = InferredLabels(bLeft, probabilities);
 		mutable mLeft = NMismatches(proposedLabels, labels, sched);
 		if (mLeft < mBest)
 		{
@@ -421,7 +421,7 @@ namespace Microsoft.Quantum.MachineLearning {
 			set mBest = mLeft;
 			set bestDir = -1;
 		}
-		set proposedLabels = InferredLabels(probabilities,bRight);
+		set proposedLabels = InferredLabels(bRight, probabilities);
 		mutable mRight = NMismatches(proposedLabels, labels, sched);
 		if (mRight < mBest)
 		{
@@ -437,7 +437,7 @@ namespace Microsoft.Quantum.MachineLearning {
 				return bBest;
 			}
 			let bMiddle = 0.5*(bLeft+bRight);
-			set proposedLabels = InferredLabels(probabilities,bMiddle);
+			set proposedLabels = InferredLabels(bMiddle, probabilities);
 			let mMiddle = NMismatches(proposedLabels, labels, sched);
 
 			if (mMiddle < mLeft)
@@ -687,12 +687,5 @@ namespace Microsoft.Quantum.MachineLearning {
 		return ret;
 	}
 
-	function InferredLabels(probabilities: Double[], bias: Double): Int[] {
-		mutable ret = new Int[Length(probabilities)];
-		for (il in 0..(Length(probabilities) - 1)) {
-			set ret w/= il <- probabilities[il] + bias > 0.5 ? 1 | 0;
-		}
-		return ret;
-	}
 
 }

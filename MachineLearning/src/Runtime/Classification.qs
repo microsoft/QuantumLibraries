@@ -1,7 +1,44 @@
 namespace Microsoft.Quantum.MachineLearning {
+    open Microsoft.Quantum.Arrays;
     open Microsoft.Quantum.Intrinsic;
     open Microsoft.Quantum.Canon;
 	open Microsoft.Quantum.Convert;
+
+	/// # Summary
+	/// Given a of classification probability and a bias, returns the
+	/// label inferred from that probability.
+	///
+	/// # Input
+	/// ## bias
+	/// The bias between two classes, typically the result of training a
+	/// classifier.
+	/// ## probability
+	/// A classification probabilities for a particular sample, typicaly
+	/// resulting from estimating its classification frequency.
+	///
+	/// # Output
+	/// The label inferred from the given classification probability.
+	function InferredLabel(bias : Double, probability : Double) : Int {
+		return probability + bias > 0.5 ? 1 | 0;
+	}
+
+	/// # Summary
+	/// Given an array of classification probabilities and a bias, returns the
+	/// label inferred from each probability.
+	///
+	/// # Input
+	/// ## bias
+	/// The bias between two classes, typically the result of training a
+	/// classifier.
+	/// ## probabilities
+	/// An array of classification probabilities for a set of samples, typicaly
+	/// resulting from estimating classification frequencies.
+	///
+	/// # Output
+	/// The label inferred from each classification probability.
+	function InferredLabels(bias : Double, probabilities : Double[]): Int[] {
+		return Mapped(InferredLabel(bias, _), probabilities);
+	}
 
 	/// # Summary
 	/// Get a list of all the classification probabilities. In the from of (prob1,label) pairs. THIS operation is IN DEPRECATION
@@ -43,7 +80,7 @@ namespace Microsoft.Quantum.MachineLearning {
 		}
 
 		return ret;
-	} //EstimateClassificationProbabilitiesClassicalData
+	}
 
 	/// # Summary
 	/// Using a flat description of a classification model, assign estimated probability of top class label
@@ -78,7 +115,7 @@ namespace Microsoft.Quantum.MachineLearning {
 		let probs = EstimateClassificationProbabilitiesClassicalData(
 			tolerance, samples, schedule, nQubits, sequence, parameters, nMeasurements
 		);
-		return InferredLabels(probs, bias);
+		return InferredLabels(bias, probs);
 	}
 
 

@@ -47,7 +47,7 @@ namespace Microsoft.Quantum.MachineLearning {
 				tolerance,
 				cTechnicalIter
 			);
-			let localPL = InferredLabels(probsValidation,localBias);
+			let localPL = InferredLabels(localBias, probsValidation);
 			let localMisses = NMismatches(localPL, labels, validationSchedule);
 			if (bestValidation > localMisses) {
 				set bestValidation = localMisses;
