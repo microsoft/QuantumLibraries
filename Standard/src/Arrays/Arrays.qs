@@ -2,8 +2,11 @@
 // Licensed under the MIT License.
 
 namespace Microsoft.Quantum.Arrays {
+    open Microsoft.Quantum.Convert;
     open Microsoft.Quantum.Diagnostics;
+    open Microsoft.Quantum.Intrinsic;
     open Microsoft.Quantum.Math;
+    open Microsoft.Quantum.Logical;
 
     /// # Summary
     /// Create an array that contains the same elements as an input array but in Reversed
@@ -295,5 +298,109 @@ namespace Microsoft.Quantum.Arrays {
 
 
 }
+    function _IsPermutationPred(permutation : Int[], value : Int) : Bool {
+        let index = IndexOf(EqualI(value, _), permutation);
+        return index != -1;
+    }
 
+    function _IsPermutation(permuation : Int[]) : Bool {
+        return All(_IsPermutationPred(permuation, _), RangeAsIntArray(IndexRange(permuation)));
+    }
 
+    /// # Summary
+    /// Returns the order elements in an array need to be swapped to produce an ordered array.
+    /// Assumes swaps occur in place.
+    ///
+    /// # Input
+    /// ## newOrder
+    /// Array with the permutation of the indices of the new array. There should be $n$ elements,
+    /// each being a unique integer from $0$ to $n-1$.
+    ///
+    /// # Output
+    /// The tuple represents the two indices to be swapped. The swaps begin at the lowest index.
+    ///
+    /// # Remarks
+    /// ## Example
+    /// ```qsharp
+    /// // The following returns [(0, 5),(0, 4),(0, 1),(0, 3)];
+    /// let swapOrder = _SwapOrderToPermuteArray([5, 3, 2, 0, 1, 4]);
+    /// ```
+    ///
+    /// ## Psuedocode
+    /// for (index in 0..Length(newOrder) - 1)
+    /// {
+    ///     while newOrder[index] != index
+    ///     {
+    ///         Switch newOrder[index] with newOrder[newOrder[index]]
+    ///     }
+    /// }
+    function _SwapOrderToPermuteArray(newOrder : Int[]) : (Int, Int)[] {
+        // Check to verify the new ordering actually is a permutation of the indices
+        Fact(_IsPermutation(newOrder), $"The new ordering is not a permutation");
+
+        mutable swaps = new (Int, Int)[0];
+        mutable order = newOrder;
+
+        // for each value, whenever the index and value don't match, swap until it does
+        for (index in IndexRange(order)) {
+            while (not EqualI(order[index], index))
+            {
+                set swaps += [(index, order[index])];
+                set order = Swapped(order[index], index, order);
+            }
+        }
+
+        return swaps;
+    }
+
+    /// # Summary
+    /// Applies a swap of two elements in an array.
+    ///
+    /// # Input
+    /// ## firstIndex
+    /// Index of the first element to be swapped.
+    ///
+    /// ## secondIndex
+    /// Index of the second element to be swapped.
+    ///
+    /// ## arr
+    /// Array with elements to be swapped.
+    ///
+    /// # Output
+    /// The array with the in place swapp applied.
+    ///
+    /// ## Example
+    /// ```qsharp
+    /// // The following returns [0, 3, 2, 1, 4]
+    /// Swapped(1, 3, [0, 1, 2, 3, 4]);
+    function Swapped<'T>(firstIndex: Int, secondIndex: Int, arr: 'T[]) : 'T[] {
+        return arr
+            w/ firstIndex <- arr[secondIndex]
+            w/ secondIndex <- arr[firstIndex];
+    }
+
+    /// # Summary
+    /// Turns a list of 2-tuples into a nested array.
+    ///
+    /// # Input
+    /// ## tupleList
+    /// List of 2-tuples to be turned into a nested array.
+    ///
+    /// # Output
+    /// A nested array with length matching the tupleList.
+    ///
+    /// ## Example
+    /// ```qsharp
+    /// // The following returns [[2, 3], [4, 5]]
+    /// TupleArrayAsNestedArray([(2, 3), (4, 5)]);
+    /// ```
+    function TupleArrayAsNestedArray<'T>(tupleList : ('T, 'T)[]) : 'T[][] {
+        mutable newArray = new 'T[][Length(tupleList)];
+        for (idx in IndexRange(tupleList)) {
+            let (tupleLeft, tupleRight) = tupleList[idx];
+            set newArray w/= idx <- [tupleLeft, tupleRight];
+        }
+        return newArray;
+    }
+
+}

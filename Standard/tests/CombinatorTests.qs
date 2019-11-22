@@ -1,5 +1,6 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
+
 namespace Microsoft.Quantum.Tests {
     open Microsoft.Quantum.Math;
     open Microsoft.Quantum.Canon;
@@ -347,6 +348,32 @@ namespace Microsoft.Quantum.Tests {
     operation ApplyIfElseBCATest() : Unit {
         AssertOperationsEqualReferenced(2, ApplyIfElseBCACase(true, _), ApplyToEachA(H, _));
         AssertOperationsEqualReferenced(2, ApplyIfElseBCACase(false, _), ApplyToEachA(X, _));
+    }
+
+    operation ApplyXToSecondQubit(qubits : Qubit[]) : Unit is Adj + Ctl {
+        X(qubits[1]);
+    }
+
+    operation ApplyToElementTest() : Unit {
+        AssertOperationsEqualReferenced(3,
+            ApplyToElement(X, 1, _),
+            ApplyXToSecondQubit
+        );
+        
+        AssertOperationsEqualReferenced(3,
+            ApplyToElementC(X, 1, _),
+            ApplyXToSecondQubit
+        );
+        
+        AssertOperationsEqualReferenced(3,
+            ApplyToElementA(X, 1, _),
+            ApplyXToSecondQubit
+        );
+        
+        AssertOperationsEqualReferenced(3,
+            ApplyToElementCA(X, 1, _),
+            ApplyXToSecondQubit
+        );
     }
 
 }
