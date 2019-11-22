@@ -4,6 +4,8 @@
 namespace Microsoft.Quantum.Canon {
     open Microsoft.Quantum.Intrinsic;
     open Microsoft.Quantum.Arithmetic;
+    open Microsoft.Quantum.Diagnostics;
+    open Microsoft.Quantum.Arrays;
 
     /// # Summary
     /// Applies the controlled-X (CX) gate to a pair of qubits.
@@ -270,6 +272,32 @@ namespace Microsoft.Quantum.Canon {
     is Adj + Ctl {
         SWAP(qubit1, qubit2);
         CZ(qubit1, qubit2);
+    }
+
+    /// # Summary
+    /// Permutes qubits by using the SWAP operation.
+    ///
+    /// # Input
+    /// ## ordering
+    /// Describes the new ordering of the qubits, where the qubit at index i will now be at ordering[i].
+    /// ## register
+    /// Qubit register to be acted upon.
+    ///
+    /// # Example
+    /// Given ordering = [2, 1, 0] and register $\ket{\alpha_0} \ket{\alpha_1} \ket{\alpha_2}$, PermuteQubits
+    /// changes the register into $\ket{\alpha_2} \ket{\alpha_1} \ket{\alpha_0}$
+    ///
+    /// ```qsharp
+    /// // The following two lines are equivalent
+    /// PermuteQubits([2, 1, 0], register);
+    /// SWAP(register[0], register[2]);
+    /// ```
+    operation PermuteQubits(ordering : Int[], register : Qubit[]) : Unit is Adj+Ctl {
+        EqualityFactI(Length(ordering), Length(register), "The new ordering has an incorrect number of elements");
+
+        for ((left, right) in _SwapOrderToPermuteArray(ordering)) {
+            SWAP(register[left], register[right]);
+        }
     }
 
 }
