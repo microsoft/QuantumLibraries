@@ -296,8 +296,6 @@ namespace Microsoft.Quantum.Arrays {
         return Length(array) == 0;
     }
 
-
-}
     function _IsPermutationPred(permutation : Int[], value : Int) : Bool {
         let index = IndexOf(EqualI(value, _), permutation);
         return index != -1;
