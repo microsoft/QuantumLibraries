@@ -122,7 +122,7 @@ namespace Microsoft.Quantum.MachineLearning {
 		let labels = Mapped(_Label, samples);
 
 		let cTechnicalIter = 10; //10 iterations are sufficient for bias adjustment in most cases
-		for (idxStart in 0..(Length(parameterSource)-1)) {
+		for (idxStart in 0..(Length(parameterSource) - 1)) {
 			Message($"Beginning training at start point #{idxStart}...");
 			let ((h, m), (b, parpar)) = StochasticTrainingLoop(
 				samples, trainingSchedule, trainingSchedule, 1, miniBatchSize,
