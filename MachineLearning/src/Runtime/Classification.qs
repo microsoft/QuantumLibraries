@@ -68,7 +68,7 @@ namespace Microsoft.Quantum.MachineLearning {
 	}
 
 	/// # Summary
-	/// Get a list of all the classification probabilities. In the from of (prob1,label) pairs. THIS operation is IN DEPRECATION
+	/// Estimates all classification probabilities for a given dataset.
 	///
 	/// # Input
 	/// ## samples

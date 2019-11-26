@@ -7,7 +7,7 @@ namespace Microsoft.Quantum.MachineLearning {
     open Microsoft.Quantum.Canon;
 
 	/// # Summary
-	/// Semi-greedily find a bias value that leads to near-minimum misclassification score.
+	/// Returns a bias value that leads to near-minimum misclassification score.
 	///
 	/// # Remarks
 	/// Note that `probabilities` and `labels` will not in general have the same
