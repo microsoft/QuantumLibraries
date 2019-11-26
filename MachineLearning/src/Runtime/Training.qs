@@ -6,6 +6,101 @@ namespace Microsoft.Quantum.MachineLearning {
     open Microsoft.Quantum.Intrinsic;
     open Microsoft.Quantum.Canon;
 
+	/// # Summary
+	/// Returns a bias value that leads to near-minimum misclassification score.
+	///
+	/// # Remarks
+	/// Note that `probabilities` and `labels` will not in general have the same
+	/// length, as `labels` is indexed by a training set index while `probabilities`
+	/// is indexed by the given sampling schedule.
+	function _UpdatedBias(probabilities: Double[], labels: Int[], sched: SamplingSchedule, bias: Double, tolerance: Double, maxIter: Int) : Double {
+		mutable min1 = 1.0;
+		mutable max0 = 0.0;
+		mutable ipro = 0;
+		for (rg in sched!) {
+			for (ix in rg) {
+				let prob = probabilities[ipro];
+				let lab = labels[ix];
+				if (lab > 0) {
+					if (min1 > prob) {
+						set min1 = prob;
+					}
+				} else {
+					if (max0 < prob) {
+						set max0 = prob;
+					}
+				}
+				set ipro += 1;
+			}
+		}
+		// Exit early if we can find a perfect classification.
+		if (max0 <= min1) {
+			return 0.5 * (1.0 - max0 - min1);
+		}
+		mutable mBest = Length(probabilities);
+		mutable bBest = bias;
+		mutable bLeft = 0.5 - max0;
+		mutable bRight = 0.5 - min1;
+		mutable bestDir = 0;
+		mutable proposedLabels = InferredLabels(bLeft, probabilities);
+		mutable mLeft = NMismatches(proposedLabels, labels, sched);
+		if (mLeft < mBest) {
+			set bBest = bLeft;
+			set mBest = mLeft;
+			set bestDir = -1;
+		}
+		set proposedLabels = InferredLabels(bRight, probabilities);
+		mutable mRight = NMismatches(proposedLabels, labels, sched);
+		if (mRight < mBest) {
+			set bBest = bRight;
+			set mBest = mRight;
+			set bestDir = 1;
+		}
+
+		for (iter in 1..maxIter) {
+			if ((bRight - bLeft) < tolerance)
+			{
+				return bBest;
+			}
+			let bMiddle = 0.5 * (bLeft+bRight);
+			set proposedLabels = InferredLabels(bMiddle, probabilities);
+			let mMiddle = NMismatches(proposedLabels, labels, sched);
+
+			if (mMiddle < mLeft) {
+				if (bestDir > 0) { //replace the weaker end
+					set bLeft = bMiddle;
+					set mLeft = mMiddle;
+
+					if (mMiddle < mBest) {
+						set bBest = bMiddle;
+						set mBest = mMiddle;
+						set bestDir = -1; //note that the left end is now better
+					}
+				} else { //right end was the weaker end
+						set bRight = bMiddle;
+						set mRight = mMiddle;
+						if (mMiddle < mBest) {
+							set bBest = bMiddle;
+							set mBest = mMiddle;
+							set bestDir = 1; //note that the right end is now better
+						}
+				}
+				//Done with the left end
+			} else {
+				if (mMiddle < mRight) {
+					// We are better than the right but worse than the left.
+					// Hence the right must be weaker.
+					set bRight = bMiddle;
+					set mRight = mMiddle;
+				} else {
+					return bBest; //cannot continue the greedy search
+				}
+			}
+
+		}
+		return bias;
+	} //recomputeBias
+
 	operation TrainSequentialClassifier(
 		nQubits: Int,
 		gates: GateSequence,
@@ -27,7 +122,7 @@ namespace Microsoft.Quantum.MachineLearning {
 		let labels = Mapped(_Label, samples);
 
 		let cTechnicalIter = 10; //10 iterations are sufficient for bias adjustment in most cases
-		for (idxStart in 0..(Length(parameterSource)-1)) {
+		for (idxStart in 0..(Length(parameterSource) - 1)) {
 			Message($"Beginning training at start point #{idxStart}...");
 			let ((h, m), (b, parpar)) = StochasticTrainingLoop(
 				samples, trainingSchedule, trainingSchedule, 1, miniBatchSize,
@@ -39,7 +134,7 @@ namespace Microsoft.Quantum.MachineLearning {
 				gates, parpar, nMeasurements
 			);
 			//Estimate bias here!
-			let localBias = recomputeBias(
+			let localBias = _UpdatedBias(
 				probsValidation,
 				labels,
 				validationSchedule,
@@ -47,7 +142,7 @@ namespace Microsoft.Quantum.MachineLearning {
 				tolerance,
 				cTechnicalIter
 			);
-			let localPL = InferredLabels(probsValidation,localBias);
+			let localPL = InferredLabels(localBias, probsValidation);
 			let localMisses = NMismatches(localPL, labels, validationSchedule);
 			if (bestValidation > localMisses) {
 				set bestValidation = localMisses;

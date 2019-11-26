@@ -77,146 +77,6 @@ namespace Microsoft.Quantum.MachineLearning {
 		return 1.0-EstimateFrequencyA(endToEndHTcircuit(enc2,param1,gates1,param2,gates2),measureLastQubit(nQubits), nQubits, nMeasurements);
 	}
 
-	operation QubitProbPhysical(enc: (LittleEndian => Unit is Adj + Ctl), parameters: Double[], gates: GateSequence, nQubits: Int, nMeasurements : Int)
-	: Double {
-		return 1.0 - EstimateFrequencyA(
-			endToEndPreparation(enc,parameters,gates),
-			measureLastQubit(nQubits),
-			nQubits,
-			nMeasurements
-		);
-	}
-
-	operation CircuitResultClassical(tolerance: Double, parameters : Double[], gates: GateSequence, sample: Double[], nMeasurements: Int) : Double
-	{
-		let dL = IntAsDouble (Length(sample));
-		let N = Microsoft.Quantum.Math.Ceiling(Lg(dL));
-		let circEnc = NoisyInputEncoder(tolerance/IntAsDouble(Length(gates!)),sample);
-		let rslt = QubitProbPhysical(circEnc, parameters,gates, N, nMeasurements);
-		return rslt;
-
-	}
-
-
-	/// # Summary
-	/// Classify one sample;  the label part of the container is ignored
-	///
-	/// # Input
-	/// ## measCount
-	/// the number of measurements used
-	///
-	/// ## sg
-	/// generates quantum encoding of a subject sample (either simulated or true)
-	///
-	/// ## param
-	/// circuit parameters
-	///
-	/// ## gates
-	/// sequence of gates in the circuit
-	///
-	/// ## bias
-	/// postselection bias of the model
-	///
-	/// # Output
-	/// post-selected class label
-	///
-	operation ClassifyOneSimulated(tolerance: Double, sample: LabeledSample, parameters : Double[], gates: GateSequence, bias: Double, nMeasurements: Int): Int
-	{
-		let dL = IntAsDouble (Length(getData(sample)));
-		mutable N = Microsoft.Quantum.Math.Ceiling(Lg(dL));
-		let qsp = qubitSpan(gates);
-		if (N < qsp)
-		{
-			set N = qsp;
-		}
-		let circEnc = NoisyInputEncoder(tolerance/IntAsDouble(Length(gates!)), getData(sample));
-		return bias + QubitProbPhysical(circEnc, parameters, gates, N, nMeasurements) > 0.5 ? 1 | 0;
-	}
-
-
-	/// # Summary
-	/// Quantum-lawful estimation of postselection probability of |1>
-	///
-	/// # Input
-	/// ## measCount
-	/// the number of measurements used
-	///
-	/// ## sg
-	/// generates quantum encoding of a subject sample (either simulated or true)
-	///
-	/// ## param
-	/// circuit parameters
-	///
-	/// ## gates
-	/// sequence of gates in the circuit
-	///
-	/// # Output
-	/// the probability estimate
-	///
-	operation CircuitResult (measCount: Int, sg: StateGenerator, parameters : Double[], gates: GateSequence) : Double {
-
-			mutable countOne = 0.0;
-			mutable qCount = qubitSpan(gates);
-			if (qCount < Fst(sg!))
-			{
-				set qCount = Fst(sg!);
-			}
-			let measIdx = qCount - 1;
-			let circEnc = Snd(sg!);
-			for (ep in 1..measCount)
-			{
-				using (qubits = Qubit[qCount])
-				{
-					//let circEnc = InputEncoder(coefficients); //usage insights
-					//let qubitsBE = LittleEndian(qubits);
-					circEnc(LittleEndian(qubits));
-					_ApplyGates(parameters, gates, qubits);
-					//dumpRegisterToConsole(qubits);
-
-					let rslt = M(qubits[measIdx]);
-					if (rslt == One)
-					{
-						set countOne = countOne + 1.0;
-					}
-
-					for(i in 0..qCount-1)
-					{
-						Set(Zero, qubits[i]);
-					}
-				}
-			}
-
-			// Return number of times we saw a |1>
-            return countOne/IntAsDouble (measCount);
-
-    }
-
-	/// # Summary
-	/// Classify one sample represented as a state generator
-	///
-	/// # Input
-	/// ## measCount
-	/// the number of measurements used
-	///
-	/// ## sg
-	/// generates quantum encoding of a subject sample (either simulated or true)
-	///
-	/// ## param
-	/// circuit parameters
-	///
-	/// ## gates
-	/// sequence of gates in the circuit
-	///
-	/// ## bias
-	/// postselection bias of the model
-	///
-	/// # Output
-	/// post-selected class label
-	///
-	operation ClassifyOne (measCount: Int, sg: StateGenerator, parameters : Double[], gates: GateSequence, bias: Double) : (Int)
-	{
-		return CircuitResult(measCount,sg,parameters,gates)+bias > 0.5 ? 1 | 0;
-	}
 
 
 	/// # Summary
@@ -256,7 +116,6 @@ namespace Microsoft.Quantum.MachineLearning {
 		let pC = Length(param);
 		mutable grad = ConstantArray(pC, 0.0);
 		mutable paramShift = param + [0.0];
-		// let sqNorm0 = CircuitResultHack(param, gates, register);
 		let nQubits = MaxI(NQubitsRequired(gates), sg::NQubits);
 
 		for (gate in gates!) {
@@ -342,163 +201,32 @@ namespace Microsoft.Quantum.MachineLearning {
 	/// ## gates
 	/// the sequence of gates in the circuit
 	///
-	/// ## measCount
+	/// ## nMeasurements
 	/// the maximum number of quantum measurements used in the probability estimation
-	/// IMPORTANT: measCount==0 implies deployment to simulator
 	///
 	/// # Output
-	/// (no.hits, no.misses) pair
-	///
-	operation ClassificationProbabilitiesClassicalData(samples: LabeledSample[], sched: SamplingSchedule, param: Double[], gates: GateSequence, measCount: Int):
-		(Double,Int)[]
-	{
-		mutable ret = [(0.0,0)];
-		mutable sC = 0;
-		for (rg in sched!)
-		{
-			for (ix in rg)
-			{
-				 set sC += 1;
-			}
-		}
-		mutable N = qubitSpan(gates);
-		if (Length(samples)>0)
-		{
-			let dL =Microsoft.Quantum.Math.Ceiling(Lg(IntAsDouble (Length(getData(Head(samples))))));
-			if (N < dL)
-			{
-				set N = dL;
-			}
-		}
-		set ret = new (Double,Int)[sC];
-		mutable ir = 0;
+	/// TODO
+	operation ClassificationProbabilitiesClassicalData(samples: LabeledSample[], sched: SamplingSchedule, param: Double[], gates: GateSequence, nMeasurements: Int):
+		(Double,Int)[] {
+		mutable N = IsEmpty(samples)
+		            ? NQubitsRequired(gates)
+		            | MaxI(NQubitsRequired(gates), FeatureRegisterSize(_Features(Head(samples))));
+		mutable ret = new (Double, Int)[0];
 		for (rg in sched!) {
 			for (ix in rg) {
-				let samp = samples[ix];
+				let sample = samples[ix];
 				//agnostic w.r.t. simulator (may still be simulable)
-				let prob1 = CircuitResultClassical(1E-12,param, gates, getData(samp),measCount);
-				set ret w/= ir <- (prob1, getLabel(samp));
-				set ir += 1;
+				let prob1 = EstimateClassificationProbabilityFromSample(1E-12, param, gates, sample::Features, nMeasurements);
+				set ret += [(prob1, sample::Label)];
 			}
 		}
 
 		return ret;
 	}
-
-
-
-	/// # Summary
-	/// Get a list of all the classification probabilities. In the from of (prob1,label) pairs. THIS operation is IN DEPRECATION
-	///
-	/// # Input
-	/// ## samples
-	/// a container of labeled samples
-	///
-	/// ## sched
-	/// a schedule to define a subset of samples
-	///
-	/// ## nQubits
-	/// number of cubits in the classification circuit
-	///
-	/// ## gates
-	/// the sequence of gates in the circuit
-	///
-	/// ## param
-	/// parameters of the circuits
-	///
-	/// ## measCount
-	///
-	/// # Output
-	/// array of corresponding estimated probabilities of the top class label
-	///
-	operation EstimateClassificationProbabilitiesClassicalData(
-		tolerance : Double, samples : Double[][], sched : SamplingSchedule,
-		nQubits : Int, gates : GateSequence, param : Double[],
-		nMeasurements : Int
-	) : Double[] {
-		let effectiveTolerance = tolerance / IntAsDouble(Length(gates!));
-		mutable ret = new Double[0];
-		for (rg in sched!) {
-			for (ix in rg) {
-				let samp = samples[ix];
-				let circEnc = NoisyInputEncoder(effectiveTolerance, samp);
-				set ret += [QubitProbPhysical(circEnc, param, gates, nQubits, nMeasurements)];
-			}
-		}
-
-		return ret;
-	} //EstimateClassificationProbabilitiesClassicalData
-
 
 	operation EstimateClassificationProbabilitiesClassicalDataAdapter(tolerance: Double, samples: Double[][], schedule: Int[][], nQubits: Int,  gates: Int[][], param: Double[], measCount: Int): Double[]
 	{
 		return EstimateClassificationProbabilitiesClassicalData(tolerance, samples, unFlattenSchedule(schedule), nQubits, unFlattenGateSequence(gates), param, measCount);
-	}
-
-	operation PrepareUniformSuperpositionLE(reg : LittleEndian) : Unit is Adj + Ctl {
-        ApplyToEachCA(H, reg!);
-	}
-
-	/// # Summary
-	/// Get a list of all the classification probabilities. In the from of (prob1,label) pairs.
-	///
-	/// # Input
-	/// ## samples
-	/// a container of labeled samples
-	///
-	/// ## sched
-	/// a schedule to define a subset of samples
-	///
-	/// ## param
-	/// parameters of the circuits
-	///
-	/// ## gates
-	/// the sequence of gates in the circuit
-	///
-	/// ## measCount
-	/// the maximum number of quantum measurements used in the probability estimation
-	/// IMPORTANT: measCount==0 implies deployment to simulator
-	///
-	/// # Output
-	/// List if triplets of the form (sample index, sample probaility, sample label)
-	///
-	operation ClassificationTripletsClassicalData(samples: LabeledSample[], sched: SamplingSchedule, param: Double[], gates: GateSequence, measCount: Int):
-		(Int, Double, Int)[]
-	{
-		mutable ret = [(-1,0.0,0)];
-		mutable sC = 0;
-		for (rg in sched!)
-		{
-			for (ix in rg)
-			{
-				 set sC = sC +1;
-			}
-		}
-		mutable N = qubitSpan(gates);
-		if (not IsEmpty(samples)) {
-			let dL =Microsoft.Quantum.Math.Ceiling(Lg(IntAsDouble (Length(getData(Head(samples))))));
-			if (N < dL)
-			{
-				set N = dL;
-			}
-		}
-		set ret = new (Int,Double,Int)[sC];
-		mutable ir = 0;
-		for (rg in sched!)
-		{
-			for (ix in rg)
-			{
-				let samp = samples[ix];
-				let data = getData(samp);
-				let circEnc = InputEncoder(data);
-				let sg = StateGenerator((N,circEnc));
-				let prob1 = CircuitResult(measCount, sg, param, gates);
-				set ret w/=ir<-(ix,prob1,getLabel(samp));
-				set ir = ir+1;
-			}
-		}
-
-		return ret;
 	}
 
 	/// # Summary
@@ -517,34 +245,14 @@ namespace Microsoft.Quantum.MachineLearning {
 	function TallyHitsMisses(pls: (Double, Int)[], bias: Double) : (Int, Int) {
 		mutable hits = 0;
 		mutable misses = 0;
-		for (pl in pls)
-		{
-			if (Fst(pl)+bias>0.5)
-			{
-				if (Snd(pl)<1)
-				{
-					//Misclassification
-					set misses=misses+1;
-				}
-				else
-				{
-					set hits=hits+1;
-				}
-			}
-			else
-			{
-				if (Snd(pl)>0)
-				{
-					//Misclassification
-					set misses=misses+1;
-				}
-				else
-				{
-					set hits=hits+1;
-				}
+		for ((classificationProbability, label) in pls) {
+			if (label == InferredLabel(bias, classificationProbability)) {
+				set hits += 1;
+			} else {
+				set misses += 1;
 			}
 		}
-		return (hits,misses);
+		return (hits, misses);
 	}
 
 	/// # Summary
@@ -624,323 +332,6 @@ namespace Microsoft.Quantum.MachineLearning {
 		let (h1,m1) = TallyHitsMisses(pls,biasCurrent);
 		return m1;
 	}
-
-
-	/// # Summary
-	/// C#-friendly adapter to misclassification tally
-	///
-	/// # Input
-	/// ## vectors
-	/// data vectors in flat encoding
-	///
-	/// ## labels
-	/// array of corresponding class lables
-	///
-	/// ## schedule
-	/// flat representation of index subset on which the circuit is scored
-	///
-	/// ## param
-	/// circuit parameters
-	///
-	/// ## gateStructure
-	/// gate structure in flat representation
-	///
-	/// ## bias
-	/// prediction bias to be tested
-	///
-	/// ## measCount
-	/// maximum number of quantum measurements per estimation (measCount==0 implies simulator deployment)
-	///
-	/// # Output
-	/// schedule of indices of misclassified samples
-	///
-	operation MisclassificationsAsScheduleAdapter(vectors: Double[][], labels: Int[], schedule: Int[][], param: Double[], gateStructure: Int[][], bias: Double, measCount: Int) : Int[][]
-	{
-		mutable misses = new Int[][0];
-		let samples = unFlattenLabeledSamples(vectors,labels);
-		let gates = unFlattenGateSequence(gateStructure);
-		let sched = unFlattenSchedule(schedule);
-
-		let pls = ClassificationTripletsClassicalData(samples,sched,param,gates,measCount);
-		mutable tmp = new (Double,Int)[Length(pls)];
-		for (it in 0..(Length(tmp)-1))
-		{
-			let (a,b,c) = pls[it];
-			set tmp w/=it<-(b,c);
-		}
-		let biasCurrent = adjustBias(tmp, bias, 0.01, 10);
-		for (pl in pls)
-		{
-			let (ix,pp,lb) = pl;
-			if (pp+biasCurrent>0.5)
-			{
-				if (lb <1)
-				{
-					//Misclassification
-					set misses=misses + [[ix,1,ix]];
-				}
-			}
-			else
-			{
-				if (lb>0)
-				{
-					//Misclassification
-					set misses=misses + [[ix,1,ix]];
-				}
-			}
-		}
-		return misses;
-	}
-
-
-		/// # Summary
-	/// C#-friendly adapter to misclassification tally
-	///
-	/// # Input
-	/// ## vectors
-	/// data vectors in flat encoding
-	///
-	/// ## labels
-	/// array of corresponding class lables
-	///
-	/// ## schedule
-	/// flat representation of index subset on which the circuit is scored
-	///
-	/// ## param
-	/// circuit parameters
-	///
-	/// ## gateStructure
-	/// gate structure in flat representation
-	///
-	/// ## bias
-	/// prediction bias to be tested
-	///
-	/// ## measCount
-	/// maximum number of quantum measurements per estimation (measCount==0 implies simulator deployment)
-	///
-	/// # Output
-	/// schedule of indices of misclassified samples
-	///
-	operation TestMisclassificationsAsScheduleAdapter(vectors: Double[][], labels: Int[], schedule: Int[][], param: Double[], gateStructure: Int[][], bias: Double, measCount: Int) : Int[][]
-	{
-		mutable misses = new Int[][0];
-		let samples = unFlattenLabeledSamples(vectors,labels);
-		let gates = unFlattenGateSequence(gateStructure);
-		let sched = unFlattenSchedule(schedule);
-
-		let pls = ClassificationTripletsClassicalData(samples,sched,param,gates,measCount);
-		mutable tmp = new (Double,Int)[Length(pls)];
-		for (it in 0..(Length(tmp)-1))
-		{
-			let (a,b,c) = pls[it];
-			set tmp w/=it<-(b,c);
-		}
-		let biasCurrent = bias;
-		for (pl in pls)
-		{
-			let (ix,pp,lb) = pl;
-			if (pp+biasCurrent>0.5)
-			{
-				if (lb <1)
-				{
-					//Misclassification
-					set misses=misses + [[ix,1,ix]];
-				}
-			}
-			else
-			{
-				if (lb>0)
-				{
-					//Misclassification
-					set misses=misses + [[ix,1,ix]];
-				}
-			}
-		}
-		return misses;
-	}
-
-
-
-	/// # Summary
-	/// C#-friendly adapter to misclassification tally
-	///
-	/// # Input
-	/// ## vectors
-	/// data vectors in flat encoding
-	///
-	/// ## labels
-	/// array of corresponding class lables
-	///
-	/// ## schedule
-	/// flat representation of index subset on which the circuit is scored
-	///
-	/// ## param
-	/// circuit parameters
-	///
-	/// ## gateStructure
-	/// gate structure in flat representation
-	///
-	/// ## bias
-	/// prediction bias to be tested
-	///
-	/// ## measCount
-	/// maximum number of quantum measurements per estimation (measCount==0 implies simulator deployment)
-	///
-	/// # Output
-	/// (bias, schedule of indices of misclassified samples)
-	///
-	operation BiasAndMisclassificationsAsScheduleAdapter(vectors: Double[][], labels: Int[], schedule: Int[][], param: Double[], gateStructure: Int[][], bias: Double, measCount: Int) : (Double,Int[][])
-	{
-		mutable misses = new Int[][0];
-		let samples = unFlattenLabeledSamples(vectors,labels);
-		let gates = unFlattenGateSequence(gateStructure);
-		let sched = unFlattenSchedule(schedule);
-
-		let pls = ClassificationTripletsClassicalData(samples,sched,param,gates,measCount);
-		mutable tmp = new (Double,Int)[Length(pls)];
-		for (it in 0..(Length(tmp)-1))
-		{
-			let (a,b,c) = pls[it];
-			set tmp w/=it<-(b,c);
-		}
-		let biasCurrent = adjustBias(tmp, bias, 0.01, 10);
-		for (pl in pls)
-		{
-			let (ix,pp,lb) = pl;
-			if (pp+biasCurrent>0.5)
-			{
-				if (lb <1)
-				{
-					//Misclassification
-					set misses=misses + [[ix,1,ix]];
-				}
-			}
-			else
-			{
-				if (lb>0)
-				{
-					//Misclassification
-					set misses=misses + [[ix,1,ix]];
-				}
-			}
-		}
-		return (biasCurrent, misses);
-	}
-
-
-	/// # Summary
-	/// Semi-greedily find a bias value that leads to near-minimum misclassification score
-	///
-	operation recomputeBias(probabilities: Double[], labels: Int[], sched: SamplingSchedule, bias: Double, tolerance: Double, maxIter: Int) : Double
-	{
-		mutable min1 = 1.0;
-		mutable max0 = 0.0;
-		mutable ipro = 0;
-		for (rg in sched!)
-		{
-			for(ix in rg)
-			{
-				let prob = probabilities[ipro];
-				let lab = labels[ix];
-				if (lab > 0)
-				{
-					if (min1 > prob)
-					{
-						set min1 = prob;
-					}
-				}
-				else
-				{
-					if  (max0 < prob)
-					{
-						set max0 = prob;
-					}
-				}
-				set ipro = ipro +1 ;
-			}
-		} //rof
-		if (max0 <= min1)
-		{
-			return 0.5*(1.0-max0-min1); //Gives a perfect classification
-		}
-		mutable mBest = Length(probabilities);
-		mutable bBest = bias;
-		mutable bLeft = 0.5-max0;
-		mutable bRight = 0.5-min1;
-		mutable bestDir = 0;
-		mutable proposedLabels = InferredLabels(probabilities,bLeft);
-		mutable mLeft = NMismatches(proposedLabels, labels, sched);
-		if (mLeft < mBest)
-		{
-			set bBest = bLeft;
-			set mBest = mLeft;
-			set bestDir = -1;
-		}
-		set proposedLabels = InferredLabels(probabilities,bRight);
-		mutable mRight = NMismatches(proposedLabels, labels, sched);
-		if (mRight < mBest)
-		{
-			set bBest = bRight;
-			set mBest = mRight;
-			set bestDir = 1;
-		}
-
-		for (iter in 1..maxIter)
-		{
-			if ((bRight - bLeft) < tolerance)
-			{
-				return bBest;
-			}
-			let bMiddle = 0.5*(bLeft+bRight);
-			set proposedLabels = InferredLabels(probabilities,bMiddle);
-			let mMiddle = NMismatches(proposedLabels, labels, sched);
-
-			if (mMiddle < mLeft)
-			{
-				if (bestDir > 0) //replace the weaker end
-				{
-					set bLeft = bMiddle;
-					set mLeft = mMiddle;
-
-					if (mMiddle < mBest)
-					{
-						set bBest = bMiddle;
-						set mBest = mMiddle;
-						set bestDir = -1; //note that the left end is now better
-					}
-				}
-				else //right end was the weaker end
-				{
-						set bRight = bMiddle;
-						set mRight = mMiddle;
-						if (mMiddle < mBest)
-						{
-							set bBest = bMiddle;
-							set mBest = mMiddle;
-							set bestDir = 1; //note that the right end is now better
-						}
-				}
-				//Done with the left end
-			}
-			else
-			{
-
-				if (mMiddle < mRight)
-				{
-					//We are better than the right but worse than the left
-					//Hence the right must be weaker
-						set bRight = bMiddle;
-						set mRight = mMiddle;
-				}
-				else
-				{
-					return bBest; //cannot continue the greedy search
-				}
-			}
-
-		}
-		return bias;
-	} //recomputeBias
 
 	/// # Summary
 	/// Semi-greedily find a bias value that leads to near-minimum misclassification score
@@ -1142,12 +533,5 @@ namespace Microsoft.Quantum.MachineLearning {
 		return ret;
 	}
 
-	function InferredLabels(probabilities: Double[], bias: Double): Int[] {
-		mutable ret = new Int[Length(probabilities)];
-		for (il in 0..(Length(probabilities) - 1)) {
-			set ret w/= il <- probabilities[il] + bias > 0.5 ? 1 | 0;
-		}
-		return ret;
-	}
 
 }

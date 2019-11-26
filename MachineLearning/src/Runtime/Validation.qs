@@ -66,7 +66,7 @@ namespace Microsoft.Quantum.MachineLearning {
 		let features = Mapped(_Features, samples);
 		let labels = Mapped(_Label, samples);
 		let probsValidation = EstimateClassificationProbabilitiesClassicalData(tolerance, features, validationSchedule, nQubits,  gates, parameters, nMeasurements);
-		let localPL = InferredLabels(probsValidation, bias);
+		let localPL = InferredLabels(bias, probsValidation);
 		let nMismatches = NMismatches(localPL, labels, validationSchedule);
 		return ValidationResults(
 			nMismatches
