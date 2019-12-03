@@ -3,6 +3,7 @@
 
 namespace Microsoft.Quantum.Optimization {
     open Microsoft.Quantum.Canon;
+    open Microsoft.Quantum.Intrinsic;
     open Microsoft.Quantum.Math;
 
     /// # Summary
@@ -31,7 +32,7 @@ namespace Microsoft.Quantum.Optimization {
         let goldenRatio = (Sqrt(5.0) + 1.0) / 2.0;
         let delta = (_Width(left, right)) / goldenRatio;
         return (
-            left + delta, right - delta
+            right - delta, left + delta
         );
     }
 
@@ -65,7 +66,6 @@ namespace Microsoft.Quantum.Optimization {
         
         mutable interval = bounds;
         mutable probe = _Probe(interval);
-        
         while (_Width(probe) > tolerance) {
             set interval =
                 fn(Fst(probe)) < fn(Snd(probe))
