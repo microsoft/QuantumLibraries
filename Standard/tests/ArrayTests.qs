@@ -153,6 +153,48 @@ namespace Microsoft.Quantum.Tests {
         }
     }
 
+    function _SwapOrderToPermuteArrayTest() : Unit {
+        let newOrder = [0, 4, 2, 1, 3];
+        let expected = [(1, 4), (1, 3)];
+        let actual = _SwapOrderToPermuteArray(newOrder);
+
+        EqualityFactI(Length(expected), Length(actual), "Number of swaps does not match");
+        for ((exp, act) in Zip(expected, actual)) {
+            let (leftExp, rightExp) = exp;
+            let (leftAct, rightAct) = act;
+
+            EqualityFactI(leftExp, leftAct, "SWAP doesn't match");
+            EqualityFactI(rightExp, rightAct, "SWAP doesn't match");
+        }
+    }
+
+    function SwappedTest() : Unit {
+        let example = [2, 4, 6, 8, 10];
+        let expected = [2, 8, 6, 4, 10];
+        let leftIndex = 1;
+        let rightIndex = 3;
+        let newArray = Swapped(leftIndex, rightIndex, example);
+
+        EqualityFactI(Length(expected), Length(newArray), "Swapped array is a different size than original");
+        for ((exp, act) in Zip(expected, newArray)) {
+            EqualityFactI(exp, act, "Elements did not match");
+        }
+    }
+
+    function TupleArrayAsNestedArrayTest() : Unit {
+        let example = [(0, 1), (2, 3), (4, 5), (6, 7)];
+        let expected = [[0, 1], [2, 3], [4, 5], [6, 7]];
+
+        let actual = TupleArrayAsNestedArray(example);
+        EqualityFactI(Length(expected), Length(actual), "Arrays are of different sizes");
+        for ((exp, act) in Zip(expected, actual)) {
+            for ((elementExp, elementAct) in Zip(exp, act)) {
+                EqualityFactI(elementExp, elementAct, "Elements did not match");
+            }
+        }
+
+    }
+
 }
 
 
