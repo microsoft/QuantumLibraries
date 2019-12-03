@@ -7,38 +7,27 @@ namespace Microsoft.Quantum.MachineLearning {
     open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Optimization;
 
-    function _MisclassificationRate(probabilities : Double, labels : Int[], bias : Double) : Double {
+    function _MisclassificationRate(probabilities : Double[], labels : Int[], bias : Double) : Double {
         let proposedLabels = InferredLabels(bias, probabilities);
-        return IntAsDouble(NMismatches(proposedLabels, labels, sched)) / IntAsDouble(Length(probabilities));
+        return IntAsDouble(NMismatches(proposedLabels, labels)) / IntAsDouble(Length(probabilities));
     }
 
     /// # Summary
     /// Returns a bias value that leads to near-minimum misclassification score.
-    ///
-    /// # Remarks
-    /// Note that `probabilities` and `labels` will not in general have the same
-    /// length, as `labels` is indexed by a training set index while `probabilities`
-    /// is indexed by the given sampling schedule.
-    function _UpdatedBias(probabilities: Double[], labels: Int[], sched: SamplingSchedule, bias: Double, tolerance: Double, maxIter: Int) : Double {
+    function _UpdatedBias(labeledProbabilities: (Double, Int)[], bias: Double, tolerance: Double) : Double {
         mutable min1 = 1.0;
         mutable max0 = 0.0;
-        mutable ipro = 0;
 
         // Find the range of classification probabilities for each class.
-        for (rg in sched!) {
-            for (ix in rg) {
-                let prob = probabilities[ipro];
-                let lab = labels[ix];
-                if (lab > 0) {
-                    if (min1 > prob) {
-                        set min1 = prob;
-                    }
-                } else {
-                    if (max0 < prob) {
-                        set max0 = prob;
-                    }
+        for ((probability, label) in labeledProbabilities) {
+            if (label == 1) {
+                if (min1 > probability) {
+                    set min1 = probability;
                 }
-                set ipro += 1;
+            } else {
+                if (max0 < probability) {
+                    set max0 = probability;
+                }
             }
         }
 
@@ -50,11 +39,12 @@ namespace Microsoft.Quantum.MachineLearning {
         // If we can't find a perfect classification, minimize to find
         // the best feasible bias.
         let optimum = LocalUnivariateMinimum(
-            _MisclassificationRate(probabilities, labels, _),
-            (0.5 - max0, 0.5 - min1)
+            _MisclassificationRate(Mapped(Fst<Double, Int>, labeledProbabilities), Mapped(Snd<Double, Int>, labeledProbabilities), _),
+            (0.5 - max0, 0.5 - min1),
+            tolerance
         );
         return optimum::Coordinate;
-    } //recomputeBias
+    }
 
     operation TrainSequentialClassifier(
         nQubits: Int,
@@ -76,7 +66,6 @@ namespace Microsoft.Quantum.MachineLearning {
         let features = Mapped(_Features, samples);
         let labels = Mapped(_Label, samples);
 
-        let cTechnicalIter = 10; //10 iterations are sufficient for bias adjustment in most cases
         for (idxStart in 0..(Length(parameterSource) - 1)) {
             Message($"Beginning training at start point #{idxStart}...");
             let ((h, m), (b, parpar)) = StochasticTrainingLoop(
@@ -88,17 +77,14 @@ namespace Microsoft.Quantum.MachineLearning {
                 tolerance, features, validationSchedule, nQubits,
                 gates, parpar, nMeasurements
             );
-            //Estimate bias here!
+            // Find the best bias for the new classification parameters.
             let localBias = _UpdatedBias(
-                probsValidation,
-                labels,
-                validationSchedule,
+                Zip(probsValidation, Sampled(validationSchedule, labels)),
                 0.0,
-                tolerance,
-                cTechnicalIter
+                tolerance
             );
             let localPL = InferredLabels(localBias, probsValidation);
-            let localMisses = NMismatches(localPL, labels, validationSchedule);
+            let localMisses = NMismatches(localPL, Sampled(validationSchedule, labels));
             if (bestValidation > localMisses) {
                 set bestValidation = localMisses;
                 set retParam = parpar;
@@ -256,7 +242,6 @@ namespace Microsoft.Quantum.MachineLearning {
                     miniBatchSize: Int, param: Double[], gates: GateSequence, bias: Double, lrate: Double, tolerance: Double, measCount: Int,
                     h0: Int, m0: Int): ((Int,Int),(Double,Double[]))
     {
-        let HARDCODEDmaxIter = 10;
         let HARDCODEDunderage = 3; //4/26 slack greater than 3 is not recommended
 
 
@@ -281,7 +266,7 @@ namespace Microsoft.Quantum.MachineLearning {
                 if (utility > 0.0) { //good parameter update
                     set paramCurrent = upParam;
                     let plsCurrent = ClassificationProbabilitiesClassicalData(samples, schedScore, paramCurrent, gates, measCount);
-                    set biasCurrent = adjustBias(plsCurrent, bias, tolerance, HARDCODEDmaxIter);
+                    set biasCurrent = _UpdatedBias(plsCurrent, bias, tolerance);
                     let (h1,m1) = TallyHitsMisses(plsCurrent,biasCurrent);
                     if (m1 < mBest + HARDCODEDunderage) {
                         //we allow limited non-greediness
@@ -308,9 +293,8 @@ namespace Microsoft.Quantum.MachineLearning {
     operation OneUncontrolledStochasticTrainingEpoch(samples: LabeledSample[], sched: SamplingSchedule, schedScore: SamplingSchedule, periodScore: Int,
                     miniBatchSize: Int, param: Double[], gates: GateSequence, bias: Double, lrate: Double, tolerance: Double,  measCount: Int): ((Int,Int),(Double,Double[]))
     {
-        let HARDCODEDmaxIter = 10; //TODO:MUST: tolerance and maxIter cannot stay hardcoded
         let pls = ClassificationProbabilitiesClassicalData(samples, schedScore, param, gates, measCount);
-        mutable biasBest = adjustBias(pls, bias, tolerance, HARDCODEDmaxIter);
+        mutable biasBest = _UpdatedBias(pls, bias, tolerance);
         let (h0,m0) = TallyHitsMisses(pls,biasBest); // ClassificationScoreSimulated(samples, schedScore, param, gates, bias); //Deprecated
         mutable hCur = h0;
         mutable mCur = m0;
@@ -329,7 +313,7 @@ namespace Microsoft.Quantum.MachineLearning {
                 if (utility > 0.0) { //good parameter update
                     set paramCurrent = upParam;
                     let plsCurrent = ClassificationProbabilitiesClassicalData(samples, schedScore, paramCurrent, gates, measCount);
-                    set biasCurrent = adjustBias(plsCurrent, bias, tolerance, HARDCODEDmaxIter);
+                    set biasCurrent = _UpdatedBias(plsCurrent, bias, tolerance);
                     let (h1,m1) = TallyHitsMisses(plsCurrent,biasCurrent);
                     set hCur = h1;
                     set mCur = m1;
@@ -388,14 +372,13 @@ namespace Microsoft.Quantum.MachineLearning {
     operation StochasticTrainingLoop(samples: LabeledSample[], sched: SamplingSchedule, schedScore: SamplingSchedule, periodScore: Int,
              miniBatchSizeInital: Int, param: Double[], gates: GateSequence, bias: Double, lrateInitial: Double, maxEpochs: Int, tol: Double, measCount: Int): ((Int,Int),(Double,Double[]))
     {
-        let HARDCODEDmaxIter = 10;
         //const
         let manyNoops = 4;
         //const
         let relFuzz = 0.01;
         let HARDCODEDmaxNoops = 2*manyNoops;
         mutable pls = ClassificationProbabilitiesClassicalData(samples, schedScore, param, gates, measCount);
-        mutable biasBest = adjustBias(pls, bias, tol, HARDCODEDmaxIter);
+        mutable biasBest = _UpdatedBias(pls, bias, tol);
         let (h0, m0) = TallyHitsMisses(pls,biasBest);
         mutable hBest = h0;
         mutable mBest = m0;
