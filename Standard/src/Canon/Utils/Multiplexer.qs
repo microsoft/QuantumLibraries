@@ -11,11 +11,17 @@ namespace Microsoft.Quantum.Canon {
     /// Applies a Pauli rotation conditioned on an array of qubits.
     ///
     /// # Description
-    /// This applies the multiply-controlled unitary operation $U$ that performs
+    /// This applies a multiply controlled unitary operation that performs
     /// rotations by angle $\theta_j$ about single-qubit Pauli operator $P$
     /// when controlled by the $n$-qubit number state $\ket{j}$.
+    /// In particular, the action of this operation is represented by the
+    /// unitary
     ///
-    /// $U = \sum^{2^n-1}_{j=0}\ket{j}\bra{j}\otimes e^{i P \theta_j}$.
+    /// $$
+    /// \begin{align}
+    ///     U = \sum^{2^n - 1}_{j=0} \ket{j}\bra{j} \otimes e^{i P \theta_j}.
+    /// \end{align}
+    /// ##
     ///
     /// # Input
     /// ## coefficients
@@ -35,12 +41,55 @@ namespace Microsoft.Quantum.Canon {
     /// # Remarks
     /// `coefficients` will be padded with elements $\theta_j = 0.0$ if
     /// fewer than $2^n$ are specified.
-    operation MultiplexPauli (coefficients : Double[], pauli : Pauli, control : LittleEndian, target : Qubit)
+    ///
+    /// # See Also
+    /// - ApproximatelyMultiplexPauli
+    operation MultiplexPauli(coefficients : Double[], pauli : Pauli, control : LittleEndian, target : Qubit)
     : Unit is Adj + Ctl {
         ApproximatelyMultiplexPauli(0.0, coefficients, pauli, control, target);
     }
 
-    /// TODO
+    /// # Summary
+    /// Applies a Pauli rotation conditioned on an array of qubits, truncating
+    /// small rotation angles according to a given tolerance.
+    ///
+    /// # Description
+    /// This applies a multiply controlled unitary operation that performs
+    /// rotations by angle $\theta_j$ about single-qubit Pauli operator $P$
+    /// when controlled by the $n$-qubit number state $\ket{j}$.
+    /// In particular, the action of this operation is represented by the
+    /// unitary
+    ///
+    /// $$
+    /// \begin{align}
+    ///     U = \sum^{2^n - 1}_{j=0} \ket{j}\bra{j} \otimes e^{i P \theta_j}.
+    /// \end{align}
+    /// ##
+    ///
+    /// # Input
+    /// ## tolerance
+    /// A tolerance below which small coefficients are truncated.
+    ///
+    /// ## coefficients
+    /// Array of up to $2^n$ coefficients $\theta_j$. The $j$th coefficient
+    /// indexes the number state $\ket{j}$ encoded in little-endian format.
+    ///
+    /// ## pauli
+    /// Pauli operator $P$ that determines axis of rotation.
+    ///
+    /// ## control
+    /// $n$-qubit control register that encodes number states $\ket{j}$ in
+    /// little-endian format.
+    ///
+    /// ## target
+    /// Single qubit register that is rotated by $e^{i P \theta_j}$.
+    ///
+    /// # Remarks
+    /// `coefficients` will be padded with elements $\theta_j = 0.0$ if
+    /// fewer than $2^n$ are specified.
+    ///
+    /// # See Also
+    /// - MultiplexPauli
     operation ApproximatelyMultiplexPauli(tolerance : Double, coefficients : Double[], pauli : Pauli, control : LittleEndian, target : Qubit)
     : Unit is Adj + Ctl {
         if (pauli == PauliZ) {
@@ -62,11 +111,17 @@ namespace Microsoft.Quantum.Canon {
     /// # Summary
     /// Applies a Pauli Z rotation conditioned on an array of qubits.
     ///
-    /// This applies the multiply-controlled unitary operation $U$ that performs
+    /// # Description
+    /// This applies the multiply controlled unitary operation that performs
     /// rotations by angle $\theta_j$ about single-qubit Pauli operator $Z$
     /// when controlled by the $n$-qubit number state $\ket{j}$.
+    /// In particular, this operation can be represented by the unitary
     ///
-    /// $U = \sum^{2^n-1}_{j=0}\ket{j}\bra{j}\otimes e^{i Z \theta_j}$.
+    /// $$
+    /// \begin{align}
+    ///     U = \sum^{2^n-1}_{j=0} \ket{j}\bra{j} \otimes e^{i Z \theta_j}.
+    /// \end{align}
+    /// $$
     ///
     /// # Input
     /// ## coefficients
@@ -88,6 +143,9 @@ namespace Microsoft.Quantum.Canon {
     /// - Synthesis of Quantum Logic Circuits
     ///   Vivek V. Shende, Stephen S. Bullock, Igor L. Markov
     ///   https://arxiv.org/abs/quant-ph/0406176
+    ///
+    /// # See Also
+    /// - ApproximatelyMultiplexZ
     operation MultiplexZ(coefficients : Double[], control : LittleEndian, target : Qubit)
     : Unit is Adj + Ctl {
         ApproximatelyMultiplexZ(0.0, coefficients, control, target);
@@ -114,7 +172,48 @@ namespace Microsoft.Quantum.Canon {
         return false;
     }
 
-    /// TODO
+    /// # Summary
+    /// Applies a Pauli Z rotation conditioned on an array of qubits, truncating
+    /// small rotation angles according to a given tolerance.
+    ///
+    /// # Description
+    /// This applies the multiply controlled unitary operation that performs
+    /// rotations by angle $\theta_j$ about single-qubit Pauli operator $Z$
+    /// when controlled by the $n$-qubit number state $\ket{j}$.
+    /// In particular, this operation can be represented by the unitary
+    ///
+    /// $$
+    /// \begin{align}
+    ///     U = \sum^{2^n-1}_{j=0} \ket{j}\bra{j} \otimes e^{i Z \theta_j}.
+    /// \end{align}
+    /// $$
+    ///
+    /// # Input
+    /// ## tolerance
+    /// A tolerance below which small coefficients are truncated.
+    ///
+    /// ## coefficients
+    /// Array of up to $2^n$ coefficients $\theta_j$. The $j$th coefficient
+    /// indexes the number state $\ket{j}$ encoded in little-endian format.
+    ///
+    /// ## control
+    /// $n$-qubit control register that encodes number states $\ket{j}$ in
+    /// little-endian format.
+    ///
+    /// ## target
+    /// Single qubit register that is rotated by $e^{i P \theta_j}$.
+    ///
+    /// # Remarks
+    /// `coefficients` will be padded with elements $\theta_j = 0.0$ if
+    /// fewer than $2^n$ are specified.
+    ///
+    /// # References
+    /// - Synthesis of Quantum Logic Circuits
+    ///   Vivek V. Shende, Stephen S. Bullock, Igor L. Markov
+    ///   https://arxiv.org/abs/quant-ph/0406176
+    ///
+    /// # See Also
+    /// - MultiplexZ
     operation ApproximatelyMultiplexZ(tolerance : Double, coefficients : Double[], control : LittleEndian, target : Qubit) : Unit is Adj + Ctl {
         body (...) {
             // pad coefficients length at tail to a power of 2.
@@ -155,12 +254,19 @@ namespace Microsoft.Quantum.Canon {
     }
 
     /// # Summary
-    /// Applies an array of complex phases to numeric basis states of a register of qubits.
+    /// Applies an array of complex phases to numeric basis states of a register
+    /// of qubits.
     ///
-    /// That is, this implements the diagonal unitary operation $U$ that applies a complex phase
+    /// # Description
+    /// This operation implements a diagonal unitary that applies a complex phase
     /// $e^{i \theta_j}$ on the $n$-qubit number state $\ket{j}$.
+    /// In particular, this operation can be represented by the unitary
     ///
-    /// $U = \sum^{2^n-1}_{j=0}e^{i\theta_j}\ket{j}\bra{j}$.
+    /// $$
+    /// \begin{align}
+    ///     U = \sum^{2^n-1}_{j=0}e^{i\theta_j}\ket{j}\bra{j}.
+    /// \end{align}
+    /// $$
     ///
     /// # Input
     /// ## coefficients
@@ -179,11 +285,52 @@ namespace Microsoft.Quantum.Canon {
     /// - Synthesis of Quantum Logic Circuits
     ///   Vivek V. Shende, Stephen S. Bullock, Igor L. Markov
     ///   https://arxiv.org/abs/quant-ph/0406176
-    operation ApplyDiagonalUnitary (coefficients : Double[], qubits : LittleEndian) : Unit is Adj + Ctl {
+    ///
+    /// # See Also
+    /// - ApproximatelyApplyDiagonalUnitary
+    operation ApplyDiagonalUnitary(coefficients : Double[], qubits : LittleEndian) : Unit is Adj + Ctl {
         ApproximatelyApplyDiagonalUnitary(0.0, coefficients, qubits);
     }
 
-    /// # TODO
+    /// # Summary
+    /// Applies an array of complex phases to numeric basis states of a register
+    /// of qubits, truncating small rotation angles according to a given
+    /// tolerance.
+    ///
+    /// # Description
+    /// This operation implements a diagonal unitary that applies a complex phase
+    /// $e^{i \theta_j}$ on the $n$-qubit number state $\ket{j}$.
+    /// In particular, this operation can be represented by the unitary
+    ///
+    /// $$
+    /// \begin{align}
+    ///     U = \sum^{2^n-1}_{j=0}e^{i\theta_j}\ket{j}\bra{j}.
+    /// \end{align}
+    /// $$
+    ///
+    /// # Input
+    /// ## tolerance
+    /// A tolerance below which small coefficients are truncated.
+    ///
+    /// ## coefficients
+    /// Array of up to $2^n$ coefficients $\theta_j$. The $j$th coefficient
+    /// indexes the number state $\ket{j}$ encoded in little-endian format.
+    ///
+    /// ## control
+    /// $n$-qubit control register that encodes number states $\ket{j}$ in
+    /// little-endian format.
+    ///
+    /// # Remarks
+    /// `coefficients` will be padded with elements $\theta_j = 0.0$ if
+    /// fewer than $2^n$ are specified.
+    ///
+    /// # References
+    /// - Synthesis of Quantum Logic Circuits
+    ///   Vivek V. Shende, Stephen S. Bullock, Igor L. Markov
+    ///   https://arxiv.org/abs/quant-ph/0406176
+    ///
+    /// # See Also
+    /// - ApplyDiagonalUnitary
     operation ApproximatelyApplyDiagonalUnitary(tolerance : Double, coefficients : Double[], qubits : LittleEndian)
     : Unit is Adj + Ctl {
         if (IsEmpty(qubits!)) {
