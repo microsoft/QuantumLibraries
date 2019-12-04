@@ -107,12 +107,10 @@ namespace Microsoft.Quantum.Canon {
 
 			if (Length(coefficientsPadded) == 1) {
 				// Termination case
-				if (AbsD(coefficientsPadded[0])> tolerance) {
+				if (AbsD(coefficientsPadded[0]) > tolerance) {
 					Exp([PauliZ], coefficientsPadded[0], [target]);
 				}
-			}
-			else
-			{
+			} else {
 				// Compute new coefficients.
 				let (coefficients0, coefficients1) = _MultiplexZCoefficients(coefficientsPadded);
 				ApproximatelyMultiplexZ(tolerance,coefficients0, LittleEndian((control!)[0 .. Length(control!) - 2]), target);
@@ -166,39 +164,34 @@ namespace Microsoft.Quantum.Canon {
     /// - Synthesis of Quantum Logic Circuits
     ///   Vivek V. Shende, Stephen S. Bullock, Igor L. Markov
     ///   https://arxiv.org/abs/quant-ph/0406176
-    operation ApplyDiagonalUnitary (coefficients : Double[], qubits : LittleEndian) : Unit
-    {
-        body (...)
-        {
-            if (Length(qubits!) == 0)
-            {
-                fail $"operation ApplyDiagonalUnitary -- Number of qubits must be greater than 0.";
-            }
-            
-            // pad coefficients length at tail to a power of 2.
-            let coefficientsPadded = Padded(-2 ^ Length(qubits!), 0.0, coefficients);
-            
-            // Compute new coefficients.
-            let (coefficients0, coefficients1) = _MultiplexZCoefficients(coefficientsPadded);
-            MultiplexZ(coefficients1, LittleEndian((qubits!)[0 .. Length(qubits!) - 2]), (qubits!)[Length(qubits!) - 1]);
-            
-            if (Length(coefficientsPadded) == 2)
-            {
-                // Termination case
+    operation ApplyDiagonalUnitary (coefficients : Double[], qubits : LittleEndian) : Unit is Adj + Ctl {
+        ApproximatelyApplyDiagonalUnitary(0.0, coefficients, qubits);
+    }
+
+    /// # TODO
+    operation ApproximatelyApplyDiagonalUnitary(tolerance : Double, coefficients : Double[], qubits : LittleEndian)
+    : Unit is Adj + Ctl {
+        if (IsEmpty(qubits!)) {
+            fail "operation ApplyDiagonalUnitary -- Number of qubits must be greater than 0.";
+        }
+
+        // pad coefficients length at tail to a power of 2.
+        let coefficientsPadded = Padded(-2 ^ Length(qubits!), 0.0, coefficients);
+
+        // Compute new coefficients.
+        let (coefficients0, coefficients1) = _MultiplexZCoefficients(coefficientsPadded);
+        ApproximatelyMultiplexZ(tolerance,coefficients1, LittleEndian((qubits!)[0 .. Length(qubits!) - 2]), (qubits!)[Length(qubits!) - 1]);
+
+        if (Length(coefficientsPadded) == 2) {
+            // Termination case
+            if (AbsD(coefficients0[0]) > tolerance) {
                 Exp([PauliI], 1.0 * coefficients0[0], qubits!);
             }
-            else
-            {
-                ApplyDiagonalUnitary(coefficients0, LittleEndian((qubits!)[0 .. Length(qubits!) - 2]));
-            }
+        } else {
+            ApproximatelyApplyDiagonalUnitary(tolerance, coefficients0, LittleEndian(Most(qubits!)));
         }
-        
-        adjoint invert;
-        controlled distribute;
-        controlled adjoint distribute;
     }
-    
-    
+
     /// # Summary
     /// Implementation step of multiply-controlled Z rotations.
     /// # See Also
