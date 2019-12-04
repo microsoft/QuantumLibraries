@@ -98,16 +98,15 @@ namespace Microsoft.Quantum.MachineLearning {
         for (idx in 0 .. nCoefficients - 1) {
             mutable coef = coefficients[idx];
             mutable ang = 0.0;
-            if (coef < 0.0)
-            {
+            if (coef < 0.0) {
                 set allPositive = false;
                 set coef =  -coef;
-                set ang =Microsoft.Quantum.Math.PI();
+                set ang = PI();
             }
             set coefficientsComplexPolar w/= idx<-ComplexPolar(coef,ang);
         }
         if (_CanApplyTwoQubitCase(coefficients)) {
-            return _ApplyTwoQubitCase(coefficients,_);
+            return _ApplyTwoQubitCase(coefficients, _);
         }
         return ApproximatelyPrepareArbitraryState(1E-12, coefficientsComplexPolar, _); //this is preparing the state almost exactly so far
     }
