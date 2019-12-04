@@ -144,12 +144,16 @@ namespace Microsoft.Quantum.Preparation {
     /// - Synthesis of Quantum Logic Circuits
     ///   Vivek V. Shende, Stephen S. Bullock, Igor L. Markov
     ///   https://arxiv.org/abs/quant-ph/0406176
-    operation PrepareArbitraryState (coefficients : ComplexPolar[], qubits : LittleEndian) : Unit is Adj + Ctl {
+    operation PrepareArbitraryState(coefficients : ComplexPolar[], qubits : LittleEndian) : Unit is Adj + Ctl {
+        ApproximatelyPrepareArbitraryState(0.0, coefficients, qubits);
+    }
+
+    /// TODO
+    operation ApproximatelyPrepareArbitraryState(tolerance : Double, coefficients : ComplexPolar[], qubits : LittleEndian) : Unit is Adj + Ctl {
         // pad coefficients at tail length to a power of 2.
         let coefficientsPadded = Padded(-2 ^ Length(qubits!), ComplexPolar(0.0, 0.0), coefficients);
         let target = (qubits!)[0];
-        let op = (Adjoint _PrepareArbitraryState(coefficientsPadded, _, _))(_, target);
-
+        let op = (Adjoint _ApproximatelyPrepareArbitraryState(tolerance, coefficientsPadded, _, _))(_, target);
         op(
             // Determine what controls to apply to `op`.
             Length(qubits!) > 1
@@ -158,33 +162,36 @@ namespace Microsoft.Quantum.Preparation {
         );
     }
 
-
     /// # Summary
     /// Implementation step of arbitrary state preparation procedure.
     ///
     /// # See Also
     /// - PrepareArbitraryState
     /// - Microsoft.Quantum.Canon.MultiplexPauli
-    operation _PrepareArbitraryState(coefficients : ComplexPolar[], control : LittleEndian, target : Qubit) : Unit is Adj + Ctl
-    {
+    operation _ApproximatelyPrepareArbitraryState(tolerance: Double, coefficients : ComplexPolar[], control : LittleEndian, target : Qubit)
+    : Unit is Adj + Ctl {
         // For each 2D block, compute disentangling single-qubit rotation parameters
         let (disentanglingY, disentanglingZ, newCoefficients) = _StatePreparationSBMComputeCoefficients(coefficients);
-        MultiplexPauli(disentanglingZ, PauliZ, control, target);
-        MultiplexPauli(disentanglingY, PauliY, control, target);
-
+        if (_AnyOutsideToleranceD(tolerance, disentanglingZ)) {
+            ApproximatelyMultiplexPauli(tolerance, disentanglingZ, PauliZ, control, target);
+        }
+        if (_AnyOutsideToleranceD(tolerance, disentanglingY)) {
+            ApproximatelyMultiplexPauli(tolerance, disentanglingY, PauliY, control, target);
+        }
         // target is now in |0> state up to the phase given by arg of newCoefficients.
 
         // Continue recursion while there are control qubits.
-        if (Length(control!) == 0)
-        {
+        if (Length(control!) == 0) {
             let (abs, arg) = newCoefficients[0]!;
-            Exp([PauliI], -1.0 * arg, [target]);
-        }
-        else
-        {
-            let newControl = LittleEndian((control!)[1 .. Length(control!) - 1]);
-            let newTarget = (control!)[0];
-            _PrepareArbitraryState(newCoefficients, newControl, newTarget);
+            if (AbsD(arg) > tolerance) {
+                Exp([PauliI], -1.0 * arg, [target]);
+            }
+        } else {
+            if (_AnyOutsideToleranceCP(tolerance, newCoefficients)) {
+                let newControl = LittleEndian((control!)[1 .. Length(control!) - 1]);
+                let newTarget = (control!)[0];
+                _ApproximatelyPrepareArbitraryState(tolerance,newCoefficients, newControl, newTarget);
+            }
         }
     }
 
@@ -204,8 +211,7 @@ namespace Microsoft.Quantum.Preparation {
     ///
     /// # Output
     /// A tuple containing `(ComplexPolar(r, t), phi, theta)`.
-    function BlochSphereCoordinates (a0 : ComplexPolar, a1 : ComplexPolar) : (ComplexPolar, Double, Double)
-    {
+    function BlochSphereCoordinates (a0 : ComplexPolar, a1 : ComplexPolar) : (ComplexPolar, Double, Double) {
         let abs0 = AbsComplexPolar(a0);
         let abs1 = AbsComplexPolar(a1);
         let arg0 = ArgComplexPolar(a0);

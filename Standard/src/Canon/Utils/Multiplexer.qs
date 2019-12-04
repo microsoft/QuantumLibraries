@@ -8,8 +8,8 @@ namespace Microsoft.Quantum.Canon {
     open Microsoft.Quantum.Math;
 
     /// # Summary
-	/// Applies a Pauli rotation conditioned on an array of qubits.
-	///
+    /// Applies a Pauli rotation conditioned on an array of qubits.
+    ///
     /// # Description
     /// This applies the multiply-controlled unitary operation $U$ that performs
     /// rotations by angle $\theta_j$ about single-qubit Pauli operator $P$
@@ -60,8 +60,8 @@ namespace Microsoft.Quantum.Canon {
     }
 
     /// # Summary
-	/// Applies a Pauli Z rotation conditioned on an array of qubits.
-	///
+    /// Applies a Pauli Z rotation conditioned on an array of qubits.
+    ///
     /// This applies the multiply-controlled unitary operation $U$ that performs
     /// rotations by angle $\theta_j$ about single-qubit Pauli operator $Z$
     /// when controlled by the $n$-qubit number state $\ket{j}$.
@@ -93,7 +93,7 @@ namespace Microsoft.Quantum.Canon {
         ApproximatelyMultiplexZ(0.0, coefficients, control, target);
     }
 
-    function _AnyOutsideTolerance(tolerance : Double, coefficients : Double[]) : Bool {
+    function _AnyOutsideToleranceD(tolerance : Double, coefficients : Double[]) : Bool {
         // NB: We don't currently use Any / Mapped for this, as we want to be
         //     able to short-circuit. That should be implied by immutable
         //     semantics, but that's not yet the case.
@@ -105,49 +105,58 @@ namespace Microsoft.Quantum.Canon {
         return false;
     }
 
+    function _AnyOutsideToleranceCP(tolerance : Double, coefficients : ComplexPolar[]) : Bool {
+        for (coefficient in coefficients) {
+            if (AbsComplexPolar(coefficient) > tolerance) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     /// TODO
     operation ApproximatelyMultiplexZ(tolerance : Double, coefficients : Double[], control : LittleEndian, target : Qubit) : Unit is Adj + Ctl {
-		body (...) {
-			// pad coefficients length at tail to a power of 2.
-			let coefficientsPadded = Padded(-2 ^ Length(control!), 0.0, coefficients);
+        body (...) {
+            // pad coefficients length at tail to a power of 2.
+            let coefficientsPadded = Padded(-2 ^ Length(control!), 0.0, coefficients);
 
-			if (Length(coefficientsPadded) == 1) {
-				// Termination case
-				if (AbsD(coefficientsPadded[0]) > tolerance) {
-					Exp([PauliZ], coefficientsPadded[0], [target]);
-				}
-			} else {
-				// Compute new coefficients.
-				let (coefficients0, coefficients1) = _MultiplexZCoefficients(coefficientsPadded);
-				ApproximatelyMultiplexZ(tolerance,coefficients0, LittleEndian((control!)[0 .. Length(control!) - 2]), target);
-				if (_AnyOutsideTolerance(tolerance, coefficients1)) {
+            if (Length(coefficientsPadded) == 1) {
+                // Termination case
+                if (AbsD(coefficientsPadded[0]) > tolerance) {
+                    Exp([PauliZ], coefficientsPadded[0], [target]);
+                }
+            } else {
+                // Compute new coefficients.
+                let (coefficients0, coefficients1) = _MultiplexZCoefficients(coefficientsPadded);
+                ApproximatelyMultiplexZ(tolerance,coefficients0, LittleEndian((control!)[0 .. Length(control!) - 2]), target);
+                if (_AnyOutsideToleranceD(tolerance, coefficients1)) {
                     within {
-					    CNOT((control!)[Length(control!) - 1], target);
+                        CNOT((control!)[Length(control!) - 1], target);
                     } apply {
-					    ApproximatelyMultiplexZ(tolerance,coefficients1, LittleEndian((control!)[0 .. Length(control!) - 2]), target);
+                        ApproximatelyMultiplexZ(tolerance,coefficients1, LittleEndian((control!)[0 .. Length(control!) - 2]), target);
                     }
-				}
-			}
-		}
+                }
+            }
+        }
 
-		controlled (controlRegister, ...) {
-			// pad coefficients length to a power of 2.
-			let coefficientsPadded = Padded(2 ^ (Length(control!) + 1), 0.0, Padded(-2 ^ Length(control!), 0.0, coefficients));
-			let (coefficients0, coefficients1) = _MultiplexZCoefficients(coefficientsPadded);
-			ApproximatelyMultiplexZ(tolerance,coefficients0, control, target);
-			if (_AnyOutsideTolerance(tolerance,coefficients1)) {
-				within {
+        controlled (controlRegister, ...) {
+            // pad coefficients length to a power of 2.
+            let coefficientsPadded = Padded(2 ^ (Length(control!) + 1), 0.0, Padded(-2 ^ Length(control!), 0.0, coefficients));
+            let (coefficients0, coefficients1) = _MultiplexZCoefficients(coefficientsPadded);
+            ApproximatelyMultiplexZ(tolerance,coefficients0, control, target);
+            if (_AnyOutsideToleranceD(tolerance,coefficients1)) {
+                within {
                     Controlled X(controlRegister, target);
                 } apply {
-				    ApproximatelyMultiplexZ(tolerance,coefficients1, control, target);
+                    ApproximatelyMultiplexZ(tolerance,coefficients1, control, target);
                 }
-			}
-		}
+            }
+        }
     }
 
     /// # Summary
-	/// Applies an array of complex phases to numeric basis states of a register of qubits.
-	///
+    /// Applies an array of complex phases to numeric basis states of a register of qubits.
+    ///
     /// That is, this implements the diagonal unitary operation $U$ that applies a complex phase
     /// $e^{i \theta_j}$ on the $n$-qubit number state $\ket{j}$.
     ///
@@ -216,8 +225,8 @@ namespace Microsoft.Quantum.Canon {
     }
 
     /// # Summary
-	/// Applies an array of operations controlled by an array of number states.
-	///
+    /// Applies an array of operations controlled by an array of number states.
+    ///
     /// That is, applies Multiply-controlled unitary operation $U$ that applies a
     /// unitary $V_j$ when controlled by $n$-qubit number state $\ket{j}$.
     ///
