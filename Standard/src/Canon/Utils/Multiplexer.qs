@@ -217,7 +217,7 @@ namespace Microsoft.Quantum.Canon {
 
     /// # Summary
 	/// Applies an array of operations controlled by an array of number states.
-	/// 
+	///
     /// That is, applies Multiply-controlled unitary operation $U$ that applies a
     /// unitary $V_j$ when controlled by $n$-qubit number state $\ket{j}$.
     ///
@@ -238,7 +238,7 @@ namespace Microsoft.Quantum.Canon {
     /// # Remarks
     /// `coefficients` will be padded with identity elements if
     /// fewer than $2^n$ are specified. This implementation uses
-    /// $n-1$ ancilla qubits.
+    /// $n - 1$ auxillary qubits.
     ///
     /// # References
     /// - Toward the first quantum simulation with quantum speedup
@@ -251,8 +251,8 @@ namespace Microsoft.Quantum.Canon {
         }
 
         if (Length(unitaries) > 0) {
-            let ancilla = new Qubit[0];
-            _MultiplexOperations(unitaries, ancilla, index, target);
+            let auxillaryRegister = new Qubit[0];
+            _MultiplexOperations(unitaries, auxillaryRegister, index, target);
         }
     }
 
@@ -260,10 +260,14 @@ namespace Microsoft.Quantum.Canon {
     /// Implementation step of MultiplexOperations.
     /// # See Also
     /// - Microsoft.Quantum.Canon.MultiplexOperations
-    operation _MultiplexOperations<'T>(unitaries : ('T => Unit is Adj + Ctl)[], ancilla : Qubit[], index : LittleEndian, target : 'T) : Unit
-    {
-        body (...)
-        {
+    operation _MultiplexOperations<'T>(
+        unitaries : ('T => Unit is Adj + Ctl)[],
+        auxillaryRegister : Qubit[],
+        index : LittleEndian,
+        target : 'T
+    )
+    : Unit is Adj + Ctl {
+        body (...) {
             let nIndex = Length(index!);
             let nStates = 2 ^ nIndex;
             let nUnitaries = Length(unitaries);
@@ -272,59 +276,48 @@ namespace Microsoft.Quantum.Canon {
             let rightUnitaries = unitaries[0 .. nUnitariesRight - 1];
             let leftUnitaries = unitaries[nUnitariesRight .. nUnitariesLeft - 1];
             let newControls = LittleEndian((index!)[0 .. nIndex - 2]);
-            
-            if (nUnitaries > 0)
-            {
-                if (Length(ancilla) == 1 and nIndex == 0)
-                {
+
+            if (nUnitaries > 0) {
+                if (Length(auxillaryRegister) == 1 and nIndex == 0) {
                     // Termination case
-                    Controlled unitaries[0](ancilla, target);
-                }
-                elif (Length(ancilla) == 0 and nIndex >= 1)
-                {
+                    Controlled unitaries[0](auxillaryRegister, target);
+                } elif (Length(auxillaryRegister) == 0 and nIndex >= 1) {
                     // Start case
-                    let newAncilla = [(index!)[Length(index!) - 1]];
-                    
-                    if (nUnitariesLeft > 0)
-                    {
-                        _MultiplexOperations(leftUnitaries, newAncilla, newControls, target);
+                    let newAuxQubit = Tail(index!);
+
+                    if (nUnitariesLeft > 0) {
+                        _MultiplexOperations(leftUnitaries, [newAuxQubit], newControls, target);
                     }
-                    
-                    X(newAncilla[0]);
-                    _MultiplexOperations(rightUnitaries, newAncilla, newControls, target);
-                    X(newAncilla[0]);
-                }
-                else
-                {
-                    // Recursion that reduces nIndex by 1 & sets Length(ancilla) to 1.
-                    using (newAncilla = Qubit[1])
-                    {
-                        Controlled X(ancilla + [(index!)[Length(index!) - 1]], newAncilla[0]);
-                        
-                        if (nUnitariesLeft > 0)
-                        {
-                            _MultiplexOperations(leftUnitaries, newAncilla, newControls, target);
+
+                    within {
+                        X(newAuxQubit);
+                    } apply {
+                        _MultiplexOperations(rightUnitaries, [newAuxQubit], newControls, target);
+                    }
+                } else {
+                    // Recursion that reduces nIndex by 1 & sets Length(auxillaryRegister) to 1.
+                    using (newAuxQubit = Qubit()) {
+                        within {
+                            Controlled X(auxillaryRegister + [(index!)[Length(index!) - 1]], newAuxQubit);
+                        } apply {
+                            if (nUnitariesLeft > 0) {
+                                _MultiplexOperations(leftUnitaries, [newAuxQubit], newControls, target);
+                            }
+
+                            within {
+                                Controlled X(auxillaryRegister, newAuxQubit);
+                            } apply {
+                                _MultiplexOperations(rightUnitaries, [newAuxQubit], newControls, target);
+                            }
                         }
-                        
-                        Controlled X(ancilla, newAncilla[0]);
-                        _MultiplexOperations(rightUnitaries, newAncilla, newControls, target);
-                        Controlled X(ancilla, newAncilla[0]);
-                        Controlled X(ancilla + [(index!)[Length(index!) - 1]], newAncilla[0]);
                     }
                 }
             }
         }
-        
-        adjoint invert;
-        
-        controlled (controlRegister, ...)
-        {
+
+        controlled (controlRegister, ...) {
             _MultiplexOperations(unitaries, controlRegister, index, target);
         }
-        
-        controlled adjoint invert;
     }
-    
+
 }
-
-
