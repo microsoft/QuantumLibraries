@@ -172,10 +172,10 @@ namespace Microsoft.Quantum.MachineLearning {
     operation _NoisyPrepareArbitraryState(tolerance: Double, coefficients : ComplexPolar[], control : LittleEndian, target : Qubit) : Unit is Adj + Ctl {
         // For each 2D block, compute disentangling single-qubit rotation parameters
         let (disentanglingY, disentanglingZ, newCoefficients) = _NoisyStatePreparationSBMComputeCoefficients(coefficients);
-        if (significantReal(tolerance,disentanglingZ)) {
+        if (_AnyOutsideTolerance(tolerance,disentanglingZ)) {
             NoisyMultiplexPauli(tolerance,disentanglingZ, PauliZ, control, target);
         }
-        if (significantReal(tolerance,disentanglingY)) {
+        if (_AnyOutsideTolerance(tolerance,disentanglingY)) {
             NoisyMultiplexPauli(tolerance,disentanglingY, PauliY, control, target);
         }
         // target is now in |0> state up to the phase given by arg of newCoefficients.

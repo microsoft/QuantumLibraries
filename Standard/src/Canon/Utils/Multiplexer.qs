@@ -10,6 +10,7 @@ namespace Microsoft.Quantum.Canon {
     /// # Summary
 	/// Applies a Pauli rotation conditioned on an array of qubits.
 	///
+    /// # Description
     /// This applies the multiply-controlled unitary operation $U$ that performs
     /// rotations by angle $\theta_j$ about single-qubit Pauli operator $P$
     /// when controlled by the $n$-qubit number state $\ket{j}$.
@@ -34,44 +35,27 @@ namespace Microsoft.Quantum.Canon {
     /// # Remarks
     /// `coefficients` will be padded with elements $\theta_j = 0.0$ if
     /// fewer than $2^n$ are specified.
-    operation MultiplexPauli (coefficients : Double[], pauli : Pauli, control : LittleEndian, target : Qubit) : Unit
-    {
-        body (...)
-        {
-            if (pauli == PauliZ)
-            {
-                let op = MultiplexZ(coefficients, control, _);
-                op(target);
-            }
-            elif (pauli == PauliX)
-            {
-                let op = MultiplexPauli(coefficients, PauliZ, control, _);
-                ApplyWithCA(H, op, target);
-            }
-            elif (pauli == PauliY)
-            {
-                let op = MultiplexPauli(coefficients, PauliX, control, _);
-                ApplyWithCA(Adjoint S, op, target);
-            }
-            elif (pauli == PauliI)
-            {
-                ApplyDiagonalUnitary(coefficients, control);
-            }
-            else
-            {
-                fail $"MultiplexPauli failed. Invalid pauli {pauli}.";
-            }
+    operation MultiplexPauli (coefficients : Double[], pauli : Pauli, control : LittleEndian, target : Qubit)
+    : Unit is Adj + Ctl {
+        if (pauli == PauliZ) {
+            let op = MultiplexZ(coefficients, control, _);
+            op(target);
+        } elif (pauli == PauliX) {
+            let op = MultiplexPauli(coefficients, PauliZ, control, _);
+            ApplyWithCA(H, op, target);
+        } elif (pauli == PauliY) {
+            let op = MultiplexPauli(coefficients, PauliX, control, _);
+            ApplyWithCA(Adjoint S, op, target);
+        } elif (pauli == PauliI) {
+            ApplyDiagonalUnitary(coefficients, control);
+        } else {
+            fail $"MultiplexPauli failed. Invalid pauli {pauli}.";
         }
-        
-        adjoint invert;
-        controlled distribute;
-        controlled adjoint distribute;
     }
-    
-    
+
     /// # Summary
 	/// Applies a Pauli Z rotation conditioned on an array of qubits.
-	/// 
+	///
     /// This applies the multiply-controlled unitary operation $U$ that performs
     /// rotations by angle $\theta_j$ about single-qubit Pauli operator $Z$
     /// when controlled by the $n$-qubit number state $\ket{j}$.
@@ -98,46 +82,65 @@ namespace Microsoft.Quantum.Canon {
     /// - Synthesis of Quantum Logic Circuits
     ///   Vivek V. Shende, Stephen S. Bullock, Igor L. Markov
     ///   https://arxiv.org/abs/quant-ph/0406176
-    operation MultiplexZ (coefficients : Double[], control : LittleEndian, target : Qubit) : Unit
-    {
-        body (...)
-        {
-            // pad coefficients length at tail to a power of 2.
-            let coefficientsPadded = Padded(-2 ^ Length(control!), 0.0, coefficients);
-            
-            if (Length(coefficientsPadded) == 1)
-            {
-                // Termination case
-                Exp([PauliZ], coefficientsPadded[0], [target]);
-            }
-            else
-            {
-                // Compute new coefficients.
-                let (coefficients0, coefficients1) = MultiplexZComputeCoefficients_(coefficientsPadded);
-                MultiplexZ(coefficients0, LittleEndian((control!)[0 .. Length(control!) - 2]), target);
-                CNOT((control!)[Length(control!) - 1], target);
-                MultiplexZ(coefficients1, LittleEndian((control!)[0 .. Length(control!) - 2]), target);
-                CNOT((control!)[Length(control!) - 1], target);
-            }
-        }
-        
-        adjoint invert;
-        
-        controlled (controlRegister, ...)
-        {
-            // pad coefficients length to a power of 2.
-            let coefficientsPadded = Padded(2 ^ (Length(control!) + 1), 0.0, Padded(-2 ^ Length(control!), 0.0, coefficients));
-            let (coefficients0, coefficients1) = MultiplexZComputeCoefficients_(coefficientsPadded);
-            MultiplexZ(coefficients0, control, target);
-            Controlled X(controlRegister, target);
-            MultiplexZ(coefficients1, control, target);
-            Controlled X(controlRegister, target);
-        }
-        
-        controlled adjoint invert;
+    operation MultiplexZ(coefficients : Double[], control : LittleEndian, target : Qubit)
+    : Unit is Adj + Ctl {
+        ApproximatelyMultiplexZ(0.0, coefficients, control, target);
     }
-    
-    
+
+    function _AnyOutsideTolerance(tolerance : Double, coefficients : Double[]) : Bool {
+        // NB: We don't currently use Any / Mapped for this, as we want to be
+        //     able to short-circuit. That should be implied by immutable
+        //     semantics, but that's not yet the case.
+        for (coefficient in coefficients) {
+            if (AbsD(coefficient) >= tolerance) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /// TODO
+    operation ApproximatelyMultiplexZ(tolerance : Double, coefficients : Double[], control : LittleEndian, target : Qubit) : Unit is Adj + Ctl {
+		body (...) {
+			// pad coefficients length at tail to a power of 2.
+			let coefficientsPadded = Padded(-2 ^ Length(control!), 0.0, coefficients);
+
+			if (Length(coefficientsPadded) == 1) {
+				// Termination case
+				if (AbsD(coefficientsPadded[0])> tolerance) {
+					Exp([PauliZ], coefficientsPadded[0], [target]);
+				}
+			}
+			else
+			{
+				// Compute new coefficients.
+				let (coefficients0, coefficients1) = _MultiplexZCoefficients(coefficientsPadded);
+				ApproximatelyMultiplexZ(tolerance,coefficients0, LittleEndian((control!)[0 .. Length(control!) - 2]), target);
+				if (_AnyOutsideTolerance(tolerance, coefficients1)) {
+                    within {
+					    CNOT((control!)[Length(control!) - 1], target);
+                    } apply {
+					    ApproximatelyMultiplexZ(tolerance,coefficients1, LittleEndian((control!)[0 .. Length(control!) - 2]), target);
+                    }
+				}
+			}
+		}
+
+		controlled (controlRegister, ...) {
+			// pad coefficients length to a power of 2.
+			let coefficientsPadded = Padded(2 ^ (Length(control!) + 1), 0.0, Padded(-2 ^ Length(control!), 0.0, coefficients));
+			let (coefficients0, coefficients1) = _MultiplexZCoefficients(coefficientsPadded);
+			ApproximatelyMultiplexZ(tolerance,coefficients0, control, target);
+			if (_AnyOutsideTolerance(tolerance,coefficients1)) {
+				within {
+                    Controlled X(controlRegister, target);
+                } apply {
+				    ApproximatelyMultiplexZ(tolerance,coefficients1, control, target);
+                }
+			}
+		}
+    }
+
     /// # Summary
 	/// Applies an array of complex phases to numeric basis states of a register of qubits.
 	/// 
@@ -176,7 +179,7 @@ namespace Microsoft.Quantum.Canon {
             let coefficientsPadded = Padded(-2 ^ Length(qubits!), 0.0, coefficients);
             
             // Compute new coefficients.
-            let (coefficients0, coefficients1) = MultiplexZComputeCoefficients_(coefficientsPadded);
+            let (coefficients0, coefficients1) = _MultiplexZCoefficients(coefficientsPadded);
             MultiplexZ(coefficients1, LittleEndian((qubits!)[0 .. Length(qubits!) - 2]), (qubits!)[Length(qubits!) - 1]);
             
             if (Length(coefficientsPadded) == 2)
@@ -200,22 +203,19 @@ namespace Microsoft.Quantum.Canon {
     /// Implementation step of multiply-controlled Z rotations.
     /// # See Also
     /// - Microsoft.Quantum.Canon.MultiplexZ
-    function MultiplexZComputeCoefficients_ (coefficients : Double[]) : (Double[], Double[])
-    {
+    function _MultiplexZCoefficients(coefficients : Double[]) : (Double[], Double[]) {
         let newCoefficientsLength = Length(coefficients) / 2;
         mutable coefficients0 = new Double[newCoefficientsLength];
         mutable coefficients1 = new Double[newCoefficientsLength];
-        
-        for (idxCoeff in 0 .. newCoefficientsLength - 1)
-        {
+
+        for (idxCoeff in 0 .. newCoefficientsLength - 1) {
             set coefficients0 w/= idxCoeff <- 0.5 * (coefficients[idxCoeff] + coefficients[idxCoeff + newCoefficientsLength]);
             set coefficients1 w/= idxCoeff <- 0.5 * (coefficients[idxCoeff] - coefficients[idxCoeff + newCoefficientsLength]);
         }
-        
+
         return (coefficients0, coefficients1);
     }
-    
-    
+
     /// # Summary
 	/// Applies an array of operations controlled by an array of number states.
 	/// 
@@ -245,28 +245,18 @@ namespace Microsoft.Quantum.Canon {
     /// - Toward the first quantum simulation with quantum speedup
     ///   Andrew M. Childs, Dmitri Maslov, Yunseong Nam, Neil J. Ross, Yuan Su
     ///   https://arxiv.org/abs/1711.10980
-    operation MultiplexOperations<'T> (unitaries : ('T => Unit is Adj + Ctl)[], index : LittleEndian, target : 'T) : Unit
-    {
-        body (...)
-        {
-            if (Length(index!) == 0)
-            {
-                fail $"MultiplexOperations failed. Number of index qubits must be greater than 0.";
-            }
-            
-            if (Length(unitaries) > 0)
-            {
-                let ancilla = new Qubit[0];
-                _MultiplexOperations(unitaries, ancilla, index, target);
-            }
+    operation MultiplexOperations<'T> (unitaries : ('T => Unit is Adj + Ctl)[], index : LittleEndian, target : 'T)
+    : Unit is Adj + Ctl {
+        if (Length(index!) == 0) {
+            fail $"MultiplexOperations failed. Number of index qubits must be greater than 0.";
         }
-        
-        adjoint invert;
-        controlled distribute;
-        controlled adjoint distribute;
+
+        if (Length(unitaries) > 0) {
+            let ancilla = new Qubit[0];
+            _MultiplexOperations(unitaries, ancilla, index, target);
+        }
     }
-    
-    
+
     /// # Summary
     /// Implementation step of MultiplexOperations.
     /// # See Also
