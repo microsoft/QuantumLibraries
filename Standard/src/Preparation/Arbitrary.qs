@@ -12,8 +12,8 @@ namespace Microsoft.Quantum.Preparation {
     // from the computational basis state $\ket{0...0}$.
 
     /// # Summary
-	  /// Returns an operation that prepares the given quantum state.
-	  ///
+    /// Returns an operation that prepares the given quantum state.
+    ///
     /// The returned operation $U$ prepares an arbitrary quantum
     /// state $\ket{\psi}$ with positive coefficients $\alpha_j\ge 0$ from
     /// the $n$-qubit computational basis state $\ket{0...0}$.
@@ -61,8 +61,8 @@ namespace Microsoft.Quantum.Preparation {
     }
 
     /// # Summary
-	/// Returns an operation that prepares a specific quantum state.
-	/// 
+    /// Returns an operation that prepares a specific quantum state.
+    ///
     /// The returned operation $U$ prepares an arbitrary quantum
     /// state $\ket{\psi}$ with complex coefficients $r_j e^{i t_j}$ from
     /// the $n$-qubit computational basis state $\ket{0...0}$.
@@ -108,11 +108,11 @@ namespace Microsoft.Quantum.Preparation {
     function StatePreparationComplexCoefficients (coefficients : ComplexPolar[]) : (LittleEndian => Unit is Adj + Ctl) {
         return PrepareArbitraryState(coefficients, _);
     }
-    
-    
+
+
     /// # Summary
-	/// Returns an operation that prepares a given quantum state.
-	/// 
+    /// Returns an operation that prepares a given quantum state.
+    ///
     /// The returned operation $U$ prepares an arbitrary quantum
     /// state $\ket{\psi}$ with complex coefficients $r_j e^{i t_j}$ from
     /// the $n$-qubit computational basis state $\ket{0...0}$.
@@ -171,9 +171,9 @@ namespace Microsoft.Quantum.Preparation {
         let (disentanglingY, disentanglingZ, newCoefficients) = _StatePreparationSBMComputeCoefficients(coefficients);
         MultiplexPauli(disentanglingZ, PauliZ, control, target);
         MultiplexPauli(disentanglingY, PauliY, control, target);
-        
+
         // target is now in |0> state up to the phase given by arg of newCoefficients.
-        
+
         // Continue recursion while there are control qubits.
         if (Length(control!) == 0)
         {
@@ -187,11 +187,11 @@ namespace Microsoft.Quantum.Preparation {
             _PrepareArbitraryState(newCoefficients, newControl, newTarget);
         }
     }
-    
-    
+
+
     /// # Summary
-	/// Computes the Bloch sphere coordinates for a single-qubit state.
-	/// 
+    /// Computes the Bloch sphere coordinates for a single-qubit state.
+    ///
     /// Given two complex numbers $a0, a1$ that represent the qubit state, computes coordinates
     /// on the Bloch sphere such that
     /// $a0 \ket{0} + a1 \ket{1} = r e^{it}(e^{-i \phi /2}\cos{(\theta/2)}\ket{0}+e^{i \phi /2}\sin{(\theta/2)}\ket{1})$.
