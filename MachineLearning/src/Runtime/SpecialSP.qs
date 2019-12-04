@@ -173,10 +173,10 @@ namespace Microsoft.Quantum.MachineLearning {
         // For each 2D block, compute disentangling single-qubit rotation parameters
         let (disentanglingY, disentanglingZ, newCoefficients) = _NoisyStatePreparationSBMComputeCoefficients(coefficients);
         if (_AnyOutsideTolerance(tolerance,disentanglingZ)) {
-            NoisyMultiplexPauli(tolerance,disentanglingZ, PauliZ, control, target);
+            ApproximatelyMultiplexPauli(tolerance, disentanglingZ, PauliZ, control, target);
         }
         if (_AnyOutsideTolerance(tolerance,disentanglingY)) {
-            NoisyMultiplexPauli(tolerance,disentanglingY, PauliY, control, target);
+            ApproximatelyMultiplexPauli(tolerance, disentanglingY, PauliY, control, target);
         }
         // target is now in |0> state up to the phase given by arg of newCoefficients.
 

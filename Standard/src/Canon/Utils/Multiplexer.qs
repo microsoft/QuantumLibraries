@@ -37,17 +37,23 @@ namespace Microsoft.Quantum.Canon {
     /// fewer than $2^n$ are specified.
     operation MultiplexPauli (coefficients : Double[], pauli : Pauli, control : LittleEndian, target : Qubit)
     : Unit is Adj + Ctl {
+        ApproximatelyMultiplexPauli(0.0, coefficients, pauli, control, target);
+    }
+
+    /// TODO
+    operation ApproximatelyMultiplexPauli(tolerance : Double, coefficients : Double[], pauli : Pauli, control : LittleEndian, target : Qubit)
+    : Unit is Adj + Ctl {
         if (pauli == PauliZ) {
-            let op = MultiplexZ(coefficients, control, _);
+            let op = ApproximatelyMultiplexZ(tolerance, coefficients, control, _);
             op(target);
         } elif (pauli == PauliX) {
-            let op = MultiplexPauli(coefficients, PauliZ, control, _);
+            let op = ApproximatelyMultiplexPauli(tolerance, coefficients, PauliZ, control, _);
             ApplyWithCA(H, op, target);
         } elif (pauli == PauliY) {
-            let op = MultiplexPauli(coefficients, PauliX, control, _);
+            let op = ApproximatelyMultiplexPauli(tolerance, coefficients, PauliX, control, _);
             ApplyWithCA(Adjoint S, op, target);
         } elif (pauli == PauliI) {
-            ApplyDiagonalUnitary(coefficients, control);
+            ApproximatelyApplyDiagonalUnitary(tolerance, coefficients, control);
         } else {
             fail $"MultiplexPauli failed. Invalid pauli {pauli}.";
         }
@@ -141,7 +147,7 @@ namespace Microsoft.Quantum.Canon {
 
     /// # Summary
 	/// Applies an array of complex phases to numeric basis states of a register of qubits.
-	/// 
+	///
     /// That is, this implements the diagonal unitary operation $U$ that applies a complex phase
     /// $e^{i \theta_j}$ on the $n$-qubit number state $\ket{j}$.
     ///
