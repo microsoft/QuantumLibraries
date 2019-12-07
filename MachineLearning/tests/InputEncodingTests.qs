@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License.
+
 namespace Microsoft.Quantum.MachineLearning.Tests {
     open Microsoft.Quantum.Arrays;
     open Microsoft.Quantum.Math;
