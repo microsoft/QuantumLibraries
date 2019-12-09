@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
-namespace Microsoft.Quantum.MachineLearning {
+
+namespace Microsoft.Quantum.Preparation {
     open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Arithmetic;
     open Microsoft.Quantum.Intrinsic;
@@ -9,7 +10,7 @@ namespace Microsoft.Quantum.MachineLearning {
 
     // This library returns operations that prepare a specified quantum state
     // from the computational basis state $\ket{0...0}$.
-    
+
     /// # Summary
     /// Returns an operation that prepares the given quantum state.
     ///
@@ -48,18 +49,20 @@ namespace Microsoft.Quantum.MachineLearning {
     ///     op(qubitsLE);
     /// }
     /// ```
-    function NoisyStatePreparationPositiveCoefficients (tolerance: Double, coefficients : Double[]) : (LittleEndian => Unit is Adj + Ctl) {
+    function StatePreparationPositiveCoefficients (coefficients : Double[]) : (LittleEndian => Unit is Adj + Ctl) {
         let nCoefficients = Length(coefficients);
         mutable coefficientsComplexPolar = new ComplexPolar[nCoefficients];
+
         for (idx in 0 .. nCoefficients - 1) {
             set coefficientsComplexPolar w/= idx <- ComplexPolar(AbsD(coefficients[idx]), 0.0);
         }
-        return NoisyPrepareArbitraryState(tolerance, coefficientsComplexPolar, _);
+
+        return PrepareArbitraryState(coefficientsComplexPolar, _);
     }
 
     /// # Summary
     /// Returns an operation that prepares a specific quantum state.
-    /// 
+    ///
     /// The returned operation $U$ prepares an arbitrary quantum
     /// state $\ket{\psi}$ with complex coefficients $r_j e^{i t_j}$ from
     /// the $n$-qubit computational basis state $\ket{0...0}$.
@@ -102,13 +105,14 @@ namespace Microsoft.Quantum.MachineLearning {
     ///     op(qubitsLE);
     /// }
     /// ```
-    function NoisyStatePreparationComplexCoefficients (tolerance: Double, coefficients : ComplexPolar[]) : (LittleEndian => Unit is Adj + Ctl)  {
-        return NoisyPrepareArbitraryState(tolerance, coefficients, _);
+    function StatePreparationComplexCoefficients (coefficients : ComplexPolar[]) : (LittleEndian => Unit is Adj + Ctl) {
+        return PrepareArbitraryState(coefficients, _);
     }
+
 
     /// # Summary
     /// Returns an operation that prepares a given quantum state.
-    /// 
+    ///
     /// The returned operation $U$ prepares an arbitrary quantum
     /// state $\ket{\psi}$ with complex coefficients $r_j e^{i t_j}$ from
     /// the $n$-qubit computational basis state $\ket{0...0}$.
@@ -140,11 +144,16 @@ namespace Microsoft.Quantum.MachineLearning {
     /// - Synthesis of Quantum Logic Circuits
     ///   Vivek V. Shende, Stephen S. Bullock, Igor L. Markov
     ///   https://arxiv.org/abs/quant-ph/0406176
-    operation NoisyPrepareArbitraryState (tolerance:Double, coefficients : ComplexPolar[], qubits : LittleEndian) : Unit is Adj + Ctl {
+    operation PrepareArbitraryState(coefficients : ComplexPolar[], qubits : LittleEndian) : Unit is Adj + Ctl {
+        ApproximatelyPrepareArbitraryState(0.0, coefficients, qubits);
+    }
+
+    /// TODO
+    operation ApproximatelyPrepareArbitraryState(tolerance : Double, coefficients : ComplexPolar[], qubits : LittleEndian) : Unit is Adj + Ctl {
         // pad coefficients at tail length to a power of 2.
         let coefficientsPadded = Padded(-2 ^ Length(qubits!), ComplexPolar(0.0, 0.0), coefficients);
         let target = (qubits!)[0];
-        let op = (Adjoint _NoisyPrepareArbitraryState(tolerance,coefficientsPadded, _, _))(_, target);
+        let op = (Adjoint _ApproximatelyPrepareArbitraryState(tolerance, coefficientsPadded, _, _))(_, target);
         op(
             // Determine what controls to apply to `op`.
             Length(qubits!) > 1
@@ -153,52 +162,43 @@ namespace Microsoft.Quantum.MachineLearning {
         );
     }
 
-
-    function significantComplex(tol: Double, rg:ComplexPolar[]):Bool {
-        for (j in 0..(Length(rg)-1)) {
-            if (AbsComplexPolar(rg[j])>tol) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     /// # Summary
     /// Implementation step of arbitrary state preparation procedure.
     ///
     /// # See Also
     /// - PrepareArbitraryState
     /// - Microsoft.Quantum.Canon.MultiplexPauli
-    operation _NoisyPrepareArbitraryState(tolerance: Double, coefficients : ComplexPolar[], control : LittleEndian, target : Qubit) : Unit is Adj + Ctl {
+    operation _ApproximatelyPrepareArbitraryState(tolerance: Double, coefficients : ComplexPolar[], control : LittleEndian, target : Qubit)
+    : Unit is Adj + Ctl {
         // For each 2D block, compute disentangling single-qubit rotation parameters
-        let (disentanglingY, disentanglingZ, newCoefficients) = _NoisyStatePreparationSBMComputeCoefficients(coefficients);
-        if (significantReal(tolerance,disentanglingZ)) {
-            NoisyMultiplexPauli(tolerance,disentanglingZ, PauliZ, control, target);
+        let (disentanglingY, disentanglingZ, newCoefficients) = _StatePreparationSBMComputeCoefficients(coefficients);
+        if (_AnyOutsideToleranceD(tolerance, disentanglingZ)) {
+            ApproximatelyMultiplexPauli(tolerance, disentanglingZ, PauliZ, control, target);
         }
-        if (significantReal(tolerance,disentanglingY)) {
-            NoisyMultiplexPauli(tolerance,disentanglingY, PauliY, control, target);
+        if (_AnyOutsideToleranceD(tolerance, disentanglingY)) {
+            ApproximatelyMultiplexPauli(tolerance, disentanglingY, PauliY, control, target);
         }
         // target is now in |0> state up to the phase given by arg of newCoefficients.
 
         // Continue recursion while there are control qubits.
         if (Length(control!) == 0) {
             let (abs, arg) = newCoefficients[0]!;
-            if (AbsD(arg)> tolerance)
-            {
-            Exp([PauliI], -1.0 * arg, [target]);
+            if (AbsD(arg) > tolerance) {
+                Exp([PauliI], -1.0 * arg, [target]);
             }
         } else {
-            if (significantComplex(tolerance,newCoefficients)) {
+            if (_AnyOutsideToleranceCP(tolerance, newCoefficients)) {
                 let newControl = LittleEndian((control!)[1 .. Length(control!) - 1]);
                 let newTarget = (control!)[0];
-                _NoisyPrepareArbitraryState(tolerance,newCoefficients, newControl, newTarget);
+                _ApproximatelyPrepareArbitraryState(tolerance,newCoefficients, newControl, newTarget);
             }
         }
     }
 
+
     /// # Summary
     /// Computes the Bloch sphere coordinates for a single-qubit state.
-    /// 
+    ///
     /// Given two complex numbers $a0, a1$ that represent the qubit state, computes coordinates
     /// on the Bloch sphere such that
     /// $a0 \ket{0} + a1 \ket{1} = r e^{it}(e^{-i \phi /2}\cos{(\theta/2)}\ket{0}+e^{i \phi /2}\sin{(\theta/2)}\ket{1})$.
@@ -211,7 +211,7 @@ namespace Microsoft.Quantum.MachineLearning {
     ///
     /// # Output
     /// A tuple containing `(ComplexPolar(r, t), phi, theta)`.
-    function NoisyBlochSphereCoordinates (a0 : ComplexPolar, a1 : ComplexPolar) : (ComplexPolar, Double, Double) {
+    function BlochSphereCoordinates (a0 : ComplexPolar, a1 : ComplexPolar) : (ComplexPolar, Double, Double) {
         let abs0 = AbsComplexPolar(a0);
         let abs1 = AbsComplexPolar(a1);
         let arg0 = ArgComplexPolar(a0);
@@ -227,16 +227,21 @@ namespace Microsoft.Quantum.MachineLearning {
     /// Implementation step of arbitrary state preparation procedure.
     /// # See Also
     /// - Microsoft.Quantum.Canon.PrepareArbitraryState
-    function _NoisyStatePreparationSBMComputeCoefficients (coefficients : ComplexPolar[]) : (Double[], Double[], ComplexPolar[]) {
+    function _StatePreparationSBMComputeCoefficients (coefficients : ComplexPolar[]) : (Double[], Double[], ComplexPolar[]) {
         mutable disentanglingZ = new Double[Length(coefficients) / 2];
         mutable disentanglingY = new Double[Length(coefficients) / 2];
         mutable newCoefficients = new ComplexPolar[Length(coefficients) / 2];
+
         for (idxCoeff in 0 .. 2 .. Length(coefficients) - 1) {
-            let (rt, phi, theta) = NoisyBlochSphereCoordinates(coefficients[idxCoeff], coefficients[idxCoeff + 1]);
+            let (rt, phi, theta) = BlochSphereCoordinates(coefficients[idxCoeff], coefficients[idxCoeff + 1]);
             set disentanglingZ w/= idxCoeff / 2 <- 0.5 * phi;
             set disentanglingY w/= idxCoeff / 2 <- 0.5 * theta;
             set newCoefficients w/= idxCoeff / 2 <- rt;
         }
+
         return (disentanglingY, disentanglingZ, newCoefficients);
     }
+
 }
+
+
