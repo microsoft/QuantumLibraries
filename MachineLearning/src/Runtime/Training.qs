@@ -179,10 +179,11 @@ namespace Microsoft.Quantum.MachineLearning {
     /// (utility, (new)parameters) pair
     ///
     operation OneStochasticTrainingStep(
-        tolerance: Double, miniBatch: LabeledSample[], param: Double[], gates: GateSequence,
-        lrate: Double, measCount: Int
-    ) : (Double, Double[]) {
-        mutable upParam = new Double[Length(param)];
+        miniBatch : LabeledSample[],
+        options : TrainingOptions,
+        param : Double[], gates : GateSequence
+    )
+    : (Double, Double[]) {
         mutable batchGradient = ConstantArray(Length(param), 0.0);
 
         for (samp in miniBatch) {
@@ -190,17 +191,19 @@ namespace Microsoft.Quantum.MachineLearning {
             if (err < 1.0) {
                 set err = -1.0; //class 0 misclassified to class 1; strive to reduce the probability
             }
-            let grad = EstimateGradientFromClassicalSample(tolerance, param, gates, samp::Features, measCount);
+            let grad = EstimateGradientFromClassicalSample(
+                options::Tolerance, param, gates, samp::Features,
+                options::NMeasurements
+            );
             for (ip in 0..(Length(param) - 1)) {
                 // GradientClassicalSample actually computes antigradient, but err*grad corrects it back to gradient
-                set batchGradient w/= ip <- (batchGradient[ip] + lrate * err * grad[ip]);
+                set batchGradient w/= ip <- (batchGradient[ip] + options::LearningRate * err * grad[ip]);
             }
 
         }
-        for (ip in 0..(Length(param)-1)) {
-            set upParam w/= ip <- (param[ip] + batchGradient[ip]);
-        }
-        return (SquaredNorm(batchGradient), upParam); //TODO:REVIEW: Ok to interpret utility as size of the overall move?
+        let updatedParameters = Mapped(PlusD, Zip(param, batchGradient));
+        // TODO:REVIEW: Ok to interpret utility as size of the overall move?
+        return (SquaredNorm(batchGradient), updatedParameters);
     }
 
 
@@ -238,11 +241,15 @@ namespace Microsoft.Quantum.MachineLearning {
     /// ## measCount
     /// number of true quantum measurements to estimate probabilities.
     ///
-    operation OneStochasticTrainingEpoch(samples: LabeledSample[], sched: SamplingSchedule, schedScore: SamplingSchedule, periodScore: Int, options : TrainingOptions,
-                    param: Double[], gates: GateSequence, bias: Double,
-                    h0: Int, m0: Int): ((Int,Int),(Double,Double[]))
-    {
-        let HARDCODEDunderage = 3; //4/26 slack greater than 3 is not recommended
+    operation OneStochasticTrainingEpoch(
+        samples: LabeledSample[], sched: SamplingSchedule,
+        schedScore: SamplingSchedule, periodScore: Int,
+        options : TrainingOptions,
+        param: Double[], gates: GateSequence, bias: Double,
+        h0: Int, m0: Int
+    )
+    : ((Int, Int), (Double, Double[])) {
+        let HARDCODEDunderage = 3; // 4/26 slack greater than 3 is not recommended
 
 
         mutable hBest = h0;
@@ -260,7 +267,7 @@ namespace Microsoft.Quantum.MachineLearning {
         //An epoch is just an attempt to update the parameters by learning from misses based on LKG parameters
         for (ixLoc in 0..options::MinibatchSize..(Length(missLocations) - 1)) {
             let miniBatch = ExtractMiniBatch(options::MinibatchSize, ixLoc, missLocations, samples);
-            let (utility,upParam) = OneStochasticTrainingStep(options::Tolerance, miniBatch, paramCurrent, gates, options::LearningRate, options::NMeasurements);
+            let (utility, upParam) = OneStochasticTrainingStep(miniBatch, options, paramCurrent, gates);
             if (AbsD(utility) > 0.0000001) {
                 //There had been some parameter update
                 if (utility > 0.0) { //good parameter update
