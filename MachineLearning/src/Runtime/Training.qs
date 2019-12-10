@@ -295,43 +295,6 @@ namespace Microsoft.Quantum.MachineLearning {
         }
         return ((hBest, mBest), (biasBest, paramBest));
     }
-
-    //Make some oblivious gradien descent steps without checking the prediction quality
-    operation OneUncontrolledStochasticTrainingEpoch(samples: LabeledSample[], sched: SamplingSchedule, schedScore: SamplingSchedule, periodScore: Int,
-                    miniBatchSize: Int, param: Double[], gates: GateSequence, bias: Double, lrate: Double, tolerance: Double,  measCount: Int): ((Int,Int),(Double,Double[]))
-    {
-        let pls = ClassificationProbabilitiesClassicalData(samples, schedScore, param, gates, measCount);
-        mutable biasBest = _UpdatedBias(pls, bias, tolerance);
-        let (h0,m0) = TallyHitsMisses(pls,biasBest); // ClassificationScoreSimulated(samples, schedScore, param, gates, bias); //Deprecated
-        mutable hCur = h0;
-        mutable mCur = m0;
-        let missLocations = MissLocations(schedScore, pls, biasBest);
-
-        mutable paramBest = param;
-        mutable paramCurrent = paramBest;
-        mutable biasCurrent = biasBest;
-
-        //An epoch is just an attempt to update the parameters by learning from misses based on LKG parameters
-        for (ixLoc in 0..miniBatchSize..(Length(missLocations) - 1)) {
-            let miniBatch = ExtractMiniBatch(miniBatchSize,ixLoc,missLocations,samples);
-            let (utility,upParam) = OneStochasticTrainingStep(tolerance, miniBatch, paramCurrent, gates, lrate, measCount);
-            if (AbsD(utility) > 0.0000001) {
-                //There had been some parameter update
-                if (utility > 0.0) { //good parameter update
-                    set paramCurrent = upParam;
-                    let plsCurrent = ClassificationProbabilitiesClassicalData(samples, schedScore, paramCurrent, gates, measCount);
-                    set biasCurrent = _UpdatedBias(plsCurrent, bias, tolerance);
-                    let (h1,m1) = TallyHitsMisses(plsCurrent,biasCurrent);
-                    set hCur = h1;
-                    set mCur = m1;
-                }
-
-            }
-
-        }
-        return ((hCur, mCur),(biasCurrent,paramCurrent));
-    } //OneUncontrolledStochasticTrainingEpoch
-
     /// # Summary
     /// Randomly rescales an input to either grow or shrink by a given factor.
     operation _RandomlyRescale(scale : Double, value : Double) : Double {
