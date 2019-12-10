@@ -33,7 +33,8 @@ namespace Microsoft.Quantum.Canon {
             within {
                 CNOT(target, control1);
                 CNOT(target, control2);
-            } apply {
+            }
+            apply {
                 Adjoint T(control1);
                 Adjoint T(control2);
                 T(target);
@@ -80,7 +81,8 @@ namespace Microsoft.Quantum.Canon {
                     CNOT(control2, helper);
                     CNOT(target, control1);
                     CNOT(target, control2);
-                } apply {
+                }
+                apply {
                     Adjoint T(control1);
                     Adjoint T(control2);
                     T(target);
