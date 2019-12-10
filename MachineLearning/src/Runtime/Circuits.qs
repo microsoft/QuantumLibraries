@@ -332,55 +332,12 @@ namespace Microsoft.Quantum.MachineLearning {
     /// (when it falls on the tail end of the list of 'locations')
     ///
     function ExtractMiniBatch(size: Int, ixLoc: Int, locations: Int[], samples: LabeledSample[]): LabeledSample[] {
-        mutable cnt = Length(locations)-ixLoc;
-        if (cnt > size)
-        {
-            set cnt = size;
-        }
+        let cnt = MinI(size, Length(locations) - ixLoc);
         mutable rgSamples = new LabeledSample[0];
-        if (cnt > 0)
-        {
-            set rgSamples = new LabeledSample[cnt];
-            for (isa in 0..(cnt-1))
-            {
-                set rgSamples w/=isa<- samples[locations[ixLoc+isa]];
-            }
+        for (location in locations[ixLoc...]) {
+            set rgSamples += [samples[location]];
         }
         return rgSamples;
     }
-
-    /// # Summary
-    /// (Randomly) inflate of deflate the source number
-    operation randomize(src : Double, relativeFuzz : Double) : Double {
-        return src * (
-            1.0 + relativeFuzz * (Random([0.5, 0.5]) > 0 ? 1.0 | -1.0)
-        );
-    }
-
-
-
-    /// Summary
-    /// One possible C#-friendly wrap around the StochasticTrainingLoop
-    ///
-    operation StochasticTrainingLoopPlainAdapter(vectors: Double[][], labels: Int[], sched: Int[][], schedScore: Int[][], periodScore: Int,
-             miniBatchSize: Int, param: Double[],gates: Int[][], bias: Double, lrate: Double, maxEpochs: Int, tol: Double, measCount: Int ) : Double[] //
-    {
-        let samples = unFlattenLabeledSamples(vectors,labels);
-        let sch = unFlattenSchedule(sched);
-        let schScore = unFlattenSchedule(sched);
-        let gts = unFlattenGateSequence(gates);
-        let ((h,m),(b,parpar)) = StochasticTrainingLoop(samples, sch, schScore, periodScore,
-             miniBatchSize, param, gts, bias, lrate, maxEpochs, tol, measCount);
-        mutable ret = new Double[Length(parpar)+3];
-        set ret w/=0<-IntAsDouble (h);
-        set ret w/=1<-IntAsDouble (m);
-        set ret w/=2<-b;
-        for (j in 0..(Length(parpar)-1))
-        {
-            set ret w/=(j+3)<-parpar[j];
-        }
-        return ret;
-    }
-
 
 }
