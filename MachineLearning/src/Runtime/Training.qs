@@ -143,7 +143,12 @@ namespace Microsoft.Quantum.MachineLearning {
         let sch = unFlattenSchedule(trainingSchedule);
         let schValidate = unFlattenSchedule(validationSchedule);
         let gateSequence = unFlattenGateSequence(gates);
-        let options = TrainingOptions(learningRate, tolerance, miniBatchSize, nMeasurements, maxEpochs);
+        let options = DefaultTrainingOptions()
+            w/ LearningRate <- learningRate
+            w/ Tolerance <- tolerance
+            w/ MinibatchSize <- miniBatchSize
+            w/ NMeasurements <- nMeasurements
+            w/ MaxEpochs <- maxEpochs;
 
         return TrainSequentialClassifier(
             nQubits, gateSequence, parameterSource, samples,
