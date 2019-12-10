@@ -238,8 +238,8 @@ namespace Microsoft.Quantum.MachineLearning {
     /// ## measCount
     /// number of true quantum measurements to estimate probabilities.
     ///
-    operation OneStochasticTrainingEpoch(samples: LabeledSample[], sched: SamplingSchedule, schedScore: SamplingSchedule, periodScore: Int,
-                    miniBatchSize: Int, param: Double[], gates: GateSequence, bias: Double, lrate: Double, tolerance: Double, measCount: Int,
+    operation OneStochasticTrainingEpoch(samples: LabeledSample[], sched: SamplingSchedule, schedScore: SamplingSchedule, periodScore: Int, options : TrainingOptions,
+                    param: Double[], gates: GateSequence, bias: Double,
                     h0: Int, m0: Int): ((Int,Int),(Double,Double[]))
     {
         let HARDCODEDunderage = 3; //4/26 slack greater than 3 is not recommended
@@ -249,7 +249,7 @@ namespace Microsoft.Quantum.MachineLearning {
         mutable mBest = m0;
         mutable biasBest = bias;
 
-        let pls = ClassificationProbabilitiesClassicalData(samples, schedScore, param, gates, measCount);
+        let pls = ClassificationProbabilitiesClassicalData(samples, schedScore, param, gates, options::NMeasurements);
         let (h2,m2) = TallyHitsMisses(pls,biasBest);
         let missLocations = MissLocations(schedScore, pls, biasBest);
 
@@ -258,15 +258,15 @@ namespace Microsoft.Quantum.MachineLearning {
         mutable biasCurrent = biasBest;
 
         //An epoch is just an attempt to update the parameters by learning from misses based on LKG parameters
-        for (ixLoc in 0..miniBatchSize..(Length(missLocations) - 1)) {
-            let miniBatch = ExtractMiniBatch(miniBatchSize, ixLoc, missLocations, samples);
-            let (utility,upParam) = OneStochasticTrainingStep(tolerance, miniBatch, paramCurrent, gates, lrate, measCount);
+        for (ixLoc in 0..options::MinibatchSize..(Length(missLocations) - 1)) {
+            let miniBatch = ExtractMiniBatch(options::MinibatchSize, ixLoc, missLocations, samples);
+            let (utility,upParam) = OneStochasticTrainingStep(options::Tolerance, miniBatch, paramCurrent, gates, options::LearningRate, options::NMeasurements);
             if (AbsD(utility) > 0.0000001) {
                 //There had been some parameter update
                 if (utility > 0.0) { //good parameter update
                     set paramCurrent = upParam;
-                    let plsCurrent = ClassificationProbabilitiesClassicalData(samples, schedScore, paramCurrent, gates, measCount);
-                    set biasCurrent = _UpdatedBias(plsCurrent, bias, tolerance);
+                    let plsCurrent = ClassificationProbabilitiesClassicalData(samples, schedScore, paramCurrent, gates, options::NMeasurements);
+                    set biasCurrent = _UpdatedBias(plsCurrent, bias, options::Tolerance);
                     let (h1,m1) = TallyHitsMisses(plsCurrent,biasCurrent);
                     if (m1 < mBest + HARDCODEDunderage) {
                         //we allow limited non-greediness
@@ -404,8 +404,10 @@ namespace Microsoft.Quantum.MachineLearning {
         for (ep in 1..options::MaxEpochs) {
             let ((h1, m1), (upBias, upParam)) = OneStochasticTrainingEpoch(
                 samples, sched, schedScore, periodScore,
-                batchSize, paramCurrent, gates, biasCurrent, lrate,
-                options::Tolerance, options::NMeasurements, hBest, mBest
+                options
+                    w/ LearningRate <- lrate
+                    w/ MinibatchSize <- batchSize,
+                paramCurrent, gates, biasCurrent, hBest, mBest
             );
             if (m1 < mBest) {
                 set hBest = h1;
