@@ -31,8 +31,7 @@ namespace Microsoft.Quantum.Tests {
         }
     }
 
-    operation ANDTest() : Unit
-    {
+    operation ANDTest() : Unit {
         for (p1 in [false, true]) {
             for (p2 in [false, true]) {
                 for (op in [AND, ANDLowDepth]) {
