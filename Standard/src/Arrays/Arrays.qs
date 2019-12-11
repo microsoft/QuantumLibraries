@@ -249,6 +249,32 @@ namespace Microsoft.Quantum.Arrays {
                | inputArray + padArray; // Padded at tail.
     }
 
+
+    /// # Summary
+    /// Splits an array into multiple parts of equal length.
+    ///
+    /// # Input
+    /// ## nElements
+    /// The length of each chunk.
+    /// ## arr
+    /// The array to be split.
+    ///
+    /// # Output
+    /// A array containing each chunk of the original array.
+    ///
+    /// # Remarks
+    /// Note that the last element of the output may be shorter
+    /// than `nElements` if `Length(arr)` is not divisible by `nElements`.
+    function Chunks<'T>(nElements : Int, arr : 'T[]) : 'T[][] {
+        mutable output = new 'T[][0];
+        mutable remaining = arr;
+        while (not IsEmpty(remaining)) {
+            set output += [remaining[...nElements - 1]];
+            set remaining = remaining[nElements...];
+        }
+        return output;
+    }
+
     /// # Summary
     /// Splits an array into multiple parts.
     ///
