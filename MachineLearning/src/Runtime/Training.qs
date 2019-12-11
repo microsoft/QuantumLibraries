@@ -265,9 +265,9 @@ namespace Microsoft.Quantum.MachineLearning {
         mutable biasCurrent = biasBest;
 
         //An epoch is just an attempt to update the parameters by learning from misses based on LKG parameters
-        for (ixLoc in 0..options::MinibatchSize..(Length(missLocations) - 1)) {
-            let miniBatch = ExtractMiniBatch(options::MinibatchSize, ixLoc, missLocations, samples);
-            let (utility, upParam) = OneStochasticTrainingStep(miniBatch, options, paramCurrent, gates);
+        let minibatches = Mapped(Subarray(_, samples), Chunks(options::MinibatchSize, missLocations));
+        for (minibatch in minibatches) {
+            let (utility, upParam) = OneStochasticTrainingStep(minibatch, options, paramCurrent, gates);
             if (AbsD(utility) > 0.0000001) {
                 //There had been some parameter update
                 if (utility > 0.0) { //good parameter update

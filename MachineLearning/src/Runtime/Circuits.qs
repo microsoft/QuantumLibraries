@@ -334,7 +334,7 @@ namespace Microsoft.Quantum.MachineLearning {
     function ExtractMiniBatch(size: Int, ixLoc: Int, locations: Int[], samples: LabeledSample[]): LabeledSample[] {
         let cnt = MinI(size, Length(locations) - ixLoc);
         mutable rgSamples = new LabeledSample[0];
-        for (location in locations[ixLoc...]) {
+        for (location in locations[ixLoc..ixLoc + cnt]) {
             set rgSamples += [samples[location]];
         }
         return rgSamples;
