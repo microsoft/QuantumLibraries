@@ -206,29 +206,23 @@ namespace Microsoft.Quantum.MachineLearning {
     ///
     /// # Output
     /// TODO
-    operation ClassificationProbabilitiesClassicalData(samples: LabeledSample[], sched: SamplingSchedule, param: Double[], gates: GateSequence, nMeasurements: Int):
-        (Double,Int)[] {
-        mutable N = IsEmpty(samples)
-                    ? NQubitsRequired(gates)
-                    | MaxI(NQubitsRequired(gates), FeatureRegisterSize(_Features(Head(samples))));
+    operation ClassificationProbabilitiesClassicalData(
+        gates: GateSequence,
+        param: Double[],
+        samples: LabeledSample[],
+        nMeasurements: Int,
+        schedule: SamplingSchedule
+    )
+    : (Double, Int)[] {
         mutable ret = new (Double, Int)[0];
-        for (rg in sched!) {
-            for (ix in rg) {
-                let sample = samples[ix];
-                //agnostic w.r.t. simulator (may still be simulable)
-                let prob1 = EstimateClassificationProbabilityFromSample(1E-12, param, gates, sample::Features, nMeasurements);
-                set ret += [(prob1, sample::Label)];
-            }
+        for (sample in Sampled(schedule, samples)) {
+            let prob1 = EstimateClassificationProbabilityFromSample(
+                1E-12, param, gates, sample::Features, nMeasurements
+            );
+            set ret += [(prob1, sample::Label)];
         }
-
         return ret;
     }
-
-    operation EstimateClassificationProbabilitiesClassicalDataAdapter(tolerance: Double, samples: Double[][], schedule: Int[][], nQubits: Int,  gates: Int[][], param: Double[], measCount: Int): Double[]
-    {
-        return EstimateClassificationProbabilitiesClassicalData(tolerance, samples, unFlattenSchedule(schedule), nQubits, unFlattenGateSequence(gates), param, measCount);
-    }
-
 
     /// # Summary
     /// generate a flat list of sample indices where mispredictions occur
@@ -266,46 +260,6 @@ namespace Microsoft.Quantum.MachineLearning {
             }
         }
         return ret;
-    }
-
-    /// # Summary
-    /// C#-friendly adapter to misclassification tally
-    ///
-    /// # Input
-    /// ## vectors
-    /// data vectors in flat encoding
-    ///
-    /// ## labels
-    /// array of corresponding class lables
-    ///
-    /// ## schedule
-    /// flat representation of index subset on which the circuit is scored
-    ///
-    /// ## param
-    /// circuit parameters
-    ///
-    /// ## gateStructure
-    /// gate structure in flat representation
-    ///
-    /// ## bias
-    /// prediction bias to be tested
-    ///
-    /// ## measCount
-    /// maximum number of quantum measurements per estimation (measCount==0 implies simulator deployment)
-    ///
-    /// # Output
-    /// the number of misclassifications
-    ///
-    operation MisclassificationScoreAdapter(vectors: Double[][], labels: Int[], schedule: Int[][], param: Double[], gateStructure: Int[][], bias: Double, measCount: Int) : Int {
-        mutable misses = 0;
-        let samples = unFlattenLabeledSamples(vectors,labels);
-        let gates = unFlattenGateSequence(gateStructure);
-        let sched = unFlattenSchedule(schedule);
-
-        let pls = ClassificationProbabilitiesClassicalData(samples,sched,param,gates,measCount);
-        let biasCurrent = _UpdatedBias(pls, bias, 0.01);
-        let (h1,m1) = TallyHitsMisses(pls,biasCurrent);
-        return m1;
     }
 
     /// # Summary

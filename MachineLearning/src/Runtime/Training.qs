@@ -250,17 +250,20 @@ namespace Microsoft.Quantum.MachineLearning {
         let HARDCODEDunderage = 3; // 4/26 slack greater than 3 is not recommended
 
 
-        mutable hBest = h0;
-        mutable mBest = m0;
+        mutable (hBest, mBest) = (h0, m0);
         mutable bestSoFar = model;
 
         let pls = ClassificationProbabilitiesClassicalData(
-            samples, schedule, model::Parameters, gates, options::NMeasurements
+            gates, model::Parameters, samples, options::NMeasurements,
+            schedule
         );
         let missLocations = MissLocations(schedule, pls, model::Bias);
 
         //An epoch is just an attempt to update the parameters by learning from misses based on LKG parameters
-        let minibatches = Mapped(Subarray(_, samples), Chunks(options::MinibatchSize, missLocations));
+        let minibatches = Mapped(
+            Subarray(_, samples),
+            Chunks(options::MinibatchSize, missLocations)
+        );
         for (minibatch in minibatches) {
             let (utility, updatedParameters) = OneStochasticTrainingStep(
                 minibatch, options, bestSoFar::Parameters, gates
@@ -269,16 +272,18 @@ namespace Microsoft.Quantum.MachineLearning {
                 // There has been some good parameter update.
                 // Check if it actually improves things, and if so,
                 // commit it.
-                let plsCurrent = ClassificationProbabilitiesClassicalData(samples, schedule, updatedParameters, gates, options::NMeasurements);
-                let updatedBias = _UpdatedBias(
-                    plsCurrent, model::Bias, options::Tolerance
+                let probabilities = ClassificationProbabilitiesClassicalData(
+                    gates, updatedParameters, samples, options::NMeasurements,
+                    schedule
                 );
-                let (h1, m1) = TallyHitsMisses(plsCurrent,  updatedBias);
+                let updatedBias = _UpdatedBias(
+                    probabilities, model::Bias, options::Tolerance
+                );
+                let (h1, m1) = TallyHitsMisses(probabilities,  updatedBias);
                 if (m1 < mBest + HARDCODEDunderage) {
                     //we allow limited non-greediness
                     if (m1 < mBest) {
-                        set hBest = h1;
-                        set mBest = m1;
+                        set (hBest, mBest) = (h1, m1);
                         set bestSoFar = SequentialModel(updatedParameters, updatedBias);
                     }
                 }
@@ -353,7 +358,8 @@ namespace Microsoft.Quantum.MachineLearning {
         //const
         let relFuzz = 0.01;
         let pls = ClassificationProbabilitiesClassicalData(
-            samples, schedule, model::Parameters, gates, options::NMeasurements
+            gates, model::Parameters, samples, options::NMeasurements,
+            schedule
         );
         mutable bestSoFar = model
             w/ Bias <- _UpdatedBias(pls, model::Bias, options::Tolerance);
