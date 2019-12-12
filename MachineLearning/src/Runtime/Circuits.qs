@@ -331,6 +331,7 @@ namespace Microsoft.Quantum.MachineLearning {
     /// the resulting mini batch can be occasionally shorter than the requested 'size'
     /// (when it falls on the tail end of the list of 'locations')
     ///
+    @Deprecated("Microsoft.Quantum.Arrays.Chunks")
     function ExtractMiniBatch(size: Int, ixLoc: Int, locations: Int[], samples: LabeledSample[]): LabeledSample[] {
         let cnt = MinI(size, Length(locations) - ixLoc);
         mutable rgSamples = new LabeledSample[0];

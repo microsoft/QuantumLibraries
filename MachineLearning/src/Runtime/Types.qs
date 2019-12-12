@@ -104,4 +104,9 @@ namespace Microsoft.Quantum.MachineLearning {
         );
     }
 
+    newtype SequentialModel = (
+        Parameters: Double[],
+        Bias: Double
+    );
+
 }
