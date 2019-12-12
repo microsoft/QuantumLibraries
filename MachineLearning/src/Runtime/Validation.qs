@@ -1,17 +1,15 @@
 namespace Microsoft.Quantum.MachineLearning {
     open Microsoft.Quantum.Arrays;
     open Microsoft.Quantum.Intrinsic;
+    open Microsoft.Quantum.Logical;
     open Microsoft.Quantum.Canon;
 
     function Misclassifications(inferredLabels : Int[], actualLabels : Int[])
     : Int[] {
-        mutable ret = new Int[0];
-        for ((idx, (inferred, actual)) in Enumerated(Zip(inferredLabels, actualLabels))) {
-            if (inferred != actual) {
-                set ret += [idx];
-            }
-        }
-        return ret;
+        return Where(
+            NotEqualI,
+            Zip(inferredLabels, actualLabels)
+        );
     }
 
     function NMisclassifications(proposed: Int[], actual: Int[]): Int {
