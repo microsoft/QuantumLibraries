@@ -269,8 +269,9 @@ namespace Microsoft.Quantum.Arrays {
         mutable output = new 'T[][0];
         mutable remaining = arr;
         while (not IsEmpty(remaining)) {
-            set output += [remaining[...nElements - 1]];
-            set remaining = remaining[nElements...];
+            let nElementsToTake = MinI(Length(remaining), nElements);
+            set output += [remaining[...nElementsToTake - 1]];
+            set remaining = remaining[nElementsToTake...];
         }
         return output;
     }
