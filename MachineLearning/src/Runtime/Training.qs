@@ -179,7 +179,7 @@ namespace Microsoft.Quantum.MachineLearning {
     /// # Output
     /// (utility, (new)parameters) pair
     ///
-    operation OneStochasticTrainingStep(
+    operation _RunSingleTrainingStep(
         miniBatch : LabeledSample[],
         options : TrainingOptions,
         param : Double[], gates : GateSequence
@@ -242,7 +242,7 @@ namespace Microsoft.Quantum.MachineLearning {
     /// ## measCount
     /// number of true quantum measurements to estimate probabilities.
     ///
-    operation RunSingleTrainingEpoch(
+    operation _RunSingleTrainingEpoch(
         samples: LabeledSample[],
         schedule: SamplingSchedule, periodScore: Int,
         options : TrainingOptions,
@@ -272,7 +272,7 @@ namespace Microsoft.Quantum.MachineLearning {
             Chunks(options::MinibatchSize, missLocations)
         );
         for (minibatch in minibatches) {
-            let (utility, updatedParameters) = OneStochasticTrainingStep(
+            let (utility, updatedParameters) = RunSingleTrainingStep(
                 minibatch, options, bestSoFar::Parameters, gates
             );
             if (utility > 0.0000001) {
