@@ -3,7 +3,7 @@ namespace Microsoft.Quantum.MachineLearning {
     open Microsoft.Quantum.Intrinsic;
     open Microsoft.Quantum.Canon;
 
-    function MissLocations(inferredLabels : Int[], actualLabels : Int[])
+    function Misclassifications(inferredLabels : Int[], actualLabels : Int[])
     : Int[] {
         mutable ret = new Int[0];
         for ((idx, (inferred, actual)) in Enumerated(Zip(inferredLabels, actualLabels))) {
@@ -14,8 +14,8 @@ namespace Microsoft.Quantum.MachineLearning {
         return ret;
     }
 
-    function NMismatches(proposed: Int[], actual: Int[]): Int {
-        return Length(MissLocations(proposed, actual));
+    function NMisclassifications(proposed: Int[], actual: Int[]): Int {
+        return Length(Misclassifications(proposed, actual));
     }
 
     /// # Summary
@@ -55,25 +55,34 @@ namespace Microsoft.Quantum.MachineLearning {
     {
         let schValidate = unFlattenSchedule(validationSchedule);
         let results = ValidateModel(
-            tolerance, nQubits, Mapped(LabeledSample, Zip(trainingSet, trainingLabels)),
-            schValidate, unFlattenGateSequence(gates),
-            parameters, bias, nMeasurements
+            unFlattenGateSequence(gates),
+            SequentialModel(parameters, bias),
+            Mapped(LabeledSample, Zip(trainingSet, trainingLabels)),
+            tolerance, nMeasurements,
+            schValidate
         );
         return results::NMisclassifications;
     }
 
-    operation ValidateModel(tolerance: Double, nQubits: Int, samples : LabeledSample[], validationSchedule: SamplingSchedule, gates: GateSequence, parameters: Double[], bias:Double, nMeasurements: Int) : ValidationResults
-    {
+    operation ValidateModel(
+        gates: GateSequence,
+        model : SequentialModel,
+        samples : LabeledSample[],
+        tolerance: Double,
+        nMeasurements: Int,
+        validationSchedule: SamplingSchedule
+    )
+    : ValidationResults {
         let features = Mapped(_Features, samples);
         let labels = Sampled(validationSchedule, Mapped(_Label, samples));
         let probabilities = EstimateClassificationProbabilities(
-            tolerance, parameters, gates,
+            tolerance, model::Parameters, gates,
             Sampled(validationSchedule, features), nMeasurements
         );
-        let localPL = InferredLabels(bias, probabilities);
-        let nMismatches = NMismatches(localPL, labels);
+        let localPL = InferredLabels(model::Bias, probabilities);
+        let nMisclassifications = NMisclassifications(localPL, labels);
         return ValidationResults(
-            nMismatches
+            nMisclassifications
         );
     }
 

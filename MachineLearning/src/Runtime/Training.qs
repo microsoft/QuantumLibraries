@@ -9,7 +9,7 @@ namespace Microsoft.Quantum.MachineLearning {
 
     function _MisclassificationRate(probabilities : Double[], labels : Int[], bias : Double) : Double {
         let proposedLabels = InferredLabels(bias, probabilities);
-        return IntAsDouble(NMismatches(proposedLabels, labels)) / IntAsDouble(Length(probabilities));
+        return IntAsDouble(NMisclassifications(proposedLabels, labels)) / IntAsDouble(Length(probabilities));
     }
 
     /// # Summary
@@ -47,7 +47,6 @@ namespace Microsoft.Quantum.MachineLearning {
     }
 
     operation TrainSequentialClassifier(
-        nQubits: Int,
         gates: GateSequence,
         parameterSource: Double[][],
         samples: LabeledSample[],
@@ -81,7 +80,7 @@ namespace Microsoft.Quantum.MachineLearning {
                 options::Tolerance
             );
             let localPL = InferredLabels(localBias, probabilities);
-            let localMisses = NMismatches(localPL, Sampled(validationSchedule, labels));
+            let localMisses = NMisclassifications(localPL, Sampled(validationSchedule, labels));
             if (bestValidation > localMisses) {
                 set bestValidation = localMisses;
                 set bestSoFar = proposedUpdate;
@@ -90,72 +89,6 @@ namespace Microsoft.Quantum.MachineLearning {
         }
         return bestSoFar;
     }
-
-    /// # Summary
-    /// Using a flat description of a classification model, find a good local optimum
-    /// for the model parameters and a related calssification bias
-    ///
-    /// # Input
-    /// ## nQubits
-    /// the number of qubits used for data encoding
-    ///
-    /// ## gates
-    /// flat characterization of  circuit  structure. Each element is [parameterIndex, pauliCode, targetQubit\,sequence of control qubits\]
-    ///
-    /// ## parameterSource
-    /// an array of parameter arrays, to be used as SGD starting points
-    ///
-    /// ## trainingSet
-    /// the set of training samples
-    ///
-    /// ## trainingLabels
-    /// the set of training labels
-    ///
-    /// ## trainingSchedule
-    /// defines a subset of training data actually used in the training process
-    ///
-    /// ## validatioSchedule
-    /// defines a subset of training data used for validation and computation of the *bias*
-    ///
-    /// ## learningRate
-    /// initial learning rate for stochastic gradient descent
-    ///
-    /// ## tolerance
-    /// sufficient absolute precision of parameter updates
-    ///
-    /// ## learningRate
-    /// initial learning rate for stochastic gradient descent
-    ///
-    /// ## miniBatchSize
-    /// maximum size of SGD mini batches
-    ///
-    /// ## maxEpochs
-    /// limit to the number of training epochs
-    ///
-    /// ## nMeasurenets
-    /// number of the measurement cycles to be used for estimation of each probability
-    ///
-    /// # Output
-    /// (Array of optimal parameters, optimal validation *bias*)
-    ///
-    operation TrainQcccSequential(nQubits: Int, gates: Int[][], parameterSource: Double[][], trainingSet: Double[][], trainingLabels: Int[], trainingSchedule: Int[][], validationSchedule: Int[][],
-                                    learningRate: Double, tolerance: Double, miniBatchSize: Int, maxEpochs: Int, nMeasurements: Int) : (Double[],Double) {
-        let samples = unFlattenLabeledSamples(trainingSet,trainingLabels);
-        let sch = unFlattenSchedule(trainingSchedule);
-        let schValidate = unFlattenSchedule(validationSchedule);
-        let gateSequence = unFlattenGateSequence(gates);
-        let options = DefaultTrainingOptions()
-            w/ LearningRate <- learningRate
-            w/ Tolerance <- tolerance
-            w/ MinibatchSize <- miniBatchSize
-            w/ NMeasurements <- nMeasurements
-            w/ MaxEpochs <- maxEpochs;
-
-        return (TrainSequentialClassifier(
-            nQubits, gateSequence, parameterSource, samples,
-            options, sch, schValidate
-        ))!;
-    } //TrainQcccSequential
 
     /// # Summary
     /// attempts a single parameter update in the direction of mini batch gradient
@@ -264,15 +197,17 @@ namespace Microsoft.Quantum.MachineLearning {
                 features, options::NMeasurements
             )
         );
-        let missLocations = MissLocations(inferredLabels, actualLabels);
 
         //An epoch is just an attempt to update the parameters by learning from misses based on LKG parameters
         let minibatches = Mapped(
             Subarray(_, samples),
-            Chunks(options::MinibatchSize, missLocations)
+            Chunks(
+                options::MinibatchSize,
+                Misclassifications(inferredLabels, actualLabels)
+            )
         );
         for (minibatch in minibatches) {
-            let (utility, updatedParameters) = RunSingleTrainingStep(
+            let (utility, updatedParameters) = _RunSingleTrainingStep(
                 minibatch, options, bestSoFar::Parameters, gates
             );
             if (utility > 0.0000001) {
@@ -289,7 +224,7 @@ namespace Microsoft.Quantum.MachineLearning {
                 let updatedLabels = InferredLabels(
                     updatedBias, probabilities
                 );
-                let nMisses = Length(MissLocations(
+                let nMisses = Length(Misclassifications(
                     updatedLabels, actualLabels
                 ));
                 if (nMisses < nBestMisses) {
@@ -382,7 +317,7 @@ namespace Microsoft.Quantum.MachineLearning {
             bestSoFar::Bias, probabilities
         );
         mutable nBestMisses = Length(
-            MissLocations(inferredLabels, actualLabels)
+            Misclassifications(inferredLabels, actualLabels)
         );
         mutable current = bestSoFar;
 
@@ -394,7 +329,7 @@ namespace Microsoft.Quantum.MachineLearning {
         mutable nStalls = 0;
 
         for (ep in 1..options::MaxEpochs) {
-            let (nMisses, proposedUpdate) = RunSingleTrainingEpoch(
+            let (nMisses, proposedUpdate) = _RunSingleTrainingEpoch(
                 samples, schedule, periodScore,
                 options
                     w/ LearningRate <- lrate

@@ -7,12 +7,17 @@ namespace Microsoft.Quantum.MachineLearning {
     open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Convert;
 
-    operation EstimateClassificationProbabilityFromEncodedSample(
-        encodedSample : StateGenerator,
-        parameters: Double[],
-        gates: GateSequence, nMeasurements : Int
+    operation EstimateClassificationProbability(
+        tolerance: Double,
+        parameters : Double[],
+        gates: GateSequence,
+        sample: Double[],
+        nMeasurements: Int
     )
     : Double {
+        let nQubits = FeatureRegisterSize(sample);
+        let circEnc = NoisyInputEncoder(tolerance / IntAsDouble(Length(gates!)), sample);
+        let encodedSample = StateGenerator(nQubits, circEnc);
         return 1.0 - EstimateFrequencyA(
             endToEndPreparation(encodedSample::Apply, parameters,gates),
             measureLastQubit(encodedSample::NQubits),
@@ -21,26 +26,17 @@ namespace Microsoft.Quantum.MachineLearning {
         );
     }
 
-    operation EstimateClassificationProbabilityFromSample(tolerance: Double, parameters : Double[], gates: GateSequence, sample: Double[], nMeasurements: Int)
-    : Double {
-        let nQubits = FeatureRegisterSize(sample);
-        let circEnc = NoisyInputEncoder(tolerance / IntAsDouble(Length(gates!)), sample);
-        return EstimateClassificationProbabilityFromEncodedSample(
-            StateGenerator(nQubits, circEnc), parameters, gates, nMeasurements
-        );
-
-    }
-
     operation EstimateClassificationProbabilities(
         tolerance : Double,
         parameters : Double[],
         structure : GateSequence,
         samples : Double[][],
         nMeasurements : Int
-    ) : Double[] {
+    )
+    : Double[] {
         let effectiveTolerance = tolerance / IntAsDouble(Length(structure!));
         return ForEach(
-            EstimateClassificationProbabilityFromSample(
+            EstimateClassificationProbability(
                 effectiveTolerance, parameters, structure, _, nMeasurements
             ),
             samples
