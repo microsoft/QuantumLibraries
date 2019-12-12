@@ -3,40 +3,19 @@ namespace Microsoft.Quantum.MachineLearning {
     open Microsoft.Quantum.Intrinsic;
     open Microsoft.Quantum.Canon;
 
-    function NMismatches(proposed: Int[], actual: Int[]): Int {
-        mutable count = 0;
-        for ((proposedLabel, actualLabel) in Zip(proposed, actual)) {
-            if (proposedLabel != actualLabel) {
-                set count += 1;
+    function MissLocations(inferredLabels : Int[], actualLabels : Int[])
+    : Int[] {
+        mutable ret = new Int[0];
+        for ((idx, (inferred, actual)) in Enumerated(Zip(inferredLabels, actualLabels))) {
+            if (inferred != actual) {
+                set ret += [idx];
             }
         }
-        return count;
+        return ret;
     }
 
-    /// # Summary
-    /// tallies hits and misses off a list of probability estimates
-    ///
-    /// # Input
-    /// ## pls
-    /// a list of estimated probabilities with the corresponding class labels
-    ///
-    /// ## bias
-    /// bias on record
-    ///
-    /// # Output
-    /// (no.hits, no.misses) pair
-    ///
-    function TallyHitsMisses(pls : (Double, Int)[], bias : Double) : (Int, Int) {
-        mutable hits = 0;
-        mutable misses = 0;
-        for ((classificationProbability, label) in pls) {
-            if (label == InferredLabel(bias, classificationProbability)) {
-                set hits += 1;
-            } else {
-                set misses += 1;
-            }
-        }
-        return (hits, misses);
+    function NMismatches(proposed: Int[], actual: Int[]): Int {
+        return Length(MissLocations(proposed, actual));
     }
 
     /// # Summary
@@ -87,8 +66,11 @@ namespace Microsoft.Quantum.MachineLearning {
     {
         let features = Mapped(_Features, samples);
         let labels = Sampled(validationSchedule, Mapped(_Label, samples));
-        let probsValidation = EstimateClassificationProbabilitiesClassicalData(tolerance, features, validationSchedule, nQubits,  gates, parameters, nMeasurements);
-        let localPL = InferredLabels(bias, probsValidation);
+        let probabilities = EstimateClassificationProbabilities(
+            tolerance, parameters, gates,
+            Sampled(validationSchedule, features), nMeasurements
+        );
+        let localPL = InferredLabels(bias, probabilities);
         let nMismatches = NMismatches(localPL, labels);
         return ValidationResults(
             nMismatches

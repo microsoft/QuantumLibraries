@@ -63,21 +63,24 @@ namespace Microsoft.Quantum.MachineLearning {
 
         for (idxStart in 0..(Length(parameterSource) - 1)) {
             Message($"Beginning training at start point #{idxStart}...");
-            let ((h, m), proposedUpdate) = StochasticTrainingLoop(
+            let proposedUpdate = StochasticTrainingLoop(
                 gates, SequentialModel(parameterSource[idxStart], 0.0),
                 samples, options, trainingSchedule, 1
             );
-            let probsValidation = EstimateClassificationProbabilitiesClassicalData(
-                options::Tolerance, features, validationSchedule, nQubits,
-                gates, proposedUpdate::Parameters, options::NMeasurements
+            let probabilities = EstimateClassificationProbabilities(
+                options::Tolerance,
+                proposedUpdate::Parameters,
+                gates,
+                Sampled(validationSchedule, features),
+                options::NMeasurements
             );
             // Find the best bias for the new classification parameters.
             let localBias = _UpdatedBias(
-                Zip(probsValidation, Sampled(validationSchedule, labels)),
+                Zip(probabilities, Sampled(validationSchedule, labels)),
                 0.0,
                 options::Tolerance
             );
-            let localPL = InferredLabels(localBias, probsValidation);
+            let localPL = InferredLabels(localBias, probabilities);
             let localMisses = NMismatches(localPL, Sampled(validationSchedule, labels));
             if (bestValidation > localMisses) {
                 set bestValidation = localMisses;
@@ -202,8 +205,8 @@ namespace Microsoft.Quantum.MachineLearning {
         let updatedParameters = Mapped(PlusD, Zip(param, batchGradient));
         // TODO:REVIEW: Ok to interpret utility as size of the overall move?
         return (SquaredNorm(batchGradient), updatedParameters);
-    }
 
+    }
 
     /// # Summary
     /// Perform one epoch of circuit training on a subset of data samples to a quantum simulator
@@ -239,25 +242,29 @@ namespace Microsoft.Quantum.MachineLearning {
     /// ## measCount
     /// number of true quantum measurements to estimate probabilities.
     ///
-    operation OneStochasticTrainingEpoch(
+    operation RunSingleTrainingEpoch(
         samples: LabeledSample[],
         schedule: SamplingSchedule, periodScore: Int,
         options : TrainingOptions,
         model : SequentialModel, gates: GateSequence,
-        h0: Int, m0: Int
+        nPreviousBestMisses : Int
     )
-    : ((Int, Int), SequentialModel) {
+    : (Int, SequentialModel) {
         let HARDCODEDunderage = 3; // 4/26 slack greater than 3 is not recommended
 
-
-        mutable (hBest, mBest) = (h0, m0);
+        mutable nBestMisses = nPreviousBestMisses;
         mutable bestSoFar = model;
+        let features = Mapped(_Features, samples);
+        let actualLabels = Mapped(_Label, samples);
 
-        let pls = ClassificationProbabilitiesClassicalData(
-            gates, model::Parameters, samples, options::NMeasurements,
-            schedule
+        let inferredLabels = InferredLabels(
+            model::Bias,
+            EstimateClassificationProbabilities(
+                options::Tolerance, model::Parameters, gates,
+                features, options::NMeasurements
+            )
         );
-        let missLocations = MissLocations(schedule, pls, model::Bias);
+        let missLocations = MissLocations(inferredLabels, actualLabels);
 
         //An epoch is just an attempt to update the parameters by learning from misses based on LKG parameters
         let minibatches = Mapped(
@@ -272,26 +279,28 @@ namespace Microsoft.Quantum.MachineLearning {
                 // There has been some good parameter update.
                 // Check if it actually improves things, and if so,
                 // commit it.
-                let probabilities = ClassificationProbabilitiesClassicalData(
-                    gates, updatedParameters, samples, options::NMeasurements,
-                    schedule
+                let probabilities = EstimateClassificationProbabilities(
+                    options::Tolerance, updatedParameters, gates,
+                    features, options::NMeasurements
                 );
                 let updatedBias = _UpdatedBias(
-                    probabilities, model::Bias, options::Tolerance
+                    Zip(probabilities, actualLabels), model::Bias, options::Tolerance
                 );
-                let (h1, m1) = TallyHitsMisses(probabilities,  updatedBias);
-                if (m1 < mBest + HARDCODEDunderage) {
-                    //we allow limited non-greediness
-                    if (m1 < mBest) {
-                        set (hBest, mBest) = (h1, m1);
-                        set bestSoFar = SequentialModel(updatedParameters, updatedBias);
-                    }
+                let updatedLabels = InferredLabels(
+                    updatedBias, probabilities
+                );
+                let nMisses = Length(MissLocations(
+                    updatedLabels, actualLabels
+                ));
+                if (nMisses < nBestMisses) {
+                    set nBestMisses = nMisses;
+                    set bestSoFar = SequentialModel(updatedParameters, updatedBias);
                 }
 
             }
 
         }
-        return ((hBest, mBest), bestSoFar);
+        return (nBestMisses, bestSoFar);
     }
 
     /// # Summary
@@ -354,16 +363,27 @@ namespace Microsoft.Quantum.MachineLearning {
         schedule: SamplingSchedule,
         periodScore: Int
     )
-    : ((Int, Int), SequentialModel) {
+    : SequentialModel {
         //const
         let relFuzz = 0.01;
-        let pls = ClassificationProbabilitiesClassicalData(
-            gates, model::Parameters, samples, options::NMeasurements,
-            schedule
+        let nSamples = Length(samples);
+        let features = Mapped(_Features, samples);
+        let actualLabels = Mapped(_Label, samples);
+        let probabilities = EstimateClassificationProbabilities(
+            options::Tolerance, model::Parameters, gates,
+            features, options::NMeasurements
         );
         mutable bestSoFar = model
-            w/ Bias <- _UpdatedBias(pls, model::Bias, options::Tolerance);
-        mutable (hBest, mBest) = TallyHitsMisses(pls, model::Bias);
+            w/ Bias <- _UpdatedBias(
+                Zip(probabilities, actualLabels),
+                model::Bias, options::Tolerance
+            );
+        let inferredLabels = InferredLabels(
+            bestSoFar::Bias, probabilities
+        );
+        mutable nBestMisses = Length(
+            MissLocations(inferredLabels, actualLabels)
+        );
         mutable current = bestSoFar;
 
         //reintroducing learning rate heuristics
@@ -374,19 +394,19 @@ namespace Microsoft.Quantum.MachineLearning {
         mutable nStalls = 0;
 
         for (ep in 1..options::MaxEpochs) {
-            let ((h1, m1), proposedUpdate) = OneStochasticTrainingEpoch(
+            let (nMisses, proposedUpdate) = RunSingleTrainingEpoch(
                 samples, schedule, periodScore,
                 options
                     w/ LearningRate <- lrate
                     w/ MinibatchSize <- batchSize,
-                current, gates, hBest, mBest
+                current, gates,
+                nBestMisses
             );
-            if (m1 < mBest) {
-                set hBest = h1;
-                set mBest = m1;
+            if (nMisses < nBestMisses) {
+                set nBestMisses = nMisses;
                 set bestSoFar = proposedUpdate;
-                if (IntAsDouble(mBest) / IntAsDouble(mBest + hBest) < options::Tolerance) { //Terminate based on tolerance
-                    return ((hBest, mBest), bestSoFar);
+                if (IntAsDouble(nMisses) / IntAsDouble(nSamples) < options::Tolerance) { //Terminate based on tolerance
+                    return bestSoFar;
                 }
                 set nStalls = 0; //Reset the counter of consequtive noops
                 set lrate = options::LearningRate;
@@ -400,7 +420,7 @@ namespace Microsoft.Quantum.MachineLearning {
                 // If we're more than halfway through our maximum allowed number of stalls,
                 // exit early with the best we actually found.
                 if (nStalls > options::MaxStalls) {
-                    return ((hBest, mBest), bestSoFar); //Too many non-steps. Continuation makes no sense
+                    return bestSoFar; //Too many non-steps. Continuation makes no sense
                 }
 
                 // Otherwise, heat up the learning rate and batch size.
@@ -429,7 +449,7 @@ namespace Microsoft.Quantum.MachineLearning {
             }
         }
 
-        return ((hBest, mBest), bestSoFar);
+        return bestSoFar;
     }
 
 }

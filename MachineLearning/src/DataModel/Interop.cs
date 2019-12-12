@@ -176,7 +176,7 @@ namespace Microsoft.Quantum.MachineLearning.Interop
 
         /// <summary>
         /// Creates a cyclic block of nQubits controlled rotations that starts
-        /// with contol qubit (nQubits-1), target qubit (cspan-1) % n , followed by the 
+        /// with contol qubit (nQubits-1), target qubit (cspan-1) % n , followed by the
         /// ladder of entanglers with control qubit iq and target qubit (iq+cspan) % n
         /// </summary>
         /// <param name="nQubits">Number of qubits to entangle</param>
@@ -253,7 +253,7 @@ namespace Microsoft.Quantum.MachineLearning.Interop
                 (j) =>
                 {
 
-                    var rslt = 
+                    var rslt =
                     TrainQcccSequential.Run(simAll[j], this._nQubits, this._structure, parameterComb[j], trainingSet, trainingLabels, trainingSchedule, validationSchedule, learningRate, tolerance, miniBatchSize, maxEpochs, nMeasurements).Result;
                     resultsAll[j] = rslt;
                 }
@@ -303,31 +303,6 @@ namespace Microsoft.Quantum.MachineLearning.Interop
             validationSchedule.Add(new long[] { 0L, 1L, ((long)(samples.Count - 1)) });
             return CountMisclassifications(tolerance, Qonvert.ToQ(samples), Qonvert.ToQ(knownLabels), Qonvert.ToQ(validationSchedule), nMeasurements, randomizationSeed);
         }
-
-        //EstimateClassificationProbabilitiesClassicalDataAdapter(samples: Double[][], schedule: Int[][], nQubits: Int,  gates: Int[][], param: Double[], measCount: Int): Double[]
-        public double[] EstimateClassificationProbabilities(double tolerance, IQArray<IQArray<double>> samples, IQArray<IQArray<long>> schedule, long nMeasurements, uint randomizationSeed)
-        {
-            if (this.isTrained)
-            {
-                var sim = new QuantumSimulator(false, randomizationSeed);
-                IQArray<double> probs = EstimateClassificationProbabilitiesClassicalDataAdapter.Run(sim, tolerance, samples, schedule, this._nQubits, this._structure, this.CachedParameters, nMeasurements).Result;
-                return probs.ToArray();
-            }
-            return new double[] { -1.0 };          
-        }
-
-        public double[] EstimateClassificationProbabilities(double tolerance, List<double[]> samples, List<long[]> schedule, long nMeasurements, uint randomizationSeed)
-        {
-            return EstimateClassificationProbabilities(tolerance, Qonvert.ToQ(samples), Qonvert.ToQ(schedule), nMeasurements, randomizationSeed);
-        }
-
-        public double[] EstimateClassificationProbabilities(double tolerance, List<double[]> samples, long nMeasurements, uint randomizationSeed)
-        {
-            List<long[]> sched = new List<long[]>(1);
-            sched.Add(new long[] { 0L, 1L, (long)(samples.Count - 1) });
-            return EstimateClassificationProbabilities(tolerance, Qonvert.ToQ(samples), Qonvert.ToQ(sched), nMeasurements, randomizationSeed);
-        }
-
 
     } //class ClassificationModel
 
