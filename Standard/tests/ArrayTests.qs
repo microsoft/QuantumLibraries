@@ -53,6 +53,12 @@ namespace Microsoft.Quantum.Tests {
             [[10, 11], [12, 13], [14, 15]],
             Chunks(2, data)
         )), "Wrong chunks in 2x3 case.");
+
+        // Case with some leftovers.
+        Fact(All(_AllEqualI, Zip(
+            [[10, 11, 12, 13], [14, 15]],
+            Chunks(4, data)
+        )), "Wrong chunks in case with leftover elements.");
     }
 
     function _Squared(x : Int) : Int {
