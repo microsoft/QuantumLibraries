@@ -185,37 +185,4 @@ namespace Microsoft.Quantum.MachineLearning {
 
     }
 
-    /// # Summary
-    /// Extract a mini batch of samples and wrap the batch as a LabeledSampleContainer
-    ///
-    /// # Input
-    /// ## size
-    /// desired number of samples in the mini batch
-    ///
-    /// ## ixLoc
-    /// starting index for the batch in the list of locations
-    ///
-    /// ## locations
-    /// list of indices of samples of interest
-    ///
-    /// ## samples
-    /// the container to extract the samples from
-    ///
-    /// # Output
-    /// the mini batched wrapped as a LabeledSampleContainer
-    ///
-    /// # Remarks
-    /// the resulting mini batch can be occasionally shorter than the requested 'size'
-    /// (when it falls on the tail end of the list of 'locations')
-    ///
-    @Deprecated("Microsoft.Quantum.Arrays.Chunks")
-    function ExtractMiniBatch(size: Int, ixLoc: Int, locations: Int[], samples: LabeledSample[]): LabeledSample[] {
-        let cnt = MinI(size, Length(locations) - ixLoc);
-        mutable rgSamples = new LabeledSample[0];
-        for (location in locations[ixLoc..ixLoc + cnt]) {
-            set rgSamples += [samples[location]];
-        }
-        return rgSamples;
-    }
-
 }
