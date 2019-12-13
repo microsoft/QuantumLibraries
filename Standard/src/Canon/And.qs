@@ -6,6 +6,10 @@ namespace Microsoft.Quantum.Canon {
     open Microsoft.Quantum.Measurement;
 
     /// # Summary
+    /// Inverts a given target qubit if and only if both control qubits are in the 1 state,
+    /// using measurement to perform the adjoint operation.
+    ///
+    /// # Description
     /// Inverts `target` if and only if both controls are 1, but assumes that
     /// `target` is in state 0.  The operation has T-count 4, T-depth 2 and
     /// requires no helper qubit, and may therefore be preferable to a CCNOT
