@@ -26,6 +26,7 @@ namespace Microsoft.Quantum.Canon {
     ///   https://arxiv.org/abs/1709.06648
     operation AND(control1 : Qubit, control2 : Qubit, target : Qubit) : Unit {
         body (...) {
+            AssertProb([PauliZ], [target], Zero, 1.0, "Target qubit must be in 0 state", 0.0);
             H(target);
             T(target);
             CNOT(control1, target);
@@ -75,6 +76,7 @@ namespace Microsoft.Quantum.Canon {
     operation ANDLowDepth(control1 : Qubit, control2 : Qubit, target : Qubit) : Unit {
         body (...) {
             using (helper = Qubit()) {
+                AssertProb([PauliZ], [target], Zero, 1.0, "Target qubit must be in 0 state", 0.0);
                 H(target);
                 within {
                     CNOT(control1, helper);
