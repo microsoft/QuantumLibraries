@@ -28,6 +28,7 @@ namespace Microsoft.Quantum.Canon {
     /// - Craig Gidney: "Halving the cost of quantum addition", Quantum 2, page
     ///   74, 2018
     ///   https://arxiv.org/abs/1709.06648
+    ///   doi:10.1103/PhysRevA.85.044302
     operation AND(control1 : Qubit, control2 : Qubit, target : Qubit) : Unit {
         body (...) {
             AssertProb([PauliZ], [target], Zero, 1.0, "Target qubit must be in 0 state", 0.0);
@@ -74,9 +75,11 @@ namespace Microsoft.Quantum.Canon {
     /// - Craig Gidney: "Halving the cost of quantum addition", Quantum 2, page
     ///   74, 2018
     ///   https://arxiv.org/abs/1709.06648
+    ///   doi:10.1103/PhysRevA.85.044302
     /// - Cody Jones: "Novel constructions for the fault-tolerant Toffoli gate",
     ///   Phys. Rev. A 87, 022328, 2013
     ///   https://arxiv.org/abs/1212.5069
+    ///   doi:10.1103/PhysRevA.87.022328
     operation ANDLowDepth(control1 : Qubit, control2 : Qubit, target : Qubit) : Unit {
         body (...) {
             using (helper = Qubit()) {
