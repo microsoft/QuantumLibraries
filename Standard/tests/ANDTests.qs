@@ -10,7 +10,7 @@ namespace Microsoft.Quantum.Tests {
         using ((control1, control2, target, output) = (Qubit(), Qubit(), Qubit(), Qubit())) {
             within {
                 ApplyPauliFromBitString(PauliX, true, [polarity1, polarity2], [control1, control2]);
-                gate!(control1, control2, target);
+                gate::Apply(control1, control2, target);
             }
             apply {
                 CNOT(target, output);
