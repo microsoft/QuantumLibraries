@@ -11,10 +11,10 @@ namespace Microsoft.Quantum.Arithmetic {
     /// # Summary
     /// Performs a modular increment of a qubit register by an integer constant.
     ///
-    /// Let us denote `increment` by a, `modulus` by N and integer encoded in `target` by y
+    /// Let us denote `increment` by a, `modulus` by N and integer encoded in `target` by y.
     /// Then the operation performs the following transformation:
     /// \begin{align}
-    ///     \ket{y} \mapsto \ket{y + 1 \operatorname{mod} N}
+    ///     \ket{y} \mapsto \ket{(y + a) \operatorname{mod} N}
     /// \end{align}
     /// Integers are encoded in little-endian format.
     ///
@@ -27,12 +27,14 @@ namespace Microsoft.Quantum.Arithmetic {
     /// Integer y in `LittleEndian` format that `increment` a is added to.
     ///
     /// # See Also
-    /// - IncrementPhaseByModularInteger
+    /// - Microsoft.Quantum.Arithmetic.IncrementPhaseByModularInteger
     ///
     /// # Remarks
-    /// Assumes that the value of target is less than N. Note that
+    /// Assumes that the initial value of target is less than N
+    /// and that the increment a is less than N. 
+    /// Note that
     /// <xref:microsoft.quantum.arithmetic.incrementphasebymodularinteger> implements
-    /// the same operation, but in the `PhaseLittleEndian` basis.
+    /// the same operation in the `PhaseLittleEndian` basis.
     operation IncrementByModularInteger(increment : Int, modulus : Int, target : LittleEndian) : Unit {
         body (...) {
             let inner = IncrementPhaseByModularInteger(increment, modulus, _);
@@ -50,13 +52,13 @@ namespace Microsoft.Quantum.Arithmetic {
     /// # Summary
     /// Performs a modular increment of a qubit register by an integer constant.
     ///
-    /// Let us denote `increment` by a, `modulus` by N and integer encoded in `target` by y
+    /// Let us denote `increment` by a, `modulus` by N and integer encoded in `target` by y.
     /// Then the operation performs the following transformation:
     /// |y⟩ ↦ |y+a (mod N)⟩
-    /// Integers are encoded in little-endian format in QFT basis
+    /// Integers are encoded in little-endian format in QFT basis.
     ///
     /// # See Also
-    /// - Microsoft.Quantum.Canon.ModularIncrementLE
+    /// - Microsoft.Quantum.Canon.ModularIncrementLE (deprecated)
     ///
     /// # Remarks
     /// Assumes that `target` has the highest bit set to 0.
@@ -153,11 +155,11 @@ namespace Microsoft.Quantum.Arithmetic {
     }
 
     /// # Summary
-    /// The same as ModularAddProductLE, but assumes that summand encodes
+    /// The same as ModularAddProductLE (deprecated), but assumes that summand encodes
     /// integers in QFT basis
     ///
     /// # See Also
-    /// - Microsoft.Quantum.Canon.ModularAddProductLE
+    /// - Microsoft.Quantum.Canon.ModularAddProductLE (deprecated)
     ///
     /// # Remarks
     /// Assumes that `phaseSummand` has the highest bit set to 0.
@@ -186,13 +188,13 @@ namespace Microsoft.Quantum.Arithmetic {
     /// Let us denote modulus by N and constMultiplier by a
     /// then this operation implements a unitary defined by the following map on
     /// computational basis:
-    /// |y⟩ ↦ |a⋅y (mod N) ⟩, for all y between 0 and N - 1
+    /// |y⟩ ↦ |a⋅y (mod N)⟩, for all y between 0 and N - 1.
     ///
     /// # Input
     /// ## constMultiplier
     /// Constant by which multiplier is being multiplied. Must be co-prime to modulus.
     /// ## modulus
-    /// The multiplication operation is performed modulo `modulus`
+    /// The multiplication operation is performed modulo `modulus`.
     /// ## multiplier
     /// The number being multiplied by a constant.
     /// This is an array of qubits representing integer in little-endian bit order.
