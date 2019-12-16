@@ -31,10 +31,10 @@ namespace Microsoft.Quantum.Tests {
         }
     }
 
-    operation ANDTest() : Unit {
+    operation ApplyANDTest() : Unit {
         for (p1 in [false, true]) {
             for (p2 in [false, true]) {
-                for (op in [AND, ANDLowDepth]) {
+                for (op in [ApplyAND, ApplyANDLowDepth]) {
                     ANDTestHelper(p1, p2, CCNOTop(op));
                 }
             }
