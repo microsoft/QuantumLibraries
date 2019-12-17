@@ -29,7 +29,7 @@ namespace Microsoft.Quantum.Canon {
     ///   74, 2018
     ///   [arXiv:1709.06648](https://arxiv.org/abs/1709.06648)
     ///   doi:10.1103/PhysRevA.85.044302
-    operation ApplyAND(control1 : Qubit, control2 : Qubit, target : Qubit) : Unit {
+    operation ApplyAnd(control1 : Qubit, control2 : Qubit, target : Qubit) : Unit {
         body (...) {
             AssertProb([PauliZ], [target], Zero, 1.0, "Target qubit must be in 0 state", 0.0);
             H(target);
@@ -80,7 +80,7 @@ namespace Microsoft.Quantum.Canon {
     ///   Phys. Rev. A 87, 022328, 2013
     ///   [arXiv:1212.5069](https://arxiv.org/abs/1212.5069)
     ///   doi:10.1103/PhysRevA.87.022328
-    operation ApplyANDLowDepth(control1 : Qubit, control2 : Qubit, target : Qubit) : Unit {
+    operation ApplyLowDepthAnd(control1 : Qubit, control2 : Qubit, target : Qubit) : Unit {
         body (...) {
             using (helper = Qubit()) {
                 AssertProb([PauliZ], [target], Zero, 1.0, "Target qubit must be in 0 state", 0.0);
@@ -101,7 +101,7 @@ namespace Microsoft.Quantum.Canon {
             }
         }
         adjoint (...) {
-            Adjoint ApplyAND(control1, control2, target);
+            Adjoint ApplyAnd(control1, control2, target);
         }
     }
 }
