@@ -17,7 +17,7 @@ namespace Microsoft.Quantum.Canon {
     /// operation, if `target` is known to be 0.  The adjoint of this operation
     /// is measurement based and requires no T gates.
     ///
-    /// # Inputs
+    /// # Input
     /// ## control1
     /// First control qubit
     /// ## control2
@@ -69,7 +69,7 @@ namespace Microsoft.Quantum.Canon {
     /// operation, if `target` is known to be 0.  The adjoint of this operation
     /// is measurement based and requires no T gates, and no helper qubit.
     ///
-    /// # Inputs
+    /// # Input
     /// ## control1
     /// First control qubit
     /// ## control2
