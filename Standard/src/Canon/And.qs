@@ -27,7 +27,7 @@ namespace Microsoft.Quantum.Canon {
     /// # References
     /// - Craig Gidney: "Halving the cost of quantum addition", Quantum 2, page
     ///   74, 2018
-    ///   https://arxiv.org/abs/1709.06648
+    ///   [arXiv:1709.06648](https://arxiv.org/abs/1709.06648)
     ///   doi:10.1103/PhysRevA.85.044302
     operation ApplyAND(control1 : Qubit, control2 : Qubit, target : Qubit) : Unit {
         body (...) {
@@ -74,11 +74,11 @@ namespace Microsoft.Quantum.Canon {
     /// # References
     /// - Craig Gidney: "Halving the cost of quantum addition", Quantum 2, page
     ///   74, 2018
-    ///   https://arxiv.org/abs/1709.06648
+    ///   [arXiv:1709.06648](https://arxiv.org/abs/1709.06648)
     ///   doi:10.1103/PhysRevA.85.044302
     /// - Cody Jones: "Novel constructions for the fault-tolerant Toffoli gate",
     ///   Phys. Rev. A 87, 022328, 2013
-    ///   https://arxiv.org/abs/1212.5069
+    ///   [arXiv:1212.5069](https://arxiv.org/abs/1212.5069)
     ///   doi:10.1103/PhysRevA.87.022328
     operation ApplyANDLowDepth(control1 : Qubit, control2 : Qubit, target : Qubit) : Unit {
         body (...) {
