@@ -3,6 +3,7 @@
 namespace Microsoft.Quantum.Tests {
     open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Convert;
+    open Microsoft.Quantum.Diagnostics;
     open Microsoft.Quantum.Intrinsic;
     open Microsoft.Quantum.Measurement;
 
@@ -31,6 +32,7 @@ namespace Microsoft.Quantum.Tests {
         }
     }
 
+    @Test("QuantumSimulator")
     operation ApplyANDTest() : Unit {
         for (p1 in [false, true]) {
             for (p2 in [false, true]) {
