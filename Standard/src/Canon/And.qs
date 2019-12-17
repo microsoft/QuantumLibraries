@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 namespace Microsoft.Quantum.Canon {
+    open Microsoft.Quantum.Diagnostics;
     open Microsoft.Quantum.Intrinsic;
     open Microsoft.Quantum.Measurement;
 
@@ -31,7 +32,7 @@ namespace Microsoft.Quantum.Canon {
     ///   doi:10.1103/PhysRevA.85.044302
     operation ApplyAnd(control1 : Qubit, control2 : Qubit, target : Qubit) : Unit {
         body (...) {
-            AssertProb([PauliZ], [target], Zero, 1.0, "Target qubit must be in 0 state", 0.0);
+            AssertAllZero([target]);
             H(target);
             T(target);
             CNOT(control1, target);
@@ -83,7 +84,7 @@ namespace Microsoft.Quantum.Canon {
     operation ApplyLowDepthAnd(control1 : Qubit, control2 : Qubit, target : Qubit) : Unit {
         body (...) {
             using (helper = Qubit()) {
-                AssertProb([PauliZ], [target], Zero, 1.0, "Target qubit must be in 0 state", 0.0);
+                AssertAllZero([target]);
                 H(target);
                 within {
                     CNOT(control1, helper);
