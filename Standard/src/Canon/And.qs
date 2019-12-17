@@ -87,9 +87,9 @@ namespace Microsoft.Quantum.Canon {
                 AssertAllZero([target]);
                 H(target);
                 within {
+                    CNOT(target, control1);
                     CNOT(control1, helper);
                     CNOT(control2, helper);
-                    CNOT(target, control1);
                     CNOT(target, control2);
                 }
                 apply {
