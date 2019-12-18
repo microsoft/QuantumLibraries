@@ -26,12 +26,12 @@ namespace Microsoft.Quantum.Tests {
         }
     }
 
-    operation ControlledAndTestHelper(polarities : Bool[]) : Unit {
+    operation ControlledAndTestHelper(polarities : Bool[], gate : ((Qubit, Qubit, Qubit) => Unit is Adj+Ctl)) : Unit {
         let numControls = Length(polarities);
         using ((controls, target, output) = (Qubit[numControls], Qubit(), Qubit())) {
             within {
                 ApplyPauliFromBitString(PauliX, true, polarities, controls);
-                Controlled ApplyAnd(controls[0..numControls - 3], (controls[numControls - 2], controls[numControls - 1], target));
+                Controlled gate(controls[0..numControls - 3], (controls[numControls - 2], controls[numControls - 1], target));
             }
             apply {
                 CNOT(target, output);
@@ -59,7 +59,12 @@ namespace Microsoft.Quantum.Tests {
     operation ControlledApplyAndTest() : Unit {
         for (numControls in 3..5) {
             for (assignment in 0..2^numControls - 1) {
-                ControlledAndTestHelper(IntAsBoolArray(assignment, numControls));
+                ControlledAndTestHelper(IntAsBoolArray(assignment, numControls), ApplyAnd);
+            }
+        }
+        for (numControls in 3..4) {
+            for (assignment in 0..2^numControls - 1) {
+                ControlledAndTestHelper(IntAsBoolArray(assignment, numControls), ApplyLowDepthAnd);
             }
         }
     }

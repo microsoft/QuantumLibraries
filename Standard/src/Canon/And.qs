@@ -125,6 +125,12 @@ namespace Microsoft.Quantum.Canon {
         adjoint (...) {
             Adjoint ApplyAnd(control1, control2, target);
         }
+        controlled (controls, ...) {
+            _ApplyMultipleControlledLowDepthAnd(controls + [control1, control2], target);
+        }
+        adjoint controlled (controls, ...) {
+            Adjoint _ApplyMultipleControlledAnd(controls + [control1, control2], target);
+        }
     }
 
     /// # Summary
@@ -141,7 +147,7 @@ namespace Microsoft.Quantum.Canon {
     ///
     /// # Example
     /// ```Q#
-    /// GrayCode(2); // [(0, 0);(1, 1);(3, 0);(2, 1)]
+    /// _GrayCode(2); // [(0, 0);(1, 1);(3, 0);(2, 1)]
     /// ```
     function _GrayCode(n : Int) : (Int, Int)[] {
         let N = 1 <<< n;
@@ -253,6 +259,79 @@ namespace Microsoft.Quantum.Canon {
                     }
                 }
                 Reset(target);
+            }
+        }
+    }
+
+    /// # Summary
+    /// Arrange control, target, and helper qubits according to an index
+    ///
+    /// # Description
+    /// Returns a Qubit array with target at index 0, and control i at index
+    /// 2^i.  The helper qubits are inserted to all other positions in the
+    /// array.
+    function _ArrangeQubits(controls : Qubit[], target : Qubit, helper : Qubit[]) : Qubit[] {
+        let numControls = Length(controls);
+        mutable qs = new Qubit[2^numControls];
+        set qs w/= 0 <- target;
+        mutable cntC = 0;
+        mutable cntH = 0;
+        for (i in 1..2^numControls - 1) {
+            if (i == (i &&& -i)) {
+                set qs w/= i <- controls[cntC];
+                set cntC += 1;
+            } else {
+                set qs w/= i <- helper[cntH];
+                set cntH += 1;
+            }
+        }
+        return qs;
+    }
+
+    /// # Summary
+    /// Implements a multiple-controlled Toffoli gate, assuming that target
+    /// qubit is initialized 0.  The adjoint operation assumes that the target
+    /// qubit will be released to 0.  Requires a Rz depth of 1, while the number
+    /// of helper qubits are exponential in the number of qubits.
+    ///
+    /// # Input
+    /// ## controls
+    /// Control qubits
+    /// ## target
+    /// Target qubit
+    operation _ApplyMultipleControlledLowDepthAnd(controls : Qubit[], target : Qubit) : Unit {
+        body (...) {
+            let vars = Length(controls);
+            using (helper = Qubit[2^vars - vars - 1]) {
+                let qs = _ArrangeQubits(controls, target, helper);
+
+                AssertAllZero([target]);
+                HY(target);
+
+                within {
+                    // initialize helper lines with control lines based on LSB
+                    for (i in 3..2^vars - 1) {
+                        let lsb = i &&& -i;
+                        if (i != lsb) { // i is power of 2
+                            CNOT(qs[lsb], qs[i]);
+                        }
+                    }
+                    // target to control
+                    ApplyToEachA(CNOT(target, _), controls);
+                    // copy remainder (without LSB)
+                    for (i in 3..2^vars - 1) {
+                        let lsb = i &&& -i;
+                        if (i != lsb) {
+                            CNOT(qs[i - lsb], qs[i]);
+                        }
+                    }
+                } apply {
+                    for (i in IndexRange(qs)) {
+                        RFrac(PauliZ, _AndSpectrum(vars, i), vars + 2, qs[i]);
+                    }
+                }
+
+                H(target);
             }
         }
     }
