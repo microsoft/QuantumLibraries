@@ -129,7 +129,7 @@ namespace Microsoft.Quantum.Canon {
             _ApplyMultipleControlledLowDepthAnd(controls + [control1, control2], target);
         }
         adjoint controlled (controls, ...) {
-            Adjoint _ApplyMultipleControlledAnd(controls + [control1, control2], target);
+            Adjoint _ApplyMultipleControlledLowDepthAnd(controls + [control1, control2], target);
         }
     }
 
@@ -246,7 +246,7 @@ namespace Microsoft.Quantum.Canon {
 
             H(target);
             AssertProb([PauliZ], [target], One, 0.5, "Probability of the measurement must be 0.5", 1e-10);
-            if (IsResultOne(M(target))) {
+            if (IsResultOne(MResetZ(target))) {
                 for (i in 0..vars - 1) {
                     let start = 1 <<< i;
                     let code = _GrayCode(i);
@@ -258,7 +258,6 @@ namespace Microsoft.Quantum.Canon {
                         }
                     }
                 }
-                Reset(target);
             }
         }
     }
@@ -332,6 +331,34 @@ namespace Microsoft.Quantum.Canon {
                 }
 
                 H(target);
+            }
+        }
+        adjoint (...) {
+            let vars = Length(controls);
+
+            H(target);
+            AssertProb([PauliZ], [target], One, 0.5, "Probability of the measurement must be 0.5", 1e-10);
+            if (IsResultOne(MResetZ(target))) {
+                using (helper = Qubit[2^vars - vars - 1]) {
+                    let qs = _ArrangeQubits(controls, target, helper);
+                    within {
+                        // this is a bit easier than in the compute part, since
+                        // the target qubit does not have to be copied over to
+                        // the control lines.  Therefore, the two LSB CNOT parts
+                        // can be merged into a single loop.
+                        for (i in 3..2^vars - 1) {
+                            let lsb = i &&& -i;
+                            if (i != lsb) {
+                                CNOT(qs[lsb], qs[i]);
+                                CNOT(qs[i - lsb], qs[i]);
+                            }
+                        }
+                    } apply {
+                        for (i in 1..2^vars - 1) {
+                            RFrac(PauliZ, -_AndSpectrum(vars, i), vars + 1, qs[i]);
+                        }
+                    }
+                }
             }
         }
     }
