@@ -33,7 +33,7 @@ namespace Microsoft.Quantum.Canon {
     /// ## control2
     /// Second control qubit
     /// ## target
-    /// Target ancilla qubit; must be in state 0
+    /// Target auxillary qubit; must be in state 0
     ///
     /// # References
     /// - Cody Jones: "Novel constructions for the fault-tolerant Toffoli gate",
@@ -98,7 +98,7 @@ namespace Microsoft.Quantum.Canon {
     /// ## control2
     /// Second control qubit
     /// ## target
-    /// Target ancilla qubit; must be in state 0
+    /// Target auxillary qubit; must be in state 0
     ///
     /// # References
     /// - Cody Jones: "Novel constructions for the fault-tolerant Toffoli gate",
@@ -154,7 +154,7 @@ namespace Microsoft.Quantum.Canon {
     ///
     /// # Example
     /// ```Q#
-    /// _GrayCode(2); // [(0, 0);(1, 1);(3, 0);(2, 1)]
+    /// _GrayCode(2); // [(0, 0),(1, 1),(3, 0),(2, 1)]
     /// ```
     function _GrayCode(n : Int) : (Int, Int)[] {
         let N = 1 <<< n;
