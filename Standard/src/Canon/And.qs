@@ -274,8 +274,7 @@ namespace Microsoft.Quantum.Canon {
     /// array.
     function _ArrangeQubits(controls : Qubit[], target : Qubit, helper : Qubit[]) : Qubit[] {
         let numControls = Length(controls);
-        mutable qs = new Qubit[2^numControls];
-        set qs w/= 0 <- target;
+        mutable qs = new Qubit[2^numControls] w/ 0 <- target;
         mutable cntC = 0;
         mutable cntH = 0;
         for (i in 1..2^numControls - 1) {
