@@ -202,23 +202,19 @@ namespace Microsoft.Quantum.Canon {
     }
 
     /// # Summary
-    /// Returns the coefficient of the Rademacher-Walsh spectrum of the
-    /// n-variable AND function for a given assignment
+    /// Returns 1, if `index` has an odd number of 1s and -1, if `index` has an
+    /// even number of 1s.
+    ///
+    /// # Description
+    /// Value corresponds to the sign of the coefficient of the Rademacher-Walsh
+    /// spectrum of the n-variable AND function for a given assignment that
+    /// decides the angle of the rotation.
     ///
     /// # Input
-    /// ## numVars
-    /// Number of variables in the AND function
     /// ## index
     /// Input assignment as integer (from 0 to 2^n - 1)
-    ///
-    /// # Output
-    /// Coefficient of the Rademacher-Walsh spectrum for given assignment
-    function _AndSpectrum(numVars : Int, index : Int) : Int {
-        if (index == 0) {
-            return 2^numVars - 2;
-        } else {
-            return _HammingWeightI(index) % 2 == 1 ? 2 | -2;
-        }
+    function _Angle(index : Int) : Int {
+        return _HammingWeightI(index) % 2 == 1 ? 1 | -1;
     }
 
     /// # Summary
@@ -237,16 +233,16 @@ namespace Microsoft.Quantum.Canon {
 
             AssertAllZero([target]);
 
-            HY(target);
+            H(target);
 
             let code = _GrayCode(vars);
             for (j in 0..Length(code) - 1) {
                 let (offset, ctrl) = code[j];
-                RFrac(PauliZ, _AndSpectrum(vars, offset), vars + 2, target);
+                RFrac(PauliZ, _Angle(offset), vars + 1, target);
                 CNOT(controls[ctrl], target);
             }
 
-            H(target);
+            HY(target);
         }
         adjoint (...) {
             let vars = Length(controls);
@@ -259,7 +255,7 @@ namespace Microsoft.Quantum.Canon {
                     let code = _GrayCode(i);
                     for (j in 0..Length(code) - 1) {
                         let (offset, ctrl) = code[j];
-                        RFrac(PauliZ, -_AndSpectrum(vars, start + offset), vars + 1, controls[i]);
+                        RFrac(PauliZ, -_Angle(start + offset), vars, controls[i]);
                         if (i != 0) {
                             CNOT(controls[ctrl], controls[i]);
                         }
@@ -312,7 +308,7 @@ namespace Microsoft.Quantum.Canon {
                 let qs = _ArrangeQubits(controls, target, helper);
 
                 AssertAllZero([target]);
-                HY(target);
+                H(target);
 
                 within {
                     // initialize helper lines with control lines based on LSB
@@ -333,11 +329,11 @@ namespace Microsoft.Quantum.Canon {
                     }
                 } apply {
                     for (i in IndexRange(qs)) {
-                        RFrac(PauliZ, _AndSpectrum(vars, i), vars + 2, qs[i]);
+                        RFrac(PauliZ, _Angle(i), vars + 1, qs[i]);
                     }
                 }
 
-                H(target);
+                HY(target);
             }
         }
         adjoint (...) {
@@ -362,7 +358,7 @@ namespace Microsoft.Quantum.Canon {
                         }
                     } apply {
                         for (i in 1..2^vars - 1) {
-                            RFrac(PauliZ, -_AndSpectrum(vars, i), vars + 1, qs[i]);
+                            RFrac(PauliZ, -_Angle(i), vars, qs[i]);
                         }
                     }
                 }
