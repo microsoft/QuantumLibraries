@@ -1,14 +1,15 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.Quantum.Sdk/0.10.1912.2202-alpha">
+
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
     <AssemblyName>Microsoft.Quantum.Standard</AssemblyName>
-    <PlatformTarget>x64</PlatformTarget>
+    <QsharpDocsGeneration>true</QsharpDocsGeneration>
+    <CsharpGeneration>false</CsharpGeneration>
+    <IncludeQsharpCorePackages>false</IncludeQsharpCorePackages> <!-- otherwise the standard library is included by the Sdk -->
+    <NoWarn>1591</NoWarn> <!-- warning regarding missing C# doc comments -->
   </PropertyGroup>
 
   <PropertyGroup>
-    <NoWarn>0162</NoWarn>
-    <NoWarn>1591</NoWarn>
-    <RunQDocGen>True</RunQDocGen>
     <Authors>Microsoft</Authors>
     <Description>Microsoft's Quantum standard libraries.</Description>
     <Copyright>© Microsoft Corporation. All rights reserved.</Copyright>
@@ -30,7 +31,15 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Quantum.Development.Kit" Version="0.10.1912.501" />
+    <PackageReference Include="Microsoft.Quantum.Simulators" Version="0.10.1912.2208-alpha" />
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.Quantum.CsharpGeneration" Version="0.10.1912.2208-alpha" IsQscReference="true" />
   </ItemGroup>
+
+  <Target Name="BeforeCsharpCompile">
+    <ItemGroup>
+      <Compile Include="$(GeneratedFilesOutputPath)**/*.g.cs" Exclude="@(Compile)" AutoGen="true" />
+    </ItemGroup>
+  </Target>
+
 </Project>

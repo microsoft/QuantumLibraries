@@ -1,30 +1,30 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.Quantum.Sdk/0.10.1912.2202-alpha">
+
   <PropertyGroup>
     <TargetFramework>netcoreapp3.0</TargetFramework>
-    <PlatformTarget>x64</PlatformTarget>
-    <IsPackable>false</IsPackable>
-    <LangVersion>latest</LangVersion>
     <AssemblyName>Microsoft.Quantum.Standard.Tests</AssemblyName>
+    <CsharpGeneration>false</CsharpGeneration>
+    <IncludeQsharpCorePackages>false</IncludeQsharpCorePackages> <!-- otherwise the standard library is included by the Sdk -->    
+    <IsPackable>false</IsPackable>
   </PropertyGroup>
-
-  <PropertyGroup>
-    <NoWarn>0162</NoWarn>
-  </PropertyGroup>
-
-  <ItemGroup>
-    <Compile Include="..\Common\DelaySign.cs" Link="Properties\DelaySign.cs" />
-  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\src\Standard.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Quantum.Development.Kit" Version="0.10.1912.501" />
-    <PackageReference Include="Microsoft.Quantum.Xunit" Version="0.10.1912.501" />
+    <PackageReference Include="Microsoft.Quantum.CsharpGeneration" Version="0.10.1912.2208-alpha" IsQscReference="true" />
+    <PackageReference Include="Microsoft.Quantum.Xunit" Version="0.10.1912.2208-alpha" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.4.0" />
     <PackageReference Include="xunit" Version="2.4.1" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.1" />
     <DotNetCliToolReference Include="dotnet-xunit" Version="2.3.1" />
   </ItemGroup>
+
+  <Target Name="BeforeCsharpCompile">
+    <ItemGroup>
+      <Compile Include="$(GeneratedFilesOutputPath)**/*.g.cs" Exclude="@(Compile)" AutoGen="true" />
+    </ItemGroup>
+  </Target>
+
 </Project>
