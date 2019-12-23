@@ -4,7 +4,6 @@
     <TargetFramework>netstandard2.1</TargetFramework>
     <AssemblyName>Microsoft.Quantum.Standard</AssemblyName>
     <QsharpDocsGeneration>true</QsharpDocsGeneration>
-    <CsharpGeneration>false</CsharpGeneration>
     <IncludeQsharpCorePackages>false</IncludeQsharpCorePackages> <!-- otherwise the standard library is included by the Sdk -->
     <NoWarn>1591</NoWarn> <!-- warning regarding missing C# doc comments -->
   </PropertyGroup>
@@ -31,15 +30,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.Quantum.Runtime.Core" Version="0.10.1912.2208-alpha" />
     <PackageReference Include="Microsoft.Quantum.Simulators" Version="0.10.1912.2208-alpha" />
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" />
-    <PackageReference Include="Microsoft.Quantum.CsharpGeneration" Version="0.10.1912.2208-alpha" IsQscReference="true" />
   </ItemGroup>
-
-  <Target Name="BeforeCsharpCompile">
-    <ItemGroup>
-      <Compile Include="$(GeneratedFilesOutputPath)**/*.g.cs" Exclude="@(Compile)" AutoGen="true" />
-    </ItemGroup>
-  </Target>
 
 </Project>
