@@ -9,6 +9,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="..\Common\DelaySign.cs" Link="Properties\DelaySign.cs" />
+  </ItemGroup>  
+  
+  <ItemGroup>
     <ProjectReference Include="..\src\Standard.csproj" />
   </ItemGroup>
 
