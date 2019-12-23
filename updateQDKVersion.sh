@@ -15,7 +15,7 @@ else
 fi
 
 : ${ver:="$NUGET_VERSION"}
-: ${pkgs:="Microsoft.Quantum.Development.Kit;Microsoft.Quantum.IQSharp.Core;Microsoft.Quantum.Simulators;Microsoft.Quantum.Compiler;Microsoft.Quantum.Canon;Microsoft.Quantum.Xunit;Microsoft.Quantum.Chemistry;Microsoft.Quantum.Research"}
+: ${pkgs:="Microsoft.Quantum.Runtime.Core;Microsoft.Quantum.QSharp.Core;Microsoft.Quantum.Development.Kit;Microsoft.Quantum.IQSharp.Core;Microsoft.Quantum.Simulators;Microsoft.Quantum.Compiler;Microsoft.Quantum.Xunit;Microsoft.Quantum.Chemistry;Microsoft.Quantum.Research"}
 
 
 for pkg in `echo $pkgs | tr ";" "\n"`; do 
