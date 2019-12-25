@@ -28,10 +28,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="..\..\Standard\Common\DelaySign.cs" Link="Properties\DelaySign.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\..\Standard\src\Standard.csproj" />
   </ItemGroup>
 
