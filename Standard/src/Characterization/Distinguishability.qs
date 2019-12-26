@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License.
+
 namespace Microsoft.Quantum.Characterization {
     open Microsoft.Quantum.Intrinsic;
     open Microsoft.Quantum.Canon;
@@ -101,11 +104,11 @@ namespace Microsoft.Quantum.Characterization {
         nQubits : Int, nMeasurements : Int
     )
     : Double {
-        return 1.0 - EstimateFrequencyA(
+        return 2.0 * EstimateFrequencyA(
             _ApplyHadamardTestOnSingleRegister(true, commonPreparation, preparation1, preparation2, _),
             _HeadMeasurement(nQubits + 1),
             nQubits + 1, nMeasurements
-        );
+        ) - 1.0;
     }
 
     operation _ApplySwapTest(
