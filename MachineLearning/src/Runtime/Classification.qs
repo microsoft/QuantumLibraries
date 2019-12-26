@@ -7,6 +7,18 @@ namespace Microsoft.Quantum.MachineLearning {
     open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Convert;
 
+    
+    operation _PrepareClassification(
+        encoder : (LittleEndian => Unit is Adj + Ctl),
+        parameters : Double[],
+        gates : GateSequence,
+        target : Qubit[]
+    )
+    : Unit is Adj {
+        encoder(LittleEndian(target));
+        _ApplyGates(parameters, gates, target);
+    }
+
     operation EstimateClassificationProbability(
         tolerance: Double,
         parameters : Double[],
@@ -19,8 +31,8 @@ namespace Microsoft.Quantum.MachineLearning {
         let circEnc = NoisyInputEncoder(tolerance / IntAsDouble(Length(gates!)), sample);
         let encodedSample = StateGenerator(nQubits, circEnc);
         return 1.0 - EstimateFrequencyA(
-            endToEndPreparation(encodedSample::Apply, parameters,gates),
-            measureLastQubit(encodedSample::NQubits),
+            _PrepareClassification(encodedSample::Apply, parameters, gates, _),
+            _TailMeasurement(encodedSample::NQubits),
             encodedSample::NQubits,
             nMeasurements
         );

@@ -12,47 +12,11 @@ namespace Microsoft.Quantum.MachineLearning {
     open Microsoft.Quantum.Preparation;
     open Microsoft.Quantum.Characterization;
 
-    /// WARNING: the downstream EstimateFrequencyA counts the frequency of Zero
-
-    operation measureLastQubit(nQubits : Int): (Qubit[] => Result) {
-        let paulis = ConstantArray(nQubits, PauliI) w/ (nQubits - 1) <- PauliZ;
-        return Measure(paulis, _);
-    }
-
-    operation _endToEndPreparation(enc: (LittleEndian => Unit is Adj + Ctl), parameters: Double[], gates: GateSequence, reg: Qubit[]): Unit is Adj
-    {
-        enc(LittleEndian(reg));
-        _ApplyGates(parameters, gates, reg);
-    }
-
-    operation endToEndPreparation(enc: (LittleEndian => Unit is Adj + Ctl), parameters: Double[], gates: GateSequence) : (Qubit[] => Unit is Adj)
-    {
-        return _endToEndPreparation(enc,parameters, gates, _);
-    }
-
-    function collectNegativeLocs(cNegative: Int, coefficients : ComplexPolar[]) : Int[]
-    {
-        mutable negLocs = ConstantArray(cNegative, -1);
-        mutable nlx = 0;
-        for (idx in 0 .. Length(coefficients) - 1)
-        {
-            let (r,a) = (coefficients[idx])!;
-            if (AbsD(a - PI()) <  1E-9) {
-                if (nlx < cNegative)
-                {
-                    set negLocs w/= nlx <- idx;
-                    set nlx = nlx+1;
-                }
-            }
-        }
-        return negLocs;
-    } //collectNegativeLocs
-
     // NOTE: the last qubit of 'reg' in this context is the auxillary qubit used in the Hadamard test.
     operation _endToEndHTcircuit(enc: (LittleEndian => Unit is Adj + Ctl), param1 : Double[], gates1: GateSequence, param2 : Double[], gates2: GateSequence, reg: Qubit[]): Unit is Adj + Ctl {
         let L = Length(reg) - 1;
-        let g1 = _ApplyGates(param1,gates1,_);
-        let g2 = _ApplyGates(param2,gates2,_);
+        let g1 = _ApplyGates(param1, gates1, _);
+        let g2 = _ApplyGates(param2, gates2, _);
 
         enc(LittleEndian(reg[0..(L-1)]));
         within {
@@ -72,9 +36,13 @@ namespace Microsoft.Quantum.MachineLearning {
         return _endToEndHTcircuit(enc,param1, gates1, param2, gates2, _);
     }
 
-    operation HardamardTestPhysical(enc2: (LittleEndian => Unit is Adj + Ctl), param1 : Double[], gates1: GateSequence, param2 : Double[], gates2: GateSequence, nQubits: Int, nMeasurements : Int): Double
-    {
-        return 1.0-EstimateFrequencyA(endToEndHTcircuit(enc2,param1,gates1,param2,gates2),measureLastQubit(nQubits), nQubits, nMeasurements);
+    operation HardamardTestPhysical(enc2: (LittleEndian => Unit is Adj + Ctl), param1 : Double[], gates1: GateSequence, param2 : Double[], gates2: GateSequence, nQubits: Int, nMeasurements : Int): Double {
+        return 1.0 - EstimateFrequencyA(
+            endToEndHTcircuit(enc2,param1,gates1,param2,gates2),
+            _TailMeasurement(nQubits),
+            nQubits,
+            nMeasurements
+        );
     }
 
 
@@ -170,19 +138,6 @@ namespace Microsoft.Quantum.MachineLearning {
         let circEnc = NoisyInputEncoder(tolerance / IntAsDouble(Length(gates!)), sample);
         let sg = StateGenerator(nQubits, circEnc);
         return EstimateGradient(param, gates, sg, nMeasurements);
-    }
-
-    //Csharp-frendly adapter for gradient estimation
-    //'gates' is a array of "flattened" controlled rotation defitions
-    //each such definition is Int[no.controls+3] in the format [parameter index, Pauli index, target index <,control qubit indices>]
-    //Pauli index is: 0 for I, 1 for X, 2 for y, 3 for Z
-    //target index is the index of the target qubit of the rotation
-    //Sequence of <control qubit indices> can be empty for uncontroled
-    operation GradientClassicalSimulationAdapter(tolerance: Double, param : Double[], gates: Int[][], sample: Double[]) : (Double[])
-    {
-
-        return EstimateGradientFromClassicalSample(tolerance, param,unFlattenGateSequence(gates),sample,0);
-
     }
 
 }

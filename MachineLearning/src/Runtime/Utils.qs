@@ -9,4 +9,9 @@ namespace Microsoft.Quantum.MachineLearning {
         return Length(v1) == Length(v2) and All(NearlyEqualD, Zip(v1, v2));
 	}
 
+    operation _TailMeasurement(nQubits : Int) : (Qubit[] => Result) {
+        let paulis = ConstantArray(nQubits, PauliI) w/ (nQubits - 1) <- PauliZ;
+        return Measure(paulis, _);
+    }
+
 }
