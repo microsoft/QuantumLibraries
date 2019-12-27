@@ -6,48 +6,6 @@ namespace Microsoft.Quantum.Characterization {
     open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Arrays;
 
-
-    operation _ApplyHadamardTest(
-        phaseShift : Bool,
-        commonPreparation : (Qubit[] => Unit is Adj),
-        preparation1 : (Qubit[] => Unit is Adj + Ctl),
-        preparation2 : (Qubit[] => Unit is Adj + Ctl),
-        control : Qubit,
-        target : Qubit[]
-    )
-    : Unit is Adj
-    {
-        within {
-            H(control);
-        } apply {
-            commonPreparation(target);
-            Controlled preparation1([control], target);
-            within { X(control); }
-            apply { Controlled preparation2([control], target); }
-
-            (phaseShift ? S | I)(control);
-        }
-    }
-
-    operation _ApplyHadamardTestOnSingleRegister(
-        phaseShift : Bool,
-        commonPreparation : (Qubit[] => Unit is Adj),
-        preparation1 : (Qubit[] => Unit is Adj + Ctl),
-        preparation2 : (Qubit[] => Unit is Adj + Ctl),
-        register : Qubit[]
-    )
-    : Unit is Adj
-    {
-        let control = Head(register);
-        let target = Rest(register);
-        _ApplyHadamardTest(
-            phaseShift,
-            commonPreparation,
-            preparation1, preparation2,
-            control, target
-        );
-    }
-
     /// # Summary
     /// Given two operations which each prepare copies of a state, estimates
     /// the real part of the overlap between the states prepared by each
@@ -111,6 +69,63 @@ namespace Microsoft.Quantum.Characterization {
         ) - 1.0;
     }
 
+   operation EstimateOverlapBetweenStates(
+        preparation1 : (Qubit[] => Unit is Adj),
+        preparation2 : (Qubit[] => Unit is Adj),
+        nQubits : Int, nMeasurements : Int
+    )
+    : Double {
+        let nTotalQubits = 2 * nQubits + 1;
+        return 2.0 * EstimateFrequencyA(
+            _ApplySwapTestOnSingleRegister(preparation1, preparation2, _),
+            _HeadMeasurement(nTotalQubits),
+            nTotalQubits, nMeasurements
+        ) - 1.0;
+    }
+
+
+    operation _ApplyHadamardTest(
+        phaseShift : Bool,
+        commonPreparation : (Qubit[] => Unit is Adj),
+        preparation1 : (Qubit[] => Unit is Adj + Ctl),
+        preparation2 : (Qubit[] => Unit is Adj + Ctl),
+        control : Qubit,
+        target : Qubit[]
+    )
+    : Unit is Adj
+    {
+        within {
+            H(control);
+        } apply {
+            commonPreparation(target);
+            Controlled preparation1([control], target);
+            within { X(control); }
+            apply { Controlled preparation2([control], target); }
+
+            (phaseShift ? S | I)(control);
+        }
+    }
+
+    operation _ApplyHadamardTestOnSingleRegister(
+        phaseShift : Bool,
+        commonPreparation : (Qubit[] => Unit is Adj),
+        preparation1 : (Qubit[] => Unit is Adj + Ctl),
+        preparation2 : (Qubit[] => Unit is Adj + Ctl),
+        register : Qubit[]
+    )
+    : Unit is Adj
+    {
+        let control = Head(register);
+        let target = Rest(register);
+        _ApplyHadamardTest(
+            phaseShift,
+            commonPreparation,
+            preparation1, preparation2,
+            control, target
+        );
+    }
+
+
     operation _ApplySwapTest(
         preparation1 : (Qubit[] => Unit is Adj),
         preparation2 : (Qubit[] => Unit is Adj),
@@ -149,20 +164,6 @@ namespace Microsoft.Quantum.Characterization {
             ConstantArray(nQubits, PauliI) w/ 0 <- PauliZ,
             _
         );
-    }
-
-    operation EstimateOverlapBetweenStates(
-        preparation1 : (Qubit[] => Unit is Adj),
-        preparation2 : (Qubit[] => Unit is Adj),
-        nQubits : Int, nMeasurements : Int
-    )
-    : Double {
-        let nTotalQubits = 2 * nQubits + 1;
-        return 2.0 * EstimateFrequencyA(
-            _ApplySwapTestOnSingleRegister(preparation1, preparation2, _),
-            _HeadMeasurement(nTotalQubits),
-            nTotalQubits, nMeasurements
-        ) - 1.0;
     }
 
 }
