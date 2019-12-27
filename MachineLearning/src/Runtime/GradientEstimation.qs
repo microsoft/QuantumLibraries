@@ -67,7 +67,13 @@ namespace Microsoft.Quantum.MachineLearning {
     /// # Output
     /// the gradient
     ///
-    operation EstimateGradient(param : Double[], gates: GateSequence, sg: StateGenerator, nMeasurements : Int) : (Double[]) {
+    operation EstimateGradient(
+        gates : GateSequence,
+        param : Double[],
+        sg : StateGenerator,
+        nMeasurements : Int
+    )
+    : (Double[]) {
         //Synopsis: Suppose (param,gates) define Circ0
         //Suppose (param1,gates1) define Circ1 that implements one-gate derivative of Circ0
         //The expectation derivative is then 2 Re[<Circ1 psi|\Pi_1|Circ0 psi>] =
@@ -81,13 +87,14 @@ namespace Microsoft.Quantum.MachineLearning {
         //Now, suppose a gate at which we differentiate is the (Controlled R(\theta))([k0,k1,...,kr],[target])
         //and we want a unitary description of its \theta-derivative. It can be written as
         // 1/2 {(Controlled R(\theta'))([k0,k1,...,kr],[target]) -  (Controlled Z)([k1,...,kr],[k0])(Controlled R(\theta'))([k0,k1,...,kr],[target])}
-        let pC = Length(param);
-        mutable grad = ConstantArray(pC, 0.0);
-        mutable paramShift = param + [0.0];
+        mutable grad = ConstantArray(Length(param), 0.0);
         let nQubits = MaxI(NQubitsRequired(gates), sg::NQubits);
 
         for (gate in gates!) {
-            set paramShift w/= gate::Index <- (param[gate::Index] + PI()); //Shift the corresponding parameter
+            let paramShift = (param + [0.0])
+                // Shift the corresponding parameter.
+                w/ gate::Index <- (param[gate::Index] + PI());
+
             // NB: This the *antiderivative* of the bracket
             let newDer = 2.0 * HardamardTestPhysical(
                 sg::Apply, param, gates, paramShift, gates, nQubits + 1, nMeasurements
@@ -97,47 +104,19 @@ namespace Microsoft.Quantum.MachineLearning {
                 set grad w/= gate::Index <- grad[gate::Index] + newDer;
             } else {
                 //controlled gate
-                set paramShift w/=gate::Index<-(param[gate::Index]+3.0 * PI());
+                let controlledShift = paramShift
+                    w/ gate::Index <- (param[gate::Index] + 3.0 * PI());
                 //Assumption: any rotation R has the property that R(\theta+2 Pi)=(-1).R(\theta)
                 // NB: This the *antiderivative* of the bracket
                 let newDer1 = 2.0 * HardamardTestPhysical(
-                    sg::Apply, param, gates, paramShift, gates, nQubits + 1,
+                    sg::Apply, param, gates, controlledShift, gates, nQubits + 1,
                     nMeasurements
                 ) - 1.0;
-                set grad w/= gate::Index <- (grad[gate::Index] + 0.5* (newDer - newDer1));
-                set paramShift w/= gate::Index <-( param[gate::Index] + PI()); //unshift by 2 Pi (for debugging purposes)
+                set grad w/= gate::Index <- (grad[gate::Index] + 0.5 * (newDer - newDer1));
             }
-            set paramShift w/= gate::Index <- param[gate::Index]; //unshift this parameter
         }
         return grad;
 
-    } //GradientHack
-
-
-    /// # Summary
-    /// computes stochastic gradient on one classical sample
-    ///
-    /// # Input
-    /// ## param
-    /// circuit parameters
-    ///
-    /// ## gates
-    /// sequence of gates in the circuits
-    ///
-    /// ## sample
-    /// sample vector as a raw array
-    ///
-    /// ## nMeasurements
-    /// number of true quantum measurements to estimate probabilities
-    ///
-    /// # Output
-    /// the gradient
-    ///
-    operation EstimateGradientFromClassicalSample(tolerance: Double, param : Double[], gates: GateSequence, sample: Double[], nMeasurements : Int) : (Double[]) {
-        let nQubits = MaxI(FeatureRegisterSize(sample), NQubitsRequired(gates));
-        let circEnc = NoisyInputEncoder(tolerance / IntAsDouble(Length(gates!)), sample);
-        let sg = StateGenerator(nQubits, circEnc);
-        return EstimateGradient(param, gates, sg, nMeasurements);
     }
 
 }

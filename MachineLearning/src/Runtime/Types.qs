@@ -95,12 +95,13 @@ namespace Microsoft.Quantum.MachineLearning {
         MinibatchSize: Int,
         NMeasurements: Int,
         MaxEpochs: Int,
-        MaxStalls: Int
+        MaxStalls: Int,
+        StochasticRescaleFactor: Double
     );
 
     function DefaultTrainingOptions() : TrainingOptions {
         return TrainingOptions(
-            0.1, 0.005, 15, 10000, 16, 8
+            0.1, 0.005, 15, 10000, 16, 8, 0.01
         );
     }
 

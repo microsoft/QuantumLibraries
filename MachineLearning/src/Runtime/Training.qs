@@ -62,7 +62,7 @@ namespace Microsoft.Quantum.MachineLearning {
 
         for (idxStart in 0..(Length(parameterSource) - 1)) {
             Message($"Beginning training at start point #{idxStart}...");
-            let proposedUpdate = StochasticTrainingLoop(
+            let proposedUpdate = TrainSequentialClassifierAtModel(
                 gates, SequentialModel(parameterSource[idxStart], 0.0),
                 samples, options, trainingSchedule, 1
             );
@@ -119,14 +119,20 @@ namespace Microsoft.Quantum.MachineLearning {
     )
     : (Double, Double[]) {
         mutable batchGradient = ConstantArray(Length(param), 0.0);
+        let nQubits = MaxI(FeatureRegisterSize(miniBatch[0]::Features), NQubitsRequired(gates));
+        let effectiveTolerance = options::Tolerance / IntAsDouble(Length(gates!));
 
-        for (samp in miniBatch) {
-            mutable err = IntAsDouble(samp::Label);
+        for (sample in miniBatch) {
+            mutable err = IntAsDouble(sample::Label);
             if (err < 1.0) {
                 set err = -1.0; //class 0 misclassified to class 1; strive to reduce the probability
             }
-            let grad = EstimateGradientFromClassicalSample(
-                options::Tolerance, param, gates, samp::Features,
+            let stateGenerator = StateGenerator(
+                nQubits,
+                NoisyInputEncoder(effectiveTolerance, sample::Features)
+            );
+            let grad = EstimateGradient(
+                gates, param, stateGenerator,
                 options::NMeasurements
             );
             for (ip in 0..(Length(param) - 1)) {
@@ -290,17 +296,16 @@ namespace Microsoft.Quantum.MachineLearning {
     /// # Output
     /// ((no.hits,no.misses),(opt.bias,opt.parameters))
     ///
-    operation StochasticTrainingLoop(
-        gates: GateSequence,
+    operation TrainSequentialClassifierAtModel(
+        gates : GateSequence,
         model : SequentialModel,
-        samples: LabeledSample[],
+        samples : LabeledSample[],
         options : TrainingOptions,
-        schedule: SamplingSchedule,
-        periodScore: Int
+        schedule : SamplingSchedule,
+        periodScore : Int
     )
     : SequentialModel {
         //const
-        let relFuzz = 0.01;
         let nSamples = Length(samples);
         let features = Mapped(_Features, samples);
         let actualLabels = Mapped(_Label, samples);
@@ -367,8 +372,8 @@ namespace Microsoft.Quantum.MachineLearning {
                 // and bias before updating.
                 if (nStalls > options::MaxStalls / 2) {
                     set current = SequentialModel(
-                        ForEach(_RandomlyRescale(relFuzz, _), proposedUpdate::Parameters),
-                        _RandomlyRescale(relFuzz, proposedUpdate::Bias)
+                        ForEach(_RandomlyRescale(options::StochasticRescaleFactor, _), proposedUpdate::Parameters),
+                        _RandomlyRescale(options::StochasticRescaleFactor, proposedUpdate::Bias)
                     );
                 }
             } else {
