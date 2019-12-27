@@ -20,20 +20,15 @@ namespace Microsoft.Quantum.AmplitudeAmplification {
 
     /// # Summary
     /// Implementation of <xref:microsoft.quantum.canon.targetstatereflectionoracle>.
-    operation TargetStateReflectionOracleImpl (phase : Double, idxFlagQubit : Int, qubits : Qubit[]) : Unit {
-        body (...) {
-            R1(phase, qubits[idxFlagQubit]);
-        }
-
-        adjoint invert;
-        controlled distribute;
-        controlled adjoint distribute;
+    operation _TargetStateReflectionOracle(phase : Double, idxFlagQubit : Int, qubits : Qubit[])
+    : Unit is Adj + Ctl {
+        R1(phase, qubits[idxFlagQubit]);
     }
 
     /// # Summary
     /// Constructs a `ReflectionOracle` about the target state uniquely marked by the flag qubit.
-	///
-	/// The target state has a single qubit set to 1, and all others 0: $\ket{1}_f$.
+    ///
+    /// The target state has a single qubit set to 1, and all others 0: $\ket{1}_f$.
     ///
     /// # Input
     /// ## idxFlagQubit
@@ -44,8 +39,8 @@ namespace Microsoft.Quantum.AmplitudeAmplification {
     ///
     /// # See Also
     /// - Microsoft.Quantum.Canon.ReflectionOracle
-    function TargetStateReflectionOracle (idxFlagQubit : Int) : ReflectionOracle {
-        return ReflectionOracle(TargetStateReflectionOracleImpl(_, idxFlagQubit, _));
+    function TargetStateReflectionOracle(idxFlagQubit : Int) : ReflectionOracle {
+        return ReflectionOracle(_TargetStateReflectionOracle(_, idxFlagQubit, _));
     }
 
 }
