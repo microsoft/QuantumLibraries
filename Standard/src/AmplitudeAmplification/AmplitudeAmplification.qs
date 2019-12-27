@@ -104,10 +104,11 @@ namespace Microsoft.Quantum.AmplitudeAmplification {
     /// # Input
     /// ## phases
     /// Phases of partial reflections
-    /// ## ancillaOracle
-    /// Unitary oracle $A$ that prepares ancilla start state
+    /// ## startStateOracle
+    /// Unitary oracle $A$ that prepares auxiliary start state
     /// ## signalOracle
-    /// Unitary oracle $O$ of type `ObliviousOracle` that acts jointly on the ancilla and system register
+    /// Unitary oracle $O$ of type `ObliviousOracle` that acts jointly on the
+    /// auxiliary and system register
     /// ## idxFlagQubit
     /// Index to single-qubit flag register
     ///
@@ -115,8 +116,8 @@ namespace Microsoft.Quantum.AmplitudeAmplification {
     /// An operation that implements oblivious amplitude amplification based on partial reflections.
     ///
     /// # Remarks
-    /// This imposes stricter conditions on form of the ancilla start and target states than in `AmpAmpObliviousByReflectionPhases`.
-    /// It is assumed that $A\ket{0}\_f\ket{0}\_a= \ket{\text{start}}\_{fa}$ prepares the ancilla start state $\ket{\text{start}}\_{fa}$ from the computational basis $\ket{0}\_f\ket{0}$.
+    /// This imposes stricter conditions on form of the auxiliary start and target states than in `AmpAmpObliviousByReflectionPhases`.
+    /// It is assumed that $A\ket{0}\_f\ket{0}\_a= \ket{\text{start}}\_{fa}$ prepares the auxiliary start state $\ket{\text{start}}\_{fa}$ from the computational basis $\ket{0}\_f\ket{0}$.
     /// It is assumed that the target state is marked by $\ket{1}\_f$.
     /// It is assumed that
     /// \begin{align}
@@ -140,6 +141,22 @@ namespace Microsoft.Quantum.AmplitudeAmplification {
         );
     }
 
+    /// # Summary
+    /// Applies amplitude amplification on a given register, using a given set
+    /// of phases and oracles to reflect about the initial and final states.
+    ///
+    /// # Input
+    /// ## phases
+    /// A set of phases describing the partial reflections at each step of the
+    /// amplitude amplification algorithm. See
+    /// @"microsoft.quantum.amplitudeamplification.standardreflectionphases"
+    /// for an example.
+    /// ## startStateReflection
+    /// An oracle that reflects about the initial state.
+    /// ## targetStateReflection
+    /// An oracle that reflects about the desired final state.
+    /// ## target
+    /// A register to perform amplitude amplification on.
     operation ApplyAmplitudeAmplification(
         phases : ReflectionPhases,
         startStateReflection : ReflectionOracle,
@@ -177,7 +194,7 @@ namespace Microsoft.Quantum.AmplitudeAmplification {
     /// # Remarks
     /// Amplitude amplification is a special case of oblivious amplitude amplification where there are no system qubits and the oblivious oracle is set to identity.
     /// In most cases, `startQubits` is initialized in the state $\ket{\text{start}}\_1$, which is the $-1$ eigenstate of `startStateReflection`.
-    function AmpAmpByReflectionsPhases(
+    function AmplitudeAmplificationFromPartialReflections(
         phases : ReflectionPhases,
         startStateReflection : ReflectionOracle,
         targetStateReflection : ReflectionOracle
@@ -192,6 +209,10 @@ namespace Microsoft.Quantum.AmplitudeAmplification {
     }
 
 
+    // NB [STYLE]: The name of this operation uses "From" as it is not a type
+    //             conversion function ("As"), but something that constructs
+    //             an operation from given information in a deterministic
+    //             fashion.
     /// # Summary
     /// Amplitude amplification by oracles for partial reflections.
     ///
@@ -216,13 +237,19 @@ namespace Microsoft.Quantum.AmplitudeAmplification {
     /// \begin{align}
     /// A\ket{0}\_{f}\ket{0}\_s= \lambda\ket{1}\_f\ket{\text{target}}\_s + \sqrt{1-|\lambda|^2}\ket{0}\_f\cdots,
     /// \end{align}
-    /// In most cases, `flagQubit` and `ancillaRegister` is initialized in the state $\ket{0}\_{f}\ket{0}\_s$.
-    function AmpAmpByOraclePhases (phases : ReflectionPhases, stateOracle : StateOracle, idxFlagQubit : Int) : (Qubit[] => Unit is Adj + Ctl)
-    {
-        let qubitEmpty = new Qubit[0];
+    /// In most cases, `flagQubit` and `auxiliaryRegister` are initialized in the state $\ket{0}\_{f}\ket{0}\_s$.
+    function AmplitudeAmplificationFromStatePreparation(
+        phases : ReflectionPhases,
+        stateOracle : StateOracle,
+        idxFlagQubit : Int
+    )
+    : (Qubit[] => Unit is Adj + Ctl) {
+        let systemRegister = new Qubit[0];
         let signalOracle = ObliviousOracle(NoOp<(Qubit[], Qubit[])>);
-        let ancillaOracle = DeterministicStateOracleFromStateOracle(idxFlagQubit, stateOracle);
-        return (AmpAmpObliviousByOraclePhases(phases, ancillaOracle, signalOracle, idxFlagQubit))(_, qubitEmpty);
+        let startStateOracle = DeterministicStateOracleFromStateOracle(idxFlagQubit, stateOracle);
+        return (ObliviousAmplitudeAmplificationFromStatePreparation(
+            phases, startStateOracle, signalOracle, idxFlagQubit
+        ))(_, systemRegister);
     }
 
 
@@ -252,14 +279,18 @@ namespace Microsoft.Quantum.AmplitudeAmplification {
     /// \begin{align}
     /// \operatorname{AmpAmpByOracle}\ket{0}\_{f}\ket{0}\_s= \sin((2n+1)\sin^{-1}(\lambda))\ket{1}\_f\ket{\text{target}}\_s + \cdots\ket{0}\_f
     /// \end{align}
-    /// In most cases, `flagQubit` and `ancillaRegister` is initialized in the state $\ket{0}\_f\ket{0}\_a$.
+    /// In most cases, `flagQubit` and `auxiliaryRegister` is initialized in the state $\ket{0}\_f\ket{0}\_a$.
     ///
     /// # References
     /// - [ *G. Brassard, P. Hoyer, M. Mosca, A. Tapp* ](https://arxiv.org/abs/quant-ph/0005055)
-    function AmpAmpByOracle (nIterations : Int, stateOracle : StateOracle, idxFlagQubit : Int) : (Qubit[] => Unit is Adj + Ctl)
-    {
+    function StandardAmplitudeAmplification(
+        nIterations : Int,
+        stateOracle : StateOracle,
+        idxFlagQubit : Int
+    )
+    : (Qubit[] => Unit is Adj + Ctl) {
         let phases = StandardReflectionPhases(nIterations);
-        return AmpAmpByOraclePhases(phases, stateOracle, idxFlagQubit);
+        return AmplitudeAmplificationFromStatePreparation(phases, stateOracle, idxFlagQubit);
     }
 
 
@@ -275,7 +306,7 @@ namespace Microsoft.Quantum.AmplitudeAmplification {
     /// # Remarks
     /// The startQubits must be in the $\ket{0 \cdots 0}$ state. This operation iterates over a number of queries in powers of $2$ until either a maximal number of queries
     /// is reached, or the target state is found.
-    operation AmpAmpRUSByOracle(statePrepOracle : StateOracle, startQubits : Qubit[])
+    operation ApplyFixedPointAmplification(statePrepOracle : StateOracle, startQubits : Qubit[])
     : Unit {
         // Should be a power of 2
         let queriesMax = 999;
@@ -299,7 +330,7 @@ namespace Microsoft.Quantum.AmplitudeAmplification {
                 repeat {
                     let queries = 2 ^ exponentCurrent;
                     let phases = FixedPointReflectionPhases(queries, successMin);
-                    (AmpAmpByOraclePhases(phases, statePrepOracle, idxFlagQubit))(qubits);
+                    (AmplitudeAmplificationFromStatePreparation(phases, statePrepOracle, idxFlagQubit))(qubits);
                     set finished = M(flagQubit[0]);
                     set exponentCurrent = exponentCurrent + 1;
                 }

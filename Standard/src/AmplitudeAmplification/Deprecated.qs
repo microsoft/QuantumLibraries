@@ -60,4 +60,53 @@ namespace Microsoft.Quantum.AmplitudeAmplification {
         );
     }
 
+    /// # Deprecated
+    /// Please use @"microsoft.quantum.amplitudeamplification.amplitudeamplificationfrompartialreflections".
+    @Deprecated("Microsoft.Quantum.AmplitudeAmplification.AmplitudeAmplificationFromPartialReflections")
+    function AmpAmpByReflectionPhases(
+        phases : ReflectionPhases,
+        startStateReflection : ReflectionOracle,
+        targetStateReflection : ReflectionOracle
+    )
+    : (Qubit[] => Unit is Adj + Ctl) {
+        return AmplitudeAmplificationFromPartialReflections(
+            phases, startStateReflection, targetStateReflection
+        );
+    }
+
+    /// # Deprecated
+    /// Please use @"microsoft.quantum.amplitudeamplification.amplitudeamplificationfromstatepreparation".
+    @Deprecated("Microsoft.Quantum.AmplitudeAmplification.AmplitudeAmplificationFromStatePreparation")
+    function AmpAmpByOraclePhases(
+        phases : ReflectionPhases,
+        stateOracle : StateOracle,
+        idxFlagQubit : Int
+    )
+    : (Qubit[] => Unit is Adj + Ctl) {
+        return AmplitudeAmplificationFromStatePreparation(
+            phases, stateOracle, idxFlagQubit
+        );
+    }
+
+    /// # Deprecated
+    /// Please use @"microsoft.quantum.amplitudeamplification.standardamplitudeamplification".
+    @Deprecated("Microsoft.Quantum.AmplitudeAmplification.StandardAmplitudeAmplification")
+    function AmpAmpByOracle(
+        nIterations : Int,
+        stateOracle : StateOracle,
+        idxFlagQubit : Int
+    )
+    : (Qubit[] => Unit is Adj + Ctl) {
+        return StandardAmplitudeAmplification(nIterations, stateOracle, idxFlagQubit);
+    }
+
+
+    /// # Deprecated
+    /// Please use @"microsoft.quantum.amplitudeamplification.applyfixedpointamplification".
+    @Deprecated("Microsoft.Quantum.AmplitudeAmplification.ApplyFixedPointAmplification")
+    operation AmpAmpRUSByOracle(statePrepOracle : StateOracle, startQubits : Qubit[])
+    : Unit {
+        ApplyFixedPointAmplification(statePrepOracle, startQubits);
+    }
+
 }
