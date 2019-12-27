@@ -24,9 +24,9 @@ namespace Microsoft.Quantum.Characterization {
             Controlled preparation1([control], target);
             within { X(control); }
             apply { Controlled preparation2([control], target); }
-        }
 
-        (phaseShift ? S | I)(control);
+            (phaseShift ? S | I)(control);
+        }
     }
 
     operation _ApplyHadamardTestOnSingleRegister(
