@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 namespace Microsoft.Quantum.AmplitudeAmplification {
+    open Microsoft.Quantum.Arrays;
     open Microsoft.Quantum.Intrinsic;
     open Microsoft.Quantum.Convert;
     open Microsoft.Quantum.Math;
@@ -14,31 +15,31 @@ namespace Microsoft.Quantum.AmplitudeAmplification {
     /// # Input
     /// ## phases
     /// Phases of partial reflections
-    /// ## ancillaReflection
-    /// Reflection operator about start state of ancilla register
+    /// ## startStateReflection
+    /// Reflection operator about start state of auxiliary register
     /// ## targetStateReflection
-    /// Reflection operator about target state of ancilla register
+    /// Reflection operator about target state of auxiliary register
     /// ## signalOracle
     /// Unitary oracle $O$ of type `ObliviousOracle` that acts jointly on the
-    /// ancilla and system registers.
-    /// ## ancillaRegister
-    /// Ancilla register
+    /// auxiliary and system registers.
+    /// ## auxiliaryRegister
+    /// Auxiliary register
     /// ## systemRegister
     /// System register
     ///
     /// # Remarks
-    /// Given a particular ancilla start state $\ket{\text{start}}\_a$, a
-    /// particular ancilla target state $\ket{\text{target}}\_a$, and any
+    /// Given a particular auxiliary start state $\ket{\text{start}}\_a$, a
+    /// particular auxiliary target state $\ket{\text{target}}\_a$, and any
     /// system state $\ket{\psi}\_s$, suppose that
     /// \begin{align}
     /// O\ket{\text{start}}\_a\ket{\psi}\_s= \lambda\ket{\text{target}}\_a U \ket{\psi}\_s + \sqrt{1-|\lambda|^2}\ket{\text{target}^\perp}\_a\cdots
     /// \end{align}
     /// for some unitary $U$.
     /// By a sequence of reflections about the start and target states on the
-    /// ancilla register interleaved by applications of `signalOracle` and its
+    /// auxiliary register interleaved by applications of `signalOracle` and its
     /// adjoint, the success probability of applying U may be altered.
     ///
-    /// In most cases, `ancillaRegister` is initialized in the state $\ket{\text{start}}\_a$.
+    /// In most cases, `auxiliaryRegister` is initialized in the state $\ket{\text{start}}\_a$.
     ///
     /// # References
     /// See
@@ -47,56 +48,53 @@ namespace Microsoft.Quantum.AmplitudeAmplification {
     /// See
     /// - [ *G.H. Low, I.L. Chuang* ](https://arxiv.org/abs/1610.06546)
     /// for a generalization to partial reflections.
-    operation _AmpAmpObliviousByReflectionPhases(
+    operation ApplyObliviousAmplitudeAmplification(
         phases : ReflectionPhases,
-        ancillaReflection : ReflectionOracle,
+        startStateReflection : ReflectionOracle,
         targetStateReflection : ReflectionOracle,
         signalOracle : ObliviousOracle,
-        ancillaRegister : Qubit[],
+        auxiliaryRegister : Qubit[],
         systemRegister : Qubit[]
     )
     : Unit is Adj + Ctl {
-        let (phasesAncilla, phasesTarget) = phases!;
-        let nphases = 2 * Length(phasesTarget);
+        for ((startPhase, targetPhase) in Zip(phases!)) {
+            if (startPhase != 0.0) {
+                startStateReflection::ApplyReflection(
+                    startPhase, auxiliaryRegister
+                );
+            }
 
-        //FailOn(nphases != Length(phasesAncilla), "Phase array lengths not equal.")
-        if (phasesAncilla[0] != 0.0) {
-            ancillaReflection::ApplyReflection(phasesAncilla[0], ancillaRegister);
-        }
-
-        for (idxPhases in 1 .. nphases - 1) {
-            let idxPhaseAncilla = idxPhases / 2;
-            let idxPhaseTarget = idxPhases / 2;
-
-            if (idxPhases % 2 == 1) {
-                signalOracle!(ancillaRegister, systemRegister);
-
-                if (phasesTarget[idxPhaseTarget] != 0.0) {
-                    targetStateReflection!(phasesTarget[idxPhaseTarget], ancillaRegister);
-                }
-            } else {
-                Adjoint signalOracle!(ancillaRegister, systemRegister);
-
-                if (phasesAncilla[idxPhaseAncilla] != 0.0) {
-                    ancillaReflection::ApplyReflection(
-                        phasesAncilla[idxPhaseAncilla], ancillaRegister
-                    );
+            within {
+                signalOracle!(auxiliaryRegister, systemRegister);
+            } apply {
+                if (targetPhase != 0.0) {
+                    targetStateReflection!(targetPhase, auxiliaryRegister);
                 }
             }
         }
+        // This gives us one extra application of Adjoint signalOracle!, so we
+        // apply the forward direction at the end.
+        signalOracle!(auxiliaryRegister, systemRegister);
     }
 
 
+    // NB [STYLE]: The name of this operation uses "From" as it is not a type
+    //             conversion function ("As"), but something that constructs
+    //             an operation from given information in a deterministic
+    //             fashion.
     /// # Summary
     /// Returns a unitary that implements oblivious amplitude amplification by specifying for partial reflections.
-    function AmpAmpObliviousByReflectionPhases(
+    function ObliviousAmplitudeAmplificationFromPartialReflections(
         phases : ReflectionPhases,
-        ancillaReflection : ReflectionOracle,
+        startStateReflection : ReflectionOracle,
         targetStateReflection : ReflectionOracle,
         signalOracle : ObliviousOracle
     )
     : ((Qubit[], Qubit[]) => Unit is Adj + Ctl) {
-        return _AmpAmpObliviousByReflectionPhases(phases, ancillaReflection, targetStateReflection, signalOracle, _, _);
+        return ApplyObliviousAmplitudeAmplification(
+            phases, startStateReflection, targetStateReflection, signalOracle,
+            _, _
+        );
     }
 
 
@@ -125,17 +123,38 @@ namespace Microsoft.Quantum.AmplitudeAmplification {
     /// O\ket{\text{start}}\_{fa}\ket{\psi}\_s= \lambda\ket{1}\_f\ket{\text{anything}}\_a\ket{\text{target}}\_s U \ket{\psi}\_s + \sqrt{1-|\lambda|^2}\ket{0}\_f\cdots,
     /// \end{align}
     /// for some unitary $U$.
-    function AmpAmpObliviousByOraclePhases(
+    function ObliviousAmplitudeAmplificationFromStatePreparation(
         phases : ReflectionPhases,
-        ancillaOracle : DeterministicStateOracle,
+        startStateOracle : DeterministicStateOracle,
         signalOracle : ObliviousOracle,
         idxFlagQubit : Int
     )
     : ((Qubit[], Qubit[]) => Unit is Adj + Ctl) {
-        let ancillaReflection = ReflectionStart();
+        let startStateReflection = ReflectionStart();
         let targetStateReflection = TargetStateReflectionOracle(idxFlagQubit);
-        let oracleObliviousNew = ObliviousOracleFromDeterministicStateOracle(ancillaOracle, signalOracle);
-        return AmpAmpObliviousByReflectionPhases(phases, ancillaReflection, targetStateReflection, oracleObliviousNew);
+        let obliviousSignalOracle = ObliviousOracleFromDeterministicStateOracle(
+            startStateOracle, signalOracle
+        );
+        return ObliviousAmplitudeAmplificationFromPartialReflections(
+            phases, startStateReflection, targetStateReflection, obliviousSignalOracle
+        );
+    }
+
+    operation ApplyAmplitudeAmplification(
+        phases : ReflectionPhases,
+        startStateReflection : ReflectionOracle,
+        targetStateReflection : ReflectionOracle,
+        target : Qubit[]
+    )
+    : Unit is Adj + Ctl {
+        // Pass empty qubit array using fact that NoOp does nothing.
+        let systemRegister = new Qubit[0];
+        let signalOracle = ObliviousOracle(NoOp<(Qubit[], Qubit[])>);
+        let op = ObliviousAmplitudeAmplificationFromPartialReflections(
+            phases, startStateReflection, targetStateReflection, signalOracle
+        );
+
+        op(target, systemRegister);
     }
 
 
@@ -167,7 +186,9 @@ namespace Microsoft.Quantum.AmplitudeAmplification {
         // Pass empty qubit array using fact that NoOp does nothing.
         let qubitEmpty = new Qubit[0];
         let signalOracle = ObliviousOracle(NoOp<(Qubit[], Qubit[])>);
-        return (AmpAmpObliviousByReflectionPhases(phases, startStateReflection, targetStateReflection, signalOracle))(_, qubitEmpty);
+        return (ObliviousAmplitudeAmplificationFromPartialReflections(
+            phases, startStateReflection, targetStateReflection, signalOracle
+        ))(_, qubitEmpty);
     }
 
 
