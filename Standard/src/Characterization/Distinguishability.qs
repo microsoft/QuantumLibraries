@@ -36,7 +36,7 @@ namespace Microsoft.Quantum.Characterization {
     /// and where $V$ corresponds to `preparation2`.
     ///
     /// # References
-    /// TODO
+    /// - Aharonov *et al.* [quant-ph/0511096](https://arxiv.org/abs/quant-ph/0511096).
     ///
     /// # See Also
     /// - Microsoft.Quantum.Characterization.EstimateImagOverlapBetweenStates
@@ -55,6 +55,41 @@ namespace Microsoft.Quantum.Characterization {
         ) - 1.0;
     }
 
+    /// # Summary
+    /// Given two operations which each prepare copies of a state, estimates
+    /// the imaginary part of the overlap between the states prepared by each
+    /// operation.
+    ///
+    /// # Input
+    /// ## commonPreparation
+    /// An operation that prepares a fixed input state.
+    /// ## preparation1
+    /// The first of the two state preparation operations to be compared.
+    /// ## preparation2
+    /// The second of the two state preparation operations to be compared.
+    /// ## nQubits
+    /// The number of qubits on which `commonPreparation`, `preparation1`, and
+    /// `preparation2` all act.
+    /// ## nMeasurements
+    /// The number of measurements to use in estimating the overlap.
+    ///
+    /// # Remarks
+    /// This operation uses the Hadamard test to find the imaginary part of
+    /// $$
+    /// \begin{align}
+    ///     \braket{\psi | V^{\dagger} U | \psi}
+    /// \end{align}
+    /// $$
+    /// where $\ket{\psi}$ is the state prepared by `commonPreparation`,
+    /// $U$ is the unitary representation of the action of `preparation1`,
+    /// and where $V$ corresponds to `preparation2`.
+    ///
+    /// # References
+    /// - Aharonov *et al.* [quant-ph/0511096](https://arxiv.org/abs/quant-ph/0511096).
+    ///
+    /// # See Also
+    /// - Microsoft.Quantum.Characterization.EstimateRealOverlapBetweenStates
+    /// - Microsoft.Quantum.Characterization.EstimateOverlapBetweenStates
     operation EstimateImagOverlapBetweenStates(
         commonPreparation : (Qubit[] => Unit is Adj),
         preparation1 : (Qubit[] => Unit is Adj + Ctl),
@@ -69,6 +104,36 @@ namespace Microsoft.Quantum.Characterization {
         ) - 1.0;
     }
 
+
+    /// # Summary
+    /// Given two operations which each prepare copies of a state, estimates
+    /// the squared overlap between the states prepared by each
+    /// operation.
+    ///
+    /// # Input
+    /// ## preparation1
+    /// The first of the two state preparation operations to be compared.
+    /// ## preparation2
+    /// The second of the two state preparation operations to be compared.
+    /// ## nQubits
+    /// The number of qubits on which `commonPreparation`, `preparation1`, and
+    /// `preparation2` all act.
+    /// ## nMeasurements
+    /// The number of measurements to use in estimating the overlap.
+    ///
+    /// # Remarks
+    /// This operation uses the SWAP test to find
+    /// $$
+    /// \begin{align}
+    ///     \left| \braket{00\cdots 0 | V^{\dagger} U | 00\cdots 0} \right|^2
+    /// \end{align}
+    /// $$
+    /// where $U$ is the unitary representation of the action of `preparation1`,
+    /// and where $V$ corresponds to `preparation2`.
+    ///
+    /// # See Also
+    /// - Microsoft.Quantum.Characterization.EstimateRealOverlapBetweenStates
+    /// - Microsoft.Quantum.Characterization.EstimateImagOverlapBetweenStates
    operation EstimateOverlapBetweenStates(
         preparation1 : (Qubit[] => Unit is Adj),
         preparation2 : (Qubit[] => Unit is Adj),
