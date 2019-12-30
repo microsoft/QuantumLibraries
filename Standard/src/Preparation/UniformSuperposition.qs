@@ -9,12 +9,12 @@ namespace Microsoft.Quantum.Preparation {
     open Microsoft.Quantum.AmplitudeAmplification;
     open Microsoft.Quantum.Oracles;
     open Microsoft.Quantum.Math;
-    
+
     /// # Summary
-	/// Creates a uniform superposition over states that encode 0 through `nIndices`.
-	/// 
+    /// Creates a uniform superposition over states that encode 0 through `nIndices`.
+    ///
     /// That is, this unitary $U$ creates a uniform superposition over all number states
-    /// $0$ to $M-1$, given an input state $\ket{0\cdots 0}$. In other words, 
+    /// $0$ to $M-1$, given an input state $\ket{0\cdots 0}$. In other words,
     /// $$
     /// \begin{align}
     /// U\ket{0}=\frac{1}{\sqrt{M}}\sum_{j=0}^{M-1}\ket{j}.
@@ -57,7 +57,7 @@ namespace Microsoft.Quantum.Preparation {
                 let qubits = flagQubit + targetQubits;
                 let stateOracle = StateOracle(PrepareUniformSuperposition_(nIndices, nQubits, _, _));
 
-                (AmpAmpByOracle(1, stateOracle, 0))(qubits);
+                (StandardAmplitudeAmplification(1, stateOracle, 0))(qubits);
 
                 ApplyToEachCA(X, flagQubit);
             }
@@ -88,5 +88,5 @@ namespace Microsoft.Quantum.Preparation {
         controlled auto;
         adjoint controlled auto;
     }
-    
+
 }
