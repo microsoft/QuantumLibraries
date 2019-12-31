@@ -70,9 +70,6 @@ namespace Microsoft.Quantum.Arithmetic {
     /// encoding.
     /// ## increment
     /// The integer by which the `target` is incremented by.
-    ///
-    /// # See Also
-    /// - IncrementByIntegerPhaseLE
     operation IncrementByInteger(increment : Int, target : LittleEndian) : Unit is Adj + Ctl {
         ApplyPhaseLEOperationOnLECA(IncrementPhaseByInteger(increment, _), target);
     }
