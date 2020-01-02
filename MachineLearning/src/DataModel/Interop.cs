@@ -176,8 +176,8 @@ namespace Microsoft.Quantum.MachineLearning.Interop
 
         /// <summary>
         /// Creates a cyclic block of nQubits controlled rotations that starts
-        /// with contol qubit (nQubits-1), target qubit (cspan-1) % n , followed by the
-        /// ladder of entanglers with control qubit iq and target qubit (iq+cspan) % n
+        /// with control qubit (nQubits-1), target qubit (cspan-1) % nQubits , followed by a
+        /// ladder of entanglers with control qubits iq and target qubit (iq+cspan) % nQubits
         /// </summary>
         /// <param name="nQubits">Number of qubits to entangle</param>
         /// <param name="pauli"></param>
