@@ -14,7 +14,9 @@ namespace Microsoft.Quantum.Oracles {
     /// This oracle $O = \boldone - (1 - e^{i \phi}) \ket{\psi}\bra{\psi}$
     /// performs a partial reflection by a phase $\phi$ about a single pure state
     /// $\ket{\psi}$.
-    newtype ReflectionOracle = ((Double, Qubit[]) => Unit is Adj + Ctl);
+    newtype ReflectionOracle = (
+        ApplyReflection: ((Double, Qubit[]) => Unit is Adj + Ctl)
+    );
 
     // This oracle O|s>_a|ψ>_s = λ |t>_a U |ψ>_s + ... acts on the ancilla state |s>_a to implement the unitary U on any system state |ψ>_s with amplitude λ in the |t>_a basis.
 
@@ -28,7 +30,7 @@ namespace Microsoft.Quantum.Oracles {
     /// # Remarks
     /// This oracle defined by
     /// $$
-    ///O\ket{s}\_a\ket{\psi}\_s= \lambda\ket{t}\_a U \ket{\psi}\_s + \sqrt{1-|\lambda|^2}\ket{t^\perp}\_a\cdots
+    ///     O\ket{s}\_a\ket{\psi}\_s= \lambda\ket{t}\_a U \ket{\psi}\_s + \sqrt{1-|\lambda|^2}\ket{t^\perp}\_a\cdots
     /// $$
     /// acts on the ancilla state $\ket{s}\_a$ to implement the unitary $U$ on any system state $\ket{\psi}\_s$ with amplitude $\lambda$ in the basis flagged by $\ket{t}\_a$.
     /// The first parameter is the qubit register of $\ket{s}\_a$. The second parameter is the qubit register of $\ket{\psi}\_s$.
@@ -64,15 +66,15 @@ namespace Microsoft.Quantum.Oracles {
 
     /// # Summary
     /// Represents a discrete-time oracle.
-	///
-	/// This is an oracle that implements $U^m$ for a fixed operation $U$
+    ///
+    /// This is an oracle that implements $U^m$ for a fixed operation $U$
     /// and a non-negative integer $m$.
     newtype DiscreteOracle = ((Int, Qubit[]) => Unit is Adj + Ctl);
 
     /// # Summary
     /// Represents a continuous-time oracle.
-	///
-	/// This is an oracle that implements
+    ///
+    /// This is an oracle that implements
     /// $U(\delta t) : \ket{\psi(t)} \mapsto \ket{\psi(t + \delta t)}$
     /// for all times $t$, where $U$ is a fixed operation, and where
     /// $\delta t$ is a non-negative real number.
