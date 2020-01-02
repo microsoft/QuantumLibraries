@@ -1,4 +1,7 @@
-namespace Microsoft.Quantum.MachineLearning {
+// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License.
+
+namespace Microsoft.Quantum.MachineLearning.Datasets {
     open Microsoft.Quantum.Primitive;
     open Microsoft.Quantum.Convert;
     open Microsoft.Quantum.Math;
