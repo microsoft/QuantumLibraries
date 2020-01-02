@@ -1,13 +1,14 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 namespace Microsoft.Quantum.Tests {
+    open Microsoft.Quantum.Logical;
     open Microsoft.Quantum.Diagnostics;
     open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Intrinsic;
     open Microsoft.Quantum.Arrays;
 
-
-    function ZipTest () : Unit {
+    @Test("QuantumSimulator")
+    function ZipTest() : Unit {
 
         let left = [1, 2, 101];
         let right = [PauliY, PauliI];
@@ -26,6 +27,7 @@ namespace Microsoft.Quantum.Tests {
     }
 
 
+    @Test("QuantumSimulator")
     function LookupTest () : Unit {
 
         let array = [1, 12, 71, 103];
@@ -38,8 +40,28 @@ namespace Microsoft.Quantum.Tests {
         EqualityFactI(fn(1), 12, $"fn(1) did not return array[1]");
     }
 
+    function _AllEqualI(expected : Int[], actual : Int[]) : Bool {
+        return All(EqualI, Zip(expected, actual));
+    }
 
-    function ConstantArrayTestHelper (x : Int) : Int {
+    @Test("QuantumSimulator")
+    function ChunksTest() : Unit {
+        let data = [10, 11, 12, 13, 14, 15];
+
+        // 2 × 3 case.
+        Fact(All(_AllEqualI, Zip(
+            [[10, 11], [12, 13], [14, 15]],
+            Chunks(2, data)
+        )), "Wrong chunks in 2x3 case.");
+
+        // Case with some leftovers.
+        Fact(All(_AllEqualI, Zip(
+            [[10, 11, 12, 13], [14, 15]],
+            Chunks(4, data)
+        )), "Wrong chunks in case with leftover elements.");
+    }
+
+    function _Squared(x : Int) : Int {
 
         return x * x;
     }
@@ -52,7 +74,7 @@ namespace Microsoft.Quantum.Tests {
         let ignore = Mapped(NearEqualityFactD(_, 2.17), dblArray);
 
         // Stress test by making an array of Int -> Int.
-        let fnArray = ConstantArray(7, ConstantArrayTestHelper);
+        let fnArray = ConstantArray(7, _Squared);
         EqualityFactI(Length(fnArray), 7, $"ConstantArray(Int, Int -> Int) had the wrong length.");
         EqualityFactI(fnArray[3](7), 49, $"ConstantArray(Int, Int -> Int) had the wrong value.");
     }

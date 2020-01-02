@@ -89,6 +89,25 @@ namespace Microsoft.Quantum.MachineLearning {
         NMisclassifications: Int
     );
 
+    newtype TrainingOptions = (
+        LearningRate: Double,
+        Tolerance: Double,
+        MinibatchSize: Int,
+        NMeasurements: Int,
+        MaxEpochs: Int,
+        MaxStalls: Int,
+        StochasticRescaleFactor: Double
+    );
 
+    function DefaultTrainingOptions() : TrainingOptions {
+        return TrainingOptions(
+            0.1, 0.005, 15, 10000, 16, 8, 0.01
+        );
+    }
+
+    newtype SequentialModel = (
+        Parameters: Double[],
+        Bias: Double
+    );
 
 }

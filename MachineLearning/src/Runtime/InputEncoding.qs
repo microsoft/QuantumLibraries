@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 namespace Microsoft.Quantum.MachineLearning {
+    open Microsoft.Quantum.Arrays;
     open Microsoft.Quantum.Preparation;
     open Microsoft.Quantum.Convert;
     open Microsoft.Quantum.Math;
@@ -35,19 +36,31 @@ namespace Microsoft.Quantum.MachineLearning {
         return ret;
     }
 
+    function _NegativeLocations(cNegative: Int, coefficients : ComplexPolar[]) : Int[] {
+        mutable negLocs = new Int[0];
+        for ((idx, coefficient) in Enumerated(coefficients)) {
+            if (AbsD(coefficient::Argument - PI()) < 1E-9) {
+                set negLocs += [idx];
+            }
+        }
+        return Length(negLocs) > cNegative ? negLocs[...cNegative - 1] | negLocs;
+    }
+
     /// Do special processing on the first cNegative entries
-    operation _EncodeSparseNegativeInput(cNegative: Int, tolerance: Double,coefficients : ComplexPolar[], reg: LittleEndian): Unit is Adj + Ctl
-    {
-        let negLocs = collectNegativeLocs(cNegative, coefficients);
+    operation _EncodeSparseNegativeInput(
+        cNegative: Int,
+        tolerance: Double,
+        coefficients : ComplexPolar[],
+        reg: LittleEndian
+    )
+    : Unit is Adj + Ctl {
+        let negLocs = _NegativeLocations(cNegative, coefficients);
         // Prepare the state disregarding the sign of negative components.
         ApproximatelyPrepareArbitraryState(tolerance, _Unnegate(negLocs, coefficients), reg);
         // Reflect about the negative coefficients to apply the negative signs
         // at the end.
-        for (ineg in 0..(cNegative - 1)) {
-            let jx = negLocs[ineg];
-            if (jx > -1) {
-                ReflectAboutInteger(jx, reg); //TODO:REVIEW: this assumes that 2^Length(reg) is the minimal pad to Length(coefficients)
-            }
+        for (idxNegative in negLocs) {
+            ReflectAboutInteger(idxNegative, reg); //TODO:REVIEW: this assumes that 2^Length(reg) is the minimal pad to Length(coefficients)
         }
     }
 
