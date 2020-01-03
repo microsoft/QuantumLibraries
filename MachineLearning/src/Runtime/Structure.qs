@@ -52,7 +52,7 @@ namespace Microsoft.Quantum.MachineLearning {
             set rotations += [ControlledRotation(
                 GateSpan(
                     idxTarget,
-                    [idxTarget + stride % nQubits]
+                    [(idxTarget + stride) % nQubits]
                 ),
                 axis, idxTarget
             )];
