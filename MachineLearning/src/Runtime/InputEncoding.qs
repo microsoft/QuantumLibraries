@@ -64,10 +64,11 @@ namespace Microsoft.Quantum.MachineLearning {
         }
     }
 
-    function NoisyInputEncoder(tolerance: Double,coefficients : Double[]) : (LittleEndian => Unit is Adj + Ctl) {
+    function ApproximateInputEncoder(tolerance : Double,coefficients : Double[])
+    : (LittleEndian => Unit is Adj + Ctl) {
         //First quantize the coefficients: for a coef x find such y*tolerance, where y is integer and |x-y*tolerance| \neq tolerance/2
         let nCoefficients = Length(coefficients);
-        mutable coefficientsComplexPolar = new ComplexPolar[nCoefficients];
+        mutable complexCoefficients = new ComplexPolar[0];
         mutable cNegative = 0;
         for (idx in 0 .. nCoefficients - 1) {
             mutable coef = coefficients[idx];
@@ -80,7 +81,7 @@ namespace Microsoft.Quantum.MachineLearning {
                 set coef = -coef;
                 set ang = PI();
             }
-            set coefficientsComplexPolar w/= idx <- ComplexPolar(coef, ang);
+            set complexCoefficients += [ComplexPolar(coef, ang)];
         }
 
         // Check if we can apply the explicit two-qubit case.
@@ -92,11 +93,11 @@ namespace Microsoft.Quantum.MachineLearning {
         // Here, by a "few," we mean fewer than the number of qubits required
         // to encode features.
         if ((cNegative > 0) and (IntAsDouble(cNegative) < Lg(IntAsDouble(Length(coefficients))) + 1.0)) {
-            return _EncodeSparseNegativeInput(cNegative, tolerance, coefficientsComplexPolar, _); //TODO:MORE:ACCEPTANCE ("Wines" passing soi far)
+            return _EncodeSparseNegativeInput(cNegative, tolerance, complexCoefficients, _); //TODO:MORE:ACCEPTANCE ("Wines" passing soi far)
         }
 
         // Finally, we fall back to arbitrary state preparation.
-        return ApproximatelyPrepareArbitraryState(tolerance, coefficientsComplexPolar, _);
+        return ApproximatelyPrepareArbitraryState(tolerance, complexCoefficients, _);
     } //EncodeNoisyInput
 
     //TODO:REVIEW: Design consideration! The implicit qubit count must be read off from the state encoder, NOT from the gate sequence!

@@ -129,7 +129,7 @@ namespace Microsoft.Quantum.MachineLearning {
             }
             let stateGenerator = StateGenerator(
                 nQubits,
-                NoisyInputEncoder(effectiveTolerance, sample::Features)
+                ApproximateInputEncoder(effectiveTolerance, sample::Features)
             );
             let grad = EstimateGradient(
                 gates, param, stateGenerator,
