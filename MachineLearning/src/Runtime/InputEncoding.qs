@@ -105,23 +105,18 @@ namespace Microsoft.Quantum.MachineLearning {
     /// The vector of 'coefficients' does not have to be unitary
     function InputEncoder(coefficients : Double[]): (LittleEndian => Unit is Adj + Ctl) {
         //default implementation, does not respect sparcity
-        let nCoefficients = Length(coefficients);
-        mutable coefficientsComplexPolar = new ComplexPolar[nCoefficients];
-        mutable allPositive = true;
-        for (idx in 0 .. nCoefficients - 1) {
-            mutable coef = coefficients[idx];
-            mutable ang = 0.0;
-            if (coef < 0.0) {
-                set allPositive = false;
-                set coef =  -coef;
-                set ang = PI();
-            }
-            set coefficientsComplexPolar w/= idx<-ComplexPolar(coef,ang);
+        mutable complexCoefficients = new ComplexPolar[0];
+        for (coefficient in coefficients) {
+            set complexCoefficients += [ComplexPolar(
+                coefficient >= 0.0
+                ? (coefficient, 0.0)
+                | (-coefficient, PI())
+            )];
         }
         if (_CanApplyTwoQubitCase(coefficients)) {
             return _ApplyTwoQubitCase(coefficients, _);
         }
-        return ApproximatelyPrepareArbitraryState(1E-12, coefficientsComplexPolar, _); //this is preparing the state almost exactly so far
+        return ApproximatelyPrepareArbitraryState(1E-12, complexCoefficients, _); //this is preparing the state almost exactly so far
     }
 
 }
