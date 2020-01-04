@@ -190,6 +190,7 @@ namespace Microsoft.Quantum.Arithmetic {
     /// # Summary
     /// Performs modular multiplication by an integer constant on a qubit register.
     ///
+    /// # Description
     /// Let us denote `modulus` by $N$ and `constMultiplier` by $a$.
     /// Then this operation implements a unitary operator defined by the following map on
     /// computational basis:
