@@ -13,39 +13,24 @@ namespace Microsoft.Quantum.MachineLearning {
     open Microsoft.Quantum.Characterization;
 
     // NOTE: the last qubit of 'reg' in this context is the auxillary qubit used in the Hadamard test.
-    operation _endToEndHTcircuit(enc: (LittleEndian => Unit is Adj + Ctl), param1 : Double[], gates1: GateSequence, param2 : Double[], gates2: GateSequence, reg: Qubit[]): Unit is Adj + Ctl {
-        let L = Length(reg) - 1;
-        let g1 = _ApplyGates(param1, gates1, _);
-        let g2 = _ApplyGates(param2, gates2, _);
-
-        enc(LittleEndian(reg[0..(L-1)]));
-        within {
-            H(Tail(reg));
-        } apply {
-            (Controlled g1) ([reg[L]], reg[0..(L-1)]);
-            within {
-                X(Tail(reg));
-            } apply {
-                (Controlled g2) ([reg[L]], reg[0..(L-1)]);
-                (Controlled Z)  ([reg[L]], reg[(L-1)]);
-            }
-        }
+    operation _ApplyLEOperationToRawRegister(op : (LittleEndian => Unit is Adj), target : Qubit[]) : Unit is Adj {
+        op(LittleEndian(target));
     }
 
-    operation endToEndHTcircuit(enc: (LittleEndian => Unit is Adj + Ctl),param1 : Double[], gates1: GateSequence, param2 : Double[], gates2: GateSequence) : (Qubit[] => Unit is Adj) {
-        return _endToEndHTcircuit(enc,param1, gates1, param2, gates2, _);
-    }
-
-    operation HardamardTestPhysical(enc2: (LittleEndian => Unit is Adj + Ctl), param1 : Double[], gates1: GateSequence, param2 : Double[], gates2: GateSequence, nQubits: Int, nMeasurements : Int): Double {
-        return 1.0 - EstimateFrequencyA(
-            endToEndHTcircuit(enc2,param1,gates1,param2,gates2),
-            _TailMeasurement(nQubits),
-            nQubits,
-            nMeasurements
+    operation _EstimateFiniteDifference(
+        inputEncoder : StateGenerator,
+        gates : GateSequence,
+        parameters : (Double[], Double[]),
+        nQubits : Int,
+        nMeasurements : Int
+    ) : Double {
+        return EstimateRealOverlapBetweenStates(
+            _ApplyLEOperationToRawRegister(inputEncoder::Apply, _),
+            _ApplyGates(Fst(parameters), gates, _),
+            _ApplyGates(Snd(parameters), gates, _),
+            nQubits, nMeasurements
         );
     }
-
-
 
     /// # Summary
     /// polymorphic classical/quantum gradient estimator
@@ -96,9 +81,9 @@ namespace Microsoft.Quantum.MachineLearning {
                 w/ gate::Index <- (param[gate::Index] + PI());
 
             // NB: This the *antiderivative* of the bracket
-            let newDer = 2.0 * HardamardTestPhysical(
-                sg::Apply, param, gates, paramShift, gates, nQubits + 1, nMeasurements
-            ) - 1.0;
+            let newDer = _EstimateFiniteDifference(
+                sg, gates, (param, paramShift), nQubits, nMeasurements
+            );
             if (IsEmpty(gate::Span::ControlIndices)) {
                 //uncontrolled gate
                 set grad w/= gate::Index <- grad[gate::Index] + newDer;
@@ -108,10 +93,9 @@ namespace Microsoft.Quantum.MachineLearning {
                     w/ gate::Index <- (param[gate::Index] + 3.0 * PI());
                 //Assumption: any rotation R has the property that R(\theta+2 Pi)=(-1).R(\theta)
                 // NB: This the *antiderivative* of the bracket
-                let newDer1 = 2.0 * HardamardTestPhysical(
-                    sg::Apply, param, gates, controlledShift, gates, nQubits + 1,
-                    nMeasurements
-                ) - 1.0;
+                let newDer1 = _EstimateFiniteDifference(
+                    sg, gates, (param, controlledShift), nQubits, nMeasurements
+                );
                 set grad w/= gate::Index <- (grad[gate::Index] + 0.5 * (newDer - newDer1));
             }
         }
