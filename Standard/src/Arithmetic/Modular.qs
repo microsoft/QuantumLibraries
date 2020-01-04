@@ -192,7 +192,7 @@ namespace Microsoft.Quantum.Arithmetic {
     ///
     /// # Description
     /// Let us denote `modulus` by $N$ and `constMultiplier` by $a$.
-    /// Then this operation implements a unitary operator defined by the following map on
+    /// Then this operation implements a unitary operation defined by the following map on the
     /// computational basis:
     /// $$
     /// \begin{align}
