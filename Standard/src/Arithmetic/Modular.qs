@@ -11,6 +11,7 @@ namespace Microsoft.Quantum.Arithmetic {
     /// # Summary
     /// Performs a modular increment of a qubit register by an integer constant.
     ///
+    /// # Description
     /// Let us denote `increment` by $a$, `modulus` by $N$ and integer encoded in `target` by $y$.
     /// Then the operation performs the following transformation:
     /// \begin{align}
@@ -52,6 +53,7 @@ namespace Microsoft.Quantum.Arithmetic {
     /// # Summary
     /// Performs a modular increment of a qubit register by an integer constant.
     ///
+    /// # Description
     /// Let us denote `increment` by $a$, `modulus` by $N$ and integer encoded in `target` by $y$.
     /// Then the operation performs the following transformation:
     /// \begin{align}
@@ -117,6 +119,7 @@ namespace Microsoft.Quantum.Arithmetic {
     /// # Summary
     /// Performs a modular multiply-and-add by integer constants on a qubit register.
     ///
+    /// # Description
     /// Implements the map
     /// $$
     /// \begin{align}
@@ -160,15 +163,15 @@ namespace Microsoft.Quantum.Arithmetic {
     }
 
     /// # Summary
-    /// The same as @"MultiplyAndAddByModularInteger", but assumes that the summand encodes
+    /// The same as MultiplyAndAddByModularInteger, but assumes that the summand encodes
     /// integers in QFT basis.
-    ///
-    /// # See Also
-    /// - Microsoft.Quantum.Arithmetic.MultiplyAndAddByModularInteger
     ///
     /// # Remarks
     /// Assumes that `phaseSummand` has the highest bit set to 0.
     /// Also assumes that the value of `phaseSummand` is less than $N$.
+    ///
+    /// # See Also
+    /// - Microsoft.Quantum.Arithmetic.MultiplyAndAddByModularInteger
     operation MultiplyAndAddPhaseByModularInteger(constMultiplier : Int, modulus : Int, multiplier : LittleEndian, phaseSummand : PhaseLittleEndian) : Unit is Adj + Ctl {
         EqualityFactB(modulus <= 2 ^ (Length(phaseSummand!) - 1), true, $"`multiplier` must be big enough to fit integers modulo `modulus`" + $"with highest bit set to 0");
         EqualityFactB(constMultiplier >= 0 and constMultiplier < modulus, true, $"`constMultiplier` must be between 0 and `modulus`-1");
