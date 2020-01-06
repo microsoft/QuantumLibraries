@@ -11,7 +11,7 @@ namespace Microsoft.Quantum.Canon {
     
     /// # Summary
     /// The signature type of CCNOT gate.
-    newtype CCNOTop = ((Qubit, Qubit, Qubit) => Unit is Adj);
+    newtype CCNOTop = (Apply : ((Qubit, Qubit, Qubit) => Unit is Adj));
     
     
     /// # Summary
@@ -170,10 +170,10 @@ namespace Microsoft.Quantum.Canon {
     operation AndLadder (ccnot : CCNOTop, controls : Qubit[], targets : Qubit[]) : Unit is Adj {
         EqualityFactI(Length(controls), Length(targets) + 1, $"Length(controls) must be equal to Length(target) + 1");
         Fact(Length(controls) >= 2, $"The operation is not defined for less than 2 controls");
-        ccnot!(controls[0], controls[1], targets[0]);
+        ccnot::Apply(controls[0], controls[1], targets[0]);
 
         for (k in 1 .. Length(targets) - 1) {
-            ccnot!(controls[k + 1], targets[k - 1], targets[k]);
+            ccnot::Apply(controls[k + 1], targets[k - 1], targets[k]);
         }
     }
 
