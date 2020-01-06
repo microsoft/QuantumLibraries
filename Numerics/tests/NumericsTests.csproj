@@ -1,28 +1,14 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <TargetFramework>netcoreapp3.0</TargetFramework>
-    <PlatformTarget>x64</PlatformTarget>
-    <IsPackable>false</IsPackable>
-    <LangVersion>latest</LangVersion>
-  </PropertyGroup>
+﻿<Project Sdk="Microsoft.Quantum.Sdk/0.10.1912.2605-alpha">
+
+  <Import Project="..\..\Build\props\tests.props" />
 
   <PropertyGroup>
-    <NoWarn>0162</NoWarn>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <IncludeQsharpCorePackages>false</IncludeQsharpCorePackages>
   </PropertyGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\src\Numerics.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Microsoft.Quantum.Development.Kit" Version="0.10.1912.501" />
-    <PackageReference Include="Microsoft.Quantum.Xunit" Version="0.10.1912.501" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.4.0" />
-    <PackageReference Include="xunit" Version="2.4.1" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.1">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-    <DotNetCliToolReference Include="dotnet-xunit" Version="2.3.1" />
-  </ItemGroup>
 </Project>

@@ -15,7 +15,7 @@ else
 fi
 
 : ${ver:="$NUGET_VERSION"}
-: ${pkgs:="Microsoft.Quantum.Development.Kit;Microsoft.Quantum.IQSharp.Core;Microsoft.Quantum.Simulators;Microsoft.Quantum.Compiler;Microsoft.Quantum.Canon;Microsoft.Quantum.Xunit;Microsoft.Quantum.Chemistry;Microsoft.Quantum.Research"}
+: ${pkgs:="Microsoft.Quantum.CsharpGeneration;Microsoft.Quantum.Runtime.Core;Microsoft.Quantum.QSharp.Core;Microsoft.Quantum.Development.Kit;Microsoft.Quantum.IQSharp.Core;Microsoft.Quantum.Simulators;Microsoft.Quantum.Compiler;Microsoft.Quantum.Xunit;Microsoft.Quantum.Chemistry;Microsoft.Quantum.Research"}
 
 
 for pkg in `echo $pkgs | tr ";" "\n"`; do 
@@ -23,7 +23,12 @@ for pkg in `echo $pkgs | tr ";" "\n"`; do
 
   grep --include=\packages.config -lri -e "package *id=\"$pkg\" *version=" * | xargs sed -i $backup "s/package *id=\"$pkg\" *version=\"\([^\"]*\)\"/package id=\"$pkg\" version=\"$ver\"/i"
   grep --include=\*proj -lri -e "PackageReference *Include=\"$pkg\" *Version=" * | xargs sed -i $backup "s/PackageReference *Include=\"$pkg\" *Version=\"\([^\"]*\)\"/PackageReference Include=\"$pkg\" Version=\"$ver\"/i"
+  grep --include=*props -lri -e "PackageReference *Include=\"$pkg\" *Version=" * | xargs sed -i $backup "s/PackageReference *Include=\"$pkg\" *Version=\"\([^\"]*\)\"/PackageReference Include=\"$pkg\" Version=\"$ver\"/i"
 done 
+
+# Update the version number of the Quantum Sdk:
+grep --include=*proj -lri -e "Sdk=\"Microsoft.Quantum.Sdk\/" * | xargs sed -i $backup "s/Sdk=\"Microsoft.Quantum.Sdk\/\([^\"]*\)\"/Sdk=\"Microsoft.Quantum.Sdk\/$ver\"/i"
+grep --include=*Template.xml -lri -e "Sdk=\"Microsoft.Quantum.Sdk\/" * | xargs sed -i $backup "s/Sdk=\"Microsoft.Quantum.Sdk\/\([^\"]*\)\"/Sdk=\"Microsoft.Quantum.Sdk\/$ver\"/i"
 
 echo done!
 echo
