@@ -196,7 +196,7 @@ namespace Microsoft.Quantum.Canon {
     /// # Deprecated
     /// Please use @"microsoft.quantum.canon.applycnotchain".
     @Deprecated("Microsoft.Quantum.Canon.ApplyCNOTChain")
-    operation CascadeCNOT (register : Qubit[]) : Unit {
+    operation CascadeCNOT (register : Qubit[]) : Unit is Adj + Ctl {
         Microsoft.Quantum.Canon.ApplyCNOTChain(register);
     }
 
