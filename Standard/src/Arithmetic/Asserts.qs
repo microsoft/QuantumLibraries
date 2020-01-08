@@ -9,9 +9,9 @@ namespace Microsoft.Quantum.Arithmetic {
     open Microsoft.Quantum.Diagnostics;
 
     /// # Summary
-	/// Asserts that the probability of a specific state of a quantum register has the
-	/// expected value.
-	///
+    /// Asserts that the probability of a specific state of a quantum register has the
+    /// expected value.
+    ///
     /// # Description
     /// Given an $n$-qubit quantum state $\ket{\psi}=\sum^{2^n-1}_{j=0}\alpha_j \ket{j}$,
     /// asserts that the probability $|\alpha_j|^2$ of the state $\ket{j}$ indexed by $j$
