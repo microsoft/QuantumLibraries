@@ -8,7 +8,7 @@ namespace Microsoft.Quantum.Canon {
     }
 
     /// # Summary
-	/// Returns the composition of two functions.
+    /// Returns the composition of two functions.
     ///
     /// # Description
     /// Given two functions $f$ and $g$, returns a new function representing

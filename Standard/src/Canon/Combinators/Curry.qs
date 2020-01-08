@@ -9,8 +9,8 @@ namespace Microsoft.Quantum.Canon {
 
 
     /// # Summary
-	/// Returns a curried version of an operation on two inputs.
-	///
+    /// Returns a curried version of an operation on two inputs.
+    ///
     /// That is, given an operation with two inputs, this function applies Curry's isomorphism
     /// $f(x, y) \equiv f(x)(y)$ to return an operation of one input which
     /// returns an operation of one input.
@@ -106,8 +106,8 @@ namespace Microsoft.Quantum.Canon {
     ///
     /// # See Also
     /// - @"microsoft.quantum.canon.uncurryop"
-    function UncurriedOpC<'T, 'U> (curriedOp : ('T -> ('U => Unit is Ctl))) : (('T, 'U) => Unit is Ctl)
-    {
+    function UncurriedOpC<'T, 'U> (curriedOp : ('T -> ('U => Unit is Ctl)))
+    : (('T, 'U) => Unit is Ctl) {
         return _UncurriedOpC(curriedOp, _, _);
     }
 

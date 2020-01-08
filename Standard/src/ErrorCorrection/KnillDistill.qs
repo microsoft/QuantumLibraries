@@ -30,30 +30,27 @@ namespace Microsoft.Quantum.ErrorCorrection {
     /// > if the encoding circuit is modified then the syndrome outcome
     /// > might have to be interpreted differently.
 	///
-    operation _ExtractLogicalQubitFromSteaneCode (code : LogicalRegister) : (Qubit, Int, Int)
-    {
+    operation _ExtractLogicalQubitFromSteaneCode (code : LogicalRegister)
+    : (Qubit, Int, Int) {
         Adjoint SteaneCodeEncoderImpl((code!)[0 .. 0], (code!)[1 .. 6]);
         let x0 = M((code!)[6]);
         let x1 = M((code!)[1]);
         let x2 = M((code!)[3]);
         mutable xsyn = 0;
 
-        if (x0 == One)
-        {
+        if (x0 == One) {
             set xsyn = xsyn ^^^ 1;
         }
 
-        if (x1 == One)
-        {
+        if (x1 == One) {
             set xsyn = xsyn ^^^ 2;
         }
 
-        if (x2 == One)
-        {
+        if (x2 == One) {
             set xsyn = xsyn ^^^ 4;
         }
 
-        set xsyn = xsyn - 1;
+        set xsyn -= 1;
 
         // xsyn contains the qubit index (0..6) at which a single Z-error would
         // produce the given syndrome.
@@ -62,22 +59,19 @@ namespace Microsoft.Quantum.ErrorCorrection {
         let z2 = M((code!)[4]);
         mutable zsyn = 0;
 
-        if (z0 == One)
-        {
+        if (z0 == One) {
             set zsyn = zsyn ^^^ 1;
         }
 
-        if (z1 == One)
-        {
+        if (z1 == One) {
             set zsyn = zsyn ^^^ 2;
         }
 
-        if (z2 == One)
-        {
+        if (z2 == One) {
             set zsyn = zsyn ^^^ 5;
         }
 
-        set zsyn = zsyn - 1;
+        set zsyn -= 1;
 
         // zsyn contains the qubit index (0..6) at which a single X-error would
         // produce the given syndrome.

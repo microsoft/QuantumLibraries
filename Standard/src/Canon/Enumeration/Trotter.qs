@@ -110,7 +110,7 @@ namespace Microsoft.Quantum.Canon {
     /// A quantum register on which the operations act.
     operation _TrotterArbitraryImplCA<'T> (order:Int, (nSteps : Int, op : ((Int, Double, 'T) => Unit is Adj + Ctl)), stepSize : Double, target : 'T)
     : Unit is Adj + Ctl {
-        if(order > 2){
+        if (order > 2) {
             let stepSizeOuter = _TrotterStepSize(order);
             let stepSizeInner = 1.0 - 4.0 * stepSizeOuter;
             _TrotterArbitraryImplCA(order -2, (nSteps, op), stepSizeOuter * stepSize, target);
@@ -118,11 +118,9 @@ namespace Microsoft.Quantum.Canon {
             _TrotterArbitraryImplCA(order -2, (nSteps, op), stepSizeInner * stepSize, target);
             _TrotterArbitraryImplCA(order -2, (nSteps, op), stepSizeOuter * stepSize, target);
             _TrotterArbitraryImplCA(order -2, (nSteps, op), stepSizeOuter * stepSize, target);
-        }
-        elif(order == 2){
+        } elif (order == 2) {
             _Trotter2ImplCA((nSteps, op), stepSize, target);
-        }
-        else{
+        } else {
             _Trotter1ImplCA((nSteps, op), stepSize, target);
         }
     }
