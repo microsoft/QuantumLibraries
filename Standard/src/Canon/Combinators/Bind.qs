@@ -165,7 +165,7 @@ namespace Microsoft.Quantum.Canon {
     /// - Microsoft.Quantum.Canon.BoundCA
     operation _BoundCA<'T> (operations : ('T => Unit is Adj + Ctl)[], target : 'T) : Unit {
         body (...) {
-            for (idxOperation in operations) {
+            for (op in operations) {
                 op(target);
             }
         }
