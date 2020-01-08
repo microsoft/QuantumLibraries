@@ -316,7 +316,7 @@ namespace Microsoft.Quantum.Arithmetic {
     /// This operation has the same functionality as RippleCarryAdderD, but
     /// only uses one ancilla qubit instead of $n$.
     operation RippleCarryAdderCDKM (xs : LittleEndian, ys : LittleEndian, carry : Qubit)
-    : Unit {
+    : Unit is Adj + Ctl {
         let nQubits = Length(xs!);
 
         EqualityFactI(
