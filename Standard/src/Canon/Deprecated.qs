@@ -3,6 +3,7 @@
 
 namespace Microsoft.Quantum.Canon {
     open Microsoft.Quantum.Arithmetic;
+    open Microsoft.Quantum.Logical;
 
     /// # Deprecated
     /// This operation has been removed.
@@ -16,6 +17,13 @@ namespace Microsoft.Quantum.Canon {
     @Deprecated("Microsoft.Quantum.Canon.ApplyQuantumFourierTransform")
     operation ApplyQuantumFourierTransformLE(qs : LittleEndian) : Unit is Adj + Ctl {
         ApplyQuantumFourierTransform(qs);
+    }
+
+    /// # Deprecated
+    /// Please use @"microsoft.quantum.logical.xor".
+    @Deprecated("Microsoft.Quantum.Logical.Xor")
+    function XOR(bit1 : Bool, bit2 : Bool) : Bool {
+        return Xor(bit1, bit2);
     }
 
 }

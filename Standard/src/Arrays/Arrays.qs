@@ -63,7 +63,7 @@ namespace Microsoft.Quantum.Arrays {
         return array[0 .. Length(array) - 2];
     }
 
-    function LookupImpl<'T> (array : 'T[], index : Int) : 'T {
+    function _Lookup<'T> (array : 'T[], index : Int) : 'T {
         return array[index];
     }
 
@@ -90,7 +90,7 @@ namespace Microsoft.Quantum.Arrays {
     /// where functions are used to avoid the need to record an entire array
     /// in memory.
     function LookupFunction<'T> (array : 'T[]) : (Int -> 'T) {
-        return LookupImpl(array, _);
+        return _Lookup(array, _);
     }
 
     /// # Summary

@@ -3,15 +3,14 @@
 
 namespace Microsoft.Quantum.Canon {
 
-    function CurryOpImpl<'T, 'U> (op : (('T, 'U) => Unit), arg1 : 'T) : ('U => Unit)
-    {
+    function _CurriedOp<'T, 'U> (op : (('T, 'U) => Unit), arg1 : 'T) : ('U => Unit) {
         return op(arg1, _);
     }
-    
-    
+
+
     /// # Summary
 	/// Returns a curried version of an operation on two inputs.
-	/// 
+	///
     /// That is, given an operation with two inputs, this function applies Curry's isomorphism
     /// $f(x, y) \equiv f(x)(y)$ to return an operation of one input which
     /// returns an operation of one input.
@@ -40,19 +39,16 @@ namespace Microsoft.Quantum.Canon {
     /// let partial = curried(x);
     /// partial(y);
     /// ```
-    function CurriedOp<'T, 'U> (op : (('T, 'U) => Unit)) : ('T -> ('U => Unit))
-    {
-        return CurryOpImpl(op, _);
+    function CurriedOp<'T, 'U> (op : (('T, 'U) => Unit)) : ('T -> ('U => Unit)) {
+        return _CurriedOp(op, _);
     }
-    
-    
-    operation UncurryOpImpl<'T, 'U> (curriedOp : ('T -> ('U => Unit)), first : 'T, second : 'U) : Unit
-    {
+
+    operation _UncurryOp<'T, 'U> (curriedOp : ('T -> ('U => Unit)), first : 'T, second : 'U) : Unit {
         let innerOp = curriedOp(first);
         innerOp(second);
     }
-    
-    
+
+
     /// # Summary
     /// Given a function which returns operations,
     /// returns a new operation which takes both inputs
@@ -77,22 +73,17 @@ namespace Microsoft.Quantum.Canon {
     /// - @"microsoft.quantum.canon.uncurryopca"
     function UncurriedOp<'T, 'U> (curriedOp : ('T -> ('U => Unit))) : (('T, 'U) => Unit)
     {
-        return UncurryOpImpl(curriedOp, _, _);
+        return _UncurryOp(curriedOp, _, _);
     }
-    
-    
-    operation UncurryOpCImpl<'T, 'U> (curriedOp : ('T -> ('U => Unit is Ctl)), first : 'T, second : 'U) : Unit
-    {
-        body (...)
-        {
-            let innerOp = curriedOp(first);
-            innerOp(second);
-        }
-        
-        controlled distribute;
+
+
+    operation _UncurriedOpC<'T, 'U>(curriedOp : ('T -> ('U => Unit is Ctl)), first : 'T, second : 'U)
+    : Unit is Ctl {
+        let innerOp = curriedOp(first);
+        innerOp(second);
     }
-    
-    
+
+
     /// # Summary
     /// Given a function which returns operations,
     /// returns a new operation which takes both inputs
@@ -117,22 +108,17 @@ namespace Microsoft.Quantum.Canon {
     /// - @"microsoft.quantum.canon.uncurryop"
     function UncurriedOpC<'T, 'U> (curriedOp : ('T -> ('U => Unit is Ctl))) : (('T, 'U) => Unit is Ctl)
     {
-        return UncurryOpCImpl(curriedOp, _, _);
+        return _UncurriedOpC(curriedOp, _, _);
     }
-    
-    
-    operation UncurryOpAImpl<'T, 'U> (curriedOp : ('T -> ('U => Unit is Adj)), first : 'T, second : 'U) : Unit
-    {
-        body (...)
-        {
-            let innerOp = curriedOp(first);
-            innerOp(second);
-        }
-        
-        adjoint invert;
+
+
+    operation _UncurriedOpA<'T, 'U> (curriedOp : ('T -> ('U => Unit is Adj)), first : 'T, second : 'U)
+    : Unit is Adj {
+        let innerOp = curriedOp(first);
+        innerOp(second);
     }
-    
-    
+
+
     /// # Summary
     /// Given a function which returns operations,
     /// returns a new operation which takes both inputs
@@ -155,26 +141,18 @@ namespace Microsoft.Quantum.Canon {
     ///
     /// # See Also
     /// - @"microsoft.quantum.canon.uncurryop"
-    function UncurriedOpA<'T, 'U> (curriedOp : ('T -> ('U => Unit is Adj))) : (('T, 'U) => Unit is Adj)
-    {
-        return UncurryOpAImpl(curriedOp, _, _);
+    function UncurriedOpA<'T, 'U> (curriedOp : ('T -> ('U => Unit is Adj))) : (('T, 'U) => Unit is Adj) {
+        return _UncurriedOpA(curriedOp, _, _);
     }
-    
-    
-    operation UncurryOpCAImpl<'T, 'U> (curriedOp : ('T -> ('U => Unit is Ctl + Adj)), first : 'T, second : 'U) : Unit
-    {
-        body (...)
-        {
-            let innerOp = curriedOp(first);
-            innerOp(second);
-        }
-        
-        adjoint invert;
-        controlled distribute;
-        controlled adjoint distribute;
+
+
+    operation _UncurriedOpCA<'T, 'U> (curriedOp : ('T -> ('U => Unit is Ctl + Adj)), first : 'T, second : 'U)
+    : Unit is Adj + Ctl {
+        let innerOp = curriedOp(first);
+        innerOp(second);
     }
-    
-    
+
+
     /// # Summary
     /// Given a function which returns operations,
     /// returns a new operation which takes both inputs
@@ -197,11 +175,10 @@ namespace Microsoft.Quantum.Canon {
     ///
     /// # See Also
     /// - @"microsoft.quantum.canon.uncurryop"
-    function UncurriedOpCA<'T, 'U> (curriedOp : ('T -> ('U => Unit is Ctl + Adj))) : (('T, 'U) => Unit is Ctl + Adj)
-    {
-        return UncurryOpCAImpl(curriedOp, _, _);
+    function UncurriedOpCA<'T, 'U> (curriedOp : ('T -> ('U => Unit is Ctl + Adj))) : (('T, 'U) => Unit is Ctl + Adj) {
+        return _UncurriedOpCA(curriedOp, _, _);
     }
-    
+
 }
 
 
