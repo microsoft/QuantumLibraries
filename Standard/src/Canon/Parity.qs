@@ -21,7 +21,7 @@ namespace Microsoft.Quantum.Canon {
     /// # Input
     /// ## qubits
     /// Array of qubits whose parity is to be computed and stored.
-    operation CNOTChain(qubits : Qubit[]) : Unit is Adj + Ctl {
+    operation ApplyCNOTChain(qubits : Qubit[]) : Unit is Adj + Ctl {
         ApplyToEachCA(CNOT, Zip(Most(qubits), Rest(qubits)));
     }
 

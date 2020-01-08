@@ -75,6 +75,9 @@ namespace Microsoft.Quantum.Canon {
     /// of the range `0..(bound - 1)`.
     ///
     /// # Input
+    /// ## power
+    /// The Cartesian power to which the range `0..(bound - 1)` should be
+    /// raised.
     /// ## bound
     /// A specification of the range to be iterated over, given as the length
     /// of the range.

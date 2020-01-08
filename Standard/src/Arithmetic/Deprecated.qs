@@ -46,7 +46,7 @@ namespace Microsoft.Quantum.Canon {
     operation ApplyReversedOpBigEndianA(op : (BigEndian => Unit is Adj), register : LittleEndian) : Unit is Adj {
         ApplyReversedOpBEA(op, register);
     }
-    
+
     /// # Deprecated
     /// Please use @"Microsoft.Quantum.Arithmetic.ApplyReversedOpBEC".
     @Deprecated("Microsoft.Quantum.Arithmetic.ApplyReversedOpBEC")
@@ -191,6 +191,21 @@ namespace Microsoft.Quantum.Canon {
     @Deprecated("Microsoft.Quantum.Arithmetic.CopyMostSignificantBit")
      operation CopyMostSignificantBitLE(from : LittleEndian, target : Qubit) : Unit is Adj {
         CopyMostSignificantBit(from, target);
+    }
+
+    /// # Deprecated
+    /// Please use @"microsoft.quantum.canon.applycnotchain".
+    @Deprecated("Microsoft.Quantum.Canon.ApplyCNOTChain")
+    operation CascadeCNOT (register : Qubit[]) : Unit {
+        Microsoft.Quantum.Canon.ApplyCNOTChain(register);
+    }
+
+    /// # Deprecated
+    /// Please use @"microsoft.quantum.arithmetic.applymajorityinplace".
+    @Deprecated("Microsoft.Quantum.Arithmetic.ApplyMajorityInPlace")
+    operation InPlaceMajority(output: Qubit, input: Qubit[])
+    : Unit is Adj + Ctl {
+        ApplyMajorityInPlace(output, input);
     }
 
 }

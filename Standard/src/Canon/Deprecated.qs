@@ -26,4 +26,11 @@ namespace Microsoft.Quantum.Canon {
         return Xor(bit1, bit2);
     }
 
+    /// # Deprecated
+    /// Please use @"microsoft.quantum.canon.applycnotchain".
+    @Deprecated("Microsoft.Quantum.Canon.ApplyCNOTChain")
+    operation CNOTChain(qubits : Qubit[]) : Unit is Adj + Ctl {
+        ApplyCNOTChain(qubits);
+    }
+
 }

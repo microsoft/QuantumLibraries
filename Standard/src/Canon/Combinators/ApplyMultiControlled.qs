@@ -4,16 +4,16 @@
 namespace Microsoft.Quantum.Canon {
     open Microsoft.Quantum.Diagnostics;
     open Microsoft.Quantum.Arrays;
-    
+
     ///////////////////////////////////////////////////////////////////////////////////////////////
     // Combinators for constructing multiply controlled versions of operations
     ///////////////////////////////////////////////////////////////////////////////////////////////
-    
+
     /// # Summary
     /// The signature type of CCNOT gate.
     newtype CCNOTop = (Apply : ((Qubit, Qubit, Qubit) => Unit is Adj));
-    
-    
+
+
     /// # Summary
     /// Applies a multiply controlled version of a singly controlled
     /// operation.
@@ -50,7 +50,7 @@ namespace Microsoft.Quantum.Canon {
         body (...)
         {
             EqualityFactB(Length(controls) >= 1, true, $"Length of controls must be at least 1");
-            
+
             if (Length(controls) == 1)
             {
                 singlyControlledOp(controls + targets);
@@ -65,14 +65,14 @@ namespace Microsoft.Quantum.Canon {
                 }
             }
         }
-        
+
         controlled (extraControls, ...)
         {
             ApplyMultiControlledC(singlyControlledOp, ccnot, extraControls + controls, targets);
         }
     }
-    
-    
+
+
     /// # Summary
     /// Applies a multiply controlled version of a singly controlled
     /// operation.
@@ -119,21 +119,22 @@ namespace Microsoft.Quantum.Canon {
                 }
             }
         }
-        
+
         adjoint invert;
-        
+
         controlled (extraControls, ...) {
             ApplyMultiControlledCA(singlyControlledOp, ccnot, extraControls + controls, targets);
         }
-        
+
         controlled adjoint invert;
     }
-    
-    
+
     /// # Summary
-	/// Performs a controlled 'AND ladder' on the target qubits.
-	/// 
-    /// This applies a unitary given by the following map on computational basis vectors:
+	/// Performs a controlled "AND ladder" on a register of target qubits.
+    ///
+    /// # Description
+    /// This operation applies a transformation described by the following
+    /// mapping of the computational basis,
     /// $$
     /// \begin{align}
     ///     \ket{x\_1, \dots, x\_n} \ket{y\_1, \dots, y\_{n - 1}} \mapsto

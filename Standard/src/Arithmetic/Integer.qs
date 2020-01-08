@@ -23,7 +23,8 @@ namespace Microsoft.Quantum.Arithmetic {
     /// `summand1` and `summand2`.
     /// ## carryOut
     /// Carry-out qubit, will be xored with the higher bit of the sum.
-    operation Carry (carryIn: Qubit, summand1: Qubit, summand2: Qubit, carryOut: Qubit) : Unit is Adj + Ctl {
+    operation Carry(carryIn: Qubit, summand1: Qubit, summand2: Qubit, carryOut: Qubit)
+    : Unit is Adj + Ctl {
         CCNOT (summand1, summand2, carryOut);
         CNOT (summand1, summand2);
         CCNOT (carryIn, summand2, carryOut);
@@ -46,43 +47,14 @@ namespace Microsoft.Quantum.Arithmetic {
     ///
     /// # Remarks
     /// In contrast to the `Carry` operation, this does not compute the carry-out bit.
-    operation Sum (carryIn: Qubit, summand1: Qubit, summand2: Qubit) : Unit
-    {
-        body (...) {
-            CNOT (summand1, summand2);
-            CNOT (carryIn, summand2);
-        }
-        adjoint auto;
-        controlled auto;
-        adjoint controlled auto;
+    operation Sum (carryIn: Qubit, summand1: Qubit, summand2: Qubit)
+    : Unit is Adj + Ctl {
+        CNOT (summand1, summand2);
+        CNOT (carryIn, summand2);
     }
 
     /// # Summary
-    /// Implements a cascade of CNOT gates on neighboring qubits in a given qubit
-    /// register, starting from the qubit at position 0 as control to the qubit at 
-    /// position 1 as the target, then from the qubit at position 1 as the control to
-    /// the qubit at position 2 as the target, etc., ending with the qubit in position
-    /// `Length(register)-1` as the target.
-    ///
-    /// # Input
-    /// ## register
-    /// Qubit register.
-    operation CascadeCNOT (register : Qubit[]) : Unit
-    {
-        body (...) {
-            let nQubits = Length(register);
-
-            for ( idx in 0..(nQubits-2) ) {
-                CNOT(register[idx], register[idx+1]);
-            }
-        }
-        adjoint auto;
-        controlled auto;
-        adjoint controlled auto;
-    }
-
-    /// # Summary
-    /// Implements a cascade of CCNOT gates controlled on corresponding bits of two 
+    /// Implements a cascade of CCNOT gates controlled on corresponding bits of two
     /// qubit registers, acting on the next qubit of one of the registers.
     /// Starting from the qubits at position 0 in both registers as controls, CCNOT is
     /// applied to the qubit at position 1 of the target register, then controlled by
@@ -97,37 +69,32 @@ namespace Microsoft.Quantum.Arithmetic {
     ///
     /// # Remarks
     /// The target qubit register must have one qubit more than the other register.
-    operation CascadeCCNOT (register : Qubit[], targets : Qubit[]) : Unit
-    {
-        body (...) {
-            let nQubits = Length(targets);
+    operation CascadeCCNOT (register : Qubit[], targets : Qubit[])
+    : Unit is Adj + Ctl {
+        let nQubits = Length(targets);
 
-            EqualityFactB(
-                nQubits == Length(register)+1, true,
-                "Target register must have one more qubit." );
+        EqualityFactB(
+            nQubits == Length(register)+1, true,
+            "Target register must have one more qubit." );
 
-            for ( idx in 0..(nQubits-2) ) {
-                CCNOT(register[idx], targets[idx], targets[idx+1]);
-            }
+        for ( idx in 0..(nQubits-2) ) {
+            CCNOT(register[idx], targets[idx], targets[idx+1]);
         }
-        adjoint auto;
-        controlled auto;
-        adjoint controlled auto;
     }
 
 
     /// # Summary
-    /// Reversible, in-place ripple-carry addition of two integers. 
+    /// Reversible, in-place ripple-carry addition of two integers.
     /// Given two $n$-bit integers encoded in LittleEndian registers `xs` and `ys`,
-    /// and a qubit carry, the operation computes the sum of the two integers 
-    /// where the $n$ least significant bits of the result are held in `ys` and 
-    /// the carry out bit is xored to the qubit `carry`. 
+    /// and a qubit carry, the operation computes the sum of the two integers
+    /// where the $n$ least significant bits of the result are held in `ys` and
+    /// the carry out bit is xored to the qubit `carry`.
     ///
     /// # Input
     /// ## xs
     /// LittleEndian qubit register encoding the first integer summand.
     /// ## ys
-    /// LittleEndian qubit register encoding the second integer summand, is 
+    /// LittleEndian qubit register encoding the second integer summand, is
     /// modified to hold the $n$ least significant bits of the sum.
     /// ## carry
     /// Carry qubit, is xored with the most significant bit of the sum.
@@ -135,17 +102,16 @@ namespace Microsoft.Quantum.Arithmetic {
     /// # References
     /// - Thomas G. Draper: "Addition on a Quantum Computer", 2000.
     ///   https://arxiv.org/abs/quant-ph/0008033
-    /// 
-    /// # Remarks 
-    /// The specified controlled operation makes use of symmetry and mutual 
+    ///
+    /// # Remarks
+    /// The specified controlled operation makes use of symmetry and mutual
     /// cancellation of operations to improve on the default implementation
     /// that adds a control to every operation.
-    operation RippleCarryAdderD (xs : LittleEndian, ys : LittleEndian, carry : Qubit) : Unit
-    {
+    operation RippleCarryAdderD (xs : LittleEndian, ys : LittleEndian, carry : Qubit)
+    : Unit is Adj + Ctl  {
         body (...) {
             (Controlled RippleCarryAdderD) (new Qubit[0], (xs, ys, carry));
         }
-        adjoint auto;
         controlled ( controls, ... ) {
             let nQubits = Length(xs!);
 
@@ -167,15 +133,14 @@ namespace Microsoft.Quantum.Arithmetic {
                 }
             }
         }
-        adjoint controlled auto;
     }
- 
+
     /// # Summary
-    /// Reversible, in-place ripple-carry operation that is used in the 
-    /// integer addition operation RippleCarryAdderCDKM below. 
+    /// Reversible, in-place ripple-carry operation that is used in the
+    /// integer addition operation RippleCarryAdderCDKM below.
     /// Given two qubit registers `xs` and `ys` of the same length, the operation
     /// applies a ripple carry sequence of CNOT and CCNOT gates with qubits
-    /// in `xs` and `ys` as the controls and qubits in `xs` as the targets. 
+    /// in `xs` and `ys` as the controls and qubits in `xs` as the targets.
     ///
     /// # Input
     /// ## xs
@@ -186,7 +151,7 @@ namespace Microsoft.Quantum.Arithmetic {
     /// The ancilla qubit used in RippleCarryAdderCDKM passed to this operation.
     ///
     /// # References
-    /// - Steven A. Cuccaro, Thomas G. Draper, Samuel A. Kutin, David 
+    /// - Steven A. Cuccaro, Thomas G. Draper, Samuel A. Kutin, David
     ///   Petrie Moulton: "A new quantum ripple-carry addition circuit", 2004.
     ///   https://arxiv.org/abs/quant-ph/0410184v1
     operation _RippleCDKM (xs : LittleEndian, ys : LittleEndian, ancilla : Qubit) : Unit
@@ -217,8 +182,8 @@ namespace Microsoft.Quantum.Arithmetic {
     }
 
     /// # Summary
-    /// The core operation in the RippleCarryAdderCDKM, used with the above 
-    /// _RippleCDKM operation, i.e. conjugated with this operation to obtain 
+    /// The core operation in the RippleCarryAdderCDKM, used with the above
+    /// _RippleCDKM operation, i.e. conjugated with this operation to obtain
     /// the inner operation of the RippleCarryAdderCDKM. This operation computes
     /// the carry out qubit and applies a sequence of NOT gates on part of the input `ys`.
     ///
@@ -233,7 +198,7 @@ namespace Microsoft.Quantum.Arithmetic {
     /// Carry out qubit in the RippleCarryAdderCDKM operation.
     ///
     /// # References
-    /// - Steven A. Cuccaro, Thomas G. Draper, Samuel A. Kutin, David 
+    /// - Steven A. Cuccaro, Thomas G. Draper, Samuel A. Kutin, David
     ///   Petrie Moulton: "A new quantum ripple-carry addition circuit", 2004.
     ///   https://arxiv.org/abs/quant-ph/0410184v1
     operation _CarryOutCoreCDKM (xs : LittleEndian, ys : LittleEndian,
@@ -258,8 +223,8 @@ namespace Microsoft.Quantum.Arithmetic {
     }
 
     /// # Summary
-    /// Outer operation in the RippleCarryAdderCDKM for use with _InnerCDKM in ApplyWithCA to 
-    /// construct RippleCarryAdderCDKM. 
+    /// Outer operation in the RippleCarryAdderCDKM for use with _InnerCDKM in ApplyWithCA to
+    /// construct RippleCarryAdderCDKM.
     ///
     /// # Input
     /// ## xs
@@ -270,7 +235,7 @@ namespace Microsoft.Quantum.Arithmetic {
     /// The ancilla qubit used in RippleCarryAdderCDKM.
     ///
     /// # References
-    /// - Steven A. Cuccaro, Thomas G. Draper, Samuel A. Kutin, David 
+    /// - Steven A. Cuccaro, Thomas G. Draper, Samuel A. Kutin, David
     ///   Petrie Moulton: "A new quantum ripple-carry addition circuit", 2004.
     ///   https://arxiv.org/abs/quant-ph/0410184v1
     operation _OuterCDKM (xs : LittleEndian, ys : LittleEndian, ancilla : Qubit) : Unit
@@ -292,8 +257,8 @@ namespace Microsoft.Quantum.Arithmetic {
     }
 
     /// # Summary
-    /// Inner operation in the RippleCarryAdderCDKM for use with _OuterCDKM in ApplyWithCA to 
-    /// construct RippleCarryAdderCDKM. 
+    /// Inner operation in the RippleCarryAdderCDKM for use with _OuterCDKM in ApplyWithCA to
+    /// construct RippleCarryAdderCDKM.
     ///
     /// # Input
     /// ## xs
@@ -306,7 +271,7 @@ namespace Microsoft.Quantum.Arithmetic {
     /// The ancilla qubit used in RippleCarryAdderCDKM.
     ///
     /// # References
-    /// - Steven A. Cuccaro, Thomas G. Draper, Samuel A. Kutin, David 
+    /// - Steven A. Cuccaro, Thomas G. Draper, Samuel A. Kutin, David
     ///   Petrie Moulton: "A new quantum ripple-carry addition circuit", 2004.
     ///   https://arxiv.org/abs/quant-ph/0410184v1
     operation _InnerCDKM (xs : LittleEndian, ys : LittleEndian, carry : Qubit,
@@ -329,28 +294,28 @@ namespace Microsoft.Quantum.Arithmetic {
     }
 
     /// # Summary
-    /// Reversible, in-place ripple-carry addition of two integers. 
+    /// Reversible, in-place ripple-carry addition of two integers.
     /// Given two $n$-bit integers encoded in LittleEndian registers `xs` and `ys`,
-    /// and a qubit carry, the operation computes the sum of the two integers 
-    /// where the $n$ least significant bits of the result are held in `ys` and 
-    /// the carry out bit is xored to the qubit `carry`. 
+    /// and a qubit carry, the operation computes the sum of the two integers
+    /// where the $n$ least significant bits of the result are held in `ys` and
+    /// the carry out bit is xored to the qubit `carry`.
     ///
     /// # Input
     /// ## xs
     /// LittleEndian qubit register encoding the first integer summand.
     /// ## ys
-    /// LittleEndian qubit register encoding the second integer summand, is 
+    /// LittleEndian qubit register encoding the second integer summand, is
     /// modified to hold the n least significant bits of the sum.
     /// ## carry
     /// Carry qubit, is xored with the most significant bit of the sum.
     ///
     /// # References
-    /// - Steven A. Cuccaro, Thomas G. Draper, Samuel A. Kutin, David 
+    /// - Steven A. Cuccaro, Thomas G. Draper, Samuel A. Kutin, David
     ///   Petrie Moulton: "A new quantum ripple-carry addition circuit", 2004.
     ///   https://arxiv.org/abs/quant-ph/0410184v1
     ///
-    /// # Remarks 
-    /// This operation has the same functionality as RippleCarryAdderD, but 
+    /// # Remarks
+    /// This operation has the same functionality as RippleCarryAdderD, but
     /// only uses one ancilla qubit instead of $n$.
     operation RippleCarryAdderCDKM (xs : LittleEndian, ys : LittleEndian, carry : Qubit) : Unit
     {
@@ -372,28 +337,28 @@ namespace Microsoft.Quantum.Arithmetic {
     }
 
     /// # Summary
-    /// Implements the inner addition function for the operation 
+    /// Implements the inner addition function for the operation
     /// RippleCarryAdderTTK. This is the inner operation that is conjugated
     /// with the outer operation to construct the full adder.
     ///
     /// # Input
     /// ## xs
-    /// LittleEndian qubit register encoding the first integer summand 
+    /// LittleEndian qubit register encoding the first integer summand
     /// input to RippleCarryAdderTTK.
     /// ## ys
-    /// LittleEndian qubit register encoding the second integer summand 
+    /// LittleEndian qubit register encoding the second integer summand
     /// input to RippleCarryAdderTTK.
     /// ## carry
     /// Carry qubit, is xored with the most significant bit of the sum.
     ///
     /// # References
-    /// - Yasuhiro Takahashi, Seiichiro Tani, Noboru Kunihiro: "Quantum 
+    /// - Yasuhiro Takahashi, Seiichiro Tani, Noboru Kunihiro: "Quantum
     ///   Addition Circuits and Unbounded Fan-Out", Quantum Information and
     ///   Computation, Vol. 10, 2010.
-    ///   https://arxiv.org/abs/0910.2530 
+    ///   https://arxiv.org/abs/0910.2530
     ///
     /// # Remarks
-    /// The specified controlled operation makes use of symmetry and mutual 
+    /// The specified controlled operation makes use of symmetry and mutual
     /// cancellation of operations to improve on the default implementation
     /// that adds a control to every operation.
     operation _InnerAddTTK (xs : LittleEndian, ys : LittleEndian, carry : Qubit) : Unit
@@ -427,17 +392,17 @@ namespace Microsoft.Quantum.Arithmetic {
     ///
     /// # Input
     /// ## xs
-    /// LittleEndian qubit register encoding the first integer summand 
+    /// LittleEndian qubit register encoding the first integer summand
     /// input to RippleCarryAdderTTK.
     /// ## ys
-    /// LittleEndian qubit register encoding the second integer summand 
+    /// LittleEndian qubit register encoding the second integer summand
     /// input to RippleCarryAdderTTK.
     ///
     /// # References
-    /// - Yasuhiro Takahashi, Seiichiro Tani, Noboru Kunihiro: "Quantum 
+    /// - Yasuhiro Takahashi, Seiichiro Tani, Noboru Kunihiro: "Quantum
     ///   Addition Circuits and Unbounded Fan-Out", Quantum Information and
     ///   Computation, Vol. 10, 2010.
-    ///   https://arxiv.org/abs/0910.2530 
+    ///   https://arxiv.org/abs/0910.2530
     operation _OuterTTK (xs : LittleEndian, ys : LittleEndian) : Unit
     {
         body (...) {
@@ -456,28 +421,28 @@ namespace Microsoft.Quantum.Arithmetic {
     }
 
     /// # Summary
-    /// Reversible, in-place ripple-carry addition of two integers. 
+    /// Reversible, in-place ripple-carry addition of two integers.
     /// Given two $n$-bit integers encoded in LittleEndian registers `xs` and `ys`,
-    /// and a qubit carry, the operation computes the sum of the two integers 
-    /// where the $n$ least significant bits of the result are held in `ys` and 
-    /// the carry out bit is xored to the qubit `carry`. 
+    /// and a qubit carry, the operation computes the sum of the two integers
+    /// where the $n$ least significant bits of the result are held in `ys` and
+    /// the carry out bit is xored to the qubit `carry`.
     ///
     /// # Input
     /// ## xs
     /// LittleEndian qubit register encoding the first integer summand.
     /// ## ys
-    /// LittleEndian qubit register encoding the second integer summand, is 
+    /// LittleEndian qubit register encoding the second integer summand, is
     /// modified to hold the $n$ least significant bits of the sum.
     /// ## carry
     /// Carry qubit, is xored with the most significant bit of the sum.
     ///
     /// # References
-    /// - Yasuhiro Takahashi, Seiichiro Tani, Noboru Kunihiro: "Quantum 
+    /// - Yasuhiro Takahashi, Seiichiro Tani, Noboru Kunihiro: "Quantum
     ///   Addition Circuits and Unbounded Fan-Out", Quantum Information and
     ///   Computation, Vol. 10, 2010.
-    ///   https://arxiv.org/abs/0910.2530 
+    ///   https://arxiv.org/abs/0910.2530
     ///
-    /// # Remarks 
+    /// # Remarks
     /// This operation has the same functionality as RippleCarryAdderD and,
     /// RippleCarryAdderCDKM but does not use any ancilla qubits.
     operation RippleCarryAdderTTK (xs : LittleEndian, ys : LittleEndian, carry : Qubit) : Unit
@@ -504,26 +469,26 @@ namespace Microsoft.Quantum.Arithmetic {
     }
 
     /// # Summary
-    /// Implements the inner addition function for the operation 
+    /// Implements the inner addition function for the operation
     /// RippleCarryAdderNoCarryTTK. This is the inner operation that is conjugated
     /// with the outer operation to construct the full adder.
     ///
     /// # Input
     /// ## xs
-    /// LittleEndian qubit register encoding the first integer summand 
+    /// LittleEndian qubit register encoding the first integer summand
     /// input to RippleCarryAdderNoCarryTTK.
     /// ## ys
-    /// LittleEndian qubit register encoding the second integer summand 
+    /// LittleEndian qubit register encoding the second integer summand
     /// input to RippleCarryAdderNoCarryTTK.
     ///
     /// # References
-    /// - Yasuhiro Takahashi, Seiichiro Tani, Noboru Kunihiro: "Quantum 
+    /// - Yasuhiro Takahashi, Seiichiro Tani, Noboru Kunihiro: "Quantum
     ///   Addition Circuits and Unbounded Fan-Out", Quantum Information and
     ///   Computation, Vol. 10, 2010.
-    ///   https://arxiv.org/abs/0910.2530 
+    ///   https://arxiv.org/abs/0910.2530
     ///
     /// # Remarks
-    /// The specified controlled operation makes use of symmetry and mutual 
+    /// The specified controlled operation makes use of symmetry and mutual
     /// cancellation of operations to improve on the default implementation
     /// that adds a control to every operation.
     operation _InnerAddNoCarryTTK (xs : LittleEndian, ys : LittleEndian) : Unit
@@ -551,26 +516,28 @@ namespace Microsoft.Quantum.Arithmetic {
     }
 
     /// # Summary
-    /// Reversible, in-place ripple-carry addition of two integers without carry out. 
+    ///
+    /// # Description
+    /// Reversible, in-place ripple-carry addition of two integers without carry out.
     /// Given two $n$-bit integers encoded in LittleEndian registers `xs` and `ys`,
     /// the operation computes the sum of the two integers modulo $2^n$,
-    /// where $n$ is the bit size of the inputs `xs` and `ys`. It does not compute 
-    /// the carry out bit. 
+    /// where $n$ is the bit size of the inputs `xs` and `ys`. It does not compute
+    /// the carry out bit.
     ///
     /// # Input
     /// ## xs
     /// LittleEndian qubit register encoding the first integer summand.
     /// ## ys
-    /// LittleEndian qubit register encoding the second integer summand, is 
+    /// LittleEndian qubit register encoding the second integer summand, is
     /// modified to hold the $n$ least significant bits of the sum.
     ///
     /// # References
-    /// - Yasuhiro Takahashi, Seiichiro Tani, Noboru Kunihiro: "Quantum 
+    /// - Yasuhiro Takahashi, Seiichiro Tani, Noboru Kunihiro: "Quantum
     ///   Addition Circuits and Unbounded Fan-Out", Quantum Information and
     ///   Computation, Vol. 10, 2010.
-    ///   https://arxiv.org/abs/0910.2530 
+    ///   https://arxiv.org/abs/0910.2530
     ///
-    /// # Remarks 
+    /// # Remarks
     /// This operation has the same functionality as RippleCarryAdderTTK but does
     /// not return the carry bit.
     operation RippleCarryAdderNoCarryTTK (xs : LittleEndian, ys : LittleEndian) : Unit
@@ -593,9 +560,14 @@ namespace Microsoft.Quantum.Arithmetic {
     }
 
     /// # Summary
+    /// Applies a greater-than comparison between two integers encoded into
+    /// qubit registers, flipping a target qubit based on the result of the
+    /// comparison.
+    ///
+    /// # Description
     /// Carries out a strictly greater than comparison of two integers $x$ and $y$, encoded
-    /// in qubit registers xs and ys. If $x > y$, then the result qubit will be flipped, 
-    /// otherwise retain its state.
+    /// in qubit registers xs and ys. If $x > y$, then the result qubit will be flipped,
+    /// otherwise the result qubit will retain its state.
     ///
     /// # Input
     /// ## xs
@@ -604,9 +576,9 @@ namespace Microsoft.Quantum.Arithmetic {
     /// LittleEndian qubit register encoding the second integer $y$.
     /// ## result
     /// Single qubit that will be flipped if $x > y$.
-    /// 
+    ///
     /// # References
-    /// - Steven A. Cuccaro, Thomas G. Draper, Samuel A. Kutin, David 
+    /// - Steven A. Cuccaro, Thomas G. Draper, Samuel A. Kutin, David
     ///   Petrie Moulton: "A new quantum ripple-carry addition circuit", 2004.
     ///   https://arxiv.org/abs/quant-ph/0410184v1
     ///
@@ -615,19 +587,19 @@ namespace Microsoft.Quantum.Arithmetic {
     ///     https://arxiv.org/abs/1611.07995
     ///
     /// # Remarks
-    /// Uses the trick that $x-y = (x'+y)'$, where ' denotes the one's complement.
-    operation GreaterThan (xs : LittleEndian, ys : LittleEndian, result : Qubit) : Unit
-    {
+    /// Uses the trick that $x - y = (x'+y)'$, where ' denotes the one's complement.
+    operation GreaterThan(xs : LittleEndian, ys : LittleEndian, result : Qubit)
+    : Unit is Adj + Ctl {
         body (...) {
             (Controlled GreaterThan) (new Qubit[0], (xs, ys, result));
         }
-        adjoint auto;
         controlled (controls, ...) {
             let nQubits = Length(xs!);
 
-            EqualityFactB(
-                nQubits == Length(ys!), true,
-                "Input registers must have the same number of qubits." );
+            EqualityFactI(
+                nQubits, Length(ys!),
+                "Input registers must have the same number of qubits."
+            );
 
             if (nQubits == 1) {
                 X(ys![0]);
@@ -647,7 +619,6 @@ namespace Microsoft.Quantum.Arithmetic {
                 ApplyToEachCA(X, ys!);
             }
         }
-        adjoint controlled auto;
     }
 
 }
