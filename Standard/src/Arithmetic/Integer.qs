@@ -64,7 +64,7 @@ namespace Microsoft.Quantum.Arithmetic {
     /// # Input
     /// ## register
     /// Qubit register, only used for controls.
-    /// ## target
+    /// ## targets
     /// Qubit register, used for controls and as target.
     ///
     /// # Remarks
@@ -274,27 +274,25 @@ namespace Microsoft.Quantum.Arithmetic {
     /// - Steven A. Cuccaro, Thomas G. Draper, Samuel A. Kutin, David
     ///   Petrie Moulton: "A new quantum ripple-carry addition circuit", 2004.
     ///   https://arxiv.org/abs/quant-ph/0410184v1
-    operation _InnerCDKM (xs : LittleEndian, ys : LittleEndian, carry : Qubit,
-                          ancilla : Qubit) : Unit
-    {
-        body (...) {
-            let nQubits = Length(xs!);
+    operation _InnerCDKM(xs : LittleEndian, ys : LittleEndian, carry : Qubit,
+                         ancilla : Qubit)
+    : Unit is Adj + Ctl {
+        let nQubits = Length(xs!);
 
-            EqualityFactB(
-                nQubits == Length(ys!), true,
-                "Input registers must have the same number of qubits." );
+        EqualityFactI(
+            nQubits, Length(ys!),
+            "Input registers must have the same number of qubits."
+        );
 
-            ApplyWithCA(_RippleCDKM,
-                   _CarryOutCoreCDKM(_, _, _, carry), (xs, ys, ancilla));
-            ApplyToEachCA (X, Most(Rest(ys!)));   // X on ys[1..(nQubits-2)]
-        }
-        adjoint auto;
-        controlled auto;
-        adjoint controlled auto;
+        ApplyWithCA(_RippleCDKM,
+                _CarryOutCoreCDKM(_, _, _, carry), (xs, ys, ancilla));
+        ApplyToEachCA (X, Most(Rest(ys!)));   // X on ys[1..(nQubits-2)]
     }
 
     /// # Summary
     /// Reversible, in-place ripple-carry addition of two integers.
+    ///
+    /// # Description
     /// Given two $n$-bit integers encoded in LittleEndian registers `xs` and `ys`,
     /// and a qubit carry, the operation computes the sum of the two integers
     /// where the $n$ least significant bits of the result are held in `ys` and
@@ -317,23 +315,19 @@ namespace Microsoft.Quantum.Arithmetic {
     /// # Remarks
     /// This operation has the same functionality as RippleCarryAdderD, but
     /// only uses one ancilla qubit instead of $n$.
-    operation RippleCarryAdderCDKM (xs : LittleEndian, ys : LittleEndian, carry : Qubit) : Unit
-    {
-        body (...) {
-            let nQubits = Length(xs!);
+    operation RippleCarryAdderCDKM (xs : LittleEndian, ys : LittleEndian, carry : Qubit)
+    : Unit {
+        let nQubits = Length(xs!);
 
-            EqualityFactB(
-                nQubits == Length(ys!), true,
-                "Input registers must have the same number of qubits." );
+        EqualityFactI(
+            nQubits, Length(ys!),
+            "Input registers must have the same number of qubits."
+        );
 
-            using ( ancilla = Qubit() ) {
-                ApplyWithCA(_OuterCDKM, _InnerCDKM(_, _, carry, _), (xs, ys, ancilla));
-                CNOT (xs![0], ys![0]);
-            }
+        using ( ancilla = Qubit() ) {
+            ApplyWithCA(_OuterCDKM, _InnerCDKM(_, _, carry, _), (xs, ys, ancilla));
+            CNOT(xs![0], ys![0]);
         }
-        adjoint auto;
-        controlled auto;
-        adjoint controlled auto;
     }
 
     /// # Summary
@@ -361,12 +355,11 @@ namespace Microsoft.Quantum.Arithmetic {
     /// The specified controlled operation makes use of symmetry and mutual
     /// cancellation of operations to improve on the default implementation
     /// that adds a control to every operation.
-    operation _InnerAddTTK (xs : LittleEndian, ys : LittleEndian, carry : Qubit) : Unit
-    {
+    operation _InnerAddTTK (xs : LittleEndian, ys : LittleEndian, carry : Qubit)
+    : Unit is Adj + Ctl {
         body (...) {
             (Controlled _InnerAddTTK) (new Qubit[0], (xs, ys, carry));
         }
-        adjoint auto;
         controlled ( controls, ... ) {
             let nQubits = Length(xs!);
 
@@ -383,7 +376,6 @@ namespace Microsoft.Quantum.Arithmetic {
                 CCNOT (xs![idx-1], ys![idx-1], xs![idx]);
             }
         }
-        adjoint controlled auto;
     }
 
     /// # Summary
@@ -403,21 +395,16 @@ namespace Microsoft.Quantum.Arithmetic {
     ///   Addition Circuits and Unbounded Fan-Out", Quantum Information and
     ///   Computation, Vol. 10, 2010.
     ///   https://arxiv.org/abs/0910.2530
-    operation _OuterTTK (xs : LittleEndian, ys : LittleEndian) : Unit
-    {
-        body (...) {
-            let nQubits = Length(xs!);
+    operation _OuterTTK (xs : LittleEndian, ys : LittleEndian)
+    : Unit is Adj + Ctl {
+        let nQubits = Length(xs!);
 
-            EqualityFactB(
-                nQubits == Length(ys!), true,
-                "Input registers must have the same number of qubits." );
+        EqualityFactB(
+            nQubits == Length(ys!), true,
+            "Input registers must have the same number of qubits." );
 
-            ApplyToEachCA(CNOT, Zip(Rest(xs!), Rest(ys!)));
-            (Adjoint CascadeCNOT) (Rest(xs!));
-        }
-        adjoint auto;
-        controlled auto;
-        adjoint controlled auto;
+        ApplyToEachCA(CNOT, Zip(Rest(xs!), Rest(ys!)));
+        (Adjoint CascadeCNOT) (Rest(xs!));
     }
 
     /// # Summary
@@ -445,27 +432,23 @@ namespace Microsoft.Quantum.Arithmetic {
     /// # Remarks
     /// This operation has the same functionality as RippleCarryAdderD and,
     /// RippleCarryAdderCDKM but does not use any ancilla qubits.
-    operation RippleCarryAdderTTK (xs : LittleEndian, ys : LittleEndian, carry : Qubit) : Unit
-    {
-        body (...) {
-            let nQubits = Length(xs!);
+    operation RippleCarryAdderTTK (xs : LittleEndian, ys : LittleEndian, carry : Qubit)
+    : Unit is Adj + Ctl {
+        let nQubits = Length(xs!);
 
-            EqualityFactB(
-                nQubits == Length(ys!), true,
-                "Input registers must have the same number of qubits." );
+        EqualityFactI(
+            nQubits, Length(ys!),
+            "Input registers must have the same number of qubits."
+        );
 
-            if (nQubits > 1) {
-                CNOT(xs![nQubits-1], carry);
-                ApplyWithCA(_OuterTTK, _InnerAddTTK(_, _, carry), (xs, ys));
-            }
-            else {
-                CCNOT(xs![0], ys![0], carry);
-            }
-            CNOT(xs![0], ys![0]);
+        if (nQubits > 1) {
+            CNOT(xs![nQubits-1], carry);
+            ApplyWithCA(_OuterTTK, _InnerAddTTK(_, _, carry), (xs, ys));
         }
-        adjoint auto;
-        controlled auto;
-        adjoint controlled auto;
+        else {
+            CCNOT(xs![0], ys![0], carry);
+        }
+        CNOT(xs![0], ys![0]);
     }
 
     /// # Summary
@@ -491,12 +474,11 @@ namespace Microsoft.Quantum.Arithmetic {
     /// The specified controlled operation makes use of symmetry and mutual
     /// cancellation of operations to improve on the default implementation
     /// that adds a control to every operation.
-    operation _InnerAddNoCarryTTK (xs : LittleEndian, ys : LittleEndian) : Unit
-    {
+    operation _InnerAddNoCarryTTK (xs : LittleEndian, ys : LittleEndian)
+    : Unit is Adj + Ctl {
         body (...) {
             (Controlled _InnerAddNoCarryTTK) (new Qubit[0], (xs, ys));
         }
-        adjoint auto;
         controlled ( controls, ... ) {
             let nQubits = Length(xs!);
 
@@ -512,13 +494,12 @@ namespace Microsoft.Quantum.Arithmetic {
                 CCNOT (xs![idx-1], ys![idx-1], xs![idx]);
             }
         }
-        adjoint controlled auto;
     }
 
     /// # Summary
+    /// Reversible, in-place ripple-carry addition of two integers without carry out.
     ///
     /// # Description
-    /// Reversible, in-place ripple-carry addition of two integers without carry out.
     /// Given two $n$-bit integers encoded in LittleEndian registers `xs` and `ys`,
     /// the operation computes the sum of the two integers modulo $2^n$,
     /// where $n$ is the bit size of the inputs `xs` and `ys`. It does not compute
@@ -540,23 +521,18 @@ namespace Microsoft.Quantum.Arithmetic {
     /// # Remarks
     /// This operation has the same functionality as RippleCarryAdderTTK but does
     /// not return the carry bit.
-    operation RippleCarryAdderNoCarryTTK (xs : LittleEndian, ys : LittleEndian) : Unit
-    {
-        body (...) {
-            let nQubits = Length(xs!);
+    operation RippleCarryAdderNoCarryTTK (xs : LittleEndian, ys : LittleEndian)
+    : Unit is Adj + Ctl {
+        let nQubits = Length(xs!);
 
-            EqualityFactB(
-                nQubits == Length(ys!), true,
-                "Input registers must have the same number of qubits." );
+        EqualityFactB(
+            nQubits == Length(ys!), true,
+            "Input registers must have the same number of qubits." );
 
-            if (nQubits > 1) {
-                ApplyWithCA(_OuterTTK, _InnerAddNoCarryTTK, (xs, ys));
-            }
-            CNOT (xs![0], ys![0]);
+        if (nQubits > 1) {
+            ApplyWithCA(_OuterTTK, _InnerAddNoCarryTTK, (xs, ys));
         }
-        adjoint auto;
-        controlled auto;
-        adjoint controlled auto;
+        CNOT (xs![0], ys![0]);
     }
 
     /// # Summary

@@ -17,23 +17,18 @@ namespace Microsoft.Quantum.ErrorCorrection {
     ///
     /// # References
     /// - doi:10.1103/PhysRevA.85.044302
-    operation BFEncoderImpl (coherentRecovery : Bool, data : Qubit[], scratch : Qubit[]) : Unit
-    {
-        body (...)
+    operation _BFEncoder(coherentRecovery : Bool, data : Qubit[], scratch : Qubit[])
+    : Unit is Adj {
+        if (coherentRecovery)
         {
-            if (coherentRecovery)
-            {
-                Controlled X(scratch, data[0]);
-            }
-            
-            Controlled X(data, scratch[0]);
-            Controlled X(data, scratch[1]);
+            Controlled X(scratch, data[0]);
         }
-        
-        adjoint invert;
+
+        Controlled X(data, scratch[0]);
+        Controlled X(data, scratch[1]);
     }
-    
-    
+
+
     /// # Summary
     /// Encodes into the [3, 1, 3] / ⟦3, 1, 1⟧ bit-flip code.
     ///
@@ -52,12 +47,12 @@ namespace Microsoft.Quantum.ErrorCorrection {
     /// - LogicalRegister
     operation EncodeIntoBitFlipCode(physRegister : Qubit[], auxQubits : Qubit[]) : LogicalRegister
     {
-        BFEncoderImpl(false, physRegister, auxQubits);
+        _BFEncoder(false, physRegister, auxQubits);
         let logicalRegister = LogicalRegister(physRegister + auxQubits);
         return logicalRegister;
     }
-    
-    
+
+
     /// # Summary
     /// Decodes from the [3, 1, 3] / ⟦3, 1, 1⟧ bit-flip code.
     ///
@@ -72,11 +67,11 @@ namespace Microsoft.Quantum.ErrorCorrection {
     /// # See Also
     /// - LogicalRegister
     /// - EncodeIntoBitFlipCode
-    operation DecodeFromBitFlipCode(logicalRegister : LogicalRegister) : (Qubit[], Qubit[])
-    {
+    operation DecodeFromBitFlipCode(logicalRegister : LogicalRegister)
+    : (Qubit[], Qubit[]) {
         let physRegister = [(logicalRegister!)[0]];
         let auxQubits = (logicalRegister!)[1 .. 2];
-        Adjoint BFEncoderImpl(false, physRegister, auxQubits);
+        Adjoint _BFEncoder(false, physRegister, auxQubits);
         return (physRegister, auxQubits);
     }
 

@@ -6,10 +6,9 @@ namespace Microsoft.Quantum.ErrorCorrection {
     open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Measurement;
 
-
     /// # Summary
     /// Syndrome measurement and the inverse of embedding.
-	/// 
+	///
     /// $X$- and $Z$-stabilizers are not treated equally,
     /// which is due to the particular choice of the encoding circuit.
     /// This asymmetry leads to a different syndrome extraction routine.
@@ -24,13 +23,13 @@ namespace Microsoft.Quantum.ErrorCorrection {
     /// would have caused the measured syndrome.
     ///
     /// # Remarks
-	/// 
+	///
     /// > [!WARNING]
     /// > This routine is tailored
     /// > to a particular encoding circuit for Steane's 7 qubit code;
     /// > if the encoding circuit is modified then the syndrome outcome
     /// > might have to be interpreted differently.
-	/// 
+	///
     operation _ExtractLogicalQubitFromSteaneCode (code : LogicalRegister) : (Qubit, Int, Int)
     {
         Adjoint SteaneCodeEncoderImpl((code!)[0 .. 0], (code!)[1 .. 6]);
@@ -38,57 +37,60 @@ namespace Microsoft.Quantum.ErrorCorrection {
         let x1 = M((code!)[1]);
         let x2 = M((code!)[3]);
         mutable xsyn = 0;
-        
+
         if (x0 == One)
         {
             set xsyn = xsyn ^^^ 1;
         }
-        
+
         if (x1 == One)
         {
             set xsyn = xsyn ^^^ 2;
         }
-        
+
         if (x2 == One)
         {
             set xsyn = xsyn ^^^ 4;
         }
-        
+
         set xsyn = xsyn - 1;
-        
+
         // xsyn contains the qubit index (0..6) at which a single Z-error would
         // produce the given syndrome.
         let z0 = M((code!)[5]);
         let z1 = M((code!)[2]);
         let z2 = M((code!)[4]);
         mutable zsyn = 0;
-        
+
         if (z0 == One)
         {
             set zsyn = zsyn ^^^ 1;
         }
-        
+
         if (z1 == One)
         {
             set zsyn = zsyn ^^^ 2;
         }
-        
+
         if (z2 == One)
         {
             set zsyn = zsyn ^^^ 5;
         }
-        
+
         set zsyn = zsyn - 1;
-        
+
         // zsyn contains the qubit index (0..6) at which a single X-error would
         // produce the given syndrome.
         return ((code!)[0], xsyn, zsyn);
     }
-    
-    
+
+
     /// # Summary
+    /// Rotates a single qubit by π/4 about the Y-axis.
+    ///
+    /// # Description
     /// Performs a π/4 rotation about `Y`.
-	/// 
+	///
 	/// The rotation is performed by consuming a magic
     /// state; that is, a copy of the state
     /// $$
@@ -122,19 +124,19 @@ namespace Microsoft.Quantum.ErrorCorrection {
     /// This operation supports the `Adjoint` functor, in which
     /// case the same magic state is consumed, but the effect
     /// on the data qubit is a $-\pi/4$ $Y$-rotation.
-    operation InjectPi4YRotation (data : Qubit, magic : Qubit) : Unit
-    {
-        body (...)
-        {
+    operation InjectPi4YRotation (data : Qubit, magic : Qubit)
+    : Unit is Adj {
+        body (...) {
             Adjoint S(data);
             CNOT(magic, data);
             S(data);
             let r = MResetY(magic);
-            
-            if (r == One)
-            {
-                // The following five gates is equal to	Ry( Pi()/2.0, data)
-                // up to global phase.
+
+            if (r == One) {
+                // The following five operations are equivalant to
+                // Ry( Pi()/2.0, data), up to global phase.
+                // Since this operation does not support Controlled, we need
+                // not worry about global phases.
                 S(data);
                 H(data);
                 Adjoint S(data);
@@ -142,16 +144,14 @@ namespace Microsoft.Quantum.ErrorCorrection {
                 Adjoint S(data);
             }
         }
-        
-        adjoint (...)
-        {
+
+        adjoint (...) {
             Adjoint S(data);
             CNOT(magic, data);
             S(data);
             let r = MResetY(magic);
-            
-            if (r == Zero)
-            {
+
+            if (r == Zero) {
                 S(data);
                 H(data);
                 S(data);
@@ -160,11 +160,12 @@ namespace Microsoft.Quantum.ErrorCorrection {
             }
         }
     }
-    
-    
+
+
     /// # Summary
 	/// Implements the Knill magic state distillation algorithm.
-	/// 
+    ///
+    /// # Description
     /// Given 15 approximate copies of a magic state
     /// $$
     /// \begin{align}
@@ -195,39 +196,35 @@ namespace Microsoft.Quantum.ErrorCorrection {
     ///
     /// # References
     /// - [Knill](https://arxiv.org/abs/quant-ph/0402171)
-    operation KnillDistill (roughMagic : Qubit[]) : Bool
-    {
+    operation KnillDistill (roughMagic : Qubit[]) : Bool {
         mutable accept = false;
-        
-        using (scratch = Qubit[8])
-        {
+
+        using (scratch = Qubit[8]) {
             let anc = scratch[7];
             let code = scratch[0 .. 6];
             InjectPi4YRotation(code[0], roughMagic[14]);
             SteaneCodeEncoderImpl(code[0 .. 0], code[1 .. 6]);
-            
-            for (idx in 0 .. 6)
-            {
+
+            for (idx in 0 .. 6) {
                 Adjoint InjectPi4YRotation(code[idx], roughMagic[idx]);
                 CNOT(code[idx], anc);
                 InjectPi4YRotation(code[idx], roughMagic[idx + 7]);
             }
-            
+
             let (logicalQubit, xsyn, zsyn) = _ExtractLogicalQubitFromSteaneCode(LogicalRegister(code));
             let m = M(anc);
-            
-            if ((xsyn == -1 and zsyn == -1) and m == Zero)
-            {
+
+            if ((xsyn == -1 and zsyn == -1) and m == Zero) {
                 SWAP(logicalQubit, roughMagic[0]);
                 set accept = true;
             }
-            
+
             ResetAll(scratch);
         }
-        
+
         return accept;
     }
-    
+
 }
 
 
