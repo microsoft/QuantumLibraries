@@ -1,13 +1,10 @@
-<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.Quantum.Sdk/0.10.1912.2605-alpha">
+
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
     <AssemblyName>Microsoft.Quantum.Chemistry.Runtime</AssemblyName>
-    <DocumentationFile>bin\$(BuildConfiguration)\$(PlatformTarget)\$(AssemblyName).xml</DocumentationFile>
-    <PlatformTarget>x64</PlatformTarget>
-  </PropertyGroup>
-
-  <PropertyGroup>
-    <RunQDocGen>True</RunQDocGen>
+    <QsharpDocsGeneration>true</QsharpDocsGeneration>
+    <IncludeQsharpCorePackages>false</IncludeQsharpCorePackages>
   </PropertyGroup>
 
   <ItemGroup>
@@ -15,11 +12,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Quantum.Development.Kit" Version="0.10.1912.501" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\..\..\Standard\src\Standard.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Quantum.Simulators" Version="0.10.1912.2614-alpha" />
+  </ItemGroup>
+
 </Project>
+
