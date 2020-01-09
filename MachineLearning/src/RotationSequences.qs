@@ -7,12 +7,12 @@ namespace Microsoft.Quantum.MachineLearning {
     open Microsoft.Quantum.Intrinsic;
     open Microsoft.Quantum.Canon;
 
-	/// What is the minimum number of qubits
-	/// to support the subject gate sequence?
-	/// Find the maximum qubit index m occuring
-	/// in a gate sequence and return m+1
-	function NQubitsRequired(seq : GateSequence) : Int {
-		mutable nQubitsRequired = 0;
+    /// What is the minimum number of qubits
+    /// to support the subject gate sequence?
+    /// Find the maximum qubit index m occuring
+    /// in a gate sequence and return m+1
+    function NQubitsRequired(seq : GateSequence) : Int {
+        mutable nQubitsRequired = 0;
         for (gate in seq!) {
             set nQubitsRequired = Fold(
                 MaxI, 0,
@@ -23,11 +23,11 @@ namespace Microsoft.Quantum.MachineLearning {
             );
         }
         return nQubitsRequired;
-	}
+    }
 
-	/// Apply parameterized gate sequence to subject qubit register
-	///
-	operation _ApplyGates(parameters : Double[], gates: GateSequence, qubits : Qubit[]) : (Unit) is Adj + Ctl {
+    /// Apply parameterized gate sequence to subject qubit register
+    ///
+    operation _ApplyGates(parameters : Double[], gates: GateSequence, qubits : Qubit[]) : (Unit) is Adj + Ctl {
         //dumpRegisterToConsole(qubits);
         for (gate in gates!) {
             // let (gsp,p,ix) = gt!;
@@ -44,8 +44,8 @@ namespace Microsoft.Quantum.MachineLearning {
         }
     }
 
-	operation ApplyGates(parameters : Double[], gates: GateSequence): (Qubit[] => Unit is Adj + Ctl) {
+    operation ApplyGates(parameters : Double[], gates: GateSequence): (Qubit[] => Unit is Adj + Ctl) {
         return _ApplyGates(parameters,gates,_);
-	}
+    }
 
 }
