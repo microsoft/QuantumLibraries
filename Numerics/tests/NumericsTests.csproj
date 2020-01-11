@@ -3,7 +3,6 @@
   <Import Project="..\..\Build\props\tests.props" />
 
   <PropertyGroup>
-    <QscVerbosity>Detailed</QscVerbosity>
     <TargetFramework>netcoreapp3.0</TargetFramework>
     <IncludeQsharpCorePackages>false</IncludeQsharpCorePackages>
   </PropertyGroup>
