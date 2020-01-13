@@ -72,4 +72,27 @@ namespace Microsoft.Quantum.Measurement {
         return ForEach(M, targets);
     }
 
+    /// # Summary
+    /// Measures a register of qubits is in the all-zeros state.
+    ///
+    /// # Description
+    /// Given a register of qubits, measures if that register is in the state
+    /// $\ket{00 \cdots 0}$ by performing a computational basis (i.e.:
+    /// `PauliZ`) measurement on each individual qubit in the register.
+    ///
+    /// # Input
+    /// ## register
+    /// The register of qubits to be measured.
+    ///
+    /// # Output
+    /// `true` if and only if the register is measured to be in the
+    /// $\ket{00 \cdots 0}$ state.
+    ///
+    /// # Remarks
+    /// This operation does not reset its qubits, but projects them to a
+    /// computational basis state.
+    operation MeasureIfAllZeros(register : Qubit[]) : Bool {
+        return All(IsResultZero, ForEach(M, register));
+    }
+
 }
