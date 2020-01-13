@@ -10,13 +10,13 @@ namespace Microsoft.Quantum.MachineLearning {
 
     operation _PrepareClassification(
         encoder : (LittleEndian => Unit is Adj + Ctl),
-        parameters : Double[],
         structure : SequentialClassifierStructure,
+        parameters : Double[],
         target : Qubit[]
     )
     : Unit is Adj {
         encoder(LittleEndian(target));
-        ApplySequentialClassifier(parameters, structure, target);
+        ApplySequentialClassifier(structure, parameters, target);
     }
 
     operation EstimateClassificationProbability(
@@ -31,7 +31,7 @@ namespace Microsoft.Quantum.MachineLearning {
         let circEnc = ApproximateInputEncoder(tolerance / IntAsDouble(Length(structure!)), sample);
         let encodedSample = StateGenerator(nQubits, circEnc);
         return 1.0 - EstimateFrequencyA(
-            _PrepareClassification(encodedSample::Apply, parameters, structure, _),
+            _PrepareClassification(encodedSample::Apply, structure, parameters, _),
             _TailMeasurement(encodedSample::NQubits),
             encodedSample::NQubits,
             nMeasurements
