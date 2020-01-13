@@ -11,27 +11,27 @@ namespace Microsoft.Quantum.MachineLearning {
     operation _PrepareClassification(
         encoder : (LittleEndian => Unit is Adj + Ctl),
         parameters : Double[],
-        gates : GateSequence,
+        structure : SequentialClassifierStructure,
         target : Qubit[]
     )
     : Unit is Adj {
         encoder(LittleEndian(target));
-        _ApplyGates(parameters, gates, target);
+        ApplySequentialClassifier(parameters, structure, target);
     }
 
     operation EstimateClassificationProbability(
-        tolerance: Double,
+        tolerance : Double,
         parameters : Double[],
-        gates: GateSequence,
-        sample: Double[],
+        structure : SequentialClassifierStructure,
+        sample : Double[],
         nMeasurements: Int
     )
     : Double {
         let nQubits = FeatureRegisterSize(sample);
-        let circEnc = ApproximateInputEncoder(tolerance / IntAsDouble(Length(gates!)), sample);
+        let circEnc = ApproximateInputEncoder(tolerance / IntAsDouble(Length(structure!)), sample);
         let encodedSample = StateGenerator(nQubits, circEnc);
         return 1.0 - EstimateFrequencyA(
-            _PrepareClassification(encodedSample::Apply, parameters, gates, _),
+            _PrepareClassification(encodedSample::Apply, parameters, structure, _),
             _TailMeasurement(encodedSample::NQubits),
             encodedSample::NQubits,
             nMeasurements
@@ -41,7 +41,7 @@ namespace Microsoft.Quantum.MachineLearning {
     operation EstimateClassificationProbabilities(
         tolerance : Double,
         parameters : Double[],
-        structure : GateSequence,
+        structure : SequentialClassifierStructure,
         samples : Double[][],
         nMeasurements : Int
     )

@@ -47,7 +47,7 @@ namespace Microsoft.Quantum.MachineLearning {
     }
 
     operation TrainSequentialClassifier(
-        gates: GateSequence,
+        gates: SequentialClassifierStructure,
         parameterSource: Double[][],
         samples: LabeledSample[],
         options : TrainingOptions,
@@ -115,7 +115,7 @@ namespace Microsoft.Quantum.MachineLearning {
     operation _RunSingleTrainingStep(
         miniBatch : LabeledSample[],
         options : TrainingOptions,
-        param : Double[], gates : GateSequence
+        param : Double[], gates : SequentialClassifierStructure
     )
     : (Double, Double[]) {
         mutable batchGradient = ConstantArray(Length(param), 0.0);
@@ -185,7 +185,7 @@ namespace Microsoft.Quantum.MachineLearning {
         samples: LabeledSample[],
         schedule: SamplingSchedule, periodScore: Int,
         options : TrainingOptions,
-        model : SequentialModel, gates: GateSequence,
+        model : SequentialModel, gates: SequentialClassifierStructure,
         nPreviousBestMisses : Int
     )
     : (Int, SequentialModel) {
@@ -297,7 +297,7 @@ namespace Microsoft.Quantum.MachineLearning {
     /// ((no.hits,no.misses),(opt.bias,opt.parameters))
     ///
     operation TrainSequentialClassifierAtModel(
-        gates : GateSequence,
+        gates : SequentialClassifierStructure,
         model : SequentialModel,
         samples : LabeledSample[],
         options : TrainingOptions,

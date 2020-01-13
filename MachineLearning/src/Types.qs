@@ -20,7 +20,7 @@ namespace Microsoft.Quantum.MachineLearning {
     );
 
     /// Abstraction for sequence of gates
-    newtype GateSequence = ControlledRotation[];
+    newtype SequentialClassifierStructure = ControlledRotation[];
 
     /// Abstraction for state preparation
     /// Fst(StateGenerator) is the number of qubits

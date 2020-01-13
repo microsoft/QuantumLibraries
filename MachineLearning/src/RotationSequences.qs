@@ -7,13 +7,21 @@ namespace Microsoft.Quantum.MachineLearning {
     open Microsoft.Quantum.Intrinsic;
     open Microsoft.Quantum.Canon;
 
-    /// What is the minimum number of qubits
-    /// to support the subject gate sequence?
-    /// Find the maximum qubit index m occuring
-    /// in a gate sequence and return m+1
-    function NQubitsRequired(seq : GateSequence) : Int {
+    /// # Summary
+    /// Returns the number of qubits required to apply a given sequential
+    /// classifier.
+    ///
+    /// # Input
+    /// ## structure
+    /// The structure of a given sequential classifier.
+    ///
+    /// # Output
+    /// The minimum size of a register on which the sequential classifier
+    /// may be applied.
+    function NQubitsRequired(structure : SequentialClassifierStructure)
+    : Int {
         mutable nQubitsRequired = 0;
-        for (gate in seq!) {
+        for (gate in structure!) {
             set nQubitsRequired = Fold(
                 MaxI, 0,
                 gate::Span::ControlIndices + [
@@ -25,12 +33,24 @@ namespace Microsoft.Quantum.MachineLearning {
         return nQubitsRequired;
     }
 
-    /// Apply parameterized gate sequence to subject qubit register
+    /// # Summary
+    /// Given the structure and parameterization of a sequential classifier,
+    /// applies the classifier to a register of qubits.
     ///
-    operation _ApplyGates(parameters : Double[], gates: GateSequence, qubits : Qubit[]) : (Unit) is Adj + Ctl {
-        //dumpRegisterToConsole(qubits);
-        for (gate in gates!) {
-            // let (gsp,p,ix) = gt!;
+    /// # Input
+    /// ## structure
+    /// Structure of the given sequential classifier.
+    /// ## parameters
+    /// A parameterization at which the given structure is applied.
+    /// ## qubits
+    /// A target register to which the classifier should be applied.
+    operation ApplySequentialClassifier(
+        structure : SequentialClassifierStructure,
+        parameters : Double[],
+        qubits : Qubit[]
+    )
+    : (Unit) is Adj + Ctl {
+        for (gate in structure!) {
             if (gate::Index < Length(parameters)) {
                 let input = (gate::Axis, parameters[gate::Index], qubits[gate::Span::TargetIndex]);
                 if (IsEmpty(gate::Span::ControlIndices)) {
@@ -42,10 +62,6 @@ namespace Microsoft.Quantum.MachineLearning {
                 }
             }
         }
-    }
-
-    operation ApplyGates(parameters : Double[], gates: GateSequence): (Qubit[] => Unit is Adj + Ctl) {
-        return _ApplyGates(parameters,gates,_);
     }
 
 }

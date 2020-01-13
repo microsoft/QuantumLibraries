@@ -25,9 +25,9 @@ namespace Microsoft.Quantum.MachineLearning {
         return _CallFlipped(fn, _, _);
     }
 
-    function LocalRotationsLayer(nQubits : Int, axis : Pauli) : GateSequence {
+    function LocalRotationsLayer(nQubits : Int, axis : Pauli) : SequentialClassifierStructure {
         // [parameterIndex, pauliCode, targetQubit\,sequence of control qubits\]
-        return GateSequence(Mapped(
+        return SequentialClassifierStructure(Mapped(
             _Flipped(ControlledRotation(_, axis, _)),
             Enumerated(
                 _UncontrolledSpanSequence(SequenceI(0, nQubits - 1))
@@ -36,9 +36,9 @@ namespace Microsoft.Quantum.MachineLearning {
     }
 
 
-    function PartialRotationsLayer(idxsQubits : Int[], axis : Pauli) : GateSequence {
+    function PartialRotationsLayer(idxsQubits : Int[], axis : Pauli) : SequentialClassifierStructure {
         // [parameterIndex, pauliCode, targetQubit\,sequence of control qubits\]
-        return GateSequence(Mapped(
+        return SequentialClassifierStructure(Mapped(
             _Flipped(ControlledRotation(_, axis, _)),
             Enumerated(
                 _UncontrolledSpanSequence(idxsQubits)
@@ -46,7 +46,7 @@ namespace Microsoft.Quantum.MachineLearning {
         ));
     }
 
-    function CyclicEntanglingLayer(nQubits : Int, axis : Pauli, stride : Int) : GateSequence {
+    function CyclicEntanglingLayer(nQubits : Int, axis : Pauli, stride : Int) : SequentialClassifierStructure {
         mutable rotations = new ControlledRotation[0];
         for (idxTarget in 0..nQubits - 1) {
             set rotations += [ControlledRotation(
@@ -57,10 +57,10 @@ namespace Microsoft.Quantum.MachineLearning {
                 axis, idxTarget
             )];
         }
-        return GateSequence(rotations);
+        return SequentialClassifierStructure(rotations);
     }
 
-    function CombinedGateSequence(layers : GateSequence[]) : GateSequence {
+    function CombinedGateSequence(layers : SequentialClassifierStructure[]) : SequentialClassifierStructure {
         mutable combined = (Head(layers))!;
         mutable offset = Length(combined);
         for (layer in Rest(layers)) {
@@ -69,7 +69,7 @@ namespace Microsoft.Quantum.MachineLearning {
             }
             set offset += Length(layer!);
         }
-        return GateSequence(combined);
+        return SequentialClassifierStructure(combined);
     }
 
 }

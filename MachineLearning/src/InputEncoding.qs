@@ -60,11 +60,26 @@ namespace Microsoft.Quantum.MachineLearning {
         // Reflect about the negative coefficients to apply the negative signs
         // at the end.
         for (idxNegative in negLocs) {
-            ReflectAboutInteger(idxNegative, reg); //TODO:REVIEW: this assumes that 2^Length(reg) is the minimal pad to Length(coefficients)
+            ReflectAboutInteger(idxNegative, reg);
         }
     }
 
-    function ApproximateInputEncoder(tolerance : Double,coefficients : Double[])
+    /// # Summary
+    /// Returns the number of qubits required to encode a particular feature
+    /// vector.
+    ///
+    /// # Input
+    /// ## sample
+    /// A sample feature vector to be encoded into a qubit register.
+    ///
+    /// # Output
+    /// The size required to encode `sample` into a qubit register, expressed
+    /// as a number of qubits.
+    function FeatureRegisterSize(sample : Double[]) : Int {
+        return Ceiling(Lg(IntAsDouble(Length(sample))));
+    }
+
+    function ApproximateInputEncoder(tolerance : Double, coefficients : Double[])
     : (LittleEndian => Unit is Adj + Ctl) {
         //First quantize the coefficients: for a coef x find such y*tolerance, where y is integer and |x-y*tolerance| \neq tolerance/2
         let nCoefficients = Length(coefficients);
@@ -93,18 +108,17 @@ namespace Microsoft.Quantum.MachineLearning {
         // Here, by a "few," we mean fewer than the number of qubits required
         // to encode features.
         if ((cNegative > 0) and (IntAsDouble(cNegative) < Lg(IntAsDouble(Length(coefficients))) + 1.0)) {
-            return _EncodeSparseNegativeInput(cNegative, tolerance, complexCoefficients, _); //TODO:MORE:ACCEPTANCE ("Wines" passing soi far)
+            return _EncodeSparseNegativeInput(cNegative, tolerance, complexCoefficients, _);
         }
 
         // Finally, we fall back to arbitrary state preparation.
         return ApproximatelyPrepareArbitraryState(tolerance, complexCoefficients, _);
     } //EncodeNoisyInput
 
-    //TODO:REVIEW: Design consideration! The implicit qubit count must be read off from the state encoder, NOT from the gate sequence!
-
     /// Create amplitude encoding of an array of real-valued coefficients
     /// The vector of 'coefficients' does not have to be unitary
-    function InputEncoder(coefficients : Double[]): (LittleEndian => Unit is Adj + Ctl) {
+    function InputEncoder(coefficients : Double[])
+    : (LittleEndian => Unit is Adj + Ctl) {
         //default implementation, does not respect sparcity
         mutable complexCoefficients = new ComplexPolar[Length(coefficients)];
         for ((idx, coefficient) in Enumerated(coefficients)) {

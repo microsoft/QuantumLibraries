@@ -19,58 +19,61 @@ namespace Microsoft.Quantum.MachineLearning {
 
     operation _EstimateDerivativeWithParameterShift(
         inputEncoder : StateGenerator,
-        gates : GateSequence,
+        gates : SequentialClassifierStructure,
         parameters : (Double[], Double[]),
         nQubits : Int,
         nMeasurements : Int
     ) : Double {
         return EstimateRealOverlapBetweenStates(
             _ApplyLEOperationToRawRegister(inputEncoder::Apply, _),
-            _ApplyGates(Fst(parameters), gates, _),
-            _ApplyGates(Snd(parameters), gates, _),
+            ApplySequentialClassifier(Fst(parameters), gates, _),
+            ApplySequentialClassifier(Snd(parameters), gates, _),
             nQubits, nMeasurements
         );
     }
 
     /// # Summary
-    /// polymorphic classical/quantum gradient estimator
+    /// Estimates the training gradient for a sequential classifier at a
+    /// particular set of parameters and for a given encoded input.
     ///
     /// # Input
-    /// ## param
-    /// circuit parameters
-    ///
     /// ## gates
-    /// sequence of gates in the circuits
-    ///
+    /// The structure of the sequential classifier as a sequence of quantum
+    /// operations.
+    /// ## param
+    /// A set of parameters for the given classifier structure.
     /// ## sg
-    /// generates quantum encoding of a subject sample (either simulated or true)
-    ///
-    /// ## measCount
-    /// number of true quantum measurements to estimate probabilities.
-    /// IMPORTANT: measCount==0 implies simulator deployment
+    /// An input to the sequential classifier, encoded into a state preparation
+    /// operation.
+    /// ## nMeasurements
+    /// The number of measurements to use in estimating the gradient.
     ///
     /// # Output
-    /// the gradient
+    /// An estimate of the training gradient at the given input and model
+    /// parameters.
     ///
+    /// # Remarks
+    /// This operation uses a Hadamard test and the parameter shift technique
+    /// together to estimate the gradient.
     operation EstimateGradient(
-        gates : GateSequence,
+        gates : SequentialClassifierStructure,
         param : Double[],
         sg : StateGenerator,
         nMeasurements : Int
     )
     : (Double[]) {
-        //Synopsis: Suppose (param,gates) define Circ0
-        //Suppose (param1,gates1) define Circ1 that implements one-gate derivative of Circ0
-        //The expectation derivative is then 2 Re[<Circ1 psi|\Pi_1|Circ0 psi>] =
-        // Re[<Circ1 psi|Id|Circ0 psi>] - Re[<Circ1 psi|Z \otimes Id|Circ0 psi>]
-        //We observe SEE THEORY that for (Circ1)=(Circ0)' ,  Re[<Circ1 psi|Circ0 psi>]==0
-        //Thus we are left to compute Re[<Circ1 psi|Z \otimes Id|Circ0 psi>] =
-        // 1 - 1/2 < (Z \otimes Id) Circ0 psi - Circ1 psi | (Z \otimes Id) Circ0 psi - Circ1 psi>
-        //i.e., 1 - HadamardTestResultHack(Circ1,[Z],Circ0)
+        // Synopsis: Suppose (param,gates) define Circ0
+        // Suppose (param1,gates1) define Circ1 that implements one-gate derivative of Circ0
+        // The expectation derivative is then 2 Re[<Circ1 psi|\Pi_1|Circ0 psi>] =
+        //  Re[<Circ1 psi|Id|Circ0 psi>] - Re[<Circ1 psi|Z \otimes Id|Circ0 psi>]
+        // We observe SEE THEORY that for (Circ1)=(Circ0)' ,  Re[<Circ1 psi|Circ0 psi>]==0
+        // Thus we are left to compute Re[<Circ1 psi|Z \otimes Id|Circ0 psi>] =
+        //  1 - 1/2 < (Z \otimes Id) Circ0 psi - Circ1 psi | (Z \otimes Id) Circ0 psi - Circ1 psi>
+        // i.e., 1 - HadamardTestResultHack(Circ1,[Z],Circ0)
 
 
-        //Now, suppose a gate at which we differentiate is the (Controlled R(\theta))([k0,k1,...,kr],[target])
-        //and we want a unitary description of its \theta-derivative. It can be written as
+        // Now, suppose a gate at which we differentiate is the (Controlled R(\theta))([k0,k1,...,kr],[target])
+        // and we want a unitary description of its \theta-derivative. It can be written as
         // 1/2 {(Controlled R(\theta'))([k0,k1,...,kr],[target]) -  (Controlled Z)([k1,...,kr],[k0])(Controlled R(\theta'))([k0,k1,...,kr],[target])}
         mutable grad = ConstantArray(Length(param), 0.0);
         let nQubits = MaxI(NQubitsRequired(gates), sg::NQubits);
@@ -91,7 +94,7 @@ namespace Microsoft.Quantum.MachineLearning {
                 //controlled gate
                 let controlledShift = paramShift
                     w/ gate::Index <- (param[gate::Index] + 3.0 * PI());
-                //Assumption: any rotation R has the property that R(\theta+2 Pi)=(-1).R(\theta)
+                // Assumption: any rotation R has the property that R(\theta + 2 Pi) = (-1) R(\theta).
                 // NB: This the *antiderivative* of the bracket
                 let newDer1 = _EstimateDerivativeWithParameterShift(
                     sg, gates, (param, controlledShift), nQubits, nMeasurements
