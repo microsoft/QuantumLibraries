@@ -10,10 +10,10 @@ namespace Microsoft.Quantum.Measurement.Tests {
     @Test("QuantumSimulator")
     operation CheckMeasureIfAllZeros() : Unit {
         using (qs = Qubit[3]) {
-            Fact(MeasureIfAllZeros(qs));
+            Fact(MeasureIfAllZeros(qs), "MeasureIfAllZeros was false for |000⟩ state.");
 
             X(qs[1]);
-            Fact(not MeasureIfAllZeros(qs));
+            Fact(not MeasureIfAllZeros(qs), "MeasureIfAllZeros was true for |010⟩ state.");
 
             ResetAll(qs);
         }
