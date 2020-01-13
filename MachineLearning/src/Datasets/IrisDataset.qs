@@ -1,7 +1,8 @@
-namespace Microsoft.Quantum.MachineLearning {
-    open Microsoft.Quantum.Primitive;
-    open Microsoft.Quantum.Convert;
-    open Microsoft.Quantum.Math;
+// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License.
+
+namespace Microsoft.Quantum.MachineLearning.Datasets {
+    open Microsoft.Quantum.MachineLearning;
 
     operation IrisTrainingData() : LabeledSample[] {
         return [LabeledSample(([0.581557, 0.562824, 0.447721, 0.380219], 1)),
@@ -87,8 +88,4 @@ namespace Microsoft.Quantum.MachineLearning {
         ];
     }
 
-    operation Examples () : Unit
-    {
-
-    }
 }

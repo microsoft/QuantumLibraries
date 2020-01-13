@@ -14,7 +14,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Standard\src\Standard.csproj" />
-    <ProjectReference Include="..\src\Runtime\Runtime.csproj" />
-    <ProjectReference Include="..\src\DataModel\DataModel.csproj" />
+    <ProjectReference Include="..\src\MachineLearning.csproj" />
   </ItemGroup>
 </Project>

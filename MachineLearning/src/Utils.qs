@@ -5,9 +5,9 @@ namespace Microsoft.Quantum.MachineLearning {
     open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Math;
 
-	function _AllNearlyEqualD(v1: Double[], v2: Double[]):Bool {
+    function _AllNearlyEqualD(v1: Double[], v2: Double[]):Bool {
         return Length(v1) == Length(v2) and All(NearlyEqualD, Zip(v1, v2));
-	}
+    }
 
     operation _TailMeasurement(nQubits : Int) : (Qubit[] => Result) {
         let paulis = ConstantArray(nQubits, PauliI) w/ (nQubits - 1) <- PauliZ;

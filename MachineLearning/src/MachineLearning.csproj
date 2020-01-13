@@ -1,26 +1,36 @@
-<Project Sdk="Microsoft.NET.Sdk">
-
+<Project Sdk="Microsoft.Quantum.Sdk/0.10.1912.2605-alpha">
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
     <PlatformTarget>x64</PlatformTarget>
-    <AssemblyName>Microsoft.Quantum.MachineLearning.DataModel</AssemblyName>
-    <DocumentationFile>bin\$(BuildConfiguration)\$(PlatformTarget)\$(AssemblyName).xml</DocumentationFile>
+    <AssemblyName>Microsoft.Quantum.MachineLearning</AssemblyName>
     <QsharpDocsGeneration>true</QsharpDocsGeneration>
+    <!--
+      Include core packages using project references instead, since they get
+      built at the same time as this project.
+    -->
+    <IncludeQsharpCorePackages>false</IncludeQsharpCorePackages>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Include="..\Common\DelaySign.cs" Link="Properties\DelaySign.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Standard\src\Standard.csproj" />
+  </ItemGroup>
+
+  <!-- Configure NuGet package metadata as well. -->
   <PropertyGroup>
-    <RunQDocGen>True</RunQDocGen>
     <Authors>Microsoft</Authors>
     <Description>Microsoft's Quantum ML Libraries.</Description>
     <Copyright>© Microsoft Corporation. All rights reserved.</Copyright>
     <PackageId>Microsoft.Quantum.MachineLearning</PackageId>
-    <PackageReleaseNotes>See: https://docs.microsoft.com/en-us/quantum/relnotes/</PackageReleaseNotes>
+    <PackageReleaseNotes>See: https://docs.microsoft.com/quantum/relnotes/</PackageReleaseNotes>
     <PackageLicenseUrl>https://github.com/Microsoft/QuantumLibraries/raw/master/LICENSE.txt</PackageLicenseUrl>
-    <PackageProjectUrl>https://github.com/Microsoft/QuantumLibraries/tree/master/Chemistry</PackageProjectUrl>
+    <PackageProjectUrl>https://github.com/Microsoft/QuantumLibraries/tree/master/MachineLearning</PackageProjectUrl>
     <PackageIconUrl>https://secure.gravatar.com/avatar/bd1f02955b2853ba0a3b1cdc2434e8ec.png</PackageIconUrl>
     <PackageTags>Quantum Q# Qsharp</PackageTags>
     <NoWarn>1591</NoWarn>
-    <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
     <IncludeSymbols>true</IncludeSymbols>
@@ -28,16 +38,4 @@
     <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb;.xml</AllowedOutputExtensionsInPackageBuildOutputFolder>
   </PropertyGroup>
 
-  <ItemGroup>
-    <Compile Include="..\..\Common\DelaySign.cs" Link="Properties\DelaySign.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\Runtime\Runtime.csproj" PrivateAssets="all" />
-    <BuildOutputInPackage Include="..\Runtime\bin\$(Configuration)\netstandard2.1\Microsoft.Quantum.MachineLearning.*" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" />
-  </ItemGroup>
 </Project>

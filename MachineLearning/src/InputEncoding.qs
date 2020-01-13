@@ -64,23 +64,24 @@ namespace Microsoft.Quantum.MachineLearning {
         }
     }
 
-    function NoisyInputEncoder(tolerance: Double,coefficients : Double[]) : (LittleEndian => Unit is Adj + Ctl) {
+    function ApproximateInputEncoder(tolerance : Double,coefficients : Double[])
+    : (LittleEndian => Unit is Adj + Ctl) {
         //First quantize the coefficients: for a coef x find such y*tolerance, where y is integer and |x-y*tolerance| \neq tolerance/2
         let nCoefficients = Length(coefficients);
-        mutable coefficientsComplexPolar = new ComplexPolar[nCoefficients];
+        mutable complexCoefficients = new ComplexPolar[Length(coefficients)];
         mutable cNegative = 0;
-        for (idx in 0 .. nCoefficients - 1) {
-            mutable coef = coefficients[idx];
+        for ((idx, coef) in Enumerated(coefficients)) {
+            mutable magnitude = coef;
             if (tolerance > 1E-9) {
-                set coef = tolerance * IntAsDouble(Round(coefficients[idx] / tolerance)); //quantization
+                set magnitude = tolerance * IntAsDouble(Round(coefficients[idx] / tolerance)); //quantization
             }
             mutable ang = 0.0;
-            if (coef < 0.0) {
+            if (magnitude < 0.0) {
                 set cNegative += 1;
-                set coef = -coef;
+                set magnitude = -magnitude;
                 set ang = PI();
             }
-            set coefficientsComplexPolar w/= idx <- ComplexPolar(coef, ang);
+            set complexCoefficients w/= idx <- ComplexPolar(magnitude, ang);
         }
 
         // Check if we can apply the explicit two-qubit case.
@@ -92,11 +93,11 @@ namespace Microsoft.Quantum.MachineLearning {
         // Here, by a "few," we mean fewer than the number of qubits required
         // to encode features.
         if ((cNegative > 0) and (IntAsDouble(cNegative) < Lg(IntAsDouble(Length(coefficients))) + 1.0)) {
-            return _EncodeSparseNegativeInput(cNegative, tolerance, coefficientsComplexPolar, _); //TODO:MORE:ACCEPTANCE ("Wines" passing soi far)
+            return _EncodeSparseNegativeInput(cNegative, tolerance, complexCoefficients, _); //TODO:MORE:ACCEPTANCE ("Wines" passing soi far)
         }
 
         // Finally, we fall back to arbitrary state preparation.
-        return ApproximatelyPrepareArbitraryState(tolerance, coefficientsComplexPolar, _);
+        return ApproximatelyPrepareArbitraryState(tolerance, complexCoefficients, _);
     } //EncodeNoisyInput
 
     //TODO:REVIEW: Design consideration! The implicit qubit count must be read off from the state encoder, NOT from the gate sequence!
@@ -105,23 +106,18 @@ namespace Microsoft.Quantum.MachineLearning {
     /// The vector of 'coefficients' does not have to be unitary
     function InputEncoder(coefficients : Double[]): (LittleEndian => Unit is Adj + Ctl) {
         //default implementation, does not respect sparcity
-        let nCoefficients = Length(coefficients);
-        mutable coefficientsComplexPolar = new ComplexPolar[nCoefficients];
-        mutable allPositive = true;
-        for (idx in 0 .. nCoefficients - 1) {
-            mutable coef = coefficients[idx];
-            mutable ang = 0.0;
-            if (coef < 0.0) {
-                set allPositive = false;
-                set coef =  -coef;
-                set ang = PI();
-            }
-            set coefficientsComplexPolar w/= idx<-ComplexPolar(coef,ang);
+        mutable complexCoefficients = new ComplexPolar[Length(coefficients)];
+        for ((idx, coefficient) in Enumerated(coefficients)) {
+            set complexCoefficients w/= idx <- ComplexPolar(
+                coefficient >= 0.0
+                ? (coefficient, 0.0)
+                | (-coefficient, PI())
+            );
         }
         if (_CanApplyTwoQubitCase(coefficients)) {
             return _ApplyTwoQubitCase(coefficients, _);
         }
-        return ApproximatelyPrepareArbitraryState(1E-12, coefficientsComplexPolar, _); //this is preparing the state almost exactly so far
+        return ApproximatelyPrepareArbitraryState(1E-12, complexCoefficients, _); //this is preparing the state almost exactly so far
     }
 
 }
