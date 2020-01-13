@@ -17,7 +17,7 @@ namespace Microsoft.Quantum.MachineLearning {
         op(LittleEndian(target));
     }
 
-    operation _EstimateFiniteDifference(
+    operation _EstimateDerivativeWithParameterShift(
         inputEncoder : StateGenerator,
         gates : GateSequence,
         parameters : (Double[], Double[]),
@@ -81,7 +81,7 @@ namespace Microsoft.Quantum.MachineLearning {
                 w/ gate::Index <- (param[gate::Index] + PI());
 
             // NB: This the *antiderivative* of the bracket
-            let newDer = _EstimateFiniteDifference(
+            let newDer = _EstimateDerivativeWithParameterShift(
                 sg, gates, (param, paramShift), nQubits, nMeasurements
             );
             if (IsEmpty(gate::Span::ControlIndices)) {
@@ -93,7 +93,7 @@ namespace Microsoft.Quantum.MachineLearning {
                     w/ gate::Index <- (param[gate::Index] + 3.0 * PI());
                 //Assumption: any rotation R has the property that R(\theta+2 Pi)=(-1).R(\theta)
                 // NB: This the *antiderivative* of the bracket
-                let newDer1 = _EstimateFiniteDifference(
+                let newDer1 = _EstimateDerivativeWithParameterShift(
                     sg, gates, (param, controlledShift), nQubits, nMeasurements
                 );
                 set grad w/= gate::Index <- (grad[gate::Index] + 0.5 * (newDer - newDer1));

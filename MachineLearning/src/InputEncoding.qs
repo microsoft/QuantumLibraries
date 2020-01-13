@@ -68,20 +68,20 @@ namespace Microsoft.Quantum.MachineLearning {
     : (LittleEndian => Unit is Adj + Ctl) {
         //First quantize the coefficients: for a coef x find such y*tolerance, where y is integer and |x-y*tolerance| \neq tolerance/2
         let nCoefficients = Length(coefficients);
-        mutable complexCoefficients = new ComplexPolar[0];
+        mutable complexCoefficients = new ComplexPolar[Length(coefficients)];
         mutable cNegative = 0;
-        for (idx in 0 .. nCoefficients - 1) {
-            mutable coef = coefficients[idx];
+        for ((idx, coef) in Enumerated(coefficients)) {
+            mutable magnitude = coef;
             if (tolerance > 1E-9) {
-                set coef = tolerance * IntAsDouble(Round(coefficients[idx] / tolerance)); //quantization
+                set magnitude = tolerance * IntAsDouble(Round(coefficients[idx] / tolerance)); //quantization
             }
             mutable ang = 0.0;
-            if (coef < 0.0) {
+            if (magnitude < 0.0) {
                 set cNegative += 1;
-                set coef = -coef;
+                set magnitude = -magnitude;
                 set ang = PI();
             }
-            set complexCoefficients += [ComplexPolar(coef, ang)];
+            set complexCoefficients w/= idx <- ComplexPolar(magnitude, ang);
         }
 
         // Check if we can apply the explicit two-qubit case.
@@ -106,13 +106,13 @@ namespace Microsoft.Quantum.MachineLearning {
     /// The vector of 'coefficients' does not have to be unitary
     function InputEncoder(coefficients : Double[]): (LittleEndian => Unit is Adj + Ctl) {
         //default implementation, does not respect sparcity
-        mutable complexCoefficients = new ComplexPolar[0];
-        for (coefficient in coefficients) {
-            set complexCoefficients += [ComplexPolar(
+        mutable complexCoefficients = new ComplexPolar[Length(coefficients)];
+        for ((idx, coefficient) in Enumerated(coefficients)) {
+            set complexCoefficients w/= idx <- ComplexPolar(
                 coefficient >= 0.0
                 ? (coefficient, 0.0)
                 | (-coefficient, PI())
-            )];
+            );
         }
         if (_CanApplyTwoQubitCase(coefficients)) {
             return _ApplyTwoQubitCase(coefficients, _);
