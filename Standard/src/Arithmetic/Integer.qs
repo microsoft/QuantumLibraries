@@ -110,7 +110,7 @@ namespace Microsoft.Quantum.Arithmetic {
     operation RippleCarryAdderD (xs : LittleEndian, ys : LittleEndian, carry : Qubit)
     : Unit is Adj + Ctl  {
         body (...) {
-            (Controlled RippleCarryAdderD) (new Qubit[0], (xs, ys, carry));
+            Controlled RippleCarryAdderD(new Qubit[0], (xs, ys, carry));
         }
         controlled ( controls, ... ) {
             let nQubits = Length(xs!);
