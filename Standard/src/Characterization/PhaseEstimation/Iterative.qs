@@ -48,29 +48,29 @@ namespace Microsoft.Quantum.Characterization {
     /// Register of state acted upon by the given unitary oracle.
     /// ## controlQubit
     /// An auxillary qubit used to control the application of the given oracle.
-    operation DiscretePhaseEstimationIteration(oracle : DiscreteOracle, power : Int, theta : Double, targetState : Qubit[], controlQubit : Qubit) : Unit
-    {
+    operation DiscretePhaseEstimationIteration(
+        oracle : DiscreteOracle,
+        power : Int,
+        theta : Double,
+        targetState : Qubit[],
+        controlQubit : Qubit
+    )
+    : Unit is Adj + Ctl {
         // NB: We accept the control qubit as input so that we can allow for this operation
         //     to subject to the adjoint and control modifiers (that is, such that we do not need
         //     a return statement, but rather *act* on the given qubits).
-        body (...)
-        {
-            // Find the actual inversion angle by rescaling with the power of the
-            // oracle.
-            let inversionAngle = -theta * IntAsDouble(power);
+        // Find the actual inversion angle by rescaling with the power of the
+        // oracle.
+        let inversionAngle = -theta * IntAsDouble(power);
 
-            // Prepare the control qubit.
+        // Prepare the control qubit, using the within/apply block to
+        // return the control qubit to the appropriate measurement basis.
+        within {
             H(controlQubit);
+        } apply {
             Rz(inversionAngle, controlQubit);
             Controlled oracle!([controlQubit], (power, targetState));
-
-            // Return the control qubit to the appropriate measurement basis.
-            H(controlQubit);
         }
-
-        adjoint invert;
-        controlled distribute;
-        controlled adjoint distribute;
     }
 
 
@@ -91,26 +91,25 @@ namespace Microsoft.Quantum.Characterization {
     /// acting on the target state.
     /// ## targetState
     /// Register of state acted upon by the given unitary oracle.
-    operation ContinuousPhaseEstimationIteration (oracle : ContinuousOracle, time : Double, theta : Double, targetState : Qubit[], controlQubit : Qubit) : Unit
+    operation ContinuousPhaseEstimationIteration(
+        oracle : ContinuousOracle,
+        time : Double,
+        theta : Double,
+        targetState : Qubit[],
+        controlQubit : Qubit
+    ) : Unit is Adj + Ctl
     {
-        body (...)
-        {
-            let inversionAngle = -(theta * time);
+        let inversionAngle = -(theta * time);
 
-            // Prepare the control qubit.
+        // Prepare the control qubit, using the within/apply block to
+        // return the control qubit to the appropriate measurement basis.
+        within {
             H(controlQubit);
+        } apply {
             Rz(inversionAngle, controlQubit);
             Controlled oracle!([controlQubit], (time, targetState));
-
-            // Return the control qubit to the appropriate measurement basis.
-            H(controlQubit);
         }
-
-        adjoint invert;
-        controlled distribute;
-        controlled adjoint distribute;
     }
-
 
 }
 
