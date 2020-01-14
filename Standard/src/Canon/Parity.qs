@@ -43,13 +43,13 @@ namespace Microsoft.Quantum.Canon {
     /// # Remarks
     /// The following are equivalent:
     /// ```qsharp
-    /// CNOTChainTarget(Most(qs), Last(qs));
+    /// ApplyCNOTChainWithTarget(Most(qs), Last(qs));
     /// ```
     /// and
     /// ```qsharp
-    /// CNOTChain(qs);
+    /// ApplyCNOTChain(qs);
     /// ```
-    operation CNOTChainTarget(qubits : Qubit[], targetQubit : Qubit)
+    operation ApplyCNOTChainWithTarget(qubits : Qubit[], targetQubit : Qubit)
     : Unit is Adj + Ctl {
         ApplyCNOTChain(qubits + [targetQubit]);
     }
