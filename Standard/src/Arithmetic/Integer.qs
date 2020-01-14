@@ -107,7 +107,7 @@ namespace Microsoft.Quantum.Arithmetic {
     /// The specified controlled operation makes use of symmetry and mutual
     /// cancellation of operations to improve on the default implementation
     /// that adds a control to every operation.
-    operation RippleCarryAdderD (xs : LittleEndian, ys : LittleEndian, carry : Qubit)
+    operation RippleCarryAdderD(xs : LittleEndian, ys : LittleEndian, carry : Qubit)
     : Unit is Adj + Ctl  {
         body (...) {
             Controlled RippleCarryAdderD(new Qubit[0], (xs, ys, carry));
