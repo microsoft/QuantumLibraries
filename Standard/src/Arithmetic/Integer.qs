@@ -47,7 +47,7 @@ namespace Microsoft.Quantum.Arithmetic {
     ///
     /// # Remarks
     /// In contrast to the `Carry` operation, this does not compute the carry-out bit.
-    operation Sum (carryIn: Qubit, summand1: Qubit, summand2: Qubit)
+    operation Sum(carryIn: Qubit, summand1: Qubit, summand2: Qubit)
     : Unit is Adj + Ctl {
         CNOT(summand1, summand2);
         CNOT(carryIn, summand2);
