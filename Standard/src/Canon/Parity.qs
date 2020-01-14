@@ -49,8 +49,9 @@ namespace Microsoft.Quantum.Canon {
     /// ```qsharp
     /// CNOTChain(qs);
     /// ```
-    operation CNOTChainTarget(qubits : Qubit[], targetQubit : Qubit) : Unit {
-        CNOTChain(qubits + [targetQubit]);
+    operation CNOTChainTarget(qubits : Qubit[], targetQubit : Qubit)
+    : Unit is Adj + Ctl {
+        ApplyCNOTChain(qubits + [targetQubit]);
     }
 
 }
