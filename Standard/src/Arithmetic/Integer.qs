@@ -69,7 +69,7 @@ namespace Microsoft.Quantum.Arithmetic {
     ///
     /// # Remarks
     /// The target qubit register must have one qubit more than the other register.
-    operation CascadeCCNOT (register : Qubit[], targets : Qubit[])
+    operation CascadeCCNOT(register : Qubit[], targets : Qubit[])
     : Unit is Adj + Ctl {
         let nQubits = Length(targets);
 
