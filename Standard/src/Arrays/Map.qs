@@ -104,7 +104,7 @@ namespace Microsoft.Quantum.Arrays {
     ///
     /// # Input
     /// ## action
-    /// A operation from `'T` to `'U` that is applied to each element.
+    /// An operation from `'T` to `'U` that is applied to each element.
     /// ## array
     /// An array of elements over `'T`.
     ///
@@ -121,5 +121,4 @@ namespace Microsoft.Quantum.Arrays {
     }
 
 }
-
 
