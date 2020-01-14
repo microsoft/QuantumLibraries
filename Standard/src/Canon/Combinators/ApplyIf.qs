@@ -594,7 +594,7 @@ namespace Microsoft.Quantum.Canon {
     ///
     /// # Input
     /// ## bit
-    /// The boolean value used to determine if `trueOp` or `falseOp` is
+    /// The boolean value used to determine whether `trueOp` or `falseOp` is
     /// applied.
     /// ## trueOp
     /// The operation to be applied when `bit` is `true`.
