@@ -47,10 +47,10 @@ namespace Microsoft.Quantum.Arithmetic {
     ///
     /// # Remarks
     /// In contrast to the `Carry` operation, this does not compute the carry-out bit.
-    operation Sum (carryIn: Qubit, summand1: Qubit, summand2: Qubit)
+    operation Sum(carryIn: Qubit, summand1: Qubit, summand2: Qubit)
     : Unit is Adj + Ctl {
-        CNOT (summand1, summand2);
-        CNOT (carryIn, summand2);
+        CNOT(summand1, summand2);
+        CNOT(carryIn, summand2);
     }
 
     /// # Summary
@@ -69,7 +69,7 @@ namespace Microsoft.Quantum.Arithmetic {
     ///
     /// # Remarks
     /// The target qubit register must have one qubit more than the other register.
-    operation CascadeCCNOT (register : Qubit[], targets : Qubit[])
+    operation CascadeCCNOT(register : Qubit[], targets : Qubit[])
     : Unit is Adj + Ctl {
         let nQubits = Length(targets);
 
@@ -107,10 +107,10 @@ namespace Microsoft.Quantum.Arithmetic {
     /// The specified controlled operation makes use of symmetry and mutual
     /// cancellation of operations to improve on the default implementation
     /// that adds a control to every operation.
-    operation RippleCarryAdderD (xs : LittleEndian, ys : LittleEndian, carry : Qubit)
+    operation RippleCarryAdderD(xs : LittleEndian, ys : LittleEndian, carry : Qubit)
     : Unit is Adj + Ctl  {
         body (...) {
-            (Controlled RippleCarryAdderD) (new Qubit[0], (xs, ys, carry));
+            Controlled RippleCarryAdderD(new Qubit[0], (xs, ys, carry));
         }
         controlled ( controls, ... ) {
             let nQubits = Length(xs!);
