@@ -46,13 +46,45 @@ namespace Microsoft.Quantum.MachineLearning {
         return optimum::Coordinate;
     }
 
+    /// # Summary
+    /// Given the structure of a sequential classifier, trains the classifier
+    /// on a given labeled training set.
+    ///
+    /// # Input
+    /// ## structure
+    /// Structure of the sequential classifier to be trained.
+    /// ## parameterSource
+    /// A list of parameter vectors to use as starting points during training.
+    /// ## samples
+    /// A set of labeled training data that will be used to perform training.
+    /// ## options
+    /// Configuration to be used when training; see
+    /// @"microsoft.quantum.machinelearning.trainingoptions" and
+    /// @"microsoft.quantum.machinelearning.defaulttrainingoptions" for more
+    /// details.
+    /// ## trainingSchedule
+    /// A sampling schedule to use when selecting samples from the training
+    /// data during training steps.
+    /// ## validationSchedule
+    /// A sampling schedule to use when selecting samples from the training
+    /// data when selecting which start point resulted in the best classifier
+    /// score.
+    ///
+    /// # Output
+    /// A parameterization of the given classifier and a bias between the two
+    /// classes, together corresponding to the best result from each of the
+    /// given start points.
+    ///
+    /// # See Also
+    /// - Microsoft.Quantum.MachineLearning.TrainSequentialClassifierAtModel
+    /// - Microsoft.Quantum.MachineLearning.ValidateSequentialClassifier
     operation TrainSequentialClassifier(
-        gates: SequentialClassifierStructure,
-        parameterSource: Double[][],
-        samples: LabeledSample[],
+        structure : SequentialClassifierStructure,
+        parameterSource : Double[][],
+        samples : LabeledSample[],
         options : TrainingOptions,
-        trainingSchedule: SamplingSchedule,
-        validationSchedule: SamplingSchedule
+        trainingSchedule : SamplingSchedule,
+        validationSchedule : SamplingSchedule
     ) : SequentialModel {
         mutable bestSoFar = SequentialModel([-1E12], -2.0);
         mutable bestValidation = Length(samples) + 1;
@@ -60,16 +92,16 @@ namespace Microsoft.Quantum.MachineLearning {
         let features = Mapped(_Features, samples);
         let labels = Mapped(_Label, samples);
 
-        for (idxStart in 0..(Length(parameterSource) - 1)) {
+        for ((idxStart, parameters) in Enumerated(parameterSource)) {
             Message($"Beginning training at start point #{idxStart}...");
             let proposedUpdate = TrainSequentialClassifierAtModel(
-                gates, SequentialModel(parameterSource[idxStart], 0.0),
+                structure, SequentialModel(parameters, 0.0),
                 samples, options, trainingSchedule, 1
             );
             let probabilities = EstimateClassificationProbabilities(
                 options::Tolerance,
                 proposedUpdate::Parameters,
-                gates,
+                structure,
                 Sampled(validationSchedule, features),
                 options::NMeasurements
             );
@@ -148,49 +180,42 @@ namespace Microsoft.Quantum.MachineLearning {
     }
 
     /// # Summary
-    /// Perform one epoch of circuit training on a subset of data samples to a quantum simulator
+    /// Perform one epoch of sequential classifier training on a subset of
+    /// data samples.
     ///
     /// # Input
     /// ## samples
-    /// a container of available data samples
-    ///
+    /// The samples to be trained on.
     /// ## sched
-    /// a schedule of the data subset for this training loop
-    ///
+    /// A sampling schedule defining a subset of samples to be included in training.
     /// ## schedScore
-    /// defines a (possibly different) data subset on which accuracy scoring is performed
-    ///
+    /// A sampling schedule defining a subset of samples to be used in
+    /// accuracy scoring.
     /// ## periodScore
-    /// number of blind gradient steps between scoring points (performance tool, set to 1 for best accuracy)
+    /// The number of gradient steps to be taken between scoring points.
+    /// For best accuracy, set to 1.
+    /// ## options
+    /// Options to be used in training.
+    /// ## structure
+    /// The structure of the sequential classifier to be trained.
+    /// ## model
+    /// The parameterization and bias of the sequential model to be trained.
+    /// ## nPreviousBestMisses
+    /// The best number of misclassifications observed in previous epochs.
     ///
-    /// ## miniBatchSize
-    /// number of samples in a gradient mini batch
-    ///
-    /// ## param
-    /// initial parameter vector
-    ///
-    /// ## gates
-    /// sequence of gates in the circuit
-    ///
-    /// ## bias
-    /// reserved for future use; originally - initial prediction bias
-    ///
-    /// ## lrate
-    /// learning rate
-    ///
-    /// ## measCount
-    /// number of true quantum measurements to estimate probabilities.
-    ///
+    /// # Output
+    /// - The smallest number of misclassifications observed through to this
+    ///   epoch.
+    /// - The new best sequential model found.
     operation _RunSingleTrainingEpoch(
-        samples: LabeledSample[],
-        schedule: SamplingSchedule, periodScore: Int,
+        samples : LabeledSample[],
+        schedule : SamplingSchedule, periodScore: Int,
         options : TrainingOptions,
-        model : SequentialModel, gates: SequentialClassifierStructure,
+        structure : SequentialClassifierStructure,
+        model : SequentialModel,
         nPreviousBestMisses : Int
     )
     : (Int, SequentialModel) {
-        let HARDCODEDunderage = 3; // 4/26 slack greater than 3 is not recommended
-
         mutable nBestMisses = nPreviousBestMisses;
         mutable bestSoFar = model;
         let features = Mapped(_Features, samples);
@@ -199,7 +224,7 @@ namespace Microsoft.Quantum.MachineLearning {
         let inferredLabels = InferredLabels(
             model::Bias,
             EstimateClassificationProbabilities(
-                options::Tolerance, model::Parameters, gates,
+                options::Tolerance, model::Parameters, structure,
                 features, options::NMeasurements
             )
         );
@@ -214,14 +239,14 @@ namespace Microsoft.Quantum.MachineLearning {
         );
         for (minibatch in minibatches) {
             let (utility, updatedParameters) = _RunSingleTrainingStep(
-                minibatch, options, bestSoFar::Parameters, gates
+                minibatch, options, bestSoFar::Parameters, structure
             );
             if (utility > 0.0000001) {
                 // There has been some good parameter update.
                 // Check if it actually improves things, and if so,
                 // commit it.
                 let probabilities = EstimateClassificationProbabilities(
-                    options::Tolerance, updatedParameters, gates,
+                    options::Tolerance, updatedParameters, structure,
                     features, options::NMeasurements
                 );
                 let updatedBias = _UpdatedBias(
@@ -252,50 +277,36 @@ namespace Microsoft.Quantum.MachineLearning {
         );
     }
 
+
+
     /// # Summary
-    /// Run a full circuit training loop on a subset of data samples
+    /// Given the structure of a sequential classifier, trains the classifier
+    /// on a given labeled training set, starting from a particular model.
     ///
     /// # Input
+    /// ## structure
+    /// Structure of the sequential classifier to be trained.
+    /// ## model
+    /// The sequential model to be used as a starting point for training.
     /// ## samples
-    /// a container of available data samples
-    ///
-    /// ## sched
-    /// a schedule of the data subset for this training loop
-    ///
-    /// ## schedScore
-    /// defines a (possibly different) data subset on which accuracy scoring is performed
-    ///
-    /// ## periodScore
-    /// number of blind gradient steps between scoring points (performance tool, set to 1 for best accuracy)
-    ///
-    /// ## miniBatchSize
-    /// number of samples in a gradient mini batch
-    ///
-    /// ## param
-    /// initial parameter vector
-    ///
-    /// ## gates
-    /// sequence of gates in the circuit
-    ///
-    /// ## bias
-    /// reserved for future use; originally - initial prediction bias
-    ///
-    /// ## lrate
-    /// learning rate
-    ///
-    /// ## maxEpochs
-    /// maximum number of epochs in this loop
-    ///
-    /// ## tol
-    /// tolerance: acceptable misprediction rate in training
-    ///
-    /// ## measCount
-    /// number of true quantum measurements to estimate probabilities.
-    /// IMPORTANT: measCount==0 implies simulator deployment
+    /// A set of labeled training data that will be used to perform training.
+    /// ## options
+    /// Configuration to be used when training; see
+    /// @"microsoft.quantum.machinelearning.trainingoptions" and
+    /// @"microsoft.quantum.machinelearning.defaulttrainingoptions" for more
+    /// details.
+    /// ## schedule
+    /// A sampling schedule to use when selecting samples from the training
+    /// data during training steps.
     ///
     /// # Output
-    /// ((no.hits,no.misses),(opt.bias,opt.parameters))
+    /// A parameterization of the given classifier and a bias between the two
+    /// classes, together corresponding to the best result from each of the
+    /// given start points.
     ///
+    /// # See Also
+    /// - Microsoft.Quantum.MachineLearning.TrainSequentialClassifier
+    /// - Microsoft.Quantum.MachineLearning.ValidateSequentialClassifier
     operation TrainSequentialClassifierAtModel(
         gates : SequentialClassifierStructure,
         model : SequentialModel,
@@ -305,7 +316,6 @@ namespace Microsoft.Quantum.MachineLearning {
         periodScore : Int
     )
     : SequentialModel {
-        //const
         let nSamples = Length(samples);
         let features = Mapped(_Features, samples);
         let actualLabels = Mapped(_Label, samples);
@@ -339,7 +349,7 @@ namespace Microsoft.Quantum.MachineLearning {
                 options
                     w/ LearningRate <- lrate
                     w/ MinibatchSize <- batchSize,
-                current, gates,
+                gates, current,
                 nBestMisses
             );
             if (nMisses < nBestMisses) {
