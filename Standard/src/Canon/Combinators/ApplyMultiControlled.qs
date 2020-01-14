@@ -130,7 +130,7 @@ namespace Microsoft.Quantum.Canon {
     }
 
     /// # Summary
-	/// Performs a controlled "AND ladder" on a register of target qubits.
+    /// Performs a controlled "AND ladder" on a register of target qubits.
     ///
     /// # Description
     /// This operation applies a transformation described by the following

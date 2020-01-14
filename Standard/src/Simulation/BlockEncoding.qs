@@ -16,7 +16,7 @@ namespace Microsoft.Quantum.Simulation {
     /// # Summary
     /// Represents a unitary where an arbitrary operator of
     /// interest is encoded in the top-left block.
-	///
+    ///
     /// That is, a `BlockEncoding` is a unitary $U$ where an arbitrary operator $H$ of
     /// interest that acts on the system register `s` is encoded in the top-
     /// left block corresponding to auxiliary state $\ket{0}_a$. That is,
@@ -58,8 +58,8 @@ namespace Microsoft.Quantum.Simulation {
     newtype BlockEncodingReflection = BlockEncoding;
 
     /// # Summary
-	/// Represents a `BlockEncoding` that is controlled by a clock register.
-	///
+    /// Represents a `BlockEncoding` that is controlled by a clock register.
+    ///
     /// That is, a `TimeDependentBlockEncoding` is a unitary $U$ controlled by a state
     /// $\ket{k}_d$ in clock register `d` such that an arbitrary operator $H_k$ of
     /// interest that acts on the system register `s` is encoded in the top-
@@ -86,8 +86,8 @@ namespace Microsoft.Quantum.Simulation {
     newtype TimeDependentBlockEncoding = ((Qubit[], Qubit[], Qubit[]) => Unit is Adj + Ctl);
 
     /// # Summary
-	/// Converts a `BlockEncoding` into an equivalent `BLockEncodingReflection`.
-	///
+    /// Converts a `BlockEncoding` into an equivalent `BLockEncodingReflection`.
+    ///
     /// That is, given a `BlockEncoding` unitary $U$ that encodes some
     /// operator $H$ of interest, converts it into a `BlockEncodingReflection` $U'$ that
     /// encodes the same operator, but also satisfies $U'^\dagger = U'$.
@@ -129,7 +129,7 @@ namespace Microsoft.Quantum.Simulation {
     }
 
     /// # Summary
-	/// Converts a block-encoding reflection into a quantum walk.
+    /// Converts a block-encoding reflection into a quantum walk.
     ///
     /// # Description
     /// Given a `BlockEncodingReflection` represented by a unitary $U$
@@ -160,7 +160,11 @@ namespace Microsoft.Quantum.Simulation {
 
     /// # Summary
     /// Implementation of `Qubitization`.
-    operation _QuantumWalkByQubitization(blockEncoding: BlockEncodingReflection, auxiliary: Qubit[], system: Qubit[])
+    operation _QuantumWalkByQubitization(
+        blockEncoding : BlockEncodingReflection,
+        auxiliary : Qubit[],
+        system : Qubit[]
+    )
     : Unit is Adj + Ctl {
         Exp([PauliI], -0.5 * PI(), [Head(system)]);
         RAll0(PI(), auxiliary);
@@ -169,8 +173,8 @@ namespace Microsoft.Quantum.Simulation {
     }
 
     /// # Summary
-	/// Encodes an operator of interest into a `BlockEncoding`.
-	///
+    /// Encodes an operator of interest into a `BlockEncoding`.
+    ///
     /// This constructs a `BlockEncoding` unitary $U=P\cdot V\cdot P^\dagger$ that encodes some
     /// operator $H=\sum_{j}|\alpha_j|U_j$ of interest that is a linear combination of
     /// unitaries. Typically, $P$ is a state preparation unitary such that
@@ -196,30 +200,27 @@ namespace Microsoft.Quantum.Simulation {
     /// - Microsoft.Quantum.Canon.BlockEncodingReflection
     function BlockEncodingByLCU<'T,'S>(
         statePreparation: ('T => Unit is Adj + Ctl),
-        selector: (('T, 'S) => Unit is Adj + Ctl))
-        : (('T, 'S) => Unit is Adj + Ctl) {
-        return BlockEncodingByLCU_(statePreparation, selector, _, _);
+        selector: (('T, 'S) => Unit is Adj + Ctl)
+    )
+    : (('T, 'S) => Unit is Adj + Ctl) {
+        return _BlockEncodingByLCU(statePreparation, selector, _, _);
     }
 
     /// # Summary
     /// Implementation of `BlockEncodingByLCU`.
-    operation BlockEncodingByLCU_<'T,'S>(
+    operation _BlockEncodingByLCU<'T,'S>(
         statePreparation: ('T => Unit is Adj + Ctl),
         selector: (('T, 'S) => Unit is Adj + Ctl),
         auxiliary: 'T,
-        system: 'S)
-        : Unit {
-        body (...){
-            ApplyWithCA(statePreparation, selector(_, system), auxiliary);
-        }
-        adjoint auto;
-        controlled auto;
-        adjoint controlled auto;
+        system: 'S
+    )
+    : Unit is Adj + Ctl {
+        ApplyWithCA(statePreparation, selector(_, system), auxiliary);
     }
 
     /// # Summary
-	/// Encodes an operator of interest into a `BlockEncodingReflection`.
-	///
+    /// Encodes an operator of interest into a `BlockEncodingReflection`.
+    ///
     /// This constructs a `BlockEncodingReflection` unitary $U=P\cdot V\cdot P^\dagger$ that encodes some
     /// operator $H=\sum_{j}|\alpha_j|U_j$ of interest that is a linear combination of
     /// unitaries. Typically, $P$ is a state preparation unitary such that
@@ -244,9 +245,10 @@ namespace Microsoft.Quantum.Simulation {
     /// - Microsoft.Quantum.Canon.BlockEncoding
     /// - Microsoft.Quantum.Canon.BlockEncodingReflection
     function BlockEncodingReflectionByLCU(
-        statePreparation: (Qubit[] => Unit is Adj + Ctl),
-        selector: ((Qubit[], Qubit[]) => Unit is Adj + Ctl)
-        ) : BlockEncodingReflection {
+        statePreparation : (Qubit[] => Unit is Adj + Ctl),
+        selector : ((Qubit[], Qubit[]) => Unit is Adj + Ctl)
+    )
+    : BlockEncodingReflection {
         return BlockEncodingToReflection(BlockEncoding(BlockEncodingByLCU(statePreparation, selector)));
     }
 

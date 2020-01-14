@@ -3,34 +3,34 @@
 
 namespace Microsoft.Quantum.Canon {
 
-    operation _OperationPow<'T> (oracle : ('T => Unit), power : Int, target : 'T)
+    operation _OperationPow<'T> (op : ('T => Unit), power : Int, target : 'T)
     : Unit {
         for (idxApplication in 0 .. power - 1) {
-            oracle(target);
+            op(target);
         }
     }
 
 
-    operation _OperationPowC<'T> (oracle : ('T => Unit is Ctl), power : Int, target : 'T)
+    operation _OperationPowC<'T> (op : ('T => Unit is Ctl), power : Int, target : 'T)
     : Unit is Ctl {
         for (idxApplication in 0 .. power - 1) {
-            oracle(target);
+            op(target);
         }
     }
 
 
-    operation _OperationPowA<'T> (oracle : ('T => Unit is Adj), power : Int, target : 'T)
+    operation _OperationPowA<'T> (op : ('T => Unit is Adj), power : Int, target : 'T)
     : Unit is Adj {
         for (idxApplication in 0 .. power - 1) {
-            oracle(target);
+            op(target);
         }
     }
 
 
-    operation _OperationPowCA<'T> (oracle : ('T => Unit is Adj + Ctl), power : Int, target : 'T)
+    operation _OperationPowCA<'T> (op : ('T => Unit is Adj + Ctl), power : Int, target : 'T)
     : Unit is Adj + Ctl {
         for (idxApplication in 0 .. power - 1) {
-            oracle(target);
+            op(target);
         }
     }
 
@@ -42,7 +42,7 @@ namespace Microsoft.Quantum.Canon {
     /// $U^m$ for a power $m$.
     ///
     /// # Input
-    /// ## oracle
+    /// ## op
     /// An operation $U$ representing the gate to be repeated.
     /// ## power
     /// The number of times that $U$ is to be repeated.
@@ -58,8 +58,8 @@ namespace Microsoft.Quantum.Canon {
     /// - @"microsoft.quantum.canon.operationpowc"
     /// - @"microsoft.quantum.canon.operationpowa"
     /// - @"microsoft.quantum.canon.operationpowca"
-    function OperationPow<'T> (oracle : ('T => Unit), power : Int) : ('T => Unit) {
-        return _OperationPow(oracle, power, _);
+    function OperationPow<'T> (op : ('T => Unit), power : Int) : ('T => Unit) {
+        return _OperationPow(op, power, _);
     }
 
 
@@ -71,7 +71,7 @@ namespace Microsoft.Quantum.Canon {
     /// $U^m$ for a power $m$.
     ///
     /// # Input
-    /// ## oracle
+    /// ## op
     /// An operation $U$ representing the gate to be repeated.
     /// ## power
     /// The number of times that $U$ is to be repeated.
@@ -85,8 +85,8 @@ namespace Microsoft.Quantum.Canon {
     ///
     /// # See Also
     /// - @"microsoft.quantum.canon.operationpow"
-    function OperationPowC<'T> (oracle : ('T => Unit is Ctl), power : Int) : ('T => Unit is Ctl) {
-        return _OperationPowC(oracle, power, _);
+    function OperationPowC<'T> (op : ('T => Unit is Ctl), power : Int) : ('T => Unit is Ctl) {
+        return _OperationPowC(op, power, _);
     }
 
 
@@ -98,7 +98,7 @@ namespace Microsoft.Quantum.Canon {
     /// $U^m$ for a power $m$.
     ///
     /// # Input
-    /// ## oracle
+    /// ## op
     /// An operation $U$ representing the gate to be repeated.
     /// ## power
     /// The number of times that $U$ is to be repeated.
@@ -112,8 +112,8 @@ namespace Microsoft.Quantum.Canon {
     ///
     /// # See Also
     /// - @"microsoft.quantum.canon.operationpow"
-    function OperationPowA<'T> (oracle : ('T => Unit is Adj), power : Int) : ('T => Unit is Adj) {
-        return _OperationPowA(oracle, power, _);
+    function OperationPowA<'T> (op : ('T => Unit is Adj), power : Int) : ('T => Unit is Adj) {
+        return _OperationPowA(op, power, _);
     }
 
 
@@ -125,7 +125,7 @@ namespace Microsoft.Quantum.Canon {
     /// $U^m$ for a power $m$.
     ///
     /// # Input
-    /// ## oracle
+    /// ## op
     /// An operation $U$ representing the gate to be repeated.
     /// ## power
     /// The number of times that $U$ is to be repeated.
@@ -139,8 +139,8 @@ namespace Microsoft.Quantum.Canon {
     ///
     /// # See Also
     /// - @"microsoft.quantum.canon.operationpow"
-    function OperationPowCA<'T> (oracle : ('T => Unit is Ctl + Adj), power : Int) : ('T => Unit is Ctl + Adj) {
-        return _OperationPowCA(oracle, power, _);
+    function OperationPowCA<'T> (op : ('T => Unit is Ctl + Adj), power : Int) : ('T => Unit is Ctl + Adj) {
+        return _OperationPowCA(op, power, _);
     }
 
 }

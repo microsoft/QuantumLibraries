@@ -41,8 +41,8 @@ namespace Microsoft.Quantum.Simulation {
     }
 
     /// # Summary
-	/// Creates a block-encoding unitary for a Hamiltonian.
-	///
+    /// Creates a block-encoding unitary for a Hamiltonian.
+    ///
     /// The Hamiltonian $H=\sum_{j}\alpha_j P_j$ is described by a
     /// sum of Pauli terms $P_j$, each with real coefficient $\alpha_j$.
     ///
@@ -66,12 +66,11 @@ namespace Microsoft.Quantum.Simulation {
         let statePrepUnitary = StatePreparationPositiveCoefficients;
         let multiplexer = MultiplexerFromGenerator;
         return _PauliBlockEncoding(generatorSystem, statePrepUnitary, multiplexer);
-
     }
 
     /// # Summary
-	/// Creates a block-encoding unitary for a Hamiltonian.
-	///
+    /// Creates a block-encoding unitary for a Hamiltonian.
+    ///
     /// The Hamiltonian $H=\sum_{j}\alpha_j P_j$ is described by a
     /// sum of Pauli terms $P_j$, each with real coefficient $\alpha_j$.
     ///

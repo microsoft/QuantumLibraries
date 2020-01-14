@@ -7,7 +7,7 @@ namespace Microsoft.Quantum.Canon {
 
     /// # Summary
     /// Computes the parity of a register of qubits in-place.
-	///
+    ///
     /// # Description
     /// This operation transforms the state of its input as
     /// $$
@@ -27,9 +27,9 @@ namespace Microsoft.Quantum.Canon {
 
     /// # Summary
     /// Computes the parity of an array of qubits into a target qubit.
-	///
+    ///
     /// # Description
-	/// If the array is initially in the state
+    /// If the array is initially in the state
     /// $\ket{q_0} \ket{q_1} \cdots \ket{q_{\text{target}}}$,
     /// the final state is given by
     /// $\ket{q_0} \ket{q_1 \oplus q_0} \cdots \ket{q_{n - 1} \oplus \cdots \oplus q_0 \oplus q_{\text{target}}}$.
@@ -45,8 +45,8 @@ namespace Microsoft.Quantum.Canon {
     /// ```qsharp
     /// CNOTChainTarget(Most(qs), Last(qs));
     /// ```
-	/// and
-	/// ```qsharp
+    /// and
+    /// ```qsharp
     /// CNOTChain(qs);
     /// ```
     operation CNOTChainTarget(qubits : Qubit[], targetQubit : Qubit) : Unit {

@@ -37,7 +37,7 @@ namespace Microsoft.Quantum.Arithmetic {
     /// qubits.
     ///
     /// # Description
-    /// This computes the Majority function in-place on 3 qubits.
+    /// This operation computes the majority function in-place on 3 qubits.
     ///
     /// If we denote output qubit as $z$ and input qubits as $x$ and $y$,
     /// the operation performs the following transformation:
