@@ -79,7 +79,7 @@ namespace Microsoft.Quantum.Chemistry.Tests {
     function _DoublesToComplexPolar(input: Double[]) : ComplexPolar[]{
         mutable arr = new ComplexPolar[Length(input)];
         for(idx in 0..Length(input)-1){
-            set arr w/= idx <- ComplexToComplexPolar(Complex((input[idx],0.)));
+            set arr w/= idx <- ComplexAsComplexPolar(Complex((input[idx],0.)));
         }
         return arr;
     }

@@ -1,9 +1,10 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.Quantum.Sdk/0.10.1912.2605-alpha">
+
+  <Import Project="..\..\..\Build\props\tests.props" />
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.0</TargetFramework>
-    <PlatformTarget>x64</PlatformTarget>
-    <IsPackable>false</IsPackable>
+    <IncludeQsharpCorePackages>false</IncludeQsharpCorePackages>
   </PropertyGroup>
 
   <ItemGroup>
@@ -11,20 +12,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
-
-  <ItemGroup>
-    <Compile Include="..\..\Common\DelaySign.cs" Link="Properties\DelaySign.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.7.2" />
-    <PackageReference Include="Microsoft.Quantum.Development.Kit" Version="0.10.1911.307" />
-    <PackageReference Include="Microsoft.Quantum.Xunit" Version="0.10.1911.307" />
-    <PackageReference Include="xunit" Version="2.3.1" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="2.3.1" />
-    <DotNetCliToolReference Include="dotnet-xunit" Version="2.3.1" />
-  </ItemGroup>
-
+  
   <ItemGroup>
     <None Include="..\BroombridgeExamples\hydrogen_0.1.yaml" Link="Molecules\MolecularHydrogen\hydrogen_0.1.yaml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -41,9 +29,14 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Include="..\..\Common\DelaySign.cs" Link="Properties\DelaySign.cs" />
+  </ItemGroup>
+  
+  <ItemGroup>
     <ProjectReference Include="..\..\..\Standard\src\Standard.csproj" />
     <ProjectReference Include="..\..\src\Runtime\Runtime.csproj" />
     <ProjectReference Include="..\..\src\DataModel\DataModel.csproj" />
   </ItemGroup>
 
 </Project>
+
