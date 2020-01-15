@@ -104,40 +104,34 @@ namespace Microsoft.Quantum.Oracles {
 
     /// # Summary
     /// Implementation of <xref:microsoft.quantum.canon.reflectionoraclefromdeterministicstateoracle>.
-    operation ReflectionOracleFromDeterministicStateOracleImpl (phase : Double, oracle : DeterministicStateOracle, systemRegister : Qubit[]) : Unit
-    {
-        body (...)
-        {
-            ApplyWithCA(Adjoint oracle!, RAll0(phase, _), systemRegister);
-        }
-
-        adjoint invert;
-        controlled distribute;
-        controlled adjoint distribute;
+    operation _ReflectionOracleFromDeterministicStateOracle(phase : Double, oracle : DeterministicStateOracle, systemRegister : Qubit[])
+    : Unit is Adj + Ctl {
+        ApplyWithCA(Adjoint oracle!, RAll0(phase, _), systemRegister);
     }
-
 
     /// # Summary
     /// Constructs reflection about a given state from an oracle.
     ///
-    /// Given the oracle $O$ of type
-    /// <xref:microsoft.quantum.oracles.deterministicstateoracle>,
-    /// the result of this function is a reflection around the state $\ket{\psi}$
-    /// where $O\ket{0} = \ket{\psi}$.
+    /// # Description
+    /// Given a determinstic state preparation oracle represented by a unitary
+    /// matrix $O$,
+    /// the result of this function is an oracle that applies a reflection
+    /// around the state $\ket{\psi}$ prepared by the oracle $O$; that is,
+    /// the state $\ket{\psi}$ such that $O\ket{0} = \ket{\psi}$.
     ///
     /// # Input
     /// ## oracle
-    /// Oracle of type "DeterministicStateOracle"
+    /// An oracle that prepares copies of the state $\ket{\psi}$.
     ///
     /// # Output
-    /// A `ReflectionOracle` that reflects about the state $\ket{\psi}$.
+    /// An oracle that reflects about the state $\ket{\psi}$.
     ///
     /// # See Also
-    /// - DeterministicStateOracle
-    /// - ReflectionOracle
-    function ReflectionOracleFromDeterministicStateOracle (oracle : DeterministicStateOracle) : ReflectionOracle
-    {
-        return ReflectionOracle(ReflectionOracleFromDeterministicStateOracleImpl(_, oracle, _));
+    /// - Microsoft.Quantum.Oracles.DeterministicStateOracle
+    /// - Microsoft.Quantum.Oracles.ReflectionOracle
+    function ReflectionOracleFromDeterministicStateOracle(oracle : DeterministicStateOracle)
+    : ReflectionOracle {
+        return ReflectionOracle(_ReflectionOracleFromDeterministicStateOracle(_, oracle, _));
     }
 
     /// # Summary
@@ -155,7 +149,7 @@ namespace Microsoft.Quantum.Oracles {
     /// ## Example
     /// `OracleToDiscrete(U)(3, target)` is equivalent to `U(target)` repeated three times.
     function OracleToDiscrete (blackBoxOracle : (Qubit[] => Unit is Adj + Ctl)) : DiscreteOracle {
-        return DiscreteOracle(OperationPowImplCA(blackBoxOracle, _, _));
+        return DiscreteOracle(_OperationPowCA(blackBoxOracle, _, _));
     }
 
 }

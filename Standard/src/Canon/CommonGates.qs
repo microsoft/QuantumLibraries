@@ -219,14 +219,12 @@ namespace Microsoft.Quantum.Canon {
     /// \end{align}
     ///
     /// # Input
-    /// ## qubit
+    /// ## target
     /// Qubit to which the gate should be applied.
     ///
     /// # See Also
-    operation HY (target : Qubit) : Unit
-    {
-        body (...)
-        {
+    operation HY (target : Qubit) : Unit {
+        body (...) {
             H(target);
             S(target);
         }
