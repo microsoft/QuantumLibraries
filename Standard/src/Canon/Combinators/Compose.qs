@@ -1,19 +1,17 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-namespace Microsoft.Quantum.Canon
-{
-    
-    function ComposeImpl<'T, 'U, 'V> (outer : ('U -> 'V), inner : ('T -> 'U), target : 'T) : 'V
-    {
+namespace Microsoft.Quantum.Canon {
+
+    function _Compose<'T, 'U, 'V> (outer : ('U -> 'V), inner : ('T -> 'U), target : 'T) : 'V {
         return outer(inner(target));
     }
-    
-    
+
     /// # Summary
-	/// Generates the composition of two functions.
-	///
-    /// That is, given two functions $f$ and $g$, returns a new function representing
+    /// Returns the composition of two functions.
+    ///
+    /// # Description
+    /// Given two functions $f$ and $g$, returns a new function representing
     /// $f \circ g$.
     ///
     /// # Input
@@ -33,11 +31,8 @@ namespace Microsoft.Quantum.Canon
     /// of the second function to be applied.
     /// ## 'V
     /// The output type of the second function to be applied.
-    function Compose<'T, 'U, 'V> (outer : ('U -> 'V), inner : ('T -> 'U)) : ('T -> 'V)
-    {
-        return ComposeImpl(outer, inner, _);
+    function Compose<'T, 'U, 'V> (outer : ('U -> 'V), inner : ('T -> 'U)) : ('T -> 'V) {
+        return _Compose(outer, inner, _);
     }
-    
+
 }
-
-

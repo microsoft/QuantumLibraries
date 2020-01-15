@@ -6,8 +6,8 @@ namespace Microsoft.Quantum.Canon {
 
     /// # Deprecated
     /// This function has been removed.
+    @Deprecated("")
     function AsQubitArray (arr : Qubit[]) : Qubit[] {
-        // TODO: add call to _Removed.
         return arr;
     }
 

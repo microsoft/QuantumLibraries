@@ -153,7 +153,7 @@ namespace Microsoft.Quantum.Canon {
         return ApplyWithA(outerOperation, innerOperation, _);
     }
 
-    // # Summary
+    /// # Summary
     /// Given two operations, applies one as conjugated with the other.
     ///
     /// # Description

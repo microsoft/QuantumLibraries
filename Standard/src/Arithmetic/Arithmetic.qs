@@ -8,7 +8,12 @@ namespace Microsoft.Quantum.Arithmetic {
     open Microsoft.Quantum.Arrays;
 
     /// # Summary
-    /// Applies `X` operations to qubits in a little-endian register based on 1 bits in an integer.
+    /// Applies a bitwise-XOR operation between a classical integer and an
+    /// integer represented by a register of qubits.
+    ///
+    /// # Description
+    /// Applies `X` operations to qubits in a little-endian register based on
+    /// 1 bits in an integer.
     ///
     /// Let us denote `value` by a and let y be an unsigned integer encoded in `target`,
     /// then `InPlaceXorLE` performs an operation given by the following map:
@@ -19,21 +24,20 @@ namespace Microsoft.Quantum.Arithmetic {
     /// An integer which is assumed to be non-negative.
     /// ## target
     /// A quantum register which is used to store `value` in little-endian encoding.
-    operation ApplyXorInPlace(value : Int, target : LittleEndian) : Unit {
-        body (...) {
-            ApplyToEachCA(
-                CControlledCA(X),
-                Zip(IntAsBoolArray(value, Length(target!)), target!)
-            );
-        }
-
-        adjoint auto;
-        controlled auto;
-        controlled adjoint auto;
+    operation ApplyXorInPlace(value : Int, target : LittleEndian)
+    : Unit is Adj + Ctl {
+        ApplyToEachCA(
+            CControlledCA(X),
+            Zip(IntAsBoolArray(value, Length(target!)), target!)
+        );
     }
 
     /// # Summary
-    /// This computes the Majority function in-place on 3 qubits.
+    /// Applies the three-qubit majority operation in-place on a register of
+    /// qubits.
+    ///
+    /// # Description
+    /// This operation computes the majority function in-place on 3 qubits.
     ///
     /// If we denote output qubit as $z$ and input qubits as $x$ and $y$,
     /// the operation performs the following transformation:
@@ -45,17 +49,13 @@ namespace Microsoft.Quantum.Arithmetic {
     /// and stored in this qubit.
     /// ## input
     /// Second and third input qubits.
-    operation InPlaceMajority(output: Qubit, input: Qubit[]) : Unit {
-        body (...) {
-            if (Length(input) == 2) {
-                MAJ(input[0], input[1], output);
-            } else {
-                fail $"The in-place majority operation on {Length(input)} is qubits not yet implemented.";
-            }
+    operation ApplyMajorityInPlace(output: Qubit, input: Qubit[])
+    : Unit is Adj + Ctl {
+        if (Length(input) == 2) {
+            MAJ(input[0], input[1], output);
+        } else {
+            fail $"The in-place majority operation on {Length(input)} is qubits not yet implemented.";
         }
-        adjoint auto;
-        controlled auto;
-        adjoint controlled auto;
     }
 
     /// # Summary
