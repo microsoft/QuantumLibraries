@@ -60,7 +60,7 @@ namespace Microsoft.Quantum.MachineLearning {
         let features = Mapped(_Features, samples);
         let labels = Mapped(_Label, samples);
 
-        for (idxStart in 0..(Length(parameterSource) - 1)) {
+        for (idxStart in IndexRange(parameterSource)) {
             Message($"Beginning training at start point #{idxStart}...");
             let proposedUpdate = TrainSequentialClassifierAtModel(
                 gates, SequentialModel(parameterSource[idxStart], 0.0),
@@ -135,9 +135,11 @@ namespace Microsoft.Quantum.MachineLearning {
                 gates, param, stateGenerator,
                 options::NMeasurements
             );
-            for (ip in 0..(Length(param) - 1)) {
+            for (idxParam in IndexRange(param)) {
                 // GradientClassicalSample actually computes antigradient, but err*grad corrects it back to gradient
-                set batchGradient w/= ip <- (batchGradient[ip] + options::LearningRate * err * grad[ip]);
+                set batchGradient w/= idxParam <-
+                    batchGradient[idxParam] +
+                    options::LearningRate * err * grad[idxParam];
             }
 
         }
