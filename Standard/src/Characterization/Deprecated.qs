@@ -3,12 +3,14 @@
 
 namespace Microsoft.Quantum.Characterization {
     open Microsoft.Quantum.Measurement as Meas;
+    open Microsoft.Quantum.Intrinsic;
+    open Microsoft.Quantum.Arrays;
 
     /// # Deprecated
     /// Please use @"microsoft.quantum.measurement.measureAllZ".
     @Deprecated("Microsoft.Quantum.Measurement.MeasureAllZ")
     operation MeasureAllZ(register : Qubit[]) : Result {
-        return Meas.MeasureAllZ(register);
+        return Measure(ConstantArray(Length(register), PauliZ), register);
     }
 
 }
