@@ -4,6 +4,25 @@ namespace Microsoft.Quantum.MachineLearning {
     open Microsoft.Quantum.Logical;
     open Microsoft.Quantum.Canon;
 
+    /// # Summary
+    /// Given a set of inferred labels and a set of correct labels, returns
+    /// indices for where each set of labels differs.
+    ///
+    /// # Input
+    /// ## inferredLabels
+    /// The labels inferred for a given training or validation set.
+    /// ## actualLabels
+    /// The true labels for a given training or validation set.
+    ///
+    /// # Output
+    /// An array of indices `idx` such that
+    /// `inferredLabels[idx] != actualLabels[idx]`.
+    ///
+    /// # Example
+    /// ```Q#
+    /// let misclassifications = Misclassifications([0, 1, 0, 0], [0, 1, 1, 0]);
+    /// Message($"{misclassifications}"); // Will print [2].
+    /// ```
     function Misclassifications(inferredLabels : Int[], actualLabels : Int[])
     : Int[] {
         return Where(
@@ -12,58 +31,31 @@ namespace Microsoft.Quantum.MachineLearning {
         );
     }
 
+    /// # Summary
+    /// Given a set of inferred labels and a set of correct labels, returns
+    /// the number of indices at which each set of labels differ.
+    ///
+    /// # Input
+    /// ## inferredLabels
+    /// The labels inferred for a given training or validation set.
+    /// ## actualLabels
+    /// The true labels for a given training or validation set.
+    ///
+    /// # Output
+    /// The number of indices `idx` such that
+    /// `inferredLabels[idx] != actualLabels[idx]`.
+    ///
+    /// # Example
+    /// ```Q#
+    /// let nMisclassifications = NMisclassifications([1, 1, 0, 0], [0, 1, 1, 0]);
+    /// Message($"{nMisclassifications}"); // Will print 2.
+    /// ```
     function NMisclassifications(proposed: Int[], actual: Int[]): Int {
         return Length(Misclassifications(proposed, actual));
     }
 
-    /// # Summary
-    /// Using a flat description of a trained classification model, count
-    /// the number of mispredictions occuring over the validation set
-    ///
-    /// # Input
-    /// ## nQubits
-    /// the number of qubits used for data encoding
-    ///
-    /// ## trainingSet
-    /// the set of training samples
-    ///
-    /// ## trainingLabels
-    /// the set of training labels
-    ///
-    /// ## validatioSchedule
-    /// defines a subset of training data used for validation and computation of the *bias*
-    ///
-    /// ## gates
-    /// Flat representation of classifier structure. Each element is
-    /// [parameterIndex, pauliCode, targetQubit, sequence of control qubits]
-    ///
-    /// ## parameters
-    /// an array of candidate parameters
-    ///
-    /// ## bias
-    /// candidate predition bias
-    ///
-    /// ## nMeasurenets
-    /// number of the measurement cycles to be used for estimation of each probability
-    ///
-    /// # Output
-    /// the number of misclassifications
-    ///
-    operation CountValidationMisses(tolerance: Double, nQubits: Int, trainingSet: Double[][], trainingLabels: Int[], validationSchedule: Int[][], gates: Int[][], parameters: Double[],bias:Double, nMeasurements: Int) : Int
-    {
-        let schValidate = unFlattenSchedule(validationSchedule);
-        let results = ValidateModel(
-            unFlattenGateSequence(gates),
-            SequentialModel(parameters, bias),
-            Mapped(LabeledSample, Zip(trainingSet, trainingLabels)),
-            tolerance, nMeasurements,
-            schValidate
-        );
-        return results::NMisclassifications;
-    }
-
-    operation ValidateModel(
-        gates: GateSequence,
+    operation ValidateSequentialClassifier(
+        gates: SequentialClassifierStructure,
         model : SequentialModel,
         samples : LabeledSample[],
         tolerance: Double,

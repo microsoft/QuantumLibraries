@@ -10,38 +10,79 @@ namespace Microsoft.Quantum.MachineLearning {
 
     operation _PrepareClassification(
         encoder : (LittleEndian => Unit is Adj + Ctl),
+        structure : SequentialClassifierStructure,
         parameters : Double[],
-        gates : GateSequence,
         target : Qubit[]
     )
     : Unit is Adj {
         encoder(LittleEndian(target));
-        _ApplyGates(parameters, gates, target);
+        ApplySequentialClassifier(structure, parameters, target);
     }
 
+    /// # Summary
+    /// Given a sample and a sequential classifier, estimates the
+    /// classification probability for that sample by repeatedly measuring
+    /// the output of the classifier on the given sample.
+    ///
+    /// # Input
+    /// ## tolerance
+    /// The tolerance to allow in encoding the sample into a state preparation
+    /// operation.
+    /// ## parameters
+    /// A parameterization of the given sequential classifier.
+    /// ## structure
+    /// The structure of the given sequential classifier.
+    /// ## sample
+    /// The feature vector for the sample to be classified.
+    /// ## nMeasurements
+    /// The number of measusrements to use in estimating the classification
+    /// probability.
+    /// # Output
+    /// An estimate of the classification probability for the given sample.
     operation EstimateClassificationProbability(
-        tolerance: Double,
+        tolerance : Double,
         parameters : Double[],
-        gates: GateSequence,
-        sample: Double[],
+        structure : SequentialClassifierStructure,
+        sample : Double[],
         nMeasurements: Int
     )
     : Double {
         let nQubits = FeatureRegisterSize(sample);
-        let circEnc = ApproximateInputEncoder(tolerance / IntAsDouble(Length(gates!)), sample);
+        let circEnc = ApproximateInputEncoder(tolerance / IntAsDouble(Length(structure!)), sample);
         let encodedSample = StateGenerator(nQubits, circEnc);
         return 1.0 - EstimateFrequencyA(
-            _PrepareClassification(encodedSample::Apply, parameters, gates, _),
+            _PrepareClassification(encodedSample::Apply, structure, parameters, _),
             _TailMeasurement(encodedSample::NQubits),
             encodedSample::NQubits,
             nMeasurements
         );
     }
 
+    /// # Summary
+    /// Given a set of samples and a sequential classifier, estimates the
+    /// classification probability for those samples by repeatedly measuring
+    /// the output of the classifier on each sample.
+    ///
+    /// # Input
+    /// ## tolerance
+    /// The tolerance to allow in encoding the sample into a state preparation
+    /// operation.
+    /// ## parameters
+    /// A parameterization of the given sequential classifier.
+    /// ## structure
+    /// The structure of the given sequential classifier.
+    /// ## samples
+    /// An array of feature vectors for each sample to be classified.
+    /// ## nMeasurements
+    /// The number of measusrements to use in estimating the classification
+    /// probability.
+    /// # Output
+    /// An array of estimates of the classification probability for each given
+    /// sample.
     operation EstimateClassificationProbabilities(
         tolerance : Double,
         parameters : Double[],
-        structure : GateSequence,
+        structure : SequentialClassifierStructure,
         samples : Double[][],
         nMeasurements : Int
     )

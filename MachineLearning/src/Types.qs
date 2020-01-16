@@ -20,7 +20,7 @@ namespace Microsoft.Quantum.MachineLearning {
     );
 
     /// Abstraction for sequence of gates
-    newtype GateSequence = ControlledRotation[];
+    newtype SequentialClassifierStructure = ControlledRotation[];
 
     /// Abstraction for state preparation
     /// Fst(StateGenerator) is the number of qubits
@@ -99,6 +99,20 @@ namespace Microsoft.Quantum.MachineLearning {
         StochasticRescaleFactor: Double
     );
 
+    /// # Summary
+    /// Returns a default set of options for training classifiers.
+    ///
+    /// # Output
+    /// A reasonable set of default training options for use when training
+    /// classifiers.
+    ///
+    /// # Example
+    /// To use the default options, but with additional measurements, use the
+    /// `w/` operator:
+    /// ```Q#
+    /// let options = DefaultTrainingOptions()
+    ///     w/ NMeasurements <- 1000000;
+    /// ```
     function DefaultTrainingOptions() : TrainingOptions {
         return TrainingOptions(
             0.1, 0.005, 15, 10000, 16, 8, 0.01
