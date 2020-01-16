@@ -86,21 +86,31 @@ namespace Microsoft.Quantum.MachineLearning {
     ///
     /// # Input
     /// ## tolerance
-    /// // TODO
+    /// The approximation tolerance to be used when encoding the given coefficients
+    /// as a state preparation option.
     /// ## coefficients
-    /// // TODO
+    /// The coefficients to be encoded into the resulting state preparation
+    ///  operation.
+    ///
     /// # Output
-    /// // TODO
+    /// An operation that, when applied to a quantum register representing `0`
+    /// with the little-endian encoding, prepares the state described by
+    /// coefficients, up to the given approximation tolerance.
+    ///
+    /// # See Also
+    /// - Microsoft.Quantum.Preparation.ApproximatelyPrepareArbitraryState
     function ApproximateInputEncoder(tolerance : Double, coefficients : Double[])
     : (LittleEndian => Unit is Adj + Ctl) {
-        //First quantize the coefficients: for a coef x find such y*tolerance, where y is integer and |x-y*tolerance| \neq tolerance/2
         let nCoefficients = Length(coefficients);
         mutable complexCoefficients = new ComplexPolar[Length(coefficients)];
         mutable cNegative = 0;
         for ((idx, coef) in Enumerated(coefficients)) {
             mutable magnitude = coef;
+            // First, quantize the coefficients:
+            // For a coefficient x, find an new coefficient y * tolerance,
+            /// where y is integer and where |x - y * tolerance| ≤ tolerance/2.
             if (tolerance > 1E-9) {
-                set magnitude = tolerance * IntAsDouble(Round(coefficients[idx] / tolerance)); //quantization
+                set magnitude = tolerance * IntAsDouble(Round(coefficients[idx] / tolerance));
             }
             mutable ang = 0.0;
             if (magnitude < 0.0) {
@@ -125,13 +135,31 @@ namespace Microsoft.Quantum.MachineLearning {
 
         // Finally, we fall back to arbitrary state preparation.
         return ApproximatelyPrepareArbitraryState(tolerance, complexCoefficients, _);
-    } //EncodeNoisyInput
+    }
 
-    /// Create amplitude encoding of an array of real-valued coefficients
-    /// The vector of 'coefficients' does not have to be unitary
+    /// # Summary
+    /// Given a set of coefficients and a tolerance, returns a state preparation
+    /// operation that prepares each coefficient as the corresponding amplitude
+    /// of a computational basis state.
+    ///
+    /// # Input
+    /// ## tolerance
+    /// The approximation tolerance to be used when encoding the given coefficients
+    /// as a state preparation option.
+    /// ## coefficients
+    /// The coefficients to be encoded into the resulting state preparation
+    ///  operation.
+    ///
+    /// # Output
+    /// An operation that, when applied to a quantum register representing `0`
+    /// with the little-endian encoding, prepares the state described by
+    /// coefficients.
+    ///
+    /// # See Also
+    /// - Microsoft.Quantum.Preparation.PrepareArbitraryState
     function InputEncoder(coefficients : Double[])
     : (LittleEndian => Unit is Adj + Ctl) {
-        //default implementation, does not respect sparcity
+        // The default implementation does not respect sparsity.
         mutable complexCoefficients = new ComplexPolar[Length(coefficients)];
         for ((idx, coefficient) in Enumerated(coefficients)) {
             set complexCoefficients w/= idx <- ComplexPolar(
@@ -143,7 +171,9 @@ namespace Microsoft.Quantum.MachineLearning {
         if (_CanApplyTwoQubitCase(coefficients)) {
             return _ApplyTwoQubitCase(coefficients, _);
         }
-        return ApproximatelyPrepareArbitraryState(1E-12, complexCoefficients, _); //this is preparing the state almost exactly so far
+        // We fall back to the approximate encoder with an extremely small
+        // tolerance, such that we prepare the state almost exactly.
+        return ApproximatelyPrepareArbitraryState(1E-12, complexCoefficients, _);
     }
 
 }

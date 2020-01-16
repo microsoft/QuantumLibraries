@@ -205,13 +205,15 @@ namespace Microsoft.Quantum.Preparation {
     /// elements $(r_j, t_j) = (0.0, 0.0)$ if fewer than $2^n$ are
     /// specified.
     ///
+    /// Coefficients smaller than `tolerance` are ignored.
+    ///
     /// # References
     /// - Synthesis of Quantum Logic Circuits
     ///   Vivek V. Shende, Stephen S. Bullock, Igor L. Markov
     ///   https://arxiv.org/abs/quant-ph/0406176
     ///
     /// # See Also
-    /// - Microsoft.Quantum.Preparation.ApproximatelyPrepareArbitraryState
+    /// - Microsoft.Quantum.Preparation.PrepareArbitraryState
     operation ApproximatelyPrepareArbitraryState(
         tolerance : Double,
         coefficients : ComplexPolar[],
@@ -270,9 +272,18 @@ namespace Microsoft.Quantum.Preparation {
     /// # Summary
     /// Computes the Bloch sphere coordinates for a single-qubit state.
     ///
-    /// Given two complex numbers $a0, a1$ that represent the qubit state, computes coordinates
-    /// on the Bloch sphere such that
-    /// $a0 \ket{0} + a1 \ket{1} = r e^{it}(e^{-i \phi /2}\cos{(\theta/2)}\ket{0}+e^{i \phi /2}\sin{(\theta/2)}\ket{1})$.
+    /// # Description
+    /// Given two complex numbers $a_0$ and $a_1$ that represent the qubit
+    /// state, computes coordinates on the Bloch sphere such that
+    /// $$
+    /// \begin{align}
+    ///     a_0 \ket{0} + a_1 \ket{1}
+    ///         & = r e^{it} \left(
+    ///                 e^{-i \phi /2} \cos{(\theta/2)} \ket{0} +
+    ///                 e^{i \phi /2} \sin{(\theta/2)} \ket{1}
+    ///             \right).
+    /// \end{align}
+    /// $$
     ///
     /// # Input
     /// ## a0
