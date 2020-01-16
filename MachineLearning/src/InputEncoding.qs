@@ -79,6 +79,18 @@ namespace Microsoft.Quantum.MachineLearning {
         return Ceiling(Lg(IntAsDouble(Length(sample))));
     }
 
+    /// # Summary
+    /// Given a set of coefficients and a tolerance, returns a state preparation
+    /// operation that prepares each coefficient as the corresponding amplitude
+    /// of a computational basis state, up to the given tolerance.
+    ///
+    /// # Input
+    /// ## tolerance
+    /// // TODO
+    /// ## coefficients
+    /// // TODO
+    /// # Output
+    /// // TODO
     function ApproximateInputEncoder(tolerance : Double, coefficients : Double[])
     : (LittleEndian => Unit is Adj + Ctl) {
         //First quantize the coefficients: for a coef x find such y*tolerance, where y is integer and |x-y*tolerance| \neq tolerance/2

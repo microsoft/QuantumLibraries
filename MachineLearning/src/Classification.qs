@@ -19,6 +19,26 @@ namespace Microsoft.Quantum.MachineLearning {
         ApplySequentialClassifier(structure, parameters, target);
     }
 
+    /// # Summary
+    /// Given a sample and a sequential classifier, estimates the
+    /// classification probability for that sample by repeatedly measuring
+    /// the output of the classifier on the given sample.
+    ///
+    /// # Input
+    /// ## tolerance
+    /// The tolerance to allow in encoding the sample into a state preparation
+    /// operation.
+    /// ## parameters
+    /// A parameterization of the given sequential classifier.
+    /// ## structure
+    /// The structure of the given sequential classifier.
+    /// ## sample
+    /// The feature vector for the sample to be classified.
+    /// ## nMeasurements
+    /// The number of measusrements to use in estimating the classification
+    /// probability.
+    /// # Output
+    /// An estimate of the classification probability for the given sample.
     operation EstimateClassificationProbability(
         tolerance : Double,
         parameters : Double[],
@@ -38,6 +58,27 @@ namespace Microsoft.Quantum.MachineLearning {
         );
     }
 
+    /// # Summary
+    /// Given a set of samples and a sequential classifier, estimates the
+    /// classification probability for those samples by repeatedly measuring
+    /// the output of the classifier on each sample.
+    ///
+    /// # Input
+    /// ## tolerance
+    /// The tolerance to allow in encoding the sample into a state preparation
+    /// operation.
+    /// ## parameters
+    /// A parameterization of the given sequential classifier.
+    /// ## structure
+    /// The structure of the given sequential classifier.
+    /// ## samples
+    /// An array of feature vectors for each sample to be classified.
+    /// ## nMeasurements
+    /// The number of measusrements to use in estimating the classification
+    /// probability.
+    /// # Output
+    /// An array of estimates of the classification probability for each given
+    /// sample.
     operation EstimateClassificationProbabilities(
         tolerance : Double,
         parameters : Double[],
