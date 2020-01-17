@@ -133,6 +133,12 @@ namespace Microsoft.Quantum.Canon {
     /// # Summary
     /// Computes Trotter step size in recursive implementation of
     /// Trotter simulation algorithm.
+    ///
+    /// # Remarks
+    /// This operation uses a different indexing convention than that of
+    /// [quant-ph/0508139](https://arxiv.org/abs/quant-ph/0508139). In
+    /// particular, `DecomposedIntoTimeStepsCA(_, 4)` corresponds to the
+    /// scalar $p_2(\lambda)$ in quant-ph/0508139.
     function _TrotterStepSize(order : Int) : Double {
         return 1.0 / (4.0 - PowD(4.0, 1.0 / (IntAsDouble(order) - 1.0)));
     }
@@ -155,7 +161,7 @@ namespace Microsoft.Quantum.Canon {
     /// input (type `Double`) for decomposition.
     /// ## trotterOrder
     /// Selects the order of the Trotter–Suzuki integrator to be used.
-    /// Order 1 and even orders 2,4,6,... are currently supported.
+    /// Order 1 and even orders 2, 4, 6,... are currently supported.
     ///
     /// # Output
     /// Returns a unitary implementing the Trotter–Suzuki integrator, where
@@ -163,13 +169,34 @@ namespace Microsoft.Quantum.Canon {
     /// second parameter is the target acted upon.
     ///
     /// # Remarks
-    /// This operation uses a different indexing convention than that of
-    /// [quant-ph/0508139](https://arxiv.org/abs/quant-ph/0508139). In
-    /// particular, `DecomposedIntoTimeStepsCA(_, 4)` corresponds to the
-    /// propagator $S_2(\lambda)$ in quant-ph/0508139.
+    /// When called with `order` equal to `1`, this function returns an operation
+    /// that can be simulated by the lowest-order Trotter–Suzuki integrator
+    /// $$
+    /// \begin{align}
+    ///     S_1(\lambda) = \prod_{j = 1}^{m} e^{H_j \lambda},
+    /// \end{align}
+    /// $$
+    /// where we have followed the notation of
+    /// [quant-ph/0508139](https://arxiv.org/abs/quant-ph/0508139)
+    /// and let $\lambda$ be the evolution time (represented by the first input
+    /// of the returned operation), and have let $\{H_j\}_{j = 1}^{m}$ be the
+    /// set of (skew-Hermitian) dynamical generators being integrated such that
+    /// `op(j, lambda, _)` is simulated by the unitary operator
+    /// $e^{H_j \lambda}$.
+    ///
+    /// Similarly, an `order` of `2` returns the second-order symmetric
+    /// Trotter–Suzuki integrator
+    /// $$
+    /// \begin{align}
+    ///     S_2(\lambda) = \prod_{j = 1}^{m} e^{H_k \lambda / 2}
+    ///                    \prod_{j' = m}^{1} e^{H_{j'} \lambda / 2}.
+    /// \end{align}
+    /// $$
+    ///
+    /// Higher even values of `order` are implemented using the recursive
+    /// construction of [quant-ph/0508139](https://arxiv.org/abs/quant-ph/0508139).
     ///
     /// # References
-    /// We use the implementation in
     /// - [ *D. W. Berry, G. Ahokas, R. Cleve, B. C. Sanders* ](https://arxiv.org/abs/quant-ph/0508139)
     function DecomposedIntoTimeStepsCA<'T>(
         (nSteps : Int, op : ((Int, Double, 'T) => Unit is Adj + Ctl)),
