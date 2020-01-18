@@ -5,14 +5,17 @@ namespace Microsoft.Quantum.MachineLearning {
     open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Arithmetic;
 
-    /// Qubit span of a multicontrolled single-qubit gate
+    /// # Summary
+    /// Represents the span of a single-qubit quantum operation with zero or
+    /// more control qubits.
     newtype GateSpan = (
         TargetIndex: Int,
         ControlIndices: Int[]
     );
 
-    /// One-parameter controlled rotation gate triplet:
-    /// (control structure, rotation axis, index of the rotation parameter)
+    /// # Summary
+    /// Represents a controlled rotation of a given angle, about a given axis,
+    /// and with a given target index and control register.
     newtype ControlledRotation = (
         Span: GateSpan,
         Axis: Pauli,
@@ -22,15 +25,28 @@ namespace Microsoft.Quantum.MachineLearning {
     /// Abstraction for sequence of gates
     newtype SequentialClassifierStructure = ControlledRotation[];
 
-    /// Abstraction for state preparation
-    /// Fst(StateGenerator) is the number of qubits
-    /// Snd(Stategenerator) is a circuit to prepare subject state
+    /// # Summary
+    /// Represents an operation used to prepare an input state on a register
+    /// of qubits in the little-endian representation.
+    ///
+    /// # Input
+    /// ## NQubits
+    /// Specifies the number of qubits that this operation acts on.
+    /// ## Apply
+    /// Called to prepare the encoded input state on a given register.
     newtype StateGenerator = (
         NQubits: Int,
         Apply: (LittleEndian => Unit is Adj + Ctl)
     );
 
-    /// Convention: negative Snd(labledSample) signifies the last sample in a batch
+    /// # Summary
+    /// Represents the features and classification label for a given sample.
+    ///
+    /// # Input
+    /// ## Features
+    /// The vector of features for the given sample.
+    /// ## Label
+    /// An integer label for the class to which the given sample belongs.
     newtype LabeledSample = (
         Features: Double[],
         Label: Int
@@ -42,6 +58,8 @@ namespace Microsoft.Quantum.MachineLearning {
     function _Features(sample : LabeledSample) : Double[] { return sample::Features; }
     function _Label(sample : LabeledSample) : Int { return sample::Label; }
 
+    /// # Summary
+    /// TODO
     /// Abstraction for a two-level range of indices
     newtype SamplingSchedule = Range[];
 
@@ -85,10 +103,23 @@ namespace Microsoft.Quantum.MachineLearning {
         return sampled;
     }
 
+    /// # Summary
+    /// Represents the results of validating a classifier against a validation
+    /// set.
+    ///
+    /// # Input
+    /// ## NMissclassifications
+    /// The number of misclassifications observed during validation.
     newtype ValidationResults = (
         NMisclassifications: Int
     );
 
+    /// # Summary
+    /// Represents configurable options that can be set to control how a
+    /// classifier is trained.
+    ///
+    /// # Input
+    /// TODO
     newtype TrainingOptions = (
         LearningRate: Double,
         Tolerance: Double,
