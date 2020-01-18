@@ -7,16 +7,20 @@ namespace Microsoft.Quantum.Arithmetic {
     open Microsoft.Quantum.Arrays;
 
     /// # Summary
-    /// This unitary tests if two integers `x` and `y` stored in equal-size qubit registers
-    /// satisfy `x > y`. If true, 1 is XORed into an output
-    /// qubit. Otherwise, 0 is XORed into an output qubit.
+    /// This operation tests if an integer represented by a register of qubits
+    /// is greater than another integer, applying an XOR of the result onto an
+    /// output qubit.
     ///
-    /// In other words, this unitary $U$  satisfies:
+    /// # Description
+    /// Given two integers `x` and `y` stored in equal-size qubit registers,
+    /// this operation checks if they satisfy `x > y`. If true, 1 is
+    /// XORed into an output qubit. Otherwise, 0 is XORed into an output qubit.
+    /// In other words, this operation can be represented by the unitary
     /// $$
     /// \begin{align}
-    /// U\ket{x}\ket{y}\ket{z}=\ket{x}\ket{y}\ket{z\oplus (x>y)}.
+    ///     U\ket{x}\ket{y}\ket{z} = \ket{x}\ket{y}\ket{z\oplus (x>y)}.
     /// \end{align}
-    /// $$.
+    /// $$
     ///
     /// # Input
     /// ## x

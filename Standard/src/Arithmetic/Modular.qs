@@ -32,22 +32,17 @@ namespace Microsoft.Quantum.Arithmetic {
     ///
     /// # Remarks
     /// Assumes that the initial value of target is less than $N$
-    /// and that the increment $a$ is less than $N$. 
+    /// and that the increment $a$ is less than $N$.
     /// Note that
     /// <xref:microsoft.quantum.arithmetic.incrementphasebymodularinteger> implements
     /// the same operation in the `PhaseLittleEndian` basis.
-    operation IncrementByModularInteger(increment : Int, modulus : Int, target : LittleEndian) : Unit {
-        body (...) {
-            let inner = IncrementPhaseByModularInteger(increment, modulus, _);
+    operation IncrementByModularInteger(increment : Int, modulus : Int, target : LittleEndian)
+    : Unit is Adj + Ctl {
+        let inner = IncrementPhaseByModularInteger(increment, modulus, _);
 
-            using (extraZeroBit = Qubit()) {
-                ApplyPhaseLEOperationOnLECA(inner, LittleEndian(target! + [extraZeroBit]));
-            }
+        using (extraZeroBit = Qubit()) {
+            ApplyPhaseLEOperationOnLECA(inner, LittleEndian(target! + [extraZeroBit]));
         }
-
-        adjoint invert;
-        controlled distribute;
-        controlled adjoint distribute;
     }
 
     /// # Summary
@@ -61,6 +56,14 @@ namespace Microsoft.Quantum.Arithmetic {
     /// \end{align}
     /// Integers are encoded in little-endian format in QFT basis.
     ///
+    /// # Input
+    /// ## increment
+    /// Integer increment $a$ to be added to $y$.
+    /// ## modulus
+    /// Integer $N$ that mods $y + a$.
+    /// ## target
+    /// Integer $y$ in phase-encoded little-endian format that `increment` $a$ is added to.
+    ///
     /// # See Also
     /// - Microsoft.Quantum.Arithmetic.IncrementByModularInteger
     ///
@@ -70,11 +73,11 @@ namespace Microsoft.Quantum.Arithmetic {
     ///
     /// For the circuit diagram and explanation see Figure 5 on [Page 5
     /// of arXiv:quant-ph/0205095v3](https://arxiv.org/pdf/quant-ph/0205095v3.pdf#page=5).
-    operation IncrementPhaseByModularInteger(increment : Int, modulus : Int, target : PhaseLittleEndian) : Unit {
+    operation IncrementPhaseByModularInteger(increment : Int, modulus : Int, target : PhaseLittleEndian)
+    : Unit is Adj + Ctl {
         body (...) {
             Controlled IncrementPhaseByModularInteger(new Qubit[0], (increment, modulus, target));
         }
-        adjoint auto;
 
         controlled (controls, ...) {
             Fact(modulus <= 2 ^ (Length(target!) - 1), $"`multiplier` must be big enough to fit integers modulo `modulus`" + $"with highest bit set to 0");
@@ -112,8 +115,6 @@ namespace Microsoft.Quantum.Arithmetic {
                 Controlled IncrementPhaseByInteger(controls, (increment, target));
             }
         }
-
-        controlled adjoint auto;
     }
 
     /// # Summary
@@ -148,23 +149,30 @@ namespace Microsoft.Quantum.Arithmetic {
     ///        of arXiv:quant-ph/0205095v3](https://arxiv.org/pdf/quant-ph/0205095v3.pdf#page=7)
     /// - This operation corresponds to CMULT(a)MOD(N) in
     ///   [arXiv:quant-ph/0205095v3](https://arxiv.org/pdf/quant-ph/0205095v3.pdf)
-    operation MultiplyAndAddByModularInteger(constMultiplier : Int, modulus : Int, multiplier : LittleEndian, summand : LittleEndian) : Unit {
-        body (...) {
-            let inner = MultiplyAndAddPhaseByModularInteger(constMultiplier, modulus, multiplier, _);
+    operation MultiplyAndAddByModularInteger(constMultiplier : Int, modulus : Int, multiplier : LittleEndian, summand : LittleEndian)
+    : Unit is Adj + Ctl {
+        let inner = MultiplyAndAddPhaseByModularInteger(constMultiplier, modulus, multiplier, _);
 
-            using (extraZeroBit = Qubit()) {
-                ApplyPhaseLEOperationOnLECA(inner, LittleEndian(summand! + [extraZeroBit]));
-            }
+        using (extraZeroBit = Qubit()) {
+            ApplyPhaseLEOperationOnLECA(inner, LittleEndian(summand! + [extraZeroBit]));
         }
-
-        adjoint invert;
-        controlled distribute;
-        controlled adjoint distribute;
     }
 
     /// # Summary
     /// The same as MultiplyAndAddByModularInteger, but assumes that the summand encodes
     /// integers in QFT basis.
+    ///
+    /// # Input
+    /// ## constantMultiplier
+    /// An integer $a$ to be added to each basis state label.
+    /// ## modulus
+    /// The modulus $N$ which addition and multiplication is taken with respect to.
+    /// ## multiplier
+    /// A quantum register representing an unsigned integer whose value is to
+    /// be added to each basis state label of `summand`.
+    /// ## phaseSummand
+    /// A quantum register representing an unsigned integer to use as the target
+    /// for this operation.
     ///
     /// # Remarks
     /// Assumes that `phaseSummand` has the highest bit set to 0.
@@ -172,9 +180,10 @@ namespace Microsoft.Quantum.Arithmetic {
     ///
     /// # See Also
     /// - Microsoft.Quantum.Arithmetic.MultiplyAndAddByModularInteger
-    operation MultiplyAndAddPhaseByModularInteger(constMultiplier : Int, modulus : Int, multiplier : LittleEndian, phaseSummand : PhaseLittleEndian) : Unit is Adj + Ctl {
-        EqualityFactB(modulus <= 2 ^ (Length(phaseSummand!) - 1), true, $"`multiplier` must be big enough to fit integers modulo `modulus`" + $"with highest bit set to 0");
-        EqualityFactB(constMultiplier >= 0 and constMultiplier < modulus, true, $"`constMultiplier` must be between 0 and `modulus`-1");
+    operation MultiplyAndAddPhaseByModularInteger(constMultiplier : Int, modulus : Int, multiplier : LittleEndian, phaseSummand : PhaseLittleEndian)
+    : Unit is Adj + Ctl {
+        Fact(modulus <= 2 ^ (Length(phaseSummand!) - 1), $"`multiplier` must be big enough to fit integers modulo `modulus`" + $"with highest bit set to 0");
+        Fact(constMultiplier >= 0 and constMultiplier < modulus, $"`constMultiplier` must be between 0 and `modulus`-1");
 
         if (_EnableExtraAssertsForArithmetic()) {
             // assert that the highest bit is zero, by switching to computational basis
@@ -184,7 +193,7 @@ namespace Microsoft.Quantum.Arithmetic {
             AssertPhaseLessThan(modulus, phaseSummand);
         }
 
-        for (i in 0 .. Length(multiplier!) - 1) {
+        for (i in IndexRange(multiplier!)) {
             let summand = (ExpModI(2, i, modulus) * constMultiplier) % modulus;
             Controlled IncrementPhaseByModularInteger([(multiplier!)[i]], (summand, modulus, phaseSummand));
         }

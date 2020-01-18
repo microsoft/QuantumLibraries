@@ -164,8 +164,12 @@ namespace Microsoft.Quantum.Characterization {
         } apply {
             commonPreparation(target);
             Controlled preparation1([control], target);
-            within { X(control); }
-            apply { Controlled preparation2([control], target); }
+            within {
+                X(control);
+            }
+            apply {
+                Controlled preparation2([control], target);
+            }
 
             (phaseShift ? S | I)(control);
         }

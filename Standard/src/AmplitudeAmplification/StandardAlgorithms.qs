@@ -28,11 +28,6 @@ namespace Microsoft.Quantum.AmplitudeAmplification {
         return ReflectionPhases(startPhases, targetPhases);
     }
 
-    // We use the phases in "Fixed-Point Amplitude Amplification with an
-    // Optimal Number of Queires" [YoderLowChuang2014]
-    // See also "Methodology of composite quantum gates" [LowYoderChuang2016]
-    // for phases in the `RotationPhases` format
-
     /// # Summary
     /// Computes partial reflection phases for fixed-point amplitude
     /// amplification.
