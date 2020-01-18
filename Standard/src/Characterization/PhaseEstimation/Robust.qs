@@ -59,9 +59,9 @@ namespace Microsoft.Quantum.Characterization {
 
                         if (result == Zero) {
                             if (idxExperiment == 0) {
-                                set pZero = pZero + 1.0;
+                                set pZero += 1.0;
                             } elif (idxExperiment == 1) {
-                                set pPlus = pPlus + 1.0;
+                                set pPlus += 1.0;
                             }
                         }
 
@@ -76,10 +76,10 @@ namespace Microsoft.Quantum.Characterization {
 
             Reset(controlQubit);
         }
-        
+
         return thetaEst;
     }
-    
+
 }
 
 
