@@ -8,9 +8,6 @@ namespace Microsoft.Quantum.Preparation {
     open Microsoft.Quantum.Math;
     open Microsoft.Quantum.Arrays;
 
-    // This library returns operations that prepare a specified quantum state
-    // from the computational basis state $\ket{0...0}$.
-
     /// # Summary
     /// Returns an operation that prepares the given quantum state.
     ///
@@ -49,7 +46,8 @@ namespace Microsoft.Quantum.Preparation {
     ///     op(qubitsLE);
     /// }
     /// ```
-    function StatePreparationPositiveCoefficients (coefficients : Double[]) : (LittleEndian => Unit is Adj + Ctl) {
+    function StatePreparationPositiveCoefficients (coefficients : Double[])
+    : (LittleEndian => Unit is Adj + Ctl) {
         let nCoefficients = Length(coefficients);
         mutable coefficientsComplexPolar = new ComplexPolar[nCoefficients];
 
@@ -90,16 +88,14 @@ namespace Microsoft.Quantum.Preparation {
     /// specified.
     ///
     /// ## Example
-    /// The following snippet prepares the quantum state $\ket{\psi}=e^{i 0.1}\sqrt{1/8}\ket{0}+\sqrt{7/8}\ket{2}$
-    /// in the qubit register `qubitsLE`.
+    /// The following snippet prepares the quantum state
+    /// $\ket{\psi} = e^{i 0.1} \sqrt{1 / 8} \ket{0} + \sqrt{7 / 8} \ket{2}$
+    /// on the qubit register `qubitsLE`:
     /// ```qsharp
     /// let amplitudes = [Sqrt(0.125), 0.0, Sqrt(0.875), 0.0];
     /// let phases = [0.1, 0.0, 0.0, 0.0];
-    /// mutable complexNumbers = new ComplexPolar[4];
-    /// for (idx in 0..3) {
-    ///     set complexNumbers[idx] = ComplexPolar(amplitudes[idx], phases[idx]);
-    /// }
-    /// let op = StatePreparationComplexCoefficients(complexNumbers);
+    /// let coefficients = Mapped(ComplexPolar, Zip(amplitudes, phases));
+    /// let op = StatePreparationComplexCoefficients(coefficients);
     /// using (qubits = Qubit[2]) {
     ///     let qubitsLE = LittleEndian(qubits);
     ///     op(qubitsLE);
@@ -183,7 +179,7 @@ namespace Microsoft.Quantum.Preparation {
         // pad coefficients at tail length to a power of 2.
         let paddedCoefficients = Padded(-2 ^ Length(qubits!), ComplexPolar(0.0, 0.0), coefficients);
         let target = (qubits!)[0];
-        let op = (Adjoint _PrepareArbitraryState(paddedCoefficients, _, _))(_, target);
+        let op = (Adjoint _UnprepareArbitraryState(paddedCoefficients, _, _))(_, target);
 
         op(
             // Determine what controls to apply to `op`.
@@ -196,27 +192,36 @@ namespace Microsoft.Quantum.Preparation {
 
     /// # Summary
     /// Implementation step of arbitrary state preparation procedure.
+    /// As it is easier to implement an operation that maps the given state
+    /// to $\ket{0}$, we do that here in an adjointable manner, then take the
+    /// adjoint to get the desired preparation.
     ///
     /// # See Also
     /// - PrepareArbitraryState
     /// - Microsoft.Quantum.Canon.MultiplexPauli
-    operation _PrepareArbitraryState(coefficients : ComplexPolar[], control : LittleEndian, target : Qubit)
+    operation _UnprepareArbitraryState(coefficients : ComplexPolar[], control : LittleEndian, target : Qubit)
     : Unit is Adj + Ctl {
-        // For each 2D block, compute disentangling single-qubit rotation parameters
+        // For each 2D block, compute disentangling single-qubit rotation
+        // parameters.
         let (disentanglingY, disentanglingZ, newCoefficients) = _StatePreparationSBMComputeCoefficients(coefficients);
         MultiplexPauli(disentanglingZ, PauliZ, control, target);
         MultiplexPauli(disentanglingY, PauliY, control, target);
 
-        // target is now in |0> state up to the phase given by arg of newCoefficients.
+        // At this point, by having applied the disentanglers above, the target
+        // qubit is guaranteed to be in the |0⟩ state, up to a global phase
+        // given by the argument of newCoefficients[0].
+        // Since this operation may be called in a controlled fashion, we need
+        // to correct that phase before recursing.
 
         // Continue recursion while there are control qubits.
         if (Length(control!) == 0) {
-            let (abs, arg) = newCoefficients[0]!;
-            Exp([PauliI], -1.0 * arg, [target]);
+            Exp([PauliI], -(Head(newCoefficients))::Argument, [target]);
         } else {
-            let newControl = LittleEndian((control!)[1 .. Length(control!) - 1]);
-            let newTarget = (control!)[0];
-            _PrepareArbitraryState(newCoefficients, newControl, newTarget);
+            _UnprepareArbitraryState(
+                newCoefficients,
+                LittleEndian(Rest(control!)),
+                Head(control!)
+            );
         }
     }
 
@@ -267,9 +272,11 @@ namespace Microsoft.Quantum.Preparation {
 
     /// # Summary
     /// Implementation step of arbitrary state preparation procedure.
+    ///
     /// # See Also
-    /// - Microsoft.Quantum.Canon.PrepareArbitraryState
-    function _StatePreparationSBMComputeCoefficients (coefficients : ComplexPolar[]) : (Double[], Double[], ComplexPolar[]) {
+    /// - Microsoft.Quantum.Preparation.PrepareArbitraryState
+    function _StatePreparationSBMComputeCoefficients (coefficients : ComplexPolar[])
+    : (Double[], Double[], ComplexPolar[]) {
         mutable disentanglingZ = new Double[Length(coefficients) / 2];
         mutable disentanglingY = new Double[Length(coefficients) / 2];
         mutable newCoefficients = new ComplexPolar[Length(coefficients) / 2];
