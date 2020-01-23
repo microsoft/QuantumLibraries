@@ -249,9 +249,6 @@ namespace Microsoft.Quantum.Preparation {
                 Zip(Reversed(indexRegister!), altIndexRegister!)
             )
         );
-        // for (idx in 0..nBitsIndices - 1) {
-        //     (Controlled SWAP)([flagQubit], (indexRegister![nBitsIndices - idx - 1], altIndexRegister![idx]));
-        // }
     }
     // Used in QuantumROM implementation.
     function _QuantumROMWriteBitStringUnitary(idx : Int, keepCoeff : Int[], altIndex : Int[])
