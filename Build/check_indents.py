@@ -24,7 +24,7 @@ def check_file(filename : str) -> bool:
     found_spaces = False
     found_tabs = False
 
-    with open(filename, 'r') as f:
+    with open(filename, 'r', encoding='utf8') as f:
         contents = list(f.readlines())
 
     for line in contents:

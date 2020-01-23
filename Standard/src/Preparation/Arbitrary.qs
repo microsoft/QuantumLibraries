@@ -12,8 +12,8 @@ namespace Microsoft.Quantum.Preparation {
     // from the computational basis state $\ket{0...0}$.
 
     /// # Summary
-	  /// Returns an operation that prepares the given quantum state.
-	  ///
+    /// Returns an operation that prepares the given quantum state.
+    ///
     /// The returned operation $U$ prepares an arbitrary quantum
     /// state $\ket{\psi}$ with positive coefficients $\alpha_j\ge 0$ from
     /// the $n$-qubit computational basis state $\ket{0...0}$.
@@ -61,8 +61,8 @@ namespace Microsoft.Quantum.Preparation {
     }
 
     /// # Summary
-	/// Returns an operation that prepares a specific quantum state.
-	/// 
+    /// Returns an operation that prepares a specific quantum state.
+    ///
     /// The returned operation $U$ prepares an arbitrary quantum
     /// state $\ket{\psi}$ with complex coefficients $r_j e^{i t_j}$ from
     /// the $n$-qubit computational basis state $\ket{0...0}$.
@@ -108,47 +108,82 @@ namespace Microsoft.Quantum.Preparation {
     function StatePreparationComplexCoefficients (coefficients : ComplexPolar[]) : (LittleEndian => Unit is Adj + Ctl) {
         return PrepareArbitraryState(coefficients, _);
     }
-    
-    
+
+
     /// # Summary
-	/// Returns an operation that prepares a given quantum state.
-	/// 
-    /// The returned operation $U$ prepares an arbitrary quantum
-    /// state $\ket{\psi}$ with complex coefficients $r_j e^{i t_j}$ from
-    /// the $n$-qubit computational basis state $\ket{0...0}$.
+    /// Given an expansion of an abitrary state in the computational basis,
+    /// prepares that state on a register of qubits.
     ///
+    /// # Description
+    /// Given a register of qubits initially in the $n$-qubit
+    /// the $n$-qubit number state $\ket{0}$ (using a little-endian encoding),
+    /// prepares that register in the state
     /// $$
     /// \begin{align}
-    ///     U\ket{0...0}=\ket{\psi}=\frac{\sum_{j=0}^{2^n-1}r_j e^{i t_j}\ket{j}}{\sqrt{\sum_{j=0}^{2^n-1}|r_j|^2}}.
+    ///     \ket{\psi} & = \frac{
+    ///                        \sum_{j = 0}^{2^n - 1} r_j e^{i t_j} \ket{j}
+    ///                    }{
+    ///                        \sqrt{\sum_{j = 0}^{2^n - 1} |r_j|^2}
+    ///                    },
     /// \end{align}
     /// $$
+    /// where $\{r_j e^{i t_j}\}_{j = 0}^{2^n - 1}$ is a list of complex
+    /// coefficients representing the state to be prepared.
     ///
     /// # Input
     /// ## coefficients
-    /// Array of up to $2^n$ complex coefficients represented by their
-    /// absolute value and phase $(r_j, t_j)$. The $j$th coefficient
+    /// An array of up to $2^n$ complex coefficients represented by their
+    /// magnitude and phase $(r_j, t_j)$. The $j$th coefficient
     /// indexes the number state $\ket{j}$ encoded in little-endian format.
     ///
     /// ## qubits
     /// Qubit register encoding number states in little-endian format. This is
-    /// expected to be initialized in the computational basis state
-    /// $\ket{0...0}$.
+    /// expected to be initialized in the number state $\ket{0}$.
     ///
     /// # Remarks
     /// Negative input coefficients $r_j < 0$ will be treated as though
-    /// positive with value $|r_j|$. `coefficients` will be padded with
-    /// elements $(r_j, t_j) = (0.0, 0.0)$ if fewer than $2^n$ are
-    /// specified.
+    /// positive with value $|r_j|$. If `coefficients` is shorter than $2^n$
+    /// elements, this input will be padded with elements
+    /// $(r_j, t_j) = (0.0, 0.0)$ (that is, elements representing the coefficient
+    /// $0$).
+    ///
+    /// # Example
+    /// The following snippet prepares a new three-qubit register in the state
+    /// $\frac{1}{\sqrt{3}}\left( \sqrt{2} \ket{0} + e^{i \pi / 3} \ket{2} \right)$:
+    ///
+    /// ```Q#
+    /// // Represent 1 / √3 (√2 |0⟩ + e^{𝑖 π / 3} |2⟩) as an array of complex
+    /// // coefficients.
+    /// let coefficients = [
+    ///     ComplexPolar(Sqrt(2.0) / Sqrt(3.0), 0.0),
+    ///     ComplexPolar(0.0, 0.0),
+    ///     ComplexPolar(1.0 / Sqrt(3.0), PI() / 3.0)
+    /// ];
+    ///
+    /// // Allocate a bare register of three qubits.
+    /// using (qs = Qubit[3]) {
+    ///     // Use the bare register to create a new little-endian register.
+    ///     // Note that in a little-endian encoding, the computational basis
+    ///     // state |000⟩ encodes the number state |0⟩.
+    ///     let register = LittleEndian(qs);
+    ///
+    ///     // We can prepare the state represented by the coefficients array
+    ///     // by calling PrepareArbitraryState.
+    ///     PrepareArbitraryState(coefficients, register);
+    ///     // ...
+    /// }
+    /// ```
     ///
     /// # References
     /// - Synthesis of Quantum Logic Circuits
     ///   Vivek V. Shende, Stephen S. Bullock, Igor L. Markov
     ///   https://arxiv.org/abs/quant-ph/0406176
-    operation PrepareArbitraryState (coefficients : ComplexPolar[], qubits : LittleEndian) : Unit is Adj + Ctl {
+    operation PrepareArbitraryState(coefficients : ComplexPolar[], qubits : LittleEndian)
+    : Unit is Adj + Ctl {
         // pad coefficients at tail length to a power of 2.
-        let coefficientsPadded = Padded(-2 ^ Length(qubits!), ComplexPolar(0.0, 0.0), coefficients);
+        let paddedCoefficients = Padded(-2 ^ Length(qubits!), ComplexPolar(0.0, 0.0), coefficients);
         let target = (qubits!)[0];
-        let op = (Adjoint _PrepareArbitraryState(coefficientsPadded, _, _))(_, target);
+        let op = (Adjoint _PrepareArbitraryState(paddedCoefficients, _, _))(_, target);
 
         op(
             // Determine what controls to apply to `op`.
@@ -165,36 +200,41 @@ namespace Microsoft.Quantum.Preparation {
     /// # See Also
     /// - PrepareArbitraryState
     /// - Microsoft.Quantum.Canon.MultiplexPauli
-    operation _PrepareArbitraryState(coefficients : ComplexPolar[], control : LittleEndian, target : Qubit) : Unit is Adj + Ctl
-    {
+    operation _PrepareArbitraryState(coefficients : ComplexPolar[], control : LittleEndian, target : Qubit)
+    : Unit is Adj + Ctl {
         // For each 2D block, compute disentangling single-qubit rotation parameters
         let (disentanglingY, disentanglingZ, newCoefficients) = _StatePreparationSBMComputeCoefficients(coefficients);
         MultiplexPauli(disentanglingZ, PauliZ, control, target);
         MultiplexPauli(disentanglingY, PauliY, control, target);
-        
+
         // target is now in |0> state up to the phase given by arg of newCoefficients.
-        
+
         // Continue recursion while there are control qubits.
-        if (Length(control!) == 0)
-        {
+        if (Length(control!) == 0) {
             let (abs, arg) = newCoefficients[0]!;
             Exp([PauliI], -1.0 * arg, [target]);
-        }
-        else
-        {
+        } else {
             let newControl = LittleEndian((control!)[1 .. Length(control!) - 1]);
             let newTarget = (control!)[0];
             _PrepareArbitraryState(newCoefficients, newControl, newTarget);
         }
     }
-    
-    
+
+
     /// # Summary
-	/// Computes the Bloch sphere coordinates for a single-qubit state.
-	/// 
-    /// Given two complex numbers $a0, a1$ that represent the qubit state, computes coordinates
-    /// on the Bloch sphere such that
-    /// $a0 \ket{0} + a1 \ket{1} = r e^{it}(e^{-i \phi /2}\cos{(\theta/2)}\ket{0}+e^{i \phi /2}\sin{(\theta/2)}\ket{1})$.
+    /// Computes the Bloch sphere coordinates for a single-qubit state.
+    ///
+    /// # Description
+    /// Given two complex numbers $a_0$ and $a_1$ represent the single-qubit state,
+    /// $a_0 \ket{0} + a_1 \ket{1}$, returns coordinates $r$, $t$, $phi$, and
+    /// $\theta$ on the Bloch sphere such that
+    /// $$
+    /// \begin{align}
+    ///     a_0 \ket{0} + a_1 \ket{1} & = r e^_{i t} \left(
+    ///         e^{-i \phi / 2} \cos(\theta / 2) \ket{0} +
+    ///         e^{ i \phi / 2} \sin(\theta / 2) \ket{1}
+    ///     \right).
+    /// \end{align}
     ///
     /// # Input
     /// ## a0
@@ -204,16 +244,24 @@ namespace Microsoft.Quantum.Preparation {
     ///
     /// # Output
     /// A tuple containing `(ComplexPolar(r, t), phi, theta)`.
-    function BlochSphereCoordinates (a0 : ComplexPolar, a1 : ComplexPolar) : (ComplexPolar, Double, Double)
-    {
-        let abs0 = AbsComplexPolar(a0);
-        let abs1 = AbsComplexPolar(a1);
-        let arg0 = ArgComplexPolar(a0);
-        let arg1 = ArgComplexPolar(a1);
-        let r = Sqrt(abs0 * abs0 + abs1 * abs1);
-        let t = 0.5 * (arg0 + arg1);
-        let phi = arg1 - arg0;
-        let theta = 2.0 * ArcTan2(abs1, abs0);
+    ///
+    /// # Example
+    /// ```Q#
+    /// let coefficients = (
+    ///     ComplexPolar(Sqrt(2.0) / Sqrt(3.0), 0.0),
+    ///     ComplexPolar(1.0 / Sqrt(3.0), PI() / 3.0)
+    /// );
+    /// let blochSphereCoordinates = BlochSphereCoordinates(coefficients);
+    /// Message($"{blochSphereCoordinates}");
+    /// // Output:
+    /// // (ComplexPolar((1, 0.5235987755982988)), 1.0471975511965976, 1.2309594173407747)
+    /// ```
+    function BlochSphereCoordinates (a0 : ComplexPolar, a1 : ComplexPolar)
+    : (ComplexPolar, Double, Double) {
+        let r = Sqrt(PowD(a0::Magnitude, 2.0) + PowD(a1::Magnitude, 2.0));
+        let t = 0.5 * (a0::Argument + a1::Argument);
+        let phi = a0::Argument - a1::Argument;
+        let theta = 2.0 * ArcTan2(a0::Magnitude, a1::Magnitude);
         return (ComplexPolar(r, t), phi, theta);
     }
 
