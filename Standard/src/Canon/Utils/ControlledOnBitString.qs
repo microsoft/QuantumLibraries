@@ -38,11 +38,15 @@ namespace Microsoft.Quantum.Canon {
     /// Returns a unitary operator that applies an oracle on the target register if the control register state corresponds to a specified bit mask.
     ///
     /// # Description
-    /// Given a Boolean array `bits` and a unitary operation `oracle`, the output of this function
-    /// is an operation that performs the following steps:
-    /// * apply an `X` operation to each qubit of the control register that corresponds to `false` element of the `bits`;
-    /// * apply `Controlled oracle` to the control and target registers;
-    /// * apply an `X` operation to each qubit of the control register that corresponds to `false` element of the `bits` again to return the control register to the original state.
+    /// The output of this function can be represented by a unitary transformation $U$ such that
+    /// \begin{align}
+    ///     U \ket{b_0 b_1 \cdots b_{n - 1}} \ket{\psi} = \ket{b_0 b_1 \cdots b_{n-1}} \otimes 
+    ///     \begin{cases}
+    ///         V \ket{\psi} & \textrm{if} (b_0 b_1 \cdots b_{n - 1}) = \texttt{bits} \\\\
+    ///         \ket{\psi} & \textrm{otherwise}
+    ///     \end{cases},
+    /// \end{align}
+    /// where $V$ is a unitary transformation that represents the action of the `oracle` operation.
     ///
     /// # Input
     /// ## bits
@@ -56,6 +60,14 @@ namespace Microsoft.Quantum.Canon {
     /// # Remarks
     /// The length of `bits` and `controlRegister` must be equal.
     /// 
+    /// Given a Boolean array `bits` and a unitary operation `oracle`, the output of this function
+    /// is an operation that performs the following steps:
+    /// * apply an `X` operation to each qubit of the control register that corresponds to `false` element of the `bits`;
+    /// * apply `Controlled oracle` to the control and target registers;
+    /// * apply an `X` operation to each qubit of the control register that corresponds to `false` element of the `bits` again to return the control register to the original state.
+    ///
+    /// The output of the `Controlled` functor is a special case of `ControlledOnBitString` where `bits` is equal to `[true, ..., true]`.
+    ///
     /// # Example
     /// The following code snippets are equivalent:
     /// ```qsharp
