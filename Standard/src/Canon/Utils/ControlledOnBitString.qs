@@ -38,14 +38,15 @@ namespace Microsoft.Quantum.Canon {
     /// Returns a unitary operator that applies an oracle on the target register if the control register state corresponds to a specified bit mask.
     ///
     /// # Description
-    /// Given a Boolean array `bits` and a unitary operation `oracle`, the return of this function will perform the following steps:
-    /// * apply an X gate to each qubit of the control register that corresponds to `false` element of the `bits`;
+    /// Given a Boolean array `bits` and a unitary operation `oracle`, the output of this function
+    /// is an operation that performs the following steps:
+    /// * apply an `X` operation to each qubit of the control register that corresponds to `false` element of the `bits`;
     /// * apply `Controlled oracle` to the control and target registers;
-    /// * apply an X gate to each qubit of the control register that corresponds to `false` element of the `bits` again to return the control register to the original state.
+    /// * apply an `X` operation to each qubit of the control register that corresponds to `false` element of the `bits` again to return the control register to the original state.
     ///
     /// # Input
     /// ## bits
-    /// Boolean array.
+    /// The bit string to control the given unitary operator on.
     /// ## oracle
     /// Unitary operator to be applied on the target register.
     ///
@@ -55,7 +56,8 @@ namespace Microsoft.Quantum.Canon {
     /// # Remarks
     /// The length of `bits` and `controlRegister` must be equal.
     /// 
-    /// The following are equivalent:
+    /// # Example
+    /// The following code snippets are equivalent:
     /// ```qsharp
     /// (ControlledOnBitString(bits, oracle))(controlRegister, targetRegister);
     /// ```
@@ -67,9 +69,8 @@ namespace Microsoft.Quantum.Canon {
     ///     Controlled oracle(controlRegister, targetRegister);
     /// }
     /// ```
-    /// 
-    /// # Example
-    /// Prepare a state $\frac{1}{2}(\ket{00} - \ket{01} + \ket{10} + \ket{11})$:
+    ///
+    /// The following code prepares a state $\frac{1}{2}(\ket{00} - \ket{01} + \ket{10} + \ket{11})$:
     /// ```qsharp
     /// using (register = Qubit[2]) {
     ///     ApplyToEach(H, register);
