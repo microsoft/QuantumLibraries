@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Runtime.ExceptionServices;
 
 using Microsoft.Quantum.Intrinsic;
 using Microsoft.Quantum.Simulation;
@@ -69,11 +70,11 @@ namespace Microsoft.Quantum.Characterization
                 if (paulis.Length != count) throw new InvalidOperationException("The number of paulis must match the number of qubits.");
 
                 var qubits = this.Allocate.Apply(count);
+                Exception? innerException = null;
                 try
                 {
                     preparation.Apply(qubits);
                     var p = 1.0 - JointEnsembleProbability(Simulator.Id, (uint)count, paulis, qubits.GetIds());
-                    ResetAll.Apply(qubits);
 
                     var random = this.Simulator.Seed == 0 ? new System.Random() : new System.Random((int)this.Simulator.Seed);
                     var dist = new BinomialDistribution(samples, p, random);
@@ -91,20 +92,39 @@ namespace Microsoft.Quantum.Characterization
                 // weren't in the |0⟩ state and discard it.
                 catch (ExecutionFailException ex)
                 {
-                    throw ex;
+                    innerException = ex;
                 }
                 finally
                 {
                     try
                     {
+                        ResetAll.Apply(qubits);
                         Release.Apply(qubits);
+                        // If we got to this finally block by handling an
+                        // exception, and didn't hit a second exception
+                        // while resetting and releasing, then we can
+                        // go on and throw our original exception, being
+                        // careful to preserve its stack trace.
+                        if (innerException != null)
+                        {
+                            ExceptionDispatchInfo.Capture(innerException).Throw();
+                        }
                     }
-                    catch (ReleasedQubitsAreNotInZeroState ex)
-                    { }
                     catch (Exception ex)
                     {
-                        // If we fail for any other reason, propagate it on.
-                        throw ex;
+                        // If we were already handling an exception, make a
+                        // new aggregate exception and throw it.
+                        if (innerException != null)
+                        {
+                            throw new AggregateException(ex, innerException);
+                        }
+                        // Otherwise, rethrow the exception that happened
+                        // during resetting and releasing, being
+                        // careful to preserve its stack trace.
+                        else
+                        {
+                            ExceptionDispatchInfo.Capture(ex).Throw();
+                        }
                     }
                 }
             };
