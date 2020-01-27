@@ -37,14 +37,45 @@ namespace Microsoft.Quantum.Canon {
     /// # Summary
     /// Returns a unitary operator that applies an oracle on the target register if the control register state corresponds to a specified bit mask.
     ///
+    /// # Description
+    /// Given a Boolean array `bits` and a unitary operation `oracle`, the return of this function will perform the following steps:
+    /// * apply an X gate to each qubit of the control register that corresponds to `false` element of the `bits`;
+    /// * apply `Controlled oracle` to the control and target registers;
+    /// * apply an X gate to each qubit of the control register that corresponds to `false` element of the `bits` again to return the control register to the original state.
+    ///
     /// # Input
     /// ## bits
     /// Boolean array.
     /// ## oracle
-    /// Unitary operator.
+    /// Unitary operator to be applied on the target register.
     ///
     /// # Output
     /// A unitary operator that applies `oracle` on the target register if the control register state corresponds to the bit mask `bits`.
+    ///
+    /// # Remarks
+    /// The length of `bits` and `controlRegister` must be equal.
+    /// 
+    /// The following are equivalent:
+    /// ```qsharp
+    /// (ControlledOnBitString(bits, oracle))(controlRegister, targetRegister);
+    /// ```
+    /// and
+    /// ```qsharp
+    /// within {
+    ///     ApplyPauliFromBitString(PauliX, false, bits, controlRegister);
+    /// } apply {
+    ///     Controlled oracle(controlRegister, targetRegister);
+    /// }
+    /// ```
+    /// 
+    /// # Example
+    /// Prepare a state $\frac{1}{2}(\ket{00} - \ket{01} + \ket{10} + \ket{11})$:
+    /// ```qsharp
+    /// using (register = Qubit[2]) {
+    ///     ApplyToEach(H, register);
+    ///     (ControlledOnBitString([false], Z))(register[0..0], register[1]);
+    /// }
+    /// ```
     function ControlledOnBitString<'T> (bits : Bool[], oracle : ('T => Unit is Adj + Ctl)) : ((Qubit[], 'T) => Unit is Adj + Ctl)
     {
         return ControlledOnBitStringImpl(bits, oracle, _, _);
