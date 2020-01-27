@@ -261,7 +261,7 @@ namespace Microsoft.Quantum.Preparation {
     /// // Output:
     /// // (ComplexPolar((1, 0.5235987755982988)), 1.0471975511965976, 1.2309594173407747)
     /// ```
-    function BlochSphereCoordinates (a0 : ComplexPolar, a1 : ComplexPolar)
+    function BlochSphereCoordinates(a0 : ComplexPolar, a1 : ComplexPolar)
     : (ComplexPolar, Double, Double) {
         let r = Sqrt(PowD(a0::Magnitude, 2.0) + PowD(a1::Magnitude, 2.0));
         let t = 0.5 * (a0::Argument + a1::Argument);
@@ -275,7 +275,7 @@ namespace Microsoft.Quantum.Preparation {
     ///
     /// # See Also
     /// - Microsoft.Quantum.Preparation.PrepareArbitraryState
-    function _StatePreparationSBMComputeCoefficients (coefficients : ComplexPolar[])
+    function _StatePreparationSBMComputeCoefficients(coefficients : ComplexPolar[])
     : (Double[], Double[], ComplexPolar[]) {
         mutable disentanglingZ = new Double[Length(coefficients) / 2];
         mutable disentanglingY = new Double[Length(coefficients) / 2];

@@ -100,7 +100,7 @@ namespace Microsoft.Quantum.Preparation {
 
     /// # Summary
     /// Returns the total number of qubits that must be allocated
-    /// to the operation returned by
+    /// in order to apply the operation returned by
     /// @"microsoft.quantum.preparation.mixedstatepreparation".
     ///
     /// # Input

@@ -22,6 +22,7 @@ namespace Microsoft.Quantum.Preparation {
         );
     }
 
+    @Deprecated("Microsoft.Quantum.Preparation.MixedStatePreparationRequirements")
     function QuantumROMQubitCount(targetError: Double, nCoeffs: Int)
     : (Int, (Int, Int)) {
         return (MixedStatePreparationRequirements(targetError, nCoeffs))!;
