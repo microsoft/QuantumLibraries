@@ -10,7 +10,8 @@ namespace Microsoft.Quantum.Preparation {
     open Microsoft.Quantum.Arrays;
 
     /// # Summary
-    /// Returns an operation that prepares a given mixed state.
+    /// Returns an operation that prepares a a purification of a given mixed
+    /// state.
     ///
     /// # Description
     /// Uses the Quantum ROM technique to represent a given density matrix,
@@ -74,10 +75,10 @@ namespace Microsoft.Quantum.Preparation {
     /// ```Q#
     /// let coefficients = [1.0, 2.0, 3.0, 4.0, 5.0];
     /// let targetError = 1e-3;
-    /// let preparation = MixedStatePreparation(targetError, coefficients);
-    /// using (indexRegister = Qubit[preparation::Requirements::NIndexQubits]) {
-    ///     using (garbageRegister = Qubit[preparation::Requirements::NGarbageQubits]) {
-    ///         preparation::Prepare(LittleEndian(indexRegister), garbageRegister);
+    /// let purifiedState = PurifiedMixedState(targetError, coefficients);
+    /// using (indexRegister = Qubit[purifiedState::Requirements::NIndexQubits]) {
+    ///     using (garbageRegister = Qubit[purifiedState::Requirements::NGarbageQubits]) {
+    ///         purifiedState::Prepare(LittleEndian(indexRegister), garbageRegister);
     ///     }
     /// }
     /// ```
@@ -86,22 +87,22 @@ namespace Microsoft.Quantum.Preparation {
     /// - Encoding Electronic Spectra in Quantum Circuits with Linear T Complexity
     ///   Ryan Babbush, Craig Gidney, Dominic W. Berry, Nathan Wiebe, Jarrod McClean, Alexandru Paler, Austin Fowler, Hartmut Neven
     ///   https://arxiv.org/abs/1805.03662
-    function MixedStatePreparation(targetError : Double, coefficients : Double[])
-    : MixedPreparationOperation {
+    function PurifiedMixedState(targetError : Double, coefficients : Double[])
+    : MixedStatePreparation {
         let nBitsPrecision = -Ceiling(Lg(0.5 * targetError)) + 1;
         let (oneNorm, keepCoeff, altIndex) = _QuantumROMDiscretization(nBitsPrecision, coefficients);
         let nCoeffs = Length(coefficients);
         let nBitsIndices = Ceiling(Lg(IntAsDouble(nCoeffs)));
 
         let op =  _QuantumROMImpl(nBitsPrecision, nCoeffs, nBitsIndices, keepCoeff, altIndex, _, _);
-        let qubitCounts = MixedStatePreparationRequirements(targetError, nCoeffs);
-        return MixedPreparationOperation(qubitCounts, oneNorm, op);
+        let qubitCounts = PurifiedMixedStateRequirements(targetError, nCoeffs);
+        return MixedStatePreparation(qubitCounts, oneNorm, op);
     }
 
     /// # Summary
     /// Returns the total number of qubits that must be allocated
     /// in order to apply the operation returned by
-    /// @"microsoft.quantum.preparation.mixedstatepreparation".
+    /// @"microsoft.quantum.preparation.purifiedmixedstate".
     ///
     /// # Input
     /// ## targetError
@@ -112,24 +113,24 @@ namespace Microsoft.Quantum.Preparation {
     /// # Output
     /// A description of how many qubits are required in total, and for each of
     /// the index and garbage registers used by the
-    /// @"microsoft.quantum.preparation.mixedstatepreparation" function.
+    /// @"microsoft.quantum.preparation.purifiedmixedstate" function.
     ///
     /// # See Also
-    /// - Microsoft.Quantum.Preparation.MixedStatePreparation
-    function MixedStatePreparationRequirements(targetError : Double, nCoefficients : Int)
-    : MixedPreparationRequirements {
+    /// - Microsoft.Quantum.Preparation.PurifiedMixedState
+    function PurifiedMixedStateRequirements(targetError : Double, nCoefficients : Int)
+    : MixedStatePreparationRequirements {
         let nBitsPrecision = -Ceiling(Lg(0.5*targetError)) + 1;
         let nIndexQubits = Ceiling(Lg(IntAsDouble(nCoefficients)));
         let nGarbageQubits = nIndexQubits + 2 * nBitsPrecision + 1;
         let nTotal = nGarbageQubits + nIndexQubits;
-        return MixedPreparationRequirements(nTotal, (nIndexQubits, nGarbageQubits));
+        return MixedStatePreparationRequirements(nTotal, (nIndexQubits, nGarbageQubits));
     }
 
     // Implementation step of `QuantumROM`. This splits a single
     // qubit array into the subarrays required by the operation.
     function _PartitionedForQuantumROM(targetError: Double, nCoeffs: Int, qubits: Qubit[])
     : ((LittleEndian, Qubit[]), Qubit[]) {
-        let requirements = MixedStatePreparationRequirements(targetError, nCoeffs);
+        let requirements = PurifiedMixedStateRequirements(targetError, nCoeffs);
         let registers = Partitioned(
             [requirements::NIndexQubits, requirements::NGarbageQubits],
             qubits

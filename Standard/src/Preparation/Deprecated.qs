@@ -11,10 +11,10 @@ namespace Microsoft.Quantum.Preparation {
         PrepareSingleQubitPositivePauliEigenstate(basis, qubit);
     }
 
-    @Deprecated("Microsoft.Quantum.Preparation.MixedStatePreparation")
+    @Deprecated("Microsoft.Quantum.Preparation.PurifiedMixedState")
     function QuantumROM(targetError: Double, coefficients: Double[])
     : ((Int, (Int, Int)), Double, ((LittleEndian, Qubit[]) => Unit is Adj + Ctl)) {
-        let preparation = MixedStatePreparation(targetError, coefficients);
+        let preparation = PurifiedMixedState(targetError, coefficients);
         return (
             preparation::Requirements!,
             preparation::Norm,
@@ -22,9 +22,9 @@ namespace Microsoft.Quantum.Preparation {
         );
     }
 
-    @Deprecated("Microsoft.Quantum.Preparation.MixedStatePreparationRequirements")
+    @Deprecated("Microsoft.Quantum.Preparation.PurifiedMixedStateRequirements")
     function QuantumROMQubitCount(targetError: Double, nCoeffs: Int)
     : (Int, (Int, Int)) {
-        return (MixedStatePreparationRequirements(targetError, nCoeffs))!;
+        return (PurifiedMixedStateRequirements(targetError, nCoeffs))!;
     }
 }
