@@ -38,12 +38,12 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
 
 			// The last term is the reference state.
 			let referenceState = PrepareTrialState((2, [terms[nTerms-1]]), _);
-			
+
 			PrepareUnitaryCoupledClusterState(referenceState, terms[0..nTerms-2], trotterStepSize, qubits);
 		}
     }
-    
-    
+
+
     /// # Summary
     /// Simple state preparation of trial state by occupying
     /// spin-orbitals
@@ -54,23 +54,23 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
     /// ## qubits
     /// Qubits of Hamiltonian.
     operation PrepareSingleConfigurationalStateSingleSiteOccupation (qubitIndices : Int[], qubits : Qubit[]) : Unit {
-        
+
         body (...) {
             ApplyToEachCA(X, Subarray(qubitIndices, qubits));
         }
-        
+
         adjoint invert;
         controlled distribute;
         controlled adjoint distribute;
     }
-    
-    
+
+
     function _PrepareSingleConfigurationalStateSingleSiteOccupation (qubitIndices : Int[]) : (Qubit[] => Unit is Adj + Ctl) {
-        
+
         return PrepareSingleConfigurationalStateSingleSiteOccupation(qubitIndices, _);
     }
-    
-    
+
+
     /// # Summary
     /// Sparse multi-configurational state preparation of trial state by adding excitations
     /// to initial trial state.
@@ -85,34 +85,34 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
     /// ## qubits
     /// Qubits of Hamiltonian.
     operation PrepareSparseMultiConfigurationalState (initialStatePreparation : (Qubit[] => Unit), excitations : JordanWignerInputState[], qubits : Qubit[]) : Unit {
-        
+
         let nExcitations = Length(excitations);
-        
+
         //FIXME compile error let coefficientsSqrtAbs = Mapped(Compose(Compose(Sqrt, Fst),Fst), excitations);
         mutable coefficientsSqrtAbs = new Double[nExcitations];
         mutable coefficientsNewComplexPolar = new ComplexPolar[nExcitations];
         mutable applyFlips = new Int[][nExcitations];
-        
+
         for (idx in 0 .. nExcitations - 1) {
             let (x, excitation) = excitations[idx]!;
             set coefficientsSqrtAbs w/= idx <- Sqrt(AbsComplexPolar(ComplexAsComplexPolar(Complex(x))));
             set coefficientsNewComplexPolar w/= idx <- ComplexPolar(coefficientsSqrtAbs[idx], ArgComplexPolar(ComplexAsComplexPolar(Complex(x))));
             set applyFlips w/= idx <- excitation;
         }
-        
+
         let nBitsIndices = Ceiling(Lg(IntAsDouble(nExcitations)));
-        
+
         repeat {
             mutable success = false;
-            
+
             using (auxillary = Qubit[nBitsIndices + 1]) {
                 using (flag = Qubit[1]) {
                     let multiplexer = MultiplexerBruteForceFromGenerator(nExcitations, LookupFunction(Mapped(_PrepareSingleConfigurationalStateSingleSiteOccupation, applyFlips)));
-                    (StatePreparationComplexCoefficients(coefficientsNewComplexPolar))(LittleEndian(auxillary));
+                    PrepareArbitraryState(coefficientsNewComplexPolar, LittleEndian(auxillary));
                     multiplexer(LittleEndian(auxillary), qubits);
-                    (Adjoint (StatePreparationPositiveCoefficients(coefficientsSqrtAbs)))(LittleEndian(auxillary));
+                    Adjoint PrepareArbitraryState(coefficientsSqrtAbs, LittleEndian(auxillary));
                     (ControlledOnInt(0, X))(auxillary, flag[0]);
-                    
+
                     // if measurement outcome one we prepared required state
                     let outcome = Measure([PauliZ], flag);
                     set success = outcome == One;
@@ -126,9 +126,9 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
             ResetAll(qubits);
         }
     }
-    
+
 	/// # Summary
-    /// Unitary coupled-cluster state preparation of trial state 
+    /// Unitary coupled-cluster state preparation of trial state
     ///
     /// # Input
     /// ## initialStatePreparation
