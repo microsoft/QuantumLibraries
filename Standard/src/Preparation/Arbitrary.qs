@@ -9,104 +9,6 @@ namespace Microsoft.Quantum.Preparation {
     open Microsoft.Quantum.Arrays;
 
     /// # Summary
-    /// Returns an operation that prepares the given quantum state.
-    ///
-    /// The returned operation $U$ prepares an arbitrary quantum
-    /// state $\ket{\psi}$ with positive coefficients $\alpha_j\ge 0$ from
-    /// the $n$-qubit computational basis state $\ket{0...0}$.
-    ///
-    /// The action of U on a newly-allocated register is given by
-    /// $$
-    /// \begin{align}
-    ///     U \ket{0\cdots 0} = \ket{\psi} = \frac{\sum_{j=0}^{2^n-1}\alpha_j \ket{j}}{\sqrt{\sum_{j=0}^{2^n-1}|\alpha_j|^2}}.
-    /// \end{align}
-    /// $$
-    ///
-    /// # Input
-    /// ## coefficients
-    /// Array of up to $2^n$ coefficients $\alpha_j$. The $j$th coefficient
-    /// indexes the number state $\ket{j}$ encoded in little-endian format.
-    ///
-    /// # Output
-    /// A state-preparation unitary operation $U$.
-    ///
-    /// # Remarks
-    /// Negative input coefficients $\alpha_j < 0$ will be treated as though
-    /// positive with value $|\alpha_j|$. `coefficients` will be padded with
-    /// elements $\alpha_j = 0.0$ if fewer than $2^n$ are specified.
-    ///
-    /// ## Example
-    /// The following snippet prepares the quantum state $\ket{\psi}=\sqrt{1/8}\ket{0}+\sqrt{7/8}\ket{2}$
-    /// in the qubit register `qubitsLE`.
-    /// ```qsharp
-    /// let amplitudes = [Sqrt(0.125), 0.0, Sqrt(0.875), 0.0];
-    /// let op = StatePreparationPositiveCoefficients(amplitudes);
-    /// using (qubits = Qubit[2]) {
-    ///     let qubitsLE = LittleEndian(qubits);
-    ///     op(qubitsLE);
-    /// }
-    /// ```
-    function StatePreparationPositiveCoefficients (coefficients : Double[])
-    : (LittleEndian => Unit is Adj + Ctl) {
-        let nCoefficients = Length(coefficients);
-        mutable coefficientsComplexPolar = new ComplexPolar[nCoefficients];
-
-        for (idx in 0 .. nCoefficients - 1) {
-            set coefficientsComplexPolar w/= idx <- ComplexPolar(AbsD(coefficients[idx]), 0.0);
-        }
-
-        return PrepareArbitraryState(coefficientsComplexPolar, _);
-    }
-
-    /// # Summary
-    /// Returns an operation that prepares a specific quantum state.
-    ///
-    /// The returned operation $U$ prepares an arbitrary quantum
-    /// state $\ket{\psi}$ with complex coefficients $r_j e^{i t_j}$ from
-    /// the $n$-qubit computational basis state $\ket{0...0}$.
-    ///
-    /// The action of U on a newly-allocated register is given by
-    /// $$
-    /// \begin{align}
-    ///     U\ket{0...0}=\ket{\psi}=\frac{\sum_{j=0}^{2^n-1}r_j e^{i t_j}\ket{j}}{\sqrt{\sum_{j=0}^{2^n-1}|r_j|^2}}.
-    /// \end{align}
-    /// $$
-    ///
-    /// # Input
-    /// ## coefficients
-    /// Array of up to $2^n$ complex coefficients represented by their
-    /// absolute value and phase $(r_j, t_j)$. The $j$th coefficient
-    /// indexes the number state $\ket{j}$ encoded in little-endian format.
-    ///
-    /// # Output
-    /// A state-preparation unitary operation $U$.
-    ///
-    /// # Remarks
-    /// Negative input coefficients $r_j < 0$ will be treated as though
-    /// positive with value $|r_j|$. `coefficients` will be padded with
-    /// elements $(r_j, t_j) = (0.0, 0.0)$ if fewer than $2^n$ are
-    /// specified.
-    ///
-    /// ## Example
-    /// The following snippet prepares the quantum state
-    /// $\ket{\psi} = e^{i 0.1} \sqrt{1 / 8} \ket{0} + \sqrt{7 / 8} \ket{2}$
-    /// on the qubit register `qubitsLE`:
-    /// ```qsharp
-    /// let amplitudes = [Sqrt(0.125), 0.0, Sqrt(0.875), 0.0];
-    /// let phases = [0.1, 0.0, 0.0, 0.0];
-    /// let coefficients = Mapped(ComplexPolar, Zip(amplitudes, phases));
-    /// let op = StatePreparationComplexCoefficients(coefficients);
-    /// using (qubits = Qubit[2]) {
-    ///     let qubitsLE = LittleEndian(qubits);
-    ///     op(qubitsLE);
-    /// }
-    /// ```
-    function StatePreparationComplexCoefficients (coefficients : ComplexPolar[]) : (LittleEndian => Unit is Adj + Ctl) {
-        return PrepareArbitraryState(coefficients, _);
-    }
-
-
-    /// # Summary
     /// Given an expansion of an abitrary state in the computational basis,
     /// prepares that state on a register of qubits.
     ///
@@ -165,7 +67,7 @@ namespace Microsoft.Quantum.Preparation {
     ///
     ///     // We can prepare the state represented by the coefficients array
     ///     // by calling PrepareArbitraryState.
-    ///     PrepareArbitraryState(coefficients, register);
+    ///     PrepareArbitraryStateCP(coefficients, register);
     ///     // ...
     /// }
     /// ```
@@ -174,7 +76,7 @@ namespace Microsoft.Quantum.Preparation {
     /// - Synthesis of Quantum Logic Circuits
     ///   Vivek V. Shende, Stephen S. Bullock, Igor L. Markov
     ///   https://arxiv.org/abs/quant-ph/0406176
-    operation PrepareArbitraryState(coefficients : ComplexPolar[], qubits : LittleEndian)
+    operation PrepareArbitraryStateCP(coefficients : ComplexPolar[], qubits : LittleEndian)
     : Unit is Adj + Ctl {
         // pad coefficients at tail length to a power of 2.
         let paddedCoefficients = Padded(-2 ^ Length(qubits!), ComplexPolar(0.0, 0.0), coefficients);
@@ -189,6 +91,77 @@ namespace Microsoft.Quantum.Preparation {
         );
     }
 
+    /// # Summary
+    /// Given an expansion of an abitrary state in the computational basis,
+    /// prepares that state on a register of qubits.
+    ///
+    /// # Description
+    /// Given a register of qubits initially in the $n$-qubit
+    /// the $n$-qubit number state $\ket{0}$ (using a little-endian encoding),
+    /// prepares that register in the state
+    /// $$
+    /// \begin{align}
+    ///     \ket{\psi} & = \frac{
+    ///                        \sum_{j = 0}^{2^n - 1} r_j e^{i t_j} \ket{j}
+    ///                    }{
+    ///                        \sqrt{\sum_{j = 0}^{2^n - 1} |r_j|^2}
+    ///                    },
+    /// \end{align}
+    /// $$
+    /// where $\{r_j e^{i t_j}\}_{j = 0}^{2^n - 1}$ is a list of complex
+    /// coefficients representing the state to be prepared.
+    ///
+    /// # Input
+    /// ## coefficients
+    /// An array of up to $2^n$ coefficients. The $j$th coefficient
+    /// indexes the number state $\ket{j}$ encoded in little-endian format.
+    ///
+    /// ## qubits
+    /// Qubit register encoding number states in little-endian format. This is
+    /// expected to be initialized in the number state $\ket{0}$.
+    ///
+    /// # Remarks
+    /// If `coefficients` is shorter than $2^n$ elements, this input will be
+    /// padded with `0.0`.
+    ///
+    /// # Example
+    /// The following snippet prepares a new three-qubit register in the state
+    /// $\frac{1}{\sqrt{3}}\left( \sqrt{2} \ket{0} + \ket{2} \right)$:
+    ///
+    /// ```Q#
+    /// // Represent 1 / √3 (√2 |0⟩ + e^{𝑖 π / 3} |2⟩) as an array of complex
+    /// // coefficients.
+    /// let coefficients = [
+    ///     Sqrt(2.0) / Sqrt(3.0),
+    ///     0.0,
+    ///     1.0 / Sqrt(3.0)
+    /// ];
+    ///
+    /// // Allocate a bare register of three qubits.
+    /// using (qs = Qubit[3]) {
+    ///     // Use the bare register to create a new little-endian register.
+    ///     // Note that in a little-endian encoding, the computational basis
+    ///     // state |000⟩ encodes the number state |0⟩.
+    ///     let register = LittleEndian(qs);
+    ///
+    ///     // We can prepare the state represented by the coefficients array
+    ///     // by calling PrepareArbitraryState.
+    ///     PrepareArbitraryStateD(coefficients, register);
+    ///     // ...
+    /// }
+    /// ```
+    ///
+    /// # References
+    /// - Synthesis of Quantum Logic Circuits
+    ///   Vivek V. Shende, Stephen S. Bullock, Igor L. Markov
+    ///   https://arxiv.org/abs/quant-ph/0406176
+    operation PrepareArbitraryStateD(coefficients : Double[], qubits : LittleEndian)
+    : Unit is Adj + Ctl {
+        PrepareArbitraryStateCP(
+            Mapped(DoubleAsComplexPolar, coefficients),
+            qubits
+        );
+    }
 
     /// # Summary
     /// Implementation step of arbitrary state preparation procedure.

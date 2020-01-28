@@ -2,9 +2,8 @@
 // Licensed under the MIT License.
 
 namespace Microsoft.Quantum.Preparation {
-
     open Microsoft.Quantum.Arithmetic;
-
+    open Microsoft.Quantum.Math;
 
     @Deprecated("Microsoft.Quantum.Preparation.PrepareSingleQubitPositivePauliEigenstate")
     operation PrepareQubit(basis : Pauli, qubit : Qubit) : Unit {
@@ -26,5 +25,29 @@ namespace Microsoft.Quantum.Preparation {
     function QuantumROMQubitCount(targetError: Double, nCoeffs: Int)
     : (Int, (Int, Int)) {
         return (PurifiedMixedStateRequirements(targetError, nCoeffs))!;
+    }
+
+    @Deprecated("Microsoft.Quantum.Preparation.PrepareArbitraryStateCP")
+    operation PrepareArbitraryState(coefficients : ComplexPolar[], qubits : LittleEndian)
+    : Unit is Adj + Ctl {
+        PrepareArbitraryStateCP(coefficients, qubits);
+    }
+
+    @Deprecated("Microsoft.Quantum.Preparation.PrepareArbitraryStateCP")
+    function StatePreparationComplexCoefficients (coefficients : ComplexPolar[]) : (LittleEndian => Unit is Adj + Ctl) {
+        return PrepareArbitraryStateCP(coefficients, _);
+    }
+
+    @Deprecated("Microsoft.Quantum.Preparation.PrepareArbitraryStateD")
+    function StatePreparationPositiveCoefficients (coefficients : Double[])
+    : (LittleEndian => Unit is Adj + Ctl) {
+        let nCoefficients = Length(coefficients);
+        mutable coefficientsComplexPolar = new ComplexPolar[nCoefficients];
+
+        for (idx in 0 .. nCoefficients - 1) {
+            set coefficientsComplexPolar w/= idx <- ComplexPolar(AbsD(coefficients[idx]), 0.0);
+        }
+
+        return PrepareArbitraryState(coefficientsComplexPolar, _);
     }
 }
