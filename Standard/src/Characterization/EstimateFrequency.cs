@@ -71,6 +71,7 @@ namespace Microsoft.Quantum.Characterization
 
                 var qubits = this.Allocate.Apply(count);
                 Exception? innerException = null;
+                double result = null;
                 try
                 {
                     preparation.Apply(qubits);
@@ -78,7 +79,8 @@ namespace Microsoft.Quantum.Characterization
 
                     var random = this.Simulator.Seed == 0 ? new System.Random() : new System.Random((int)this.Simulator.Seed);
                     var dist = new BinomialDistribution(samples, p, random);
-                    return (double)dist.NextSample() / (double)samples;
+                    result = (double)dist.NextSample() / (double)samples;
+                    return result;
                 }
                 // If releasing fails due to not being in the |0⟩ state
                 // (as commonly happens when an ExecutionFailException
@@ -93,6 +95,7 @@ namespace Microsoft.Quantum.Characterization
                 catch (ExecutionFailException ex)
                 {
                     innerException = ex;
+                    return result;
                 }
                 finally
                 {
