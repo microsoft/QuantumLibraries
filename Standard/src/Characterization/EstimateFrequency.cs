@@ -71,7 +71,7 @@ namespace Microsoft.Quantum.Characterization
 
                 var qubits = this.Allocate.Apply(count);
                 Exception? innerException = null;
-                double result = null;
+                double result = 0.0;
                 try
                 {
                     preparation.Apply(qubits);
