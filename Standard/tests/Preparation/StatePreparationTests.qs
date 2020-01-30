@@ -12,59 +12,47 @@ namespace Microsoft.Quantum.Tests {
     open Microsoft.Quantum.Diagnostics;
 
     // number of qubits, abs(amplitude), phase
-    newtype StatePreparationTestCase = (Int, Double[], Double[]);
+    newtype StatePreparationTestCase = (
+        NQubits: Int,
+        Magnitudes: Double[],
+        Phases: Double[]
+    );
 
-
+    @Test("QuantumSimulator")
     operation StatePreparationPositiveCoefficientsTest () : Unit {
-
         let tolerance = 1E-09;
-        mutable testCases = new StatePreparationTestCase[100];
-        mutable nTests = 0;
+        let testCases = [
+            // Test positive coefficients.
+            StatePreparationTestCase(1, [0.773761, 0.633478], [0.0, 0.0]),
+            StatePreparationTestCase(2, [0.183017, 0.406973, 0.604925, 0.659502], [0.0, 0.0, 0.0, 0.0]),
+            StatePreparationTestCase(3, [0.0986553, 0.359005, 0.465689, 0.467395, 0.419893, 0.118445, 0.461883, 0.149609], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]),
+            StatePreparationTestCase(4, [0.271471, 0.0583654, 0.11639, 0.36112, 0.307383, 0.193371, 0.274151, 0.332542, 0.130172, 0.222546, 0.314879, 0.210704, 0.212429, 0.245518, 0.30666, 0.22773], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]),
 
-        // Test positive coefficients.
-        set testCases w/= nTests <- StatePreparationTestCase(1, [0.773761, 0.633478], [0.0, 0.0]);
-        set nTests = nTests + 1;
-        set testCases w/= nTests <- StatePreparationTestCase(2, [0.183017, 0.406973, 0.604925, 0.659502], [0.0, 0.0, 0.0, 0.0]);
-        set nTests = nTests + 1;
-        set testCases w/= nTests <- StatePreparationTestCase(3, [0.0986553, 0.359005, 0.465689, 0.467395, 0.419893, 0.118445, 0.461883, 0.149609], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]);
-        set nTests = nTests + 1;
-        set testCases w/= nTests <- StatePreparationTestCase(4, [0.271471, 0.0583654, 0.11639, 0.36112, 0.307383, 0.193371, 0.274151, 0.332542, 0.130172, 0.222546, 0.314879, 0.210704, 0.212429, 0.245518, 0.30666, 0.22773], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]);
-        set nTests = nTests + 1;
+            // Test negative coefficients. Should give same probabilities as positive coefficients.
+            StatePreparationTestCase(1, [-0.773761, 0.633478], [0.0, 0.0]),
+            StatePreparationTestCase(2, [0.183017, -0.406973, 0.604925, 0.659502], [0.0, 0.0, 0.0, 0.0]),
+            StatePreparationTestCase(3, [0.0986553, -0.359005, 0.465689, -0.467395, 0.419893, 0.118445, -0.461883, 0.149609], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]),
+            StatePreparationTestCase(4, [-0.271471, 0.0583654, 0.11639, 0.36112, -0.307383, 0.193371, -0.274151, 0.332542, 0.130172, 0.222546, 0.314879, -0.210704, 0.212429, 0.245518, -0.30666, -0.22773], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]),
 
-        // Test negative coefficients. Should give same probabilities as positive coefficients.
-        set testCases w/= nTests <- StatePreparationTestCase(1, [-0.773761, 0.633478], [0.0, 0.0]);
-        set nTests = nTests + 1;
-        set testCases w/= nTests <- StatePreparationTestCase(2, [0.183017, -0.406973, 0.604925, 0.659502], [0.0, 0.0, 0.0, 0.0]);
-        set nTests = nTests + 1;
-        set testCases w/= nTests <- StatePreparationTestCase(3, [0.0986553, -0.359005, 0.465689, -0.467395, 0.419893, 0.118445, -0.461883, 0.149609], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]);
-        set nTests = nTests + 1;
-        set testCases w/= nTests <- StatePreparationTestCase(4, [-0.271471, 0.0583654, 0.11639, 0.36112, -0.307383, 0.193371, -0.274151, 0.332542, 0.130172, 0.222546, 0.314879, -0.210704, 0.212429, 0.245518, -0.30666, -0.22773], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]);
-        set nTests = nTests + 1;
+            // Test unnormalized coefficients
+            StatePreparationTestCase(3, [1.0986553, 0.359005, 0.465689, -0.467395, 0.419893, 0.118445, 0.461883, 0.149609], new Double[0]),
 
-        // Test unnormalized coefficients
-        set testCases w/= nTests <- StatePreparationTestCase(3, [1.0986553, 0.359005, 0.465689, -0.467395, 0.419893, 0.118445, 0.461883, 0.149609], new Double[0]);
-        set nTests = nTests + 1;
-
-        // Test missing coefficients
-        set testCases w/= nTests <- StatePreparationTestCase(3, [1.0986553, 0.359005, 0.465689, -0.467395, 0.419893, 0.118445], new Double[0]);
-        set nTests = nTests + 1;
+            // Test missing coefficients
+            StatePreparationTestCase(3, [1.0986553, 0.359005, 0.465689, -0.467395, 0.419893, 0.118445], new Double[0])
+        ];
 
         // Loop over multiple qubit tests
-        for (idxTest in 0 .. nTests - 1) {
-            let (nQubits, coefficientsAmplitude, coefficientsPhase) = testCases[idxTest]!;
-            let nCoefficients = Length(coefficientsAmplitude);
+        for ((idxTestCase, testCase) in Enumerated(testCases)) {
 
             // Test negative coefficients. Should give same results as positive coefficients.
-            using (qubits = Qubit[nQubits]) {
+            using (qubits = Qubit[testCase::NQubits]) {
                 let qubitsLE = LittleEndian(qubits);
-                let op = StatePreparationPositiveCoefficients(coefficientsAmplitude);
+                let op = StatePreparationPositiveCoefficients(testCase::Magnitudes);
                 op(qubitsLE);
-                let normalizedCoefficients = PNormalized(2.0, coefficientsAmplitude);
+                let normalizedCoefficients = PNormalized(2.0, testCase::Magnitudes);
 
-                for (idxCoeff in 0 .. nCoefficients - 1) {
-                    let amp = normalizedCoefficients[idxCoeff];
-                    let prob = amp * amp;
-                    AssertProbInt(idxCoeff, prob, qubitsLE, tolerance);
+                for ((idxCoefficient, coefficient) in Enumerated(normalizedCoefficients)) {
+                    AssertProbInt(idxCoefficient, coefficient * coefficient, qubitsLE, tolerance);
                 }
 
                 ResetAll(qubits);
@@ -74,6 +62,7 @@ namespace Microsoft.Quantum.Tests {
 
 
     // Test phase factor on 1-qubit uniform superposition.
+    @Test("QuantumSimulator")
     operation StatePreparationComplexCoefficientsQubitPhaseTest () : Unit {
 
         let tolerance = 1E-09;
