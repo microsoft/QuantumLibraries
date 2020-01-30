@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Runtime.ExceptionServices;
 
 using Microsoft.Quantum.Intrinsic;
 using Microsoft.Quantum.Simulation;
 using Microsoft.Quantum.Simulation.Core;
 using Microsoft.Quantum.Simulation.Simulators;
+using Microsoft.Quantum.Simulation.Simulators.Exceptions;
 using Microsoft.Quantum.Standard.Emulation;
 
 namespace Microsoft.Quantum.Characterization
@@ -34,6 +36,7 @@ namespace Microsoft.Quantum.Characterization
 
             protected Allocate Allocate { get; set; }
             protected Release Release { get; set; }
+            protected ResetAll ResetAll { get; set; }
 
             public Native(IOperationFactory m) : base(m)
             {
@@ -46,6 +49,7 @@ namespace Microsoft.Quantum.Characterization
 
                 this.Allocate = this.Factory.Get<Allocate>(typeof(Microsoft.Quantum.Intrinsic.Allocate));
                 this.Release = this.Factory.Get<Release>(typeof(Microsoft.Quantum.Intrinsic.Release));
+                this.ResetAll = this.Factory.Get<ResetAll>(typeof(Microsoft.Quantum.Intrinsic.ResetAll));
             }
 
             /// <summary>
@@ -66,19 +70,65 @@ namespace Microsoft.Quantum.Characterization
                 if (paulis.Length != count) throw new InvalidOperationException("The number of paulis must match the number of qubits.");
 
                 var qubits = this.Allocate.Apply(count);
+                Exception? innerException = null;
+                double result = 0.0;
                 try
                 {
                     preparation.Apply(qubits);
                     var p = 1.0 - JointEnsembleProbability(Simulator.Id, (uint)count, paulis, qubits.GetIds());
-                    preparation.Adjoint.Apply(qubits);
 
                     var random = this.Simulator.Seed == 0 ? new System.Random() : new System.Random((int)this.Simulator.Seed);
                     var dist = new BinomialDistribution(samples, p, random);
-                    return (double)dist.NextSample() / (double)samples;
+                    result = (double)dist.NextSample() / (double)samples;
+                    return result;
+                }
+                // If releasing fails due to not being in the |0⟩ state
+                // (as commonly happens when an ExecutionFailException
+                // is caught above), we'll get an exception in the finally block
+                // below.
+                //
+                // To prevent that, we need to first catch
+                // the ExecutionFailException, since finally blocks are only
+                // guaranteed to work for handled exceptions. Next, we'll need
+                // to check for an exception caused by releasing qubits that
+                // weren't in the |0⟩ state and discard it.
+                catch (ExecutionFailException ex)
+                {
+                    innerException = ex;
+                    return result;
                 }
                 finally
                 {
-                    Release.Apply(qubits);
+                    try
+                    {
+                        ResetAll.Apply(qubits);
+                        Release.Apply(qubits);
+                        // If we got to this finally block by handling an
+                        // exception, and didn't hit a second exception
+                        // while resetting and releasing, then we can
+                        // go on and throw our original exception, being
+                        // careful to preserve its stack trace.
+                        if (innerException != null)
+                        {
+                            ExceptionDispatchInfo.Capture(innerException).Throw();
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        // If we were already handling an exception, make a
+                        // new aggregate exception and throw it.
+                        if (innerException != null)
+                        {
+                            throw new AggregateException(ex, innerException);
+                        }
+                        // Otherwise, rethrow the exception that happened
+                        // during resetting and releasing, being
+                        // careful to preserve its stack trace.
+                        else
+                        {
+                            ExceptionDispatchInfo.Capture(ex).Throw();
+                        }
+                    }
                 }
             };
 
