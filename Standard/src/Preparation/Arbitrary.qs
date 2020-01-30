@@ -232,7 +232,7 @@ namespace Microsoft.Quantum.Preparation {
     /// let blochSphereCoordinates = BlochSphereCoordinates(coefficients);
     /// Message($"{blochSphereCoordinates}");
     /// // Output:
-    /// // (ComplexPolar((1, 0.5235987755982988)), 1.0471975511965976, 1.2309594173407747)
+    /// // (ComplexPolar((1, 0.5235987755982988)), 1.0471975511965976, 1.9106332362490186)
     /// ```
     function BlochSphereCoordinates(a0 : ComplexPolar, a1 : ComplexPolar)
     : (ComplexPolar, Double, Double) {
