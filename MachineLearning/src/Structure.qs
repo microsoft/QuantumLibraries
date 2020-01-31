@@ -83,6 +83,20 @@ namespace Microsoft.Quantum.MachineLearning {
         return _CallFlipped(fn, _, _);
     }
 
+    /// # Summary
+    /// Returns an array of uncontrolled (single-qubit) rotations along a given
+    /// axis, with one rotation for each qubit in a register, parameterized by
+    /// distinct model parameters.
+    ///
+    /// # Input
+    /// ## nQubits
+    /// The number of qubits acted on by the given layer.
+    /// ## axis
+    /// The rotation axis for each rotation in the given layer.
+    ///
+    /// # Output
+    /// An array of controlled rotations about the given axis, one on each of
+    /// `nQubits` qubits.
     function LocalRotationsLayer(nQubits : Int, axis : Pauli) : ControlledRotation[] {
         // [parameterIndex, pauliCode, targetQubit\,sequence of control qubits\]
         return Mapped(
@@ -94,6 +108,19 @@ namespace Microsoft.Quantum.MachineLearning {
     }
 
 
+    /// # Summary
+    /// Returns an array of uncontrolled (single-qubit) rotations along a given
+    /// axis, parameterized by distinct model parameters.
+    ///
+    /// # Input
+    /// ## idxsQubits
+    /// Indices for the qubits to be used as the targets for each rotation.
+    /// ## axis
+    /// The rotation axis for each rotation in the given layer.
+    ///
+    /// # Output
+    /// An array of controlled rotations about the given axis, one on each of
+    /// `nQubits` qubits.
     function PartialRotationsLayer(idxsQubits : Int[], axis : Pauli) : ControlledRotation[] {
         // [parameterIndex, pauliCode, targetQubit\,sequence of control qubits\]
         return Mapped(
@@ -104,6 +131,33 @@ namespace Microsoft.Quantum.MachineLearning {
         );
     }
 
+    /// # Summary
+    /// Returns an array of singly controlled rotations along a given axis,
+    /// arranged cyclically across a register of qubits, and parameterized by
+    /// distinct model parameters.
+    ///
+    /// # Input
+    /// ## nQubits
+    /// The number of qubits acted on by the given layer.
+    /// ## axis
+    /// The rotation axis for each rotation in the given layer.
+    /// ## stride
+    /// The separation between the target and control indices for each rotation.
+    ///
+    /// # Output
+    /// An array of two-qubit controlled rotations laid out cyclically across
+    /// a register of `nQubits` qubits.
+    ///
+    /// # Example
+    /// The following are equivalent:
+    /// ```Q#
+    /// let layer = CyclicEntanglingLayer(3, PauliX, 2);
+    /// let layer = [
+    ///     ControlledRotation((0, [2]), PauliX, 0),
+    ///     ControlledRotation((1, [0]), PauliX, 1),
+    ///     ControlledRotation((2, [1]), PauliX, 2)
+    /// ];
+    /// ```
     function CyclicEntanglingLayer(nQubits : Int, axis : Pauli, stride : Int) : ControlledRotation[] {
         mutable rotations = new ControlledRotation[0];
         for (idxTarget in 0..nQubits - 1) {
@@ -118,6 +172,34 @@ namespace Microsoft.Quantum.MachineLearning {
         return rotations;
     }
 
+    /// # Summary
+    /// Given one or more layers of controlled rotations, returns a single
+    /// layer with model parameter index shifted such that distinct layers
+    /// are parameterized by distinct model parameters.
+    ///
+    /// # Input
+    /// ## layers
+    /// The layers to be combined.
+    ///
+    /// # Output
+    /// A single layer of controlled rotations, representing the concatenation
+    /// of all other layers.
+    ///
+    /// # Example
+    /// The following are equivalent:
+    /// ```Q#
+    /// let structure = CombinedStructure([
+    ///     LocalRotationLayer(2, PauliY),
+    ///     CyclicEntanglingLayer(3, PauliX, 2)
+    /// ]);
+    /// let structure = [
+    ///     ControlledRotation((0, new Int[0]), PauliY, 0),
+    ///     ControlledRotation((1, new Int[0]), PauliY, 1),
+    ///     ControlledRotation((0, [2]), PauliX, 2),
+    ///     ControlledRotation((1, [0]), PauliX, 3),
+    ///     ControlledRotation((2, [1]), PauliX, 4)
+    /// ];
+    /// ```
     function CombinedStructure(layers : ControlledRotation[][]) : ControlledRotation[] {
         mutable combined = Head(layers);
         mutable offset = Length(combined);
