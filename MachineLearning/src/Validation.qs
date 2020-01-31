@@ -54,6 +54,25 @@ namespace Microsoft.Quantum.MachineLearning {
         return Length(Misclassifications(proposed, actual));
     }
 
+    /// # Summary
+    /// Validates a given sequential classifier against a given set of
+    /// pre-labeled samples.
+    ///
+    /// # Input
+    /// ## model
+    /// The sequential model to be validated.
+    /// ## samples
+    /// The samples to be used to validate the given model.
+    /// ## tolerance
+    /// The approximation tolerance to use in encoding each sample as an input
+    /// to the sequential classifier.
+    /// ## nMeasurements
+    /// The number of measurements to use in classifying each sample.
+    /// ## validationSchedule
+    /// The schedule by which samples should be drawn from the validation set.
+    ///
+    /// # Ouput
+    /// The results of the given validation.
     operation ValidateSequentialClassifier(
         model : SequentialModel,
         samples : LabeledSample[],
