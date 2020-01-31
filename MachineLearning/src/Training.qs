@@ -51,10 +51,8 @@ namespace Microsoft.Quantum.MachineLearning {
     /// on a given labeled training set.
     ///
     /// # Input
-    /// ## structure
-    /// Structure of the sequential classifier to be trained.
-    /// ## parameterSource
-    /// A list of parameter vectors to use as starting points during training.
+    /// ## models
+    /// An array of models to be used as starting points during training.
     /// ## samples
     /// A set of labeled training data that will be used to perform training.
     /// ## options
@@ -197,10 +195,8 @@ namespace Microsoft.Quantum.MachineLearning {
     /// For best accuracy, set to 1.
     /// ## options
     /// Options to be used in training.
-    /// ## structure
-    /// The structure of the sequential classifier to be trained.
     /// ## model
-    /// The parameterization and bias of the sequential model to be trained.
+    /// The sequential model to be trained.
     /// ## nPreviousBestMisses
     /// The best number of misclassifications observed in previous epochs.
     ///
