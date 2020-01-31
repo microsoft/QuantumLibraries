@@ -27,10 +27,9 @@ namespace Microsoft.Quantum.MachineLearning {
     /// ## tolerance
     /// The tolerance to allow in encoding the sample into a state preparation
     /// operation.
-    /// ## parameters
-    /// A parameterization of the given sequential classifier.
-    /// ## structure
-    /// The structure of the given sequential classifier.
+    /// ## model
+    /// The sequential model to be used to estimate the classification
+    /// probability for the given sample.
     /// ## sample
     /// The feature vector for the sample to be classified.
     /// ## nMeasurements
@@ -65,10 +64,9 @@ namespace Microsoft.Quantum.MachineLearning {
     /// ## tolerance
     /// The tolerance to allow in encoding the sample into a state preparation
     /// operation.
-    /// ## parameters
-    /// A parameterization of the given sequential classifier.
-    /// ## structure
-    /// The structure of the given sequential classifier.
+    /// ## model
+    /// The sequential model to be used to estimate the classification
+    /// probabilities for the given samples.
     /// ## samples
     /// An array of feature vectors for each sample to be classified.
     /// ## nMeasurements
