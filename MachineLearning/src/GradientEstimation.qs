@@ -86,7 +86,7 @@ namespace Microsoft.Quantum.MachineLearning {
             let newDer = _EstimateDerivativeWithParameterShift(
                 sg, model, (model::Parameters, paramShift), nQubits, nMeasurements
             );
-            if (IsEmpty(gate::Span::ControlIndices)) {
+            if (IsEmpty(gate::ControlIndices)) {
                 //uncontrolled gate
                 set grad w/= gate::Index <- grad[gate::Index] + newDer;
             } else {

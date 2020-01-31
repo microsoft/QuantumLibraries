@@ -5,16 +5,13 @@ namespace Microsoft.Quantum.MachineLearning {
     open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Arithmetic;
 
-    /// Qubit span of a multicontrolled single-qubit gate
-    newtype GateSpan = (
-        TargetIndex: Int,
-        ControlIndices: Int[]
-    );
-
     /// One-parameter controlled rotation gate triplet:
     /// (control structure, rotation axis, index of the rotation parameter)
     newtype ControlledRotation = (
-        Span: GateSpan,
+        (
+            TargetIndex: Int,
+            ControlIndices: Int[]
+        ),
         Axis: Pauli,
         Index: Int
     );

@@ -172,9 +172,11 @@ namespace Microsoft.Quantum.MachineLearning {
             }
 
         }
-        let updatedParameters = Mapped(PlusD, Zip(model::Parameters, batchGradient));
         // TODO:REVIEW: Ok to interpret utility as size of the overall move?
-        return (SquaredNorm(batchGradient), model w/ Parameters <- updatedParameters);
+        return (
+            SquaredNorm(batchGradient),
+            model w/ Parameters <- Mapped(PlusD, Zip(model::Parameters, batchGradient))
+        );
 
     }
 

@@ -24,8 +24,8 @@ namespace Microsoft.Quantum.MachineLearning {
         for (gate in model::Structure) {
             set nQubitsRequired = Fold(
                 MaxI, 0,
-                gate::Span::ControlIndices + [
-                    gate::Span::TargetIndex,
+                gate::ControlIndices + [
+                    gate::TargetIndex,
                     nQubitsRequired
                 ]
             );
@@ -51,22 +51,22 @@ namespace Microsoft.Quantum.MachineLearning {
     : (Unit) is Adj + Ctl {
         for (gate in model::Structure) {
             if (gate::Index < Length(model::Parameters)) {
-                let input = (gate::Axis, model::Parameters[gate::Index], qubits[gate::Span::TargetIndex]);
-                if (IsEmpty(gate::Span::ControlIndices)) {
+                let input = (gate::Axis, model::Parameters[gate::Index], qubits[gate::TargetIndex]);
+                if (IsEmpty(gate::ControlIndices)) {
                     // Uncontrolled rotation of target
                     R(input);
                 } else {
                     //TODO: should one validate the control indices first?
-                    (Controlled R)(Subarray(gate::Span::ControlIndices, qubits), input);
+                    (Controlled R)(Subarray(gate::ControlIndices, qubits), input);
                 }
             }
         }
     }
 
-    function _UncontrolledSpanSequence(idxsQubits : Int[]) : GateSpan[] {
-        return Mapped(
-            GateSpan(_, new Int[0]),
-            idxsQubits
+    function _UncontrolledSpanSequence(idxsQubits : Int[]) : (Int, Int[])[] {
+        return Zip(
+            idxsQubits,
+            ConstantArray(Length(idxsQubits), new Int[0])
         );
     }
 
@@ -108,7 +108,7 @@ namespace Microsoft.Quantum.MachineLearning {
         mutable rotations = new ControlledRotation[0];
         for (idxTarget in 0..nQubits - 1) {
             set rotations += [ControlledRotation(
-                GateSpan(
+                (
                     idxTarget,
                     [(idxTarget + stride) % nQubits]
                 ),
