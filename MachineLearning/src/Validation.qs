@@ -55,7 +55,6 @@ namespace Microsoft.Quantum.MachineLearning {
     }
 
     operation ValidateSequentialClassifier(
-        gates: SequentialClassifierStructure,
         model : SequentialModel,
         samples : LabeledSample[],
         tolerance: Double,
@@ -66,7 +65,7 @@ namespace Microsoft.Quantum.MachineLearning {
         let features = Mapped(_Features, samples);
         let labels = Sampled(validationSchedule, Mapped(_Label, samples));
         let probabilities = EstimateClassificationProbabilities(
-            tolerance, model::Parameters, gates,
+            tolerance, model,
             Sampled(validationSchedule, features), nMeasurements
         );
         let localPL = InferredLabels(model::Bias, probabilities);

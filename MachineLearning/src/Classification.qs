@@ -10,13 +10,12 @@ namespace Microsoft.Quantum.MachineLearning {
 
     operation _PrepareClassification(
         encoder : (LittleEndian => Unit is Adj + Ctl),
-        structure : SequentialClassifierStructure,
-        parameters : Double[],
+        model : SequentialModel,
         target : Qubit[]
     )
     : Unit is Adj {
         encoder(LittleEndian(target));
-        ApplySequentialClassifier(structure, parameters, target);
+        ApplySequentialClassifier(model, target);
     }
 
     /// # Summary
@@ -41,17 +40,16 @@ namespace Microsoft.Quantum.MachineLearning {
     /// An estimate of the classification probability for the given sample.
     operation EstimateClassificationProbability(
         tolerance : Double,
-        parameters : Double[],
-        structure : SequentialClassifierStructure,
+        model : SequentialModel,
         sample : Double[],
         nMeasurements: Int
     )
     : Double {
         let nQubits = FeatureRegisterSize(sample);
-        let circEnc = ApproximateInputEncoder(tolerance / IntAsDouble(Length(structure!)), sample);
+        let circEnc = ApproximateInputEncoder(tolerance / IntAsDouble(Length(model::Structure)), sample);
         let encodedSample = StateGenerator(nQubits, circEnc);
         return 1.0 - EstimateFrequencyA(
-            _PrepareClassification(encodedSample::Apply, structure, parameters, _),
+            _PrepareClassification(encodedSample::Prepare, model, _),
             _TailMeasurement(encodedSample::NQubits),
             encodedSample::NQubits,
             nMeasurements
@@ -81,16 +79,15 @@ namespace Microsoft.Quantum.MachineLearning {
     /// sample.
     operation EstimateClassificationProbabilities(
         tolerance : Double,
-        parameters : Double[],
-        structure : SequentialClassifierStructure,
+        model : SequentialModel,
         samples : Double[][],
         nMeasurements : Int
     )
     : Double[] {
-        let effectiveTolerance = tolerance / IntAsDouble(Length(structure!));
+        let effectiveTolerance = tolerance / IntAsDouble(Length(model::Structure));
         return ForEach(
             EstimateClassificationProbability(
-                effectiveTolerance, parameters, structure, _, nMeasurements
+                effectiveTolerance, model, _, nMeasurements
             ),
             samples
         );

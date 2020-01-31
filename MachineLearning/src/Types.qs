@@ -19,15 +19,18 @@ namespace Microsoft.Quantum.MachineLearning {
         Index: Int
     );
 
-    /// Abstraction for sequence of gates
-    newtype SequentialClassifierStructure = ControlledRotation[];
+    newtype SequentialModel = (
+        Structure: ControlledRotation[],
+        Parameters: Double[],
+        Bias: Double
+    );
 
     /// Abstraction for state preparation
     /// Fst(StateGenerator) is the number of qubits
     /// Snd(Stategenerator) is a circuit to prepare subject state
     newtype StateGenerator = (
         NQubits: Int,
-        Apply: (LittleEndian => Unit is Adj + Ctl)
+        Prepare: (LittleEndian => Unit is Adj + Ctl)
     );
 
     /// Convention: negative Snd(labledSample) signifies the last sample in a batch
@@ -118,10 +121,5 @@ namespace Microsoft.Quantum.MachineLearning {
             0.1, 0.005, 15, 10000, 16, 8, 0.01
         );
     }
-
-    newtype SequentialModel = (
-        Parameters: Double[],
-        Bias: Double
-    );
 
 }

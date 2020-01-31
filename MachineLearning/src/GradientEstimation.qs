@@ -19,15 +19,15 @@ namespace Microsoft.Quantum.MachineLearning {
 
     operation _EstimateDerivativeWithParameterShift(
         inputEncoder : StateGenerator,
-        structure : SequentialClassifierStructure,
+        model : SequentialModel,
         parameters : (Double[], Double[]),
         nQubits : Int,
         nMeasurements : Int
     ) : Double {
         return EstimateRealOverlapBetweenStates(
-            _ApplyLEOperationToRawRegister(inputEncoder::Apply, _),
-            ApplySequentialClassifier(structure, Fst(parameters), _),
-            ApplySequentialClassifier(structure, Snd(parameters), _),
+            _ApplyLEOperationToRawRegister(inputEncoder::Prepare, _),
+            ApplySequentialClassifier(model w/ Parameters <- Fst(parameters), _),
+            ApplySequentialClassifier(model w/ Parameters <- Snd(parameters), _),
             nQubits, nMeasurements
         );
     }
@@ -56,8 +56,7 @@ namespace Microsoft.Quantum.MachineLearning {
     /// This operation uses a Hadamard test and the parameter shift technique
     /// together to estimate the gradient.
     operation EstimateGradient(
-        structure : SequentialClassifierStructure,
-        param : Double[],
+        model : SequentialModel,
         sg : StateGenerator,
         nMeasurements : Int
     )
@@ -75,17 +74,17 @@ namespace Microsoft.Quantum.MachineLearning {
         // Now, suppose a gate at which we differentiate is the (Controlled R(\theta))([k0,k1,...,kr],[target])
         // and we want a unitary description of its \theta-derivative. It can be written as
         // 1/2 {(Controlled R(\theta'))([k0,k1,...,kr],[target]) -  (Controlled Z)([k1,...,kr],[k0])(Controlled R(\theta'))([k0,k1,...,kr],[target])}
-        mutable grad = ConstantArray(Length(param), 0.0);
-        let nQubits = MaxI(NQubitsRequired(structure), sg::NQubits);
+        mutable grad = ConstantArray(Length(model::Parameters), 0.0);
+        let nQubits = MaxI(NQubitsRequired(model), sg::NQubits);
 
-        for (gate in structure!) {
-            let paramShift = (param + [0.0])
+        for (gate in model::Structure) {
+            let paramShift = (model::Parameters + [0.0])
                 // Shift the corresponding parameter.
-                w/ gate::Index <- (param[gate::Index] + PI());
+                w/ gate::Index <- (model::Parameters[gate::Index] + PI());
 
             // NB: This the *antiderivative* of the bracket
             let newDer = _EstimateDerivativeWithParameterShift(
-                sg, structure, (param, paramShift), nQubits, nMeasurements
+                sg, model, (model::Parameters, paramShift), nQubits, nMeasurements
             );
             if (IsEmpty(gate::Span::ControlIndices)) {
                 //uncontrolled gate
@@ -93,11 +92,11 @@ namespace Microsoft.Quantum.MachineLearning {
             } else {
                 //controlled gate
                 let controlledShift = paramShift
-                    w/ gate::Index <- (param[gate::Index] + 3.0 * PI());
+                    w/ gate::Index <- (model::Parameters[gate::Index] + 3.0 * PI());
                 // Assumption: any rotation R has the property that R(\theta + 2 Pi) = (-1) R(\theta).
                 // NB: This the *antiderivative* of the bracket
                 let newDer1 = _EstimateDerivativeWithParameterShift(
-                    sg, structure, (param, controlledShift), nQubits, nMeasurements
+                    sg, model, (model::Parameters, controlledShift), nQubits, nMeasurements
                 );
                 set grad w/= gate::Index <- (grad[gate::Index] + 0.5 * (newDer - newDer1));
             }
