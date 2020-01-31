@@ -50,8 +50,8 @@ namespace Microsoft.Quantum.MachineLearning {
     )
     : (Unit) is Adj + Ctl {
         for (gate in model::Structure) {
-            if (gate::Index < Length(model::Parameters)) {
-                let input = (gate::Axis, model::Parameters[gate::Index], qubits[gate::TargetIndex]);
+            if (gate::ParameterIndex < Length(model::Parameters)) {
+                let input = (gate::Axis, model::Parameters[gate::ParameterIndex], qubits[gate::TargetIndex]);
                 if (IsEmpty(gate::ControlIndices)) {
                     // Uncontrolled rotation of target
                     R(input);
@@ -123,7 +123,7 @@ namespace Microsoft.Quantum.MachineLearning {
         mutable offset = Length(combined);
         for (layer in Rest(layers)) {
             for (gate in layer) {
-                set combined += [gate w/ Index <- gate::Index + offset];
+                set combined += [gate w/ ParameterIndex <- gate::ParameterIndex + offset];
             }
             set offset += Length(layer);
         }

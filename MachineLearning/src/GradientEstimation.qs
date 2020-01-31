@@ -80,7 +80,7 @@ namespace Microsoft.Quantum.MachineLearning {
         for (gate in model::Structure) {
             let paramShift = (model::Parameters + [0.0])
                 // Shift the corresponding parameter.
-                w/ gate::Index <- (model::Parameters[gate::Index] + PI());
+                w/ gate::ParameterIndex <- (model::Parameters[gate::ParameterIndex] + PI());
 
             // NB: This the *antiderivative* of the bracket
             let newDer = _EstimateDerivativeWithParameterShift(
@@ -88,17 +88,17 @@ namespace Microsoft.Quantum.MachineLearning {
             );
             if (IsEmpty(gate::ControlIndices)) {
                 //uncontrolled gate
-                set grad w/= gate::Index <- grad[gate::Index] + newDer;
+                set grad w/= gate::ParameterIndex <- grad[gate::ParameterIndex] + newDer;
             } else {
                 //controlled gate
                 let controlledShift = paramShift
-                    w/ gate::Index <- (model::Parameters[gate::Index] + 3.0 * PI());
+                    w/ gate::ParameterIndex <- (model::Parameters[gate::ParameterIndex] + 3.0 * PI());
                 // Assumption: any rotation R has the property that R(\theta + 2 Pi) = (-1) R(\theta).
                 // NB: This the *antiderivative* of the bracket
                 let newDer1 = _EstimateDerivativeWithParameterShift(
                     sg, model, (model::Parameters, controlledShift), nQubits, nMeasurements
                 );
-                set grad w/= gate::Index <- (grad[gate::Index] + 0.5 * (newDer - newDer1));
+                set grad w/= gate::ParameterIndex <- (grad[gate::ParameterIndex] + 0.5 * (newDer - newDer1));
             }
         }
         return grad;
