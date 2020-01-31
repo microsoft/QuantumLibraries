@@ -158,10 +158,10 @@ namespace Microsoft.Quantum.MachineLearning {
             if (err < 1.0) {
                 set err = -1.0; //class 0 misclassified to class 1; strive to reduce the probability
             }
-            let stateGenerator = StateGenerator(
-                nQubits,
-                ApproximateInputEncoder(effectiveTolerance, sample::Features)
-            );
+            let stateGenerator = ApproximateInputEncoder(effectiveTolerance, sample::Features)
+                // Force the number of qubits in case something else in the
+                // minibatch requires a larger register.
+                w/ NQubits <- nQubits;
             let grad = EstimateGradient(
                 model, stateGenerator,
                 options::NMeasurements

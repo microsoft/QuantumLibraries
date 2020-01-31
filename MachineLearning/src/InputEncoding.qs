@@ -86,13 +86,16 @@ namespace Microsoft.Quantum.MachineLearning {
     ///
     /// # Input
     /// ## tolerance
-    /// // TODO
+    /// The approximation tolerance to be used in encoding the given
+    /// coefficients into an input state.
     /// ## coefficients
-    /// // TODO
+    /// The coefficients to be encoded into an input state.
+    ///
     /// # Output
-    /// // TODO
+    /// A state preparation operation that prepares the given coefficients
+    /// as an input state on a given register.
     function ApproximateInputEncoder(tolerance : Double, coefficients : Double[])
-    : (LittleEndian => Unit is Adj + Ctl) {
+    : StateGenerator {
         //First quantize the coefficients: for a coef x find such y*tolerance, where y is integer and |x-y*tolerance| \neq tolerance/2
         let nCoefficients = Length(coefficients);
         mutable complexCoefficients = new ComplexPolar[Length(coefficients)];
@@ -113,24 +116,43 @@ namespace Microsoft.Quantum.MachineLearning {
 
         // Check if we can apply the explicit two-qubit case.
         if (_CanApplyTwoQubitCase(coefficients)) {
-            return _ApplyTwoQubitCase(coefficients, _);
+            return StateGenerator(2, _ApplyTwoQubitCase(coefficients, _));
         }
+
+        let nQubits = FeatureRegisterSize(coefficients);
+
         // If not, we may be able to use a special protocol in the case that
         // there are only a few negative coefficients.
         // Here, by a "few," we mean fewer than the number of qubits required
         // to encode features.
         if ((cNegative > 0) and (IntAsDouble(cNegative) < Lg(IntAsDouble(Length(coefficients))) + 1.0)) {
-            return _EncodeSparseNegativeInput(cNegative, tolerance, complexCoefficients, _);
+            return StateGenerator(
+                nQubits,
+                _EncodeSparseNegativeInput(cNegative, tolerance, complexCoefficients, _)
+            );
         }
 
         // Finally, we fall back to arbitrary state preparation.
-        return ApproximatelyPrepareArbitraryState(tolerance, complexCoefficients, _);
-    } //EncodeNoisyInput
+        return StateGenerator(
+            nQubits,
+            ApproximatelyPrepareArbitraryState(tolerance, complexCoefficients, _)
+        );
+    }
 
-    /// Create amplitude encoding of an array of real-valued coefficients
-    /// The vector of 'coefficients' does not have to be unitary
+    /// # Summary
+    /// Given a set of coefficients and a tolerance, returns a state preparation
+    /// operation that prepares each coefficient as the corresponding amplitude
+    /// of a computational basis state.
+    ///
+    /// # Input
+    /// ## coefficients
+    /// The coefficients to be encoded into an input state.
+    ///
+    /// # Output
+    /// A state preparation operation that prepares the given coefficients
+    /// as an input state on a given register.
     function InputEncoder(coefficients : Double[])
-    : (LittleEndian => Unit is Adj + Ctl) {
+    : StateGenerator {
         //default implementation, does not respect sparcity
         mutable complexCoefficients = new ComplexPolar[Length(coefficients)];
         for ((idx, coefficient) in Enumerated(coefficients)) {
@@ -141,9 +163,13 @@ namespace Microsoft.Quantum.MachineLearning {
             );
         }
         if (_CanApplyTwoQubitCase(coefficients)) {
-            return _ApplyTwoQubitCase(coefficients, _);
+            return StateGenerator(2, _ApplyTwoQubitCase(coefficients, _));
         }
-        return ApproximatelyPrepareArbitraryState(1E-12, complexCoefficients, _); //this is preparing the state almost exactly so far
+        //this is preparing the state almost exactly so far
+        return StateGenerator(
+            FeatureRegisterSize(coefficients),
+            ApproximatelyPrepareArbitraryState(1E-12, complexCoefficients, _)
+        );
     }
 
 }

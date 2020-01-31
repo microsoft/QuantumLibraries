@@ -44,9 +44,7 @@ namespace Microsoft.Quantum.MachineLearning {
         nMeasurements: Int
     )
     : Double {
-        let nQubits = FeatureRegisterSize(sample);
-        let circEnc = ApproximateInputEncoder(tolerance / IntAsDouble(Length(model::Structure)), sample);
-        let encodedSample = StateGenerator(nQubits, circEnc);
+        let encodedSample = ApproximateInputEncoder(tolerance / IntAsDouble(Length(model::Structure)), sample);
         return 1.0 - EstimateFrequencyA(
             _PrepareClassification(encodedSample::Prepare, model, _),
             _TailMeasurement(encodedSample::NQubits),
