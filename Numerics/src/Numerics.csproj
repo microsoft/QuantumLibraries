@@ -32,6 +32,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Include="..\Common\DelaySign.cs" Link="Properties\DelaySign.cs" />
+  </ItemGroup>
+
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.Quantum.Simulators" Version="0.10.1912.2614-alpha" />
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" />
   </ItemGroup>
