@@ -170,9 +170,13 @@ namespace Microsoft.Quantum.MachineLearning {
             }
 
         }
-        // TODO:REVIEW: Ok to interpret utility as size of the overall move?
         return (
+            // NB: Here, we define the utility of an optimization step as the
+            //     size of the step taken during the move. We can find this size
+            //     as the squared norm of the gradient.
             SquaredNorm(batchGradient),
+            // To actually apply the step, we can use Mapped(PlusD, Zip(...))
+            // to represent element-wise vector summation.
             model w/ Parameters <- Mapped(PlusD, Zip(model::Parameters, batchGradient))
         );
 

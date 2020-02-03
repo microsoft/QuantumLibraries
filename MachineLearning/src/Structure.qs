@@ -109,7 +109,7 @@ namespace Microsoft.Quantum.MachineLearning {
 
 
     /// # Summary
-    /// Returns an array of uncontrolled (single-qubit) rotations along a given
+    /// Returns an array of single-qubit rotations along a given
     /// axis, parameterized by distinct model parameters.
     ///
     /// # Input
@@ -122,7 +122,6 @@ namespace Microsoft.Quantum.MachineLearning {
     /// An array of controlled rotations about the given axis, one on each of
     /// `nQubits` qubits.
     function PartialRotationsLayer(idxsQubits : Int[], axis : Pauli) : ControlledRotation[] {
-        // [parameterIndex, pauliCode, targetQubit\,sequence of control qubits\]
         return Mapped(
             _Flipped(ControlledRotation(_, axis, _)),
             Enumerated(
