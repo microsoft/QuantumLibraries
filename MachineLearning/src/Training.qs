@@ -51,10 +51,8 @@ namespace Microsoft.Quantum.MachineLearning {
     /// on a given labeled training set.
     ///
     /// # Input
-    /// ## structure
-    /// Structure of the sequential classifier to be trained.
-    /// ## parameterSource
-    /// A list of parameter vectors to use as starting points during training.
+    /// ## models
+    /// An array of models to be used as starting points during training.
     /// ## samples
     /// A set of labeled training data that will be used to perform training.
     /// ## options
@@ -79,29 +77,28 @@ namespace Microsoft.Quantum.MachineLearning {
     /// - Microsoft.Quantum.MachineLearning.TrainSequentialClassifierAtModel
     /// - Microsoft.Quantum.MachineLearning.ValidateSequentialClassifier
     operation TrainSequentialClassifier(
-        structure : SequentialClassifierStructure,
-        parameterSource : Double[][],
+        models : SequentialModel[],
         samples : LabeledSample[],
         options : TrainingOptions,
         trainingSchedule : SamplingSchedule,
         validationSchedule : SamplingSchedule
     ) : SequentialModel {
-        mutable bestSoFar = SequentialModel([-1E12], -2.0);
+        mutable bestSoFar = Default<SequentialModel>()
+                            w/ Structure <- (Head(models))::Structure;
         mutable bestValidation = Length(samples) + 1;
 
         let features = Mapped(_Features, samples);
         let labels = Mapped(_Label, samples);
 
-        for ((idxStart, parameters) in Enumerated(parameterSource)) {
-            Message($"Beginning training at start point #{idxStart}...");
+        for ((idxModel, model) in Enumerated(models)) {
+            Message($"Beginning training at start point #{idxModel}...");
             let proposedUpdate = TrainSequentialClassifierAtModel(
-                structure, SequentialModel(parameters, 0.0),
+                model,
                 samples, options, trainingSchedule, 1
             );
             let probabilities = EstimateClassificationProbabilities(
                 options::Tolerance,
-                proposedUpdate::Parameters,
-                structure,
+                proposedUpdate,
                 Sampled(validationSchedule, features),
                 options::NMeasurements
             );
@@ -147,35 +144,41 @@ namespace Microsoft.Quantum.MachineLearning {
     operation _RunSingleTrainingStep(
         miniBatch : LabeledSample[],
         options : TrainingOptions,
-        param : Double[], gates : SequentialClassifierStructure
+        model : SequentialModel
     )
-    : (Double, Double[]) {
-        mutable batchGradient = ConstantArray(Length(param), 0.0);
-        let nQubits = MaxI(FeatureRegisterSize(miniBatch[0]::Features), NQubitsRequired(gates));
-        let effectiveTolerance = options::Tolerance / IntAsDouble(Length(gates!));
+    : (Double, SequentialModel) {
+        mutable batchGradient = ConstantArray(Length(model::Parameters), 0.0);
+        let nQubits = MaxI(FeatureRegisterSize(miniBatch[0]::Features), NQubitsRequired(model));
+        let effectiveTolerance = options::Tolerance / IntAsDouble(Length(model::Structure));
 
         for (sample in miniBatch) {
             mutable err = IntAsDouble(sample::Label);
             if (err < 1.0) {
                 set err = -1.0; //class 0 misclassified to class 1; strive to reduce the probability
             }
-            let stateGenerator = StateGenerator(
-                nQubits,
-                ApproximateInputEncoder(effectiveTolerance, sample::Features)
-            );
+            let stateGenerator = ApproximateInputEncoder(effectiveTolerance, sample::Features)
+                // Force the number of qubits in case something else in the
+                // minibatch requires a larger register.
+                w/ NQubits <- nQubits;
             let grad = EstimateGradient(
-                gates, param, stateGenerator,
+                model, stateGenerator,
                 options::NMeasurements
             );
-            for (ip in 0..(Length(param) - 1)) {
+            for (ip in 0..(Length(model::Parameters) - 1)) {
                 // GradientClassicalSample actually computes antigradient, but err*grad corrects it back to gradient
                 set batchGradient w/= ip <- (batchGradient[ip] + options::LearningRate * err * grad[ip]);
             }
 
         }
-        let updatedParameters = Mapped(PlusD, Zip(param, batchGradient));
-        // TODO:REVIEW: Ok to interpret utility as size of the overall move?
-        return (SquaredNorm(batchGradient), updatedParameters);
+        return (
+            // NB: Here, we define the utility of an optimization step as the
+            //     size of the step taken during the move. We can find this size
+            //     as the squared norm of the gradient.
+            SquaredNorm(batchGradient),
+            // To actually apply the step, we can use Mapped(PlusD, Zip(...))
+            // to represent element-wise vector summation.
+            model w/ Parameters <- Mapped(PlusD, Zip(model::Parameters, batchGradient))
+        );
 
     }
 
@@ -196,10 +199,8 @@ namespace Microsoft.Quantum.MachineLearning {
     /// For best accuracy, set to 1.
     /// ## options
     /// Options to be used in training.
-    /// ## structure
-    /// The structure of the sequential classifier to be trained.
     /// ## model
-    /// The parameterization and bias of the sequential model to be trained.
+    /// The sequential model to be trained.
     /// ## nPreviousBestMisses
     /// The best number of misclassifications observed in previous epochs.
     ///
@@ -211,7 +212,6 @@ namespace Microsoft.Quantum.MachineLearning {
         samples : LabeledSample[],
         schedule : SamplingSchedule, periodScore: Int,
         options : TrainingOptions,
-        structure : SequentialClassifierStructure,
         model : SequentialModel,
         nPreviousBestMisses : Int
     )
@@ -224,7 +224,7 @@ namespace Microsoft.Quantum.MachineLearning {
         let inferredLabels = InferredLabels(
             model::Bias,
             EstimateClassificationProbabilities(
-                options::Tolerance, model::Parameters, structure,
+                options::Tolerance, model,
                 features, options::NMeasurements
             )
         );
@@ -238,15 +238,15 @@ namespace Microsoft.Quantum.MachineLearning {
             )
         );
         for (minibatch in minibatches) {
-            let (utility, updatedParameters) = _RunSingleTrainingStep(
-                minibatch, options, bestSoFar::Parameters, structure
+            let (utility, updatedModel) = _RunSingleTrainingStep(
+                minibatch, options, bestSoFar
             );
             if (utility > 0.0000001) {
                 // There has been some good parameter update.
                 // Check if it actually improves things, and if so,
                 // commit it.
                 let probabilities = EstimateClassificationProbabilities(
-                    options::Tolerance, updatedParameters, structure,
+                    options::Tolerance, updatedModel,
                     features, options::NMeasurements
                 );
                 let updatedBias = _UpdatedBias(
@@ -260,7 +260,7 @@ namespace Microsoft.Quantum.MachineLearning {
                 ));
                 if (nMisses < nBestMisses) {
                     set nBestMisses = nMisses;
-                    set bestSoFar = SequentialModel(updatedParameters, updatedBias);
+                    set bestSoFar = updatedModel;
                 }
 
             }
@@ -308,7 +308,6 @@ namespace Microsoft.Quantum.MachineLearning {
     /// - Microsoft.Quantum.MachineLearning.TrainSequentialClassifier
     /// - Microsoft.Quantum.MachineLearning.ValidateSequentialClassifier
     operation TrainSequentialClassifierAtModel(
-        gates : SequentialClassifierStructure,
         model : SequentialModel,
         samples : LabeledSample[],
         options : TrainingOptions,
@@ -320,7 +319,7 @@ namespace Microsoft.Quantum.MachineLearning {
         let features = Mapped(_Features, samples);
         let actualLabels = Mapped(_Label, samples);
         let probabilities = EstimateClassificationProbabilities(
-            options::Tolerance, model::Parameters, gates,
+            options::Tolerance, model,
             features, options::NMeasurements
         );
         mutable bestSoFar = model
@@ -349,7 +348,7 @@ namespace Microsoft.Quantum.MachineLearning {
                 options
                     w/ LearningRate <- lrate
                     w/ MinibatchSize <- batchSize,
-                gates, current,
+                current,
                 nBestMisses
             );
             if (nMisses < nBestMisses) {
@@ -382,6 +381,7 @@ namespace Microsoft.Quantum.MachineLearning {
                 // and bias before updating.
                 if (nStalls > options::MaxStalls / 2) {
                     set current = SequentialModel(
+                        model::Structure,
                         ForEach(_RandomlyRescale(options::StochasticRescaleFactor, _), proposedUpdate::Parameters),
                         _RandomlyRescale(options::StochasticRescaleFactor, proposedUpdate::Bias)
                     );

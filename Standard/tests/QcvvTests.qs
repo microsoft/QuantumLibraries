@@ -75,6 +75,8 @@ namespace Microsoft.Quantum.Tests {
     
     // Calls EstimateFrequency with a TrivialStatePreparation to make sure
     // Emulation is actually kicking in.
+    @Test("QuantumSimulator")
+    @Test("ToffoliSimulator")
     operation EstimateFrequencyEmulationTest() : Unit {
         let freq = EstimateFrequencyA(_trivialStatePrepration, Measure([PauliZ, PauliZ, PauliZ], _), 3, 2000);
         NearEqualityFactD(freq, 1.0);

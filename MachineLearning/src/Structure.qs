@@ -18,14 +18,14 @@ namespace Microsoft.Quantum.MachineLearning {
     /// # Output
     /// The minimum size of a register on which the sequential classifier
     /// may be applied.
-    function NQubitsRequired(structure : SequentialClassifierStructure)
+    function NQubitsRequired(model : SequentialModel)
     : Int {
         mutable nQubitsRequired = 0;
-        for (gate in structure!) {
+        for (gate in model::Structure) {
             set nQubitsRequired = Fold(
                 MaxI, 0,
-                gate::Span::ControlIndices + [
-                    gate::Span::TargetIndex,
+                gate::ControlIndices + [
+                    gate::TargetIndex,
                     nQubitsRequired
                 ]
             );
@@ -45,29 +45,28 @@ namespace Microsoft.Quantum.MachineLearning {
     /// ## qubits
     /// A target register to which the classifier should be applied.
     operation ApplySequentialClassifier(
-        structure : SequentialClassifierStructure,
-        parameters : Double[],
+        model : SequentialModel,
         qubits : Qubit[]
     )
     : (Unit) is Adj + Ctl {
-        for (gate in structure!) {
-            if (gate::Index < Length(parameters)) {
-                let input = (gate::Axis, parameters[gate::Index], qubits[gate::Span::TargetIndex]);
-                if (IsEmpty(gate::Span::ControlIndices)) {
+        for (gate in model::Structure) {
+            if (gate::ParameterIndex < Length(model::Parameters)) {
+                let input = (gate::Axis, model::Parameters[gate::ParameterIndex], qubits[gate::TargetIndex]);
+                if (IsEmpty(gate::ControlIndices)) {
                     // Uncontrolled rotation of target
                     R(input);
                 } else {
                     //TODO: should one validate the control indices first?
-                    (Controlled R)(Subarray(gate::Span::ControlIndices, qubits), input);
+                    (Controlled R)(Subarray(gate::ControlIndices, qubits), input);
                 }
             }
         }
     }
 
-    function _UncontrolledSpanSequence(idxsQubits : Int[]) : GateSpan[] {
-        return Mapped(
-            GateSpan(_, new Int[0]),
-            idxsQubits
+    function _UncontrolledSpanSequence(idxsQubits : Int[]) : (Int, Int[])[] {
+        return Zip(
+            idxsQubits,
+            ConstantArray(Length(idxsQubits), new Int[0])
         );
     }
 
@@ -84,51 +83,132 @@ namespace Microsoft.Quantum.MachineLearning {
         return _CallFlipped(fn, _, _);
     }
 
-    function LocalRotationsLayer(nQubits : Int, axis : Pauli) : SequentialClassifierStructure {
+    /// # Summary
+    /// Returns an array of uncontrolled (single-qubit) rotations along a given
+    /// axis, with one rotation for each qubit in a register, parameterized by
+    /// distinct model parameters.
+    ///
+    /// # Input
+    /// ## nQubits
+    /// The number of qubits acted on by the given layer.
+    /// ## axis
+    /// The rotation axis for each rotation in the given layer.
+    ///
+    /// # Output
+    /// An array of controlled rotations about the given axis, one on each of
+    /// `nQubits` qubits.
+    function LocalRotationsLayer(nQubits : Int, axis : Pauli) : ControlledRotation[] {
         // [parameterIndex, pauliCode, targetQubit\,sequence of control qubits\]
-        return SequentialClassifierStructure(Mapped(
+        return Mapped(
             _Flipped(ControlledRotation(_, axis, _)),
             Enumerated(
                 _UncontrolledSpanSequence(SequenceI(0, nQubits - 1))
             )
-        ));
+        );
     }
 
 
-    function PartialRotationsLayer(idxsQubits : Int[], axis : Pauli) : SequentialClassifierStructure {
-        // [parameterIndex, pauliCode, targetQubit\,sequence of control qubits\]
-        return SequentialClassifierStructure(Mapped(
+    /// # Summary
+    /// Returns an array of single-qubit rotations along a given
+    /// axis, parameterized by distinct model parameters.
+    ///
+    /// # Input
+    /// ## idxsQubits
+    /// Indices for the qubits to be used as the targets for each rotation.
+    /// ## axis
+    /// The rotation axis for each rotation in the given layer.
+    ///
+    /// # Output
+    /// An array of controlled rotations about the given axis, one on each of
+    /// `nQubits` qubits.
+    function PartialRotationsLayer(idxsQubits : Int[], axis : Pauli) : ControlledRotation[] {
+        return Mapped(
             _Flipped(ControlledRotation(_, axis, _)),
             Enumerated(
                 _UncontrolledSpanSequence(idxsQubits)
             )
-        ));
+        );
     }
 
-    function CyclicEntanglingLayer(nQubits : Int, axis : Pauli, stride : Int) : SequentialClassifierStructure {
+    /// # Summary
+    /// Returns an array of singly controlled rotations along a given axis,
+    /// arranged cyclically across a register of qubits, and parameterized by
+    /// distinct model parameters.
+    ///
+    /// # Input
+    /// ## nQubits
+    /// The number of qubits acted on by the given layer.
+    /// ## axis
+    /// The rotation axis for each rotation in the given layer.
+    /// ## stride
+    /// The separation between the target and control indices for each rotation.
+    ///
+    /// # Output
+    /// An array of two-qubit controlled rotations laid out cyclically across
+    /// a register of `nQubits` qubits.
+    ///
+    /// # Example
+    /// The following are equivalent:
+    /// ```Q#
+    /// let layer = CyclicEntanglingLayer(3, PauliX, 2);
+    /// let layer = [
+    ///     ControlledRotation((0, [2]), PauliX, 0),
+    ///     ControlledRotation((1, [0]), PauliX, 1),
+    ///     ControlledRotation((2, [1]), PauliX, 2)
+    /// ];
+    /// ```
+    function CyclicEntanglingLayer(nQubits : Int, axis : Pauli, stride : Int) : ControlledRotation[] {
         mutable rotations = new ControlledRotation[0];
         for (idxTarget in 0..nQubits - 1) {
             set rotations += [ControlledRotation(
-                GateSpan(
+                (
                     idxTarget,
                     [(idxTarget + stride) % nQubits]
                 ),
                 axis, idxTarget
             )];
         }
-        return SequentialClassifierStructure(rotations);
+        return rotations;
     }
 
-    function CombinedStructure(layers : SequentialClassifierStructure[]) : SequentialClassifierStructure {
-        mutable combined = (Head(layers))!;
+    /// # Summary
+    /// Given one or more layers of controlled rotations, returns a single
+    /// layer with model parameter index shifted such that distinct layers
+    /// are parameterized by distinct model parameters.
+    ///
+    /// # Input
+    /// ## layers
+    /// The layers to be combined.
+    ///
+    /// # Output
+    /// A single layer of controlled rotations, representing the concatenation
+    /// of all other layers.
+    ///
+    /// # Example
+    /// The following are equivalent:
+    /// ```Q#
+    /// let structure = CombinedStructure([
+    ///     LocalRotationLayer(2, PauliY),
+    ///     CyclicEntanglingLayer(3, PauliX, 2)
+    /// ]);
+    /// let structure = [
+    ///     ControlledRotation((0, new Int[0]), PauliY, 0),
+    ///     ControlledRotation((1, new Int[0]), PauliY, 1),
+    ///     ControlledRotation((0, [2]), PauliX, 2),
+    ///     ControlledRotation((1, [0]), PauliX, 3),
+    ///     ControlledRotation((2, [1]), PauliX, 4)
+    /// ];
+    /// ```
+    function CombinedStructure(layers : ControlledRotation[][]) : ControlledRotation[] {
+        mutable combined = Head(layers);
         mutable offset = Length(combined);
         for (layer in Rest(layers)) {
-            for (gate in layer!) {
-                set combined += [gate w/ Index <- gate::Index + offset];
+            for (gate in layer) {
+                set combined += [gate w/ ParameterIndex <- gate::ParameterIndex + offset];
             }
-            set offset += Length(layer!);
+            set offset += Length(layer);
         }
-        return SequentialClassifierStructure(combined);
+        return combined;
     }
 
 }
