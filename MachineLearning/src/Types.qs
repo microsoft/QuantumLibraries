@@ -71,7 +71,7 @@ namespace Microsoft.Quantum.MachineLearning {
     ///
     /// # Input
     /// ## NQubits
-    /// The nubmer of qubits on which the encoded input is defined.
+    /// The number of qubits on which the encoded input is defined.
     /// ## Prepare
     /// An operation which prepares the encoded input on a little-endian
     /// register of `NQubits` qubits.
