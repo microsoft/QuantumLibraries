@@ -63,7 +63,7 @@ namespace Microsoft.Quantum.Preparation {
     /// - PrepareChoiStateA
     /// - PrepareChoiStateC
     /// - PrepareChoiStateCA
-    operation PrepareChoiState (op : (Qubit[] => Unit), reference : Qubit[], target : Qubit[]) : Unit {
+    operation PrepareChoiState(op : (Qubit[] => Unit), reference : Qubit[], target : Qubit[]) : Unit {
         PrepareEntangledState(reference, target);
         op(target);
     }
@@ -87,7 +87,7 @@ namespace Microsoft.Quantum.Preparation {
     ///
     /// # See Also
     /// - PrepareChoiState
-    operation PrepareChoiStateA (op : (Qubit[] => Unit is Adj), reference : Qubit[], target : Qubit[]) : Unit is Adj {
+    operation PrepareChoiStateA(op : (Qubit[] => Unit is Adj), reference : Qubit[], target : Qubit[]) : Unit is Adj {
         PrepareEntangledState(reference, target);
         op(target);
     }

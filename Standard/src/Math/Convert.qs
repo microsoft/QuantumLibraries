@@ -4,6 +4,24 @@
 namespace Microsoft.Quantum.Math {
 
     /// # Summary
+    /// Converts a real floating-point number to a complex number in its polar
+    /// representation.
+    ///
+    /// # Input
+    /// ## input
+    /// The real number to be represented as a complex number.
+    ///
+    /// # Output
+    /// A complex number representing the given input in terms of polar
+    /// coordinates.
+    function DoubleAsComplexPolar(input : Double) : ComplexPolar {
+        return ComplexPolar(
+            AbsD(input),
+            input < 0.0 ? PI() | 0.0
+        );
+    }
+
+    /// # Summary
     /// Converts a complex number of type `ComplexPolar` to a complex
     /// number of type `Complex`.
     ///

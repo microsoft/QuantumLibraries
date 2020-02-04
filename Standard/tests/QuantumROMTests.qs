@@ -86,7 +86,7 @@ namespace Microsoft.Quantum.Tests {
 
                 Message($"Qubits used: {nGarbageQubits} + {nCoeffQubits}");
                 using(qubits = Qubit[nTotal]){
-                    let (register, rest) = _QuantumROMQubitManager(targetError, coeffs, qubits);
+                    let (register, rest) = _PartitionedForQuantumROM(targetError, coeffs, qubits);
                     let (coeffQubits, garbageQubits) = register;
                     op(register);
                     // Now check that probability of each number state in nCoeffQubits is as expected.
