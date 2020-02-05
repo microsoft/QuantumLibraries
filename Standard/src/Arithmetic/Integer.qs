@@ -583,16 +583,18 @@ namespace Microsoft.Quantum.Arithmetic {
                 X(ys![0]);
             }
             else {
-                ApplyToEachCA(X, ys!);
-                ApplyToEachCA(CNOT, Zip(Rest(xs!),Rest(ys!)));
-                (Adjoint CascadeCNOT) (Rest(xs!));
-                CascadeCCNOT (Most(ys!), xs!);
-                (Controlled CCNOT) (controls, (xs![nQubits-1], ys![nQubits-1], result));
-                (Adjoint CascadeCCNOT) (Most(ys!), xs!);
-                CascadeCNOT(Rest(xs!));
-                (Controlled CNOT) (controls, (xs![nQubits-1], result));
-                ApplyToEachCA(CNOT, Zip(Rest(xs!), Rest(ys!)));
-                ApplyToEachCA(X, ys!);
+                within {
+                    ApplyToEachCA(X, ys!);
+                    ApplyToEachCA(CNOT, Zip(Rest(xs!), Rest(ys!)));
+                } apply {
+                    within {
+                        (Adjoint ApplyCNOTChain) (Rest(xs!));
+                        CascadeCCNOT (Most(ys!), xs!);
+                    } apply {
+                        (Controlled CCNOT) (controls, (xs![nQubits-1], ys![nQubits-1], result));
+                    }
+                    (Controlled CNOT) (controls, (xs![nQubits-1], result));
+                }
             }
         }
     }
