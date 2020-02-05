@@ -51,7 +51,6 @@ namespace Microsoft.Quantum.MachineLearning {
     : (Unit) is Adj + Ctl {
         for (gate in model::Structure) {
             if (gate::ParameterIndex < Length(model::Parameters)) {
-                Message($"axis {gate::Axis} parameter {model::Parameters}[{gate::ParameterIndex}] target {gate::TargetIndex}");
                 let input = (gate::Axis, model::Parameters[gate::ParameterIndex], qubits[gate::TargetIndex]);
                 if (IsEmpty(gate::ControlIndices)) {
                     // Uncontrolled rotation of target
