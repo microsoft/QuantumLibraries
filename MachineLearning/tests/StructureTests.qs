@@ -150,14 +150,14 @@ namespace Microsoft.Quantum.MachineLearning.Tests {
                     w/ TargetIndex <- 1
                     w/ ControlIndices <- [0]
                     w/ Axis <- PauliX
-                    w/ ParameterIndex <- 1,
+                    w/ ParameterIndex <- 1
             ],
             [
                 Default<ML.ControlledRotation>()
                     w/ TargetIndex <- 2
                     w/ ControlIndices <- [1]
                     w/ Axis <- PauliZ
-                    w/ ParameterIndex <- 0,
+                    w/ ParameterIndex <- 0
             ]
         ]);
         Fact(All(EqualCR, Zip(
