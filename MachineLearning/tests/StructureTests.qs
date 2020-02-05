@@ -138,29 +138,30 @@ namespace Microsoft.Quantum.MachineLearning.Tests {
 
     @Test("QuantumSimulator")
     function CombinedStructureFact() : Unit {
-        Fact(All(EqualCR, Zip(
-            ML.CombinedStructure([
-                [
-                    Default<ML.ControlledRotation>()
-                        w/ TargetIndex <- 0
-                        w/ ControlIndices <- [2]
-                        w/ Axis <- PauliX
-                        w/ ParameterIndex <- 0,
+        let combined = ML.CombinedStructure([
+            [
+                Default<ML.ControlledRotation>()
+                    w/ TargetIndex <- 0
+                    w/ ControlIndices <- [2]
+                    w/ Axis <- PauliX
+                    w/ ParameterIndex <- 0,
 
-                    Default<ML.ControlledRotation>()
-                        w/ TargetIndex <- 1
-                        w/ ControlIndices <- [0]
-                        w/ Axis <- PauliX
-                        w/ ParameterIndex <- 1,
-                ],
-                [
-                    Default<ML.ControlledRotation>()
-                        w/ TargetIndex <- 0
-                        w/ ControlIndices <- [2]
-                        w/ Axis <- PauliZ
-                        w/ ParameterIndex <- 0,
-                ]
-            ]),
+                Default<ML.ControlledRotation>()
+                    w/ TargetIndex <- 1
+                    w/ ControlIndices <- [0]
+                    w/ Axis <- PauliX
+                    w/ ParameterIndex <- 1,
+            ],
+            [
+                Default<ML.ControlledRotation>()
+                    w/ TargetIndex <- 2
+                    w/ ControlIndices <- [1]
+                    w/ Axis <- PauliZ
+                    w/ ParameterIndex <- 0,
+            ]
+        ]);
+        Fact(All(EqualCR, Zip(
+            combined,
             [
                 Default<ML.ControlledRotation>()
                     w/ TargetIndex <- 0

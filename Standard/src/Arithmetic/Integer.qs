@@ -404,7 +404,7 @@ namespace Microsoft.Quantum.Arithmetic {
             "Input registers must have the same number of qubits." );
 
         ApplyToEachCA(CNOT, Zip(Rest(xs!), Rest(ys!)));
-        (Adjoint CascadeCNOT) (Rest(xs!));
+        Adjoint ApplyCNOTChain(Rest(xs!));
     }
 
     /// # Summary
