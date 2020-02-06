@@ -43,8 +43,6 @@ namespace Microsoft.Quantum.Tests {
 
         // Loop over multiple qubit tests
         for ((idxTestCase, testCase) in Enumerated(testCases)) {
-
-            // Test negative coefficients. Should give same results as positive coefficients.
             using (qubits = Qubit[testCase::NQubits]) {
                 let qubitsLE = LittleEndian(qubits);
                 let op = StatePreparationPositiveCoefficients(testCase::Magnitudes);

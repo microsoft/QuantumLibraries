@@ -48,6 +48,6 @@ namespace Microsoft.Quantum.Preparation {
             set coefficientsComplexPolar w/= idx <- ComplexPolar(AbsD(coefficients[idx]), 0.0);
         }
 
-        return PrepareArbitraryState(coefficientsComplexPolar, _);
+        return PrepareArbitraryStateCP(coefficientsComplexPolar, _);
     }
 }

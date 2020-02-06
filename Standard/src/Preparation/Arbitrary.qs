@@ -239,7 +239,7 @@ namespace Microsoft.Quantum.Preparation {
         let r = Sqrt(PowD(a0::Magnitude, 2.0) + PowD(a1::Magnitude, 2.0));
         let t = 0.5 * (a0::Argument + a1::Argument);
         let phi = a1::Argument - a0::Argument;
-        let theta = 2.0 * ArcTan2(a0::Magnitude, a1::Magnitude);
+        let theta = 2.0 * ArcTan2(a1::Magnitude, a0::Magnitude);
         return (ComplexPolar(r, t), phi, theta);
     }
 
