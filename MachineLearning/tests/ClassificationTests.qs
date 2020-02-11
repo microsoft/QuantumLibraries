@@ -18,7 +18,7 @@ namespace Microsoft.Quantum.MachineLearning.Tests {
         AllEqualityFactI(
             ML.InferredLabels(0.25, [0.23, 0.26, 0.1]),
             [0, 1, 0],
-            "InferredLabels returned at least wrong class."
+            "InferredLabels returned at least one wrong class."
         );
     }
 
