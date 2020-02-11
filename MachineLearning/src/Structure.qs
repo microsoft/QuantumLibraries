@@ -22,7 +22,7 @@ namespace Microsoft.Quantum.MachineLearning {
     : Int {
         mutable nQubitsRequired = 0;
         for (gate in model::Structure) {
-            set nQubitsRequired = Fold(
+            set nQubitsRequired = 1 + Fold(
                 MaxI, 0,
                 gate::ControlIndices + [
                     gate::TargetIndex,
