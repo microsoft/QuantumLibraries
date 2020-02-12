@@ -31,13 +31,12 @@ namespace Microsoft.Quantum.Canon {
     /// op(0, deltaT, target);
     /// op(1, deltaT, target);
     /// ```
-	/// and
-	/// ```qsharp
+    /// and
+    /// ```qsharp
     /// _Trotter1ImplCA((2, op), deltaT, target);
     /// ```
     operation _Trotter1ImplCA<'T> ((nSteps : Int, op : ((Int, Double, 'T) => Unit is Adj + Ctl)), stepSize : Double, target : 'T) : Unit is Adj + Ctl {
-        for (idx in 0 .. nSteps - 1)
-        {
+        for (idx in 0 .. nSteps - 1) {
             op(idx, stepSize, target);
         }
     }
@@ -71,17 +70,19 @@ namespace Microsoft.Quantum.Canon {
     /// op(1, deltaT / 2.0, target);
     /// op(0, deltaT / 2.0, target);
     /// ```
-	/// and
-	/// ```qsharp
+    /// and
+    /// ```qsharp
     /// _Trotter2ImplCA((2, op), deltaT, target);
     /// ```
-    operation _Trotter2ImplCA<'T> ((nSteps : Int, op : ((Int, Double, 'T) => Unit is Adj + Ctl)), stepSize : Double, target : 'T) : Unit is Adj + Ctl
-    {
-        for (idx in 0 .. nSteps - 1)
-        {
+    operation _Trotter2ImplCA<'T>(
+        (nSteps : Int, op : ((Int, Double, 'T) => Unit is Adj + Ctl)),
+        stepSize : Double, target : 'T
+    )
+    : Unit is Adj + Ctl {
+        for (idx in 0 .. nSteps - 1) {
             op(idx, stepSize * 0.5, target);
         }
-        
+
         for (idx in nSteps - 1 .. -1 .. 0)
         {
             op(idx, stepSize * 0.5, target);
@@ -108,37 +109,38 @@ namespace Microsoft.Quantum.Canon {
     /// Multiplier on size of each step of the simulation.
     /// ## target
     /// A quantum register on which the operations act.
-    operation _TrotterArbitraryImplCA<'T> (order:Int, (nSteps : Int, op : ((Int, Double, 'T) => Unit is Adj + Ctl)), stepSize : Double, target : 'T) : Unit
-    {
-        body (...)
-        {
-            if(order > 2){
-                let stepSizeOuter = _TrotterStepSize(order);
-                let stepSizeInner = 1.0 - 4.0 * stepSizeOuter;
-                _TrotterArbitraryImplCA(order -2, (nSteps, op), stepSizeOuter * stepSize, target);
-                _TrotterArbitraryImplCA(order -2, (nSteps, op), stepSizeOuter * stepSize, target);
-                _TrotterArbitraryImplCA(order -2, (nSteps, op), stepSizeInner * stepSize, target);
-                _TrotterArbitraryImplCA(order -2, (nSteps, op), stepSizeOuter * stepSize, target);
-                _TrotterArbitraryImplCA(order -2, (nSteps, op), stepSizeOuter * stepSize, target);
-            }
-            elif(order == 2){
-                _Trotter2ImplCA((nSteps, op), stepSize, target);
-            }
-            else{
-                _Trotter1ImplCA((nSteps, op), stepSize, target);
-            }
+    operation _TrotterArbitraryImplCA<'T>(
+        order : Int,
+        (nSteps : Int, op : ((Int, Double, 'T) => Unit is Adj + Ctl)),
+        stepSize : Double, target : 'T
+    )
+    : Unit is Adj + Ctl {
+        if (order > 2) {
+            let stepSizeOuter = _TrotterStepSize(order);
+            let stepSizeInner = 1.0 - 4.0 * stepSizeOuter;
+            _TrotterArbitraryImplCA(order - 2, (nSteps, op), stepSizeOuter * stepSize, target);
+            _TrotterArbitraryImplCA(order - 2, (nSteps, op), stepSizeOuter * stepSize, target);
+            _TrotterArbitraryImplCA(order - 2, (nSteps, op), stepSizeInner * stepSize, target);
+            _TrotterArbitraryImplCA(order - 2, (nSteps, op), stepSizeOuter * stepSize, target);
+            _TrotterArbitraryImplCA(order - 2, (nSteps, op), stepSizeOuter * stepSize, target);
+        } elif (order == 2) {
+            _Trotter2ImplCA((nSteps, op), stepSize, target);
+        } else {
+            _Trotter1ImplCA((nSteps, op), stepSize, target);
         }
-        
-        adjoint invert;
-        controlled distribute;
-        controlled adjoint distribute;
     }
 
     /// # Summary
     /// Computes Trotter step size in recursive implementation of
     /// Trotter simulation algorithm.
-    function _TrotterStepSize (order: Int) : Double {
-        return 1.0 / (4.0 - PowD(4.0, 1.0 / (2.0 * IntAsDouble(order) - 1.0)));
+    ///
+    /// # Remarks
+    /// This operation uses a different indexing convention than that of
+    /// [quant-ph/0508139](https://arxiv.org/abs/quant-ph/0508139). In
+    /// particular, `DecomposedIntoTimeStepsCA(_, 4)` corresponds to the
+    /// scalar $p_2(\lambda)$ in quant-ph/0508139.
+    function _TrotterStepSize(order : Int) : Double {
+        return 1.0 / (4.0 - PowD(4.0, 1.0 / (IntAsDouble(order) - 1.0)));
     }
 
 
@@ -152,38 +154,62 @@ namespace Microsoft.Quantum.Canon {
     /// `Qubit[]` or `Qubit`.
     ///
     /// # Input
-    /// ### nSteps
+    /// ## nSteps
     /// The number of operations to be decomposed into time steps.
-    /// ### op
+    /// ## op
     /// An operation which accepts an index input (type `Int`) and a time
     /// input (type `Double`) for decomposition.
     /// ## trotterOrder
     /// Selects the order of the Trotter–Suzuki integrator to be used.
-    /// Order 1 and even orders 2,4,6,... are currently supported.
+    /// Order 1 and even orders 2, 4, 6,... are currently supported.
     ///
     /// # Output
     /// Returns a unitary implementing the Trotter–Suzuki integrator, where
     /// the first parameter `Double` is the integration step size, and the
     /// second parameter is the target acted upon.
     ///
+    /// # Remarks
+    /// When called with `order` equal to `1`, this function returns an operation
+    /// that can be simulated by the lowest-order Trotter–Suzuki integrator
+    /// $$
+    /// \begin{align}
+    ///     S_1(\lambda) = \prod_{j = 1}^{m} e^{H_j \lambda},
+    /// \end{align}
+    /// $$
+    /// where we have followed the notation of
+    /// [quant-ph/0508139](https://arxiv.org/abs/quant-ph/0508139)
+    /// and let $\lambda$ be the evolution time (represented by the first input
+    /// of the returned operation), and have let $\{H_j\}_{j = 1}^{m}$ be the
+    /// set of (skew-Hermitian) dynamical generators being integrated such that
+    /// `op(j, lambda, _)` is simulated by the unitary operator
+    /// $e^{H_j \lambda}$.
+    ///
+    /// Similarly, an `order` of `2` returns the second-order symmetric
+    /// Trotter–Suzuki integrator
+    /// $$
+    /// \begin{align}
+    ///     S_2(\lambda) = \prod_{j = 1}^{m} e^{H_k \lambda / 2}
+    ///                    \prod_{j' = m}^{1} e^{H_{j'} \lambda / 2}.
+    /// \end{align}
+    /// $$
+    ///
+    /// Higher even values of `order` are implemented using the recursive
+    /// construction of [quant-ph/0508139](https://arxiv.org/abs/quant-ph/0508139).
+    ///
     /// # References
-    /// We use the implementation in
     /// - [ *D. W. Berry, G. Ahokas, R. Cleve, B. C. Sanders* ](https://arxiv.org/abs/quant-ph/0508139)
-    function DecomposeIntoTimeStepsCA<'T> ((nSteps : Int, op : ((Int, Double, 'T) => Unit is Adj + Ctl)), trotterOrder : Int) : ((Double, 'T) => Unit is Adj + Ctl)
-    {
-        if (trotterOrder == 1)
-        {
+    function DecomposedIntoTimeStepsCA<'T>(
+        (nSteps : Int, op : ((Int, Double, 'T) => Unit is Adj + Ctl)),
+        trotterOrder : Int
+    )
+    : ((Double, 'T) => Unit is Adj + Ctl) {
+        if (trotterOrder == 1) {
             return _Trotter1ImplCA((nSteps, op), _, _);
-        }
-        elif (trotterOrder == 2)
-        {
+        } elif (trotterOrder == 2) {
             return _Trotter2ImplCA((nSteps, op), _, _);
-        }
-        elif(trotterOrder % 2 ==0){
+        } elif(trotterOrder % 2 == 0) {
             return _TrotterArbitraryImplCA(trotterOrder, (nSteps, op), _, _);
-        }
-        else
-        {
+        } else {
             fail $"Odd order {trotterOrder} not yet supported.";
         }
     }

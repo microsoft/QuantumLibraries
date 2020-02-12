@@ -103,8 +103,8 @@ namespace Microsoft.Quantum.Arrays {
     /// The result type of the `action` operation.
     ///
     /// # Input
-    /// ## mapper
-    /// A function from `'T` to `'U` that is used to map elements.
+    /// ## action
+    /// An operation from `'T` to `'U` that is applied to each element.
     /// ## array
     /// An array of elements over `'T`.
     ///
@@ -121,5 +121,4 @@ namespace Microsoft.Quantum.Arrays {
     }
 
 }
-
 

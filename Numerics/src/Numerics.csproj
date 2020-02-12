@@ -1,5 +1,5 @@
-﻿<Project Sdk="Microsoft.Quantum.Sdk/0.10.1912.2605-alpha">
-  
+﻿<Project Sdk="Microsoft.Quantum.Sdk/0.10.2001.2831">
+
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
     <AssemblyName>Microsoft.Quantum.Numerics</AssemblyName>
@@ -32,7 +32,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Quantum.Simulators" Version="0.10.1912.2614-alpha" />
+    <Compile Include="..\Common\DelaySign.cs" Link="Properties\DelaySign.cs" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Quantum.Simulators" Version="0.10.2001.2831" />
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" />
   </ItemGroup>
 

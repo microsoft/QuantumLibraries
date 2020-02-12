@@ -220,7 +220,7 @@ namespace Microsoft.Quantum.Canon {
     /// # Summary
     /// Implements a multiple-controlled Toffoli gate, assuming that target
     /// qubit is initialized 0.  The adjoint operation assumes that the target
-    /// qubit will be released to 0.
+    /// qubit will be reset to 0.
     ///
     /// # Input
     /// ## controls
@@ -292,7 +292,7 @@ namespace Microsoft.Quantum.Canon {
     /// # Summary
     /// Implements a multiple-controlled Toffoli gate, assuming that target
     /// qubit is initialized 0.  The adjoint operation assumes that the target
-    /// qubit will be released to 0.  Requires a Rz depth of 1, while the number
+    /// qubit will be reset to 0.  Requires a Rz depth of 1, while the number
     /// of helper qubits are exponential in the number of qubits.
     ///
     /// # Input

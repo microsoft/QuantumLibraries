@@ -18,12 +18,12 @@ namespace Microsoft.Quantum.Arithmetic {
                 let summand1LE = LittleEndian(register[0 .. numberOfQubits - 1]);
                 let summand2LE = LittleEndian(register[numberOfQubits .. 2*numberOfQubits - 1]);
                 let carry = register[2*numberOfQubits];
- 
+
                 ApplyXorInPlace(summand1, summand1LE);
                 ApplyXorInPlace(summand2, summand2LE);
 
                 IntegerAdder(summand1LE, summand2LE, carry);
- 
+
                 let sum = summand1 + summand2;
                 let expected = ModulusI(sum, 2^numberOfQubits);
                 set actual1 = MeasureInteger(summand1LE);
@@ -35,7 +35,7 @@ namespace Microsoft.Quantum.Arithmetic {
                 if (measured_carry == One) {set actual_carry = 1;} else {set actual_carry = 0;}
                 EqualityFactI(expected_carry, actual_carry, $"Expected {expected_carry}, got {actual_carry}");
 
-                for (numberOfControls in 1..2) { 
+                for (numberOfControls in 1..2) {
                     using (controls = Qubit[numberOfControls]) {
                         ApplyXorInPlace(summand1, summand1LE);
                         ApplyXorInPlace(summand2, summand2LE);
@@ -66,7 +66,7 @@ namespace Microsoft.Quantum.Arithmetic {
             }
         }
     }
- 
+
     operation IntegerAdderExhaustiveTestHelper (IntegerAdder : ( (LittleEndian, LittleEndian, Qubit) => Unit is Ctl), numberOfQubits : Int) : Unit {
         for( summand1 in 0 .. 2^numberOfQubits - 1 ) {
             for( summand2 in 0 .. 2^numberOfQubits - 1 ) {
@@ -90,26 +90,26 @@ namespace Microsoft.Quantum.Arithmetic {
 
     operation RippleCarryAdderDTestReversible () : Unit {
         let numberOfQubits = 20;
-        let summand1 = 823709; 
-        let summand2 = 88487;  
+        let summand1 = 823709;
+        let summand2 = 88487;
         IntegerAdderTestHelper(RippleCarryAdderD, summand1, summand2, numberOfQubits);
     }
 
     operation RippleCarryAdderCDKMExhaustiveTest () : Unit {
         let numberOfQubits = 4;
-        IntegerAdderExhaustiveTestHelper (RippleCarryAdderCDKM, numberOfQubits);    
+        IntegerAdderExhaustiveTestHelper (RippleCarryAdderCDKM, numberOfQubits);
     }
 
     operation RippleCarryAdderCDKMTestReversible () : Unit {
         let numberOfQubits = 20;
-        let summand1 = 823709; 
-        let summand2 = 88487;  
+        let summand1 = 823709;
+        let summand2 = 88487;
         IntegerAdderTestHelper(RippleCarryAdderCDKM, summand1, summand2, numberOfQubits);
     }
 
     operation RippleCarryAdderCDKMExhaustiveTestReversible () : Unit {
         for (numberOfQubits in 3..6) {
-            IntegerAdderExhaustiveTestHelper (RippleCarryAdderCDKM, numberOfQubits); 
+            IntegerAdderExhaustiveTestHelper (RippleCarryAdderCDKM, numberOfQubits);
         }
     }
 
@@ -131,12 +131,12 @@ namespace Microsoft.Quantum.Arithmetic {
             mutable actual2 = 0;
             let summand1LE = LittleEndian(register[0 .. numberOfQubits - 1]);
             let summand2LE = LittleEndian(register[numberOfQubits .. 2*numberOfQubits - 1]);
- 
+
             ApplyXorInPlace(summand1, summand1LE);
             ApplyXorInPlace(summand2, summand2LE);
 
             IntegerAdder(summand1LE, summand2LE);
- 
+
             let sum = summand1 + summand2;
             let expected = ModulusI(sum, 2^numberOfQubits);
             set actual1 = MeasureInteger(summand1LE);
@@ -145,7 +145,7 @@ namespace Microsoft.Quantum.Arithmetic {
             EqualityFactI(expected, actual2, $"Expected {expected}, got {actual2}");
             let expected_carry = (sum / 2^numberOfQubits);
 
-            for (numberOfControls in 1..2) { 
+            for (numberOfControls in 1..2) {
                 using (controls = Qubit[numberOfControls]) {
                     ApplyXorInPlace(summand1, summand1LE);
                     ApplyXorInPlace(summand2, summand2LE);
@@ -180,8 +180,8 @@ namespace Microsoft.Quantum.Arithmetic {
 
     operation RippleCarryAdderNoCarryTTKTestReversible () : Unit {
         let numberOfQubits = 10;
-        let summand1 = 1021; 
-        let summand2 = 973; 
+        let summand1 = 1021;
+        let summand2 = 973;
         IntegerAdderNoCarryTestHelper(RippleCarryAdderNoCarryTTK, summand1, summand2, numberOfQubits);
     }
 
@@ -206,13 +206,13 @@ namespace Microsoft.Quantum.Arithmetic {
             let integer1LE = LittleEndian(register[0 .. numberOfQubits - 1]);
             let integer2LE = LittleEndian(register[numberOfQubits .. 2*numberOfQubits - 1]);
             let result = register[2*numberOfQubits];
- 
+
             ApplyXorInPlace(integer1, integer1LE);
             ApplyXorInPlace(integer2, integer2LE);
 
             GreaterThan(integer1LE, integer2LE, result);
 
-            if (integer1 > integer2) {set gt = One;} 
+            if (integer1 > integer2) {set gt = One;}
             set actual1 = MeasureInteger(integer1LE);
             EqualityFactI(integer1, actual1, $"Expected {integer1}, got {actual1}");
             set actual2 = MeasureInteger(integer2LE);
@@ -221,7 +221,7 @@ namespace Microsoft.Quantum.Arithmetic {
             EqualityFactB((gt == actualr), true, $"Expected {gt}, got {actualr}");
 
             Reset(result);
-            for (numberOfControls in 1..2) { 
+            for (numberOfControls in 1..2) {
                 using (controls = Qubit[numberOfControls]) {
                     ApplyXorInPlace(integer1, integer1LE);
                     ApplyXorInPlace(integer2, integer2LE);

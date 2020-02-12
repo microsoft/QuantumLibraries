@@ -94,5 +94,22 @@ namespace Microsoft.Quantum.Measurement {
     operation MeasureIfAllZeros(register : Qubit[]) : Bool {
         return All(IsResultZero, ForEach(M, register));
     }
+    
+    /// # Summary
+    /// Jointly measures a register of qubits in the Pauli Z basis.
+    ///
+    /// # Description
+    /// Measures a register of qubits in the $Z \otimes Z \otimes \cdots \otimes Z$
+    /// basis, representing the parity of the entire register.
+    ///
+    /// # Input
+    /// ## register
+    /// The register to be measured.
+    ///
+    /// # Output
+    /// The result of measuring $Z \otimes Z \otimes \cdots \otimes Z$.
+    operation MeasureAllZ (register : Qubit[]) : Result {
+        return Measure(ConstantArray(Length(register), PauliZ), register);
+    }
 
 }

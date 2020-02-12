@@ -3,32 +3,33 @@
 
 namespace Microsoft.Quantum.Canon {
     open Microsoft.Quantum.Intrinsic;
+    open Microsoft.Quantum.Arrays;
 
     /// # Summary
-    /// Computes the parity of an array of qubits in-place.
-	///
-    /// It follows the pattern
-    /// $\ket{q_0} \ket{q_0 \oplus q_1} \ket{q_0 \oplus q_1 \oplus q_2} \cdots$.
+    /// Computes the parity of a register of qubits in-place.
+    ///
+    /// # Description
+    /// This operation transforms the state of its input as
+    /// $$
+    /// \begin{align}
+    ///     \ket{q_0} \ket{q_1} \cdots \ket{q_{n - 1}} & \mapsto
+    ///     \ket{q_0} \ket{q_0 \oplus q_1} \ket{q_0 \oplus q_1 \oplus q_2} \cdots
+    ///         \ket{q_0 \oplus \cdots \oplus q_{n - 1}}.
+    /// \end{align}
+    /// $$
     ///
     /// # Input
     /// ## qubits
-    /// Array of qubits on which parity is computed 
-    /// and stored.
-    operation CNOTChain(qubits: Qubit[]) : Unit {
-        body (...) {
-            for (idxQubit in 0..Length(qubits) - 2){
-                CNOT(qubits[idxQubit], qubits[idxQubit + 1]);
-            }
-        }
-        adjoint auto;
-        controlled auto;
-        adjoint controlled auto;
+    /// Array of qubits whose parity is to be computed and stored.
+    operation ApplyCNOTChain(qubits : Qubit[]) : Unit is Adj + Ctl {
+        ApplyToEachCA(CNOT, Zip(Most(qubits), Rest(qubits)));
     }
 
     /// # Summary
     /// Computes the parity of an array of qubits into a target qubit.
-	///
-	/// If the array is initially in the state
+    ///
+    /// # Description
+    /// If the array is initially in the state
     /// $\ket{q_0} \ket{q_1} \cdots \ket{q_{\text{target}}}$,
     /// the final state is given by
     /// $\ket{q_0} \ket{q_1 \oplus q_0} \cdots \ket{q_{n - 1} \oplus \cdots \oplus q_0 \oplus q_{\text{target}}}$.
@@ -42,26 +43,15 @@ namespace Microsoft.Quantum.Canon {
     /// # Remarks
     /// The following are equivalent:
     /// ```qsharp
-    /// CNOTChainTarget(Most(qs), Last(qs));
+    /// ApplyCNOTChainWithTarget(Most(qs), Last(qs));
     /// ```
-	/// and
-	/// ```qsharp
-    /// CNOTChain(qs);
+    /// and
+    /// ```qsharp
+    /// ApplyCNOTChain(qs);
     /// ```
-    operation CNOTChainTarget(qubits: Qubit[], targetQubit: Qubit) : Unit {
-        body (...) {
-            let allQubits = qubits + [targetQubit];
-            CNOTChain(allQubits);
-        }
-        adjoint auto;
-        controlled auto;
-        adjoint controlled auto;
-    }
-
-    /// # Summary
-    /// This computes the exclusive-OR of two bits.
-    function XOR(bit1: Bool, bit2: Bool) : Bool {
-        return (bit1 or bit2) and (not bit1 or not bit2);
+    operation ApplyCNOTChainWithTarget(qubits : Qubit[], targetQubit : Qubit)
+    : Unit is Adj + Ctl {
+        ApplyCNOTChain(qubits + [targetQubit]);
     }
 
 }
