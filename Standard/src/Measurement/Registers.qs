@@ -76,7 +76,7 @@ namespace Microsoft.Quantum.Measurement {
     /// Measures a register of qubits and returns true if it is in the all-zeros state or false otherwise.
     ///
     /// # Description
-    /// Given a register of qubits, measures if that register is in the state
+    /// Given a register of qubits, checks if that register is in the state
     /// $\ket{00 \cdots 0}$ by performing a computational basis (i.e.:
     /// `PauliZ`) measurement on each individual qubit in the register.
     ///
