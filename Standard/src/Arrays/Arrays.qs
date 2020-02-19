@@ -136,13 +136,13 @@ namespace Microsoft.Quantum.Arrays {
     /// ## length
     /// Length of the new array.
     /// ## value
-    /// A value of each element of the new array.
+    /// The value of each element of the new array.
     ///
     /// # Output
     /// A new array of length `length`, such that every element is `value`.
     ///
     /// # Example
-    /// The following code creates an array of 3 Boolean values `true`:
+    /// The following code creates an array of 3 Boolean values, each equal to `true`:
     /// ```qsharp
     /// let array = ConstantArray(3, true);
     /// ```
