@@ -29,6 +29,19 @@ namespace Microsoft.Quantum.Arrays {
     ///
     /// # Output
     /// A `Bool` value of the AND function of the predicate applied to all elements.
+    /// # Example 
+    /// open Microsoft.Quantum.Arrays;
+    /// open Microsoft.Quantum.Logical;
+    ///
+    /// operation All_Demo() : Unit {
+    /// let predicate = NotEqualI(_,0);
+    /// let isnonzero = All (predicate,[2,3,4,5,6,0]);
+    /// Message($"{isnonzero}");
+    /// }
+    /// ```
+    ///
+   
+   
     function All<'T> (predicate : ('T -> Bool), array : 'T[]) : Bool {
        return Fold(_And, true, Mapped(predicate, array));
     }
