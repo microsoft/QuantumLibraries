@@ -38,4 +38,19 @@ namespace Microsoft.Quantum.Arrays {
         return Subarray(idxArray[0 .. totalFound - 1], array);
     }
 
+
+    /// # Example
+
+    /// The following code demostrates the "Filtered" function. A predicate is defined using a function called "GreaterTahnI" from the Microsoft.Quantum.Logical namespace:
+    /// open Microsoft.Quantum.Arrays;
+    /// open Microsoft.Quantum.Logical;
+    ///
+    /// operation Filtered_Demo () : Unit {
+    ///    let predicate = GreaterThanI(_, 5);
+    ///    let filteredArray = Filtered (predicate,[2,5,9,1,8]);
+    ///    Message($"{filteredArray}");
+    /// }
+
+    /// ```
+
 }
