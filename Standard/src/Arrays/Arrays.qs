@@ -136,10 +136,16 @@ namespace Microsoft.Quantum.Arrays {
     /// ## length
     /// Length of the new array.
     /// ## value
-    /// A value that will be contained at each index of the new array.
+    /// A value of each element of the new array.
     ///
     /// # Output
     /// A new array of length `length`, such that every element is `value`.
+    ///
+    /// # Example
+    /// The following code creates an array of 3 Boolean values `true`:
+    /// ```qsharp
+    /// let array = ConstantArray(3, true);
+    /// ```
     function ConstantArray<'T> (length : Int, value : 'T) : 'T[] {
         mutable arr = new 'T[length];
 
