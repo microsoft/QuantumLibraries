@@ -52,5 +52,5 @@ namespace Microsoft.Quantum.Arrays {
     /// }
 
     /// ```
-
+    /// The outcome one should expect from this example will be an array of numbers greater than 5. 
 }
