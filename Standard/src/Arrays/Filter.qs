@@ -41,7 +41,8 @@ namespace Microsoft.Quantum.Arrays {
 
     /// # Example
 
-    /// The following code demostrates the "Filtered" function. A predicate is defined using a function called "GreaterTahnI" from the Microsoft.Quantum.Logical namespace:
+    /// The following code demonstrates the "Filtered" function.
+    /// A predicate is defined using the @"microsoft.quantum.logical.greaterthani" function:
     /// open Microsoft.Quantum.Arrays;
     /// open Microsoft.Quantum.Logical;
     ///
