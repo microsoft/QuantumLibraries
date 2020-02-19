@@ -45,7 +45,7 @@ namespace Microsoft.Quantum.Arrays {
     /// open Microsoft.Quantum.Arrays;
     /// open Microsoft.Quantum.Logical;
     ///
-    /// operation Filtered_Demo () : Unit {
+    /// function FilteredDemo () : Unit {
     ///    let predicate = GreaterThanI(_, 5);
     ///    let filteredArray = Filtered (predicate,[2,5,9,1,8]);
     ///    Message($"{filteredArray}");
