@@ -40,7 +40,6 @@ namespace Microsoft.Quantum.Arrays {
 
 
     /// # Example
-
     /// The following code demonstrates the "Filtered" function.
     /// A predicate is defined using the @"microsoft.quantum.logical.greaterthani" function:
     /// open Microsoft.Quantum.Arrays;
