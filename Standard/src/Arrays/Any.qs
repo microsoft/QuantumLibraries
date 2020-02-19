@@ -32,15 +32,15 @@ namespace Microsoft.Quantum.Arrays {
     ///
     /// # Example
     /// ```qsharp
-    ///open Microsoft.Quantum.Intrinsic;
-    ///open Microsoft.Quantum.Arrays;
-    ///open Microsoft.Quantum.Logical;
+    /// open Microsoft.Quantum.Intrinsic;
+    /// open Microsoft.Quantum.Arrays;
+    /// open Microsoft.Quantum.Logical;
     ///
-    ///operation ArrayAny_Demo() : Unit {
-    ///    let arrayOfInts = [1, 2, 3, 4, 5];
-    ///    let is3Present = Any(EqualI(_, 3), arrayOfInts);
-    ///    Message($"{is3Present}");
-    ///}
+    /// operation IsThreePresent() : Bool {
+    ///     let arrayOfInts = [1, 2, 3, 4, 5];
+    ///     let is3Present = Any(EqualI(_, 3), arrayOfInts);
+    ///     Message($"{is3Present}");
+    /// }
     /// ```
     function Any<'T> (predicate : ('T -> Bool), array : 'T[]) : Bool {
        return Fold(_Or, false, Mapped(predicate, array));
