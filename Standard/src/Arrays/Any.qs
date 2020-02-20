@@ -35,7 +35,7 @@ namespace Microsoft.Quantum.Arrays {
     /// open Microsoft.Quantum.Arrays;
     /// open Microsoft.Quantum.Logical;
     ///
-    /// function IsThreePresent(): Bool {
+    /// function IsThreePresent() : Bool {
     ///     let arrayOfInts = [1, 2, 3, 4, 5];
     ///     let is3Present = IsNumberPresentInArray(3, arrayOfInts);
     ///     return is3Present;
