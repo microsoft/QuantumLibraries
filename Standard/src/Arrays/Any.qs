@@ -41,7 +41,7 @@ namespace Microsoft.Quantum.Arrays {
     ///     return is3Present;
     /// }
     ///
-    /// function IsNumberPresentInArray(n: Int, array: Int[]): Bool {
+    /// function IsNumberPresentInArray(n : Int, array : Int[]) : Bool {
     ///     return Any(EqualI(_, n), array);
     /// }
     /// ```
