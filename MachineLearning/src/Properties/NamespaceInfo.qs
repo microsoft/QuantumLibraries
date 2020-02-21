@@ -2,7 +2,8 @@
 // Licensed under the MIT License.
 
 /// # Summary
-/// TODO
+/// This namespace provides functions and operations used in
+/// quantum machine learning applications.
 ///
 /// # References
 /// - Maria Schuld, Alex Bocharov, Krysta Svore, Nathan Wiebe,
