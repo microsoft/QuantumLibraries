@@ -90,7 +90,8 @@ namespace Microsoft.Quantum.MachineLearning {
         let localPL = InferredLabels(model::Bias, probabilities);
         let nMisclassifications = NMisclassifications(localPL, labels);
         return ValidationResults(
-            nMisclassifications
+            nMisclassifications,
+            Length(localPL)
         );
     }
 

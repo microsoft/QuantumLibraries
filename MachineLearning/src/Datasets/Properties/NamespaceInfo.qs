@@ -2,5 +2,6 @@
 // Licensed under the MIT License.
 
 /// # Summary
-/// TODO
+/// This namespace provides example datasets for use
+/// with quantum machine learning classifiers.
 namespace Microsoft.Quantum.MachineLearning.Datasets { }
