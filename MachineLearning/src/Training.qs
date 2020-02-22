@@ -142,25 +142,18 @@ namespace Microsoft.Quantum.MachineLearning {
     /// (utility, (new)parameters) pair
     ///
     operation _RunSingleTrainingStep(
-        miniBatch : LabeledSample[],
+        miniBatch : (LabeledSample, StateGenerator)[],
         options : TrainingOptions,
         model : SequentialModel
     )
     : (Double, SequentialModel) {
         mutable batchGradient = ConstantArray(Length(model::Parameters), 0.0);
-        let nQubits = MaxI(FeatureRegisterSize(miniBatch[0]::Features), NQubitsRequired(model));
-        let effectiveTolerance = options::Tolerance / IntAsDouble(Length(model::Structure));
 
-        for ((idxSample, sample) in Enumerated(miniBatch)) {
+        for ((idxSample, (sample, stateGenerator)) in Enumerated(miniBatch)) {
             mutable err = IntAsDouble(sample::Label);
             if (err < 1.0) {
                 set err = -1.0; //class 0 misclassified to class 1; strive to reduce the probability
             }
-            options::VerboseMessage($"      Encoding sample {idxSample}...");
-            let stateGenerator = ApproximateInputEncoder(effectiveTolerance, sample::Features)
-                // Force the number of qubits in case something else in the
-                // minibatch requires a larger register.
-                w/ NQubits <- nQubits;
             options::VerboseMessage($"      Estimating gradient at sample {idxSample}...");
             let grad = EstimateGradient(
                 model, stateGenerator,
@@ -211,7 +204,7 @@ namespace Microsoft.Quantum.MachineLearning {
     ///   epoch.
     /// - The new best sequential model found.
     operation _RunSingleTrainingEpoch(
-        samples : LabeledSample[],
+        encodedSamples : (LabeledSample, StateGenerator)[],
         schedule : SamplingSchedule, periodScore: Int,
         options : TrainingOptions,
         model : SequentialModel,
@@ -220,6 +213,8 @@ namespace Microsoft.Quantum.MachineLearning {
     : (Int, SequentialModel) {
         mutable nBestMisses = nPreviousBestMisses;
         mutable bestSoFar = model;
+        let samples = Mapped(Fst<LabeledSample, StateGenerator>, encodedSamples);
+        let stateGenerators = Mapped(Snd<LabeledSample, StateGenerator>, encodedSamples);
         let features = Mapped(_Features, samples);
         let actualLabels = Mapped(_Label, samples);
 
@@ -233,7 +228,7 @@ namespace Microsoft.Quantum.MachineLearning {
 
         // An epoch is just an attempt to update the parameters by learning from misses based on LKG parameters
         let minibatches = Mapped(
-            Subarray(_, samples),
+            Subarray(_, encodedSamples),
             Chunks(
                 options::MinibatchSize,
                 Misclassifications(inferredLabels, actualLabels)
@@ -281,7 +276,16 @@ namespace Microsoft.Quantum.MachineLearning {
         );
     }
 
-
+    function _EncodeSample(effectiveTolerance : Double, nQubits : Int, sample : LabeledSample)
+    : (LabeledSample, StateGenerator) {
+        return (
+            sample,
+            ApproximateInputEncoder(effectiveTolerance, sample::Features)
+                // Force the number of qubits in case something else in the
+                // minibatch requires a larger register.
+                w/ NQubits <- nQubits
+        );
+    }
 
     /// # Summary
     /// Given the structure of a sequential classifier, trains the classifier
@@ -339,6 +343,12 @@ namespace Microsoft.Quantum.MachineLearning {
         );
         mutable current = bestSoFar;
 
+        // Encode samples first.
+        options::VerboseMessage("    Pre-encoding samples...");
+        let effectiveTolerance = options::Tolerance / IntAsDouble(Length(model::Structure));
+        let nQubits = MaxI(FeatureRegisterSize(samples[0]::Features), NQubitsRequired(model));
+        let encodedSamples = Mapped(_EncodeSample(effectiveTolerance, nQubits, _), samples);
+
         //reintroducing learning rate heuristics
         mutable lrate = options::LearningRate;
         mutable batchSize = options::MinibatchSize;
@@ -349,7 +359,7 @@ namespace Microsoft.Quantum.MachineLearning {
         for (ep in 1..options::MaxEpochs) {
             options::VerboseMessage($"    Beginning epoch {ep}.");
             let (nMisses, proposedUpdate) = _RunSingleTrainingEpoch(
-                samples, schedule, periodScore,
+                encodedSamples, schedule, periodScore,
                 options w/ LearningRate <- lrate
                         w/ MinibatchSize <- batchSize,
                 current,
