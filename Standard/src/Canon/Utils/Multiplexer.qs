@@ -153,8 +153,7 @@ namespace Microsoft.Quantum.Canon {
 
     function _AnyOutsideToleranceD(tolerance : Double, coefficients : Double[]) : Bool {
         // NB: We don't currently use Any / Mapped for this, as we want to be
-        //     able to short-circuit. That should be implied by immutable
-        //     semantics, but that's not yet the case.
+        //     able to short-circuit.
         for (coefficient in coefficients) {
             if (AbsD(coefficient) >= tolerance) {
                 return true;

@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 namespace Microsoft.Quantum.MachineLearning {
     open Microsoft.Quantum.Math;
     open Microsoft.Quantum.Logical;
@@ -15,8 +18,7 @@ namespace Microsoft.Quantum.MachineLearning {
     /// # Summary
     /// Returns a bias value that leads to near-minimum misclassification score.
     function _UpdatedBias(labeledProbabilities: (Double, Int)[], bias: Double, tolerance: Double) : Double {
-        mutable min1 = 1.0;
-        mutable max0 = 0.0;
+        mutable (min1, max0) = (1.0, 0.0);
 
         // Find the range of classification probabilities for each class.
         for ((probability, label) in labeledProbabilities) {
@@ -152,7 +154,8 @@ namespace Microsoft.Quantum.MachineLearning {
         for ((idxSample, (sample, stateGenerator)) in Enumerated(miniBatch)) {
             mutable err = IntAsDouble(sample::Label);
             if (err < 1.0) {
-                set err = -1.0; //class 0 misclassified to class 1; strive to reduce the probability
+                // Class 0 misclassified to class 1; strive to reduce the probability.
+                set err = -1.0;
             }
             options::VerboseMessage($"      Estimating gradient at sample {idxSample}...");
             let grad = EstimateGradient(
@@ -239,7 +242,7 @@ namespace Microsoft.Quantum.MachineLearning {
             let (utility, updatedModel) = _RunSingleTrainingStep(
                 minibatch, options, bestSoFar
             );
-            if (utility > 0.0000001) {
+            if (utility > 1e-7) {
                 options::VerboseMessage($"            Observed good parameter update... estimating and possibly commiting.");
                 // There has been some good parameter update.
                 // Check if it actually improves things, and if so,

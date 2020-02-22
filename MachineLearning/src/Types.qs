@@ -94,6 +94,10 @@ namespace Microsoft.Quantum.MachineLearning {
         Label: Int
     );
 
+    // NB: The newtype SamplingSchedule is intended to be used only as a
+    //     black-box, and thus does not provide a named item to access its
+    //     contents.
+
     /// # Summary
     /// A schedule for drawing batches from a set of samples.
     newtype SamplingSchedule = Range[];
@@ -152,7 +156,8 @@ namespace Microsoft.Quantum.MachineLearning {
     /// ## NMisclassifications
     /// The number of misclassifications observed during validation.
     newtype ValidationResults = (
-        NMisclassifications: Int
+        NMisclassifications: Int,
+        NValidationSamples: Int
     );
 
     /// # Summary
@@ -185,9 +190,12 @@ namespace Microsoft.Quantum.MachineLearning {
     /// by calling @"microsoft.quantum.machinelearning.defaulttrainingoptions"
     /// and then using the `w/` operator to override different defaults.
     ///
-    /// For example, to use 100,000 measurements:
+    /// For example, to use 100,000 measurements and at most 8 training
+    /// epochs:
     /// ```Q#
-    /// let options = DefaultTrainingOptions() w/ NMeasurements <- 100000;
+    /// let options = DefaultTrainingOptions()
+    ///               w/ NMeasurements <- 100000
+    ///               w/ MaxEpochs <- 8;
     /// ```
     ///
     /// # References

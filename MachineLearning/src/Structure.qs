@@ -56,8 +56,7 @@ namespace Microsoft.Quantum.MachineLearning {
                     // Uncontrolled rotation of target
                     R(input);
                 } else {
-                    //TODO: should one validate the control indices first?
-                    (Controlled R)(Subarray(gate::ControlIndices, qubits), input);
+                    Controlled R(Subarray(gate::ControlIndices, qubits), input);
                 }
             }
         }

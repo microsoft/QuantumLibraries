@@ -1,7 +1,6 @@
 <Project Sdk="Microsoft.Quantum.Sdk/0.10.2002.2103-beta">
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
-    <PlatformTarget>x64</PlatformTarget>
     <AssemblyName>Microsoft.Quantum.MachineLearning</AssemblyName>
     <QsharpDocsGeneration>true</QsharpDocsGeneration>
     <!--
@@ -26,7 +25,7 @@
     <Copyright>© Microsoft Corporation. All rights reserved.</Copyright>
     <PackageId>Microsoft.Quantum.MachineLearning</PackageId>
     <PackageReleaseNotes>See: https://docs.microsoft.com/quantum/relnotes/</PackageReleaseNotes>
-    <PackageLicenseUrl>https://github.com/Microsoft/QuantumLibraries/raw/master/LICENSE.txt</PackageLicenseUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/Microsoft/QuantumLibraries/tree/master/MachineLearning</PackageProjectUrl>
     <PackageIconUrl>https://secure.gravatar.com/avatar/bd1f02955b2853ba0a3b1cdc2434e8ec.png</PackageIconUrl>
     <PackageTags>Quantum Q# Qsharp</PackageTags>

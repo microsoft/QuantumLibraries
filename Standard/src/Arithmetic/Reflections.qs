@@ -34,7 +34,7 @@ namespace Microsoft.Quantum.Arithmetic {
                 Zip(Mapped(Not, IntAsBoolArray(index, Length(reg!))), reg!)
             );
         } apply {
-            (Controlled Z)(Most(reg!), Tail(reg!));
+            Controlled Z(Most(reg!), Tail(reg!));
         }
 	}
 
