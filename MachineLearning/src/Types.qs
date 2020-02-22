@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 namespace Microsoft.Quantum.MachineLearning {
+    open Microsoft.Quantum.Intrinsic;
     open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Arithmetic;
 
@@ -176,6 +177,8 @@ namespace Microsoft.Quantum.MachineLearning {
     /// (approximately zero gradient) before failing.
     /// ## StochasticRescaleFactor
     /// The amount to rescale stalled models by before retrying an update.
+    /// ## VerboseMessage
+    /// A function that can be used to provide verbose feedback.
     ///
     /// # Remarks
     /// This UDT should not be created directly, but rather should be specified
@@ -196,8 +199,13 @@ namespace Microsoft.Quantum.MachineLearning {
         NMeasurements: Int,
         MaxEpochs: Int,
         MaxStalls: Int,
-        StochasticRescaleFactor: Double
+        StochasticRescaleFactor: Double,
+        VerboseMessage: (String -> Unit)
     );
+
+    // Used only to populate default training options to ignore verbose
+    // messages.
+    function _Ignored(value : String) : Unit {}
 
     /// # Summary
     /// Returns a default set of options for training classifiers.
@@ -215,7 +223,8 @@ namespace Microsoft.Quantum.MachineLearning {
     /// ```
     function DefaultTrainingOptions() : TrainingOptions {
         return TrainingOptions(
-            0.1, 0.005, 15, 10000, 16, 8, 0.01
+            0.1, 0.005, 15, 10000, 16, 8, 0.01,
+            _Ignored
         );
     }
 

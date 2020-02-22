@@ -91,7 +91,7 @@ namespace Microsoft.Quantum.MachineLearning {
         let labels = Mapped(_Label, samples);
 
         for ((idxModel, model) in Enumerated(models)) {
-            Message($"Beginning training at start point #{idxModel}...");
+            options::VerboseMessage($"  Beginning training at start point #{idxModel}...");
             let proposedUpdate = TrainSequentialClassifierAtModel(
                 model,
                 samples, options, trainingSchedule, 1
@@ -151,15 +151,17 @@ namespace Microsoft.Quantum.MachineLearning {
         let nQubits = MaxI(FeatureRegisterSize(miniBatch[0]::Features), NQubitsRequired(model));
         let effectiveTolerance = options::Tolerance / IntAsDouble(Length(model::Structure));
 
-        for (sample in miniBatch) {
+        for ((idxSample, sample) in Enumerated(miniBatch)) {
             mutable err = IntAsDouble(sample::Label);
             if (err < 1.0) {
                 set err = -1.0; //class 0 misclassified to class 1; strive to reduce the probability
             }
+            options::VerboseMessage($"      Encoding sample {idxSample}...");
             let stateGenerator = ApproximateInputEncoder(effectiveTolerance, sample::Features)
                 // Force the number of qubits in case something else in the
                 // minibatch requires a larger register.
                 w/ NQubits <- nQubits;
+            options::VerboseMessage($"      Estimating gradient at sample {idxSample}...");
             let grad = EstimateGradient(
                 model, stateGenerator,
                 options::NMeasurements
@@ -229,7 +231,7 @@ namespace Microsoft.Quantum.MachineLearning {
             )
         );
 
-        //An epoch is just an attempt to update the parameters by learning from misses based on LKG parameters
+        // An epoch is just an attempt to update the parameters by learning from misses based on LKG parameters
         let minibatches = Mapped(
             Subarray(_, samples),
             Chunks(
@@ -237,11 +239,13 @@ namespace Microsoft.Quantum.MachineLearning {
                 Misclassifications(inferredLabels, actualLabels)
             )
         );
-        for (minibatch in minibatches) {
+        for ((idxMinibatch, minibatch) in Enumerated(minibatches)) {
+            options::VerboseMessage($"        Beginning minibatch {idxMinibatch} of {Length(minibatches)}.");
             let (utility, updatedModel) = _RunSingleTrainingStep(
                 minibatch, options, bestSoFar
             );
             if (utility > 0.0000001) {
+                options::VerboseMessage($"            Observed good parameter update... estimating and possibly commiting.");
                 // There has been some good parameter update.
                 // Check if it actually improves things, and if so,
                 // commit it.
@@ -343,11 +347,11 @@ namespace Microsoft.Quantum.MachineLearning {
         mutable nStalls = 0;
 
         for (ep in 1..options::MaxEpochs) {
+            options::VerboseMessage($"    Beginning epoch {ep}.");
             let (nMisses, proposedUpdate) = _RunSingleTrainingEpoch(
                 samples, schedule, periodScore,
-                options
-                    w/ LearningRate <- lrate
-                    w/ MinibatchSize <- batchSize,
+                options w/ LearningRate <- lrate
+                        w/ MinibatchSize <- batchSize,
                 current,
                 nBestMisses
             );
@@ -363,7 +367,8 @@ namespace Microsoft.Quantum.MachineLearning {
             }
 
             if (
-                    NearlyEqualD(current::Bias, proposedUpdate::Bias) and _AllNearlyEqualD(current::Parameters, proposedUpdate::Parameters)
+                    NearlyEqualD(current::Bias, proposedUpdate::Bias) and
+                    _AllNearlyEqualD(current::Parameters, proposedUpdate::Parameters)
             ) {
                 set nStalls += 1;
                 // If we're more than halfway through our maximum allowed number of stalls,
