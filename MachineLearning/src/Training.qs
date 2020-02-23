@@ -71,9 +71,10 @@ namespace Microsoft.Quantum.MachineLearning {
     /// score.
     ///
     /// # Output
-    /// A parameterization of the given classifier and a bias between the two
-    /// classes, together corresponding to the best result from each of the
-    /// given start points.
+    /// - A parameterization of the given classifier and a bias between the two
+    ///   classes, together corresponding to the best result from each of the
+    ///   given start points.
+    /// - The number of misses observed at the best classifier model.
     ///
     /// # See Also
     /// - Microsoft.Quantum.MachineLearning.TrainSequentialClassifierAtModel
@@ -84,7 +85,7 @@ namespace Microsoft.Quantum.MachineLearning {
         options : TrainingOptions,
         trainingSchedule : SamplingSchedule,
         validationSchedule : SamplingSchedule
-    ) : SequentialModel {
+    ) : (SequentialModel, Int) {
         mutable bestSoFar = Default<SequentialModel>()
                             w/ Structure <- (Head(models))::Structure;
         mutable bestValidation = Length(samples) + 1;
@@ -94,31 +95,17 @@ namespace Microsoft.Quantum.MachineLearning {
 
         for ((idxModel, model) in Enumerated(models)) {
             options::VerboseMessage($"  Beginning training at start point #{idxModel}...");
-            let proposedUpdate = TrainSequentialClassifierAtModel(
+            let (proposedUpdate, localMisses) = TrainSequentialClassifierAtModel(
                 model,
-                samples, options, trainingSchedule, 1
+                samples, options, trainingSchedule, validationSchedule
             );
-            let probabilities = EstimateClassificationProbabilities(
-                options::Tolerance,
-                proposedUpdate,
-                Sampled(validationSchedule, features),
-                options::NMeasurements
-            );
-            // Find the best bias for the new classification parameters.
-            let localBias = _UpdatedBias(
-                Zip(probabilities, Sampled(validationSchedule, labels)),
-                0.0,
-                options::Tolerance
-            );
-            let localPL = InferredLabels(localBias, probabilities);
-            let localMisses = NMisclassifications(localPL, Sampled(validationSchedule, labels));
             if (bestValidation > localMisses) {
                 set bestValidation = localMisses;
                 set bestSoFar = proposedUpdate;
             }
 
         }
-        return bestSoFar;
+        return (bestSoFar, bestValidation);
     }
 
     /// # Summary
@@ -306,14 +293,20 @@ namespace Microsoft.Quantum.MachineLearning {
     /// @"microsoft.quantum.machinelearning.trainingoptions" and
     /// @"microsoft.quantum.machinelearning.defaulttrainingoptions" for more
     /// details.
-    /// ## schedule
+    /// ## trainingSchedule
     /// A sampling schedule to use when selecting samples from the training
     /// data during training steps.
+    /// ## validationSchedule
+    /// A sampling schedule to use when selecting samples from the training
+    /// data when selecting which start point resulted in the best classifier
+    /// score.
+    ///
     ///
     /// # Output
-    /// A parameterization of the given classifier and a bias between the two
-    /// classes, together corresponding to the best result from each of the
-    /// given start points.
+    /// - A parameterization of the given classifier and a bias between the two
+    ///   classes, together corresponding to the best result from each of the
+    ///   given start points.
+    /// - The number of misses observed at the best classifier model.
     ///
     /// # See Also
     /// - Microsoft.Quantum.MachineLearning.TrainSequentialClassifier
@@ -322,8 +315,39 @@ namespace Microsoft.Quantum.MachineLearning {
         model : SequentialModel,
         samples : LabeledSample[],
         options : TrainingOptions,
-        schedule : SamplingSchedule,
-        periodScore : Int
+        trainingSchedule : SamplingSchedule,
+        validationSchedule : SamplingSchedule
+    )
+    : (SequentialModel, Int) {
+        let optimizedModel = _TrainSequentialClassifierAtModel(model, samples, options, trainingSchedule);
+        let labels = Mapped(_Label, samples);
+        let features = Mapped(_Features, samples);
+        let probabilities = EstimateClassificationProbabilities(
+            options::Tolerance,
+            optimizedModel,
+            Sampled(validationSchedule, features),
+            options::NMeasurements
+        );
+        // Find the best bias for the new classification parameters.
+        let localBias = _UpdatedBias(
+            Zip(probabilities, Sampled(validationSchedule, labels)),
+            0.0,
+            options::Tolerance
+        );
+        let localPL = InferredLabels(localBias, probabilities);
+        let localMisses = NMisclassifications(localPL, Sampled(validationSchedule, labels));
+
+        return (optimizedModel w/ Bias <- localBias, localMisses);
+    }
+
+    // Private operation used for the bulk of the implementation of
+    // TrainSequentialClassifierAtModel, omitting the updating of the final
+    // bias.
+    operation _TrainSequentialClassifierAtModel(
+        model : SequentialModel,
+        samples : LabeledSample[],
+        options : TrainingOptions,
+        schedule : SamplingSchedule
     )
     : SequentialModel {
         let nSamples = Length(samples);
@@ -362,7 +386,7 @@ namespace Microsoft.Quantum.MachineLearning {
         for (ep in 1..options::MaxEpochs) {
             options::VerboseMessage($"    Beginning epoch {ep}.");
             let (nMisses, proposedUpdate) = _RunSingleTrainingEpoch(
-                encodedSamples, schedule, periodScore,
+                encodedSamples, schedule, options::ScoringPeriod,
                 options w/ LearningRate <- lrate
                         w/ MinibatchSize <- batchSize,
                 current,
