@@ -54,19 +54,15 @@ namespace Microsoft.Quantum.Arithmetic {
     }
 
     // Implementation step of `ApplyRippleCarryComparatorLE`.
-    operation _ApplyRippleCarryComparatorLE(x: LittleEndian, y: LittleEndian, auxiliary: Qubit[], output: Qubit) : Unit {
-        body (...) {
-            let nQubitsX = Length(x!);
+    operation _ApplyRippleCarryComparatorLE(x: LittleEndian, y: LittleEndian, auxiliary: Qubit[], output: Qubit)
+    : Unit is Adj + Ctl {
+        let nQubitsX = Length(x!);
 
-            // Take 2's complement
-            ApplyToEachCA(X, x! + auxiliary);
+        // Take 2's complement
+        ApplyToEachCA(X, x! + auxiliary);
 
-            InPlaceMajority(x![0], [y![0], auxiliary[0]]);
-            ApplyToEachCA(MAJ, Zip3(Most(x!), Rest(y!), Rest(x!)));
-        }
-        adjoint auto;
-        controlled auto;
-        adjoint controlled auto;
+        ApplyMajorityInPlace(x![0], [y![0], auxiliary[0]]);
+        ApplyToEachCA(MAJ, Zip3(Most(x!), Rest(y!), Rest(x!)));
     }
 
 }

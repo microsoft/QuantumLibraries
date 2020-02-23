@@ -32,7 +32,7 @@ namespace Microsoft.Quantum.Arithmetic {
     ///
     /// # Remarks
     /// Assumes that the initial value of target is less than $N$
-    /// and that the increment $a$ is less than $N$. 
+    /// and that the increment $a$ is less than $N$.
     /// Note that
     /// <xref:microsoft.quantum.arithmetic.incrementphasebymodularinteger> implements
     /// the same operation in the `PhaseLittleEndian` basis.

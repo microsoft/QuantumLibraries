@@ -610,6 +610,29 @@ namespace Microsoft.Quantum.Math {
         return PowD(norm, 1.0 / p);
     }
 
+
+    /// # Summary
+    /// Returns the squared 2-norm of a vector.
+    ///
+    /// # Description
+    /// Returns the squared 2-norm of a vector; that is, given an input
+    /// $\vec{x}$, returns $\sum_i x_i^2$.
+    ///
+    /// # Input
+    /// ## array
+    /// The vector whose squared 2-norm is to be returned.
+    ///
+    /// # Output
+    /// The squared 2-norm of `array`.
+    function SquaredNorm(array : Double[]) : Double {
+        mutable ret = 0.0;
+        for (element in array) {
+            set ret += element * element;
+        }
+        return ret;
+    }
+
+
     /// # Summary
     /// Normalizes a vector of `Double`s in the `L(p)` norm.
     ///
