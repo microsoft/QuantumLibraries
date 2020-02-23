@@ -211,10 +211,6 @@ namespace Microsoft.Quantum.MachineLearning {
         VerboseMessage: (String -> Unit)
     );
 
-    // Used only to populate default training options to ignore verbose
-    // messages.
-    function _Ignored(value : String) : Unit {}
-
     /// # Summary
     /// Returns a default set of options for training classifiers.
     ///
@@ -232,7 +228,7 @@ namespace Microsoft.Quantum.MachineLearning {
     function DefaultTrainingOptions() : TrainingOptions {
         return TrainingOptions(
             0.1, 0.005, 15, 10000, 16, 8, 0.01,
-            _Ignored
+            Ignore
         );
     }
 
