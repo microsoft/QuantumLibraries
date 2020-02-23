@@ -182,6 +182,9 @@ namespace Microsoft.Quantum.MachineLearning {
     /// (approximately zero gradient) before failing.
     /// ## StochasticRescaleFactor
     /// The amount to rescale stalled models by before retrying an update.
+    /// ## ScoringPeriod
+    /// The number of gradient steps to be taken between scoring points.
+    /// For best accuracy, set to 1.
     /// ## VerboseMessage
     /// A function that can be used to provide verbose feedback.
     ///
@@ -208,6 +211,7 @@ namespace Microsoft.Quantum.MachineLearning {
         MaxEpochs: Int,
         MaxStalls: Int,
         StochasticRescaleFactor: Double,
+        ScoringPeriod: Int,
         VerboseMessage: (String -> Unit)
     );
 
@@ -227,7 +231,7 @@ namespace Microsoft.Quantum.MachineLearning {
     /// ```
     function DefaultTrainingOptions() : TrainingOptions {
         return TrainingOptions(
-            0.1, 0.005, 15, 10000, 16, 8, 0.01,
+            0.1, 0.005, 15, 10000, 16, 8, 0.01, 1,
             Ignore<String>
         );
     }
