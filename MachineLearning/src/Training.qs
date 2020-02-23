@@ -93,7 +93,7 @@ namespace Microsoft.Quantum.MachineLearning {
         let labels = Mapped(_Label, samples);
 
         for ((idxModel, model) in Enumerated(models)) {
-            Message($"Beginning training at start point #{idxModel}...");
+            options::VerboseMessage($"  Beginning training at start point #{idxModel}...");
             let proposedUpdate = TrainSequentialClassifierAtModel(
                 model,
                 samples, options, trainingSchedule, 1
@@ -144,25 +144,20 @@ namespace Microsoft.Quantum.MachineLearning {
     /// (utility, (new)parameters) pair
     ///
     operation _RunSingleTrainingStep(
-        miniBatch : LabeledSample[],
+        miniBatch : (LabeledSample, StateGenerator)[],
         options : TrainingOptions,
         model : SequentialModel
     )
     : (Double, SequentialModel) {
         mutable batchGradient = ConstantArray(Length(model::Parameters), 0.0);
-        let nQubits = MaxI(FeatureRegisterSize(miniBatch[0]::Features), NQubitsRequired(model));
-        let effectiveTolerance = options::Tolerance / IntAsDouble(Length(model::Structure));
 
-        for (sample in miniBatch) {
+        for ((idxSample, (sample, stateGenerator)) in Enumerated(miniBatch)) {
             mutable err = IntAsDouble(sample::Label);
             if (err < 1.0) {
                 // Class 0 misclassified to class 1; strive to reduce the probability.
                 set err = -1.0;
             }
-            let stateGenerator = ApproximateInputEncoder(effectiveTolerance, sample::Features)
-                // Force the number of qubits in case something else in the
-                // minibatch requires a larger register.
-                w/ NQubits <- nQubits;
+            options::VerboseMessage($"      Estimating gradient at sample {idxSample}...");
             let grad = EstimateGradient(
                 model, stateGenerator,
                 options::NMeasurements
@@ -212,7 +207,7 @@ namespace Microsoft.Quantum.MachineLearning {
     ///   epoch.
     /// - The new best sequential model found.
     operation _RunSingleTrainingEpoch(
-        samples : LabeledSample[],
+        encodedSamples : (LabeledSample, StateGenerator)[],
         schedule : SamplingSchedule, periodScore: Int,
         options : TrainingOptions,
         model : SequentialModel,
@@ -221,6 +216,8 @@ namespace Microsoft.Quantum.MachineLearning {
     : (Int, SequentialModel) {
         mutable nBestMisses = nPreviousBestMisses;
         mutable bestSoFar = model;
+        let samples = Mapped(Fst<LabeledSample, StateGenerator>, encodedSamples);
+        let stateGenerators = Mapped(Snd<LabeledSample, StateGenerator>, encodedSamples);
         let features = Mapped(_Features, samples);
         let actualLabels = Mapped(_Label, samples);
 
@@ -232,19 +229,21 @@ namespace Microsoft.Quantum.MachineLearning {
             )
         );
 
-        //An epoch is just an attempt to update the parameters by learning from misses based on LKG parameters
+        // An epoch is just an attempt to update the parameters by learning from misses based on LKG parameters
         let minibatches = Mapped(
-            Subarray(_, samples),
+            Subarray(_, encodedSamples),
             Chunks(
                 options::MinibatchSize,
                 Misclassifications(inferredLabels, actualLabels)
             )
         );
-        for (minibatch in minibatches) {
+        for ((idxMinibatch, minibatch) in Enumerated(minibatches)) {
+            options::VerboseMessage($"        Beginning minibatch {idxMinibatch} of {Length(minibatches)}.");
             let (utility, updatedModel) = _RunSingleTrainingStep(
                 minibatch, options, bestSoFar
             );
             if (utility > 1e-7) {
+                options::VerboseMessage($"            Observed good parameter update... estimating and possibly commiting.");
                 // There has been some good parameter update.
                 // Check if it actually improves things, and if so,
                 // commit it.
@@ -280,7 +279,16 @@ namespace Microsoft.Quantum.MachineLearning {
         );
     }
 
-
+    function _EncodeSample(effectiveTolerance : Double, nQubits : Int, sample : LabeledSample)
+    : (LabeledSample, StateGenerator) {
+        return (
+            sample,
+            ApproximateInputEncoder(effectiveTolerance, sample::Features)
+                // Force the number of qubits in case something else in the
+                // minibatch requires a larger register.
+                w/ NQubits <- nQubits
+        );
+    }
 
     /// # Summary
     /// Given the structure of a sequential classifier, trains the classifier
@@ -338,6 +346,12 @@ namespace Microsoft.Quantum.MachineLearning {
         );
         mutable current = bestSoFar;
 
+        // Encode samples first.
+        options::VerboseMessage("    Pre-encoding samples...");
+        let effectiveTolerance = options::Tolerance / IntAsDouble(Length(model::Structure));
+        let nQubits = MaxI(FeatureRegisterSize(samples[0]::Features), NQubitsRequired(model));
+        let encodedSamples = Mapped(_EncodeSample(effectiveTolerance, nQubits, _), samples);
+
         //reintroducing learning rate heuristics
         mutable lrate = options::LearningRate;
         mutable batchSize = options::MinibatchSize;
@@ -346,11 +360,11 @@ namespace Microsoft.Quantum.MachineLearning {
         mutable nStalls = 0;
 
         for (ep in 1..options::MaxEpochs) {
+            options::VerboseMessage($"    Beginning epoch {ep}.");
             let (nMisses, proposedUpdate) = _RunSingleTrainingEpoch(
-                samples, schedule, periodScore,
-                options
-                    w/ LearningRate <- lrate
-                    w/ MinibatchSize <- batchSize,
+                encodedSamples, schedule, periodScore,
+                options w/ LearningRate <- lrate
+                        w/ MinibatchSize <- batchSize,
                 current,
                 nBestMisses
             );
@@ -366,7 +380,8 @@ namespace Microsoft.Quantum.MachineLearning {
             }
 
             if (
-                    NearlyEqualD(current::Bias, proposedUpdate::Bias) and _AllNearlyEqualD(current::Parameters, proposedUpdate::Parameters)
+                    NearlyEqualD(current::Bias, proposedUpdate::Bias) and
+                    _AllNearlyEqualD(current::Parameters, proposedUpdate::Parameters)
             ) {
                 set nStalls += 1;
                 // If we're more than halfway through our maximum allowed number of stalls,

@@ -218,16 +218,57 @@ namespace Microsoft.Quantum.Preparation {
         qubits : LittleEndian
     )
     : Unit is Adj + Ctl {
+        (_CompileApproximateArbitraryStatePreparation(tolerance, coefficients, Length(qubits!)))(qubits);
+    }
+
+    operation _ApplyToLittleEndian(bareOp : ((Qubit[]) => Unit is Adj + Ctl), register : LittleEndian)
+    : Unit is Adj + Ctl {
+        bareOp(register!);
+    }
+
+    function _CompileApproximateArbitraryStatePreparation(
+        tolerance : Double,
+        coefficients : ComplexPolar[],
+        nQubits : Int
+    )
+    : (LittleEndian => Unit is Adj + Ctl) {
         // pad coefficients at tail length to a power of 2.
-        let coefficientsPadded = Padded(-2 ^ Length(qubits!), ComplexPolar(0.0, 0.0), coefficients);
-        let target = (qubits!)[0];
-        let op = (Adjoint _ApproximatelyPrepareArbitraryState(tolerance, coefficientsPadded, _, _))(_, target);
-        op(
+        let coefficientsPadded = Padded(-2 ^ nQubits, ComplexPolar(0.0, 0.0), coefficients);
+        let idxTarget = 0;
+        let rngControl =
             // Determine what controls to apply to `op`.
-            Length(qubits!) > 1
-            ? LittleEndian((qubits!)[1 .. Length(qubits!) - 1])
-            | LittleEndian(new Qubit[0])
+            nQubits > 1
+            ? (1 .. (nQubits - 1))
+            | (1..0);
+        let plan = _ApproximatelyUnprepareArbitraryStatePlan(
+            tolerance, coefficientsPadded, (rngControl, idxTarget)
         );
+        let unprepare = BoundCA(plan);
+        return _ApplyToLittleEndian(Adjoint unprepare, _);
+    }
+
+    operation _ApplyMultiplexStep(
+        tolerance : Double, disentangling : Double[], axis : Pauli,
+        (rngControl : Range, idxTarget : Int),
+        register : Qubit[]
+    )
+    : Unit is Adj + Ctl {
+        let actualControl = LittleEndian(register[rngControl]);
+        ApproximatelyMultiplexPauli(tolerance, disentangling, axis, actualControl, register[idxTarget]);
+    }
+
+    function _RangeLength(rng : Range) : Int {
+        mutable len = 0;
+        for (idx in rng) {
+            set len += 1;
+        }
+        return len;
+    }
+
+    operation _ApplyGlobalRotationStep(
+        angle : Double, idxTarget : Int, register : Qubit[]
+    ) : Unit is Adj + Ctl {
+        Exp([PauliI], angle, [register[idxTarget]]);
     }
 
     /// # Summary
@@ -236,34 +277,39 @@ namespace Microsoft.Quantum.Preparation {
     /// # See Also
     /// - PrepareArbitraryState
     /// - Microsoft.Quantum.Canon.MultiplexPauli
-    operation _ApproximatelyPrepareArbitraryState(
+    function _ApproximatelyUnprepareArbitraryStatePlan(
         tolerance : Double, coefficients : ComplexPolar[],
-        control : LittleEndian, target : Qubit
+        (rngControl : Range, idxTarget : Int)
     )
-    : Unit is Adj + Ctl {
+    : (Qubit[] => Unit is Adj + Ctl)[] {
+        mutable plan = new (Qubit[] => Unit is Adj + Ctl)[0];
+
         // For each 2D block, compute disentangling single-qubit rotation parameters
         let (disentanglingY, disentanglingZ, newCoefficients) = _StatePreparationSBMComputeCoefficients(coefficients);
         if (_AnyOutsideToleranceD(tolerance, disentanglingZ)) {
-            ApproximatelyMultiplexPauli(tolerance, disentanglingZ, PauliZ, control, target);
+            set plan += [_ApplyMultiplexStep(tolerance, disentanglingZ, PauliZ, (rngControl, idxTarget), _)];
         }
         if (_AnyOutsideToleranceD(tolerance, disentanglingY)) {
-            ApproximatelyMultiplexPauli(tolerance, disentanglingY, PauliY, control, target);
+            set plan += [_ApplyMultiplexStep(tolerance, disentanglingY, PauliY, (rngControl, idxTarget), _)];
         }
+
         // target is now in |0> state up to the phase given by arg of newCoefficients.
 
         // Continue recursion while there are control qubits.
-        if (Length(control!) == 0) {
+        if (_RangeLength(rngControl) == 0) {
             let (abs, arg) = newCoefficients[0]!;
             if (AbsD(arg) > tolerance) {
-                Exp([PauliI], -1.0 * arg, [target]);
+                set plan += [_ApplyGlobalRotationStep(-1.0 * arg, idxTarget, _)];
             }
         } else {
             if (_AnyOutsideToleranceCP(tolerance, newCoefficients)) {
-                let newControl = LittleEndian(Rest(control!));
-                let newTarget = (control!)[0];
-                _ApproximatelyPrepareArbitraryState(tolerance, newCoefficients, newControl, newTarget);
+                let newControl = (RangeStart(rngControl) + 1)..RangeStep(rngControl)..RangeEnd(rngControl);
+                let newTarget = RangeStart(rngControl);
+                set plan += _ApproximatelyUnprepareArbitraryStatePlan(tolerance, newCoefficients, (newControl, newTarget));
             }
         }
+
+        return plan;
     }
 
 

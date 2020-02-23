@@ -47,18 +47,12 @@ namespace Microsoft.Quantum.MachineLearning {
     }
 
     /// Do special processing on the first cNegative entries
-    operation _EncodeSparseNegativeInput(
-        cNegative: Int,
-        tolerance: Double,
+    operation _ReflectAboutNegativeCoefficients(
+        negLocs : Int[],
         coefficients : ComplexPolar[],
         reg: LittleEndian
     )
     : Unit is Adj + Ctl {
-        let negLocs = _NegativeLocations(cNegative, coefficients);
-        // Prepare the state disregarding the sign of negative components.
-        ApproximatelyPrepareArbitraryState(tolerance, _Unnegate(negLocs, coefficients), reg);
-        // Reflect about the negative coefficients to apply the negative signs
-        // at the end.
         for (idxNegative in negLocs) {
             ReflectAboutInteger(idxNegative, reg);
         }
@@ -126,16 +120,25 @@ namespace Microsoft.Quantum.MachineLearning {
         // Here, by a "few," we mean fewer than the number of qubits required
         // to encode features.
         if ((cNegative > 0) and (IntAsDouble(cNegative) < Lg(IntAsDouble(Length(coefficients))) + 1.0)) {
+            let negLocs = _NegativeLocations(cNegative, complexCoefficients);
             return StateGenerator(
                 nQubits,
-                _EncodeSparseNegativeInput(cNegative, tolerance, complexCoefficients, _)
+                BoundCA([
+                    // Prepare the state disregarding the sign of negative components.
+                    _CompileApproximateArbitraryStatePreparation(
+                        tolerance, _Unnegate(negLocs, complexCoefficients), nQubits
+                    ),
+                    // Reflect about the negative coefficients to apply the negative signs
+                    // at the end.
+                    _ReflectAboutNegativeCoefficients(negLocs, complexCoefficients, _)
+                ])
             );
         }
 
         // Finally, we fall back to arbitrary state preparation.
         return StateGenerator(
             nQubits,
-            ApproximatelyPrepareArbitraryState(tolerance, complexCoefficients, _)
+            _CompileApproximateArbitraryStatePreparation(tolerance, complexCoefficients, nQubits)
         );
     }
 
