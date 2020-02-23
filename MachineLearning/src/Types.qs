@@ -228,7 +228,7 @@ namespace Microsoft.Quantum.MachineLearning {
     function DefaultTrainingOptions() : TrainingOptions {
         return TrainingOptions(
             0.1, 0.005, 15, 10000, 16, 8, 0.01,
-            Ignore
+            Ignore<String>
         );
     }
 
