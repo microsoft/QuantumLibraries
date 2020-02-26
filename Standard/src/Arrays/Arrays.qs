@@ -255,6 +255,33 @@ namespace Microsoft.Quantum.Arrays {
                | inputArray + padArray; // Padded at tail.
     }
 
+
+    /// # Summary
+    /// Splits an array into multiple parts of equal length.
+    ///
+    /// # Input
+    /// ## nElements
+    /// The length of each chunk.
+    /// ## arr
+    /// The array to be split.
+    ///
+    /// # Output
+    /// A array containing each chunk of the original array.
+    ///
+    /// # Remarks
+    /// Note that the last element of the output may be shorter
+    /// than `nElements` if `Length(arr)` is not divisible by `nElements`.
+    function Chunks<'T>(nElements : Int, arr : 'T[]) : 'T[][] {
+        mutable output = new 'T[][0];
+        mutable remaining = arr;
+        while (not IsEmpty(remaining)) {
+            let nElementsToTake = MinI(Length(remaining), nElements);
+            set output += [remaining[...nElementsToTake - 1]];
+            set remaining = remaining[nElementsToTake...];
+        }
+        return output;
+    }
+
     /// # Summary
     /// Splits an array into multiple parts.
     ///
@@ -289,6 +316,19 @@ namespace Microsoft.Quantum.Arrays {
         return output;
     }
 
+    /// # Summary
+    /// Returns true if and only if an array is empty.
+    ///
+    /// # Input
+    /// ## array
+    /// The array to be checked.
+    ///
+    /// # Output
+    /// `true` if and only if the array is empty (has length 0).
+    function IsEmpty<'T>(array : 'T[]) : Bool {
+        return Length(array) == 0;
+    }
+
     function _IsPermutationPred(permutation : Int[], value : Int) : Bool {
         let index = IndexOf(EqualI(value, _), permutation);
         return index != -1;
@@ -299,12 +339,12 @@ namespace Microsoft.Quantum.Arrays {
     }
 
     /// # Summary
-    /// Returns the order elements in an array need to be swapped to produce an ordered array. 
+    /// Returns the order elements in an array need to be swapped to produce an ordered array.
     /// Assumes swaps occur in place.
     ///
     /// # Input
     /// ## newOrder
-    /// Array with the permutation of the indices of the new array. There should be $n$ elements, 
+    /// Array with the permutation of the indices of the new array. There should be $n$ elements,
     /// each being a unique integer from $0$ to $n-1$.
     ///
     /// # Output
@@ -318,9 +358,9 @@ namespace Microsoft.Quantum.Arrays {
     /// ```
     ///
     /// ## Psuedocode
-    /// for (index in 0..Length(newOrder) - 1) 
+    /// for (index in 0..Length(newOrder) - 1)
     /// {
-    ///     while newOrder[index] != index 
+    ///     while newOrder[index] != index
     ///     {
     ///         Switch newOrder[index] with newOrder[newOrder[index]]
     ///     }
@@ -389,9 +429,9 @@ namespace Microsoft.Quantum.Arrays {
         mutable newArray = new 'T[][Length(tupleList)];
         for (idx in IndexRange(tupleList)) {
             let (tupleLeft, tupleRight) = tupleList[idx];
-            set newArray w/= idx <- [tupleLeft, tupleRight]; 
+            set newArray w/= idx <- [tupleLeft, tupleRight];
         }
         return newArray;
-    } 
+    }
 
 }

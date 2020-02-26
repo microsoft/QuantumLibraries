@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.Quantum.Sdk/0.10.2001.2831">
+<Project Sdk="Microsoft.Quantum.Sdk/0.10.2002.2304-beta">
 
   <Import Project="..\..\..\Build\props\tests.props" />
 
@@ -12,7 +12,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
-  
+
   <ItemGroup>
     <None Include="..\BroombridgeExamples\hydrogen_0.1.yaml" Link="Molecules\MolecularHydrogen\hydrogen_0.1.yaml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -31,7 +31,7 @@
   <ItemGroup>
     <Compile Include="..\..\Common\DelaySign.cs" Link="Properties\DelaySign.cs" />
   </ItemGroup>
-  
+
   <ItemGroup>
     <ProjectReference Include="..\..\..\Standard\src\Standard.csproj" />
     <ProjectReference Include="..\..\src\Runtime\Runtime.csproj" />
