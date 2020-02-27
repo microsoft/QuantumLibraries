@@ -33,10 +33,10 @@ namespace Microsoft.Quantum.Arrays {
     /// open Microsoft.Quantum.Arrays;
     /// open Microsoft.Quantum.Logical;
     ///
-    /// operation All_Demo() : Unit {
-    /// let predicate = NotEqualI(_,0);
-    /// let isnonzero = All (predicate,[2,3,4,5,6,0]);
-    /// Message($"{isnonzero}");
+    /// function AllDemo() : Unit {
+    ///     let predicate = NotEqualI(_, 0);
+    ///     let isNonZero = All(predicate, [2, 3, 4, 5, 6, 0]);
+    ///     Message($"{isNonZero}");
     /// }
     /// ```
     ///
