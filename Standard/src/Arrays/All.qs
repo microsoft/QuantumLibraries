@@ -43,8 +43,6 @@ namespace Microsoft.Quantum.Arrays {
     /// }
     /// ```
     ///
-   
-   
     function All<'T> (predicate : ('T -> Bool), array : 'T[]) : Bool {
        return Fold(_And, true, Mapped(predicate, array));
     }
