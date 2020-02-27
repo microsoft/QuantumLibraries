@@ -200,6 +200,9 @@ namespace Microsoft.Quantum.Diagnostics {
     /// The array that is expected from a test case of interest.
     /// ## message
     /// A message to be printed if the arrays are not equal.
+    ///
+    /// # See Also
+    /// Microsoft.Quantum.Diagnostics.AllEqualityFactI
     function AllEqualityFactB(actual : Bool[], expected : Bool[], message : String) : Unit {
         let n = Length(actual);
         if (n != Length(expected)) {
@@ -207,6 +210,28 @@ namespace Microsoft.Quantum.Diagnostics {
         }
 
         Ignore(Mapped(EqualityFactB(_, _, message), Zip(actual, expected)));
+    }
+
+    /// # Summary
+    /// Asserts that two arrays of integer values are equal.
+    ///
+    /// # Input
+    /// ## actual
+    /// The array that is produced by a test case of interest.
+    /// ## expected
+    /// The array that is expected from a test case of interest.
+    /// ## message
+    /// A message to be printed if the arrays are not equal.
+    ///
+    /// # See Also
+    /// Microsoft.Quantum.Diagnostics.AllEqualityFactB
+    function AllEqualityFactI(actual : Int[], expected : Int[], message : String) : Unit {
+        let n = Length(actual);
+        if (n != Length(expected)) {
+            fail message;
+        }
+
+        Ignore(Mapped(EqualityFactI(_, _, message), Zip(actual, expected)));
     }
 
 }

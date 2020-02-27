@@ -14,7 +14,7 @@ function Pack-One() {
         -c $Env:BUILD_CONFIGURATION `
         -v $Env:BUILD_VERBOSITY `
         -o $Env:NUGET_OUTDIR `
-        /property:PackageVersion=$Env:NUGET_VERSION 
+        /property:PackageVersion=$Env:NUGET_VERSION
 
     if  ($LastExitCode -ne 0) {
         Write-Host "##vso[task.logissue type=error;]Failed to pack $project."
@@ -27,6 +27,9 @@ Pack-One '../Standard/src/Standard.csproj'
 
 Write-Host "##[info]Pack Chemistry library"
 Pack-One '../Chemistry/src/DataModel/DataModel.csproj'
+
+Write-Host "##[info]Pack QML library"
+Pack-One '../MachineLearning/src/MachineLearning.csproj'
 
 Write-Host "##[info]Pack Numerics library"
 Pack-One '../Numerics/src/Numerics.csproj'

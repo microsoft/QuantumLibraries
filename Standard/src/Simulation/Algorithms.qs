@@ -9,7 +9,7 @@ namespace Microsoft.Quantum.Simulation {
     // A simulation technique converts an EvolutionGenerator to time evolution
     // by the encoded system for some time step
     // Here is an example of a simulation technique.
-    
+
     /// # Summary
     /// Implements time-evolution by a term contained in a `GeneratorSystem`.
     ///
@@ -28,8 +28,8 @@ namespace Microsoft.Quantum.Simulation {
         let generatorIndex = generatorSystemFunction(idx);
         (evolutionSet!(generatorIndex))!(stepsize, qubits);
     }
-    
-    
+
+
     /// # Summary
     /// Implements a single time-step of time-evolution by the system
     /// described in an `EvolutionGenerator` using a Trotter–Suzuki
@@ -54,19 +54,19 @@ namespace Microsoft.Quantum.Simulation {
     {
         let (evolutionSet, generatorSystem) = evolutionGenerator!;
         let (nTerms, generatorSystemFunction) = generatorSystem!;
-        
+
         // The input to DecomposeIntoTimeStepsCA has signature
         // (Int, ((Int, Double, Qubit[]) => () is Adj + Ctl))
         let trotterForm = (nTerms, TrotterStepImpl(evolutionGenerator, _, _, _));
-        return (DecomposeIntoTimeStepsCA(trotterForm, trotterOrder))(trotterStepSize, _);
+        return (DecomposedIntoTimeStepsCA(trotterForm, trotterOrder))(trotterStepSize, _);
     }
-    
-    
+
+
     // This simulation algorithm takes (timeMax, EvolutionGenerator,
     // register) and other algorithm-specific parameters (trotterStepSize,
     // trotterOrder), and performs evolution under the EvolutionGenerator
     // for time = timeMax.
-    
+
     /// # Summary
     /// Makes repeated calls to `TrotterStep` to approximate the
     /// time-evolution operator exp(_-iHt_).
@@ -88,19 +88,19 @@ namespace Microsoft.Quantum.Simulation {
         {
             let nTimeSlices = Ceiling(maxTime / trotterStepSize);
             let resizedTrotterStepSize = maxTime / IntAsDouble(nTimeSlices);
-            
+
             for (idxTimeSlice in 0 .. nTimeSlices - 1)
             {
                 (TrotterStep(evolutionGenerator, trotterOrder, resizedTrotterStepSize))(qubits);
             }
         }
-        
+
         adjoint invert;
         controlled distribute;
         controlled adjoint distribute;
     }
-    
-    
+
+
     /// # Summary
     /// `SimulationAlgorithm` function that uses a Trotter–Suzuki
     /// decomposition to approximate the time-evolution operator _exp(-iHt)_.
@@ -117,11 +117,11 @@ namespace Microsoft.Quantum.Simulation {
     {
         return SimulationAlgorithm(TrotterSimulationAlgorithmImpl(trotterStepSize, trotterOrder, _, _, _));
     }
-    
-    
+
+
     // This simple time-dependent simulation algorithm implements a
     // sequence of uniformly-sized trotter steps
-    
+
     /// # Summary
     /// Implementation of multiple Trotter steps to approximate a unitary
     /// operator that solves the time-dependent Schrödinger equation.
@@ -143,7 +143,7 @@ namespace Microsoft.Quantum.Simulation {
         {
             let nTimeSlices = Ceiling(maxTime / trotterStepSize);
             let resizedTrotterStepSize = maxTime / IntAsDouble(nTimeSlices);
-            
+
             for (idxTimeSlice in 0 .. nTimeSlices - 1)
             {
                 let schedule = IntAsDouble(idxTimeSlice) / IntAsDouble(nTimeSlices);
@@ -153,13 +153,13 @@ namespace Microsoft.Quantum.Simulation {
                 (TrotterSimulationAlgorithm(resizedTrotterStepSize, trotterOrder))!(resizedTrotterStepSize, evolutionGenerator, qubits);
             }
         }
-        
+
         adjoint invert;
         controlled distribute;
         controlled adjoint distribute;
     }
-    
-    
+
+
     /// # Summary
     /// `TimeDependentSimulationAlgorithm` function that uses a Trotter–Suzuki
     /// decomposition to approximate a unitary operator that solves the
@@ -177,7 +177,7 @@ namespace Microsoft.Quantum.Simulation {
     {
         return TimeDependentSimulationAlgorithm(TimeDependentTrotterSimulationAlgorithmImpl(trotterStepSize, trotterOrder, _, _, _));
     }
-    
+
 }
 
 
