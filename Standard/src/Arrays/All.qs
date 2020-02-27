@@ -29,7 +29,10 @@ namespace Microsoft.Quantum.Arrays {
     ///
     /// # Output
     /// A `Bool` value of the AND function of the predicate applied to all elements.
+    ///
     /// # Example 
+    /// The following code checks whether all elements of the array are non-zero:
+    /// ```qsharp
     /// open Microsoft.Quantum.Arrays;
     /// open Microsoft.Quantum.Logical;
     ///
