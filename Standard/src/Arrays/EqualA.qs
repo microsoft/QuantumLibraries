@@ -8,26 +8,28 @@ namespace Microsoft.Quantum.Arrays {
     /// for pairs of elements of the arrays, checks whether the arrays are equal.
     ///
     /// # Remarks
-    /// The function is defined for generic types, i.e., whenever we have
-    /// two arrays `'T[]` and a function `equal: ('T, 'T) -> Bool`, we can produce
+    /// This function is defined for generic types; i.e., whenever we have
+    /// two arrays `'T[]` and a function `equal: ('T, 'T) -> Bool`, this function returns
     /// a `Bool` value that indicates whether the arrays are equal.
     /// For two arrays to be considered equal, they have to have equal length
     /// and the elements in the same positions in the arrays have to be equal.
     ///
     /// # Type Parameters
     /// ## 'T
-    /// The type of arrays' elements.
+    /// The type of each array's elements.
     ///
     /// # Input
     /// ## predicate
     /// A function from tuple `('T, 'T)` to `Bool` that is used to check whether two elements of arrays are equal.
     /// ## array1
-    /// An array of elements of type `'T`.
+    /// The first array to be compared.
     /// ## array2
     /// An array of elements of type `'T`.
     ///
     /// # Output
-    /// A `Bool` value indicating whether the arrays are equal.
+    /// The value `true` if and only if `array1` and `array2` are equal.
+    /// That is, if both arrays have the same length, and all elements are equal
+    /// as defined by `equal`.
     ///
     /// # Example 
     /// The following code checks whether different pairs of arrays of integers are equal:
