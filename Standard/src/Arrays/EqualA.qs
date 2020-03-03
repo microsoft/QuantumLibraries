@@ -24,7 +24,7 @@ namespace Microsoft.Quantum.Arrays {
     /// ## array1
     /// The first array to be compared.
     /// ## array2
-    /// An array of elements of type `'T`.
+    /// The second array to be compared.
     ///
     /// # Output
     /// The value `true` if and only if `array1` and `array2` are equal.
@@ -32,15 +32,15 @@ namespace Microsoft.Quantum.Arrays {
     /// as defined by `equal`.
     ///
     /// # Example 
-    /// The following code checks whether different pairs of arrays of integers are equal:
+    /// The following code checks whether different pairs of arrays are equal:
     /// ```qsharp
     /// open Microsoft.Quantum.Arrays;
     /// open Microsoft.Quantum.Logical;
     ///
     /// function EqualADemo() : Unit {
     ///     let equalArrays = EqualA(EqualI, [2, 3, 4], [2, 3, 4]);
-    ///     let differentLength = EqualA(EqualI, [2, 3, 4], [2, 3]);
-    ///     let differentElements = EqualA(EqualI, [2, 3, 4], [2, 5, 4]);
+    ///     let differentLength = EqualA(EqualD, [2.0, 3.0, 4.0], [2.0, 3.0]);
+    ///     let differentElements = EqualA(EqualR, [One, Zero], [One, One]);
     ///     Message($"Equal arrays are {equalArrays ? "equal" | "not equal"}");
     ///     Message($"Arrays of different length are {differentLength ? "equal" | "not equal"}");
     ///     Message($"Arrays of the same length with different elements are {differentElements ? "equal" | "not equal"}");

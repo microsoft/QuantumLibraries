@@ -226,13 +226,16 @@ namespace Microsoft.Quantum.Tests {
 
 
     function EqualATest() : Unit {
+        // arrays of integers
         let equalArrays = EqualA(EqualI, [2, 3, 4], [2, 3, 4]);
         Fact(equalArrays, "Equal arrays were not reported as equal");
 
-        let differentLength = EqualA(EqualI, [2, 3, 4], [2, 3]);
+        // arrays of doubles
+        let differentLength = EqualA(EqualD, [2.0, 3.0, 4.0], [2.0, 3.0]);
         Fact(not differentLength, "Arrays of different length were reported as equal");
 
-        let differentElements = EqualA(EqualI, [2, 3, 4], [2, 5, 4]);
+        // arrays of Results
+        let differentElements = EqualA(EqualR, [One, Zero], [One, One]);
         Fact(not differentElements, "Arrays with different elements were reported as equal");
     }
 }
