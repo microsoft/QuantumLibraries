@@ -29,6 +29,20 @@ namespace Microsoft.Quantum.Arrays {
     ///
     /// # Output
     /// A `Bool` value of the AND function of the predicate applied to all elements.
+    ///
+    /// # Example 
+    /// The following code checks whether all elements of the array are non-zero:
+    /// ```qsharp
+    /// open Microsoft.Quantum.Arrays;
+    /// open Microsoft.Quantum.Logical;
+    ///
+    /// function AllDemo() : Unit {
+    ///     let predicate = NotEqualI(_, 0);
+    ///     let isNonZero = All(predicate, [2, 3, 4, 5, 6, 0]);
+    ///     Message($"{isNonZero}");
+    /// }
+    /// ```
+    ///
     function All<'T> (predicate : ('T -> Bool), array : 'T[]) : Bool {
        return Fold(_And, true, Mapped(predicate, array));
     }
