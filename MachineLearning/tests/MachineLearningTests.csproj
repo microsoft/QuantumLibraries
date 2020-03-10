@@ -3,7 +3,7 @@
   <Import Project="..\..\Build\props\tests.props" />
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
     <AssemblyName>Microsoft.Quantum.Standard.Tests</AssemblyName>
     <IncludeQsharpCorePackages>false</IncludeQsharpCorePackages>
   </PropertyGroup>
