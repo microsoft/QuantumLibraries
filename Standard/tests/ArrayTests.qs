@@ -40,7 +40,7 @@ namespace Microsoft.Quantum.Tests {
         EqualityFactI(fn(1), 12, $"fn(1) did not return array[1]");
     }
 
-    function _AllEqualI(expected : Int[], actual : Int[]) : Bool {
+    internal function AllEqualI(expected : Int[], actual : Int[]) : Bool {
         return All(EqualI, Zip(expected, actual));
     }
 
@@ -61,8 +61,7 @@ namespace Microsoft.Quantum.Tests {
         )), "Wrong chunks in case with leftover elements.");
     }
 
-    function _Squared(x : Int) : Int {
-
+    internal function Squared(x : Int) : Int {
         return x * x;
     }
 
@@ -183,7 +182,7 @@ namespace Microsoft.Quantum.Tests {
         Fact(not IsEmpty([""]), "Non-empty array marked as empty.");
     }
 
-    function _SwapOrderToPermuteArrayTest() : Unit {
+    internal function SwapOrderToPermuteArrayTest() : Unit {
         let newOrder = [0, 4, 2, 1, 3];
         let expected = [(1, 4), (1, 3)];
         let actual = _SwapOrderToPermuteArray(newOrder);

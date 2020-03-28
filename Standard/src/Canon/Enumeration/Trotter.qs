@@ -116,7 +116,7 @@ namespace Microsoft.Quantum.Canon {
     )
     : Unit is Adj + Ctl {
         if (order > 2) {
-            let stepSizeOuter = _TrotterStepSize(order);
+            let stepSizeOuter = TrotterStepSize(order);
             let stepSizeInner = 1.0 - 4.0 * stepSizeOuter;
             _TrotterArbitraryImplCA(order - 2, (nSteps, op), stepSizeOuter * stepSize, target);
             _TrotterArbitraryImplCA(order - 2, (nSteps, op), stepSizeOuter * stepSize, target);
@@ -139,7 +139,7 @@ namespace Microsoft.Quantum.Canon {
     /// [quant-ph/0508139](https://arxiv.org/abs/quant-ph/0508139). In
     /// particular, `DecomposedIntoTimeStepsCA(_, 4)` corresponds to the
     /// scalar $p_2(\lambda)$ in quant-ph/0508139.
-    function _TrotterStepSize(order : Int) : Double {
+    internal function TrotterStepSize(order : Int) : Double {
         return 1.0 / (4.0 - PowD(4.0, 1.0 / (IntAsDouble(order) - 1.0)));
     }
 

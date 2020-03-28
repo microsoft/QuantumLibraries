@@ -63,7 +63,7 @@ namespace Microsoft.Quantum.Arrays {
         return array[0 .. Length(array) - 2];
     }
 
-    function _Lookup<'T> (array : 'T[], index : Int) : 'T {
+    internal function Lookup<'T> (array : 'T[], index : Int) : 'T {
         return array[index];
     }
 
@@ -90,7 +90,7 @@ namespace Microsoft.Quantum.Arrays {
     /// where functions are used to avoid the need to record an entire array
     /// in memory.
     function LookupFunction<'T> (array : 'T[]) : (Int -> 'T) {
-        return _Lookup(array, _);
+        return Lookup(array, _);
     }
 
     /// # Summary
@@ -404,7 +404,7 @@ namespace Microsoft.Quantum.Arrays {
     /// ```qsharp
     /// // The following returns [0, 3, 2, 1, 4]
     /// Swapped(1, 3, [0, 1, 2, 3, 4]);
-    function Swapped<'T>(firstIndex: Int, secondIndex: Int, arr: 'T[]) : 'T[] {
+    function Swapped<'T>(firstIndex : Int, secondIndex : Int, arr : 'T[]) : 'T[] {
         return arr
             w/ firstIndex <- arr[secondIndex]
             w/ secondIndex <- arr[firstIndex];

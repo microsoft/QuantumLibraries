@@ -190,7 +190,7 @@ namespace Microsoft.Quantum.Canon {
     /// Number to compute Hamming weight
     /// # Output
     /// Hamming weight of the number
-    function _HammingWeightI(number : Int) : Int {
+    internal function HammingWeightI(number : Int) : Int {
         mutable cnt = number;
         set cnt = (cnt &&& 0x5555555555555555) + ((cnt >>>  1) &&& 0x5555555555555555);
         set cnt = (cnt &&& 0x3333333333333333) + ((cnt >>>  2) &&& 0x3333333333333333);
@@ -213,8 +213,8 @@ namespace Microsoft.Quantum.Canon {
     /// # Input
     /// ## index
     /// Input assignment as integer (from 0 to 2^n - 1)
-    function _Angle(index : Int) : Int {
-        return _HammingWeightI(index) % 2 == 1 ? 1 | -1;
+    internal function Angle(index : Int) : Int {
+        return HammingWeightI(index) % 2 == 1 ? 1 | -1;
     }
 
     /// # Summary
@@ -238,7 +238,7 @@ namespace Microsoft.Quantum.Canon {
             let code = _GrayCode(vars);
             for (j in 0..Length(code) - 1) {
                 let (offset, ctrl) = code[j];
-                RFrac(PauliZ, _Angle(offset), vars + 1, target);
+                RFrac(PauliZ, Angle(offset), vars + 1, target);
                 CNOT(controls[ctrl], target);
             }
 
@@ -255,7 +255,7 @@ namespace Microsoft.Quantum.Canon {
                     let code = _GrayCode(i);
                     for (j in 0..Length(code) - 1) {
                         let (offset, ctrl) = code[j];
-                        RFrac(PauliZ, -_Angle(start + offset), vars, controls[i]);
+                        RFrac(PauliZ, -Angle(start + offset), vars, controls[i]);
                         if (i != 0) {
                             CNOT(controls[ctrl], controls[i]);
                         }
@@ -272,7 +272,7 @@ namespace Microsoft.Quantum.Canon {
     /// Returns a Qubit array with target at index 0, and control i at index
     /// 2^i.  The helper qubits are inserted to all other positions in the
     /// array.
-    function _ArrangeQubits(controls : Qubit[], target : Qubit, helper : Qubit[]) : Qubit[] {
+    internal function ArrangedQubits(controls : Qubit[], target : Qubit, helper : Qubit[]) : Qubit[] {
         let numControls = Length(controls);
         mutable qs = new Qubit[2^numControls] w/ 0 <- target;
         mutable cntC = 0;
@@ -304,7 +304,7 @@ namespace Microsoft.Quantum.Canon {
         body (...) {
             let vars = Length(controls);
             using (helper = Qubit[2^vars - vars - 1]) {
-                let qs = _ArrangeQubits(controls, target, helper);
+                let qs = ArrangedQubits(controls, target, helper);
 
                 AssertAllZero([target]);
                 H(target);
@@ -328,7 +328,7 @@ namespace Microsoft.Quantum.Canon {
                     }
                 } apply {
                     for (i in IndexRange(qs)) {
-                        RFrac(PauliZ, _Angle(i), vars + 1, qs[i]);
+                        RFrac(PauliZ, Angle(i), vars + 1, qs[i]);
                     }
                 }
 
@@ -342,7 +342,7 @@ namespace Microsoft.Quantum.Canon {
             AssertProb([PauliZ], [target], One, 0.5, "Probability of the measurement must be 0.5", 1e-10);
             if (IsResultOne(MResetZ(target))) {
                 using (helper = Qubit[2^vars - vars - 1]) {
-                    let qs = _ArrangeQubits(controls, target, helper);
+                    let qs = ArrangedQubits(controls, target, helper);
                     within {
                         // this is a bit easier than in the compute part, since
                         // the target qubit does not have to be copied over to
@@ -357,7 +357,7 @@ namespace Microsoft.Quantum.Canon {
                         }
                     } apply {
                         for (i in 1..2^vars - 1) {
-                            RFrac(PauliZ, -_Angle(i), vars, qs[i]);
+                            RFrac(PauliZ, -Angle(i), vars, qs[i]);
                         }
                     }
                 }

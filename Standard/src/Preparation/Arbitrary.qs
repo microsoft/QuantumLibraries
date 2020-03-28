@@ -286,10 +286,10 @@ namespace Microsoft.Quantum.Preparation {
 
         // For each 2D block, compute disentangling single-qubit rotation parameters
         let (disentanglingY, disentanglingZ, newCoefficients) = _StatePreparationSBMComputeCoefficients(coefficients);
-        if (_AnyOutsideToleranceD(tolerance, disentanglingZ)) {
+        if (AnyOutsideToleranceD(tolerance, disentanglingZ)) {
             set plan += [_ApplyMultiplexStep(tolerance, disentanglingZ, PauliZ, (rngControl, idxTarget), _)];
         }
-        if (_AnyOutsideToleranceD(tolerance, disentanglingY)) {
+        if (AnyOutsideToleranceD(tolerance, disentanglingY)) {
             set plan += [_ApplyMultiplexStep(tolerance, disentanglingY, PauliY, (rngControl, idxTarget), _)];
         }
 
@@ -302,7 +302,7 @@ namespace Microsoft.Quantum.Preparation {
                 set plan += [_ApplyGlobalRotationStep(-1.0 * arg, idxTarget, _)];
             }
         } else {
-            if (_AnyOutsideToleranceCP(tolerance, newCoefficients)) {
+            if (AnyOutsideToleranceCP(tolerance, newCoefficients)) {
                 let newControl = (RangeStart(rngControl) + 1)..RangeStep(rngControl)..RangeEnd(rngControl);
                 let newTarget = RangeStart(rngControl);
                 set plan += _ApproximatelyUnprepareArbitraryStatePlan(tolerance, newCoefficients, (newControl, newTarget));
