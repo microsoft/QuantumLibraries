@@ -83,8 +83,7 @@ namespace Microsoft.Quantum.Canon {
             op(idx, stepSize * 0.5, target);
         }
 
-        for (idx in nSteps - 1 .. -1 .. 0)
-        {
+        for (idx in nSteps - 1 .. -1 .. 0) {
             op(idx, stepSize * 0.5, target);
         }
     }

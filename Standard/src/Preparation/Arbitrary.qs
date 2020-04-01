@@ -226,6 +226,9 @@ namespace Microsoft.Quantum.Preparation {
         bareOp(register!);
     }
 
+    // NB: This is currently not marked as internal, as the QML library
+    //     currently uses this function. Please see the relevant GitHub issue
+    //     at https://github.com/microsoft/QuantumLibraries/issues/239.
     function _CompileApproximateArbitraryStatePreparation(
         tolerance : Double,
         coefficients : ComplexPolar[],
@@ -257,7 +260,7 @@ namespace Microsoft.Quantum.Preparation {
         ApproximatelyMultiplexPauli(tolerance, disentangling, axis, actualControl, register[idxTarget]);
     }
 
-    function _RangeLength(rng : Range) : Int {
+    internal function RangeLength(rng : Range) : Int {
         mutable len = 0;
         for (idx in rng) {
             set len += 1;
@@ -296,7 +299,7 @@ namespace Microsoft.Quantum.Preparation {
         // target is now in |0> state up to the phase given by arg of newCoefficients.
 
         // Continue recursion while there are control qubits.
-        if (_RangeLength(rngControl) == 0) {
+        if (RangeLength(rngControl) == 0) {
             let (abs, arg) = newCoefficients[0]!;
             if (AbsD(arg) > tolerance) {
                 set plan += [_ApplyGlobalRotationStep(-1.0 * arg, idxTarget, _)];

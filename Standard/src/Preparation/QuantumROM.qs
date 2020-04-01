@@ -10,12 +10,12 @@ namespace Microsoft.Quantum.Preparation {
     open Microsoft.Quantum.Arrays;
 
     /// # Summary
-	/// Uses the Quantum ROM technique to represent a given density matrix.
-	///
+    /// Uses the Quantum ROM technique to represent a given density matrix.
+    ///
     /// Given a list of $N$ coefficients $\alpha_j$, this returns a unitary $U$ that uses the Quantum-ROM
     /// technique to prepare
-    /// an approximation  $\tilde\rho\sum_{j=0}^{N-1}p_j\ket{j}\bra{j}$ of the purification of the density matrix 
-    /// $\rho=\sum_{j=0}^{N-1}\frac{|alpha_j|}{\sum_k |\alpha_k|}\ket{j}\bra{j}$. In this approximation, the 
+    /// an approximation  $\tilde\rho\sum_{j=0}^{N-1}p_j\ket{j}\bra{j}$ of the purification of the density matrix
+    /// $\rho=\sum_{j=0}^{N-1}\frac{|alpha_j|}{\sum_k |\alpha_k|}\ket{j}\bra{j}$. In this approximation, the
     /// error $\epsilon$ is such that $|p_j-\frac{|alpha_j|}{\sum_k |\alpha_k|}|\le \epsilon / N$ and
     /// $\|\tilde\rho - \rho\| \le \epsilon$. In other words,
     /// $$
@@ -28,7 +28,7 @@ namespace Microsoft.Quantum.Preparation {
     /// ## targetError
     /// The target error $\epsilon$.
     /// ## coefficients
-    /// Array of $N$ coefficients specifying the probability of basis states. 
+    /// Array of $N$ coefficients specifying the probability of basis states.
     /// Negative numbers $-\alpha_j$ will be treated as positive $|\alpha_j|$.
     ///
     /// # Output
@@ -43,8 +43,8 @@ namespace Microsoft.Quantum.Preparation {
     ///
     /// # Remarks
     /// ## Example
-    /// The following code snippet prepares an purification of the $3$-qubit state 
-    /// $\rho=\sum_{j=0}^{4}\frac{|alpha_j|}{\sum_k |\alpha_k|}\ket{j}\bra{j}$, where 
+    /// The following code snippet prepares an purification of the $3$-qubit state
+    /// $\rho=\sum_{j=0}^{4}\frac{|alpha_j|}{\sum_k |\alpha_k|}\ket{j}\bra{j}$, where
     /// $\vec\alpha=(1.0,2.0,3.0,4.0,5.0)$, and the error is `1e-3`;
     /// ```qsharp
     /// let coefficients = [1.0,2.0,3.0,4.0,5.0];
@@ -87,8 +87,7 @@ namespace Microsoft.Quantum.Preparation {
     /// A tuple `(x,(y,z))` where `x = y + z` is the total number of qubits allocated,
     /// `y` is the number of qubits for the `LittleEndian` register, and `z` is the Number
     /// of garbage qubits.
-    function QuantumROMQubitCount(targetError: Double, nCoeffs: Int) : (Int, (Int, Int))
-    {
+    function QuantumROMQubitCount(targetError: Double, nCoeffs: Int) : (Int, (Int, Int)) {
         let nBitsPrecision = -Ceiling(Lg(0.5*targetError))+1;
         let nBitsIndices = Ceiling(Lg(IntAsDouble(nCoeffs)));
         let nGarbageQubits = nBitsIndices + 2 * nBitsPrecision + 1;
@@ -106,7 +105,7 @@ namespace Microsoft.Quantum.Preparation {
 
     // Classical processing
     // This discretizes the coefficients such that
-    // |coefficient[i] * oneNorm - discretizedCoefficient[i] * discreizedOneNorm| * nCoeffs <= 2^{1-bitsPrecision}.  
+    // |coefficient[i] * oneNorm - discretizedCoefficient[i] * discreizedOneNorm| * nCoeffs <= 2^{1-bitsPrecision}.
     function _QuantumROMDiscretization(bitsPrecision: Int, coefficients: Double[]) : (Double, Int[], Int[]) {
         let oneNorm = PNorm(1.0, coefficients);
         let nCoefficients = Length(coefficients);
@@ -185,10 +184,10 @@ namespace Microsoft.Quantum.Preparation {
                 return (oneNorm, keepCoeff, altIndex);
             }
         }
-        
+
         return (oneNorm, keepCoeff, altIndex);
     }
-        
+
     // Used in QuantumROM implementation.
     function _QuantumROMDiscretizationRoundCoefficients(coefficient: Double, oneNorm: Double, nCoefficients: Int, barHeight: Int) : Int {
         return Round((AbsD(coefficient) / oneNorm) * IntAsDouble(nCoefficients) * IntAsDouble(barHeight));

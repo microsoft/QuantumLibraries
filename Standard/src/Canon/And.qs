@@ -73,10 +73,10 @@ namespace Microsoft.Quantum.Canon {
             }
         }
         controlled (controls, ...) {
-            _ApplyMultipleControlledAnd(controls + [control1, control2], target);
+            ApplyMultiplyControlledAnd(controls + [control1, control2], target);
         }
         adjoint controlled (controls, ...) {
-            Adjoint _ApplyMultipleControlledAnd(controls + [control1, control2], target);
+            Adjoint ApplyMultiplyControlledAnd(controls + [control1, control2], target);
         }
     }
 
@@ -133,10 +133,10 @@ namespace Microsoft.Quantum.Canon {
             Adjoint ApplyAnd(control1, control2, target);
         }
         controlled (controls, ...) {
-            _ApplyMultipleControlledLowDepthAnd(controls + [control1, control2], target);
+            ApplyMultiplyControlledLowDepthAnd(controls + [control1, control2], target);
         }
         adjoint controlled (controls, ...) {
-            Adjoint _ApplyMultipleControlledLowDepthAnd(controls + [control1, control2], target);
+            Adjoint ApplyMultiplyControlledLowDepthAnd(controls + [control1, control2], target);
         }
     }
 
@@ -154,9 +154,9 @@ namespace Microsoft.Quantum.Canon {
     ///
     /// # Example
     /// ```Q#
-    /// _GrayCode(2); // [(0, 0),(1, 1),(3, 0),(2, 1)]
+    /// GrayCode(2); // [(0, 0),(1, 1),(3, 0),(2, 1)]
     /// ```
-    function _GrayCode(n : Int) : (Int, Int)[] {
+    internal function GrayCode(n : Int) : (Int, Int)[] {
         let N = 1 <<< n;
 
         mutable res = new (Int, Int)[N];
@@ -227,7 +227,7 @@ namespace Microsoft.Quantum.Canon {
     /// Control qubits
     /// ## target
     /// Target qubit
-    operation _ApplyMultipleControlledAnd(controls : Qubit[], target : Qubit) : Unit {
+    internal operation ApplyMultiplyControlledAnd(controls : Qubit[], target : Qubit) : Unit {
         body (...) {
             let vars = Length(controls);
 
@@ -235,7 +235,7 @@ namespace Microsoft.Quantum.Canon {
 
             H(target);
 
-            let code = _GrayCode(vars);
+            let code = GrayCode(vars);
             for (j in 0..Length(code) - 1) {
                 let (offset, ctrl) = code[j];
                 RFrac(PauliZ, Angle(offset), vars + 1, target);
@@ -252,7 +252,7 @@ namespace Microsoft.Quantum.Canon {
             if (IsResultOne(MResetZ(target))) {
                 for (i in 0..vars - 1) {
                     let start = 1 <<< i;
-                    let code = _GrayCode(i);
+                    let code = GrayCode(i);
                     for (j in 0..Length(code) - 1) {
                         let (offset, ctrl) = code[j];
                         RFrac(PauliZ, -Angle(start + offset), vars, controls[i]);
@@ -300,7 +300,7 @@ namespace Microsoft.Quantum.Canon {
     /// Control qubits
     /// ## target
     /// Target qubit
-    operation _ApplyMultipleControlledLowDepthAnd(controls : Qubit[], target : Qubit) : Unit {
+    internal operation ApplyMultiplyControlledLowDepthAnd(controls : Qubit[], target : Qubit) : Unit {
         body (...) {
             let vars = Length(controls);
             using (helper = Qubit[2^vars - vars - 1]) {
