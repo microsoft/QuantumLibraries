@@ -364,6 +364,9 @@ namespace Microsoft.Quantum.Arrays {
         return All(IsValuePresent(permuation, _), RangeAsIntArray(IndexRange(permuation)));
     }
 
+    // NB: This function is internal, but not marked as internal so as to allow
+    //     unit tests to check its behaviour. In the future, tests should be
+    //     redesigned to check only publicly accessible behavior.
     /// # Summary
     /// Returns the order elements in an array need to be swapped to produce an ordered array.
     /// Assumes swaps occur in place.
@@ -380,7 +383,7 @@ namespace Microsoft.Quantum.Arrays {
     /// ## Example
     /// ```qsharp
     /// // The following returns [(0, 5),(0, 4),(0, 1),(0, 3)];
-    /// let swapOrder = SwapOrderToPermuteArray([5, 3, 2, 0, 1, 4]);
+    /// let swapOrder = _SwapOrderToPermuteArray([5, 3, 2, 0, 1, 4]);
     /// ```
     ///
     /// ## Psuedocode
@@ -389,7 +392,7 @@ namespace Microsoft.Quantum.Arrays {
     ///         Switch newOrder[index] with newOrder[newOrder[index]]
     ///     }
     /// }
-    internal function SwapOrderToPermuteArray(newOrder : Int[]) : (Int, Int)[] {
+    function _SwapOrderToPermuteArray(newOrder : Int[]) : (Int, Int)[] {
         // Check to verify the new ordering actually is a permutation of the indices
         Fact(IsPermutation(newOrder), $"The new ordering is not a permutation");
 

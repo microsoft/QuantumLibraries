@@ -407,7 +407,7 @@ namespace Microsoft.Quantum.Canon {
 
         if (Length(unitaries) > 0) {
             let auxillaryRegister = new Qubit[0];
-            _MultiplexOperations(unitaries, auxillaryRegister, index, target);
+            MultiplexOperationsWithAuxRegister(unitaries, auxillaryRegister, index, target);
         }
     }
 
@@ -415,7 +415,7 @@ namespace Microsoft.Quantum.Canon {
     /// Implementation step of MultiplexOperations.
     /// # See Also
     /// - Microsoft.Quantum.Canon.MultiplexOperations
-    operation _MultiplexOperations<'T>(
+    internal operation MultiplexOperationsWithAuxRegister<'T>(
         unitaries : ('T => Unit is Adj + Ctl)[],
         auxillaryRegister : Qubit[],
         index : LittleEndian,
@@ -441,13 +441,13 @@ namespace Microsoft.Quantum.Canon {
                     let newAuxQubit = Tail(index!);
 
                     if (nUnitariesLeft > 0) {
-                        _MultiplexOperations(leftUnitaries, [newAuxQubit], newControls, target);
+                        MultiplexOperationsWithAuxRegister(leftUnitaries, [newAuxQubit], newControls, target);
                     }
 
                     within {
                         X(newAuxQubit);
                     } apply {
-                        _MultiplexOperations(rightUnitaries, [newAuxQubit], newControls, target);
+                        MultiplexOperationsWithAuxRegister(rightUnitaries, [newAuxQubit], newControls, target);
                     }
                 } else {
                     // Recursion that reduces nIndex by 1 & sets Length(auxillaryRegister) to 1.
@@ -456,13 +456,13 @@ namespace Microsoft.Quantum.Canon {
                             Controlled X(auxillaryRegister + [(index!)[Length(index!) - 1]], newAuxQubit);
                         } apply {
                             if (nUnitariesLeft > 0) {
-                                _MultiplexOperations(leftUnitaries, [newAuxQubit], newControls, target);
+                                MultiplexOperationsWithAuxRegister(leftUnitaries, [newAuxQubit], newControls, target);
                             }
 
                             within {
                                 Controlled X(auxillaryRegister, newAuxQubit);
                             } apply {
-                                _MultiplexOperations(rightUnitaries, [newAuxQubit], newControls, target);
+                                MultiplexOperationsWithAuxRegister(rightUnitaries, [newAuxQubit], newControls, target);
                             }
                         }
                     }
@@ -471,7 +471,7 @@ namespace Microsoft.Quantum.Canon {
         }
 
         controlled (controlRegister, ...) {
-            _MultiplexOperations(unitaries, controlRegister, index, target);
+            MultiplexOperationsWithAuxRegister(unitaries, controlRegister, index, target);
         }
     }
 

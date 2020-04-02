@@ -8,7 +8,7 @@ namespace Microsoft.Quantum.Canon {
     open Microsoft.Quantum.Math;
 
     /// # Summary
-    /// Applies a multiply-controlled unitary operation $U$ that applies a 
+    /// Applies a multiply-controlled unitary operation $U$ that applies a
     /// unitary $V_j$ when controlled by n-qubit number state $\ket{j}$.
     ///
     /// $U = \sum^{N-1}_{j=0}\ket{j}\bra{j}\otimes V_j$.
@@ -18,7 +18,7 @@ namespace Microsoft.Quantum.Canon {
     /// A tuple where the first element `Int` is the number of unitaries $N$,
     /// and the second element `(Int -> ('T => () is Adj + Ctl))`
     /// is a function that takes an integer $j$ in $[0,N-1]$ and outputs the unitary
-    /// operation $V_j$. 
+    /// operation $V_j$.
     ///
     /// ## index
     /// $n$-qubit control register that encodes number states $\ket{j}$ in
@@ -28,7 +28,7 @@ namespace Microsoft.Quantum.Canon {
     /// Generic qubit register that $V_j$ acts on.
     ///
     /// # Remarks
-    /// `coefficients` will be padded with identity elements if 
+    /// `coefficients` will be padded with identity elements if
     /// fewer than $2^n$ are specified. This implementation uses
     /// $n-1$ auxiliary qubits.
     ///
@@ -51,11 +51,12 @@ namespace Microsoft.Quantum.Canon {
     /// Implementation step of `MultiplexOperationsFromGenerator`.
     /// # See Also
     /// - Microsoft.Quantum.Canon.MultiplexOperationsFromGenerator
-    operation _MultiplexOperationsFromGenerator<'T>(unitaryGenerator : (Int, Int, (Int -> ('T => Unit is Adj + Ctl))), auxiliary: Qubit[], index: LittleEndian, target: 'T) : Unit {
+    operation _MultiplexOperationsFromGenerator<'T>(unitaryGenerator : (Int, Int, (Int -> ('T => Unit is Adj + Ctl))), auxiliary: Qubit[], index: LittleEndian, target: 'T)
+    : Unit {
         body (...) {
             let nIndex = Length(index!);
             let nStates = 2^nIndex;
-            
+
             let (nUnitaries, unitaryOffset, unitaryFunction) = unitaryGenerator;
 
             let nUnitariesLeft = MinI(nUnitaries, nStates/2);
@@ -63,38 +64,40 @@ namespace Microsoft.Quantum.Canon {
 
             let leftUnitaries = (nUnitariesLeft, unitaryOffset, unitaryFunction);
             let rightUnitaries = (nUnitariesRight-nUnitariesLeft, unitaryOffset + nUnitariesLeft, unitaryFunction);
-            
-            let newControls = LittleEndian(index![0..nIndex-2]);
 
-            if(nUnitaries > 0){
-                if(Length(auxiliary) == 1 and nIndex==0){
+            let newControls = LittleEndian(index![0..nIndex - 2]);
+
+            if(nUnitaries > 0) {
+                if(Length(auxiliary) == 1 and nIndex==0) {
                     // Termination case
-                    
+
                     (Controlled Adjoint (unitaryFunction(unitaryOffset)))(auxiliary, target);
-                }
-                elif(Length(auxiliary) == 0 and nIndex>=1){
+                } elif (Length(auxiliary) == 0 and nIndex >= 1) {
                     // Start case
                     let newauxiliary = [index![Length(index!) - 1]];
                     if(nUnitariesRight > 0){
                         _MultiplexOperationsFromGenerator(rightUnitaries, newauxiliary, newControls, target);
                     }
-                    X(newauxiliary[0]);
-                    _MultiplexOperationsFromGenerator(leftUnitaries, newauxiliary, newControls, target);
-                    X(newauxiliary[0]);
-                }
-                else{
+                    within {
+                        X(newauxiliary[0]);
+                    } apply {
+                        _MultiplexOperationsFromGenerator(leftUnitaries, newauxiliary, newControls, target);
+                    }
+                } else {
                     // Recursion that reduces nIndex by 1 & sets Length(auxiliary) to 1.
-                    using(newauxiliary = Qubit[1]){
-                        let op = _LogicalANDMeasAndFix(_, _);
-                        // Naive measurement-free approach uses 4x more T gates with 
+                    using (newauxiliary = Qubit[1]) {
+                        let op = LogicalANDMeasAndFix(_, _);
+                        // Naive measurement-free approach uses 4x more T gates with
                         // let op = (Controlled X);
                         op([index![Length(index!) - 1]] + auxiliary, newauxiliary[0]);
-                        if(nUnitariesRight > 0){
+                        if (nUnitariesRight > 0) {
                             _MultiplexOperationsFromGenerator(rightUnitaries, newauxiliary, newControls, target);
                         }
-                        (Controlled X)(auxiliary, newauxiliary[0]);
-                        _MultiplexOperationsFromGenerator(leftUnitaries, newauxiliary, newControls, target);
-                        (Controlled X)(auxiliary, newauxiliary[0]);
+                        within {
+                            (Controlled X)(auxiliary, newauxiliary[0]);
+                        } apply {
+                            _MultiplexOperationsFromGenerator(leftUnitaries, newauxiliary, newControls, target);
+                        }
                         (Adjoint op)([index![Length(index!) - 1]] + auxiliary, newauxiliary[0]);
                     }
                 }
@@ -108,7 +111,7 @@ namespace Microsoft.Quantum.Canon {
     }
 
     /// # Summary
-    /// Applies multiply-controlled unitary operation $U$ that applies a 
+    /// Applies multiply-controlled unitary operation $U$ that applies a
     /// unitary $V_j$ when controlled by n-qubit number state $\ket{j}$.
     ///
     /// $U = \sum^{N-1}_{j=0}\ket{j}\bra{j}\otimes V_j$.
@@ -118,7 +121,7 @@ namespace Microsoft.Quantum.Canon {
     /// A tuple where the first element `Int` is the number of unitaries $N$,
     /// and the second element `(Int -> ('T => () is Adj + Ctl))`
     /// is a function that takes an integer $j$ in $[0,N-1]$ and outputs the unitary
-    /// operation $V_j$. 
+    /// operation $V_j$.
     ///
     /// ## index
     /// $n$-qubit control register that encodes number states $\ket{j}$ in
@@ -128,25 +131,21 @@ namespace Microsoft.Quantum.Canon {
     /// Generic qubit register that $V_j$ acts on.
     ///
     /// # Remarks
-    /// `coefficients` will be padded with identity elements if 
-    /// fewer than $2^n$ are specified. This version is implemented 
+    /// `coefficients` will be padded with identity elements if
+    /// fewer than $2^n$ are specified. This version is implemented
     /// directly by looping through n-controlled unitary operators.
-    operation MultiplexOperationsBruteForceFromGenerator<'T>(unitaryGenerator : (Int, (Int -> ('T => Unit is Adj + Ctl))), index: LittleEndian, target: 'T) : Unit {
-        body (...) {
-            let nIndex = Length(index!);
-            let nStates = 2^nIndex;
-            let (nUnitaries, unitaryFunction) = unitaryGenerator;
-            for(idxOp in 0..MinI(nStates,nUnitaries) - 1){
-                (ControlledOnInt(idxOp, unitaryFunction(idxOp)))(index!,target);
-            }
+    operation MultiplexOperationsBruteForceFromGenerator<'T>(unitaryGenerator : (Int, (Int -> ('T => Unit is Adj + Ctl))), index: LittleEndian, target: 'T)
+    : Unit is Adj + Ctl {
+        let nIndex = Length(index!);
+        let nStates = 2^nIndex;
+        let (nUnitaries, unitaryFunction) = unitaryGenerator;
+        for (idxOp in 0..MinI(nStates,nUnitaries) - 1){
+            (ControlledOnInt(idxOp, unitaryFunction(idxOp)))(index!, target);
         }
-        adjoint auto;
-        controlled auto;
-        adjoint controlled auto;
     }
 
     /// # Summary
-    /// Returns a multiply-controlled unitary operation $U$ that applies a 
+    /// Returns a multiply-controlled unitary operation $U$ that applies a
     /// unitary $V_j$ when controlled by n-qubit number state $\ket{j}$.
     ///
     /// $U = \sum^{2^n-1}_{j=0}\ket{j}\bra{j}\otimes V_j$.
@@ -156,7 +155,7 @@ namespace Microsoft.Quantum.Canon {
     /// A tuple where the first element `Int` is the number of unitaries $N$,
     /// and the second element `(Int -> ('T => () is Adj + Ctl))`
     /// is a function that takes an integer $j$ in $[0,N-1]$ and outputs the unitary
-    /// operation $V_j$. 
+    /// operation $V_j$.
     ///
     /// # Output
     /// A multiply-controlled unitary operation $U$ that applies unitaries
@@ -169,7 +168,7 @@ namespace Microsoft.Quantum.Canon {
     }
 
     /// # Summary
-    /// Returns a multiply-controlled unitary operation $U$ that applies a 
+    /// Returns a multiply-controlled unitary operation $U$ that applies a
     /// unitary $V_j$ when controlled by n-qubit number state $\ket{j}$.
     ///
     /// $U = \sum^{2^n-1}_{j=0}\ket{j}\bra{j}\otimes V_j$.
@@ -179,7 +178,7 @@ namespace Microsoft.Quantum.Canon {
     /// A tuple where the first element `Int` is the number of unitaries $N$,
     /// and the second element `(Int -> ('T => () is Adj + Ctl))`
     /// is a function that takes an integer $j$ in $[0,N-1]$ and outputs the unitary
-    /// operation $V_j$. 
+    /// operation $V_j$.
     ///
     /// # Output
     /// A multiply-controlled unitary operation $U$ that applies unitaries
@@ -201,18 +200,17 @@ namespace Microsoft.Quantum.Canon {
     /// assumed to always start in the $\ket{0}$ state.
     /// # Remarks
     /// When `ctrlRegister` has exactly $2$ qubits,
-    /// this is equivalent to the `CCNOT` operation but phase with a phase 
+    /// this is equivalent to the `CCNOT` operation but phase with a phase
     /// $e^{i\Pi/2}$ on $\ket{001}$ and $-e^{i\Pi/2}$ on $\ket{101}$ and $\ket{011}$.
     /// The Adjoint is also measure-and-fixup approach that is the inverse
     /// of the original operation only in special cases (see references),
-    /// but uses fewer T-gates. 
+    /// but uses fewer T-gates.
     ///
     /// # References
     /// - [ *Craig Gidney*, 1709.06648](https://arxiv.org/abs/1709.06648)
-    operation _LogicalANDMeasAndFix(ctrlRegister: Qubit[], target: Qubit) : Unit
-    {
-        body (...) 
-        {
+    internal operation LogicalANDMeasAndFix(ctrlRegister : Qubit[], target : Qubit)
+    : Unit {
+        body (...) {
             if(Length(ctrlRegister) == 2){
                 let c1 = ctrlRegister[0];
                 let c2 = ctrlRegister[1];
@@ -229,8 +227,7 @@ namespace Microsoft.Quantum.Canon {
                 CNOT(target,c1);
                 H(target);
                 S(target);
-            }
-            else{
+            } else {
                 (Controlled X)(ctrlRegister, target);
             }
         }
@@ -241,13 +238,14 @@ namespace Microsoft.Quantum.Canon {
                 H(target);
                 let Meas = M(target);
                 if (Meas == One) {
-                    H(c2);
-                    CNOT(c1,c2);
-                    H(c2);
+                    within {
+                        H(c2);
+                    } apply {
+                        CNOT(c1,c2);
+                    }
                     X(target);
                 }
-            }
-            else{
+            } else {
                  (Controlled X)(ctrlRegister, target);
             }
         }

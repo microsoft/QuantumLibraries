@@ -67,7 +67,7 @@ namespace Microsoft.Quantum.Preparation {
         let nCoeffs = Length(coefficients);
         let nBitsIndices = Ceiling(Lg(IntAsDouble(nCoeffs)));
 
-        let op =  _QuantumROMImpl(nBitsPrecision, nCoeffs, nBitsIndices, keepCoeff, altIndex, _, _);
+        let op =  PrepareQuantumROMState(nBitsPrecision, nCoeffs, nBitsIndices, keepCoeff, altIndex, _, _);
         let qubitCounts = QuantumROMQubitCount(targetError, nCoeffs);
         return (qubitCounts, oneNorm, op);
     }
@@ -122,7 +122,7 @@ namespace Microsoft.Quantum.Preparation {
         let barHeight = 2^bitsPrecision - 1;
 
         mutable altIndex = RangeAsIntArray(0..nCoefficients-1);
-        mutable keepCoeff = Mapped(_QuantumROMDiscretizationRoundCoefficients(_, oneNorm, nCoefficients, barHeight), coefficients);
+        mutable keepCoeff = Mapped(RoundedDiscretizationCoefficients(_, oneNorm, nCoefficients, barHeight), coefficients);
 
         // Calculate difference between number of discretized bars vs. maximum
         mutable bars = 0;
@@ -189,62 +189,52 @@ namespace Microsoft.Quantum.Preparation {
     }
 
     // Used in QuantumROM implementation.
-    function _QuantumROMDiscretizationRoundCoefficients(coefficient: Double, oneNorm: Double, nCoefficients: Int, barHeight: Int) : Int {
+    internal function RoundedDiscretizationCoefficients(coefficient: Double, oneNorm: Double, nCoefficients: Int, barHeight: Int) : Int {
         return Round((AbsD(coefficient) / oneNorm) * IntAsDouble(nCoefficients) * IntAsDouble(barHeight));
     }
 
     // Used in QuantumROM implementation.
-    operation _QuantumROMImpl(nBitsPrecision: Int, nCoeffs: Int, nBitsIndices: Int, keepCoeff: Int[], altIndex: Int[], indexRegister: LittleEndian, garbageRegister: Qubit[]) : Unit {
-        body (...) {
-            let unitaryGenerator = (nCoeffs, _QuantumROMWriteBitStringUnitary(_, keepCoeff, altIndex));
-            let garbageIdx0 = nBitsIndices;
-            let garbageIdx1 = garbageIdx0 + nBitsPrecision;
-            let garbageIdx2 = garbageIdx1 + nBitsPrecision;
-            let garbageIdx3 = garbageIdx2 + 1;
+    internal operation PrepareQuantumROMState(nBitsPrecision: Int, nCoeffs: Int, nBitsIndices: Int, keepCoeff: Int[], altIndex: Int[], indexRegister: LittleEndian, garbageRegister: Qubit[])
+    : Unit is Adj + Ctl {
+        let unitaryGenerator = (nCoeffs, QuantumROMBitStringWriterByIndex(_, keepCoeff, altIndex));
+        let garbageIdx0 = nBitsIndices;
+        let garbageIdx1 = garbageIdx0 + nBitsPrecision;
+        let garbageIdx2 = garbageIdx1 + nBitsPrecision;
+        let garbageIdx3 = garbageIdx2 + 1;
 
-            let altIndexRegister = LittleEndian(garbageRegister[0..garbageIdx0-1]);
-            let keepCoeffRegister = LittleEndian(garbageRegister[garbageIdx0..garbageIdx1 - 1]);
-            let uniformKeepCoeffRegister = LittleEndian(garbageRegister[garbageIdx1..garbageIdx2 - 1]);
-            let flagQubit = garbageRegister[garbageIdx3 - 1];
+        let altIndexRegister = LittleEndian(garbageRegister[0..garbageIdx0-1]);
+        let keepCoeffRegister = LittleEndian(garbageRegister[garbageIdx0..garbageIdx1 - 1]);
+        let uniformKeepCoeffRegister = LittleEndian(garbageRegister[garbageIdx1..garbageIdx2 - 1]);
+        let flagQubit = garbageRegister[garbageIdx3 - 1];
 
-            // Create uniform superposition over index and alt coeff register.
-            PrepareUniformSuperposition(nCoeffs, indexRegister);
-            ApplyToEachCA(H, uniformKeepCoeffRegister!);
+        // Create uniform superposition over index and alt coeff register.
+        PrepareUniformSuperposition(nCoeffs, indexRegister);
+        ApplyToEachCA(H, uniformKeepCoeffRegister!);
 
-            // Write bitstrings to altIndex and keepCoeff register.
-            MultiplexOperationsFromGenerator(unitaryGenerator, indexRegister, (keepCoeffRegister, altIndexRegister));
+        // Write bitstrings to altIndex and keepCoeff register.
+        MultiplexOperationsFromGenerator(unitaryGenerator, indexRegister, (keepCoeffRegister, altIndexRegister));
 
-            // Perform comparison
-            CompareUsingRippleCarry(uniformKeepCoeffRegister, keepCoeffRegister, flagQubit);
+        // Perform comparison
+        CompareUsingRippleCarry(uniformKeepCoeffRegister, keepCoeffRegister, flagQubit);
 
-            let indexRegisterSize = Length(indexRegister!);
+        let indexRegisterSize = Length(indexRegister!);
 
-            // Swap in register based on comparison
-            for(idx in 0..nBitsIndices-1){
-                (Controlled SWAP)([flagQubit], (indexRegister![nBitsIndices - idx - 1], altIndexRegister![idx]));
-            }
+        // Swap in register based on comparison
+        for (idx in 0..nBitsIndices - 1) {
+            (Controlled SWAP)([flagQubit], (indexRegister![nBitsIndices - idx - 1], altIndexRegister![idx]));
         }
-        adjoint auto;
-        controlled auto;
-        adjoint controlled auto;
     }
 
     // Used in QuantumROM implementation.
-    function _QuantumROMWriteBitStringUnitary(idx: Int, keepCoeff: Int[], altIndex: Int[]) : ((LittleEndian, LittleEndian) => Unit is Adj + Ctl) {
-        return _QuantumROMWriteBitString(idx, keepCoeff, altIndex, _, _);
+    internal function QuantumROMBitStringWriterByIndex(idx : Int, keepCoeff : Int[], altIndex : Int[]) : ((LittleEndian, LittleEndian) => Unit is Adj + Ctl) {
+        return WriteQuantumROMBitString(idx, keepCoeff, altIndex, _, _);
     }
 
     // Used in QuantumROM implementation.
-    operation _QuantumROMWriteBitString(idx: Int, keepCoeff: Int[], altIndex: Int[], keepCoeffRegister: LittleEndian, altIndexRegister: LittleEndian) : Unit {
-        body (...) {
-            ApplyXorInPlace(keepCoeff[idx], keepCoeffRegister);
-            ApplyXorInPlace(altIndex[idx], altIndexRegister);
-        }
-        adjoint auto;
-        controlled auto;
-        adjoint controlled auto;
+    internal operation WriteQuantumROMBitString(idx: Int, keepCoeff: Int[], altIndex: Int[], keepCoeffRegister: LittleEndian, altIndexRegister: LittleEndian)
+    : Unit is Adj + Ctl {
+        ApplyXorInPlace(keepCoeff[idx], keepCoeffRegister);
+        ApplyXorInPlace(altIndex[idx], altIndexRegister);
     }
-
-
 
 }
