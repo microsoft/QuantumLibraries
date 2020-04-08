@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Linq;
 
 using Microsoft.Jupyter.Core;
@@ -59,7 +60,7 @@ namespace Microsoft.Quantum.Chemistry.Magic
         /// or from a ProblemDescription.
         /// If the fileName is specified, that will be used and the problemDescription will be ignored.
         /// </summary>
-        public ExecutionResult Run(string input, IChannel channel)
+        public async Task<ExecutionResult> Run(string input, IChannel channel)
         {
             if (string.IsNullOrWhiteSpace(input))
             {
@@ -79,7 +80,7 @@ namespace Microsoft.Quantum.Chemistry.Magic
             // This transformation requires us to pick a convention for converting a spin-orbital index to a single integer.
             // Let us pick one according to the formula `integer = 2 * orbitalIndex + spinIndex`.
             FermionHamiltonian fermionHamiltonian = orbitalIntegralHamiltonian.ToFermionHamiltonian(args.IndexConvention);
-            
+
             return fermionHamiltonian.ToExecutionResult();
         }
 
@@ -153,7 +154,7 @@ namespace Microsoft.Quantum.Chemistry.Magic
 
             var hamiltonian = args.Hamiltonian;
             hamiltonian.AddRange(args.FermionTerms.Select(t => (new HermitianFermionTerm(t.Item1.ToLadderSequence()), t.Item2.ToDoubleCoeff())));
-            
+
             return hamiltonian.ToExecutionResult();
         }
     }

@@ -1,4 +1,5 @@
 ﻿
+using System.Threading.Tasks;
 using Microsoft.Jupyter.Core;
 using Microsoft.Quantum.Chemistry.Fermion;
 using Microsoft.Quantum.Chemistry.Paulis;
@@ -36,7 +37,7 @@ namespace Microsoft.Quantum.Chemistry.Magic
             public FermionWavefunction<int> Wavefunction { get; set; }
         }
 
-        public ExecutionResult Run(string input, IChannel channel)
+        public async Task<ExecutionResult> Run(string input, IChannel channel)
         {
             var args = JsonConvert.DeserializeObject<Arguments>(input);
 
