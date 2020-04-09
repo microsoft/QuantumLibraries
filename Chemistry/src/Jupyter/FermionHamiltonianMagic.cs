@@ -139,7 +139,7 @@ namespace Microsoft.Quantum.Chemistry.Magic
         /// <summary>
         /// Simply calls AddRange on the hamiltonian to add each term from the list of fermionTerms
         /// </summary>
-        public ExecutionResult Run(string input, IChannel channel)
+        public async Task<ExecutionResult> Run(string input, IChannel channel)
         {
             if (string.IsNullOrWhiteSpace(input))
             {
