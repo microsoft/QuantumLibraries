@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.IO;
 using System.Linq;
 using Microsoft.Jupyter.Core;
@@ -22,18 +23,18 @@ namespace Microsoft.Quantum.Chemistry.Tests
             (new FermionHamiltonianLoadMagic(), new MockChannel());
 
         [Fact]
-        public void LoadNoInput()
+        public async Task LoadNoInput()
         {
             var (magic, channel) = Init();
 
             Assert.Equal("%chemistry.fh.load", magic.Name);
-            var result = magic.Run("", channel);
+            var result = await magic.Run("", channel);
 
             Assert.Equal(ExecuteStatus.Error, result.Status);
         }
 
         [Fact]
-        public void LoadInvalidFile()
+        public async Task LoadInvalidFile()
         {
             var (magic, channel) = Init();
             var args = JsonConvert.SerializeObject(new FermionHamiltonianLoadMagic.Arguments
@@ -41,11 +42,11 @@ namespace Microsoft.Quantum.Chemistry.Tests
                 FileName = "foo_bar.yaml"
             });
 
-            Assert.Throws<FileNotFoundException>(() => magic.Run(args, channel));
+            await Assert.ThrowsAsync<FileNotFoundException>(async () => await magic.Run(args, channel));
         }
 
         [Fact]
-        public void LoadFromBroombridgeFile()
+        public async Task LoadFromBroombridgeFile()
         {
             var (magic, channel) = Init();
             var args = JsonConvert.SerializeObject(new FermionHamiltonianLoadMagic.Arguments
@@ -53,7 +54,7 @@ namespace Microsoft.Quantum.Chemistry.Tests
                 FileName = "broombridge_v0.2.yaml"
             });
 
-            var result = magic.Run(args, channel);
+            var result = await magic.Run(args, channel);
             var hamiltonian = result.Output as FermionHamiltonian;
             Assert.Equal(ExecuteStatus.Ok, result.Status);
             Assert.Equal(12, hamiltonian.SystemIndices.Count);
@@ -90,7 +91,7 @@ namespace Microsoft.Quantum.Chemistry.Tests
             (new FermionHamiltonianAddTermsMagic(), new MockChannel());
 
         [Fact]
-        public void AddHamiltonianTerms()
+        public async Task AddHamiltonianTerms()
         {
             var (magic, channel) = Init();
             Assert.Equal("%chemistry.fh.add_terms", magic.Name);
@@ -122,24 +123,24 @@ namespace Microsoft.Quantum.Chemistry.Tests
                 FermionTerms = fermionTerms
             });
 
-            var result = magic.Run(args, channel);
+            var result = await magic.Run(args, channel);
             var hamiltonian = result.Output as FermionHamiltonian;
             Assert.Equal(ExecuteStatus.Ok, result.Status);
             Assert.Equal(16, hamiltonian.CountTerms());
         }
 
         [Fact]
-        public void AddTermsToExistingHamiltonian()
+        public async Task AddTermsToExistingHamiltonian()
         {
             var (magic, channel) = Init();
             Assert.Equal("%chemistry.fh.add_terms", magic.Name);
 
             var loadMagic = new FermionHamiltonianLoadMagic();
             var args = JsonConvert.SerializeObject(new FermionHamiltonianLoadMagic.Arguments { FileName = "broombridge_v0.2.yaml" });
-            var original = loadMagic.Run(args, channel).Output as FermionHamiltonian;
+            var original = (await loadMagic.Run(args, channel)).Output as FermionHamiltonian;
             var fermionTerms = new List<(int[], double)>
             {
-                (new int[] {}, 10.0),   
+                (new int[] {}, 10.0),
                 (new[] {0,6}, 1.0),
                 (new[] {0,2,2,0}, 1.0)
             };
@@ -151,7 +152,7 @@ namespace Microsoft.Quantum.Chemistry.Tests
             });
             File.WriteAllText("add_terms.args.json", args);
 
-            var result = magic.Run(args, channel);
+            var result = await magic.Run(args, channel);
             var hamiltonian = result.Output as FermionHamiltonian;
             Assert.Equal(ExecuteStatus.Ok, result.Status);
             Assert.True(hamiltonian.CountTerms() > original.CountTerms());

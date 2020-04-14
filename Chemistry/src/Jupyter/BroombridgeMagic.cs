@@ -1,10 +1,11 @@
 ﻿using Microsoft.Jupyter.Core;
+using System.Threading.Tasks;
 using Microsoft.Quantum.Chemistry.Broombridge;
 
 namespace Microsoft.Quantum.Chemistry.Magic
 {
     /// <summary>
-    /// Jupyter Magic that loads and returns 
+    /// Jupyter Magic that loads and returns
     /// Broombridge electronic structure problem representation from a given .yaml file.
     /// </summary>
     public class BroombridgeMagic : MagicSymbol
@@ -23,7 +24,7 @@ namespace Microsoft.Quantum.Chemistry.Magic
         /// <summary>
         /// Loads the broombridge data from the given .yaml file and returns it.
         /// </summary>
-        public ExecutionResult Run(string input, IChannel channel)
+        public async Task<ExecutionResult> Run(string input, IChannel channel)
         {
             if (string.IsNullOrWhiteSpace(input))
             {
@@ -34,5 +35,5 @@ namespace Microsoft.Quantum.Chemistry.Magic
             var yamlData = Deserializers.DeserializeBroombridge(input).Raw;
             return yamlData.ToExecutionResult();
         }
-    }    
+    }
 }

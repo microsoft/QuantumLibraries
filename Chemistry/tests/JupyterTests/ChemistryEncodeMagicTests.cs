@@ -4,6 +4,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.Jupyter.Core;
 using Microsoft.Quantum.Chemistry.Broombridge;
 using Microsoft.Quantum.Chemistry.Fermion;
@@ -22,7 +23,7 @@ namespace Microsoft.Quantum.Chemistry.Tests
 
 
         [Fact]
-        public void EncodeBroombridge()
+        public async Task EncodeBroombridge()
         {
             var (magic, channel) = Init();
             var fileName = "broombridge_v0.2.yaml";
@@ -41,7 +42,7 @@ namespace Microsoft.Quantum.Chemistry.Tests
                 WavefunctionLabel = "UCCSD |G>",
                 IndexConvention = IndexConvention.HalfUp
             });
-            var wavefunction = (FermionWavefunction<int>)wavefunctionMagic.Run(args, channel).Output;
+            var wavefunction = (FermionWavefunction<int>)((await wavefunctionMagic.Run(args, channel)).Output);
 
             args = JsonConvert.SerializeObject(new ChemistryEncodeMagic.Arguments
             {
@@ -49,7 +50,7 @@ namespace Microsoft.Quantum.Chemistry.Tests
                 Wavefunction = wavefunction
             });
 
-            var result = magic.Run(args, channel);
+            var result = await magic.Run(args, channel);
             Assert.Equal(ExecuteStatus.Ok, result.Status);
             var data = result.Output as JordanWignerEncodingData;
 
