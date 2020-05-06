@@ -11,7 +11,7 @@ namespace Microsoft.Quantum.Tests {
     open Microsoft.Quantum.Convert;
 
     // Tests the discretization algorithm
-    operation _QuantumROMDiscretizationTest() : Unit {
+    operation QuantumROMDiscretizationTest() : Unit {
         for(rep in 0..20){
             let coeffs = RandomInt(5000)+2;
             let bitsPrecision = RandomInt(30)+1;
@@ -97,7 +97,7 @@ namespace Microsoft.Quantum.Tests {
                     }
 
                     (Adjoint op)(register);
-                        
+
                 }
             }
         }

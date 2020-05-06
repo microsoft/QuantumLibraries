@@ -55,7 +55,7 @@ namespace Microsoft.Quantum.Math {
     {
         mutable min = value[0];
         let nTerms = Length(value);
-        
+
         for (idx in 0 .. nTerms - 1)
         {
             if (value[idx] < min)
@@ -63,11 +63,11 @@ namespace Microsoft.Quantum.Math {
                 set min = value[idx];
             }
         }
-        
+
         return min;
     }
-    
-    
+
+
     /// # Summary
     /// Computes the modulus between two real numbers.
     ///
@@ -103,10 +103,10 @@ namespace Microsoft.Quantum.Math {
         let output = moduloValue * modulo + minValue;
         return output;
     }
-    
-    
+
+
     // NB: .NET's Math library does not provide hyperbolic arcfunctions.
-    
+
     /// # Summary
     /// Computes the inverse hyperbolic cosine of a number.
     ///
@@ -119,8 +119,8 @@ namespace Microsoft.Quantum.Math {
     function ArcCosh (x : Double) : Double {
         return Log(x + Sqrt(x * x - 1.0));
     }
-    
-    
+
+
     /// # Summary
     /// Computes the inverse hyperbolic sine of a number.
     ///
@@ -134,8 +134,8 @@ namespace Microsoft.Quantum.Math {
     {
         return Log(x + Sqrt(x * x + 1.0));
     }
-    
-    
+
+
     /// # Summary
     /// Computes the inverse hyperbolic tangent of a number.
     ///
@@ -149,8 +149,8 @@ namespace Microsoft.Quantum.Math {
     {
         return Log((1.0 + x) / (1.0 - x)) * 0.5;
     }
-    
-    
+
+
     /// # Summary
     /// Computes the canonical residue of `value` modulo `modulus`.
     /// # Input
@@ -188,8 +188,8 @@ namespace Microsoft.Quantum.Math {
         let r = value % modulus;
         return (r < 0L) ? (r + modulus) | r;
     }
-    
-    
+
+
     /// # Summary
     /// Returns an integer raised to a given power, with respect to a given
     /// modulus.
@@ -208,11 +208,11 @@ namespace Microsoft.Quantum.Math {
         Fact(expBase > 0, $"`expBase` must be positive");
         mutable res = 1;
         mutable expPow2mod = expBase;
-        
+
         // express p as bit-string pₙ … p₀
         let powerBitExpansion = IntAsBoolArray(power, BitSizeI(power));
         let expBaseMod = expBase % modulus;
-        
+
         for (k in IndexRange(powerBitExpansion))
         {
             if (powerBitExpansion[k])
@@ -220,11 +220,11 @@ namespace Microsoft.Quantum.Math {
                 // if bit pₖ is 1, multiply res by expBase^(2ᵏ) (mod `modulus`)
                 set res = (res * expPow2mod) % modulus;
             }
-            
+
             // update value of expBase^(2ᵏ) (mod `modulus`)
             set expPow2mod = (expPow2mod * expPow2mod) % modulus;
         }
-        
+
         return res;
     }
 
@@ -246,23 +246,21 @@ namespace Microsoft.Quantum.Math {
         Fact(expBase > 0L, $"`expBase` must be positive");
         mutable res = 1L;
         mutable expPow2mod = expBase;
-        
+
         // express p as bit-string pₙ … p₀
         let powerBitExpansion = BigIntAsBoolArray(power);
         let expBaseMod = expBase % modulus;
-        
-        for (k in IndexRange(powerBitExpansion))
-        {
-            if (powerBitExpansion[k])
-            {
+
+        for (k in IndexRange(powerBitExpansion)) {
+            if (powerBitExpansion[k]) {
                 // if bit pₖ is 1, multiply res by expBase^(2ᵏ) (mod `modulus`)
                 set res = (res * expPow2mod) % modulus;
             }
-            
+
             // update value of expBase^(2ᵏ) (mod `modulus`)
             set expPow2mod = (expPow2mod * expPow2mod) % modulus;
         }
-        
+
         return res;
     }
 
@@ -272,15 +270,15 @@ namespace Microsoft.Quantum.Math {
         if (Snd(r) == 0) {
             return (Fst(s) * signA, Fst(t) * signB);
         }
-        
+
         let quotient = Fst(r) / Snd(r);
         let r_ = (Snd(r), Fst(r) - quotient * Snd(r));
         let s_ = (Snd(s), Fst(s) - quotient * Snd(s));
         let t_ = (Snd(t), Fst(t) - quotient * Snd(t));
         return _ExtendedGreatestCommonDivisorI(signA, signB, r_, s_, t_);
     }
-    
-    
+
+
     /// # Summary
     /// Computes a tuple $(u,v)$ such that $u \cdot a + v \cdot b = \operatorname{GCD}(a, b)$,
     /// where $\operatorname{GCD}$ is $a$
@@ -319,8 +317,8 @@ namespace Microsoft.Quantum.Math {
         let t_ = (Snd(t), Fst(t) - quotient * Snd(t));
         return _ExtendedGreatestCommonDivisorL(signA, signB, r_, s_, t_);
     }
-    
-    
+
+
     /// # Summary
     /// Computes a tuple $(u,v)$ such that $u \cdot a + v \cdot b = \operatorname{GCD}(a, b)$,
     /// where $\operatorname{GCD}$ is $a$
@@ -346,7 +344,7 @@ namespace Microsoft.Quantum.Math {
         return _ExtendedGreatestCommonDivisorL(signA, signB, r, s, t);
     }
 
-    
+
     /// # Summary
     /// Computes the greatest common divisor of $a$ and $b$. The GCD is always positive.
     ///
@@ -378,8 +376,8 @@ namespace Microsoft.Quantum.Math {
         let (u, v) = ExtendedGreatestCommonDivisorL(a, b);
         return u * a + v * b;
     }
-    
-    
+
+
     /// # Summary
     /// Internal recursive call to calculate the GCD with a bound
     function _ContinuedFractionConvergentI(signA : Int, signB : Int, r : (Int, Int), s : (Int, Int), t : (Int, Int), denominatorBound : Int) : Fraction
@@ -396,8 +394,8 @@ namespace Microsoft.Quantum.Math {
         let t_ = (Snd(t), Fst(t) - quotient * Snd(t));
         return _ContinuedFractionConvergentI(signA, signB, r_, s_, t_, denominatorBound);
     }
-    
-    
+
+
     /// # Summary
     /// Finds the continued fraction convergent closest to `fraction`
     /// with the denominator less or equal to `denominatorBound`
@@ -408,8 +406,8 @@ namespace Microsoft.Quantum.Math {
     /// # Output
     /// Continued fraction closest to `fraction`
     /// with the denominator less or equal to `denominatorBound`
-    function ContinuedFractionConvergentI(fraction : Fraction, denominatorBound : Int) : Fraction
-    {
+    function ContinuedFractionConvergentI(fraction : Fraction, denominatorBound : Int)
+    : Fraction {
         Fact(denominatorBound > 0, $"Denominator bound must be positive");
         let (a, b) = fraction!;
         let signA = SignI(a);
@@ -419,7 +417,7 @@ namespace Microsoft.Quantum.Math {
         let r = (a * signA, b * signB);
         return _ContinuedFractionConvergentI(signA, signB, r, s, t, denominatorBound);
     }
-    
+
     /// # Summary
     /// Internal recursive call to calculate the GCD with a bound
     function _ContinuedFractionConvergentL(signA : Int, signB : Int, r : (BigInt, BigInt), s : (BigInt, BigInt), t : (BigInt, BigInt), denominatorBound : BigInt) : BigFraction
@@ -436,8 +434,8 @@ namespace Microsoft.Quantum.Math {
         let t_ = (Snd(t), Fst(t) - quotient * Snd(t));
         return _ContinuedFractionConvergentL(signA, signB, r_, s_, t_, denominatorBound);
     }
-    
-    
+
+
     /// # Summary
     /// Finds the continued fraction convergent closest to `fraction`
     /// with the denominator less or equal to `denominatorBound`
@@ -448,8 +446,8 @@ namespace Microsoft.Quantum.Math {
     /// # Output
     /// Continued fraction closest to `fraction`
     /// with the denominator less or equal to `denominatorBound`
-    function ContinuedFractionConvergentL(fraction : BigFraction, denominatorBound : BigInt) : BigFraction
-    {
+    function ContinuedFractionConvergentL(fraction : BigFraction, denominatorBound : BigInt)
+    : BigFraction {
         Fact(denominatorBound > 0L, $"Denominator bound must be positive");
         let (a, b) = fraction!;
         let signA = SignL(a);
@@ -459,7 +457,7 @@ namespace Microsoft.Quantum.Math {
         let r = (a * IntAsBigInt(signA), b * IntAsBigInt(signB));
         return _ContinuedFractionConvergentL(signA, signB, r, s, t, denominatorBound);
     }
-    
+
     /// # Summary
     /// Returns true if $a$ and $b$ are co-prime and false otherwise.
     ///
@@ -524,22 +522,21 @@ namespace Microsoft.Quantum.Math {
     ///
     /// # Output
     /// Integer $b$ such that $a \cdot b = 1 (\operatorname{mod} \texttt{modulus})$.
-    function InverseModL(a : BigInt, modulus : BigInt) : BigInt
-    {
+    function InverseModL(a : BigInt, modulus : BigInt) : BigInt {
         let (u, v) = ExtendedGreatestCommonDivisorL(a, modulus);
         let gcd = u * a + v * modulus;
         EqualityFactL(gcd, 1L, $"`a` and `modulus` must be co-prime");
         return ModulusL(u, modulus);
     }
-    
-    
+
+
     /// # Summary
     /// Helper function used to recursively calculate the bitsize of a value.
-    function _bitsize (val : Int, bitsize : Int) : Int {
-        return val == 0 ? bitsize | _bitsize(val / 2, bitsize + 1);
+    internal function AccumulatedBitsizeI(val : Int, bitsize : Int) : Int {
+        return val == 0 ? bitsize | AccumulatedBitsizeI(val / 2, bitsize + 1);
     }
-    
-    
+
+
     /// # Summary
     /// For a non-negative integer `a`, returns the number of bits required to represent `a`.
     ///
@@ -552,19 +549,18 @@ namespace Microsoft.Quantum.Math {
     ///
     /// # Output
     /// The bit-size of `a`.
-    function BitSizeI(a : Int) : Int
-    {
+    function BitSizeI(a : Int) : Int {
         Fact(a >= 0, $"`a` must be non-negative");
-        return _bitsize(a, 0);
+        return AccumulatedBitsizeI(a, 0);
     }
 
     /// # Summary
     /// Helper function used to recursively calculate the bitsize of a value.
-    function _bitsize_l(val : BigInt, bitsize : Int) : Int {
-        return val == 0L ? bitsize | _bitsize_l(val / 2L, bitsize + 1);
+    internal function AccumulatedBitsizeL(val : BigInt, bitsize : Int) : Int {
+        return val == 0L ? bitsize | AccumulatedBitsizeL(val / 2L, bitsize + 1);
     }
-    
-    
+
+
     /// # Summary
     /// For a non-negative integer `a`, returns the number of bits required to represent `a`.
     ///
@@ -577,16 +573,15 @@ namespace Microsoft.Quantum.Math {
     ///
     /// # Output
     /// The bit-size of `a`.
-    function BitSizeL(a : BigInt) : Int
-    {
+    function BitSizeL(a : BigInt) : Int {
         Fact(a >= 0L, $"`a` must be non-negative");
-        return _bitsize_l(a, 0);
+        return AccumulatedBitsizeL(a, 0);
     }
-    
-    
+
+
     /// # Summary
     /// Returns the `L(p)` norm of a vector of `Double`s.
-    /// 
+    ///
     /// That is, given an array $x$ of type `Double[]`, this returns the $p$-norm
     /// $\|x\|\_p= (\sum_{j}|x_j|^{p})^{1/p}$.
     ///
@@ -600,13 +595,13 @@ namespace Microsoft.Quantum.Math {
         if (p < 1.0) {
             fail $"PNorm failed. `p` must be >= 1.0";
         }
-        
+
         mutable norm = 0.0;
-        
+
         for (element in array) {
             set norm = norm + PowD(AbsD(element), p);
         }
-        
+
         return PowD(norm, 1.0 / p);
     }
 

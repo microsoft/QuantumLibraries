@@ -3,7 +3,10 @@
 
 namespace Microsoft.Quantum.Canon {
 
-    function _Compose<'T, 'U, 'V> (outer : ('U -> 'V), inner : ('T -> 'U), target : 'T) : 'V {
+    /// # Summary
+    /// Returns the output of the the composition of `inner` and `outer`
+    /// for a given input.
+    internal function ComposedOutput<'T, 'U, 'V> (outer : ('U -> 'V), inner : ('T -> 'U), target : 'T) : 'V {
         return outer(inner(target));
     }
 
@@ -32,7 +35,7 @@ namespace Microsoft.Quantum.Canon {
     /// ## 'V
     /// The output type of the second function to be applied.
     function Compose<'T, 'U, 'V> (outer : ('U -> 'V), inner : ('T -> 'U)) : ('T -> 'V) {
-        return _Compose(outer, inner, _);
+        return ComposedOutput(outer, inner, _);
     }
 
 }

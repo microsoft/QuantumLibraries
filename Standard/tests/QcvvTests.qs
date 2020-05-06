@@ -23,7 +23,7 @@ namespace Microsoft.Quantum.Tests {
         }
     }
 
-    operation _trivialStatePrepration(qubits : Qubit[]) : Unit is Adj {
+    operation PrepareTrivialState(qubits : Qubit[]) : Unit is Adj {
         Message("stage prepared");
     }
 
@@ -72,22 +72,22 @@ namespace Microsoft.Quantum.Tests {
             EstimateFrequencyBinomialCase(testCase);
         }
     }
-    
+
     // Calls EstimateFrequency with a TrivialStatePreparation to make sure
     // Emulation is actually kicking in.
     @Test("QuantumSimulator")
     @Test("ToffoliSimulator")
     operation EstimateFrequencyEmulationTest() : Unit {
-        let freq = EstimateFrequencyA(_trivialStatePrepration, Measure([PauliZ, PauliZ, PauliZ], _), 3, 2000);
+        let freq = EstimateFrequencyA(PrepareTrivialState, Measure([PauliZ, PauliZ, PauliZ], _), 3, 2000);
         NearEqualityFactD(freq, 1.0);
     }
 
-    operation _RobustPhaseEstimationTestOp (phase : Double, power : Int, qubits : Qubit[]) : Unit is Adj + Ctl {
+    operation RobustPhaseEstimationTestOp (phase : Double, power : Int, qubits : Qubit[]) : Unit is Adj + Ctl {
         Exp([PauliZ], phase * IntAsDouble(power), qubits);
     }
 
     operation RobustPhaseEstimationDemoImpl (phaseSet : Double, bitsPrecision : Int) : Double {
-        let op = DiscreteOracle(_RobustPhaseEstimationTestOp(phaseSet, _, _));
+        let op = DiscreteOracle(RobustPhaseEstimationTestOp(phaseSet, _, _));
 
         using (q = Qubit()) {
             let phaseEst = RobustPhaseEstimation(bitsPrecision, op, [q]);
@@ -98,17 +98,17 @@ namespace Microsoft.Quantum.Tests {
 
     // Probabilistic test. Might fail occasionally
     operation RobustPhaseEstimationTest () : Unit {
-        
+
         let bitsPrecision = 10;
-        
+
         for (idxTest in 0 .. 9) {
             let phaseSet = ((2.0 * PI()) * IntAsDouble(idxTest - 5)) / 12.0;
             let phaseEst = RobustPhaseEstimationDemoImpl(phaseSet, bitsPrecision);
             EqualityWithinToleranceFact(phaseEst, phaseSet, 0.01);
         }
     }
-    
-    
+
+
     operation PrepareQubitTest () : Unit {
         using (qubit = Qubit()) {
             let bases = [PauliI, PauliX, PauliY, PauliZ];

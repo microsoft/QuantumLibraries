@@ -40,7 +40,7 @@ namespace Microsoft.Quantum.Tests {
         EqualityFactI(fn(1), 12, $"fn(1) did not return array[1]");
     }
 
-    function _AllEqualI(expected : Int[], actual : Int[]) : Bool {
+    internal function AllEqualI(expected : Int[], actual : Int[]) : Bool {
         return All(EqualI, Zip(expected, actual));
     }
 
@@ -49,20 +49,19 @@ namespace Microsoft.Quantum.Tests {
         let data = [10, 11, 12, 13, 14, 15];
 
         // 2 × 3 case.
-        Fact(All(_AllEqualI, Zip(
+        Fact(All(AllEqualI, Zip(
             [[10, 11], [12, 13], [14, 15]],
             Chunks(2, data)
         )), "Wrong chunks in 2x3 case.");
 
         // Case with some leftovers.
-        Fact(All(_AllEqualI, Zip(
+        Fact(All(AllEqualI, Zip(
             [[10, 11, 12, 13], [14, 15]],
             Chunks(4, data)
         )), "Wrong chunks in case with leftover elements.");
     }
 
-    function _Squared(x : Int) : Int {
-
+    internal function Squared(x : Int) : Int {
         return x * x;
     }
 
@@ -74,7 +73,7 @@ namespace Microsoft.Quantum.Tests {
         let ignore = Mapped(NearEqualityFactD(_, 2.17), dblArray);
 
         // Stress test by making an array of Int -> Int.
-        let fnArray = ConstantArray(7, _Squared);
+        let fnArray = ConstantArray(7, Squared);
         EqualityFactI(Length(fnArray), 7, $"ConstantArray(Int, Int -> Int) had the wrong length.");
         EqualityFactI(fnArray[3](7), 49, $"ConstantArray(Int, Int -> Int) had the wrong value.");
     }
@@ -85,8 +84,8 @@ namespace Microsoft.Quantum.Tests {
         let array0 = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
         let subarrayOdd = Subarray([1, 3, 5, 7, 9], array0);
         let subarrayEven = Subarray([0, 2, 4, 6, 8, 10], array0);
-        EqualityFactB(All(IsEven, subarrayEven), true, $"the even elements of [1..10] were not correctly sliced.");
-        EqualityFactB(Any(IsEven, subarrayOdd), false, $"the odd elements of [1..10] were not correctly sliced.");
+        Fact(All(IsEven, subarrayEven), $"the even elements of [1..10] were not correctly sliced.");
+        Fact(not Any(IsEven, subarrayOdd), $"the odd elements of [1..10] were not correctly sliced.");
         let array1 = [10, 11, 12, 13];
         Ignore(Mapped(EqualityFactI(_, _, $"Subarray failed: subpermutation case."), Zip([12, 11], Subarray([2, 1], array1))));
     }
@@ -183,7 +182,7 @@ namespace Microsoft.Quantum.Tests {
         Fact(not IsEmpty([""]), "Non-empty array marked as empty.");
     }
 
-    function _SwapOrderToPermuteArrayTest() : Unit {
+    function SwapOrderToPermuteArrayTest() : Unit {
         let newOrder = [0, 4, 2, 1, 3];
         let expected = [(1, 4), (1, 3)];
         let actual = _SwapOrderToPermuteArray(newOrder);

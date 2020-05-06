@@ -68,7 +68,7 @@ namespace Microsoft.Quantum.Canon {
     /// # See Also
     /// - Microsoft.Quantum.Canon.ApproximateQFT
     /// - Microsoft.Quantum.Canon.QFTLE
-    operation _ApplyQuantumFourierTransformBE(qs : BigEndian) : Unit is Adj + Ctl {
+    internal operation ApplyQuantumFourierTransformBE(qs : BigEndian) : Unit is Adj + Ctl {
         ApproximateQFT(Length(qs!), qs);
     }
 
@@ -87,7 +87,7 @@ namespace Microsoft.Quantum.Canon {
     /// # See Also
     /// - ApplyQuantumFourierTransformBE
     operation ApplyQuantumFourierTransform(qs : LittleEndian) : Unit is Adj + Ctl {
-        ApplyReversedOpBECA(_ApplyQuantumFourierTransformBE, qs);
+        ApplyReversedOpBECA(ApplyQuantumFourierTransformBE, qs);
     }
 
 }

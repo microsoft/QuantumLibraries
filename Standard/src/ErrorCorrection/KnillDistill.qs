@@ -1,4 +1,4 @@
-﻿// Copyright (c) Microsoft Corporation. All rights reserved.
+// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
 namespace Microsoft.Quantum.ErrorCorrection {
@@ -8,7 +8,7 @@ namespace Microsoft.Quantum.ErrorCorrection {
 
     /// # Summary
     /// Syndrome measurement and the inverse of embedding.
-	///
+    ///
     /// $X$- and $Z$-stabilizers are not treated equally,
     /// which is due to the particular choice of the encoding circuit.
     /// This asymmetry leads to a different syndrome extraction routine.
@@ -23,14 +23,17 @@ namespace Microsoft.Quantum.ErrorCorrection {
     /// would have caused the measured syndrome.
     ///
     /// # Remarks
-	///
+    /// Note that this operation is not marked as `internal`, as unit tests
+    /// directly depend on this operation. As a future improvement, unit tests
+    /// should be refactored to depend only on public callables directly.
+    ///
     /// > [!WARNING]
     /// > This routine is tailored
     /// > to a particular encoding circuit for Steane's 7 qubit code;
     /// > if the encoding circuit is modified then the syndrome outcome
     /// > might have to be interpreted differently.
-	///
-    operation _ExtractLogicalQubitFromSteaneCode (code : LogicalRegister)
+    ///
+    operation _ExtractLogicalQubitFromSteaneCode(code : LogicalRegister)
     : (Qubit, Int, Int) {
         Adjoint SteaneCodeEncoderImpl((code!)[0 .. 0], (code!)[1 .. 6]);
         let x0 = M((code!)[6]);
@@ -84,8 +87,8 @@ namespace Microsoft.Quantum.ErrorCorrection {
     ///
     /// # Description
     /// Performs a π/4 rotation about `Y`.
-	///
-	/// The rotation is performed by consuming a magic
+    ///
+    /// The rotation is performed by consuming a magic
     /// state; that is, a copy of the state
     /// $$
     /// \begin{align}
@@ -106,8 +109,8 @@ namespace Microsoft.Quantum.ErrorCorrection {
     /// ```qsharp
     /// Ry(PI() / 4.0, data);
     /// ```
-	/// and
-	/// ```qsharp
+    /// and
+    /// ```qsharp
     /// using (magic = Qubit()) {
     ///     Ry(PI() / 4.0, magic);
     ///     InjectPi4YRotation(data, magic);
@@ -157,7 +160,7 @@ namespace Microsoft.Quantum.ErrorCorrection {
 
 
     /// # Summary
-	/// Implements the Knill magic state distillation algorithm.
+    /// Implements the Knill magic state distillation algorithm.
     ///
     /// # Description
     /// Given 15 approximate copies of a magic state
@@ -220,5 +223,3 @@ namespace Microsoft.Quantum.ErrorCorrection {
     }
 
 }
-
-

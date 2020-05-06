@@ -9,7 +9,7 @@ namespace Microsoft.Quantum.Arithmetic {
     ///
     /// # Remarks
     /// This function allows to configure the behavior of the library.
-    function _EnableExtraAssertsForArithmetic () : Bool {
+    internal function ExtraArithmeticAssertionsEnabled() : Bool {
         return false;
     }
 

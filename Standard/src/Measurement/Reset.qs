@@ -5,15 +5,9 @@ namespace Microsoft.Quantum.Measurement {
     open Microsoft.Quantum.Intrinsic;
     open Microsoft.Quantum.Canon;
 
-    operation _BasisChangeZtoY (target : Qubit) : Unit {
-        body (...) {
-            H(target);
-            S(target);
-        }
-
-        adjoint invert;
-        controlled distribute;
-        controlled adjoint distribute;
+    internal operation BasisChangeZtoY(target : Qubit) : Unit is Adj + Ctl {
+        H(target);
+        S(target);
     }
 
 
@@ -37,9 +31,14 @@ namespace Microsoft.Quantum.Measurement {
     }
 
     /// # Summary
-    /// Measures a single qubit in the `Z` basis,
-    /// and resets it to the standard basis state
-    /// |0〉 following the measurement.
+    /// Measures a single qubit in the Z basis,
+    /// and resets it to a fixed initial state
+    /// following the measurement.
+    ///
+    /// # Description
+    /// Performs a single-qubit measurement in the $Z$-basis,
+    /// and ensures that the qubit is returned to $\ket{0}$
+    /// following the measurement.
     ///
     /// # Input
     /// ## target
@@ -47,26 +46,29 @@ namespace Microsoft.Quantum.Measurement {
     ///
     /// # Output
     /// The result of measuring `target` in the Pauli $Z$ basis.
-    operation MResetZ (target : Qubit) : Result
-    {
+    operation MResetZ (target : Qubit) : Result {
         let result = M(target);
-        
-        if (result == One)
-        {
+
+        if (result == One) {
             // Recall that the +1 eigenspace of a measurement operator corresponds to
             // the Result case Zero. Thus, if we see a One case, we must reset the state
             // have +1 eigenvalue.
             X(target);
         }
-        
+
         return result;
     }
-    
-    
+
+
     /// # Summary
     /// Measures a single qubit in the X basis,
-    /// and resets it to the standard basis state
-    /// |0〉 following the measurement.
+    /// and resets it to a fixed initial state
+    /// following the measurement.
+    ///
+    /// # Description
+    /// Performs a single-qubit measurement in the $X$-basis,
+    /// and ensures that the qubit is returned to $\ket{0}$
+    /// following the measurement.
     ///
     /// # Input
     /// ## target
@@ -74,29 +76,32 @@ namespace Microsoft.Quantum.Measurement {
     ///
     /// # Output
     /// The result of measuring `target` in the Pauli $X$ basis.
-    operation MResetX (target : Qubit) : Result
-    {
+    operation MResetX (target : Qubit) : Result {
         let result = Measure([PauliX], [target]);
-        
+
         // We must return the qubit to the Z basis as well.
         H(target);
-        
-        if (result == One)
-        {
+
+        if (result == One) {
             // Recall that the +1 eigenspace of a measurement operator corresponds to
             // the Result case Zero. Thus, if we see a One case, we must reset the state
             // have +1 eigenvalue.
             X(target);
         }
-        
+
         return result;
     }
-    
-    
+
+
     /// # Summary
     /// Measures a single qubit in the Y basis,
-    /// and resets it to the standard basis state
-    /// |0〉 following the measurement.
+    /// and resets it to a fixed initial state
+    /// following the measurement.
+    ///
+    /// # Description
+    /// Performs a single-qubit measurement in the $Y$-basis,
+    /// and ensures that the qubit is returned to $\ket{0}$
+    /// following the measurement.
     ///
     /// # Input
     /// ## target
@@ -104,21 +109,19 @@ namespace Microsoft.Quantum.Measurement {
     ///
     /// # Output
     /// The result of measuring `target` in the Pauli $Y$ basis.
-    operation MResetY (target : Qubit) : Result
-    {
+    operation MResetY (target : Qubit) : Result {
         let result = Measure([PauliY], [target]);
-        
+
         // We must return the qubit to the Z basis as well.
-        Adjoint _BasisChangeZtoY(target);
-        
-        if (result == One)
-        {
+        Adjoint BasisChangeZtoY(target);
+
+        if (result == One) {
             // Recall that the +1 eigenspace of a measurement operator corresponds to
             // the Result case Zero. Thus, if we see a One case, we must reset the state
             // have +1 eigenvalue.
             X(target);
         }
-        
+
         return result;
     }
 

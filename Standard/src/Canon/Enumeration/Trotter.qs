@@ -33,9 +33,9 @@ namespace Microsoft.Quantum.Canon {
     /// ```
     /// and
     /// ```qsharp
-    /// _Trotter1ImplCA((2, op), deltaT, target);
+    /// Trotter1ImplCA((2, op), deltaT, target);
     /// ```
-    operation _Trotter1ImplCA<'T> ((nSteps : Int, op : ((Int, Double, 'T) => Unit is Adj + Ctl)), stepSize : Double, target : 'T) : Unit is Adj + Ctl {
+    internal operation Trotter1ImplCA<'T> ((nSteps : Int, op : ((Int, Double, 'T) => Unit is Adj + Ctl)), stepSize : Double, target : 'T) : Unit is Adj + Ctl {
         for (idx in 0 .. nSteps - 1) {
             op(idx, stepSize, target);
         }
@@ -72,9 +72,9 @@ namespace Microsoft.Quantum.Canon {
     /// ```
     /// and
     /// ```qsharp
-    /// _Trotter2ImplCA((2, op), deltaT, target);
+    /// Trotter2ImplCA((2, op), deltaT, target);
     /// ```
-    operation _Trotter2ImplCA<'T>(
+    internal operation Trotter2ImplCA<'T>(
         (nSteps : Int, op : ((Int, Double, 'T) => Unit is Adj + Ctl)),
         stepSize : Double, target : 'T
     )
@@ -83,8 +83,7 @@ namespace Microsoft.Quantum.Canon {
             op(idx, stepSize * 0.5, target);
         }
 
-        for (idx in nSteps - 1 .. -1 .. 0)
-        {
+        for (idx in nSteps - 1 .. -1 .. 0) {
             op(idx, stepSize * 0.5, target);
         }
     }
@@ -109,24 +108,24 @@ namespace Microsoft.Quantum.Canon {
     /// Multiplier on size of each step of the simulation.
     /// ## target
     /// A quantum register on which the operations act.
-    operation _TrotterArbitraryImplCA<'T>(
+    internal operation TrotterArbitraryImplCA<'T>(
         order : Int,
         (nSteps : Int, op : ((Int, Double, 'T) => Unit is Adj + Ctl)),
         stepSize : Double, target : 'T
     )
     : Unit is Adj + Ctl {
         if (order > 2) {
-            let stepSizeOuter = _TrotterStepSize(order);
+            let stepSizeOuter = TrotterStepSize(order);
             let stepSizeInner = 1.0 - 4.0 * stepSizeOuter;
-            _TrotterArbitraryImplCA(order - 2, (nSteps, op), stepSizeOuter * stepSize, target);
-            _TrotterArbitraryImplCA(order - 2, (nSteps, op), stepSizeOuter * stepSize, target);
-            _TrotterArbitraryImplCA(order - 2, (nSteps, op), stepSizeInner * stepSize, target);
-            _TrotterArbitraryImplCA(order - 2, (nSteps, op), stepSizeOuter * stepSize, target);
-            _TrotterArbitraryImplCA(order - 2, (nSteps, op), stepSizeOuter * stepSize, target);
+            TrotterArbitraryImplCA(order - 2, (nSteps, op), stepSizeOuter * stepSize, target);
+            TrotterArbitraryImplCA(order - 2, (nSteps, op), stepSizeOuter * stepSize, target);
+            TrotterArbitraryImplCA(order - 2, (nSteps, op), stepSizeInner * stepSize, target);
+            TrotterArbitraryImplCA(order - 2, (nSteps, op), stepSizeOuter * stepSize, target);
+            TrotterArbitraryImplCA(order - 2, (nSteps, op), stepSizeOuter * stepSize, target);
         } elif (order == 2) {
-            _Trotter2ImplCA((nSteps, op), stepSize, target);
+            Trotter2ImplCA((nSteps, op), stepSize, target);
         } else {
-            _Trotter1ImplCA((nSteps, op), stepSize, target);
+            Trotter1ImplCA((nSteps, op), stepSize, target);
         }
     }
 
@@ -139,7 +138,7 @@ namespace Microsoft.Quantum.Canon {
     /// [quant-ph/0508139](https://arxiv.org/abs/quant-ph/0508139). In
     /// particular, `DecomposedIntoTimeStepsCA(_, 4)` corresponds to the
     /// scalar $p_2(\lambda)$ in quant-ph/0508139.
-    function _TrotterStepSize(order : Int) : Double {
+    internal function TrotterStepSize(order : Int) : Double {
         return 1.0 / (4.0 - PowD(4.0, 1.0 / (IntAsDouble(order) - 1.0)));
     }
 
@@ -204,11 +203,11 @@ namespace Microsoft.Quantum.Canon {
     )
     : ((Double, 'T) => Unit is Adj + Ctl) {
         if (trotterOrder == 1) {
-            return _Trotter1ImplCA((nSteps, op), _, _);
+            return Trotter1ImplCA((nSteps, op), _, _);
         } elif (trotterOrder == 2) {
-            return _Trotter2ImplCA((nSteps, op), _, _);
+            return Trotter2ImplCA((nSteps, op), _, _);
         } elif(trotterOrder % 2 == 0) {
-            return _TrotterArbitraryImplCA(trotterOrder, (nSteps, op), _, _);
+            return TrotterArbitraryImplCA(trotterOrder, (nSteps, op), _, _);
         } else {
             fail $"Odd order {trotterOrder} not yet supported.";
         }

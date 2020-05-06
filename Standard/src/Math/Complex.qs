@@ -4,8 +4,8 @@
 namespace Microsoft.Quantum.Math {
 
     /// # Summary
-	/// Represents a complex number in polar form.
-	///
+    /// Represents a complex number in polar form.
+    ///
     /// The polar representation of a complex number is $c=r e^{i t}$.
     ///
     /// # Input
@@ -73,8 +73,8 @@ namespace Microsoft.Quantum.Math {
         let (abs, arg) = input!;
         return abs * abs;
     }
-    
-    
+
+
     /// # Summary
     /// Returns the absolute value of a complex number of type
     /// `ComplexPolar`.
@@ -88,8 +88,8 @@ namespace Microsoft.Quantum.Math {
     function AbsComplexPolar (input : ComplexPolar) : Double {
         return input::Magnitude;
     }
-    
-    
+
+
     /// # Summary
     /// Returns the phase of a complex number of type
     /// `ComplexPolar`.
@@ -238,7 +238,7 @@ namespace Microsoft.Quantum.Math {
     /// Private. Since it is easiest to define the power of two complex numbers
     /// in cartesian form as returning in polar form, we define that here, then
     /// convert as needed.
-    function _PowC(base_ : Complex, power : Complex) : ComplexPolar {
+    internal function PowCAsCP(base_ : Complex, power : Complex) : ComplexPolar {
         let ((a, b), (c, d)) = (base_!, power!);
         // Re: https://www.wolframalpha.com/input/?i=simplify+re+%28%28a+%2B+b+i%29%5E%28c+%2B+d+i%29%29
         // Im: https://www.wolframalpha.com/input/?i=simplify+im+%28%28a+%2B+b+i%29%5E%28c+%2B+d+i%29%29
@@ -265,7 +265,7 @@ namespace Microsoft.Quantum.Math {
     /// The power $a^b$
     function PowC(base_ : Complex, power : Complex) : Complex {
         return ComplexPolarAsComplex(
-            _PowC(base_, power)
+            PowCAsCP(base_, power)
         );
     }
 
@@ -281,7 +281,7 @@ namespace Microsoft.Quantum.Math {
     /// # Output
     /// The power $a^b$
     function PowCP(a : ComplexPolar, power : ComplexPolar) : ComplexPolar {
-        return _PowC(
+        return PowCAsCP(
             ComplexPolarAsComplex(a),
             ComplexPolarAsComplex(power)
         );
