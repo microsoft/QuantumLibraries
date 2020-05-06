@@ -31,9 +31,14 @@ namespace Microsoft.Quantum.Measurement {
     }
 
     /// # Summary
-    /// Measures a single qubit in the `Z` basis,
-    /// and resets it to the standard basis state
-    /// |0〉 following the measurement.
+    /// Measures a single qubit in the Z basis,
+    /// and resets it to a fixed initial state
+    /// following the measurement.
+    ///
+    /// # Description
+    /// Performs a single-qubit measurement in the $Z$-basis,
+    /// and ensures that the qubit is returned to $\ket{0}$
+    /// following the measurement.
     ///
     /// # Input
     /// ## target
@@ -57,8 +62,13 @@ namespace Microsoft.Quantum.Measurement {
 
     /// # Summary
     /// Measures a single qubit in the X basis,
-    /// and resets it to the standard basis state
-    /// |0〉 following the measurement.
+    /// and resets it to a fixed initial state
+    /// following the measurement.
+    ///
+    /// # Description
+    /// Performs a single-qubit measurement in the $X$-basis,
+    /// and ensures that the qubit is returned to $\ket{0}$
+    /// following the measurement.
     ///
     /// # Input
     /// ## target
@@ -85,8 +95,13 @@ namespace Microsoft.Quantum.Measurement {
 
     /// # Summary
     /// Measures a single qubit in the Y basis,
-    /// and resets it to the standard basis state
-    /// |0〉 following the measurement.
+    /// and resets it to a fixed initial state
+    /// following the measurement.
+    ///
+    /// # Description
+    /// Performs a single-qubit measurement in the $Y$-basis,
+    /// and ensures that the qubit is returned to $\ket{0}$
+    /// following the measurement.
     ///
     /// # Input
     /// ## target
