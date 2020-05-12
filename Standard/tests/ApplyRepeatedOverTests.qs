@@ -55,7 +55,7 @@ namespace Microsoft.Quantum.Tests {
     }
 
     // Helper method for PermuteQubitsTest
-    operation SamplePermuteQubits(register : Qubit[]) : Unit is Adj + Ctl {
+    internal operation SamplePermuteQubits(register : Qubit[]) : Unit is Adj + Ctl {
         // assumes the order to be swapped is [(0, 5),(0, 4),(0, 1),(0, 3)]
         // (Order is [5, 3, 2, 0, 1, 4])
         SWAP(register[0], register[5]);
