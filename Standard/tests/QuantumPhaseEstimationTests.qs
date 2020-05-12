@@ -43,12 +43,11 @@ namespace Microsoft.Quantum.Tests {
 
     /// # Summary
     /// Implementation of T-gate for Quantum Phase Estimation Oracle
-    operation ApplyTOracle (power : Int, target : Qubit[]) : Unit is Adj + Ctl {
+    internal operation ApplyTOracle (power : Int, target : Qubit[]) : Unit is Adj + Ctl {
         for (idxPower in 0 .. power - 1) {
             T(Head(target));
         }
     }
 
 }
-
 
