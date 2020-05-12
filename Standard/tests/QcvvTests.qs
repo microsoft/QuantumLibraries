@@ -23,7 +23,7 @@ namespace Microsoft.Quantum.Tests {
         }
     }
 
-    operation PrepareTrivialState(qubits : Qubit[]) : Unit is Adj {
+    internal operation PrepareTrivialState(qubits : Qubit[]) : Unit is Adj {
         Message("stage prepared");
     }
 
@@ -132,5 +132,4 @@ namespace Microsoft.Quantum.Tests {
     }
 
 }
-
 
