@@ -26,7 +26,7 @@ namespace Microsoft.Quantum.Tests {
     }
 
     // Helper method for ApplySeriesOfOpsTest
-    operation SampleApplySeriesOfOps(register : Qubit[]) : Unit is Adj + Ctl {
+    internal operation SampleApplySeriesOfOps(register : Qubit[]) : Unit is Adj + Ctl {
         // replicate those ops implemented here
         X(register[0]);
         CNOT(register[0], register[4]);
