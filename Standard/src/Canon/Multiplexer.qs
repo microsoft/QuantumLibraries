@@ -67,8 +67,8 @@ namespace Microsoft.Quantum.Canon {
 
             let newControls = LittleEndian(index![0..nIndex - 2]);
 
-            if(nUnitaries > 0) {
-                if(Length(auxiliary) == 1 and nIndex==0) {
+            if (nUnitaries > 0) {
+                if (Length(auxiliary) == 1 and nIndex == 0) {
                     // Termination case
 
                     (Controlled Adjoint (unitaryFunction(unitaryOffset)))(auxiliary, target);
