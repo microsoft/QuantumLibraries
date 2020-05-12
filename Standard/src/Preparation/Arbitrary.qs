@@ -221,11 +221,19 @@ namespace Microsoft.Quantum.Preparation {
         (_CompileApproximateArbitraryStatePreparation(tolerance, coefficients, Length(qubits!)))(qubits);
     }
 
-    operation _ApplyToLittleEndian(bareOp : ((Qubit[]) => Unit is Adj + Ctl), register : LittleEndian)
+    /// # Summary
+    /// Applies an operation to the underlying qubits making up a little-endian
+    /// register. This operation is marked as internal, as a little-endian
+    /// register is intended to be "opaque," such that this is an implementation
+    /// detail only.
+    internal operation ApplyToLittleEndian(bareOp : ((Qubit[]) => Unit is Adj + Ctl), register : LittleEndian)
     : Unit is Adj + Ctl {
         bareOp(register!);
     }
 
+    // NB: This is currently not marked as internal, as the QML library
+    //     currently uses this function. Please see the relevant GitHub issue
+    //     at https://github.com/microsoft/QuantumLibraries/issues/239.
     function _CompileApproximateArbitraryStatePreparation(
         tolerance : Double,
         coefficients : ComplexPolar[],
@@ -244,10 +252,10 @@ namespace Microsoft.Quantum.Preparation {
             tolerance, coefficientsPadded, (rngControl, idxTarget)
         );
         let unprepare = BoundCA(plan);
-        return _ApplyToLittleEndian(Adjoint unprepare, _);
+        return ApplyToLittleEndian(Adjoint unprepare, _);
     }
 
-    operation _ApplyMultiplexStep(
+    internal operation ApplyMultiplexStep(
         tolerance : Double, disentangling : Double[], axis : Pauli,
         (rngControl : Range, idxTarget : Int),
         register : Qubit[]
@@ -257,7 +265,7 @@ namespace Microsoft.Quantum.Preparation {
         ApproximatelyMultiplexPauli(tolerance, disentangling, axis, actualControl, register[idxTarget]);
     }
 
-    function _RangeLength(rng : Range) : Int {
+    internal function RangeLength(rng : Range) : Int {
         mutable len = 0;
         for (idx in rng) {
             set len += 1;
@@ -265,7 +273,7 @@ namespace Microsoft.Quantum.Preparation {
         return len;
     }
 
-    operation _ApplyGlobalRotationStep(
+    internal operation ApplyGlobalRotationStep(
         angle : Double, idxTarget : Int, register : Qubit[]
     ) : Unit is Adj + Ctl {
         Exp([PauliI], angle, [register[idxTarget]]);
@@ -286,23 +294,23 @@ namespace Microsoft.Quantum.Preparation {
 
         // For each 2D block, compute disentangling single-qubit rotation parameters
         let (disentanglingY, disentanglingZ, newCoefficients) = _StatePreparationSBMComputeCoefficients(coefficients);
-        if (_AnyOutsideToleranceD(tolerance, disentanglingZ)) {
-            set plan += [_ApplyMultiplexStep(tolerance, disentanglingZ, PauliZ, (rngControl, idxTarget), _)];
+        if (AnyOutsideToleranceD(tolerance, disentanglingZ)) {
+            set plan += [ApplyMultiplexStep(tolerance, disentanglingZ, PauliZ, (rngControl, idxTarget), _)];
         }
-        if (_AnyOutsideToleranceD(tolerance, disentanglingY)) {
-            set plan += [_ApplyMultiplexStep(tolerance, disentanglingY, PauliY, (rngControl, idxTarget), _)];
+        if (AnyOutsideToleranceD(tolerance, disentanglingY)) {
+            set plan += [ApplyMultiplexStep(tolerance, disentanglingY, PauliY, (rngControl, idxTarget), _)];
         }
 
         // target is now in |0> state up to the phase given by arg of newCoefficients.
 
         // Continue recursion while there are control qubits.
-        if (_RangeLength(rngControl) == 0) {
+        if (RangeLength(rngControl) == 0) {
             let (abs, arg) = newCoefficients[0]!;
             if (AbsD(arg) > tolerance) {
-                set plan += [_ApplyGlobalRotationStep(-1.0 * arg, idxTarget, _)];
+                set plan += [ApplyGlobalRotationStep(-1.0 * arg, idxTarget, _)];
             }
         } else {
-            if (_AnyOutsideToleranceCP(tolerance, newCoefficients)) {
+            if (AnyOutsideToleranceCP(tolerance, newCoefficients)) {
                 let newControl = (RangeStart(rngControl) + 1)..RangeStep(rngControl)..RangeEnd(rngControl);
                 let newTarget = RangeStart(rngControl);
                 set plan += _ApproximatelyUnprepareArbitraryStatePlan(tolerance, newCoefficients, (newControl, newTarget));

@@ -28,7 +28,7 @@ namespace Microsoft.Quantum.Arrays {
        return 0..(Length(array) - 1);
     }
 
-    function _Identity<'T>(input : 'T) : 'T { return input; }
+    internal function Identity<'T>(input : 'T) : 'T { return input; }
 
     /// # Summary
     /// Given an array, returns a new array containing elements of the original
@@ -56,7 +56,7 @@ namespace Microsoft.Quantum.Arrays {
     /// for ((idx, element) in Enumerated(array)) { ... }
     /// ```
     function Enumerated<'TElement>(array : 'TElement[]) : (Int, 'TElement)[] {
-        return MappedByIndex(_Identity<(Int, 'TElement)>, array);
+        return MappedByIndex(Identity<(Int, 'TElement)>, array);
     }
 
 }

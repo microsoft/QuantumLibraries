@@ -8,8 +8,8 @@ namespace Microsoft.Quantum.Diagnostics {
     open Microsoft.Quantum.Logical;
 
     /// # Summary
-    /// Private function used to generate meaningful error messages.
-    function _FormattedExpectation<'T>(actual : 'T, expected : 'T) : String {
+    /// Internal function used to generate meaningful error messages.
+    internal function FormattedExpectation<'T>(actual : 'T, expected : 'T) : String {
         return $"Expected: '{expected}'. Actual: '{actual}'";
     }
 
@@ -22,8 +22,34 @@ namespace Microsoft.Quantum.Diagnostics {
     /// ## message
     /// Failure message string to be printed in the case that the classical
     /// condition is false.
+    ///
+    /// # See Also
+    /// - Microsoft.Quantum.Diagnostics.Contradiction
     function Fact(actual : Bool, message : String) : Unit {
         if (not actual) { fail message; }
+    }
+
+    /// # Summary
+    /// Declares that a classical condition is false.
+    ///
+    /// # Input
+    /// ## actual
+    /// The condition to be declared.
+    /// ## message
+    /// Failure message string to be printed in the case that the classical
+    /// condition is true.
+    ///
+    /// # See Also
+    /// - Microsoft.Quantum.Diagnostics.Fact
+    ///
+    /// # Example
+    /// The following Q# code will print "Hello, world":
+    /// ```Q#
+    /// Contradiction(2 == 3, "2 is not equal to 3.");
+    /// Message("Hello, world.");
+    /// ```
+    function Contradiction(actual : Bool, message : String) : Unit {
+        if (actual) { fail message; }
     }
 
     /// # Summary
@@ -41,7 +67,7 @@ namespace Microsoft.Quantum.Diagnostics {
     function EqualityWithinToleranceFact(actual : Double, expected : Double, tolerance : Double) : Unit {
         let delta = actual - expected;
         if (delta > tolerance or delta < -tolerance) {
-            fail _FormattedExpectation(actual, expected);
+            fail FormattedExpectation(actual, expected);
         }
     }
 
@@ -76,7 +102,7 @@ namespace Microsoft.Quantum.Diagnostics {
         // conditions.
         let ((reA, imA), (reE, imE)) = (actual!, expected!);
         if (AbsD(reA - reE) >= 1e-10 or AbsD(imA - imE) >= 1e-10) {
-            fail _FormattedExpectation(actual, expected);
+            fail FormattedExpectation(actual, expected);
         }
     }
 
