@@ -8,7 +8,7 @@ namespace Microsoft.Quantum.Diagnostics {
     open Microsoft.Quantum.Logical;
 
     /// # Summary
-    /// Private function used to generate meaningful error messages.
+    /// Internal function used to generate meaningful error messages.
     internal function FormattedExpectation<'T>(actual : 'T, expected : 'T) : String {
         return $"Expected: '{expected}'. Actual: '{actual}'";
     }
