@@ -235,7 +235,7 @@ namespace Microsoft.Quantum.Math {
     }
 
     /// # Summary
-    /// Private. Since it is easiest to define the power of two complex numbers
+    /// Internal. Since it is easiest to define the power of two complex numbers
     /// in cartesian form as returning in polar form, we define that here, then
     /// convert as needed.
     internal function PowCAsCP(base_ : Complex, power : Complex) : ComplexPolar {
