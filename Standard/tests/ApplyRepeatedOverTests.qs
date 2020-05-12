@@ -41,7 +41,7 @@ namespace Microsoft.Quantum.Tests {
     }
 
     // Helper method for ApplyRepeatedOpTest
-    operation SampleApplyRepeatedOp(register : Qubit[]) : Unit is Adj + Ctl {
+    internal operation SampleApplyRepeatedOp(register : Qubit[]) : Unit is Adj + Ctl {
         CCNOT(register[0], register[1], register[2]);
         CCNOT(register[2], register[1], register[0]);
         CCNOT(register[3], register[4], register[5]);
