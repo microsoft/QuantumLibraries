@@ -6,7 +6,7 @@ namespace Microsoft.Quantum.Oracles {
 
     /// # Summary
     /// Implementation of <xref:microsoft.quantum.canon.obliviousoraclefromdeterministicstateoracle>.
-    operation _ObliviousOracleFromDeterministicStateOracle(ancillaOracle : DeterministicStateOracle, signalOracle : ObliviousOracle, ancillaRegister : Qubit[], systemRegister : Qubit[])
+    internal operation ApplyObliviousOracleFromDeterministicStateOracle(ancillaOracle : DeterministicStateOracle, signalOracle : ObliviousOracle, ancillaRegister : Qubit[], systemRegister : Qubit[])
     : Unit is Adj + Ctl {
         ancillaOracle!(ancillaRegister);
         signalOracle!(ancillaRegister, systemRegister);
@@ -28,14 +28,15 @@ namespace Microsoft.Quantum.Oracles {
     /// # See Also
     /// - Microsoft.Quantum.Canon.DeterministicStateOracle
     /// - Microsoft.Quantum.Canon.ObliviousOracle
-    function ObliviousOracleFromDeterministicStateOracle (ancillaOracle : DeterministicStateOracle, signalOracle : ObliviousOracle) : ObliviousOracle {
-        return ObliviousOracle(_ObliviousOracleFromDeterministicStateOracle(ancillaOracle, signalOracle, _, _));
+    function ObliviousOracleFromDeterministicStateOracle(ancillaOracle : DeterministicStateOracle, signalOracle : ObliviousOracle)
+    : ObliviousOracle {
+        return ObliviousOracle(ApplyObliviousOracleFromDeterministicStateOracle(ancillaOracle, signalOracle, _, _));
     }
 
 
     /// # Summary
     /// Implementation of <xref:microsoft.quantum.canon.deterministicstateoraclefromstateoracle>.
-    operation _DeterministicStateOracleFromStateOracle (idxFlagQubit : Int, stateOracle : StateOracle, startQubits : Qubit[])
+    internal operation ApplyDeterministicStateOracleFromStateOracle (idxFlagQubit : Int, stateOracle : StateOracle, startQubits : Qubit[])
     : Unit is Adj + Ctl {
         stateOracle!(idxFlagQubit, startQubits);
     }
@@ -60,24 +61,17 @@ namespace Microsoft.Quantum.Oracles {
     /// # See Also
     /// - Microsoft.Quantum.Canon.StateOracle
     /// - Microsoft.Quantum.Canon.DeterministicStateOracle
-    function DeterministicStateOracleFromStateOracle (idxFlagQubit : Int, stateOracle : StateOracle) : DeterministicStateOracle
-    {
-        return DeterministicStateOracle(_DeterministicStateOracleFromStateOracle(idxFlagQubit, stateOracle, _));
+    function DeterministicStateOracleFromStateOracle (idxFlagQubit : Int, stateOracle : StateOracle)
+    : DeterministicStateOracle {
+        return DeterministicStateOracle(ApplyDeterministicStateOracleFromStateOracle(idxFlagQubit, stateOracle, _));
     }
 
 
     /// # Summary
     /// Implementation of <xref:microsoft.quantum.canon.stateoraclefromdeterministicstateoracle>.
-    operation _StateOracleFromDeterministicStateOracle (idxFlagQubit : Int, oracleStateDeterministic : DeterministicStateOracle, qubits : Qubit[]) : Unit
-    {
-        body (...)
-        {
-            oracleStateDeterministic!(qubits);
-        }
-
-        adjoint invert;
-        controlled distribute;
-        controlled adjoint distribute;
+    internal operation ApplyStateOracleFromDeterministicStateOracle(idxFlagQubit : Int, oracleStateDeterministic : DeterministicStateOracle, qubits : Qubit[])
+    : Unit is Adj + Ctl {
+        oracleStateDeterministic!(qubits);
     }
 
 
@@ -98,7 +92,7 @@ namespace Microsoft.Quantum.Oracles {
     /// - Microsoft.Quantum.Canon.StateOracle
     function StateOracleFromDeterministicStateOracle (deterministicStateOracle : DeterministicStateOracle) : StateOracle
     {
-        return StateOracle(_StateOracleFromDeterministicStateOracle(_, deterministicStateOracle, _));
+        return StateOracle(ApplyStateOracleFromDeterministicStateOracle(_, deterministicStateOracle, _));
     }
 
 
@@ -149,7 +143,7 @@ namespace Microsoft.Quantum.Oracles {
     /// ## Example
     /// `OracleToDiscrete(U)(3, target)` is equivalent to `U(target)` repeated three times.
     function OracleToDiscrete (blackBoxOracle : (Qubit[] => Unit is Adj + Ctl)) : DiscreteOracle {
-        return DiscreteOracle(_OperationPowCA(blackBoxOracle, _, _));
+        return DiscreteOracle(ApplyOperationRepeatedlyCA(blackBoxOracle, _, _));
     }
 
 }

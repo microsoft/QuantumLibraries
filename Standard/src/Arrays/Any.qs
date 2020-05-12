@@ -2,10 +2,7 @@
 // Licensed under the MIT License.
 
 namespace Microsoft.Quantum.Arrays {
-
-    function _Or(left : Bool, right : Bool) : Bool {
-        return left or right;
-    }
+    open Microsoft.Quantum.Logical;
 
     /// # Summary
     /// Given an array and a predicate that is defined
@@ -46,7 +43,7 @@ namespace Microsoft.Quantum.Arrays {
     /// }
     /// ```
     function Any<'T> (predicate : ('T -> Bool), array : 'T[]) : Bool {
-       return Fold(_Or, false, Mapped(predicate, array));
+       return Fold(Or, false, Mapped(predicate, array));
     }
 
 }

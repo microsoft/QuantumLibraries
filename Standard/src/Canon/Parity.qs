@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 namespace Microsoft.Quantum.Canon {
+    open Microsoft.Quantum.Diagnostics;
     open Microsoft.Quantum.Intrinsic;
     open Microsoft.Quantum.Arrays;
 
@@ -24,6 +25,35 @@ namespace Microsoft.Quantum.Canon {
     operation ApplyCNOTChain(qubits : Qubit[]) : Unit is Adj + Ctl {
         ApplyToEachCA(CNOT, Zip(Most(qubits), Rest(qubits)));
     }
+
+    /// # Summary
+    /// Implements a cascade of CCNOT gates controlled on corresponding bits of two
+    /// qubit registers, acting on the next qubit of one of the registers.
+    /// Starting from the qubits at position 0 in both registers as controls, CCNOT is
+    /// applied to the qubit at position 1 of the target register, then controlled by
+    /// the qubits at position 1 acting on the qubit at position 2 in the target register,
+    /// etc., ending with an action on the target qubit in position `Length(nQubits)-1`.
+    ///
+    /// # Input
+    /// ## register
+    /// Qubit register, only used for controls.
+    /// ## targets
+    /// Qubit register, used for controls and as target.
+    ///
+    /// # Remarks
+    /// The target qubit register must have one qubit more than the other register.
+    operation ApplyCCNOTChain(register : Qubit[], targets : Qubit[])
+    : Unit is Adj + Ctl {
+        let nQubits = Length(targets);
+
+        EqualityFactI(
+            nQubits, Length(register) + 1,
+            "Target register must have one more qubit."
+        );
+
+        ApplyToEachCA(CCNOT, Zip3(register, Most(targets), Rest(targets)));
+    }
+
 
     /// # Summary
     /// Computes the parity of an array of qubits into a target qubit.

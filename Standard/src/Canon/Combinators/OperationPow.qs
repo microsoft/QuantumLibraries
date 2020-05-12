@@ -3,7 +3,7 @@
 
 namespace Microsoft.Quantum.Canon {
 
-    operation _OperationPow<'T> (op : ('T => Unit), power : Int, target : 'T)
+    internal operation ApplyOperationRepeatedly<'T> (op : ('T => Unit), power : Int, target : 'T)
     : Unit {
         for (idxApplication in 0 .. power - 1) {
             op(target);
@@ -11,7 +11,7 @@ namespace Microsoft.Quantum.Canon {
     }
 
 
-    operation _OperationPowC<'T> (op : ('T => Unit is Ctl), power : Int, target : 'T)
+    internal operation ApplyOperationRepeatedlyC<'T> (op : ('T => Unit is Ctl), power : Int, target : 'T)
     : Unit is Ctl {
         for (idxApplication in 0 .. power - 1) {
             op(target);
@@ -19,7 +19,7 @@ namespace Microsoft.Quantum.Canon {
     }
 
 
-    operation _OperationPowA<'T> (op : ('T => Unit is Adj), power : Int, target : 'T)
+    internal operation ApplyOperationRepeatedlyA<'T> (op : ('T => Unit is Adj), power : Int, target : 'T)
     : Unit is Adj {
         for (idxApplication in 0 .. power - 1) {
             op(target);
@@ -27,7 +27,7 @@ namespace Microsoft.Quantum.Canon {
     }
 
 
-    operation _OperationPowCA<'T> (op : ('T => Unit is Adj + Ctl), power : Int, target : 'T)
+    internal operation ApplyOperationRepeatedlyCA<'T> (op : ('T => Unit is Adj + Ctl), power : Int, target : 'T)
     : Unit is Adj + Ctl {
         for (idxApplication in 0 .. power - 1) {
             op(target);
@@ -59,7 +59,7 @@ namespace Microsoft.Quantum.Canon {
     /// - @"microsoft.quantum.canon.operationpowa"
     /// - @"microsoft.quantum.canon.operationpowca"
     function OperationPow<'T> (op : ('T => Unit), power : Int) : ('T => Unit) {
-        return _OperationPow(op, power, _);
+        return ApplyOperationRepeatedly(op, power, _);
     }
 
 
@@ -86,7 +86,7 @@ namespace Microsoft.Quantum.Canon {
     /// # See Also
     /// - @"microsoft.quantum.canon.operationpow"
     function OperationPowC<'T> (op : ('T => Unit is Ctl), power : Int) : ('T => Unit is Ctl) {
-        return _OperationPowC(op, power, _);
+        return ApplyOperationRepeatedlyC(op, power, _);
     }
 
 
@@ -113,7 +113,7 @@ namespace Microsoft.Quantum.Canon {
     /// # See Also
     /// - @"microsoft.quantum.canon.operationpow"
     function OperationPowA<'T> (op : ('T => Unit is Adj), power : Int) : ('T => Unit is Adj) {
-        return _OperationPowA(op, power, _);
+        return ApplyOperationRepeatedlyA(op, power, _);
     }
 
 
@@ -140,7 +140,7 @@ namespace Microsoft.Quantum.Canon {
     /// # See Also
     /// - @"microsoft.quantum.canon.operationpow"
     function OperationPowCA<'T> (op : ('T => Unit is Ctl + Adj), power : Int) : ('T => Unit is Ctl + Adj) {
-        return _OperationPowCA(op, power, _);
+        return ApplyOperationRepeatedlyCA(op, power, _);
     }
 
 }

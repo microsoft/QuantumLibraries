@@ -20,7 +20,7 @@ namespace Microsoft.Quantum.AmplitudeAmplification {
 
     /// # Summary
     /// Implementation of <xref:microsoft.quantum.canon.targetstatereflectionoracle>.
-    operation _TargetStateReflectionOracle(phase : Double, idxFlagQubit : Int, qubits : Qubit[])
+    internal operation ApplyTargetStateReflectionOracle(phase : Double, idxFlagQubit : Int, qubits : Qubit[])
     : Unit is Adj + Ctl {
         R1(phase, qubits[idxFlagQubit]);
     }
@@ -40,7 +40,7 @@ namespace Microsoft.Quantum.AmplitudeAmplification {
     /// # See Also
     /// - Microsoft.Quantum.Canon.ReflectionOracle
     function TargetStateReflectionOracle(idxFlagQubit : Int) : ReflectionOracle {
-        return ReflectionOracle(_TargetStateReflectionOracle(_, idxFlagQubit, _));
+        return ReflectionOracle(ApplyTargetStateReflectionOracle(_, idxFlagQubit, _));
     }
 
 }
