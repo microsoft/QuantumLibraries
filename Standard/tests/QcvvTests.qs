@@ -82,7 +82,7 @@ namespace Microsoft.Quantum.Tests {
         NearEqualityFactD(freq, 1.0);
     }
 
-    operation RobustPhaseEstimationTestOp (phase : Double, power : Int, qubits : Qubit[]) : Unit is Adj + Ctl {
+    internal operation RobustPhaseEstimationTestOp (phase : Double, power : Int, qubits : Qubit[]) : Unit is Adj + Ctl {
         Exp([PauliZ], phase * IntAsDouble(power), qubits);
     }
 
@@ -132,4 +132,3 @@ namespace Microsoft.Quantum.Tests {
     }
 
 }
-
