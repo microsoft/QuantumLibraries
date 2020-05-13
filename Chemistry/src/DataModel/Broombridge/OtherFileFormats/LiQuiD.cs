@@ -6,6 +6,7 @@ using Microsoft.Quantum.Simulation.Core;
 using System.Text.RegularExpressions;
 using System.Linq;
 using System.Collections.Generic;
+using System.IO;
 
 using Microsoft.Quantum.Chemistry.OrbitalIntegrals;
 
@@ -33,18 +34,34 @@ namespace Microsoft.Quantum.Chemistry
         ///      LIQ𝑈𝑖|⟩ documentation</a> for further details about the
         ///      format parsed by this method.
         /// </summary>
+        /// <param name="reader">A stream for reading LIQ𝑈𝑖|⟩ data.</param>
+        /// <returns>
+        ///      List of electronic structure problem deserialized from the file.
+        /// </returns>
+        public static IEnumerable<ProblemDescription> Deserialize(TextReader reader)
+        {
+            var allText = reader.ReadToEnd();
+            string[] delimiters = { "tst" };
+            var lines = allText.Split(delimiters, System.StringSplitOptions.RemoveEmptyEntries);
+            var hamiltonians = lines.Select(o => DeserializeSingle(o));
+            return hamiltonians;
+        }
+
+        /// <summary>
+        ///      Loads a Hamiltonian from integral data represented
+        ///      in LIQ𝑈𝑖|⟩ format.
+        ///      Please see the <a href="https://stationq.github.io/Liquid/docs/LIQUiD.pdf">
+        ///      LIQ𝑈𝑖|⟩ documentation</a> for further details about the
+        ///      format parsed by this method.
+        /// </summary>
         /// <param name="filename">The name of the file to be loaded.</param>
         /// <returns>
         ///      List of electronic structure problem deserialized from the file.
         /// </returns>
         public static IEnumerable<ProblemDescription> Deserialize(string filename)
         {
-            var name = filename;
-            var allText = System.IO.File.ReadAllText(filename, System.Text.Encoding.ASCII);
-            string[] delimiters = { "tst" };
-            var lines = allText.Split(delimiters, System.StringSplitOptions.RemoveEmptyEntries);
-            var hamiltonians = lines.Select(o => DeserializeSingle(o));
-            return hamiltonians;
+            using var reader = File.OpenText(filename);
+            return Deserialize(reader);
         }
 
         /// <summary>
