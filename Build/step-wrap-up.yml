@@ -17,6 +17,11 @@ steps:
   inputs:
     SearchPattern: '$(System.DefaultWorkingDirectory)/src/**/*.pdb'
 
+- pwsh: ./manifest.ps1
+  displayName: "List built assemblies"
+  workingDirectory: $(System.DefaultWorkingDirectory)/Build
+  condition: succeededOrFailed()
+
 - task: PublishBuildArtifacts@1
   displayName: 'Publish Artifact: qsharp-runtime'
   condition: succeededOrFailed()
