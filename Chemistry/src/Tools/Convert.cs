@@ -73,25 +73,96 @@ namespace Microsoft.Quantum.Chemistry.Tools
             Save(data, writer, to);
         }
 
-        internal static Broombridge.Data Load(TextReader reader, SerializationFormat from) =>
+        internal static Broombridge.V0_2.Data Load(TextReader reader, SerializationFormat from) =>
             from switch
             {
                 SerializationFormat.Broombridge => Broombridge
                     .Deserializers
-                    .DeserializeBroombridge(reader),
-                SerializationFormat.LiQuiD => new Broombridge.Data
+                    .DeserializeBroombridge(reader)
+                    .Raw,
+                SerializationFormat.LiQuiD => new Broombridge.V0_2.Data
                 {
-                    // TODO: put misc information somewhere
-                    ProblemDescriptions = LiQuiD
+                    // TODO: make a constant for well-known schema URLs.
+                    Schema = "https://raw.githubusercontent.com/Microsoft/Quantum/master/Chemistry/Schema/broombridge-0.2.schema.json",
+                    Format = new Broombridge.V0_1.Format
+                    {
+                        Version = "0.2"
+                    },
+                    Generator = new Broombridge.V0_1.Generator
+                    {
+                        Source = "qdk-chem",
+                        Version = typeof(Convert).Assembly.GetName().Version.ToString()
+                    },
+                    Bibliography = new List<Broombridge.V0_1.BibliographyItem>(),
+                    // TODO: metadata
+                    ProblemDescriptions =
+                        LiQuiD
                         .Deserialize(reader)
                         .Select(liquidDescription =>
-                            new Broombridge.ProblemDescription
+                            new Broombridge.V0_2.ProblemDescription
                             {
-                                EnergyOffset = liquidDescription.CoulombRepulsion,
+                                Metadata = new Dictionary<string, object>
+                                {
+                                    ["misc_info"] = liquidDescription.MiscellaneousInformation
+                                },
+                                // TODO: add command line option for controlling units.
+                                CoulombRepulsion = new Broombridge.V0_1.SimpleQuantity
+                                {
+                                    Value = liquidDescription.CoulombRepulsion,
+                                    Units = "hartree"
+                                },
                                 NOrbitals = liquidDescription.NOrbitals,
                                 NElectrons = liquidDescription.NElectrons,
-                                OrbitalIntegralHamiltonian = liquidDescription.OrbitalIntegralHamiltonian,
-                                Wavefunctions = null
+                                Hamiltonian = new Broombridge.V0_1.HamiltonianData
+                                {
+                                    OneElectronIntegrals = new Broombridge.V0_1.ArrayQuantity<long, double>
+                                    {
+                                        Units = "hartree",
+                                        Format = "sparse",
+                                        Values = liquidDescription
+                                            .OrbitalIntegralHamiltonian
+                                            .Terms[TermType.OrbitalIntegral.OneBody]
+                                            .Select(
+                                                termPair => (
+                                                    termPair
+                                                        .Key
+                                                        .OrbitalIndices
+                                                        .Cast<long>()
+                                                        .ToArray(),
+                                                    termPair.Value.Value
+                                                )
+                                            )
+                                            .ToList()
+                                    },
+                                    TwoElectronIntegrals = new Broombridge.V0_1.ArrayQuantity<long, double>
+                                    {
+                                        Units = "hartree",
+                                        Format = "sparse",
+                                        Values = liquidDescription
+                                            .OrbitalIntegralHamiltonian
+                                            .Terms[TermType.OrbitalIntegral.TwoBody]
+                                            .Select(
+                                                // TODO: extract duplicated logic to an extension method.
+                                                termPair => (
+                                                    termPair
+                                                        .Key
+                                                        .OrbitalIndices
+                                                        .Cast<long>()
+                                                        .ToArray(),
+                                                    termPair.Value.Value
+                                                )
+                                            )
+                                            .ToList()
+                                    }
+                                },
+                                EnergyOffset = new Broombridge.V0_1.SimpleQuantity
+                                {
+                                    Value = /*liquidDescription
+                                        .OrbitalIntegralHamiltonian
+                                        .Terms[TermType.OrbitalIntegral.Identity]
+                                        .Value*/ 0.0,
+                                    Units = "hartree"
+                                }
                             }
                         )
                         .ToList()
@@ -100,14 +171,22 @@ namespace Microsoft.Quantum.Chemistry.Tools
                 _ => throw new ArgumentException($"Invalid format {from}.")
             };
 
-        internal static void Save(Broombridge.Data data, TextWriter writer, SerializationFormat to)
+        internal static void Save(Broombridge.V0_2.Data data, TextWriter writer, SerializationFormat to)
         {
-            to switch
+            switch (to)
             {
-                SerializationFormat.Broombridge => Broombridge.Serializers.SerializeBroombridgev0_2(data.),
-                SerializationFormat.LiQuiD => throw new NotSupportedException("Not yet implemented."),
-                SerializationFormat.FciDump => throw new NotSupportedException("Not yet implemented."),
-                _ => throw new ArgumentException($"Invalid format {to}.")
+                case SerializationFormat.Broombridge:
+                    Broombridge.Serializers.SerializeBroombridgev0_2(data, writer);
+                    return;
+                case SerializationFormat.LiQuiD:
+                    throw new NotSupportedException("Not yet implemented.");
+                    return;
+                case SerializationFormat.FciDump:
+                    throw new NotSupportedException("Not yet implemented.");
+                    return;
+                default:
+                    throw new ArgumentException($"Invalid format {to}.");
+                    return;
             };
         }
     }   

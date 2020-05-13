@@ -156,10 +156,22 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
         /// <returns>Serialized Broombridge</returns>
         public static void SerializeBroombridgev0_2(V0_2.Data data, string filename)
         {
+            using var writer = new StreamWriter(File.OpenWrite(filename));
             var stringBuilder = new StringBuilder();
             var serializer = new Serializer();
             stringBuilder.AppendLine(serializer.Serialize(data));
-            Console.WriteLine(stringBuilder);
+        }
+
+        // <summary>
+        /// Broombridge serializer
+        /// </summary>
+        /// <param name="filename">Broombridge filename to serialize</param>
+        /// <returns>Serialized Broombridge</returns>
+        public static void SerializeBroombridgev0_2(V0_2.Data data, TextWriter writer)
+        {
+            var stringBuilder = new StringBuilder();
+            var serializer = new Serializer();
+            writer.WriteLine(serializer.Serialize(data));
             Console.WriteLine("");
         }
     } 

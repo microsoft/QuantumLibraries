@@ -97,7 +97,7 @@ namespace Microsoft.Quantum.Chemistry.Tests
             var broombridge_v0_1 = Deserializers.Deserialize<V0_1.Data>(filename);
             var broombridge_v0_2 = DataStructures.Update(broombridge_v0_1);
 
-            Broombridge.Serializers.SerializeBroombridgev0_2(broombridge_v0_2, "");
+            Broombridge.Serializers.SerializeBroombridgev0_2(broombridge_v0_2, System.Console.Out);
 
         }
 
