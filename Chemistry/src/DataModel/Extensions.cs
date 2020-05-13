@@ -218,6 +218,14 @@ namespace Microsoft.Quantum.Chemistry
         /// <param name="array">Input array to clone.</param>
         /// <returns>Clone of the input array.</returns>
         public static TValue[] Clone<TValue>(this TValue[] array) => array.Select(el => el).ToArray();
+        
+        /// <summary>
+        ///       Searches base types of a given type to find the type that immediately derives from
+        ///       <see href="System.Object" />.
+        /// </summary>
+        internal static Type GetBasestType(this Type t) =>
+            (t.BaseType == typeof(object) || t == typeof(object)) ? t : GetBasestType(t.BaseType);
 
     }
+
 }
