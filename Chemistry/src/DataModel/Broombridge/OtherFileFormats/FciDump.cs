@@ -34,7 +34,7 @@ namespace Microsoft.Quantum.Chemistry
             var allText = reader.ReadToEnd();
             var lines = Regex.Split(allText, "\r\n|\r|\n");
             var header = System.String.Join("\n", lines.TakeWhile(line => line.Trim() != "&END")).Trim();
-            var body = lines.SkipWhile(line => line != "&END").Skip(1);
+            var body = lines.SkipWhile(line => line.Trim() != "&END").Skip(1).ToList();
             
             // Make sure that the header starts with &FCI, as expected.
             if (!header.StartsWith("&FCI"))
@@ -47,24 +47,23 @@ namespace Microsoft.Quantum.Chemistry
                 header
                 .Replace("&FCI", "")
                 .Replace("&END", ""),
-                pattern: "\\s*(?<identifier>\\w+)\\s*=\\s*(?<value>[^=]),\\s*"
+                pattern: "\\s*(?<identifier>\\w+)\\s*=\\s*(?<value>[^=]+),\\s*"
             )
             .ToDictionary(
                 match => match.Groups["identifier"].Value,
                 match => match.Groups["value"].Value
             );
 
-
             var hamiltonian = new OrbitalIntegralHamiltonian();
 
-            foreach (var line in body)
+            foreach (var line in body.Select(line => line.Trim()).Where(line => line.Length > 0))
             {
                 // Separate into columns, delimited by spaces.
                 var columns = line.Split(" ", StringSplitOptions.RemoveEmptyEntries);
                 var value = Double.Parse(columns[0]);
                 var indices = columns[1..].Select(idx => Int32.Parse(idx));
                 if (indices.All(index => index == 0))
-                {
+                { 
                     hamiltonian.Add(TermType.OrbitalIntegral.Identity, new OrbitalIntegral(), value);
                 }
                 else if (indices.Skip(2).All(index => index == 0))

@@ -87,38 +87,7 @@ namespace Microsoft.Quantum.Chemistry.Tools
                             LiQuiD
                             .Deserialize(reader)
                             .Select(liquidDescription =>
-                                new Broombridge.V0_2.ProblemDescription
-                                {
-                                    Metadata = new Dictionary<string, object>
-                                    {
-                                        ["misc_info"] = liquidDescription.MiscellaneousInformation
-                                    },
-                                    // TODO: add command line option for controlling units.
-                                    CoulombRepulsion = new Broombridge.V0_1.SimpleQuantity
-                                    {
-                                        Value = liquidDescription.CoulombRepulsion,
-                                        Units = "hartree"
-                                    },
-                                    NOrbitals = liquidDescription.NOrbitals,
-                                    NElectrons = liquidDescription.NElectrons,
-                                    Hamiltonian = new Broombridge.V0_1.HamiltonianData
-                                    {
-                                        OneElectronIntegrals = liquidDescription.IndiciesToArrayQuantity(
-                                            TermType.OrbitalIntegral.OneBody
-                                        ),
-                                        TwoElectronIntegrals = liquidDescription.IndiciesToArrayQuantity(
-                                            TermType.OrbitalIntegral.TwoBody
-                                        )
-                                    },
-                                    EnergyOffset = new Broombridge.V0_1.SimpleQuantity
-                                    {
-                                        Value = /* FIXME: liquidDescription
-                                            .OrbitalIntegralHamiltonian
-                                            .Terms[TermType.OrbitalIntegral.Identity]
-                                            .Value*/ 0.0,
-                                        Units = "hartree"
-                                    }
-                                }
+                                liquidDescription.ToBroombridgeProblemDescription()
                             )
                             .ToList()
                     }
@@ -128,7 +97,9 @@ namespace Microsoft.Quantum.Chemistry.Tools
                     {
                         ProblemDescriptions = new List<Broombridge.V0_2.ProblemDescription>
                         {
-                            // TODO: add FCIDUMP logic here.
+                            FciDump
+                            .Deserialize(reader)
+                            .ToBroombridgeProblemDescription()
                         }
                     }
                     .WithDefaultMetadata(),

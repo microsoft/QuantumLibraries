@@ -45,5 +45,39 @@ namespace Microsoft.Quantum.Chemistry
                     )
                     .ToList()
         };
+
+        public Broombridge.V0_2.ProblemDescription ToBroombridgeProblemDescription() =>
+            new Broombridge.V0_2.ProblemDescription
+            {
+                Metadata = new Dictionary<string, object>
+                {
+                    ["misc_info"] = MiscellaneousInformation
+                },
+                // TODO: add command line option for controlling units.
+                CoulombRepulsion = new Broombridge.V0_1.SimpleQuantity
+                {
+                    Value = CoulombRepulsion,
+                    Units = "hartree"
+                },
+                NOrbitals = NOrbitals,
+                NElectrons = NElectrons,
+                Hamiltonian = new Broombridge.V0_1.HamiltonianData
+                {
+                    OneElectronIntegrals = IndicesToArrayQuantity(
+                        TermType.OrbitalIntegral.OneBody
+                    ),
+                    TwoElectronIntegrals = IndicesToArrayQuantity(
+                        TermType.OrbitalIntegral.TwoBody
+                    )
+                },
+                EnergyOffset = new Broombridge.V0_1.SimpleQuantity
+                {
+                    Value = /* FIXME: liquidDescription
+                        .OrbitalIntegralHamiltonian
+                        .Terms[TermType.OrbitalIntegral.Identity]
+                        .Value*/ 0.0,
+                    Units = "hartree"
+                }
+            };
     }
 }

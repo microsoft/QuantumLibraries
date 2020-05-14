@@ -63,7 +63,7 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
         // Root of Broombridge data structure
         public struct Data
         {
-            static readonly Format DefaultFormat = new Broombridge.V0_1.Format
+            public static readonly Format DefaultFormat = new Broombridge.V0_1.Format
             {
                 Version = "0.2"
             };
