@@ -4,6 +4,9 @@
 using System;
 using System.CommandLine;
 using System.CommandLine.Invocation;
+using System.Collections.Generic;
+
+using Broombridge = Microsoft.Quantum.Chemistry.Broombridge;
 
 namespace Microsoft.Quantum.Chemistry.Tools
 {

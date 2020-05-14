@@ -18,36 +18,6 @@ namespace Microsoft.Quantum.Chemistry
     /// </summary>
     public class LiQuiD
     {
-        public struct ProblemDescription
-        {
-            public int NOrbitals { get; set; }
-            public int NElectrons { get; set; }
-            public double CoulombRepulsion { get; set; }
-            public string MiscellaneousInformation { get; set; }
-            public OrbitalIntegralHamiltonian OrbitalIntegralHamiltonian { get; set; }
-
-            public Broombridge.V0_1.ArrayQuantity<long, double> IndicesToArrayQuantity(
-                TermType.OrbitalIntegral termType,
-                string units = "hartree"
-            ) => new Broombridge.V0_1.ArrayQuantity<long, double>
-            {
-                Units = units,
-                Format = "sparse",
-                Values = OrbitalIntegralHamiltonian
-                         .Terms[termType]
-                         .Select(
-                             termPair => (
-                                 termPair
-                                     .Key
-                                     .OrbitalIndices
-                                     .Select(idx => (long)(idx + 1))
-                                     .ToArray(),
-                                 termPair.Value.Value
-                             )
-                         )
-                         .ToList()
-            };
-        }
 
         /// <summary>
         ///      Loads a Hamiltonian from integral data represented
@@ -60,7 +30,7 @@ namespace Microsoft.Quantum.Chemistry
         /// <returns>
         ///      List of electronic structure problem deserialized from the file.
         /// </returns>
-        public static IEnumerable<ProblemDescription> Deserialize(TextReader reader)
+        public static IEnumerable<MinimalProblemDescription> Deserialize(TextReader reader)
         {
             var allText = reader.ReadToEnd();
             string[] delimiters = { "tst" };
@@ -80,7 +50,7 @@ namespace Microsoft.Quantum.Chemistry
         /// <returns>
         ///      List of electronic structure problem deserialized from the file.
         /// </returns>
-        public static IEnumerable<ProblemDescription> Deserialize(string filename)
+        public static IEnumerable<MinimalProblemDescription> Deserialize(string filename)
         {
             using var reader = File.OpenText(filename);
             return Deserialize(reader);
@@ -93,13 +63,13 @@ namespace Microsoft.Quantum.Chemistry
         ///      LIQ𝑈𝑖|⟩ documentation</a> for further details about the
         ///      format parsed by this method.
         /// </summary>
-        /// <param name="lines">Sequence of text describing terms of Hamiltonian.</param>
+        /// <param name="line">Sequence of text describing terms of Hamiltonian.</param>
         /// <returns>
         ///      Single electronic structure problem deserialized from the file.
         /// </returns>
-        public static ProblemDescription DeserializeSingle(string line)
+        public static MinimalProblemDescription DeserializeSingle(string line)
         {
-            var problem = new LiQuiD.ProblemDescription();
+            var problem = new MinimalProblemDescription();
 
             var regexMiscellaneous = new Regex(@"((info=(?<info>[^\s]*)))");
             var regexnuc = new Regex(@"nuc=(?<nuc>-?\s*\d*.\d*)");
