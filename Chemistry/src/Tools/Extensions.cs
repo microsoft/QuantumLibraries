@@ -35,6 +35,20 @@ namespace Microsoft.Quantum.Chemistry.Tools
             command.Description = description;
             return command;
         }
+
+        internal static Broombridge.V0_2.Data WithDefaultMetadata(Broombridge.V0_2.Data data)
+        {
+            // TODO: make a constant for well-known schema URLs.
+            data.Schema = "https://raw.githubusercontent.com/Microsoft/Quantum/master/Chemistry/Schema/broombridge-0.2.schema.json";
+            data.Format = Broombridge.V0_2.DefaultFormat;
+            data.Generator = new Broombridge.V0_1.Generator
+            {
+                Source = "qdk-chem",
+                Version = typeof(Convert).Assembly.GetName().Version.ToString()
+            };
+            data.Bibliography = new List<Broombridge.V0_1.BibliographyItem>();
+            return data;
+        }
     }
 }
 

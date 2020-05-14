@@ -25,6 +25,28 @@ namespace Microsoft.Quantum.Chemistry
             public double CoulombRepulsion { get; set; }
             public string MiscellaneousInformation { get; set; }
             public OrbitalIntegralHamiltonian OrbitalIntegralHamiltonian { get; set; }
+
+            public Broombridge.V0_1.ArrayQuantity<long, double> IndicesToArrayQuantity(
+                TermType.OrbitalIntegral termType,
+                string units = "hartree"
+            ) => new Broombridge.V0_1.ArrayQuantity<long, double>
+            {
+                Units = units,
+                Format = "sparse",
+                Values = OrbitalIntegralHamiltonian
+                         .Terms[termType]
+                         .Select(
+                             termPair => (
+                                 termPair
+                                     .Key
+                                     .OrbitalIndices
+                                     .Select(idx => (long)(idx + 1))
+                                     .ToArray(),
+                                 termPair.Value.Value
+                             )
+                         )
+                         .ToList()
+            };
         }
 
         /// <summary>

@@ -80,94 +80,58 @@ namespace Microsoft.Quantum.Chemistry.Tools
                     .Deserializers
                     .DeserializeBroombridge(reader)
                     .Raw,
-                SerializationFormat.LiQuiD => new Broombridge.V0_2.Data
-                {
-                    // TODO: make a constant for well-known schema URLs.
-                    Schema = "https://raw.githubusercontent.com/Microsoft/Quantum/master/Chemistry/Schema/broombridge-0.2.schema.json",
-                    Format = new Broombridge.V0_1.Format
+                SerializationFormat.LiQuiD =>
+                    new Broombridge.V0_2.Data
                     {
-                        Version = "0.2"
-                    },
-                    Generator = new Broombridge.V0_1.Generator
-                    {
-                        Source = "qdk-chem",
-                        Version = typeof(Convert).Assembly.GetName().Version.ToString()
-                    },
-                    Bibliography = new List<Broombridge.V0_1.BibliographyItem>(),
-                    // TODO: metadata
-                    ProblemDescriptions =
-                        LiQuiD
-                        .Deserialize(reader)
-                        .Select(liquidDescription =>
-                            new Broombridge.V0_2.ProblemDescription
-                            {
-                                Metadata = new Dictionary<string, object>
+                        ProblemDescriptions =
+                            LiQuiD
+                            .Deserialize(reader)
+                            .Select(liquidDescription =>
+                                new Broombridge.V0_2.ProblemDescription
                                 {
-                                    ["misc_info"] = liquidDescription.MiscellaneousInformation
-                                },
-                                // TODO: add command line option for controlling units.
-                                CoulombRepulsion = new Broombridge.V0_1.SimpleQuantity
-                                {
-                                    Value = liquidDescription.CoulombRepulsion,
-                                    Units = "hartree"
-                                },
-                                NOrbitals = liquidDescription.NOrbitals,
-                                NElectrons = liquidDescription.NElectrons,
-                                Hamiltonian = new Broombridge.V0_1.HamiltonianData
-                                {
-                                    OneElectronIntegrals = new Broombridge.V0_1.ArrayQuantity<long, double>
+                                    Metadata = new Dictionary<string, object>
                                     {
-                                        Units = "hartree",
-                                        Format = "sparse",
-                                        Values = liquidDescription
-                                            .OrbitalIntegralHamiltonian
-                                            .Terms[TermType.OrbitalIntegral.OneBody]
-                                            .Select(
-                                                termPair => (
-                                                    termPair
-                                                        .Key
-                                                        .OrbitalIndices
-                                                        .Select(idx => (long)idx)
-                                                        .ToArray(),
-                                                    termPair.Value.Value
-                                                )
-                                            )
-                                            .ToList()
+                                        ["misc_info"] = liquidDescription.MiscellaneousInformation
                                     },
-                                    TwoElectronIntegrals = new Broombridge.V0_1.ArrayQuantity<long, double>
+                                    // TODO: add command line option for controlling units.
+                                    CoulombRepulsion = new Broombridge.V0_1.SimpleQuantity
                                     {
-                                        Units = "hartree",
-                                        Format = "sparse",
-                                        Values = liquidDescription
+                                        Value = liquidDescription.CoulombRepulsion,
+                                        Units = "hartree"
+                                    },
+                                    NOrbitals = liquidDescription.NOrbitals,
+                                    NElectrons = liquidDescription.NElectrons,
+                                    Hamiltonian = new Broombridge.V0_1.HamiltonianData
+                                    {
+                                        OneElectronIntegrals = liquidDescription.IndiciesToArrayQuantity(
+                                            TermType.OrbitalIntegral.OneBody
+                                        ),
+                                        TwoElectronIntegrals = liquidDescription.IndiciesToArrayQuantity(
+                                            TermType.OrbitalIntegral.TwoBody
+                                        )
+                                    },
+                                    EnergyOffset = new Broombridge.V0_1.SimpleQuantity
+                                    {
+                                        Value = /* FIXME: liquidDescription
                                             .OrbitalIntegralHamiltonian
-                                            .Terms[TermType.OrbitalIntegral.TwoBody]
-                                            .Select(
-                                                // TODO: extract duplicated logic to an extension method.
-                                                termPair => (
-                                                    termPair
-                                                        .Key
-                                                        .OrbitalIndices
-                                                        .Select(idx => (long)idx)
-                                                        .ToArray(),
-                                                    termPair.Value.Value
-                                                )
-                                            )
-                                            .ToList()
+                                            .Terms[TermType.OrbitalIntegral.Identity]
+                                            .Value*/ 0.0,
+                                        Units = "hartree"
                                     }
-                                },
-                                EnergyOffset = new Broombridge.V0_1.SimpleQuantity
-                                {
-                                    Value = /*liquidDescription
-                                        .OrbitalIntegralHamiltonian
-                                        .Terms[TermType.OrbitalIntegral.Identity]
-                                        .Value*/ 0.0,
-                                    Units = "hartree"
                                 }
-                            }
-                        )
-                        .ToList()
-                },
-                SerializationFormat.FciDump => throw new NotSupportedException("Not yet implemented."),
+                            )
+                            .ToList()
+                    }
+                    .WithDefaultMetadata(),
+                SerializationFormat.FciDump =>
+                    new Broombridge.V0_2.Data
+                    {
+                        ProblemDescriptions = new List<Broombridge.V0_2.ProblemDescription>
+                        {
+                            // TODO: add FCIDUMP logic here.
+                        }
+                    }
+                    .WithDefaultMetadata(),
                 _ => throw new ArgumentException($"Invalid format {from}.")
             };
 
