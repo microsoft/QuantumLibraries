@@ -127,7 +127,7 @@ namespace Microsoft.Quantum.Chemistry.Tools
                                                     termPair
                                                         .Key
                                                         .OrbitalIndices
-                                                        .Cast<long>()
+                                                        .Select(idx => (long)idx)
                                                         .ToArray(),
                                                     termPair.Value.Value
                                                 )
@@ -147,7 +147,7 @@ namespace Microsoft.Quantum.Chemistry.Tools
                                                     termPair
                                                         .Key
                                                         .OrbitalIndices
-                                                        .Cast<long>()
+                                                        .Select(idx => (long)idx)
                                                         .ToArray(),
                                                     termPair.Value.Value
                                                 )

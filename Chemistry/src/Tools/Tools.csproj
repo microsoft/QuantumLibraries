@@ -31,6 +31,7 @@
   </ItemGroup>
   
   <ItemGroup>
+    <ProjectReference Include="..\Runtime\Runtime.csproj" />
     <ProjectReference Include="..\DataModel\DataModel.csproj" />
   </ItemGroup>
 
