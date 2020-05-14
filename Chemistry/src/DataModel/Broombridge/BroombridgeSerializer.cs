@@ -117,7 +117,7 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
         public static Data DeserializeBroombridge(string filename)
         {
             using var reader = File.OpenText(filename);
-            return DeserializeBroombridge(filename);
+            return DeserializeBroombridge(reader);
         }
 
         /// <summary>
