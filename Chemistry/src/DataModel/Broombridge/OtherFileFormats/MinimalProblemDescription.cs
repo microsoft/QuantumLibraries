@@ -46,6 +46,20 @@ namespace Microsoft.Quantum.Chemistry
                     .ToList()
         };
 
+        public static MinimalProblemDescription FromBroombridgeProblemDescription(Broombridge.V0_2.ProblemDescription problem) =>
+            new MinimalProblemDescription
+            {
+                // TODO: Assert units are hartree.
+                CoulombRepulsion = problem.CoulombRepulsion.Value,
+                MiscellaneousInformation = "",
+                NElectrons = problem.NElectrons,
+                NOrbitals = problem.NOrbitals,
+                OrbitalIntegralHamiltonian = Broombridge
+                                             .ProblemDescription
+                                             .ProcessRawProblemDescription(problem)
+                                             .OrbitalIntegralHamiltonian
+            };
+
         public Broombridge.V0_2.ProblemDescription ToBroombridgeProblemDescription() =>
             new Broombridge.V0_2.ProblemDescription
             {

@@ -81,8 +81,8 @@ namespace Microsoft.Quantum.Chemistry
             {
                 CoulombRepulsion = 0.0,
                 MiscellaneousInformation = "Imported from FCIDUMP",
-                NElectrons = Int32.Parse(namelist["NORB"]),
-                NOrbitals = Int32.Parse(namelist["NELEC"]),
+                NElectrons = Int32.Parse(namelist["NELEC"]),
+                NOrbitals = Int32.Parse(namelist["NORB"]),
                 OrbitalIntegralHamiltonian = hamiltonian
             };
         }
@@ -101,6 +101,30 @@ namespace Microsoft.Quantum.Chemistry
         {
             using var reader = File.OpenText(filename);
             return Deserialize(reader);
+        }
+
+        public static void Serialize(MinimalProblemDescription problem, TextWriter writer)
+        {
+            // Start by writing the header.
+            writer.WriteLine($"&FCI NORB={problem.NOrbitals},NELEC={problem.NElectrons},");
+            // Assume global phase symmetry for now.
+            writer.WriteLine($" ORBSYM={String.Join("", Enumerable.Range(0, problem.NOrbitals).Select(idx => "1,"))}");
+            writer.WriteLine($" ISYM=1,");
+            writer.WriteLine("&END");
+
+            // Next write out all two-body terms.
+            foreach (var term in problem.OrbitalIntegralHamiltonian.Terms[TermType.OrbitalIntegral.TwoBody])
+            {
+                writer.WriteLine($"{term.Value.Value} {String.Join(" ", term.Key.OrbitalIndices.Select(i => i.ToString()))}");
+            }
+            // Next write out all one-body terms, using trailing zeros to indicate one-body.
+            foreach (var term in problem.OrbitalIntegralHamiltonian.Terms[TermType.OrbitalIntegral.OneBody])
+            {
+                writer.WriteLine($"{term.Value.Value} {String.Join(" ", term.Key.OrbitalIndices.Select(i => i.ToString()))} 0 0");
+            }
+            // Finish by writing out the identity term.
+            var identityTerm = problem.OrbitalIntegralHamiltonian.Terms[TermType.OrbitalIntegral.Identity].Single();
+            writer.WriteLine($"{identityTerm.Value.Value} 0 0 0 0");
         }
     }
 }

@@ -114,7 +114,7 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
                 OrbitalIntegralHamiltonian = V0_2.ToOrbitalIntegralHamiltonian(problem),
                 Wavefunctions = new Dictionary<string, FermionWavefunction<SpinOrbital>>()
             };
-            foreach (var initialState in problem.InitialStates)
+            foreach (var initialState in problem.InitialStates ?? new List<V0_2.State>())
             {
                 var finalState = new FermionWavefunction<SpinOrbital>();
 

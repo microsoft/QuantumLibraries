@@ -117,7 +117,12 @@ namespace Microsoft.Quantum.Chemistry.Tools
                     throw new NotSupportedException("Not yet implemented.");
                     return;
                 case SerializationFormat.FciDump:
-                    throw new NotSupportedException("Not yet implemented.");
+                    FciDump.Serialize(
+                        MinimalProblemDescription.FromBroombridgeProblemDescription(
+                            data.ProblemDescriptions.Single()
+                        ),
+                        writer
+                    );
                     return;
                 default:
                     throw new ArgumentException($"Invalid format {to}.");
