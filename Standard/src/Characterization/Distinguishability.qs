@@ -49,8 +49,8 @@ namespace Microsoft.Quantum.Characterization {
     )
     : Double {
         return 2.0 * EstimateFrequencyA(
-            _ApplyHadamardTestOnSingleRegister(false, commonPreparation, preparation1, preparation2, _),
-            _HeadMeasurement(nQubits + 1),
+            ApplyHadamardTestOnSingleRegister(false, commonPreparation, preparation1, preparation2, _),
+            HeadMeasurement(nQubits + 1),
             nQubits + 1, nMeasurements
         ) - 1.0;
     }
@@ -98,8 +98,8 @@ namespace Microsoft.Quantum.Characterization {
     )
     : Double {
         return 2.0 * EstimateFrequencyA(
-            _ApplyHadamardTestOnSingleRegister(true, commonPreparation, preparation1, preparation2, _),
-            _HeadMeasurement(nQubits + 1),
+            ApplyHadamardTestOnSingleRegister(true, commonPreparation, preparation1, preparation2, _),
+            HeadMeasurement(nQubits + 1),
             nQubits + 1, nMeasurements
         ) - 1.0;
     }
@@ -142,14 +142,14 @@ namespace Microsoft.Quantum.Characterization {
     : Double {
         let nTotalQubits = 2 * nQubits + 1;
         return 2.0 * EstimateFrequencyA(
-            _ApplySwapTestOnSingleRegister(preparation1, preparation2, _),
-            _HeadMeasurement(nTotalQubits),
+            ApplySwapTestOnSingleRegister(preparation1, preparation2, _),
+            HeadMeasurement(nTotalQubits),
             nTotalQubits, nMeasurements
         ) - 1.0;
     }
 
 
-    operation _ApplyHadamardTest(
+    internal operation ApplyHadamardTest(
         phaseShift : Bool,
         commonPreparation : (Qubit[] => Unit is Adj),
         preparation1 : (Qubit[] => Unit is Adj + Ctl),
@@ -157,8 +157,7 @@ namespace Microsoft.Quantum.Characterization {
         control : Qubit,
         target : Qubit[]
     )
-    : Unit is Adj
-    {
+    : Unit is Adj {
         within {
             H(control);
         } apply {
@@ -175,18 +174,17 @@ namespace Microsoft.Quantum.Characterization {
         }
     }
 
-    operation _ApplyHadamardTestOnSingleRegister(
+    internal operation ApplyHadamardTestOnSingleRegister(
         phaseShift : Bool,
         commonPreparation : (Qubit[] => Unit is Adj),
         preparation1 : (Qubit[] => Unit is Adj + Ctl),
         preparation2 : (Qubit[] => Unit is Adj + Ctl),
         register : Qubit[]
     )
-    : Unit is Adj
-    {
+    : Unit is Adj {
         let control = Head(register);
         let target = Rest(register);
-        _ApplyHadamardTest(
+        ApplyHadamardTest(
             phaseShift,
             commonPreparation,
             preparation1, preparation2,
@@ -195,7 +193,7 @@ namespace Microsoft.Quantum.Characterization {
     }
 
 
-    operation _ApplySwapTest(
+    internal operation ApplySwapTest(
         preparation1 : (Qubit[] => Unit is Adj),
         preparation2 : (Qubit[] => Unit is Adj),
         control : Qubit,
@@ -212,7 +210,7 @@ namespace Microsoft.Quantum.Characterization {
         }
     }
 
-    operation _ApplySwapTestOnSingleRegister(
+    internal operation ApplySwapTestOnSingleRegister(
         preparation1 : (Qubit[] => Unit is Adj),
         preparation2 : (Qubit[] => Unit is Adj),
         register : Qubit[]
@@ -220,7 +218,7 @@ namespace Microsoft.Quantum.Characterization {
     : Unit is Adj {
         let control = Head(register);
         let targets = Rest(register);
-        _ApplySwapTest(
+        ApplySwapTest(
             preparation1, preparation2,
             control,
             targets[...Length(targets) / 2 - 1],
@@ -228,7 +226,7 @@ namespace Microsoft.Quantum.Characterization {
         );
     }
 
-    function _HeadMeasurement(nQubits : Int) : (Qubit[] => Result) {
+    internal function HeadMeasurement(nQubits : Int) : (Qubit[] => Result) {
         return Measure(
             ConstantArray(nQubits, PauliI) w/ 0 <- PauliZ,
             _

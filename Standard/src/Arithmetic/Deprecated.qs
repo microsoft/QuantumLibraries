@@ -6,13 +6,6 @@ namespace Microsoft.Quantum.Canon {
     open Microsoft.Quantum.Measurement;
 
     /// # Deprecated
-    /// Please use @"Microsoft.Quantum.Arithmetic.ApplyReversedOpLE".
-    @Deprecated("Microsoft.Quantum.Arithmetic.ApplyReversedOpLE")
-    operation ApplyReversedOpLittleEndian(op : (LittleEndian => Unit), register : BigEndian) : Unit {
-        ApplyReversedOpLE(op, register);
-    }
-
-    /// # Deprecated
     /// Please use @"Microsoft.Quantum.Arithmetic.ApplyReversedOpLEA".
     @Deprecated("Microsoft.Quantum.Arithmetic.ApplyReversedOpLEA")
     operation ApplyReversedOpLittleEndianA(op : (LittleEndian => Unit is Adj), register : BigEndian) : Unit is Adj {
@@ -31,13 +24,6 @@ namespace Microsoft.Quantum.Canon {
     @Deprecated("Microsoft.Quantum.Arithmetic.ApplyReversedOpLECA")
     operation ApplyReversedOpLittleEndianCA(op : (LittleEndian => Unit is Adj + Ctl), register : BigEndian) : Unit is Adj + Ctl {
         ApplyReversedOpLECA(op, register);
-    }
-
-    /// # Deprecated
-    /// Please use @"Microsoft.Quantum.Arithmetic.ApplyReversedOpBE".
-    @Deprecated("Microsoft.Quantum.Arithmetic.ApplyReversedOpBE")
-    operation ApplyReversedOpBigEndian(op : (BigEndian => Unit), register : LittleEndian) : Unit {
-        ApplyReversedOpBE(op, register);
     }
 
     /// # Deprecated
@@ -152,45 +138,11 @@ namespace Microsoft.Quantum.Canon {
         AssertPhaseLessThan(value, number);
     }
 
-    // #region Removal of "BE" suffix
-    // NB: with Q# 0.6, all arithmetic functionality has been normalized to
-    //     take exclusively LittleEndian inputs.
-
     /// # Deprecated
     /// This operation has been removed.
     @Deprecated("ApplyReversedOpLECA(ApplyXorInPlace(value, _), target)")
     operation InPlaceXorBE(value : Int, target : BigEndian) : Unit is Adj + Ctl {
         ApplyReversedOpLECA(ApplyXorInPlace(value, _), target);
-    }
-
-    /// # Deprecated
-    /// This operation has been removed.
-    @Deprecated("CompareUsingRippleCarry(BigEndianAsLittleEndian(x), BigEndianAsLittleEndian(y), output)")
-    operation ApplyRippleCarryComparatorBE(x : BigEndian, y : BigEndian, output : Qubit) : Unit {
-        CompareUsingRippleCarry(BigEndianAsLittleEndian(x), BigEndianAsLittleEndian(y), output);
-    }
-
-    /// # Deprecated
-    /// This operation has been removed.
-    @Deprecated("MeasureInteger(BigEndianAsLittleEndian(target))")
-    operation MeasureIntegerBE(target : BigEndian) : Int {
-        return MeasureInteger(BigEndianAsLittleEndian(target));
-    }
-
-    /// # Deprecated
-    /// This operation has been removed.
-    @Deprecated("AssertProbInt(stateIndex, prob, BigEndianAsLittleEndian(qubits), tolerance)")
-    operation AssertProbIntBE (stateIndex : Int, prob : Double, qubits : BigEndian, tolerance : Double) : Unit {
-        AssertProbInt(stateIndex, prob, BigEndianAsLittleEndian(qubits), tolerance);
-    }
-
-    // #endregion
-
-    /// # Deprecated
-    /// Please use @"Microsoft.Quantum.Arithmetic.CopyMostSignificantBit".
-    @Deprecated("Microsoft.Quantum.Arithmetic.CopyMostSignificantBit")
-     operation CopyMostSignificantBitLE(from : LittleEndian, target : Qubit) : Unit is Adj {
-        CopyMostSignificantBit(from, target);
     }
 
     /// # Deprecated
@@ -206,6 +158,12 @@ namespace Microsoft.Quantum.Canon {
     operation InPlaceMajority(output: Qubit, input: Qubit[])
     : Unit is Adj + Ctl {
         ApplyMajorityInPlace(output, input);
+    }
+
+    @Deprecated("Microsoft.Quantum.Canon.ApplyCCNOTChain")
+    operation CascadeCCNOT(register : Qubit[], targets : Qubit[])
+    : Unit is Adj + Ctl {
+        ApplyCCNOTChain(register, targets);
     }
 
 }

@@ -21,16 +21,16 @@ namespace Microsoft.Quantum.Optimization {
 
     /// # Summary
     /// Returns the width of an interval.
-    function _Width(left : Double, right : Double) : Double {
+    internal function Width(left : Double, right : Double) : Double {
         return right - left;
     }
 
     /// # Summary
     /// Given an interval, returns a probe interval that contracts the given
     /// interval by a factor of the golden ratio.
-    function _Probe(left : Double, right : Double) : (Double, Double) {
+    internal function Probe(left : Double, right : Double) : (Double, Double) {
         let goldenRatio = (Sqrt(5.0) + 1.0) / 2.0;
-        let delta = (_Width(left, right)) / goldenRatio;
+        let delta = (Width(left, right)) / goldenRatio;
         return (
             right - delta, left + delta
         );
@@ -38,7 +38,7 @@ namespace Microsoft.Quantum.Optimization {
 
     /// # Summary
     /// Returns the midpoint for an interval.
-    function _Midpoint(left : Double, right : Double) : (Double) {
+    internal function Midpoint(left : Double, right : Double) : (Double) {
         return (left + right) / 2.0;
     }
 
@@ -63,18 +63,18 @@ namespace Microsoft.Quantum.Optimization {
         bounds : (Double, Double),
         tolerance : Double
     ) : UnivariateOptimizationResult {
-        
+
         mutable interval = bounds;
-        mutable probe = _Probe(interval);
-        while (_Width(probe) > tolerance) {
+        mutable probe = Probe(interval);
+        while (Width(probe) > tolerance) {
             set interval =
                 fn(Fst(probe)) < fn(Snd(probe))
                 ? (Fst(interval), Snd(probe))
                 | (Fst(probe), Snd(interval));
-            set probe = _Probe(interval);
+            set probe = Probe(interval);
         }
 
-        let mid = _Midpoint(interval);
+        let mid = Midpoint(interval);
         return UnivariateOptimizationResult(
             mid, fn(mid)
         );
