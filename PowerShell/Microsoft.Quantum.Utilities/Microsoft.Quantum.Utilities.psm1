@@ -1,3 +1,7 @@
+#!/usr/bin/env pwsh
+# Copyright (c) Microsoft Corporation.
+# Licensed under the MIT License.
+
 $quantumPackages = @(
     "Microsoft.Azure.Quantum.Client",
     "Microsoft.Azure.Quantum.DataStructures",
