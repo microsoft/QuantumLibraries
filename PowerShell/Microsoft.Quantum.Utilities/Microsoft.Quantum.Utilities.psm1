@@ -129,6 +129,12 @@ function Get-QdkVersion() {
     );
 
     process {
-        Write-Output $MyInvocation.MyCommand.Module.Version;
+        @{
+            "Microsoft.Quantum.Utilities" = $MyInvocation.MyCommand.Module.Version;
+            ".NET Core SDK" = (dotnet --version); # TODO: Guard against exceptions here when `dotnet` is missing.
+            "Microsoft.Quantum.IQSharp" = # TODO: Parse IQ# version here.
+            "qsharp.py" = "python -c `"import qsharp; print(qsharp.__version__)`"";
+            "VS Code extension" = (code --list-extensions --show-versions | sls quantum.quantum-devkit-vscode);
+        }.GetEnumerator() | ForEach-Object { [pscustomobject]$_ }
     }
 }
