@@ -49,6 +49,7 @@
 # entries below.
 ###############################################################################
 *.md   diff=astextplain
+*.psd1   diff=astextplain
 #*.doc   diff=astextplain
 #*.DOC   diff=astextplain
 #*.docx  diff=astextplain
