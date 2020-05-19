@@ -21,9 +21,70 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
         NotRecognized = -1, v0_1 = 0, v0_2 = 1
     }
 
+    public static class BroombridgeSerializer
+    {
+        public static IEnumerable<ElectronicStructureProblem> Deserialize(TextReader reader)
+        {
+            var data = Deserializers.DeserializeBroombridge(reader);
+            return data
+                .Raw
+                .ProblemDescriptions
+                .Select(
+                    problem => new ElectronicStructureProblem
+                    {
+                        BasisSet = problem.BasisSet?.FromBroombridgeV0_1(),
+                        CoulombRepulsion = problem.CoulombRepulsion.FromBroombridgeV0_1(),
+                        Geometry = problem.Geometry?.FromBroombridgeV0_1(),
+                        EnergyOffset = problem.EnergyOffset.FromBroombridgeV0_1(),
+                        FciEnergy = problem.FciEnergy?.FromBroombridgeV0_1(),
+                        InitialStates = ProblemDescription.FromBroombridgeV0_2(problem.InitialStates),
+                        Metadata = problem.Metadata,
+                        NElectrons = problem.NElectrons,
+                        NOrbitals = problem.NOrbitals,
+                        OrbitalIntegralHamiltonian = V0_2.ToOrbitalIntegralHamiltonian(problem),
+                        ScfEnergy = problem.ScfEnergy?.FromBroombridgeV0_1(),
+                        ScfEnergyOffset = problem.ScfEnergyOffset?.FromBroombridgeV0_1()
+                    }
+                );
+        }
+
+        public static void Serialize(TextWriter writer, IEnumerable<ElectronicStructureProblem> problems)
+        {
+            Serializers.SerializeBroombridgev0_2(
+                new Broombridge.V0_2.Data
+                {
+                    // TODO: fix additional properties by converting IEnumerable<ESP> to
+                    //       new problem collection class.
+                    Bibliography = null,
+                    Format = new V0_1.Format
+                    {
+                        Version = "0.2"
+                    },
+                    Generator = new V0_1.Generator
+                    {
+                        Source = "qdk-chem",
+                        Version = typeof(BroombridgeSerializer).Assembly.GetName().Version.ToString()
+                    },
+                    // TODO: fix schema.
+                    Schema = "",
+                    ProblemDescriptions = problems
+                        .Select(
+                            problem => problem.ToBroombridgeV0_2()
+                        )
+                        .ToList()
+                },
+                writer
+            );
+        }
+    }
+
     /// <summary>
     /// Broombridge deserializers
     /// </summary>
+    [Obsolete(
+        "Please use BroombridgeSerializer instead.",
+        false
+    )]
     public static class Deserializers
     {
         /// <summary>
@@ -32,11 +93,11 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
         internal static Dictionary<string, VersionNumber> VersionNumberDict = new Dictionary<string, VersionNumber>()
         {
             // https://github.com/Microsoft/Quantum/blob/master/Chemistry/Schema/broombridge-0.1.schema.json
-            {"0.1", VersionNumber.v0_1 },
-            {"broombridge-0.1.schema", VersionNumber.v0_1 },
+            ["0.1"] = VersionNumber.v0_1,
+            ["broombridge-0.1.schema"] = VersionNumber.v0_1,
             // TODO: URL of 0.2 schema.
-            {"0.2", VersionNumber.v0_2 },
-            {"broombridge-0.2.schema", VersionNumber.v0_2 }
+            ["0.2"] = VersionNumber.v0_2,
+            ["broombridge-0.2.schema"] = VersionNumber.v0_2
         };
 
         

@@ -17,7 +17,7 @@ namespace Microsoft.Quantum.Chemistry
     ///      Serialization and deserialization support for FCIDUMP
     ///      formatted problem descriptions.
     /// </summary>
-    public static class FciDump
+    public static class FciDumpSerializer
     {
 
         /// <summary>
@@ -27,7 +27,7 @@ namespace Microsoft.Quantum.Chemistry
         /// <returns>
         ///      An electronic structure problem deserialized from the file.
         /// </returns>
-        public static MinimalProblemDescription Deserialize(TextReader reader)
+        public static IEnumerable<ElectronicStructureProblem> Deserialize(TextReader reader)
         {
             // FCIDUMP files begin with a FORTRAN-formatted namelist, delimited
             // by &FCI and &END. We start by extracting that namelist.
@@ -77,34 +77,26 @@ namespace Microsoft.Quantum.Chemistry
             }
             
             
-            return new MinimalProblemDescription
+            return new List<ElectronicStructureProblem>
             {
-                CoulombRepulsion = 0.0,
-                MiscellaneousInformation = "Imported from FCIDUMP",
-                NElectrons = Int32.Parse(namelist["NELEC"]),
-                NOrbitals = Int32.Parse(namelist["NORB"]),
-                OrbitalIntegralHamiltonian = hamiltonian
+                new ElectronicStructureProblem
+                {
+                    CoulombRepulsion = 0.0.WithUnits("hartree"),
+                    Metadata = new Dictionary<string, object>
+                    {
+                        ["Comment"] = "Imported from FCIDUMP"
+                    },
+                    NElectrons = Int32.Parse(namelist["NELEC"]),
+                    NOrbitals = Int32.Parse(namelist["NORB"]),
+                    OrbitalIntegralHamiltonian = hamiltonian
+                }
             };
         }
 
-        /// <summary>
-        ///     Deserializes an FCIDUMP-formatted problem description.
-        /// </summary>
-        /// <param name="filename">The name of the file to be loaded.</param>
-        /// <returns>
-        ///      An electronic structure problem deserialized from the file.
-        /// </returns>
-        /// <returns>
-        ///      List of electronic structure problem deserialized from the file.
-        /// </returns>
-        public static MinimalProblemDescription Deserialize(string filename)
+        public static void Serialize(TextWriter writer, IEnumerable<ElectronicStructureProblem> problems)
         {
-            using var reader = File.OpenText(filename);
-            return Deserialize(reader);
-        }
+            var problem = problems.Single();
 
-        public static void Serialize(MinimalProblemDescription problem, TextWriter writer)
-        {
             // Start by writing the header.
             writer.WriteLine($"&FCI NORB={problem.NOrbitals},NELEC={problem.NElectrons},");
             // Assume global phase symmetry for now.

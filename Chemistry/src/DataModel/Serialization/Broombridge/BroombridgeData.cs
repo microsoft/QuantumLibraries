@@ -1,6 +1,6 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
-
+#nullable enable
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -20,6 +20,10 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
     /// <summary>
     /// Latest Broombridge format.
     /// </summary>
+    [Obsolete(
+        "Please use collections of ElectronicStructureProblem instead.",
+        error: false
+    )]
     public class Data
     {
         /// <summary>
@@ -71,6 +75,10 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
     /// <summary>
     /// Electronic structure problem instance.
     /// </summary>
+    [Obsolete(
+        "Please use ElectronicStructureProblem instead.",
+        error: false
+    )]
     public struct ProblemDescription
     {
         /// <summary>
@@ -112,9 +120,18 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
                 NElectrons = problem.NElectrons,
                 NOrbitals = problem.NOrbitals,
                 OrbitalIntegralHamiltonian = V0_2.ToOrbitalIntegralHamiltonian(problem),
-                Wavefunctions = new Dictionary<string, FermionWavefunction<SpinOrbital>>()
+                Wavefunctions = FromBroombridgeV0_2(problem.InitialStates)
             };
-            foreach (var initialState in problem.InitialStates ?? new List<V0_2.State>())
+            return problemDescription;
+        }
+
+        internal static Dictionary<string, Fermion.FermionWavefunction<OrbitalIntegrals.SpinOrbital>>
+            FromBroombridgeV0_2(
+                IEnumerable<V0_2.State>? initialStates
+            )
+        {
+            var wavefunctions = new Dictionary<string, Fermion.FermionWavefunction<OrbitalIntegrals.SpinOrbital>>();
+            foreach (var initialState in initialStates ?? new List<V0_2.State>())
             {
                 var finalState = new FermionWavefunction<SpinOrbital>();
 
@@ -159,9 +176,9 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
                 finalState.Method = setMethod;
                 finalState.Energy = setEnergy;
 
-                problemDescription.Wavefunctions.Add(initialState.Label, finalState);
+                wavefunctions.Add(initialState.Label, finalState);
             }
-            return problemDescription;
+            return wavefunctions;
         }
     }
 

@@ -60,6 +60,14 @@ namespace Microsoft.Quantum.Chemistry
         }
 
 
+        internal static TValue GetValueOrDefault<TKey, TValue>(
+                this Dictionary<TKey, TValue> dictionary, TKey key,
+                TValue @default = default
+        ) =>
+            dictionary.TryGetValue(key, out var value)
+            ? value
+            : @default;
+
         #endregion
 
 

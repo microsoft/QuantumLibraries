@@ -13,6 +13,7 @@ using System.IO;
 using System;
 
 using Broombridge = Microsoft.Quantum.Chemistry.Broombridge;
+using Microsoft.Quantum.Chemistry.Broombridge;
 
 namespace Microsoft.Quantum.Chemistry.Tools
 {
@@ -73,55 +74,38 @@ namespace Microsoft.Quantum.Chemistry.Tools
             Save(data, writer, to);
         }
 
-        internal static Broombridge.V0_2.Data Load(TextReader reader, SerializationFormat from) =>
-            from switch
+        internal static IEnumerable<ElectronicStructureProblem> Load(TextReader reader, SerializationFormat from) =>
+            (from switch
             {
-                SerializationFormat.Broombridge => Broombridge
-                    .Deserializers
-                    .DeserializeBroombridge(reader)
-                    .Raw,
-                SerializationFormat.LiQuiD =>
-                    new Broombridge.V0_2.Data
-                    {
-                        ProblemDescriptions =
-                            LiQuiD
-                            .Deserialize(reader)
-                            .Select(liquidDescription =>
-                                liquidDescription.ToBroombridgeProblemDescription()
-                            )
-                            .ToList()
-                    }
-                    .WithDefaultMetadata(),
+                SerializationFormat.Broombridge =>
+                    BroombridgeSerializer.Deserialize(reader),
+                SerializationFormat.LiQuiD => 
+                    LiQuiDSerializer.Deserialize(reader),
                 SerializationFormat.FciDump =>
-                    new Broombridge.V0_2.Data
-                    {
-                        ProblemDescriptions = new List<Broombridge.V0_2.ProblemDescription>
-                        {
-                            FciDump
-                            .Deserialize(reader)
-                            .ToBroombridgeProblemDescription()
-                        }
-                    }
-                    .WithDefaultMetadata(),
+                    FciDumpSerializer.Deserialize(reader),
                 _ => throw new ArgumentException($"Invalid format {from}.")
-            };
+            })
+            .ToList();
 
-        internal static void Save(Broombridge.V0_2.Data data, TextWriter writer, SerializationFormat to)
+        internal static void Save(IEnumerable<ElectronicStructureProblem> data, TextWriter writer, SerializationFormat to)
         {
             switch (to)
             {
                 case SerializationFormat.Broombridge:
-                    Broombridge.Serializers.SerializeBroombridgev0_2(data, writer);
+                    // Check if the data has any nontrivial initial state suggestions, since
+                    // those are currently unsupported for export.
+                    if (data.Any(problem => (problem.InitialStates?.Count ?? 0) > 0))
+                    {
+                        Console.Error.WriteLine("[WARNING] Serialization of initial states is not currently supported.");
+                    }
+                    BroombridgeSerializer.Serialize(writer, data);
                     return;
                 case SerializationFormat.LiQuiD:
                     throw new NotSupportedException("Not yet implemented.");
                     return;
                 case SerializationFormat.FciDump:
-                    FciDump.Serialize(
-                        MinimalProblemDescription.FromBroombridgeProblemDescription(
-                            data.ProblemDescriptions.Single()
-                        ),
-                        writer
+                    FciDumpSerializer.Serialize(
+                        writer, data
                     );
                     return;
                 default:

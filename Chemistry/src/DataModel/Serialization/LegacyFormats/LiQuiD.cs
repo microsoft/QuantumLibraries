@@ -1,75 +1,39 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
+#nullable enable
+
 using Microsoft.Quantum.Simulation.Core;
 
 using System.Text.RegularExpressions;
 using System.Linq;
 using System.Collections.Generic;
-using System.IO;
 
 using Microsoft.Quantum.Chemistry.OrbitalIntegrals;
+using System.IO;
+using System;
 
 namespace Microsoft.Quantum.Chemistry
 {
-    /// <summary>
-    /// Methods for loading Hamiltonian data from standard formats
-    /// into a <see cref="FermionHamiltonian"/>.
-    /// </summary>
-    public class LiQuiD
-    {
 
-        /// <summary>
-        ///      Loads a Hamiltonian from integral data represented
-        ///      in LIQ𝑈𝑖|⟩ format.
-        ///      Please see the <a href="https://stationq.github.io/Liquid/docs/LIQUiD.pdf">
-        ///      LIQ𝑈𝑖|⟩ documentation</a> for further details about the
-        ///      format parsed by this method.
-        /// </summary>
-        /// <param name="reader">A stream for reading LIQ𝑈𝑖|⟩ data.</param>
-        /// <returns>
-        ///      List of electronic structure problem deserialized from the file.
-        /// </returns>
-        public static IEnumerable<MinimalProblemDescription> Deserialize(TextReader reader)
+
+    public static class LiQuiDSerializer
+    {
+        public static IEnumerable<ElectronicStructureProblem> Deserialize(TextReader reader)
         {
             var allText = reader.ReadToEnd();
             string[] delimiters = { "tst" };
             var lines = allText.Split(delimiters, System.StringSplitOptions.RemoveEmptyEntries);
-            var hamiltonians = lines.Select(o => DeserializeSingle(o));
+            var hamiltonians = lines.Select(DeserializeSingleProblem);
             return hamiltonians;
         }
 
-        /// <summary>
-        ///      Loads a Hamiltonian from integral data represented
-        ///      in LIQ𝑈𝑖|⟩ format.
-        ///      Please see the <a href="https://stationq.github.io/Liquid/docs/LIQUiD.pdf">
-        ///      LIQ𝑈𝑖|⟩ documentation</a> for further details about the
-        ///      format parsed by this method.
-        /// </summary>
-        /// <param name="filename">The name of the file to be loaded.</param>
-        /// <returns>
-        ///      List of electronic structure problem deserialized from the file.
-        /// </returns>
-        public static IEnumerable<MinimalProblemDescription> Deserialize(string filename)
+        internal static ElectronicStructureProblem DeserializeSingleProblem(string line)
         {
-            using var reader = File.OpenText(filename);
-            return Deserialize(reader);
-        }
-
-        /// <summary>
-        ///      Loads a Hamiltonian from integral data represented
-        ///      in LIQ𝑈𝑖|⟩ format.
-        ///      Please see the <a href="https://stationq.github.io/Liquid/docs/LIQUiD.pdf">
-        ///      LIQ𝑈𝑖|⟩ documentation</a> for further details about the
-        ///      format parsed by this method.
-        /// </summary>
-        /// <param name="line">Sequence of text describing terms of Hamiltonian.</param>
-        /// <returns>
-        ///      Single electronic structure problem deserialized from the file.
-        /// </returns>
-        public static MinimalProblemDescription DeserializeSingle(string line)
-        {
-            var problem = new MinimalProblemDescription();
+            var problem = new ElectronicStructureProblem()
+            {
+                Metadata = new Dictionary<string, object>()
+            };
 
             var regexMiscellaneous = new Regex(@"((info=(?<info>[^\s]*)))");
             var regexnuc = new Regex(@"nuc=(?<nuc>-?\s*\d*.\d*)");
@@ -86,7 +50,7 @@ namespace Microsoft.Quantum.Chemistry
             Match stringMisc = regexMiscellaneous.Match(line);
             if (stringMisc.Success)
             {
-                problem.MiscellaneousInformation = stringMisc.Groups["info"].ToString();
+                problem.Metadata["misc_info"] = stringMisc.Groups["info"].ToString();
             }
 
 
@@ -188,10 +152,65 @@ namespace Microsoft.Quantum.Chemistry
 
             problem.OrbitalIntegralHamiltonian = hamiltonian;
             problem.NOrbitals = System.Convert.ToInt32 ( nOrbitals);
-            problem.CoulombRepulsion = coulombRepulsion;
+            problem.CoulombRepulsion = coulombRepulsion.WithUnits("hartree");
 
             return problem;
-
         }
+
+        public static void Serialize(TextWriter writer, IEnumerable<ElectronicStructureProblem> problems)
+        {
+            throw new NotImplementedException("Serialization to LiQuiD is not yet implemented.");
+        }
+    }
+
+
+
+    /// <summary>
+    /// Methods for loading Hamiltonian data from standard formats
+    /// into a <see cref="FermionHamiltonian"/>.
+    /// </summary>
+    [Obsolete(
+        "Please use LiQuiDSerializer instead.",
+        false
+    )]
+
+    public class LiQuiD
+    {
+        public struct ProblemDescription
+        {
+            public int NOrbitals { get; set; }
+            public int NElectrons { get; set; }
+            public double CoulombRepulsion { get; set; }
+            public string MiscellaneousInformation { get; set; }
+            public OrbitalIntegralHamiltonian OrbitalIntegralHamiltonian { get; set; }
+        }
+
+        /// <summary>
+        ///      Loads a Hamiltonian from integral data represented
+        ///      in LIQ𝑈𝑖|⟩ format.
+        ///      Please see the <a href="https://stationq.github.io/Liquid/docs/LIQUiD.pdf">
+        ///      LIQ𝑈𝑖|⟩ documentation</a> for further details about the
+        ///      format parsed by this method.
+        /// </summary>
+        /// <param name="filename">The name of the file to be loaded.</param>
+        /// <returns>
+        ///      List of electronic structure problem deserialized from the file.
+        /// </returns>
+        public static IEnumerable<ProblemDescription> Deserialize(string filename)
+        {
+            var name = filename;
+            using var reader = File.OpenText(filename);
+            return LiQuiDSerializer
+                .Deserialize(reader)
+                .Select(problem => new ProblemDescription
+                {
+                    CoulombRepulsion = problem.CoulombRepulsion.Value,
+                    MiscellaneousInformation = problem.Metadata.GetValueOrDefault("misc_info", "").ToString(),
+                    NElectrons = problem.NElectrons,
+                    NOrbitals = problem.NOrbitals,
+                    OrbitalIntegralHamiltonian = problem.OrbitalIntegralHamiltonian
+                });
+        }
+
     }
 }

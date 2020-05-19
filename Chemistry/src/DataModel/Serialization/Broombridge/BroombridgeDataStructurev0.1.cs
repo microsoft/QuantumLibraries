@@ -16,6 +16,103 @@ using Microsoft.Quantum.Chemistry.LadderOperators;
 
 namespace Microsoft.Quantum.Chemistry.Broombridge
 {
+
+    internal static class BroombridgeExtensionsV0_1
+    {
+
+        internal static Broombridge.V0_1.SimpleQuantity ToBroombridgeV0_1(this Quantity<double> quantity) =>
+            new Broombridge.V0_1.SimpleQuantity
+            {
+                Units = quantity.Units,
+                Value = quantity.Value
+            };
+
+        internal static Broombridge.V0_1.BoundedQuantity ToBroombridgeV0_1(this BoundedQuantity<double> quantity) =>
+            new Broombridge.V0_1.BoundedQuantity
+            {
+                Units = quantity.Units,
+                Value = quantity.Value,
+                Lower = quantity.Lower,
+                Upper = quantity.Upper
+            };
+
+        internal static Quantity<double> FromBroombridgeV0_1(this Broombridge.V0_1.SimpleQuantity quantity) =>
+            new Quantity<double>
+            {
+                Units = quantity.Units,
+                Value = quantity.Value
+            };
+
+        internal static BoundedQuantity<double> FromBroombridgeV0_1(this Broombridge.V0_1.BoundedQuantity quantity) =>
+            new BoundedQuantity<double>
+            {
+                Units = quantity.Units,
+                Value = quantity.Value,
+                Lower = quantity.Lower,
+                Upper = quantity.Upper
+            };
+
+        internal static BasisSet FromBroombridgeV0_1(this Broombridge.V0_1.BasisSet basisSet) =>
+            new BasisSet
+            {
+                Name = basisSet.Name,
+                Type = basisSet.Type
+            };
+
+        
+
+        internal static Geometry FromBroombridgeV0_1(this Broombridge.V0_1.Geometry geometry) =>
+            new Geometry
+            {
+                Atoms = geometry.Atoms,
+                CoordinateSystem = geometry.CoordinateSystem,
+                Symmetry = geometry.Symmetry,
+                Units = geometry.Units
+            };
+
+        internal static V0_1.Geometry ToBroombridgeV0_1(this Geometry geometry) =>
+            new V0_1.Geometry
+            {
+                Atoms = geometry.Atoms,
+                CoordinateSystem = geometry.CoordinateSystem,
+                Symmetry = geometry.Symmetry,
+                Units = geometry.Units
+            };
+
+        internal static V0_1.ArrayQuantity<long, double> ToBroombridgeV0_1(
+                this Dictionary<OrbitalIntegrals.OrbitalIntegral, DoubleCoeff> terms
+        ) =>
+            new V0_1.ArrayQuantity<long, double>()
+            {
+                Format = "sparse",
+                Units = "hartree",
+                Values = terms.Select(term => (
+                             term
+                             .Key
+                             .ToCanonicalForm()
+                             .OrbitalIndices
+                             .Select(idx => (long)idx)
+                             .ToArray(),
+                             term.Value.Value
+                         )).ToList()
+            };
+
+        internal static V0_1.HamiltonianData ToBroombridgeV0_1(this OrbitalIntegralHamiltonian hamiltonian) =>
+            new V0_1.HamiltonianData
+            {
+                OneElectronIntegrals = hamiltonian
+                    .Terms[TermType.OrbitalIntegral.OneBody]
+                    .ToBroombridgeV0_1(),
+                TwoElectronIntegrals = hamiltonian
+                    .Terms[TermType.OrbitalIntegral.OneBody]
+                    .ToBroombridgeV0_1()
+            };
+
+        internal static V0_1.IntegralSet ToBroombridgeV0_1(this ElectronicStructureProblem problem) =>
+            throw new NotImplementedException("Not yet implemented.");
+
+    }
+
     /// <summary>
     /// Broombridge v0.1 format
     /// </summary>
