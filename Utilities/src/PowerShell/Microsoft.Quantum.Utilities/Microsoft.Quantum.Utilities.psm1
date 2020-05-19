@@ -36,19 +36,24 @@ $quantumPackages = @(
 function Update-QuantumProject() {
     <#
         .SYNOPSIS
-            This cmdlet upates the Quantum SDK version as well as the references to Microsoft Quantum packages
+            This cmdlet updates the Quantum SDK version as well as the references to Microsoft Quantum packages
             to a specified version of the QDK. If no version is specified, then the QDK version of the PowerShell
-            Microsoft.Quantum.Utilities module is used.
+            Microsoft.Quantum.Utilities module is used. The dependencies of the project are restored, unless 
+            parameter -NoRestore is specified.
 
         .PARAMETER Path
             Path to the VS project file to update.
 
         .PARAMETER Revert
-            Restores a the target project to a previous version if available. If used, parameter Version is ignored.
+            Restores a the target project to a previous version if available.
+            Dependency restoration is not performed during a revert.
 
         .PARAMETER Version
             (Optional) Version of the QDK to update the project to. If not specified, the version of this PowerShell
             module will be used. To display the version of this modue, use cmdlet 'Get-QdkVersion'.
+
+        .PARAMETER NoRestore
+            (Optional) Skips performing the .NET restore step on the project after updating the references.
 
         .EXAMPLE
             Update-QuantumProject -Path QuantumFourierTransform.csproj
@@ -57,10 +62,13 @@ function Update-QuantumProject() {
             Update-QuantumProject -Path QuantumFourierTransform.csproj -Version 0.11.2004.2825
 
         .EXAMPLE
+            Update-QuantumProject -Path QuantumFourierTransform.csproj -Version 0.11.2004.2825 -NoRestore
+
+        .EXAMPLE
             Update-QuantumProject -Path QuantumFourierTransform.csproj -Revert
             
     #>
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess=$true)]
     param(
         [string] $Version = $MyInvocation.MyCommand.Module.Version,
 
@@ -68,7 +76,10 @@ function Update-QuantumProject() {
         [System.IO.FileInfo] $Path,
 
         [Parameter(Mandatory=$false)]
-        [switch] $Revert
+        [switch] $Revert,
+
+        [Parameter(Mandatory=$false)]
+        [switch] $NoRestore
     );
 
     process {
@@ -79,13 +90,17 @@ function Update-QuantumProject() {
             return;
         }
 
-        $pathToPrev = [System.IO.FileInfo] ([String]$Path + ".prev_ver");
+        $prevVerDir = Join-Path -Path $Path.Directory -ChildPath ".prev";
+        $pathToPrev = [System.IO.FileInfo](Join-Path -Path $prevVerDir -ChildPath $Path.Name);
 
         if ($Revert){
             Write-Verbose "Reverting $Path to previous version."
 
             if (Test-Path $pathToPrev) {
-                Move-Item -Path $pathToPrev -Destination $Path -Force;
+                if ($PSCmdlet.ShouldProcess($Path, "Revert")) {
+                    New-Item -ItemType Directory -Path $prevVerDir;
+                    Move-Item -Path $pathToPrev -Destination $Path -Force;
+                }
             }
         }
         else {
@@ -105,10 +120,18 @@ function Update-QuantumProject() {
 
             Set-Content -Path $Path -Value $upcsproj;
 
+            # Do a project restore of dependencies
+            if (-Not $NoRestore) {
+                dotnet restore $Path;
+            }
+
             if (Compare-Object -ReferenceObject $csproj -DifferenceObject $upcsproj) {
-                
-                Set-Content -Path $pathToPrev -Value $csproj;
                 Write-Verbose "Saving previous configuration to $pathToPrev.";
+                
+                if ($PSCmdlet.ShouldProcess($pathToPrev, "Set-Content")) {
+                    New-Item -ErrorAction Ignore -ItemType Directory -Path $prevVerDir;
+                    Set-Content -Path $pathToPrev -Value $csproj;
+                }
             }
         }
     }
@@ -117,11 +140,18 @@ function Update-QuantumProject() {
 function Get-QdkVersion() {
     <#
         .SYNOPSIS
-            Displays the version of the Quantum Development Kit corresponding to this module.
+            Displays the version of the Quantum Development Kit components.
+
+        .DESCRIPTION
+            Shows the version of the following components.
+             - Microsoft.Quantum.Utilities
+             - .NET Core SDK
+             - Microsoft.Quantum.IQSharp
+             - qsharp.py
+             - VS Code Extension
 
         .EXAMPLE
             Get-QdkVersion
-            
     #>
 
     [CmdletBinding()]
@@ -129,12 +159,29 @@ function Get-QdkVersion() {
     );
 
     process {
+        try{
+            $dotnetVersion = (dotnet --version);
+            $iqsharpVersion = [string]((dotnet iqsharp --version) -match "iqsharp" -replace "iqsharp:\s*","");
+        }
+        catch {
+            # We'll just skip the values that couldn't be retrieved, and we will present empty strings
+            # indicating that the version could not be retrieved. We only log the error in -Verbose mode.
+            Write-Verbose $_;
+        }
+
+        try{
+            $qsharpPythonVersion = (python -c "import qsharp; print(qsharp.__version__)");
+        }
+        catch {
+            Write-Verbose $_;
+        }
+
         @{
             "Microsoft.Quantum.Utilities" = $MyInvocation.MyCommand.Module.Version;
-            ".NET Core SDK" = (dotnet --version); # TODO: Guard against exceptions here when `dotnet` is missing.
-            "Microsoft.Quantum.IQSharp" = # TODO: Parse IQ# version here.
-            "qsharp.py" = "python -c `"import qsharp; print(qsharp.__version__)`"";
-            "VS Code extension" = (code --list-extensions --show-versions | sls quantum.quantum-devkit-vscode);
+            ".NET Core SDK" = $dotnetVersion;
+            "Microsoft.Quantum.IQSharp" = $iqsharpVersion;
+            "qsharp.py" = $qsharpPythonVersion;
+            "VS Code Extension" = (code --list-extensions --show-versions | Select-String quantum.quantum-devkit-vscode);
         }.GetEnumerator() | ForEach-Object { [pscustomobject]$_ }
     }
 }
