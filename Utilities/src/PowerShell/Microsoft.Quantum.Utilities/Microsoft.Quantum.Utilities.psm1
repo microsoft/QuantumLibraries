@@ -106,40 +106,57 @@ function Update-QuantumProject() {
 
             if (Test-Path $pathToPrev) {
                 if ($PSCmdlet.ShouldProcess($Path, "Revert")) {
-                    New-Item -ItemType Directory -Path $prevVerDir;
                     Move-Item -Path $pathToPrev -Destination $Path -Force;
                 }
+            }
+            else {
+                Write-Error "A previous version of the project was not found."
             }
         }
         else {
             Write-Verbose "Updating $Path to QDK version $Version."
 
-            $csproj = Get-Content $Path;
+            $csproj = [XML](Get-Content $Path);
+            $projectWasUpdated = $false;
 
             # Update the Quantum SDK Version
-            $upcsproj = $csproj -replace ("Sdk=`"Microsoft.Quantum.Sdk`/`([^`"]*`)`""),
-                                         ("Sdk=`"Microsoft.Quantum.Sdk`/" + $Version + "`"");
+            foreach ($item in (Select-Xml -Xml $csproj -XPath '//Project[@Sdk]')) {
+                $sdk = [String]($item.node.Sdk);
+                $sdk = $sdk -replace ("Microsoft.Quantum.Sdk`/`([^`"]*`)"),
+                                     ("Microsoft.Quantum.Sdk`/" + $Version);
+
+                if($sdk -ne $item.node.Sdk) {
+                    $projectWasUpdated = $true;
+                    $item.node.Sdk = $sdk;
+                }
+            }
 
             # Update the version of each of the Quantum packages
             foreach ($pack in $quantumPackages) {
-                $upcsproj  = $upcsproj -replace ("PackageReference\s*Include=`"" + $pack + "`"\s*Version=`"`([^`"]*`)`"") , 
-                                                ("PackageReference Include=`"" + $pack + "`" Version=`"" + $Version + "`"");
+                foreach ($item in (Select-Xml -Xml $csproj -XPath '//Project/ItemGroup/PackageReference')) {
+                    if (($item.node.Include -ieq $pack) -and ($item.node.Version -ne $Version)) {
+                        $item.node.Version = $Version;
+                        $projectWasUpdated = $true;
+                    }
+                }
             }
 
-            Set-Content -Path $Path -Value $upcsproj;
-
-            # Do a project restore of dependencies
-            if (-Not $NoRestore) {
-                dotnet restore $Path;
-            }
-
-            if (Compare-Object -ReferenceObject $csproj -DifferenceObject $upcsproj) {
+            # Backup previous XML if a change was made
+            if ($projectWasUpdated) {
                 Write-Verbose "Saving previous configuration to $pathToPrev.";
                 
                 if ($PSCmdlet.ShouldProcess($pathToPrev, "Set-Content")) {
                     New-Item -ErrorAction Ignore -ItemType Directory -Path $prevVerDir;
-                    Set-Content -Path $pathToPrev -Value $csproj;
+                    Copy-Item -Path $Path -Destination $pathToPrev;
                 }
+            }
+
+            # Save the updated file.
+            $csproj.Save($Path);
+
+            # Do a project restore of dependencies
+            if (-Not $NoRestore) {
+                dotnet restore $Path;
             }
         }
     }
