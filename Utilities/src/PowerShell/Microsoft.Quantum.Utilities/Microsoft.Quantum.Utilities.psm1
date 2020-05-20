@@ -110,7 +110,7 @@ function Update-QuantumProject() {
                 }
             }
             else {
-                Write-Error "A previous version of the project was not found."
+                Write-Output "A previous version of the project was not found. Skipping."
             }
         }
         else {
@@ -141,7 +141,7 @@ function Update-QuantumProject() {
                 }
             }
 
-            # Backup previous XML if a change was made
+            # Backup previous XML if a change was made and save updated file.
             if ($projectWasUpdated) {
                 Write-Verbose "Saving previous configuration to $pathToPrev.";
                 
@@ -149,10 +149,10 @@ function Update-QuantumProject() {
                     New-Item -ErrorAction Ignore -ItemType Directory -Path $prevVerDir;
                     Copy-Item -Path $Path -Destination $pathToPrev;
                 }
-            }
 
-            # Save the updated file.
-            $csproj.Save($Path);
+                # Save the updated file.
+                $csproj.Save($Path);
+            }
 
             # Do a project restore of dependencies
             if (-Not $NoRestore) {
