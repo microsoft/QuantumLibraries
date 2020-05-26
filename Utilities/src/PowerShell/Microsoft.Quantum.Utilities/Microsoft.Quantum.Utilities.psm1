@@ -92,8 +92,7 @@ function Update-QuantumProject() {
 
     process {
 
-        if (-Not (Test-Path $Path))
-        {
+        if (-Not (Test-Path $Path)) {
             Write-Error "Project $Path does not exist.";
             return;
         }
@@ -101,7 +100,7 @@ function Update-QuantumProject() {
         $prevVerDir = Join-Path -Path $Path.Directory -ChildPath ".prev";
         $pathToPrev = [System.IO.FileInfo](Join-Path -Path $prevVerDir -ChildPath $Path.Name);
 
-        if ($Revert){
+        if ($Revert) {
             Write-Verbose "Reverting $Path to previous version."
 
             if (Test-Path $pathToPrev) {
@@ -176,7 +175,15 @@ function Get-QdkVersion() {
              - VS Code Extension
 
         .EXAMPLE
-            Get-QdkVersion
+            PS> Get-QdkVersion
+            Name                           Value
+            ----                           -----
+            Microsoft.Quantum.Utilities    0.11.2004.2825
+            VS Code Extension              0.11.20042825
+            VS Code                        1.45.1
+            qsharp.py                      0.11.2004.2825
+            Microsoft.Quantum.IQSharp      0.11.2004.2825
+            .NET Core SDK                  3.1.201
     #>
 
     [CmdletBinding()]
@@ -184,7 +191,7 @@ function Get-QdkVersion() {
     );
 
     process {
-        try{
+        try {
             $dotnetVersion = (dotnet --version);
             $iqsharpVersion = [string]((dotnet iqsharp --version) -match "iqsharp" -replace "iqsharp:\s*","");
         }
@@ -194,10 +201,21 @@ function Get-QdkVersion() {
             Write-Verbose $_;
         }
 
-        try{
+        try {
             $qsharpPythonVersion = (python -c "import qsharp; print(qsharp.__version__)");
         }
         catch {
+            Write-Verbose $_;
+        }
+
+        try {
+            $vscodeVersion, $vscodeCommit, $vscodePlatform = code --version;
+            (
+                code --list-extensions --show-versions `
+                | Select-String quantum.quantum-devkit-vscode
+            ) -match "[^@]*@(?<Version>.+)" | Out-Null;
+            $vscodeExtVersion = $Matches.Version;
+        } catch {
             Write-Verbose $_;
         }
 
@@ -206,7 +224,8 @@ function Get-QdkVersion() {
             ".NET Core SDK" = $dotnetVersion;
             "Microsoft.Quantum.IQSharp" = $iqsharpVersion;
             "qsharp.py" = $qsharpPythonVersion;
-            "VS Code Extension" = (code --list-extensions --show-versions | Select-String quantum.quantum-devkit-vscode);
+            "VS Code" = $vscodeVersion;
+            "VS Code Extension" = $vscodeExtVersion;
         }.GetEnumerator() | ForEach-Object { [pscustomobject]$_ }
     }
 }
