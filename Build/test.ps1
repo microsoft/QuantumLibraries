@@ -22,6 +22,21 @@ function Test-One {
     }
 }
 
+function Test-PowerShellModules {
+    param(
+        [string]
+        $Path
+    );
+
+    if (!(Get-Module -ListAvailable Pester)) {
+        Write-Host "##vso[task.logissue type=warning;]Pester not available, cannot run PowerShell tests.";
+    } else {
+        Import-Module Pester
+        $results = Invoke-Pester $Path -PassThru;
+        $Script:all_ok = $Script:all_ok -and ($results.FailedCount -eq 0);
+    }
+}
+
 Write-Host "##[info]Testing Standard/tests/Standard.Tests.csproj"
 Test-One '../Standard/tests/Standard.Tests.csproj'
 
