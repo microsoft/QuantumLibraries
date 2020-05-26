@@ -66,7 +66,7 @@ Build-One 'publish' '../Magic.sln'
 Write-Host "##[info]Building PowerShell docs..."
 Build-PwshDocs `
     -ModulePath (Join-Path $PSScriptRoot "Utilities/src/PowerShell/Microsoft.Quantum.Utilities") `
-    -ModulePath (Join-Path $PSScriptRoot "Utilities/docs")
+    -DocsPath (Join-Path $PSScriptRoot "Utilities/docs")
 
 if (-not $all_ok) {
     throw "At least one test failed execution. Check the logs."
