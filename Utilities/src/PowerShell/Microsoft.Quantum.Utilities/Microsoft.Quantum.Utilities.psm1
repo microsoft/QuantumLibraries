@@ -41,41 +41,12 @@ $quantumPackages = @(
     "Microsoft.Quantum.Xunit"
 );
 
+# NB: Documentation for this module is built from the Markdown files
+#     in the Utilities/docs folder, using the platyPS module.
+#     This allows for embedding more content than is allowed in comment-based
+#     help. To build help files, use the build.ps1 script.
+
 function Update-QuantumProject() {
-    <#
-        .SYNOPSIS
-            This cmdlet updates the Quantum SDK version as well as the references to Microsoft Quantum packages
-            to a specified version of the QDK. If no version is specified, then the QDK version of the PowerShell
-            Microsoft.Quantum.Utilities module is used. The dependencies of the project are restored, unless 
-            parameter -NoRestore is specified.
-
-        .PARAMETER Path
-            Path to the VS project file to update.
-
-        .PARAMETER Revert
-            Restores a the target project to a previous version if available.
-            Dependency restoration is not performed during a revert.
-
-        .PARAMETER Version
-            (Optional) Version of the QDK to update the project to. If not specified, the version of this PowerShell
-            module will be used. To display the version of this modue, use cmdlet 'Get-QdkVersion'.
-
-        .PARAMETER NoRestore
-            (Optional) Skips performing the .NET restore step on the project after updating the references.
-
-        .EXAMPLE
-            Update-QuantumProject -Path QuantumFourierTransform.csproj
-
-        .EXAMPLE
-            Update-QuantumProject -Path QuantumFourierTransform.csproj -Version 0.11.2004.2825
-
-        .EXAMPLE
-            Update-QuantumProject -Path QuantumFourierTransform.csproj -Version 0.11.2004.2825 -NoRestore
-
-        .EXAMPLE
-            Update-QuantumProject -Path QuantumFourierTransform.csproj -Revert
-            
-    #>
     [CmdletBinding(SupportsShouldProcess=$true)]
     param(
         [string] $Version = $MyInvocation.MyCommand.Module.Version,
@@ -162,30 +133,6 @@ function Update-QuantumProject() {
 }
 
 function Get-QdkVersion() {
-    <#
-        .SYNOPSIS
-            Displays the version of the Quantum Development Kit components.
-
-        .DESCRIPTION
-            Shows the version of the following components.
-             - Microsoft.Quantum.Utilities
-             - .NET Core SDK
-             - Microsoft.Quantum.IQSharp
-             - qsharp.py
-             - VS Code Extension
-
-        .EXAMPLE
-            PS> Get-QdkVersion
-            Name                           Value
-            ----                           -----
-            Microsoft.Quantum.Utilities    0.11.2004.2825
-            VS Code Extension              0.11.20042825
-            VS Code                        1.45.1
-            qsharp.py                      0.11.2004.2825
-            Microsoft.Quantum.IQSharp      0.11.2004.2825
-            .NET Core SDK                  3.1.201
-    #>
-
     [CmdletBinding()]
     param(
     );

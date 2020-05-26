@@ -25,6 +25,22 @@ function Build-One {
     }
 }
 
+function Build-PwshDocs {
+    param(
+        [string] $DocsPath,
+        [string] $ModulePath
+    );
+
+    # Check that platyPS is available; if not, we can't
+    # build docs.
+    if (!(Get-Module -ListAvailable platyPS)) {
+        Write-Host "##vso[task.logissue type=warning;]platyPS was not available, cannot build docs for PowerShell modules.";
+    } else {
+        Import-Module platyPS
+        New-ExternalHelp -Force $DocsPath -OutputPath (Join-Path $ModulePath "en-US");
+    }
+}
+
 Write-Host "##[info]Build Standard library"
 Build-One 'publish' '../Standard.sln'
 
@@ -39,6 +55,11 @@ Build-One 'publish' '../MachineLearning.sln'
 
 Write-Host "##[info]Build Jupyter magic library"
 Build-One 'publish' '../Magic.sln'
+
+Write-Host "##[info]Building PowerShell docs..."
+Build-PwshDocs `
+    -ModulePath (Join-Path $PSScriptRoot "Utilities/src/PowerShell/Microsoft.Quantum.Utilities") `
+    -ModulePath (Join-Path $PSScriptRoot "Utilities/docs")
 
 if (-not $all_ok) {
     throw "At least one test failed execution. Check the logs."
