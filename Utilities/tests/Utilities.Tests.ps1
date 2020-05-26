@@ -1,3 +1,6 @@
+# Copyright (c) Microsoft Corporation.
+# Licensed under the MIT License.
+
 Get-Module Microsoft.Quantum.Utilities | Remove-Module -Force
 Import-Module -Force (
     Join-Path `
