@@ -36,8 +36,15 @@ function Build-PwshDocs {
     if (!(Get-Module -ListAvailable platyPS)) {
         Write-Host "##vso[task.logissue type=warning;]platyPS was not available, cannot build docs for PowerShell modules.";
     } else {
-        Import-Module platyPS
-        New-ExternalHelp -Force $DocsPath -OutputPath (Join-Path $ModulePath "en-US");
+        try {
+            Import-Module platyPS
+            $platyPS = Get-Module platyPS;
+            Write-Host "##[info]Using platyPS version $($platyPS.Version) to build docs.";
+            New-ExternalHelp -Force $DocsPath -OutputPath (Join-Path $ModulePath "en-US") -Verbose;
+        } catch {
+            Write-Verbose "$_"
+            $script:all_ok = $false;
+        }
     }
 }
 
