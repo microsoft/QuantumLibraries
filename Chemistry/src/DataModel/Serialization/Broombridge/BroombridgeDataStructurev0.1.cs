@@ -1,6 +1,8 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
+#nullable enable
+
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -119,6 +121,8 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
     #region Broombridge v0.1 format
     public static class V0_1
     {
+        public static string SchemaUrl = "https://raw.githubusercontent.com/microsoft/Quantum/master/Chemistry/Schema/broombridge-0.1.schema.json";
+
         public struct Data
         {
 
@@ -301,7 +305,7 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
             [YamlMember(Alias = "particle_hole_representation", ApplyNamingConventions = false)]
             // TODO: Placeholder object for ParticleHoleRepresentation, which we do not
             // yet support.
-            public ArrayQuantity<object, object> ParticleHoleRepresentation { get; set; }
+            public ArrayQuantity<object, object>? ParticleHoleRepresentation { get; set; }
 
             [YamlMember(Alias = "one_electron_integrals", ApplyNamingConventions = false)]
             public ArrayQuantity<long, double> OneElectronIntegrals { get; set; }

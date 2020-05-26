@@ -65,8 +65,7 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
                         Source = "qdk-chem",
                         Version = typeof(BroombridgeSerializer).Assembly.GetName().Version.ToString()
                     },
-                    // TODO: fix schema.
-                    Schema = "",
+                    Schema = V0_2.SchemaUrl,
                     ProblemDescriptions = problems
                         .Select(
                             problem => problem.ToBroombridgeV0_2()
@@ -231,7 +230,10 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
         public static void SerializeBroombridgev0_2(V0_2.Data data, TextWriter writer)
         {
             var stringBuilder = new StringBuilder();
-            var serializer = new Serializer();
+            var serializer =
+                new SerializerBuilder()
+                .ConfigureDefaultValuesHandling(DefaultValuesHandling.OmitNull)
+                .Build();
             writer.WriteLine(serializer.Serialize(data));
             Console.WriteLine("");
         }

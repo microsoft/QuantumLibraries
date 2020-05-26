@@ -55,6 +55,7 @@ namespace Microsoft.Quantum.Chemistry
             );
 
             var hamiltonian = new OrbitalIntegralHamiltonian();
+            var energyOffset = 0.0;
 
             foreach (var line in body.Select(line => line.Trim()).Where(line => line.Length > 0))
             {
@@ -64,7 +65,7 @@ namespace Microsoft.Quantum.Chemistry
                 var indices = columns[1..].Select(idx => Int32.Parse(idx));
                 if (indices.All(index => index == 0))
                 { 
-                    hamiltonian.Add(TermType.OrbitalIntegral.Identity, new OrbitalIntegral(), value);
+                    energyOffset = value;
                 }
                 else if (indices.Skip(2).All(index => index == 0))
                 {
@@ -81,7 +82,7 @@ namespace Microsoft.Quantum.Chemistry
             {
                 new ElectronicStructureProblem
                 {
-                    CoulombRepulsion = 0.0.WithUnits("hartree"),
+                    EnergyOffset = energyOffset.WithUnits("hartree"),
                     Metadata = new Dictionary<string, object>
                     {
                         ["Comment"] = "Imported from FCIDUMP"
@@ -105,6 +106,10 @@ namespace Microsoft.Quantum.Chemistry
             writer.WriteLine("&END");
 
             // Next write out all two-body terms.
+            foreach (var termType in problem.OrbitalIntegralHamiltonian.Terms.Keys)
+            {
+                System.Console.WriteLine(termType.ToString());
+            }
             foreach (var term in problem.OrbitalIntegralHamiltonian.Terms[TermType.OrbitalIntegral.TwoBody])
             {
                 writer.WriteLine($"{term.Value.Value} {String.Join(" ", term.Key.OrbitalIndices.Select(i => i.ToString()))}");
