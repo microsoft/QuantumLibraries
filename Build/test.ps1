@@ -32,7 +32,7 @@ function Test-PowerShellModules {
         Write-Host "##vso[task.logissue type=warning;]Pester not available, cannot run PowerShell tests.";
     } else {
         Import-Module Pester
-        $results = Invoke-Pester $Path -PassThru;
+        $results = Invoke-Pester (Join-Path $PSScriptRoot $Path) -PassThru;
         $Script:all_ok = $Script:all_ok -and ($results.FailedCount -eq 0);
     }
 }
@@ -57,6 +57,9 @@ Test-One '../Chemistry/tests/JupyterTests/JupyterTests.csproj'
 
 Write-Host "##[info]Testing Numerics/tests/NumericsTests.csproj"
 Test-One '../Numerics/tests/NumericsTests.csproj'
+
+Write-Host "##[info]Testing PowerShell modules..."
+Test-PowerShellModules "../Utilities/tests/"
 
 if (-not $all_ok) {
     throw "At least one test failed execution. Check the logs."
