@@ -10,11 +10,11 @@ Import-Module -Force (
 
 Describe 'GetQdkVersion' {
     It 'Does not throw' {
-        { Get-QdkVersion } | Should Not Throw;
+        { Get-QdkVersion } | Should -Not Throw;
     }
 
     It 'Should have all expected versions' {
         $version = Get-QdkVersion;
-        $version.Key.Count | Should Be 6;
+        $version.Key.Count | Should -Be 6;
     }
 }
