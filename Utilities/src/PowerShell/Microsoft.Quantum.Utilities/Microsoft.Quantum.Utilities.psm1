@@ -132,6 +132,30 @@ function Update-QuantumProject() {
     }
 }
 
+# Invokes a command if it exists and runs correctly,
+# but without raising an error if the command fails
+# for any reason. This is used, for instance, to
+# get version information from a command when it
+# exists, but without causing an error if the command
+# or one of its dependencies is missing.
+function Invoke-Safe() {
+    param(
+        [scriptblock] $Command
+    );
+
+    $oldErrorCount = $Global:Error.Count;
+    $oldLastExitCode = $LASTEXITCODE;
+    try {
+        Invoke-Command -ErrorAction Ignore $Command 2> $null;
+    } catch {
+        $_ | Write-Verbose;
+    }
+    $LASTEXITCODE = $oldLastExitCode;
+    if ($Global:Error.Count -gt $oldErrorCount) {
+        $Global:Error.RemoveRange($oldErrorCount, $Global:Error.Count - $oldErrorCount);
+    }
+}
+
 function Get-QdkVersion() {
     [CmdletBinding()]
     param(
@@ -139,8 +163,9 @@ function Get-QdkVersion() {
 
     process {
         try {
-            $dotnetVersion = (dotnet --version);
-            $iqsharpVersion = [string]((dotnet iqsharp --version) -match "iqsharp" -replace "iqsharp:\s*","");
+            $dotnetVersion = Invoke-Safe { dotnet --version };
+            $iqsharpVersionOutput = Invoke-Safe { dotnet iqsharp --version };
+            $iqsharpVersion = [string]($iqsharpVersionOutput -match "iqsharp" -replace "iqsharp:\s*","");
         }
         catch {
             # We'll just skip the values that couldn't be retrieved, and we will present empty strings
@@ -149,16 +174,16 @@ function Get-QdkVersion() {
         }
 
         try {
-            $qsharpPythonVersion = (python -c "import qsharp; print(qsharp.__version__)");
+            $qsharpPythonVersion = Invoke-Safe { python -c "import qsharp; print(qsharp.__version__)" };
         }
         catch {
             Write-Verbose $_;
         }
 
         try {
-            $vscodeVersion, $vscodeCommit, $vscodePlatform = code --version;
+            $vscodeVersion, $vscodeCommit, $vscodePlatform = Invoke-Safe { code --version };
             (
-                code --list-extensions --show-versions `
+                Invoke-Safe { code --list-extensions --show-versions } `
                 | Select-String quantum.quantum-devkit-vscode
             ) -match "[^@]*@(?<Version>.+)" | Out-Null;
             $vscodeExtVersion = $Matches.Version;
