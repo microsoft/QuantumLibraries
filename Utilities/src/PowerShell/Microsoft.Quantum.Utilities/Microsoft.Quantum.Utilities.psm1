@@ -144,13 +144,13 @@ function Invoke-Safe() {
     );
 
     $oldErrorCount = $Global:Error.Count;
-    $oldLastExitCode = $LASTEXITCODE;
+    $oldLastExitCode = $Global:LASTEXITCODE;
     try {
         Invoke-Command -ErrorAction Ignore $Command 2> $null;
     } catch {
         $_ | Write-Verbose;
     }
-    $LASTEXITCODE = $oldLastExitCode;
+    $Global:LASTEXITCODE = $oldLastExitCode;
     if ($Global:Error.Count -gt $oldErrorCount) {
         $Global:Error.RemoveRange($oldErrorCount, $Global:Error.Count - $oldErrorCount);
     }

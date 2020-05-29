@@ -35,28 +35,32 @@ function Test-PowerShellModules {
         $results = Invoke-Pester (Join-Path $PSScriptRoot $Path) -PassThru;
         $Script:all_ok = $Script:all_ok -and ($results.FailedCount -eq 0);
     }
+
+    # We've already handled setting all_ok above, so suppress the exit code here
+    # to avoid false positive failures.
+    $Global:LASTEXITCODE = 0;
 }
 
-Write-Host "##[info]Testing Standard/tests/Standard.Tests.csproj"
-Test-One '../Standard/tests/Standard.Tests.csproj'
+# Write-Host "##[info]Testing Standard/tests/Standard.Tests.csproj"
+# Test-One '../Standard/tests/Standard.Tests.csproj'
 
-Write-Host "##[info]Testing Chemistry/tests/ChemistryTests/QSharpTests.csproj"
-Test-One '../Chemistry/tests/ChemistryTests/QSharpTests.csproj'
+# Write-Host "##[info]Testing Chemistry/tests/ChemistryTests/QSharpTests.csproj"
+# Test-One '../Chemistry/tests/ChemistryTests/QSharpTests.csproj'
 
-Write-Host "##[info]Testing Chemistry/tests/SystemTests/SystemTests.csproj"
-Test-One '../Chemistry/tests/SystemTests/SystemTests.csproj'
+# Write-Host "##[info]Testing Chemistry/tests/SystemTests/SystemTests.csproj"
+# Test-One '../Chemistry/tests/SystemTests/SystemTests.csproj'
 
-Write-Host "##[info]Testing Chemistry/tests/DataModelTests/CSharpTests.csproj"
-Test-One '../Chemistry/tests/DataModelTests/CSharpTests.csproj'
+# Write-Host "##[info]Testing Chemistry/tests/DataModelTests/CSharpTests.csproj"
+# Test-One '../Chemistry/tests/DataModelTests/CSharpTests.csproj'
 
-Write-Host "##[info]Testing Chemistry/tests/SerializationTests/SerializationTests.csproj"
-Test-One '../Chemistry/tests/SerializationTests/SerializationTests.csproj'
+# Write-Host "##[info]Testing Chemistry/tests/SerializationTests/SerializationTests.csproj"
+# Test-One '../Chemistry/tests/SerializationTests/SerializationTests.csproj'
 
-Write-Host "##[info]Testing Chemistry/tests/JupyterTests/JupyterTests.csproj"
-Test-One '../Chemistry/tests/JupyterTests/JupyterTests.csproj'
+# Write-Host "##[info]Testing Chemistry/tests/JupyterTests/JupyterTests.csproj"
+# Test-One '../Chemistry/tests/JupyterTests/JupyterTests.csproj'
 
-Write-Host "##[info]Testing Numerics/tests/NumericsTests.csproj"
-Test-One '../Numerics/tests/NumericsTests.csproj'
+# Write-Host "##[info]Testing Numerics/tests/NumericsTests.csproj"
+# Test-One '../Numerics/tests/NumericsTests.csproj'
 
 Write-Host "##[info]Testing PowerShell modules..."
 Test-PowerShellModules "../Utilities/tests/"
