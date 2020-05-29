@@ -41,41 +41,12 @@ $quantumPackages = @(
     "Microsoft.Quantum.Xunit"
 );
 
+# NB: Documentation for this module is built from the Markdown files
+#     in the Utilities/docs folder, using the platyPS module.
+#     This allows for embedding more content than is allowed in comment-based
+#     help. To build help files, use the build.ps1 script.
+
 function Update-QuantumProject() {
-    <#
-        .SYNOPSIS
-            This cmdlet updates the Quantum SDK version as well as the references to Microsoft Quantum packages
-            to a specified version of the QDK. If no version is specified, then the QDK version of the PowerShell
-            Microsoft.Quantum.Utilities module is used. The dependencies of the project are restored, unless 
-            parameter -NoRestore is specified.
-
-        .PARAMETER Path
-            Path to the VS project file to update.
-
-        .PARAMETER Revert
-            Restores a the target project to a previous version if available.
-            Dependency restoration is not performed during a revert.
-
-        .PARAMETER Version
-            (Optional) Version of the QDK to update the project to. If not specified, the version of this PowerShell
-            module will be used. To display the version of this modue, use cmdlet 'Get-QdkVersion'.
-
-        .PARAMETER NoRestore
-            (Optional) Skips performing the .NET restore step on the project after updating the references.
-
-        .EXAMPLE
-            Update-QuantumProject -Path QuantumFourierTransform.csproj
-
-        .EXAMPLE
-            Update-QuantumProject -Path QuantumFourierTransform.csproj -Version 0.11.2004.2825
-
-        .EXAMPLE
-            Update-QuantumProject -Path QuantumFourierTransform.csproj -Version 0.11.2004.2825 -NoRestore
-
-        .EXAMPLE
-            Update-QuantumProject -Path QuantumFourierTransform.csproj -Revert
-            
-    #>
     [CmdletBinding(SupportsShouldProcess=$true)]
     param(
         [string] $Version = $MyInvocation.MyCommand.Module.Version,
@@ -92,8 +63,7 @@ function Update-QuantumProject() {
 
     process {
 
-        if (-Not (Test-Path $Path))
-        {
+        if (-Not (Test-Path $Path)) {
             Write-Error "Project $Path does not exist.";
             return;
         }
@@ -101,7 +71,7 @@ function Update-QuantumProject() {
         $prevVerDir = Join-Path -Path $Path.Directory -ChildPath ".prev";
         $pathToPrev = [System.IO.FileInfo](Join-Path -Path $prevVerDir -ChildPath $Path.Name);
 
-        if ($Revert){
+        if ($Revert) {
             Write-Verbose "Reverting $Path to previous version."
 
             if (Test-Path $pathToPrev) {
@@ -162,31 +132,40 @@ function Update-QuantumProject() {
     }
 }
 
+# Invokes a command if it exists and runs correctly,
+# but without raising an error if the command fails
+# for any reason. This is used, for instance, to
+# get version information from a command when it
+# exists, but without causing an error if the command
+# or one of its dependencies is missing.
+function Invoke-Safe() {
+    param(
+        [scriptblock] $Command
+    );
+
+    $oldErrorCount = $Global:Error.Count;
+    $oldLastExitCode = $Global:LASTEXITCODE;
+    try {
+        Invoke-Command -ErrorAction Ignore $Command 2> $null;
+    } catch {
+        $_ | Write-Verbose;
+    }
+    $Global:LASTEXITCODE = $oldLastExitCode;
+    if ($Global:Error.Count -gt $oldErrorCount) {
+        $Global:Error.RemoveRange($oldErrorCount, $Global:Error.Count - $oldErrorCount);
+    }
+}
+
 function Get-QdkVersion() {
-    <#
-        .SYNOPSIS
-            Displays the version of the Quantum Development Kit components.
-
-        .DESCRIPTION
-            Shows the version of the following components.
-             - Microsoft.Quantum.Utilities
-             - .NET Core SDK
-             - Microsoft.Quantum.IQSharp
-             - qsharp.py
-             - VS Code Extension
-
-        .EXAMPLE
-            Get-QdkVersion
-    #>
-
     [CmdletBinding()]
     param(
     );
 
     process {
-        try{
-            $dotnetVersion = (dotnet --version);
-            $iqsharpVersion = [string]((dotnet iqsharp --version) -match "iqsharp" -replace "iqsharp:\s*","");
+        try {
+            $dotnetVersion = Invoke-Safe { dotnet --version };
+            $iqsharpVersionOutput = Invoke-Safe { dotnet iqsharp --version };
+            $iqsharpVersion = [string]($iqsharpVersionOutput -match "iqsharp" -replace "iqsharp:\s*","");
         }
         catch {
             # We'll just skip the values that couldn't be retrieved, and we will present empty strings
@@ -194,10 +173,21 @@ function Get-QdkVersion() {
             Write-Verbose $_;
         }
 
-        try{
-            $qsharpPythonVersion = (python -c "import qsharp; print(qsharp.__version__)");
+        try {
+            $qsharpPythonVersion = Invoke-Safe { python -c "import qsharp; print(qsharp.__version__)" };
         }
         catch {
+            Write-Verbose $_;
+        }
+
+        try {
+            $vscodeVersion, $vscodeCommit, $vscodePlatform = Invoke-Safe { code --version };
+            (
+                Invoke-Safe { code --list-extensions --show-versions } `
+                | Select-String quantum.quantum-devkit-vscode
+            ) -match "[^@]*@(?<Version>.+)" | Out-Null;
+            $vscodeExtVersion = $Matches.Version;
+        } catch {
             Write-Verbose $_;
         }
 
@@ -206,7 +196,8 @@ function Get-QdkVersion() {
             ".NET Core SDK" = $dotnetVersion;
             "Microsoft.Quantum.IQSharp" = $iqsharpVersion;
             "qsharp.py" = $qsharpPythonVersion;
-            "VS Code Extension" = (code --list-extensions --show-versions | Select-String quantum.quantum-devkit-vscode);
+            "VS Code" = $vscodeVersion;
+            "VS Code Extension" = $vscodeExtVersion;
         }.GetEnumerator() | ForEach-Object { [pscustomobject]$_ }
     }
 }

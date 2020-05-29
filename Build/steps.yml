@@ -6,6 +6,10 @@ steps:
     packageType: sdk
     version: '3.1.100'
 
+- powershell: |
+    Install-Module -Force Pester -Scope CurrentUser
+    Install-Module -Force platyPS -Scope CurrentUser
+  displayName: "Install PowerShell build requirements."
 
 - powershell: ./build.ps1
   displayName: "Building"
