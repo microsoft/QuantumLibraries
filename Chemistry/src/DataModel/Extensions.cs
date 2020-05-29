@@ -4,6 +4,8 @@
 using System.Collections.Generic;
 using System.Linq;
 
+#nullable enable
+
 namespace Microsoft.Quantum.Chemistry
 {
     using System;
@@ -233,6 +235,20 @@ namespace Microsoft.Quantum.Chemistry
         /// </summary>
         internal static Type GetBasestType(this Type t) =>
             (t.BaseType == typeof(object) || t == typeof(object)) ? t : GetBasestType(t.BaseType);
+
+        internal static int[] ToZeroBasedIndices(this IEnumerable<int> indices) =>
+            indices.Select(idx => idx - 1).ToArray();
+
+        internal static int[] ToOneBasedIndices(this IEnumerable<int> indices) =>
+            indices.Select(idx => idx + 1).ToArray();
+
+        internal static IEnumerable<TOutput> SelectMaybe<TInput, TOutput>(
+                this IEnumerable<TInput> source, Func<TInput, TOutput?> selector
+        ) 
+        where TOutput : class =>
+            source.Select(selector).Where(output => output != null).Select(item => item!);
+
+
 
     }
 

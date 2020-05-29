@@ -93,6 +93,7 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
                              .Key
                              .ToCanonicalForm()
                              .OrbitalIndices
+                             .ToOneBasedIndices()
                              .Select(idx => (long)idx)
                              .ToArray(),
                              term.Value.Value
@@ -106,7 +107,7 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
                     .Terms[TermType.OrbitalIntegral.OneBody]
                     .ToBroombridgeV0_1(),
                 TwoElectronIntegrals = hamiltonian
-                    .Terms[TermType.OrbitalIntegral.OneBody]
+                    .Terms[TermType.OrbitalIntegral.TwoBody]
                     .ToBroombridgeV0_1()
             };
 

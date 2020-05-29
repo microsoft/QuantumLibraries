@@ -80,7 +80,9 @@ namespace Microsoft.Quantum.Chemistry.OrbitalIntegrals
                 }
                 else
                 {
-                    throw new System.ArgumentException("Mulliken convention for not 2 or 4 indices is not defined.");
+                    throw new System.ArgumentException(
+                        $"Got indices [{String.Join(", ", orbitalIndices)}], but Mulliken convention for not 2 or 4 indices is not defined."
+                    );
                 }
                 Coefficient = coefficient;
             }

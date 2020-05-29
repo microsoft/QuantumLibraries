@@ -10,6 +10,7 @@ using System.IO;
 
 using Microsoft.Quantum.Chemistry.OrbitalIntegrals;
 using System;
+using System.Diagnostics;
 
 namespace Microsoft.Quantum.Chemistry
 {
@@ -33,8 +34,12 @@ namespace Microsoft.Quantum.Chemistry
             // by &FCI and &END. We start by extracting that namelist.
             var allText = reader.ReadToEnd();
             var lines = Regex.Split(allText, "\r\n|\r|\n");
+            if (lines == null)
+            {
+                throw new IOException("Expected a non-empty FCIDUMP file.");
+            }
             var header = System.String.Join("\n", lines.TakeWhile(line => line.Trim() != "&END")).Trim();
-            var body = lines.SkipWhile(line => line.Trim() != "&END").Skip(1).ToList();
+            var body = lines!.SkipWhile(line => line.Trim() != "&END").Skip(1).ToList();
             
             // Make sure that the header starts with &FCI, as expected.
             if (!header.StartsWith("&FCI"))
@@ -55,28 +60,30 @@ namespace Microsoft.Quantum.Chemistry
             );
 
             var hamiltonian = new OrbitalIntegralHamiltonian();
-            var energyOffset = 0.0;
-
-            foreach (var line in body.Select(line => line.Trim()).Where(line => line.Length > 0))
-            {
-                // Separate into columns, delimited by spaces.
-                var columns = line.Split(" ", StringSplitOptions.RemoveEmptyEntries);
-                var value = Double.Parse(columns[0]);
-                var indices = columns[1..].Select(idx => Int32.Parse(idx));
-                if (indices.All(index => index == 0))
-                { 
-                    energyOffset = value;
-                }
-                else if (indices.Skip(2).All(index => index == 0))
-                {
-                    hamiltonian.Add(new OrbitalIntegral(indices.Take(2), value).ToCanonicalForm());
-                }
-                else
-                {
-                    hamiltonian.Add(new OrbitalIntegral(indices, value).ToCanonicalForm());
-                }
-            }
-            
+            var arrayData = body
+                .Select(line => line.Trim())
+                .Where(line => line.Length > 0)
+                .Select(
+                    line => line.Split(" ", StringSplitOptions.RemoveEmptyEntries)
+                )
+                .Select(
+                    row => (
+                        Double.Parse(row[0]), 
+                        row[1..].Select(Int32.Parse).Where(idx => idx != 0).ToZeroBasedIndices()
+                    )
+                );
+            var (energyOffset, _) = arrayData.Where(item => item.Item2.Length == 0).Single();
+            hamiltonian.Add(arrayData
+                .Where(row => row.Item2.Length > 0)
+                .SelectMaybe(
+                    row => row.Item2.Length % 2 == 0
+                           ? new OrbitalIntegral(
+                                 row.Item2, row.Item1, OrbitalIntegral.Convention.Mulliken
+                             ).ToCanonicalForm()
+                           : null
+                )
+                .Distinct()
+            );
             
             return new List<ElectronicStructureProblem>
             {
@@ -105,19 +112,14 @@ namespace Microsoft.Quantum.Chemistry
             writer.WriteLine($" ISYM=1,");
             writer.WriteLine("&END");
 
-            // Next write out all two-body terms.
-            foreach (var termType in problem.OrbitalIntegralHamiltonian.Terms.Keys)
-            {
-                System.Console.WriteLine(termType.ToString());
-            }
             foreach (var term in problem.OrbitalIntegralHamiltonian.Terms[TermType.OrbitalIntegral.TwoBody])
             {
-                writer.WriteLine($"{term.Value.Value} {String.Join(" ", term.Key.OrbitalIndices.Select(i => i.ToString()))}");
+                writer.WriteLine($"{term.Value.Value} {String.Join(" ", term.Key.OrbitalIndices.ToOneBasedIndices().Select(i => i.ToString()))}");
             }
             // Next write out all one-body terms, using trailing zeros to indicate one-body.
             foreach (var term in problem.OrbitalIntegralHamiltonian.Terms[TermType.OrbitalIntegral.OneBody])
             {
-                writer.WriteLine($"{term.Value.Value} {String.Join(" ", term.Key.OrbitalIndices.Select(i => i.ToString()))} 0 0");
+                writer.WriteLine($"{term.Value.Value} {String.Join(" ", term.Key.OrbitalIndices.ToOneBasedIndices().Select(i => i.ToString()))} 0 0");
             }
             // Finish by writing out the identity term.
             var identityTerm = problem.OrbitalIntegralHamiltonian.Terms[TermType.OrbitalIntegral.Identity].Single();
