@@ -130,7 +130,7 @@ namespace Microsoft.Quantum.ErrorCorrection {
             let r = MResetY(magic);
 
             if (r == One) {
-                // The following five operations are equivalant to
+                // The following five operations are equivalent to
                 // Ry( Pi()/2.0, data), up to global phase.
                 // Since this operation does not support Controlled, we need
                 // not worry about global phases.

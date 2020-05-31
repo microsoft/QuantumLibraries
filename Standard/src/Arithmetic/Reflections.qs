@@ -23,7 +23,7 @@ namespace Microsoft.Quantum.Arithmetic {
     ///
     /// # Remarks
     /// This operation is implemented in-place, without explicit allocation of
-    /// additional auxillary qubits.
+    /// additional auxiliary qubits.
 	operation ReflectAboutInteger(index : Int, reg : LittleEndian) : Unit is Adj + Ctl {
         within {
             // We want to reduce to the problem of reflecting about the all-ones

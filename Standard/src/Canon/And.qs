@@ -33,7 +33,7 @@ namespace Microsoft.Quantum.Canon {
     /// ## control2
     /// Second control qubit
     /// ## target
-    /// Target auxillary qubit; must be in state 0
+    /// Target auxiliary qubit; must be in state 0
     ///
     /// # References
     /// - Cody Jones: "Novel constructions for the fault-tolerant Toffoli gate",
@@ -98,7 +98,7 @@ namespace Microsoft.Quantum.Canon {
     /// ## control2
     /// Second control qubit
     /// ## target
-    /// Target auxillary qubit; must be in state 0
+    /// Target auxiliary qubit; must be in state 0
     ///
     /// # References
     /// - Cody Jones: "Novel constructions for the fault-tolerant Toffoli gate",
