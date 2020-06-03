@@ -16,6 +16,8 @@ using YamlDotNet.Serialization;
 using Microsoft.Quantum.Chemistry.OrbitalIntegrals;
 using Microsoft.Quantum.Chemistry.LadderOperators;
 
+using static Microsoft.Quantum.Chemistry.OrbitalIntegrals.IndexConventionConversions;
+
 namespace Microsoft.Quantum.Chemistry.Broombridge
 {
 
@@ -89,10 +91,14 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
                 Format = "sparse",
                 Units = "hartree",
                 Values = terms.Select(term => (
-                             term
-                             .Key
-                             .ToCanonicalForm()
-                             .OrbitalIndices
+                             ConvertIndices(
+                                 term
+                                .Key
+                                .ToCanonicalForm()
+                                .OrbitalIndices,
+                                OrbitalIntegral.Convention.Dirac,
+                                OrbitalIntegral.Convention.Mulliken
+                             )
                              .ToOneBasedIndices()
                              .Select(idx => (long)idx)
                              .ToArray(),

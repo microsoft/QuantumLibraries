@@ -165,7 +165,7 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
 
             [YamlMember(Alias = "basis_set", ApplyNamingConventions = false)]
             [JsonProperty(PropertyName = "basis_set")]
-            public BasisSet? BasisSet { get; set; }
+            public Nullable<BasisSet> BasisSet { get; set; }
 
             [YamlMember(Alias = "geometry", ApplyNamingConventions = false)]
             [JsonProperty(PropertyName = "geometry")]

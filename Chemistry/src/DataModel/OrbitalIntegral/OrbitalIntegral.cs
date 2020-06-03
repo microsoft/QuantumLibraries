@@ -8,6 +8,8 @@ using System.Collections.Generic;
 using Microsoft.Quantum.Chemistry;
 using Microsoft.Quantum.Chemistry.LadderOperators;
 
+using static Microsoft.Quantum.Chemistry.OrbitalIntegrals.IndexConventionConversions;
+
 namespace Microsoft.Quantum.Chemistry.OrbitalIntegrals
 {
     using static Microsoft.Quantum.Chemistry.Extensions;
@@ -64,33 +66,8 @@ namespace Microsoft.Quantum.Chemistry.OrbitalIntegrals
         /// <param name="convention">Convention for ordering of orbital indices.</param>
         public OrbitalIntegral(IEnumerable<int> orbitalIndices, double coefficient, Convention convention = Convention.Mulliken)
         {
-            if (convention == Convention.Mulliken)
-            {
-                if (orbitalIndices.Count() == 2)
-                {
-                    OrbitalIndices = orbitalIndices.Select(o => o).ToArray();
-                }
-                else if (orbitalIndices.Count() == 4)
-                {
-                    var p = orbitalIndices.ElementAt(0);
-                    var q = orbitalIndices.ElementAt(2);
-                    var r = orbitalIndices.ElementAt(3);
-                    var s = orbitalIndices.ElementAt(1);
-                    OrbitalIndices = new int[] { p, q, r, s };
-                }
-                else
-                {
-                    throw new System.ArgumentException(
-                        $"Got indices [{String.Join(", ", orbitalIndices)}], but Mulliken convention for not 2 or 4 indices is not defined."
-                    );
-                }
-                Coefficient = coefficient;
-            }
-            else
-            {
-                OrbitalIndices = orbitalIndices.ToArray();
-                Coefficient = coefficient;
-            }
+            OrbitalIndices = ConvertIndices(orbitalIndices, convention, Convention.Dirac);
+            Coefficient = coefficient;
         }
 
         public TermType.OrbitalIntegral TermType

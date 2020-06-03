@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.IO;
 
 using Microsoft.Quantum.Chemistry.OrbitalIntegrals;
+using static Microsoft.Quantum.Chemistry.OrbitalIntegrals.IndexConventionConversions;
 using System;
 using System.Diagnostics;
 
@@ -112,14 +113,34 @@ namespace Microsoft.Quantum.Chemistry
             writer.WriteLine($" ISYM=1,");
             writer.WriteLine("&END");
 
-            foreach (var term in problem.OrbitalIntegralHamiltonian.Terms[TermType.OrbitalIntegral.TwoBody])
+            (string, double) FormatTerm(KeyValuePair<OrbitalIntegral, DoubleCoeff> term) =>
+                (
+                    String.Join("",
+                        ConvertIndices(
+                            term.Key.OrbitalIndices,
+                            OrbitalIntegral.Convention.Dirac,
+                            OrbitalIntegral.Convention.Mulliken
+                        )
+                        .ToOneBasedIndices()
+                        .Select(i => i.ToString())
+                    ),
+                    term.Value
+                );
+
+            foreach (var (indices, value) in problem
+                                 .OrbitalIntegralHamiltonian
+                                 .Terms[TermType.OrbitalIntegral.TwoBody]
+                                 .Select(FormatTerm))
             {
-                writer.WriteLine($"{term.Value.Value} {String.Join(" ", term.Key.OrbitalIndices.ToOneBasedIndices().Select(i => i.ToString()))}");
+                writer.WriteLine($"{value} {indices}");
             }
             // Next write out all one-body terms, using trailing zeros to indicate one-body.
-            foreach (var term in problem.OrbitalIntegralHamiltonian.Terms[TermType.OrbitalIntegral.OneBody])
+            foreach (var (indices, value) in problem
+                                 .OrbitalIntegralHamiltonian
+                                 .Terms[TermType.OrbitalIntegral.OneBody]
+                                 .Select(FormatTerm))
             {
-                writer.WriteLine($"{term.Value.Value} {String.Join(" ", term.Key.OrbitalIndices.ToOneBasedIndices().Select(i => i.ToString()))} 0 0");
+                writer.WriteLine($"{value} {indices} 0 0");
             }
             // Finish by writing out the identity term.
             var identityTerm = problem.OrbitalIntegralHamiltonian.Terms[TermType.OrbitalIntegral.Identity].Single();
