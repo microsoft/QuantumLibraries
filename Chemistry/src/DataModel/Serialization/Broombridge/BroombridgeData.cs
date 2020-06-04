@@ -37,7 +37,7 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
         /// <summary>
         /// Raw deserialized Broombridge data.
         /// </summary>
-        public V0_2.Data Raw { get; set; }
+        internal V0_2.Data Raw { get; set; }
 
         // Root of Broombridge data structure
 
@@ -112,7 +112,7 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
         /// </summary>
         /// <param name="problem">Problem description to be converted</param>
         /// <returns>The internal problem description data structure.</returns>
-        public static ProblemDescription ProcessRawProblemDescription(Broombridge.V0_2.ProblemDescription problem)
+        internal static ProblemDescription ProcessRawProblemDescription(Broombridge.V0_2.ProblemDescription problem)
         {
             var problemDescription = new ProblemDescription
             {

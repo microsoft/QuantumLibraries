@@ -1,4 +1,4 @@
-﻿// Copyright (c) Microsoft Corporation. All rights reserved.
+﻿// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
 #nullable enable
@@ -126,7 +126,7 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
     /// Broombridge v0.1 format
     /// </summary>
     #region Broombridge v0.1 format
-    public static class V0_1
+    internal static class V0_1
     {
         public static string SchemaUrl = "https://raw.githubusercontent.com/microsoft/Quantum/master/Chemistry/Schema/broombridge-0.1.schema.json";
 
@@ -159,7 +159,7 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
             public Dictionary<string, object> Metadata { get; set; }
 
             [YamlMember(Alias = "basis_set", ApplyNamingConventions = false)]
-            public BasisSet BasisSet { get; set; }
+            public BasisSet? BasisSet { get; set; }
 
             [YamlMember(Alias = "geometry", ApplyNamingConventions = false)]
             public Geometry Geometry { get; set; }
@@ -187,10 +187,6 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
 
             [YamlMember(Alias = "hamiltonian", ApplyNamingConventions = false)]
             public HamiltonianData Hamiltonian { get; set; }
-
-            // FIXME: actually specify what initial_state_suggestions looks like.
-            //[YamlMember(Alias = "initial_state_suggestions", ApplyNamingConventions = false)]
-            //public List<Dictionary<string, object>> InitialStateSuggestions { get; set; }
 
             [YamlMember(Alias = "initial_state_suggestions", ApplyNamingConventions = false)]
             public List<SuggestedState> SuggestedState { get; set; }
@@ -249,19 +245,12 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
 
                 Value = dict[kind];
 
-                switch (kind.ToLowerInvariant())
+                Kind = kind.ToLowerInvariant() switch
                 {
-                    case "arxiv":
-                        Kind = BibliographyKind.arXiv;
-                        break;
-                    case "doi":
-                        Kind = BibliographyKind.DOI;
-                        break;
-                    default:
-                        Kind = BibliographyKind.URL;
-                        break;
-
-                }
+                    "arxiv" => BibliographyKind.arXiv,
+                    "doi" => BibliographyKind.DOI,
+                    _ => BibliographyKind.URL
+                };
 
             }
 
@@ -278,7 +267,7 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
             }
         }
 
-        public struct BasisSet
+        public class BasisSet
         {
             [YamlMember(Alias = "type", ApplyNamingConventions = false)]
             public string Type { get; set; }

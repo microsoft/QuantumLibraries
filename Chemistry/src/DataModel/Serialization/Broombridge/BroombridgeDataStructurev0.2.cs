@@ -1,4 +1,4 @@
-﻿// Copyright (c) Microsoft Corporation. All rights reserved.
+﻿// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
 #nullable enable
@@ -59,7 +59,7 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
                                 Name = problem.BasisSet?.Name,
                                 Type = problem.BasisSet?.Type
                             }
-                            : (Nullable<V0_1.BasisSet>)null,
+                            : null,
                 CoulombRepulsion = problem.CoulombRepulsion.ToBroombridgeV0_2(),
                 EnergyOffset = problem.EnergyOffset.ToBroombridgeV0_2(),
                 FciEnergy = problem.FciEnergy?.ToBroombridgeV0_2(),
@@ -128,7 +128,7 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
         };
 
         // Root of Broombridge data structure
-        public struct Data
+        internal struct Data
         {
             public static readonly Format DefaultFormat = new Broombridge.V0_1.Format
             {
@@ -157,7 +157,7 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
 
         }
 
-        public struct ProblemDescription
+        internal struct ProblemDescription
         {
             [YamlMember(Alias = "metadata", ApplyNamingConventions = false)]
             [JsonProperty(PropertyName = "metadata")]
@@ -165,7 +165,7 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
 
             [YamlMember(Alias = "basis_set", ApplyNamingConventions = false)]
             [JsonProperty(PropertyName = "basis_set")]
-            public Nullable<BasisSet> BasisSet { get; set; }
+            public BasisSet? BasisSet { get; set; }
 
             [YamlMember(Alias = "geometry", ApplyNamingConventions = false)]
             [JsonProperty(PropertyName = "geometry")]
@@ -210,7 +210,7 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
 
 
 
-        public struct State
+        internal struct State
         {
             [YamlMember(Alias = "label", ApplyNamingConventions = false)]
             public string Label { get; set; }
