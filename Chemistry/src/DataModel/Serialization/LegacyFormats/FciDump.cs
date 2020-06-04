@@ -115,7 +115,7 @@ namespace Microsoft.Quantum.Chemistry
 
             (string, double) FormatTerm(KeyValuePair<OrbitalIntegral, DoubleCoeff> term) =>
                 (
-                    String.Join("",
+                    String.Join(" ",
                         ConvertIndices(
                             term.Key.OrbitalIndices,
                             OrbitalIntegral.Convention.Dirac,
