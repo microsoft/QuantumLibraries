@@ -53,9 +53,9 @@ namespace Microsoft.Quantum.Chemistry.OrbitalIntegrals
                 4 => new int[]
                 {
                     indices.ElementAt(0),
-                    indices.ElementAt(2),
                     indices.ElementAt(3),
-                    indices.ElementAt(1)
+                    indices.ElementAt(1),
+                    indices.ElementAt(2)
                 },
                 _ => throw new System.ArgumentException(
                     $"Got indices [{String.Join(", ", indices)}], but Dirac convention for not 2 or 4 indices is not defined."
