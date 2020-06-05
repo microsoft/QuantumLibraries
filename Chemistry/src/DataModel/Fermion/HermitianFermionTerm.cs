@@ -6,8 +6,6 @@ using System.Linq;
 using System.Collections.Generic;
 
 using Microsoft.Quantum.Chemistry.LadderOperators;
-using Microsoft.Quantum.Chemistry;
-using Microsoft.Quantum.Chemistry;
 
 namespace Microsoft.Quantum.Chemistry.Fermion
 {
@@ -32,6 +30,7 @@ namespace Microsoft.Quantum.Chemistry.Fermion
     /// Hermitian, and is assumed to be implicitly summed with its Hermitian conjugate if not explicitly Hermitian.
     /// </description>
     /// </item>
+    /// </list>
     /// </summary>
     public class HermitianFermionTerm : FermionTerm, ITermIndex<TermType.Fermion, HermitianFermionTerm>
     {
@@ -53,7 +52,9 @@ namespace Microsoft.Quantum.Chemistry.Fermion
         /// Constructs a Hermitian fermion term from a normal-ordered sequence of ladder operators.
         /// </summary>
         /// <param name="ladderOperators">Hermitian normal-ordered sequence of ladder operators.</param>
-        public HermitianFermionTerm(IEnumerable<FermionOperator> ladderOperators, int setSign = 1) : base(ladderOperators, setSign) {
+        public HermitianFermionTerm(IEnumerable<FermionOperator> ladderOperators, int setSign = 1)
+        : base(ladderOperators, setSign)
+        {
             NormalizeToCanonicalOrder();
         }
 

@@ -85,9 +85,12 @@ namespace Microsoft.Quantum.Chemistry.LadderOperators
         }
         
         /// <summary>
-        /// Construct instance from sequence of ladder operators.
+        ///     Construct instance from sequence of ladder operators.
         /// </summary>
         /// <param name="setSequence">Sequence of ladder operators.</param>
+        /// <param name="setCoefficient">
+        ///     Coefficient as the sign (<c>-1</c> or <c>+1</c>) of a ladder operator.
+        /// </param>
         public LadderSequence(IEnumerable<LadderOperator<TIndex>> setSequence, int setCoefficient = 1)
         {
             Sequence = setSequence.ToList();
@@ -96,7 +99,7 @@ namespace Microsoft.Quantum.Chemistry.LadderOperators
 
         // This exists as a convenience function for creating fermion terms in samples.
         /// <summary>
-        /// Implicit operator for creating a Ladder operator.
+        ///     Implicit operator for creating a Ladder operator.
         /// </summary>
         /// <param name="setOperator">Tuple where the first parameter
         /// is the raising or lowering index, and the second parameter
@@ -128,14 +131,13 @@ namespace Microsoft.Quantum.Chemistry.LadderOperators
             {
                 throw new System.ArgumentException(
                     $"Number of terms provided is `{length}` and must be of even length."
-                    );
+                );
             }
-            LadderOperator<TIndex> GetLadderOperator(TIndex index, int position)
-            {
-                var ladderOperatorData = (position < length / 2 ? RaisingLowering.u : RaisingLowering.d, index);
-                return new LadderOperator<TIndex>(ladderOperatorData);
-            }
-            Sequence = indices.Select(GetLadderOperator).ToList();
+            Sequence = indices.Select(
+                (index, position) => new LadderOperator<TIndex>(
+                    position < length / 2 ? RaisingLowering.u : RaisingLowering.d, index
+                )
+            ).ToList();
         }
         #endregion
 
@@ -147,7 +149,10 @@ namespace Microsoft.Quantum.Chemistry.LadderOperators
         /// Returns <c>true</c> this condition is satisfied.
         /// Returns <c>false</c> otherwise.
         /// </returns>
-        public bool IsInNormalOrder() => Sequence.Count() == 0 ? true : Sequence.Select(o => (int)o.Type).IsInAscendingOrder();
+        public bool IsInNormalOrder() =>
+            Sequence.Count() == 0
+            ? true
+            : Sequence.Select(o => (int)o.Type).IsInAscendingOrder();
         #endregion
 
         /// <summary>
@@ -168,11 +173,11 @@ namespace Microsoft.Quantum.Chemistry.LadderOperators
         /// <summary>
         /// Concatenates two Fermion terms.
         /// </summary>
-        /// <param name="left">Left <see cref="LadderSequence"/> <c>x</c>.</param>
-        /// <param name="right">Right <see cref="LadderSequence"/> <c>y</c>.</param>
+        /// <param name="left">Left <see cref="LadderSequence{TIndex}"/> <c>x</c>.</param>
+        /// <param name="right">Right <see cref="LadderSequence{TIndex}"/> <c>y</c>.</param>
         /// <returns>
-        /// Returns new <see cref="LadderSequence"/> <c>xy</c> where coefficients and 
-        /// LadderOperatorSequences are multipled together.
+        ///     Returns new <see cref="LadderSequence{TIndex}"/> <c>xy</c> where coefficients and 
+        ///     LadderOperatorSequences are multipled together.
         /// </returns>
         // TODO: May decide to overload the * operator.
         public LadderSequence<TIndex> Multiply(
@@ -181,8 +186,8 @@ namespace Microsoft.Quantum.Chemistry.LadderOperators
             => new LadderSequence<TIndex>(left.Sequence.Concat(right.Sequence), left.Coefficient * right.Coefficient);
         
         /// <summary>
-        /// Counts the number of unique system indices across all <see cref="LadderOperator"/> terms
-        /// in a <see cref="LadderSequence"/>
+        /// Counts the number of unique system indices across all <see cref="LadderOperator{TIndex}"/> terms
+        /// in a <see cref="LadderSequence{TIndex}"/>
         /// </summary>
         /// <returns>Number of unique system indices.</returns>
         public int UniqueIndices() => Sequence.Select(o => o.Index).Distinct().Count();
@@ -269,6 +274,3 @@ namespace Microsoft.Quantum.Chemistry.LadderOperators
         #endregion
     }
 }
-
-
-
