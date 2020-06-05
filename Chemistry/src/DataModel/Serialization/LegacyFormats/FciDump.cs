@@ -143,8 +143,13 @@ namespace Microsoft.Quantum.Chemistry
                 writer.WriteLine($"{value} {indices} 0 0");
             }
             // Finish by writing out the identity term.
-            var identityTerm = problem.OrbitalIntegralHamiltonian.Terms[TermType.OrbitalIntegral.Identity].Single();
-            writer.WriteLine($"{identityTerm.Value.Value} 0 0 0 0");
+            var identityTerm = problem
+                .OrbitalIntegralHamiltonian
+                .Terms.GetValueOrDefault(TermType.OrbitalIntegral.Identity, null)
+                ?.Select(term => term.Value.Value)
+                ?.SingleOrDefault() ?? 0.0
+                + problem.EnergyOffset.Value;
+            writer.WriteLine($"{identityTerm} 0 0 0 0");
         }
     }
 }
