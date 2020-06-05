@@ -128,7 +128,7 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
         };
 
         // Root of Broombridge data structure
-        internal struct Data
+        public struct Data
         {
             public static readonly Format DefaultFormat = new Broombridge.V0_1.Format
             {
@@ -157,7 +157,7 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
 
         }
 
-        internal struct ProblemDescription
+        public struct ProblemDescription
         {
             [YamlMember(Alias = "metadata", ApplyNamingConventions = false)]
             [JsonProperty(PropertyName = "metadata")]
@@ -210,7 +210,7 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
 
 
 
-        internal struct State
+        public struct State
         {
             [YamlMember(Alias = "label", ApplyNamingConventions = false)]
             public string Label { get; set; }
