@@ -10,6 +10,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using YamlDotNet.Core;
 using YamlDotNet.Serialization;
+using YamlDotNet.Core.Events;
 
 namespace Microsoft.Quantum.Chemistry.Broombridge
 {
@@ -233,9 +234,37 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
             var serializer =
                 new SerializerBuilder()
                 .ConfigureDefaultValuesHandling(DefaultValuesHandling.OmitNull)
+                .WithTypeConverter(new DoubleYamlConverter())
                 .Build();
             writer.WriteLine(serializer.Serialize(data));
             Console.WriteLine("");
         }
-    } 
+    }
+
+    /// <summary>
+    ///     YAML type converter used to ensure that the double value <c>0</c>
+    ///     in <c>"G17"</c> converts to <c>0.0</c> to help assist compatability
+    ///     with dynamically typed languages.
+    /// </summary>
+    internal class DoubleYamlConverter : IYamlTypeConverter
+    {
+        /// <inheritdoc />
+        public bool Accepts(Type type) => type == typeof(double);
+
+        /// <inheritdoc />
+        public object ReadYaml(IParser parser, Type type) =>
+            Double.TryParse(parser.Consume<Scalar>()?.Value, out var value)
+            ? value as object
+            : null;
+
+        /// <inheritdoc />
+        public void WriteYaml(IEmitter emitter, object value, Type type) =>
+            emitter.Emit(new Scalar(
+                null, null,
+                ((double)value) == 0
+                ? "0.0"
+                : ((double)value).ToString("G17"),
+                ScalarStyle.Any, true, false
+            ));
+    }
 }

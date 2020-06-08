@@ -278,7 +278,7 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
 
         public class HasUnits
         {
-            [YamlMember(Alias = "units", ApplyNamingConventions = false)]
+            [YamlMember(Alias = "units", ApplyNamingConventions = false, DefaultValuesHandling = DefaultValuesHandling.Preserve)]
             // FIXME: make this an enum of allowed units.
             public string Units { get; set; }
         }
@@ -313,7 +313,7 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
 
         public class SimpleQuantity : HasUnits
         {
-            [YamlMember(Alias = "value", ApplyNamingConventions = false)]
+            [YamlMember(Alias = "value", ApplyNamingConventions = false, SerializeAs = typeof(double))]
             public double Value { get; set; }
         }
 
