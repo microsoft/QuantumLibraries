@@ -73,7 +73,7 @@ namespace Microsoft.Quantum.Chemistry
                         row[1..].Select(Int32.Parse).Where(idx => idx != 0).ToZeroBasedIndices()
                     )
                 );
-            var (energyOffset, _) = arrayData.Where(item => item.Item2.Length == 0).Single();
+            var (coulomb, _) = arrayData.Where(item => item.Item2.Length == 0).Single();
             hamiltonian.Add(arrayData
                 .Where(row => row.Item2.Length > 0)
                 .SelectMaybe(
@@ -90,7 +90,8 @@ namespace Microsoft.Quantum.Chemistry
             {
                 new ElectronicStructureProblem
                 {
-                    EnergyOffset = energyOffset.WithUnits("hartree"),
+                    EnergyOffset = 0.0.WithUnits("hartree"),
+                    CoulombRepulsion = coulomb.WithUnits("hartree"),
                     Metadata = new Dictionary<string, object>
                     {
                         ["Comment"] = "Imported from FCIDUMP"
