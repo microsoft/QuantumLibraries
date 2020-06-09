@@ -26,14 +26,14 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Standard", "Standard\src\St
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SerializationTests", "Chemistry\tests\SerializationTests\SerializationTests.csproj", "{364D11CE-AB4E-4727-ADA7-EFF3DCD92096}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BroombridgeExamples", "BroombridgeExamples", "{F25F3396-EDE5-4A9F-A428-643EB138F00F}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TestData\Broombridge", "TestData\Broombridge", "{F25F3396-EDE5-4A9F-A428-643EB138F00F}"
 	ProjectSection(SolutionItems) = preProject
-		Chemistry\tests\BroombridgeExamples\broombridge_v0.1.yaml = Chemistry\tests\BroombridgeExamples\broombridge_v0.1.yaml
-		Chemistry\tests\BroombridgeExamples\broombridge_v0.2.yaml = Chemistry\tests\BroombridgeExamples\broombridge_v0.2.yaml
-		Chemistry\tests\BroombridgeExamples\hydrogen_0.1.yaml = Chemistry\tests\BroombridgeExamples\hydrogen_0.1.yaml
-		Chemistry\tests\BroombridgeExamples\hydrogen_0.2.yaml = Chemistry\tests\BroombridgeExamples\hydrogen_0.2.yaml
-		Chemistry\tests\BroombridgeExamples\LiH_0.1.yaml = Chemistry\tests\BroombridgeExamples\LiH_0.1.yaml
-		Chemistry\tests\BroombridgeExamples\LiH_0.2.yaml = Chemistry\tests\BroombridgeExamples\LiH_0.2.yaml
+		Chemistry\tests\TestData\Broombridge\broombridge_v0.1.yaml = Chemistry\tests\TestData\Broombridge\broombridge_v0.1.yaml
+		Chemistry\tests\TestData\Broombridge\broombridge_v0.2.yaml = Chemistry\tests\TestData\Broombridge\broombridge_v0.2.yaml
+		Chemistry\tests\TestData\Broombridge\hydrogen_0.1.yaml = Chemistry\tests\TestData\Broombridge\hydrogen_0.1.yaml
+		Chemistry\tests\TestData\Broombridge\hydrogen_0.2.yaml = Chemistry\tests\TestData\Broombridge\hydrogen_0.2.yaml
+		Chemistry\tests\TestData\Broombridge\LiH_0.1.yaml = Chemistry\tests\TestData\Broombridge\LiH_0.1.yaml
+		Chemistry\tests\TestData\Broombridge\LiH_0.2.yaml = Chemistry\tests\TestData\Broombridge\LiH_0.2.yaml
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SamplesTests", "Chemistry\tests\SamplesTests\SamplesTests.csproj", "{2A0E61DB-7187-4359-B5C7-C30FCB1D6800}"

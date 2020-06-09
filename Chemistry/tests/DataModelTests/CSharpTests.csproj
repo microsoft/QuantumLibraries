@@ -31,10 +31,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="..\BroombridgeExamples\broombridge_v0.1.yaml" Link="Broombridge\broombridge_v0.1.yaml">
+    <None Include="..\TestData\Broombridge\broombridge_v0.1.yaml" Link="Broombridge\broombridge_v0.1.yaml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\BroombridgeExamples\broombridge_v0.2.yaml" Link="Broombridge\broombridge_v0.2.yaml">
+    <None Include="..\TestData\Broombridge\broombridge_v0.2.yaml" Link="Broombridge\broombridge_v0.2.yaml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
