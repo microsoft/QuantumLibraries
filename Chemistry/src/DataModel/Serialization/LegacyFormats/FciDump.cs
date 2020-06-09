@@ -123,7 +123,6 @@ namespace Microsoft.Quantum.Chemistry
                             OrbitalIntegral.Convention.Mulliken
                         )
                         .ToOneBasedIndices()
-                        .Select(i => i.ToString())
                     ),
                     term.Value
                 );
