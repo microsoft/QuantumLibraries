@@ -7,10 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="..\BroombridgeExamples\broombridge_v0.2.yaml" Link="broombridge_v0.2.yaml">
+    <None Include="..\TestData\Broombridge\broombridge_v0.2.yaml" Link="broombridge_v0.2.yaml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\BroombridgeExamples\LiH_0.1.yaml" Link="LiH_0.1.yaml">
+    <None Include="..\TestData\Broombridge\LiH_0.1.yaml" Link="LiH_0.1.yaml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
