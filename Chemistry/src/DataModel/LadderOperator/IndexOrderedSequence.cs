@@ -45,8 +45,11 @@ namespace Microsoft.Quantum.Chemistry.LadderOperators
         /// Constructs an instance from a normal-ordered sequence of ladder operators.
         /// </summary>
         /// <param name="ladderOperators">Normal-ordered sequence of ladder operators.</param>
-        public IndexOrderedSequence(IEnumerable<LadderOperator<TIndex>> ladderOperators, int setSign = 1)
-        : base(ladderOperators, setSign)
+        /// <param name="coefficient">
+        ///     Coefficient as the sign (<c>-1</c> or <c>+1</c>) of a ladder operator.
+        /// </param>
+        public IndexOrderedSequence(IEnumerable<LadderOperator<TIndex>> ladderOperators, int coefficient = 1)
+        : base(ladderOperators, coefficient)
         {
             NormalizeToIndexOrder();
         }

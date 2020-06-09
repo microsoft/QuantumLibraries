@@ -88,22 +88,24 @@ namespace Microsoft.Quantum.Chemistry.LadderOperators
         ///     Construct instance from sequence of ladder operators.
         /// </summary>
         /// <param name="setSequence">Sequence of ladder operators.</param>
-        /// <param name="setCoefficient">
+        /// <param name="coefficient">
         ///     Coefficient as the sign (<c>-1</c> or <c>+1</c>) of a ladder operator.
         /// </param>
-        public LadderSequence(IEnumerable<LadderOperator<TIndex>> setSequence, int setCoefficient = 1)
+        public LadderSequence(IEnumerable<LadderOperator<TIndex>> setSequence, int coefficient = 1)
         {
             Sequence = setSequence.ToList();
-            Coefficient = setCoefficient;
+            Coefficient = coefficient;
         }
 
         // This exists as a convenience function for creating fermion terms in samples.
         /// <summary>
         ///     Implicit operator for creating a Ladder operator.
         /// </summary>
-        /// <param name="setOperator">Tuple where the first parameter
-        /// is the raising or lowering index, and the second parameter
-        /// is the position index of the ladder operator.</param>
+        /// <param name="setSequence">
+        ///     Tuple where the first parameter
+        ///     is the raising or lowering index, and the second parameter
+        ///     is the position index of the ladder operator.
+        /// </param>
         public static implicit operator LadderSequence<TIndex>((RaisingLowering, TIndex)[] setSequence)
         {
             return new LadderSequence<TIndex>(setSequence.Select(o => new LadderOperator<TIndex>(o)));
@@ -150,9 +152,9 @@ namespace Microsoft.Quantum.Chemistry.LadderOperators
         /// Returns <c>false</c> otherwise.
         /// </returns>
         public bool IsInNormalOrder() =>
-            Sequence.Count() == 0
-            ? true
-            : Sequence.Select(o => (int)o.Type).IsInAscendingOrder();
+            Sequence.Count() == 0 ||
+            Sequence.Select(o => (int)o.Type).IsInAscendingOrder();
+
         #endregion
 
         /// <summary>

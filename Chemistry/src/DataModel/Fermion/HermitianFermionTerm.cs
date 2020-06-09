@@ -52,8 +52,11 @@ namespace Microsoft.Quantum.Chemistry.Fermion
         /// Constructs a Hermitian fermion term from a normal-ordered sequence of ladder operators.
         /// </summary>
         /// <param name="ladderOperators">Hermitian normal-ordered sequence of ladder operators.</param>
-        public HermitianFermionTerm(IEnumerable<FermionOperator> ladderOperators, int setSign = 1)
-        : base(ladderOperators, setSign)
+        /// <param name="coefficient">
+        ///     Coefficient as the sign (<c>-1</c> or <c>+1</c>) of a ladder operator.
+        /// </param>
+        public HermitianFermionTerm(IEnumerable<FermionOperator> ladderOperators, int coefficient = 1)
+        : base(ladderOperators, coefficient)
         {
             NormalizeToCanonicalOrder();
         }

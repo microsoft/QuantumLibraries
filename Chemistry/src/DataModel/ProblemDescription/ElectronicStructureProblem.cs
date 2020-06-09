@@ -77,16 +77,27 @@ namespace Microsoft.Quantum.Chemistry
     {
         #region Metadata
         
+        /// <summary>
+        ///     Represents any additional metadata about this electronic structure problem.
+        /// </summary>
         public Dictionary<string, object> Metadata { get; set; } = new Dictionary<string, object>();
 
         public Quantity<double> EnergyOffset { get; set; }
         public Quantity<double> CoulombRepulsion { get; set; }
 
-        // TODO: document that this is self-consistent field energy.
+        /// <summary>
+        ///     The self-consistent field energy for this electronic structure problem.
+        ///     If no energy SCF is provided or known, may be <c>null</c>.
+        /// </summary>
         public Quantity<double>? ScfEnergy { get; set; }
         public Quantity<double>? ScfEnergyOffset { get; set; }
 
-        // TODO: document that this is full configuration interaction energy.
+        /// <summary>
+        ///     The full configuration interaction energy for this electronic structure problem.
+        ///     If the FCI energy is known only to be bounded with in an interval,
+        ///     the <see cref="BoundedQuantity{TValue}.Value" /> property may be <c>null</c>,
+        ///     while if not even a bound is known, this property itself may be <c>null</c>.
+        /// </summary>
         public BoundedQuantity<double>? FciEnergy { get; set; }
 
         public BasisSet? BasisSet { get; set; }
