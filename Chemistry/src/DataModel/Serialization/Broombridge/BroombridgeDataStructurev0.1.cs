@@ -1,5 +1,7 @@
-﻿// Copyright (c) Microsoft Corporation. All rights reserved.
+﻿// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
+
+#nullable enable
 
 using System;
 using System.Collections.Generic;
@@ -14,14 +16,120 @@ using YamlDotNet.Serialization;
 using Microsoft.Quantum.Chemistry.OrbitalIntegrals;
 using Microsoft.Quantum.Chemistry.LadderOperators;
 
+using static Microsoft.Quantum.Chemistry.OrbitalIntegrals.IndexConventionConversions;
+
 namespace Microsoft.Quantum.Chemistry.Broombridge
 {
+
+    internal static class BroombridgeExtensionsV0_1
+    {
+
+        internal static Broombridge.V0_1.SimpleQuantity ToBroombridgeV0_1(this Quantity<double> quantity) =>
+            new Broombridge.V0_1.SimpleQuantity
+            {
+                Units = quantity.Units,
+                Value = quantity.Value
+            };
+
+        internal static Broombridge.V0_1.BoundedQuantity ToBroombridgeV0_1(this BoundedQuantity<double> quantity) =>
+            new Broombridge.V0_1.BoundedQuantity
+            {
+                Units = quantity.Units,
+                Value = quantity.Value,
+                Lower = quantity.Lower,
+                Upper = quantity.Upper
+            };
+
+        internal static Quantity<double> FromBroombridgeV0_1(this Broombridge.V0_1.SimpleQuantity quantity) =>
+            new Quantity<double>
+            {
+                Units = quantity.Units,
+                Value = quantity.Value
+            };
+
+        internal static BoundedQuantity<double> FromBroombridgeV0_1(this Broombridge.V0_1.BoundedQuantity quantity) =>
+            new BoundedQuantity<double>
+            {
+                Units = quantity.Units,
+                Value = quantity.Value,
+                Lower = quantity.Lower,
+                Upper = quantity.Upper
+            };
+
+        internal static BasisSet FromBroombridgeV0_1(this Broombridge.V0_1.BasisSet basisSet) =>
+            new BasisSet
+            {
+                Name = basisSet.Name,
+                Type = basisSet.Type
+            };
+
+        
+
+        internal static Geometry FromBroombridgeV0_1(this Broombridge.V0_1.Geometry geometry) =>
+            new Geometry
+            {
+                Atoms = geometry.Atoms,
+                CoordinateSystem = geometry.CoordinateSystem,
+                Symmetry = geometry.Symmetry,
+                Units = geometry.Units
+            };
+
+        internal static V0_1.Geometry ToBroombridgeV0_1(this Geometry geometry) =>
+            new V0_1.Geometry
+            {
+                Atoms = geometry.Atoms,
+                CoordinateSystem = geometry.CoordinateSystem,
+                Symmetry = geometry.Symmetry,
+                Units = geometry.Units
+            };
+
+        internal static V0_1.ArrayQuantity<long, double> ToBroombridgeV0_1(
+                this Dictionary<OrbitalIntegrals.OrbitalIntegral, DoubleCoeff> terms
+        ) =>
+            new V0_1.ArrayQuantity<long, double>()
+            {
+                Format = "sparse",
+                Units = "hartree",
+                Values = terms.Select(term => (
+                             ConvertIndices(
+                                 term
+                                .Key
+                                .ToCanonicalForm()
+                                .OrbitalIndices,
+                                OrbitalIntegral.Convention.Dirac,
+                                OrbitalIntegral.Convention.Mulliken
+                             )
+                             .ToOneBasedIndices()
+                             .Select(idx => (long)idx)
+                             .ToArray(),
+                             term.Value.Value
+                         )).ToList()
+            };
+
+        internal static V0_1.HamiltonianData ToBroombridgeV0_1(this OrbitalIntegralHamiltonian hamiltonian) =>
+            new V0_1.HamiltonianData
+            {
+                OneElectronIntegrals = hamiltonian
+                    .Terms[TermType.OrbitalIntegral.OneBody]
+                    .ToBroombridgeV0_1(),
+                TwoElectronIntegrals = hamiltonian
+                    .Terms[TermType.OrbitalIntegral.TwoBody]
+                    .ToBroombridgeV0_1()
+            };
+
+        internal static V0_1.IntegralSet ToBroombridgeV0_1(this ElectronicStructureProblem problem) =>
+            throw new NotImplementedException("Not yet implemented.");
+
+    }
+
     /// <summary>
     /// Broombridge v0.1 format
     /// </summary>
     #region Broombridge v0.1 format
     public static class V0_1
     {
+        public static string SchemaUrl = "https://raw.githubusercontent.com/microsoft/Quantum/master/Chemistry/Schema/broombridge-0.1.schema.json";
+
         public struct Data
         {
 
@@ -51,7 +159,7 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
             public Dictionary<string, object> Metadata { get; set; }
 
             [YamlMember(Alias = "basis_set", ApplyNamingConventions = false)]
-            public BasisSet BasisSet { get; set; }
+            public BasisSet? BasisSet { get; set; }
 
             [YamlMember(Alias = "geometry", ApplyNamingConventions = false)]
             public Geometry Geometry { get; set; }
@@ -79,10 +187,6 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
 
             [YamlMember(Alias = "hamiltonian", ApplyNamingConventions = false)]
             public HamiltonianData Hamiltonian { get; set; }
-
-            // FIXME: actually specify what initial_state_suggestions looks like.
-            //[YamlMember(Alias = "initial_state_suggestions", ApplyNamingConventions = false)]
-            //public List<Dictionary<string, object>> InitialStateSuggestions { get; set; }
 
             [YamlMember(Alias = "initial_state_suggestions", ApplyNamingConventions = false)]
             public List<SuggestedState> SuggestedState { get; set; }
@@ -141,19 +245,12 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
 
                 Value = dict[kind];
 
-                switch (kind.ToLowerInvariant())
+                Kind = kind.ToLowerInvariant() switch
                 {
-                    case "arxiv":
-                        Kind = BibliographyKind.arXiv;
-                        break;
-                    case "doi":
-                        Kind = BibliographyKind.DOI;
-                        break;
-                    default:
-                        Kind = BibliographyKind.URL;
-                        break;
-
-                }
+                    "arxiv" => BibliographyKind.arXiv,
+                    "doi" => BibliographyKind.DOI,
+                    _ => BibliographyKind.URL
+                };
 
             }
 
@@ -170,7 +267,7 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
             }
         }
 
-        public struct BasisSet
+        public class BasisSet
         {
             [YamlMember(Alias = "type", ApplyNamingConventions = false)]
             public string Type { get; set; }
@@ -181,7 +278,7 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
 
         public class HasUnits
         {
-            [YamlMember(Alias = "units", ApplyNamingConventions = false)]
+            [YamlMember(Alias = "units", ApplyNamingConventions = false, DefaultValuesHandling = DefaultValuesHandling.Preserve)]
             // FIXME: make this an enum of allowed units.
             public string Units { get; set; }
         }
@@ -204,7 +301,7 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
             [YamlMember(Alias = "particle_hole_representation", ApplyNamingConventions = false)]
             // TODO: Placeholder object for ParticleHoleRepresentation, which we do not
             // yet support.
-            public ArrayQuantity<object, object> ParticleHoleRepresentation { get; set; }
+            public ArrayQuantity<object, object>? ParticleHoleRepresentation { get; set; }
 
             [YamlMember(Alias = "one_electron_integrals", ApplyNamingConventions = false)]
             public ArrayQuantity<long, double> OneElectronIntegrals { get; set; }
@@ -216,7 +313,7 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
 
         public class SimpleQuantity : HasUnits
         {
-            [YamlMember(Alias = "value", ApplyNamingConventions = false)]
+            [YamlMember(Alias = "value", ApplyNamingConventions = false, SerializeAs = typeof(double))]
             public double Value { get; set; }
         }
 
