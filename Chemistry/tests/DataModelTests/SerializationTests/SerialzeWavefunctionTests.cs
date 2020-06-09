@@ -20,7 +20,9 @@ namespace Microsoft.Quantum.Chemistry.Tests
     {
         public FermionWavefunction<int> MakeWavefunction(string wavefunctionLabel = "UCCSD |G>")
         {
-            var data = Broombridge.Deserializers.DeserializeBroombridge("broombridge_v0.2.yaml");
+            var data = Broombridge.Deserializers.DeserializeBroombridge(
+                Path.Join("Broombridge", "broombridge_v0.2.yaml"
+            ));
             return data.ProblemDescriptions.First().Wavefunctions[wavefunctionLabel].ToIndexing(IndexConvention.UpDown);
         }
 

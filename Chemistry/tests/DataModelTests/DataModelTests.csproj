@@ -37,6 +37,9 @@
     <None Include="..\TestData\Broombridge\broombridge_v0.2.yaml" Link="Broombridge\broombridge_v0.2.yaml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="..\TestData\Broombridge\LiH_0.1.yaml" Link="Broombridge\LiH_0.1.yaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
   <ItemGroup>
