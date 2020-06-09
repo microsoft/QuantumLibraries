@@ -120,7 +120,7 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
                 NElectrons = problem.NElectrons,
                 NOrbitals = problem.NOrbitals,
                 OrbitalIntegralHamiltonian = V0_2.ToOrbitalIntegralHamiltonian(problem),
-                Wavefunctions = FromBroombridgeV0_2(problem.InitialStates)
+                Wavefunctions = problem.InitialStates?.FromBroombridgeV0_2() ?? new Dictionary<string, FermionWavefunction<SpinOrbital>>()
             };
             return problemDescription;
         }
