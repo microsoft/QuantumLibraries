@@ -26,28 +26,6 @@ namespace Microsoft.Quantum.Synthesis {
         ControlMask : Int, TargetMask : Int
     );
 
-    /// # Summary
-    /// A type to represent a multiple-controlled Toffoli gate.
-    ///
-    /// The first value is an array of qubits for the control lines, the second
-    /// value is a qubit for the target line.
-    ///
-    /// The target cannot be contained in the control lines.
-    ///
-    /// # Example
-    /// ```Q#
-    /// using (qubits = Qubit[4]) {
-    ///   let not_gate = MCTGate(new Qubit[0], qubits[0]);
-    ///   let cnot_gate = MCTGate([qubits[0]], qubits[1]);
-    ///   let toffoli_gate = MCTGate([qubits[0], qubits[1]], qubits[2]);
-    ///   let gate = MCTGate([qubits[0], qubits[1], qubits[2]], qubits[3]);
-    /// }
-    /// ```
-    internal newtype MCTGate = (
-        Controls : Qubit[],
-        Target : Qubit
-    );
-
 
     // Some helper functions
 
@@ -151,7 +129,7 @@ namespace Microsoft.Quantum.Synthesis {
 
     /// # Summary
     /// Compute gate masks to synthesize permutation.
-    internal function TBSMain(perm : Int[]) : MCMTMask[] {
+    internal function TBSMain (perm : Int[]) : MCMTMask[] {
         let xs = RangeAsIntArray(0..Length(perm) - 1);
         let gates = new MCMTMask[0];
         return Reversed(Snd(Fold(TBSStep, (perm, gates), xs)));
@@ -159,26 +137,17 @@ namespace Microsoft.Quantum.Synthesis {
 
 
     /// # Summary
-    /// Translate MCT masks into multiple-controlled Toffoli gates (with single
-    /// targets).
-    internal function GateMasksToToffoliGates (qubits : Qubit[], masks : MCMTMask[]) : MCTGate[] {
-        mutable result = new MCTGate[0];
+    /// Transform mask of control and target bits to a pair of control qubits and target qubits
+    internal function MaskToQubitsPair (qubits : Qubit[], mask : MCMTMask) : (Qubit[], Qubit[]) {
         let n = Length(qubits);
+        let controlBits = IntegerBits(mask::ControlMask, n);
+        let targetBits = IntegerBits(mask::TargetMask, n);
+        let cQubits = Subarray(controlBits, qubits);
+        let tQubits = Subarray(targetBits, qubits);
 
-        for (mask in masks) {
-            let (controls, targets) = mask!;
-            let controlBits = IntegerBits(controls, n);
-            let targetBits = IntegerBits(targets, n);
-            let cQubits = Subarray(controlBits, qubits);
-            let tQubits = Subarray(targetBits, qubits);
-
-            for (t in tQubits) {
-                set result += [MCTGate(cQubits, t)];
-            }
-        }
-
-        return result;
+        return (cQubits, tQubits);
     }
+
 
     ////////////////////////////////////////////////////////////
     // Public operation                                       //
@@ -188,8 +157,8 @@ namespace Microsoft.Quantum.Synthesis {
     /// Transformation-based synthesis algorithm.
     ///
     /// This procedure implements the unidirectional transformation based
-    /// synthesis approach.  Input is a permutation π over 2^𝑛 elements {0, ...,
-    /// 2^𝑛-1}, which represents an 𝑛-variable reversible Boolean function.  The
+    /// synthesis approach.  Input is a permutation π over 2ⁿ elements {0, ...,
+    /// 2ⁿ-1}, which represents an 𝑛-variable reversible Boolean function.  The
     /// algorithm performs iteratively the following steps:
     ///
     /// 1. Find smallest 𝑥 such that 𝑥 ≠ π(𝑥) = 𝑦
@@ -198,7 +167,7 @@ namespace Microsoft.Quantum.Synthesis {
     ///
     /// # Input
     /// ## perm
-    /// A permutation of 2^𝑛 elements starting from 0.
+    /// A permutation of 2ⁿ elements starting from 0.
     /// ## qubits
     /// A list of 𝑛 qubits where the Toffoli gates are being applied to.  Note
     /// that the algorithm does not apply the gates.  But only prepares the
@@ -219,10 +188,13 @@ namespace Microsoft.Quantum.Synthesis {
     ///    Proc. RC 2016, Springer, pp. 307-321,
     ///    2016](https://doi.org/10.1007/978-3-319-40578-0_22)
     operation ApplyPermutationTransformationBased(perm : Int[], qubits : Qubit[]) : Unit is Adj + Ctl {
-        let gates = GateMasksToToffoliGates(qubits, TBSMain(perm));
+        // Translate MCT masks into multiple-controlled multiple-target Toffoli gates.
+        let gates = Mapped(MaskToQubitsPair(qubits, _), TBSMain(perm));
 
         for (gate in gates) {
-            Controlled X(gate::Controls, gate::Target);
+            let (controls, target) = gate;
+            let MultiX = ApplyToEachCA(X, _);
+            Controlled MultiX(controls, target);
         }
     } 
 }
