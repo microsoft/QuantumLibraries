@@ -1,12 +1,13 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 namespace Microsoft.Quantum.Synthesis {
-    open Microsoft.Quantum.Intrinsic;
-    open Microsoft.Quantum.Canon;
-    open Microsoft.Quantum.Math;
-    open Microsoft.Quantum.Arrays;
     open Microsoft.Quantum.Arithmetic;
+    open Microsoft.Quantum.Arrays;
+    open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Convert;
+    open Microsoft.Quantum.Intrinsic;
+    open Microsoft.Quantum.Logical;
+    open Microsoft.Quantum.Math;
 
     ////////////////////////////////////////////////////////////
     // Transformation-based synthesis                         //
@@ -25,34 +26,6 @@ namespace Microsoft.Quantum.Synthesis {
     internal newtype MCMTMask = (
         ControlMask : Int, TargetMask : Int
     );
-
-
-    // Some helper functions
-
-    /// # Summary
-    /// Checks whether bit at position is set in nonnegative number.
-    ///
-    /// # Input
-    /// ## value
-    /// A nonnegative number.
-    /// ## position
-    /// A bit position starting from 0.
-    ///
-    /// # Output
-    /// Returns true, if in the binary expansion of `value` the bit at position
-    /// `position` is 1, otherwise false.
-    ///
-    /// # Example
-    /// ```Q#
-    /// IsBitSet(23, 0); // true, since 23 is 10111 in binary
-    /// IsBitSet(23, 3); // false
-    /// ```
-    ///
-    /// # Note
-    /// Implementation with right-shift did not work
-    internal function IsBitSet (value : Int, position : Int) : Bool {
-        return (value &&& 2 ^ position) == 2 ^ position;
-    }
 
 
     /// # Summary
@@ -76,7 +49,7 @@ namespace Microsoft.Quantum.Synthesis {
     /// IntegerBits(10, 4); // [1, 3]
     /// ```
     internal function IntegerBits (value : Int, length : Int) : Int[] {
-        return Filtered(IsBitSet(value, _), RangeAsIntArray(0..length - 1));
+        return Where(EqualB(true, _), IntAsBoolArray(value, length));
     }
 
 
