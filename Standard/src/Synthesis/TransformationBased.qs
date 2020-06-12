@@ -74,7 +74,7 @@ namespace Microsoft.Quantum.Synthesis {
 
     /// # Summary
     /// Update an output pattern according to gate mask.
-    internal function UpdateOutputPattern (pattern : Int, gateMask : MCMTMask) : Int {
+    internal function UpdatedOutputPattern (pattern : Int, gateMask : MCMTMask) : Int {
         return (pattern &&& gateMask::ControlMask) == gateMask::ControlMask
                ? pattern ^^^ gateMask::TargetMask
                | pattern;
@@ -83,8 +83,8 @@ namespace Microsoft.Quantum.Synthesis {
 
     /// # Summary
     /// Update permutation based according to gate mask.
-    internal function UpdatePermutation (perm : Int[], gateMask : MCMTMask) : Int[] {
-        return Mapped(UpdateOutputPattern(_, gateMask), perm);
+    internal function UpdatedPermutation (perm : Int[], gateMask : MCMTMask) : Int[] {
+        return Mapped(UpdatedOutputPattern(_, gateMask), perm);
     }
 
 
@@ -95,7 +95,7 @@ namespace Microsoft.Quantum.Synthesis {
         let (perm, gates) = state;
         let y = perm[x];
         let masks = GateMasksForAssignment(x, y);
-        let new_perm = Fold(UpdatePermutation, perm, masks);
+        let new_perm = Fold(UpdatedPermutation, perm, masks);
         return (new_perm, gates + masks);
     }
 
@@ -151,7 +151,7 @@ namespace Microsoft.Quantum.Synthesis {
     /// To synthesize a `SWAP` operation:
     /// ```Q#
     /// using (qubits = Qubit[3]) {
-    ///   ApplyPermutationTransformationBased([0, 2, 1, 3], qubits);
+    ///   ApplyPermutationUsingTransformation([0, 2, 1, 3], qubits);
     /// }
     /// ```
     ///
@@ -162,7 +162,7 @@ namespace Microsoft.Quantum.Synthesis {
     /// - [*Mathias Soeken*, *Gerhard W. Dueck*, *D. Michael Miller*,
     ///    Proc. RC 2016, Springer, pp. 307-321,
     ///    2016](https://doi.org/10.1007/978-3-319-40578-0_22)
-    operation ApplyPermutationTransformationBased(perm : Int[], qubits : Qubit[]) : Unit is Adj + Ctl {
+    operation ApplyPermutationUsingTransformation(perm : Int[], qubits : Qubit[]) : Unit is Adj + Ctl {
         // Translate MCT masks into multiple-controlled multiple-target Toffoli gates.
         let gates = Mapped(MaskToQubitsPair(qubits, _), TBSMain(perm));
 

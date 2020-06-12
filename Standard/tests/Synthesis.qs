@@ -9,7 +9,8 @@ namespace Microsoft.Quantum.Tests {
     open Microsoft.Quantum.Measurement;
     open Microsoft.Quantum.Synthesis;
 
-    operation TransformationBasedSynthesisTest () : Unit {
+    @Test("ToffoliSimulator")
+    operation CheckTransformationBasedSynthesis () : Unit {
         let permutations = [
             [0, 2, 1, 3],
             [0, 1, 3, 2],
@@ -26,7 +27,7 @@ namespace Microsoft.Quantum.Tests {
             using (qs = Qubit[numQubits]) {
                 for (i in 0..Length(perm) - 1) {
                     ApplyXorInPlace(i, LittleEndian(qs));
-                    ApplyPermutationTransformationBased(perm, qs);
+                    ApplyPermutationUsingTransformation(perm, qs);
                     EqualityFactI(MeasureInteger(LittleEndian(qs)), perm[i], $"ApplyPermutation failed for permutation {perm} at index {i}");
                 }
             }
