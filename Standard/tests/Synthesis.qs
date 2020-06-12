@@ -34,4 +34,28 @@ namespace Microsoft.Quantum.Tests {
             }
         }
     }
+
+    @Test("ToffoliSimulator")
+    operation CheckApplyTransposition () : Unit {
+        for (numQubits in 2..6) {
+            for (_ in 1..10) {
+                let a = RandomInt(2^numQubits);
+                let b = RandomInt(2^numQubits);
+
+                using (qs = Qubit[numQubits]) {
+                    let register = LittleEndian(qs);
+
+                    for (i in 0..2^numQubits - 1) {
+                        ApplyXorInPlace(i, register);
+                        ApplyTransposition(a, b, register);
+                        EqualityFactI(
+                            MeasureInteger(register),
+                            i == a ? b | (i == b ? a | i),
+                            $"ApplyTransposition failed for {numQubits} qubits when a = {a} and b = {b}"
+                        );
+                    }
+                }
+            }
+        }
+    }
 }
