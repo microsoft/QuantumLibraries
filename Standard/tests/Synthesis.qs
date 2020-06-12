@@ -25,10 +25,11 @@ namespace Microsoft.Quantum.Tests {
             let numQubits = BitSizeI(Length(perm) - 1);
 
             using (qs = Qubit[numQubits]) {
+                let register = LittleEndian(qs);
                 for (i in 0..Length(perm) - 1) {
-                    ApplyXorInPlace(i, LittleEndian(qs));
-                    ApplyPermutationUsingTransformation(perm, qs);
-                    EqualityFactI(MeasureInteger(LittleEndian(qs)), perm[i], $"ApplyPermutation failed for permutation {perm} at index {i}");
+                    ApplyXorInPlace(i, register);
+                    ApplyPermutationUsingTransformation(perm, register);
+                    EqualityFactI(MeasureInteger(register), perm[i], $"ApplyPermutation failed for permutation {perm} at index {i}");
                 }
             }
         }
