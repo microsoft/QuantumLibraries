@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft Corporation. All rights reserved.
+// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 namespace Microsoft.Quantum.Synthesis {
     open Microsoft.Quantum.Arithmetic;
@@ -127,16 +127,17 @@ namespace Microsoft.Quantum.Synthesis {
     ////////////////////////////////////////////////////////////
 
     /// # Summary
-    /// Transformation-based synthesis algorithm.
+    /// Applies a given permutation using transformation-based synthesis.
     ///
+    /// # Description
     /// This procedure implements the unidirectional transformation based
-    /// synthesis approach.  Input is a permutation π over 2ⁿ elements {0, ...,
-    /// 2ⁿ-1}, which represents an 𝑛-variable reversible Boolean function.  The
-    /// algorithm performs iteratively the following steps:
+    /// synthesis approach.  Input is a permutation $\pi$ over $2^n$ elements
+    /// $\{0, \dots, 2^n-1\}$, which represents an $n$-variable reversible Boolean function. 
+    /// The algorithm performs iteratively the following steps:
     ///
-    /// 1. Find smallest 𝑥 such that 𝑥 ≠ π(𝑥) = 𝑦
-    /// 2. Find multiple-controlled Toffoli gates, which applied to the outputs
-    ///    make π(𝑥) = 𝑥 and do not change π(𝑥') for all 𝑥' < 𝑥
+    /// 1. Find smallest $x$ such that $x \ne \pi(x) = y$.
+    /// 2. Find multiple-controlled Toffoli operations, which applied to the outputs
+    ///    make $\pi(x) = x$ and do not change $\pi(x')$ for all $x' < x$
     ///
     /// # Input
     /// ## perm
@@ -147,9 +148,10 @@ namespace Microsoft.Quantum.Synthesis {
     /// Toffoli gates.
     ///
     /// # Example
+    /// To synthesize a `SWAP` operation:
     /// ```Q#
     /// using (qubits = Qubit[3]) {
-    ///   ApplyPermutationTransformationBased([0, 2, 1, 3], qubits); // synthesize SWAP operation
+    ///   ApplyPermutationTransformationBased([0, 2, 1, 3], qubits);
     /// }
     /// ```
     ///
