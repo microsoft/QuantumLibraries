@@ -127,7 +127,8 @@ namespace Microsoft.Quantum.Synthesis {
     ////////////////////////////////////////////////////////////
 
     /// # Summary
-    /// Applies a given permutation using transformation-based synthesis.
+    /// Permutes the amplitudes in a quantum state given a permutation
+    /// using transformation-based synthesis.
     ///
     /// # Description
     /// This procedure implements the unidirectional transformation based
@@ -141,11 +142,9 @@ namespace Microsoft.Quantum.Synthesis {
     ///
     /// # Input
     /// ## perm
-    /// A permutation of 2ⁿ elements starting from 0.
+    /// A permutation of $2^n$ elements starting from 0.
     /// ## qubits
-    /// A list of 𝑛 qubits where the Toffoli gates are being applied to.  Note
-    /// that the algorithm does not apply the gates.  But only prepares the
-    /// Toffoli gates.
+    /// A list of $n$ qubits to which the permutation is applied to.
     ///
     /// # Example
     /// To synthesize a `SWAP` operation:
