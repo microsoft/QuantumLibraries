@@ -5,6 +5,7 @@ namespace Microsoft.Quantum.Synthesis {
     open Microsoft.Quantum.Arrays;
     open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Convert;
+    open Microsoft.Quantum.Diagnostics;
     open Microsoft.Quantum.Intrinsic;
     open Microsoft.Quantum.Logical;
     open Microsoft.Quantum.Math;
@@ -149,7 +150,7 @@ namespace Microsoft.Quantum.Synthesis {
     /// # Example
     /// To synthesize a `SWAP` operation:
     /// ```Q#
-    /// using (qubits = Qubit[3]) {
+    /// using (qubits = Qubit[2]) {
     ///   ApplyPermutationUsingTransformation([0, 2, 1, 3], qubits);
     /// }
     /// ```
@@ -165,10 +166,13 @@ namespace Microsoft.Quantum.Synthesis {
         // Translate MCT masks into multiple-controlled multiple-target Toffoli gates.
         let gates = Mapped(MaskToQubitsPair(qubits!, _), TBSMain(perm));
 
+        Fact(IsPermutation(perm), "perm must be a permutation");
+        EqualityFactI(Length(perm), 2^Length(qubits!), $"Length of perm must be {2^Length(qubits!)}");
+
         for (gate in gates) {
             let (controls, target) = gate;
             let MultiX = ApplyToEachCA(X, _);
             Controlled MultiX(controls, target);
         }
-    } 
+    }
 }

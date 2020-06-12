@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft Corporation. All rights reserved.
+// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 namespace Microsoft.Quantum.Tests {
     open Microsoft.Quantum.Arithmetic;
@@ -18,7 +18,7 @@ namespace Microsoft.Quantum.Tests {
             [3, 2, 1, 0],
             [0, 1, 2, 3, 4, 5, 7, 6],
             [0, 2, 4, 6, 1, 3, 5, 7],
-            [0, 2, 3, 5, 7, 11, 13, 4, 6, 8, 9, 10, 12, 14, 15]
+            [0, 2, 3, 5, 7, 11, 13, 1, 4, 6, 8, 9, 10, 12, 14, 15]
         ];
 
         for (perm in permutations) {
