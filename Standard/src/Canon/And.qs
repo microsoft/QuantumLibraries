@@ -45,7 +45,7 @@ namespace Microsoft.Quantum.Canon {
     ///   [arXiv:1709.06648](https://arxiv.org/abs/1709.06648)
     ///   doi:10.1103/PhysRevA.85.044302
     /// - Mathias Soeken: "Quantum Oracle Circuits and the Christmas Tree Pattern",
-    ///   [Blog article from Decemer 19, 2019](https://msoeken.github.io/blog_qac.html)
+    ///   [Blog article from December 19, 2019](https://msoeken.github.io/blog_qac.html)
     ///   (note: explains the multiple controlled construction)
     operation ApplyAnd(control1 : Qubit, control2 : Qubit, target : Qubit) : Unit {
         body (...) {
