@@ -3,15 +3,14 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
     <PlatformTarget>x64</PlatformTarget>
-    <AssemblyName>Microsoft.Quantum.Chemistry.DataModel</AssemblyName>
-    <DocumentationFile>bin\$(BuildConfiguration)\$(PlatformTarget)\$(AssemblyName).xml</DocumentationFile>
+    <AssemblyName>Microsoft.Quantum.Chemistry.Metapackage</AssemblyName>
   </PropertyGroup>
 
   <PropertyGroup>
     <Authors>Microsoft</Authors>
     <Description>Microsoft's Quantum Chemistry Libraries.</Description>
     <Copyright>© Microsoft Corporation. All rights reserved.</Copyright>
-    <PackageId>Microsoft.Quantum.Chemistry.DataModel</PackageId>
+    <PackageId>Microsoft.Quantum.Chemistry</PackageId>
     <PackageReleaseNotes>See: https://docs.microsoft.com/en-us/quantum/relnotes/</PackageReleaseNotes>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/Microsoft/QuantumLibraries/tree/master/Chemistry</PackageProjectUrl>
@@ -31,24 +30,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.Logging" Version="2.1.1" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="2.1.1" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="2.1.1" />
-    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
-    <PackageReference Include="YamlDotNet" Version="8.0.0" />
-    <PackageReference Include="Serilog.Extensions.Logging.File" Version="1.1.0" />
-  </ItemGroup>
-
-
-  <ItemGroup>
+    <ProjectReference Include="..\DataModel\DataModel.csproj" />
     <ProjectReference Include="..\Runtime\Runtime.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Include="Analysis\README.txt" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" />
   </ItemGroup>
 </Project>
