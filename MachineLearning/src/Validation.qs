@@ -71,7 +71,7 @@ namespace Microsoft.Quantum.MachineLearning {
     /// ## validationSchedule
     /// The schedule by which samples should be drawn from the validation set.
     ///
-    /// # Ouput
+    /// # Output
     /// The results of the given validation.
     operation ValidateSequentialClassifier(
         model : SequentialModel,

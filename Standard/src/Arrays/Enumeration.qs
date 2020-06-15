@@ -43,7 +43,7 @@ namespace Microsoft.Quantum.Arrays {
     /// An array whose elements are to be enumerated.
     ///
     /// # Output
-    /// A new array containing elments of the original array along with their
+    /// A new array containing elements of the original array along with their
     /// indices.
     ///
     /// # Example

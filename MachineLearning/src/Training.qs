@@ -230,7 +230,7 @@ namespace Microsoft.Quantum.MachineLearning {
                 minibatch, options, bestSoFar
             );
             if (utility > 1e-7) {
-                options::VerboseMessage($"            Observed good parameter update... estimating and possibly commiting.");
+                options::VerboseMessage($"            Observed good parameter update... estimating and possibly committing.");
                 // There has been some good parameter update.
                 // Check if it actually improves things, and if so,
                 // commit it.
@@ -398,7 +398,7 @@ namespace Microsoft.Quantum.MachineLearning {
                 if (IntAsDouble(nMisses) / IntAsDouble(nSamples) < options::Tolerance) { //Terminate based on tolerance
                     return bestSoFar;
                 }
-                set nStalls = 0; //Reset the counter of consequtive noops
+                set nStalls = 0; //Reset the counter of consecutive noops
                 set lrate = options::LearningRate;
                 set batchSize = options::MinibatchSize;
             }
@@ -431,7 +431,7 @@ namespace Microsoft.Quantum.MachineLearning {
             } else {
                 // If we learned successfully this iteration, reset the number of
                 // stalls so far.
-                set nStalls = 0; //Reset the counter of consequtive noops
+                set nStalls = 0; //Reset the counter of consecutive noops
                 set lrate = options::LearningRate;
                 set batchSize = options::MinibatchSize;
 
