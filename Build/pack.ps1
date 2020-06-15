@@ -26,7 +26,10 @@ Write-Host "##[info]Pack Standard library"
 Pack-One '../Standard/src/Standard.csproj'
 
 Write-Host "##[info]Pack Chemistry library"
+Pack-One '../Chemistry/src/Runtime/Runtime.csproj'
 Pack-One '../Chemistry/src/DataModel/DataModel.csproj'
+Pack-One '../Chemistry/src/Metapackage/Metapackage.csproj'
+exit
 
 Write-Host "##[info]Pack QML library"
 Pack-One '../MachineLearning/src/MachineLearning.csproj'
