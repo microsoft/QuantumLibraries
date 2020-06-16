@@ -1,5 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
+
 namespace Microsoft.Quantum.Synthesis {
     open Microsoft.Quantum.Arrays;
     open Microsoft.Quantum.Canon;
@@ -110,7 +111,7 @@ namespace Microsoft.Quantum.Synthesis {
         body (...) {
             let vars = Length(controlRegister);
 
-            let maxValue = PowL(2L, 2^vars);
+            let maxValue = 1L <<< 2^vars;
             Fact(func >= 0L and func < maxValue, $"Argument func must be value from 0 to {maxValue}");
 
             let tt = BigIntAsBoolArray(func);

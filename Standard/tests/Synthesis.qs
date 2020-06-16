@@ -1,5 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
+
 namespace Microsoft.Quantum.Tests {
     open Microsoft.Quantum.Arithmetic;
     open Microsoft.Quantum.Canon;
@@ -84,11 +85,16 @@ namespace Microsoft.Quantum.Tests {
                         } apply {
                             Controlled ControlledXOnTruthTable([control], (func, controls, target));
                         }
-                        let result = IsResultOne(MResetZ(target)) != targetInit;
-                        EqualityFactB(
-                            controlInit and result,
-                            controlInit and truthValues[i],
-                            $"Measured value does not correspond to truth table bit in truth table {func} and bit {i}");
+
+                        let result = IsResultOne(MResetZ(target));
+                        if (controlInit) {
+                            EqualityFactB(
+                                result != targetInit,
+                                truthValues[i],
+                                $"Measured value does not correspond to truth table bit in truth table {func} and bit {i}");
+                        } else {
+                            EqualityFactB(result, targetInit, $"Target should not have been changed from its initial value {targetInit}");
+                        }
                     }
                 }
             }
