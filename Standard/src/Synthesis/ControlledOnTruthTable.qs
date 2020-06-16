@@ -107,31 +107,34 @@ namespace Microsoft.Quantum.Synthesis {
     }
 
     operation ControlledXOnTruthTable (func : BigInt, controlRegister : Qubit[], targetRegister : Qubit) : Unit {
-        let vars = Length(controlRegister);
+        body (...) {
+            let vars = Length(controlRegister);
 
-        let maxValue = PowL(2L, 2^vars);
-        Fact(func >= 0L and func < maxValue, $"Argument func must be value from 0 to {maxValue}");
+            let maxValue = PowL(2L, 2^vars);
+            Fact(func >= 0L and func < maxValue, $"Argument func must be value from 0 to {maxValue}");
 
-        let tt = BigIntAsBoolArray(func);
-        let table = Encode(SizeAdjustedTruthTable(BigIntAsBoolArray(func), vars));
-        let spectrum = Extend(FastHadamardTransform(table));
+            let tt = BigIntAsBoolArray(func);
+            let table = Encode(SizeAdjustedTruthTable(BigIntAsBoolArray(func), vars));
+            let spectrum = Extend(FastHadamardTransform(table));
 
-        let qubits = controlRegister + [targetRegister];
+            let qubits = controlRegister + [targetRegister];
 
-        HY(targetRegister);
+            HY(targetRegister);
 
-        for (i in 0..vars) {
-            let start = 1 <<< i;
-            let code = GrayCode(i);
-            for (j in 0..Length(code) - 1) {
-                let (offset, ctrl) = code[j];
-                RFrac(PauliZ, -spectrum[start + offset], vars + 2, qubits[i]);
-                if (i != 0) {
-                    CNOT(qubits[ctrl], qubits[i]);
+            for (i in 0..vars) {
+                let start = 1 <<< i;
+                let code = GrayCode(i);
+                for (j in 0..Length(code) - 1) {
+                    let (offset, ctrl) = code[j];
+                    R1Frac(spectrum[start + offset], vars + 1, qubits[i]);
+                    if (i != 0) {
+                        CNOT(qubits[ctrl], qubits[i]);
+                    }
                 }
             }
-        }
 
-        H(targetRegister);
+            H(targetRegister);
+        }
+        adjoint self;
     }
 }
