@@ -156,7 +156,7 @@ namespace Microsoft.Quantum.MachineLearning {
     /// as an input state on a given register.
     function InputEncoder(coefficients : Double[])
     : StateGenerator {
-        //default implementation, does not respect sparcity
+        //default implementation, does not respect sparsity
         mutable complexCoefficients = new ComplexPolar[Length(coefficients)];
         for ((idx, coefficient) in Enumerated(coefficients)) {
             set complexCoefficients w/= idx <- ComplexPolar(

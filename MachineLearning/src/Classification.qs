@@ -33,7 +33,7 @@ namespace Microsoft.Quantum.MachineLearning {
     /// ## sample
     /// The feature vector for the sample to be classified.
     /// ## nMeasurements
-    /// The number of measusrements to use in estimating the classification
+    /// The number of measurements to use in estimating the classification
     /// probability.
     /// # Output
     /// An estimate of the classification probability for the given sample.
@@ -68,7 +68,7 @@ namespace Microsoft.Quantum.MachineLearning {
     /// ## samples
     /// An array of feature vectors for each sample to be classified.
     /// ## nMeasurements
-    /// The number of measusrements to use in estimating the classification
+    /// The number of measurements to use in estimating the classification
     /// probability.
     /// # Output
     /// An array of estimates of the classification probability for each given
@@ -98,7 +98,7 @@ namespace Microsoft.Quantum.MachineLearning {
     /// The bias between two classes, typically the result of training a
     /// classifier.
     /// ## probability
-    /// A classification probabilities for a particular sample, typicaly
+    /// A classification probabilities for a particular sample, typically
     /// resulting from estimating its classification frequency.
     ///
     /// # Output
@@ -116,7 +116,7 @@ namespace Microsoft.Quantum.MachineLearning {
     /// The bias between two classes, typically the result of training a
     /// classifier.
     /// ## probabilities
-    /// An array of classification probabilities for a set of samples, typicaly
+    /// An array of classification probabilities for a set of samples, typically
     /// resulting from estimating classification frequencies.
     ///
     /// # Output

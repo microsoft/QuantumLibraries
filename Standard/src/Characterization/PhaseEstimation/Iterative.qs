@@ -47,7 +47,7 @@ namespace Microsoft.Quantum.Characterization {
     /// ## targetState
     /// Register of state acted upon by the given unitary oracle.
     /// ## controlQubit
-    /// An auxillary qubit used to control the application of the given oracle.
+    /// An auxiliary qubit used to control the application of the given oracle.
     operation DiscretePhaseEstimationIteration(
         oracle : DiscreteOracle,
         power : Int,

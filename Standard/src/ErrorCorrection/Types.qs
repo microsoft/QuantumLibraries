@@ -47,8 +47,8 @@ namespace Microsoft.Quantum.ErrorCorrection {
     ///
     /// # Remarks
     /// The signature `(LogicalRegister => Syndrome)` represents an operation
-    /// that acts jointly on the qubits in `LogicalRegister` and some auxillary
-    /// qubits followed by a measurements of the auxillary qubits to extract a
+    /// that acts jointly on the qubits in `LogicalRegister` and some auxiliary
+    /// qubits followed by a measurements of the auxiliary qubits to extract a
     /// `Syndrome` value representing the `Result[]` of these measurements.
     ///
     /// ## Example
