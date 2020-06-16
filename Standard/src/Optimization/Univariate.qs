@@ -11,7 +11,7 @@ namespace Microsoft.Quantum.Optimization {
     ///
     /// # Input
     /// ## Coordinate
-    /// Input at which an optimium was found.
+    /// Input at which an optimum was found.
     /// ## Value
     /// Value returned by the function at its optimum.
     newtype UnivariateOptimizationResult = (
