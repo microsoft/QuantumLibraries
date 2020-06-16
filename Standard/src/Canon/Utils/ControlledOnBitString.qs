@@ -21,16 +21,16 @@ namespace Microsoft.Quantum.Canon {
     /// # Remarks
     /// The length of `bits` and `controlRegister` must be equal.
     /// For example, `bits = [0,1,0,0,1]` means that `oracle` is applied if and only if `controlRegister`" is in the state $\ket{0}\ket{1}\ket{0}\ket{0}\ket{1}$.
-    operation ControlledOnBitStringImpl<'T> (bits : Bool[], oracle : ('T => Unit is Adj + Ctl), controlRegister : Qubit[], targetRegister : 'T) : Unit
-    {
-        body (...)
-        {
-            ApplyWithCA(ApplyPauliFromBitString(PauliX, false, bits, _), Controlled oracle(_, targetRegister), controlRegister);
+    operation ControlledOnBitStringImpl<'T> (bits : Bool[], oracle : ('T => Unit is Adj + Ctl), controlRegister : Qubit[], targetRegister : 'T)
+    : Unit is Adj + Ctl {
+        // Use a subregister of the controlled register when
+        // bits is shorter than controlRegister.
+        let controlSubregister = controlRegister[...Length(bits) - 1];
+        within {
+            ApplyPauliFromBitString(PauliX, false, bits, controlSubregister);
+        } apply {
+            Controlled oracle(controlSubregister, targetRegister);
         }
-
-        adjoint invert;
-        controlled distribute;
-        controlled adjoint distribute;
     }
 
 
@@ -60,7 +60,9 @@ namespace Microsoft.Quantum.Canon {
     /// A unitary operation that applies `oracle` on the target register if the control register state corresponds to the bit mask `bits`.
     ///
     /// # Remarks
-    /// The length of `bits` and `controlRegister` must be equal.
+    /// The pattern given by `bits` may be shorter than `controlRegister`,
+    /// in which case additional control qubits are ignored (that is, neither
+    /// controlled on $\ket{0}$ nor $\ket{1}$).
     ///
     /// Given a Boolean array `bits` and a unitary operation `oracle`, the output of this function
     /// is an operation that performs the following steps:
@@ -113,17 +115,10 @@ namespace Microsoft.Quantum.Canon {
     /// # Remarks
     /// `numberState` must be at most $2^\texttt{Length(controlRegister)} - 1$.
     /// For example, `numberState = 537` means that `oracle` is applied if and only if `controlRegister` is in the state $\ket{537}$.
-    operation ControlledOnIntImpl<'T> (numberState : Int, oracle : ('T => Unit is Adj + Ctl), controlRegister : Qubit[], targetRegister : 'T) : Unit
-    {
-        body (...)
-        {
-            let bits = IntAsBoolArray(numberState, Length(controlRegister));
-            (ControlledOnBitString(bits, oracle))(controlRegister, targetRegister);
-        }
-
-        adjoint invert;
-        controlled distribute;
-        controlled adjoint distribute;
+    operation ControlledOnIntImpl<'T> (numberState : Int, oracle : ('T => Unit is Adj + Ctl), controlRegister : Qubit[], targetRegister : 'T)
+    : Unit is Adj + Ctl {
+        let bits = IntAsBoolArray(numberState, Length(controlRegister));
+        (ControlledOnBitString(bits, oracle))(controlRegister, targetRegister);
     }
 
 
@@ -138,8 +133,8 @@ namespace Microsoft.Quantum.Canon {
     ///
     /// # Output
     /// A unitary operator that applies `oracle` on the target register if the control register state corresponds to the number state `numberState`.
-    function ControlledOnInt<'T> (numberState : Int, oracle : ('T => Unit is Adj + Ctl)) : ((Qubit[], 'T) => Unit is Adj + Ctl)
-    {
+    function ControlledOnInt<'T> (numberState : Int, oracle : ('T => Unit is Adj + Ctl))
+    : ((Qubit[], 'T) => Unit is Adj + Ctl) {
         return ControlledOnIntImpl(numberState, oracle, _, _);
     }
 
