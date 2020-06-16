@@ -16,7 +16,7 @@ namespace Microsoft.Quantum.Tests {
     /// ## register
     /// A register of at least four qubits, the last of which is considered to
     /// be the target.
-    internal operation ApplyRyControlledOn001(register : Qubit)
+    internal operation ApplyRyControlledOn001(register : Qubit[])
     : Unit is Adj + Ctl {
         let controls = Most(register);
         let target = Tail(register);
