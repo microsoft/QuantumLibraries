@@ -44,13 +44,13 @@ namespace Microsoft.Quantum.Tests {
         );
         AssertOperationsEqualReferenced(4,
             ApplyRyControlledOn001,
-            controlledOp
+            ApplyControlledOnBitStringToFlatRegister(controlledOp, _)
         );
 
         // Check that extra qubits are uncontrolled.
         AssertOperationsEqualReferenced(5,
             ApplyRyControlledOn001,
-            controlledOp
+            ApplyControlledOnBitStringToFlatRegister(controlledOp, _)
         );
     }
 
