@@ -3,6 +3,7 @@
 namespace Microsoft.Quantum.Tests {
     open Microsoft.Quantum.Arithmetic;
     open Microsoft.Quantum.Canon;
+    open Microsoft.Quantum.Convert;
     open Microsoft.Quantum.Diagnostics;
     open Microsoft.Quantum.Intrinsic;
     open Microsoft.Quantum.Math;
@@ -30,6 +31,33 @@ namespace Microsoft.Quantum.Tests {
                     ApplyXorInPlace(i, register);
                     ApplyPermutationUsingTransformation(perm, register);
                     EqualityFactI(MeasureInteger(register), perm[i], $"ApplyPermutation failed for permutation {perm} at index {i}");
+                }
+            }
+        }
+    }
+
+    @Test("QuantumSimulator")
+    operation CheckControlledXOnTruthTable () : Unit {
+        let tests = [
+            (0xEL, 2),
+            (0xE8L, 3)
+        ];
+
+        for (test in tests) {
+            let (func, numQubits) = test;
+            let truthValues = BigIntAsBoolArray(func);
+
+            using ((controls, target) = (Qubit[numQubits], Qubit())) {
+                for (i in 0..(2^numQubits - 1)) {
+                    within {
+                        ApplyXorInPlace(i, LittleEndian(controls));
+                    } apply {
+                        ControlledXOnTruthTable(func, controls, target);
+                    }
+                    EqualityFactB(
+                        IsResultOne(MResetZ(target)),
+                        truthValues[i],
+                        $"Measured value does not correspond to truth table bit in truth table {func} and bit {i}");
                 }
             }
         }
