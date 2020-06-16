@@ -393,7 +393,7 @@ namespace Microsoft.Quantum.Canon {
     /// # Remarks
     /// `coefficients` will be padded with identity elements if
     /// fewer than $2^n$ are specified. This implementation uses
-    /// $n - 1$ auxillary qubits.
+    /// $n - 1$ auxiliary qubits.
     ///
     /// # References
     /// - Toward the first quantum simulation with quantum speedup
