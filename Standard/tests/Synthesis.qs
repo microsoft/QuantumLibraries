@@ -59,4 +59,29 @@ namespace Microsoft.Quantum.Tests {
             }
         }
     }
+
+    @Test("QuantumSimulator")
+    operation CheckControlledXOnTruthTableWithCleanTarget () : Unit {
+        for (numQubits in 2..5) {
+            for (round in 1..5) {
+                let func = IntAsBigInt(RandomInt(2^(2^numQubits)));
+                let truthValues = BigIntAsBoolArray(func);
+
+                using ((controls, target, copy) = (Qubit[numQubits], Qubit(), Qubit())) {
+                    for (i in 0..(2^numQubits - 1)) {
+                        within {
+                            ApplyXorInPlace(i, LittleEndian(controls));
+                            ControlledXOnTruthTableWithCleanTarget(func, controls, target);
+                        } apply {
+                            CNOT(target, copy);
+                        }
+                        EqualityFactB(
+                            IsResultOne(MResetZ(copy)),
+                            truthValues[i],
+                            $"Measured value does not correspond to truth table bit in truth table {func} and bit {i}");
+                    }
+                }
+            }
+        }
+    }
 }

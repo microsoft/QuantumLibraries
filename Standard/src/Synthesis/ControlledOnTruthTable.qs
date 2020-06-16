@@ -137,4 +137,57 @@ namespace Microsoft.Quantum.Synthesis {
         }
         adjoint self;
     }
+
+    operation ControlledXOnTruthTableWithCleanTarget (func : BigInt, controlRegister : Qubit[], targetRegister : Qubit) : Unit {
+        body (...) {
+            let vars = Length(controlRegister);
+
+            let maxValue = PowL(2L, 2^vars);
+            Fact(func >= 0L and func < maxValue, $"Argument func must be value from 0 to {maxValue}");
+            AssertAllZero([targetRegister]);
+
+            let tt = BigIntAsBoolArray(func);
+            let table = Encode(SizeAdjustedTruthTable(BigIntAsBoolArray(func), vars));
+            let spectrum = FastHadamardTransform(table);
+
+            HY(targetRegister);
+
+            let code = GrayCode(vars);
+            for (j in 0..Length(code) - 1) {
+                let (offset, ctrl) = code[j];
+                R1Frac(-spectrum[offset], vars + 1, targetRegister);
+                CNOT(controlRegister[ctrl], targetRegister);
+            }
+
+            H(targetRegister);
+        }
+        adjoint (...) {
+            let vars = Length(controlRegister);
+
+            let maxValue = PowL(2L, 2^vars);
+            Fact(func >= 0L and func < maxValue, $"Argument func must be value from 0 to {maxValue}");
+
+            let tt = BigIntAsBoolArray(func);
+            let table = Encode(SizeAdjustedTruthTable(BigIntAsBoolArray(func), vars));
+            let spectrum = FastHadamardTransform(table);
+
+            H(targetRegister);
+            AssertProb([PauliZ], [targetRegister], One, 0.5, "Probability of the measurement must be 0.5", 1e-10);
+
+            if (IsResultOne(M(targetRegister))) {
+                for (i in 0..vars - 1) {
+                    let start = 1 <<< i;
+                    let code = GrayCode(i);
+                    for (j in 0..Length(code) - 1) {
+                        let (offset, ctrl) = code[j];
+                        R1Frac(spectrum[start + offset], vars, controlRegister[i]);
+                        if (i != 0) {
+                            CNOT(controlRegister[ctrl], controlRegister[i]);
+                        }
+                    }
+                }
+                Reset(targetRegister);
+            }
+        }
+    }
 }
