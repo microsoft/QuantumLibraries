@@ -38,26 +38,23 @@ namespace Microsoft.Quantum.Tests {
 
     @Test("QuantumSimulator")
     operation CheckControlledXOnTruthTable () : Unit {
-        let tests = [
-            (0xEL, 2),
-            (0xE8L, 3)
-        ];
+        for (numQubits in 2..5) {
+            for (round in 1..5) {
+                let func = IntAsBigInt(RandomInt(2^(2^numQubits)));
+                let truthValues = BigIntAsBoolArray(func);
 
-        for (test in tests) {
-            let (func, numQubits) = test;
-            let truthValues = BigIntAsBoolArray(func);
-
-            using ((controls, target) = (Qubit[numQubits], Qubit())) {
-                for (i in 0..(2^numQubits - 1)) {
-                    within {
-                        ApplyXorInPlace(i, LittleEndian(controls));
-                    } apply {
-                        ControlledXOnTruthTable(func, controls, target);
+                using ((controls, target) = (Qubit[numQubits], Qubit())) {
+                    for (i in 0..(2^numQubits - 1)) {
+                        within {
+                            ApplyXorInPlace(i, LittleEndian(controls));
+                        } apply {
+                            ControlledXOnTruthTable(func, controls, target);
+                        }
+                        EqualityFactB(
+                            IsResultOne(MResetZ(target)),
+                            truthValues[i],
+                            $"Measured value does not correspond to truth table bit in truth table {func} and bit {i}");
                     }
-                    EqualityFactB(
-                        IsResultOne(MResetZ(target)),
-                        truthValues[i],
-                        $"Measured value does not correspond to truth table bit in truth table {func} and bit {i}");
                 }
             }
         }
