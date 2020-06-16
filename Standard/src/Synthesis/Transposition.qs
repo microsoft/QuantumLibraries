@@ -1,5 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
+
 namespace Microsoft.Quantum.Synthesis {
     open Microsoft.Quantum.Arithmetic;
     open Microsoft.Quantum.Arrays;
@@ -11,7 +12,7 @@ namespace Microsoft.Quantum.Synthesis {
 
 
     // # Summary
-    /// Swaps to amplitudes in a state vector.
+    /// Swaps two amplitudes in a state vector.
     ///
     /// # Description
     /// This operation swaps the amplitude at index `a` with the
@@ -37,7 +38,7 @@ namespace Microsoft.Quantum.Synthesis {
     ///   ApplyTransposition(0, 3, register);
     /// }
     /// ```
-    operation ApplyTransposition(a : Int, b : Int, qubits : LittleEndian) : Unit is Adj+Ctl {
+    operation ApplyTransposition(a : Int, b : Int, qubits : LittleEndian) : Unit is Adj + Ctl {
         let qs = qubits!;
         let n = Length(qs);
 
