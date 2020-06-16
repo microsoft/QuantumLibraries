@@ -36,6 +36,10 @@ namespace Microsoft.Quantum.Tests {
         }
     }
 
+    internal operation RandomBool () : Bool {
+        return RandomInt(2) == 1;
+    }
+
     @Test("QuantumSimulator")
     operation CheckControlledXOnTruthTable () : Unit {
         for (numQubits in 2..5) {
@@ -45,14 +49,45 @@ namespace Microsoft.Quantum.Tests {
 
                 using ((controls, target) = (Qubit[numQubits], Qubit())) {
                     for (i in 0..(2^numQubits - 1)) {
+                        let targetInit = RandomBool();
+                        ApplyIf(X, targetInit, target);
                         within {
                             ApplyXorInPlace(i, LittleEndian(controls));
                         } apply {
                             ControlledXOnTruthTable(func, controls, target);
                         }
                         EqualityFactB(
-                            IsResultOne(MResetZ(target)),
+                            IsResultOne(MResetZ(target)) != targetInit,
                             truthValues[i],
+                            $"Measured value does not correspond to truth table bit in truth table {func} and bit {i}");
+                    }
+                }
+            }
+        }
+    }
+
+    @Test("QuantumSimulator")
+    operation CheckControlledControlledXOnTruthTable () : Unit {
+        for (numQubits in 2..5) {
+            for (round in 1..5) {
+                let func = IntAsBigInt(RandomInt(2^(2^numQubits)));
+                let truthValues = BigIntAsBoolArray(func);
+
+                using ((controls, control, target) = (Qubit[numQubits], Qubit(), Qubit())) {
+                    for (i in 0..(2^numQubits - 1)) {
+                        let controlInit = RandomBool();
+                        let targetInit = RandomBool();
+                        ApplyIf(X, targetInit, target);
+                        within {
+                            ApplyIfA(X, controlInit, control);
+                            ApplyXorInPlace(i, LittleEndian(controls));
+                        } apply {
+                            Controlled ControlledXOnTruthTable([control], (func, controls, target));
+                        }
+                        let result = IsResultOne(MResetZ(target)) != targetInit;
+                        EqualityFactB(
+                            controlInit and result,
+                            controlInit and truthValues[i],
                             $"Measured value does not correspond to truth table bit in truth table {func} and bit {i}");
                     }
                 }

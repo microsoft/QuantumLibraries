@@ -136,6 +136,16 @@ namespace Microsoft.Quantum.Synthesis {
             H(targetRegister);
         }
         adjoint self;
+        controlled (controls, ...) {
+            using (q = Qubit()) {
+                within {
+                    ControlledXOnTruthTableWithCleanTarget(func, controlRegister, q);
+                } apply {
+                    Controlled X(controls + [q], targetRegister);
+                }
+            }
+        }
+        controlled adjoint self;
     }
 
     operation ControlledXOnTruthTableWithCleanTarget (func : BigInt, controlRegister : Qubit[], targetRegister : Qubit) : Unit {
@@ -188,6 +198,12 @@ namespace Microsoft.Quantum.Synthesis {
                 }
                 Reset(targetRegister);
             }
+        }
+        controlled (controls, ...) {
+            Controlled ControlledXOnTruthTable (controls, (func, controlRegister, targetRegister));
+        }
+        controlled adjoint (controls, ...) {
+            Controlled ControlledXOnTruthTable (controls, (func, controlRegister, targetRegister));
         }
     }
 }
