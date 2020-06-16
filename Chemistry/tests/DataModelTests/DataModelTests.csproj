@@ -31,6 +31,17 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Include="..\..\Common\DelaySign.cs" Link="Properties\DelaySign.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Runtime\Runtime.csproj" />
+    <ProjectReference Include="..\..\src\DataModel\DataModel.csproj" />
+  </ItemGroup>
+
+  <!-- Serialization test data -->
+  <ItemGroup>
+    <!-- Broombridge v0.1 and v0.2 examples -->
     <None Include="..\TestData\Broombridge\broombridge_v0.1.yaml" Link="Broombridge\broombridge_v0.1.yaml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -40,14 +51,10 @@
     <None Include="..\TestData\Broombridge\LiH_0.1.yaml" Link="Broombridge\LiH_0.1.yaml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Include="..\..\Common\DelaySign.cs" Link="Properties\DelaySign.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\..\src\Runtime\Runtime.csproj" />
-    <ProjectReference Include="..\..\src\DataModel\DataModel.csproj" />
+    
+    <!-- FCIDUMP examples -->
+    <None Include="..\TestData\FciDump\h2_anorccmb.fcidump" Link="FciDump\h2_anorccmb.fcidump">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 </Project>
