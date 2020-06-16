@@ -124,9 +124,7 @@ namespace Microsoft.Quantum.Synthesis {
 
             for (i in 0..vars) {
                 let start = 1 <<< i;
-                let code = GrayCode(i);
-                for (j in 0..Length(code) - 1) {
-                    let (offset, ctrl) = code[j];
+                for ((offset, ctrl) in GrayCode(i)) {
                     R1Frac(spectrum[start + offset], vars + 1, qubits[i]);
                     if (i != 0) {
                         CNOT(qubits[ctrl], qubits[i]);
@@ -163,9 +161,7 @@ namespace Microsoft.Quantum.Synthesis {
 
             HY(targetRegister);
 
-            let code = GrayCode(vars);
-            for (j in 0..Length(code) - 1) {
-                let (offset, ctrl) = code[j];
+            for ((offset, ctrl) in GrayCode(vars)) {
                 R1Frac(-spectrum[offset], vars + 1, targetRegister);
                 CNOT(controlRegister[ctrl], targetRegister);
             }
@@ -188,9 +184,7 @@ namespace Microsoft.Quantum.Synthesis {
             if (IsResultOne(M(targetRegister))) {
                 for (i in 0..vars - 1) {
                     let start = 1 <<< i;
-                    let code = GrayCode(i);
-                    for (j in 0..Length(code) - 1) {
-                        let (offset, ctrl) = code[j];
+                    for ((offset, ctrl) in GrayCode(i)) {
                         R1Frac(spectrum[start + offset], vars, controlRegister[i]);
                         if (i != 0) {
                             CNOT(controlRegister[ctrl], controlRegister[i]);
