@@ -26,6 +26,7 @@ namespace Microsoft.Quantum.Canon {
     /// ```
     ///
     /// # See Also
+    /// - Microsoft.Quantum.Arrays.DrawMany
     /// - Microsoft.Quantum.Canon.RepeatA
     /// - Microsoft.Quantum.Canon.RepeatC
     /// - Microsoft.Quantum.Canon.RepeatCA
@@ -58,7 +59,8 @@ namespace Microsoft.Quantum.Canon {
     /// ```
     ///
     /// # See Also
-    /// - Microsoft.Quantum.Canon.RepeatA
+    /// - Microsoft.Quantum.Arrays.DrawMany
+    /// - Microsoft.Quantum.Canon.Repeat
     /// - Microsoft.Quantum.Canon.RepeatC
     /// - Microsoft.Quantum.Canon.RepeatCA
     operation RepeatA<'TInput>(op : ('TInput => Unit is Adj), nTimes : Int, input : 'TInput) : Unit is Adj {
@@ -90,8 +92,9 @@ namespace Microsoft.Quantum.Canon {
     /// ```
     ///
     /// # See Also
+    /// - Microsoft.Quantum.Arrays.DrawMany
+    /// - Microsoft.Quantum.Canon.Repeat
     /// - Microsoft.Quantum.Canon.RepeatA
-    /// - Microsoft.Quantum.Canon.RepeatC
     /// - Microsoft.Quantum.Canon.RepeatCA
     operation RepeatC<'TInput>(op : ('TInput => Unit is Ctl), nTimes : Int, input : 'TInput) : Unit is Ctl {
         for (idx in 0..nTimes - 1) {
@@ -122,9 +125,10 @@ namespace Microsoft.Quantum.Canon {
     /// ```
     ///
     /// # See Also
+    /// - Microsoft.Quantum.Arrays.DrawMany
+    /// - Microsoft.Quantum.Canon.Repeat
     /// - Microsoft.Quantum.Canon.RepeatA
     /// - Microsoft.Quantum.Canon.RepeatC
-    /// - Microsoft.Quantum.Canon.RepeatCA
     operation RepeatCA<'TInput>(op : ('TInput => Unit is Adj + Ctl), nTimes : Int, input : 'TInput) : Unit is Adj + Ctl { 
         for (idx in 0..nTimes - 1) {
             op(input);
