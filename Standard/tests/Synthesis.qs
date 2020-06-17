@@ -3,6 +3,7 @@
 
 namespace Microsoft.Quantum.Tests {
     open Microsoft.Quantum.Arithmetic;
+    open Microsoft.Quantum.Arrays;
     open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Convert;
     open Microsoft.Quantum.Diagnostics;
@@ -65,12 +66,24 @@ namespace Microsoft.Quantum.Tests {
         return RandomInt(2) == 1;
     }
 
+    // from ControlledOnTruthTable.qs
+    internal function SizeAdjustedTruthTable(table : Bool[], numVars : Int) : Bool[] {
+        let numEntries = 2^numVars;
+        if (numEntries < Length(table)) {
+            return table[...numEntries - 1];
+        } elif (numEntries > Length(table)) {
+            return Padded(-numEntries, false, table);
+        } else {
+            return table;
+        }
+    }
+
     @Test("QuantumSimulator")
     operation CheckControlledXOnTruthTable () : Unit {
         for (numQubits in 2..5) {
             for (round in 1..5) {
                 let func = IntAsBigInt(RandomInt(2^(2^numQubits)));
-                let truthValues = BigIntAsBoolArray(func);
+                let truthValues = SizeAdjustedTruthTable(BigIntAsBoolArray(func), numQubits);
 
                 using ((controls, target) = (Qubit[numQubits], Qubit())) {
                     for (i in 0..(2^numQubits - 1)) {
@@ -96,7 +109,7 @@ namespace Microsoft.Quantum.Tests {
         for (numQubits in 2..5) {
             for (round in 1..5) {
                 let func = IntAsBigInt(RandomInt(2^(2^numQubits)));
-                let truthValues = BigIntAsBoolArray(func);
+                let truthValues = SizeAdjustedTruthTable(BigIntAsBoolArray(func), numQubits);
 
                 using ((controls, control, target) = (Qubit[numQubits], Qubit(), Qubit())) {
                     for (i in 0..(2^numQubits - 1)) {
@@ -130,7 +143,7 @@ namespace Microsoft.Quantum.Tests {
         for (numQubits in 2..5) {
             for (round in 1..5) {
                 let func = IntAsBigInt(RandomInt(2^(2^numQubits)));
-                let truthValues = BigIntAsBoolArray(func);
+                let truthValues = SizeAdjustedTruthTable(BigIntAsBoolArray(func), numQubits);
 
                 using ((controls, target, copy) = (Qubit[numQubits], Qubit(), Qubit())) {
                     for (i in 0..(2^numQubits - 1)) {

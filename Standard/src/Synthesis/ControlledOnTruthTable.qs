@@ -116,7 +116,7 @@ namespace Microsoft.Quantum.Synthesis {
         if (numEntries < Length(table)) {
             return table[...numEntries - 1];
         } elif (numEntries > Length(table)) {
-            return Padded(numEntries, false, table);
+            return Padded(-numEntries, false, table);
         } else {
             return table;
         }
