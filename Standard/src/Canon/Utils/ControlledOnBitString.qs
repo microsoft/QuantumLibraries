@@ -4,6 +4,7 @@
 namespace Microsoft.Quantum.Canon {
     open Microsoft.Quantum.Convert;
     open Microsoft.Quantum.Intrinsic;
+    open Microsoft.Quantum.Diagnostic;
 
     /// # Summary
     /// Applies a unitary operator on the target register if the control register state corresponds to a specified bit mask.
@@ -19,10 +20,12 @@ namespace Microsoft.Quantum.Canon {
     /// Quantum register that controls application of `oracle`.
     ///
     /// # Remarks
-    /// The length of `bits` and `controlRegister` must be equal.
     /// For example, `bits = [0,1,0,0,1]` means that `oracle` is applied if and only if `controlRegister`" is in the state $\ket{0}\ket{1}\ket{0}\ket{0}\ket{1}$.
     operation ControlledOnBitStringImpl<'T> (bits : Bool[], oracle : ('T => Unit is Adj + Ctl), controlRegister : Qubit[], targetRegister : 'T)
     : Unit is Adj + Ctl {
+        // The control register must have enough bits to implement the requested control.
+        Fact(Length(bits) <= Length(controlRegister), "Control register shorter than control pattern.");
+
         // Use a subregister of the controlled register when
         // bits is shorter than controlRegister.
         let controlSubregister = controlRegister[...Length(bits) - 1];
@@ -63,6 +66,7 @@ namespace Microsoft.Quantum.Canon {
     /// The pattern given by `bits` may be shorter than `controlRegister`,
     /// in which case additional control qubits are ignored (that is, neither
     /// controlled on $\ket{0}$ nor $\ket{1}$).
+    /// If `bits` is longer than `controlRegister`, an error is raised.
     ///
     /// Given a Boolean array `bits` and a unitary operation `oracle`, the output of this function
     /// is an operation that performs the following steps:
