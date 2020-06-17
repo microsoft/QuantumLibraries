@@ -22,14 +22,14 @@ namespace Microsoft.Quantum.Synthesis {
     ///
     /// # Example
     /// ```Q#
-    /// FastHadamardTransform([1, 1, 1, -1]); // [2, 2, 2, -2]
+    /// FastHadamardTransformed([1, 1, 1, -1]); // [2, 2, 2, -2]
     /// ```
     ///
     /// # Reference
     /// Frank Yates: The design and analysis of factorial experiments, in:
     /// Technical Communication No. 35, Imperial Bureau of Soil Science,
     /// London (1937)
-    internal function FastHadamardTransform(func : Int[]) : Int[] {
+    internal function FastHadamardTransformed(func : Int[]) : Int[] {
         let bits = BitSizeI(Length(func) - 1);
         mutable res = func;
         for (m in 0..bits - 1) {
@@ -59,9 +59,9 @@ namespace Microsoft.Quantum.Synthesis {
     ///
     /// # Example
     /// ```Q#
-    /// Extend([2, 2, 2, -2]); // [2, 2, 2, -2, -2, -2, -2, 2]
+    /// Extended([2, 2, 2, -2]); // [2, 2, 2, -2, -2, -2, -2, 2]
     /// ```
-    internal function Extend(spectrum : Int[]) : Int[] {
+    internal function Extended(spectrum : Int[]) : Int[] {
         return spectrum + Mapped(NegationI, spectrum);
     }
 
@@ -90,12 +90,27 @@ namespace Microsoft.Quantum.Synthesis {
     ///
     /// # Example
     /// ```Q#
-    /// Encode([false, false, false, true]); // [1, 1, 1, -1]
+    /// Encoded([false, false, false, true]); // [1, 1, 1, -1]
     /// ```
-    internal function Encode(table : Bool[]) : Int[] {
+    internal function Encoded(table : Bool[]) : Int[] {
         return Mapped(RMEncoding, table);
     }
 
+    /// # Summary
+    /// Adjusts truth table from array of Booleans according to number of variables
+    ///
+    /// A new array is returned of length `2^numVars`, possibly
+    /// requiring to extend `table`'s size with `false` entries
+    /// or truncating it to `2^numVars` elements.
+    ///
+    /// # Input
+    /// ## table
+    /// Truth table as array of truth values
+    /// ## numVars
+    /// Number of variables
+    ///
+    /// # Output
+    /// Size adjusted truth table
     internal function SizeAdjustedTruthTable(table : Bool[], numVars : Int) : Bool[] {
         let numEntries = 2^numVars;
         if (numEntries < Length(table)) {
@@ -107,7 +122,40 @@ namespace Microsoft.Quantum.Synthesis {
         }
     }
 
-    operation ControlledXOnTruthTable (func : BigInt, controlRegister : Qubit[], targetRegister : Qubit) : Unit {
+    /// # Summary
+    /// Applies the `X` operation on `target`, if the Boolean function `func` evaluates
+    /// to true for the classical assignment in `controlRegister`.  In other words, it implements
+    /// the unitary operation
+    /// \begin{align}
+    ///    U\ket{x}\ket{y} = \ket{x}\ket{y \oplus f(x)}
+    /// \end{align}
+    /// where $x$ and $y$ represent `controlRegister` and `target`, respectively.
+    ///
+    /// The Boolean function $f$ is represented as a truth table in terms of a big integer.
+    /// For example, the majority function on three inputs is represented by the bitstring
+    /// `11101000`, where the most significant bit `1` corresponds to the input assignment `(1, 1, 1)`,
+    /// and the least significant bit `0` corresponds to the input assignment `(0, 0, 0)`.
+    /// It can be represented by the big integer `0xE8L` in hexadecimal notation or as `232L`
+    /// in decimal notation.  The `L` suffix indicates that the constant is of type `BigInt`.
+    /// More details on this representation can also be found in the [truth tables kata](https://github.com/microsoft/QuantumKatas/tree/master/TruthTables).
+    ///
+    /// The implementation makes use of `CNOT` and `R1` gates.
+    ///
+    /// # Input
+    /// ## func
+    /// Boolean truth table represented as big integer
+    /// ## controlRegister
+    /// Register of control qubits
+    /// ## target
+    /// Target qubit
+    ///
+    /// # See Also
+    /// - @"microsoft.quantum.synthesis.controlledxontruthtablewithcleantarget"
+    ///
+    /// # References
+    /// - [*N. Schuch*, *J. Siewert*, PRL 91, no. 027902, 2003, arXiv:quant-ph/0303063](https://arxiv.org/abs/quant-ph/0303063)
+    /// - [*Mathias Soeken*, *Martin Roetteler*, arXiv:2005.12310](https://arxiv.org/abs/2005.12310)
+    operation ControlledXOnTruthTable (func : BigInt, controlRegister : Qubit[], target : Qubit) : Unit {
         body (...) {
             let vars = Length(controlRegister);
 
@@ -115,12 +163,12 @@ namespace Microsoft.Quantum.Synthesis {
             Fact(func >= 0L and func < maxValue, $"Argument func must be value from 0 to {maxValue}");
 
             let tt = BigIntAsBoolArray(func);
-            let table = Encode(SizeAdjustedTruthTable(BigIntAsBoolArray(func), vars));
-            let spectrum = Extend(FastHadamardTransform(table));
+            let table = Encoded(SizeAdjustedTruthTable(BigIntAsBoolArray(func), vars));
+            let spectrum = Extended(FastHadamardTransformed(table));
 
-            let qubits = controlRegister + [targetRegister];
+            let qubits = controlRegister + [target];
 
-            HY(targetRegister);
+            HY(target);
 
             for (i in 0..vars) {
                 let start = 1 <<< i;
@@ -132,7 +180,7 @@ namespace Microsoft.Quantum.Synthesis {
                 }
             }
 
-            H(targetRegister);
+            H(target);
         }
         adjoint self;
         controlled (controls, ...) {
@@ -140,33 +188,52 @@ namespace Microsoft.Quantum.Synthesis {
                 within {
                     ControlledXOnTruthTableWithCleanTarget(func, controlRegister, q);
                 } apply {
-                    Controlled X(controls + [q], targetRegister);
+                    Controlled X(controls + [q], target);
                 }
             }
         }
         controlled adjoint self;
     }
 
-    operation ControlledXOnTruthTableWithCleanTarget (func : BigInt, controlRegister : Qubit[], targetRegister : Qubit) : Unit {
+    /// # Summary
+    /// Applies the `X` operation on `target`, if the Boolean function `func` evaluates
+    /// to true for the classical assignment in `controlRegister`.  This operation implements
+    /// a special case of @"microsoft.quantum.synthesis.controlledxontruthtable", in which the target qubit is known to
+    /// be in the $\ket{0}$ state.
+    ///
+    /// The implementation makes use of `CNOT` and `R1` gates.  The implementation of the
+    /// adjoint operation is optimized and uses measurement-based uncomputation.
+    ///
+    /// # Input
+    /// ## func
+    /// Boolean truth table represented as big integer
+    /// ## controlRegister
+    /// Register of control qubits
+    /// ## target
+    /// Target qubit (must be in $\ket{0}$ state)
+    ///
+    /// # See Also
+    /// - @"microsoft.quantum.synthesis.controlledxontruthtable"
+    operation ControlledXOnTruthTableWithCleanTarget (func : BigInt, controlRegister : Qubit[], target : Qubit) : Unit {
         body (...) {
             let vars = Length(controlRegister);
 
             let maxValue = PowL(2L, 2^vars);
             Fact(func >= 0L and func < maxValue, $"Argument func must be value from 0 to {maxValue}");
-            AssertAllZero([targetRegister]);
+            AssertAllZero([target]);
 
             let tt = BigIntAsBoolArray(func);
-            let table = Encode(SizeAdjustedTruthTable(BigIntAsBoolArray(func), vars));
-            let spectrum = FastHadamardTransform(table);
+            let table = Encoded(SizeAdjustedTruthTable(BigIntAsBoolArray(func), vars));
+            let spectrum = FastHadamardTransformed(table);
 
-            HY(targetRegister);
+            HY(target);
 
             for ((offset, ctrl) in GrayCode(vars)) {
-                R1Frac(-spectrum[offset], vars + 1, targetRegister);
-                CNOT(controlRegister[ctrl], targetRegister);
+                R1Frac(-spectrum[offset], vars + 1, target);
+                CNOT(controlRegister[ctrl], target);
             }
 
-            H(targetRegister);
+            H(target);
         }
         adjoint (...) {
             let vars = Length(controlRegister);
@@ -175,13 +242,13 @@ namespace Microsoft.Quantum.Synthesis {
             Fact(func >= 0L and func < maxValue, $"Argument func must be value from 0 to {maxValue}");
 
             let tt = BigIntAsBoolArray(func);
-            let table = Encode(SizeAdjustedTruthTable(BigIntAsBoolArray(func), vars));
-            let spectrum = FastHadamardTransform(table);
+            let table = Encoded(SizeAdjustedTruthTable(BigIntAsBoolArray(func), vars));
+            let spectrum = FastHadamardTransformed(table);
 
-            H(targetRegister);
-            AssertProb([PauliZ], [targetRegister], One, 0.5, "Probability of the measurement must be 0.5", 1e-10);
+            H(target);
+            AssertProb([PauliZ], [target], One, 0.5, "Probability of the measurement must be 0.5", 1e-10);
 
-            if (IsResultOne(M(targetRegister))) {
+            if (IsResultOne(M(target))) {
                 for (i in 0..vars - 1) {
                     let start = 1 <<< i;
                     for ((offset, ctrl) in GrayCode(i)) {
@@ -191,14 +258,14 @@ namespace Microsoft.Quantum.Synthesis {
                         }
                     }
                 }
-                Reset(targetRegister);
+                Reset(target);
             }
         }
         controlled (controls, ...) {
-            Controlled ControlledXOnTruthTable (controls, (func, controlRegister, targetRegister));
+            Controlled ControlledXOnTruthTable (controls, (func, controlRegister, target));
         }
         controlled adjoint (controls, ...) {
-            Controlled ControlledXOnTruthTable (controls, (func, controlRegister, targetRegister));
+            Controlled ControlledXOnTruthTable (controls, (func, controlRegister, target));
         }
     }
 }
