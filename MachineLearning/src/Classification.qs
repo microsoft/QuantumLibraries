@@ -80,7 +80,10 @@ namespace Microsoft.Quantum.MachineLearning {
         nMeasurements : Int
     )
     : Double[] {
-        let effectiveTolerance = tolerance / IntAsDouble(Length(model::Structure));
+        let effectiveTolerance =
+            IsEmpty(model::Structure)
+            ? tolerance
+            | tolerance / IntAsDouble(Length(model::Structure));
         return ForEach(
             EstimateClassificationProbability(
                 effectiveTolerance, model, _, nMeasurements
