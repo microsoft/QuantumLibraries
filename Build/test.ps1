@@ -31,8 +31,8 @@ Test-One '../Chemistry/tests/ChemistryTests/QSharpTests.csproj'
 Write-Host "##[info]Testing Chemistry/tests/SystemTests/SystemTests.csproj"
 Test-One '../Chemistry/tests/SystemTests/SystemTests.csproj'
 
-Write-Host "##[info]Testing Chemistry/tests/DataModelTests/CSharpTests.csproj"
-Test-One '../Chemistry/tests/DataModelTests/CSharpTests.csproj'
+Write-Host "##[info]Testing Chemistry/tests/DataModelTests/DataModelTests.csproj"
+Test-One '../Chemistry/tests/DataModelTests/DataModelTests.csproj'
 
 Write-Host "##[info]Testing Chemistry/tests/SerializationTests/SerializationTests.csproj"
 Test-One '../Chemistry/tests/SerializationTests/SerializationTests.csproj'
