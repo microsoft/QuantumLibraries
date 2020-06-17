@@ -21,7 +21,7 @@ namespace Microsoft.Quantum.Canon {
     ///
     /// # Remarks
     /// For example, `bits = [0,1,0,0,1]` means that `oracle` is applied if and only if `controlRegister`" is in the state $\ket{0}\ket{1}\ket{0}\ket{0}\ket{1}$.
-    operation ControlledOnBitStringImpl<'T> (bits : Bool[], oracle : ('T => Unit is Adj + Ctl), controlRegister : Qubit[], targetRegister : 'T)
+    internal operation ApplyControlledOnBitString<'T> (bits : Bool[], oracle : ('T => Unit is Adj + Ctl), controlRegister : Qubit[], targetRegister : 'T)
     : Unit is Adj + Ctl {
         // The control register must have enough bits to implement the requested control.
         Fact(Length(bits) <= Length(controlRegister), "Control register shorter than control pattern.");
@@ -99,7 +99,7 @@ namespace Microsoft.Quantum.Canon {
     /// ```
     function ControlledOnBitString<'T> (bits : Bool[], oracle : ('T => Unit is Adj + Ctl))
     : ((Qubit[], 'T) => Unit is Adj + Ctl) {
-        return ControlledOnBitStringImpl(bits, oracle, _, _);
+        return ApplyControlledOnBitString(bits, oracle, _, _);
     }
 
 
@@ -119,7 +119,7 @@ namespace Microsoft.Quantum.Canon {
     /// # Remarks
     /// `numberState` must be at most $2^\texttt{Length(controlRegister)} - 1$.
     /// For example, `numberState = 537` means that `oracle` is applied if and only if `controlRegister` is in the state $\ket{537}$.
-    operation ControlledOnIntImpl<'T> (numberState : Int, oracle : ('T => Unit is Adj + Ctl), controlRegister : Qubit[], targetRegister : 'T)
+    internal operation ApplyControlledOnInt<'T> (numberState : Int, oracle : ('T => Unit is Adj + Ctl), controlRegister : Qubit[], targetRegister : 'T)
     : Unit is Adj + Ctl {
         let bits = IntAsBoolArray(numberState, Length(controlRegister));
         (ControlledOnBitString(bits, oracle))(controlRegister, targetRegister);
@@ -139,7 +139,7 @@ namespace Microsoft.Quantum.Canon {
     /// A unitary operator that applies `oracle` on the target register if the control register state corresponds to the number state `numberState`.
     function ControlledOnInt<'T> (numberState : Int, oracle : ('T => Unit is Adj + Ctl))
     : ((Qubit[], 'T) => Unit is Adj + Ctl) {
-        return ControlledOnIntImpl(numberState, oracle, _, _);
+        return ApplyControlledOnInt(numberState, oracle, _, _);
     }
 
 }
