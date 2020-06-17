@@ -38,6 +38,32 @@ namespace Microsoft.Quantum.Tests {
         }
     }
 
+    @Test("QuantumSimulator")
+    operation CheckDecompositionBasedSynthesis () : Unit {
+        let permutations = [
+            [0, 2, 1, 3],
+            [0, 1, 3, 2],
+            [0, 1, 2, 3],
+            [3, 2, 1, 0],
+            [0, 1, 2, 3, 4, 5, 7, 6],
+            [0, 2, 4, 6, 1, 3, 5, 7],
+            [0, 2, 3, 5, 7, 11, 13, 1, 4, 6, 8, 9, 10, 12, 14, 15]
+        ];
+
+        for (perm in permutations) {
+            let numQubits = BitSizeI(Length(perm) - 1);
+
+            using (qs = Qubit[numQubits]) {
+                let register = LittleEndian(qs);
+                for (i in 0..Length(perm) - 1) {
+                    ApplyXorInPlace(i, register);
+                    ApplyPermutationUsingDecomposition(perm, register);
+                    EqualityFactI(MeasureInteger(register), perm[i], $"ApplyPermutation failed for permutation {perm} at index {i}");
+                }
+            }
+        }
+    }
+
     @Test("ToffoliSimulator")
     operation CheckApplyTransposition () : Unit {
         for (numQubits in 2..6) {
