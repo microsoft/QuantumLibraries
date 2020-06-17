@@ -85,6 +85,11 @@ namespace Microsoft.Quantum.Chemistry
                 )
                 .Distinct()
             );
+
+            // The identity term in deserialized Hamiltonians is the sum of the 
+            // Coloumb repulsion and the energy offset. Since only the former
+            // exists in FCIDUMP, we set the identity term accordingly.
+            hamiltonian.Add(new OrbitalIntegral(), coulomb);
             
             return new List<ElectronicStructureProblem>
             {

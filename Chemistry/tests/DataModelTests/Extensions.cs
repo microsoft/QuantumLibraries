@@ -13,6 +13,7 @@ using Microsoft.Quantum.Chemistry.Broombridge;
 using Newtonsoft.Json;
 
 using Xunit;
+using FluentAssertions;
 
 namespace Microsoft.Quantum.Chemistry.Tests
 {
@@ -56,30 +57,65 @@ namespace Microsoft.Quantum.Chemistry.Tests
         internal static IEnumerable<Action> IsEqualTo(this ElectronicStructureProblem expected, ElectronicStructureProblem actual)
         {   
             // TODO: check rest of metadata.
-            yield return () => Assert.Equal(expected.CoulombRepulsion.Value, actual.CoulombRepulsion.Value);
-            yield return () => Assert.Equal(expected.EnergyOffset.Value, actual.EnergyOffset.Value);
-            yield return () => Assert.Equal(expected.NElectrons, actual.NElectrons);
-            yield return () => Assert.Equal(expected.NOrbitals, actual.NOrbitals);
-            yield return () => Assert.Equal(expected.OrbitalIntegralHamiltonian.Terms.Count, actual.OrbitalIntegralHamiltonian.Terms.Count);
+            yield return () =>
+                actual.CoulombRepulsion.Value.Should().Be(
+                    expected.CoulombRepulsion.Value,
+                    because: "Coulomb repulsion should match"
+                );
+            yield return () => 
+                actual.EnergyOffset.Value.Should().Be(
+                    expected.EnergyOffset.Value,
+                    because: "energy offset should match"
+                );
+            yield return () =>
+                actual.NElectrons.Should().Be(
+                    expected.NElectrons,
+                    because: "# of electrons should match"
+                );
+            yield return () =>
+                actual.NOrbitals.Should().Be(
+                    expected.NOrbitals,
+                    because: "# of orbitals should match"
+                );
+            // yield return () =>
+            //     actual.OrbitalIntegralHamiltonian.Terms.Should().ContainKeys(
+            //         expected.OrbitalIntegralHamiltonian.Terms.Keys
+            //     ).And.HaveCount(
+            //         expected.OrbitalIntegralHamiltonian.Terms.Count,
+            //         because: "# of kinds of terms should match"
+            //     );
+
+            var onlyInActual =
+                actual.OrbitalIntegralHamiltonian.Terms.Keys
+                .Except(expected.OrbitalIntegralHamiltonian.Terms.Keys);
+
+            // Make sure that any keys that are only in the actual
+            // problem are trivial.
+            foreach (var termType in onlyInActual)
+            {
+                var term = actual.OrbitalIntegralHamiltonian.Terms[termType];
+                // Make sure that any terms, if present, have coefficient zero.
+                yield return () => term.Values.Should().OnlyContain(item => item.Value == 0.0);
+            }
 
             // Check the actual terms themselves.
-            // NB: We don't have to worry about actual having expected term kinds, since we
-            //     checked Count above.
             foreach (var termType in expected.OrbitalIntegralHamiltonian.Terms.Keys)
             {
-                yield return () => Assert.Equal(
-                    expected.OrbitalIntegralHamiltonian.Terms[termType].Count,
-                    actual.OrbitalIntegralHamiltonian.Terms[termType].Count
-                );
+                yield return () =>
+                    actual.OrbitalIntegralHamiltonian.Terms[termType].Count.Should().Be(
+                        expected.OrbitalIntegralHamiltonian.Terms[termType].Count,
+                        because: $"# of terms of type {termType} should match"
+                    );
 
                 // Now that we've checked that the count is correct, we can check
                 // each individual term.
                 foreach (var index in expected.OrbitalIntegralHamiltonian.Terms[termType])
                 {
-                    yield return () => Assert.Equal(
-                        index.Value,
-                        actual.OrbitalIntegralHamiltonian.Terms[termType][index.Key]
-                    );
+                    yield return () =>
+                        actual.OrbitalIntegralHamiltonian.Terms[termType][index.Key].Should().Be(
+                            index.Value,
+                            $"term with index {index.Key} of type {termType} should match"
+                        );
                 }
             }
         }
