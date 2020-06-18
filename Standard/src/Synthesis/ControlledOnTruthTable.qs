@@ -226,7 +226,7 @@ namespace Microsoft.Quantum.Synthesis {
 
             let maxValue = PowL(2L, 2^vars);
             Fact(func >= 0L and func < maxValue, $"Argument func must be value from 0 to {maxValue}");
-            AssertAllZero([target]);
+            AssertQubit(Zero, target);
 
             let tt = BigIntAsBoolArray(func);
             let table = Encoded(SizeAdjustedTruthTable(BigIntAsBoolArray(func), vars));
