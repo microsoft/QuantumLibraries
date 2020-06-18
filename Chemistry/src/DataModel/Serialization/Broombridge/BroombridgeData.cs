@@ -120,65 +120,9 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
                 NElectrons = problem.NElectrons,
                 NOrbitals = problem.NOrbitals,
                 OrbitalIntegralHamiltonian = V0_2.ToOrbitalIntegralHamiltonian(problem),
-                Wavefunctions = FromBroombridgeV0_2(problem.InitialStates)
+                Wavefunctions = problem.InitialStates?.FromBroombridgeV0_2() ?? new Dictionary<string, FermionWavefunction<SpinOrbital>>()
             };
             return problemDescription;
-        }
-
-        internal static Dictionary<string, Fermion.FermionWavefunction<OrbitalIntegrals.SpinOrbital>>
-            FromBroombridgeV0_2(
-                IEnumerable<V0_2.State>? initialStates
-            )
-        {
-            var wavefunctions = new Dictionary<string, Fermion.FermionWavefunction<OrbitalIntegrals.SpinOrbital>>();
-            foreach (var initialState in initialStates ?? new List<V0_2.State>())
-            {
-                var finalState = new FermionWavefunction<SpinOrbital>();
-
-                var (method, energy, outputState) = V0_2.ToWavefunction(initialState);
-
-                var setMethod = V0_2.ParseInitialStateMethod(initialState.Method);
-                var setEnergy = energy;
-
-                if (setMethod == StateType.SparseMultiConfigurational)
-                {
-                    var mcfData = (SparseMultiCFWavefunction<SpinOrbital>)outputState;
-
-                    finalState = new FermionWavefunction<SpinOrbital>(
-                        mcfData.Excitations
-                            .Select(o => (
-                                o.Key.ToIndices().ToArray(),
-                                o.Value.Real
-                            )));
-                }
-                else if (setMethod == StateType.UnitaryCoupledCluster)
-                {
-                    var uccData = (UnitaryCCWavefunction<SpinOrbital>)outputState;
-
-                    var reference = uccData.Reference;
-
-                    var excitations = uccData.Excitations;
-
-                    finalState = new FermionWavefunction<SpinOrbital>(
-                        reference.ToIndices(),
-                        excitations
-                            .Select(o => (
-                                o.Key.ToIndices().ToArray(),
-                                o.Value.Real
-                            ))
-                        );
-                }
-                else
-                {
-                    throw new System.ArgumentException($"Wavefunction type {setMethod} not recognized");
-                }
-
-                finalState.Method = setMethod;
-                finalState.Energy = setEnergy;
-
-                wavefunctions.Add(initialState.Label, finalState);
-            }
-            return wavefunctions;
         }
     }
 

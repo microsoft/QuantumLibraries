@@ -13,8 +13,9 @@ $ dotnet tool install --global Microsoft.Quantum.Chemistry.Tools
 > ⚠ NOTE: If you want to use a pre-release version of the Microsoft.Quantum.Chemistry.Tools package, you'll need to [configure the Quantum Development Kit prerelease feed](https://github.com/microsoft/QuantumLibraries#optional-using-prerelease-versions) before proceeding.
 > Once you have the prerelease feed configured, you can install the Microsoft.Quantum.Chemistry.Tools package by providing an explicit version:
 > ```
-> $ dotnet tool install --global Microsoft.Quantum.Chemistry.Tools --version "0.11.2005.1422-beta"
+> $ dotnet tool install --global Microsoft.Quantum.Chemistry.Tools --version "<version>"
 > ```
+> where `<version>` should be replaced by the specific prerelease version that you would like to install.
 
 Once installed, you can run the Quantum Development Kit chemistry command-line tools with the `qdk-chem` command:
 

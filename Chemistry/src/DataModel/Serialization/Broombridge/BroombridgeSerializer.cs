@@ -38,7 +38,7 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
                         Geometry = problem.Geometry?.FromBroombridgeV0_1(),
                         EnergyOffset = problem.EnergyOffset.FromBroombridgeV0_1(),
                         FciEnergy = problem.FciEnergy?.FromBroombridgeV0_1(),
-                        InitialStates = ProblemDescription.FromBroombridgeV0_2(problem.InitialStates),
+                        InitialStates = problem.InitialStates?.FromBroombridgeV0_2(),
                         Metadata = problem.Metadata,
                         NElectrons = problem.NElectrons,
                         NOrbitals = problem.NOrbitals,

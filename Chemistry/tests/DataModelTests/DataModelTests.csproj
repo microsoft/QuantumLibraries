@@ -28,15 +28,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <DotNetCliToolReference Include="dotnet-xunit" Version="2.3.1" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="..\BroombridgeExamples\broombridge_v0.1.yaml" Link="Broombridge\broombridge_v0.1.yaml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\BroombridgeExamples\broombridge_v0.2.yaml" Link="Broombridge\broombridge_v0.2.yaml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+    <PackageReference Include="FluentAssertions" Version="5.10.3" />
   </ItemGroup>
 
   <ItemGroup>
@@ -46,5 +38,24 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\Runtime\Runtime.csproj" />
     <ProjectReference Include="..\..\src\DataModel\DataModel.csproj" />
+  </ItemGroup>
+
+  <!-- Serialization test data -->
+  <ItemGroup>
+    <!-- Broombridge v0.1 and v0.2 examples -->
+    <None Include="..\TestData\Broombridge\broombridge_v0.1.yaml" Link="Broombridge\broombridge_v0.1.yaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\TestData\Broombridge\broombridge_v0.2.yaml" Link="Broombridge\broombridge_v0.2.yaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\TestData\Broombridge\LiH_0.1.yaml" Link="Broombridge\LiH_0.1.yaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    
+    <!-- FCIDUMP examples -->
+    <None Include="..\TestData\FciDump\h2_anorccmb.fcidump" Link="FciDump\h2_anorccmb.fcidump">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 </Project>

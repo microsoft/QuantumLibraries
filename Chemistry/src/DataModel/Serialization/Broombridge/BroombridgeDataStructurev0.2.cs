@@ -95,6 +95,63 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
                 // FIXME: add Superposition and ClusterOperator.
             })
             .ToList();
+
+        internal static Dictionary<string, Fermion.FermionWavefunction<OrbitalIntegrals.SpinOrbital>>
+            FromBroombridgeV0_2(
+                this IEnumerable<V0_2.State> initialStates
+            )
+        {
+            var wavefunctions = new Dictionary<string, Fermion.FermionWavefunction<OrbitalIntegrals.SpinOrbital>>();
+            foreach (var initialState in initialStates ?? new List<V0_2.State>())
+            {
+
+                var (method, energy, outputState) = V0_2.ToWavefunction(initialState);
+                var finalState = new FermionWavefunction<SpinOrbital>()
+                {
+                    Energy = energy
+                };
+
+                var setMethod = V0_2.ParseInitialStateMethod(initialState.Method);
+
+                if (setMethod == StateType.SparseMultiConfigurational)
+                {
+                    var mcfData = (SparseMultiCFWavefunction<SpinOrbital>)outputState;
+
+                    finalState = new FermionWavefunction<SpinOrbital>(
+                        mcfData.Excitations
+                            .Select(o => (
+                                o.Key.ToIndices().ToArray(),
+                                o.Value.Real
+                            )));
+                }
+                else if (setMethod == StateType.UnitaryCoupledCluster)
+                {
+                    var uccData = (UnitaryCCWavefunction<SpinOrbital>)outputState;
+
+                    var reference = uccData.Reference;
+
+                    var excitations = uccData.Excitations;
+
+                    finalState = new FermionWavefunction<SpinOrbital>(
+                        reference.ToIndices(),
+                        excitations
+                            .Select(o => (
+                                o.Key.ToIndices().ToArray(),
+                                o.Value.Real
+                            ))
+                        );
+                }
+                else
+                {
+                    throw new System.ArgumentException($"Wavefunction type {setMethod} not recognized");
+                }
+
+                finalState.Method = setMethod;
+
+                wavefunctions.Add(initialState.Label, finalState);
+            }
+            return wavefunctions;
+        }
     }
 
 
