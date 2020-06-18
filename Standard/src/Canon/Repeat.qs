@@ -21,8 +21,8 @@ namespace Microsoft.Quantum.Canon {
     /// # Example
     /// The following are equivalent:
     /// ```Q#
-    /// Repeat(H, 2, target);
-    /// NoOp<Qubit>(target);
+    /// Repeat(U, 17, target);
+    /// (Bound(ConstantArray(17, U)))(target);
     /// ```
     ///
     /// # See Also
@@ -54,8 +54,8 @@ namespace Microsoft.Quantum.Canon {
     /// # Example
     /// The following are equivalent:
     /// ```Q#
-    /// Repeat(H, 2, target);
-    /// NoOp<Qubit>(target);
+    /// RepeatA(U, 17, target);
+    /// (BoundA(ConstantArray(17, U)))(target);
     /// ```
     ///
     /// # See Also
@@ -87,8 +87,8 @@ namespace Microsoft.Quantum.Canon {
     /// # Example
     /// The following are equivalent:
     /// ```Q#
-    /// Repeat(H, 2, target);
-    /// NoOp<Qubit>(target);
+    /// RepeatC(U, 17, target);
+    /// (BoundC(ConstantArray(17, U)))(target);
     /// ```
     ///
     /// # See Also
@@ -120,8 +120,8 @@ namespace Microsoft.Quantum.Canon {
     /// # Example
     /// The following are equivalent:
     /// ```Q#
-    /// Repeat(H, 2, target);
-    /// NoOp<Qubit>(target);
+    /// RepeatCA(U, 17, target);
+    /// (BoundCA(ConstantArray(17, U)))(target);
     /// ```
     ///
     /// # See Also
