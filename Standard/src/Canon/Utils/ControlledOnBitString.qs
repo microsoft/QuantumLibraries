@@ -4,23 +4,30 @@
 namespace Microsoft.Quantum.Canon {
     open Microsoft.Quantum.Convert;
     open Microsoft.Quantum.Intrinsic;
-    open Microsoft.Quantum.Diagnostic;
+    open Microsoft.Quantum.Diagnostics;
 
     /// # Summary
-    /// Applies a unitary operator on the target register if the control register state corresponds to a specified bit mask.
+    /// Applies a unitary operation on the target register, controlled on a a state specified by a given
+    /// bit mask.
     ///
     /// # Input
     /// ## bits
-    /// Boolean array.
+    /// The bit string to control the given unitary operation on.
     /// ## oracle
-    /// Unitary operator.
+    /// The unitary operation to be applied on the target register.
     /// ## targetRegister
-    /// Quantum register acted on by `oracle`.
+    /// The target register to be passed to `oracle` as an input.
     /// ## controlRegister
-    /// Quantum register that controls application of `oracle`.
+    /// A quantum register that controls application of `oracle`.
     ///
     /// # Remarks
-    /// For example, `bits = [0,1,0,0,1]` means that `oracle` is applied if and only if `controlRegister`" is in the state $\ket{0}\ket{1}\ket{0}\ket{0}\ket{1}$.
+    /// The pattern given by `bits` may be shorter than `controlRegister`,
+    /// in which case additional control qubits are ignored (that is, neither
+    /// controlled on $\ket{0}$ nor $\ket{1}$).
+    /// If `bits` is longer than `controlRegister`, an error is raised.
+    ///
+    /// For example, `bits = [0,1,0,0,1]` means that `oracle` is applied if and only if `controlRegister`
+    /// is in the state $\ket{0}\ket{1}\ket{0}\ket{0}\ket{1}$.
     operation ApplyControlledOnBitString<'T> (bits : Bool[], oracle : ('T => Unit is Adj + Ctl), controlRegister : Qubit[], targetRegister : 'T)
     : Unit is Adj + Ctl {
         // The control register must have enough bits to implement the requested control.
@@ -104,21 +111,26 @@ namespace Microsoft.Quantum.Canon {
 
 
     /// # Summary
-    /// Applies a unitary operator on the target register if the control register state corresponds to a specified positive integer.
+    /// Applies a unitary operation on the target register if the control
+    /// register state corresponds to a specified positive integer.
     ///
     /// # Input
     /// ## numberState
-    /// Positive integer.
+    /// A nonnegative integer on which the operation `oracle` should be
+    /// controlled.
     /// ## oracle
-    /// Unitary operator.
+    /// A unitary operation to be controlled.
     /// ## targetRegister
-    /// Quantum register acted on by `oracle`.
+    /// A register on which to apply `oracle`.
     /// ## controlRegister
-    /// Quantum register that controls application of `oracle`.
+    /// A quantum register that controls application of `oracle`.
     ///
     /// # Remarks
+    /// The value of `numberState` is interpreted using a little-endian encoding.
+    ///
     /// `numberState` must be at most $2^\texttt{Length(controlRegister)} - 1$.
-    /// For example, `numberState = 537` means that `oracle` is applied if and only if `controlRegister` is in the state $\ket{537}$.
+    /// For example, `numberState = 537` means that `oracle`
+    /// is applied if and only if `controlRegister` is in the state $\ket{537}$.
     operation ApplyControlledOnInt<'T> (numberState : Int, oracle : ('T => Unit is Adj + Ctl), controlRegister : Qubit[], targetRegister : 'T)
     : Unit is Adj + Ctl {
         let bits = IntAsBoolArray(numberState, Length(controlRegister));
@@ -127,7 +139,8 @@ namespace Microsoft.Quantum.Canon {
 
 
     /// # Summary
-    /// Returns a unitary operator that applies an oracle on the target register if the control register state corresponds to a specified positive integer.
+    /// Returns a unitary operator that applies an oracle on the target register
+    /// if the control register state corresponds to a specified positive integer.
     ///
     /// # Input
     /// ## numberState
@@ -136,8 +149,12 @@ namespace Microsoft.Quantum.Canon {
     /// Unitary operator.
     ///
     /// # Output
-    /// A unitary operator that applies `oracle` on the target register if the control register state corresponds to the number state `numberState`.
-    function ControlledOnInt<'T> (numberState : Int, oracle : ('T => Unit is Adj + Ctl))
+    /// A unitary operator that applies `oracle` on the target register if the
+    /// control register state corresponds to the number state `numberState`.
+    ///
+    /// # Remarks
+    /// The value of `numberState` is interpreted using a little-endian encoding.
+    function ControlledOnInt<'T>(numberState : Int, oracle : ('T => Unit is Adj + Ctl))
     : ((Qubit[], 'T) => Unit is Adj + Ctl) {
         return ApplyControlledOnInt(numberState, oracle, _, _);
     }
