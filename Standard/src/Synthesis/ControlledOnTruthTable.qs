@@ -123,9 +123,11 @@ namespace Microsoft.Quantum.Synthesis {
     }
 
     /// # Summary
-    /// Applies the `X` operation on `target`, if the Boolean function `func` evaluates
-    /// to true for the classical assignment in `controlRegister`.  In other words, it implements
-    /// the unitary operation
+    /// Applies the @"microsoft.quantum.intrinsic.x" operation on `target`, if the Boolean function `func` evaluates
+    /// to true for the classical assignment in `controlRegister`.
+    ///
+    /// # Description
+    /// The operation implements the unitary operation
     /// \begin{align}
     ///    U\ket{x}\ket{y} = \ket{x}\ket{y \oplus f(x)}
     /// \end{align}
@@ -139,7 +141,8 @@ namespace Microsoft.Quantum.Synthesis {
     /// in decimal notation.  The `L` suffix indicates that the constant is of type `BigInt`.
     /// More details on this representation can also be found in the [truth tables kata](https://github.com/microsoft/QuantumKatas/tree/master/TruthTables).
     ///
-    /// The implementation makes use of `CNOT` and `R1` gates.
+    /// The implementation makes use of @"microsoft.quantum.intrinsic.cnot"
+    /// and @"microsoft.quantum.intrinsic.r1" gates.
     ///
     /// # Input
     /// ## func
@@ -150,12 +153,12 @@ namespace Microsoft.Quantum.Synthesis {
     /// Target qubit
     ///
     /// # See Also
-    /// - @"microsoft.quantum.synthesis.controlledxontruthtablewithcleantarget"
+    /// - Microsoft.Quantum.Synthesis.ApplyXControlledOnTruthTableWithCleanTarget
     ///
     /// # References
     /// - [*N. Schuch*, *J. Siewert*, PRL 91, no. 027902, 2003, arXiv:quant-ph/0303063](https://arxiv.org/abs/quant-ph/0303063)
     /// - [*Mathias Soeken*, *Martin Roetteler*, arXiv:2005.12310](https://arxiv.org/abs/2005.12310)
-    operation ControlledXOnTruthTable (func : BigInt, controlRegister : Qubit[], target : Qubit) : Unit {
+    operation ApplyXControlledOnTruthTable (func : BigInt, controlRegister : Qubit[], target : Qubit) : Unit {
         body (...) {
             let vars = Length(controlRegister);
 
@@ -186,7 +189,7 @@ namespace Microsoft.Quantum.Synthesis {
         controlled (controls, ...) {
             using (q = Qubit()) {
                 within {
-                    ControlledXOnTruthTableWithCleanTarget(func, controlRegister, q);
+                    ApplyXControlledOnTruthTableWithCleanTarget(func, controlRegister, q);
                 } apply {
                     Controlled X(controls + [q], target);
                 }
@@ -196,12 +199,15 @@ namespace Microsoft.Quantum.Synthesis {
     }
 
     /// # Summary
-    /// Applies the `X` operation on `target`, if the Boolean function `func` evaluates
-    /// to true for the classical assignment in `controlRegister`.  This operation implements
-    /// a special case of @"microsoft.quantum.synthesis.controlledxontruthtable", in which the target qubit is known to
-    /// be in the $\ket{0}$ state.
+    /// Applies the @"microsoft.quantum.intrinsic.x" operation on `target`, if the Boolean function `func` evaluates
+    /// to true for the classical assignment in `controlRegister`.
     ///
-    /// The implementation makes use of `CNOT` and `R1` gates.  The implementation of the
+    /// # Description
+    /// This operation implements a special case of @"microsoft.quantum.synthesis.applyxcontrolledontruthtable",
+    /// in which the target qubit is known to be in the $\ket{0}$ state.
+    ///
+    /// The implementation makes use of @"microsoft.quantum.intrinsic.cnot"
+    /// and @"microsoft.quantum.intrinsic.r1" gates.  The implementation of the
     /// adjoint operation is optimized and uses measurement-based uncomputation.
     ///
     /// # Input
@@ -213,14 +219,14 @@ namespace Microsoft.Quantum.Synthesis {
     /// Target qubit (must be in $\ket{0}$ state)
     ///
     /// # See Also
-    /// - @"microsoft.quantum.synthesis.controlledxontruthtable"
-    operation ControlledXOnTruthTableWithCleanTarget (func : BigInt, controlRegister : Qubit[], target : Qubit) : Unit {
+    /// - Microsoft.Quantum.Synthesis.ApplyXControlledOnTruthTable
+    operation ApplyXControlledOnTruthTableWithCleanTarget (func : BigInt, controlRegister : Qubit[], target : Qubit) : Unit {
         body (...) {
             let vars = Length(controlRegister);
 
             let maxValue = PowL(2L, 2^vars);
             Fact(func >= 0L and func < maxValue, $"Argument func must be value from 0 to {maxValue}");
-            AssertAllZero([target]);
+            AssertQubit(Zero, target);
 
             let tt = BigIntAsBoolArray(func);
             let table = Encoded(SizeAdjustedTruthTable(BigIntAsBoolArray(func), vars));
@@ -262,10 +268,10 @@ namespace Microsoft.Quantum.Synthesis {
             }
         }
         controlled (controls, ...) {
-            Controlled ControlledXOnTruthTable (controls, (func, controlRegister, target));
+            Controlled ApplyXControlledOnTruthTable (controls, (func, controlRegister, target));
         }
         controlled adjoint (controls, ...) {
-            Controlled ControlledXOnTruthTable (controls, (func, controlRegister, target));
+            Controlled ApplyXControlledOnTruthTable (controls, (func, controlRegister, target));
         }
     }
 }

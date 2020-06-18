@@ -105,7 +105,7 @@ namespace Microsoft.Quantum.Tests {
     }
 
     @Test("QuantumSimulator")
-    operation CheckControlledXOnTruthTable () : Unit {
+    operation CheckApplyXControlledOnTruthTable () : Unit {
         for (numQubits in 2..5) {
             for (round in 1..5) {
                 let func = IntAsBigInt(RandomInt(2^(2^numQubits)));
@@ -118,7 +118,7 @@ namespace Microsoft.Quantum.Tests {
                         within {
                             ApplyXorInPlace(i, LittleEndian(controls));
                         } apply {
-                            ControlledXOnTruthTable(func, controls, target);
+                            ApplyXControlledOnTruthTable(func, controls, target);
                         }
                         EqualityFactB(
                             IsResultOne(MResetZ(target)) != targetInit,
@@ -131,7 +131,7 @@ namespace Microsoft.Quantum.Tests {
     }
 
     @Test("QuantumSimulator")
-    operation CheckControlledControlledXOnTruthTable () : Unit {
+    operation CheckControlledApplyXControlledOnTruthTable () : Unit {
         for (numQubits in 2..5) {
             for (round in 1..5) {
                 let func = IntAsBigInt(RandomInt(2^(2^numQubits)));
@@ -146,7 +146,7 @@ namespace Microsoft.Quantum.Tests {
                             ApplyIfA(X, controlInit, control);
                             ApplyXorInPlace(i, LittleEndian(controls));
                         } apply {
-                            Controlled ControlledXOnTruthTable([control], (func, controls, target));
+                            Controlled ApplyXControlledOnTruthTable([control], (func, controls, target));
                         }
 
                         let result = IsResultOne(MResetZ(target));
@@ -165,7 +165,7 @@ namespace Microsoft.Quantum.Tests {
     }
 
     @Test("QuantumSimulator")
-    operation CheckControlledXOnTruthTableWithCleanTarget () : Unit {
+    operation CheckApplyXControlledOnTruthTableWithCleanTarget () : Unit {
         for (numQubits in 2..5) {
             for (round in 1..5) {
                 let func = IntAsBigInt(RandomInt(2^(2^numQubits)));
@@ -175,7 +175,7 @@ namespace Microsoft.Quantum.Tests {
                     for (i in 0..(2^numQubits - 1)) {
                         within {
                             ApplyXorInPlace(i, LittleEndian(controls));
-                            ControlledXOnTruthTableWithCleanTarget(func, controls, target);
+                            ApplyXControlledOnTruthTableWithCleanTarget(func, controls, target);
                         } apply {
                             CNOT(target, copy);
                         }
