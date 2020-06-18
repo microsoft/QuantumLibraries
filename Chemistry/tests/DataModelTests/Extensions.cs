@@ -56,7 +56,9 @@ namespace Microsoft.Quantum.Chemistry.Tests
 
         internal static IEnumerable<Action> IsEqualTo(this ElectronicStructureProblem expected, ElectronicStructureProblem actual)
         {   
-            // TODO: check rest of metadata.
+            // NB: This does not yet check all metadata, as some metadata does not yet roundtrip
+            //     correctly. See https://github.com/microsoft/QuantumLibraries/issues/279 for an
+            //     example and for discussion.
             yield return () =>
                 actual.CoulombRepulsion.Value.Should().Be(
                     expected.CoulombRepulsion.Value,

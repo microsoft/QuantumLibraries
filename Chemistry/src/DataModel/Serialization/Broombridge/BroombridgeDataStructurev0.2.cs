@@ -104,12 +104,14 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
             var wavefunctions = new Dictionary<string, Fermion.FermionWavefunction<OrbitalIntegrals.SpinOrbital>>();
             foreach (var initialState in initialStates ?? new List<V0_2.State>())
             {
-                var finalState = new FermionWavefunction<SpinOrbital>();
 
                 var (method, energy, outputState) = V0_2.ToWavefunction(initialState);
+                var finalState = new FermionWavefunction<SpinOrbital>()
+                {
+                    Energy = energy
+                };
 
                 var setMethod = V0_2.ParseInitialStateMethod(initialState.Method);
-                var setEnergy = energy;
 
                 if (setMethod == StateType.SparseMultiConfigurational)
                 {
@@ -145,7 +147,6 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
                 }
 
                 finalState.Method = setMethod;
-                finalState.Energy = setEnergy;
 
                 wavefunctions.Add(initialState.Label, finalState);
             }
