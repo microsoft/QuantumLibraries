@@ -22,23 +22,16 @@ namespace Microsoft.Quantum.Synthesis {
         mutable row = 0;
 
         while (row != -1) {
-            //Message($"Row = {row}");
-            //Message($"  set left[{row}] to {(row &&& ~~~(1 <<< var))}");
             set left w/= row <- (row &&& ~~~(1 <<< var));
             set visited w/= row <- true;
-            //Message($"  set left[{row ^^^ (1 <<< var)}] to {left[row] ^^^ (1 <<< var)}");
             set left w/= row ^^^ (1 <<< var) <- left[row] ^^^ (1 <<< var);
             set row ^^^= (1 <<< var);
             set visited w/= row <- true;
 
-            //Message($"  set right[{perm[row] ||| (1 <<< var)}] to {perm[row]}");
             set right w/= perm[row] ||| (1 <<< var) <- perm[row];
-            //Message($"  set right[{perm[row] &&& ~~~(1 <<< var)}] to {perm[row] ^^^ (1 <<< var)}");
             set right w/= perm[row] &&& ~~~(1 <<< var) <- perm[row] ^^^ (1 <<< var);
 
-            //Message($"  find {perm[row] ^^^ (1 <<< var)} in perm = {perm}   (row = {row})");
             set row = IndexOf(EqualI(perm[row] ^^^ (1 <<< var), _), perm);
-            //Message($"  new row = {row}");
             if (visited[row]) {
                 set row = IndexOf(EqualB(false, _), visited);
             }
@@ -56,11 +49,7 @@ namespace Microsoft.Quantum.Synthesis {
         return ((x &&& (2^(vars-1) - 2^position)) <<< 1) + (x &&& (2^position - 1));
     }
 
-    ////////////////////////////////////////////////////////////
-    // Public operation                                       //
-    ////////////////////////////////////////////////////////////
-
-    operation ApplyPermutationUsingDecomposition(perm : Int[], qubits : LittleEndian) : Unit {
+    internal function GetTruthTablesForGates (perm : Int[]) : (BigInt, Int)[] {
         let n = BitSizeI(Length(perm) - 1);
 
         mutable lFunctions = new (BigInt, Int)[n];
@@ -71,15 +60,29 @@ namespace Microsoft.Quantum.Synthesis {
             let ((l, r), remainder) = DecomposedOn(permCopy, i);
             set permCopy = remainder;
             let indices = Mapped(WithZeroInsertedAt(i, n, _), RangeAsIntArray(0..2^(n - 1) - 1));
-            set lFunctions w/= i <- (BoolArrayAsBigInt(Mapped(NotEqualI, Subarray(indices, Enumerated(l)))), i);
-            set rFunctions w/= i <- (BoolArrayAsBigInt(Mapped(NotEqualI, Subarray(indices, Enumerated(r)))), i);
+            
+            let lFunc = BoolArrayAsBigInt(Mapped(NotEqualI, Subarray(indices, Enumerated(l))));
+            let rFunc = BoolArrayAsBigInt(Mapped(NotEqualI, Subarray(indices, Enumerated(r))));
+
+            if (lFunc != 0L) {
+                set lFunctions w/= i <- (lFunc, i);
+            }
+            if (rFunc != 0L) {
+                set rFunctions w/= i <- (rFunc, i);
+            }
         }
 
+        return lFunctions + Reversed(rFunctions);
+    }
+
+    ////////////////////////////////////////////////////////////
+    // Public operation                                       //
+    ////////////////////////////////////////////////////////////
+
+    operation ApplyPermutationUsingDecomposition(perm : Int[], qubits : LittleEndian) : Unit is Adj+Ctl {
         let register = qubits!;
-        for ((func, target) in lFunctions + Reversed(rFunctions)) {
-            if (func != 0L) {
-                ControlledXOnTruthTable(func, Exclude([target], register), register[target]);
-            }
+        for ((func, target) in GetTruthTablesForGates(perm)) {
+            ApplyXControlledOnTruthTable(func, Exclude([target], register), register[target]);
         }
     }
 }
