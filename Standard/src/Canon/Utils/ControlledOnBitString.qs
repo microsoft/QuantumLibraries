@@ -21,7 +21,7 @@ namespace Microsoft.Quantum.Canon {
     ///
     /// # Remarks
     /// For example, `bits = [0,1,0,0,1]` means that `oracle` is applied if and only if `controlRegister`" is in the state $\ket{0}\ket{1}\ket{0}\ket{0}\ket{1}$.
-    internal operation ApplyControlledOnBitString<'T> (bits : Bool[], oracle : ('T => Unit is Adj + Ctl), controlRegister : Qubit[], targetRegister : 'T)
+    operation ApplyControlledOnBitString<'T> (bits : Bool[], oracle : ('T => Unit is Adj + Ctl), controlRegister : Qubit[], targetRegister : 'T)
     : Unit is Adj + Ctl {
         // The control register must have enough bits to implement the requested control.
         Fact(Length(bits) <= Length(controlRegister), "Control register shorter than control pattern.");
@@ -119,7 +119,7 @@ namespace Microsoft.Quantum.Canon {
     /// # Remarks
     /// `numberState` must be at most $2^\texttt{Length(controlRegister)} - 1$.
     /// For example, `numberState = 537` means that `oracle` is applied if and only if `controlRegister` is in the state $\ket{537}$.
-    internal operation ApplyControlledOnInt<'T> (numberState : Int, oracle : ('T => Unit is Adj + Ctl), controlRegister : Qubit[], targetRegister : 'T)
+    operation ApplyControlledOnInt<'T> (numberState : Int, oracle : ('T => Unit is Adj + Ctl), controlRegister : Qubit[], targetRegister : 'T)
     : Unit is Adj + Ctl {
         let bits = IntAsBoolArray(numberState, Length(controlRegister));
         (ControlledOnBitString(bits, oracle))(controlRegister, targetRegister);
