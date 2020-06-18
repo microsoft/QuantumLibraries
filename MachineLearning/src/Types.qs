@@ -46,7 +46,7 @@ namespace Microsoft.Quantum.MachineLearning {
     );
 
     /// # Summary
-    /// Describes a quantum classifier model comprised of a sequence of
+    /// Describes a quantum classifier model composed of a sequence of
     /// parameterized and controlled rotations, an assignment of rotation
     /// angles, and a bias between the two classes recognized by the model.
     ///
