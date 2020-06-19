@@ -45,8 +45,25 @@ namespace Microsoft.Quantum.Synthesis {
         return ((left, right), remainder);
     }
 
-    internal function WithZeroInsertedAt (position : Int, vars : Int, x : Int) : Int {
-        return ((x &&& (2^(vars-1) - 2^position)) <<< 1) + (x &&& (2^position - 1));
+    /// # Summary
+    /// Insert a 0-bit into an integer
+    ///
+    /// # Description
+    /// This operation takes an integer, inserts a 0 at bit `position`, and returns
+    /// the updated value as an integer.  For example, inserting a 0 at position 2
+    /// in the number 10 ($10_{10} = 1010_{2}$) returns the number 18 ($18_{10} = 10010_{2}$).
+    ///
+    /// # Input
+    /// ## position
+    /// The position at which 0 is inserted
+    /// ## value
+    /// The value that is modified
+    ///
+    /// # Output
+    /// Modified value
+    internal function WithZeroInsertedAt (position : Int, value : Int) : Int {
+        let mask = 2^position - 1;
+        return ((value &&& ~~~mask) <<< 1) + (value &&& mask);
     }
 
     internal function GetTruthTablesForGates (perm : Int[]) : (BigInt, Int)[] {
@@ -59,7 +76,7 @@ namespace Microsoft.Quantum.Synthesis {
         for (i in 0..n - 1) {
             let ((l, r), remainder) = DecomposedOn(permCopy, i);
             set permCopy = remainder;
-            let indices = Mapped(WithZeroInsertedAt(i, n, _), RangeAsIntArray(0..2^(n - 1) - 1));
+            let indices = Mapped(WithZeroInsertedAt(i, _), SequenceI(0, 2^(n - 1) - 1));
             
             let lFunc = BoolArrayAsBigInt(Mapped(NotEqualI, Subarray(indices, Enumerated(l))));
             let rFunc = BoolArrayAsBigInt(Mapped(NotEqualI, Subarray(indices, Enumerated(r))));
