@@ -4,7 +4,7 @@
 namespace Microsoft.Quantum.Canon {
 
     /// # Summary
-    /// Returns the output of the the composition of `inner` and `outer`
+    /// Returns the output of the composition of `inner` and `outer`
     /// for a given input.
     internal function ComposedOutput<'T, 'U, 'V> (outer : ('U -> 'V), inner : ('T -> 'U), target : 'T) : 'V {
         return outer(inner(target));

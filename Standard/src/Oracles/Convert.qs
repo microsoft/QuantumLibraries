@@ -107,7 +107,7 @@ namespace Microsoft.Quantum.Oracles {
     /// Constructs reflection about a given state from an oracle.
     ///
     /// # Description
-    /// Given a determinstic state preparation oracle represented by a unitary
+    /// Given a deterministic state preparation oracle represented by a unitary
     /// matrix $O$,
     /// the result of this function is an oracle that applies a reflection
     /// around the state $\ket{\psi}$ prepared by the oracle $O$; that is,

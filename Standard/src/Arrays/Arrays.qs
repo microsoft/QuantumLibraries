@@ -424,7 +424,7 @@ namespace Microsoft.Quantum.Arrays {
     /// Array with elements to be swapped.
     ///
     /// # Output
-    /// The array with the in place swapp applied.
+    /// The array with the in place swap applied.
     ///
     /// ## Example
     /// ```qsharp

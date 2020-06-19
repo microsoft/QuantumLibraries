@@ -15,7 +15,7 @@ namespace Microsoft.Quantum.Chemistry
 
         #region Extension methods
         /// <summary>
-        /// Computes the L_p norm of coefficicients of all terms in a Hamiltonian.
+        /// Computes the L_p norm of coefficients of all terms in a Hamiltonian.
         /// </summary>
         /// <param name="power">Selects type of norm.</param>
         /// <returns>L_p norm of Hamiltonian coefficients.</returns>

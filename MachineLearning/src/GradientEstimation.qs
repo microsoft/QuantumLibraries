@@ -12,7 +12,7 @@ namespace Microsoft.Quantum.MachineLearning {
     open Microsoft.Quantum.Preparation;
     open Microsoft.Quantum.Characterization;
 
-    // NOTE: the last qubit of 'reg' in this context is the auxillary qubit used in the Hadamard test.
+    // NOTE: the last qubit of 'reg' in this context is the auxiliary qubit used in the Hadamard test.
     operation _ApplyLEOperationToRawRegister(op : (LittleEndian => Unit is Adj), target : Qubit[]) : Unit is Adj {
         op(LittleEndian(target));
     }
