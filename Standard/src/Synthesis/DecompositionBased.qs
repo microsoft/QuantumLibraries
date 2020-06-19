@@ -94,8 +94,8 @@ namespace Microsoft.Quantum.Synthesis {
         let ((l, r), remainder) = DecomposedOn(state::perm, index);
 
         let indices = Mapped(WithZeroInsertedAt(index, _), SequenceI(0, 2^(numVars - 1) - 1));
-        let lFunc = BoolArrayAsBigInt(Mapped(NotEqualI, Subarray(indices, Enumerated(l))));
-        let rFunc = BoolArrayAsBigInt(Mapped(NotEqualI, Subarray(indices, Enumerated(r))));
+        let lFunc = BoolArrayAsBigInt(Mapped(NotEqualI, Subarray(indices, Enumerated(l))) + [false]); // make sure that lFunc is positive
+        let rFunc = BoolArrayAsBigInt(Mapped(NotEqualI, Subarray(indices, Enumerated(r))) + [false]); // make sure that lFunc is positive
 
         return DecompositionState(
             remainder,
