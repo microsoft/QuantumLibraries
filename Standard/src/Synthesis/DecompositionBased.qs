@@ -106,11 +106,11 @@ namespace Microsoft.Quantum.Synthesis {
 
     /// # Summary
     /// Collect all functions for controlled gates by folding through all variable indexes
-    internal function GetTruthTablesForGates (perm : Int[]) : (BigInt, Int)[] {
-        let n = BitSizeI(Length(perm) - 1);
+    internal function GetTruthTablesForGates (perm : Int[], variableOrder : Int[]) : (BigInt, Int)[] {
+        let numVars = Length(variableOrder);
 
         let initialState = DecompositionState(perm, new (BigInt, Int)[0], new (BigInt, Int)[0]);
-        let (_, lfunctions, rfunctions) = (Fold(GetTruthTablesForGatesFolder(n, _, _), initialState, SequenceI(0, n - 1)))!;
+        let (_, lfunctions, rfunctions) = (Fold(GetTruthTablesForGatesFolder(numVars, _, _), initialState, variableOrder))!;
 
         return lfunctions + rfunctions;
     }
@@ -121,7 +121,7 @@ namespace Microsoft.Quantum.Synthesis {
 
     /// # Summary
     /// Permutes the amplitudes in a quantum state given a permutation
-    /// using transformation-based synthesis.
+    /// using decomposition-based synthesis.
     ///
     /// # Description
     /// This procedure implements the decomposition based
@@ -140,6 +140,9 @@ namespace Microsoft.Quantum.Synthesis {
     /// permutation `\pi` will be the identity, and based on the collectd truth
     /// tables and indexes, one can apply truth-table controlled @"microsoft.quantum.intrinsic.x"
     /// operations using the @"microsoft.quantum.synthesis.applyxcontrolledontruthtable" operation.
+    ///
+    /// The variable order is $0, \dots, n - 1$.  A custom variable order can be specified
+    /// in the operation @"microsoft.quantum.synthesis.applypermutationusingdecompositionwithvariableorder".
     ///
     /// # Input
     /// ## perm
@@ -160,13 +163,49 @@ namespace Microsoft.Quantum.Synthesis {
     ///    Adv. in Math. of Comm. 2(2), 2008, pp. 183--200](http://www.aimsciences.org/article/doi/10.3934/amc.2008.2.183)
     /// - [*Mathias Soeken*, *Laura Tague*, *Gerhard W. Dueck*, *Rolf Drechsler*,
     ///    Journal of Symbolic Computation 73 (2016), pp. 1--26](https://www.sciencedirect.com/science/article/pii/S0747717115000188?via%3Dihub)
+    ///
+    /// # See Also
+    /// - Microsoft.Quantum.Synthesis.ApplyPermutationUsingDecompositionWithVariableOrder
     operation ApplyPermutationUsingDecomposition(perm : Int[], qubits : LittleEndian) : Unit is Adj+Ctl {
+        ApplyPermutationUsingDecompositionWithVariableOrder(perm, SequenceI(0, Length(qubits!) - 1), qubits);
+    }
+
+    /// # Summary
+    /// Permutes the amplitudes in a quantum state given a permutation
+    /// using decomposition-based synthesis.
+    ///
+    /// # Description
+    /// This operation is a more general version of @"microsoft.quantum.synthesis.applypermutationusingdecomposition"
+    /// in which the variable order can be specified.
+    ///
+    /// # Input
+    /// ## perm
+    /// A permutation of $2^n$ elements starting from 0.
+    /// ## variableOrder
+    /// A permutation of $n$ elements starting from 0.
+    /// ## qubits
+    /// A list of $n$ qubits to which the permutation is applied to.
+    ///
+    /// # Example
+    /// To synthesize a `SWAP` operation:
+    /// ```Q#
+    /// using (qubits = Qubit[2]) {
+    ///   ApplyPermutationUsingDecompositionWithVariableOrder([0, 2, 1, 3], [1, 0], qubits);
+    /// }
+    /// ```
+    ///
+    /// # See Also
+    /// - Microsoft.Quantum.Synthesis.ApplyPermutationUsingDecomposition
+    operation ApplyPermutationUsingDecompositionWithVariableOrder(perm : Int[], variableOrder : Int[], qubits : LittleEndian) : Unit is Adj+Ctl {
         Fact(IsPermutation(perm), "perm must be a permutation");
         EqualityFactI(Length(perm), 2^Length(qubits!), $"Length of perm must be {2^Length(qubits!)}");
 
+        Fact(IsPermutation(variableOrder), "variableOrder must be a permutation");
+        EqualityFactI(Length(variableOrder), Length(qubits!), $"Length of variableOrder must be {Length(qubits!)}");
+
         let register = qubits!;
 
-        for ((func, target) in GetTruthTablesForGates(perm)) {
+        for ((func, target) in GetTruthTablesForGates(perm, variableOrder)) {
             ApplyXControlledOnTruthTable(func, Exclude([target], register), register[target]);
         }
     }
