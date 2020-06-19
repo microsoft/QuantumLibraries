@@ -5,6 +5,7 @@ namespace Microsoft.Quantum.Synthesis {
     open Microsoft.Quantum.Arithmetic;
     open Microsoft.Quantum.Arrays;
     open Microsoft.Quantum.Convert;
+    open Microsoft.Quantum.Diagnostics;
     open Microsoft.Quantum.Intrinsic;
     open Microsoft.Quantum.Logical;
     open Microsoft.Quantum.Math;
@@ -160,7 +161,11 @@ namespace Microsoft.Quantum.Synthesis {
     /// - [*Mathias Soeken*, *Laura Tague*, *Gerhard W. Dueck*, *Rolf Drechsler*,
     ///    Journal of Symbolic Computation 73 (2016), pp. 1--26](https://www.sciencedirect.com/science/article/pii/S0747717115000188?via%3Dihub)
     operation ApplyPermutationUsingDecomposition(perm : Int[], qubits : LittleEndian) : Unit is Adj+Ctl {
+        Fact(IsPermutation(perm), "perm must be a permutation");
+        EqualityFactI(Length(perm), 2^Length(qubits!), $"Length of perm must be {2^Length(qubits!)}");
+
         let register = qubits!;
+
         for ((func, target) in GetTruthTablesForGates(perm)) {
             ApplyXControlledOnTruthTable(func, Exclude([target], register), register[target]);
         }
