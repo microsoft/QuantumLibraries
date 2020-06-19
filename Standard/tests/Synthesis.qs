@@ -12,7 +12,7 @@ namespace Microsoft.Quantum.Tests {
     open Microsoft.Quantum.Measurement;
     open Microsoft.Quantum.Synthesis;
 
-    operation CheckApplyPermutation (synthesisOperation : ((Int[], LittleEndian) => Unit is Adj+Ctl)) : Unit {
+    internal operation CheckApplyPermutation (synthesisOperation : ((Int[], LittleEndian) => Unit is Adj + Ctl)) : Unit {
         let permutations = [
             [0, 2, 1, 3],
             [0, 1, 3, 2],
@@ -37,6 +37,11 @@ namespace Microsoft.Quantum.Tests {
         }
     }
 
+    internal operation ApplyPermutationUsingDecompositionWithReverseVariableOrder (perm : Int[], qubits : LittleEndian) : Unit is Adj + Ctl {
+        let variableOrder = Reversed(SequenceI(0, Length(qubits!) - 1));
+        ApplyPermutationUsingDecompositionWithVariableOrder(perm, variableOrder, qubits);
+    }
+
     @Test("ToffoliSimulator")
     operation CheckTransformationBasedSynthesis () : Unit {
         CheckApplyPermutation(ApplyPermutationUsingTransformation);
@@ -45,6 +50,7 @@ namespace Microsoft.Quantum.Tests {
     @Test("QuantumSimulator")
     operation CheckDecompositionBasedSynthesis () : Unit {
         CheckApplyPermutation(ApplyPermutationUsingDecomposition);
+        CheckApplyPermutation(ApplyPermutationUsingDecompositionWithReverseVariableOrder);
     }
 
     @Test("ToffoliSimulator")
