@@ -66,30 +66,29 @@ namespace Microsoft.Quantum.Synthesis {
         return ((value &&& ~~~mask) <<< 1) + (value &&& mask);
     }
 
+    internal newtype DecompositionState = (perm : Int[], lfunctions : (BigInt, Int)[], rfunctions : (BigInt, Int)[]);
+
+    internal function GetTruthTablesForGatesFolder(numVars : Int, state : DecompositionState, index : Int) : DecompositionState {
+        let ((l, r), remainder) = DecomposedOn(state::perm, index);
+
+        let indices = Mapped(WithZeroInsertedAt(index, _), SequenceI(0, 2^(numVars - 1) - 1));
+        let lFunc = BoolArrayAsBigInt(Mapped(NotEqualI, Subarray(indices, Enumerated(l))));
+        let rFunc = BoolArrayAsBigInt(Mapped(NotEqualI, Subarray(indices, Enumerated(r))));
+
+        return DecompositionState(
+            remainder,
+            lFunc == 0L ? state::lfunctions | state::lfunctions + [(lFunc, index)],
+            rFunc == 0L ? state::rfunctions | [(rFunc, index)] + state::rfunctions
+        );
+    }
+
     internal function GetTruthTablesForGates (perm : Int[]) : (BigInt, Int)[] {
         let n = BitSizeI(Length(perm) - 1);
 
-        mutable lFunctions = new (BigInt, Int)[n];
-        mutable rFunctions = new (BigInt, Int)[n];
+        let initialState = DecompositionState(perm, new (BigInt, Int)[0], new (BigInt, Int)[0]);
+        let (_, lfunctions, rfunctions) = (Fold(GetTruthTablesForGatesFolder(n, _, _), initialState, SequenceI(0, n - 1)))!;
 
-        mutable permCopy = perm;
-        for (i in 0..n - 1) {
-            let ((l, r), remainder) = DecomposedOn(permCopy, i);
-            set permCopy = remainder;
-            let indices = Mapped(WithZeroInsertedAt(i, _), SequenceI(0, 2^(n - 1) - 1));
-            
-            let lFunc = BoolArrayAsBigInt(Mapped(NotEqualI, Subarray(indices, Enumerated(l))));
-            let rFunc = BoolArrayAsBigInt(Mapped(NotEqualI, Subarray(indices, Enumerated(r))));
-
-            if (lFunc != 0L) {
-                set lFunctions w/= i <- (lFunc, i);
-            }
-            if (rFunc != 0L) {
-                set rFunctions w/= i <- (rFunc, i);
-            }
-        }
-
-        return lFunctions + Reversed(rFunctions);
+        return lfunctions + rfunctions;
     }
 
     ////////////////////////////////////////////////////////////
