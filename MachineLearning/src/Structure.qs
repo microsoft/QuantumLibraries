@@ -20,17 +20,14 @@ namespace Microsoft.Quantum.MachineLearning {
     /// may be applied.
     function NQubitsRequired(model : SequentialModel)
     : Int {
-        mutable nQubitsRequired = 0;
+        mutable lastQubitIndex = -1; // Need to return 0 if there are no gates
         for (gate in model::Structure) {
-            set nQubitsRequired = 1 + Fold(
-                MaxI, 0,
-                gate::ControlIndices + [
-                    gate::TargetIndex,
-                    nQubitsRequired
-                ]
+            set lastQubitIndex = Fold(
+                MaxI, lastQubitIndex,
+                gate::ControlIndices + [gate::TargetIndex]
             );
         }
-        return nQubitsRequired;
+        return lastQubitIndex + 1;
     }
 
     /// # Summary
