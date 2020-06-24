@@ -125,19 +125,19 @@ namespace Microsoft.Quantum.Synthesis {
     ///
     /// # Description
     /// This procedure implements the decomposition based
-    /// synthesis approach.  Input is a permutation $\pi$ over $2^n$ elements
+    /// synthesis approach.  The input is a permutation $\pi$ over $2^n$ elements
     /// $\{0, \dots, 2^n-1\}$, which represents an $n$-variable reversible Boolean function. 
-    /// The algorithm performs iteratively the following steps for each variable
+    /// The algorithm iteratively performs the following steps for each variable
     /// index $i$:
     ///
     /// 1. Compute $((\pi_l, \pi_r), \pi')$ such that the images
     ///    of $\pi_l$ and $\pi_r$ do not change bits in their elements at indexes other
     ///    than $i$ and images of $\pi'$ do not change bit $i$ in their elements.
     /// 2. Set $\pi \leftarrow \pi'$, and derive truth tables from $\pi_l$ and $\pi_r$
-    ///    based on elements that are not fix-points.
+    ///    based on elements that are not fixed-points.
     ///
     /// After applying these steps for all variable indexes, the remaining
-    /// permutation `\pi` will be the identity, and based on the collectd truth
+    /// permutation $\pi$ will be the identity, and based on the collected truth
     /// tables and indexes, one can apply truth-table controlled @"microsoft.quantum.intrinsic.x"
     /// operations using the @"microsoft.quantum.synthesis.applyxcontrolledontruthtable" operation.
     ///
