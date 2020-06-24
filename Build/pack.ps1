@@ -39,6 +39,9 @@ Pack-One '../Numerics/src/Numerics.csproj'
 Write-Host "##[info]Pack chemistry magics library"
 Pack-One '../Chemistry/src/Jupyter/Jupyter.csproj'
 
+Write-Host "##[info]Pack chemistry tool"
+Pack-One '../Chemistry/src/Tools/Tools.csproj'
+
 if (-not $all_ok) {
     throw "At least one test failed execution. Check the logs."
 }

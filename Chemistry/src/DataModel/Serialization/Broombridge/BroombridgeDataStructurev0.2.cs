@@ -1,5 +1,7 @@
-﻿// Copyright (c) Microsoft Corporation. All rights reserved.
+﻿// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
+
+#nullable enable
 
 using System;
 using System.Collections.Generic;
@@ -31,6 +33,127 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
     using HamiltonianData = V0_1.HamiltonianData;
     using BoundedQuantity = V0_1.BoundedQuantity;
 
+    internal static class BroombridgeExtensionsV0_2
+    {
+        // NB: V0_2 and V0_1 use the same format for quantities.
+        internal static Broombridge.V0_1.SimpleQuantity ToBroombridgeV0_2(this Quantity<double> quantity) =>
+            quantity.ToBroombridgeV0_1();
+
+        internal static Broombridge.V0_1.BoundedQuantity ToBroombridgeV0_2(this BoundedQuantity<double> quantity) =>
+            quantity.ToBroombridgeV0_1();
+
+        // NB: Broombridge v0.2 uses the same serialization format
+        //     for Geometry as 0.1.
+        internal static V0_1.Geometry ToBroombridgeV0_2(
+                this Microsoft.Quantum.Chemistry.Geometry geometry
+        ) =>
+            geometry.ToBroombridgeV0_1();
+
+        internal static V0_2.ProblemDescription ToBroombridgeV0_2(
+                this ElectronicStructureProblem problem
+        ) => new V0_2.ProblemDescription
+            {
+                BasisSet = problem.BasisSet != null
+                            ? new V0_1.BasisSet
+                            {
+                                Name = problem.BasisSet?.Name,
+                                Type = problem.BasisSet?.Type
+                            }
+                            : null,
+                CoulombRepulsion = problem.CoulombRepulsion.ToBroombridgeV0_2(),
+                EnergyOffset = problem.EnergyOffset.ToBroombridgeV0_2(),
+                FciEnergy = problem.FciEnergy?.ToBroombridgeV0_2(),
+                Geometry = problem.Geometry?.ToBroombridgeV0_2(),
+                Hamiltonian = problem.OrbitalIntegralHamiltonian.ToBroombridgeV0_1(),
+                InitialStates = problem.InitialStates?.ToBroombridgeV0_2(),
+                Metadata = problem.Metadata,
+                NElectrons = problem.NElectrons,
+                NOrbitals = problem.NOrbitals,
+                ScfEnergy = problem.ScfEnergy?.ToBroombridgeV0_2(),
+                ScfEnergyOffset = problem.ScfEnergyOffset?.ToBroombridgeV0_2()
+            };
+
+        internal static List<V0_2.State> ToBroombridgeV0_2(
+                this Dictionary<string, FermionWavefunction<SpinOrbital>> states
+        ) =>
+            states
+            .Select(state => new V0_2.State
+            {
+                Label = state.Key,
+                Energy = new SimpleQuantity
+                {
+                    Value = state.Value.Energy,
+                    Units = "hartree" // FIXME
+                },
+                Method = state.Value.Method switch
+                {
+                    StateType.SingleConfigurational => V0_2.UpdaterStrings.SingleConfigurational,
+                    StateType.SparseMultiConfigurational => V0_2.UpdaterStrings.SparseMultiConfigurational,
+                    StateType.UnitaryCoupledCluster => V0_2.UpdaterStrings.UnitaryCoupledCluster,
+                    _ => "default"
+                }
+                // FIXME: add Superposition and ClusterOperator.
+            })
+            .ToList();
+
+        internal static Dictionary<string, Fermion.FermionWavefunction<OrbitalIntegrals.SpinOrbital>>
+            FromBroombridgeV0_2(
+                this IEnumerable<V0_2.State> initialStates
+            )
+        {
+            var wavefunctions = new Dictionary<string, Fermion.FermionWavefunction<OrbitalIntegrals.SpinOrbital>>();
+            foreach (var initialState in initialStates ?? new List<V0_2.State>())
+            {
+
+                var (method, energy, outputState) = V0_2.ToWavefunction(initialState);
+                var finalState = new FermionWavefunction<SpinOrbital>()
+                {
+                    Energy = energy
+                };
+
+                var setMethod = V0_2.ParseInitialStateMethod(initialState.Method);
+
+                if (setMethod == StateType.SparseMultiConfigurational)
+                {
+                    var mcfData = (SparseMultiCFWavefunction<SpinOrbital>)outputState;
+
+                    finalState = new FermionWavefunction<SpinOrbital>(
+                        mcfData.Excitations
+                            .Select(o => (
+                                o.Key.ToIndices().ToArray(),
+                                o.Value.Real
+                            )));
+                }
+                else if (setMethod == StateType.UnitaryCoupledCluster)
+                {
+                    var uccData = (UnitaryCCWavefunction<SpinOrbital>)outputState;
+
+                    var reference = uccData.Reference;
+
+                    var excitations = uccData.Excitations;
+
+                    finalState = new FermionWavefunction<SpinOrbital>(
+                        reference.ToIndices(),
+                        excitations
+                            .Select(o => (
+                                o.Key.ToIndices().ToArray(),
+                                o.Value.Real
+                            ))
+                        );
+                }
+                else
+                {
+                    throw new System.ArgumentException($"Wavefunction type {setMethod} not recognized");
+                }
+
+                finalState.Method = setMethod;
+
+                wavefunctions.Add(initialState.Label, finalState);
+            }
+            return wavefunctions;
+        }
+    }
+
 
     /// <summary>
     /// Broombridge v0.2 format.
@@ -44,14 +167,7 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
     #region Broombridge v0.2 format
     public static class V0_2
     {
-        // Lower-case invariant dictionary key comparer.
-        private static Dictionary<string, StateType> StateTypeDictionary = new Dictionary<string, StateType>(StringComparer.OrdinalIgnoreCase)
-        {
-            { "single_configurational", StateType.SingleConfigurational },
-            { "sparse_multi_configurational", StateType.SparseMultiConfigurational },
-            { "unitary_coupled_cluster", StateType.UnitaryCoupledCluster }
-        };
-            
+        public static string SchemaUrl = "https://raw.githubusercontent.com/microsoft/Quantum/master/Chemistry/Schema/broombridge-0.2.schema.json";
         internal static class UpdaterStrings
         {
             public const string SingleConfigurational = "single_configurational";
@@ -60,9 +176,21 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
             public const string VersionNumber = "0.2";
         }
 
+        // Lower-case invariant dictionary key comparer.
+        private static Dictionary<string, StateType> StateTypeDictionary = new Dictionary<string, StateType>(StringComparer.OrdinalIgnoreCase)
+        {
+            [UpdaterStrings.SingleConfigurational] = StateType.SingleConfigurational,
+            [UpdaterStrings.SparseMultiConfigurational] = StateType.SparseMultiConfigurational,
+            [UpdaterStrings.UnitaryCoupledCluster] = StateType.UnitaryCoupledCluster
+        };
+
         // Root of Broombridge data structure
         public struct Data
         {
+            public static readonly Format DefaultFormat = new Broombridge.V0_1.Format
+            {
+                Version = "0.2"
+            };
 
             [YamlMember(Alias = "$schema", ApplyNamingConventions = false)]
             [JsonProperty(PropertyName = "$schema")]
@@ -94,11 +222,11 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
 
             [YamlMember(Alias = "basis_set", ApplyNamingConventions = false)]
             [JsonProperty(PropertyName = "basis_set")]
-            public BasisSet BasisSet { get; set; }
+            public BasisSet? BasisSet { get; set; }
 
             [YamlMember(Alias = "geometry", ApplyNamingConventions = false)]
             [JsonProperty(PropertyName = "geometry")]
-            public Geometry Geometry { get; set; }
+            public Geometry? Geometry { get; set; }
 
             [YamlMember(Alias = "coulomb_repulsion", ApplyNamingConventions = false)]
             [JsonProperty(PropertyName = "coulomb_repulsion")]
@@ -106,15 +234,15 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
 
             [YamlMember(Alias = "scf_energy", ApplyNamingConventions = false)]
             [JsonProperty(PropertyName = "scf_energy")]
-            public SimpleQuantity ScfEnergy { get; set; }
+            public SimpleQuantity? ScfEnergy { get; set; }
 
             [YamlMember(Alias = "scf_energy_offset", ApplyNamingConventions = false)]
             [JsonProperty(PropertyName = "scf_energy_offset")]
-            public SimpleQuantity ScfEnergyOffset { get; set; }
+            public SimpleQuantity? ScfEnergyOffset { get; set; }
 
             [YamlMember(Alias = "fci_energy", ApplyNamingConventions = false)]
             [JsonProperty(PropertyName = "fci_energy")]
-            public BoundedQuantity FciEnergy { get; set; }
+            public BoundedQuantity? FciEnergy { get; set; }
 
             [YamlMember(Alias = "n_orbitals", ApplyNamingConventions = false)]
             [JsonProperty(PropertyName = "n_orbitals")]
@@ -134,7 +262,7 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
 
             [YamlMember(Alias = "initial_state_suggestions", ApplyNamingConventions = false)]
             [JsonProperty(PropertyName = "initial_state_suggestions")]
-            public List<State> InitialStates { get; set; }
+            public List<State>? InitialStates { get; set; }
         }
 
 
@@ -204,7 +332,9 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
         /// <param name="state">String in method field.</param>
         /// <returns>The initial state preparation algorithm described by the given method.</returns>
         internal static StateType ParseInitialStateMethod(string state) =>
-            StateTypeDictionary.ContainsKey(state) ? StateTypeDictionary[state] : StateType.Default;
+            StateTypeDictionary.ContainsKey(state)
+            ? StateTypeDictionary[state]
+            : StateType.Default;
         
 
         // Parses MCF wavefunction.
@@ -278,7 +408,7 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
         internal static (StateType, double, object) ToWavefunction(V0_2.State state)
         {
             StateType method = ParseInitialStateMethod(state.Method);
-            double energy = state.Energy != null ? state.Energy.Value : 0.0;
+            var energy = state.Energy?.Value ?? 0.0;
             List<List<string>> superposition = state.Superposition ?? new List<List<string>>();
             ClusterOperator clusterOperator = state.ClusterOperator;
             object outputState;

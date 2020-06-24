@@ -15,6 +15,7 @@ using Microsoft.Quantum.Chemistry.LadderOperators;
 using Microsoft.Quantum.Chemistry;
 
 using Newtonsoft.Json.Linq;
+using System.IO;
 
 namespace SerializationTests
 {
@@ -83,7 +84,7 @@ namespace SerializationTests
         }
 
         // Lithium Hydride filename.
-        static string filename = "LiH_0.1.yaml";
+        static string filename = Path.Join("Broombridge", "LiH_0.1.yaml");
 
         [Fact]
         public void SerializeEmptyHamiltonian()

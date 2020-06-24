@@ -1,5 +1,7 @@
-﻿// Copyright (c) Microsoft Corporation. All rights reserved.
+// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
+
+#nullable enable
 
 using System;
 using System.Collections.Generic;
@@ -20,6 +22,10 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
     /// <summary>
     /// Latest Broombridge format.
     /// </summary>
+    [Obsolete(
+        "Please use collections of ElectronicStructureProblem instead.",
+        error: false
+    )]
     public class Data
     {
         /// <summary>
@@ -71,6 +77,10 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
     /// <summary>
     /// Electronic structure problem instance.
     /// </summary>
+    [Obsolete(
+        "Please use ElectronicStructureProblem instead.",
+        error: false
+    )]
     public struct ProblemDescription
     {
         /// <summary>
@@ -112,55 +122,8 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
                 NElectrons = problem.NElectrons,
                 NOrbitals = problem.NOrbitals,
                 OrbitalIntegralHamiltonian = V0_2.ToOrbitalIntegralHamiltonian(problem),
-                Wavefunctions = new Dictionary<string, FermionWavefunction<SpinOrbital>>()
+                Wavefunctions = problem.InitialStates?.FromBroombridgeV0_2() ?? new Dictionary<string, FermionWavefunction<SpinOrbital>>()
             };
-            foreach (var initialState in problem.InitialStates)
-            {
-                var finalState = new FermionWavefunction<SpinOrbital>();
-
-                var (method, energy, outputState) = V0_2.ToWavefunction(initialState);
-
-                var setMethod = V0_2.ParseInitialStateMethod(initialState.Method);
-                var setEnergy = energy;
-
-                if (setMethod == StateType.SparseMultiConfigurational)
-                {
-                    var mcfData = (SparseMultiCFWavefunction<SpinOrbital>)outputState;
-
-                    finalState = new FermionWavefunction<SpinOrbital>(
-                        mcfData.Excitations
-                            .Select(o => (
-                                o.Key.ToIndices().ToArray(),
-                                o.Value.Real
-                            )));
-                }
-                else if (setMethod == StateType.UnitaryCoupledCluster)
-                {
-                    var uccData = (UnitaryCCWavefunction<SpinOrbital>)outputState;
-
-                    var reference = uccData.Reference;
-
-                    var excitations = uccData.Excitations;
-
-                    finalState = new FermionWavefunction<SpinOrbital>(
-                        reference.ToIndices(),
-                        excitations
-                            .Select(o => (
-                                o.Key.ToIndices().ToArray(),
-                                o.Value.Real
-                            ))
-                        );
-                }
-                else
-                {
-                    throw new System.ArgumentException($"Wavefunction type {setMethod} not recognized");
-                }
-
-                finalState.Method = setMethod;
-                finalState.Energy = setEnergy;
-
-                problemDescription.Wavefunctions.Add(initialState.Label, finalState);
-            }
             return problemDescription;
         }
     }
