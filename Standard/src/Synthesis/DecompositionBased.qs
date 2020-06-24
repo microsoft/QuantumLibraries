@@ -154,7 +154,7 @@ namespace Microsoft.Quantum.Synthesis {
     /// To synthesize a `SWAP` operation:
     /// ```Q#
     /// using (qubits = Qubit[2]) {
-    ///   ApplyPermutationUsingDecomposition([0, 2, 1, 3], qubits);
+    ///   ApplyPermutationUsingDecomposition([0, 2, 1, 3], LittleEndian(qubits));
     /// }
     /// ```
     ///
@@ -190,7 +190,7 @@ namespace Microsoft.Quantum.Synthesis {
     /// To synthesize a `SWAP` operation:
     /// ```Q#
     /// using (qubits = Qubit[2]) {
-    ///   ApplyPermutationUsingDecompositionWithVariableOrder([0, 2, 1, 3], [1, 0], qubits);
+    ///   ApplyPermutationUsingDecompositionWithVariableOrder([0, 2, 1, 3], [1, 0], LittleEndian(qubits));
     /// }
     /// ```
     ///

@@ -152,7 +152,7 @@ namespace Microsoft.Quantum.Synthesis {
     /// To synthesize a `SWAP` operation:
     /// ```Q#
     /// using (qubits = Qubit[2]) {
-    ///   ApplyPermutationUsingTransformation([0, 2, 1, 3], qubits);
+    ///   ApplyPermutationUsingTransformation([0, 2, 1, 3], LittleEndian(qubits));
     /// }
     /// ```
     ///
