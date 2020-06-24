@@ -1,0 +1,46 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <PlatformTarget>x64</PlatformTarget>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <RootNamespace>Microsoft.Quantum.Chemistry.Tools</RootNamespace>
+    <AssemblyName>qdk-chem</AssemblyName>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <NoWarn>0162</NoWarn>
+    <Authors>Microsoft</Authors>
+    <Description>Tools for working with quantum chemistry data.</Description>
+    <Copyright>© Microsoft Corporation. All rights reserved.</Copyright>
+    <PackageReleaseNotes>See: https://docs.microsoft.com/quantum/relnotes/</PackageReleaseNotes>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/microsoft/quantumlibraries</PackageProjectUrl>
+    <PackageIconUrl>https://secure.gravatar.com/avatar/bd1f02955b2853ba0a3b1cdc2434e8ec.png</PackageIconUrl>
+    <PackageTags>Quantum Q# Qsharp</PackageTags>
+    <PackAsTool>true</PackAsTool>
+    <ToolCommandName>qdk-chem</ToolCommandName>
+    <PackageId>Microsoft.Quantum.Chemistry.Tools</PackageId>
+    <ContentTargetFolders>\</ContentTargetFolders>
+    <ApplicationIcon />
+  </PropertyGroup>
+  
+  <ItemGroup>
+    <Compile Include="..\..\Common\DelaySign.cs" Link="Properties\DelaySign.cs" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <ProjectReference Include="..\Runtime\Runtime.csproj" />
+    <ProjectReference Include="..\DataModel\DataModel.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="3.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="3.0.0" />
+    <PackageReference Include="Serilog.Extensions.Logging.File" Version="2.0.0-dev-00039" />
+    <PackageReference Include="System.CommandLine" Version="2.0.0-beta1.20253.1" />
+    <PackageReference Include="System.CommandLine.Rendering" Version="0.3.0-alpha.20253.1" />
+  </ItemGroup>
+
+</Project>

@@ -4,6 +4,8 @@
 using System.Collections.Generic;
 using System.Linq;
 
+#nullable enable
+
 namespace Microsoft.Quantum.Chemistry
 {
     using System;
@@ -59,6 +61,14 @@ namespace Microsoft.Quantum.Chemistry
             return "[" + string.Join(", ", ints) + "]";
         }
 
+
+        internal static TValue GetValueOrDefault<TKey, TValue>(
+                this Dictionary<TKey, TValue> dictionary, TKey key,
+                TValue defaultValue = default
+        ) =>
+            dictionary.TryGetValue(key, out var value)
+            ? value
+            : defaultValue;
 
         #endregion
 
@@ -218,6 +228,28 @@ namespace Microsoft.Quantum.Chemistry
         /// <param name="array">Input array to clone.</param>
         /// <returns>Clone of the input array.</returns>
         public static TValue[] Clone<TValue>(this TValue[] array) => array.Select(el => el).ToArray();
+        
+        /// <summary>
+        ///       Searches base types of a given type to find the type that immediately derives from
+        ///       <see href="System.Object" />.
+        /// </summary>
+        internal static Type GetBasestType(this Type t) =>
+            (t.BaseType == typeof(object) || t == typeof(object)) ? t : GetBasestType(t.BaseType);
+
+        internal static int[] ToZeroBasedIndices(this IEnumerable<int> indices) =>
+            indices.Select(idx => idx - 1).ToArray();
+
+        internal static int[] ToOneBasedIndices(this IEnumerable<int> indices) =>
+            indices.Select(idx => idx + 1).ToArray();
+
+        internal static IEnumerable<TOutput> SelectMaybe<TInput, TOutput>(
+                this IEnumerable<TInput> source, Func<TInput, TOutput?> selector
+        ) 
+        where TOutput : class =>
+            source.Select(selector).Where(output => output != null).Select(item => item!);
+
+
 
     }
+
 }
