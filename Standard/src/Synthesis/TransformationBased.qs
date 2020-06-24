@@ -163,6 +163,9 @@ namespace Microsoft.Quantum.Synthesis {
     /// - [*Mathias Soeken*, *Gerhard W. Dueck*, *D. Michael Miller*,
     ///    Proc. RC 2016, Springer, pp. 307-321,
     ///    2016](https://doi.org/10.1007/978-3-319-40578-0_22)
+    ///
+    /// # See Also
+    /// - Microsoft.Quantum.Synthesis.ApplyPermutationUsingDecomposition
     operation ApplyPermutationUsingTransformation(perm : Int[], qubits : LittleEndian) : Unit is Adj + Ctl {
         // Translate MCT masks into multiple-controlled multiple-target Toffoli gates.
         let gates = Mapped(MaskToQubitsPair(qubits!, _), TBSMain(perm));

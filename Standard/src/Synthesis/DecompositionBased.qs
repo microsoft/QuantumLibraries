@@ -82,7 +82,7 @@ namespace Microsoft.Quantum.Synthesis {
     /// # Description
     /// The state holds the current permutation and the currently generated functions
     /// for controlled gates on the left, and controlled gates on the right.
-    internal newtype DecompositionState = (perm : Int[], lfunctions : (BigInt, Int)[], rfunctions : (BigInt, Int)[]);
+    internal newtype DecompositionState = (Perm : Int[], Lfunctions : (BigInt, Int)[], Rfunctions : (BigInt, Int)[]);
 
     /// # Summary
     /// Decomposition logic for a single variable index
@@ -90,8 +90,8 @@ namespace Microsoft.Quantum.Synthesis {
     /// # Description
     /// This takes the current state and generates an updated permutation
     /// and possibly adds new functions for controlled gates.
-    internal function GetTruthTablesForGatesFolder(numVars : Int, state : DecompositionState, index : Int) : DecompositionState {
-        let ((l, r), remainder) = DecomposedOn(state::perm, index);
+    internal function TruthTablesFromPermutationFolder(numVars : Int, state : DecompositionState, index : Int) : DecompositionState {
+        let ((l, r), remainder) = DecomposedOn(state::Perm, index);
 
         let indices = Mapped(WithZeroInsertedAt(index, _), SequenceI(0, 2^(numVars - 1) - 1));
         let lFunc = BoolArrayAsBigInt(Mapped(NotEqualI, Subarray(indices, Enumerated(l))) + [false]); // make sure that lFunc is positive
@@ -99,18 +99,18 @@ namespace Microsoft.Quantum.Synthesis {
 
         return DecompositionState(
             remainder,
-            lFunc == 0L ? state::lfunctions | state::lfunctions + [(lFunc, index)],
-            rFunc == 0L ? state::rfunctions | [(rFunc, index)] + state::rfunctions
+            lFunc == 0L ? state::Lfunctions | state::Lfunctions + [(lFunc, index)],
+            rFunc == 0L ? state::Rfunctions | [(rFunc, index)] + state::Rfunctions
         );
     }
 
     /// # Summary
     /// Collect all functions for controlled gates by folding through all variable indexes
-    internal function GetTruthTablesForGates (perm : Int[], variableOrder : Int[]) : (BigInt, Int)[] {
+    internal function TruthTablesFromPermutation (perm : Int[], variableOrder : Int[]) : (BigInt, Int)[] {
         let numVars = Length(variableOrder);
 
         let initialState = DecompositionState(perm, new (BigInt, Int)[0], new (BigInt, Int)[0]);
-        let (_, lfunctions, rfunctions) = (Fold(GetTruthTablesForGatesFolder(numVars, _, _), initialState, variableOrder))!;
+        let (_, lfunctions, rfunctions) = (Fold(TruthTablesFromPermutationFolder(numVars, _, _), initialState, variableOrder))!;
 
         return lfunctions + rfunctions;
     }
@@ -166,6 +166,7 @@ namespace Microsoft.Quantum.Synthesis {
     ///
     /// # See Also
     /// - Microsoft.Quantum.Synthesis.ApplyPermutationUsingDecompositionWithVariableOrder
+    /// - Microsoft.Quantum.Synthesis.ApplyPermutationUsingTransformation
     operation ApplyPermutationUsingDecomposition(perm : Int[], qubits : LittleEndian) : Unit is Adj + Ctl {
         ApplyPermutationUsingDecompositionWithVariableOrder(perm, SequenceI(0, Length(qubits!) - 1), qubits);
     }
@@ -196,6 +197,7 @@ namespace Microsoft.Quantum.Synthesis {
     ///
     /// # See Also
     /// - Microsoft.Quantum.Synthesis.ApplyPermutationUsingDecomposition
+    /// - Microsoft.Quantum.Synthesis.ApplyPermutationUsingTransformation
     operation ApplyPermutationUsingDecompositionWithVariableOrder(perm : Int[], variableOrder : Int[], qubits : LittleEndian) : Unit is Adj + Ctl {
         Fact(IsPermutation(perm), "perm must be a permutation");
         EqualityFactI(Length(perm), 2^Length(qubits!), $"Length of perm must be {2^Length(qubits!)}");
@@ -205,7 +207,7 @@ namespace Microsoft.Quantum.Synthesis {
 
         let register = qubits!;
 
-        for ((func, target) in GetTruthTablesForGates(perm, variableOrder)) {
+        for ((func, target) in TruthTablesFromPermutation(perm, variableOrder)) {
             ApplyXControlledOnTruthTable(func, Exclude([target], register), register[target]);
         }
     }
