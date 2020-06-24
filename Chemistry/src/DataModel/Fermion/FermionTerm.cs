@@ -25,6 +25,7 @@ namespace Microsoft.Quantum.Chemistry.Fermion
     /// Index-ordered, where are raising(lowering) operators are in ascending(descending) order.
     /// </description>
     /// </item>
+    /// </list>
     /// </summary>
     public class FermionTerm : IndexOrderedSequence<int>
     {
@@ -44,7 +45,11 @@ namespace Microsoft.Quantum.Chemistry.Fermion
         /// Construct instance from a normal-ordered sequence of ladder operators.
         /// </summary>
         /// <param name="ladderOperators">Normal-ordered sequence of ladder operators.</param>
-        public FermionTerm(IEnumerable<FermionOperator> ladderOperators, int setSign = 1 ) : base(ladderOperators, setSign) { }
+        /// <param name="coefficient">
+        ///     Coefficient as the sign (<c>-1</c> or <c>+1</c>) of a ladder operator.
+        /// </param>
+        public FermionTerm(IEnumerable<FermionOperator> ladderOperators, int coefficient = 1)
+        : base(ladderOperators, coefficient) { }
         #endregion
 
         // This exists as a convenience function for creating fermion terms in samples.
@@ -87,6 +92,3 @@ namespace Microsoft.Quantum.Chemistry.Fermion
         }
     }
 }
-
-
-

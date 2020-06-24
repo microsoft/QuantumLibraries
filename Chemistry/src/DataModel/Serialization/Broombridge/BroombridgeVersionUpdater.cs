@@ -14,7 +14,7 @@ using YamlDotNet.Serialization;
 namespace Microsoft.Quantum.Chemistry.Broombridge
 {
 
-    public static partial class DataStructures
+    internal static partial class DataStructures
     {
         
         /// <summary>
