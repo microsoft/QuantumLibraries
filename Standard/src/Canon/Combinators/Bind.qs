@@ -6,7 +6,7 @@ namespace Microsoft.Quantum.Canon {
 
     /// # See Also
     /// - Microsoft.Quantum.Canon.Bound
-    operation _Bound<'T> (operations : ('T => Unit)[], target : 'T) : Unit {
+    internal operation ApplyBound<'T> (operations : ('T => Unit)[], target : 'T) : Unit {
         for (op in operations) {
             op(target);
         }
@@ -46,13 +46,13 @@ namespace Microsoft.Quantum.Canon {
     /// - Microsoft.Quantum.Canon.BoundA
     /// - Microsoft.Quantum.Canon.BoundCA
     function Bound<'T> (operations : ('T => Unit)[]) : ('T => Unit) {
-        return _Bound(operations, _);
+        return ApplyBound(operations, _);
     }
 
 
     /// # See Also
     /// - Microsoft.Quantum.Canon.BoundA
-    operation _BoundA<'T> (operations : ('T => Unit is Adj)[], target : 'T)
+    internal operation ApplyBoundA<'T> (operations : ('T => Unit is Adj)[], target : 'T)
     : Unit is Adj {
         for (op in operations) {
             op(target);
@@ -94,13 +94,13 @@ namespace Microsoft.Quantum.Canon {
     /// - Microsoft.Quantum.Canon.Bound
     function BoundA<'T> (operations : ('T => Unit is Adj)[])
     : ('T => Unit is Adj) {
-        return _BoundA(operations, _);
+        return ApplyBoundA(operations, _);
     }
 
 
     /// # See Also
     /// - Microsoft.Quantum.Canon.BoundC
-    operation _BoundC<'T> (operations : ('T => Unit is Ctl)[], target : 'T)
+    internal operation ApplyBoundC<'T> (operations : ('T => Unit is Ctl)[], target : 'T)
     : Unit is Ctl {
         for (op in operations) {
             op(target);
@@ -141,13 +141,13 @@ namespace Microsoft.Quantum.Canon {
     /// # See Also
     /// - Microsoft.Quantum.Canon.Bound
     function BoundC<'T> (operations : ('T => Unit is Ctl)[]) : ('T => Unit is Ctl) {
-        return _BoundC(operations, _);
+        return ApplyBoundC(operations, _);
     }
 
 
     /// # See Also
     /// - Microsoft.Quantum.Canon.BoundCA
-    operation _BoundCA<'T> (operations : ('T => Unit is Adj + Ctl)[], target : 'T)
+    internal operation ApplyBoundCA<'T> (operations : ('T => Unit is Adj + Ctl)[], target : 'T)
     : Unit is Adj + Ctl {
         for (op in operations) {
             op(target);
@@ -189,7 +189,7 @@ namespace Microsoft.Quantum.Canon {
     /// # See Also
     /// - Microsoft.Quantum.Canon.Bound
     function BoundCA<'T> (operations : ('T => Unit is Adj + Ctl)[]) : ('T => Unit is Adj + Ctl) {
-        return _BoundCA(operations, _);
+        return ApplyBoundCA(operations, _);
     }
 
 }

@@ -33,7 +33,7 @@ namespace Microsoft.Quantum.Canon {
     /// ## control2
     /// Second control qubit
     /// ## target
-    /// Target auxillary qubit; must be in state 0
+    /// Target auxiliary qubit; must be in state 0
     ///
     /// # References
     /// - Cody Jones: "Novel constructions for the fault-tolerant Toffoli gate",
@@ -45,7 +45,7 @@ namespace Microsoft.Quantum.Canon {
     ///   [arXiv:1709.06648](https://arxiv.org/abs/1709.06648)
     ///   doi:10.1103/PhysRevA.85.044302
     /// - Mathias Soeken: "Quantum Oracle Circuits and the Christmas Tree Pattern",
-    ///   [Blog article from Decemer 19, 2019](https://msoeken.github.io/blog_qac.html)
+    ///   [Blog article from December 19, 2019](https://msoeken.github.io/blog_qac.html)
     ///   (note: explains the multiple controlled construction)
     operation ApplyAnd(control1 : Qubit, control2 : Qubit, target : Qubit) : Unit {
         body (...) {
@@ -73,10 +73,10 @@ namespace Microsoft.Quantum.Canon {
             }
         }
         controlled (controls, ...) {
-            _ApplyMultipleControlledAnd(controls + [control1, control2], target);
+            ApplyMultiplyControlledAnd(controls + [control1, control2], target);
         }
         adjoint controlled (controls, ...) {
-            Adjoint _ApplyMultipleControlledAnd(controls + [control1, control2], target);
+            Adjoint ApplyMultiplyControlledAnd(controls + [control1, control2], target);
         }
     }
 
@@ -98,7 +98,7 @@ namespace Microsoft.Quantum.Canon {
     /// ## control2
     /// Second control qubit
     /// ## target
-    /// Target auxillary qubit; must be in state 0
+    /// Target auxiliary qubit; must be in state 0
     ///
     /// # References
     /// - Cody Jones: "Novel constructions for the fault-tolerant Toffoli gate",
@@ -133,10 +133,10 @@ namespace Microsoft.Quantum.Canon {
             Adjoint ApplyAnd(control1, control2, target);
         }
         controlled (controls, ...) {
-            _ApplyMultipleControlledLowDepthAnd(controls + [control1, control2], target);
+            ApplyMultiplyControlledLowDepthAnd(controls + [control1, control2], target);
         }
         adjoint controlled (controls, ...) {
-            Adjoint _ApplyMultipleControlledLowDepthAnd(controls + [control1, control2], target);
+            Adjoint ApplyMultiplyControlledLowDepthAnd(controls + [control1, control2], target);
         }
     }
 
@@ -154,9 +154,9 @@ namespace Microsoft.Quantum.Canon {
     ///
     /// # Example
     /// ```Q#
-    /// _GrayCode(2); // [(0, 0),(1, 1),(3, 0),(2, 1)]
+    /// GrayCode(2); // [(0, 0),(1, 1),(3, 0),(2, 1)]
     /// ```
-    function _GrayCode(n : Int) : (Int, Int)[] {
+    internal function GrayCode(n : Int) : (Int, Int)[] {
         let N = 1 <<< n;
 
         mutable res = new (Int, Int)[N];
@@ -190,7 +190,7 @@ namespace Microsoft.Quantum.Canon {
     /// Number to compute Hamming weight
     /// # Output
     /// Hamming weight of the number
-    function _HammingWeightI(number : Int) : Int {
+    internal function HammingWeightI(number : Int) : Int {
         mutable cnt = number;
         set cnt = (cnt &&& 0x5555555555555555) + ((cnt >>>  1) &&& 0x5555555555555555);
         set cnt = (cnt &&& 0x3333333333333333) + ((cnt >>>  2) &&& 0x3333333333333333);
@@ -213,8 +213,8 @@ namespace Microsoft.Quantum.Canon {
     /// # Input
     /// ## index
     /// Input assignment as integer (from 0 to 2^n - 1)
-    function _Angle(index : Int) : Int {
-        return _HammingWeightI(index) % 2 == 1 ? 1 | -1;
+    internal function Angle(index : Int) : Int {
+        return HammingWeightI(index) % 2 == 1 ? 1 | -1;
     }
 
     /// # Summary
@@ -227,7 +227,7 @@ namespace Microsoft.Quantum.Canon {
     /// Control qubits
     /// ## target
     /// Target qubit
-    operation _ApplyMultipleControlledAnd(controls : Qubit[], target : Qubit) : Unit {
+    internal operation ApplyMultiplyControlledAnd(controls : Qubit[], target : Qubit) : Unit {
         body (...) {
             let vars = Length(controls);
 
@@ -235,10 +235,10 @@ namespace Microsoft.Quantum.Canon {
 
             H(target);
 
-            let code = _GrayCode(vars);
+            let code = GrayCode(vars);
             for (j in 0..Length(code) - 1) {
                 let (offset, ctrl) = code[j];
-                RFrac(PauliZ, _Angle(offset), vars + 1, target);
+                RFrac(PauliZ, Angle(offset), vars + 1, target);
                 CNOT(controls[ctrl], target);
             }
 
@@ -252,10 +252,10 @@ namespace Microsoft.Quantum.Canon {
             if (IsResultOne(MResetZ(target))) {
                 for (i in 0..vars - 1) {
                     let start = 1 <<< i;
-                    let code = _GrayCode(i);
+                    let code = GrayCode(i);
                     for (j in 0..Length(code) - 1) {
                         let (offset, ctrl) = code[j];
-                        RFrac(PauliZ, -_Angle(start + offset), vars, controls[i]);
+                        RFrac(PauliZ, -Angle(start + offset), vars, controls[i]);
                         if (i != 0) {
                             CNOT(controls[ctrl], controls[i]);
                         }
@@ -272,7 +272,7 @@ namespace Microsoft.Quantum.Canon {
     /// Returns a Qubit array with target at index 0, and control i at index
     /// 2^i.  The helper qubits are inserted to all other positions in the
     /// array.
-    function _ArrangeQubits(controls : Qubit[], target : Qubit, helper : Qubit[]) : Qubit[] {
+    internal function ArrangedQubits(controls : Qubit[], target : Qubit, helper : Qubit[]) : Qubit[] {
         let numControls = Length(controls);
         mutable qs = new Qubit[2^numControls] w/ 0 <- target;
         mutable cntC = 0;
@@ -300,11 +300,11 @@ namespace Microsoft.Quantum.Canon {
     /// Control qubits
     /// ## target
     /// Target qubit
-    operation _ApplyMultipleControlledLowDepthAnd(controls : Qubit[], target : Qubit) : Unit {
+    internal operation ApplyMultiplyControlledLowDepthAnd(controls : Qubit[], target : Qubit) : Unit {
         body (...) {
             let vars = Length(controls);
             using (helper = Qubit[2^vars - vars - 1]) {
-                let qs = _ArrangeQubits(controls, target, helper);
+                let qs = ArrangedQubits(controls, target, helper);
 
                 AssertAllZero([target]);
                 H(target);
@@ -328,7 +328,7 @@ namespace Microsoft.Quantum.Canon {
                     }
                 } apply {
                     for (i in IndexRange(qs)) {
-                        RFrac(PauliZ, _Angle(i), vars + 1, qs[i]);
+                        RFrac(PauliZ, Angle(i), vars + 1, qs[i]);
                     }
                 }
 
@@ -342,7 +342,7 @@ namespace Microsoft.Quantum.Canon {
             AssertProb([PauliZ], [target], One, 0.5, "Probability of the measurement must be 0.5", 1e-10);
             if (IsResultOne(MResetZ(target))) {
                 using (helper = Qubit[2^vars - vars - 1]) {
-                    let qs = _ArrangeQubits(controls, target, helper);
+                    let qs = ArrangedQubits(controls, target, helper);
                     within {
                         // this is a bit easier than in the compute part, since
                         // the target qubit does not have to be copied over to
@@ -357,7 +357,7 @@ namespace Microsoft.Quantum.Canon {
                         }
                     } apply {
                         for (i in 1..2^vars - 1) {
-                            RFrac(PauliZ, -_Angle(i), vars, qs[i]);
+                            RFrac(PauliZ, -Angle(i), vars, qs[i]);
                         }
                     }
                 }

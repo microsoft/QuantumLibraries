@@ -14,7 +14,7 @@ namespace Microsoft.Quantum.Chemistry.Fermion
         /// <summary>
         /// Method for collecting all distinct system (orbital) indices.
         /// </summary>
-        /// <param name="orbitalIntegral">Collate orbital indices from this orbital integral.</param>
+        /// <param name="index">Collate orbital indices from this orbital integral.</param>
         public override void AddToSystemIndices(HermitianFermionTerm index)
         {
             foreach (var idx in index.Sequence)

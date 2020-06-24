@@ -1,0 +1,11 @@
+{
+    "image": "mcr.microsoft.com/quantum/iqsharp-base:latest",
+    "containerEnv": {
+        "IQSHARP_HOSTING_ENVIRONMENT": "libraries-devcontainer"
+    },
+    "extensions": [
+        "ms-dotnettools.csharp",
+        "quantum.quantum-devkit-vscode",
+        "ms-python.python"
+    ]
+}

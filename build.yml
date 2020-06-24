@@ -4,6 +4,7 @@
 name: $(Build.Major).$(Build.Minor).$(date:yyMM).$(DayOfMonth)$(rev:rr)
 trigger:
 - master
+- feature/*
 
 variables:
   Build.Major: 0
@@ -12,15 +13,18 @@ variables:
 
 jobs:
 - job: Windows
-  pool: 'Hosted VS2017'
+  pool:
+    vmImage: 'windows-2019'
   steps:
   - template: Build/steps.yml
 - job: macOS
-  pool: 'Hosted macOS'
+  pool:
+    vmImage: 'macOS-latest'
   steps:
   - template: Build/steps.yml
 - job: Linux
-  pool: 'Hosted Ubuntu 1604'
+  pool:
+    vmImage: 'ubuntu-latest'
   steps:
   - template: Build/steps.yml
 

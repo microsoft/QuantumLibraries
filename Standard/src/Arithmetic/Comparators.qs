@@ -34,39 +34,26 @@ namespace Microsoft.Quantum.Arithmetic {
     /// - A new quantum ripple-carry addition circuit
     ///   Steven A. Cuccaro, Thomas G. Draper, Samuel A. Kutin, David Petrie Moulton
     ///   https://arxiv.org/abs/quant-ph/0410184
-    operation CompareUsingRippleCarry(x: LittleEndian, y: LittleEndian, output: Qubit) : Unit {
-        body (...) {
-            if (Length(x!) != Length(y!)) {
-                fail "Size of integer registers must be equal.";
-            }
+    operation CompareUsingRippleCarry(x : LittleEndian, y : LittleEndian, output : Qubit)
+    : Unit is Adj + Ctl {
+        if (Length(x!) != Length(y!)) {
+            fail "Size of integer registers must be equal.";
+        }
 
-            using (auxiliary = Qubit()) {
-                ApplyWithCA(
-                    _ApplyRippleCarryComparatorLE(x, y, [auxiliary], _),
-                    BoundCA([X, CNOT(Tail(x!), _)]),
-                    output
-                );
+        using (auxiliary = Qubit()) {
+            within {
+                let nQubitsX = Length(x!);
+
+                // Take 2's complement
+                ApplyToEachCA(X, x! + [auxiliary]);
+
+                ApplyMajorityInPlace(x![0], [y![0], auxiliary]);
+                ApplyToEachCA(MAJ, Zip3(Most(x!), Rest(y!), Rest(x!)));
+            } apply {
+                X(output);
+                CNOT(Tail(x!), output);
             }
         }
-        adjoint auto;
-        controlled auto;
-        adjoint controlled auto;
-    }
-
-    // Implementation step of `ApplyRippleCarryComparatorLE`.
-    operation _ApplyRippleCarryComparatorLE(x: LittleEndian, y: LittleEndian, auxiliary: Qubit[], output: Qubit) : Unit {
-        body (...) {
-            let nQubitsX = Length(x!);
-
-            // Take 2's complement
-            ApplyToEachCA(X, x! + auxiliary);
-
-            InPlaceMajority(x![0], [y![0], auxiliary[0]]);
-            ApplyToEachCA(MAJ, Zip3(Most(x!), Rest(y!), Rest(x!)));
-        }
-        adjoint auto;
-        controlled auto;
-        adjoint controlled auto;
     }
 
 }

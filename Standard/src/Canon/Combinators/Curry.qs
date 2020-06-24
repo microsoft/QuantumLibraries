@@ -3,7 +3,7 @@
 
 namespace Microsoft.Quantum.Canon {
 
-    function _CurriedOp<'T, 'U> (op : (('T, 'U) => Unit), arg1 : 'T) : ('U => Unit) {
+    internal function WithFirstInputApplied<'T, 'U> (op : (('T, 'U) => Unit), arg1 : 'T) : ('U => Unit) {
         return op(arg1, _);
     }
 
@@ -40,10 +40,10 @@ namespace Microsoft.Quantum.Canon {
     /// partial(y);
     /// ```
     function CurriedOp<'T, 'U> (op : (('T, 'U) => Unit)) : ('T -> ('U => Unit)) {
-        return _CurriedOp(op, _);
+        return WithFirstInputApplied(op, _);
     }
 
-    operation _UncurryOp<'T, 'U> (curriedOp : ('T -> ('U => Unit)), first : 'T, second : 'U) : Unit {
+    internal operation ApplyCurriedOp<'T, 'U> (curriedOp : ('T -> ('U => Unit)), first : 'T, second : 'U) : Unit {
         let innerOp = curriedOp(first);
         innerOp(second);
     }
@@ -64,20 +64,19 @@ namespace Microsoft.Quantum.Canon {
     ///
     /// # Type Parameters
     /// ## 'T
-    /// The type of the first argument of a curried function.
+    /// The type of the first input to a curried operation.
     /// ## 'U
-    /// The type of the second argument of a curried function.
+    /// The type of the second input to a curried operation.
     /// # See Also
     /// - @"microsoft.quantum.canon.uncurryopc"
     /// - @"microsoft.quantum.canon.uncurryopa"
     /// - @"microsoft.quantum.canon.uncurryopca"
-    function UncurriedOp<'T, 'U> (curriedOp : ('T -> ('U => Unit))) : (('T, 'U) => Unit)
-    {
-        return _UncurryOp(curriedOp, _, _);
+    function UncurriedOp<'T, 'U> (curriedOp : ('T -> ('U => Unit))) : (('T, 'U) => Unit) {
+        return ApplyCurriedOp(curriedOp, _, _);
     }
 
 
-    operation _UncurriedOpC<'T, 'U>(curriedOp : ('T -> ('U => Unit is Ctl)), first : 'T, second : 'U)
+    internal operation ApplyCurriedOpC<'T, 'U>(curriedOp : ('T -> ('U => Unit is Ctl)), first : 'T, second : 'U)
     : Unit is Ctl {
         let innerOp = curriedOp(first);
         innerOp(second);
@@ -108,11 +107,11 @@ namespace Microsoft.Quantum.Canon {
     /// - @"microsoft.quantum.canon.uncurryop"
     function UncurriedOpC<'T, 'U> (curriedOp : ('T -> ('U => Unit is Ctl)))
     : (('T, 'U) => Unit is Ctl) {
-        return _UncurriedOpC(curriedOp, _, _);
+        return ApplyCurriedOpC(curriedOp, _, _);
     }
 
 
-    operation _UncurriedOpA<'T, 'U> (curriedOp : ('T -> ('U => Unit is Adj)), first : 'T, second : 'U)
+    internal operation ApplyCurriedOpA<'T, 'U> (curriedOp : ('T -> ('U => Unit is Adj)), first : 'T, second : 'U)
     : Unit is Adj {
         let innerOp = curriedOp(first);
         innerOp(second);
@@ -142,11 +141,11 @@ namespace Microsoft.Quantum.Canon {
     /// # See Also
     /// - @"microsoft.quantum.canon.uncurryop"
     function UncurriedOpA<'T, 'U> (curriedOp : ('T -> ('U => Unit is Adj))) : (('T, 'U) => Unit is Adj) {
-        return _UncurriedOpA(curriedOp, _, _);
+        return ApplyCurriedOpA(curriedOp, _, _);
     }
 
 
-    operation _UncurriedOpCA<'T, 'U> (curriedOp : ('T -> ('U => Unit is Ctl + Adj)), first : 'T, second : 'U)
+    internal operation ApplyCurriedOpCA<'T, 'U> (curriedOp : ('T -> ('U => Unit is Ctl + Adj)), first : 'T, second : 'U)
     : Unit is Adj + Ctl {
         let innerOp = curriedOp(first);
         innerOp(second);
@@ -176,7 +175,7 @@ namespace Microsoft.Quantum.Canon {
     /// # See Also
     /// - @"microsoft.quantum.canon.uncurryop"
     function UncurriedOpCA<'T, 'U> (curriedOp : ('T -> ('U => Unit is Ctl + Adj))) : (('T, 'U) => Unit is Ctl + Adj) {
-        return _UncurriedOpCA(curriedOp, _, _);
+        return ApplyCurriedOpCA(curriedOp, _, _);
     }
 
 }

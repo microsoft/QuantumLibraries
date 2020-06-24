@@ -24,7 +24,7 @@ def check_file(filename : str) -> bool:
     found_spaces = False
     found_tabs = False
 
-    with open(filename, 'r') as f:
+    with open(filename, 'r', encoding='utf-8') as f:
         contents = list(f.readlines())
 
     for line in contents:
@@ -38,7 +38,7 @@ def check_file(filename : str) -> bool:
     if problem_found:
         print(f"Found mixed spaces and tabs in {filename}.")
         # Time to normalize!
-        with open(filename, 'w') as f:
+        with open(filename, 'w', encoding='utf-8') as f:
             f.writelines(
                 whitespace.replace('\t', '    ') + rest
                 for whitespace, rest in map(find_whitespace, contents)

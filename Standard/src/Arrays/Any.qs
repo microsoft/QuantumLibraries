@@ -2,10 +2,7 @@
 // Licensed under the MIT License.
 
 namespace Microsoft.Quantum.Arrays {
-
-    function _Or(left : Bool, right : Bool) : Bool {
-        return left or right;
-    }
+    open Microsoft.Quantum.Logical;
 
     /// # Summary
     /// Given an array and a predicate that is defined
@@ -29,8 +26,24 @@ namespace Microsoft.Quantum.Arrays {
     ///
     /// # Output
     /// A `Bool` value of the OR function of the predicate applied to all elements.
+    ///
+    /// # Example
+    /// ```qsharp
+    /// open Microsoft.Quantum.Arrays;
+    /// open Microsoft.Quantum.Logical;
+    ///
+    /// function IsThreePresent() : Bool {
+    ///     let arrayOfInts = [1, 2, 3, 4, 5];
+    ///     let is3Present = IsNumberPresentInArray(3, arrayOfInts);
+    ///     return is3Present;
+    /// }
+    ///
+    /// function IsNumberPresentInArray(n : Int, array : Int[]) : Bool {
+    ///     return Any(EqualI(_, n), array);
+    /// }
+    /// ```
     function Any<'T> (predicate : ('T -> Bool), array : 'T[]) : Bool {
-       return Fold(_Or, false, Mapped(predicate, array));
+       return Fold(Or, false, Mapped(predicate, array));
     }
 
 }

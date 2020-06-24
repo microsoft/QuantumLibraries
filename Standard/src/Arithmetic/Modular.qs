@@ -32,7 +32,7 @@ namespace Microsoft.Quantum.Arithmetic {
     ///
     /// # Remarks
     /// Assumes that the initial value of target is less than $N$
-    /// and that the increment $a$ is less than $N$. 
+    /// and that the increment $a$ is less than $N$.
     /// Note that
     /// <xref:microsoft.quantum.arithmetic.incrementphasebymodularinteger> implements
     /// the same operation in the `PhaseLittleEndian` basis.
@@ -82,7 +82,7 @@ namespace Microsoft.Quantum.Arithmetic {
         controlled (controls, ...) {
             Fact(modulus <= 2 ^ (Length(target!) - 1), $"`multiplier` must be big enough to fit integers modulo `modulus`" + $"with highest bit set to 0");
 
-            if (_EnableExtraAssertsForArithmetic()) {
+            if (ExtraArithmeticAssertionsEnabled()) {
                 // assert that the highest bit is zero, by switching to computational basis
                 ApplyLEOperationOnPhaseLEA(AssertMostSignificantBit(Zero, _), target);
 
@@ -185,7 +185,7 @@ namespace Microsoft.Quantum.Arithmetic {
         Fact(modulus <= 2 ^ (Length(phaseSummand!) - 1), $"`multiplier` must be big enough to fit integers modulo `modulus`" + $"with highest bit set to 0");
         Fact(constMultiplier >= 0 and constMultiplier < modulus, $"`constMultiplier` must be between 0 and `modulus`-1");
 
-        if (_EnableExtraAssertsForArithmetic()) {
+        if (ExtraArithmeticAssertionsEnabled()) {
             // assert that the highest bit is zero, by switching to computational basis
             ApplyLEOperationOnPhaseLECA(AssertMostSignificantBit(Zero, _), phaseSummand);
 

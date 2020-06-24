@@ -10,6 +10,8 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 
+using static Microsoft.Quantum.Chemistry.Extensions;
+
 namespace Microsoft.Quantum.Chemistry.Tests
 {
    public class ComparerTests
@@ -29,12 +31,12 @@ namespace Microsoft.Quantum.Chemistry.Tests
         [Fact]
         public void CompareIntArrayTest()
         {
-            Assert.Equal(0, Extensions.CompareArray(new Int64[] { 1, 2, 3, 4 }, new Int64[] { 1, 2, 3, 4 }));
-            Assert.Equal(1, Extensions.CompareArray(new Int64[] { 1, 2, 3, 4 }, new Int64[] { 1, 2, 3, 3 }));
-            Assert.Equal(-1, Extensions.CompareArray(new Int64[] { 1, 2, 3, 3 }, new Int64[] { 1, 2, 3, 4 }));
-            Assert.Equal(0, Extensions.CompareArray(new Int64[] { 2, 2, 2, 2 }, new Int64[] { 2, 2, 2, 2 }));
-            Assert.Equal(1, Extensions.CompareArray(new Int64[] { 2, 2, 3, 4 }, new Int64[] { 1, 2, 10, 3 }));
-            Assert.Equal(-1, Extensions.CompareArray(new Int64[] { 1, 3, 3, 3 }, new Int64[] { 10, 2, 3, 4 }));
+            Assert.Equal(0, CompareArray(new Int64[] { 1, 2, 3, 4 }, new Int64[] { 1, 2, 3, 4 }));
+            Assert.Equal(1, CompareArray(new Int64[] { 1, 2, 3, 4 }, new Int64[] { 1, 2, 3, 3 }));
+            Assert.Equal(-1, CompareArray(new Int64[] { 1, 2, 3, 3 }, new Int64[] { 1, 2, 3, 4 }));
+            Assert.Equal(0, CompareArray(new Int64[] { 2, 2, 2, 2 }, new Int64[] { 2, 2, 2, 2 }));
+            Assert.Equal(1, CompareArray(new Int64[] { 2, 2, 3, 4 }, new Int64[] { 1, 2, 10, 3 }));
+            Assert.Equal(-1, CompareArray(new Int64[] { 1, 3, 3, 3 }, new Int64[] { 10, 2, 3, 4 }));
         }
 
         [Fact]

@@ -17,7 +17,7 @@ namespace Microsoft.Quantum.ErrorCorrection {
     ///
     /// # References
     /// - doi:10.1103/PhysRevA.85.044302
-    operation _BFEncoder(coherentRecovery : Bool, data : Qubit[], scratch : Qubit[])
+    internal operation ApplyBitFlipEncoder(coherentRecovery : Bool, data : Qubit[], scratch : Qubit[])
     : Unit is Adj {
         if (coherentRecovery) {
             Controlled X(scratch, data[0]);
@@ -46,7 +46,7 @@ namespace Microsoft.Quantum.ErrorCorrection {
     /// - LogicalRegister
     operation EncodeIntoBitFlipCode(physRegister : Qubit[], auxQubits : Qubit[])
     : LogicalRegister {
-        _BFEncoder(false, physRegister, auxQubits);
+        ApplyBitFlipEncoder(false, physRegister, auxQubits);
         let logicalRegister = LogicalRegister(physRegister + auxQubits);
         return logicalRegister;
     }
@@ -70,7 +70,7 @@ namespace Microsoft.Quantum.ErrorCorrection {
     : (Qubit[], Qubit[]) {
         let physRegister = [(logicalRegister!)[0]];
         let auxQubits = (logicalRegister!)[1 .. 2];
-        Adjoint _BFEncoder(false, physRegister, auxQubits);
+        Adjoint ApplyBitFlipEncoder(false, physRegister, auxQubits);
         return (physRegister, auxQubits);
     }
 

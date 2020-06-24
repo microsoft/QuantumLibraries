@@ -63,7 +63,7 @@ namespace Microsoft.Quantum.Arrays {
         return array[0 .. Length(array) - 2];
     }
 
-    function _Lookup<'T> (array : 'T[], index : Int) : 'T {
+    internal function Lookup<'T> (array : 'T[], index : Int) : 'T {
         return array[index];
     }
 
@@ -90,7 +90,7 @@ namespace Microsoft.Quantum.Arrays {
     /// where functions are used to avoid the need to record an entire array
     /// in memory.
     function LookupFunction<'T> (array : 'T[]) : (Int -> 'T) {
-        return _Lookup(array, _);
+        return Lookup(array, _);
     }
 
     /// # Summary
@@ -136,10 +136,16 @@ namespace Microsoft.Quantum.Arrays {
     /// ## length
     /// Length of the new array.
     /// ## value
-    /// A value that will be contained at each index of the new array.
+    /// The value of each element of the new array.
     ///
     /// # Output
     /// A new array of length `length`, such that every element is `value`.
+    ///
+    /// # Example
+    /// The following code creates an array of 3 Boolean values, each equal to `true`:
+    /// ```qsharp
+    /// let array = ConstantArray(3, true);
+    /// ```
     function ConstantArray<'T> (length : Int, value : 'T) : 'T[] {
         mutable arr = new 'T[length];
 
@@ -249,6 +255,33 @@ namespace Microsoft.Quantum.Arrays {
                | inputArray + padArray; // Padded at tail.
     }
 
+
+    /// # Summary
+    /// Splits an array into multiple parts of equal length.
+    ///
+    /// # Input
+    /// ## nElements
+    /// The length of each chunk.
+    /// ## arr
+    /// The array to be split.
+    ///
+    /// # Output
+    /// A array containing each chunk of the original array.
+    ///
+    /// # Remarks
+    /// Note that the last element of the output may be shorter
+    /// than `nElements` if `Length(arr)` is not divisible by `nElements`.
+    function Chunks<'T>(nElements : Int, arr : 'T[]) : 'T[][] {
+        mutable output = new 'T[][0];
+        mutable remaining = arr;
+        while (not IsEmpty(remaining)) {
+            let nElementsToTake = MinI(Length(remaining), nElements);
+            set output += [remaining[...nElementsToTake - 1]];
+            set remaining = remaining[nElementsToTake...];
+        }
+        return output;
+    }
+
     /// # Summary
     /// Splits an array into multiple parts.
     ///
@@ -266,7 +299,7 @@ namespace Microsoft.Quantum.Arrays {
     /// # Remarks
     /// ## Example
     /// ```qsharp
-    /// // The following returns [[1,5],[3],[7]];
+    /// // The following returns [[1, 5], [3], [7]];
     /// let split = Partitioned([2,1], [1,5,3,7]);
     /// ```
     function Partitioned<'T>(nElements: Int[], arr: 'T[]) : 'T[][] {
@@ -283,22 +316,64 @@ namespace Microsoft.Quantum.Arrays {
         return output;
     }
 
-    function _IsPermutationPred(permutation : Int[], value : Int) : Bool {
+    /// # Summary
+    /// Returns true if and only if an array is empty.
+    ///
+    /// # Input
+    /// ## array
+    /// The array to be checked.
+    ///
+    /// # Output
+    /// `true` if and only if the array is empty (has length 0).
+    function IsEmpty<'T>(array : 'T[]) : Bool {
+        return Length(array) == 0;
+    }
+
+    internal function IsValuePresent(permutation : Int[], value : Int) : Bool {
         let index = IndexOf(EqualI(value, _), permutation);
         return index != -1;
     }
 
-    function _IsPermutation(permuation : Int[]) : Bool {
-        return All(_IsPermutationPred(permuation, _), RangeAsIntArray(IndexRange(permuation)));
+    /// # Summary
+    /// Outputs true if and only if a given array represents a permutation.
+    ///
+    /// # Description
+    /// Given an array `array` of length `n`, returns true if and only if
+    /// each integer from `0` to `n - 1` appears exactly once in `array`, such
+    /// that `array` can be interpreted as a permutation on `n` elements.
+    ///
+    /// # Input
+    /// ## array
+    /// An array that may or may not represent a permutation.
+    ///
+    /// # Ouput
+    /// `true` if and only if the array is a permutation.
+    ///
+    /// # Remarks
+    /// An array of length zero is trivially a permutation.
+    ///
+    /// # Example
+    /// The following Q# code prints the message "All diagnostics completed
+    /// successfully":
+    /// ```Q#
+    /// Fact(IsPermutation([2, 0, 1], "");
+    /// Contradiction(IsPermutation([5, 0, 1], "[5, 0, 1] isn't a permutation");
+    /// Message("All diagnostics completed successfully.");
+    /// ```
+    function IsPermutation(permuation : Int[]) : Bool {
+        return All(IsValuePresent(permuation, _), RangeAsIntArray(IndexRange(permuation)));
     }
 
+    // NB: This function is internal, but not marked as internal so as to allow
+    //     unit tests to check its behaviour. In the future, tests should be
+    //     redesigned to check only publicly accessible behavior.
     /// # Summary
-    /// Returns the order elements in an array need to be swapped to produce an ordered array. 
+    /// Returns the order elements in an array need to be swapped to produce an ordered array.
     /// Assumes swaps occur in place.
     ///
     /// # Input
     /// ## newOrder
-    /// Array with the permutation of the indices of the new array. There should be $n$ elements, 
+    /// Array with the permutation of the indices of the new array. There should be $n$ elements,
     /// each being a unique integer from $0$ to $n-1$.
     ///
     /// # Output
@@ -312,24 +387,21 @@ namespace Microsoft.Quantum.Arrays {
     /// ```
     ///
     /// ## Psuedocode
-    /// for (index in 0..Length(newOrder) - 1) 
-    /// {
-    ///     while newOrder[index] != index 
-    ///     {
+    /// for (index in 0..Length(newOrder) - 1) {
+    ///     while newOrder[index] != index {
     ///         Switch newOrder[index] with newOrder[newOrder[index]]
     ///     }
     /// }
     function _SwapOrderToPermuteArray(newOrder : Int[]) : (Int, Int)[] {
         // Check to verify the new ordering actually is a permutation of the indices
-        Fact(_IsPermutation(newOrder), $"The new ordering is not a permutation");
+        Fact(IsPermutation(newOrder), $"The new ordering is not a permutation");
 
         mutable swaps = new (Int, Int)[0];
         mutable order = newOrder;
 
         // for each value, whenever the index and value don't match, swap until it does
         for (index in IndexRange(order)) {
-            while (not EqualI(order[index], index))
-            {
+            while (not EqualI(order[index], index)) {
                 set swaps += [(index, order[index])];
                 set order = Swapped(order[index], index, order);
             }
@@ -352,13 +424,13 @@ namespace Microsoft.Quantum.Arrays {
     /// Array with elements to be swapped.
     ///
     /// # Output
-    /// The array with the in place swapp applied.
+    /// The array with the in place swap applied.
     ///
     /// ## Example
     /// ```qsharp
     /// // The following returns [0, 3, 2, 1, 4]
     /// Swapped(1, 3, [0, 1, 2, 3, 4]);
-    function Swapped<'T>(firstIndex: Int, secondIndex: Int, arr: 'T[]) : 'T[] {
+    function Swapped<'T>(firstIndex : Int, secondIndex : Int, arr : 'T[]) : 'T[] {
         return arr
             w/ firstIndex <- arr[secondIndex]
             w/ secondIndex <- arr[firstIndex];
@@ -383,9 +455,9 @@ namespace Microsoft.Quantum.Arrays {
         mutable newArray = new 'T[][Length(tupleList)];
         for (idx in IndexRange(tupleList)) {
             let (tupleLeft, tupleRight) = tupleList[idx];
-            set newArray w/= idx <- [tupleLeft, tupleRight]; 
+            set newArray w/= idx <- [tupleLeft, tupleRight];
         }
         return newArray;
-    } 
+    }
 
 }

@@ -54,7 +54,7 @@ namespace Microsoft.Quantum.Chemistry
         TTermValue Default();
 
         TTermValue Clone();
-        
+
 
         /// <summary>
         /// Computes the L_p norm of term.
@@ -67,7 +67,7 @@ namespace Microsoft.Quantum.Chemistry
 
 
     /// <summary>
-    /// Class containing a indices to a variety of term categories. 
+    /// Class containing a indices to a variety of term categories.
     /// </summary>
     // Might want to distribute these to the separate term classes.
     public static class TermType
@@ -75,7 +75,7 @@ namespace Microsoft.Quantum.Chemistry
         [JsonConverter(typeof(StringEnumConverter))]
         public enum OrbitalIntegral
         {
-            
+
             Identity, OneBody, TwoBody
         }
 
@@ -131,6 +131,23 @@ namespace Microsoft.Quantum.Chemistry
     {
         u = 0, d = 1, identity
     }
+
+    /// <summary>
+    ///     Represents the possible formats that can be used to represent integral
+    ///     data sets.
+    /// </summary>
+    public enum IntegralDataFormat
+    {
+        /// <summary>
+        /// Liquid format
+        /// </summary>
+        LiQuiD,
+        /// <summary>
+        /// Broombridge format
+        /// </summary>
+        Broombridge
+    }
+
 
     /// <summary>
     /// Boxed version of double that implements the <see cref="ITermValue"></see> interface
@@ -233,22 +250,6 @@ namespace Microsoft.Quantum.Chemistry
 
 
         #endregion
-
-        /// <summary>
-        ///     Represents the possible formats that can be used to represent integral
-        ///     data sets.
-        /// </summary>
-        public enum IntegralDataFormat
-        {
-            /// <summary>
-            /// Liquid format
-            /// </summary>
-            LiQuiD,
-            /// <summary>
-            /// Broombridge format
-            /// </summary>
-            Broombridge
-        }
 
         /// <summary>
         /// This JsonConverter encodes the DoubleCoeff as a double.
