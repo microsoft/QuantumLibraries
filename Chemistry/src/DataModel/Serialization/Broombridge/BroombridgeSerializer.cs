@@ -1,4 +1,4 @@
-﻿// Copyright (c) Microsoft Corporation. All rights reserved.
+// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
 using System;
@@ -55,7 +55,7 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
                 new Broombridge.V0_2.Data
                 {
                     // TODO: fix additional properties by converting IEnumerable<ESP> to
-                    //       new problem collection class.
+                    //       new problem collection class. See https://github.com/microsoft/QuantumLibraries/issues/287.
                     Bibliography = null,
                     Format = new V0_1.Format
                     {
