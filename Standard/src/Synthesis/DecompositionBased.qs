@@ -126,7 +126,7 @@ namespace Microsoft.Quantum.Synthesis {
     /// # Description
     /// This procedure implements the decomposition based
     /// synthesis approach.  The input is a permutation $\pi$ over $2^n$ elements
-    /// $\{0, \dots, 2^n-1\}$, which represents an $n$-variable reversible Boolean function. 
+    /// $\{0, \dots, 2^n-1\}$, which represents an $n$-variable reversible Boolean function.
     /// The algorithm iteratively performs the following steps for each variable
     /// index $i$:
     ///
@@ -177,7 +177,11 @@ namespace Microsoft.Quantum.Synthesis {
     ///
     /// # Description
     /// This operation is a more general version of @"microsoft.quantum.synthesis.applypermutationusingdecomposition"
-    /// in which the variable order can be specified.
+    /// in which the variable order can be specified. A different variable order
+    /// changes the decomposition sequence and the truth tables used for the
+    /// controlled @"microsoft.quantum.intrinsic.x" gates.  Therefore, changing the
+    /// variable order changes the number of overall gates used to realize the
+    /// permutation.
     ///
     /// # Input
     /// ## perm
