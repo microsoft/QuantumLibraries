@@ -1,18 +1,16 @@
-<Project Sdk="Microsoft.Quantum.Sdk/0.11.2006.403">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
-    <AssemblyName>Microsoft.Quantum.Chemistry.Runtime</AssemblyName>
-    <QsharpDocsGeneration>true</QsharpDocsGeneration>
-    <IncludeQsharpCorePackages>false</IncludeQsharpCorePackages>
-    <RunQDocGen>True</RunQDocGen>
+    <PlatformTarget>x64</PlatformTarget>
+    <AssemblyName>Microsoft.Quantum.Chemistry.Metapackage</AssemblyName>
   </PropertyGroup>
 
   <PropertyGroup>
     <Authors>Microsoft</Authors>
     <Description>Microsoft's Quantum Chemistry Libraries.</Description>
     <Copyright>© Microsoft Corporation. All rights reserved.</Copyright>
-    <PackageId>Microsoft.Quantum.Chemistry.Runtime</PackageId>
+    <PackageId>Microsoft.Quantum.Chemistry</PackageId>
     <PackageReleaseNotes>See: https://docs.microsoft.com/en-us/quantum/relnotes/</PackageReleaseNotes>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/Microsoft/QuantumLibraries/tree/master/Chemistry</PackageProjectUrl>
@@ -23,21 +21,13 @@
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <EmbedAllSources>true</EmbedAllSources>
     <IncludeSymbols>true</IncludeSymbols>
+    <IncludeBuildOutput>false</IncludeBuildOutput>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb;.xml</AllowedOutputExtensionsInPackageBuildOutputFolder>
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="..\..\Common\DelaySign.cs" Link="Properties\DelaySign.cs" />
+    <ProjectReference Include="..\DataModel\DataModel.csproj" />
+    <ProjectReference Include="..\Runtime\Runtime.csproj" />
   </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\Standard\src\Standard.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Microsoft.Quantum.Simulators" Version="0.11.2006.403" />
-  </ItemGroup>
-
 </Project>
-
