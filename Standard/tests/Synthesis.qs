@@ -12,8 +12,7 @@ namespace Microsoft.Quantum.Tests {
     open Microsoft.Quantum.Measurement;
     open Microsoft.Quantum.Synthesis;
 
-    @Test("ToffoliSimulator")
-    operation CheckTransformationBasedSynthesis () : Unit {
+    internal operation CheckApplyPermutation (synthesisOperation : ((Int[], LittleEndian) => Unit is Adj + Ctl)) : Unit {
         let permutations = [
             [0, 2, 1, 3],
             [0, 1, 3, 2],
@@ -31,11 +30,27 @@ namespace Microsoft.Quantum.Tests {
                 let register = LittleEndian(qs);
                 for (i in 0..Length(perm) - 1) {
                     ApplyXorInPlace(i, register);
-                    ApplyPermutationUsingTransformation(perm, register);
+                    synthesisOperation(perm, register);
                     EqualityFactI(MeasureInteger(register), perm[i], $"ApplyPermutation failed for permutation {perm} at index {i}");
                 }
             }
         }
+    }
+
+    internal operation ApplyPermutationUsingDecompositionWithReverseVariableOrder (perm : Int[], qubits : LittleEndian) : Unit is Adj + Ctl {
+        let variableOrder = Reversed(SequenceI(0, Length(qubits!) - 1));
+        ApplyPermutationUsingDecompositionWithVariableOrder(perm, variableOrder, qubits);
+    }
+
+    @Test("ToffoliSimulator")
+    operation CheckTransformationBasedSynthesis () : Unit {
+        CheckApplyPermutation(ApplyPermutationUsingTransformation);
+    }
+
+    @Test("QuantumSimulator")
+    operation CheckDecompositionBasedSynthesis () : Unit {
+        CheckApplyPermutation(ApplyPermutationUsingDecomposition);
+        CheckApplyPermutation(ApplyPermutationUsingDecompositionWithReverseVariableOrder);
     }
 
     @Test("ToffoliSimulator")

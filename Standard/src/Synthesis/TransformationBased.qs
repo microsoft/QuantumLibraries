@@ -1,5 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
+
 namespace Microsoft.Quantum.Synthesis {
     open Microsoft.Quantum.Arithmetic;
     open Microsoft.Quantum.Arrays;
@@ -151,7 +152,7 @@ namespace Microsoft.Quantum.Synthesis {
     /// To synthesize a `SWAP` operation:
     /// ```Q#
     /// using (qubits = Qubit[2]) {
-    ///   ApplyPermutationUsingTransformation([0, 2, 1, 3], qubits);
+    ///   ApplyPermutationUsingTransformation([0, 2, 1, 3], LittleEndian(qubits));
     /// }
     /// ```
     ///
@@ -162,6 +163,9 @@ namespace Microsoft.Quantum.Synthesis {
     /// - [*Mathias Soeken*, *Gerhard W. Dueck*, *D. Michael Miller*,
     ///    Proc. RC 2016, Springer, pp. 307-321,
     ///    2016](https://doi.org/10.1007/978-3-319-40578-0_22)
+    ///
+    /// # See Also
+    /// - Microsoft.Quantum.Synthesis.ApplyPermutationUsingDecomposition
     operation ApplyPermutationUsingTransformation(perm : Int[], qubits : LittleEndian) : Unit is Adj + Ctl {
         // Translate MCT masks into multiple-controlled multiple-target Toffoli gates.
         let gates = Mapped(MaskToQubitsPair(qubits!, _), TBSMain(perm));
