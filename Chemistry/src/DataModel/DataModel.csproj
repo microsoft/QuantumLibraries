@@ -8,11 +8,10 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <RunQDocGen>True</RunQDocGen>
     <Authors>Microsoft</Authors>
     <Description>Microsoft's Quantum Chemistry Libraries.</Description>
     <Copyright>© Microsoft Corporation. All rights reserved.</Copyright>
-    <PackageId>Microsoft.Quantum.Chemistry</PackageId>
+    <PackageId>Microsoft.Quantum.Chemistry.DataModel</PackageId>
     <PackageReleaseNotes>See: https://docs.microsoft.com/en-us/quantum/relnotes/</PackageReleaseNotes>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/Microsoft/QuantumLibraries/tree/master/Chemistry</PackageProjectUrl>
@@ -42,9 +41,7 @@
 
 
   <ItemGroup>
-    <ProjectReference Include="..\Runtime\Runtime.csproj" PrivateAssets="all" />
-
-    <BuildOutputInPackage Include="..\Runtime\bin\$(Configuration)\netstandard2.1\Microsoft.Quantum.Chemistry.*" />
+    <ProjectReference Include="..\Runtime\Runtime.csproj" />
   </ItemGroup>
 
   <ItemGroup>
