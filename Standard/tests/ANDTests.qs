@@ -45,6 +45,7 @@ namespace Microsoft.Quantum.Tests {
     }
 
     @Test("QuantumSimulator")
+    @Test("ToffoliSimulator")
     operation ApplyAndTest() : Unit {
         for (p1 in [false, true]) {
             for (p2 in [false, true]) {
@@ -56,6 +57,7 @@ namespace Microsoft.Quantum.Tests {
     }
 
     @Test("QuantumSimulator")
+    @Test("ToffoliSimulator")
     operation ControlledApplyAndTest() : Unit {
         for (numControls in 3..5) {
             for (assignment in 0..2^numControls - 1) {
