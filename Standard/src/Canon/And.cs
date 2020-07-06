@@ -10,11 +10,11 @@ using Microsoft.Quantum.Simulation.Simulators;
 
 namespace Microsoft.Quantum.Canon
 {
-    /// <summary>
-    /// Uses CCNOT implementation when executed using ToffoliSimulator.
-    /// </summary>
     public partial class ApplyAnd
     {
+        /// <summary>
+        /// Uses CCNOT implementation when executed using ToffoliSimulator.
+        /// </summary>
         public class Native : ApplyAnd
         {
             private ToffoliSimulator? simulator = null;
@@ -45,15 +45,15 @@ namespace Microsoft.Quantum.Canon
         }
     }
 
-    /// <summary>
-    /// Uses CCNOT implementation when executed using ToffoliSimulator.
-    /// </summary>
     public partial class ApplyLowDepthAnd
     {
+        /// <summary>
+        /// Uses CCNOT implementation when executed using ToffoliSimulator.
+        /// </summary>
         public class Native : ApplyLowDepthAnd
         {
-            private ToffoliSimulator simulator = null;
-            protected CCNOT CCNOT { get; set; } = null;
+            private ToffoliSimulator? simulator = null;
+            protected CCNOT? CCNOT { get; set; } = null;
 
             public Native(IOperationFactory m) : base(m)
             {
