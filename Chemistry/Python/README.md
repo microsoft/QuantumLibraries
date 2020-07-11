@@ -1,6 +1,6 @@
 # Q# Chemistry Library for Python #
 
-The `qsharp-chemistry` package for Python provides interoperability with Microsoft's Quantum Development Kit Chemistry Lirary.
+The `qsharp-chemistry` package for Python provides interoperability with Microsoft Quantum Development Kit's Chemistry Lirary.
 
 For details on how to get started with Python and Q#, please see the [Getting Started with Python guide](https://docs.microsoft.com/quantum/install-guide/python).
 
