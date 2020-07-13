@@ -1,7 +1,7 @@
 #!/bin/env python
 # -*- coding: utf-8 -*-
 ##
-# setup.py: Installs Python host functionality for Q#.
+# setup.py: Installs Python host functionality for Q# chemistry library.
 ##
 # Copyright (c) Microsoft Corporation. All rights reserved.
 # Licensed under the MIT License.
@@ -26,7 +26,7 @@ is_conda = bool(os.environ.get('CONDA_BUILD', False))
 with open('./qsharp/chemistry/version.py', 'w') as f:
     f.write(f'''# Auto-generated file, do not edit.
 ##
-# version.py: Specifies the version of the qsharp package.
+# version.py: Specifies the version of the qsharp-chemistry package.
 ##
 # Copyright (c) Microsoft Corporation. All rights reserved.
 # Licensed under the MIT License.
@@ -53,7 +53,7 @@ setuptools.setup(
     description="Python chemistry libraries for Q#.",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/microsoft/iqsharp",
+    url="https://github.com/microsoft/QuantumLibraries",
     packages=setuptools.find_packages(),
     classifiers=[
         "Programming Language :: Python :: 3",

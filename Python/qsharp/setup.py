@@ -40,7 +40,7 @@ setuptools.setup(
     description="Q# Libraries for interop with Python.",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/microsoft/iqsharp",
+    url="https://github.com/microsoft/QuantumLibraries",
     packages=setuptools.find_packages(),
     classifiers=[
         "Programming Language :: Python :: 3",
