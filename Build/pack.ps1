@@ -69,6 +69,7 @@ if ($Env:ENABLE_PYTHON -eq "false") {
     Write-Host "##[info]Packing Python wheel..."
     python --version
     Pack-Wheel '../Python/qsharp-chemistry'
+    Pack-Wheel '../Python/qsharp'
 }
 
 if (-not $all_ok) {
