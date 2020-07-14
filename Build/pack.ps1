@@ -26,7 +26,9 @@ Write-Host "##[info]Pack Standard library"
 Pack-One '../Standard/src/Standard.csproj'
 
 Write-Host "##[info]Pack Chemistry library"
+Pack-One '../Chemistry/src/Runtime/Runtime.csproj'
 Pack-One '../Chemistry/src/DataModel/DataModel.csproj'
+Pack-One '../Chemistry/src/Metapackage/Metapackage.csproj'
 
 Write-Host "##[info]Pack QML library"
 Pack-One '../MachineLearning/src/MachineLearning.csproj'
@@ -36,6 +38,9 @@ Pack-One '../Numerics/src/Numerics.csproj'
 
 Write-Host "##[info]Pack chemistry magics library"
 Pack-One '../Chemistry/src/Jupyter/Jupyter.csproj'
+
+Write-Host "##[info]Pack chemistry tool"
+Pack-One '../Chemistry/src/Tools/Tools.csproj'
 
 if (-not $all_ok) {
     throw "At least one test failed execution. Check the logs."

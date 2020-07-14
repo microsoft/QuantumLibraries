@@ -161,7 +161,9 @@ namespace Microsoft.Quantum.Characterization
             public virtual bool CanEmulate(IAdjointable preparation, ICallable measure) =>
                     this.Simulator != null &&
                     (preparation.Qubits == null || !preparation.Qubits.Where(q => q != null).Any()) &&
-                    (measure.FullName == typeof(Primitive.Measure).FullName || measure.FullName == typeof(Intrinsic.Measure).FullName || measure.FullName == typeof(MeasureAllZ).FullName);
+                    // NB: the "Primitive" deprecation stub has been removed, so we check against the exact
+                    //     full name instead. That check should be removed in the future.
+                    (measure.FullName == "Microsoft.Quantum.Primitive.Measure" || measure.FullName == typeof(Intrinsic.Measure).FullName || measure.FullName == typeof(MeasureAllZ).FullName);
         }
     }
 }

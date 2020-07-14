@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.Quantum.Sdk/0.11.2005.1133-beta">
+﻿<Project Sdk="Microsoft.Quantum.Sdk/0.12.20062514-beta">
 
   <Import Project="..\..\..\Build\props\tests.props" />
 
@@ -14,16 +14,16 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="..\BroombridgeExamples\hydrogen_0.1.yaml" Link="Molecules\MolecularHydrogen\hydrogen_0.1.yaml">
+    <None Include="..\TestData\Broombridge\hydrogen_0.1.yaml" Link="Molecules\MolecularHydrogen\hydrogen_0.1.yaml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\BroombridgeExamples\hydrogen_0.2.yaml" Link="Molecules\MolecularHydrogen\hydrogen_0.2.yaml">
+    <None Include="..\TestData\Broombridge\hydrogen_0.2.yaml" Link="Molecules\MolecularHydrogen\hydrogen_0.2.yaml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\BroombridgeExamples\LiH_0.1.yaml" Link="Molecules\LithiumHydride\LiH_0.1.yaml">
+    <None Include="..\TestData\Broombridge\LiH_0.1.yaml" Link="Molecules\LithiumHydride\LiH_0.1.yaml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\BroombridgeExamples\LiH_0.2.yaml" Link="Molecules\LithiumHydride\LiH_0.2.yaml">
+    <None Include="..\TestData\Broombridge\LiH_0.2.yaml" Link="Molecules\LithiumHydride\LiH_0.2.yaml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
