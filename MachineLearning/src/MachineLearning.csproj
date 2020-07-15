@@ -19,7 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="..\..\build\assets\qdk-nuget-icon.png" Pack="true" Visible="false" PackagePath="" />
+    <None Include="..\..\Build\assets\qdk-nuget-icon.png" Pack="true" Visible="false" PackagePath="" />
   </ItemGroup>
 
   <!-- Configure NuGet package metadata as well. -->
