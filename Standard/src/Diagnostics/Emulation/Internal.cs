@@ -5,6 +5,7 @@
 
 using System;
 using System.Linq;
+using Microsoft.Quantum.Diagnostics.Emulation;
 using Microsoft.Quantum.Simulation.Common;
 using Microsoft.Quantum.Simulation.Core;
 using Microsoft.Quantum.Simulation.Simulators;

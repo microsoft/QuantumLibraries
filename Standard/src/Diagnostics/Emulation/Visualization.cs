@@ -7,7 +7,7 @@ using Microsoft.Jupyter.Core;
 using Newtonsoft.Json;
 using static NumSharp.Slice;
 
-namespace Microsoft.Quantum.Diagnostics
+namespace Microsoft.Quantum.Diagnostics.Emulation
 {
 
     internal class FailureRecord<T>
