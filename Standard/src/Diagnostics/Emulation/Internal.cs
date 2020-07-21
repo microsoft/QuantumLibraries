@@ -102,8 +102,12 @@ namespace Microsoft.Quantum.Diagnostics
             {
                 var arrayDumper = new ArrayDumper(simulator);
                 arrayDumper.Dump(new QArray<Qubit>(reference.Concat(target)));
-                // TODO: do something to get state of the two registers out from simulator.
-                // TODO: write operation out as unitary.
+                Simulator?.MaybeDisplayDiagnostic(
+                    new DisplayableUnitaryOperator
+                    {
+                        Data = arrayDumper.Data
+                    }
+                );
                 return QVoid.Instance;
             }
 
