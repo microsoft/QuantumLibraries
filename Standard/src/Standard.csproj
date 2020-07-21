@@ -32,6 +32,7 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.Quantum.Simulators" Version="0.12.20062514-beta" />
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.Jupyter.Core" Version="1.4.80531" />
   </ItemGroup>
 
   <ItemGroup>

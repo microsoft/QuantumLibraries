@@ -4,7 +4,7 @@ namespace Microsoft.Quantum.Tests {
     open Microsoft.Quantum.Arithmetic;
     open Microsoft.Quantum.Intrinsic;
     open Microsoft.Quantum.Canon;
-    open Microsoft.Quantum.Diagnostics;
+    open Microsoft.Quantum.Diagnostics as Diag;
     open Microsoft.Quantum.Arrays;
 
 
@@ -14,7 +14,7 @@ namespace Microsoft.Quantum.Tests {
 
     operation PreparationTest () : Unit {
         using (qubit = Qubit()) {
-            AssertProb([PauliZ], [qubit], Zero, 1.0, $"Freshly prepared qubit was not in |0〉 state.", 1E-10);
+            Diag.AssertMeasurementProbability([PauliZ], [qubit], Zero, 1.0, $"Freshly prepared qubit was not in |0〉 state.", 1E-10);
         }
     }
 
@@ -27,29 +27,27 @@ namespace Microsoft.Quantum.Tests {
     }
 
     function AssertEqualTestShouldFail () : Unit {
-        NearEqualityFactD(1.0, 0.0);
+        Diag.NearEqualityFactD(1.0, 0.0);
     }
     
     
     function AssertBoolArrayEqualTestShouldFail () : Unit {
-        
-        AllEqualityFactB([true, false], [false, true], $"OK");
+        Diag.AllEqualityFactB([true, false], [false, true], $"OK");
     }
     
     
     function AssertBoolEqualTestShouldFail () : Unit {
-        EqualityFactB(true, false, $"OK");
+        Diag.EqualityFactB(true, false, $"OK");
     }
     
     
     function EqualityFactRTestShouldFail () : Unit {
-        EqualityFactR(Zero, One, $"OK");
+        Diag.EqualityFactR(Zero, One, $"OK");
     }
     
     
     function EqualityFactITestShouldFail () : Unit {
-        
-        EqualityFactI(12, 42, $"OK");
+        Diag.EqualityFactI(12, 42, $"OK");
     }
     
     
@@ -60,7 +58,7 @@ namespace Microsoft.Quantum.Tests {
     /// operation equality assertions.
     operation SelfAdjointOperationsTest () : Unit {
         for (op in [I, X, Y, Z, H]) {
-            AssertOperationsEqualReferenced(3, ApplyToEach(op, _), ApplyToEachA(op, _));
+            Diag.AssertOperationsEqualReferenced(3, ApplyToEach(op, _), ApplyToEachA(op, _));
         }
     }
     
@@ -75,7 +73,7 @@ namespace Microsoft.Quantum.Tests {
         for (op in [I, X, Y, Z, H]) {
             let arr = [op, Adjoint op];
             let bound = BoundCA(arr);
-            AssertOperationsEqualReferenced(3, ApplyToEachCA(BoundCA(arr), _), ApplyToEachA(I, _));
+            Diag.AssertOperationsEqualReferenced(3, ApplyToEachCA(BoundCA(arr), _), ApplyToEachA(I, _));
         }
     }
     
@@ -105,7 +103,7 @@ namespace Microsoft.Quantum.Tests {
         using (qubits = Qubit[1]) {
             H(qubits[0]);
             Exp([PauliZ], phase, qubits);
-            AssertPhase(phase, qubits[0], tolerance);
+            Diag.AssertPhase(phase, qubits[0], tolerance);
             ResetAll(qubits);
         }
     }
