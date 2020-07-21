@@ -63,7 +63,7 @@ namespace Microsoft.Quantum.Arrays {
         return array[0 .. Length(array) - 2];
     }
 
-    function _Lookup<'T> (array : 'T[], index : Int) : 'T {
+    internal function Lookup<'T> (array : 'T[], index : Int) : 'T {
         return array[index];
     }
 
@@ -90,7 +90,7 @@ namespace Microsoft.Quantum.Arrays {
     /// where functions are used to avoid the need to record an entire array
     /// in memory.
     function LookupFunction<'T> (array : 'T[]) : (Int -> 'T) {
-        return _Lookup(array, _);
+        return Lookup(array, _);
     }
 
     /// # Summary
@@ -299,7 +299,7 @@ namespace Microsoft.Quantum.Arrays {
     /// # Remarks
     /// ## Example
     /// ```qsharp
-    /// // The following returns [[1,5],[3],[7]];
+    /// // The following returns [[1, 5], [3], [7]];
     /// let split = Partitioned([2,1], [1,5,3,7]);
     /// ```
     function Partitioned<'T>(nElements: Int[], arr: 'T[]) : 'T[][] {
@@ -329,15 +329,44 @@ namespace Microsoft.Quantum.Arrays {
         return Length(array) == 0;
     }
 
-    function _IsPermutationPred(permutation : Int[], value : Int) : Bool {
+    internal function IsValuePresent(permutation : Int[], value : Int) : Bool {
         let index = IndexOf(EqualI(value, _), permutation);
         return index != -1;
     }
 
-    function _IsPermutation(permuation : Int[]) : Bool {
-        return All(_IsPermutationPred(permuation, _), RangeAsIntArray(IndexRange(permuation)));
+    /// # Summary
+    /// Outputs true if and only if a given array represents a permutation.
+    ///
+    /// # Description
+    /// Given an array `array` of length `n`, returns true if and only if
+    /// each integer from `0` to `n - 1` appears exactly once in `array`, such
+    /// that `array` can be interpreted as a permutation on `n` elements.
+    ///
+    /// # Input
+    /// ## array
+    /// An array that may or may not represent a permutation.
+    ///
+    /// # Ouput
+    /// `true` if and only if the array is a permutation.
+    ///
+    /// # Remarks
+    /// An array of length zero is trivially a permutation.
+    ///
+    /// # Example
+    /// The following Q# code prints the message "All diagnostics completed
+    /// successfully":
+    /// ```Q#
+    /// Fact(IsPermutation([2, 0, 1], "");
+    /// Contradiction(IsPermutation([5, 0, 1], "[5, 0, 1] isn't a permutation");
+    /// Message("All diagnostics completed successfully.");
+    /// ```
+    function IsPermutation(permuation : Int[]) : Bool {
+        return All(IsValuePresent(permuation, _), RangeAsIntArray(IndexRange(permuation)));
     }
 
+    // NB: This function is internal, but not marked as internal so as to allow
+    //     unit tests to check its behaviour. In the future, tests should be
+    //     redesigned to check only publicly accessible behavior.
     /// # Summary
     /// Returns the order elements in an array need to be swapped to produce an ordered array.
     /// Assumes swaps occur in place.
@@ -358,24 +387,21 @@ namespace Microsoft.Quantum.Arrays {
     /// ```
     ///
     /// ## Psuedocode
-    /// for (index in 0..Length(newOrder) - 1)
-    /// {
-    ///     while newOrder[index] != index
-    ///     {
+    /// for (index in 0..Length(newOrder) - 1) {
+    ///     while newOrder[index] != index {
     ///         Switch newOrder[index] with newOrder[newOrder[index]]
     ///     }
     /// }
     function _SwapOrderToPermuteArray(newOrder : Int[]) : (Int, Int)[] {
         // Check to verify the new ordering actually is a permutation of the indices
-        Fact(_IsPermutation(newOrder), $"The new ordering is not a permutation");
+        Fact(IsPermutation(newOrder), $"The new ordering is not a permutation");
 
         mutable swaps = new (Int, Int)[0];
         mutable order = newOrder;
 
         // for each value, whenever the index and value don't match, swap until it does
         for (index in IndexRange(order)) {
-            while (not EqualI(order[index], index))
-            {
+            while (not EqualI(order[index], index)) {
                 set swaps += [(index, order[index])];
                 set order = Swapped(order[index], index, order);
             }
@@ -398,13 +424,13 @@ namespace Microsoft.Quantum.Arrays {
     /// Array with elements to be swapped.
     ///
     /// # Output
-    /// The array with the in place swapp applied.
+    /// The array with the in place swap applied.
     ///
     /// ## Example
     /// ```qsharp
     /// // The following returns [0, 3, 2, 1, 4]
     /// Swapped(1, 3, [0, 1, 2, 3, 4]);
-    function Swapped<'T>(firstIndex: Int, secondIndex: Int, arr: 'T[]) : 'T[] {
+    function Swapped<'T>(firstIndex : Int, secondIndex : Int, arr : 'T[]) : 'T[] {
         return arr
             w/ firstIndex <- arr[secondIndex]
             w/ secondIndex <- arr[firstIndex];

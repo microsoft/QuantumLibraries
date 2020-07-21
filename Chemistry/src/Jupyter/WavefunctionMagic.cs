@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 using Microsoft.Jupyter.Core;
 using Microsoft.Quantum.Chemistry.Broombridge;
@@ -48,7 +49,7 @@ namespace Microsoft.Quantum.Chemistry.Magic
             public IndexConvention IndexConvention { get; set; } = IndexConvention.UpDown;
 
             /// <summary>
-            /// The label of the wavefunctio within the ProblemDescription to use. 
+            /// The label of the wavefunctio within the ProblemDescription to use.
             /// If no label specified, it will return the Hartree-Fock state.
             /// </summary>
             [JsonProperty(PropertyName = "wavefunction_label")]
@@ -59,10 +60,10 @@ namespace Microsoft.Quantum.Chemistry.Magic
         /// Loads a InputState (WaveFunction) from the given Broombridge's ProblemDescription.
         /// The ProblemDescription can come from a .yaml broombridge file or can be passed down as parameter.
         /// If the wavefunctionLabel is specified, it will return the corresponding inputstate from the
-        /// ProblemDescription; if the wavefunctionLabel is not specified, then it returns 
+        /// ProblemDescription; if the wavefunctionLabel is not specified, then it returns
         /// the Hartree--Fock state.
         /// </summary>
-        public ExecutionResult Run(string input, IChannel channel)
+        public async Task<ExecutionResult> Run(string input, IChannel channel)
         {
             if (string.IsNullOrWhiteSpace(input))
             {
@@ -81,7 +82,7 @@ namespace Microsoft.Quantum.Chemistry.Magic
 
             return wavefunction.ToExecutionResult();
         }
-        
+
         /// <summary>
         /// Selects the ProblemDescription from the given arguments.
         /// If the fileName is specified, it will try to load the Broombridge data from the file

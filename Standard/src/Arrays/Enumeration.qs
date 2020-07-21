@@ -3,32 +3,7 @@
 
 namespace Microsoft.Quantum.Arrays {
 
-    /// # Summary
-    /// Given an array, returns a range over the indices of that array, suitable
-    /// for use in a for loop.
-    ///
-    /// # Type Parameters
-    /// ## 'TElement
-    /// The type of elements of the array.
-    ///
-    /// # Input
-    /// ## array
-    /// An array for which a range of indices should be returned.
-    ///
-    /// # Output
-    /// A range over all indices of the array.
-    ///
-    /// # Example
-    /// The following `for` loops are equivalent:
-    /// ```Q#
-    /// for (idx in IndexRange(array)) { ... }
-    /// for (idx in IndexRange(array)) { ... }
-    /// ```
-    function IndexRange<'TElement>(array : 'TElement[]) : Range {
-       return 0..(Length(array) - 1);
-    }
-
-    function _Identity<'T>(input : 'T) : 'T { return input; }
+    internal function Identity<'T>(input : 'T) : 'T { return input; }
 
     /// # Summary
     /// Given an array, returns a new array containing elements of the original
@@ -43,7 +18,7 @@ namespace Microsoft.Quantum.Arrays {
     /// An array whose elements are to be enumerated.
     ///
     /// # Output
-    /// A new array containing elments of the original array along with their
+    /// A new array containing elements of the original array along with their
     /// indices.
     ///
     /// # Example
@@ -56,7 +31,7 @@ namespace Microsoft.Quantum.Arrays {
     /// for ((idx, element) in Enumerated(array)) { ... }
     /// ```
     function Enumerated<'TElement>(array : 'TElement[]) : (Int, 'TElement)[] {
-        return MappedByIndex(_Identity<(Int, 'TElement)>, array);
+        return MappedByIndex(Identity<(Int, 'TElement)>, array);
     }
 
 }

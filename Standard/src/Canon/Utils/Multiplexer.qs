@@ -151,7 +151,7 @@ namespace Microsoft.Quantum.Canon {
         ApproximatelyMultiplexZ(0.0, coefficients, control, target);
     }
 
-    function _AnyOutsideToleranceD(tolerance : Double, coefficients : Double[]) : Bool {
+    internal function AnyOutsideToleranceD(tolerance : Double, coefficients : Double[]) : Bool {
         // NB: We don't currently use Any / Mapped for this, as we want to be
         //     able to short-circuit.
         for (coefficient in coefficients) {
@@ -162,7 +162,7 @@ namespace Microsoft.Quantum.Canon {
         return false;
     }
 
-    function _AnyOutsideToleranceCP(tolerance : Double, coefficients : ComplexPolar[]) : Bool {
+    internal function AnyOutsideToleranceCP(tolerance : Double, coefficients : ComplexPolar[]) : Bool {
         for (coefficient in coefficients) {
             if (AbsComplexPolar(coefficient) > tolerance) {
                 return true;
@@ -225,9 +225,9 @@ namespace Microsoft.Quantum.Canon {
                 }
             } else {
                 // Compute new coefficients.
-                let (coefficients0, coefficients1) = _MultiplexZCoefficients(coefficientsPadded);
+                let (coefficients0, coefficients1) = MultiplexZCoefficients(coefficientsPadded);
                 ApproximatelyMultiplexZ(tolerance,coefficients0, LittleEndian((control!)[0 .. Length(control!) - 2]), target);
-                if (_AnyOutsideToleranceD(tolerance, coefficients1)) {
+                if (AnyOutsideToleranceD(tolerance, coefficients1)) {
                     within {
                         CNOT((control!)[Length(control!) - 1], target);
                     } apply {
@@ -240,9 +240,9 @@ namespace Microsoft.Quantum.Canon {
         controlled (controlRegister, ...) {
             // pad coefficients length to a power of 2.
             let coefficientsPadded = Padded(2 ^ (Length(control!) + 1), 0.0, Padded(-2 ^ Length(control!), 0.0, coefficients));
-            let (coefficients0, coefficients1) = _MultiplexZCoefficients(coefficientsPadded);
+            let (coefficients0, coefficients1) = MultiplexZCoefficients(coefficientsPadded);
             ApproximatelyMultiplexZ(tolerance,coefficients0, control, target);
-            if (_AnyOutsideToleranceD(tolerance,coefficients1)) {
+            if (AnyOutsideToleranceD(tolerance,coefficients1)) {
                 within {
                     Controlled X(controlRegister, target);
                 } apply {
@@ -340,7 +340,7 @@ namespace Microsoft.Quantum.Canon {
         let coefficientsPadded = Padded(-2 ^ Length(qubits!), 0.0, coefficients);
 
         // Compute new coefficients.
-        let (coefficients0, coefficients1) = _MultiplexZCoefficients(coefficientsPadded);
+        let (coefficients0, coefficients1) = MultiplexZCoefficients(coefficientsPadded);
         ApproximatelyMultiplexZ(tolerance,coefficients1, LittleEndian((qubits!)[0 .. Length(qubits!) - 2]), (qubits!)[Length(qubits!) - 1]);
 
         if (Length(coefficientsPadded) == 2) {
@@ -357,7 +357,7 @@ namespace Microsoft.Quantum.Canon {
     /// Implementation step of multiply-controlled Z rotations.
     /// # See Also
     /// - Microsoft.Quantum.Canon.MultiplexZ
-    function _MultiplexZCoefficients(coefficients : Double[]) : (Double[], Double[]) {
+    internal function MultiplexZCoefficients(coefficients : Double[]) : (Double[], Double[]) {
         let newCoefficientsLength = Length(coefficients) / 2;
         mutable coefficients0 = new Double[newCoefficientsLength];
         mutable coefficients1 = new Double[newCoefficientsLength];
@@ -393,7 +393,7 @@ namespace Microsoft.Quantum.Canon {
     /// # Remarks
     /// `coefficients` will be padded with identity elements if
     /// fewer than $2^n$ are specified. This implementation uses
-    /// $n - 1$ auxillary qubits.
+    /// $n - 1$ auxiliary qubits.
     ///
     /// # References
     /// - Toward the first quantum simulation with quantum speedup
@@ -407,7 +407,7 @@ namespace Microsoft.Quantum.Canon {
 
         if (Length(unitaries) > 0) {
             let auxillaryRegister = new Qubit[0];
-            _MultiplexOperations(unitaries, auxillaryRegister, index, target);
+            MultiplexOperationsWithAuxRegister(unitaries, auxillaryRegister, index, target);
         }
     }
 
@@ -415,7 +415,7 @@ namespace Microsoft.Quantum.Canon {
     /// Implementation step of MultiplexOperations.
     /// # See Also
     /// - Microsoft.Quantum.Canon.MultiplexOperations
-    operation _MultiplexOperations<'T>(
+    internal operation MultiplexOperationsWithAuxRegister<'T>(
         unitaries : ('T => Unit is Adj + Ctl)[],
         auxillaryRegister : Qubit[],
         index : LittleEndian,
@@ -441,13 +441,13 @@ namespace Microsoft.Quantum.Canon {
                     let newAuxQubit = Tail(index!);
 
                     if (nUnitariesLeft > 0) {
-                        _MultiplexOperations(leftUnitaries, [newAuxQubit], newControls, target);
+                        MultiplexOperationsWithAuxRegister(leftUnitaries, [newAuxQubit], newControls, target);
                     }
 
                     within {
                         X(newAuxQubit);
                     } apply {
-                        _MultiplexOperations(rightUnitaries, [newAuxQubit], newControls, target);
+                        MultiplexOperationsWithAuxRegister(rightUnitaries, [newAuxQubit], newControls, target);
                     }
                 } else {
                     // Recursion that reduces nIndex by 1 & sets Length(auxillaryRegister) to 1.
@@ -456,13 +456,13 @@ namespace Microsoft.Quantum.Canon {
                             Controlled X(auxillaryRegister + [(index!)[Length(index!) - 1]], newAuxQubit);
                         } apply {
                             if (nUnitariesLeft > 0) {
-                                _MultiplexOperations(leftUnitaries, [newAuxQubit], newControls, target);
+                                MultiplexOperationsWithAuxRegister(leftUnitaries, [newAuxQubit], newControls, target);
                             }
 
                             within {
                                 Controlled X(auxillaryRegister, newAuxQubit);
                             } apply {
-                                _MultiplexOperations(rightUnitaries, [newAuxQubit], newControls, target);
+                                MultiplexOperationsWithAuxRegister(rightUnitaries, [newAuxQubit], newControls, target);
                             }
                         }
                     }
@@ -471,7 +471,7 @@ namespace Microsoft.Quantum.Canon {
         }
 
         controlled (controlRegister, ...) {
-            _MultiplexOperations(unitaries, controlRegister, index, target);
+            MultiplexOperationsWithAuxRegister(unitaries, controlRegister, index, target);
         }
     }
 

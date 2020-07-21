@@ -114,12 +114,12 @@ namespace Microsoft.Quantum.Simulation {
     /// - Microsoft.Quantum.Canon.BlockEncodingReflection
     function BlockEncodingToReflection(blockEncoding: BlockEncoding)
     : BlockEncodingReflection {
-        return BlockEncodingReflection(BlockEncoding(_BlockEncodingToReflection(blockEncoding, _, _)));
+        return BlockEncodingReflection(BlockEncoding(ApplyBlockEncodingAsReflection(blockEncoding, _, _)));
     }
 
     /// # Summary
     /// Implementation of `BlockEncodingToReflection`.
-    operation _BlockEncodingToReflection(blockEncoding: BlockEncoding, auxiliary: Qubit[], system: Qubit[])
+    internal operation ApplyBlockEncodingAsReflection(blockEncoding: BlockEncoding, auxiliary: Qubit[], system: Qubit[])
     : Unit is Adj + Ctl {
         let prep = auxiliary[0];
         let blockEncodingAux = Rest(auxiliary);
@@ -155,12 +155,12 @@ namespace Microsoft.Quantum.Simulation {
     /// - Microsoft.Quantum.Canon.BlockEncodingReflection
     function QuantumWalkByQubitization(blockEncoding: BlockEncodingReflection)
     : ((Qubit[], Qubit[]) => Unit is Adj + Ctl) {
-        return _QuantumWalkByQubitization(blockEncoding, _, _);
+        return ApplyQuantumWalkByQubitization(blockEncoding, _, _);
     }
 
     /// # Summary
     /// Implementation of `Qubitization`.
-    operation _QuantumWalkByQubitization(
+    internal operation ApplyQuantumWalkByQubitization(
         blockEncoding : BlockEncodingReflection,
         auxiliary : Qubit[],
         system : Qubit[]
@@ -203,12 +203,12 @@ namespace Microsoft.Quantum.Simulation {
         selector: (('T, 'S) => Unit is Adj + Ctl)
     )
     : (('T, 'S) => Unit is Adj + Ctl) {
-        return _BlockEncodingByLCU(statePreparation, selector, _, _);
+        return ApplyBlockEncodingByLCU(statePreparation, selector, _, _);
     }
 
     /// # Summary
     /// Implementation of `BlockEncodingByLCU`.
-    operation _BlockEncodingByLCU<'T,'S>(
+    internal operation ApplyBlockEncodingByLCU<'T,'S>(
         statePreparation: ('T => Unit is Adj + Ctl),
         selector: (('T, 'S) => Unit is Adj + Ctl),
         auxiliary: 'T,
@@ -255,7 +255,7 @@ namespace Microsoft.Quantum.Simulation {
 
     /// # Summary
     /// Conversion of ((LittleEndian, Qubit[]) => () is Adj + Ctl) to BlockEncoding
-    operation _BlockEncodingFromBEandQubit(
+    internal operation ApplyBlockEncodingFromBEandQubit(
         op: ((LittleEndian, Qubit[]) => Unit is Adj + Ctl),
         auxiliary: Qubit[],
         system: Qubit[]

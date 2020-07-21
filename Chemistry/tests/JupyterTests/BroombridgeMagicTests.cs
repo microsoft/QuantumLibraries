@@ -16,37 +16,37 @@ namespace Microsoft.Quantum.Chemistry.Tests
     public class BroombridgeMagicTests
     {
         [Fact]
-        public void LoadNoFile()
+        public async void LoadNoFile()
         {
             var magic = new BroombridgeMagic();
             var channel = new MockChannel();
 
             Assert.Equal("%chemistry.broombridge", magic.Name);
-            var result = magic.Run("", channel);
+            var result = await magic.Run("", channel);
 
             Assert.Equal(ExecuteStatus.Error, result.Status);
         }
 
 
         [Fact]
-        public void LoadInvalidFile()
+        public async void LoadInvalidFile()
         {
             var filename = "foo_bar.yaml";
             var magic = new BroombridgeMagic();
             var channel = new MockChannel();
 
-            Assert.Throws<FileNotFoundException>(() => magic.Run(filename, channel));
+            await Assert.ThrowsAsync<FileNotFoundException>(async () => await magic.Run(filename, channel));
         }
 
 
         [Fact]
-        public void LoadBroombridgeFile()
+        public async void LoadBroombridgeFile()
         {
             var filename = "broombridge_v0.2.yaml";
             var magic = new BroombridgeMagic();
             var channel = new MockChannel();
 
-            var result = magic.Run(filename, channel);
+            var result = await magic.Run(filename, channel);
             var broombridge = (V0_2.Data)result.Output;
             Assert.Equal(ExecuteStatus.Ok, result.Status);
             Assert.Equal("0.2", broombridge.Format.Version);

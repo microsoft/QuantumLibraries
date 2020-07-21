@@ -260,13 +260,13 @@ namespace Microsoft.Quantum.Canon {
     /// The second qubit to be swapped.
     ///
     /// # References
-    /// - [ *Ryan Babbush, Nathan Wiebe, Jarrod McClean, James McClain, 
+    /// - [ *Ryan Babbush, Nathan Wiebe, Jarrod McClean, James McClain,
     ///     Hartmut Neven, Garnet Kin-Lic Chan*,
     ///     arXiv:1706.00023 ](https://arxiv.org/pdf/1706.00023.pdf)
     ///
     /// # See Also
     /// - Microsoft.Quantum.Intrinsic.SWAP
-    operation ApplyFermionicSWAP (qubit1 : Qubit, qubit2 : Qubit) : Unit 
+    operation ApplyFermionicSWAP (qubit1 : Qubit, qubit2 : Qubit) : Unit
     is Adj + Ctl {
         SWAP(qubit1, qubit2);
         CZ(qubit1, qubit2);
