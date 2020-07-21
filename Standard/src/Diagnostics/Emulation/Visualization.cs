@@ -5,6 +5,7 @@
 
 using Microsoft.Jupyter.Core;
 using Newtonsoft.Json;
+using static NumSharp.Slice;
 
 namespace Microsoft.Quantum.Diagnostics
 {
@@ -59,5 +60,22 @@ namespace Microsoft.Quantum.Diagnostics
             : (EncodedData?)null;
     }
 
+    internal class DisplayableUnitaryOperator
+    {
+        public NumSharp.NDArray? Data { get; set; }
+    }
+
+    public class DisplayableUnitaryOperatorToTextEncoder : IResultEncoder
+    {
+        public string MimeType => MimeTypes.PlainText;
+
+        public EncodedData? Encode(object displayable) =>
+            displayable is DisplayableUnitaryOperator op
+            ? op.Data != null
+              ? $"Real:\n{op.Data[Ellipsis, 0]}\nImag:\n{op.Data[Ellipsis, 1]}".ToEncodedData()
+              : (EncodedData?)null
+            : (EncodedData?)null;
+
+    }
 
 }
