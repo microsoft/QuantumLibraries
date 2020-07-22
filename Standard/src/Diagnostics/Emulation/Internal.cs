@@ -116,7 +116,7 @@ namespace Microsoft.Quantum.Diagnostics
                 var (reference, target) = __in__;
                 return Simulator switch
                 {
-                    QuantumSimulator sim => DumpUnitary(sim, reference, target),
+                    QuantumSimulator sim => this.DumpUnitary(sim, reference, target),
                     // TODO: Add Toffoli simulator here.
                     _ => base.Body(__in__)
                 };
