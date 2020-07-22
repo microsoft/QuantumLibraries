@@ -9,19 +9,6 @@ using static NumSharp.Slice;
 
 namespace Microsoft.Quantum.Diagnostics.Emulation
 {
-
-    internal class FailureRecord<T>
-    {
-        [JsonProperty("actual")]
-        public T Actual { get; set; }
-
-        [JsonProperty("expected")]
-        public T Expected { get; set; }
-
-        [JsonProperty("message")]
-        public string Message { get; set; } = "";
-    }
-
     
     public class FailureRecordToHtmlEncoder : IResultEncoder
     {
@@ -58,11 +45,6 @@ namespace Microsoft.Quantum.Diagnostics.Emulation
             displayable is FailureRecord<dynamic> record
             ? $"{record.Message}\n\tExpected:\t{record.Expected}\n\tActual:\t{record.Actual}".ToEncodedData()
             : (EncodedData?)null;
-    }
-
-    internal class DisplayableUnitaryOperator
-    {
-        public NumSharp.NDArray? Data { get; set; }
     }
 
     public class DisplayableUnitaryOperatorToTextEncoder : IResultEncoder

@@ -1,23 +1,21 @@
-<Project Sdk="Microsoft.Quantum.Sdk/0.12.20072120-beta">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
-    <AssemblyName>Microsoft.Quantum.Standard</AssemblyName>
-    <QsharpDocsGeneration>true</QsharpDocsGeneration>
-    <IncludeQsharpCorePackages>false</IncludeQsharpCorePackages> <!-- otherwise the standard library is included by the Sdk -->
+    <AssemblyName>Microsoft.Quantum.Standard.Visualization</AssemblyName>
     <NoWarn>1591</NoWarn> <!-- warning regarding missing C# doc comments -->
   </PropertyGroup>
 
   <PropertyGroup>
     <Authors>Microsoft</Authors>
-    <Description>Microsoft's Quantum standard libraries.</Description>
+    <Description>Provides IQ# visualization support for Microsoft's Q# standard libraries.</Description>
     <Copyright>© Microsoft Corporation. All rights reserved.</Copyright>
     <PackageReleaseNotes>See: https://docs.microsoft.com/en-us/quantum/relnotes/</PackageReleaseNotes>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/Microsoft/Quantum</PackageProjectUrl>
     <PackageIcon>qdk-nuget-icon.png</PackageIcon>
     <PackageTags>Quantum Q# Qsharp</PackageTags>
-    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <GenerateDocumentationFile>false</GenerateDocumentationFile>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <EmbedAllSources>true</EmbedAllSources>
     <IncludeSymbols>true</IncludeSymbols>
@@ -32,6 +30,7 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.Quantum.Simulators" Version="0.12.20072120-beta" />
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.Jupyter.Core" Version="1.4.80531" />
     <PackageReference Include="NumSharp" Version="0.20.5" />
   </ItemGroup>
 
