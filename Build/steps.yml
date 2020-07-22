@@ -15,6 +15,10 @@ steps:
   condition: and(succeeded(), ne(variables['Enable.Python'], 'false'))
   continueOnError: true
 
+- script: pip install setuptools wheel pytest
+  displayName: 'Install Python tools'
+  condition: and(succeeded(), ne(variables['Enable.Python'], 'false'))
+
 
 - powershell: ./build.ps1
   displayName: "Building"
