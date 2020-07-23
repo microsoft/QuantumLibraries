@@ -22,6 +22,27 @@ function Pack-One() {
     }
 }
 
+function Pack-Wheel() {
+    param(
+        [string] $Path
+    );
+
+    $result = 0
+
+    Push-Location (Join-Path $PSScriptRoot $Path)
+        python setup.py bdist_wheel sdist --formats=gztar
+
+        if  ($LastExitCode -ne 0) {
+            Write-Host "##vso[task.logissue type=error;]Failed to build $Path."
+            $script:all_ok = $False
+        } else {
+            Copy-Item "dist/*.whl" $Env:PYTHON_OUTDIR
+            Copy-Item "dist/*.tar.gz" $Env:PYTHON_OUTDIR
+        }
+    Pop-Location
+}
+
+
 Write-Host "##[info]Pack Standard library"
 Pack-One '../Standard/src/Standard.csproj'
 
@@ -41,6 +62,15 @@ Pack-One '../Chemistry/src/Jupyter/Jupyter.csproj'
 
 Write-Host "##[info]Pack chemistry tool"
 Pack-One '../Chemistry/src/Tools/Tools.csproj'
+
+if ($Env:ENABLE_PYTHON -eq "false") {
+    Write-Host "##vso[task.logissue type=warning;]Skipping Creating Python packages. Env:ENABLE_PYTHON was set to 'false'."
+} else {
+    Write-Host "##[info]Packing Python wheel..."
+    python --version
+    Pack-Wheel '../Python/qsharp-chemistry'
+    Pack-Wheel '../Python/qsharp'
+}
 
 if (-not $all_ok) {
     throw "At least one test failed execution. Check the logs."
