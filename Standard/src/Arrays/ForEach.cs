@@ -7,7 +7,11 @@ namespace Microsoft.Quantum.Arrays
 {
     public partial class ForEach<__T__, __U__>
     {
-        public override RuntimeMetadata GetRuntimeMetadata(IApplyData args) =>
-            new RuntimeMetadata() { IsComposite = true };
+        public override RuntimeMetadata GetRuntimeMetadata(IApplyData args)
+        {
+            var metadata = base.GetRuntimeMetadata(args);
+            metadata.IsComposite = true;
+            return metadata;
+        }
     }
 }

@@ -23,7 +23,13 @@ namespace Microsoft.Quantum.Tests
             var baseOp = new Microsoft.Quantum.Intrinsic.I(new QuantumSimulator());
             IQArray<Qubit> targets = new QArray<Qubit>(new Qubit[] { });
             var args = op.__dataIn((baseOp, targets));
-            var expected = new RuntimeMetadata() { IsComposite = true };
+            var expected = new RuntimeMetadata()
+            {
+                Label = "ApplyToEach",
+                FormattedNonQubitArgs = "(I)",
+                IsComposite = true,
+                Targets = new List<Qubit>() { },
+            };
             Assert.Equal(expected, op.GetRuntimeMetadata(args));
         }
 
@@ -34,7 +40,13 @@ namespace Microsoft.Quantum.Tests
             var baseOp = new Microsoft.Quantum.Intrinsic.I(new QuantumSimulator());
             IQArray<Qubit> targets = new QArray<Qubit>(new Qubit[] { });
             var args = op.__dataIn((baseOp, targets));
-            var expected = new RuntimeMetadata() { IsComposite = true };
+            var expected = new RuntimeMetadata()
+            {
+                Label = "ApplyToEachC",
+                FormattedNonQubitArgs = "(I)",
+                IsComposite = true,
+                Targets = new List<Qubit>() { },
+            };
             Assert.Equal(expected, op.GetRuntimeMetadata(args));
         }
 
@@ -45,7 +57,13 @@ namespace Microsoft.Quantum.Tests
             var baseOp = new Microsoft.Quantum.Intrinsic.I(new QuantumSimulator());
             IQArray<Qubit> targets = new QArray<Qubit>(new Qubit[] { });
             var args = op.__dataIn((baseOp, targets));
-            var expected = new RuntimeMetadata() { IsComposite = true };
+            var expected = new RuntimeMetadata()
+            {
+                Label = "ApplyToEachA",
+                FormattedNonQubitArgs = "(I)",
+                IsComposite = true,
+                Targets = new List<Qubit>() { },
+            };
             Assert.Equal(expected, op.GetRuntimeMetadata(args));
         }
 
@@ -56,7 +74,13 @@ namespace Microsoft.Quantum.Tests
             var baseOp = new Microsoft.Quantum.Intrinsic.I(new QuantumSimulator());
             IQArray<Qubit> targets = new QArray<Qubit>(new Qubit[] { });
             var args = op.__dataIn((baseOp, targets));
-            var expected = new RuntimeMetadata() { IsComposite = true };
+            var expected = new RuntimeMetadata()
+            {
+                Label = "ApplyToEachCA",
+                FormattedNonQubitArgs = "(I)",
+                IsComposite = true,
+                Targets = new List<Qubit>() { },
+            };
             Assert.Equal(expected, op.GetRuntimeMetadata(args));
         }
     }

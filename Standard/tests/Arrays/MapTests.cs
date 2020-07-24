@@ -23,7 +23,13 @@ namespace Microsoft.Quantum.Tests
             var baseOp = new Microsoft.Quantum.Intrinsic.M(new QuantumSimulator());
             IQArray<Qubit> targets = new QArray<Qubit>(new Qubit[] { });
             var args = op.__dataIn((baseOp, targets));
-            var expected = new RuntimeMetadata() { IsComposite = true };
+            var expected = new RuntimeMetadata()
+            {
+                Label = "ForEach",
+                FormattedNonQubitArgs = "(M)",
+                IsComposite = true,
+                Targets = new List<Qubit>() { },
+            };
             Assert.Equal(expected, op.GetRuntimeMetadata(args));
         }
     }
