@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 using Microsoft.Quantum.Simulation.Core;
+using System;
 
 namespace Microsoft.Quantum.Arrays
 {
@@ -10,6 +11,7 @@ namespace Microsoft.Quantum.Arrays
         public override RuntimeMetadata GetRuntimeMetadata(IApplyData args)
         {
             var metadata = base.GetRuntimeMetadata(args);
+            if (metadata == null) throw new NullReferenceException($"Null RuntimeMetadata found for {this.ToString()}.");
             metadata.IsComposite = true;
             return metadata;
         }
