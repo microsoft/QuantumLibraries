@@ -9,9 +9,9 @@ namespace Quantum.QAOA
         static void Main(string[] args)
         {
             //PARAMETERS
-            int numberOfIterations = 200;
+            int numberOfIterations = 50;
             int p = 3;
-            int numberOfRandomStartingPoints = 3;
+            int numberOfRandomStartingPoints = 1;
 
             //EXAMPLES
 
@@ -53,9 +53,14 @@ namespace Quantum.QAOA
                                0, 0};
             ProblemInstance maxCut3 = new ProblemInstance(dh, dJ);
 
+            dh = new Double[] {0, 0 };
+            dJ = new Double[]{ 0, 1,
+                               0, 0};
+            ProblemInstance maxCut4 = new ProblemInstance(dh, dJ);
+
             //END EXAMPLES
 
-            HybridQaoa cop = new HybridQaoa(numberOfIterations, p, maxCut1, numberOfRandomStartingPoints);
+            HybridQaoa cop = new HybridQaoa(numberOfIterations, p, maxCut4, numberOfRandomStartingPoints);
 
             OptimalSolution res = cop.runOptimization();
             Console.WriteLine(res.optimalVector);
