@@ -72,13 +72,45 @@ namespace QAOATest.ClassicalOptimizationTests
             double[] dh = new Double[] { 0, 0 };
             double[] dJ = new Double[]{ 0, 1,
                                0, 0};
+
+            int numberOfIterations = 50;
+            int p = 2;
+            int numberOfRandomStartingPoints = 2;
+
             ProblemInstance simpleMaxCut = new ProblemInstance(dh, dJ);
 
-            HybridQaoa classicalOptimization = new HybridQaoa(50, 2, simpleMaxCut, 2);
+            HybridQaoa classicalOptimization = new HybridQaoa(numberOfIterations, p, simpleMaxCut, numberOfRandomStartingPoints);
             OptimalSolution optimalSolution = classicalOptimization.runOptimization();
 
             string optimizationResult1 = "01";
             string optimizationResult2 = "10";
+
+            string result = optimalSolution.optimalVector;
+            Console.WriteLine(result);
+
+            Assert.IsTrue(result.Equals(optimizationResult1) || result.Equals(optimizationResult2), "Hybrid QAOA produced incorrect result.");
+
+        }
+
+        [TestMethod]
+        public void runOptimizationTest2()
+        {
+            double[] dh = new Double[] { 0, 0 ,0};
+            double[] dJ = new Double[]{ 0, 1, 5,
+                                        0, 0, 2,
+                                        0, 0, 0};
+
+            int numberOfIterations = 50;
+            int p = 2;
+            int numberOfRandomStartingPoints = 2;
+
+            ProblemInstance simpleMaxCut = new ProblemInstance(dh, dJ);
+
+            HybridQaoa classicalOptimization = new HybridQaoa(numberOfIterations, p, simpleMaxCut, numberOfRandomStartingPoints);
+            OptimalSolution optimalSolution = classicalOptimization.runOptimization();
+
+            string optimizationResult1 = "110";
+            string optimizationResult2 = "001";
 
             string result = optimalSolution.optimalVector;
             Console.WriteLine(result);
