@@ -66,6 +66,28 @@ namespace QAOATest.ClassicalOptimizationTests
 
         }
 
+        [TestMethod]
+        public void runOptimizationTest()
+        {
+            double[] dh = new Double[] { 0, 0 };
+            double[] dJ = new Double[]{ 0, 1,
+                               0, 0};
+            ProblemInstance simpleMaxCut = new ProblemInstance(dh, dJ);
+
+            HybridQaoa classicalOptimization = new HybridQaoa(50, 2, simpleMaxCut, 2);
+            OptimalSolution optimalSolution = classicalOptimization.runOptimization();
+
+            string optimizationResult1 = "01";
+            string optimizationResult2 = "10";
+
+            string result = optimalSolution.optimalVector;
+            Console.WriteLine(result);
+
+            Assert.IsTrue(result.Equals(optimizationResult1) || result.Equals(optimizationResult2), "Hybrid QAOA produced incorrect result.");
+
+
+        }
+
 
     }
 }
