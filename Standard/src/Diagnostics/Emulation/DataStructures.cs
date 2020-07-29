@@ -3,6 +3,9 @@
 
 #nullable enable
 
+using System.Collections.Generic;
+using Microsoft.Quantum.Simulation.Common;
+using Microsoft.Quantum.Simulation.Core;
 using Newtonsoft.Json;
 
 namespace Microsoft.Quantum.Diagnostics.Emulation
@@ -21,6 +24,7 @@ namespace Microsoft.Quantum.Diagnostics.Emulation
     
     public class DisplayableUnitaryOperator
     {
+        public IList<Qubit>? Qubits { get; set; }
         public NumSharp.NDArray? Data { get; set; }
     }
 }

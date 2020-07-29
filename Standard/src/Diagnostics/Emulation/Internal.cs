@@ -95,14 +95,15 @@ namespace Microsoft.Quantum.Diagnostics
                 Simulator = m as SimulatorBase;
             }
 
-            private QVoid DumpUnitary(QuantumSimulator simulator, IQArray<Qubit> reference, IQArray<Qubit> target)
+            private QVoid DumpUnitaryFromChoiState(QuantumSimulator simulator, IQArray<Qubit> reference, IQArray<Qubit> target)
             {
                 var arrayDumper = new ArrayDumper(simulator);
                 arrayDumper.Dump(new QArray<Qubit>(reference.Concat(target)));
                 Simulator?.MaybeDisplayDiagnostic(
                     new DisplayableUnitaryOperator
                     {
-                        Data = arrayDumper.Data
+                        Data = arrayDumper.Data,
+                        Qubits = target.ToList()
                     }
                 );
                 return QVoid.Instance;
@@ -113,8 +114,8 @@ namespace Microsoft.Quantum.Diagnostics
                 var (reference, target) = __in__;
                 return Simulator switch
                 {
-                    QuantumSimulator sim => this.DumpUnitary(sim, reference, target),
-                    // TODO: Add Toffoli simulator here.
+                    QuantumSimulator sim => this.DumpUnitaryFromChoiState(sim, reference, target),
+                    // TODO: Add other simulators here as appropriate.
                     _ => base.Body(__in__)
                 };
             };
