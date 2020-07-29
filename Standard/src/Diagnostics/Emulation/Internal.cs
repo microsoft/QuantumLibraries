@@ -80,9 +80,6 @@ namespace Microsoft.Quantum.Diagnostics
             var scaleFactor = System.Math.Sqrt(1 << nQubitsPerRegister);
             Data = scaleFactor * Data.reshape(1 << nQubitsPerRegister, 1 << nQubitsPerRegister, 2);
 
-            // Clean up the state vector buffer.
-            Data = null;
-
             return result;
         }
     }

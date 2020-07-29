@@ -4,6 +4,7 @@
 #nullable enable
 
 using Microsoft.Jupyter.Core;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using static NumSharp.Slice;
 
@@ -49,14 +50,26 @@ namespace Microsoft.Quantum.Diagnostics.Emulation
 
     public class DisplayableUnitaryOperatorToTextEncoder : IResultEncoder
     {
+        private ILogger<DisplayableUnitaryOperatorToTextEncoder> logger;
         public string MimeType => MimeTypes.PlainText;
 
-        public EncodedData? Encode(object displayable) =>
-            displayable is DisplayableUnitaryOperator op
-            ? op.Data != null
-              ? $"Real:\n{op.Data[Ellipsis, 0]}\nImag:\n{op.Data[Ellipsis, 1]}".ToEncodedData()
-              : (EncodedData?)null
-            : (EncodedData?)null;
+        public DisplayableUnitaryOperatorToTextEncoder(ILogger<DisplayableUnitaryOperatorToTextEncoder> logger)
+        {
+            this.logger = logger;
+        }
+
+        public EncodedData? Encode(object displayable)
+        {
+            if (displayable is DisplayableUnitaryOperator op)
+            {
+                if (op?.Data is null)
+                {
+                    logger.LogError("Asked to encode a displayable unitary operator, but its data was null. This should not happen.");
+                }
+                return $"Real:\n{op.Data[Ellipsis, 0]}\nImag:\n{op.Data[Ellipsis, 1]}".ToEncodedData();
+            }
+            else return null;
+        }
 
     }
 
