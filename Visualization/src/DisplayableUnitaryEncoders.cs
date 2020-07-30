@@ -14,44 +14,6 @@ using System;
 
 namespace Microsoft.Quantum.Diagnostics.Emulation
 {
-    
-    public class FailureRecordToHtmlEncoder : IResultEncoder
-    {
-        public string MimeType => MimeTypes.Html;
-
-        public EncodedData? Encode(object displayable) =>
-            displayable is FailureRecord<dynamic> record
-            ? $@"
-                <blockquote style=""border-left-color: rgb(255, 0, 0)"">
-                    <p>
-                        <strong>Contradiction reached:</strong> {record.Message}
-                    </p>
-
-                    <table>
-                        <tr>
-                            <td>Actual</td>
-                            <td>{record.Actual}</td>
-                        </tr>
-                        <tr>
-                            <td>Expected</td>
-                            <td>{record.Expected}</td>
-                        </tr>
-                    </table>
-                </blockquote>                
-            ".ToEncodedData()
-            : (EncodedData?)null;
-    }
-
-    public class FailureRecordToTextEncoder : IResultEncoder
-    {
-        public string MimeType => MimeTypes.PlainText;
-
-        public EncodedData? Encode(object displayable) =>
-            displayable is FailureRecord<dynamic> record
-            ? $"{record.Message}\n\tExpected:\t{record.Expected}\n\tActual:\t{record.Actual}".ToEncodedData()
-            : (EncodedData?)null;
-    }
-
     public class DisplayableUnitaryOperatorToTextEncoder : IResultEncoder
     {
         private ILogger<DisplayableUnitaryOperatorToTextEncoder> logger;
@@ -95,6 +57,9 @@ namespace Microsoft.Quantum.Diagnostics.Emulation
 
         public EncodedData? Encode(object displayable)
         {
+            bool IsNearZero(double value) =>
+                System.Math.Abs(value) <= configurationSource.TruncationThreshold;
+
             if (displayable is DisplayableUnitaryOperator op)
             {
                 if (op?.Data is null)
@@ -102,6 +67,12 @@ namespace Microsoft.Quantum.Diagnostics.Emulation
                     logger.LogError("Asked to encode a displayable unitary operator, but its data was null. This should not happen.");
                     return null;
                 }
+
+                var precision = configurationSource.GetOptionOrDefault(
+                    "dump.unitaryPrecision",
+                    3
+                );
+
                 var outputMatrix = String.Join(
                     " \\\\\n",
                     op.Data.EnumerateOverAxis().Cast<NumSharp.NDArray>().Select(
@@ -109,7 +80,30 @@ namespace Microsoft.Quantum.Diagnostics.Emulation
                             String.Join(" & ",
                                 row.EnumerateOverAxis()
                                    .Cast<NumSharp.NDArray>()
-                                   .Select(element => $"{element[0]} {(((double)element[1]) < 0 ? "-" : "+")} {System.Math.Abs((double)element[1])}i")
+                                   .Select(element =>
+                                   {
+                                       var format = $"{{0:G{precision}}}";
+                                       var re = (double)element[0];
+                                       var im = (double)element[1];
+                                       var reFmt = String.Format(format, re);
+                                       var imFmt = String.Format(format, System.Math.Abs(im)) + "i";
+                                       if (IsNearZero(re) && IsNearZero(im))
+                                       {
+                                           return "0";
+                                       }
+                                       else if (IsNearZero(im))
+                                       { 
+                                           return reFmt;
+                                       }
+                                       else if (IsNearZero(re))
+                                       {
+                                           return im < 0.0 ? $"-{imFmt}" : imFmt;
+                                       }
+                                       else
+                                       {
+                                           return $"{reFmt} {(im < 0.0 ? "-" : "+")} {imFmt}";
+                                       }
+                                   })
                             )
                     )
                 );

@@ -29,7 +29,14 @@ namespace Microsoft.Quantum.Diagnostics.Emulation
             }
         }
 
-
+        // TODO: remove once https://github.com/microsoft/iqsharp/pull/239 is
+        //       resolved.
+        internal static T GetOptionOrDefault<T>(
+            this IConfigurationSource configurationSource, string optionName, T defaultValue
+        ) =>
+            configurationSource.Configuration.TryGetValue(optionName, out var token)
+            ? token.ToObject<T>() ?? defaultValue
+            : defaultValue;
     }
 
 }

@@ -14,39 +14,6 @@ using static NumSharp.Slice;
 
 namespace Microsoft.Quantum.Diagnostics
 {
-
-    internal partial class FormattedFailure<__T__>
-    {
-
-        public class Native : FormattedFailure<__T__>
-        {
-            private SimulatorBase? Simulator;
-
-            public Native(IOperationFactory m) : base(m)
-            {
-                Simulator = m as SimulatorBase;
-            }
-
-            public override Func<(__T__,__T__,String), QVoid> Body => (__in__) =>
-            {
-                if (Simulator != null)
-                {
-                    var (actual, expected, message) = __in__;
-                    Simulator.MaybeDisplayDiagnostic(
-                        new FailureRecord<__T__>
-                        {
-                            Message = message,
-                            Actual = actual,
-                            Expected = expected
-                        }
-                    );
-                }
-                return base.Body(__in__);
-            };
-        }
-
-    }
-
     internal class ArrayDumper : QuantumSimulator.StateDumper
     {
         // NB: NumSharp does not yet support complex numbers, so we store data

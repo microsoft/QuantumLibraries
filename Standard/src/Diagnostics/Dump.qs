@@ -17,6 +17,23 @@ namespace Microsoft.Quantum.Diagnostics {
     /// ## op
     /// The operation that is to be diagnosed.
     ///
+    /// # Example
+    /// When run on the quantum simulator target, the following snippet
+    /// will output the matrix
+    /// $\left(\begin{matrix} 0.0 & 0.707 \\\\ 0.707 & 0.0\end{matrix}\right)$:
+    ///
+    /// ```Q#
+    /// open Microsoft.Quantum.Arrays as Arrays;
+    /// 
+    /// operation ApplyH(register : Qubit[]) : Unit is Adj + Ctl {
+    ///     H(Head(register));
+    /// }
+    ///
+    /// operation DumpH() : Unit {
+    ///     DumpOperation(1, ApplyH);
+    /// }
+    /// ```
+    ///
     /// # Remarks
     /// Calling this operation has no observable effect from within
     /// Q#. The exact diagnostics that are displayed, if any, are

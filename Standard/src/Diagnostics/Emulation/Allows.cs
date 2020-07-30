@@ -18,12 +18,6 @@ using Newtonsoft.Json.Linq;
 namespace Microsoft.Quantum.Diagnostics
 {
 
-    internal struct CallSites
-    {
-        public string Subject { get; set; }
-        public ImmutableList<ImmutableStack<string>> Sites { get; set; }
-    }
-
     public partial class AllowAtMostNCallsCA<__TInput__, __TOutput__>
     {
         public class Native : AllowAtMostNCallsCA<__TInput__, __TOutput__>
