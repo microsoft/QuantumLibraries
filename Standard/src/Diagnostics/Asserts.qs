@@ -7,9 +7,8 @@ namespace Microsoft.Quantum.Diagnostics {
     open Microsoft.Quantum.Math;
 
     /// # Summary
-	/// Asserts that the phase of an equal superposition state has the expected value.
-	///
-    /// # Description
+    /// Asserts that the phase of an equal superposition state has the expected value.
+    ///
     /// Specifically, asserts that the phase $\phi$ of a quantum state
     /// that may be expressed as
     /// $\frac{e^{i t}}{\sqrt{2}}(e^{i\phi}\ket{0} + e^{-i\phi}\ket{1})$

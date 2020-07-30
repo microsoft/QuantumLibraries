@@ -20,7 +20,7 @@
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <EmbedAllSources>true</EmbedAllSources>
-    <IncludeSymbols>true</IncludeSymbols>
+    <IncludeSymbols>false</IncludeSymbols>
     <IncludeBuildOutput>false</IncludeBuildOutput>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb;.xml</AllowedOutputExtensionsInPackageBuildOutputFolder>
