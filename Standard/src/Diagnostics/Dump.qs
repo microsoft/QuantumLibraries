@@ -40,6 +40,10 @@ namespace Microsoft.Quantum.Diagnostics {
     /// dependent on the current execution target and editor environment.
     /// For example, when used on the full-state quantum simulator,
     /// a unitary matrix used to represent `op` is displayed.
+    ///
+    /// Note that, when run on simulators that admit a global phase ambiguity
+    /// (e.g.: the full-state simulator), returned representations may vary
+    /// up to a global phase.
     operation DumpOperation(nQubits : Int, op : (Qubit[] => Unit is Adj))
     : Unit {
         using ((reference, target) = (Qubit[nQubits], Qubit[nQubits])) {
