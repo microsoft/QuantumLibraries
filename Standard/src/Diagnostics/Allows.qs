@@ -2,9 +2,6 @@
 // Licensed under the MIT License.
 
 namespace Microsoft.Quantum.Diagnostics {
-    open Microsoft.Quantum.Intrinsic;
-    open Microsoft.Quantum.Canon;
-
 
     /// # Summary
     /// Between a call to this operation and its adjoint, asserts that
@@ -38,6 +35,34 @@ namespace Microsoft.Quantum.Diagnostics {
         nTimes : Int, op : ('TInput => 'TOutput is Adj + Ctl)
     )
     : Unit is Adj {
+    }
+
+    /// # Summary
+    /// Between a call to this operation and its adjoint, asserts that
+    /// at most a given number of additional qubits are allocated with
+    /// using statements.
+    ///
+    /// # Input
+    /// ## nQubits
+    /// The maximum number of qubits that may be allocated.
+    ///
+    /// # Example
+    /// The following snippet will fail when executed on machines which
+    /// support this diagnostic:
+    /// ```Q#
+    /// within {
+    ///     AllowAtMostNQubits(3);
+    /// } apply {
+    ///     // Fails since this allocates four qubits.
+    ///     using (register = Qubit[4]) {
+    ///     }
+    /// }
+    /// ```
+    ///
+    /// # Remarks
+    /// This operation may be replaced by a no-op on targets which do not
+    /// support it.
+    operation AllowAtMostNQubits(nQubits : Int) : Unit is Adj {
     }
 
 }

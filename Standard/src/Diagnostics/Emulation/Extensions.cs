@@ -38,6 +38,21 @@ namespace Microsoft.Quantum.Diagnostics.Emulation
         }
     }
 
+    internal class ActionDisposer<TData> : IDisposable
+    {
+        private Action<TData> cleanup;
+        private TData data;
+        public ActionDisposer(TData data, Action<TData> setup, Action<TData> cleanup)
+        {
+            this.data = data;
+            this.cleanup = cleanup;
+            setup(data);
+        }
+
+        public void Dispose() =>
+            cleanup(data);
+    }
+
     internal static class Extensions
     {
         internal static SimulatorEventDisposer RegisterOperationHandlers(
