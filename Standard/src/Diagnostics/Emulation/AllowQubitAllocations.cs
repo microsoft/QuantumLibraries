@@ -32,7 +32,7 @@ namespace Microsoft.Quantum.Diagnostics
                 Simulator = m as SimulatorBase;
             }
 
-            public override Func<long, QVoid> Body => (_args) =>
+            public override Func<long, QVoid> Body => _args =>
             {
                 if (Simulator == null) return QVoid.Instance;
 
@@ -68,7 +68,7 @@ namespace Microsoft.Quantum.Diagnostics
                 return QVoid.Instance;
             };
 
-            public override Func<long, QVoid> AdjointBody => (_args) =>
+            public override Func<long, QVoid> AdjointBody => _args =>
             {
                 if (Simulator == null) return QVoid.Instance;
 

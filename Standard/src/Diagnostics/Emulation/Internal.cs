@@ -37,7 +37,7 @@ namespace Microsoft.Quantum.Diagnostics
             var count = qubits == null
                         ? this.Simulator.QubitManager!.GetAllocatedQubitsCount()
                         : qubits.Length;
-            var nQubitsPerRegister = ((int) count / 2);
+            var nQubitsPerRegister = ((int)count / 2);
             Data = np.empty(new Shape(1 << ((int)count), 2));
             var result = base.Dump(qubits);
 
