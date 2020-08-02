@@ -5,17 +5,11 @@ using Accord.Math;
 using Accord.Math.Optimization;
 using Microsoft.Quantum.Simulation.Core;
 using Microsoft.Quantum.Simulation.Simulators;
+using QAOA.ClassicalOptimization;
 
 namespace Quantum.QAOA
 
 {
-    public struct OptimalSolution
-    {
-        public String optimalVector;
-        public Double optimalValue;
-        public Double[] optimalBeta;
-        public Double[] optimalGamma;
-    }
 
     public class HybridQaoa //currently support up to 2-local Hamiltonians; will be generalized later
     {
@@ -219,17 +213,10 @@ namespace Quantum.QAOA
         ///
         /// # Output
         /// Optimal solution found by a QAOA.
-        public OptimalSolution getOptimalSolution()
+        public OptimalSolution GetOptimalSolution()
         {
-            OptimalSolution optimalSolution = new OptimalSolution
-            {
-                optimalVector = this.bestVector,
-                optimalValue = this.bestHamiltonian,
-                optimalBeta = this.bestBeta,
-                optimalGamma = this.bestGamma,
-            };
 
-            return optimalSolution;
+            return new OptimalSolution(this.bestVector, this.bestHamiltonian, this.bestBeta, this.bestGamma);
         }
 
         /// # Summary
@@ -259,7 +246,7 @@ namespace Quantum.QAOA
 
             }
 
-            return getOptimalSolution();
+            return GetOptimalSolution();
         }
 
 

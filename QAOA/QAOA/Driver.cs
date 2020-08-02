@@ -1,4 +1,5 @@
-﻿using System;
+﻿using QAOA.ClassicalOptimization;
+using System;
 
 namespace Quantum.QAOA
 {
@@ -63,7 +64,7 @@ namespace Quantum.QAOA
             HybridQaoa cop = new HybridQaoa(numberOfIterations, p, maxCut4, numberOfRandomStartingPoints);
 
             OptimalSolution res = cop.runOptimization();
-            Console.WriteLine(res.optimalVector);
+            Console.WriteLine(res.OptimalVector);
 
             }
     }

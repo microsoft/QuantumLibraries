@@ -11,7 +11,7 @@ namespace QAOA.magicCommand
 
         public HybridQaoaRunMagic()
         {
-            this.Name = $"%standard.hybridqaoa.run";
+            this.Name = $"%qaoa.hybridqaoa.run";
             this.Documentation = new Documentation() { Summary = "Runs a hybrid QAOA algorithm with a classical optimizer that chooses input angles. QAOA parameters are provided as a json" };
             this.Kind = SymbolKind.Magic;
             this.Execute = this.Run;
@@ -72,12 +72,64 @@ namespace QAOA.magicCommand
 
             var args = JsonConvert.DeserializeObject<Arguments>(input);
 
-
-            HybridQaoa hybridQaoa = new HybridQaoa(args.NumberOfIterations, args.p, args.ProblemInstance); //deal with optional params
+            HybridQaoa hybridQaoa = new HybridQaoa(args.NumberOfIterations, args.p, args.ProblemInstance, args.NumberOfRandomStartingPoints, args.InitialBeta, args.InitialGamma);
 
             return hybridQaoa.runOptimization().ToExecutionResult();
         }
-
-
     }
+
+        public class HybridQaoaProblemInstanceMagic : MagicSymbol
+        {
+            public HybridQaoaProblemInstanceMagic()
+            {
+                this.Name = $"%qaoa.hybridqaoa.create.problem.instance";
+                this.Documentation = new Documentation() { Summary = "Prepares a problem instance objects that serves as one of arguments to %qaoa.hybridqaoa.run." };
+                this.Kind = SymbolKind.Magic;
+                this.Execute = this.Run;
+            }
+
+            /// <summary>
+            /// List of arguments
+            /// </summary>
+            public class Arguments
+            {
+                /// <summary>
+                /// Coefficents for one-local Hamiltonian terms.
+                /// </summary>
+                [JsonProperty(PropertyName = "one_local_hamiltonian_coefficients")]
+                public Double[] OneLocalHamiltonianCoefficients { get; set; }
+
+                /// <summary>
+                /// Coefficents for one-local Hamiltonian terms.
+                /// </summary>
+                [JsonProperty(PropertyName = "two_local_hamiltonian_coefficients")]
+                public Double[] TwoLocalHamiltonianCoefficients { get; set; }
+
+                /// <summary>
+                /// Depth of a QAOA circuit.
+                /// </summary>
+                [JsonProperty(PropertyName = "problem_size_in_bits")]
+                public int ProblemSizeInBits { get; set; }
+
+            }
+
+            /// <summary>
+            /// Prepares a ProblemInstance object for a hybrid QAOA.
+            /// </summary>
+            public async Task<ExecutionResult> Run(string input, IChannel channel)
+            {
+                if (string.IsNullOrWhiteSpace(input))
+                {
+                    channel.Stderr("Please provide correct arguments");
+                    return ExecuteStatus.Error.ToExecutionResult();
+                }
+
+                var args = JsonConvert.DeserializeObject<Arguments>(input);
+
+                ProblemInstance problemInstance = new ProblemInstance(args.OneLocalHamiltonianCoefficients, args.TwoLocalHamiltonianCoefficients);
+
+                return problemInstance.ToExecutionResult();
+            }
+
+        }
 }
