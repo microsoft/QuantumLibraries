@@ -20,7 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\QAOA\QAOA.csproj" />
+    <ProjectReference Include="..\src\QAOA.csproj" />
   </ItemGroup>
 
 </Project>
