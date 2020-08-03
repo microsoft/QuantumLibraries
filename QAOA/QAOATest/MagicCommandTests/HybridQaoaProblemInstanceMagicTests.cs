@@ -37,7 +37,9 @@ namespace Microsoft.Quantum.QAOA.QAOATest.HybridQaoaTests
             var problemInstance = result.Output as ProblemInstance;
             Assert.Equal(ExecuteStatus.Ok, result.Status);
 
-            Assert.True(problemInstance.ProblemSizeInBits.Equals(2));
+            Assert.Equal(problemInstance.problemSizeInBits, dh.Length);
+            Assert.Equal(problemInstance.oneLocalHamiltonianCoefficients, dh);
+            Assert.Equal(problemInstance.twoLocalHamiltonianCoefficients,dJ);
         }
 
     }

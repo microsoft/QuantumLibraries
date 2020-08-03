@@ -13,11 +13,11 @@ namespace Quantum.QAOA
 
     public class HybridQaoa //currently support up to 2-local Hamiltonians; will be generalized later
     {
-        ClassicalOptimizationUtils.FreeParamsVector FreeParamsVector;
+        Utils.FreeParamsVector FreeParamsVector;
         int numberOfIterations;
         int p;
         ProblemInstance problemInstance;
-        Double bestHamiltonian;
+        Double bestHamiltonianValue;
         String bestVector;
         Double[] bestBeta;
         Double[] bestGamma;
@@ -30,19 +30,19 @@ namespace Quantum.QAOA
             this.numberOfIterations = numberOfIterations;
             this.p = p;
             this.problemInstance = problemInstance;
-            FreeParamsVector.beta = initialBeta;
-            FreeParamsVector.gamma = initialGamma;
-            bestHamiltonian = Double.MaxValue;
+            this.FreeParamsVector.beta = initialBeta;
+            this.FreeParamsVector.gamma = initialGamma;
+            bestHamiltonianValue = Double.MaxValue;
             bestVector = null;
             this.numberOfRandomStartingPoints = numberOfRandomStartingPoints;
         }
 
 
 
-        public Double evaluateCostFunction(string result, double[] costs)
+        public Double EvaluateCostFunction(string result, double[] costs)
         {
             double costFunctionValue = 0;
-            for (int i = 0; i < problemInstance.ProblemSizeInBits; i++)
+            for (int i = 0; i < problemInstance.problemSizeInBits; i++)
             {
                 costFunctionValue += costs[i] * Char.GetNumericValue(result[i]);
             }
@@ -63,19 +63,19 @@ namespace Quantum.QAOA
         /// # Remarks
         /// In the binary string, 0 is mapped to 1 and 1 is mapped to -1 since (-1,1) are eigenvalues of the Z operator which is currently supported in this implementation.
 
-        public double evaluateHamiltonian(string result)
+        public double EvaluateHamiltonian(string result)
         {
             double hamiltonianValue = 0;
-            for (int i = 0; i < problemInstance.ProblemSizeInBits; i++)
+            for (int i = 0; i < problemInstance.problemSizeInBits; i++)
             {
-                hamiltonianValue += problemInstance.OneLocalHamiltonianCoefficients[i] * (1 - 2 * Char.GetNumericValue(result[i]));
+                hamiltonianValue += problemInstance.oneLocalHamiltonianCoefficients[i] * (1 - 2 * Char.GetNumericValue(result[i]));
             }
 
-            for (int i = 0; i < problemInstance.ProblemSizeInBits; i++)
+            for (int i = 0; i < problemInstance.problemSizeInBits; i++)
             {
-                for (int j = i + 1; j < problemInstance.ProblemSizeInBits; j++)
+                for (int j = i + 1; j < problemInstance.problemSizeInBits; j++)
                 {
-                    hamiltonianValue += problemInstance.TwoLocalHamiltonianCoefficients[i * problemInstance.ProblemSizeInBits + j] * (1 - 2 * Char.GetNumericValue(result[i])) * (1 - 2 * Char.GetNumericValue(result[j]));
+                    hamiltonianValue += problemInstance.twoLocalHamiltonianCoefficients[i * problemInstance.problemSizeInBits + j] * (1 - 2 * Char.GetNumericValue(result[i])) * (1 - 2 * Char.GetNumericValue(result[j]));
                 }
             }
 
@@ -93,37 +93,37 @@ namespace Quantum.QAOA
         ///
         /// # Output
         /// The expected value of a Hamiltonian that we calculated in this run.
-        public Double calculateObjectiveFunction(double[] bigfreeParamsVector)
+        public Double CalculateObjectiveFunction(double[] bigfreeParamsVector)
         {
-            ClassicalOptimizationUtils.FreeParamsVector freeParamsVector = ClassicalOptimizationUtils.convertVectorIntoHalves(bigfreeParamsVector);
+            Utils.FreeParamsVector freeParamsVector = Utils.ConvertVectorIntoHalves(bigfreeParamsVector);
             double hamiltonianExpectationValue = 0;
             List<bool[]> allSolutionVectors = new List<bool[]>();
 
             var beta = new QArray<Double>(freeParamsVector.beta);
             var gamma = new QArray<Double>(freeParamsVector.gamma);
 
-            ClassicalOptimizationUtils.printCurrentBetaGamma(beta, gamma);
+            Utils.PrintCurrentBetaGamma(beta, gamma);
 
-            var oneLocalHamiltonianCoefficients = new QArray<Double>(problemInstance.OneLocalHamiltonianCoefficients);
-            var twoLocalHamiltonianCoefficients = new QArray<Double>(problemInstance.TwoLocalHamiltonianCoefficients);
+            var oneLocalHamiltonianCoefficients = new QArray<Double>(problemInstance.oneLocalHamiltonianCoefficients);
+            var twoLocalHamiltonianCoefficients = new QArray<Double>(problemInstance.twoLocalHamiltonianCoefficients);
 
             using (var qsim = new QuantumSimulator())
             {
 
                 for (int i = 0; i < numberOfIterations; i++)
                 {
-                    IQArray<bool> result = RunQaoa.Run(qsim, problemInstance.ProblemSizeInBits, beta, gamma, oneLocalHamiltonianCoefficients, twoLocalHamiltonianCoefficients, p).Result;
+                    IQArray<bool> result = RunQaoa.Run(qsim, problemInstance.problemSizeInBits, beta, gamma, oneLocalHamiltonianCoefficients, twoLocalHamiltonianCoefficients, p).Result;
                     allSolutionVectors.Add(result.ToArray());
-                    string solutionVector = ClassicalOptimizationUtils.getBoolStringFromBoolArray(result.ToArray());
-                    double hamiltonianValue = evaluateHamiltonian(solutionVector);
+                    string solutionVector = Utils.GetBoolStringFromBoolArray(result.ToArray());
+                    double hamiltonianValue = EvaluateHamiltonian(solutionVector);
                     hamiltonianExpectationValue += (hamiltonianValue/numberOfIterations);
 
                 }
 
             }
             
-            updateBestSolution(hamiltonianExpectationValue, allSolutionVectors, freeParamsVector);
-            ClassicalOptimizationUtils.printCurrentBestSolution(this.bestHamiltonian, this.bestVector);
+            UpdateBestSolution(hamiltonianExpectationValue, allSolutionVectors, freeParamsVector);
+            Utils.PrintCurrentBestSolution(this.bestHamiltonianValue, this.bestVector);
 
             return hamiltonianExpectationValue;
         }
@@ -138,12 +138,12 @@ namespace Quantum.QAOA
         /// A vector of all binary solutions that were found by a QAOA.
         /// ## freeParamsVector
         /// A vector of beta and gamma coefficients.
-        private void updateBestSolution(double hamiltonianExpectationValue, List<bool[]> allSolutionVectors, ClassicalOptimizationUtils.FreeParamsVector freeParamsVector)
+        private void UpdateBestSolution(double hamiltonianExpectationValue, List<bool[]> allSolutionVectors, Utils.FreeParamsVector freeParamsVector)
         {
-            if (hamiltonianExpectationValue < this.bestHamiltonian)
+            if (hamiltonianExpectationValue < this.bestHamiltonianValue)
             {
-                String mostProbableSolutionVectorTemp = ClassicalOptimizationUtils.getModeFromBoolList(allSolutionVectors);
-                bestHamiltonian = hamiltonianExpectationValue;
+                String mostProbableSolutionVectorTemp = Utils.GetModeFromBoolList(allSolutionVectors);
+                bestHamiltonianValue = hamiltonianExpectationValue;
                 bestVector = mostProbableSolutionVectorTemp;
                 bestBeta = freeParamsVector.beta;
                 bestGamma = freeParamsVector.gamma;
@@ -160,7 +160,7 @@ namespace Quantum.QAOA
         /// # Remarks
         /// For the canonical choice of the mixing Hamiltonian (i.e. the sum of X operators acting on single qubits), the range of values in the beta vector is 0 <= beta_i <= PI.
         /// For the objective function Hamiltonian based on Z operators, the range of values in the gamma vector is 0 <= beta_i <= 2PI.
-        private NonlinearConstraint[] generateConstraints()
+        private NonlinearConstraint[] GenerateConstraints()
         {
 
             NonlinearConstraint[] constraints = new NonlinearConstraint[4*p];
@@ -181,7 +181,7 @@ namespace Quantum.QAOA
         ///
         /// # Output
         /// Initialized beta and gamma vectors concatenated.
-        private double[] setUpFreeParameters()
+        private double[] SetUpFreeParameters()
         {
             double[] betaCoefficients;
             if (FreeParamsVector.beta != null)
@@ -191,7 +191,7 @@ namespace Quantum.QAOA
             }
             else
             {
-                betaCoefficients = ClassicalOptimizationUtils.getRandomVector(p, Math.PI);
+                betaCoefficients = Utils.GetRandomVector(p, Math.PI);
             }
 
             double[] gammaCoefficients;
@@ -202,21 +202,10 @@ namespace Quantum.QAOA
             }
             else
             {
-                gammaCoefficients = ClassicalOptimizationUtils.getRandomVector(p, 2 * Math.PI);
+                gammaCoefficients = Utils.GetRandomVector(p, 2 * Math.PI);
             }
 
            return betaCoefficients.Concat(gammaCoefficients).ToArray();
-        }
-
-        /// # Summary
-        /// Returns the optimal solution found by a QAOA.
-        ///
-        /// # Output
-        /// Optimal solution found by a QAOA.
-        public OptimalSolution GetOptimalSolution()
-        {
-
-            return new OptimalSolution(this.bestVector, this.bestHamiltonian, this.bestBeta, this.bestGamma);
         }
 
         /// # Summary
@@ -228,25 +217,25 @@ namespace Quantum.QAOA
         /// # Remarks
         /// Currently used optimizer is Cobyla which is a gradient-free optimization technique.
         /// The objective function Hamiltonian is based on Z operators, the range of values in the gamma vector is 0 <= beta_i <= 2PI.
-        public OptimalSolution runOptimization()
+        public OptimalSolution RunOptimization()
         {
 
-            Func<Double[], Double> objectiveFunction = calculateObjectiveFunction;
+            Func<Double[], Double> objectiveFunction = CalculateObjectiveFunction;
             
             var optimizerObjectiveFunction = new NonlinearObjectiveFunction(2 * p, objectiveFunction);
 
-            NonlinearConstraint[] constraints = generateConstraints();
+            NonlinearConstraint[] constraints = GenerateConstraints();
 
             for (int i = 0; i < numberOfRandomStartingPoints; i++)
             {
                 var cobyla = new Cobyla(optimizerObjectiveFunction, constraints);
-                double[] freeParameters = setUpFreeParameters();
+                double[] freeParameters = SetUpFreeParameters();
                 bool success = cobyla.Minimize(freeParameters);
-                ClassicalOptimizationUtils.printSuccess(success);
+                Utils.PrintSuccess(success);
 
             }
 
-            return GetOptimalSolution();
+            return new OptimalSolution(this.bestVector, this.bestHamiltonianValue, this.bestBeta, this.bestGamma);
         }
 
 

@@ -7,17 +7,17 @@ namespace QAOA.ClassicalOptimization
     public class OptimalSolution
     {
 
-        public String OptimalVector { get; }
-        public Double OptimalValue { get; }
-        public Double[] OptimalBeta { get; }
-        public Double[] OptimalGamma { get; }
+        public String optimalVector { get; }
+        public Double optimalValue { get; }
+        public Double[] optimalBeta { get; }
+        public Double[] optimalGamma { get; }
 
         public OptimalSolution(String optimalVector, Double optimalValue, Double[] optimalBeta, Double[] optimalGamma)
         {
-            OptimalVector = optimalVector;
-            OptimalValue = optimalValue;
-            OptimalBeta = optimalBeta;
-            OptimalGamma = optimalGamma;
+            this.optimalVector = optimalVector;
+            this.optimalValue = optimalValue;
+            this.optimalBeta = optimalBeta;
+            this.optimalGamma = optimalGamma;
 
         }
 

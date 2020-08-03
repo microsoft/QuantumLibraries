@@ -44,7 +44,7 @@ namespace Microsoft.Quantum.QAOA.QAOATest.HybridQaoaTests
             string optimizationResult1 = "01";
             string optimizationResult2 = "10";
 
-            Assert.True(optimalSolution.OptimalVector.Equals(optimizationResult1) || optimalSolution.OptimalVector.Equals(optimizationResult2), "Hybrid QAOA produced incorrect result.");
+            Assert.True(optimalSolution.optimalVector.Equals(optimizationResult1) || optimalSolution.optimalVector.Equals(optimizationResult2), "Hybrid QAOA produced incorrect result.");
         }
     }
         

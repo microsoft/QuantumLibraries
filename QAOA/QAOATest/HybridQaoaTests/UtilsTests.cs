@@ -1,8 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
 using Quantum.QAOA;
 using System.Collections.Generic;
-using System.Text;
 
 namespace QAOATest.ClassicalOptimizationTests
 {
@@ -10,7 +8,7 @@ namespace QAOATest.ClassicalOptimizationTests
     public class UtilsTests
     {
         [TestMethod]
-        public void modeOfABoolListTest()
+        public void ModeOfABoolListTest()
         {
             bool[] boolsArray1 = { false, false, true };
             bool[] boolsArray2 = { false, false, true };
@@ -25,7 +23,7 @@ namespace QAOATest.ClassicalOptimizationTests
 
             string expectedResult = "001";
 
-            string result = ClassicalOptimizationUtils.getModeFromBoolList(listOfBools);
+            string result = Utils.GetModeFromBoolList(listOfBools);
 
             Assert.AreEqual(expectedResult, result, "Mode bool string not found correctly.");
 
@@ -33,14 +31,14 @@ namespace QAOATest.ClassicalOptimizationTests
         }
 
         [TestMethod]
-        public void boolStringFromBoolArrayTest()
+        public void BoolStringFromBoolArrayTest()
         {
             bool[] boolsArray = { false, false, true };
 
 
             string expectedResult = "001";
 
-            string result = ClassicalOptimizationUtils.getBoolStringFromBoolArray(boolsArray);
+            string result = Utils.GetBoolStringFromBoolArray(boolsArray);
 
             Assert.AreEqual(expectedResult, result, "Bool string not created correctly.");
 
