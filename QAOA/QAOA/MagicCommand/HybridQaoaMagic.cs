@@ -74,7 +74,7 @@ namespace QAOA.magicCommand
 
             HybridQaoa hybridQaoa = new HybridQaoa(args.NumberOfIterations, args.p, args.ProblemInstance, args.NumberOfRandomStartingPoints, args.InitialBeta, args.InitialGamma);
 
-            return hybridQaoa.runOptimization().ToExecutionResult();
+            return hybridQaoa.RunOptimization().ToExecutionResult();
         }
     }
 

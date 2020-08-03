@@ -1,8 +1,6 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Collections.Generic;
 using Quantum.QAOA;
 using System;
-using System.Reflection;
 using QAOA.ClassicalOptimization;
 
 namespace QAOATest.ClassicalOptimizationTests
@@ -13,20 +11,20 @@ namespace QAOATest.ClassicalOptimizationTests
     {
 
         [TestMethod]
-        public void convertDataVectorToVectorsTest()
+        public void ConvertDataVectorToVectorsTest()
         {
 
             ProblemInstance problemInstance = new ProblemInstance(new double[] { 1, 2, 2, -1 }, new double[] { 5, 0, 0, 1, 1, 5, 0, 0, 3, 4, -2, -2, 8, 7, -2, 12 });
 
             HybridQaoa classicalOptimization = new HybridQaoa(2, 3, problemInstance, 1, new Double[] { 1, 2, 3 }, new Double[] { 4, 5, 6 } );
 
-            ClassicalOptimizationUtils.FreeParamsVector result = ClassicalOptimizationUtils.convertVectorIntoHalves(new Double[] { 1, 2, 3, 4, 5, 6 });
+            Utils.FreeParamsVector result = Utils.ConvertVectorIntoHalves(new Double[] { 1, 2, 3, 4, 5, 6 });
 
-            ClassicalOptimizationUtils.FreeParamsVector dataVectors = new ClassicalOptimizationUtils.FreeParamsVector();
+            Utils.FreeParamsVector dataVectors = new Utils.FreeParamsVector();
             dataVectors.beta = new double[] { 1, 2, 3 };
             dataVectors.gamma = new double[] { 4, 5, 6 };
 
-            ClassicalOptimizationUtils.FreeParamsVector expectedResult = dataVectors;
+            Utils.FreeParamsVector expectedResult = dataVectors;
 
             CollectionAssert.AreEqual(expectedResult.beta, result.beta, "Hamiltonian beta value not calculated correctly.");
             CollectionAssert.AreEqual(expectedResult.gamma, result.gamma, "Hamiltonian gamma value not calculated correctly.");
@@ -34,13 +32,13 @@ namespace QAOATest.ClassicalOptimizationTests
         }
 
         [TestMethod]
-        public void evaluateHamiltonianTest()
+        public void EvaluateHamiltonianTest()
         {
             ProblemInstance problemInstance = new ProblemInstance(new double[] { 1, 2, 2, -1 }, new double[] { 5, 0, 0, 1, 1, 5, 0, 0, 3, 4, -2, -2, 8, 7, -2, 12 });
 
             HybridQaoa classicalOptimization = new HybridQaoa(2, 3, problemInstance, 1, new Double[] { 1, 2, 3 }, new Double[] { 4, 5, 6 });
 
-            Double result = classicalOptimization.evaluateHamiltonian("0011");
+            Double result = classicalOptimization.EvaluateHamiltonian("0011");
 
             Double expectedResult = -1;
 
@@ -49,7 +47,7 @@ namespace QAOATest.ClassicalOptimizationTests
         }
 
         [TestMethod]
-        public void evaluateCostFunctionTest()
+        public void EvaluateCostFunctionTest()
         {
             ProblemInstance problemInstance = new ProblemInstance(new double[] { 1, 1, 1, 1 }, new double[] { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 });
 
@@ -58,7 +56,7 @@ namespace QAOATest.ClassicalOptimizationTests
 
             string optimizationResult = "0101";
 
-            Double result = classicalOptimization.evaluateCostFunction(optimizationResult, new double[] { 5, 3, 2, 1 });
+            Double result = classicalOptimization.EvaluateCostFunction(optimizationResult, new double[] { 5, 3, 2, 1 });
 
             Double expectedResult = 4;
 
@@ -68,7 +66,7 @@ namespace QAOATest.ClassicalOptimizationTests
         }
 
         [TestMethod]
-        public void runOptimizationTest()
+        public void RunHybridQaoaTest()
         {
             double[] dh = new Double[] { 0, 0 };
             double[] dJ = new Double[]{ 0, 1,
@@ -81,12 +79,12 @@ namespace QAOATest.ClassicalOptimizationTests
             ProblemInstance simpleMaxCut = new ProblemInstance(dh, dJ);
 
             HybridQaoa classicalOptimization = new HybridQaoa(numberOfIterations, p, simpleMaxCut, numberOfRandomStartingPoints);
-            OptimalSolution optimalSolution = classicalOptimization.runOptimization();
+            OptimalSolution optimalSolution = classicalOptimization.RunOptimization();
 
             string optimizationResult1 = "01";
             string optimizationResult2 = "10";
 
-            string result = optimalSolution.OptimalVector;
+            string result = optimalSolution.optimalVector;
             Console.WriteLine(result);
 
             Assert.IsTrue(result.Equals(optimizationResult1) || result.Equals(optimizationResult2), "Hybrid QAOA produced incorrect result.");

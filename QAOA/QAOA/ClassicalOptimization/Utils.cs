@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Quantum.QAOA
 {
-    public class ClassicalOptimizationUtils
+    public class Utils
     {
 
         public struct FreeParamsVector
@@ -26,13 +26,13 @@ namespace Quantum.QAOA
         /// # Output
         /// A random vector of doubles.
         
-        public static double[] getRandomVector(int length, double maximum)
+        public static double[] GetRandomVector(int length, double maximumValue)
         {
             var rand = new Random();
             double[] randomVector = new double[length];
             for (int i = 0; i < length; i++)
             {
-                randomVector[i] = maximum * rand.NextDouble();
+                randomVector[i] = maximumValue * rand.NextDouble();
             }
 
             return randomVector;
@@ -48,12 +48,12 @@ namespace Quantum.QAOA
         /// # Output
         /// The most common boolean string.
 
-        public static String getModeFromBoolList(List<bool[]> list)
+        public static String GetModeFromBoolList(List<bool[]> list)
         {
             Dictionary<string, int> counter = new Dictionary<string, int>();
             foreach (bool[] boolArray in list)
             {
-                String boolString = getBoolStringFromBoolArray(boolArray);
+                String boolString = GetBoolStringFromBoolArray(boolArray);
                 if (counter.ContainsKey(boolString))
                 {
                     counter[boolString] += 1;
@@ -88,7 +88,7 @@ namespace Quantum.QAOA
         /// # Output
         /// A boolean string.
 
-        public static string getBoolStringFromBoolArray(bool[] boolArray)
+        public static string GetBoolStringFromBoolArray(bool[] boolArray)
         {
             System.Text.StringBuilder sb = new StringBuilder();
             foreach (bool b in boolArray)
@@ -111,7 +111,7 @@ namespace Quantum.QAOA
         /// # Remarks
         /// Useful for getting beta and gamma vectors from a concatenated vector inside the optimized function.
 
-        public static FreeParamsVector convertVectorIntoHalves(double[] bigfreeParamsVector)
+        public static FreeParamsVector ConvertVectorIntoHalves(double[] bigfreeParamsVector)
         {
             int size = bigfreeParamsVector.Length;
             int vectorTermsNumber = size / 2;
@@ -134,7 +134,7 @@ namespace Quantum.QAOA
         /// Beta vector of coefficients.
         /// ## gamma
         /// Gamma vector of coefficients.
-        public static void printCurrentBetaGamma(QArray<Double> beta, QArray<Double> gamma)
+        public static void PrintCurrentBetaGamma(QArray<Double> beta, QArray<Double> gamma)
         {
             Console.WriteLine("Current beta vector:");
             Console.WriteLine(beta);
@@ -152,7 +152,7 @@ namespace Quantum.QAOA
         /// Best value of a Hamiltonian so far.
         /// ## bestVector
         /// Best solution vector that generates the above value of a Hamiltonian  so far.
-        public static void printCurrentBestSolution(double bestHamiltonian, String bestVector)
+        public static void PrintCurrentBestSolution(double bestHamiltonian, String bestVector)
         {
             Console.WriteLine("Current best fidelity");
             Console.WriteLine(bestHamiltonian);
@@ -166,7 +166,7 @@ namespace Quantum.QAOA
         /// # Input
         /// ## success
         /// A flag that indiciates whether an optimization finished successfully.
-        public static void printSuccess(bool success)
+        public static void PrintSuccess(bool success)
         {
             Console.WriteLine("Was optimization successful?");
             Console.WriteLine(success);

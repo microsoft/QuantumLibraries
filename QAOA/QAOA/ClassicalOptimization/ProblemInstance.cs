@@ -4,15 +4,15 @@ namespace Quantum.QAOA
 {
     public class ProblemInstance
     {
-        public Double[] OneLocalHamiltonianCoefficients { get; }
-        public Double[] TwoLocalHamiltonianCoefficients { get; }
-        public int ProblemSizeInBits { get; }
+        public Double[] oneLocalHamiltonianCoefficients { get; }
+        public Double[] twoLocalHamiltonianCoefficients { get; }
+        public int problemSizeInBits { get; }
 
         public ProblemInstance(Double[] oneLocalHamiltonianCoefficients, Double[] twoLocalHamiltonianCoefficients)
         {
-            OneLocalHamiltonianCoefficients = oneLocalHamiltonianCoefficients;
-            TwoLocalHamiltonianCoefficients = twoLocalHamiltonianCoefficients;
-            ProblemSizeInBits = OneLocalHamiltonianCoefficients.Length;
+            this.oneLocalHamiltonianCoefficients = oneLocalHamiltonianCoefficients;
+            this.twoLocalHamiltonianCoefficients = twoLocalHamiltonianCoefficients;
+            this.problemSizeInBits = oneLocalHamiltonianCoefficients.Length;
         }
     }
 }

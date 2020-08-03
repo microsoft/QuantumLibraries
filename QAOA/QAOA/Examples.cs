@@ -3,7 +3,7 @@ using System;
 
 namespace Quantum.QAOA
 {
-    class Driver
+    class Examples
     {
 
 
@@ -63,8 +63,8 @@ namespace Quantum.QAOA
 
             HybridQaoa cop = new HybridQaoa(numberOfIterations, p, maxCut4, numberOfRandomStartingPoints);
 
-            OptimalSolution res = cop.runOptimization();
-            Console.WriteLine(res.OptimalVector);
+            OptimalSolution res = cop.RunOptimization();
+            Console.WriteLine(res.optimalVector);
 
             }
     }
