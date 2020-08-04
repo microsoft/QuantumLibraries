@@ -8,8 +8,9 @@ using Xunit;
 using System;
 using QAOA.magicCommand;
 using Quantum.QAOA;
+using Microsoft.Quantum.QAOA.JupyterTests;
 
-namespace Microsoft.Quantum.QAOA.QAOATest.HybridQaoaTests
+namespace Microsoft.Quantum.QAOA.HybridQaoaTests
 {
 
     public class HybridQaoaProblemInstanceMagicTests

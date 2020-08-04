@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Accord.Math;
 using Accord.Math.Optimization;
+using Microsoft.Quantum.QAOA;
 using Microsoft.Quantum.Simulation.Core;
 using Microsoft.Quantum.Simulation.Simulators;
 using QAOA.ClassicalOptimization;

@@ -4,13 +4,13 @@
 using System.Threading.Tasks;
 using Microsoft.Jupyter.Core;
 using Newtonsoft.Json;
-using Xunit;
 using QAOA.magicCommand;
 using Quantum.QAOA;
 using System;
 using QAOA.ClassicalOptimization;
+using Xunit;
 
-namespace Microsoft.Quantum.QAOA.QAOATest.HybridQaoaTests
+namespace Microsoft.Quantum.QAOA.JupyterTests
 {
     public class HybridQaoaRunMagicTests
     {
