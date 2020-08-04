@@ -42,6 +42,9 @@ Pack-One '../Chemistry/src/Jupyter/Jupyter.csproj'
 Write-Host "##[info]Pack chemistry tool"
 Pack-One '../Chemistry/src/Tools/Tools.csproj'
 
+Write-Host "##[info]Pack QAOA library"
+Pack-One '../QAOA/src/QAOA.csproj'
+
 if (-not $all_ok) {
     throw "At least one test failed execution. Check the logs."
 }
