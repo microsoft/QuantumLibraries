@@ -8,7 +8,7 @@ namespace Microsoft.Quantum.Arithmetic {
     open Microsoft.Quantum.Diagnostics;
     open Microsoft.Quantum.Measurement;
 
-    operation IntegerAdderTestHelper( IntegerAdder : ( (LittleEndian, LittleEndian, Qubit) => Unit is Ctl), summand1 : Int, summand2 : Int, numberOfQubits : Int ) : Unit {
+    internal operation IntegerAdderTestHelper( IntegerAdder : ( (LittleEndian, LittleEndian, Qubit) => Unit is Ctl), summand1 : Int, summand2 : Int, numberOfQubits : Int ) : Unit {
         body (...) {
             using (register = Qubit[2*numberOfQubits + 1]) {
                 mutable actual_carry = 0;
@@ -67,7 +67,7 @@ namespace Microsoft.Quantum.Arithmetic {
         }
     }
 
-    operation IntegerAdderExhaustiveTestHelper (IntegerAdder : ( (LittleEndian, LittleEndian, Qubit) => Unit is Ctl), numberOfQubits : Int) : Unit {
+    internal operation IntegerAdderExhaustiveTestHelper (IntegerAdder : ( (LittleEndian, LittleEndian, Qubit) => Unit is Ctl), numberOfQubits : Int) : Unit {
         for( summand1 in 0 .. 2^numberOfQubits - 1 ) {
             for( summand2 in 0 .. 2^numberOfQubits - 1 ) {
                 IntegerAdderTestHelper(IntegerAdder, summand1, summand2, numberOfQubits);
@@ -75,6 +75,7 @@ namespace Microsoft.Quantum.Arithmetic {
         }
     }
 
+    @Test("ToffoliSimulator")
     operation RippleCarryAdderDTest () : Unit {
         let numberOfQubits = 7;
         let summand1 = 127;
@@ -82,12 +83,14 @@ namespace Microsoft.Quantum.Arithmetic {
         IntegerAdderTestHelper(RippleCarryAdderD, summand1, summand2, numberOfQubits);
     }
 
+    @Test("ToffoliSimulator")
     operation RippleCarryAdderDExhaustiveTestReversible () : Unit {
         for (numberOfQubits in 3..6) {
             IntegerAdderExhaustiveTestHelper (RippleCarryAdderD, numberOfQubits);
         }
     }
 
+    @Test("ToffoliSimulator")
     operation RippleCarryAdderDTestReversible () : Unit {
         let numberOfQubits = 20;
         let summand1 = 823709;
@@ -95,11 +98,7 @@ namespace Microsoft.Quantum.Arithmetic {
         IntegerAdderTestHelper(RippleCarryAdderD, summand1, summand2, numberOfQubits);
     }
 
-    operation RippleCarryAdderCDKMExhaustiveTest () : Unit {
-        let numberOfQubits = 4;
-        IntegerAdderExhaustiveTestHelper (RippleCarryAdderCDKM, numberOfQubits);
-    }
-
+    @Test("ToffoliSimulator")
     operation RippleCarryAdderCDKMTestReversible () : Unit {
         let numberOfQubits = 20;
         let summand1 = 823709;
@@ -107,25 +106,27 @@ namespace Microsoft.Quantum.Arithmetic {
         IntegerAdderTestHelper(RippleCarryAdderCDKM, summand1, summand2, numberOfQubits);
     }
 
+    @Test("ToffoliSimulator")
     operation RippleCarryAdderCDKMExhaustiveTestReversible () : Unit {
         for (numberOfQubits in 3..6) {
             IntegerAdderExhaustiveTestHelper (RippleCarryAdderCDKM, numberOfQubits);
         }
     }
 
+    @Test("ToffoliSimulator")
     operation RippleCarryAdderTTKExhaustiveTest () : Unit {
         let numberOfQubits = 4;
         IntegerAdderExhaustiveTestHelper (RippleCarryAdderTTK, numberOfQubits);
     }
 
+    @Test("ToffoliSimulator")
     operation RippleCarryAdderTTKExhaustiveTestReversible () : Unit {
         for (numberOfQubits in 1..6){
             IntegerAdderExhaustiveTestHelper (RippleCarryAdderTTK, numberOfQubits);
         }
     }
 
-
-    operation IntegerAdderNoCarryTestHelper( IntegerAdder : ( (LittleEndian, LittleEndian) => Unit is Ctl), summand1 : Int, summand2 : Int, numberOfQubits : Int ) : Unit {
+    internal operation IntegerAdderNoCarryTestHelper( IntegerAdder : ( (LittleEndian, LittleEndian) => Unit is Ctl), summand1 : Int, summand2 : Int, numberOfQubits : Int ) : Unit {
         using (register = Qubit[2*numberOfQubits]) {
             mutable actual1 = 0;
             mutable actual2 = 0;
@@ -170,7 +171,7 @@ namespace Microsoft.Quantum.Arithmetic {
         }
     }
 
-    operation IntegerAdderNoCarryExhaustiveTestHelper (IntegerAdder : ( (LittleEndian, LittleEndian) => Unit is Ctl), numberOfQubits : Int) : Unit {
+    internal operation IntegerAdderNoCarryExhaustiveTestHelper (IntegerAdder : ( (LittleEndian, LittleEndian) => Unit is Ctl), numberOfQubits : Int) : Unit {
         for( summand1 in 0 .. 2^numberOfQubits - 1 ) {
             for( summand2 in 0 .. 2^numberOfQubits - 1 ) {
                 IntegerAdderNoCarryTestHelper(IntegerAdder, summand1, summand2, numberOfQubits);
@@ -178,6 +179,7 @@ namespace Microsoft.Quantum.Arithmetic {
         }
     }
 
+    @Test("ToffoliSimulator")
     operation RippleCarryAdderNoCarryTTKTestReversible () : Unit {
         let numberOfQubits = 10;
         let summand1 = 1021;
@@ -185,19 +187,20 @@ namespace Microsoft.Quantum.Arithmetic {
         IntegerAdderNoCarryTestHelper(RippleCarryAdderNoCarryTTK, summand1, summand2, numberOfQubits);
     }
 
+    @Test("ToffoliSimulator")
     operation RippleCarryAdderNoCarryTTKExhaustiveTest () : Unit {
         let numberOfQubits = 4;
         IntegerAdderNoCarryExhaustiveTestHelper (RippleCarryAdderNoCarryTTK, numberOfQubits);
     }
 
+    @Test("ToffoliSimulator")
     operation RippleCarryAdderNoCarryTTKExhaustiveTestReversible () : Unit {
         for (numberOfQubits in 1..6) {
             IntegerAdderNoCarryExhaustiveTestHelper (RippleCarryAdderNoCarryTTK, numberOfQubits);
         }
     }
 
-
-    operation GreaterThanTestHelper( integer1 : Int, integer2 : Int, numberOfQubits : Int ) : Unit {
+    internal operation GreaterThanTestHelper( integer1 : Int, integer2 : Int, numberOfQubits : Int ) : Unit {
         using (register = Qubit[2*numberOfQubits+1]) {
             mutable actual1 = 0;
             mutable actual2 = 0;
@@ -253,6 +256,7 @@ namespace Microsoft.Quantum.Arithmetic {
         }
     }
 
+    @Test("ToffoliSimulator")
     operation GreaterThanExhaustiveTestReversible () : Unit {
         for (numberOfQubits in 1..5) {
             for (integer1 in 0..2^numberOfQubits-1) {
