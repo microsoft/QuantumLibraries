@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 using Microsoft.Jupyter.Core;
 
-namespace Microsoft.Quantum.QAOA.QAOATest.HybridQaoaTests
+namespace Microsoft.Quantum.QAOA.JupyterTests
 {
     public class MockChannel : IChannel
     {

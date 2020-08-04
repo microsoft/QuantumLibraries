@@ -2,7 +2,7 @@
 using Quantum.QAOA;
 using System.Collections.Generic;
 
-namespace QAOATest.ClassicalOptimizationTests
+namespace Microsoft.Quantum.QAOA.HybridQaoaTests
 {
     [TestClass]
     public class UtilsTests

@@ -3,7 +3,7 @@ using Quantum.QAOA;
 using System;
 using QAOA.ClassicalOptimization;
 
-namespace QAOATest.ClassicalOptimizationTests
+namespace Microsoft.Quantum.QAOA.HybridQaoaTests
 {
 
     [TestClass]

@@ -1,4 +1,4 @@
-﻿namespace Quantum.QAOA {
+﻿namespace Microsoft.Quantum.QAOA {
 
     open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Intrinsic;
