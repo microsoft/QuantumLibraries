@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.29920.165
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QAOA", "QAOA\src\QAOA.csproj", "{159D83BF-56A2-41B7-951B-35292F5A9F23}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QAOATest", "QAOA\tests\QAOATest.csproj", "{D9BB6E07-427A-4A8D-9652-B4E310F803E5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QAOATests", "QAOA\tests\QAOATests.csproj", "{D9BB6E07-427A-4A8D-9652-B4E310F803E5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -40,6 +40,9 @@ Test-One '../Chemistry/tests/JupyterTests/JupyterTests.csproj'
 Write-Host "##[info]Testing Numerics/tests/NumericsTests.csproj"
 Test-One '../Numerics/tests/NumericsTests.csproj'
 
+Write-Host "##[info]Testing QAOA/tests/QAOATests.csproj"
+Test-One '../QAOA/tests/QAOATests.csproj'
+
 if (-not $all_ok) {
     throw "At least one test failed execution. Check the logs."
 }
