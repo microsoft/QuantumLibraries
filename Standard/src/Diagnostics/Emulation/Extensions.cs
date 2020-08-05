@@ -11,6 +11,10 @@ using Microsoft.Quantum.Simulation.Simulators;
 namespace Microsoft.Quantum.Diagnostics.Emulation
 {
 
+    /// <summary>
+    ///     Attaches events to a <see cref="Microsoft.Quantum.Simulation.Simulators.SimulatorBase" />
+    ///     instance, allowing for events to be removed with a disposable pattern.
+    /// </summary>
     internal class SimulatorEventDisposer : IDisposable
     {
         private SimulatorBase Simulator;
@@ -32,7 +36,6 @@ namespace Microsoft.Quantum.Diagnostics.Emulation
 
         public void Dispose()
         {
-            System.Console.WriteLine("Removing events.");
             Simulator.OnOperationStart -= StartOperation;
             Simulator.OnOperationEnd -= EndOperation;
         }
@@ -55,6 +58,10 @@ namespace Microsoft.Quantum.Diagnostics.Emulation
 
     internal static class Extensions
     {
+        /// <summary>
+        ///     Attaches given event handlers to a simulator, returning a
+        ///     disposable object that removes handlers when disposed.
+        /// </summary>
         internal static SimulatorEventDisposer RegisterOperationHandlers(
                 this SimulatorBase simulator,
                 Action<ICallable, IApplyData> startOperation,
