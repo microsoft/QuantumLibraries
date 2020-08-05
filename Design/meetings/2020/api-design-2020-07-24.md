@@ -34,7 +34,7 @@ Proposal: https://github.com/microsoft/QuantumLibraries/issues/304
     - Don't try to be minimal, but aim for coverage. Minimal only in sense that isn't redundant.
     - **Resolution:** Proposal modified to improve coverage of arithmetic data types.
 
-- Introducing new arithmetic UDTs comes at a large cost: need to support in all future arithmetic APIs. Opportunity to improve existing support to better cover `BigInt` (issue: TODO link).
+- Introducing new arithmetic UDTs comes at a large cost: need to support in all future arithmetic APIs. Opportunity to improve existing support to better cover `BigInt` (https://github.com/microsoft/QuantumLibraries/issues/95).
     - **Proposal**: Adopt as API design principle that functionality should cover all relevant built-in and standard library types.
 
 **Consensus**:
