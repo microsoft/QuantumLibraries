@@ -3,6 +3,7 @@
     open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Intrinsic;
     open Microsoft.Quantum.Measurement;
+    open Microsoft.Quantum.Diagnostics;
 
 
    operation MeasureAllAndReset(qubits: Qubit[]) : Bool[]
@@ -29,5 +30,6 @@
         {
             CNOT(qubits[controlQubitsIndices[i]], ancillaQubit[0]);
 		}
+
 	}
 }

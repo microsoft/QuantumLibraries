@@ -61,7 +61,7 @@ namespace Quantum.QAOA
 
             //END EXAMPLES
 
-            HybridQaoa cop = new HybridQaoa(numberOfIterations, p, maxCut4, numberOfRandomStartingPoints);
+            HybridQaoa cop = new HybridQaoa(numberOfIterations, p, quantumSanta, numberOfRandomStartingPoints);
 
             OptimalSolution res = cop.RunOptimization();
             Console.WriteLine(res.optimalVector);
