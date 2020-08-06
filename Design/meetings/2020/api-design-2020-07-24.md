@@ -1,4 +1,5 @@
 # Q# API Design Meeting / 24 July 2020
+Attendees (in order by username): @bettinaheim, @cgranade, @efratshabtai, @msoeken.
 
 ## Agenda
 
