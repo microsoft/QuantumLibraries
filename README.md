@@ -31,9 +31,8 @@ of samples on how to use these libraries to write quantum based programs.
 
 ## Feedback ##
 
-We are collecting feedback for the entire Microsoft Quantum Development Kit
-at [user voice](https://quantum.uservoice.com/). Please leave your suggestions,
-requests and bugs (or praises!) there.
+If you have feedback about the content in this repository, please let us know by filing a [new issue](https://github.com/microsoft/quantumlibraries/issues/new/choose)!
+If you have feedback about some other part of the Microsoft Quantum Development Kit, please see the [contribution guide](https://docs.microsoft.com/quantum/contributing/) for more information.
 
 ## Contributing ##
 
