@@ -1,7 +1,7 @@
-﻿using System;
-
-namespace Quantum.QAOA
+﻿namespace QAOA.QaoaHybrid
 {
+    using System;
+
     public class ProblemInstance
     {
         public Double[] oneLocalHamiltonianCoefficients { get; }

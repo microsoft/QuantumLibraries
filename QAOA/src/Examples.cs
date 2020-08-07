@@ -1,12 +1,11 @@
-﻿using QAOA.ClassicalOptimization;
-using System;
-
-namespace Quantum.QAOA
+﻿namespace Quantum.QAOA
 {
+    using global::QAOA.QaoaHybrid;
+    using System;
+
+
     class Examples
     {
-
-
         static void Main(string[] args)
         {
             //PARAMETERS
@@ -61,7 +60,7 @@ namespace Quantum.QAOA
 
             //END EXAMPLES
 
-            HybridQaoa cop = new HybridQaoa(numberOfIterations, p, quantumSanta, numberOfRandomStartingPoints);
+            HybridQaoa cop = new HybridQaoa(numberOfIterations, p, maxCut4, numberOfRandomStartingPoints);
 
             OptimalSolution res = cop.RunOptimization();
             Console.WriteLine(res.optimalVector);

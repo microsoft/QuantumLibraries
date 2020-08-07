@@ -6,9 +6,9 @@ using Microsoft.Jupyter.Core;
 using Newtonsoft.Json;
 using Xunit;
 using System;
-using QAOA.magicCommand;
-using Quantum.QAOA;
 using Microsoft.Quantum.QAOA.JupyterTests;
+using QAOA.Jupyter;
+using QAOA.QaoaHybrid;
 
 namespace Microsoft.Quantum.QAOA.HybridQaoaTests
 {

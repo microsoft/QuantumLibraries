@@ -1,11 +1,11 @@
-﻿using System;
-using System.Threading.Tasks;
-using Microsoft.Jupyter.Core;
-using Newtonsoft.Json;
-using Quantum.QAOA;
-
-namespace QAOA.magicCommand
+﻿namespace QAOA.Jupyter
 {
+    using System;
+    using System.Threading.Tasks;
+    using Microsoft.Jupyter.Core;
+    using Newtonsoft.Json;
+    using QAOA.QaoaHybrid;
+
     public class HybridQaoaRunMagic : MagicSymbol
     {
 
