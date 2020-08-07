@@ -1,41 +1,47 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Accord.Math;
-using Accord.Math.Optimization;
-using Microsoft.Quantum.QAOA;
-using Microsoft.Quantum.Simulation.Core;
-using Microsoft.Quantum.Simulation.Simulators;
-using QAOA.ClassicalOptimization;
-
-namespace Quantum.QAOA
+﻿namespace QAOA.QaoaHybrid
 
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using Accord.Math;
+    using Accord.Math.Optimization;
+    using Microsoft.Quantum.QAOA;
+    using Microsoft.Quantum.Simulation.Core;
+    using Microsoft.Quantum.Simulation.Simulators;
 
-    public class HybridQaoa //currently support up to 2-local Hamiltonians; will be generalized later
+    //currently support up to 2-local Hamiltonians; will be generalized later
+    public class HybridQaoa 
     {
-        Utils.FreeParamsVector FreeParamsVector;
-        int numberOfIterations;
-        int p;
-        ProblemInstance problemInstance;
-        Double bestHamiltonianValue;
-        String bestVector;
-        Double[] bestBeta;
-        Double[] bestGamma;
-        int numberOfRandomStartingPoints;
+        private Utils.FreeParamsVector freeParamsVector;
+        private int numberOfIterations;
+        private int p;
+        private ProblemInstance problemInstance;
+        private Double bestHamiltonianValue;
+        private String bestVector;
+        private Double[] bestBeta;
+        private Double[] bestGamma;
+        private int numberOfRandomStartingPoints;
+        private QaoaLogger logger;
+        private String loggerFilePath;
 
 
-        public HybridQaoa(int numberOfIterations, int p, ProblemInstance problemInstance, int numberOfRandomStartingPoints = 1, Double[] initialBeta = null, Double[] initialGamma = null)
+        public HybridQaoa(int numberOfIterations, int p, ProblemInstance problemInstance, int numberOfRandomStartingPoints = 1, Double[] initialBeta = null, Double[] initialGamma = null, String loggerFilePath = null)
         {
 
             this.numberOfIterations = numberOfIterations;
             this.p = p;
             this.problemInstance = problemInstance;
-            this.FreeParamsVector.beta = initialBeta;
-            this.FreeParamsVector.gamma = initialGamma;
-            bestHamiltonianValue = Double.MaxValue;
-            bestVector = null;
+            this.freeParamsVector.beta = initialBeta;
+            this.freeParamsVector.gamma = initialGamma;
+            this.bestHamiltonianValue = double.MaxValue;
+            this.bestVector = null;
             this.numberOfRandomStartingPoints = numberOfRandomStartingPoints;
+            this.loggerFilePath = loggerFilePath;
+            if (loggerFilePath != null)
+            {
+                this.logger = new QaoaLogger(loggerFilePath);
+            }
         }
 
 
@@ -43,7 +49,7 @@ namespace Quantum.QAOA
         public Double EvaluateCostFunction(string result, double[] costs)
         {
             double costFunctionValue = 0;
-            for (int i = 0; i < problemInstance.problemSizeInBits; i++)
+            for (int i = 0; i < this.problemInstance.problemSizeInBits; i++)
             {
                 costFunctionValue += costs[i] * Char.GetNumericValue(result[i]);
             }
@@ -67,16 +73,16 @@ namespace Quantum.QAOA
         public double EvaluateHamiltonian(string result)
         {
             double hamiltonianValue = 0;
-            for (int i = 0; i < problemInstance.problemSizeInBits; i++)
+            for (int i = 0; i < this.problemInstance.problemSizeInBits; i++)
             {
-                hamiltonianValue += problemInstance.oneLocalHamiltonianCoefficients[i] * (1 - 2 * Char.GetNumericValue(result[i]));
+                hamiltonianValue += this.problemInstance.oneLocalHamiltonianCoefficients[i] * (1 - 2 * Char.GetNumericValue(result[i]));
             }
 
-            for (int i = 0; i < problemInstance.problemSizeInBits; i++)
+            for (int i = 0; i < this.problemInstance.problemSizeInBits; i++)
             {
-                for (int j = i + 1; j < problemInstance.problemSizeInBits; j++)
+                for (int j = i + 1; j < this.problemInstance.problemSizeInBits; j++)
                 {
-                    hamiltonianValue += problemInstance.twoLocalHamiltonianCoefficients[i * problemInstance.problemSizeInBits + j] * (1 - 2 * Char.GetNumericValue(result[i])) * (1 - 2 * Char.GetNumericValue(result[j]));
+                    hamiltonianValue += this.problemInstance.twoLocalHamiltonianCoefficients[i * this.problemInstance.problemSizeInBits + j] * (1 - 2 * Char.GetNumericValue(result[i])) * (1 - 2 * Char.GetNumericValue(result[j]));
                 }
             }
 
@@ -85,7 +91,7 @@ namespace Quantum.QAOA
 
         /// # Summary
         /// Uses a quantum function to get a solution string from the QAOA that relies on the current values of beta and gamma vectors.
-        ///To get a reasonable estimate for the expectation value of a Hamiltonian that encodes the problem, we run the QAOA many times and calculate the expectation based on solutions obtained.
+        /// To get a reasonable estimate for the expectation value of a Hamiltonian that encodes the problem, we run the QAOA many times and calculate the expectation based on solutions obtained.
         ///If the expectation of the Hamiltonian is smaller than our current best, we update our best solution to the current solution. The solution vector for the current best solution is the mode of boolean strings that we obtained from the QAOA.
         ///
         /// # Input
@@ -103,29 +109,29 @@ namespace Quantum.QAOA
             var beta = new QArray<Double>(freeParamsVector.beta);
             var gamma = new QArray<Double>(freeParamsVector.gamma);
 
-            Utils.PrintCurrentBetaGamma(beta, gamma);
-
-            var oneLocalHamiltonianCoefficients = new QArray<Double>(problemInstance.oneLocalHamiltonianCoefficients);
-            var twoLocalHamiltonianCoefficients = new QArray<Double>(problemInstance.twoLocalHamiltonianCoefficients);
+            var oneLocalHamiltonianCoefficients = new QArray<Double>(this.problemInstance.oneLocalHamiltonianCoefficients);
+            var twoLocalHamiltonianCoefficients = new QArray<Double>(this.problemInstance.twoLocalHamiltonianCoefficients);
 
             using (var qsim = new QuantumSimulator())
             {
 
                 for (int i = 0; i < numberOfIterations; i++)
                 {
-                    IQArray<bool> result = RunQaoa.Run(qsim, problemInstance.problemSizeInBits, beta, gamma, oneLocalHamiltonianCoefficients, twoLocalHamiltonianCoefficients, p).Result;
+                    IQArray<bool> result = RunQaoa.Run(qsim, this.problemInstance.problemSizeInBits, beta, gamma, oneLocalHamiltonianCoefficients, twoLocalHamiltonianCoefficients, p).Result;
                     allSolutionVectors.Add(result.ToArray());
                     string solutionVector = Utils.GetBoolStringFromBoolArray(result.ToArray());
-                    double hamiltonianValue = EvaluateHamiltonian(solutionVector);
-                    hamiltonianExpectationValue += (hamiltonianValue/numberOfIterations);
+                    double hamiltonianValue = this.EvaluateHamiltonian(solutionVector);
+                    hamiltonianExpectationValue += hamiltonianValue/ this.numberOfIterations;
 
                 }
-
             }
-            
-            UpdateBestSolution(hamiltonianExpectationValue, allSolutionVectors, freeParamsVector);
-            Utils.PrintCurrentBestSolution(this.bestHamiltonianValue, this.bestVector);
 
+            this.UpdateBestSolution(hamiltonianExpectationValue, allSolutionVectors, freeParamsVector);
+
+            if (this.loggerFilePath != null)
+            {
+                this.logger.LogCurrentBestSolution(beta, gamma, this.bestHamiltonianValue, this.bestVector);
+            }
             return hamiltonianExpectationValue;
         }
 
@@ -143,11 +149,11 @@ namespace Quantum.QAOA
         {
             if (hamiltonianExpectationValue < this.bestHamiltonianValue)
             {
-                String mostProbableSolutionVectorTemp = Utils.GetModeFromBoolList(allSolutionVectors);
-                bestHamiltonianValue = hamiltonianExpectationValue;
-                bestVector = mostProbableSolutionVectorTemp;
-                bestBeta = freeParamsVector.beta;
-                bestGamma = freeParamsVector.gamma;
+                string mostProbableSolutionVectorTemp = Utils.GetModeFromBoolList(allSolutionVectors);
+                this.bestHamiltonianValue = hamiltonianExpectationValue;
+                this.bestVector = mostProbableSolutionVectorTemp;
+                this.bestBeta = freeParamsVector.beta;
+                this.bestGamma = freeParamsVector.gamma;
             }
         }
 
@@ -174,7 +180,6 @@ namespace Quantum.QAOA
                 constraints[gammaIndex + 1] = new NonlinearConstraint(2 * p, x => x[gammaIndex / 2] <= 2 * Math.PI);
             }
             return constraints;
-            
         }
 
         /// # Summary
@@ -185,10 +190,10 @@ namespace Quantum.QAOA
         private double[] SetUpFreeParameters()
         {
             double[] betaCoefficients;
-            if (FreeParamsVector.beta != null)
+            if (this.freeParamsVector.beta != null)
             {
-                betaCoefficients = FreeParamsVector.beta;
-                FreeParamsVector.beta = null;
+                betaCoefficients = this.freeParamsVector.beta;
+                this.freeParamsVector.beta = null;
             }
             else
             {
@@ -196,17 +201,17 @@ namespace Quantum.QAOA
             }
 
             double[] gammaCoefficients;
-            if (FreeParamsVector.gamma != null)
+            if (this.freeParamsVector.gamma != null)
             {
-                gammaCoefficients = FreeParamsVector.gamma;
-                FreeParamsVector.gamma = null;
+                gammaCoefficients = this.freeParamsVector.gamma;
+                this.freeParamsVector.gamma = null;
             }
             else
             {
                 gammaCoefficients = Utils.GetRandomVector(p, 2 * Math.PI);
             }
 
-           return betaCoefficients.Concat(gammaCoefficients).ToArray();
+            return betaCoefficients.Concat(gammaCoefficients).ToArray();
         }
 
         /// # Summary
@@ -221,24 +226,27 @@ namespace Quantum.QAOA
         public OptimalSolution RunOptimization()
         {
 
-            Func<Double[], Double> objectiveFunction = CalculateObjectiveFunction;
-            
+            Func<Double[], Double> objectiveFunction = this.CalculateObjectiveFunction;
+
             var optimizerObjectiveFunction = new NonlinearObjectiveFunction(2 * p, objectiveFunction);
 
-            NonlinearConstraint[] constraints = GenerateConstraints();
+            NonlinearConstraint[] constraints = this.GenerateConstraints();
 
-            for (int i = 0; i < numberOfRandomStartingPoints; i++)
+            for (int i = 0; i < this.numberOfRandomStartingPoints; i++)
             {
                 var cobyla = new Cobyla(optimizerObjectiveFunction, constraints);
-                double[] freeParameters = SetUpFreeParameters();
+                double[] freeParameters = this.SetUpFreeParameters();
                 bool success = cobyla.Minimize(freeParameters);
-                Utils.PrintSuccess(success);
+
+                if (this.loggerFilePath != null)
+                {
+                    this.logger.LogSuccess(success);
+                    this.logger.Close();
+                }
 
             }
 
             return new OptimalSolution(this.bestVector, this.bestHamiltonianValue, this.bestBeta, this.bestGamma);
         }
-
-
     }
 }

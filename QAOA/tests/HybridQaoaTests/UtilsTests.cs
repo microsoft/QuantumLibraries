@@ -1,5 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Quantum.QAOA;
+using QAOA.QaoaHybrid;
 using System.Collections.Generic;
 
 namespace Microsoft.Quantum.QAOA.HybridQaoaTests

@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace QAOA.ClassicalOptimization
+﻿namespace QAOA.QaoaHybrid
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Text;
+
     public class OptimalSolution
     {
 

@@ -1,7 +1,6 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Quantum.QAOA;
+using QAOA.QaoaHybrid;
 using System;
-using QAOA.ClassicalOptimization;
 
 namespace Microsoft.Quantum.QAOA.HybridQaoaTests
 {
