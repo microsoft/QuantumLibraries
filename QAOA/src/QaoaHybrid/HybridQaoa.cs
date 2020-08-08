@@ -26,7 +26,7 @@
         private String loggerFilePath;
 
 
-        public HybridQaoa(int numberOfIterations, int p, ProblemInstance problemInstance, int numberOfRandomStartingPoints = 1, Double[] initialBeta = null, Double[] initialGamma = null, String loggerFilePath = null)
+        public HybridQaoa(int numberOfIterations, int p, ProblemInstance problemInstance, int numberOfRandomStartingPoints = 1, String loggerFilePath = null, Double[] initialBeta = null, Double[] initialGamma = null)
         {
 
             this.numberOfIterations = numberOfIterations;

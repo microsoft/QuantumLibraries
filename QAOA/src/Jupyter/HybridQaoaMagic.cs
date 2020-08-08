@@ -72,7 +72,7 @@
 
             var args = JsonConvert.DeserializeObject<Arguments>(input);
 
-            HybridQaoa hybridQaoa = new HybridQaoa(args.NumberOfIterations, args.p, args.ProblemInstance, args.NumberOfRandomStartingPoints, args.InitialBeta, args.InitialGamma);
+            HybridQaoa hybridQaoa = new HybridQaoa(args.NumberOfIterations, args.p, args.ProblemInstance, args.NumberOfRandomStartingPoints, null, args.InitialBeta, args.InitialGamma);
 
             return hybridQaoa.RunOptimization().ToExecutionResult();
         }
