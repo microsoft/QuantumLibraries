@@ -28,7 +28,7 @@ namespace Microsoft.Quantum.Tests {
     }
 
      @Test("QuantumSimulator")
-    operation RunPhaseKickbackTest2() : Unit {
+    operation RunPhaseKickbackOneControlQubitTest() : Unit {
 
         let numberOfQubits = 1;
         let ancillaQubits = 1;
