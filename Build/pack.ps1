@@ -75,6 +75,9 @@ if ($Env:ENABLE_PYTHON -eq "false") {
 Write-Host "##[info]Pack QAOA library"
 Pack-One '../QAOA/src/QAOA.csproj'
 
+Write-Host "##[info]Pack QAOA library"
+Pack-One '../QAOA/src/QAOA.csproj'
+
 if (-not $all_ok) {
     throw "At least one test failed execution. Check the logs."
 }
