@@ -8,9 +8,10 @@
     {
         private StreamWriter logger;
 
-        public QaoaLogger(string filePath = "")
+        public QaoaLogger()
         {
-            this.logger = new StreamWriter(@filePath+"hybrid_qaoa_log_" + DateTime.Now.ToString("yyyy-dd-M--HH-mm-ss") + ".txt", true);
+
+            this.logger = new StreamWriter("hybrid_qaoa_log_" + DateTime.Now.ToString("yyyy-dd-M--HH-mm-ss") + ".txt", true);
         }
 
         /// # Summary

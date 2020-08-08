@@ -47,6 +47,12 @@
             public int NumberOfRandomStartingPoints { get; set; } = 1;
 
             /// <summary>
+            /// Flag whether optimization should be logged into a file.
+            /// </summary>
+            [JsonProperty(PropertyName = "should_log")]
+            public Boolean ShouldLog { get; set; } = false;
+
+            /// <summary>
             /// Initial beta angles.
             /// </summary>
             [JsonProperty(PropertyName = "initial_beta")]
@@ -72,7 +78,7 @@
 
             var args = JsonConvert.DeserializeObject<Arguments>(input);
 
-            HybridQaoa hybridQaoa = new HybridQaoa(args.NumberOfIterations, args.p, args.ProblemInstance, args.NumberOfRandomStartingPoints, null, args.InitialBeta, args.InitialGamma);
+            HybridQaoa hybridQaoa = new HybridQaoa(args.NumberOfIterations, args.p, args.ProblemInstance, args.NumberOfRandomStartingPoints, args.ShouldLog, args.InitialBeta, args.InitialGamma);
 
             return hybridQaoa.RunOptimization().ToExecutionResult();
         }
