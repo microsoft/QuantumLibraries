@@ -329,5 +329,3 @@ __pycache__/
 *.btm.cs
 *.odx.cs
 *.xsd.cs
-
-/QAOA/QAOATest/MagicCommandTests/sample.py
