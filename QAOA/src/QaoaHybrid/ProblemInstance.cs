@@ -1,14 +1,14 @@
-﻿namespace QAOA.QaoaHybrid
+﻿namespace Microsoft.Quantum.QAOA.QaoaHybrid
 {
     using System;
 
     public class ProblemInstance
     {
-        public Double[] oneLocalHamiltonianCoefficients { get; }
-        public Double[] twoLocalHamiltonianCoefficients { get; }
+        public double[] oneLocalHamiltonianCoefficients { get; }
+        public double[] twoLocalHamiltonianCoefficients { get; }
         public int problemSizeInBits { get; }
 
-        public ProblemInstance(Double[] oneLocalHamiltonianCoefficients, Double[] twoLocalHamiltonianCoefficients)
+        public ProblemInstance(double[] oneLocalHamiltonianCoefficients, double[] twoLocalHamiltonianCoefficients)
         {
             this.oneLocalHamiltonianCoefficients = oneLocalHamiltonianCoefficients;
             this.twoLocalHamiltonianCoefficients = twoLocalHamiltonianCoefficients;

@@ -1,6 +1,6 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using QAOA.QaoaHybrid;
 using System;
+using Microsoft.Quantum.QAOA.QaoaHybrid;
 
 namespace Microsoft.Quantum.QAOA.HybridQaoaTests
 {
@@ -15,7 +15,7 @@ namespace Microsoft.Quantum.QAOA.HybridQaoaTests
 
             ProblemInstance problemInstance = new ProblemInstance(new double[] { 1, 2, 2, -1 }, new double[] { 5, 0, 0, 1, 1, 5, 0, 0, 3, 4, -2, -2, 8, 7, -2, 12 });
 
-            HybridQaoa classicalOptimization = new HybridQaoa(2, 3, problemInstance, 1, false, new Double[] { 1, 2, 3 }, new Double[] { 4, 5, 6 } );
+            HybridQaoa classicalOptimization = new HybridQaoa(2, 3, problemInstance, 1, false, new double[] { 1, 2, 3 }, new double[] { 4, 5, 6 } );
 
             Utils.FreeParamsVector result = Utils.ConvertVectorIntoHalves(new Double[] { 1, 2, 3, 4, 5, 6 });
 
@@ -35,11 +35,11 @@ namespace Microsoft.Quantum.QAOA.HybridQaoaTests
         {
             ProblemInstance problemInstance = new ProblemInstance(new double[] { 1, 2, 2, -1 }, new double[] { 5, 0, 0, 1, 1, 5, 0, 0, 3, 4, -2, -2, 8, 7, -2, 12 });
 
-            HybridQaoa classicalOptimization = new HybridQaoa(2, 3, problemInstance, 1, false, new Double[] { 1, 2, 3 }, new Double[] { 4, 5, 6 });
+            HybridQaoa classicalOptimization = new HybridQaoa(2, 3, problemInstance, 1, false, new double[] { 1, 2, 3 }, new double[] { 4, 5, 6 });
 
-            Double result = classicalOptimization.EvaluateHamiltonian("0011");
+            double result = classicalOptimization.EvaluateHamiltonian("0011");
 
-            Double expectedResult = -1;
+            double expectedResult = -1;
 
             Assert.AreEqual(expectedResult, result, "Hamiltonian value not calculated correctly.");
 
@@ -55,9 +55,9 @@ namespace Microsoft.Quantum.QAOA.HybridQaoaTests
 
             string optimizationResult = "0101";
 
-            Double result = classicalOptimization.EvaluateCostFunction(optimizationResult, new double[] { 5, 3, 2, 1 });
+            double result = classicalOptimization.EvaluateCostFunction(optimizationResult, new double[] { 5, 3, 2, 1 });
 
-            Double expectedResult = 4;
+            double expectedResult = 4;
 
             Assert.AreEqual(expectedResult, result, "Cost function not calculated correctly.");
 
@@ -67,8 +67,8 @@ namespace Microsoft.Quantum.QAOA.HybridQaoaTests
         [TestMethod]
         public void RunHybridQaoaTest()
         {
-            double[] dh = new Double[] { 0, 0 };
-            double[] dJ = new Double[]{ 0, 1,
+            double[] dh = new double[] { 0, 0 };
+            double[] dJ = new double[]{ 0, 1,
                                0, 0};
 
             int numberOfIterations = 50;

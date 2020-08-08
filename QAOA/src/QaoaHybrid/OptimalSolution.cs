@@ -1,18 +1,16 @@
-﻿namespace QAOA.QaoaHybrid
+﻿namespace Microsoft.Quantum.QAOA.QaoaHybrid
 {
     using System;
-    using System.Collections.Generic;
-    using System.Text;
 
     public class OptimalSolution
     {
 
-        public String optimalVector { get; }
-        public Double optimalValue { get; }
-        public Double[] optimalBeta { get; }
-        public Double[] optimalGamma { get; }
+        public string optimalVector { get; }
+        public double optimalValue { get; }
+        public double[] optimalBeta { get; }
+        public double[] optimalGamma { get; }
 
-        public OptimalSolution(String optimalVector, Double optimalValue, Double[] optimalBeta, Double[] optimalGamma)
+        public OptimalSolution(string optimalVector, double optimalValue, double[] optimalBeta, double[] optimalGamma)
         {
             this.optimalVector = optimalVector;
             this.optimalValue = optimalValue;

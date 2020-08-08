@@ -1,4 +1,4 @@
-﻿namespace QAOA.QaoaHybrid
+﻿namespace Microsoft.Quantum.QAOA.QaoaHybrid
 {
     using System;
     using System.IO;
@@ -6,7 +6,7 @@
 
     class QaoaLogger
     {
-        private StreamWriter logger;
+        private readonly StreamWriter logger;
 
         public QaoaLogger()
         {
@@ -18,11 +18,15 @@
         /// Writes current values of the best fidelity and the best solution vector to a file.
         ///
         /// # Input
+        /// ## beta
+        /// Best beta vector so far.
+        /// ## gamma
+        /// Best gamma vector so far.
         /// ## bestHamiltonian
         /// Best value of a Hamiltonian so far.
         /// ## bestVector
         /// Best solution vector that generates the above value of a Hamiltonian  so far.
-        public void LogCurrentBestSolution(QArray<Double> beta, QArray<Double> gamma, double bestHamiltonian, String bestVector)
+        public void LogCurrentBestSolution(QArray<double> beta, QArray<double> gamma, double bestHamiltonian, string bestVector)
         {
 
                 this.logger.WriteLine("Current beta vector:");

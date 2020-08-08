@@ -1,12 +1,10 @@
-﻿namespace QAOA.QaoaHybrid
+﻿namespace Microsoft.Quantum.QAOA.QaoaHybrid
 
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using Accord.Math;
     using Accord.Math.Optimization;
-    using Microsoft.Quantum.QAOA;
     using Microsoft.Quantum.Simulation.Core;
     using Microsoft.Quantum.Simulation.Simulators;
 
@@ -14,18 +12,18 @@
     public class HybridQaoa 
     {
         private Utils.FreeParamsVector freeParamsVector;
-        private int numberOfIterations;
-        private int p;
-        private ProblemInstance problemInstance;
-        private Double bestHamiltonianValue;
-        private String bestVector;
-        private Double[] bestBeta;
-        private Double[] bestGamma;
-        private int numberOfRandomStartingPoints;
-        private QaoaLogger logger;
-        private Boolean shouldLog;
+        private readonly int numberOfIterations;
+        private readonly int p;
+        private readonly ProblemInstance problemInstance;
+        private double bestHamiltonianValue;
+        private string bestVector;
+        private double[] bestBeta;
+        private double[] bestGamma;
+        private readonly int numberOfRandomStartingPoints;
+        private readonly QaoaLogger logger;
+        private readonly bool shouldLog;
 
-        public HybridQaoa(int numberOfIterations, int p, ProblemInstance problemInstance, int numberOfRandomStartingPoints = 1, Boolean shouldLog = false, Double[] initialBeta = null, Double[] initialGamma = null)
+        public HybridQaoa(int numberOfIterations, int p, ProblemInstance problemInstance, int numberOfRandomStartingPoints = 1, bool shouldLog = false, double[] initialBeta = null, double[] initialGamma = null)
         {
 
             this.numberOfIterations = numberOfIterations;
@@ -56,12 +54,12 @@
         /// 
         /// # Output
         /// The value of the costfunction.
-        public Double EvaluateCostFunction(string result, double[] costs)
+        public double EvaluateCostFunction(string result, double[] costs)
         {
             double costFunctionValue = 0;
             for (int i = 0; i < this.problemInstance.problemSizeInBits; i++)
             {
-                costFunctionValue += costs[i] * Char.GetNumericValue(result[i]);
+                costFunctionValue += costs[i] * char.GetNumericValue(result[i]);
             }
 
             return costFunctionValue;
@@ -84,14 +82,14 @@
             double hamiltonianValue = 0;
             for (int i = 0; i < this.problemInstance.problemSizeInBits; i++)
             {
-                hamiltonianValue += this.problemInstance.oneLocalHamiltonianCoefficients[i] * (1 - 2 * Char.GetNumericValue(result[i]));
+                hamiltonianValue += this.problemInstance.oneLocalHamiltonianCoefficients[i] * (1 - 2 * char.GetNumericValue(result[i]));
             }
 
             for (int i = 0; i < this.problemInstance.problemSizeInBits; i++)
             {
                 for (int j = i + 1; j < this.problemInstance.problemSizeInBits; j++)
                 {
-                    hamiltonianValue += this.problemInstance.twoLocalHamiltonianCoefficients[i * this.problemInstance.problemSizeInBits + j] * (1 - 2 * Char.GetNumericValue(result[i])) * (1 - 2 * Char.GetNumericValue(result[j]));
+                    hamiltonianValue += this.problemInstance.twoLocalHamiltonianCoefficients[i * this.problemInstance.problemSizeInBits + j] * (1 - 2 * char.GetNumericValue(result[i])) * (1 - 2 * char.GetNumericValue(result[j]));
                 }
             }
 
@@ -101,7 +99,7 @@
         /// # Summary
         /// Uses a quantum function to get a solution string from the QAOA that relies on the current values of beta and gamma vectors.
         /// To get a reasonable estimate for the expectation value of a Hamiltonian that encodes the problem, we run the QAOA many times and calculate the expectation based on solutions obtained.
-        ///If the expectation of the Hamiltonian is smaller than our current best, we update our best solution to the current solution. The solution vector for the current best solution is the mode of boolean strings that we obtained from the QAOA.
+        /// If the expectation of the Hamiltonian is smaller than our current best, we update our best solution to the current solution. The solution vector for the current best solution is the mode of boolean strings that we obtained from the QAOA.
         ///
         /// # Input
         /// ## bigfreeParamsVector
@@ -109,28 +107,28 @@
         ///
         /// # Output
         /// The expected value of a Hamiltonian that we calculated in this run.
-        public Double CalculateObjectiveFunction(double[] bigfreeParamsVector)
+        public double CalculateObjectiveFunction(double[] bigfreeParamsVector)
         {
             Utils.FreeParamsVector freeParamsVector = Utils.ConvertVectorIntoHalves(bigfreeParamsVector);
             double hamiltonianExpectationValue = 0;
             List<bool[]> allSolutionVectors = new List<bool[]>();
 
-            var beta = new QArray<Double>(freeParamsVector.beta);
-            var gamma = new QArray<Double>(freeParamsVector.gamma);
+            var beta = new QArray<double>(freeParamsVector.beta);
+            var gamma = new QArray<double>(freeParamsVector.gamma);
 
-            var oneLocalHamiltonianCoefficients = new QArray<Double>(this.problemInstance.oneLocalHamiltonianCoefficients);
-            var twoLocalHamiltonianCoefficients = new QArray<Double>(this.problemInstance.twoLocalHamiltonianCoefficients);
+            var oneLocalHamiltonianCoefficients = new QArray<double>(this.problemInstance.oneLocalHamiltonianCoefficients);
+            var twoLocalHamiltonianCoefficients = new QArray<double>(this.problemInstance.twoLocalHamiltonianCoefficients);
 
             using (var qsim = new QuantumSimulator())
             {
 
-                for (int i = 0; i < numberOfIterations; i++)
+                for (int i = 0; i < this.numberOfIterations; i++)
                 {
-                    IQArray<bool> result = RunQaoa.Run(qsim, this.problemInstance.problemSizeInBits, beta, gamma, oneLocalHamiltonianCoefficients, twoLocalHamiltonianCoefficients, p).Result;
+                    IQArray<bool> result = RunQaoa.Run(qsim, this.problemInstance.problemSizeInBits, beta, gamma, oneLocalHamiltonianCoefficients, twoLocalHamiltonianCoefficients, this.p).Result;
                     allSolutionVectors.Add(result.ToArray());
                     string solutionVector = Utils.GetBoolStringFromBoolArray(result.ToArray());
                     double hamiltonianValue = this.EvaluateHamiltonian(solutionVector);
-                    hamiltonianExpectationValue += hamiltonianValue/ this.numberOfIterations;
+                    hamiltonianExpectationValue += hamiltonianValue / this.numberOfIterations;
 
                 }
             }
@@ -179,14 +177,14 @@
         private NonlinearConstraint[] GenerateConstraints()
         {
 
-            NonlinearConstraint[] constraints = new NonlinearConstraint[4*p];
-            foreach (var i in Enumerable.Range(0, p).Select(x => x * 2))
+            NonlinearConstraint[] constraints = new NonlinearConstraint[4*this.p];
+            foreach (var i in Enumerable.Range(0, this.p).Select(x => x * 2))
             {
                 int gammaIndex = 2 * p + i;
-                constraints[i] = new NonlinearConstraint(2 * p, x => x[i/2] >= 0);
-                constraints[i + 1] = new NonlinearConstraint(2 * p, x => x[i/2] <= Math.PI);
+                constraints[i] = new NonlinearConstraint(2 * p, x => x[i / 2] >= 0);
+                constraints[i + 1] = new NonlinearConstraint(2 * p, x => x[i / 2] <= Math.PI);
                 constraints[gammaIndex] = new NonlinearConstraint(2 * p, x => x[gammaIndex / 2] >= 0);
-                constraints[gammaIndex + 1] = new NonlinearConstraint(2 * p, x => x[gammaIndex / 2] <= 2 * Math.PI);
+                constraints[gammaIndex + 1] = new NonlinearConstraint(2 * this.p, x => x[gammaIndex / 2] <= 2 * Math.PI);
             }
             return constraints;
         }
@@ -206,7 +204,7 @@
             }
             else
             {
-                betaCoefficients = Utils.GetRandomVector(p, Math.PI);
+                betaCoefficients = Utils.GetRandomVector(this.p, Math.PI);
             }
 
             double[] gammaCoefficients;
@@ -217,7 +215,7 @@
             }
             else
             {
-                gammaCoefficients = Utils.GetRandomVector(p, 2 * Math.PI);
+                gammaCoefficients = Utils.GetRandomVector(this.p, 2 * Math.PI);
             }
 
             return betaCoefficients.Concat(gammaCoefficients).ToArray();
@@ -235,9 +233,9 @@
         public OptimalSolution RunOptimization()
         {
 
-            Func<Double[], Double> objectiveFunction = this.CalculateObjectiveFunction;
+            Func<double[], double> objectiveFunction = this.CalculateObjectiveFunction;
 
-            var optimizerObjectiveFunction = new NonlinearObjectiveFunction(2 * p, objectiveFunction);
+            var optimizerObjectiveFunction = new NonlinearObjectiveFunction(2 * this.p, objectiveFunction);
 
             NonlinearConstraint[] constraints = this.GenerateConstraints();
 

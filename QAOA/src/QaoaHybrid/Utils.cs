@@ -1,4 +1,4 @@
-﻿namespace QAOA.QaoaHybrid
+﻿namespace Microsoft.Quantum.QAOA.QaoaHybrid
 {
     using System;
     using System.Collections.Generic;
@@ -9,8 +9,8 @@
 
         public struct FreeParamsVector
         {
-            public Double[] beta;
-            public Double[] gamma;
+            public double[] beta;
+            public double[] gamma;
         }
 
         /// # Summary
@@ -45,12 +45,12 @@
         /// 
         /// # Output
         /// The most common boolean string.
-        public static String GetModeFromBoolList(List<bool[]> list)
+        public static string GetModeFromBoolList(List<bool[]> list)
         {
             Dictionary<string, int> counter = new Dictionary<string, int>();
             foreach (bool[] boolArray in list)
             {
-                String boolString = GetBoolStringFromBoolArray(boolArray);
+                string boolString = GetBoolStringFromBoolArray(boolArray);
                 if (counter.ContainsKey(boolString))
                 {
                     counter[boolString] += 1;
@@ -62,7 +62,7 @@
 
             }
             int maximum = 0;
-            String result = null;
+            string result = null;
             foreach (string key in counter.Keys)
             {
                 if (counter[key] > maximum)

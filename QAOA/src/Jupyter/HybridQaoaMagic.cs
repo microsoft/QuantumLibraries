@@ -3,8 +3,8 @@
     using System;
     using System.Threading.Tasks;
     using Microsoft.Jupyter.Core;
+    using Microsoft.Quantum.QAOA.QaoaHybrid;
     using Newtonsoft.Json;
-    using QAOA.QaoaHybrid;
 
     public class HybridQaoaRunMagic : MagicSymbol
     {

@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 using Microsoft.Jupyter.Core;
 using Newtonsoft.Json;
 using System;
+using Microsoft.Quantum.QAOA.QaoaHybrid;
 using Xunit;
 using QAOA.Jupyter;
-using QAOA.QaoaHybrid;
 
 namespace Microsoft.Quantum.QAOA.JupyterTests
 {

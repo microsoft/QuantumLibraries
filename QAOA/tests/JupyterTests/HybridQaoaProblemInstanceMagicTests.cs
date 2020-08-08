@@ -7,8 +7,8 @@ using Newtonsoft.Json;
 using Xunit;
 using System;
 using Microsoft.Quantum.QAOA.JupyterTests;
+using Microsoft.Quantum.QAOA.QaoaHybrid;
 using QAOA.Jupyter;
-using QAOA.QaoaHybrid;
 
 namespace Microsoft.Quantum.QAOA.HybridQaoaTests
 {

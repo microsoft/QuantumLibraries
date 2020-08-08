@@ -1,6 +1,8 @@
-﻿namespace Quantum.QAOA
+﻿
+
+namespace Quantum.QAOA
 {
-    using global::QAOA.QaoaHybrid;
+    using Microsoft.Quantum.QAOA.QaoaHybrid;
     using System;
 
 
