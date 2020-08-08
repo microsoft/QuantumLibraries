@@ -45,7 +45,18 @@
         }
 
 
-
+        /// # Summary
+        /// Calculates the value of the cost function based on costs provided.
+        ///
+        /// # Input
+        /// ## result
+        /// A binary string. In this context it is a result that we get after measuring the QAOA state.
+        ///
+        /// ## costs
+        /// A list of costs for the cost function.
+        /// 
+        /// # Output
+        /// The value of the costfunction.
         public Double EvaluateCostFunction(string result, double[] costs)
         {
             double costFunctionValue = 0;
@@ -69,7 +80,6 @@
         ///
         /// # Remarks
         /// In the binary string, 0 is mapped to 1 and 1 is mapped to -1 since (-1,1) are eigenvalues of the Z operator which is currently supported in this implementation.
-
         public double EvaluateHamiltonian(string result)
         {
             double hamiltonianValue = 0;

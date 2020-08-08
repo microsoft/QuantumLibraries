@@ -24,7 +24,6 @@
         /// 
         /// # Output
         /// A random vector of doubles.
-        
         public static double[] GetRandomVector(int length, double maximumValue)
         {
             var rand = new Random();
@@ -46,7 +45,6 @@
         /// 
         /// # Output
         /// The most common boolean string.
-
         public static String GetModeFromBoolList(List<bool[]> list)
         {
             Dictionary<string, int> counter = new Dictionary<string, int>();
@@ -86,7 +84,6 @@
         /// 
         /// # Output
         /// A boolean string.
-
         public static string GetBoolStringFromBoolArray(bool[] boolArray)
         {
             System.Text.StringBuilder sb = new StringBuilder();
@@ -109,7 +106,6 @@
         ///
         /// # Remarks
         /// Useful for getting beta and gamma vectors from a concatenated vector inside the optimized function.
-
         public static FreeParamsVector ConvertVectorIntoHalves(double[] bigfreeParamsVector)
         {
             int size = bigfreeParamsVector.Length;
