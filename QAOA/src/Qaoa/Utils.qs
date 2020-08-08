@@ -4,6 +4,15 @@
     open Microsoft.Quantum.Intrinsic;
     open Microsoft.Quantum.Measurement;
 
+    /// # Summary
+    /// Measures all qubits and resets them.
+    ///
+    /// # Input
+    /// ## qubits
+    /// Qubits to be measured.
+    ///
+    /// # Output
+    /// Results of the measurement.
 
    operation MeasureAllAndReset(qubits: Qubit[]) : Bool[]
     {
@@ -15,6 +24,19 @@
         }
         return results;
     }
+
+    /// # Summary
+    /// Runs a phase kickback routine on an ancilla qubit given indices of control qubits and a phase.
+    ///
+    /// # Input
+    /// ## qubits
+    /// Qubits that are to aquire a phase.
+    /// ## ancillaQubit
+    /// Ancilla qubit.
+    /// ## controlQubitsIndices
+    /// List of indices of control qubits.
+    /// ## phaseExponent
+    /// Phase to be applied.
 
     operation RunPhaseKickback(qubits: Qubit[], ancillaQubit: Qubit[], controlQubitsIndices: Int[], phaseExponent: Double) : Unit
     {
