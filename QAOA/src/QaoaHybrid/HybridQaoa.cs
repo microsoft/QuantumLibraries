@@ -107,7 +107,7 @@
         ///
         /// # Output
         /// The expected value of a Hamiltonian that we calculated in this run.
-        public double CalculateObjectiveFunction(double[] bigfreeParamsVector)
+        private double CalculateObjectiveFunction(double[] bigfreeParamsVector)
         {
             Utils.FreeParamsVector freeParamsVector = Utils.ConvertVectorIntoHalves(bigfreeParamsVector);
             double hamiltonianExpectationValue = 0;
