@@ -60,7 +60,7 @@
 
             //END EXAMPLES
 
-            HybridQaoa cop = new HybridQaoa(numberOfIterations, p, maxCut4, numberOfRandomStartingPoints);
+            HybridQaoa cop = new HybridQaoa(numberOfIterations, p, maxCut4, numberOfRandomStartingPoints, true);
 
             OptimalSolution res = cop.RunOptimization();
             Console.WriteLine(res.optimalVector);

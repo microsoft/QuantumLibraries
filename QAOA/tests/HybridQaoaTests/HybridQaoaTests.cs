@@ -15,7 +15,7 @@ namespace Microsoft.Quantum.QAOA.HybridQaoaTests
 
             ProblemInstance problemInstance = new ProblemInstance(new double[] { 1, 2, 2, -1 }, new double[] { 5, 0, 0, 1, 1, 5, 0, 0, 3, 4, -2, -2, 8, 7, -2, 12 });
 
-            HybridQaoa classicalOptimization = new HybridQaoa(2, 3, problemInstance, 1, null, new Double[] { 1, 2, 3 }, new Double[] { 4, 5, 6 } );
+            HybridQaoa classicalOptimization = new HybridQaoa(2, 3, problemInstance, 1, false, new Double[] { 1, 2, 3 }, new Double[] { 4, 5, 6 } );
 
             Utils.FreeParamsVector result = Utils.ConvertVectorIntoHalves(new Double[] { 1, 2, 3, 4, 5, 6 });
 
@@ -35,7 +35,7 @@ namespace Microsoft.Quantum.QAOA.HybridQaoaTests
         {
             ProblemInstance problemInstance = new ProblemInstance(new double[] { 1, 2, 2, -1 }, new double[] { 5, 0, 0, 1, 1, 5, 0, 0, 3, 4, -2, -2, 8, 7, -2, 12 });
 
-            HybridQaoa classicalOptimization = new HybridQaoa(2, 3, problemInstance, 1, null, new Double[] { 1, 2, 3 }, new Double[] { 4, 5, 6 });
+            HybridQaoa classicalOptimization = new HybridQaoa(2, 3, problemInstance, 1, false, new Double[] { 1, 2, 3 }, new Double[] { 4, 5, 6 });
 
             Double result = classicalOptimization.EvaluateHamiltonian("0011");
 
@@ -50,7 +50,7 @@ namespace Microsoft.Quantum.QAOA.HybridQaoaTests
         {
             ProblemInstance problemInstance = new ProblemInstance(new double[] { 1, 1, 1, 1 }, new double[] { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 });
 
-            HybridQaoa classicalOptimization = new HybridQaoa(2, 1, problemInstance, 1, null, new double[] { 2 }, new double[] { 3 });
+            HybridQaoa classicalOptimization = new HybridQaoa(2, 1, problemInstance, 1, false, new double[] { 2 }, new double[] { 3 });
 
 
             string optimizationResult = "0101";

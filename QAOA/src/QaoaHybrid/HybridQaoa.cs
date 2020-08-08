@@ -23,10 +23,9 @@
         private Double[] bestGamma;
         private int numberOfRandomStartingPoints;
         private QaoaLogger logger;
-        private String loggerFilePath;
+        private Boolean shouldLog;
 
-
-        public HybridQaoa(int numberOfIterations, int p, ProblemInstance problemInstance, int numberOfRandomStartingPoints = 1, String loggerFilePath = null, Double[] initialBeta = null, Double[] initialGamma = null)
+        public HybridQaoa(int numberOfIterations, int p, ProblemInstance problemInstance, int numberOfRandomStartingPoints = 1, Boolean shouldLog = false, Double[] initialBeta = null, Double[] initialGamma = null)
         {
 
             this.numberOfIterations = numberOfIterations;
@@ -37,10 +36,10 @@
             this.bestHamiltonianValue = double.MaxValue;
             this.bestVector = null;
             this.numberOfRandomStartingPoints = numberOfRandomStartingPoints;
-            this.loggerFilePath = loggerFilePath;
-            if (loggerFilePath != null)
+            this.shouldLog = shouldLog;
+            if (shouldLog)
             {
-                this.logger = new QaoaLogger(loggerFilePath);
+                this.logger = new QaoaLogger();
             }
         }
 
@@ -138,7 +137,7 @@
 
             this.UpdateBestSolution(hamiltonianExpectationValue, allSolutionVectors, freeParamsVector);
 
-            if (this.loggerFilePath != null)
+            if (this.shouldLog)
             {
                 this.logger.LogCurrentBestSolution(beta, gamma, this.bestHamiltonianValue, this.bestVector);
             }
@@ -248,7 +247,7 @@
                 double[] freeParameters = this.SetUpFreeParameters();
                 bool success = cobyla.Minimize(freeParameters);
 
-                if (this.loggerFilePath != null)
+                if (this.shouldLog)
                 {
                     this.logger.LogSuccess(success);
                     this.logger.Close();
