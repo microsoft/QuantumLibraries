@@ -7,13 +7,14 @@
     class QaoaLogger
     {
         private StreamWriter logger;
+
         public QaoaLogger(string filePath = "")
         {
             this.logger = new StreamWriter(@filePath+"hybrid_qaoa_log_" + DateTime.Now.ToString("yyyy-dd-M--HH-mm-ss") + ".txt", true);
         }
 
         /// # Summary
-        /// Prints current values of the best fidelity and the best solution vector as optimization is being performed.
+        /// Writes current values of the best fidelity and the best solution vector to a file.
         ///
         /// # Input
         /// ## bestHamiltonian
@@ -34,7 +35,7 @@
         }
 
         /// # Summary
-        /// Prints whether an optimization finished successfully.
+        /// Writes to a file whether an optimization finished successfully.
         ///
         /// # Input
         /// ## success
@@ -47,6 +48,8 @@
 
         }
 
+        /// # Summary
+        /// Closes a logger.
         public void Close()
         {
             this.logger.Close();
