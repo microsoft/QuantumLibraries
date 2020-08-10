@@ -27,7 +27,7 @@ namespace Microsoft.Quantum.Diagnostics
             private static Dictionary<(Type, Type), Stack<IDisposable>> Handlers =
                 new Dictionary<(Type, Type), Stack<IDisposable>>();
 
-            private readonly (Type, Type) Key = (typeof(__TInput__), typeof(__TOutput__));
+            private static readonly (Type, Type) Key = (typeof(__TInput__), typeof(__TOutput__));
 
             public Native(IOperationFactory m) : base(m)
             {
