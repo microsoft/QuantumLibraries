@@ -22,6 +22,7 @@ namespace Microsoft.Quantum.Tests
             {
                 var count = 0;
                 sim.OnLog += (_) => count++;
+                sim.DisableLogToConsole();
 
                 EstimateFrequencyEmulationTest.Run(sim).Wait();
                 Assert.Equal(expected, count);

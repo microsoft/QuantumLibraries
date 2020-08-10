@@ -85,7 +85,7 @@ namespace Microsoft.Quantum.Arithmetic {
 
     @Test("ToffoliSimulator")
     operation RippleCarryAdderDExhaustiveTestReversible () : Unit {
-        for (numberOfQubits in 3..6) {
+        for (numberOfQubits in [3, 6]) {
             IntegerAdderExhaustiveTestHelper (RippleCarryAdderD, numberOfQubits);
         }
     }
@@ -108,7 +108,7 @@ namespace Microsoft.Quantum.Arithmetic {
 
     @Test("ToffoliSimulator")
     operation RippleCarryAdderCDKMExhaustiveTestReversible () : Unit {
-        for (numberOfQubits in 3..6) {
+        for (numberOfQubits in [3, 6]) {
             IntegerAdderExhaustiveTestHelper (RippleCarryAdderCDKM, numberOfQubits);
         }
     }
@@ -121,7 +121,7 @@ namespace Microsoft.Quantum.Arithmetic {
 
     @Test("ToffoliSimulator")
     operation RippleCarryAdderTTKExhaustiveTestReversible () : Unit {
-        for (numberOfQubits in 1..6){
+        for (numberOfQubits in [4, 6]){
             IntegerAdderExhaustiveTestHelper (RippleCarryAdderTTK, numberOfQubits);
         }
     }
@@ -195,7 +195,7 @@ namespace Microsoft.Quantum.Arithmetic {
 
     @Test("ToffoliSimulator")
     operation RippleCarryAdderNoCarryTTKExhaustiveTestReversible () : Unit {
-        for (numberOfQubits in 1..6) {
+        for (numberOfQubits in [1, 3, 6]) {
             IntegerAdderNoCarryExhaustiveTestHelper (RippleCarryAdderNoCarryTTK, numberOfQubits);
         }
     }
