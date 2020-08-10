@@ -21,7 +21,6 @@ namespace Microsoft.Quantum.Diagnostics
         internal NumSharp.NDArray? Data = null;
         public ArrayDumper(QuantumSimulator sim) : base(sim)
         {
-
         }
 
         public override bool Callback(uint idx, double real, double img)
@@ -34,9 +33,7 @@ namespace Microsoft.Quantum.Diagnostics
 
         public override bool Dump(IQArray<Qubit>? qubits = null)
         {
-            var count = qubits == null
-                        ? this.Simulator.QubitManager!.GetAllocatedQubitsCount()
-                        : qubits.Length;
+            var count = qubits?.Length ?? Simulator.QubitManager!.GetAllocatedQubitsCount();
             var nQubitsPerRegister = ((int)count / 2);
             Data = np.empty(new Shape(1 << ((int)count), 2));
             var result = base.Dump(qubits);
@@ -76,7 +73,7 @@ namespace Microsoft.Quantum.Diagnostics
                 return QVoid.Instance;
             }
 
-            public override Func<(IQArray<Qubit>, IQArray<Qubit>), QVoid> Body => (__in__) =>
+            public override Func<(IQArray<Qubit>, IQArray<Qubit>), QVoid> Body => __in__ =>
             {
                 var (reference, target) = __in__;
                 return Simulator switch
