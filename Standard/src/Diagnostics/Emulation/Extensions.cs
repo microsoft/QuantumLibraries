@@ -69,7 +69,7 @@ namespace Microsoft.Quantum.Diagnostics.Emulation
         ) => new SimulatorEventDisposer(
             simulator,
             startOperation,
-            endOperation ?? (callable, data) => {}
+            endOperation ?? ((callable, data) => {})
         );
     }
 }
