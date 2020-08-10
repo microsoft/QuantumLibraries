@@ -248,11 +248,13 @@
                 if (this.shouldLog)
                 {
                     this.logger.LogSuccess(success);
-                    this.logger.Close();
                 }
 
             }
-
+            if (this.shouldLog)
+            {
+                this.logger.Close();
+            }
             return new OptimalSolution(this.bestVector, this.bestHamiltonianValue, this.bestBeta, this.bestGamma);
         }
     }

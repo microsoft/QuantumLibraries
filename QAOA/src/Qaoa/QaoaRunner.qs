@@ -31,15 +31,15 @@
     {
         
         mutable result = new Bool[problemSize];
-        using (x = Qubit[problemSize])
+        using (qubits = Qubit[problemSize])
         {
-            ApplyToEach(H, x);                          // prepare the uniform distribution
+            ApplyToEach(H, qubits);                         
             for (i in 0..p-1)
             {
-                EvolveWithObjectiveHamiltonian(x, gamma[i], h, J);    // do Exp(-i H_C tz[i])
-                EvolveWithMixingHamiltonian(x, beta[i]);            // do Exp(-i H_0 tx[i])
+                EvolveWithObjectiveHamiltonian(qubits, gamma[i], h, J);
+                EvolveWithMixingHamiltonian(qubits, beta[i]);
             }
-            set result = MeasureAllAndReset(x);                 // measure in the computational basis
+            set result = MeasureAllAndReset(qubits);                
         }
         return result;
     }
