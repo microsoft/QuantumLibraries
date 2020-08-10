@@ -24,24 +24,21 @@ namespace Microsoft.Quantum.Diagnostics.Emulation
             this.logger = logger;
         }
 
-        public EncodedData? Encode(object displayable)
+        public EncodedData? Encode(object displayable) => displayable switch
         {
-            if (displayable is CallSites sites)
-            {
-                var list = String.Join("\n---\n",
-                    sites.Sites.Select(
-                        call => String.Join("\n",
-                            call.Select(
-                                frame => $"- {frame}"
+            CallSites sites => $@"Calls to {sites.Subject}:\n\n{
+                    String.Join("\n---\n",
+                        sites.Sites.Select(
+                            call => String.Join("\n",
+                                call.Select(
+                                    frame => $"- {frame}"
+                                )
                             )
                         )
                     )
-                );
-                return $"Calls to {sites.Subject}:\n\n{list}".ToEncodedData();
-            }
-            else return null;
-        }
-
+                }".ToEncodedData(),
+            _ => null
+        };
     }
 
     public class CallSitesToHtmlEncoder : IResultEncoder
@@ -59,12 +56,9 @@ namespace Microsoft.Quantum.Diagnostics.Emulation
             this.configurationSource = configurationSource;
         }
 
-        public EncodedData? Encode(object displayable)
+        public EncodedData? Encode(object displayable) => displayable switch
         {
-            if (displayable is CallSites sites)
-            {
-                logger.LogDebug("Using HTML encoder to output call site record.");
-                return $@"
+            CallSites sites => $@"
                     <details>
                         <summary>Calls to {sites.Subject}:</summary>
                         <ul>{
@@ -81,10 +75,9 @@ namespace Microsoft.Quantum.Diagnostics.Emulation
                             )
                         }</ul>
                     </details>
-                ".ToEncodedData();
-            }
-            else return null;
-        }
+                ".ToEncodedData(),
+            _ => null
+        };
 
     }
 
