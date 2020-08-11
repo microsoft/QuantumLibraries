@@ -1,18 +1,21 @@
-﻿namespace Microsoft.Quantum.QAOA.QaoaHybrid
+﻿// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
+namespace Microsoft.Quantum.QAOA.QaoaHybrid
 {
     using System;
 
     public class ProblemInstance
     {
-        public double[] oneLocalHamiltonianCoefficients { get; }
-        public double[] twoLocalHamiltonianCoefficients { get; }
-        public int problemSizeInBits { get; }
+        public double[] OneLocalHamiltonianCoefficients { get; }
+        public double[] TwoLocalHamiltonianCoefficients { get; }
+        public int ProblemSizeInBits { get; }
 
         public ProblemInstance(double[] oneLocalHamiltonianCoefficients, double[] twoLocalHamiltonianCoefficients)
         {
-            this.oneLocalHamiltonianCoefficients = oneLocalHamiltonianCoefficients;
-            this.twoLocalHamiltonianCoefficients = twoLocalHamiltonianCoefficients;
-            this.problemSizeInBits = oneLocalHamiltonianCoefficients.Length;
+            this.OneLocalHamiltonianCoefficients = oneLocalHamiltonianCoefficients;
+            this.TwoLocalHamiltonianCoefficients = twoLocalHamiltonianCoefficients;
+            this.ProblemSizeInBits = oneLocalHamiltonianCoefficients.Length;
         }
     }
 }

@@ -1,4 +1,7 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
 using Microsoft.Quantum.QAOA.QaoaHybrid;
 
@@ -34,7 +37,6 @@ namespace Microsoft.Quantum.QAOA.HybridQaoaTests
         public void BoolStringFromBoolArrayTest()
         {
             bool[] boolsArray = { false, false, true };
-
 
             string expectedResult = "001";
 

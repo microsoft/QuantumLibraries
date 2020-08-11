@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using Microsoft.Quantum.QAOA.QaoaHybrid;
@@ -12,10 +15,6 @@ namespace Microsoft.Quantum.QAOA.HybridQaoaTests
         [TestMethod]
         public void ConvertDataVectorToVectorsTest()
         {
-
-            ProblemInstance problemInstance = new ProblemInstance(new double[] { 1, 2, 2, -1 }, new double[] { 5, 0, 0, 1, 1, 5, 0, 0, 3, 4, -2, -2, 8, 7, -2, 12 });
-
-            HybridQaoa classicalOptimization = new HybridQaoa(2, 3, problemInstance, 1, false, new double[] { 1, 2, 3 }, new double[] { 4, 5, 6 } );
 
             Utils.FreeParamsVector result = Utils.ConvertVectorIntoHalves(new Double[] { 1, 2, 3, 4, 5, 6 });
 
@@ -52,7 +51,6 @@ namespace Microsoft.Quantum.QAOA.HybridQaoaTests
 
             HybridQaoa classicalOptimization = new HybridQaoa(2, 1, problemInstance, 1, false, new double[] { 2 }, new double[] { 3 });
 
-
             string optimizationResult = "0101";
 
             double result = classicalOptimization.EvaluateCostFunction(optimizationResult, new double[] { 5, 3, 2, 1 });
@@ -83,7 +81,7 @@ namespace Microsoft.Quantum.QAOA.HybridQaoaTests
             string optimizationResult1 = "01";
             string optimizationResult2 = "10";
 
-            string result = optimalSolution.optimalVector;
+            string result = optimalSolution.OptimalVector;
             Console.WriteLine(result);
 
             Assert.IsTrue(result.Equals(optimizationResult1) || result.Equals(optimizationResult2), "Hybrid QAOA produced incorrect result.");

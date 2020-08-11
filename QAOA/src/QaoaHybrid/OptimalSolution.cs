@@ -1,21 +1,24 @@
-﻿namespace Microsoft.Quantum.QAOA.QaoaHybrid
+﻿// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
+namespace Microsoft.Quantum.QAOA.QaoaHybrid
 {
     using System;
 
     public class OptimalSolution
     {
 
-        public string optimalVector { get; }
-        public double optimalValue { get; }
-        public double[] optimalBeta { get; }
-        public double[] optimalGamma { get; }
+        public string OptimalVector { get; }
+        public double OptimalValue { get; }
+        public double[] OptimalBeta { get; }
+        public double[] OptimalGamma { get; }
 
         public OptimalSolution(string optimalVector, double optimalValue, double[] optimalBeta, double[] optimalGamma)
         {
-            this.optimalVector = optimalVector;
-            this.optimalValue = optimalValue;
-            this.optimalBeta = optimalBeta;
-            this.optimalGamma = optimalGamma;
+            this.OptimalVector = optimalVector;
+            this.OptimalValue = optimalValue;
+            this.OptimalBeta = optimalBeta;
+            this.OptimalGamma = optimalGamma;
 
         }
 

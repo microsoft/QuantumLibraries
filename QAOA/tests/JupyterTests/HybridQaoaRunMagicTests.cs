@@ -7,7 +7,7 @@ using Newtonsoft.Json;
 using System;
 using Microsoft.Quantum.QAOA.QaoaHybrid;
 using Xunit;
-using QAOA.Jupyter;
+using Microsoft.Quantum.QAOA.Jupyter;
 
 namespace Microsoft.Quantum.QAOA.JupyterTests
 {
@@ -24,11 +24,10 @@ namespace Microsoft.Quantum.QAOA.JupyterTests
 
             var numberOfIterations = 50;
             var p = 2;
-            double[] dh = new Double[] { 0, 0 };
-            double[] dJ = new Double[]{ 0, 1,
-                               0, 0};
+            double[] oneLocalHamiltonianCoefficients = new Double[] { 0, 0 };
+            double[] twoLocalHamiltonianCoefficients = new Double[]{ 0, 1, 0, 0};
 
-            ProblemInstance simpleMaxCut = new ProblemInstance(dh, dJ);
+            ProblemInstance simpleMaxCut = new ProblemInstance(oneLocalHamiltonianCoefficients, twoLocalHamiltonianCoefficients);
 
             var args = JsonConvert.SerializeObject(new HybridQaoaRunMagic.Arguments
             {
@@ -43,7 +42,7 @@ namespace Microsoft.Quantum.QAOA.JupyterTests
             string optimizationResult1 = "01";
             string optimizationResult2 = "10";
 
-            Assert.True(optimalSolution.optimalVector.Equals(optimizationResult1) || optimalSolution.optimalVector.Equals(optimizationResult2), "Hybrid QAOA produced incorrect result.");
+            Assert.True(optimalSolution.OptimalVector.Equals(optimizationResult1) || optimalSolution.OptimalVector.Equals(optimizationResult2), "Hybrid QAOA produced incorrect result.");
         }
     }
         

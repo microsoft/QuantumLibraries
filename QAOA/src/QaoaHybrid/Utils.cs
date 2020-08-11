@@ -1,4 +1,7 @@
-﻿namespace Microsoft.Quantum.QAOA.QaoaHybrid
+﻿// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
+namespace Microsoft.Quantum.QAOA.QaoaHybrid
 {
     using System;
     using System.Collections.Generic;

@@ -1,4 +1,7 @@
-﻿namespace QAOA.Jupyter
+﻿// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
+namespace Microsoft.Quantum.QAOA.Jupyter
 {
     using System;
     using System.Threading.Tasks;

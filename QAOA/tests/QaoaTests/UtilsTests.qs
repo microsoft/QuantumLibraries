@@ -13,16 +13,13 @@ namespace Microsoft.Quantum.Tests {
     operation RunPhaseKickbackTest() : Unit {
 
         let numberOfQubits = 1;
-        let ancillaQubits = 1;
+        let auxiliaryQubits = 1;
         let controlQubitsIndices = [0];
         let phaseExponent = 0.5;
-        let complexZero = Complex(1.0, 0.0);
-        let complexOne = Complex(0.0, 0.0);
 
-        using (qubits = Qubit[numberOfQubits+ancillaQubits])
-        {
-            RunPhaseKickback(qubits[...1], qubits[1...],controlQubitsIndices,phaseExponent);
-            AssertQubitIsInStateWithinTolerance((complexZero,complexOne), qubits[0], 1E-05);
+        using (qubits = Qubit[numberOfQubits+auxiliaryQubits]) {
+            RunPhaseKickback(qubits[...1], qubits[1],controlQubitsIndices,phaseExponent);
+            AssertQubit(Zero, Head(qubits));
             ResetAll(qubits);
         }
     }
@@ -31,17 +28,16 @@ namespace Microsoft.Quantum.Tests {
     operation RunPhaseKickbackOneControlQubitTest() : Unit {
 
         let numberOfQubits = 1;
-        let ancillaQubits = 1;
+        let auxiliaryQubits = 1;
         let controlQubitsIndices = [0];
         let phaseExponent = 0.5;
         
         let complexZero = Complex(0.685125,-0.174941);
         let complexOne = Complex(0.685125,0.174941);
 
-        using (qubits = Qubit[numberOfQubits+ancillaQubits])
-        {
+        using (qubits = Qubit[numberOfQubits+auxiliaryQubits]) {
             H(qubits[0]);
-            RunPhaseKickback([qubits[0]], [qubits[1]],controlQubitsIndices,phaseExponent);
+            RunPhaseKickback([qubits[0]], qubits[1],controlQubitsIndices,phaseExponent);
             AssertQubitIsInStateWithinTolerance((complexZero,complexOne), qubits[0], 1E-05);
             ResetAll(qubits);
         }
@@ -53,21 +49,20 @@ namespace Microsoft.Quantum.Tests {
         let complexOne = Complex(1.0, 0.0);
         let complexZero = Complex(0.0, 0.0);
 
-        using (qubits = Qubit[numberOfQubits])
-        {
+        using (qubits = Qubit[numberOfQubits]) {
             X(qubits[0]);
             X(qubits[2]);
             let result = MeasureAllAndReset(qubits);
 
-            EqualityFactB(result[0], true, "Expected |1> state.");
-            EqualityFactB(result[1], false, "Expected |0> state.");
-            EqualityFactB(result[2], true, "Expected |1> state.");
-            EqualityFactB(result[3], false, "Expected |0> state.");
+            Fact(result[0], "Expected |1> state.");
+            Fact(not result[1], "Expected |0> state.");
+            Fact(result[2], "Expected |1> state.");
+            Fact(not result[3], "Expected |0> state.");
 
-            AssertQubitIsInStateWithinTolerance((complexOne, complexZero), qubits[0], 1E-06);
-            AssertQubitIsInStateWithinTolerance((complexOne, complexZero), qubits[1], 1E-06);
-            AssertQubitIsInStateWithinTolerance((complexOne, complexZero), qubits[2], 1E-06);
-            AssertQubitIsInStateWithinTolerance((complexOne, complexZero), qubits[3], 1E-06);
+            AssertQubit(Zero, qubits[0]);
+            AssertQubit(Zero, qubits[1]);
+            AssertQubit(Zero, qubits[2]);
+            AssertQubit(Zero, qubits[3]);
 
         }
 

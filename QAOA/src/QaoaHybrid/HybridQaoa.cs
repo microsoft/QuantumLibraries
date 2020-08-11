@@ -1,4 +1,7 @@
-﻿namespace Microsoft.Quantum.QAOA.QaoaHybrid
+﻿// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
+namespace Microsoft.Quantum.QAOA.QaoaHybrid
 
 {
     using System;
@@ -8,7 +11,6 @@
     using Microsoft.Quantum.Simulation.Core;
     using Microsoft.Quantum.Simulation.Simulators;
 
-    //currently support up to 2-local Hamiltonians; will be generalized later
     public class HybridQaoa 
     {
         private Utils.FreeParamsVector freeParamsVector;
@@ -57,7 +59,7 @@
         public double EvaluateCostFunction(string result, double[] costs)
         {
             double costFunctionValue = 0;
-            for (int i = 0; i < this.problemInstance.problemSizeInBits; i++)
+            for (int i = 0; i < this.problemInstance.ProblemSizeInBits; i++)
             {
                 costFunctionValue += costs[i] * char.GetNumericValue(result[i]);
             }
@@ -80,16 +82,16 @@
         public double EvaluateHamiltonian(string result)
         {
             double hamiltonianValue = 0;
-            for (int i = 0; i < this.problemInstance.problemSizeInBits; i++)
+            for (int i = 0; i < this.problemInstance.ProblemSizeInBits; i++)
             {
-                hamiltonianValue += this.problemInstance.oneLocalHamiltonianCoefficients[i] * (1 - 2 * char.GetNumericValue(result[i]));
+                hamiltonianValue += this.problemInstance.OneLocalHamiltonianCoefficients[i] * (1 - 2 * char.GetNumericValue(result[i]));
             }
 
-            for (int i = 0; i < this.problemInstance.problemSizeInBits; i++)
+            for (int i = 0; i < this.problemInstance.ProblemSizeInBits; i++)
             {
-                for (int j = i + 1; j < this.problemInstance.problemSizeInBits; j++)
+                for (int j = i + 1; j < this.problemInstance.ProblemSizeInBits; j++)
                 {
-                    hamiltonianValue += this.problemInstance.twoLocalHamiltonianCoefficients[i * this.problemInstance.problemSizeInBits + j] * (1 - 2 * char.GetNumericValue(result[i])) * (1 - 2 * char.GetNumericValue(result[j]));
+                    hamiltonianValue += this.problemInstance.TwoLocalHamiltonianCoefficients[i * this.problemInstance.ProblemSizeInBits + j] * (1 - 2 * char.GetNumericValue(result[i])) * (1 - 2 * char.GetNumericValue(result[j]));
                 }
             }
 
@@ -116,15 +118,15 @@
             var beta = new QArray<double>(freeParamsVector.beta);
             var gamma = new QArray<double>(freeParamsVector.gamma);
 
-            var oneLocalHamiltonianCoefficients = new QArray<double>(this.problemInstance.oneLocalHamiltonianCoefficients);
-            var twoLocalHamiltonianCoefficients = new QArray<double>(this.problemInstance.twoLocalHamiltonianCoefficients);
+            var oneLocalHamiltonianCoefficients = new QArray<double>(this.problemInstance.OneLocalHamiltonianCoefficients);
+            var twoLocalHamiltonianCoefficients = new QArray<double>(this.problemInstance.TwoLocalHamiltonianCoefficients);
 
             using (var qsim = new QuantumSimulator())
             {
 
                 for (int i = 0; i < this.numberOfIterations; i++)
                 {
-                    IQArray<bool> result = RunQaoa.Run(qsim, this.problemInstance.problemSizeInBits, beta, gamma, oneLocalHamiltonianCoefficients, twoLocalHamiltonianCoefficients, this.p).Result;
+                    IQArray<bool> result = RunQaoa.Run(qsim, this.problemInstance.ProblemSizeInBits, beta, gamma, oneLocalHamiltonianCoefficients, twoLocalHamiltonianCoefficients, this.p).Result;
                     allSolutionVectors.Add(result.ToArray());
                     string solutionVector = Utils.GetBoolStringFromBoolArray(result.ToArray());
                     double hamiltonianValue = this.EvaluateHamiltonian(solutionVector);
@@ -180,10 +182,10 @@
             NonlinearConstraint[] constraints = new NonlinearConstraint[4*this.p];
             foreach (var i in Enumerable.Range(0, this.p).Select(x => x * 2))
             {
-                int gammaIndex = 2 * p + i;
-                constraints[i] = new NonlinearConstraint(2 * p, x => x[i / 2] >= 0);
-                constraints[i + 1] = new NonlinearConstraint(2 * p, x => x[i / 2] <= Math.PI);
-                constraints[gammaIndex] = new NonlinearConstraint(2 * p, x => x[gammaIndex / 2] >= 0);
+                int gammaIndex = 2 * this.p + i;
+                constraints[i] = new NonlinearConstraint(2 * this.p, x => x[i / 2] >= 0);
+                constraints[i + 1] = new NonlinearConstraint(2 * this.p, x => x[i / 2] <= Math.PI);
+                constraints[gammaIndex] = new NonlinearConstraint(2 * this.p, x => x[gammaIndex / 2] >= 0);
                 constraints[gammaIndex + 1] = new NonlinearConstraint(2 * this.p, x => x[gammaIndex / 2] <= 2 * Math.PI);
             }
             return constraints;

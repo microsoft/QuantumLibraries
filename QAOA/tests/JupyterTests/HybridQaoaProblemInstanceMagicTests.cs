@@ -8,7 +8,7 @@ using Xunit;
 using System;
 using Microsoft.Quantum.QAOA.JupyterTests;
 using Microsoft.Quantum.QAOA.QaoaHybrid;
-using QAOA.Jupyter;
+using Microsoft.Quantum.QAOA.Jupyter;
 
 namespace Microsoft.Quantum.QAOA.HybridQaoaTests
 {
@@ -24,23 +24,22 @@ namespace Microsoft.Quantum.QAOA.HybridQaoaTests
             var (magic, channel) = Init();
             Assert.Equal("%qaoa.hybridqaoa.create.problem.instance", magic.Name);
 
-            double[] dh = new Double[] { 0, 0 };
-            double[] dJ = new Double[]{ 0, 1,
-                               0, 0};
+            double[] oneLocalHamiltonianCoefficients = new Double[] { 0, 0 };
+            double[] twoLocalHamiltonianCoefficients = new Double[]{ 0, 1, 0, 0};
 
             var args = JsonConvert.SerializeObject(new HybridQaoaProblemInstanceMagic.Arguments
             {
-                OneLocalHamiltonianCoefficients = dh,
-                TwoLocalHamiltonianCoefficients = dJ
+                OneLocalHamiltonianCoefficients = oneLocalHamiltonianCoefficients,
+                TwoLocalHamiltonianCoefficients = twoLocalHamiltonianCoefficients
             });
 
             var result = await magic.Run(args, channel);
             var problemInstance = result.Output as ProblemInstance;
             Assert.Equal(ExecuteStatus.Ok, result.Status);
 
-            Assert.Equal(problemInstance.problemSizeInBits, dh.Length);
-            Assert.Equal(problemInstance.oneLocalHamiltonianCoefficients, dh);
-            Assert.Equal(problemInstance.twoLocalHamiltonianCoefficients,dJ);
+            Assert.Equal(problemInstance.ProblemSizeInBits, oneLocalHamiltonianCoefficients.Length);
+            Assert.Equal(problemInstance.OneLocalHamiltonianCoefficients, oneLocalHamiltonianCoefficients);
+            Assert.Equal(problemInstance.TwoLocalHamiltonianCoefficients, twoLocalHamiltonianCoefficients);
         }
 
     }

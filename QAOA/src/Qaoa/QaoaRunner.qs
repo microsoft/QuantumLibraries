@@ -1,4 +1,7 @@
-﻿namespace Microsoft.Quantum.QAOA {
+﻿// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
+namespace Microsoft.Quantum.QAOA {
 
     open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Intrinsic;
@@ -14,9 +17,9 @@
     /// Vector of coefficents for the unitary based on the mixing Hamiltonian.
     /// ## gamma
     /// Vector of coefficents for the unitary based on the objective function Hamiltonian.
-    /// ## h
+    /// ## oneLocalHamiltonianCoefficients
     /// Array of 1-local coefficents of the objective function Hamiltonian.
-    /// ## J
+    /// ## twoLocalHamiltonianCoefficients
     /// Array of 2-local coefficents of the objective function Hamiltonian.
     /// ## p
     /// Depth of the QAOA circuit.
@@ -26,17 +29,13 @@
     ///
     /// # References
     /// This implementation in inspired by https://github.com/stephenjordan/qaoa_tsp.
-
-    operation RunQaoa(problemSize: Int, beta: Double[], gamma: Double[], h: Double[], J: Double[], p: Int) : Bool[]
-    {
+    operation RunQaoa(problemSize: Int, beta: Double[], gamma: Double[], oneLocalHamiltonianCoefficients: Double[], twoLocalHamiltonianCoefficients: Double[], p: Int) : Bool[] {
         
         mutable result = new Bool[problemSize];
-        using (qubits = Qubit[problemSize])
-        {
+        using (qubits = Qubit[problemSize]) {
             ApplyToEach(H, qubits);                         
-            for (i in 0..p-1)
-            {
-                EvolveWithObjectiveHamiltonian(qubits, gamma[i], h, J);
+            for (i in 0..p-1) {
+                EvolveWithObjectiveHamiltonian(qubits, gamma[i], oneLocalHamiltonianCoefficients, twoLocalHamiltonianCoefficients);
                 EvolveWithMixingHamiltonian(qubits, beta[i]);
             }
             set result = MeasureAllAndReset(qubits);                

@@ -41,7 +41,7 @@ Write-Host "##[info]Testing Numerics/tests/NumericsTests.csproj"
 Test-One '../Numerics/tests/NumericsTests.csproj'
 
 Write-Host "##[info]Testing QAOA/tests/QaoaTests/QaoaTests.csproj"
-Test-One '../QAOA/tests//QaoaTests/QaoaTests.csproj'
+Test-One '../QAOA/tests/QaoaTests/QaoaTests.csproj'
 
 Write-Host "##[info]Testing QAOA/tests/HybridQaoaTests/HybridQaoaTests.csproj"
 Test-One '../QAOA/tests/HybridQaoaTests/HybridQaoaTests.csproj'
