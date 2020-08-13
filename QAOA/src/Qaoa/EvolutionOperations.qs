@@ -47,7 +47,7 @@ namespace Microsoft.Quantum.QAOA {
             }
             for(i in 0..numberOfQubits-1) {
                 for (j in i+1..numberOfQubits-1) {
-                    RunPhaseKickback(qubits, auxiliaryQubit, [i,j], 2.0*gamma*twoLocalHamiltonianCoefficients[numberOfQubits*i+j]);
+                    RunPhaseKickback(qubits, auxiliaryQubit, [i,j], 2.0*gamma*twoLocalHamiltonianCoefficients[i*numberOfQubits+j]);
                 }
             }
         }

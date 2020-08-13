@@ -8,6 +8,8 @@ using System;
 using Microsoft.Quantum.QAOA.QaoaHybrid;
 using Xunit;
 using Microsoft.Quantum.QAOA.Jupyter;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Assert = Xunit.Assert;
 
 namespace Microsoft.Quantum.QAOA.JupyterTests
 {
@@ -24,10 +26,10 @@ namespace Microsoft.Quantum.QAOA.JupyterTests
 
             var numberOfIterations = 50;
             var p = 2;
-            double[] oneLocalHamiltonianCoefficients = new Double[] { 0, 0 };
-            double[] twoLocalHamiltonianCoefficients = new Double[]{ 0, 1, 0, 0};
+            var oneLocalHamiltonianCoefficients = new double[] { 0, 0 };
+            var twoLocalHamiltonianCoefficients = new double[] { 0, 1, 0, 0};
 
-            ProblemInstance simpleMaxCut = new ProblemInstance(oneLocalHamiltonianCoefficients, twoLocalHamiltonianCoefficients);
+            var simpleMaxCut = new ProblemInstance(oneLocalHamiltonianCoefficients, twoLocalHamiltonianCoefficients);
 
             var args = JsonConvert.SerializeObject(new HybridQaoaRunMagic.Arguments
             {
@@ -37,12 +39,19 @@ namespace Microsoft.Quantum.QAOA.JupyterTests
             });
 
             var result = await magic.Run(args, channel);
-            var optimalSolution = result.Output as OptimalSolution;
+            var optimalSolution = result.Output as Solution;
             Assert.Equal(ExecuteStatus.Ok, result.Status);
-            string optimizationResult1 = "01";
-            string optimizationResult2 = "10";
+            var optimizationResult1 = new[] {false, true};
+            var optimizationResult2 = new[] {true, false};
 
-            Assert.True(optimalSolution.OptimalVector.Equals(optimizationResult1) || optimalSolution.OptimalVector.Equals(optimizationResult2), "Hybrid QAOA produced incorrect result.");
+            if (optimalSolution.SolutionVector[0] == false)
+            {
+                CollectionAssert.AreEqual(optimalSolution.SolutionVector, optimizationResult1, "Hybrid QAOA produced incorrect result when running magic.");
+            }
+            else
+            {
+                CollectionAssert.AreEqual(optimalSolution.SolutionVector, optimizationResult2, "Hybrid QAOA produced incorrect result when running magic.");
+            }
         }
     }
         

@@ -24,8 +24,8 @@ namespace Microsoft.Quantum.QAOA.HybridQaoaTests
             var (magic, channel) = Init();
             Assert.Equal("%qaoa.hybridqaoa.create.problem.instance", magic.Name);
 
-            double[] oneLocalHamiltonianCoefficients = new Double[] { 0, 0 };
-            double[] twoLocalHamiltonianCoefficients = new Double[]{ 0, 1, 0, 0};
+            var oneLocalHamiltonianCoefficients = new double[] {0, 0};
+            var twoLocalHamiltonianCoefficients = new double[] {0, 1, 0, 0};
 
             var args = JsonConvert.SerializeObject(new HybridQaoaProblemInstanceMagic.Arguments
             {

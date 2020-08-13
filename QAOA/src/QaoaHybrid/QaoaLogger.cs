@@ -1,6 +1,8 @@
 ﻿// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+using System.Linq;
+
 namespace Microsoft.Quantum.QAOA.QaoaHybrid
 {
     using System;
@@ -17,37 +19,41 @@ namespace Microsoft.Quantum.QAOA.QaoaHybrid
             this.logger = new StreamWriter("hybrid_qaoa_log_" + DateTime.Now.ToString("yyyy-dd-M--HH-mm-ss") + ".txt", true);
         }
 
-        /// # Summary
+        /// <summary>
         /// Writes current values of the best fidelity and the best solution vector to a file.
-        ///
-        /// # Input
-        /// ## beta
+        /// </summary>
+        /// <param name="beta">
         /// Best beta vector so far.
-        /// ## gamma
+        /// </param>
+        /// <param name="gamma">
         /// Best gamma vector so far.
-        /// ## bestHamiltonian
+        /// </param>
+        /// <param name="bestHamiltonian">
         /// Best value of a Hamiltonian so far.
-        /// ## bestVector
+        /// </param>
+        /// <param name="bestVector">
         /// Best solution vector that generates the above value of a Hamiltonian  so far.
-        public void LogCurrentBestSolution(QArray<double> beta, QArray<double> gamma, double bestHamiltonian, string bestVector)
+        /// </param>
+        public void LogCurrentBestSolution(QArray<double> beta, QArray<double> gamma, double bestHamiltonian, bool[] bestVector)
         {
 
                 this.logger.WriteLine("Current beta vector:");
                 this.logger.WriteLine(beta);
                 this.logger.WriteLine("Current gamma vector:");
                 this.logger.WriteLine(gamma);
-                this.logger.WriteLine("Current best fidelity");
+                this.logger.WriteLine("Current best expected value of a Hamiltonian:");
                 this.logger.WriteLine(bestHamiltonian);
-                this.logger.WriteLine("Current best string");
-                this.logger.WriteLine(bestVector);
+                this.logger.WriteLine("Current best solution vector:");
+                var bestSolutionVector = string.Join(", ", bestVector.Select(x => x.ToString()));
+                this.logger.WriteLine("[" + bestSolutionVector + "]");
         }
 
-        /// # Summary
+        /// <summary>
         /// Writes to a file whether an optimization finished successfully.
-        ///
-        /// # Input
-        /// ## success
-        /// A flag that indiciates whether an optimization finished successfully.
+        /// </summary>
+        /// <param name="success">
+        /// A flag that indicates whether an optimization finished successfully.
+        /// </param>
         public void LogSuccess(bool success)
         {
                 this.logger.WriteLine("Was optimization successful?");
@@ -56,8 +62,9 @@ namespace Microsoft.Quantum.QAOA.QaoaHybrid
 
         }
 
-        /// # Summary
+        /// <summary>
         /// Closes a logger.
+        /// </summary>
         public void Close()
         {
             this.logger.Close();

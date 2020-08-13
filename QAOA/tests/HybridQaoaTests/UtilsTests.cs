@@ -18,17 +18,19 @@ namespace Microsoft.Quantum.QAOA.HybridQaoaTests
             bool[] boolsArray3 = { false, false, false };
             bool[] boolsArray4 = { false, true, true };
 
-            List<bool[]> listOfBools = new List<bool[]>();
-            listOfBools.Add(boolsArray1);
-            listOfBools.Add(boolsArray3);
-            listOfBools.Add(boolsArray2);
-            listOfBools.Add(boolsArray4);
+            var listOfBools = new List<bool[]>
+            {
+                boolsArray1,
+                boolsArray3,
+                boolsArray2,
+                boolsArray4
+            };
 
-            string expectedResult = "001";
+            var expectedResult = new[] {false, false, true};
 
-            string result = Utils.GetModeFromBoolList(listOfBools);
+            var result = Utils.GetModeFromBoolList(listOfBools);
 
-            Assert.AreEqual(expectedResult, result, "Mode bool string not found correctly.");
+            CollectionAssert.AreEqual(expectedResult, result, "Mode bool string not found correctly.");
 
 
         }
@@ -36,11 +38,11 @@ namespace Microsoft.Quantum.QAOA.HybridQaoaTests
         [TestMethod]
         public void BoolStringFromBoolArrayTest()
         {
-            bool[] boolsArray = { false, false, true };
+            var boolsArray = new [] { false, false, true };
 
-            string expectedResult = "001";
+            var expectedResult = "001";
 
-            string result = Utils.GetBoolStringFromBoolArray(boolsArray);
+            var result = Utils.GetBoolStringFromBoolArray(boolsArray);
 
             Assert.AreEqual(expectedResult, result, "Bool string not created correctly.");
 

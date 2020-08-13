@@ -32,7 +32,7 @@ namespace Microsoft.Quantum.QAOA.Jupyter
             public int NumberOfIterations { get; set; }
 
             /// <summary>
-            /// Depth of a QAOA circuit.
+            /// A parameter related to the depth of a QAOA circuit.
             /// </summary>
             [JsonProperty(PropertyName = "p")]
             public int p { get; set; }
@@ -87,7 +87,7 @@ namespace Microsoft.Quantum.QAOA.Jupyter
         }
     }
 
-        public class HybridQaoaProblemInstanceMagic : MagicSymbol
+    public class HybridQaoaProblemInstanceMagic : MagicSymbol
         {
             public HybridQaoaProblemInstanceMagic()
             {
@@ -106,16 +106,16 @@ namespace Microsoft.Quantum.QAOA.Jupyter
                 /// Coefficents for one-local Hamiltonian terms.
                 /// </summary>
                 [JsonProperty(PropertyName = "one_local_hamiltonian_coefficients")]
-                public Double[] OneLocalHamiltonianCoefficients { get; set; }
+                public double[] OneLocalHamiltonianCoefficients { get; set; }
 
                 /// <summary>
                 /// Coefficents for one-local Hamiltonian terms.
                 /// </summary>
                 [JsonProperty(PropertyName = "two_local_hamiltonian_coefficients")]
-                public Double[] TwoLocalHamiltonianCoefficients { get; set; }
+                public double[] TwoLocalHamiltonianCoefficients { get; set; }
 
                 /// <summary>
-                /// Depth of a QAOA circuit.
+                /// Size of the combinatorial problem in bits.
                 /// </summary>
                 [JsonProperty(PropertyName = "problem_size_in_bits")]
                 public int ProblemSizeInBits { get; set; }
@@ -135,7 +135,7 @@ namespace Microsoft.Quantum.QAOA.Jupyter
 
                 var args = JsonConvert.DeserializeObject<Arguments>(input);
 
-                ProblemInstance problemInstance = new ProblemInstance(args.OneLocalHamiltonianCoefficients, args.TwoLocalHamiltonianCoefficients);
+                var problemInstance = new ProblemInstance(args.OneLocalHamiltonianCoefficients, args.TwoLocalHamiltonianCoefficients);
 
                 return problemInstance.ToExecutionResult();
             }

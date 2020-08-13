@@ -5,6 +5,9 @@ namespace Microsoft.Quantum.QAOA {
 
     open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Intrinsic;
+    open Microsoft.Quantum.Measurement;
+    open Microsoft.Quantum.Arrays;
+    open Microsoft.Quantum.Convert;
 
 
     /// # Summary
@@ -38,8 +41,7 @@ namespace Microsoft.Quantum.QAOA {
                 EvolveWithObjectiveHamiltonian(qubits, gamma[i], oneLocalHamiltonianCoefficients, twoLocalHamiltonianCoefficients);
                 EvolveWithMixingHamiltonian(qubits, beta[i]);
             }
-            set result = MeasureAllAndReset(qubits);                
+            return ResultArrayAsBoolArray(ForEach(MResetZ, qubits));               
         }
-        return result;
     }
 }

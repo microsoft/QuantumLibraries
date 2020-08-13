@@ -5,33 +5,35 @@ namespace Microsoft.Quantum.QAOA.QaoaHybrid
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Text;
 
     public class Utils
     {
 
-        public struct FreeParamsVector
+        public struct FreeParameters
         {
-            public double[] beta;
-            public double[] gamma;
+            public double[] Beta;
+            public double[] Gamma;
         }
 
-        /// # Summary
+        /// <summary>
         /// Returns a vector of random doubles in a range from 0 to maximum.
-        ///
-        /// # Input
-        /// ## length
+        /// </summary>
+        /// <param name="length">
         /// Length of a random vector.
-        /// ## maximum
+        /// </param>
+        /// <param name="maximumValue">
         /// Maximum value of a random double.
-        /// 
-        /// # Output
+        /// </param>
+        /// <returns>
         /// A random vector of doubles.
+        /// </returns>
         public static double[] GetRandomVector(int length, double maximumValue)
         {
             var rand = new Random();
             double[] randomVector = new double[length];
-            for (int i = 0; i < length; i++)
+            for (var i = 0; i < length; i++)
             {
                 randomVector[i] = maximumValue * rand.NextDouble();
             }
@@ -39,21 +41,20 @@ namespace Microsoft.Quantum.QAOA.QaoaHybrid
             return randomVector;
         }
 
-        /// # Summary
+        /// <summary>
         /// Return the most common boolean string from a list of boolean values.
-        ///
-        /// # Input
-        /// ## list
+        /// </summary>
+        /// <param name="list">
         /// List of boolean values.
-        /// 
-        /// # Output
+        /// </param>
+        /// <returns>
         /// The most common boolean string.
-        public static string GetModeFromBoolList(List<bool[]> list)
+        /// </returns>
+        public static bool[] GetModeFromBoolList(List<bool[]> list)
         {
-            Dictionary<string, int> counter = new Dictionary<string, int>();
-            foreach (bool[] boolArray in list)
+            var counter = new Dictionary<string, int>();
+            foreach (var boolString in list.Select(GetBoolStringFromBoolArray))
             {
-                string boolString = GetBoolStringFromBoolArray(boolArray);
                 if (counter.ContainsKey(boolString))
                 {
                     counter[boolString] += 1;
@@ -62,62 +63,60 @@ namespace Microsoft.Quantum.QAOA.QaoaHybrid
                 {
                     counter[boolString] = 1;
                 }
-
             }
-            int maximum = 0;
+
+            var maximum = 0;
             string result = null;
-            foreach (string key in counter.Keys)
+            foreach (var key in counter.Keys.Where(key => counter[key] > maximum))
             {
-                if (counter[key] > maximum)
-                {
-                    maximum = counter[key];
-                    result = key;
-                }
+                maximum = counter[key];
+                result = key;
             }
 
-            return result;
+            return result.Select(chr => chr == '1').ToArray();
         }
 
-        /// # Summary
+        /// <summary>
         /// Converts an array of bools to a boolean string.
-        ///
-        /// # Input
-        /// ## boolArray
+        /// </summary>
+        /// <param name="boolArray">
         /// An array of bools.
-        /// 
-        /// # Output
+        /// </param>
+        /// <returns>
         /// A boolean string.
+        /// </returns>
         public static string GetBoolStringFromBoolArray(bool[] boolArray)
         {
-            System.Text.StringBuilder sb = new StringBuilder();
-            foreach (bool b in boolArray)
+            var sb = new StringBuilder();
+            foreach (var b in boolArray)
             {
                 sb.Append(b ? "1" : "0");
             }
+
             return sb.ToString();
         }
 
-        /// # Summary
+        /// <summary>
         /// Converts concatenated beta and gamma vectors into separate beta and gamma vector.
-        ///
-        /// # Input
-        /// ## bigfreeParamsVector
+        /// </summary>
+        /// <param name="bigFreeParamsVector">
         /// Concatenated beta and gamma vectors.
-        ///
-        /// # Output
-        /// FreeParamsVector that contains beta and gamma vectors.
-        ///
-        /// # Remarks
+        /// </param>
+        /// <returns>
+        /// FreeParameters that contains beta and gamma vectors.
+        /// </returns>
+        /// <remarks>
         /// Useful for getting beta and gamma vectors from a concatenated vector inside the optimized function.
-        public static FreeParamsVector ConvertVectorIntoHalves(double[] bigfreeParamsVector)
+        /// </remarks>
+        public static FreeParameters ConvertVectorIntoHalves(double[] bigFreeParamsVector)
         {
-            int size = bigfreeParamsVector.Length;
-            int vectorTermsNumber = size / 2;
-            FreeParamsVector freeParamsVector = new FreeParamsVector
+            var size = bigFreeParamsVector.Length;
+            var vectorTermsNumber = size / 2;
+            var freeParamsVector = new FreeParameters
             {
 
-                beta = bigfreeParamsVector[0..vectorTermsNumber],
-                gamma = bigfreeParamsVector[vectorTermsNumber..(2*vectorTermsNumber)],
+                Beta = bigFreeParamsVector[0..vectorTermsNumber],
+                Gamma = bigFreeParamsVector[vectorTermsNumber..(2 * vectorTermsNumber)],
 
             };
 

@@ -42,30 +42,4 @@ namespace Microsoft.Quantum.Tests {
             ResetAll(qubits);
         }
     }
-
-    @Test("QuantumSimulator")
-    operation MeasureAllAndResetTest() : Unit {
-        let numberOfQubits = 4;
-        let complexOne = Complex(1.0, 0.0);
-        let complexZero = Complex(0.0, 0.0);
-
-        using (qubits = Qubit[numberOfQubits]) {
-            X(qubits[0]);
-            X(qubits[2]);
-            let result = MeasureAllAndReset(qubits);
-
-            Fact(result[0], "Expected |1> state.");
-            Fact(not result[1], "Expected |0> state.");
-            Fact(result[2], "Expected |1> state.");
-            Fact(not result[3], "Expected |0> state.");
-
-            AssertQubit(Zero, qubits[0]);
-            AssertQubit(Zero, qubits[1]);
-            AssertQubit(Zero, qubits[2]);
-            AssertQubit(Zero, qubits[3]);
-
-        }
-
-    }
-
 }
