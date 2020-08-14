@@ -18,7 +18,7 @@ namespace Microsoft.Quantum.Tests {
             let coeffs = DrawRandomInt(2, 5002);
             let bitsPrecision = DrawRandomInt(1, 31);
             let barHeight = 2^(bitsPrecision) - 1;
-            let coefficients = DrawMany(DrawRandomDouble, coeffs, (0.0, 1.0));
+            mutable coefficients = DrawMany(DrawRandomDouble, coeffs, (0.0, 1.0));
             Message($"Test case coeffs {coeffs}, bitsPrecision {bitsPrecision}");
             // This avoids the case where coefficient are all zeros.
             let rnd = DrawRandomInt(0, coeffs - 1);

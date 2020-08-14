@@ -99,7 +99,7 @@ namespace Microsoft.Quantum.Tests {
         for (numQubits in 2..5) {
             for (round in 1..5) {
                 // TODO: replace with BigUniform.
-                let func = IntAsBigInt(DrawRandomInt(2^(2^numQubits) - 1));
+                let func = IntAsBigInt(DrawRandomInt(0, 2^(2^numQubits) - 1));
                 let truthValues = SizeAdjustedTruthTable(BigIntAsBoolArray(func), numQubits);
 
                 using ((controls, target) = (Qubit[numQubits], Qubit())) {
@@ -126,7 +126,7 @@ namespace Microsoft.Quantum.Tests {
         for (numQubits in 2..5) {
             for (round in 1..5) {
                 // TODO: replace with BigUniform.
-                let func = IntAsBigInt(DrawRandomInt(2^(2^numQubits) - 1));
+                let func = IntAsBigInt(DrawRandomInt(0, 2^(2^numQubits) - 1));
                 let truthValues = SizeAdjustedTruthTable(BigIntAsBoolArray(func), numQubits);
 
                 using ((controls, control, target) = (Qubit[numQubits], Qubit(), Qubit())) {
@@ -161,7 +161,7 @@ namespace Microsoft.Quantum.Tests {
         for (numQubits in 2..5) {
             for (round in 1..5) {
                 // TODO: replace with BigUniform.
-                let func = IntAsBigInt(DrawRandomInt(2^(2^numQubits) - 1));
+                let func = IntAsBigInt(DrawRandomInt(0, 2^(2^numQubits) - 1));
                 let truthValues = SizeAdjustedTruthTable(BigIntAsBoolArray(func), numQubits);
 
                 using ((controls, target, copy) = (Qubit[numQubits], Qubit(), Qubit())) {

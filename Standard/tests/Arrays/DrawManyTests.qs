@@ -4,6 +4,7 @@
 namespace Microsoft.Quantum.Arrays {
     open Microsoft.Quantum.Diagnostics;
     open Microsoft.Quantum.Math;
+    open Microsoft.Quantum.Random;
 
     @Test("QuantumSimulator")
     operation CheckDrawMany() : Unit {
