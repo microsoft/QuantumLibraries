@@ -7,11 +7,11 @@ namespace Microsoft.Quantum.Arrays {
 
     @Test("QuantumSimulator")
     operation CheckDrawMany() : Unit {
-        let samples = DrawMany(RandomInt, 20, 10);
+        let samples = DrawMany(DrawRandomInt, 20, (0, 29));
         EqualityFactI(20, Length(samples), "Wrong number of samples returned.");
 
         for (sample in samples) {
-            Fact(0 <= sample and sample < 20, "Sample returned by DrawMany was out of range.");
+            Fact(0 <= sample and sample < 30, "Sample returned by DrawMany was out of range.");
         }
     }
 
