@@ -3,7 +3,12 @@
 
 namespace Microsoft.Quantum.QAOA.QaoaHybrid
 {
-
+    /// <summary>
+    /// This class stores a solution that is found by a hybrid QAOA. It includes a boolean array that encodes the solution, a corresponding expected value of the objective function Hamiltonian and corresponding beta and gamma parameters that are input to a QAOA.
+    /// </summary>
+    /// <remarks>
+    /// Note that given the nature of a QAOA and a hybrid QAOA, a solution produced by the algorithm is not necessarily feasible and not necessarily optimal.
+    /// </remarks>
     public class Solution
     {
 

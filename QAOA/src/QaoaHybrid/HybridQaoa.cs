@@ -11,6 +11,10 @@ namespace Microsoft.Quantum.QAOA.QaoaHybrid
     using Microsoft.Quantum.QAOA;
     using Microsoft.Quantum.Simulation.Core;
     using Microsoft.Quantum.Simulation.Simulators;
+
+    /// <summary>
+    /// This class runs a hybrid (quantum-classical) QAOA given an instance of a combinatorial optimization problem encoded into a 2-local Hamiltonian. The classical part is used for optimizing QAOA input parameters and is implemented using the Cobyla optimizer. QAOA input parameters can be optionally specified by a user and they will be treated as a starting point for optimization. Otherwise, input parameters are initialized randomly (possibly many times, as specified by the numberOfRandomStartingPoints variable).
+    /// </summary>
     public class HybridQaoa
     {
         private Utils.FreeParameters freeParameters;

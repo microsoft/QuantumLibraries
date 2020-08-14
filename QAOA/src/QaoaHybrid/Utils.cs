@@ -8,6 +8,9 @@ namespace Microsoft.Quantum.QAOA.QaoaHybrid
     using System.Linq;
     using System.Text;
 
+    /// <summary>
+    /// This class provides auxiliary methods for a hybrid QAOA.
+    /// </summary>
     public class Utils
     {
 

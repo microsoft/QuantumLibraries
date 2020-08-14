@@ -9,6 +9,9 @@ namespace Microsoft.Quantum.QAOA.QaoaHybrid
     using System.IO;
     using Microsoft.Quantum.Simulation.Core;
 
+    /// <summary>
+    /// This class provides a simple capability for logging intermediate steps of a hybrid QAOA to a text file.
+    /// </summary>
     class QaoaLogger
     {
         private readonly StreamWriter logger;

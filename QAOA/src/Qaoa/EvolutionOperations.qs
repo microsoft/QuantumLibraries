@@ -14,11 +14,8 @@ namespace Microsoft.Quantum.QAOA {
     /// Qubits that will be transformed by a unitary.
     /// ## beta
     /// Vector of coefficents for the unitary based on the mixing Hamiltonian.
-    ///
     /// # References
     /// This implementation in inspired by https://github.com/stephenjordan/qaoa_tsp.
-
-
     operation EvolveWithMixingHamiltonian(qubits: Qubit[], beta: Double) : Unit is Adj + Ctl {
         ApplyToEachCA(R(PauliX, -2.0 * beta, _), qubits);
     }
@@ -35,10 +32,8 @@ namespace Microsoft.Quantum.QAOA {
     /// Array of 1-local coefficents of the objective function Hamiltonian.
     /// ## twoLocalHamiltonianCoefficients
     /// Array of 2-local coefficents of the objective function Hamiltonian.
-    ///
     /// # References
     /// This implementation in inspired by https://github.com/stephenjordan/qaoa_tsp.
-
     operation EvolveWithObjectiveHamiltonian(qubits: Qubit[], gamma: Double, oneLocalHamiltonianCoefficients: Double[], twoLocalHamiltonianCoefficients: Double[]) : Unit is Adj + Ctl{
         let numberOfQubits = Length(qubits);
         using (auxiliaryQubit = Qubit()) {
