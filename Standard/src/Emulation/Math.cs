@@ -69,7 +69,7 @@ namespace Microsoft.Quantum.Standard.Emulation
         }
 
         public BinomialDistribution(long nSamples, double successProbability)
-        : this(nSamples, successProbability, new Random())
+        : this(nSamples, successProbability, new System.Random())
         { }
 
         public long NextSample()
