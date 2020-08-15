@@ -17,14 +17,12 @@ namespace Microsoft.Quantum.QAOA.QaoaHybrid
     /// </summary>
     public class HybridQaoa
     {
-        private Utils.FreeParameters freeParameters;
         private readonly int numberOfIterations;
         private readonly int p;
         private readonly ProblemInstance problemInstance;
-        private Solution solution;
-        private readonly int numberOfRandomStartingPoints;
-        private readonly QaoaLogger logger;
         private readonly bool shouldLog;
+        private Solution solution;
+        private QaoaLogger logger;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="HybridQaoa"/> class.
@@ -38,35 +36,16 @@ namespace Microsoft.Quantum.QAOA.QaoaHybrid
         /// <param name="problemInstance">
         /// An object that describes a combinatorial optimization problem to be solved by the algorithm.
         /// </param>
-        /// <param name="numberOfRandomStartingPoints">
-        /// A number of times the hybrid QAOA will be ran with randomly initiated values of beta and gamma. The bigger the number, the lower the chance of getting a solution that is a local minimum.
-        /// </param>
         /// <param name="shouldLog">
         /// A flag that specifies whether a log from the hybrid QAOA should be saved in a text file.
         /// </param>
-        /// <param name="initialBeta">
-        /// A user-defined initial value of beta parameters.
-        /// </param>
-        /// <param name="initialGamma">
-        /// A user-defined initial value of gamma parameters.
-        /// </param>
-        public HybridQaoa(int numberOfIterations, int p, ProblemInstance problemInstance, int numberOfRandomStartingPoints = 1, bool shouldLog = false, double[] initialBeta = null, double[] initialGamma = null)
+        public HybridQaoa(int numberOfIterations, int p, ProblemInstance problemInstance, bool shouldLog = false)
         {
-
             this.numberOfIterations = numberOfIterations;
             this.p = p;
             this.problemInstance = problemInstance;
-            this.freeParameters.Beta = initialBeta;
-            this.freeParameters.Gamma = initialGamma;
-            this.solution = new Solution(null, double.MaxValue, null, null);
-            this.numberOfRandomStartingPoints = numberOfRandomStartingPoints;
             this.shouldLog = shouldLog;
-            if (shouldLog)
-            {
-                this.logger = new QaoaLogger();
-            }
         }
-
 
         /// <summary>
         /// Calculates the value of the cost function based on costs provided.
@@ -187,34 +166,15 @@ namespace Microsoft.Quantum.QAOA.QaoaHybrid
         }
 
         /// <summary>
-        /// We create beta and gamma vectors. If the user provided their set of parameters, we use them for the first run. Otherwise, we use randomly generated parameters.
+        /// We create random beta and gamma vectors.
         /// </summary>
         /// <returns>
         /// Initialized beta and gamma vectors concatenated.
         /// </returns>
-        private double[] SetUpFreeParameters()
+        private double[] SetUpRandomFreeParameters()
         {
-            double[] betaCoefficients;
-            if (this.freeParameters.Beta != null)
-            {
-                betaCoefficients = this.freeParameters.Beta;
-                this.freeParameters.Beta = null;
-            }
-            else
-            {
-                betaCoefficients = Utils.GetRandomVector(this.p, Math.PI);
-            }
-
-            double[] gammaCoefficients;
-            if (this.freeParameters.Gamma != null)
-            {
-                gammaCoefficients = this.freeParameters.Gamma;
-                this.freeParameters.Gamma = null;
-            }
-            else
-            {
-                gammaCoefficients = Utils.GetRandomVector(this.p, 2 * Math.PI);
-            }
+            var betaCoefficients = Utils.GetRandomVector(this.p, Math.PI);
+            var gammaCoefficients = Utils.GetRandomVector(this.p, 2 * Math.PI);
 
             return betaCoefficients.Concat(gammaCoefficients).ToArray();
         }
@@ -222,26 +182,34 @@ namespace Microsoft.Quantum.QAOA.QaoaHybrid
         /// <summary>
         /// Uses a classical optimizer to change beta and gamma parameters so that the objective function is minimized. The optimization is performed some number of times to decrease the chance of getting stuck in a local minimum.
         /// </summary>
+        /// <param name="numberOfRandomStartingPoints">
+        /// A number of times the hybrid QAOA will be ran with randomly initiated values of beta and gamma. The bigger the number, the lower the chance of getting a solution that is a local minimum.
+        /// </param>
         /// <returns>
         /// Optimal solution to the optimization problem input by the user.
         /// </returns>
         /// <remarks>
         /// Currently used optimizer is Cobyla which is a gradient-free optimization technique.
-        /// The objective function Hamiltonian is based on Z operators, the range of values in the gamma vector is 0 <= beta_i <= 2PI.
+        /// The objective function Hamiltonian is based on Z operators, the range of values in the beta vector is 0 <= beta_i <= PI, the range of values in the gamma vector is 0 <= beta_i <= 2PI.
         /// </remarks>
-        public Solution RunOptimization()
+        public Solution RunOptimization(int numberOfRandomStartingPoints)
         {
+            if (this.shouldLog)
+            {
+                this.logger = new QaoaLogger();
+            }
+
+            this.solution = new Solution(null, double.MaxValue, null, null);
 
             Func<double[], double> objectiveFunction = this.CalculateObjectiveFunction;
 
             var optimizerObjectiveFunction = new NonlinearObjectiveFunction(2 * this.p, objectiveFunction);
-
             var constraints = this.GenerateConstraints();
+            var cobyla = new Cobyla(optimizerObjectiveFunction, constraints);
 
-            for (int i = 0; i < this.numberOfRandomStartingPoints; i++)
+            for (int i = 0; i < numberOfRandomStartingPoints; i++)
             {
-                var cobyla = new Cobyla(optimizerObjectiveFunction, constraints);
-                var freeParameters = this.SetUpFreeParameters();
+                var freeParameters = this.SetUpRandomFreeParameters();
                 var success = cobyla.Minimize(freeParameters);
 
                 if (this.shouldLog)
@@ -252,6 +220,48 @@ namespace Microsoft.Quantum.QAOA.QaoaHybrid
 
             if (this.shouldLog)
             {
+                this.logger.Close();
+            }
+
+            return this.solution;
+        }
+
+        /// <summary>
+        /// Uses a classical optimizer to change beta and gamma parameters so that the objective function is minimized. Initial beta and gamma parameters are provided by a user.
+        /// </summary>
+        /// <param name="initialBeta">
+        /// A user-defined initial value of beta parameters.
+        /// </param>
+        /// <param name="initialGamma">
+        /// A user-defined initial value of gamma parameters.
+        /// </param>
+        /// <returns>
+        /// Optimal solution to the optimization problem input by the user.
+        /// </returns>
+        /// <remarks>
+        /// Currently used optimizer is Cobyla which is a gradient-free optimization technique.
+        /// The objective function Hamiltonian is based on Z operators, the range of values in the beta vector is 0 <= beta_i <= PI, the range of values in the gamma vector is 0 <= beta_i <= 2PI.
+        /// </remarks>
+        public Solution RunOptimization(double[] initialBeta, double[] initialGamma)
+        {
+            if (this.shouldLog)
+            {
+                this.logger = new QaoaLogger();
+            }
+
+            this.solution = new Solution(null, double.MaxValue, null, null);
+
+            Func<double[], double> objectiveFunction = this.CalculateObjectiveFunction;
+            var optimizerObjectiveFunction = new NonlinearObjectiveFunction(2 * this.p, objectiveFunction);
+            var constraints = this.GenerateConstraints();
+
+            var cobyla = new Cobyla(optimizerObjectiveFunction, constraints);
+            var freeParameters = initialBeta.Concat(initialGamma).ToArray();
+            var success = cobyla.Minimize(freeParameters);
+
+            if (this.shouldLog)
+            {
+                this.logger.LogSuccess(success);
                 this.logger.Close();
             }
 
