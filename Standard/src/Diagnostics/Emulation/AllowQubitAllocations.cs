@@ -47,7 +47,7 @@ namespace Microsoft.Quantum.Diagnostics
                             if (nQubitsAllocated > nQubitsAllowed)
                             {
                                 throw new ExecutionFailException(
-                                    $"{nQubitsAllocated} were allocated, but at most {nQubitsAllowed} are allowed:\n{message}."
+                                    $"{nQubitsAllocated} qubit(s) were allocated, but at most {nQubitsAllowed} qubit(s) are allowed:\n{message}."
                                 );
                             }
                         },
