@@ -8,6 +8,7 @@ using System.Collections.Immutable;
 using Microsoft.Quantum.Simulation.Common;
 using Microsoft.Quantum.Simulation.Core;
 using Newtonsoft.Json;
+using static NumSharp.Slice;
 
 namespace Microsoft.Quantum.Diagnostics.Emulation
 {    

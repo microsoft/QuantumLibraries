@@ -34,11 +34,11 @@ namespace Microsoft.Quantum.Diagnostics
                 Simulator = m as SimulatorBase;
             }
 
-            public override Func<(long, IUnitary), QVoid> Body => _args =>
+            public override Func<(long, IUnitary, string), QVoid> Body => _args =>
             {
                 if (Simulator == null) return QVoid.Instance;
 
-                var (nTimes, op) = _args;
+                var (nTimes, op, message) = _args;
                 var callStack = ImmutableStack<string>.Empty;
                 var callSites = ImmutableList<ImmutableStack<string>>.Empty;
 
@@ -72,7 +72,7 @@ namespace Microsoft.Quantum.Diagnostics
                                 });
                                 failed = true;
                                 throw new ExecutionFailException(
-                                    $"Operation {op.FullName} was called more than the allowed {nTimes} times."
+                                    $"Operation {op.FullName} was called more than the allowed {nTimes} times:\n{message}"
                                 );
                             }
                         }
@@ -97,7 +97,7 @@ namespace Microsoft.Quantum.Diagnostics
                 return QVoid.Instance;
             };
 
-            public override Func<(long, IUnitary), QVoid> AdjointBody => _args =>
+            public override Func<(long, IUnitary, string), QVoid> AdjointBody => _args =>
             {
                 if (Simulator == null) return QVoid.Instance;
 

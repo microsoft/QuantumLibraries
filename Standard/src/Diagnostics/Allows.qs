@@ -12,6 +12,8 @@ namespace Microsoft.Quantum.Diagnostics {
     /// The maximum number of times that `op` may be called.
     /// ## op
     /// An operation whose calls are to be restricted.
+    /// ## message
+    /// A message to be displayed upon failure.
     ///
     /// # Example
     /// The following snippet will fail when executed on machines which
@@ -19,7 +21,7 @@ namespace Microsoft.Quantum.Diagnostics {
     /// ```Q#
     /// using (register = Qubit[4]) {
     ///     within {
-    ///         AllowAtMostNCallsCA(3, H);
+    ///         AllowAtMostNCallsCA(3, H, "Too many calls to H.");
     ///     } apply {
     ///         // Fails since this calls H four times, rather than the
     ///         // allowed maximum of three.
@@ -32,7 +34,8 @@ namespace Microsoft.Quantum.Diagnostics {
     /// This operation may be replaced by a no-op on targets which do not
     /// support it.
     operation AllowAtMostNCallsCA<'TInput, 'TOutput>(
-        nTimes : Int, op : ('TInput => 'TOutput is Adj + Ctl)
+        nTimes : Int, op : ('TInput => 'TOutput is Adj + Ctl),
+        message : String
     )
     : Unit is Adj {
     }
@@ -45,13 +48,15 @@ namespace Microsoft.Quantum.Diagnostics {
     /// # Input
     /// ## nQubits
     /// The maximum number of qubits that may be allocated.
+    /// ## message
+    /// A message to be displayed upon failure.
     ///
     /// # Example
     /// The following snippet will fail when executed on machines which
     /// support this diagnostic:
     /// ```Q#
     /// within {
-    ///     AllowAtMostNQubits(3);
+    ///     AllowAtMostNQubits(3, "Too many qubits allocated.");
     /// } apply {
     ///     // Fails since this allocates four qubits.
     ///     using (register = Qubit[4]) {
@@ -62,7 +67,7 @@ namespace Microsoft.Quantum.Diagnostics {
     /// # Remarks
     /// This operation may be replaced by a no-op on targets which do not
     /// support it.
-    operation AllowAtMostNQubits(nQubits : Int) : Unit is Adj {
+    operation AllowAtMostNQubits(nQubits : Int, message : String) : Unit is Adj {
     }
 
 }

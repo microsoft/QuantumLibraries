@@ -32,11 +32,11 @@ namespace Microsoft.Quantum.Diagnostics
                 Simulator = m as SimulatorBase;
             }
 
-            public override Func<long, QVoid> Body => _args =>
+            public override Func<(long, string), QVoid> Body => _args =>
             {
                 if (Simulator == null) return QVoid.Instance;
 
-                var nQubitsAllowed = _args;
+                var (nQubitsAllowed, message) = _args;
                 var nQubitsAllocated = 0L;
 
                 Handlers.Push((
@@ -47,7 +47,7 @@ namespace Microsoft.Quantum.Diagnostics
                             if (nQubitsAllocated > nQubitsAllowed)
                             {
                                 throw new ExecutionFailException(
-                                    $"{nQubitsAllocated} were allocated, but at most {nQubitsAllowed} are allowed."
+                                    $"{nQubitsAllocated} were allocated, but at most {nQubitsAllowed} are allowed:\n{message}."
                                 );
                             }
                         },
@@ -68,7 +68,7 @@ namespace Microsoft.Quantum.Diagnostics
                 return QVoid.Instance;
             };
 
-            public override Func<long, QVoid> AdjointBody => _args =>
+            public override Func<(long, string), QVoid> AdjointBody => _args =>
             {
                 if (Simulator == null) return QVoid.Instance;
 
