@@ -37,7 +37,7 @@ namespace Microsoft.Quantum.Standard.Emulation
     /// </summary>
     internal class BinomialDistribution
     {
-        public Random RandomState { get; }
+        public System.Random RandomState { get; }
         public long NSamples { get; }
         public double SuccessProbability { get; }
 
@@ -53,7 +53,7 @@ namespace Microsoft.Quantum.Standard.Emulation
         public BinomialDistribution ComplementaryDistribution =>
             new BinomialDistribution(NSamples, FailureProbability, RandomState);
 
-        public BinomialDistribution(long nSamples, double successProbability, Random randomState)
+        public BinomialDistribution(long nSamples, double successProbability, System.Random randomState)
         {
             NSamples = nSamples;
             SuccessProbability = successProbability;
@@ -69,7 +69,7 @@ namespace Microsoft.Quantum.Standard.Emulation
         }
 
         public BinomialDistribution(long nSamples, double successProbability)
-        : this(nSamples, successProbability, new Random())
+        : this(nSamples, successProbability, new System.Random())
         { }
 
         public long NextSample()
