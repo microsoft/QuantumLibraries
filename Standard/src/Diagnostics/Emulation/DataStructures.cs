@@ -36,7 +36,7 @@ namespace Microsoft.Quantum.Diagnostics.Emulation
         /// </remarks>
         public NumSharp.NDArray? Data { get; set; }
 
-        public override ToString() =>
+        public override string ToString() =>
             Data == null
             ? ""
             : $"Real:\n{Data[Ellipsis, 0]}\nImag:\n{Data[Ellipsis, 1]}";
