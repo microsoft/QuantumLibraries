@@ -4,52 +4,50 @@ namespace Microsoft.Quantum.Tests {
     open Microsoft.Quantum.Arithmetic;
     open Microsoft.Quantum.Intrinsic;
     open Microsoft.Quantum.Canon;
-    open Microsoft.Quantum.Diagnostics;
+    open Microsoft.Quantum.Diagnostics as Diag;
     open Microsoft.Quantum.Arrays;
 
 
     // This file contains very simple tests that should trivially pass
     // with the intent of testing the assert and testing harness mechanisms themselves.
-    operation EmptyTest () : Unit { }
+    operation EmptyTest() : Unit { }
 
-    operation PreparationTest () : Unit {
+    operation PreparationTest() : Unit {
         using (qubit = Qubit()) {
-            AssertProb([PauliZ], [qubit], Zero, 1.0, $"Freshly prepared qubit was not in |0〉 state.", 1E-10);
+            Diag.AssertMeasurementProbability([PauliZ], [qubit], Zero, 1.0, $"Freshly prepared qubit was not in |0〉 state.", 1E-10);
         }
     }
 
-    operation OperationTestShouldFail () : Unit {
+    operation OperationTestShouldFail() : Unit {
         fail $"OK";
     }
 
-    function FunctionTestShouldFail () : Unit {
+    function FunctionTestShouldFail() : Unit {
         fail $"OK";
     }
 
-    function AssertEqualTestShouldFail () : Unit {
-        NearEqualityFactD(1.0, 0.0);
+    function AssertEqualTestShouldFail() : Unit {
+        Diag.NearEqualityFactD(1.0, 0.0);
     }
     
     
-    function AssertBoolArrayEqualTestShouldFail () : Unit {
-        
-        AllEqualityFactB([true, false], [false, true], $"OK");
+    function AssertBoolArrayEqualTestShouldFail() : Unit {
+        Diag.AllEqualityFactB([true, false], [false, true], $"OK");
     }
     
     
-    function AssertBoolEqualTestShouldFail () : Unit {
-        EqualityFactB(true, false, $"OK");
+    function AssertBoolEqualTestShouldFail() : Unit {
+        Diag.EqualityFactB(true, false, $"OK");
     }
     
     
-    function EqualityFactRTestShouldFail () : Unit {
-        EqualityFactR(Zero, One, $"OK");
+    function EqualityFactRTestShouldFail() : Unit {
+        Diag.EqualityFactR(Zero, One, $"OK");
     }
     
     
-    function EqualityFactITestShouldFail () : Unit {
-        
-        EqualityFactI(12, 42, $"OK");
+    function EqualityFactITestShouldFail() : Unit {
+        Diag.EqualityFactI(12, 42, $"OK");
     }
     
     
@@ -58,9 +56,9 @@ namespace Microsoft.Quantum.Tests {
     /// These tests are already performed in Solid itself, such that
     /// this operation tests whether we can reproduce that using our
     /// operation equality assertions.
-    operation SelfAdjointOperationsTest () : Unit {
+    operation SelfAdjointOperationsTest() : Unit {
         for (op in [I, X, Y, Z, H]) {
-            AssertOperationsEqualReferenced(3, ApplyToEach(op, _), ApplyToEachA(op, _));
+            Diag.AssertOperationsEqualReferenced(3, ApplyToEach(op, _), ApplyToEachA(op, _));
         }
     }
     
@@ -71,17 +69,16 @@ namespace Microsoft.Quantum.Tests {
     ///
     /// # Remarks
     /// Marked as ex-fail due to known issues with Bound.
-    operation BindSelfAdjointOperationsTestExFail () : Unit {
+    operation BindSelfAdjointOperationsTestExFail() : Unit {
         for (op in [I, X, Y, Z, H]) {
             let arr = [op, Adjoint op];
             let bound = BoundCA(arr);
-            AssertOperationsEqualReferenced(3, ApplyToEachCA(BoundCA(arr), _), ApplyToEachA(I, _));
+            Diag.AssertOperationsEqualReferenced(3, ApplyToEachCA(BoundCA(arr), _), ApplyToEachA(I, _));
         }
     }
     
     
-    operation AssertProbIntTest () : Unit {
-        
+    operation AssertProbIntTest() : Unit {        
         let theta = 0.123;
         let prob = 0.015052858190174602;
         let tolerance = 1E-09;
@@ -97,15 +94,14 @@ namespace Microsoft.Quantum.Tests {
     }
     
     
-    operation AssertPhaseTest () : Unit {
-        
+    operation AssertPhaseTest() : Unit {        
         let phase = 0.456;
         let tolerance = 1E-09;
         
         using (qubits = Qubit[1]) {
             H(qubits[0]);
             Exp([PauliZ], phase, qubits);
-            AssertPhase(phase, qubits[0], tolerance);
+            Diag.AssertPhase(phase, qubits[0], tolerance);
             ResetAll(qubits);
         }
     }

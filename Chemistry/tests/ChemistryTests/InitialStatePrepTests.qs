@@ -5,7 +5,7 @@ namespace Microsoft.Quantum.Chemistry.Tests {
     open Microsoft.Quantum.Arithmetic;
     open Microsoft.Quantum.Intrinsic;
     open Microsoft.Quantum.Canon;
-    open Microsoft.Quantum.Diagnostics;
+    open Microsoft.Quantum.Diagnostics as Diag;
     open Microsoft.Quantum.Convert;
     open Microsoft.Quantum.Chemistry.JordanWigner;
     open Microsoft.Quantum.Arrays;
@@ -109,8 +109,7 @@ namespace Microsoft.Quantum.Chemistry.Tests {
     
     
     // Prepare multiple excitations with complex weights
-    operation PrepareSparseMultiConfigurationalState4Test () : Unit {
-        
+    operation PrepareSparseMultiConfigurationalState4Test () : Unit {        
         let nQubits = 1;
         let intTest = [39, 21, 10];
         let phase = 2.453;
@@ -118,7 +117,7 @@ namespace Microsoft.Quantum.Chemistry.Tests {
         
         using (qubits = Qubit[nQubits]) {
             PrepareSparseMultiConfigurationalState(NoOp<Qubit[]>, excitations, qubits);
-            AssertPhase(-phase / 2.0, qubits[0], 1E-09);
+            Diag.AssertPhase(-phase / 2.0, qubits[0], 1E-09);
             ResetAll(qubits);
         }
     }
