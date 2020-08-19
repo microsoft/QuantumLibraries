@@ -49,12 +49,8 @@ namespace Microsoft.Quantum.Diagnostics {
     /// $$
     ///
     /// ```Q#
-    /// operation ApplyCnotToRegister(register : Qubit[]) : Unit is Adj + Ctl {
-    ///     CNOT(register[0], register[1]);
-    /// }
-    /// 
     /// operation DumpCnot() : Unit {
-    ///     Diag.DumpOperation(2, ApplyCnotToRegister);
+    ///     DumpOperation(2, ApplyToFirstTwoQubitsCA(CNOT, _));
     /// }
     /// ```
     ///

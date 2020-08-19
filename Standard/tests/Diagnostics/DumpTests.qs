@@ -10,12 +10,8 @@ namespace Microsoft.Quantum.Tests {
         Diag.DumpOperation(1, ApplyToEachCA(S, _));
     }
 
-    operation ApplyCnotToRegister(register : Qubit[]) : Unit is Adj + Ctl {
-        CNOT(register[0], register[1]);
-    }
-
     operation DumpCnot() : Unit {
-        Diag.DumpOperation(2, ApplyCnotToRegister);
+        Diag.DumpOperation(2, ApplyToFirstTwoQubitsCA(CNOT, _));
     }
 
 }
