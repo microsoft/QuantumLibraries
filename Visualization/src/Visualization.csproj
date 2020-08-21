@@ -1,25 +1,21 @@
-<Project Sdk="Microsoft.Quantum.Sdk/0.12.20082035-beta">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
-    <AssemblyName>Microsoft.Quantum.Numerics</AssemblyName>
-    <QsharpDocsGeneration>true</QsharpDocsGeneration>
-    <IncludeQsharpCorePackages>false</IncludeQsharpCorePackages>
+    <AssemblyName>Microsoft.Quantum.Standard.Visualization</AssemblyName>
+    <NoWarn>1591</NoWarn> <!-- warning regarding missing C# doc comments -->
   </PropertyGroup>
 
   <PropertyGroup>
-    <NoWarn>0162</NoWarn>
-    <RunQDocGen>True</RunQDocGen>
     <Authors>Microsoft</Authors>
-    <Description>Microsoft's Quantum numerics libraries.</Description>
+    <Description>Provides IQ# visualization support for Microsoft's Q# standard libraries.</Description>
     <Copyright>© Microsoft Corporation. All rights reserved.</Copyright>
     <PackageReleaseNotes>See: https://docs.microsoft.com/en-us/quantum/relnotes/</PackageReleaseNotes>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <PackageProjectUrl>https://github.com/Microsoft/QuantumLibraries</PackageProjectUrl>
+    <PackageProjectUrl>https://github.com/Microsoft/Quantum</PackageProjectUrl>
     <PackageIcon>qdk-nuget-icon.png</PackageIcon>
     <PackageTags>Quantum Q# Qsharp</PackageTags>
-    <NoWarn>1591</NoWarn>
-    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <GenerateDocumentationFile>false</GenerateDocumentationFile>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <EmbedAllSources>true</EmbedAllSources>
     <IncludeSymbols>true</IncludeSymbols>
@@ -28,21 +24,22 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="..\Common\DelaySign.cs" Link="Properties\DelaySign.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\..\Standard\src\Standard.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="..\Common\DelaySign.cs" Link="Properties\DelaySign.cs" />
+    <PackageReference Include="Microsoft.Quantum.Simulators" Version="0.12.20082035-beta" />
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.Quantum.IQSharp.Jupyter" Version="0.12.20082035-beta" />
+    <PackageReference Include="NumSharp" Version="0.20.5" />
   </ItemGroup>
 
   <ItemGroup>
     <None Include="..\..\Build\assets\qdk-nuget-icon.png" Pack="true" Visible="false" PackagePath="" />
   </ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Microsoft.Quantum.Simulators" Version="0.12.20082035-beta" />
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" />
-  </ItemGroup>
-
 </Project>
-

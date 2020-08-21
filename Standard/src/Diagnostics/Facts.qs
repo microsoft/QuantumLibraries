@@ -8,12 +8,6 @@ namespace Microsoft.Quantum.Diagnostics {
     open Microsoft.Quantum.Logical;
 
     /// # Summary
-    /// Internal function used to generate meaningful error messages.
-    internal function FormattedExpectation<'T>(actual : 'T, expected : 'T) : String {
-        return $"Expected: '{expected}'. Actual: '{actual}'";
-    }
-
-    /// # Summary
     /// Represents the claim that a classical floating point value has the
     /// expected value up to a given
     /// absolute tolerance.
@@ -28,7 +22,7 @@ namespace Microsoft.Quantum.Diagnostics {
     function EqualityWithinToleranceFact(actual : Double, expected : Double, tolerance : Double) : Unit {
         let delta = actual - expected;
         if (delta > tolerance or delta < -tolerance) {
-            fail FormattedExpectation(actual, expected);
+            FormattedFailure(actual, expected, "Values were not equal within tolerance.");
         }
     }
 
@@ -63,7 +57,7 @@ namespace Microsoft.Quantum.Diagnostics {
         // conditions.
         let ((reA, imA), (reE, imE)) = (actual!, expected!);
         if (AbsD(reA - reE) >= 1e-10 or AbsD(imA - imE) >= 1e-10) {
-            fail FormattedExpectation(actual, expected);
+            FormattedFailure(actual, expected, "Values were not equal within tolerance.");
         }
     }
 
@@ -95,7 +89,9 @@ namespace Microsoft.Quantum.Diagnostics {
     /// ## message
     /// Failure message string to be used when the assertion is triggered.
     function EqualityFactI(actual : Int, expected : Int, message : String) : Unit {
-        Fact(actual == expected, $"{actual} ≠ {expected}: {message}");
+        if (actual != expected) {
+            FormattedFailure(actual, expected, message);
+        }
     }
 
     /// # Summary
@@ -110,7 +106,9 @@ namespace Microsoft.Quantum.Diagnostics {
     /// ## message
     /// Failure message string to be used when the assertion is triggered.
     function EqualityFactL(actual : BigInt, expected : BigInt, message : String) : Unit {
-        Fact(actual == expected, $"{actual} ≠ {expected}: {message}");
+        if (actual != expected) {
+            FormattedFailure(actual, expected, message);
+        }
     }
 
     /// # Summary
@@ -126,7 +124,9 @@ namespace Microsoft.Quantum.Diagnostics {
     /// ## message
     /// Failure message string to be used when the assertion is triggered.
     function EqualityFactB(actual : Bool, expected : Bool, message : String) : Unit {
-        Fact(actual == expected, $"{actual} ≠ {expected}: {message}");
+        if (actual != expected) {
+            FormattedFailure(actual, expected, message);
+        }
     }
 
     /// # Summary
@@ -142,7 +142,9 @@ namespace Microsoft.Quantum.Diagnostics {
     /// ## message
     /// Failure message string to be used when the assertion is triggered.
     function EqualityFactR (actual : Result, expected : Result, message : String) : Unit {
-        Fact(actual == expected, $"{actual} ≠ {expected}: {message}");
+        if (actual != expected) {
+            FormattedFailure(actual, expected, message);
+        }
     }
 
     /// # Summary
@@ -158,7 +160,9 @@ namespace Microsoft.Quantum.Diagnostics {
     /// ## message
     /// Failure message string to be used when the assertion is triggered.
     function EqualityFactC(actual : Complex, expected : Complex, message : String) : Unit {
-        Fact(EqualC(actual, expected), $"{actual} ≠ {expected}: {message}");
+        if (actual::Real != expected::Real or actual::Imag != expected::Imag) {
+            FormattedFailure(actual, expected, message);
+        }
     }
 
     /// # Summary
@@ -174,7 +178,14 @@ namespace Microsoft.Quantum.Diagnostics {
     /// ## message
     /// Failure message string to be used when the assertion is triggered.
     function EqualityFactCP(actual : ComplexPolar, expected : ComplexPolar, message : String) : Unit {
-        Fact(EqualCP(actual, expected), $"{actual} ≠ {expected}: {message}");
+        let actualCartesian = ComplexPolarAsComplex(actual);
+        let expectedCartesian = ComplexPolarAsComplex(expected);
+        if (
+            actualCartesian::Real != expectedCartesian::Real or
+            actualCartesian::Imag != expectedCartesian::Imag
+        ) {
+            FormattedFailure(actual, expected, message);
+        }
     }
 
     /// # Summary
@@ -193,7 +204,7 @@ namespace Microsoft.Quantum.Diagnostics {
     function AllEqualityFactB(actual : Bool[], expected : Bool[], message : String) : Unit {
         let n = Length(actual);
         if (n != Length(expected)) {
-            fail message;
+            FormattedFailure(actual, expected, message);
         }
 
         Ignore(Mapped(EqualityFactB(_, _, message), Zip(actual, expected)));
@@ -215,7 +226,7 @@ namespace Microsoft.Quantum.Diagnostics {
     function AllEqualityFactI(actual : Int[], expected : Int[], message : String) : Unit {
         let n = Length(actual);
         if (n != Length(expected)) {
-            fail message;
+            FormattedFailure(actual, expected, message);
         }
 
         Ignore(Mapped(EqualityFactI(_, _, message), Zip(actual, expected)));

@@ -5,7 +5,7 @@ namespace Microsoft.Quantum.Chemistry.Tests {
     open Microsoft.Quantum.Arithmetic;
     open Microsoft.Quantum.Intrinsic;
     open Microsoft.Quantum.Canon;
-    open Microsoft.Quantum.Diagnostics;
+    open Microsoft.Quantum.Diagnostics as Diag;
     open Microsoft.Quantum.Convert;
     open Microsoft.Quantum.Chemistry.JordanWigner;
     open Microsoft.Quantum.Math;
@@ -41,7 +41,7 @@ namespace Microsoft.Quantum.Chemistry.Tests {
                             // |0> -> |0>
                             // |+> -> |->
                             Message($"Test Z Pauli on qubit {idxTest}");
-                            AssertProb([PauliZ], [testQubit], Zero, 1.0, $"Error: Test {idxTest} {idxTest} Z Pauli |0>", 1E-10);
+                            Diag.AssertMeasurementProbability([PauliZ], [testQubit], Zero, 1.0, $"Error: Test {idxTest} {idxTest} Z Pauli |0>", 1E-10);
                         }
                         elif (targetIndex == idxTest) {
                             
@@ -53,7 +53,7 @@ namespace Microsoft.Quantum.Chemistry.Tests {
                             // |0> -> i|1>
                             // |+> -> -i|->
                             Message($"Test X or Y Pauli on qubit {idxTest}");
-                            AssertProb([PauliZ], [testQubit], One, 1.0, $"Error: Test {idxTest} X or Y Pauli |0>", 1E-10);
+                            Diag.AssertMeasurementProbability([PauliZ], [testQubit], One, 1.0, $"Error: Test {idxTest} X or Y Pauli |0>", 1E-10);
                         }
                         else {
                             
@@ -61,7 +61,7 @@ namespace Microsoft.Quantum.Chemistry.Tests {
                             // |0> -> |0>
                             // |+> -> |+>
                             Message($"Test ZI Pauli on qubit {idxTest}");
-                            AssertProb([PauliZ], [testQubit], Zero, 1.0, $"Error: Test {idxTest} I Pauli |0>", 1E-10);
+                            Diag.AssertMeasurementProbability([PauliZ], [testQubit], Zero, 1.0, $"Error: Test {idxTest} I Pauli |0>", 1E-10);
                         }
                     }
                     
@@ -109,7 +109,7 @@ namespace Microsoft.Quantum.Chemistry.Tests {
                             // |0> -> |0>
                             // |+> -> |->
                             Message($"Test Z Pauli on qubit {idxTest}");
-                            AssertProb([PauliX], [testQubit], One, 1.0, $"Error: Test {idxTest} Z Pauli |+>", 1e-10);
+                            Diag.AssertMeasurementProbability([PauliX], [testQubit], One, 1.0, $"Error: Test {idxTest} Z Pauli |+>", 1e-10);
                         }
                         elif(targetIndex == idxTest){
                             // Test X Pauli
@@ -117,7 +117,7 @@ namespace Microsoft.Quantum.Chemistry.Tests {
                             // |+> -> |+>
                             if(pauliBasis == PauliX){
                                 Message($"Test X Pauli on qubit {idxTest}");
-                                AssertProb([PauliX], [testQubit], Zero, 1.0, $"Error: Test {idxTest} X Pauli |+>", 1e-10);
+                                Diag.AssertMeasurementProbability([PauliX], [testQubit], Zero, 1.0, $"Error: Test {idxTest} X Pauli |+>", 1e-10);
                             }
                                 
                             // Test Y Pauli
@@ -125,7 +125,7 @@ namespace Microsoft.Quantum.Chemistry.Tests {
                             // |+> -> -i|->
                             if(pauliBasis == PauliY){
                                 Message($"Test Y Pauli on qubit {idxTest}");
-                                AssertProb([PauliX], [testQubit], One, 1.0, $"Error: Test {idxTest} Y Pauli |+>", 1e-10);
+                                Diag.AssertMeasurementProbability([PauliX], [testQubit], One, 1.0, $"Error: Test {idxTest} Y Pauli |+>", 1e-10);
                             }
 
                         }
@@ -134,7 +134,7 @@ namespace Microsoft.Quantum.Chemistry.Tests {
                             // |0> -> |0>
                             // |+> -> |+>
                             Message($"Test I Pauli on qubit {idxTest}");
-                            AssertProb([PauliX], [testQubit], Zero, 1.0, $"Error: Test {idxTest} I Pauli |+>", 1e-10);
+                            Diag.AssertMeasurementProbability([PauliX], [testQubit], Zero, 1.0, $"Error: Test {idxTest} I Pauli |+>", 1e-10);
                         }
                     }
                     OptimizedBEXY(pauliBasisQubit[0], LittleEndian(indexRegister), targetRegister);
@@ -188,8 +188,10 @@ namespace Microsoft.Quantum.Chemistry.Tests {
     
     
     // Test phase of controlled OptimizedBEXY operator.
-    operation ControlledOptimizedBEOperatorTestHelper (pauliBasis : Pauli, targetRegisterSize : Int, targetIndex : Int) : Unit {
-        
+    operation ControlledOptimizedBEOperatorTestHelper(
+        pauliBasis : Pauli, targetRegisterSize : Int, targetIndex : Int
+    )
+    : Unit {
         let indexRegisterSize = Ceiling(Lg(IntAsDouble(targetRegisterSize)));
         
         using (pauliBasisQubit = Qubit[1]) {
@@ -202,37 +204,27 @@ namespace Microsoft.Quantum.Chemistry.Tests {
                         let testQubit = targetRegister[targetIndex];
                         
                         // Create indexRegister state.
-                        ApplyXorInPlace(targetIndex, LittleEndian(indexRegister));
+                        within {
+                            ApplyXorInPlace(targetIndex, LittleEndian(indexRegister));
                         
-                        // Initialize control in |+> state.
-                        H(controlRegister[0]);
-                        
-                        // Choose X or Y operator.
-                        if (pauliBasis == PauliX) {
-                            
-                            // Initialize testQubit state in X +1 eigenstate
-                            H(testQubit);
-                            Controlled OptimizedBEXY(controlRegister, (pauliBasisQubit[0], LittleEndian(indexRegister), targetRegister));
-                            AssertPhase(0.0, controlRegister[0], 1E-10);
-                            Adjoint Controlled OptimizedBEXY(controlRegister, (pauliBasisQubit[0], LittleEndian(indexRegister), targetRegister));
-                            H(testQubit);
+                            // Initialize control in |+> state.
+                            H(controlRegister[0]);
+
+                            // Choose X or Y operator.
+                            if (pauliBasis == PauliX) {
+                                // Initialize testQubit state in X +1 eigenstate
+                                H(testQubit);
+                                Controlled OptimizedBEXY(controlRegister, (pauliBasisQubit[0], LittleEndian(indexRegister), targetRegister));
+                            } elif (pauliBasis == PauliY) {                            
+                                // Initialize testQubit state Y +1 eigenstate
+                                X(pauliBasisQubit[0]);
+                                H(testQubit);
+                                S(testQubit);
+                                Controlled OptimizedBEXY(controlRegister, (pauliBasisQubit[0], LittleEndian(indexRegister), targetRegister));
+                            }
+                        } apply {
+                            Diag.AssertPhase(0.0, controlRegister[0], 1E-10);
                         }
-                        elif (pauliBasis == PauliY) {
-                            X(pauliBasisQubit[0]);
-                            
-                            // Initialize testQubit state Y +1 eigenstate
-                            H(testQubit);
-                            S(testQubit);
-                            Controlled OptimizedBEXY(controlRegister, (pauliBasisQubit[0], LittleEndian(indexRegister), targetRegister));
-                            AssertPhase(0.0, controlRegister[0], 1E-10);
-                            Adjoint Controlled OptimizedBEXY(controlRegister, (pauliBasisQubit[0], LittleEndian(indexRegister), targetRegister));
-                            Adjoint S(testQubit);
-                            H(testQubit);
-                            X(pauliBasisQubit[0]);
-                        }
-                        
-                        H(controlRegister[0]);
-                        Adjoint ApplyXorInPlace(targetIndex, LittleEndian(indexRegister));
                     }
                 }
             }
@@ -265,7 +257,7 @@ namespace Microsoft.Quantum.Chemistry.Tests {
                 H(targetRegister[idxTest]);
                 ApplyXorInPlace(idxTest, LittleEndian(indexRegister));
                 SelectZ(LittleEndian(indexRegister), targetRegister);
-                AssertProb([PauliX], [targetRegister[idxTest]], One, 1.0, $"Error: Test {idxTest} X Pauli |+>", 1E-10);
+                Diag.AssertMeasurementProbability([PauliX], [targetRegister[idxTest]], One, 1.0, $"Error: Test {idxTest} X Pauli |+>", 1E-10);
                 Z(targetRegister[idxTest]);
                 Adjoint ApplyXorInPlace(idxTest, LittleEndian(indexRegister));
                 H(targetRegister[idxTest]);
