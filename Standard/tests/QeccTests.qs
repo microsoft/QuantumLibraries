@@ -364,7 +364,7 @@ namespace Microsoft.Quantum.Tests {
     /// since corrections would make the output magic state
     /// less accurate, compared to post-selection on zero syndrome.
     operation KDTest () : Unit {
-        
+
         using (rm = Qubit[15]) {
             ApplyToEach(Ry(PI() / 4.0, _), rm);
             let acc = KnillDistill(rm);
@@ -377,7 +377,7 @@ namespace Microsoft.Quantum.Tests {
             AssertQubit(Zero, rm[0]);
             
             // Cases where a single magic state is wrong
-            for (idx in 0 .. 14) {
+            for (idx in [0, 8, 14]) {
                 ResetAll(rm);
                 ApplyToEach(Ry(PI() / 4.0, _), rm);
                 Y(rm[idx]);
@@ -390,20 +390,18 @@ namespace Microsoft.Quantum.Tests {
             }
             
             // Cases where two magic states are wrong
-            for (idxFirst in 0 .. 13) {
+            for ((idxFirst, idxSecond) in [(0,1), (0, 3), (0,14), (4, 13), (13, 14)]) {
                 
-                for (idxSecond in idxFirst + 1 .. 14) {
-                    ResetAll(rm);
-                    ApplyToEach(Ry(PI() / 4.0, _), rm);
-                    Y(rm[idxFirst]);
-                    Y(rm[idxSecond]);
-                    let acc1 = KnillDistill(rm);
+                ResetAll(rm);
+                ApplyToEach(Ry(PI() / 4.0, _), rm);
+                Y(rm[idxFirst]);
+                Y(rm[idxSecond]);
+                let acc1 = KnillDistill(rm);
                     
-                    // Check that the rough magic states were
-                    // successfully reset to |0〉.
-                    ApplyToEach(AssertQubit(Zero, _), Rest(rm));
-                    EqualityFactB(false, acc1, $"Distillation missed a pair error");
-                }
+                // Check that the rough magic states were
+                // successfully reset to |0〉.
+                ApplyToEach(AssertQubit(Zero, _), Rest(rm));
+                EqualityFactB(false, acc1, $"Distillation missed a pair error");
             }
             
             ResetAll(rm);

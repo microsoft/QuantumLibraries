@@ -3,27 +3,25 @@
 
 
 namespace Microsoft.Quantum.Tests {
+    open Microsoft.Quantum.Arrays;
     open Microsoft.Quantum.Intrinsic;
     open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Preparation;
     open Microsoft.Quantum.Diagnostics;
     open Microsoft.Quantum.Math;
     open Microsoft.Quantum.Convert;
+    open Microsoft.Quantum.Random;
 
     // Tests the discretization algorithm
     operation QuantumROMDiscretizationTest() : Unit {
         for(rep in 0..20){
-            let coeffs = RandomInt(5000)+2;
-            let bitsPrecision = RandomInt(30)+1;
+            let coeffs = DrawRandomInt(2, 5002);
+            let bitsPrecision = DrawRandomInt(1, 31);
             let barHeight = 2^(bitsPrecision) - 1;
-            mutable coefficients = new Double[coeffs];
+            mutable coefficients = DrawMany(DrawRandomDouble, coeffs, (0.0, 1.0));
             Message($"Test case coeffs {coeffs}, bitsPrecision {bitsPrecision}");
-            for (idx in 0..coeffs-1)
-            {
-                set coefficients w/= idx <- 1000.0 * RandomReal(2*bitsPrecision);
-            }
             // This avoids the case where coefficient are all zeros.
-            let rnd = RandomInt(coeffs);
+            let rnd = DrawRandomInt(0, coeffs - 1);
             set coefficients w/= rnd <- coefficients[rnd] + 1.0;
 
             let (oneNorm, keepCoeff, altIndex) = _QuantumROMDiscretization(bitsPrecision, coefficients);
@@ -71,11 +69,7 @@ namespace Microsoft.Quantum.Tests {
             for(nBitsPrecision in -1..-1..-2){
                 let targetError = PowD(2.0, IntAsDouble(nBitsPrecision));
                 let probtargetError = targetError / IntAsDouble(coeffs);
-                mutable coefficients = new Double[coeffs];
-                for (idx in 0..coeffs-1)
-                {
-                    set coefficients w/= idx <- RandomReal(2*32);
-                }
+                let coefficients = DrawMany(DrawRandomDouble, coeffs, (0.0, 1.0));
                 let ((nTotal, (nCoeffQubits, nGarbageQubits)), oneNorm, op) =  QuantumROM(targetError, coefficients);
                 Message($"Test case coeffs {coeffs}, bitsPrecision {nCoeffQubits}, global targetError {targetError}, probability error {probtargetError}.");
                 for (idx in 0..coeffs-1)
