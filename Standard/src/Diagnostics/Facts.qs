@@ -8,49 +8,6 @@ namespace Microsoft.Quantum.Diagnostics {
     open Microsoft.Quantum.Logical;
 
     /// # Summary
-    /// Declares that a classical condition is true.
-    ///
-    /// # Input
-    /// ## actual
-    /// The condition to be declared.
-    /// ## message
-    /// Failure message string to be printed in the case that the classical
-    /// condition is false.
-    ///
-    /// # See Also
-    /// - Microsoft.Quantum.Diagnostics.Contradiction
-    function Fact(actual : Bool, message : String) : Unit {
-        if (not actual) {
-            FormattedFailure(actual, true, message);
-        }
-    }
-
-    /// # Summary
-    /// Declares that a classical condition is false.
-    ///
-    /// # Input
-    /// ## actual
-    /// The condition to be declared.
-    /// ## message
-    /// Failure message string to be printed in the case that the classical
-    /// condition is true.
-    ///
-    /// # See Also
-    /// - Microsoft.Quantum.Diagnostics.Fact
-    ///
-    /// # Example
-    /// The following Q# code will print "Hello, world":
-    /// ```Q#
-    /// Contradiction(2 == 3, "2 is not equal to 3.");
-    /// Message("Hello, world.");
-    /// ```
-    function Contradiction(actual : Bool, message : String) : Unit {
-        if (actual) {
-            FormattedFailure(actual, false, message);
-        }
-    }
-
-    /// # Summary
     /// Represents the claim that a classical floating point value has the
     /// expected value up to a given
     /// absolute tolerance.
