@@ -6,6 +6,7 @@
 @{
     Packages = @(
         "Microsoft.Quantum.Standard",
+        "Microsoft.Quantum.Standard.Visualization",
         "Microsoft.Quantum.Chemistry",
         "Microsoft.Quantum.Numerics",
         "Microsoft.Quantum.MachineLearning"
