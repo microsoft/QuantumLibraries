@@ -13,26 +13,6 @@ namespace Microsoft.Quantum.QAOA.HybridQaoaTests
     {
 
         [TestMethod]
-        public void ConvertDataVectorToVectorsTest()
-        {
-
-            var result = Utils.ConvertVectorIntoHalves(new Double[] { 1, 2, 3, 4, 5, 6 });
-
-            var dataVectors = new Utils.FreeParameters
-            {
-                Beta = new double[] { 1, 2, 3 },
-                Gamma = new double[] { 4, 5, 6 }
-            };
-
-            var expectedResult = dataVectors;
-
-            CollectionAssert.AreEqual(expectedResult.Beta, result.Beta, "Hamiltonian beta value not calculated correctly.");
-            CollectionAssert.AreEqual(expectedResult.Gamma, result.Gamma, "Hamiltonian gamma value not calculated correctly.");
-
-        }
-
-        
-        [TestMethod]
         public void EvaluateCostFunctionTest()
         {
             ProblemInstance problemInstance = new ProblemInstance(new double[] { 1, 1, 1, 1 }, new double[] { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 });
@@ -94,8 +74,10 @@ namespace Microsoft.Quantum.QAOA.HybridQaoaTests
             var initialBeta = new double[] { 0, 0, 0 };
             var initialGamma = new double[] { 0, 0, 0 };
 
+            var qaoaParameters = new QaoaParameters(initialBeta, initialGamma);
+
             var classicalOptimization = new HybridQaoa(numberOfIterations, p, simpleMaxCut);
-            var optimalSolution = classicalOptimization.RunOptimization(initialBeta, initialGamma);
+            var optimalSolution = classicalOptimization.RunOptimization(qaoaParameters);
 
             var optimizationResult1 = new[] { false, true };
             var optimizationResult2 = new[] { true, false };

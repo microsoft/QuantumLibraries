@@ -12,7 +12,7 @@ namespace Microsoft.Quantum.QAOA.QaoaHybrid
     /// <summary>
     /// This class provides a simple capability for logging intermediate steps of a hybrid QAOA to a text file.
     /// </summary>
-    class QaoaLogger
+    class QaoaLogger : IDisposable
     {
         private readonly StreamWriter logger;
 
@@ -65,12 +65,24 @@ namespace Microsoft.Quantum.QAOA.QaoaHybrid
 
         }
 
+        protected virtual void Dispose(bool disposing)
+        {
+
+            if (disposing)
+            {
+                if (logger != null)
+                {
+                    logger.Dispose();
+                }
+            }
+        }
+
         /// <summary>
         /// Closes a logger.
         /// </summary>
-        public void Close()
+        public void Dispose()
         {
-            this.logger.Close();
+            Dispose(true);
         }
     }
 }

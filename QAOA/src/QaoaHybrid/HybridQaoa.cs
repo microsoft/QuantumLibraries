@@ -75,20 +75,20 @@ namespace Microsoft.Quantum.QAOA.QaoaHybrid
         /// To get a reasonable estimate for the expectation value of a Hamiltonian that encodes the problem, we run the QAOA many times and calculate the expectation based on solutions obtained.
         /// If the expectation of the Hamiltonian is smaller than our current best, we update our best solution to the current solution. The solution vector for the current best solution is the mode of boolean strings that we obtained from the QAOA.
         /// </summary>
-        /// <param name="bigFreeParamsVector">
+        /// <param name="concatenatedQaoaParameters">
         /// Beta and gamma vectors concatenated.
         /// </param>
         /// <returns>
         /// The expected value of a Hamiltonian that we calculated in this run.
         /// </returns>
-        private double CalculateObjectiveFunction(double[] bigFreeParamsVector)
+        private double CalculateObjectiveFunction(double[] concatenatedQaoaParameters)
         {
-            var freeParamsVector = Utils.ConvertVectorIntoHalves(bigFreeParamsVector);
+            var qaoaParameters = new QaoaParameters(concatenatedQaoaParameters);
             double hamiltonianExpectationValue = 0;
             var allSolutionVectors = new List<bool[]>();
 
-            var beta = new QArray<double>(freeParamsVector.Beta);
-            var gamma = new QArray<double>(freeParamsVector.Gamma);
+            var beta = new QArray<double>(qaoaParameters.Beta);
+            var gamma = new QArray<double>(qaoaParameters.Gamma);
 
             var oneLocalHamiltonianCoefficients = new QArray<double>(this.problemInstance.OneLocalHamiltonianCoefficients);
             var twoLocalHamiltonianCoefficients = new QArray<double>(this.problemInstance.TwoLocalHamiltonianCoefficients);
@@ -106,7 +106,7 @@ namespace Microsoft.Quantum.QAOA.QaoaHybrid
                 }
             }
 
-            this.UpdateBestSolution(hamiltonianExpectationValue, allSolutionVectors, freeParamsVector);
+            this.UpdateBestSolution(hamiltonianExpectationValue, allSolutionVectors, qaoaParameters);
 
             if (this.shouldLog)
             {
@@ -125,18 +125,17 @@ namespace Microsoft.Quantum.QAOA.QaoaHybrid
         /// <param name="allSolutionVectors">
         /// A vector of all binary solutions that were found by a QAOA.
         /// </param>
-        /// <param name="freeParameters">
-        /// A vector of beta and gamma coefficients.
+        /// <param name="qaoaParameters">
+        /// Beta and gamma coefficients.
         /// </param>
-        private void UpdateBestSolution(double hamiltonianExpectationValue, List<bool[]> allSolutionVectors, Utils.FreeParameters freeParameters)
+        private void UpdateBestSolution(double hamiltonianExpectationValue, List<bool[]> allSolutionVectors, QaoaParameters qaoaParameters)
         {
             if (hamiltonianExpectationValue < this.solution.SolutionHamiltonianValue)
             {
                 var mostProbableSolutionVectorTemp = Utils.GetModeFromBoolList(allSolutionVectors);
                 this.solution.SolutionHamiltonianValue = hamiltonianExpectationValue;
                 this.solution.SolutionVector = mostProbableSolutionVectorTemp;
-                this.solution.SolutionBeta = freeParameters.Beta;
-                this.solution.SolutionGamma = freeParameters.Gamma;
+                this.solution.SolutionQaoaParameters = qaoaParameters;
             }
         }
 
@@ -166,20 +165,6 @@ namespace Microsoft.Quantum.QAOA.QaoaHybrid
         }
 
         /// <summary>
-        /// We create random beta and gamma vectors.
-        /// </summary>
-        /// <returns>
-        /// Initialized beta and gamma vectors concatenated.
-        /// </returns>
-        private double[] SetUpRandomFreeParameters()
-        {
-            var betaCoefficients = Utils.GetRandomVector(this.p, Math.PI);
-            var gammaCoefficients = Utils.GetRandomVector(this.p, 2 * Math.PI);
-
-            return betaCoefficients.Concat(gammaCoefficients).ToArray();
-        }
-
-        /// <summary>
         /// Uses a classical optimizer to change beta and gamma parameters so that the objective function is minimized. The optimization is performed some number of times to decrease the chance of getting stuck in a local minimum.
         /// </summary>
         /// <param name="numberOfRandomStartingPoints">
@@ -199,7 +184,7 @@ namespace Microsoft.Quantum.QAOA.QaoaHybrid
                 this.logger = new QaoaLogger();
             }
 
-            this.solution = new Solution(null, double.MaxValue, null, null);
+            this.solution = new Solution(null, double.MaxValue, null);
 
             Func<double[], double> objectiveFunction = this.CalculateObjectiveFunction;
 
@@ -209,8 +194,8 @@ namespace Microsoft.Quantum.QAOA.QaoaHybrid
 
             for (int i = 0; i < numberOfRandomStartingPoints; i++)
             {
-                var freeParameters = this.SetUpRandomFreeParameters();
-                var success = cobyla.Minimize(freeParameters);
+                var concatenatedQaoaParameters = new QaoaParameters(p).getConcatenatedQaoaParameters();
+                var success = cobyla.Minimize(concatenatedQaoaParameters);
 
                 if (this.shouldLog)
                 {
@@ -220,7 +205,7 @@ namespace Microsoft.Quantum.QAOA.QaoaHybrid
 
             if (this.shouldLog)
             {
-                this.logger.Close();
+                this.logger.Dispose();
             }
 
             return this.solution;
@@ -229,12 +214,8 @@ namespace Microsoft.Quantum.QAOA.QaoaHybrid
         /// <summary>
         /// Uses a classical optimizer to change beta and gamma parameters so that the objective function is minimized. Initial beta and gamma parameters are provided by a user.
         /// </summary>
-        /// <param name="initialBeta">
-        /// A user-defined initial value of beta parameters.
-        /// </param>
-        /// <param name="initialGamma">
-        /// A user-defined initial value of gamma parameters.
-        /// </param>
+        /// <param name="qaoaParameters">
+        /// User-defined initial values of beta and gamma parameters.
         /// <returns>
         /// Optimal solution to the optimization problem input by the user.
         /// </returns>
@@ -242,27 +223,27 @@ namespace Microsoft.Quantum.QAOA.QaoaHybrid
         /// Currently used optimizer is Cobyla which is a gradient-free optimization technique.
         /// The objective function Hamiltonian is based on Z operators, the range of values in the beta vector is 0 <= beta_i <= PI, the range of values in the gamma vector is 0 <= beta_i <= 2PI.
         /// </remarks>
-        public Solution RunOptimization(double[] initialBeta, double[] initialGamma)
+        public Solution RunOptimization(QaoaParameters qaoaParameters)
         {
             if (this.shouldLog)
             {
                 this.logger = new QaoaLogger();
             }
 
-            this.solution = new Solution(null, double.MaxValue, null, null);
+            this.solution = new Solution(null, double.MaxValue, null);
 
             Func<double[], double> objectiveFunction = this.CalculateObjectiveFunction;
             var optimizerObjectiveFunction = new NonlinearObjectiveFunction(2 * this.p, objectiveFunction);
             var constraints = this.GenerateConstraints();
 
             var cobyla = new Cobyla(optimizerObjectiveFunction, constraints);
-            var freeParameters = initialBeta.Concat(initialGamma).ToArray();
-            var success = cobyla.Minimize(freeParameters);
+            var concatenatedQaoaParameters = qaoaParameters.getConcatenatedQaoaParameters();
+            var success = cobyla.Minimize(concatenatedQaoaParameters);
 
             if (this.shouldLog)
             {
                 this.logger.LogSuccess(success);
-                this.logger.Close();
+                this.logger.Dispose();
             }
 
             return this.solution;

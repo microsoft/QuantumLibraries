@@ -14,12 +14,6 @@ namespace Microsoft.Quantum.QAOA.QaoaHybrid
     public class Utils
     {
 
-        public struct FreeParameters
-        {
-            public double[] Beta;
-            public double[] Gamma;
-        }
-
         /// <summary>
         /// Returns a vector of random doubles in a range from 0 to maximum.
         /// </summary>
@@ -97,33 +91,6 @@ namespace Microsoft.Quantum.QAOA.QaoaHybrid
             }
 
             return sb.ToString();
-        }
-
-        /// <summary>
-        /// Converts concatenated beta and gamma vectors into separate beta and gamma vector.
-        /// </summary>
-        /// <param name="bigFreeParamsVector">
-        /// Concatenated beta and gamma vectors.
-        /// </param>
-        /// <returns>
-        /// FreeParameters that contains beta and gamma vectors.
-        /// </returns>
-        /// <remarks>
-        /// Useful for getting beta and gamma vectors from a concatenated vector inside the optimized function.
-        /// </remarks>
-        public static FreeParameters ConvertVectorIntoHalves(double[] bigFreeParamsVector)
-        {
-            var size = bigFreeParamsVector.Length;
-            var vectorTermsNumber = size / 2;
-            var freeParamsVector = new FreeParameters
-            {
-
-                Beta = bigFreeParamsVector[0..vectorTermsNumber],
-                Gamma = bigFreeParamsVector[vectorTermsNumber..(2 * vectorTermsNumber)],
-
-            };
-
-            return freeParamsVector;
         }
     }
 }

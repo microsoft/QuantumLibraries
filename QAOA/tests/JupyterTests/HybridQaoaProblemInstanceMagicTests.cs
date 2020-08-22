@@ -5,12 +5,11 @@ using System.Threading.Tasks;
 using Microsoft.Jupyter.Core;
 using Newtonsoft.Json;
 using Xunit;
-using System;
 using Microsoft.Quantum.QAOA.JupyterTests;
 using Microsoft.Quantum.QAOA.QaoaHybrid;
 using Microsoft.Quantum.QAOA.Jupyter;
 
-namespace Microsoft.Quantum.QAOA.HybridQaoaTests
+namespace Microsoft.Quantum.QAOA.JupyterTests
 {
 
     public class HybridQaoaProblemInstanceMagicTests

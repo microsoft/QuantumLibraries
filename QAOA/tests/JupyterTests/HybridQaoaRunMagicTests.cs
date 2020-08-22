@@ -30,6 +30,7 @@ namespace Microsoft.Quantum.QAOA.JupyterTests
             var twoLocalHamiltonianCoefficients = new double[] { 0, 1, 0, 0};
             var initialBeta = new double[] {0, 0};
             var initialGamma = new double[] { 0, 0 };
+            var initialQaoaParameters = new QaoaParameters(initialBeta, initialGamma);
 
             var simpleMaxCut = new ProblemInstance(oneLocalHamiltonianCoefficients, twoLocalHamiltonianCoefficients);
 
@@ -38,8 +39,7 @@ namespace Microsoft.Quantum.QAOA.JupyterTests
                 NumberOfIterations = numberOfIterations,
                 p = p,
                 ProblemInstance = simpleMaxCut,
-                InitialBeta = initialBeta,
-                InitialGamma = initialGamma
+                InitialQaoaParameters = initialQaoaParameters,
             });
 
             var result = await magic.Run(args, channel);

@@ -44,16 +44,10 @@ namespace Microsoft.Quantum.QAOA.Jupyter
             public ProblemInstance ProblemInstance { get; set; }
 
             /// <summary>
-            /// Initial beta angles.
+            /// Initial QAOA parameters (beta and gamma angles).
             /// </summary>
-            [JsonProperty(PropertyName = "initial_beta")]
-            public Double[] InitialBeta { get; set; }
-
-            /// <summary>
-            /// Initial gamma angles.
-            /// </summary>
-            [JsonProperty(PropertyName = "initial_gamma")]
-            public Double[] InitialGamma { get; set; }
+            [JsonProperty(PropertyName = "initial_qaoa_parameters")]
+            public QaoaParameters InitialQaoaParameters { get; set; }
 
             /// <summary>
             /// Flag whether optimization should be logged into a file.
@@ -77,7 +71,7 @@ namespace Microsoft.Quantum.QAOA.Jupyter
 
             HybridQaoa hybridQaoa = new HybridQaoa(args.NumberOfIterations, args.p, args.ProblemInstance, args.ShouldLog);
 
-            return hybridQaoa.RunOptimization(args.InitialBeta, args.InitialGamma).ToExecutionResult();
+            return hybridQaoa.RunOptimization(args.InitialQaoaParameters).ToExecutionResult();
         }
     }
 
@@ -146,59 +140,4 @@ namespace Microsoft.Quantum.QAOA.Jupyter
             return hybridQaoa.RunOptimization(args.NumberOfRandomStartingPoints).ToExecutionResult();
         }
     }
-
-    public class HybridQaoaProblemInstanceMagic : MagicSymbol
-        {
-            public HybridQaoaProblemInstanceMagic()
-            {
-                this.Name = $"%qaoa.hybridqaoa.create.problem.instance";
-                this.Documentation = new Documentation() { Summary = "Prepares a problem instance objects that serves as one of arguments to %qaoa.hybridqaoa.run." };
-                this.Kind = SymbolKind.Magic;
-                this.Execute = this.Run;
-            }
-
-            /// <summary>
-            /// List of arguments.
-            /// </summary>
-            public class Arguments
-            {
-                /// <summary>
-                /// Coefficents for one-local Hamiltonian terms.
-                /// </summary>
-                [JsonProperty(PropertyName = "one_local_hamiltonian_coefficients")]
-                public double[] OneLocalHamiltonianCoefficients { get; set; }
-
-                /// <summary>
-                /// Coefficents for one-local Hamiltonian terms.
-                /// </summary>
-                [JsonProperty(PropertyName = "two_local_hamiltonian_coefficients")]
-                public double[] TwoLocalHamiltonianCoefficients { get; set; }
-
-                /// <summary>
-                /// Size of the combinatorial problem in bits.
-                /// </summary>
-                [JsonProperty(PropertyName = "problem_size_in_bits")]
-                public int ProblemSizeInBits { get; set; }
-
-            }
-
-            /// <summary>
-            /// Prepares a ProblemInstance object for a hybrid QAOA.
-            /// </summary>
-            public async Task<ExecutionResult> Run(string input, IChannel channel)
-            {
-                if (string.IsNullOrWhiteSpace(input))
-                {
-                    channel.Stderr("Please provide correct arguments");
-                    return ExecuteStatus.Error.ToExecutionResult();
-                }
-
-                var args = JsonConvert.DeserializeObject<Arguments>(input);
-
-                var problemInstance = new ProblemInstance(args.OneLocalHamiltonianCoefficients, args.TwoLocalHamiltonianCoefficients);
-
-                return problemInstance.ToExecutionResult();
-            }
-
-        }
 }
