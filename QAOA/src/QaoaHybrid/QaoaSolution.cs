@@ -9,7 +9,7 @@ namespace Microsoft.Quantum.QAOA.QaoaHybrid
     /// <remarks>
     /// Note that given the nature of a QAOA and a hybrid QAOA, a solution produced by the algorithm is not necessarily feasible and not necessarily optimal.
     /// </remarks>
-    public class Solution
+    public class QaoaSolution
     {
 
         public bool[] SolutionVector { get; set; }
@@ -19,7 +19,7 @@ namespace Microsoft.Quantum.QAOA.QaoaHybrid
         public QaoaParameters SolutionQaoaParameters { get; set; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Solution"/> class.
+        /// Initializes a new instance of the <see cref="QaoaSolution"/> class.
         /// </summary>
         /// <param name="solutionVector">
         /// A vector that is a solution of a combinatorial optimization problem found by a hybrid QAOA.
@@ -30,7 +30,7 @@ namespace Microsoft.Quantum.QAOA.QaoaHybrid
         /// <param name="solutionQaoaParameters">
         /// Values of beta and gamma parameters that correspond to the solution stored in solutionVector.
         /// </param>
-        public Solution(bool[] solutionVector, double solutionHamiltonianValue, QaoaParameters solutionQaoaParameters)
+        public QaoaSolution(bool[] solutionVector, double solutionHamiltonianValue, QaoaParameters solutionQaoaParameters)
         {
             SolutionVector = solutionVector;
             SolutionHamiltonianValue = solutionHamiltonianValue;

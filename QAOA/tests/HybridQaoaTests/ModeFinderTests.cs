@@ -1,17 +1,17 @@
 ﻿// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Collections.Generic;
-using Microsoft.Quantum.QAOA.QaoaHybrid;
-
 namespace Microsoft.Quantum.QAOA.HybridQaoaTests
 {
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using System.Collections.Generic;
+    using Microsoft.Quantum.QAOA.QaoaHybrid.Helpers;
+
     [TestClass]
-    public class UtilsTests
+    public class ModeFinderTests
     {
         [TestMethod]
-        public void ModeOfABoolListTest()
+        public void FindModeInBoolListTest()
         {
             bool[] boolsArray1 = { false, false, true };
             bool[] boolsArray2 = { false, false, true };
@@ -28,23 +28,9 @@ namespace Microsoft.Quantum.QAOA.HybridQaoaTests
 
             var expectedResult = new[] {false, false, true};
 
-            var result = Utils.GetModeFromBoolList(listOfBools);
+            var result = ModeFinder.FindModeInBoolList(listOfBools);
 
             CollectionAssert.AreEqual(expectedResult, result, "Mode bool string not found correctly.");
-
-
-        }
-
-        [TestMethod]
-        public void BoolStringFromBoolArrayTest()
-        {
-            var boolsArray = new [] { false, false, true };
-
-            var expectedResult = "001";
-
-            var result = Utils.GetBoolStringFromBoolArray(boolsArray);
-
-            Assert.AreEqual(expectedResult, result, "Bool string not created correctly.");
 
 
         }

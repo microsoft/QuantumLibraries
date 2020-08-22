@@ -1,18 +1,17 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-using System.Threading.Tasks;
-using Microsoft.Jupyter.Core;
-using Newtonsoft.Json;
-using System;
-using Microsoft.Quantum.QAOA.QaoaHybrid;
-using Xunit;
-using Microsoft.Quantum.QAOA.Jupyter;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Assert = Xunit.Assert;
-
 namespace Microsoft.Quantum.QAOA.JupyterTests
 {
+    using System.Threading.Tasks;
+    using Microsoft.Jupyter.Core;
+    using Newtonsoft.Json;
+    using Microsoft.Quantum.QAOA.QaoaHybrid;
+    using Xunit;
+    using Microsoft.Quantum.QAOA.Jupyter;
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using Assert = Xunit.Assert;
+
     public class HybridQaoaRunMagicTests
     {
         public (HybridQaoaRunMagic, MockChannel) Init() =>
@@ -43,7 +42,7 @@ namespace Microsoft.Quantum.QAOA.JupyterTests
             });
 
             var result = await magic.Run(args, channel);
-            var optimalSolution = result.Output as Solution;
+            var optimalSolution = result.Output as QaoaSolution;
             Assert.Equal(ExecuteStatus.Ok, result.Status);
             var optimizationResult1 = new[] {false, true};
             var optimizationResult2 = new[] {true, false};
@@ -87,7 +86,7 @@ namespace Microsoft.Quantum.QAOA.JupyterTests
         });
 
             var result = await magic.Run(args, channel);
-            var optimalSolution = result.Output as Solution;
+            var optimalSolution = result.Output as QaoaSolution;
             Assert.Equal(ExecuteStatus.Ok, result.Status);
             var optimizationResult1 = new[] { false, true };
             var optimizationResult2 = new[] { true, false };

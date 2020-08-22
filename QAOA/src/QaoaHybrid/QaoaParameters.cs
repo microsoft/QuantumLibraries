@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Microsoft.Quantum.Math;
-using Newtonsoft.Json;
+﻿// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
 
 namespace Microsoft.Quantum.QAOA.QaoaHybrid
 {
+    using System.Linq;
+    using Newtonsoft.Json;
+    using Microsoft.Quantum.QAOA.QaoaHybrid.Helpers;
+
     public class QaoaParameters
     {
         public double[] Beta { get; }
@@ -29,8 +29,8 @@ namespace Microsoft.Quantum.QAOA.QaoaHybrid
 
         public QaoaParameters(int p)
         {
-           Beta = Utils.GetRandomVector(p, System.Math.PI);
-           Gamma = Utils.GetRandomVector(p, 2 * System.Math.PI);
+           Beta = RandomVectorGenerator.GenerateRandomVector(p, System.Math.PI);
+           Gamma = RandomVectorGenerator.GenerateRandomVector(p, 2 * System.Math.PI);
         }
 
         /// <summary>

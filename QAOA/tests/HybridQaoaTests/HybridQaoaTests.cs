@@ -1,12 +1,10 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using Microsoft.Quantum.QAOA.QaoaHybrid;
-
 namespace Microsoft.Quantum.QAOA.HybridQaoaTests
 {
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using Microsoft.Quantum.QAOA.QaoaHybrid;
 
     [TestClass]
     public class ClassicalOptimizationTest

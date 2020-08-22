@@ -11,6 +11,7 @@ namespace Microsoft.Quantum.QAOA.QaoaHybrid
     using Microsoft.Quantum.QAOA;
     using Microsoft.Quantum.Simulation.Core;
     using Microsoft.Quantum.Simulation.Simulators;
+    using Microsoft.Quantum.QAOA.QaoaHybrid.Helpers;
 
     /// <summary>
     /// This class runs a hybrid (quantum-classical) QAOA given an instance of a combinatorial optimization problem encoded into a 2-local Hamiltonian. The classical part is used for optimizing QAOA input parameters and is implemented using the Cobyla optimizer. QAOA input parameters can be optionally specified by a user and they will be treated as a starting point for optimization. Otherwise, input parameters are initialized randomly (possibly many times, as specified by the numberOfRandomStartingPoints variable).
@@ -21,7 +22,7 @@ namespace Microsoft.Quantum.QAOA.QaoaHybrid
         private readonly int p;
         private readonly ProblemInstance problemInstance;
         private readonly bool shouldLog;
-        private Solution solution;
+        private QaoaSolution solution;
         private QaoaLogger logger;
 
         /// <summary>
@@ -132,7 +133,7 @@ namespace Microsoft.Quantum.QAOA.QaoaHybrid
         {
             if (hamiltonianExpectationValue < this.solution.SolutionHamiltonianValue)
             {
-                var mostProbableSolutionVectorTemp = Utils.GetModeFromBoolList(allSolutionVectors);
+                var mostProbableSolutionVectorTemp = ModeFinder.FindModeInBoolList(allSolutionVectors);
                 this.solution.SolutionHamiltonianValue = hamiltonianExpectationValue;
                 this.solution.SolutionVector = mostProbableSolutionVectorTemp;
                 this.solution.SolutionQaoaParameters = qaoaParameters;
@@ -177,14 +178,14 @@ namespace Microsoft.Quantum.QAOA.QaoaHybrid
         /// Currently used optimizer is Cobyla which is a gradient-free optimization technique.
         /// The objective function Hamiltonian is based on Z operators, the range of values in the beta vector is 0 <= beta_i <= PI, the range of values in the gamma vector is 0 <= beta_i <= 2PI.
         /// </remarks>
-        public Solution RunOptimization(int numberOfRandomStartingPoints)
+        public QaoaSolution RunOptimization(int numberOfRandomStartingPoints)
         {
             if (this.shouldLog)
             {
                 this.logger = new QaoaLogger();
             }
 
-            this.solution = new Solution(null, double.MaxValue, null);
+            this.solution = new QaoaSolution(null, double.MaxValue, null);
 
             Func<double[], double> objectiveFunction = this.CalculateObjectiveFunction;
 
@@ -223,14 +224,14 @@ namespace Microsoft.Quantum.QAOA.QaoaHybrid
         /// Currently used optimizer is Cobyla which is a gradient-free optimization technique.
         /// The objective function Hamiltonian is based on Z operators, the range of values in the beta vector is 0 <= beta_i <= PI, the range of values in the gamma vector is 0 <= beta_i <= 2PI.
         /// </remarks>
-        public Solution RunOptimization(QaoaParameters qaoaParameters)
+        public QaoaSolution RunOptimization(QaoaParameters qaoaParameters)
         {
             if (this.shouldLog)
             {
                 this.logger = new QaoaLogger();
             }
 
-            this.solution = new Solution(null, double.MaxValue, null);
+            this.solution = new QaoaSolution(null, double.MaxValue, null);
 
             Func<double[], double> objectiveFunction = this.CalculateObjectiveFunction;
             var optimizerObjectiveFunction = new NonlinearObjectiveFunction(2 * this.p, objectiveFunction);

@@ -1,13 +1,12 @@
 ﻿// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-using System.Linq;
-
 namespace Microsoft.Quantum.QAOA.QaoaHybrid
 {
     using System;
     using System.IO;
     using Microsoft.Quantum.Simulation.Core;
+    using System.Linq;
 
     /// <summary>
     /// This class provides a simple capability for logging intermediate steps of a hybrid QAOA to a text file.

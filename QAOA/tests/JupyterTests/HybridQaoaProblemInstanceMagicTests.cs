@@ -1,16 +1,14 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-using System.Threading.Tasks;
-using Microsoft.Jupyter.Core;
-using Newtonsoft.Json;
-using Xunit;
-using Microsoft.Quantum.QAOA.JupyterTests;
-using Microsoft.Quantum.QAOA.QaoaHybrid;
-using Microsoft.Quantum.QAOA.Jupyter;
-
 namespace Microsoft.Quantum.QAOA.JupyterTests
 {
+    using System.Threading.Tasks;
+    using Microsoft.Jupyter.Core;
+    using Newtonsoft.Json;
+    using Xunit;
+    using Microsoft.Quantum.QAOA.QaoaHybrid;
+    using Microsoft.Quantum.QAOA.Jupyter;
 
     public class HybridQaoaProblemInstanceMagicTests
     {

@@ -1,10 +1,13 @@
-﻿using System.Threading.Tasks;
-using Microsoft.Jupyter.Core;
-using Microsoft.Quantum.QAOA.QaoaHybrid;
-using Newtonsoft.Json;
+﻿// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
 
 namespace Microsoft.Quantum.QAOA.Jupyter
 {
+    using System.Threading.Tasks;
+    using Microsoft.Jupyter.Core;
+    using Microsoft.Quantum.QAOA.QaoaHybrid;
+    using Newtonsoft.Json;
+
     public class HybridQaoaParametersMagic : MagicSymbol
     {
         public HybridQaoaParametersMagic()

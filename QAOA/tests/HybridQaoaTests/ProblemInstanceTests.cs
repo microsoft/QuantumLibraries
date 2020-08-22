@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Microsoft.Quantum.QAOA.QaoaHybrid;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
 
 namespace Microsoft.Quantum.QAOA.HybridQaoaTests
 {
+    using Microsoft.Quantum.QAOA.QaoaHybrid;
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
 
     [TestClass]
     class ProblemInstanceTests
