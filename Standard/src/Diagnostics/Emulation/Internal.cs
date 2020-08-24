@@ -73,14 +73,14 @@ namespace Microsoft.Quantum.Diagnostics
                 return QVoid.Instance;
             }
 
-            public override Func<(IQArray<Qubit>, IQArray<Qubit>), QVoid> Body => __in__ =>
+            public override Func<(IQArray<Qubit>, IQArray<Qubit>), QVoid> __Body__ => __in__ =>
             {
                 var (reference, target) = __in__;
                 return Simulator switch
                 {
                     QuantumSimulator sim => this.DumpUnitaryFromChoiState(sim, reference, target),
                     // TODO: Add other simulators here as appropriate.
-                    _ => base.Body(__in__)
+                    _ => base.__Body__(__in__)
                 };
             };
 

@@ -22,7 +22,7 @@ namespace Microsoft.Quantum.Tests
             var op = new Microsoft.Quantum.Arrays.ForEach<Qubit, Result>(new QuantumSimulator());
             var baseOp = new Microsoft.Quantum.Intrinsic.M(new QuantumSimulator());
             IQArray<Qubit> targets = new QArray<Qubit>(new Qubit[] { });
-            var args = op.__dataIn((baseOp, targets));
+            var args = op.__DataIn__((baseOp, targets));
             var expected = new RuntimeMetadata()
             {
                 Label = "ForEach",

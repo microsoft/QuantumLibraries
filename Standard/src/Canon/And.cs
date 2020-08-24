@@ -25,23 +25,23 @@ namespace Microsoft.Quantum.Canon
                 simulator = m as ToffoliSimulator;
             }
 
-            public override void Init()
+            public override void __Init__()
             {
-                base.Init();
+                base.__Init__();
 
                 if (simulator != null)
                 {
-                    CCNOT = Factory.Get<CCNOT>(typeof(CCNOT));
+                    CCNOT = __Factory__.Get<CCNOT>(typeof(CCNOT));
                 }
             }
 
-            public override Func<(Qubit, Qubit, Qubit), QVoid> Body => CCNOT?.Body ?? base.Body;
+            public override Func<(Qubit, Qubit, Qubit), QVoid> __Body__ => CCNOT?.__Body__ ?? base.__Body__;
 
-            public override Func<(Qubit, Qubit, Qubit), QVoid> AdjointBody => CCNOT?.AdjointBody ?? base.AdjointBody;
+            public override Func<(Qubit, Qubit, Qubit), QVoid> __AdjointBody__ => CCNOT?.__AdjointBody__ ?? base.__AdjointBody__;
 
-            public override Func<(IQArray<Qubit>, (Qubit, Qubit, Qubit)), QVoid> ControlledBody => CCNOT?.ControlledBody ?? base.ControlledBody;
+            public override Func<(IQArray<Qubit>, (Qubit, Qubit, Qubit)), QVoid> __ControlledBody__ => CCNOT?.__ControlledBody__ ?? base.__ControlledBody__;
 
-            public override Func<(IQArray<Qubit>, (Qubit, Qubit, Qubit)), QVoid> ControlledAdjointBody => CCNOT?.ControlledAdjointBody ?? base.ControlledAdjointBody;
+            public override Func<(IQArray<Qubit>, (Qubit, Qubit, Qubit)), QVoid> __ControlledAdjointBody__ => CCNOT?.__ControlledAdjointBody__ ?? base.__ControlledAdjointBody__;
         }
     }
 
@@ -60,23 +60,23 @@ namespace Microsoft.Quantum.Canon
                 simulator = m as ToffoliSimulator;
             }
 
-            public override void Init()
+            public override void __Init__()
             {
-                base.Init();
+                base.__Init__();
 
                 if (simulator != null)
                 {
-                    CCNOT = Factory.Get<CCNOT>(typeof(CCNOT));
+                    CCNOT = __Factory__.Get<CCNOT>(typeof(CCNOT));
                 }
             }
 
-            public override Func<(Qubit, Qubit, Qubit), QVoid> Body => CCNOT?.Body ?? base.Body;
+            public override Func<(Qubit, Qubit, Qubit), QVoid> __Body__ => CCNOT?.__Body__ ?? base.__Body__;
 
-            public override Func<(Qubit, Qubit, Qubit), QVoid> AdjointBody => CCNOT?.AdjointBody ?? base.AdjointBody;
+            public override Func<(Qubit, Qubit, Qubit), QVoid> __AdjointBody__ => CCNOT?.__AdjointBody__ ?? base.__AdjointBody__;
 
-            public override Func<(IQArray<Qubit>, (Qubit, Qubit, Qubit)), QVoid> ControlledBody => CCNOT?.ControlledBody ?? base.ControlledBody;
+            public override Func<(IQArray<Qubit>, (Qubit, Qubit, Qubit)), QVoid> __ControlledBody__ => CCNOT?.__ControlledBody__ ?? base.__ControlledBody__;
 
-            public override Func<(IQArray<Qubit>, (Qubit, Qubit, Qubit)), QVoid> ControlledAdjointBody => CCNOT?.ControlledAdjointBody ?? base.ControlledAdjointBody;
+            public override Func<(IQArray<Qubit>, (Qubit, Qubit, Qubit)), QVoid> __ControlledAdjointBody__ => CCNOT?.__ControlledAdjointBody__ ?? base.__ControlledAdjointBody__;
         }
     }
 }
