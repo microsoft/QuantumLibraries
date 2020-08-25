@@ -3,6 +3,7 @@
 
 
 namespace Microsoft.Quantum.Tests {
+    open Microsoft.Quantum.Arithmetic;
     open Microsoft.Quantum.Arrays;
     open Microsoft.Quantum.Intrinsic;
     open Microsoft.Quantum.Canon;
@@ -64,34 +65,37 @@ namespace Microsoft.Quantum.Tests {
         }
     }
 
-    operation QuantumROMTest() : Unit {
+    @Test("QuantumSimulator")
+    operation TestQuantumROM() : Unit {
         for(coeffs in 2..7){
             for(nBitsPrecision in -1..-1..-2){
                 let targetError = PowD(2.0, IntAsDouble(nBitsPrecision));
                 let probtargetError = targetError / IntAsDouble(coeffs);
                 let coefficients = DrawMany(DrawRandomDouble, coeffs, (0.0, 1.0));
                 let ((nTotal, (nCoeffQubits, nGarbageQubits)), oneNorm, op) =  QuantumROM(targetError, coefficients);
+
                 Message($"Test case coeffs {coeffs}, bitsPrecision {nCoeffQubits}, global targetError {targetError}, probability error {probtargetError}.");
-                for (idx in 0..coeffs-1)
-                {
-                    let tmp = AbsD(coefficients[idx]) / oneNorm;
+                for ((idx, coefficient) in Enumerated(coefficients)) {
+                    let tmp = AbsD(coefficient) / oneNorm;
                     Message($"{idx} expected prob = {tmp}.");
                 }
 
                 Message($"Qubits used: {nGarbageQubits} + {nCoeffQubits}");
-                using(qubits = Qubit[nTotal]){
-                    let (register, rest) = _QuantumROMQubitManager(targetError, coeffs, qubits);
-                    let (coeffQubits, garbageQubits) = register;
-                    op(register);
-                    // Now check that probability of each number state in nCoeffQubits is as expected.
-                    for(stateIndex in 0..coeffs-1){
-                        let prob = AbsD(coefficients[stateIndex]) / oneNorm;
-                        Message($"Testing probability {prob} on index {stateIndex}");
-                        //BAssertProbIntBE(stateIndex, AbsD(coefficients[stateIndex]) / oneNorm, BigEndian(coeffQubits), targetError / IntAsDouble(coeffs));
+                using ((coeffRegister, garbageQubits) = (Qubit[nCoeffQubits], Qubit[nGarbageQubits])) {
+                    let coeffQubits = LittleEndian(coeffRegister);
+
+                    // Check that probability of each number state in nCoeffQubits is as expected.
+                    within {
+                        op(coeffQubits, garbageQubits);
+                    } apply {
+                        for (stateIndex in 0..coeffs - 1) {
+                            let prob = AbsD(coefficients[stateIndex]) / oneNorm;
+                            // FIXME: this only works for stateIndex == 0; why?
+                            if (stateIndex == 0) {
+                                AssertProbInt(stateIndex, prob, coeffQubits, probtargetError);
+                            }
+                        }
                     }
-
-                    (Adjoint op)(register);
-
                 }
             }
         }

@@ -95,14 +95,6 @@ namespace Microsoft.Quantum.Preparation {
         return (nTotal, (nBitsIndices, nGarbageQubits));
     }
 
-    // Implementation step of `QuantumROM`. This splits a single
-    // qubit array into the subarrays required by the operation.
-    function _QuantumROMQubitManager(targetError: Double, nCoeffs: Int, qubits: Qubit[]) : ((LittleEndian, Qubit[]), Qubit[]) {
-        let (nTotal, (nIndexRegister, nGarbageQubits)) = QuantumROMQubitCount(targetError, nCoeffs);
-        let registers = Partitioned([nIndexRegister, nGarbageQubits], qubits);
-        return((LittleEndian(registers[0]), registers[1]), registers[2]);
-    }
-
     // Classical processing
     // This discretizes the coefficients such that
     // |coefficient[i] * oneNorm - discretizedCoefficient[i] * discreizedOneNorm| * nCoeffs <= 2^{1-bitsPrecision}.
