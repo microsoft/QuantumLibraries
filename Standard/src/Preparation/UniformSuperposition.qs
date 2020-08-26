@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft Corporation. All rights reserved.
+// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
 namespace Microsoft.Quantum.Preparation {
@@ -39,23 +39,24 @@ namespace Microsoft.Quantum.Preparation {
     ///     PrepareUniformSuperposition(nIndices, LittleEndian(indexRegister));
     /// }
     /// ```
-    operation PrepareUniformSuperposition(nIndices: Int, indexRegister: LittleEndian) : Unit is Adj + Ctl {
-        if(nIndices == 0) {
-            fail $"Cannot prepare uniform superposition over {nIndices} state.";
+    operation PrepareUniformSuperposition(nIndices: Int, indexRegister: LittleEndian)
+    : Unit is Adj+Ctl {
+        if (nIndices == 0) {
+            fail "Cannot prepare uniform superposition over 0 state.";
         } elif (nIndices == 1) {
             // Superposition over one state, so do nothing.
-        } elif (nIndices == 2){
+        } elif (nIndices == 2) {
             H(indexRegister![0]);
         } else {
-            let nQubits = Ceiling(Lg(IntAsDouble(nIndices)));
-            if (nQubits > Length(indexRegister!)){
+            let nQubits = BitSizeI(nIndices - 1);
+            if (nQubits > Length(indexRegister!)) {
                 fail $"Cannot prepare uniform superposition over {nIndices} states as it is larger than the qubit register.";
             }
 
             using (flagQubit = Qubit[3]) {
                 let targetQubits = indexRegister![0..nQubits - 1];
                 let qubits = flagQubit + targetQubits;
-                let stateOracle = StateOracle(PrepareUniformSuperposition_(nIndices, nQubits, _, _));
+                let stateOracle = StateOracle(PrepareUniformSuperpositionOracle(nIndices, nQubits, _, _));
 
                 (StandardAmplitudeAmplification(1, stateOracle, 0))(qubits);
 
@@ -66,27 +67,24 @@ namespace Microsoft.Quantum.Preparation {
 
     /// # Summary
     /// Implementation step of <xref:microsoft.quantum.canon.prepareuniformsuperposition>
-    operation PrepareUniformSuperposition_(nIndices: Int, nQubits: Int, idxFlag: Int, qubits: Qubit[]) : Unit {
-        body (...) {
-            let targetQubits = qubits[3..3 + nQubits-1];
-            let flagQubit = qubits[0];
-            let auxillaryQubits = qubits[1..2];
-            let theta = ArcSin(Sqrt(IntAsDouble(2^nQubits)/IntAsDouble(nIndices)) * Sin(PI() / 6.0));
-            //let theta = PI() * 0.5;
+    internal operation PrepareUniformSuperpositionOracle(nIndices: Int, nQubits: Int, idxFlag: Int, qubits: Qubit[])
+    : Unit is Adj+Ctl {
+        let targetQubits = qubits[3...];
+        let flagQubit = qubits[0];
+        let auxillaryQubits = qubits[1..2];
+        let theta = ArcSin(Sqrt(IntAsDouble(2^nQubits) / IntAsDouble(nIndices)) * Sin(PI() / 6.0));
 
-            ApplyToEachCA(H, targetQubits);
-            using(compareQubits = Qubit[nQubits]) {
+        ApplyToEachCA(H, targetQubits);
+        using (compareQubits = Qubit[nQubits]) {
+            within {
                 ApplyXorInPlace(nIndices - 1, LittleEndian(compareQubits));
+            } apply {
                 CompareUsingRippleCarry(LittleEndian(targetQubits), LittleEndian(compareQubits), auxillaryQubits[0]);
                 X(auxillaryQubits[0]);
-                ApplyXorInPlace(nIndices - 1, LittleEndian(compareQubits));
             }
-            Exp([PauliY], -theta, [auxillaryQubits[1]]);
-            (Controlled X)(auxillaryQubits, flagQubit);
         }
-        adjoint auto;
-        controlled auto;
-        adjoint controlled auto;
+        Ry(2.0 * theta, auxillaryQubits[1]);
+        (Controlled X)(auxillaryQubits, flagQubit);
     }
 
 }
