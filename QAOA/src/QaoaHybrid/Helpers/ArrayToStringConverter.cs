@@ -5,7 +5,7 @@ namespace Microsoft.Quantum.Qaoa.QaoaHybrid.Helpers
 {
     using System.Text;
 
-    internal class ArrayToStringConverter
+    public class ArrayToStringConverter
     {
         /// <summary>
         /// Converts an array of bools to a boolean string.

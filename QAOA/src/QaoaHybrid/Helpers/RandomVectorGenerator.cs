@@ -5,7 +5,7 @@ namespace Microsoft.Quantum.Qaoa.QaoaHybrid.Helpers
 {
     using System;
 
-    internal class RandomVectorGenerator
+    public class RandomVectorGenerator
     {
         /// <summary>
         /// Returns a vector of random doubles in a range from 0 to maximum.

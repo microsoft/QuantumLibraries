@@ -197,7 +197,7 @@ namespace Microsoft.Quantum.Qaoa.QaoaHybrid
 
             for (int i = 0; i < numberOfRandomStartingPoints; i++)
             {
-                var concatenatedQaoaParameters = new QaoaParameters(p).ConcatenatedQaoaParameters();
+                var concatenatedQaoaParameters = new QaoaParameters(p).ConcatenatedQaoaParameters;
                 var success = cobyla.Minimize(concatenatedQaoaParameters);
 
                 this.logger?.LogSuccess(success);
@@ -237,7 +237,7 @@ namespace Microsoft.Quantum.Qaoa.QaoaHybrid
             var constraints = this.GenerateConstraints();
 
             var cobyla = new Cobyla(optimizerObjectiveFunction, constraints);
-            var concatenatedQaoaParameters = qaoaParameters.ConcatenatedQaoaParameters();
+            var concatenatedQaoaParameters = qaoaParameters.ConcatenatedQaoaParameters;
             var success = cobyla.Minimize(concatenatedQaoaParameters);
 
             if (this.shouldLog)
