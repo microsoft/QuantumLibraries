@@ -15,7 +15,10 @@ namespace Microsoft.Quantum.QAOA.Jupyter
         public HybridQaoaRunMagic()
         {
             this.Name = $"%qaoa.hybridqaoa.run";
-            this.Documentation = new Documentation() { Summary = "Runs a hybrid QAOA algorithm with a classical optimizer that chooses input angles. QAOA parameters are provided as a json. Initial beta and gamma coefficients are provided by a user." };
+            this.Documentation = new Documentation()
+            {
+                Summary = "Runs a hybrid QAOA algorithm with a classical optimizer that chooses input angles. QAOA parameters are provided as JSON input. Initial beta and gamma coefficients are provided by a user."
+            };
             this.Kind = SymbolKind.Magic;
             this.Execute = this.Run;
         }
@@ -81,7 +84,10 @@ namespace Microsoft.Quantum.QAOA.Jupyter
         public HybridQaoaWithRandomParametersRunMagic()
         {
             this.Name = $"%qaoa.hybridqaoa.random.params.run";
-            this.Documentation = new Documentation() { Summary = "Runs a hybrid QAOA algorithm with a classical optimizer that chooses input angles. QAOA parameters are provided as a json. Initial beta and gamma parameters are chosen randomly." };
+            this.Documentation = new Documentation()
+            {
+                Summary = "Runs a hybrid QAOA algorithm with a classical optimizer that chooses input angles. QAOA parameters are provided as a JSON. Initial beta and gamma parameters are chosen randomly."
+            };
             this.Kind = SymbolKind.Magic;
             this.Execute = this.Run;
         }

@@ -9,39 +9,39 @@ namespace Microsoft.Quantum.QAOA.QaoaHybrid
 
     public class QaoaParameters
     {
-        public double[] Beta { get; }
-        public double[] Gamma { get; }
+        public double[] Betas { get; }
+        public double[] Gammas { get; }
 
         public QaoaParameters(double[] concatenatedQaoaParameters)
         {
             var size = concatenatedQaoaParameters.Length;
             var vectorTermsNumber = size / 2;
-            Beta = concatenatedQaoaParameters[0..vectorTermsNumber];
-            Gamma = concatenatedQaoaParameters[vectorTermsNumber..(2 * vectorTermsNumber)];
+            Betas = concatenatedQaoaParameters[0..vectorTermsNumber];
+            Gammas = concatenatedQaoaParameters[vectorTermsNumber..(2 * vectorTermsNumber)];
         }
 
         [JsonConstructor]
-        public QaoaParameters(double[] beta, double[] gamma)
+        public QaoaParameters(double[] betas, double[] gammas)
         {
-            Beta = beta;
-            Gamma = gamma;
+            Betas = betas;
+            Gammas = gammas;
         }
 
         public QaoaParameters(int p)
         {
-           Beta = RandomVectorGenerator.GenerateRandomVector(p, System.Math.PI);
-           Gamma = RandomVectorGenerator.GenerateRandomVector(p, 2 * System.Math.PI);
+           Betas = RandomVectorGenerator.GenerateRandomVector(p, System.Math.PI);
+           Gammas = RandomVectorGenerator.GenerateRandomVector(p, 2 * System.Math.PI);
         }
 
         /// <summary>
-        /// Converts beta and gamma vectors into a concatenated vector.
+        /// Converts betas and gammas vectors into a concatenated vector.
         /// </summary>
         /// <returns>
-        /// Array of concatenated beta and gamma arrays.
+        /// Array of concatenated betas and gammas arrays.
         /// </returns>
         public double[] getConcatenatedQaoaParameters()
         {
-            return Beta.Concat(Gamma).ToArray();
+            return Betas.Concat(Gammas).ToArray();
         }
     }
 }

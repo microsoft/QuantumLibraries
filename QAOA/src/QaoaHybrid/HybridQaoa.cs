@@ -77,7 +77,7 @@ namespace Microsoft.Quantum.QAOA.QaoaHybrid
         /// If the expectation of the Hamiltonian is smaller than our current best, we update our best solution to the current solution. The solution vector for the current best solution is the mode of boolean strings that we obtained from the QAOA.
         /// </summary>
         /// <param name="concatenatedQaoaParameters">
-        /// Beta and gamma vectors concatenated.
+        /// Betas and gamma vectors concatenated.
         /// </param>
         /// <returns>
         /// The expected value of a Hamiltonian that we calculated in this run.
@@ -88,8 +88,8 @@ namespace Microsoft.Quantum.QAOA.QaoaHybrid
             double hamiltonianExpectationValue = 0;
             var allSolutionVectors = new List<bool[]>();
 
-            var beta = new QArray<double>(qaoaParameters.Beta);
-            var gamma = new QArray<double>(qaoaParameters.Gamma);
+            var betas = new QArray<double>(qaoaParameters.Betas);
+            var gammas = new QArray<double>(qaoaParameters.Gammas);
 
             var oneLocalHamiltonianCoefficients = new QArray<double>(this.problemInstance.OneLocalHamiltonianCoefficients);
             var twoLocalHamiltonianCoefficients = new QArray<double>(this.problemInstance.TwoLocalHamiltonianCoefficients);
@@ -99,7 +99,7 @@ namespace Microsoft.Quantum.QAOA.QaoaHybrid
 
                 for (var i = 0; i < this.numberOfIterations; i++)
                 {
-                    IQArray<bool> result = RunQaoa.Run(qsim, this.problemInstance.ProblemSizeInBits, beta, gamma, oneLocalHamiltonianCoefficients, twoLocalHamiltonianCoefficients, this.p).Result;
+                    IQArray<bool> result = RunQaoa.Run(qsim, this.problemInstance.ProblemSizeInBits, betas, gammas, oneLocalHamiltonianCoefficients, twoLocalHamiltonianCoefficients, this.p).Result;
                     allSolutionVectors.Add(result.ToArray());
                     var hamiltonianValue = this.problemInstance.EvaluateHamiltonian(result.ToArray());
                     hamiltonianExpectationValue += hamiltonianValue / this.numberOfIterations;
@@ -111,7 +111,7 @@ namespace Microsoft.Quantum.QAOA.QaoaHybrid
 
             if (this.shouldLog)
             {
-                this.logger.LogCurrentBestSolution(beta, gamma, this.solution.SolutionHamiltonianValue, this.solution.SolutionVector);
+                this.logger.LogCurrentBestSolution(betas, gammas, this.solution.SolutionHamiltonianValue, this.solution.SolutionVector);
             }
 
             return hamiltonianExpectationValue;
@@ -127,7 +127,7 @@ namespace Microsoft.Quantum.QAOA.QaoaHybrid
         /// A vector of all binary solutions that were found by a QAOA.
         /// </param>
         /// <param name="qaoaParameters">
-        /// Beta and gamma coefficients.
+        /// Betas and gamma coefficients.
         /// </param>
         private void UpdateBestSolution(double hamiltonianExpectationValue, List<bool[]> allSolutionVectors, QaoaParameters qaoaParameters)
         {

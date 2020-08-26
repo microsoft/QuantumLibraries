@@ -16,9 +16,9 @@ namespace Microsoft.Quantum.QAOA {
     /// # Input
     /// ## problemSize
     /// Number of qubits.
-    /// ## beta
+    /// ## betas
     /// Vector of coefficents for the unitary based on the mixing Hamiltonian.
-    /// ## gamma
+    /// ## gammas
     /// Vector of coefficents for the unitary based on the objective function Hamiltonian.
     /// ## oneLocalHamiltonianCoefficients
     /// Array of 1-local coefficents of the objective function Hamiltonian.
@@ -32,14 +32,14 @@ namespace Microsoft.Quantum.QAOA {
     ///
     /// # References
     /// This implementation in inspired by https://github.com/stephenjordan/qaoa_tsp.
-    operation RunQaoa(problemSize: Int, beta: Double[], gamma: Double[], oneLocalHamiltonianCoefficients: Double[], twoLocalHamiltonianCoefficients: Double[], p: Int) : Bool[] {
+    operation RunQaoa(problemSize: Int, betas: Double[], gammas: Double[], oneLocalHamiltonianCoefficients: Double[], twoLocalHamiltonianCoefficients: Double[], p: Int) : Bool[] {
         
         mutable result = new Bool[problemSize];
         using (qubits = Qubit[problemSize]) {
             ApplyToEach(H, qubits);                         
             for (i in 0..p-1) {
-                EvolveWithObjectiveHamiltonian(qubits, gamma[i], oneLocalHamiltonianCoefficients, twoLocalHamiltonianCoefficients);
-                EvolveWithMixingHamiltonian(qubits, beta[i]);
+                EvolveWithObjectiveHamiltonian(qubits, gammas[i], oneLocalHamiltonianCoefficients, twoLocalHamiltonianCoefficients);
+                EvolveWithMixingHamiltonian(qubits, betas[i]);
             }
             return ResultArrayAsBoolArray(ForEach(MResetZ, qubits));               
         }

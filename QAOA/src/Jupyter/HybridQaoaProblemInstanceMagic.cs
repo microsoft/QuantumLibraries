@@ -13,7 +13,10 @@ namespace Microsoft.Quantum.QAOA.Jupyter
         public HybridQaoaProblemInstanceMagic()
         {
             this.Name = $"%qaoa.hybridqaoa.create.problem.instance";
-            this.Documentation = new Documentation() { Summary = "Prepares a problem instance object that serves as one of arguments to %qaoa.hybridqaoa.run." };
+            this.Documentation = new Documentation()
+            {
+                Summary = "Prepares a problem instance object that serves as one of arguments to %qaoa.hybridqaoa.run."
+            };
             this.Kind = SymbolKind.Magic;
             this.Execute = this.Run;
         }

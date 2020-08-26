@@ -13,7 +13,10 @@ namespace Microsoft.Quantum.QAOA.Jupyter
         public HybridQaoaParametersMagic()
         {
             this.Name = $"%qaoa.hybridqaoa.create.parameters";
-            this.Documentation = new Documentation() { Summary = "Prepares a QAOA parameters object that serves as one of arguments to %qaoa.hybridqaoa.run." };
+            this.Documentation = new Documentation()
+            {
+                Summary = "Prepares a QAOA parameters object that serves as one of arguments to %qaoa.hybridqaoa.run."
+            };
             this.Kind = SymbolKind.Magic;
             this.Execute = this.Run;
         }
@@ -24,13 +27,13 @@ namespace Microsoft.Quantum.QAOA.Jupyter
         public class Arguments
         {
             /// <summary>
-            /// Beta QAOA coefficients.
+            /// Betas QAOA coefficients.
             /// </summary>
             [JsonProperty(PropertyName = "beta")]
             public double[] Beta { get; set; }
 
             /// <summary>
-            /// Gamma QAOA coefficients.
+            /// Gammas QAOA coefficients.
             /// </summary>
             [JsonProperty(PropertyName = "gamma")]
             public double[] Gamma { get; set; }

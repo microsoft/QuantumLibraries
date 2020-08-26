@@ -35,8 +35,8 @@ namespace Microsoft.Quantum.QAOA.JupyterTests
             var qaoaParameters = result.Output as QaoaParameters;
             Assert.Equal(ExecuteStatus.Ok, result.Status);
 
-            Assert.Equal(qaoaParameters.Beta, beta);
-            Assert.Equal(qaoaParameters.Gamma, gamma);
+            Assert.Equal(qaoaParameters.Betas, beta);
+            Assert.Equal(qaoaParameters.Gammas, gamma);
         }
 
     }
