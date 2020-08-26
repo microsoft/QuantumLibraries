@@ -1,9 +1,9 @@
 ﻿// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-namespace Microsoft.Quantum.QAOA.HybridQaoaTests
+namespace Microsoft.Quantum.Qaoa.HybridQaoaTests
 {
-    using Microsoft.Quantum.QAOA.QaoaHybrid;
+    using Microsoft.Quantum.Qaoa.QaoaHybrid;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
     [TestClass]

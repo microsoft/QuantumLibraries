@@ -1,11 +1,11 @@
 ﻿// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-namespace Microsoft.Quantum.QAOA.Jupyter
+namespace Microsoft.Quantum.Qaoa.Jupyter
 {
     using System.Threading.Tasks;
     using Microsoft.Jupyter.Core;
-    using Microsoft.Quantum.QAOA.QaoaHybrid;
+    using Microsoft.Quantum.Qaoa.QaoaHybrid;
     using Newtonsoft.Json;
 
     public class HybridQaoaProblemInstanceMagic : MagicSymbol

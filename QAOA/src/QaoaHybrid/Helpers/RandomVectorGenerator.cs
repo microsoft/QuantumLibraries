@@ -1,7 +1,7 @@
 ﻿// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-namespace Microsoft.Quantum.QAOA.QaoaHybrid.Helpers
+namespace Microsoft.Quantum.Qaoa.QaoaHybrid.Helpers
 {
     using System;
 

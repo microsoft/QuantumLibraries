@@ -7,7 +7,7 @@ namespace Microsoft.Quantum.Tests {
     open Microsoft.Quantum.Intrinsic;
     open Microsoft.Quantum.Diagnostics;
     open Microsoft.Quantum.Math;
-    open Microsoft.Quantum.QAOA;
+    open Microsoft.Quantum.Qaoa;
 
     @Test("QuantumSimulator")
     operation RunPhaseKickbackTest() : Unit {

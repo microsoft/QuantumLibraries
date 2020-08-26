@@ -1,7 +1,7 @@
 ﻿// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-namespace Microsoft.Quantum.QAOA.QaoaHybrid
+namespace Microsoft.Quantum.Qaoa.QaoaHybrid
 {
     /// <summary>
     /// This class stores a solution that is found by a hybrid QAOA. It includes a boolean array that encodes the solution, a corresponding expected value of the objective function Hamiltonian and corresponding beta and gamma parameters that are input to a QAOA.

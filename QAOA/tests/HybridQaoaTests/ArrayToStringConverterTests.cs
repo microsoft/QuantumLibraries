@@ -1,10 +1,10 @@
 ﻿// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-namespace Microsoft.Quantum.QAOA.HybridQaoaTests
+namespace Microsoft.Quantum.Qaoa.HybridQaoaTests
 {
     using Microsoft.VisualStudio.TestTools.UnitTesting;
-    using QAOA.QaoaHybrid.Helpers;
+    using Qaoa.QaoaHybrid.Helpers;
 
     [TestClass]
     class ArrayToStringConverterTests

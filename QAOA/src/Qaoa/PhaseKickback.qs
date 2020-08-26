@@ -1,7 +1,7 @@
 ﻿// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-namespace Microsoft.Quantum.QAOA {
+namespace Microsoft.Quantum.Qaoa {
 
     open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Intrinsic;

@@ -1,14 +1,14 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-namespace Microsoft.Quantum.QAOA.JupyterTests
+namespace Microsoft.Quantum.Qaoa.JupyterTests
 {
     using System.Threading.Tasks;
     using Microsoft.Jupyter.Core;
     using Newtonsoft.Json;
-    using Microsoft.Quantum.QAOA.QaoaHybrid;
+    using Microsoft.Quantum.Qaoa.QaoaHybrid;
     using Xunit;
-    using Microsoft.Quantum.QAOA.Jupyter;
+    using Microsoft.Quantum.Qaoa.Jupyter;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using Assert = Xunit.Assert;
 

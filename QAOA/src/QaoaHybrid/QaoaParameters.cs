@@ -1,11 +1,11 @@
 ﻿// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-namespace Microsoft.Quantum.QAOA.QaoaHybrid
+namespace Microsoft.Quantum.Qaoa.QaoaHybrid
 {
     using System.Linq;
     using Newtonsoft.Json;
-    using Microsoft.Quantum.QAOA.QaoaHybrid.Helpers;
+    using Microsoft.Quantum.Qaoa.QaoaHybrid.Helpers;
 
     public class QaoaParameters
     {

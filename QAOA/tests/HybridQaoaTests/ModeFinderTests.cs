@@ -1,11 +1,11 @@
 ﻿// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-namespace Microsoft.Quantum.QAOA.HybridQaoaTests
+namespace Microsoft.Quantum.Qaoa.HybridQaoaTests
 {
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using System.Collections.Generic;
-    using Microsoft.Quantum.QAOA.QaoaHybrid.Helpers;
+    using Microsoft.Quantum.Qaoa.QaoaHybrid.Helpers;
 
     [TestClass]
     public class ModeFinderTests

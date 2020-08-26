@@ -1,12 +1,12 @@
 ﻿// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-namespace Microsoft.Quantum.QAOA.Jupyter
+namespace Microsoft.Quantum.Qaoa.Jupyter
 {
     using System;
     using System.Threading.Tasks;
     using Microsoft.Jupyter.Core;
-    using Microsoft.Quantum.QAOA.QaoaHybrid;
+    using Microsoft.Quantum.Qaoa.QaoaHybrid;
     using Newtonsoft.Json;
 
     public class HybridQaoaRunMagic : MagicSymbol
@@ -72,7 +72,7 @@ namespace Microsoft.Quantum.QAOA.Jupyter
 
             var args = JsonConvert.DeserializeObject<Arguments>(input);
 
-            HybridQaoa hybridQaoa = new HybridQaoa(args.NumberOfIterations, args.p, args.ProblemInstance, args.ShouldLog);
+            var hybridQaoa = new HybridQaoa(args.NumberOfIterations, args.p, args.ProblemInstance, args.ShouldLog);
 
             return hybridQaoa.RunOptimization(args.InitialQaoaParameters).ToExecutionResult();
         }
@@ -141,7 +141,7 @@ namespace Microsoft.Quantum.QAOA.Jupyter
 
             var args = JsonConvert.DeserializeObject<Arguments>(input);
 
-            HybridQaoa hybridQaoa = new HybridQaoa(args.NumberOfIterations, args.p, args.ProblemInstance, args.ShouldLog);
+            var hybridQaoa = new HybridQaoa(args.NumberOfIterations, args.p, args.ProblemInstance, args.ShouldLog);
 
             return hybridQaoa.RunOptimization(args.NumberOfRandomStartingPoints).ToExecutionResult();
         }

@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-namespace Microsoft.Quantum.QAOA.JupyterTests
+namespace Microsoft.Quantum.Qaoa.JupyterTests
 {
     using System;
     using System.Collections.Generic;
