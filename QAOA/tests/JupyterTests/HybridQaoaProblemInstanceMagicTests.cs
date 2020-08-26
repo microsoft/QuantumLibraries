@@ -31,7 +31,7 @@ namespace Microsoft.Quantum.Qaoa.JupyterTests
             });
 
             var result = await magic.Run(args, channel);
-            var problemInstance = result.Output as ProblemInstance;
+            var problemInstance = result.Output as QaoaProblemInstance;
             Assert.Equal(ExecuteStatus.Ok, result.Status);
 
             Assert.Equal(problemInstance.ProblemSizeInBits, oneLocalHamiltonianCoefficients.Length);

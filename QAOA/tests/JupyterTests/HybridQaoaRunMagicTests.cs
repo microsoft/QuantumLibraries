@@ -31,13 +31,13 @@ namespace Microsoft.Quantum.Qaoa.JupyterTests
             var initialGamma = new double[] { 0, 0 };
             var initialQaoaParameters = new QaoaParameters(initialBeta, initialGamma);
 
-            var simpleMaxCut = new ProblemInstance(oneLocalHamiltonianCoefficients, twoLocalHamiltonianCoefficients);
+            var simpleMaxCut = new QaoaProblemInstance(oneLocalHamiltonianCoefficients, twoLocalHamiltonianCoefficients);
 
             var args = JsonConvert.SerializeObject(new HybridQaoaRunMagic.Arguments
             {
                 NumberOfIterations = numberOfIterations,
                 p = p,
-                ProblemInstance = simpleMaxCut,
+                QaoaProblemInstance = simpleMaxCut,
                 InitialQaoaParameters = initialQaoaParameters,
             });
 
@@ -75,13 +75,13 @@ namespace Microsoft.Quantum.Qaoa.JupyterTests
             var twoLocalHamiltonianCoefficients = new double[] { 0, 1, 0, 0 };
             var numberOfRandomStartingPoints = 2;
 
-            var simpleMaxCut = new ProblemInstance(oneLocalHamiltonianCoefficients, twoLocalHamiltonianCoefficients);
+            var simpleMaxCut = new QaoaProblemInstance(oneLocalHamiltonianCoefficients, twoLocalHamiltonianCoefficients);
 
             var args = JsonConvert.SerializeObject(new HybridQaoaWithRandomParametersRunMagic.Arguments
             {
                 NumberOfIterations = numberOfIterations,
                 p = p,
-                ProblemInstance = simpleMaxCut,
+                QaoaProblemInstance = simpleMaxCut,
                 NumberOfRandomStartingPoints = numberOfRandomStartingPoints
         });
 

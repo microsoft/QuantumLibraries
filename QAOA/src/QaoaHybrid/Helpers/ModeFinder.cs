@@ -6,7 +6,7 @@ namespace Microsoft.Quantum.Qaoa.QaoaHybrid.Helpers
     using System.Collections.Generic;
     using System.Linq;
 
-    public class ModeFinder
+    internal class ModeFinder
     {
         /// <summary>
         /// Return the most common boolean string from a list of boolean values.

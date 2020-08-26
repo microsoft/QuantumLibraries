@@ -44,7 +44,7 @@ namespace Microsoft.Quantum.Qaoa.Jupyter
             /// Description of a combinatorial problem to be solved.
             /// </summary>
             [JsonProperty(PropertyName = "problem_instance")]
-            public ProblemInstance ProblemInstance { get; set; }
+            public QaoaProblemInstance QaoaProblemInstance { get; set; }
 
             /// <summary>
             /// Initial QAOA parameters (beta and gamma angles).
@@ -72,7 +72,7 @@ namespace Microsoft.Quantum.Qaoa.Jupyter
 
             var args = JsonConvert.DeserializeObject<Arguments>(input);
 
-            var hybridQaoa = new HybridQaoa(args.NumberOfIterations, args.p, args.ProblemInstance, args.ShouldLog);
+            var hybridQaoa = new HybridQaoa(args.NumberOfIterations, args.p, args.QaoaProblemInstance, args.ShouldLog);
 
             return hybridQaoa.RunOptimization(args.InitialQaoaParameters).ToExecutionResult();
         }
@@ -113,7 +113,7 @@ namespace Microsoft.Quantum.Qaoa.Jupyter
             /// Description of a combinatorial problem to be solved.
             /// </summary>
             [JsonProperty(PropertyName = "problem_instance")]
-            public ProblemInstance ProblemInstance { get; set; }
+            public QaoaProblemInstance QaoaProblemInstance { get; set; }
 
             /// <summary>
             /// Number of random starting points in the angles parameters spaces.
@@ -141,7 +141,7 @@ namespace Microsoft.Quantum.Qaoa.Jupyter
 
             var args = JsonConvert.DeserializeObject<Arguments>(input);
 
-            var hybridQaoa = new HybridQaoa(args.NumberOfIterations, args.p, args.ProblemInstance, args.ShouldLog);
+            var hybridQaoa = new HybridQaoa(args.NumberOfIterations, args.p, args.QaoaProblemInstance, args.ShouldLog);
 
             return hybridQaoa.RunOptimization(args.NumberOfRandomStartingPoints).ToExecutionResult();
         }

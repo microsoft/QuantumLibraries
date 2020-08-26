@@ -46,7 +46,7 @@ namespace Microsoft.Quantum.Qaoa.Jupyter
         }
 
         /// <summary>
-        /// Prepares a ProblemInstance object for a hybrid QAOA.
+        /// Prepares a QaoaProblemInstance object for a hybrid QAOA.
         /// </summary>
         public async Task<ExecutionResult> Run(string input, IChannel channel)
         {
@@ -58,7 +58,7 @@ namespace Microsoft.Quantum.Qaoa.Jupyter
 
             var args = JsonConvert.DeserializeObject<Arguments>(input);
 
-            var problemInstance = new ProblemInstance(args.OneLocalHamiltonianCoefficients, args.TwoLocalHamiltonianCoefficients);
+            var problemInstance = new QaoaProblemInstance(args.OneLocalHamiltonianCoefficients, args.TwoLocalHamiltonianCoefficients);
 
             return problemInstance.ToExecutionResult();
         }

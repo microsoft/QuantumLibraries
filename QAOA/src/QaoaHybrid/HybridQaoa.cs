@@ -22,7 +22,7 @@ namespace Microsoft.Quantum.Qaoa.QaoaHybrid
     {
         private readonly int numberOfIterations;
         private readonly int p;
-        private readonly ProblemInstance problemInstance;
+        private readonly QaoaProblemInstance qaoaProblemInstance;
         private readonly bool shouldLog;
         private QaoaSolution solution;
         private QaoaLogger? logger;
@@ -36,17 +36,17 @@ namespace Microsoft.Quantum.Qaoa.QaoaHybrid
         /// <param name="p">
         /// A parameter related to the depth of a QAOA circuit. It corresponds to the number of times evolution operators are applied.
         /// </param>
-        /// <param name="problemInstance">
+        /// <param name="qaoaProblemInstance">
         /// An object that describes a combinatorial optimization problem to be solved by the algorithm.
         /// </param>
         /// <param name="shouldLog">
         /// A flag that specifies whether a log from the hybrid QAOA should be saved in a text file.
         /// </param>
-        public HybridQaoa(int numberOfIterations, int p, ProblemInstance problemInstance, bool shouldLog = false)
+        public HybridQaoa(int numberOfIterations, int p, QaoaProblemInstance qaoaProblemInstance, bool shouldLog = false)
         {
             this.numberOfIterations = numberOfIterations;
             this.p = p;
-            this.problemInstance = problemInstance;
+            this.qaoaProblemInstance = qaoaProblemInstance;
             this.shouldLog = shouldLog;
         }
 
@@ -65,7 +65,7 @@ namespace Microsoft.Quantum.Qaoa.QaoaHybrid
         public double EvaluateCostFunction(bool[] result, double[] costs)
         {
             double costFunctionValue = 0;
-            for (var i = 0; i < this.problemInstance.ProblemSizeInBits; i++)
+            for (var i = 0; i < this.qaoaProblemInstance.ProblemSizeInBits; i++)
             {
                 costFunctionValue += costs[i] * Convert.ToInt32(result[i]);
             }
@@ -93,17 +93,17 @@ namespace Microsoft.Quantum.Qaoa.QaoaHybrid
             var betas = new QArray<double>(qaoaParameters.Betas);
             var gammas = new QArray<double>(qaoaParameters.Gammas);
 
-            var oneLocalHamiltonianCoefficients = new QArray<double>(this.problemInstance.OneLocalHamiltonianCoefficients);
-            var twoLocalHamiltonianCoefficients = new QArray<double>(this.problemInstance.TwoLocalHamiltonianCoefficients);
+            var oneLocalHamiltonianCoefficients = new QArray<double>(this.qaoaProblemInstance.OneLocalHamiltonianCoefficients);
+            var twoLocalHamiltonianCoefficients = new QArray<double>(this.qaoaProblemInstance.TwoLocalHamiltonianCoefficients);
 
             using (var qsim = new QuantumSimulator())
             {
 
                 for (var i = 0; i < this.numberOfIterations; i++)
                 {
-                    var result = RunQaoa.Run(qsim, this.problemInstance.ProblemSizeInBits, betas, gammas, oneLocalHamiltonianCoefficients, twoLocalHamiltonianCoefficients, this.p).Result;
+                    var result = RunQaoa.Run(qsim, this.qaoaProblemInstance.ProblemSizeInBits, betas, gammas, oneLocalHamiltonianCoefficients, twoLocalHamiltonianCoefficients, this.p).Result;
                     allSolutionVectors.Add(result.ToArray());
-                    var hamiltonianValue = this.problemInstance.EvaluateHamiltonian(result.ToArray());
+                    var hamiltonianValue = this.qaoaProblemInstance.EvaluateHamiltonian(result.ToArray());
                     hamiltonianExpectationValue += hamiltonianValue / this.numberOfIterations;
 
                 }

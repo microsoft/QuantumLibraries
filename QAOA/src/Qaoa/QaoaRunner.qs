@@ -25,7 +25,7 @@ namespace Microsoft.Quantum.Qaoa {
     /// ## twoLocalHamiltonianCoefficients
     /// Array of 2-local coefficents of the objective function Hamiltonian.
     /// ## p
-    /// Depth of the QAOA circuit.
+    /// A parameter related to the depth of a QAOA circuit. It corresponds to the number of times evolution operators are applied.
     ///
     /// # Output
     /// Array of boolean values that represent results of measurements on the QAOA state.

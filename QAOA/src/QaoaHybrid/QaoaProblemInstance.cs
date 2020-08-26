@@ -8,7 +8,7 @@ namespace Microsoft.Quantum.Qaoa.QaoaHybrid
     /// <summary>
     /// This class is used for storing the encoding of a combinatorial optimization problem into a Hamiltonian. Currently, a Hamiltonian with locality of up to 2 is supported.
     /// </summary>
-    public class ProblemInstance
+    public class QaoaProblemInstance
     {
         public double[] OneLocalHamiltonianCoefficients { get; }
 
@@ -17,7 +17,7 @@ namespace Microsoft.Quantum.Qaoa.QaoaHybrid
         public int ProblemSizeInBits { get; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ProblemInstance"/> class.
+        /// Initializes a new instance of the <see cref="QaoaProblemInstance"/> class.
         /// </summary>
         /// <param name="oneLocalHamiltonianCoefficients">
         /// Given a problem encoding into a Hamiltonian, this field corresponds to coefficients of 1-local terms. Non-existent terms (excluding those that go beyond the size of a problem) shall be input with a coefficient that equals 0.
@@ -25,7 +25,7 @@ namespace Microsoft.Quantum.Qaoa.QaoaHybrid
         /// <param name="twoLocalHamiltonianCoefficients">
         /// Given a problem encoding into a Hamiltonian, this field corresponds to coefficients of 2-local terms. Non-existent terms (excluding those that go beyond the size of a problem) shall be input with a coefficient that equals 0.
         /// </param>
-        public ProblemInstance(double[] oneLocalHamiltonianCoefficients, double[] twoLocalHamiltonianCoefficients)
+        public QaoaProblemInstance(double[] oneLocalHamiltonianCoefficients, double[] twoLocalHamiltonianCoefficients)
         {
             this.OneLocalHamiltonianCoefficients = oneLocalHamiltonianCoefficients;
             this.TwoLocalHamiltonianCoefficients = twoLocalHamiltonianCoefficients;

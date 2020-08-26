@@ -13,9 +13,9 @@ namespace Microsoft.Quantum.Qaoa.HybridQaoaTests
         [TestMethod]
         public void EvaluateCostFunctionTest()
         {
-            ProblemInstance problemInstance = new ProblemInstance(new double[] { 1, 1, 1, 1 }, new double[] { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 });
+            QaoaProblemInstance qaoaProblemInstance = new QaoaProblemInstance(new double[] { 1, 1, 1, 1 }, new double[] { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 });
 
-            HybridQaoa classicalOptimization = new HybridQaoa(2, 1, problemInstance);
+            HybridQaoa classicalOptimization = new HybridQaoa(2, 1, qaoaProblemInstance);
 
             var optimizationResult = new []{false, true, false, true};
 
@@ -38,7 +38,7 @@ namespace Microsoft.Quantum.Qaoa.HybridQaoaTests
             var p = 2;
             var numberOfRandomStartingPoints = 2;
 
-            var simpleMaxCut = new ProblemInstance(dh, dJ);
+            var simpleMaxCut = new QaoaProblemInstance(dh, dJ);
 
             var classicalOptimization = new HybridQaoa(numberOfIterations, p, simpleMaxCut);
             var optimalSolution = classicalOptimization.RunOptimization(numberOfRandomStartingPoints);
@@ -67,7 +67,7 @@ namespace Microsoft.Quantum.Qaoa.HybridQaoaTests
             var numberOfIterations = 60;
             var p = 3;
 
-            var simpleMaxCut = new ProblemInstance(dh, dJ);
+            var simpleMaxCut = new QaoaProblemInstance(dh, dJ);
 
             var initialBeta = new double[] { 0, 0, 0 };
             var initialGamma = new double[] { 0, 0, 0 };
