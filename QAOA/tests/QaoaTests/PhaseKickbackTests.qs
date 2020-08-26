@@ -12,7 +12,6 @@ namespace Microsoft.Quantum.Tests {
     @Test("QuantumSimulator")
     operation RunPhaseKickbackTest() : Unit {
 
-        let auxiliaryQubits = 1;
         let controlQubitsIndices = [0];
         let phaseExponent = 0.5;
 
@@ -27,7 +26,6 @@ namespace Microsoft.Quantum.Tests {
      @Test("QuantumSimulator")
     operation RunPhaseKickbackOneControlQubitTest() : Unit {
 
-        let auxiliaryQubits = 1;
         let controlQubitsIndices = [0];
         let phaseExponent = 0.5;
         

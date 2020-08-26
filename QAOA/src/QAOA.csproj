@@ -3,6 +3,7 @@
   <PropertyGroup>
     <OutputType>Library</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+	  <AssemblyName>Microsoft.Quantum.Qaoa</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>
