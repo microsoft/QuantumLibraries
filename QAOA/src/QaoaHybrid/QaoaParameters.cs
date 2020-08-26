@@ -34,14 +34,12 @@ namespace Microsoft.Quantum.Qaoa.QaoaHybrid
         }
 
         /// <summary>
-        /// Converts betas and gammas vectors into a concatenated vector.
+        /// Gets betas and gammas vectors as a concatenated vector.
         /// </summary>
         /// <returns>
         /// Array of concatenated betas and gammas arrays.
         /// </returns>
-        public double[] getConcatenatedQaoaParameters()
-        {
-            return Betas.Concat(Gammas).ToArray();
-        }
+        public double[] ConcatenatedQaoaParameters =>
+            Betas.Concat(Gammas).ToArray();
     }
 }

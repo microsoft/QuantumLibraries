@@ -17,10 +17,11 @@ namespace Microsoft.Quantum.Tests {
         let controlQubitsIndices = [0];
         let phaseExponent = 0.5;
 
-        using (qubits = Qubit[numberOfQubits+auxiliaryQubits]) {
-            RunPhaseKickback(qubits[...1], qubits[1],controlQubitsIndices,phaseExponent);
-            AssertQubit(Zero, Head(qubits));
-            ResetAll(qubits);
+       using ((register, aux) = (Qubit[numberOfQubits], Qubit())) {
+            RunPhaseKickback(register, aux, controlQubitsIndices, phaseExponent);
+            AssertQubit(Zero, register);
+            ResetAll(register);
+            ResetAll(aux);
         }
     }
 
@@ -35,11 +36,12 @@ namespace Microsoft.Quantum.Tests {
         let complexZero = Complex(0.685125,-0.174941);
         let complexOne = Complex(0.685125,0.174941);
 
-        using (qubits = Qubit[numberOfQubits+auxiliaryQubits]) {
-            H(qubits[0]);
-            RunPhaseKickback([qubits[0]], qubits[1],controlQubitsIndices,phaseExponent);
-            AssertQubitIsInStateWithinTolerance((complexZero,complexOne), qubits[0], 1E-05);
-            ResetAll(qubits);
+        using ((register, aux) = (Qubit[numberOfQubits], Qubit())) {
+            H(register);
+            RunPhaseKickback([register], aux, controlQubitsIndices, phaseExponent);
+            AssertQubitIsInStateWithinTolerance((complexZero, complexOne), register, 1E-05);
+            ResetAll(register);
+            ResetAll(aux);
         }
     }
 }
