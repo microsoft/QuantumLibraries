@@ -37,9 +37,9 @@ namespace Microsoft.Quantum.QAOA {
         mutable result = new Bool[problemSize];
         using (qubits = Qubit[problemSize]) {
             ApplyToEach(H, qubits);                         
-            for (i in 0..p-1) {
-                EvolveWithObjectiveHamiltonian(qubits, gammas[i], oneLocalHamiltonianCoefficients, twoLocalHamiltonianCoefficients);
-                EvolveWithMixingHamiltonian(qubits, betas[i]);
+            for ((beta, gamma) in Zip(betas, gammas)) {
+                EvolveWithObjectiveHamiltonian(qubits, gamma, oneLocalHamiltonianCoefficients, twoLocalHamiltonianCoefficients);
+                EvolveWithMixingHamiltonian(qubits, beta);
             }
             return ResultArrayAsBoolArray(ForEach(MResetZ, qubits));               
         }

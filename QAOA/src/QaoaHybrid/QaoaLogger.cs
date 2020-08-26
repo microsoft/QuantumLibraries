@@ -18,7 +18,7 @@ namespace Microsoft.Quantum.QAOA.QaoaHybrid
         public QaoaLogger()
         {
 
-            this.logger = new StreamWriter("hybrid_qaoa_log_" + DateTime.Now.ToString("yyyy-dd-M--HH-mm-ss") + ".txt", true);
+            logger = new StreamWriter("hybrid_qaoa_log_" + DateTime.Now.ToString("yyyy-dd-M--HH-mm-ss") + ".txt", true);
         }
 
         /// <summary>
@@ -39,15 +39,15 @@ namespace Microsoft.Quantum.QAOA.QaoaHybrid
         public void LogCurrentBestSolution(QArray<double> beta, QArray<double> gamma, double bestHamiltonian, bool[] bestVector)
         {
 
-                this.logger.WriteLine("Current beta vector:");
-                this.logger.WriteLine(beta);
-                this.logger.WriteLine("Current gamma vector:");
-                this.logger.WriteLine(gamma);
-                this.logger.WriteLine("Current best expected value of a Hamiltonian:");
-                this.logger.WriteLine(bestHamiltonian);
-                this.logger.WriteLine("Current best solution vector:");
+                logger.WriteLine("Current beta vector:");
+                logger.WriteLine(beta);
+                logger.WriteLine("Current gamma vector:");
+                logger.WriteLine(gamma);
+                logger.WriteLine("Current best expected value of a Hamiltonian:");
+                logger.WriteLine(bestHamiltonian);
+                logger.WriteLine("Current best solution vector:");
                 var bestSolutionVector = string.Join(", ", bestVector.Select(x => x.ToString()));
-                this.logger.WriteLine("[" + bestSolutionVector + "]");
+                logger.WriteLine("[" + bestSolutionVector + "]");
         }
 
         /// <summary>
@@ -58,9 +58,9 @@ namespace Microsoft.Quantum.QAOA.QaoaHybrid
         /// </param>
         public void LogSuccess(bool success)
         {
-                this.logger.WriteLine("Was optimization successful?");
-                this.logger.WriteLine(success);
-                this.logger.WriteLine("##################################");
+                logger.WriteLine("Was optimization successful?");
+                logger.WriteLine(success);
+                logger.WriteLine("##################################");
 
         }
 
@@ -69,10 +69,7 @@ namespace Microsoft.Quantum.QAOA.QaoaHybrid
 
             if (disposing)
             {
-                if (logger != null)
-                {
-                    logger.Dispose();
-                }
+                logger?.Dispose();
             }
         }
 

@@ -13,17 +13,13 @@ namespace Microsoft.Quantum.QAOA.HybridQaoaTests
         [TestMethod]
         public void FindModeInBoolListTest()
         {
-            bool[] boolsArray1 = { false, false, true };
-            bool[] boolsArray2 = { false, false, true };
-            bool[] boolsArray3 = { false, false, false };
-            bool[] boolsArray4 = { false, true, true };
 
             var listOfBools = new List<bool[]>
             {
-                boolsArray1,
-                boolsArray3,
-                boolsArray2,
-                boolsArray4
+                new[] { false, false, true },
+                new[] { false, false, true },
+                new[] { false, false, false },
+                new[] { false, true, true }
             };
 
             var expectedResult = new[] {false, false, true};

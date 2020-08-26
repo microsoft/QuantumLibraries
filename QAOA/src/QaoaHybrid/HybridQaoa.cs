@@ -1,6 +1,8 @@
 ﻿// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+#nullable enable
+
 namespace Microsoft.Quantum.QAOA.QaoaHybrid
 
 {
@@ -23,7 +25,7 @@ namespace Microsoft.Quantum.QAOA.QaoaHybrid
         private readonly ProblemInstance problemInstance;
         private readonly bool shouldLog;
         private QaoaSolution solution;
-        private QaoaLogger logger;
+        private QaoaLogger? logger;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="HybridQaoa"/> class.
@@ -85,7 +87,7 @@ namespace Microsoft.Quantum.QAOA.QaoaHybrid
         private double CalculateObjectiveFunction(double[] concatenatedQaoaParameters)
         {
             var qaoaParameters = new QaoaParameters(concatenatedQaoaParameters);
-            double hamiltonianExpectationValue = 0;
+            var hamiltonianExpectationValue = 0.0;
             var allSolutionVectors = new List<bool[]>();
 
             var betas = new QArray<double>(qaoaParameters.Betas);
@@ -99,7 +101,7 @@ namespace Microsoft.Quantum.QAOA.QaoaHybrid
 
                 for (var i = 0; i < this.numberOfIterations; i++)
                 {
-                    IQArray<bool> result = RunQaoa.Run(qsim, this.problemInstance.ProblemSizeInBits, betas, gammas, oneLocalHamiltonianCoefficients, twoLocalHamiltonianCoefficients, this.p).Result;
+                    var result = RunQaoa.Run(qsim, this.problemInstance.ProblemSizeInBits, betas, gammas, oneLocalHamiltonianCoefficients, twoLocalHamiltonianCoefficients, this.p).Result;
                     allSolutionVectors.Add(result.ToArray());
                     var hamiltonianValue = this.problemInstance.EvaluateHamiltonian(result.ToArray());
                     hamiltonianExpectationValue += hamiltonianValue / this.numberOfIterations;
@@ -198,10 +200,7 @@ namespace Microsoft.Quantum.QAOA.QaoaHybrid
                 var concatenatedQaoaParameters = new QaoaParameters(p).getConcatenatedQaoaParameters();
                 var success = cobyla.Minimize(concatenatedQaoaParameters);
 
-                if (this.shouldLog)
-                {
-                    this.logger.LogSuccess(success);
-                }
+                this.logger?.LogSuccess(success);
             }
 
             if (this.shouldLog)
