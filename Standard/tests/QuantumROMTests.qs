@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft Corporation. All rights reserved.
+// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
 
@@ -14,7 +14,8 @@ namespace Microsoft.Quantum.Tests {
     open Microsoft.Quantum.Random;
 
     // Tests the discretization algorithm
-    operation QuantumROMDiscretizationTest() : Unit {
+    @Test("QuantumSimulator")
+    operation TestQuantumROMDiscretization() : Unit {
         for(rep in 0..20){
             let coeffs = DrawRandomInt(2, 5002);
             let bitsPrecision = DrawRandomInt(1, 31);
@@ -31,7 +32,7 @@ namespace Microsoft.Quantum.Tests {
 
             // Reconstruct coefficients
             mutable coefficientsOutInt = new Int[coeffs];
-            for (idx in 0..coeffs-1)
+            for (idx in 0..coeffs - 1)
             {
                 set coefficientsOutInt w/= idx <- coefficientsOutInt[idx] + keepCoeff[idx];
                 if (altIndex[idx] >= 0)
@@ -44,21 +45,17 @@ namespace Microsoft.Quantum.Tests {
             mutable coefficientsOut = new Double[coeffs];
             mutable errors = new Double[coeffs];
             mutable maxError = 0.0;
-            for (i in 0..coeffs-1)
-            {
+            for (i in 0..coeffs - 1) {
                 set coefficientsOut w/= i <- oneNorm * IntAsDouble(coefficientsOutInt[i]) / IntAsDouble(barHeight * coeffs);
                 let error = AbsD(coefficients[i] - coefficientsOut[i]) / oneNorm  /( PowD(2.0, IntAsDouble(-bitsPrecision)) / IntAsDouble(coeffs));
                 set errors w/= i <- error;
-                if(AbsD(error) > AbsD(maxError)){
+                if (AbsD(error) > AbsD(maxError)) {
                     set maxError = error;
                 }
             }
             Message($"coeffs {coeffs}, bitsPrecision {bitsPrecision}, maxError {maxError}");
-            for(i in 0..coeffs-1){
-                if(errors[i] < IntAsDouble(3)){
-                    // test passes
-                }
-                else{
+            for (i in 0..coeffs - 1) {
+                if (errors[i] >= IntAsDouble(3)) {
                     fail $"index {i} reconstructed coefficient incorrect. Error is {errors[i]}";
                 }
             }
