@@ -61,7 +61,6 @@ namespace Microsoft.Quantum.Qaoa.QaoaHybrid
                 logger.WriteLine("Was optimization successful?");
                 logger.WriteLine(success);
                 logger.WriteLine("##################################");
-
         }
 
         protected virtual void Dispose(bool disposing)

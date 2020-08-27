@@ -111,10 +111,7 @@ namespace Microsoft.Quantum.Qaoa.QaoaHybrid
 
             this.UpdateBestSolution(hamiltonianExpectationValue, allSolutionVectors, qaoaParameters);
 
-            if (this.shouldLog)
-            {
-                this.logger.LogCurrentBestSolution(betas, gammas, this.solution.SolutionHamiltonianValue, this.solution.SolutionVector);
-            }
+            this.logger?.LogCurrentBestSolution(betas, gammas, this.solution.SolutionHamiltonianValue, this.solution.SolutionVector);
 
             return hamiltonianExpectationValue;
         }
@@ -195,7 +192,7 @@ namespace Microsoft.Quantum.Qaoa.QaoaHybrid
             var constraints = this.GenerateConstraints();
             var cobyla = new Cobyla(optimizerObjectiveFunction, constraints);
 
-            for (int i = 0; i < numberOfRandomStartingPoints; i++)
+            for (var i = 0; i < numberOfRandomStartingPoints; i++)
             {
                 var concatenatedQaoaParameters = new QaoaParameters(p).ConcatenatedQaoaParameters;
                 var success = cobyla.Minimize(concatenatedQaoaParameters);
@@ -203,10 +200,7 @@ namespace Microsoft.Quantum.Qaoa.QaoaHybrid
                 this.logger?.LogSuccess(success);
             }
 
-            if (this.shouldLog)
-            {
-                this.logger.Dispose();
-            }
+            this.logger?.Dispose();
 
             return this.solution;
         }
@@ -240,11 +234,8 @@ namespace Microsoft.Quantum.Qaoa.QaoaHybrid
             var concatenatedQaoaParameters = qaoaParameters.ConcatenatedQaoaParameters;
             var success = cobyla.Minimize(concatenatedQaoaParameters);
 
-            if (this.shouldLog)
-            {
-                this.logger.LogSuccess(success);
-                this.logger.Dispose();
-            }
+            this.logger?.LogSuccess(success);
+            this.logger?.Dispose();
 
             return this.solution;
         }
