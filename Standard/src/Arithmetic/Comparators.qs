@@ -77,15 +77,13 @@ namespace Microsoft.Quantum.Arithmetic {
                 let tmpCarry = x![l..l] + tmpAnd;
                 within {
                     ApplyXorInPlaceL(c, x);
-                    for (i in 0..bitwidth - l - 2) {
-                        if (i > 0) {
-                            within {
-                                ApplyIfA(X, bits[i + l], tmpCarry[i - 1]);
-                            } apply {
-                                ApplyAnd(tmpCarry[i - 1], x![i + l], tmpCarry[i]);
-                            }
-                            CNOT(tmpCarry[i - 1], tmpCarry[i]);
+                    for (i in 1..bitwidth - l - 2) {
+                        within {
+                            ApplyIfA(X, bits[i + l], tmpCarry[i - 1]);
+                        } apply {
+                            ApplyAnd(tmpCarry[i - 1], x![i + l], tmpCarry[i]);
                         }
+                        CNOT(tmpCarry[i - 1], tmpCarry[i]);
                     }
                 } apply {
                     within {
