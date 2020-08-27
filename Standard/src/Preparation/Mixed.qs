@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft Corporation. All rights reserved.
+// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
 namespace Microsoft.Quantum.Preparation {
@@ -8,8 +8,8 @@ namespace Microsoft.Quantum.Preparation {
     open Microsoft.Quantum.Random;
 
     /// # Summary
-	/// Prepares a qubit in the maximally mixed state.
-	///
+    /// Prepares a qubit in the maximally mixed state.
+    ///
     /// It prepares the given qubit in the $\boldone / 2$ state by applying the depolarizing channel
     /// $$
     /// \begin{align}
@@ -38,9 +38,9 @@ namespace Microsoft.Quantum.Preparation {
 
     /// # Summary
     /// Given a register, prepares that register in the maximally mixed state.
-	///
+    ///
     /// The register is prepared in the $\boldone / 2^N$ state by applying the 
-	/// complete depolarizing
+    /// complete depolarizing
     /// channel to each qubit, where $N$ is the length of the register.
     ///
     /// # Input
@@ -55,10 +55,10 @@ namespace Microsoft.Quantum.Preparation {
     }
 
     /// # Summary
-	/// Prepares a qubit in the +1 (`Zero`) eigenstate of the given Pauli operator.
-	/// If the identity operator is given, then the qubit is prepared in the maximally
-	/// mixed state.
-	///
+    /// Prepares a qubit in the +1 (`Zero`) eigenstate of the given Pauli operator.
+    /// If the identity operator is given, then the qubit is prepared in the maximally
+    /// mixed state.
+    ///
     /// If the qubit was initially in the $\ket{0}$ state, this operation prepares the
     /// qubit in the $+1$ eigenstate of a given Pauli operator, or, for `PauliI`,
     /// in the maximally mixed state instead (see <xref:microsoft.quantum.preparation.preparesinglequbitidentity>).
@@ -73,16 +73,11 @@ namespace Microsoft.Quantum.Preparation {
     /// ## qubit
     /// A qubit to be prepared.
     operation PrepareQubit (basis : Pauli, qubit : Qubit) : Unit {
-        if (basis == PauliI)
-        {
+        if (basis == PauliI) {
             PrepareSingleQubitIdentity(qubit);
-        }
-        elif (basis == PauliX)
-        {
+        } elif (basis == PauliX) {
             H(qubit);
-        }
-        elif (basis == PauliY)
-        {
+        } elif (basis == PauliY) {
             H(qubit);
             S(qubit);
         }
