@@ -72,7 +72,7 @@ namespace Microsoft.Quantum.Arithmetic {
             X(output);
         } else {
             let l = TrailingZeroes(c);
-            using ((tmpConstants, tmpAnd) = (Qubit[bitwidth - l], Qubit[bitwidth - 1 - l])) {
+            using ((tmpConstants, tmpAnd) = (Qubit[bitwidth - l], Qubit[bitwidth - 2 - l])) {
                 within {
                     ApplyXorInPlaceL(c >>> l, LittleEndian(tmpConstants));
                     ApplyXorInPlaceL(c, x);
@@ -80,18 +80,18 @@ namespace Microsoft.Quantum.Arithmetic {
                         if (i == 0) {
                             CNOT(x![i + l], tmpConstants[i + 1]);
                         } else {
-                            ApplyAnd(tmpConstants[i], x![i + l], tmpAnd[i]);
+                            ApplyAnd(tmpConstants[i], x![i + l], tmpAnd[i - 1]);
                             if (i == 1) {
-                                CNOT(x![i + l - 1], tmpAnd[i]);
+                                CNOT(x![i + l - 1], tmpAnd[i - 1]);
                             } else {
-                                CNOT(tmpAnd[i - 1], tmpAnd[i]);
+                                CNOT(tmpAnd[i - 2], tmpAnd[i - 1]);
                             }
-                            CNOT(tmpAnd[i], tmpConstants[i + 1]);
+                            CNOT(tmpAnd[i - 1], tmpConstants[i + 1]);
                         }
                     }
                 } apply {
                     ApplyAnd(Tail(tmpConstants), Tail(x!), output);
-                    CNOT(Length(tmpAnd) == 1 ? x![l] | Tail(tmpAnd), output);
+                    CNOT(Length(tmpAnd) == 0 ? x![l] | Tail(tmpAnd), output);
                 }
             }
         }
