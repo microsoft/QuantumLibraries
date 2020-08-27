@@ -78,16 +78,20 @@ namespace Microsoft.Quantum.Arithmetic {
                     ApplyXorInPlaceL(c, x);
                     for (i in 0..bitwidth - l - 2) {
                         if (i == 0) {
-                            CNOT(x![i + l], tmpAnd[i]);
+                            CNOT(x![i + l], tmpConstants[i + 1]);
                         } else {
                             ApplyAnd(tmpConstants[i], x![i + l], tmpAnd[i]);
-                            CNOT(tmpAnd[i - 1], tmpAnd[i]);
+                            if (i == 1) {
+                                CNOT(x![i + l - 1], tmpAnd[i]);
+                            } else {
+                                CNOT(tmpAnd[i - 1], tmpAnd[i]);
+                            }
+                            CNOT(tmpAnd[i], tmpConstants[i + 1]);
                         }
-                        CNOT(tmpAnd[i], tmpConstants[i + 1]);
                     }
                 } apply {
                     ApplyAnd(Tail(tmpConstants), Tail(x!), output);
-                    CNOT(Tail(tmpAnd), output);
+                    CNOT(Length(tmpAnd) == 1 ? x![l] | Tail(tmpAnd), output);
                 }
             }
         }
