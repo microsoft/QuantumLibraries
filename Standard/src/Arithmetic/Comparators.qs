@@ -78,17 +78,11 @@ namespace Microsoft.Quantum.Arithmetic {
                     ApplyXorInPlaceL(c >>> l, LittleEndian(tmpConstants));
                     ApplyXorInPlaceL(c, x);
                     for (i in 0..bitwidth - l - 2) {
-                        if (i == 0) {
-                            CNOT(x![i + l], tmpConstants[i + 1]);
-                        } else {
+                        if (i > 0) {
                             ApplyAnd(tmpConstants[i], x![i + l], tmpCarry[i]);
-                            if (i == 1) {
-                                CNOT(x![i + l - 1], tmpCarry[i]);
-                            } else {
-                                CNOT(tmpCarry[i - 1], tmpCarry[i]);
-                            }
-                            CNOT(tmpCarry[i], tmpConstants[i + 1]);
+                            CNOT(tmpCarry[i - 1], tmpCarry[i]);
                         }
+                        CNOT(tmpCarry[i], tmpConstants[i + 1]);
                     }
                 } apply {
                     ApplyAnd(Tail(tmpConstants), Tail(x!), output);
