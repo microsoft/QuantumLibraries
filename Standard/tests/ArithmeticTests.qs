@@ -2,10 +2,13 @@
 // Licensed under the MIT License.
 namespace Microsoft.Quantum.ArithmeticTests {
     open Microsoft.Quantum.Arithmetic;
+    open Microsoft.Quantum.Arrays;
     open Microsoft.Quantum.Canon;
+    open Microsoft.Quantum.Convert;
     open Microsoft.Quantum.Math;
     open Microsoft.Quantum.Intrinsic;
     open Microsoft.Quantum.Diagnostics;
+    open Microsoft.Quantum.Measurement;
     
     
     operation InPlaceXorTestHelper (testValue : Int, numberOfQubits : Int) : Unit {
@@ -173,7 +176,28 @@ namespace Microsoft.Quantum.ArithmeticTests {
             }
         }
     }
-    
+
+    @Test("ToffoliSimulator")
+    operation TestLessThanConstantUsingRippleCarry() : Unit {
+        TestLessThanConstantUsingRippleCarryForBitWidth(3);
+        TestLessThanConstantUsingRippleCarryForBitWidth(4);
+    }
+
+    internal operation TestLessThanConstantUsingRippleCarryForBitWidth(bitwidth : Int) : Unit {
+        using ((input, output) = (Qubit[bitwidth], Qubit())) {
+            let inputReg = LittleEndian(input);
+            for (qinput in 0..2^bitwidth - 1) {
+                for (cinput in 0..2^bitwidth - 1) {
+                    within {
+                        ApplyXorInPlace(qinput, inputReg);
+                    } apply {
+                        LessThanConstantUsingRippleCarry(IntAsBigInt(cinput), inputReg, output);
+                        EqualityFactB(IsResultOne(MResetZ(output)), qinput < cinput, $"Unexpected result for cinput = {cinput} and qinput = {qinput}");
+                    }
+                }
+            }
+        }
+    }
 }
 
 

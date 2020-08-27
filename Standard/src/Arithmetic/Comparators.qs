@@ -2,9 +2,11 @@
 // Licensed under the MIT License.
 
 namespace Microsoft.Quantum.Arithmetic {
-    open Microsoft.Quantum.Intrinsic;
-    open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Arrays;
+    open Microsoft.Quantum.Canon;
+    open Microsoft.Quantum.Convert;
+    open Microsoft.Quantum.Diagnostics;
+    open Microsoft.Quantum.Intrinsic;
 
     /// # Summary
     /// This operation tests if an integer represented by a register of qubits
@@ -54,6 +56,49 @@ namespace Microsoft.Quantum.Arithmetic {
                 CNOT(Tail(x!), output);
             }
         }
+    }
+
+    operation LessThanConstantUsingRippleCarry(c : BigInt, x : LittleEndian, output : Qubit)
+    : Unit {
+        let bitwidth = Length(x!);
+        AssertAllZero([output]);
+
+        if (c == 0L) {
+            // do nothing; output stays 0
+        } elif (c >= (1L <<< bitwidth)) {
+            X(output);
+        } elif (c == (1L <<< (bitwidth - 1))) {
+            CNOT(Tail(x!), output);
+            X(output);
+        } else {
+            let l = TrailingZeroes(c);
+            using ((tmpConstants, tmpAnd) = (Qubit[bitwidth - l], Qubit[bitwidth - 1 - l])) {
+                within {
+                    ApplyXorInPlaceL(c >>> l, LittleEndian(tmpConstants));
+                    ApplyXorInPlaceL(c, x);
+                    for (i in 0..bitwidth - l - 2) {
+                        ApplyAnd(tmpConstants[i], x![i + l], tmpAnd[i]);
+                        if (i > 0) {
+                            CNOT(tmpAnd[i - 1], tmpAnd[i]);
+                        }
+                        CNOT(tmpAnd[i], tmpConstants[i + 1]);
+                    }
+                } apply {
+                    ApplyAnd(Tail(tmpConstants), Tail(x!), output);
+                    CNOT(Tail(tmpAnd), output);
+                }
+            }
+        }
+    }
+
+    internal function TrailingZeroes(number : BigInt) : Int {
+        mutable zeroes = 0;
+        mutable copy = number;
+        while (copy % 2L == 0L) {
+            set zeroes += 1;
+            set copy /= 2L;
+        }
+        return zeroes;
     }
 
 }
