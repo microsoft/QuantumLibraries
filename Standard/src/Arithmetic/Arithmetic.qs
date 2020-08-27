@@ -33,6 +33,31 @@ namespace Microsoft.Quantum.Arithmetic {
     }
 
     /// # Summary
+    /// Applies a bitwise-XOR operation between a classical integer and a
+    /// big integer represented by a register of qubits.
+    ///
+    /// # Description
+    /// Applies `X` operations to qubits in a little-endian register based on
+    /// 1 bits in a big integer.
+    ///
+    /// Let us denote `value` by a and let y be an unsigned integer encoded in `target`,
+    /// then `InPlaceXorLE` performs an operation given by the following map:
+    /// $\ket{y}\rightarrow \ket{y\oplus a}$ , where $\oplus$ is the bitwise exclusive OR operator.
+    ///
+    /// # Input
+    /// ## value
+    /// A big integer which is assumed to be non-negative.
+    /// ## target
+    /// A quantum register which is used to store `value` in little-endian encoding.
+    operation ApplyXorInPlaceL(value : BigInt, target : LittleEndian)
+    : Unit is Adj + Ctl {
+        ApplyToEachCA(
+            CControlledCA(X),
+            Zip(BigIntAsBoolArray(value), target!)
+        );
+    }
+
+    /// # Summary
     /// Applies the three-qubit majority operation in-place on a register of
     /// qubits.
     ///
