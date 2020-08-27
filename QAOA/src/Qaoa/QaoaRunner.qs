@@ -38,8 +38,8 @@ namespace Microsoft.Quantum.Qaoa {
         using (qubits = Qubit[problemSize]) {
             ApplyToEach(H, qubits);                         
             for ((beta, gamma) in Zip(betas, gammas)) {
-                EvolveWithObjectiveHamiltonian(qubits, gamma, oneLocalHamiltonianCoefficients, twoLocalHamiltonianCoefficients);
-                EvolveWithMixingHamiltonian(qubits, beta);
+                EvolveWithObjectiveHamiltonian(gamma, oneLocalHamiltonianCoefficients, twoLocalHamiltonianCoefficients, qubits);
+                EvolveWithMixingHamiltonian(beta, qubits);
             }
             return ResultArrayAsBoolArray(ForEach(MResetZ, qubits));               
         }

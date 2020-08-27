@@ -20,7 +20,7 @@ namespace Microsoft.Quantum.Qaoa {
     /// List of indices of control qubits.
     /// ## phaseExponent
     /// Phase to be applied.
-    operation RunPhaseKickback(qubits: Qubit[], auxiliaryQubit: Qubit, controlQubitsIndices: Int[], phaseExponent: Double) : Unit is Adj + Ctl {
+    operation RunPhaseKickback(controlQubitsIndices: Int[], phaseExponent: Double, qubits: Qubit[], auxiliaryQubit: Qubit) : Unit is Adj + Ctl {
 
         within {
             ApplyToEachCA(

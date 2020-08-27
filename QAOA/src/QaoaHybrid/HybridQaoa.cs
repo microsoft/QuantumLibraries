@@ -157,7 +157,7 @@ namespace Microsoft.Quantum.Qaoa.QaoaHybrid
             var constraints = new NonlinearConstraint[4*this.p];
             foreach (var i in Enumerable.Range(0, this.p).Select(x => x * 2))
             {
-                int gammaIndex = (2 * this.p) + i;
+                var gammaIndex = (2 * this.p) + i;
                 constraints[i] = new NonlinearConstraint(2 * this.p, x => x[i / 2] >= 0);
                 constraints[i + 1] = new NonlinearConstraint(2 * this.p, x => x[i / 2] <= Math.PI);
                 constraints[gammaIndex] = new NonlinearConstraint(2 * this.p, x => x[gammaIndex / 2] >= 0);

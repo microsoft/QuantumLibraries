@@ -16,7 +16,7 @@ namespace Microsoft.Quantum.Qaoa {
     /// Coefficent for the unitary based on the mixing Hamiltonian.
     /// # References
     /// This implementation in inspired by https://github.com/stephenjordan/qaoa_tsp.
-    operation EvolveWithMixingHamiltonian(qubits: Qubit[], beta: Double) : Unit is Adj + Ctl {
+    operation EvolveWithMixingHamiltonian(beta: Double, qubits: Qubit[]) : Unit is Adj + Ctl {
         ApplyToEachCA(R(PauliX, -2.0 * beta, _), qubits);
     }
 
@@ -34,7 +34,7 @@ namespace Microsoft.Quantum.Qaoa {
     /// Array of 2-local coefficents of the objective function Hamiltonian.
     /// # References
     /// This implementation in inspired by https://github.com/stephenjordan/qaoa_tsp.
-    operation EvolveWithObjectiveHamiltonian(qubits: Qubit[], gamma: Double, oneLocalHamiltonianCoefficients: Double[], twoLocalHamiltonianCoefficients: Double[]) : Unit is Adj + Ctl{
+    operation EvolveWithObjectiveHamiltonian(gamma: Double, oneLocalHamiltonianCoefficients: Double[], twoLocalHamiltonianCoefficients: Double[], qubits: Qubit[]) : Unit is Adj + Ctl{
         let numberOfQubits = Length(qubits);
         using (auxiliaryQubit = Qubit()) {
             for(i in 0..numberOfQubits-1) {
@@ -42,7 +42,7 @@ namespace Microsoft.Quantum.Qaoa {
             }
             for(i in 0..numberOfQubits-1) {
                 for (j in i+1..numberOfQubits-1) {
-                    RunPhaseKickback(qubits, auxiliaryQubit, [i,j], 2.0*gamma*twoLocalHamiltonianCoefficients[i*numberOfQubits+j]);
+                    RunPhaseKickback([i,j], 2.0*gamma*twoLocalHamiltonianCoefficients[i*numberOfQubits+j], qubits, auxiliaryQubit);
                 }
             }
         }
