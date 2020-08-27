@@ -7,6 +7,7 @@ namespace Microsoft.Quantum.Arithmetic {
     open Microsoft.Quantum.Convert;
     open Microsoft.Quantum.Diagnostics;
     open Microsoft.Quantum.Intrinsic;
+    open Microsoft.Quantum.Logical;
 
     /// # Summary
     /// This operation tests if an integer represented by a register of qubits
@@ -72,11 +73,11 @@ namespace Microsoft.Quantum.Arithmetic {
             X(output);
         } else {
             let bits = BigIntAsBoolArray(c);
-            let l = TrailingZeroes(c);
+            let l = IndexOf(EqualB(true, _), bits);
             using (tmpAnd = Qubit[bitwidth - 2 - l]) {
                 let tmpCarry = x![l..l] + tmpAnd;
                 within {
-                    ApplyXorInPlaceL(c, x);
+                    ApplyPauliFromBitString(PauliX, true, bits, x!);
                     for (i in 1..bitwidth - l - 2) {
                         within {
                             ApplyIfA(X, bits[i + l], tmpCarry[i - 1]);
@@ -95,16 +96,6 @@ namespace Microsoft.Quantum.Arithmetic {
                 }
             }
         }
-    }
-
-    internal function TrailingZeroes(number : BigInt) : Int {
-        mutable zeroes = 0;
-        mutable copy = number;
-        while (copy % 2L == 0L) {
-            set zeroes += 1;
-            set copy /= 2L;
-        }
-        return zeroes;
     }
 
 }
