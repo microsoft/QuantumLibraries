@@ -12,23 +12,22 @@ namespace Microsoft.Quantum.Qaoa {
     /// Runs a phase kickback routine on an auxiliary qubit given indices of control qubits and a phase.
     ///
     /// # Input
-    /// ## qubits
+    /// ## phaseExponent
+    /// Phase to be applied.
+    /// ## controlQubits
     /// Qubits that are to aquire a phase.
     /// ## auxiliaryQubit
     /// auxiliary qubit.
-    /// ## controlQubitsIndices
-    /// List of indices of control qubits.
-    /// ## phaseExponent
-    /// Phase to be applied.
-    operation RunPhaseKickback(controlQubitsIndices: Int[], phaseExponent: Double, qubits: Qubit[], auxiliaryQubit: Qubit) : Unit is Adj + Ctl {
-
-        within {
-            ApplyToEachCA(
-                CNOT(_, auxiliaryQubit),
-                Subarray(controlQubitsIndices, qubits)
-            );
-        } apply {
-            R(PauliZ, phaseExponent, auxiliaryQubit);
-        }
+    operation RunPhaseKickback(phaseExponent: Double, controlQubits: Qubit[]) : Unit is Adj + Ctl {
+        using(auxiliaryQubit = Qubit()){
+            within {
+                ApplyToEachCA(
+                    CNOT(_, auxiliaryQubit),
+                    controlQubits
+                );
+            } apply {
+                R(PauliZ, phaseExponent, auxiliaryQubit);
+            }    
+		}
 	}
 }
