@@ -1,6 +1,9 @@
 ﻿// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+using System.Threading.Tasks;
+using Microsoft.Jupyter.Core;
+
 #nullable enable
 
 namespace Microsoft.Quantum.Qaoa.QaoaHybrid
@@ -84,11 +87,9 @@ namespace Microsoft.Quantum.Qaoa.QaoaHybrid
         /// <returns>
         /// The expected value of a Hamiltonian that we calculated in this run.
         /// </returns>
-        private double CalculateObjectiveFunction(double[] concatenatedQaoaParameters)
+        private double CalculateObjectiveFunctionAsync(double[] concatenatedQaoaParameters)
         {
             var qaoaParameters = new QaoaParameters(concatenatedQaoaParameters);
-            var hamiltonianExpectationValue = 0.0;
-            var allSolutionVectors = new List<bool[]>();
 
             var betas = new QArray<double>(qaoaParameters.Betas);
             var gammas = new QArray<double>(qaoaParameters.Gammas);
@@ -96,24 +97,33 @@ namespace Microsoft.Quantum.Qaoa.QaoaHybrid
             var oneLocalHamiltonianCoefficients = new QArray<double>(this.qaoaProblemInstance.OneLocalHamiltonianCoefficients);
             var twoLocalHamiltonianCoefficients = new QArray<double>(this.qaoaProblemInstance.TwoLocalHamiltonianCoefficients);
 
-            using (var qsim = new QuantumSimulator())
-            {
-
-                for (var i = 0; i < this.numberOfIterations; i++)
-                {
-                    var result = RunQaoa.Run(qsim, this.qaoaProblemInstance.ProblemSizeInBits, betas, gammas, oneLocalHamiltonianCoefficients, twoLocalHamiltonianCoefficients, this.p).Result;
-                    allSolutionVectors.Add(result.ToArray());
-                    var hamiltonianValue = this.qaoaProblemInstance.EvaluateHamiltonian(result.ToArray());
-                    hamiltonianExpectationValue += hamiltonianValue / this.numberOfIterations;
-
-                }
-            }
+            var (hamiltonianExpectationValue, allSolutionVectors) = this.CalculateHamiltonianExpectation(betas, gammas, oneLocalHamiltonianCoefficients, twoLocalHamiltonianCoefficients).Result;
 
             this.UpdateBestSolution(hamiltonianExpectationValue, allSolutionVectors, qaoaParameters);
 
             this.logger?.LogCurrentBestSolution(betas, gammas, this.solution.SolutionHamiltonianValue, this.solution.SolutionVector);
 
             return hamiltonianExpectationValue;
+        }
+
+        private async Task<(double HamiltonianExpectationValue, List<bool[]> AllSolutionVectors)> CalculateHamiltonianExpectation(QArray<double> betas, QArray<double> gammas, QArray<double> oneLocalHamiltonianCoefficients, QArray<double> twoLocalHamiltonianCoefficients)
+        {
+            var hamiltonianExpectationValue = 0.0;
+            var allSolutionVectors = new List<bool[]>();
+
+            using (var qsim = new QuantumSimulator())
+            {
+
+                for (var i = 0; i < this.numberOfIterations; i++)
+                {
+                    var result = await RunQaoa.Run(qsim, this.qaoaProblemInstance.ProblemSizeInBits, betas, gammas, oneLocalHamiltonianCoefficients, twoLocalHamiltonianCoefficients, this.p);
+                    allSolutionVectors.Add(result.ToArray());
+                    var hamiltonianValue = this.qaoaProblemInstance.EvaluateHamiltonian(result.ToArray());
+                    hamiltonianExpectationValue += hamiltonianValue / this.numberOfIterations;
+                }
+            }
+
+            return (hamiltonianExpectationValue, allSolutionVectors);
         }
 
         /// <summary>
@@ -179,28 +189,33 @@ namespace Microsoft.Quantum.Qaoa.QaoaHybrid
         /// </remarks>
         public QaoaSolution RunOptimization(int numberOfRandomStartingPoints)
         {
-            if (this.shouldLog)
+            try
             {
-                this.logger = new QaoaLogger();
+                if (this.shouldLog)
+                {
+                    this.logger = new QaoaLogger();
+                }
+
+                this.solution = new QaoaSolution(null, double.MaxValue, null);
+
+                Func<double[], double> objectiveFunction = this.CalculateObjectiveFunctionAsync;
+
+                var optimizerObjectiveFunction = new NonlinearObjectiveFunction(2 * this.p, objectiveFunction);
+                var constraints = this.GenerateConstraints();
+                var cobyla = new Cobyla(optimizerObjectiveFunction, constraints);
+
+                for (var i = 0; i < numberOfRandomStartingPoints; i++)
+                {
+                    var concatenatedQaoaParameters = new QaoaParameters(p).ConcatenatedQaoaParameters;
+                    var success = cobyla.Minimize(concatenatedQaoaParameters);
+
+                    this.logger?.LogSuccess(success);
+                }
             }
-
-            this.solution = new QaoaSolution(null, double.MaxValue, null);
-
-            Func<double[], double> objectiveFunction = this.CalculateObjectiveFunction;
-
-            var optimizerObjectiveFunction = new NonlinearObjectiveFunction(2 * this.p, objectiveFunction);
-            var constraints = this.GenerateConstraints();
-            var cobyla = new Cobyla(optimizerObjectiveFunction, constraints);
-
-            for (var i = 0; i < numberOfRandomStartingPoints; i++)
+            finally
             {
-                var concatenatedQaoaParameters = new QaoaParameters(p).ConcatenatedQaoaParameters;
-                var success = cobyla.Minimize(concatenatedQaoaParameters);
-
-                this.logger?.LogSuccess(success);
+                this.logger?.Dispose();
             }
-
-            this.logger?.Dispose();
 
             return this.solution;
         }
@@ -219,23 +234,29 @@ namespace Microsoft.Quantum.Qaoa.QaoaHybrid
         /// </remarks>
         public QaoaSolution RunOptimization(QaoaParameters qaoaParameters)
         {
-            if (this.shouldLog)
+            try
             {
-                this.logger = new QaoaLogger();
+                if (this.shouldLog)
+                {
+                    this.logger = new QaoaLogger();
+                }
+
+                this.solution = new QaoaSolution(null, double.MaxValue, null);
+
+                Func<double[], double> objectiveFunction = this.CalculateObjectiveFunctionAsync;
+                var optimizerObjectiveFunction = new NonlinearObjectiveFunction(2 * this.p, objectiveFunction);
+                var constraints = this.GenerateConstraints();
+
+                var cobyla = new Cobyla(optimizerObjectiveFunction, constraints);
+                var concatenatedQaoaParameters = qaoaParameters.ConcatenatedQaoaParameters;
+                var success = cobyla.Minimize(concatenatedQaoaParameters);
+
+                this.logger?.LogSuccess(success);
             }
-
-            this.solution = new QaoaSolution(null, double.MaxValue, null);
-
-            Func<double[], double> objectiveFunction = this.CalculateObjectiveFunction;
-            var optimizerObjectiveFunction = new NonlinearObjectiveFunction(2 * this.p, objectiveFunction);
-            var constraints = this.GenerateConstraints();
-
-            var cobyla = new Cobyla(optimizerObjectiveFunction, constraints);
-            var concatenatedQaoaParameters = qaoaParameters.ConcatenatedQaoaParameters;
-            var success = cobyla.Minimize(concatenatedQaoaParameters);
-
-            this.logger?.LogSuccess(success);
-            this.logger?.Dispose();
+            finally
+            {
+                this.logger?.Dispose();
+            }
 
             return this.solution;
         }

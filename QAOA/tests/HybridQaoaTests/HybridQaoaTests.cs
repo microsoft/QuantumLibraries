@@ -48,14 +48,7 @@ namespace Microsoft.Quantum.Qaoa.HybridQaoaTests
 
             var result = optimalSolution.SolutionVector;
 
-            if (result[0] == false)
-            {
-                CollectionAssert.AreEqual(result, optimizationResult1, "Hybrid QAOA with random parameters produced incorrect result.");
-            }
-            else
-            {
-                CollectionAssert.AreEqual(result, optimizationResult2, "Hybrid QAOA with random parameters produced incorrect result.");
-            }
+            CollectionAssert.AreEqual(result, result[0] ? optimizationResult2 : optimizationResult1, "Hybrid QAOA with random parameters produced incorrect result.");
         }
 
         [TestMethod]
@@ -82,14 +75,7 @@ namespace Microsoft.Quantum.Qaoa.HybridQaoaTests
 
             var result = optimalSolution.SolutionVector;
 
-            if (result[0] == false)
-            {
-                CollectionAssert.AreEqual(result, optimizationResult1, "Hybrid QAOA with user's parameters produced incorrect result.");
-            }
-            else
-            {
-                CollectionAssert.AreEqual(result, optimizationResult2, "Hybrid QAOA with user's parameters produced incorrect result.");
-            }
+            CollectionAssert.AreEqual(result, result[0] ? optimizationResult2 : optimizationResult1, "Hybrid QAOA with random parameters produced incorrect result.");
         }
     }
 }
