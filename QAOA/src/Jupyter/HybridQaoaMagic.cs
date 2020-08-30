@@ -9,6 +9,9 @@ namespace Microsoft.Quantum.Qaoa.Jupyter
     using Microsoft.Quantum.Qaoa.QaoaHybrid;
     using Newtonsoft.Json;
 
+    /// <summary>
+    /// This class makes it possible to run the hybrid QAOA with user-defined input parameters in languages other than C# that are supported by this mechanism.
+    /// </summary>
     public class HybridQaoaRunMagic : MagicSymbol
     {
 
@@ -78,6 +81,9 @@ namespace Microsoft.Quantum.Qaoa.Jupyter
         }
     }
 
+    /// <summary>
+    /// This class makes it possible to run the hybrid QAOA with randomly initialized input parameters in languages other than C# that are supported by this mechanism.
+    /// </summary>
     public class HybridQaoaWithRandomParametersRunMagic : MagicSymbol
     {
 

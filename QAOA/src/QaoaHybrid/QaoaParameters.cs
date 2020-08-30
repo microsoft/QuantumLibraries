@@ -9,8 +9,8 @@ namespace Microsoft.Quantum.Qaoa.QaoaHybrid
 
     public class QaoaParameters
     {
-        public double[] Betas { get; }
-        public double[] Gammas { get; }
+        public double[] Betas { get; set; }
+        public double[] Gammas { get; set; }
 
         public QaoaParameters(double[] concatenatedQaoaParameters)
         {

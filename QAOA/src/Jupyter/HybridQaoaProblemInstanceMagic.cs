@@ -8,6 +8,9 @@ namespace Microsoft.Quantum.Qaoa.Jupyter
     using Microsoft.Quantum.Qaoa.QaoaHybrid;
     using Newtonsoft.Json;
 
+    /// <summary>
+    /// This class makes it possible to create a problem instance for the hybrid QAOA in languages other than C# that are supported by this mechanism.
+    /// </summary>
     public class HybridQaoaProblemInstanceMagic : MagicSymbol
     {
         public HybridQaoaProblemInstanceMagic()
@@ -27,13 +30,13 @@ namespace Microsoft.Quantum.Qaoa.Jupyter
         public class Arguments
         {
             /// <summary>
-            /// Coefficents for one-local Hamiltonian terms.
+            /// Coefficients for one-local Hamiltonian terms. Assuming that a solution to a combinatorial optimization problem can be encoded into n bits (which then corresponds to an encoding into n qubits), this array must be of length n. The i-th coefficient in an array corresponds to the coefficient of a term \sigma_i^z.
             /// </summary>
             [JsonProperty(PropertyName = "one_local_hamiltonian_coefficients")]
             public double[] OneLocalHamiltonianCoefficients { get; set; }
 
             /// <summary>
-            /// Coefficents for one-local Hamiltonian terms.
+            /// Coefficients for two-local Hamiltonian terms. Assuming that a solution to a combinatorial optimization problem can be encoded into n bits (which then corresponds to an encoding into n qubits), this array must be of length n^2. The (i*n+j)-th coefficient in an array corresponds to the coefficient of a term \sigma_i^z\sigma_j^z (other coefficients in an array can take any value of type double).
             /// </summary>
             [JsonProperty(PropertyName = "two_local_hamiltonian_coefficients")]
             public double[] TwoLocalHamiltonianCoefficients { get; set; }

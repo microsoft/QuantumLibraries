@@ -20,10 +20,10 @@ namespace Microsoft.Quantum.Qaoa.QaoaHybrid
         /// Initializes a new instance of the <see cref="QaoaProblemInstance"/> class.
         /// </summary>
         /// <param name="oneLocalHamiltonianCoefficients">
-        /// Given a problem encoding into a Hamiltonian, this field corresponds to coefficients of 1-local terms. Non-existent terms (excluding those that go beyond the size of a problem) shall be input with a coefficient that equals 0.
+        /// Given a problem encoding into a Hamiltonian, this field corresponds to coefficients of 1-local terms. Assuming that a solution to a combinatorial optimization problem can be encoded into n bits (which then corresponds to an encoding into n qubits), this array must be of length n. The i-th coefficient in an array corresponds to the coefficient of a term \sigma_i^z.
         /// </param>
         /// <param name="twoLocalHamiltonianCoefficients">
-        /// Given a problem encoding into a Hamiltonian, this field corresponds to coefficients of 2-local terms. Non-existent terms (excluding those that go beyond the size of a problem) shall be input with a coefficient that equals 0.
+        /// Given a problem encoding into a Hamiltonian, this field corresponds to coefficients of 2-local terms. Assuming that a solution to a combinatorial optimization problem can be encoded into n bits (which then corresponds to an encoding into n qubits), this array must be of length n^2. The (i*n+j)-th coefficient in an array corresponds to the coefficient of a term \sigma_i^z\sigma_j^z (other coefficients in an array can take any value of type double).
         /// </param>
         public QaoaProblemInstance(double[] oneLocalHamiltonianCoefficients, double[] twoLocalHamiltonianCoefficients)
         {

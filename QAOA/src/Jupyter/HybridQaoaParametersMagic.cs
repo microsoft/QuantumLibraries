@@ -8,6 +8,9 @@ namespace Microsoft.Quantum.Qaoa.Jupyter
     using Microsoft.Quantum.Qaoa.QaoaHybrid;
     using Newtonsoft.Json;
 
+    /// <summary>
+    /// This class makes it possible to initialize hybrid QAOA input parameters in languages other than C# that are supported by this mechanism.
+    /// </summary>
     public class HybridQaoaParametersMagic : MagicSymbol
     {
         public HybridQaoaParametersMagic()
