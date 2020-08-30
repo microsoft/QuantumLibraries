@@ -35,12 +35,12 @@ namespace Microsoft.Quantum.Qaoa.HybridQaoaTests
             var dJ = new double[]{ 0, 1, 0, 0};
 
             var numberOfIterations = 50;
-            var p = 2;
+            var NHamiltonianApplications = 2;
             var numberOfRandomStartingPoints = 2;
 
             var simpleMaxCut = new QaoaProblemInstance(dh, dJ);
 
-            var classicalOptimization = new HybridQaoa(numberOfIterations, p, simpleMaxCut);
+            var classicalOptimization = new HybridQaoa(numberOfIterations, NHamiltonianApplications, simpleMaxCut);
             var optimalSolution = classicalOptimization.RunOptimization(numberOfRandomStartingPoints);
 
             var optimizationResult1 = new[] {false, true};
@@ -58,7 +58,7 @@ namespace Microsoft.Quantum.Qaoa.HybridQaoaTests
             var dJ = new double[] { 0, 1, 0, 0 };
 
             var numberOfIterations = 60;
-            var p = 3;
+            var NHamiltonianApplications = 3;
 
             var simpleMaxCut = new QaoaProblemInstance(dh, dJ);
 
@@ -67,7 +67,7 @@ namespace Microsoft.Quantum.Qaoa.HybridQaoaTests
 
             var qaoaParameters = new QaoaParameters(initialBeta, initialGamma);
 
-            var classicalOptimization = new HybridQaoa(numberOfIterations, p, simpleMaxCut);
+            var classicalOptimization = new HybridQaoa(numberOfIterations, NHamiltonianApplications, simpleMaxCut);
             var optimalSolution = classicalOptimization.RunOptimization(qaoaParameters);
 
             var optimizationResult1 = new[] { false, true };

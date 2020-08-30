@@ -40,8 +40,8 @@ namespace Microsoft.Quantum.Qaoa.Jupyter
             /// <summary>
             /// A parameter related to the depth of a QAOA circuit.
             /// </summary>
-            [JsonProperty(PropertyName = "p")]
-            public int p { get; set; }
+            [JsonProperty(PropertyName = "NHamiltonianApplications")]
+            public int NHamiltonianApplications { get; set; }
 
             /// <summary>
             /// Description of a combinatorial problem to be solved.
@@ -75,7 +75,7 @@ namespace Microsoft.Quantum.Qaoa.Jupyter
 
             var args = JsonConvert.DeserializeObject<Arguments>(input);
 
-            var hybridQaoa = new HybridQaoa(args.NumberOfIterations, args.p, args.QaoaProblemInstance, args.ShouldLog);
+            var hybridQaoa = new HybridQaoa(args.NumberOfIterations, args.NHamiltonianApplications, args.QaoaProblemInstance, args.ShouldLog);
 
             return hybridQaoa.RunOptimization(args.InitialQaoaParameters).ToExecutionResult();
         }
@@ -112,8 +112,8 @@ namespace Microsoft.Quantum.Qaoa.Jupyter
             /// <summary>
             /// A parameter related to the depth of a QAOA circuit.
             /// </summary>
-            [JsonProperty(PropertyName = "p")]
-            public int p { get; set; }
+            [JsonProperty(PropertyName = "NHamiltonianApplications")]
+            public int NHamiltonianApplications { get; set; }
 
             /// <summary>
             /// Description of a combinatorial problem to be solved.
@@ -147,7 +147,7 @@ namespace Microsoft.Quantum.Qaoa.Jupyter
 
             var args = JsonConvert.DeserializeObject<Arguments>(input);
 
-            var hybridQaoa = new HybridQaoa(args.NumberOfIterations, args.p, args.QaoaProblemInstance, args.ShouldLog);
+            var hybridQaoa = new HybridQaoa(args.NumberOfIterations, args.NHamiltonianApplications, args.QaoaProblemInstance, args.ShouldLog);
 
             return hybridQaoa.RunOptimization(args.NumberOfRandomStartingPoints).ToExecutionResult();
         }

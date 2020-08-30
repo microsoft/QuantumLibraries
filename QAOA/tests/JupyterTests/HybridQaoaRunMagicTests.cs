@@ -36,7 +36,7 @@ namespace Microsoft.Quantum.Qaoa.JupyterTests
             var args = JsonConvert.SerializeObject(new HybridQaoaRunMagic.Arguments
             {
                 NumberOfIterations = numberOfIterations,
-                p = p,
+                NHamiltonianApplications = p,
                 QaoaProblemInstance = simpleMaxCut,
                 InitialQaoaParameters = initialQaoaParameters,
             });
@@ -80,7 +80,7 @@ namespace Microsoft.Quantum.Qaoa.JupyterTests
             var args = JsonConvert.SerializeObject(new HybridQaoaWithRandomParametersRunMagic.Arguments
             {
                 NumberOfIterations = numberOfIterations,
-                p = p,
+                NHamiltonianApplications = p,
                 QaoaProblemInstance = simpleMaxCut,
                 NumberOfRandomStartingPoints = numberOfRandomStartingPoints
         });

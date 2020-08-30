@@ -24,7 +24,7 @@ namespace Microsoft.Quantum.Qaoa.QaoaHybrid
     public class HybridQaoa
     {
         private readonly int numberOfIterations;
-        private readonly int p;
+        private readonly int NHamiltonianApplications;
         private readonly QaoaProblemInstance qaoaProblemInstance;
         private readonly bool shouldLog;
         private QaoaSolution solution;
@@ -36,7 +36,7 @@ namespace Microsoft.Quantum.Qaoa.QaoaHybrid
         /// <param name="numberOfIterations">
         /// The number of iterations for sampling the average value of the objective function Hamiltonian.
         /// </param>
-        /// <param name="p">
+        /// <param name="nHamiltonianApplications">
         /// A parameter related to the depth of a QAOA circuit. It corresponds to the number of times evolution operators are applied.
         /// </param>
         /// <param name="qaoaProblemInstance">
@@ -45,10 +45,10 @@ namespace Microsoft.Quantum.Qaoa.QaoaHybrid
         /// <param name="shouldLog">
         /// A flag that specifies whether a log from the hybrid QAOA should be saved in a text file.
         /// </param>
-        public HybridQaoa(int numberOfIterations, int p, QaoaProblemInstance qaoaProblemInstance, bool shouldLog = false)
+        public HybridQaoa(int numberOfIterations, int nHamiltonianApplications, QaoaProblemInstance qaoaProblemInstance, bool shouldLog = false)
         {
             this.numberOfIterations = numberOfIterations;
-            this.p = p;
+            this.NHamiltonianApplications = nHamiltonianApplications;
             this.qaoaProblemInstance = qaoaProblemInstance;
             this.shouldLog = shouldLog;
         }
@@ -116,7 +116,7 @@ namespace Microsoft.Quantum.Qaoa.QaoaHybrid
 
                 for (var i = 0; i < this.numberOfIterations; i++)
                 {
-                    var result = await RunQaoa.Run(qsim, this.qaoaProblemInstance.ProblemSizeInBits, betas, gammas, oneLocalHamiltonianCoefficients, twoLocalHamiltonianCoefficients, this.p);
+                    var result = await RunQaoa.Run(qsim, this.qaoaProblemInstance.ProblemSizeInBits, betas, gammas, oneLocalHamiltonianCoefficients, twoLocalHamiltonianCoefficients);
                     allSolutionVectors.Add(result.ToArray());
                     var hamiltonianValue = this.qaoaProblemInstance.EvaluateHamiltonian(result.ToArray());
                     hamiltonianExpectationValue += hamiltonianValue / this.numberOfIterations;
@@ -161,14 +161,14 @@ namespace Microsoft.Quantum.Qaoa.QaoaHybrid
         /// </remarks>
         private NonlinearConstraint[] GenerateConstraints()
         {
-            var constraints = new NonlinearConstraint[4*this.p];
-            foreach (var i in Enumerable.Range(0, this.p).Select(x => x * 2))
+            var constraints = new NonlinearConstraint[4*this.NHamiltonianApplications];
+            foreach (var i in Enumerable.Range(0, this.NHamiltonianApplications).Select(x => x * 2))
             {
-                var gammaIndex = (2 * this.p) + i;
-                constraints[i] = new NonlinearConstraint(2 * this.p, x => x[i / 2] >= 0);
-                constraints[i + 1] = new NonlinearConstraint(2 * this.p, x => x[i / 2] <= Math.PI);
-                constraints[gammaIndex] = new NonlinearConstraint(2 * this.p, x => x[gammaIndex / 2] >= 0);
-                constraints[gammaIndex + 1] = new NonlinearConstraint(2 * this.p, x => x[gammaIndex / 2] <= 2 * Math.PI);
+                var gammaIndex = (2 * this.NHamiltonianApplications) + i;
+                constraints[i] = new NonlinearConstraint(2 * this.NHamiltonianApplications, x => x[i / 2] >= 0);
+                constraints[i + 1] = new NonlinearConstraint(2 * this.NHamiltonianApplications, x => x[i / 2] <= Math.PI);
+                constraints[gammaIndex] = new NonlinearConstraint(2 * this.NHamiltonianApplications, x => x[gammaIndex / 2] >= 0);
+                constraints[gammaIndex + 1] = new NonlinearConstraint(2 * this.NHamiltonianApplications, x => x[gammaIndex / 2] <= 2 * Math.PI);
             }
 
             return constraints;
@@ -200,13 +200,13 @@ namespace Microsoft.Quantum.Qaoa.QaoaHybrid
 
                 Func<double[], double> objectiveFunction = this.CalculateObjectiveFunctionAsync;
 
-                var optimizerObjectiveFunction = new NonlinearObjectiveFunction(2 * this.p, objectiveFunction);
+                var optimizerObjectiveFunction = new NonlinearObjectiveFunction(2 * this.NHamiltonianApplications, objectiveFunction);
                 var constraints = this.GenerateConstraints();
                 var cobyla = new Cobyla(optimizerObjectiveFunction, constraints);
 
                 for (var i = 0; i < numberOfRandomStartingPoints; i++)
                 {
-                    var concatenatedQaoaParameters = new QaoaParameters(p).ConcatenatedQaoaParameters;
+                    var concatenatedQaoaParameters = new QaoaParameters(NHamiltonianApplications).ConcatenatedQaoaParameters;
                     var success = cobyla.Minimize(concatenatedQaoaParameters);
 
                     this.logger?.LogSuccess(success);
@@ -244,7 +244,7 @@ namespace Microsoft.Quantum.Qaoa.QaoaHybrid
                 this.solution = new QaoaSolution(null, double.MaxValue, null);
 
                 Func<double[], double> objectiveFunction = this.CalculateObjectiveFunctionAsync;
-                var optimizerObjectiveFunction = new NonlinearObjectiveFunction(2 * this.p, objectiveFunction);
+                var optimizerObjectiveFunction = new NonlinearObjectiveFunction(2 * this.NHamiltonianApplications, objectiveFunction);
                 var constraints = this.GenerateConstraints();
 
                 var cobyla = new Cobyla(optimizerObjectiveFunction, constraints);
