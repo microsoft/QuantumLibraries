@@ -64,11 +64,29 @@ namespace Microsoft.Quantum.Preparation {
     function QuantumROM(targetError: Double, coefficients: Double[])
     : ((Int, (Int, Int)), Double, ((LittleEndian, Qubit[]) => Unit is Adj + Ctl)) {
         let nBitsPrecision = -Ceiling(Lg(0.5 * targetError)) + 1;
-        let (oneNorm, keepCoeff, altIndex) = _QuantumROMDiscretization(nBitsPrecision, coefficients);
-        let nCoeffs = Length(coefficients);
+        let positiveCoefficients = Mapped(AbsD, coefficients);
+        let (oneNorm, keepCoeff, altIndex) = _QuantumROMDiscretization(nBitsPrecision, positiveCoefficients);
+        let nCoeffs = Length(positiveCoefficients);
         let nBitsIndices = Ceiling(Lg(IntAsDouble(nCoeffs)));
 
-        let op =  PrepareQuantumROMState(nBitsPrecision, nCoeffs, nBitsIndices, keepCoeff, altIndex, _, _);
+        let op =  PrepareQuantumROMState(nBitsPrecision, nCoeffs, nBitsIndices, keepCoeff, altIndex, _, new Qubit[0], _);
+        let qubitCounts = QuantumROMQubitCount(targetError, nCoeffs);
+        return (qubitCounts, oneNorm, op);
+    }
+
+    internal function SplitSign(coefficient : Double) : (Double, Bool) {
+        return (AbsD(coefficient), coefficient < 0.0);
+    }
+
+    function QuantumROMWithSign(targetError : Double, coefficients : Double[])
+    : ((Int, (Int, Int)), Double, ((LittleEndian, Qubit, Qubit[]) => Unit is Adj + Ctl)) {
+        let nBitsPrecision = -Ceiling(Lg(0.5 * targetError)) + 1;
+        let (positiveCoefficients, signs) = Unzipped(Mapped(SplitSign, coefficients));
+        let (oneNorm, keepCoeff, altIndex) = _QuantumROMDiscretization(nBitsPrecision, positiveCoefficients);
+        let nCoeffs = Length(positiveCoefficients);
+        let nBitsIndices = Ceiling(Lg(IntAsDouble(nCoeffs)));
+
+        let op =  PrepareQuantumROMStateWithSign(nBitsPrecision, nCoeffs, nBitsIndices, keepCoeff, altIndex, _, _, _);
         let qubitCounts = QuantumROMQubitCount(targetError, nCoeffs);
         return (qubitCounts, oneNorm, op);
     }
@@ -186,7 +204,7 @@ namespace Microsoft.Quantum.Preparation {
     }
 
     // Used in QuantumROM implementation.
-    internal operation PrepareQuantumROMState(nBitsPrecision: Int, nCoeffs: Int, nBitsIndices: Int, keepCoeff: Int[], altIndex: Int[], indexRegister: LittleEndian, garbageRegister: Qubit[])
+    internal operation PrepareQuantumROMState(nBitsPrecision: Int, nCoeffs: Int, nBitsIndices: Int, keepCoeff: Int[], altIndex: Int[], indexRegister: LittleEndian, signQubit : Qubit[], garbageRegister: Qubit[])
     : Unit is Adj + Ctl {
         let unitaryGenerator = (nCoeffs, QuantumROMBitStringWriterByIndex(_, keepCoeff, altIndex));
         let garbageIdx0 = nBitsIndices;
@@ -213,6 +231,13 @@ namespace Microsoft.Quantum.Preparation {
 
         // Swap in register based on comparison
         ApplyToEachCA((Controlled SWAP)([flagQubit], _), Zip(indexRegister!, altIndexRegister!));
+    }
+
+    // # Remark
+    // Application case for Maybe UDT
+    internal operation PrepareQuantumROMStateWithSign(nBitsPrecision: Int, nCoeffs: Int, nBitsIndices: Int, keepCoeff: Int[], altIndex: Int[], indexRegister: LittleEndian, signQubit : Qubit, garbageRegister: Qubit[])
+    : Unit is Adj + Ctl {
+        PrepareQuantumROMState(nBitsPrecision, nCoeffs, nBitsIndices, keepCoeff, altIndex, indexRegister, [signQubit], garbageRegister);
     }
 
     // Used in QuantumROM implementation.

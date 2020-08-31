@@ -68,26 +68,40 @@ namespace Microsoft.Quantum.Tests {
             for(nBitsPrecision in -1..-1..-2){
                 let targetError = PowD(2.0, IntAsDouble(nBitsPrecision));
                 let probtargetError = targetError / IntAsDouble(coeffs);
-                let coefficients = DrawMany(DrawRandomDouble, coeffs, (0.0, 1.0));
-                let ((nTotal, (nCoeffQubits, nGarbageQubits)), oneNorm, op) =  QuantumROM(targetError, coefficients);
+                let coefficients = DrawMany(DrawRandomDouble, coeffs, (-1.0, 1.0));
 
-                Message($"Test case coeffs {coeffs}, bitsPrecision {nCoeffQubits}, global targetError {targetError}, probability error {probtargetError}.");
-                for ((idx, coefficient) in Enumerated(coefficients)) {
-                    let tmp = AbsD(coefficient) / oneNorm;
-                    Message($"{idx} expected prob = {tmp}.");
+                if (true) { // quantum ROM without sign
+                    let ((nTotal, (nCoeffQubits, nGarbageQubits)), oneNorm, op) =  QuantumROM(targetError, coefficients);
+
+                    using ((coeffRegister, garbageQubits) = (Qubit[nCoeffQubits], Qubit[nGarbageQubits])) {
+                        let coeffQubits = LittleEndian(coeffRegister);
+
+                        // Check that probability of each number state in nCoeffQubits is as expected.
+                        within {
+                            op(coeffQubits, garbageQubits);
+                        } apply {
+                            for (stateIndex in 0..coeffs - 1) {
+                                let prob = AbsD(coefficients[stateIndex]) / oneNorm;
+                                AssertProbInt(stateIndex, prob, coeffQubits, probtargetError);
+                            }
+                        }
+                    }
                 }
 
-                Message($"Qubits used: {nGarbageQubits} + {nCoeffQubits}");
-                using ((coeffRegister, garbageQubits) = (Qubit[nCoeffQubits], Qubit[nGarbageQubits])) {
-                    let coeffQubits = LittleEndian(coeffRegister);
+                if (true) { // quantum ROM with sign
+                    let ((nTotal, (nCoeffQubits, nGarbageQubits)), oneNorm, op) =  QuantumROMWithSign(targetError, coefficients);
 
-                    // Check that probability of each number state in nCoeffQubits is as expected.
-                    within {
-                        op(coeffQubits, garbageQubits);
-                    } apply {
-                        for (stateIndex in 0..coeffs - 1) {
-                            let prob = AbsD(coefficients[stateIndex]) / oneNorm;
-                            AssertProbInt(stateIndex, prob, coeffQubits, probtargetError);
+                    using ((coeffRegister, signQubit, garbageQubits) = (Qubit[nCoeffQubits], Qubit(), Qubit[nGarbageQubits])) {
+                        let coeffQubits = LittleEndian(coeffRegister);
+
+                        // Check that probability of each number state in nCoeffQubits is as expected.
+                        within {
+                            op(coeffQubits, signQubit, garbageQubits);
+                        } apply {
+                            for (stateIndex in 0..coeffs - 1) {
+                                let prob = AbsD(coefficients[stateIndex]) / oneNorm;
+                                AssertProbInt(stateIndex, prob, coeffQubits, probtargetError);
+                            }
                         }
                     }
                 }
