@@ -87,10 +87,7 @@ namespace Microsoft.Quantum.Tests {
                     } apply {
                         for (stateIndex in 0..coeffs - 1) {
                             let prob = AbsD(coefficients[stateIndex]) / oneNorm;
-                            // FIXME: this only works for stateIndex == 0; why?
-                            if (stateIndex == 0) {
-                                AssertProbInt(stateIndex, prob, coeffQubits, probtargetError);
-                            }
+                            AssertProbInt(stateIndex, prob, coeffQubits, probtargetError);
                         }
                     }
                 }

@@ -212,9 +212,7 @@ namespace Microsoft.Quantum.Preparation {
         let indexRegisterSize = Length(indexRegister!);
 
         // Swap in register based on comparison
-        for (idx in 0..nBitsIndices - 1) {
-            (Controlled SWAP)([flagQubit], (indexRegister![nBitsIndices - idx - 1], altIndexRegister![idx]));
-        }
+        ApplyToEachCA((Controlled SWAP)([flagQubit], _), Zip(indexRegister!, altIndexRegister!));
     }
 
     // Used in QuantumROM implementation.
