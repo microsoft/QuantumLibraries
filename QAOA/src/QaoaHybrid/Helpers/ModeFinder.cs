@@ -32,13 +32,7 @@ namespace Microsoft.Quantum.Qaoa.QaoaHybrid.Helpers
                 }
             }
 
-            var maximum = 0;
-            string result = null;
-            foreach (var key in counter.Keys.Where(key => counter[key] > maximum))
-            {
-                maximum = counter[key];
-                result = key;
-            }
+            var result = counter.Aggregate((x, y) => x.Value > y.Value ? x : y).Key;
 
             return result.Select(chr => chr == '1').ToArray();
         }
