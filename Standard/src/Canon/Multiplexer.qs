@@ -5,6 +5,7 @@ namespace Microsoft.Quantum.Canon {
     open Microsoft.Quantum.Intrinsic;
     open Microsoft.Quantum.Arithmetic;
     open Microsoft.Quantum.Arrays;
+    open Microsoft.Quantum.Diagnostics;
     open Microsoft.Quantum.Math;
 
     /// # Summary
@@ -85,11 +86,12 @@ namespace Microsoft.Quantum.Canon {
                     }
                 } else {
                     // Recursion that reduces nIndex by 1 & sets Length(auxiliary) to 1.
-                    using (newauxiliary = Qubit[1]) {
-                        let op = LogicalANDMeasAndFix(_, _);
+                    let controls = [Tail(index!)] + auxiliary;
+                    using ((newauxiliary, andauxiliary) = (Qubit[1], Qubit[MaxI(0, Length(controls) - 2)])) {
+                        let op = ApplyAndChain(andauxiliary, _, _);
                         // Naive measurement-free approach uses 4x more T gates with
                         // let op = (Controlled X);
-                        op([index![Length(index!) - 1]] + auxiliary, newauxiliary[0]);
+                        op(controls, newauxiliary[0]);
                         if (nUnitariesRight > 0) {
                             _MultiplexOperationsFromGenerator(rightUnitaries, newauxiliary, newControls, target);
                         }
@@ -98,7 +100,7 @@ namespace Microsoft.Quantum.Canon {
                         } apply {
                             _MultiplexOperationsFromGenerator(leftUnitaries, newauxiliary, newControls, target);
                         }
-                        (Adjoint op)([index![Length(index!) - 1]] + auxiliary, newauxiliary[0]);
+                        (Adjoint op)(controls, newauxiliary[0]);
                     }
                 }
             }
@@ -208,46 +210,18 @@ namespace Microsoft.Quantum.Canon {
     ///
     /// # References
     /// - [ *Craig Gidney*, 1709.06648](https://arxiv.org/abs/1709.06648)
-    internal operation LogicalANDMeasAndFix(ctrlRegister : Qubit[], target : Qubit)
-    : Unit {
-        body (...) {
-            if(Length(ctrlRegister) == 2){
-                let c1 = ctrlRegister[0];
-                let c2 = ctrlRegister[1];
-                H(target);
-                T(target);
-                CNOT(c1,target);
-                CNOT(c2,target);
-                CNOT(target,c1);
-                CNOT(target,c2);
-                (Adjoint T)(c1);
-                (Adjoint T)(c2);
-                T(target);
-                CNOT(target,c2);
-                CNOT(target,c1);
-                H(target);
-                S(target);
-            } else {
-                (Controlled X)(ctrlRegister, target);
-            }
-        }
-        adjoint (...)  {
-            if(Length(ctrlRegister) == 2){
-                let c1 = ctrlRegister[0];
-                let c2 = ctrlRegister[1];
-                H(target);
-                let Meas = M(target);
-                if (Meas == One) {
-                    within {
-                        H(c2);
-                    } apply {
-                        CNOT(c1,c2);
-                    }
-                    X(target);
-                }
-            } else {
-                 (Controlled X)(ctrlRegister, target);
-            }
+    internal operation ApplyAndChain(auxRegister : Qubit[], ctrlRegister : Qubit[], target : Qubit)
+    : Unit is Adj {
+        if (Length(ctrlRegister) == 0) {
+            X(target);
+        } elif (Length(ctrlRegister) == 1) {
+            CNOT(Head(ctrlRegister), target);
+        } else {
+            EqualityFactI(Length(auxRegister), Length(ctrlRegister) - 2, "Unexpected number of auxiliary qubits");
+            let controls1 = ctrlRegister[0..0] + auxRegister;
+            let controls2 = Rest(ctrlRegister);
+            let targets = auxRegister + [target];
+            ApplyToEachA(ApplyAnd, Zip3(controls1, controls2, targets));
         }
     }
 }
