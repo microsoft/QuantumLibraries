@@ -198,6 +198,26 @@ namespace Microsoft.Quantum.ArithmeticTests {
             }
         }
     }
+
+    @Test("ResourcesEstimator")
+    operation TestLessThanConstantUsingRippleCarryOperationCalls() : Unit {
+        let tCounts = [0, 12, 8, 12, 4, 12, 8, 12, 0, 12, 8, 12, 4, 12, 8, 12, 0];
+        let qubitCounts = [0, 2, 1, 2, 0, 2, 1, 2, 0, 2, 1, 2, 0, 2, 1, 2, 0];
+
+        for ((idx, (tCount, qubitCount)) in Enumerated(Zip(tCounts, qubitCounts))) {
+            within {
+                AllowAtMostNCallsCA(tCount * 4, T, $"Too many T operations for constant {idx}");
+            } apply {
+                using ((input, output) = (Qubit[4], Qubit())) {
+                    within {
+                        AllowAtMostNQubits(qubitCount, $"Too many qubits allocated for constant {idx}");
+                    } apply {
+                        LessThanConstantUsingRippleCarry(IntAsBigInt(idx), LittleEndian(input), output);
+                    }
+                }
+            }
+        }
+    }
 }
 
 
