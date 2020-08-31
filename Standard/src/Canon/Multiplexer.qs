@@ -44,7 +44,7 @@ namespace Microsoft.Quantum.Canon {
         }
         if (nUnitaries > 0) {
             let auxiliary = new Qubit[0];
-            Adjoint _MultiplexOperationsFromGenerator(unitaryGeneratorWithOffset, auxiliary, index, target);
+            Adjoint MultiplexOperationsFromGeneratorImpl(unitaryGeneratorWithOffset, auxiliary, index, target);
         }
     }
 
@@ -52,7 +52,7 @@ namespace Microsoft.Quantum.Canon {
     /// Implementation step of `MultiplexOperationsFromGenerator`.
     /// # See Also
     /// - Microsoft.Quantum.Canon.MultiplexOperationsFromGenerator
-    operation _MultiplexOperationsFromGenerator<'T>(unitaryGenerator : (Int, Int, (Int -> ('T => Unit is Adj + Ctl))), auxiliary: Qubit[], index: LittleEndian, target: 'T)
+    internal operation MultiplexOperationsFromGeneratorImpl<'T>(unitaryGenerator : (Int, Int, (Int -> ('T => Unit is Adj + Ctl))), auxiliary: Qubit[], index: LittleEndian, target: 'T)
     : Unit {
         body (...) {
             let nIndex = Length(index!);
@@ -60,13 +60,13 @@ namespace Microsoft.Quantum.Canon {
 
             let (nUnitaries, unitaryOffset, unitaryFunction) = unitaryGenerator;
 
-            let nUnitariesLeft = MinI(nUnitaries, nStates/2);
+            let nUnitariesLeft = MinI(nUnitaries, nStates / 2);
             let nUnitariesRight = MinI(nUnitaries, nStates);
 
             let leftUnitaries = (nUnitariesLeft, unitaryOffset, unitaryFunction);
-            let rightUnitaries = (nUnitariesRight-nUnitariesLeft, unitaryOffset + nUnitariesLeft, unitaryFunction);
+            let rightUnitaries = (nUnitariesRight - nUnitariesLeft, unitaryOffset + nUnitariesLeft, unitaryFunction);
 
-            let newControls = LittleEndian(index![0..nIndex - 2]);
+            let newControls = LittleEndian(Most(index!));
 
             if (nUnitaries > 0) {
                 if (Length(auxiliary) == 1 and nIndex == 0) {
@@ -75,39 +75,38 @@ namespace Microsoft.Quantum.Canon {
                     (Controlled Adjoint (unitaryFunction(unitaryOffset)))(auxiliary, target);
                 } elif (Length(auxiliary) == 0 and nIndex >= 1) {
                     // Start case
-                    let newauxiliary = [index![Length(index!) - 1]];
-                    if(nUnitariesRight > 0){
-                        _MultiplexOperationsFromGenerator(rightUnitaries, newauxiliary, newControls, target);
+                    let newauxiliary = Tail(index!);
+                    if (nUnitariesRight > 0) {
+                        MultiplexOperationsFromGeneratorImpl(rightUnitaries, [newauxiliary], newControls, target);
                     }
                     within {
-                        X(newauxiliary[0]);
+                        X(newauxiliary);
                     } apply {
-                        _MultiplexOperationsFromGenerator(leftUnitaries, newauxiliary, newControls, target);
+                        MultiplexOperationsFromGeneratorImpl(leftUnitaries, [newauxiliary], newControls, target);
                     }
                 } else {
                     // Recursion that reduces nIndex by 1 & sets Length(auxiliary) to 1.
                     let controls = [Tail(index!)] + auxiliary;
-                    using ((newauxiliary, andauxiliary) = (Qubit[1], Qubit[MaxI(0, Length(controls) - 2)])) {
-                        let op = ApplyAndChain(andauxiliary, _, _);
-                        // Naive measurement-free approach uses 4x more T gates with
-                        // let op = (Controlled X);
-                        op(controls, newauxiliary[0]);
-                        if (nUnitariesRight > 0) {
-                            _MultiplexOperationsFromGenerator(rightUnitaries, newauxiliary, newControls, target);
-                        }
+                    using ((newauxiliary, andauxiliary) = (Qubit(), Qubit[MaxI(0, Length(controls) - 2)])) {
                         within {
-                            (Controlled X)(auxiliary, newauxiliary[0]);
+                            ApplyAndChain(andauxiliary, controls, newauxiliary);
                         } apply {
-                            _MultiplexOperationsFromGenerator(leftUnitaries, newauxiliary, newControls, target);
+                            if (nUnitariesRight > 0) {
+                                MultiplexOperationsFromGeneratorImpl(rightUnitaries, [newauxiliary], newControls, target);
+                            }
+                            within {
+                                (Controlled X)(auxiliary, newauxiliary);
+                            } apply {
+                                MultiplexOperationsFromGeneratorImpl(leftUnitaries, [newauxiliary], newControls, target);
+                            }
                         }
-                        (Adjoint op)(controls, newauxiliary[0]);
                     }
                 }
             }
         }
         adjoint auto;
         controlled (controlRegister, (...)) {
-            _MultiplexOperationsFromGenerator(unitaryGenerator, auxiliary + controlRegister, index, target);
+            MultiplexOperationsFromGeneratorImpl(unitaryGenerator, auxiliary + controlRegister, index, target);
         }
         adjoint controlled auto;
     }
@@ -193,23 +192,12 @@ namespace Microsoft.Quantum.Canon {
     }
 
     /// # Summary
-    /// Computes the logical AND of multiple qubits.
-    /// # Input
-    /// ## ctrlRegister
-    /// Qubits input to the multiple-input AND gate.
-    /// ## target
-    /// Qubit on which output of AND is written to. This is
-    /// assumed to always start in the $\ket{0}$ state.
-    /// # Remarks
-    /// When `ctrlRegister` has exactly $2$ qubits,
-    /// this is equivalent to the `CCNOT` operation but phase with a phase
-    /// $e^{i\Pi/2}$ on $\ket{001}$ and $-e^{i\Pi/2}$ on $\ket{101}$ and $\ket{011}$.
-    /// The Adjoint is also measure-and-fixup approach that is the inverse
-    /// of the original operation only in special cases (see references),
-    /// but uses fewer T-gates.
+    /// Computes a chain of AND gates
     ///
-    /// # References
-    /// - [ *Craig Gidney*, 1709.06648](https://arxiv.org/abs/1709.06648)
+    /// # Description
+    /// The auxiliary qubits to compute temporary results must be specified explicitly.
+    /// The length of that register is `Length(ctrlRegister) - 2`, if there are at least
+    /// two controls, otherwise the length is 0.
     internal operation ApplyAndChain(auxRegister : Qubit[], ctrlRegister : Qubit[], target : Qubit)
     : Unit is Adj {
         if (Length(ctrlRegister) == 0) {
