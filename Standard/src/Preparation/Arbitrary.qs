@@ -212,7 +212,7 @@ namespace Microsoft.Quantum.Preparation {
         qubits : LittleEndian
     )
     : Unit is Adj + Ctl {
-        (CompileApproximateArbitraryStatePreparation(tolerance, coefficients, Length(qubits!)))(qubits);
+        (_CompileApproximateArbitraryStatePreparation(tolerance, coefficients, Length(qubits!)))(qubits);
     }
 
     /// # Summary
@@ -228,7 +228,7 @@ namespace Microsoft.Quantum.Preparation {
     // NB: This is currently not marked as internal, as the QML library
     //     currently uses this function. Please see the relevant GitHub issue
     //     at https://github.com/microsoft/QuantumLibraries/issues/239.
-    internal function CompileApproximateArbitraryStatePreparation(
+    function _CompileApproximateArbitraryStatePreparation(
         tolerance : Double,
         coefficients : ComplexPolar[],
         nQubits : Int
