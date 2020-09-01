@@ -99,8 +99,8 @@ namespace Microsoft.Quantum.Tests {
                             op(coeffQubits, signQubit, garbageQubits);
                         } apply {
                             for (stateIndex in 0..coeffs - 1) {
-                                let prob = AbsD(coefficients[stateIndex]) / oneNorm;
-                                AssertProbInt(stateIndex, prob, coeffQubits, probtargetError);
+                                let prob = coefficients[stateIndex] / oneNorm;
+                                AssertSignedProbInt(stateIndex, prob, signQubit, coeffQubits, probtargetError);
                             }
                         }
                     }

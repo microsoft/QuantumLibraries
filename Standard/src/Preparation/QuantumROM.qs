@@ -8,6 +8,7 @@ namespace Microsoft.Quantum.Preparation {
     open Microsoft.Quantum.Convert;
     open Microsoft.Quantum.Math;
     open Microsoft.Quantum.Arrays;
+    open Microsoft.Quantum.Synthesis;
 
     /// # Summary
     /// Uses the Quantum ROM technique to represent a given density matrix.
@@ -69,7 +70,7 @@ namespace Microsoft.Quantum.Preparation {
         let nCoeffs = Length(positiveCoefficients);
         let nBitsIndices = Ceiling(Lg(IntAsDouble(nCoeffs)));
 
-        let op =  PrepareQuantumROMState(nBitsPrecision, nCoeffs, nBitsIndices, keepCoeff, altIndex, new Bool[0], _, new Qubit[0], _);
+        let op = PrepareQuantumROMStateWithoutSign(nBitsPrecision, nCoeffs, nBitsIndices, keepCoeff, altIndex, _, _);
         let qubitCounts = QuantumROMQubitCount(targetError, nCoeffs);
         return (qubitCounts, oneNorm, op);
     }
@@ -86,7 +87,7 @@ namespace Microsoft.Quantum.Preparation {
         let nCoeffs = Length(positiveCoefficients);
         let nBitsIndices = Ceiling(Lg(IntAsDouble(nCoeffs)));
 
-        let op =  PrepareQuantumROMStateWithSign(nBitsPrecision, nCoeffs, nBitsIndices, keepCoeff, altIndex, signs, _, _, _);
+        let op = PrepareQuantumROMStateWithSign(nBitsPrecision, nCoeffs, nBitsIndices, keepCoeff, altIndex, signs, _, _, _);
         let qubitCounts = QuantumROMQubitCount(targetError, nCoeffs);
         return (qubitCounts, oneNorm, op);
     }
@@ -206,7 +207,6 @@ namespace Microsoft.Quantum.Preparation {
     // Used in QuantumROM implementation.
     internal operation PrepareQuantumROMState(nBitsPrecision: Int, nCoeffs: Int, nBitsIndices: Int, keepCoeff: Int[], altIndex: Int[], signs : Bool[], indexRegister: LittleEndian, signQubit : Qubit[], garbageRegister: Qubit[])
     : Unit is Adj + Ctl {
-        let unitaryGenerator = (nCoeffs, QuantumROMBitStringWriterByIndex(_, keepCoeff, altIndex));
         let garbageIdx0 = nBitsIndices;
         let garbageIdx1 = garbageIdx0 + nBitsPrecision;
         let garbageIdx2 = garbageIdx1 + nBitsPrecision;
@@ -222,6 +222,7 @@ namespace Microsoft.Quantum.Preparation {
         ApplyToEachCA(H, uniformKeepCoeffRegister!);
 
         // Write bitstrings to altIndex and keepCoeff register.
+        let unitaryGenerator = (nCoeffs, QuantumROMBitStringWriterByIndex(_, keepCoeff, altIndex));
         MultiplexOperationsFromGenerator(unitaryGenerator, indexRegister, (keepCoeffRegister, altIndexRegister));
 
         // Perform comparison
@@ -231,6 +232,18 @@ namespace Microsoft.Quantum.Preparation {
 
         // Swap in register based on comparison
         ApplyToEachCA((Controlled SWAP)([flagQubit], _), Zip(indexRegister!, altIndexRegister!));
+
+        // FIXME incorporate preparation of sign bit into MultiplexOperationsFromGenerator
+        if (Length(signs) > 0) {
+            ApplyXControlledOnTruthTable(BoolArrayAsBigInt(signs), indexRegister!, Head(signQubit));
+        }
+    }
+
+    // # Remark
+    // Application case for Maybe UDT
+    internal operation PrepareQuantumROMStateWithoutSign(nBitsPrecision: Int, nCoeffs: Int, nBitsIndices: Int, keepCoeff: Int[], altIndex: Int[], indexRegister: LittleEndian, garbageRegister: Qubit[])
+    : Unit is Adj + Ctl {
+        PrepareQuantumROMState(nBitsPrecision, nCoeffs, nBitsIndices, keepCoeff, altIndex, new Bool[0], indexRegister, new Qubit[0], garbageRegister);
     }
 
     // # Remark
