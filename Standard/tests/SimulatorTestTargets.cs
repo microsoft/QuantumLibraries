@@ -58,7 +58,7 @@ namespace Microsoft.Quantum.Tests
                     opData.TestOperationRunner(sim);
                 }
             }
-            catch( System.BadImageFormatException e )
+            catch (System.BadImageFormatException e)
             {
                 throw new System.BadImageFormatException($"Could not load Quantum Simulator. If you are running tests using Visual Studio 2017, " +
                     $"this problem can be fixed by using menu Test > Test Settings > Default Processor Architecture " +

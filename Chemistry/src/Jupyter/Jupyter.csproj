@@ -12,7 +12,7 @@
     <PackageReleaseNotes>See: https://docs.microsoft.com/en-us/quantum/relnotes/</PackageReleaseNotes>
     <PackageLicenseUrl>https://github.com/Microsoft/QuantumLibraries/raw/master/LICENSE.txt</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/Microsoft/QuantumLibraries/tree/master/Chemistry</PackageProjectUrl>
-    <PackageIconUrl>https://secure.gravatar.com/avatar/bd1f02955b2853ba0a3b1cdc2434e8ec.png</PackageIconUrl>
+    <PackageIcon>qdk-nuget-icon.png</PackageIcon>
     <PackageTags>Quantum Q# Qsharp Jupyter</PackageTags>
     <NoWarn>1591</NoWarn>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
@@ -25,10 +25,13 @@
 
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Jupyter.Core" Version="1.3.52077" />
+    <PackageReference Include="Microsoft.Jupyter.Core" Version="1.4.80531" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="..\..\..\Build\assets\qdk-nuget-icon.png" Pack="true" Visible="false" PackagePath="" />
+  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\DataModel\DataModel.csproj" />

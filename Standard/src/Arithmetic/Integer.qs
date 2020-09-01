@@ -228,8 +228,8 @@ namespace Microsoft.Quantum.Arithmetic {
                 ApplyOuterCDKMAdder(xs, ys, auxiliary);
             } apply {
                 CarryOutCoreCDKM(xs, ys, auxiliary, carry);
-                ApplyToEachCA(X, Most(Rest(ys!)));
             }
+            ApplyToEachCA(X, Most(Rest(ys!)));
             CNOT(xs![0], ys![0]);
         }
     }

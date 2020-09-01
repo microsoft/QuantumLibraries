@@ -43,26 +43,26 @@ namespace Microsoft.Quantum.Characterization
                 this.Simulator = m as QuantumSimulator;
             }
 
-            public override void Init()
+            public override void __Init__()
             {
-                base.Init();
+                base.__Init__();
 
-                this.Allocate = this.Factory.Get<Allocate>(typeof(Microsoft.Quantum.Intrinsic.Allocate));
-                this.Release = this.Factory.Get<Release>(typeof(Microsoft.Quantum.Intrinsic.Release));
-                this.ResetAll = this.Factory.Get<ResetAll>(typeof(Microsoft.Quantum.Intrinsic.ResetAll));
+                this.Allocate = this.__Factory__.Get<Allocate>(typeof(Microsoft.Quantum.Intrinsic.Allocate));
+                this.Release = this.__Factory__.Get<Release>(typeof(Microsoft.Quantum.Intrinsic.Release));
+                this.ResetAll = this.__Factory__.Get<ResetAll>(typeof(Microsoft.Quantum.Intrinsic.ResetAll));
             }
 
             /// <summary>
             /// Overrides the body to do the emulation when possible. If emulation is not possible, then
             /// it just invokes the default Q# implementation.
             /// </summary>
-            public override Func<(IAdjointable, ICallable, long, long), double> Body => (_args) =>
+            public override Func<(IAdjointable, ICallable, long, long), double> __Body__ => (_args) =>
             {
                 var (preparation, measure, count, samples) = _args;
 
                 if (!CanEmulate(preparation, measure))
                 {
-                    return base.Body(_args);
+                    return base.__Body__(_args);
                 }
 
                 // Find the basis used for measurement from the captured Paulis:
@@ -161,7 +161,9 @@ namespace Microsoft.Quantum.Characterization
             public virtual bool CanEmulate(IAdjointable preparation, ICallable measure) =>
                     this.Simulator != null &&
                     (preparation.Qubits == null || !preparation.Qubits.Where(q => q != null).Any()) &&
-                    (measure.FullName == typeof(Primitive.Measure).FullName || measure.FullName == typeof(Intrinsic.Measure).FullName || measure.FullName == typeof(MeasureAllZ).FullName);
+                    // NB: the "Primitive" deprecation stub has been removed, so we check against the exact
+                    //     full name instead. That check should be removed in the future.
+                    (measure.FullName == "Microsoft.Quantum.Primitive.Measure" || measure.FullName == typeof(Intrinsic.Measure).FullName || measure.FullName == typeof(MeasureAllZ).FullName);
         }
     }
 }

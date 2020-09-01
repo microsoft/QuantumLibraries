@@ -11,9 +11,9 @@ namespace Microsoft.Quantum.Tests {
     open Microsoft.Quantum.Math;
     open Microsoft.Quantum.Measurement;
     open Microsoft.Quantum.Synthesis;
+    open Microsoft.Quantum.Random;
 
-    @Test("ToffoliSimulator")
-    operation CheckTransformationBasedSynthesis () : Unit {
+    internal operation CheckApplyPermutation (synthesisOperation : ((Int[], LittleEndian) => Unit is Adj + Ctl)) : Unit {
         let permutations = [
             [0, 2, 1, 3],
             [0, 1, 3, 2],
@@ -31,19 +31,35 @@ namespace Microsoft.Quantum.Tests {
                 let register = LittleEndian(qs);
                 for (i in 0..Length(perm) - 1) {
                     ApplyXorInPlace(i, register);
-                    ApplyPermutationUsingTransformation(perm, register);
+                    synthesisOperation(perm, register);
                     EqualityFactI(MeasureInteger(register), perm[i], $"ApplyPermutation failed for permutation {perm} at index {i}");
                 }
             }
         }
     }
 
+    internal operation ApplyPermutationUsingDecompositionWithReverseVariableOrder (perm : Int[], qubits : LittleEndian) : Unit is Adj + Ctl {
+        let variableOrder = Reversed(SequenceI(0, Length(qubits!) - 1));
+        ApplyPermutationUsingDecompositionWithVariableOrder(perm, variableOrder, qubits);
+    }
+
+    @Test("ToffoliSimulator")
+    operation CheckTransformationBasedSynthesis () : Unit {
+        CheckApplyPermutation(ApplyPermutationUsingTransformation);
+    }
+
+    @Test("QuantumSimulator")
+    operation CheckDecompositionBasedSynthesis () : Unit {
+        CheckApplyPermutation(ApplyPermutationUsingDecomposition);
+        CheckApplyPermutation(ApplyPermutationUsingDecompositionWithReverseVariableOrder);
+    }
+
     @Test("ToffoliSimulator")
     operation CheckApplyTransposition () : Unit {
         for (numQubits in 2..6) {
             for (_ in 1..10) {
-                let a = RandomInt(2^numQubits);
-                let b = RandomInt(2^numQubits);
+                let a = DrawRandomInt(0, 2^numQubits - 1);
+                let b = DrawRandomInt(0, 2^numQubits - 1);
 
                 using (qs = Qubit[numQubits]) {
                     let register = LittleEndian(qs);
@@ -62,8 +78,8 @@ namespace Microsoft.Quantum.Tests {
         }
     }
 
-    internal operation RandomBool () : Bool {
-        return RandomInt(2) == 1;
+    internal operation RandomBool() : Bool {
+        return DrawRandomInt(0, 1) == 1;
     }
 
     // from ControlledOnTruthTable.qs
@@ -82,7 +98,8 @@ namespace Microsoft.Quantum.Tests {
     operation CheckApplyXControlledOnTruthTable () : Unit {
         for (numQubits in 2..5) {
             for (round in 1..5) {
-                let func = IntAsBigInt(RandomInt(2^(2^numQubits)));
+                // TODO: replace with BigUniform.
+                let func = IntAsBigInt(DrawRandomInt(0, 2^(2^numQubits) - 1));
                 let truthValues = SizeAdjustedTruthTable(BigIntAsBoolArray(func), numQubits);
 
                 using ((controls, target) = (Qubit[numQubits], Qubit())) {
@@ -108,7 +125,8 @@ namespace Microsoft.Quantum.Tests {
     operation CheckControlledApplyXControlledOnTruthTable () : Unit {
         for (numQubits in 2..5) {
             for (round in 1..5) {
-                let func = IntAsBigInt(RandomInt(2^(2^numQubits)));
+                // TODO: replace with BigUniform.
+                let func = IntAsBigInt(DrawRandomInt(0, 2^(2^numQubits) - 1));
                 let truthValues = SizeAdjustedTruthTable(BigIntAsBoolArray(func), numQubits);
 
                 using ((controls, control, target) = (Qubit[numQubits], Qubit(), Qubit())) {
@@ -142,7 +160,8 @@ namespace Microsoft.Quantum.Tests {
     operation CheckApplyXControlledOnTruthTableWithCleanTarget () : Unit {
         for (numQubits in 2..5) {
             for (round in 1..5) {
-                let func = IntAsBigInt(RandomInt(2^(2^numQubits)));
+                // TODO: replace with BigUniform.
+                let func = IntAsBigInt(DrawRandomInt(0, 2^(2^numQubits) - 1));
                 let truthValues = SizeAdjustedTruthTable(BigIntAsBoolArray(func), numQubits);
 
                 using ((controls, target, copy) = (Qubit[numQubits], Qubit(), Qubit())) {
