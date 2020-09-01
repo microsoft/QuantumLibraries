@@ -26,6 +26,16 @@ namespace Microsoft.Quantum.Tests {
         }
     }
 
+    @Test("QuantumSimulator")
+    function UnzippedTest() : Unit {
+        let first = [6, 5, 5, 3, 2, 1];
+        let second = [true, false, false, false, true, false];
+
+        let (first2, second2) = Unzipped(Zip(first, second));
+        AllEqualityFactI(first2, first, "Unexpected array of integers");
+        AllEqualityFactB(second2, second, "Unexpected array of Booleans");
+    }
+
 
     @Test("QuantumSimulator")
     function LookupTest () : Unit {
