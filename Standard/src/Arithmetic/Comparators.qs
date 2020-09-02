@@ -39,19 +39,15 @@ namespace Microsoft.Quantum.Arithmetic {
     ///   https://arxiv.org/abs/quant-ph/0410184
     operation CompareUsingRippleCarry(x : LittleEndian, y : LittleEndian, output : Qubit)
     : Unit is Adj + Ctl {
-        if (Length(x!) != Length(y!)) {
-            fail "Size of integer registers must be equal.";
-        }
+        EqualityFactI(Length(x!), Length(y!), "Size of integer registers must be equal.");
 
         using (auxiliary = Qubit()) {
             within {
-                let nQubitsX = Length(x!);
-
                 // Take 2's complement
-                ApplyToEachCA(X, x! + [auxiliary]);
+                ApplyToEachA(X, x! + [auxiliary]);
 
-                ApplyMajorityInPlace(x![0], [y![0], auxiliary]);
-                ApplyToEachCA(MAJ, Zip3(Most(x!), Rest(y!), Rest(x!)));
+                // propagate carrys
+                ApplyToEachA(MAJ, Zip3([auxiliary] + Most(x!), y!, x!));
             } apply {
                 X(output);
                 CNOT(Tail(x!), output);
