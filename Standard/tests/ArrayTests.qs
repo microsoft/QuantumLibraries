@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft Corporation. All rights reserved.
+// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 namespace Microsoft.Quantum.Tests {
     open Microsoft.Quantum.Logical;
@@ -8,7 +8,7 @@ namespace Microsoft.Quantum.Tests {
     open Microsoft.Quantum.Arrays;
 
     @Test("QuantumSimulator")
-    function ZipTest() : Unit {
+    function TestZip() : Unit {
 
         let left = [1, 2, 101];
         let right = [PauliY, PauliI];
@@ -27,7 +27,7 @@ namespace Microsoft.Quantum.Tests {
     }
 
     @Test("QuantumSimulator")
-    function UnzippedTest() : Unit {
+    function TestUnzipped() : Unit {
         let first = [6, 5, 5, 3, 2, 1];
         let second = [true, false, false, false, true, false];
 
@@ -38,7 +38,7 @@ namespace Microsoft.Quantum.Tests {
 
 
     @Test("QuantumSimulator")
-    function LookupTest () : Unit {
+    function TestLookup() : Unit {
 
         let array = [1, 12, 71, 103];
         let fn = LookupFunction(array);
@@ -55,7 +55,7 @@ namespace Microsoft.Quantum.Tests {
     }
 
     @Test("QuantumSimulator")
-    function ChunksTest() : Unit {
+    function TestChunks() : Unit {
         let data = [10, 11, 12, 13, 14, 15];
 
         // 2 × 3 case.
