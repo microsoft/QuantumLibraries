@@ -24,11 +24,60 @@ namespace Microsoft.Quantum.Arithmetic {
     /// An integer which is assumed to be non-negative.
     /// ## target
     /// A quantum register which is used to store `value` in little-endian encoding.
+    ///
+    /// # Example
+    /// ```Q#
+    /// using (qs = Qubit[6]) {
+    ///   // prepare qs in state |42>
+    ///   ApplyXorInPlace(42, LittleEndian(qs));
+    ///   // check will pass
+    ///   EqualityFactI(MeasureInteger(LittleEndian(qs)), 42);
+    /// }
+    /// ```
+    ///
+    /// # See Also
+    /// - Microsoft.Quantum.Arithmetic.ApplyXorInPlaceL
     operation ApplyXorInPlace(value : Int, target : LittleEndian)
     : Unit is Adj + Ctl {
         ApplyToEachCA(
             CControlledCA(X),
             Zip(IntAsBoolArray(value, Length(target!)), target!)
+        );
+    }
+
+    /// # Summary
+    /// Applies a bitwise-XOR operation between a classical integer and a
+    /// big integer represented by a register of qubits.
+    ///
+    /// # Description
+    /// Applies `X` operations to qubits in a little-endian register based on
+    /// 1 bits in a big integer.
+    ///
+    /// Let us denote `value` by a and let y be an unsigned integer encoded in `target`,
+    /// then `InPlaceXorLE` performs an operation given by the following map:
+    /// $\ket{y}\rightarrow \ket{y\oplus a}$ , where $\oplus$ is the bitwise exclusive OR operator.
+    ///
+    /// # Input
+    /// ## value
+    /// A big integer which is assumed to be non-negative.
+    /// ## target
+    /// A quantum register which is used to store `value` in little-endian encoding.
+    ///
+    /// # Example
+    /// ```Q#
+    /// using (qs = Qubit[6]) {
+    ///   // prepare qs in state |42>, using big integer
+    ///   ApplyXorInPlaceL(42L, LittleEndian(qs));
+    /// }
+    /// ```
+    ///
+    /// # See Also
+    /// - Microsoft.Quantum.Arithmetic.ApplyXorInPlace
+    operation ApplyXorInPlaceL(value : BigInt, target : LittleEndian)
+    : Unit is Adj + Ctl {
+        ApplyToEachCA(
+            CControlledCA(X),
+            Zip(BigIntAsBoolArray(value), target!)
         );
     }
 

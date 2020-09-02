@@ -10,6 +10,7 @@ namespace Microsoft.Quantum.Tests {
     open Microsoft.Quantum.Convert;
     open Microsoft.Quantum.Arrays;
     open Microsoft.Quantum.Math;
+    open Microsoft.Quantum.Measurement;
 
     // BlockEncoding.qs tests
 
@@ -178,42 +179,6 @@ namespace Microsoft.Quantum.Tests {
                         AssertProb([PauliZ], qubits[0..0], One, 1.0, "", 1e-10);
                     }
                     ResetAll(qubits);
-                }
-            }
-        }
-   }
-
-   operation ApplyRippleCarryComparatorTest() : Unit{
-        body (...) {
-            let nQubits = 4;
-            let intMax = 2^nQubits-1;
-            for(x in 0..intMax){
-                for(y in 0..intMax){
-                    mutable result = Zero;
-                    if(x > y){
-                        set result = One;
-                    }
-                
-                    Message($"Test case. {x} > {y} = {result}");
-                    using(qubits = Qubit[nQubits*2 + 1]){
-                        let xRegister = LittleEndian(qubits[0..nQubits-1]);
-                        let yRegister = LittleEndian(qubits[nQubits..2*nQubits-1]);
-                        let output = qubits[2*nQubits];
-
-                        ApplyXorInPlace(x, xRegister);
-                        ApplyXorInPlace(y, yRegister);
-                        CompareUsingRippleCarry(xRegister, yRegister, output);
-
-                        AssertProb([PauliZ], [output], result, 1.0, "", 1e-10);
-                        if(result == One){
-                            X(output);
-                        }
-
-                        (Adjoint ApplyXorInPlace)(y, yRegister);
-                        (Adjoint ApplyXorInPlace)(x, xRegister);
-
-                    
-                    }
                 }
             }
         }
