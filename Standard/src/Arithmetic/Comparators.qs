@@ -97,7 +97,7 @@ namespace Microsoft.Quantum.Arithmetic {
         body (...) {
             let bitwidth = Length(x!);
             AssertAllZero([output]);
-            Fact(c >= 0L, "Constant input `c` must not be negative");
+            Fact(c >= 0L, $"Constant input `c` must not be negative, but was {c}");
 
             if (c == 0L) {
                 // do nothing; output stays 0
@@ -108,7 +108,7 @@ namespace Microsoft.Quantum.Arithmetic {
                 X(output);
             } else {
                 let bits = BigIntAsBoolArray(c);
-                let l = IndexOf(EqualB(true, _), bits);
+                let l = IndexOf(Identity<Bool>, bits);
                 using (tmpAnd = Qubit[bitwidth - 2 - l]) {
                     let tmpCarry = x![l..l] + tmpAnd;
                     within {
