@@ -259,13 +259,6 @@ namespace Microsoft.Quantum.Preparation {
         ApproximatelyMultiplexPauli(tolerance, disentangling, axis, actualControl, register[idxTarget]);
     }
 
-    internal function IsRangeEmpty(rng : Range) : Bool {
-        for (idx in rng) {
-            return false;
-        }
-        return true;
-    }
-
     internal operation ApplyGlobalRotationStep(
         angle : Double, idxTarget : Int, register : Qubit[]
     ) : Unit is Adj + Ctl {
