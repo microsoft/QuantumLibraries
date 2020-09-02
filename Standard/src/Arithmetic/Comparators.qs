@@ -92,8 +92,8 @@ namespace Microsoft.Quantum.Arithmetic {
     ///   Dominic W. Berry, Craig Gidney, Mario Motta, Jarrod R. McClean, Ryan Babbush
     ///   Quantum 3, 208 (2019)
     ///   https://arxiv.org/abs/1902.02134v4
-    operation LessThanConstantUsingRippleCarry(c : BigInt, x : LittleEndian, output : Qubit)
-    : Unit {
+    operation CompareLessThanConstantUsingRippleCarry(c : BigInt, x : LittleEndian, output : Qubit)
+    : Unit is Adj+Ctl {
         body (...) {
             let bitwidth = Length(x!);
             AssertAllZero([output]);
@@ -113,21 +113,9 @@ namespace Microsoft.Quantum.Arithmetic {
                     let tmpCarry = x![l..l] + tmpAnd;
                     within {
                         ApplyPauliFromBitString(PauliX, true, bits, x!);
-                        for (i in 1..bitwidth - l - 2) {
-                            within {
-                                ApplyIfA(X, bits[i + l], tmpCarry[i - 1]);
-                            } apply {
-                                ApplyAnd(tmpCarry[i - 1], x![i + l], tmpCarry[i]);
-                            }
-                            CNOT(tmpCarry[i - 1], tmpCarry[i]);
-                        }
+                        ApplyToEachA(ApplyAndOrStep, Zip4(bits[l + 1...], Most(tmpCarry), x![l + 1...], Rest(tmpCarry)));
                     } apply {
-                        within {
-                            ApplyIfA(X, bits[bitwidth - 1], Tail(tmpCarry));
-                        } apply {
-                            ApplyAnd(Tail(tmpCarry), Tail(x!), output);
-                        }
-                        CNOT(Tail(tmpCarry), output);
+                        ApplyAndOrStep(bits[bitwidth - 1], Tail(tmpCarry), Tail(x!), output);
                     }
                 }
             }
@@ -137,7 +125,7 @@ namespace Microsoft.Quantum.Arithmetic {
         controlled (controls, ...) {
             using (q = Qubit()) {
                 within {
-                    LessThanConstantUsingRippleCarry(c, x, q);
+                    CompareLessThanConstantUsingRippleCarry(c, x, q);
                 } apply {
                     if (Length(controls) == 1) {
                         ApplyAnd(Head(controls), q, output);
@@ -148,6 +136,27 @@ namespace Microsoft.Quantum.Arithmetic {
             }
         }
         adjoint controlled self;
+    }
+
+    /// # Summary
+    /// Applies to input-transformed AND or OR gate
+    ///
+    /// # Description
+    /// Given a $\ket 0$ initialized `target`, applies
+    /// $a \land \bar b$, if `isOr` is `false`, and
+    /// $a \lor b$, if `isOr` is `true`
+    ///
+    /// # Remark
+    /// The OR gate is realized using `ApplyAnd`
+    internal operation ApplyAndOrStep(isOr : Bool, a : Qubit, b : Qubit, target : Qubit)
+    : Unit is Adj {
+        within {
+            ApplyIfA(X, isOr, a);
+            X(b);
+        } apply {
+            ApplyAnd(a, b, target);
+            ApplyIfA(X, isOr, target);
+        }
     }
 
 }

@@ -203,28 +203,27 @@ namespace Microsoft.Quantum.ArithmeticTests {
 
     @Test("ResourcesEstimator")
     operation TestCompareUsingRippleCarryOperationCalls() : Unit {
-        for (bitwidth in 2..6) {
-            within {
-                AllowAtMostNCallsCA(2 * bitwidth, CCNOT, $"Too many CCNOT operations for bitwidth {bitwidth}");
-            } apply {
-                using ((input1, input2, output) = (Qubit[bitwidth], Qubit[bitwidth], Qubit())) {
-                    within {
-                        AllowAtMostNQubits(1, $"Too many qubits allocated for bitwidth {bitwidth}");
-                    } apply {
-                        CompareUsingRippleCarry(LittleEndian(input1), LittleEndian(input2), output);
-                    }
+        let bitwidth = 4;
+        within {
+            AllowAtMostNCallsCA(2 * bitwidth, CCNOT, $"Too many CCNOT operations for bitwidth {bitwidth}");
+        } apply {
+            using ((input1, input2, output) = (Qubit[bitwidth], Qubit[bitwidth], Qubit())) {
+                within {
+                    AllowAtMostNQubits(1, $"Too many qubits allocated for bitwidth {bitwidth}");
+                } apply {
+                    CompareUsingRippleCarry(LittleEndian(input1), LittleEndian(input2), output);
                 }
             }
         }
     }
 
     @Test("ToffoliSimulator")
-    operation TestLessThanConstantUsingRippleCarry() : Unit {
-        TestLessThanConstantUsingRippleCarryForBitWidth(3);
-        TestLessThanConstantUsingRippleCarryForBitWidth(4);
+    operation TestCompareLessThanConstantUsingRippleCarry() : Unit {
+        TestCompareLessThanConstantUsingRippleCarryForBitWidth(3);
+        TestCompareLessThanConstantUsingRippleCarryForBitWidth(4);
     }
 
-    internal operation TestLessThanConstantUsingRippleCarryForBitWidth(bitwidth : Int) : Unit {
+    internal operation TestCompareLessThanConstantUsingRippleCarryForBitWidth(bitwidth : Int) : Unit {
         using ((input, output) = (Qubit[bitwidth], Qubit())) {
             let inputReg = LittleEndian(input);
             for (qinput in 0..2^bitwidth - 1) {
@@ -232,7 +231,7 @@ namespace Microsoft.Quantum.ArithmeticTests {
                     within {
                         ApplyXorInPlace(qinput, inputReg);
                     } apply {
-                        LessThanConstantUsingRippleCarry(IntAsBigInt(cinput), inputReg, output);
+                        CompareLessThanConstantUsingRippleCarry(IntAsBigInt(cinput), inputReg, output);
                         EqualityFactB(IsResultOne(MResetZ(output)), qinput < cinput, $"Unexpected result for cinput = {cinput} and qinput = {qinput}");
                     }
                 }
@@ -241,7 +240,7 @@ namespace Microsoft.Quantum.ArithmeticTests {
     }
 
     @Test("ResourcesEstimator")
-    operation TestLessThanConstantUsingRippleCarryOperationCalls() : Unit {
+    operation TestCompareLessThanConstantUsingRippleCarryOperationCalls() : Unit {
         let tCounts = [0, 12, 8, 12, 4, 12, 8, 12, 0, 12, 8, 12, 4, 12, 8, 12, 0];
         let qubitCounts = [0, 2, 1, 2, 0, 2, 1, 2, 0, 2, 1, 2, 0, 2, 1, 2, 0];
 
@@ -253,7 +252,7 @@ namespace Microsoft.Quantum.ArithmeticTests {
                     within {
                         AllowAtMostNQubits(qubitCount, $"Too many qubits allocated for constant {idx}");
                     } apply {
-                        LessThanConstantUsingRippleCarry(IntAsBigInt(idx), LittleEndian(input), output);
+                        CompareLessThanConstantUsingRippleCarry(IntAsBigInt(idx), LittleEndian(input), output);
                     }
                 }
             }

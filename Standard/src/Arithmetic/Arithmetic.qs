@@ -24,6 +24,19 @@ namespace Microsoft.Quantum.Arithmetic {
     /// An integer which is assumed to be non-negative.
     /// ## target
     /// A quantum register which is used to store `value` in little-endian encoding.
+    ///
+    /// # Example
+    /// ```Q#
+    /// using (qs = Qubit[6]) {
+    ///   // prepare qs in state |42>
+    ///   ApplyXorInPlace(42, LittleEndian(qs));
+    ///   // check will pass
+    ///   EqualityFactI(MeasureInteger(LittleEndian(qs)), 42);
+    /// }
+    /// ```
+    ///
+    /// # See Also
+    /// - Microsoft.Quantum.Arithmetic.ApplyXorInPlaceL
     operation ApplyXorInPlace(value : Int, target : LittleEndian)
     : Unit is Adj + Ctl {
         ApplyToEachCA(
@@ -49,6 +62,17 @@ namespace Microsoft.Quantum.Arithmetic {
     /// A big integer which is assumed to be non-negative.
     /// ## target
     /// A quantum register which is used to store `value` in little-endian encoding.
+    ///
+    /// # Example
+    /// ```Q#
+    /// using (qs = Qubit[6]) {
+    ///   // prepare qs in state |42>, using big integer
+    ///   ApplyXorInPlaceL(42L, LittleEndian(qs));
+    /// }
+    /// ```
+    ///
+    /// # See Also
+    /// - Microsoft.Quantum.Arithmetic.ApplyXorInPlace
     operation ApplyXorInPlaceL(value : BigInt, target : LittleEndian)
     : Unit is Adj + Ctl {
         ApplyToEachCA(
