@@ -24,7 +24,7 @@ namespace Microsoft.Quantum.Tests
             var control = new MockQubit(1);
             var target = new MockQubit(0);
             var op = new Microsoft.Quantum.Canon.CX(new QuantumSimulator());
-            var args = op.__dataIn((control, target));
+            var args = op.__DataIn__((control, target));
             var expected = new RuntimeMetadata()
             {
                 Label = "X",
@@ -47,7 +47,7 @@ namespace Microsoft.Quantum.Tests
             var control = new MockQubit(1);
             var target = new MockQubit(0);
             var op = new Microsoft.Quantum.Canon.CY(new QuantumSimulator());
-            var args = op.__dataIn((control, target));
+            var args = op.__DataIn__((control, target));
             var expected = new RuntimeMetadata()
             {
                 Label = "Y",
@@ -70,7 +70,7 @@ namespace Microsoft.Quantum.Tests
             var control = new MockQubit(1);
             var target = new MockQubit(0);
             var op = new Microsoft.Quantum.Canon.CZ(new QuantumSimulator());
-            var args = op.__dataIn((control, target));
+            var args = op.__DataIn__((control, target));
             var expected = new RuntimeMetadata()
             {
                 Label = "Z",
