@@ -1,11 +1,12 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 namespace Microsoft.Quantum.Tests {
-    open Microsoft.Quantum.Logical;
-    open Microsoft.Quantum.Diagnostics;
-    open Microsoft.Quantum.Canon;
-    open Microsoft.Quantum.Intrinsic;
     open Microsoft.Quantum.Arrays;
+    open Microsoft.Quantum.Canon;
+    open Microsoft.Quantum.Diagnostics;
+    open Microsoft.Quantum.Intrinsic;
+    open Microsoft.Quantum.Logical;
+    open Microsoft.Quantum.Math;
 
     @Test("QuantumSimulator")
     function TestZip() : Unit {
@@ -246,6 +247,54 @@ namespace Microsoft.Quantum.Tests {
         // arrays of Results
         let differentElements = EqualA(EqualR, [One, Zero], [One, One]);
         Fact(not differentElements, "Arrays with different elements were reported as equal");
+    }
+
+    @Test("QuantumSimulator")
+    operation TestInterleaved() : Unit {
+        AllEqualityFactI(Interleaved([1, 2, 3], [-1, -2, -3]), [1, -1, 2, -2, 3, -3], "Interleaving failed");
+        AllEqualityFactB(Interleaved(ConstantArray(3, false), ConstantArray(2, true)), [false, true, false, true, false], "Interleaving failed");
+    }
+
+    @Test("QuantumSimulator")
+    operation TestCumulativeFolded() : Unit {
+        AllEqualityFactI(CumulativeFolded(PlusI, 0, SequenceI(1, 5)), [1, 3, 6, 10, 15], "CumulativeFolded failed");
+    }
+
+    @Test("QuantumSimulator")
+    operation TestTransposed() : Unit {
+        for ((actual, expected) in Zip(Transposed([[1, 2, 3], [4, 5, 6]]), [[1, 4], [2, 5], [3, 6]])) {
+            AllEqualityFactI(actual, expected, "Transposed failed");
+        }
+    }
+
+    @Test("QuantumSimulator")
+    operation TestColumnVectorAt() : Unit {
+        let matrix = [[1, 2, 3], [4, 5, 6], [7, 8, 9]];
+        AllEqualityFactI(ColumnVectorAt(0, matrix), [1, 4, 7], "ColumnVectorAt failed");
+        AllEqualityFactI(ColumnVectorAt(1, matrix), [2, 5, 8], "ColumnVectorAt failed");
+        AllEqualityFactI(ColumnVectorAt(2, matrix), [3, 6, 9], "ColumnVectorAt failed");
+    }
+
+    @Test("QuantumSimulator")
+    operation TestElementAt() : Unit {
+        let lucas = [2, 1, 3, 4, 7, 11, 18, 29, 47, 76];
+        let prime = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29];
+        let fibonacci = [0, 1, 1, 2, 3, 5, 8, 13, 21, 34];
+        let catalan = [1, 1, 2, 5, 14, 42, 132, 429, 1430, 4862];
+        let famous2 = Mapped(ElementAt<Int>(2, _), [lucas, prime, fibonacci, catalan]);
+        AllEqualityFactI(famous2, [3, 5, 1, 2], "ElementAt failed");
+    }
+
+    @Test("QuantumSimulator")
+    operation TestElementsAt() : Unit {
+        let lucas = [2, 1, 3, 4, 7, 11, 18, 29, 47, 76];
+        let prime = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29];
+        let fibonacci = [0, 1, 1, 2, 3, 5, 8, 13, 21, 34];
+        let catalan = [1, 1, 2, 5, 14, 42, 132, 429, 1430, 4862];
+        let famousOdd = Mapped(ElementsAt<Int>(0..2..9, _), [lucas, prime, fibonacci, catalan]);
+        for ((actual, expected) in Zip(famousOdd, [[2, 3, 7, 18, 47], [2, 5, 11, 17, 23], [0, 1, 3, 8, 21], [1, 2, 14, 132, 1430]])) {
+            AllEqualityFactI(actual, expected, "ElementsAt failed");
+        }
     }
 }
 
