@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft Corporation. All rights reserved.
+// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
 namespace Microsoft.Quantum.Preparation {
@@ -6,8 +6,8 @@ namespace Microsoft.Quantum.Preparation {
     open Microsoft.Quantum.Arrays;
 
     /// # Summary
-	/// Pairwise entangles two qubit registers.
-	///
+    /// Pairwise entangles two qubit registers.
+    ///
     /// That is, given two registers, prepares the maximally entangled state
     /// $\frac{1}{\sqrt{2}} \left(\ket{00} + \ket{11} \right)$ between each pair of qubits on the respective registers,
     /// assuming that each register starts in the $\ket{0\cdots 0}$ state.
@@ -24,17 +24,17 @@ namespace Microsoft.Quantum.Preparation {
 
         for ((leftQubit, rightQubit) in Zip(left, right)) {
             H(leftQubit);
-            Controlled X([leftQubit], rightQubit);
+            CNOT(leftQubit, rightQubit);
         }
     }
 
     /// # Summary
-    /// Prepares the Choi–Jamiłkowski state for a given operation onto given reference
+    /// Prepares the Choi–Jamiołkowski state for a given operation onto given reference
     /// and target registers.
     ///
     /// # Input
     /// ## op
-    /// Operation $\Lambda$ whose Choi–Jamiłkowski state $J(\Lambda) / 2^N$
+    /// Operation $\Lambda$ whose Choi–Jamiołkowski state $J(\Lambda) / 2^N$
     /// is to be prepared, where $N$ is the number of qubits on which
     /// `op` acts.
     /// ## reference
@@ -70,7 +70,7 @@ namespace Microsoft.Quantum.Preparation {
 
 
     /// # Summary
-    /// Prepares the Choi–Jamiłkowski state for a given operation with a controlled variant onto given reference
+    /// Prepares the Choi–Jamiołkowski state for a given operation with a controlled variant onto given reference
     /// and target registers.
     ///
     /// # See Also
@@ -82,7 +82,7 @@ namespace Microsoft.Quantum.Preparation {
 
 
     /// # Summary
-    /// Prepares the Choi–Jamiłkowski state for a given operation with an adjoint variant onto given reference
+    /// Prepares the Choi–Jamiołkowski state for a given operation with an adjoint variant onto given reference
     /// and target registers.
     ///
     /// # See Also
@@ -94,7 +94,7 @@ namespace Microsoft.Quantum.Preparation {
 
 
     /// # Summary
-    /// Prepares the Choi–Jamiłkowski state for a given operation with both controlled and adjoint variants onto given reference
+    /// Prepares the Choi–Jamiołkowski state for a given operation with both controlled and adjoint variants onto given reference
     /// and target registers.
     ///
     /// # See Also

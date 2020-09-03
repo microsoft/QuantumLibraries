@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft Corporation. All rights reserved.
+// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
 namespace Microsoft.Quantum.Preparation {
@@ -49,14 +49,8 @@ namespace Microsoft.Quantum.Preparation {
     ///     op(qubitsLE);
     /// }
     /// ```
-    function StatePreparationPositiveCoefficients (coefficients : Double[]) : (LittleEndian => Unit is Adj + Ctl) {
-        let nCoefficients = Length(coefficients);
-        mutable coefficientsComplexPolar = new ComplexPolar[nCoefficients];
-
-        for (idx in 0 .. nCoefficients - 1) {
-            set coefficientsComplexPolar w/= idx <- ComplexPolar(AbsD(coefficients[idx]), 0.0);
-        }
-
+    function StatePreparationPositiveCoefficients(coefficients : Double[]) : (LittleEndian => Unit is Adj + Ctl) {
+        let coefficientsComplexPolar = Mapped(Compose(ComplexPolar(_, 0.0), AbsD), coefficients);
         return PrepareArbitraryState(coefficientsComplexPolar, _);
     }
 
@@ -248,7 +242,7 @@ namespace Microsoft.Quantum.Preparation {
             nQubits > 1
             ? (1 .. (nQubits - 1))
             | (1..0);
-        let plan = _ApproximatelyUnprepareArbitraryStatePlan(
+        let plan = ApproximatelyUnprepareArbitraryStatePlan(
             tolerance, coefficientsPadded, (rngControl, idxTarget)
         );
         let unprepare = BoundCA(plan);
@@ -265,14 +259,6 @@ namespace Microsoft.Quantum.Preparation {
         ApproximatelyMultiplexPauli(tolerance, disentangling, axis, actualControl, register[idxTarget]);
     }
 
-    internal function RangeLength(rng : Range) : Int {
-        mutable len = 0;
-        for (idx in rng) {
-            set len += 1;
-        }
-        return len;
-    }
-
     internal operation ApplyGlobalRotationStep(
         angle : Double, idxTarget : Int, register : Qubit[]
     ) : Unit is Adj + Ctl {
@@ -285,7 +271,7 @@ namespace Microsoft.Quantum.Preparation {
     /// # See Also
     /// - PrepareArbitraryState
     /// - Microsoft.Quantum.Canon.MultiplexPauli
-    function _ApproximatelyUnprepareArbitraryStatePlan(
+    internal function ApproximatelyUnprepareArbitraryStatePlan(
         tolerance : Double, coefficients : ComplexPolar[],
         (rngControl : Range, idxTarget : Int)
     )
@@ -293,7 +279,7 @@ namespace Microsoft.Quantum.Preparation {
         mutable plan = new (Qubit[] => Unit is Adj + Ctl)[0];
 
         // For each 2D block, compute disentangling single-qubit rotation parameters
-        let (disentanglingY, disentanglingZ, newCoefficients) = _StatePreparationSBMComputeCoefficients(coefficients);
+        let (disentanglingY, disentanglingZ, newCoefficients) = StatePreparationSBMComputeCoefficients(coefficients);
         if (AnyOutsideToleranceD(tolerance, disentanglingZ)) {
             set plan += [ApplyMultiplexStep(tolerance, disentanglingZ, PauliZ, (rngControl, idxTarget), _)];
         }
@@ -304,17 +290,15 @@ namespace Microsoft.Quantum.Preparation {
         // target is now in |0> state up to the phase given by arg of newCoefficients.
 
         // Continue recursion while there are control qubits.
-        if (RangeLength(rngControl) == 0) {
+        if (IsRangeEmpty(rngControl)) {
             let (abs, arg) = newCoefficients[0]!;
             if (AbsD(arg) > tolerance) {
                 set plan += [ApplyGlobalRotationStep(-1.0 * arg, idxTarget, _)];
             }
-        } else {
-            if (AnyOutsideToleranceCP(tolerance, newCoefficients)) {
-                let newControl = (RangeStart(rngControl) + 1)..RangeStep(rngControl)..RangeEnd(rngControl);
-                let newTarget = RangeStart(rngControl);
-                set plan += _ApproximatelyUnprepareArbitraryStatePlan(tolerance, newCoefficients, (newControl, newTarget));
-            }
+        } elif (AnyOutsideToleranceCP(tolerance, newCoefficients)) {
+            let newControl = (RangeStart(rngControl) + 1)..RangeStep(rngControl)..RangeEnd(rngControl);
+            let newTarget = RangeStart(rngControl);
+            set plan += ApproximatelyUnprepareArbitraryStatePlan(tolerance, newCoefficients, (newControl, newTarget));
         }
 
         return plan;
@@ -352,7 +336,7 @@ namespace Microsoft.Quantum.Preparation {
     /// Implementation step of arbitrary state preparation procedure.
     /// # See Also
     /// - Microsoft.Quantum.Canon.PrepareArbitraryState
-    function _StatePreparationSBMComputeCoefficients (coefficients : ComplexPolar[]) : (Double[], Double[], ComplexPolar[]) {
+    internal function StatePreparationSBMComputeCoefficients (coefficients : ComplexPolar[]) : (Double[], Double[], ComplexPolar[]) {
         mutable disentanglingZ = new Double[Length(coefficients) / 2];
         mutable disentanglingY = new Double[Length(coefficients) / 2];
         mutable newCoefficients = new ComplexPolar[Length(coefficients) / 2];
