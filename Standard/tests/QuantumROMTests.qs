@@ -71,7 +71,8 @@ namespace Microsoft.Quantum.Tests {
                 let coefficients = DrawMany(DrawRandomDouble, coeffs, (-1.0, 1.0));
 
                 if (true) { // quantum ROM without sign
-                    let ((nTotal, (nCoeffQubits, nGarbageQubits)), oneNorm, op) =  QuantumROM(targetError, coefficients);
+                    let (reqs, oneNorm, op) =  QuantumROM(targetError, coefficients);
+                    let (nTotal, (nCoeffQubits, nGarbageQubits)) = reqs!;
 
                     using ((coeffRegister, garbageQubits) = (Qubit[nCoeffQubits], Qubit[nGarbageQubits])) {
                         let coeffQubits = LittleEndian(coeffRegister);
@@ -89,7 +90,8 @@ namespace Microsoft.Quantum.Tests {
                 }
 
                 if (true) { // quantum ROM with sign
-                    let ((nTotal, (nCoeffQubits, nGarbageQubits)), oneNorm, op) =  QuantumROMWithSign(targetError, coefficients);
+                    let (reqs, oneNorm, op) =  QuantumROMWithSign(targetError, coefficients);
+                    let (nTotal, (nCoeffQubits, nGarbageQubits)) = reqs!;
 
                     using ((coeffRegister, signQubit, garbageQubits) = (Qubit[nCoeffQubits], Qubit(), Qubit[nGarbageQubits])) {
                         let coeffQubits = LittleEndian(coeffRegister);

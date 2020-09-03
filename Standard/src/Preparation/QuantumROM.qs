@@ -62,7 +62,7 @@ namespace Microsoft.Quantum.Preparation {
     ///   Ryan Babbush, Craig Gidney, Dominic W. Berry, Nathan Wiebe, Jarrod McClean, Alexandru Paler, Austin Fowler, Hartmut Neven
     ///   https://arxiv.org/abs/1805.03662
     function QuantumROM(targetError: Double, coefficients: Double[])
-    : ((Int, (Int, Int)), Double, ((LittleEndian, Qubit[]) => Unit is Adj + Ctl)) {
+    : (MixedStatePreparationRequirements, Double, ((LittleEndian, Qubit[]) => Unit is Adj + Ctl)) {
         let nBitsPrecision = -Ceiling(Lg(0.5 * targetError)) + 1;
         let positiveCoefficients = Mapped(AbsD, coefficients);
         let (oneNorm, keepCoeff, altIndex) = _QuantumROMDiscretization(nBitsPrecision, positiveCoefficients);
@@ -70,7 +70,7 @@ namespace Microsoft.Quantum.Preparation {
         let nBitsIndices = Ceiling(Lg(IntAsDouble(nCoeffs)));
 
         let op = PrepareQuantumROMStateWithoutSign(nBitsPrecision, nCoeffs, nBitsIndices, keepCoeff, altIndex, _, _);
-        let qubitCounts = QuantumROMQubitCount(targetError, nCoeffs, false);
+        let qubitCounts = PurifiedMixedStateRequirements(targetError, nCoeffs);
         return (qubitCounts, oneNorm, op);
     }
 
@@ -79,7 +79,7 @@ namespace Microsoft.Quantum.Preparation {
     }
 
     function QuantumROMWithSign(targetError : Double, coefficients : Double[])
-    : ((Int, (Int, Int)), Double, ((LittleEndian, Qubit, Qubit[]) => Unit is Adj + Ctl)) {
+    : (MixedStatePreparationRequirements, Double, ((LittleEndian, Qubit, Qubit[]) => Unit is Adj + Ctl)) {
         let nBitsPrecision = -Ceiling(Lg(0.5 * targetError)) + 1;
         let (positiveCoefficients, signs) = Unzipped(Mapped(SplitSign, coefficients));
         let (oneNorm, keepCoeff, altIndex) = _QuantumROMDiscretization(nBitsPrecision, positiveCoefficients);
@@ -87,32 +87,35 @@ namespace Microsoft.Quantum.Preparation {
         let nBitsIndices = Ceiling(Lg(IntAsDouble(nCoeffs)));
 
         let op = PrepareQuantumROMStateWithSign(nBitsPrecision, nCoeffs, nBitsIndices, keepCoeff, altIndex, signs, _, _, _);
-        let qubitCounts = QuantumROMQubitCount(targetError, nCoeffs, true);
-        return (qubitCounts, oneNorm, op);
+        let qubitCounts = PurifiedMixedStateRequirements(targetError, nCoeffs);
+        return (qubitCounts w/ NGarbageQubits <- qubitCounts::NGarbageQubits + 1, oneNorm, op);
     }
 
     /// # Summary
     /// Returns the total number of qubits that must be allocated
-    /// to the operation returned by `QuantumROM`.
+    /// in order to apply the operation returned by
+    /// @"microsoft.quantum.preparation.purifiedmixedstate".
     ///
     /// # Input
     /// ## targetError
     /// The target error $\epsilon$.
-    /// ## nCoeffs
-    /// Number of coefficients specified in `QuantumROM`.
+    /// ## nCoefficients
+    /// The number of coefficients to be specified in preparing a mixed state.
     ///
     /// # Output
-    /// ## First parameter
-    /// A tuple `(x,(y,z))` where `x = y + z` is the total number of qubits allocated,
-    /// `y` is the number of qubits for the `LittleEndian` register, and `z` is the Number
-    /// of garbage qubits.
-    function QuantumROMQubitCount(targetError: Double, nCoeffs: Int, hasSign : Bool)
-    : (Int, (Int, Int)) {
-        let nBitsPrecision = -Ceiling(Lg(0.5*targetError))+1;
-        let nBitsIndices = Ceiling(Lg(IntAsDouble(nCoeffs)));
-        let nGarbageQubits = nBitsIndices + 2 * nBitsPrecision + 1 + (hasSign ? 1 | 0);
-        let nTotal = nGarbageQubits + nBitsIndices;
-        return (nTotal, (nBitsIndices, nGarbageQubits));
+    /// A description of how many qubits are required in total, and for each of
+    /// the index and garbage registers used by the
+    /// @"microsoft.quantum.preparation.purifiedmixedstate" function.
+    ///
+    /// # See Also
+    /// - Microsoft.Quantum.Preparation.PurifiedMixedState
+    function PurifiedMixedStateRequirements(targetError : Double, nCoefficients : Int)
+    : MixedStatePreparationRequirements {
+        let nBitsPrecision = -Ceiling(Lg(0.5*targetError)) + 1;
+        let nIndexQubits = Ceiling(Lg(IntAsDouble(nCoefficients)));
+        let nGarbageQubits = nIndexQubits + 2 * nBitsPrecision + 1;
+        let nTotal = nGarbageQubits + nIndexQubits;
+        return MixedStatePreparationRequirements(nTotal, (nIndexQubits, nGarbageQubits));
     }
 
     // Classical processing
