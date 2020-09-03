@@ -42,7 +42,7 @@ namespace Microsoft.Quantum.Preparation {
     operation PrepareUniformSuperposition(nIndices: Int, indexRegister: LittleEndian)
     : Unit is Adj+Ctl {
         if (nIndices == 0) {
-            fail "Cannot prepare uniform superposition over 0 state.";
+            fail "Cannot prepare uniform superposition over 0 basis states.";
         } elif (nIndices == 1) {
             // Superposition over one state, so do nothing.
         } elif (nIndices == 2) {
