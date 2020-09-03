@@ -126,16 +126,19 @@ namespace Microsoft.Quantum.Preparation {
             fail $"Bits of precision {bitsPrecision} unsupported. Max is 31.";
         }
         if (nCoefficients <= 1) {
-            fail "Cannot prepare state with less than 2 coefficients.";
+            fail $"Cannot prepare state with less than 2 coefficients.";
         }
         if (oneNorm == 0.0) {
-            fail "State must have at least one coefficient > 0";
+            fail $"State must have at least one coefficient > 0";
         }
 
-        let barHeight = 2^bitsPrecision - 1;
+        let barHeight = 2 ^ bitsPrecision - 1;
 
         mutable altIndex = RangeAsIntArray(0..nCoefficients - 1);
-        mutable keepCoeff = Mapped(RoundedDiscretizationCoefficients(_, oneNorm, nCoefficients, barHeight), coefficients);
+        mutable keepCoeff = Mapped(
+            QuantumROMDiscretizationRoundCoefficients(_, oneNorm, nCoefficients, barHeight),
+            coefficients
+        );
 
         // Calculate difference between number of discretized bars vs. maximum
         mutable bars = 0;
@@ -145,49 +148,38 @@ namespace Microsoft.Quantum.Preparation {
 
         // Uniformly distribute excess bars across coefficients.
         for (idx in 0..AbsI(bars) - 1) {
-            if (bars > 0) {
-                set keepCoeff w/= idx <- keepCoeff[idx] - 1;
-            } else {
-                set keepCoeff w/= idx <- keepCoeff[idx] + 1;
-            }
+            set keepCoeff w/= idx <- keepCoeff[idx] + (bars > 0 ? -1 | +1);
         }
 
-        mutable barSink = new Int[nCoefficients];
-        mutable barSource = new Int[nCoefficients];
-        mutable nBarSink = 0;
-        mutable nBarSource = 0;
+        mutable barSink = new Int[0];
+        mutable barSource = new Int[0];
 
         for (idxCoeff in IndexRange(keepCoeff)) {
             if (keepCoeff[idxCoeff] > barHeight) {
-                set barSource w/= nBarSource <- idxCoeff;
-                set nBarSource = nBarSource + 1;
+                set barSource += [idxCoeff];
             } elif (keepCoeff[idxCoeff] < barHeight) {
-                set barSink w/= nBarSink <- idxCoeff;
-                set nBarSink = nBarSink + 1;
+                set barSink += [idxCoeff];
             }
         }
 
         for (rep in 0..nCoefficients * 10) {
-            if (nBarSource > 0 and nBarSink > 0) {
-                let idxSink = barSink[nBarSink - 1];
-                let idxSource = barSource[nBarSource - 1];
-                set nBarSink = nBarSink - 1;
-                set nBarSource = nBarSource - 1;
+            if (Length(barSink) > 0 and Length(barSource) > 0) {
+                let idxSink = Tail(barSink);
+                let idxSource = Tail(barSource);
+                set barSink = Most(barSink);
+                set barSource = Most(barSource);
 
                 set keepCoeff w/= idxSource <- keepCoeff[idxSource] - barHeight + keepCoeff[idxSink];
                 set altIndex w/= idxSink <- idxSource;
 
                 if (keepCoeff[idxSource] < barHeight) {
-                    set barSink w/= nBarSink <- idxSource;
-                    set nBarSink = nBarSink + 1;
-                } elif(keepCoeff[idxSource] > barHeight) {
-                    set barSource w/= nBarSource <- idxSource;
-                    set nBarSource = nBarSource + 1;
+                    set barSink += [idxSource];
+                } elif (keepCoeff[idxSource] > barHeight) {
+                    set barSource += [idxSource];
                 }
-            }
-            elif (nBarSource > 0) {
-                let idxSource = barSource[nBarSource - 1];
-                set nBarSource = nBarSource - 1;
+            } elif (Length(barSource) > 0) {
+                let idxSource = Tail(barSource);
+                set barSource = Most(barSource);
                 set keepCoeff w/= idxSource <- barHeight;
             } else {
                 return (oneNorm, keepCoeff, altIndex);
@@ -195,6 +187,11 @@ namespace Microsoft.Quantum.Preparation {
         }
 
         return (oneNorm, keepCoeff, altIndex);
+    }
+
+    // Used in QuantumROM implementation.
+    internal function QuantumROMDiscretizationRoundCoefficients(coefficient: Double, oneNorm: Double, nCoefficients: Int, barHeight: Int) : Int {
+        return Round((AbsD(coefficient) / oneNorm) * IntAsDouble(nCoefficients) * IntAsDouble(barHeight));
     }
 
     // Used in QuantumROM implementation.
