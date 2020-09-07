@@ -204,7 +204,7 @@ namespace Microsoft.Quantum.Preparation {
     }
 
     // Used in QuantumROM implementation.
-    internal operation PrepareQuantumROMState(nBitsPrecision: Int, nCoeffs: Int, nBitsIndices: Int, keepCoeff: Int[], altIndex: Int[], signs : Int[], indexRegister: LittleEndian, signQubit : Qubit[], garbageRegister: Qubit[])
+    internal operation PrepareQuantumROMState(nBitsPrecision: Int, nCoeffs: Int, nBitsIndices: Int, keepCoeff: Int[], altIndex: Int[], signs : Int[], indexRegister: LittleEndian, dataQubits : Qubit[], garbageRegister: Qubit[])
     : Unit is Adj + Ctl {
         let garbageIdx0 = nBitsIndices;
         let garbageIdx1 = garbageIdx0 + nBitsPrecision;
@@ -215,7 +215,7 @@ namespace Microsoft.Quantum.Preparation {
         let keepCoeffRegister = LittleEndian(garbageRegister[garbageIdx0..garbageIdx1 - 1]);
         let uniformKeepCoeffRegister = LittleEndian(garbageRegister[garbageIdx1..garbageIdx2 - 1]);
         let flagQubit = garbageRegister[garbageIdx3 - 1];
-        let dataRegister = LittleEndian(signQubit);
+        let dataRegister = LittleEndian(dataQubits);
         let altDataRegister = LittleEndian(garbageRegister[garbageIdx3...]);
 
         // Create uniform superposition over index and alt coeff register.
@@ -223,13 +223,8 @@ namespace Microsoft.Quantum.Preparation {
         ApplyToEachCA(H, uniformKeepCoeffRegister!);
 
         // Write bitstrings to altIndex and keepCoeff register.
-        if (Length(signs) == 0) {
-            let unitaryGenerator = (nCoeffs, QuantumROMBitStringWriterByIndex(_, keepCoeff, altIndex));
-            MultiplexOperationsFromGenerator(unitaryGenerator, indexRegister, (keepCoeffRegister, altIndexRegister));
-        } else {
-            let unitaryGenerator = (nCoeffs, QuantumROMWithSignBitStringWriterByIndex(_, keepCoeff, altIndex, signs));
-            MultiplexOperationsFromGenerator(unitaryGenerator, indexRegister, (keepCoeffRegister, altIndexRegister, dataRegister, altDataRegister));
-        }
+        let unitaryGenerator = (nCoeffs, QuantumROMBitStringWriterByIndex(_, keepCoeff, altIndex, signs));
+        MultiplexOperationsFromGenerator(unitaryGenerator, indexRegister, (keepCoeffRegister, altIndexRegister, dataRegister, altDataRegister));
 
         // Perform comparison
         CompareUsingRippleCarry(uniformKeepCoeffRegister, keepCoeffRegister, flagQubit);
@@ -237,12 +232,7 @@ namespace Microsoft.Quantum.Preparation {
         let indexRegisterSize = Length(indexRegister!);
 
         // Swap in register based on comparison
-        ApplyToEachCA((Controlled SWAP)([flagQubit], _), Zip(indexRegister!, altIndexRegister!));
-
-        if (Length(signs) > 0) {
-            let altSignQubit = garbageRegister[garbageIdx3];
-            (Controlled SWAP)([flagQubit], (Head(signQubit), altSignQubit));
-        }
+        ApplyToEachCA((Controlled SWAP)([flagQubit], _), Zip(indexRegister! + dataRegister!, altIndexRegister! + altDataRegister!));
     }
 
     // # Remark
@@ -260,31 +250,20 @@ namespace Microsoft.Quantum.Preparation {
     }
 
     // Used in QuantumROM implementation.
-    internal function QuantumROMBitStringWriterByIndex(idx : Int, keepCoeff : Int[], altIndex : Int[])
-    : ((LittleEndian, LittleEndian) => Unit is Adj + Ctl) {
-        return WriteQuantumROMBitString(idx, keepCoeff, altIndex, _, _);
+    internal function QuantumROMBitStringWriterByIndex(idx : Int, keepCoeff : Int[], altIndex : Int[], data : Int[])
+    : ((LittleEndian, LittleEndian, LittleEndian, LittleEndian) => Unit is Adj + Ctl) {
+        return WriteQuantumROMBitString(idx, keepCoeff, altIndex, data, _, _, _, _);
     }
 
     // Used in QuantumROM implementation.
-    internal operation WriteQuantumROMBitString(idx: Int, keepCoeff: Int[], altIndex: Int[], keepCoeffRegister: LittleEndian, altIndexRegister: LittleEndian)
+    internal operation WriteQuantumROMBitString(idx: Int, keepCoeff: Int[], altIndex: Int[], data : Int[], keepCoeffRegister: LittleEndian, altIndexRegister: LittleEndian, dataRegister : LittleEndian, altDataRegister : LittleEndian)
     : Unit is Adj + Ctl {
         ApplyXorInPlace(keepCoeff[idx], keepCoeffRegister);
         ApplyXorInPlace(altIndex[idx], altIndexRegister);
-    }
-
-    // Used in QuantumROMWithSign implementation.
-    internal function QuantumROMWithSignBitStringWriterByIndex(idx : Int, keepCoeff : Int[], altIndex : Int[], signs : Int[])
-    : ((LittleEndian, LittleEndian, LittleEndian, LittleEndian) => Unit is Adj + Ctl) {
-        return WriteQuantumWithSignROMBitString(idx, keepCoeff, altIndex, signs, _, _, _, _);
-    }
-
-    // Used in QuantumROMWithSign implementation.
-    internal operation WriteQuantumWithSignROMBitString(idx: Int, keepCoeff: Int[], altIndex: Int[], signs : Int[], keepCoeffRegister: LittleEndian, altIndexRegister: LittleEndian, dataRegister : LittleEndian, altDataRegister : LittleEndian)
-    : Unit is Adj + Ctl {
-        ApplyXorInPlace(keepCoeff[idx], keepCoeffRegister);
-        ApplyXorInPlace(altIndex[idx], altIndexRegister);
-        ApplyXorInPlace(signs[idx], dataRegister);
-        ApplyXorInPlace(signs[altIndex[idx]], altDataRegister);
+        if (Length(dataRegister!) > 0) {
+            ApplyXorInPlace(data[idx], dataRegister);
+            ApplyXorInPlace(data[altIndex[idx]], altDataRegister);
+        }
     }
 
 }
