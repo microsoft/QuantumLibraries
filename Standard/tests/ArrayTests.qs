@@ -296,6 +296,19 @@ namespace Microsoft.Quantum.Tests {
             AllEqualityFactI(actual, expected, "ElementsAt failed");
         }
     }
+
+    @Test("QuantumSimulator")
+    operation TestWindows() : Unit {
+        let EqualIntA = EqualA<Int>(EqualI, _, _);
+        let EqualIntAA = EqualA<Int[]>(EqualIntA, _, _);
+
+        Fact(EqualIntAA(Windows(-1, [1, 2, 3]), new Int[][0]), "unexpected windows");
+        Fact(EqualIntAA(Windows(0, [1, 2, 3]), new Int[][0]), "unexpected windows");
+        Fact(EqualIntAA(Windows(1, [1, 2, 3]), [[1], [2], [3]]), "unexpected windows");
+        Fact(EqualIntAA(Windows(2, [1, 2, 3]), [[1, 2], [2, 3]]), "unexpected windows");
+        Fact(EqualIntAA(Windows(3, [1, 2, 3]), [[1, 2, 3]]), "unexpected windows");
+        Fact(EqualIntAA(Windows(4, [1, 2, 3]), new Int[][0]), "unexpected windows");
+    }
 }
 
 
