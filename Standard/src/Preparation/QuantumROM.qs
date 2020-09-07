@@ -10,19 +10,46 @@ namespace Microsoft.Quantum.Preparation {
     open Microsoft.Quantum.Arrays;
 
     /// # Summary
-    /// Uses the Quantum ROM technique to represent a given density matrix.
+    /// Returns an operation that prepares a a purification of a given mixed
+    /// state.
     ///
-    /// Given a list of $N$ coefficients $\alpha_j$, this returns a unitary $U$ that uses the Quantum-ROM
-    /// technique to prepare
-    /// an approximation  $\tilde\rho\sum_{j=0}^{N-1}p_j\ket{j}\bra{j}$ of the purification of the density matrix
-    /// $\rho=\sum_{j=0}^{N-1}\frac{|alpha_j|}{\sum_k |\alpha_k|}\ket{j}\bra{j}$. In this approximation, the
-    /// error $\epsilon$ is such that $|p_j-\frac{|alpha_j|}{\sum_k |\alpha_k|}|\le \epsilon / N$ and
-    /// $\|\tilde\rho - \rho\| \le \epsilon$. In other words,
+    /// # Description
+    /// Uses the Quantum ROM technique to represent a given density matrix,
+    /// returning that representation as a state preparation operation.
+    ///
+    /// In particular, given a list of $N$ coefficients $\alpha_j$, this
+    /// function returns an operation that uses the Quantum ROM technique to
+    /// prepare an approximation
     /// $$
     /// \begin{align}
-    /// U\ket{0}^{\lceil\log_2 N\rceil}\ket{0}^{m}=\sum_{j=0}^{N-1}\sqrt{p_j} \ket{j}\ket{\text{garbage}_j}.
+    ///     \tilde\rho = \sum_{j = 0}^{N - 1} p_j \ket{j}\bra{j}
     /// \end{align}
     /// $$
+    /// of the mixed state
+    /// $$
+    /// \begin{align}
+    ///     \rho = \sum_{j = 0}^{N-1}\ frac{|alpha_j|}{\sum_k |\alpha_k|} \ket{j}\bra{j},
+    /// \end{align}
+    /// $$
+    /// where each $p_j$ is an approximation to the given coefficient $\alpha_j$
+    /// such that
+    /// $$
+    /// \begin{align}
+    ///     \left| p_j - \frac{ |\alpha_j| }{ \sum_k |\alpha_k| } \le \frac{\epsilon}{N}
+    /// \end{align}
+    /// $$
+    /// for each $j$.
+    ///
+    /// When passed an index register and a register of garbage qubits,
+    /// initially in the state $\ket{0} \ket{00\cdots 0}, the returned operation
+    /// prepares both registers into the purification of $\tilde \rho$,
+    /// $$
+    /// \begin{align}
+    ///     \sum_{j=0}^{N-1} \sqrt{p_j} \ket{j}\ket{\text{garbage}_j},
+    /// \end{align}
+    /// $$
+    /// such that resetting and deallocating the garbage register enacts the
+    /// desired preparation to within the target error $\epsilon$.
     ///
     /// # Input
     /// ## targetError
@@ -32,27 +59,26 @@ namespace Microsoft.Quantum.Preparation {
     /// Negative numbers $-\alpha_j$ will be treated as positive $|\alpha_j|$.
     ///
     /// # Output
-    /// ## First parameter
-    /// A tuple `(x,(y,z))` where `x = y + z` is the total number of qubits allocated,
-    /// `y` is the number of qubits for the `LittleEndian` register, and `z` is the Number
-    /// of garbage qubits.
-    /// ## Second parameter
-    /// The one-norm $\sum_j |\alpha_j|$ of the coefficient array.
-    /// ## Third parameter
-    /// The unitary $U$.
+    /// An operation that prepares $\tilde \rho$ as a purification onto a joint
+    /// index and garbage register.
     ///
     /// # Remarks
-    /// ## Example
+    /// The coefficients provided to this operation are normalized following the
+    /// 1-norm, such that the coefficients are always considered to describe a
+    /// valid categorical probability distribution.
+    ///
+    /// # Example
     /// The following code snippet prepares an purification of the $3$-qubit state
     /// $\rho=\sum_{j=0}^{4}\frac{|alpha_j|}{\sum_k |\alpha_k|}\ket{j}\bra{j}$, where
-    /// $\vec\alpha=(1.0,2.0,3.0,4.0,5.0)$, and the error is `1e-3`;
-    /// ```qsharp
-    /// let coefficients = [1.0,2.0,3.0,4.0,5.0];
+    /// $\vec\alpha=(1.0, 2.0, 3.0, 4.0, 5.0)$, and the target error is
+    /// $10^{-3}$:
+    /// ```Q#
+    /// let coefficients = [1.0, 2.0, 3.0, 4.0, 5.0];
     /// let targetError = 1e-3;
-    /// let ((nTotalQubits, (nIndexQubits, nGarbageQubits)), oneNorm, op) = QuantumROM(targetError, coefficients);
-    /// using (indexRegister = Qubit[nIndexQubits]) {
-    ///     using (garbageRegister = Qubit[nGarbageQubits]) {
-    ///         op(LittleEndian(indexRegister), garbageRegister);
+    /// let purifiedState = PurifiedMixedState(targetError, coefficients);
+    /// using (indexRegister = Qubit[purifiedState::Requirements::NIndexQubits]) {
+    ///     using (garbageRegister = Qubit[purifiedState::Requirements::NGarbageQubits]) {
+    ///         purifiedState::Prepare(LittleEndian(indexRegister), new Qubit[0], garbageRegister);
     ///     }
     /// }
     /// ```
@@ -61,25 +87,25 @@ namespace Microsoft.Quantum.Preparation {
     /// - Encoding Electronic Spectra in Quantum Circuits with Linear T Complexity
     ///   Ryan Babbush, Craig Gidney, Dominic W. Berry, Nathan Wiebe, Jarrod McClean, Alexandru Paler, Austin Fowler, Hartmut Neven
     ///   https://arxiv.org/abs/1805.03662
-    function QuantumROM(targetError: Double, coefficients: Double[])
-    : (MixedStatePreparationRequirements, Double, ((LittleEndian, Qubit[]) => Unit is Adj + Ctl)) {
+    function PurifiedMixedState(targetError : Double, coefficients : Double[])
+    : MixedStatePreparation {
         let nBitsPrecision = -Ceiling(Lg(0.5 * targetError)) + 1;
         let positiveCoefficients = Mapped(AbsD, coefficients);
         let (oneNorm, keepCoeff, altIndex) = _QuantumROMDiscretization(nBitsPrecision, positiveCoefficients);
         let nCoeffs = Length(positiveCoefficients);
         let nBitsIndices = Ceiling(Lg(IntAsDouble(nCoeffs)));
 
-        let op = PrepareQuantumROMState(nBitsPrecision, nCoeffs, nBitsIndices, keepCoeff, altIndex, new Int[0], _, new Qubit[0], _);
+        let op = PrepareQuantumROMState(nBitsPrecision, nCoeffs, nBitsIndices, keepCoeff, altIndex, new Int[0], _, _, _);
         let qubitCounts = PurifiedMixedStateRequirements(targetError, nCoeffs);
-        return (qubitCounts, oneNorm, op);
+        return MixedStatePreparation(qubitCounts, oneNorm, op);
     }
 
     internal function SplitSign(coefficient : Double) : (Double, Int) {
         return (AbsD(coefficient), coefficient < 0.0 ? 1 | 0);
     }
 
-    function QuantumROMWithSign(targetError : Double, coefficients : Double[])
-    : (MixedStatePreparationRequirements, Double, ((LittleEndian, Qubit[], Qubit[]) => Unit is Adj + Ctl)) {
+    function PurifiedMixedStateWithSign(targetError : Double, coefficients : Double[])
+    : MixedStatePreparation {
         let nBitsPrecision = -Ceiling(Lg(0.5 * targetError)) + 1;
         let (positiveCoefficients, signs) = Unzipped(Mapped(SplitSign, coefficients));
         let (oneNorm, keepCoeff, altIndex) = _QuantumROMDiscretization(nBitsPrecision, positiveCoefficients);
@@ -88,7 +114,7 @@ namespace Microsoft.Quantum.Preparation {
 
         let op = PrepareQuantumROMState(nBitsPrecision, nCoeffs, nBitsIndices, keepCoeff, altIndex, signs, _, _, _);
         let qubitCounts = PurifiedMixedStateRequirements(targetError, nCoeffs);
-        return (qubitCounts w/ NGarbageQubits <- qubitCounts::NGarbageQubits + 1, oneNorm, op);
+        return MixedStatePreparation(qubitCounts w/ NGarbageQubits <- qubitCounts::NGarbageQubits + 1, oneNorm, op);
     }
 
     /// # Summary

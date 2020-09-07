@@ -71,18 +71,17 @@ namespace Microsoft.Quantum.Tests {
                 let coefficients = DrawMany(DrawRandomDouble, coeffs, (-1.0, 1.0));
 
                 if (true) { // quantum ROM without sign
-                    let (reqs, oneNorm, op) =  QuantumROM(targetError, coefficients);
-                    let (nTotal, (nCoeffQubits, nGarbageQubits)) = reqs!;
+                    let purifiedState = PurifiedMixedState(targetError, coefficients);
 
-                    using ((coeffRegister, garbageQubits) = (Qubit[nCoeffQubits], Qubit[nGarbageQubits])) {
+                    using ((coeffRegister, garbageQubits) = (Qubit[purifiedState::Requirements::NIndexQubits], Qubit[purifiedState::Requirements::NGarbageQubits])) {
                         let coeffQubits = LittleEndian(coeffRegister);
 
                         // Check that probability of each number state in nCoeffQubits is as expected.
                         within {
-                            op(coeffQubits, garbageQubits);
+                            purifiedState::Prepare(coeffQubits, new Qubit[0], garbageQubits);
                         } apply {
                             for (stateIndex in 0..coeffs - 1) {
-                                let prob = AbsD(coefficients[stateIndex]) / oneNorm;
+                                let prob = AbsD(coefficients[stateIndex]) / purifiedState::Norm;
                                 AssertProbInt(stateIndex, prob, coeffQubits, probtargetError);
                             }
                         }
@@ -90,18 +89,17 @@ namespace Microsoft.Quantum.Tests {
                 }
 
                 if (true) { // quantum ROM with sign
-                    let (reqs, oneNorm, op) =  QuantumROMWithSign(targetError, coefficients);
-                    let (nTotal, (nCoeffQubits, nGarbageQubits)) = reqs!;
+                    let purifiedState = PurifiedMixedStateWithSign(targetError, coefficients);
 
-                    using ((coeffRegister, signQubit, garbageQubits) = (Qubit[nCoeffQubits], Qubit(), Qubit[nGarbageQubits])) {
+                    using ((coeffRegister, signQubit, garbageQubits) = (Qubit[purifiedState::Requirements::NIndexQubits], Qubit(), Qubit[purifiedState::Requirements::NGarbageQubits])) {
                         let coeffQubits = LittleEndian(coeffRegister);
 
                         // Check that probability of each number state in nCoeffQubits is as expected.
                         within {
-                            op(coeffQubits, [signQubit], garbageQubits);
+                            purifiedState::Prepare(coeffQubits, [signQubit], garbageQubits);
                         } apply {
                             for (stateIndex in 0..coeffs - 1) {
-                                let prob = coefficients[stateIndex] / oneNorm;
+                                let prob = coefficients[stateIndex] / purifiedState::Norm;
                                 AssertSignedProbInt(stateIndex, prob, signQubit, coeffQubits, probtargetError);
                             }
                         }

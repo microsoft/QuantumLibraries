@@ -16,8 +16,9 @@ namespace Microsoft.Quantum.Preparation {
     /// Specifies the 1-norm of the coefficients used to define this mixed
     /// state.
     /// ## Prepare
-    /// An operation that, given an index register and a garbage register initially
-    /// in the $\ket{0}$ and $\ket{00\cdots 0}$ states (respectively),
+    /// An operation that, given an index register, a data register, and a
+    /// garbage register initially in the $\ket{0}$, $\let{00\dots 0}$, and
+    /// $\ket{00\dots 0}$ states (respectively),
     /// prepares the state represented by this UDT value on those registers.
     ///
     /// # See Also
@@ -25,7 +26,7 @@ namespace Microsoft.Quantum.Preparation {
     newtype MixedStatePreparation = (
         Requirements: MixedStatePreparationRequirements,
         Norm: Double,
-        Prepare: ((LittleEndian, Qubit[]) => Unit is Adj + Ctl)
+        Prepare: ((LittleEndian, Qubit[], Qubit[]) => Unit is Adj + Ctl)
     );
 
     /// # Summary
