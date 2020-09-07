@@ -98,7 +98,7 @@ namespace Microsoft.Quantum.Tests {
 
                         // Check that probability of each number state in nCoeffQubits is as expected.
                         within {
-                            op(coeffQubits, signQubit, garbageQubits);
+                            op(coeffQubits, [signQubit], garbageQubits);
                         } apply {
                             for (stateIndex in 0..coeffs - 1) {
                                 let prob = coefficients[stateIndex] / oneNorm;

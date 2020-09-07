@@ -69,7 +69,7 @@ namespace Microsoft.Quantum.Preparation {
         let nCoeffs = Length(positiveCoefficients);
         let nBitsIndices = Ceiling(Lg(IntAsDouble(nCoeffs)));
 
-        let op = PrepareQuantumROMStateWithoutSign(nBitsPrecision, nCoeffs, nBitsIndices, keepCoeff, altIndex, _, _);
+        let op = PrepareQuantumROMState(nBitsPrecision, nCoeffs, nBitsIndices, keepCoeff, altIndex, new Int[0], _, new Qubit[0], _);
         let qubitCounts = PurifiedMixedStateRequirements(targetError, nCoeffs);
         return (qubitCounts, oneNorm, op);
     }
@@ -79,14 +79,14 @@ namespace Microsoft.Quantum.Preparation {
     }
 
     function QuantumROMWithSign(targetError : Double, coefficients : Double[])
-    : (MixedStatePreparationRequirements, Double, ((LittleEndian, Qubit, Qubit[]) => Unit is Adj + Ctl)) {
+    : (MixedStatePreparationRequirements, Double, ((LittleEndian, Qubit[], Qubit[]) => Unit is Adj + Ctl)) {
         let nBitsPrecision = -Ceiling(Lg(0.5 * targetError)) + 1;
         let (positiveCoefficients, signs) = Unzipped(Mapped(SplitSign, coefficients));
         let (oneNorm, keepCoeff, altIndex) = _QuantumROMDiscretization(nBitsPrecision, positiveCoefficients);
         let nCoeffs = Length(positiveCoefficients);
         let nBitsIndices = Ceiling(Lg(IntAsDouble(nCoeffs)));
 
-        let op = PrepareQuantumROMStateWithSign(nBitsPrecision, nCoeffs, nBitsIndices, keepCoeff, altIndex, signs, _, _, _);
+        let op = PrepareQuantumROMState(nBitsPrecision, nCoeffs, nBitsIndices, keepCoeff, altIndex, signs, _, _, _);
         let qubitCounts = PurifiedMixedStateRequirements(targetError, nCoeffs);
         return (qubitCounts w/ NGarbageQubits <- qubitCounts::NGarbageQubits + 1, oneNorm, op);
     }
@@ -204,7 +204,7 @@ namespace Microsoft.Quantum.Preparation {
     }
 
     // Used in QuantumROM implementation.
-    internal operation PrepareQuantumROMState(nBitsPrecision: Int, nCoeffs: Int, nBitsIndices: Int, keepCoeff: Int[], altIndex: Int[], signs : Int[], indexRegister: LittleEndian, dataQubits : Qubit[], garbageRegister: Qubit[])
+    internal operation PrepareQuantumROMState(nBitsPrecision: Int, nCoeffs: Int, nBitsIndices: Int, keepCoeff: Int[], altIndex: Int[], data : Int[], indexRegister: LittleEndian, dataQubits : Qubit[], garbageRegister: Qubit[])
     : Unit is Adj + Ctl {
         let garbageIdx0 = nBitsIndices;
         let garbageIdx1 = garbageIdx0 + nBitsPrecision;
@@ -223,7 +223,7 @@ namespace Microsoft.Quantum.Preparation {
         ApplyToEachCA(H, uniformKeepCoeffRegister!);
 
         // Write bitstrings to altIndex and keepCoeff register.
-        let unitaryGenerator = (nCoeffs, QuantumROMBitStringWriterByIndex(_, keepCoeff, altIndex, signs));
+        let unitaryGenerator = (nCoeffs, QuantumROMBitStringWriterByIndex(_, keepCoeff, altIndex, data));
         MultiplexOperationsFromGenerator(unitaryGenerator, indexRegister, (keepCoeffRegister, altIndexRegister, dataRegister, altDataRegister));
 
         // Perform comparison
@@ -233,20 +233,6 @@ namespace Microsoft.Quantum.Preparation {
 
         // Swap in register based on comparison
         ApplyToEachCA((Controlled SWAP)([flagQubit], _), Zip(indexRegister! + dataRegister!, altIndexRegister! + altDataRegister!));
-    }
-
-    // # Remark
-    // Application case for Maybe UDT
-    internal operation PrepareQuantumROMStateWithoutSign(nBitsPrecision: Int, nCoeffs: Int, nBitsIndices: Int, keepCoeff: Int[], altIndex: Int[], indexRegister: LittleEndian, garbageRegister: Qubit[])
-    : Unit is Adj + Ctl {
-        PrepareQuantumROMState(nBitsPrecision, nCoeffs, nBitsIndices, keepCoeff, altIndex, new Int[0], indexRegister, new Qubit[0], garbageRegister);
-    }
-
-    // # Remark
-    // Application case for Maybe UDT
-    internal operation PrepareQuantumROMStateWithSign(nBitsPrecision: Int, nCoeffs: Int, nBitsIndices: Int, keepCoeff: Int[], altIndex: Int[], signs : Int[], indexRegister: LittleEndian, signQubit : Qubit, garbageRegister: Qubit[])
-    : Unit is Adj + Ctl {
-        PrepareQuantumROMState(nBitsPrecision, nCoeffs, nBitsIndices, keepCoeff, altIndex, signs, indexRegister, [signQubit], garbageRegister);
     }
 
     // Used in QuantumROM implementation.
