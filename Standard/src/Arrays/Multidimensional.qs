@@ -34,7 +34,7 @@ namespace Microsoft.Quantum.Arrays {
         let numColumns = Length(Head(matrix));
         Fact(numColumns > 0, "Matrix must have at least 1 column");
 
-        return Mapped(ColumnVectorAt(_, matrix), SequenceI(0, numColumns - 1));
+        return Mapped(ColumnAt(_, matrix), SequenceI(0, numColumns - 1));
     }
 
     /// # Summary
@@ -117,13 +117,13 @@ namespace Microsoft.Quantum.Arrays {
     /// # Example
     /// ```Q#
     /// let matrix = [[1, 2, 3], [4, 5, 6], [7, 8, 9]];
-    /// let column = ColumnVectorAt(0, matrix);
+    /// let column = ColumnAt(0, matrix);
     /// // same as: column = [1, 4, 7]
     /// ```
     ///
     /// # See Also
     /// - Microsoft.Quantum.Arrays.Transposed
-    function ColumnVectorAt<'T>(column : Int, matrix : 'T[][]) : 'T[] {
+    function ColumnAt<'T>(column : Int, matrix : 'T[][]) : 'T[] {
         return Mapped(
                 Compose(
                     ElementAt<'T>(column, _),

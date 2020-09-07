@@ -268,11 +268,11 @@ namespace Microsoft.Quantum.Tests {
     }
 
     @Test("QuantumSimulator")
-    operation TestColumnVectorAt() : Unit {
+    operation TestColumnAt() : Unit {
         let matrix = [[1, 2, 3], [4, 5, 6], [7, 8, 9]];
-        AllEqualityFactI(ColumnVectorAt(0, matrix), [1, 4, 7], "ColumnVectorAt failed");
-        AllEqualityFactI(ColumnVectorAt(1, matrix), [2, 5, 8], "ColumnVectorAt failed");
-        AllEqualityFactI(ColumnVectorAt(2, matrix), [3, 6, 9], "ColumnVectorAt failed");
+        AllEqualityFactI(ColumnAt(0, matrix), [1, 4, 7], "ColumnAt failed");
+        AllEqualityFactI(ColumnAt(1, matrix), [2, 5, 8], "ColumnAt failed");
+        AllEqualityFactI(ColumnAt(2, matrix), [3, 6, 9], "ColumnAt failed");
     }
 
     @Test("QuantumSimulator")
