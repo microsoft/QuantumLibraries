@@ -104,7 +104,47 @@ namespace Microsoft.Quantum.Preparation {
         return (AbsD(coefficient), coefficient < 0.0 ? 1 | 0);
     }
 
-    function PurifiedMixedStateWithSign(targetError : Double, coefficients : Double[])
+    /// # Summary
+    /// Same as @"microsoft.quantum.preparation.purifiedmixedstate" but
+    /// also prepares sign of the coefficient on an extra qubit.
+    ///
+    /// # Input
+    /// ## targetError
+    /// The target error $\epsilon$.
+    /// ## coefficients
+    /// Array of $N$ coefficients specifying the probability of basis states.
+    /// Negative numbers $-\alpha_j$ will be treated as positive $|\alpha_j|$,
+    /// but the sign of a negative number will be prepared on a separate data
+    /// qubit.
+    ///
+    /// # Output
+    /// An operation that prepares $\tilde \rho$ as a purification onto a joint
+    /// index and garbage register.
+    ///
+    /// # Remarks
+    /// The coefficients provided to this operation are normalized following the
+    /// 1-norm, such that the coefficients are always considered to describe a
+    /// valid categorical probability distribution.
+    ///
+    /// # Example
+    /// The following code snippet prepares an purification of the $3$-qubit state
+    /// $\rho=\sum_{j=0}^{4}\frac{|alpha_j|}{\sum_k |\alpha_k|}\ket{j}\bra{j}$, where
+    /// $\vec\alpha=(1.0, 2.0, 3.0, 4.0, 5.0)$, and the target error is
+    /// $10^{-3}$:
+    /// ```Q#
+    /// let coefficients = [1.0, -2.0, 3.0, -4.0, 5.0];
+    /// let targetError = 1e-3;
+    /// let purifiedState = PurifiedMixedStateAndSign(targetError, coefficients);
+    /// using ((indexRegister, sign) = (Qubit[purifiedState::Requirements::NIndexQubits], Qubit())) {
+    ///     using (garbageRegister = Qubit[purifiedState::Requirements::NGarbageQubits]) {
+    ///         purifiedState::Prepare(LittleEndian(indexRegister), [sign], garbageRegister);
+    ///     }
+    /// }
+    /// ```
+    ///
+    /// # See Also
+    /// - PurifiedMixedState
+    function PurifiedMixedStateAndSign(targetError : Double, coefficients : Double[])
     : MixedStatePreparation {
         let nBitsPrecision = -Ceiling(Lg(0.5 * targetError)) + 1;
         let (positiveCoefficients, signs) = Unzipped(Mapped(SplitSign, coefficients));
@@ -165,7 +205,7 @@ namespace Microsoft.Quantum.Preparation {
 
         mutable altIndex = RangeAsIntArray(0..nCoefficients - 1);
         mutable keepCoeff = Mapped(
-            QuantumROMDiscretizationRoundCoefficients(_, oneNorm, nCoefficients, barHeight),
+            RoundedDiscretizationCoefficients(_, oneNorm, nCoefficients, barHeight),
             coefficients
         );
 
@@ -216,11 +256,6 @@ namespace Microsoft.Quantum.Preparation {
         }
 
         return (oneNorm, keepCoeff, altIndex);
-    }
-
-    // Used in QuantumROM implementation.
-    internal function QuantumROMDiscretizationRoundCoefficients(coefficient: Double, oneNorm: Double, nCoefficients: Int, barHeight: Int) : Int {
-        return Round((AbsD(coefficient) / oneNorm) * IntAsDouble(nCoefficients) * IntAsDouble(barHeight));
     }
 
     // Used in QuantumROM implementation.

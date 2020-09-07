@@ -89,7 +89,7 @@ namespace Microsoft.Quantum.Tests {
                 }
 
                 if (true) { // quantum ROM with sign
-                    let purifiedState = PurifiedMixedStateWithSign(targetError, coefficients);
+                    let purifiedState = PurifiedMixedStateAndSign(targetError, coefficients);
 
                     using ((coeffRegister, signQubit, garbageQubits) = (Qubit[purifiedState::Requirements::NIndexQubits], Qubit(), Qubit[purifiedState::Requirements::NGarbageQubits])) {
                         let coeffQubits = LittleEndian(coeffRegister);
