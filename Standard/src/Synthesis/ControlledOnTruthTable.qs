@@ -252,7 +252,7 @@ namespace Microsoft.Quantum.Synthesis {
             let spectrum = FastHadamardTransformed(table);
 
             H(target);
-            AssertProb([PauliZ], [target], One, 0.5, "Probability of the measurement must be 0.5", 1e-10);
+            AssertMeasurementProbability([PauliZ], [target], One, 0.5, "Probability of the measurement must be 0.5", 1e-10);
 
             if (IsResultOne(M(target))) {
                 for (i in 0..vars - 1) {

@@ -40,7 +40,7 @@ namespace Microsoft.Quantum.Diagnostics.Emulation
         public override string ToString() =>
             Data == null
             ? ""
-            : $"Real:\n{Data[Ellipsis, 0]}\nImag:\n{Data[Ellipsis, 1]}";
+            : $"Real:\n{Data![Ellipsis, 0]}\nImag:\n{Data![Ellipsis, 1]}";
     }
 
     /// <summary>

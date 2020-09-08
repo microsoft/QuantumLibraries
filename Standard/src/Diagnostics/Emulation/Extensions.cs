@@ -12,7 +12,7 @@ namespace Microsoft.Quantum.Diagnostics.Emulation
 {
 
     /// <summary>
-    ///     Attaches events to a <see cref="Microsoft.Quantum.Simulation.Simulators.SimulatorBase" />
+    ///     Attaches events to a <see cref="Microsoft.Quantum.Simulation.Common.SimulatorBase" />
     ///     instance, allowing for events to be removed with a disposable pattern.
     /// </summary>
     internal class SimulatorEventDisposer : IDisposable

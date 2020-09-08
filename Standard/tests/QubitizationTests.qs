@@ -35,11 +35,11 @@ namespace Microsoft.Quantum.Tests {
 
                 for (rep in 0..5) {
                     LCU(auxiliary, system);
-                    AssertProb([PauliZ], auxiliary, Zero, prob, "Error0: Z Success probability does not match theory", 1e-10);
+                    AssertMeasurementProbability([PauliZ], auxiliary, Zero, prob, "Error0: Z Success probability does not match theory", 1e-10);
                     let result = M(auxiliary[0]);
                     if(result == Zero) {
                         Exp([PauliY],1.0 * inverseAngle, system);
-                        AssertProb([PauliZ], system, Zero, 1.0, "Error1: Z Success probability does not match theory", 1e-10);
+                        AssertMeasurementProbability([PauliZ], system, Zero, 1.0, "Error1: Z Success probability does not match theory", 1e-10);
                     }
                     ResetAll(qubits);
                 }
@@ -61,11 +61,11 @@ namespace Microsoft.Quantum.Tests {
                     LCU!!(auxiliary, system);
                     X(flag);
                     (ControlledOnInt(0, X))(auxiliary, flag);
-                    AssertProb([PauliZ],[flag], Zero, prob, "Error0: Z Success probability does not match theory", 1e-10);
+                    AssertMeasurementProbability([PauliZ],[flag], Zero, prob, "Error0: Z Success probability does not match theory", 1e-10);
                     let result = M(flag);
                     if(result == Zero) {
                         Exp([PauliY],1.0 * inverseAngle, system);
-                        AssertProb([PauliZ], system, Zero, 1.0, "Error1: Z Success probability does not match theory", 1e-10);
+                        AssertMeasurementProbability([PauliZ], system, Zero, 1.0, "Error1: Z Success probability does not match theory", 1e-10);
                     }
                     ResetAll(qubits);
                 }
@@ -84,11 +84,11 @@ namespace Microsoft.Quantum.Tests {
                     LCU(auxiliary, system);
                     X(flag);
                     (ControlledOnInt(0, X))(auxiliary, flag);
-                    AssertProb([PauliZ],[flag], Zero, prob, "Error0: Z Success probability does not match theory", 1e-10);
+                    AssertMeasurementProbability([PauliZ],[flag], Zero, prob, "Error0: Z Success probability does not match theory", 1e-10);
                     let result = M(flag);
                     if(result == Zero) {
                         Exp([PauliY],1.0 * inverseAngle, system);
-                        AssertProb([PauliZ], system, Zero, 1.0, "Error1: Z Success probability does not match theory", 1e-10);
+                        AssertMeasurementProbability([PauliZ], system, Zero, 1.0, "Error1: Z Success probability does not match theory", 1e-10);
                     }
                     ResetAll(system);
                     Reset(flag);
@@ -122,11 +122,11 @@ namespace Microsoft.Quantum.Tests {
 
                 for (rep in 0..5) {
                     LCU!!(auxiliary, system);
-                    AssertProb([PauliZ], auxiliary, Zero, prob, "Error0: Z Success probability does not match theory", 1e-10);
+                    AssertMeasurementProbability([PauliZ], auxiliary, Zero, prob, "Error0: Z Success probability does not match theory", 1e-10);
                     let result = M(auxiliary[0]);
                     if(result == Zero) {
                         Exp([PauliY],1.0 * inverseAngle, system);
-                        AssertProb([PauliZ], system, Zero, 1.0, "Error1: Z Success probability does not match theory", 1e-10);
+                        AssertMeasurementProbability([PauliZ], system, Zero, 1.0, "Error1: Z Success probability does not match theory", 1e-10);
                     }
                     ResetAll(qubits);
                 }
@@ -169,13 +169,13 @@ namespace Microsoft.Quantum.Tests {
                             X(qubits[idxQubit]);
                         }
                     }
-                    InPlaceMajority(qubits[0], qubits[1..2]);
+                    ApplyMajorityInPlace(qubits[0], qubits[1..2]);
 
                     if (testCase[3] == false) {
-                        AssertProb([PauliZ], qubits[0..0], Zero, 1.0, "", 1e-10);
+                        AssertMeasurementProbability([PauliZ], qubits[0..0], Zero, 1.0, "", 1e-10);
                     }
                     else {
-                        AssertProb([PauliZ], qubits[0..0], One, 1.0, "", 1e-10);
+                        AssertMeasurementProbability([PauliZ], qubits[0..0], One, 1.0, "", 1e-10);
                     }
                     ResetAll(qubits);
                 }
@@ -204,7 +204,7 @@ namespace Microsoft.Quantum.Tests {
                         ApplyXorInPlace(y, yRegister);
                         CompareUsingRippleCarry(xRegister, yRegister, output);
 
-                        AssertProb([PauliZ], [output], result, 1.0, "", 1e-10);
+                        AssertMeasurementProbability([PauliZ], [output], result, 1.0, "", 1e-10);
                         if(result == One){
                             X(output);
                         }

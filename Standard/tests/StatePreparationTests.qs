@@ -6,6 +6,7 @@ namespace Microsoft.Quantum.Tests {
     open Microsoft.Quantum.Intrinsic;
     open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Convert;
+    open Microsoft.Quantum.Diagnostics as Diag;
     open Microsoft.Quantum.Math;
     open Microsoft.Quantum.Measurement;
     open Microsoft.Quantum.Arrays;
@@ -111,7 +112,7 @@ namespace Microsoft.Quantum.Tests {
                 op(qubitsLE);
                 AssertProbInt(0, prob, qubitsLE, tolerance);
                 AssertProbInt(1, prob, qubitsLE, tolerance);
-                AssertPhase(phase, (qubitsLE!)[0], tolerance);
+                Diag.AssertPhase(phase, (qubitsLE!)[0], tolerance);
                 ResetAll(qubits);
             }
         }
@@ -186,7 +187,7 @@ namespace Microsoft.Quantum.Tests {
                         let indexMeasuredInteger = MeasureInteger(qubitsLE);
                         let phase = coefficientsPhase[indexMeasuredInteger];
                         Message($"StatePreparationComplexCoefficientsTest: expected phase = {phase}.");
-                        AssertPhase(-0.5 * phase, control[0], tolerance);
+                        Diag.AssertPhase(-0.5 * phase, control[0], tolerance);
                         ResetAll(control);
                         ResetAll(qubits);
                     }
@@ -259,7 +260,7 @@ namespace Microsoft.Quantum.Tests {
                         let indexMeasuredInteger = MeasureInteger(qubitsLE);
                         let phase = coefficientsPhase[indexMeasuredInteger];
                         Message($"StatePreparationComplexCoefficientsTest: expected phase = {phase}.");
-                        AssertPhase(-0.5 * phase, control[0], tolerance);
+                        Diag.AssertPhase(-0.5 * phase, control[0], tolerance);
                         ResetAll(control);
                         ResetAll(qubits);
                     }

@@ -25,9 +25,9 @@ namespace Microsoft.Quantum.Diagnostics
 
         public override bool Callback(uint idx, double real, double img)
         {
-            if (Data as object == null) throw new Exception("Expected data buffer to be initialized before callback, but it was null.");
-            Data[(int)idx, 0] = real;
-            Data[(int)idx, 1] = img;
+            if (Data == null) throw new Exception("Expected data buffer to be initialized before callback, but it was null.");
+            Data![(int)idx, 0] = real;
+            Data![(int)idx, 1] = img;
             return true;
         }
 

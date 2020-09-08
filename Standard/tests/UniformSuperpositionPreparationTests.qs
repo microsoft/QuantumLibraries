@@ -6,6 +6,7 @@ namespace Microsoft.Quantum.Tests {
     open Microsoft.Quantum.Intrinsic;
     open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Convert;
+    open Microsoft.Quantum.Diagnostics;
     open Microsoft.Quantum.Math;
     open Microsoft.Quantum.Measurement;
     open Microsoft.Quantum.Arrays;
@@ -25,7 +26,7 @@ namespace Microsoft.Quantum.Tests {
                     using(flag = Qubit[1])
                     {
                         (ControlledOnInt(0, X))(qubits, flag[0]);
-                        AssertProb([PauliZ], flag, One, IntAsDouble(nIndices)/IntAsDouble(2^nQubits), "", 1e-10);
+                        AssertMeasurementProbability([PauliZ], flag, One, IntAsDouble(nIndices)/IntAsDouble(2^nQubits), "", 1e-10);
                         (ControlledOnInt(0, X))(qubits, flag[0]);
                         ApplyToEachCA(H,qubits);
 
