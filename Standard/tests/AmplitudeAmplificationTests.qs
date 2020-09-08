@@ -5,6 +5,7 @@ namespace Microsoft.Quantum.Tests {
     open Microsoft.Quantum.Intrinsic;
     open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Convert;
+    open Microsoft.Quantum.Diagnostics;
     open Microsoft.Quantum.AmplitudeAmplification;
     open Microsoft.Quantum.Oracles;
     open Microsoft.Quantum.Math;
@@ -29,7 +30,7 @@ namespace Microsoft.Quantum.Tests {
     
     /// In this minimal example, there are no system qubits, only a single flag qubit.
     /// ExampleStatePrep is already of type  StateOracle, so we call
-    /// AmpAmpByOracle(iterations: Int, stateOracle : StateOracle, idxFlagQubit : Int startQubits: Qubit[]) : ()
+    /// StandardAmplitudeAmplification(iterations: Int, stateOracle : StateOracle, idxFlagQubit : Int startQubits: Qubit[]) : ()
     operation AmpAmpByOracleTest () : Unit {
         
         using (qubits = Qubit[1]) {
@@ -43,10 +44,10 @@ namespace Microsoft.Quantum.Tests {
                     let idxFlag = 0;
                     let startQubits = qubits;
                     let stateOracle = ExampleStatePrep(lambda);
-                    (AmpAmpByOracle(nIterations, stateOracle, idxFlag))(startQubits);
+                    (StandardAmplitudeAmplification(nIterations, stateOracle, idxFlag))(startQubits);
                     let successAmplitude = Sin(IntAsDouble(2 * nIterations + 1) * rotAngle);
                     let successProbability = successAmplitude * successAmplitude;
-                    AssertProb([PauliZ], [startQubits[idxFlag]], One, successProbability, $"Error: Success probability does not match theory", 1E-10);
+                    AssertMeasurementProbability([PauliZ], [startQubits[idxFlag]], One, successProbability, $"Error: Success probability does not match theory", 1E-10);
                     ResetAll(qubits);
                 }
             }
@@ -60,7 +61,7 @@ namespace Microsoft.Quantum.Tests {
             ResetAll(qubits);
             
             for (nIterations in 0 .. 5) {
-                let phases = AmpAmpPhasesStandard(nIterations);
+                let phases = StandardReflectionPhases(nIterations);
                 
                 for (idx in 0 .. 20) {
                     let rotAngle = (IntAsDouble(idx) * PI()) / 20.0;
@@ -69,10 +70,10 @@ namespace Microsoft.Quantum.Tests {
                     let systemRegister = new Qubit[0];
                     let ancillaOracle = DeterministicStateOracle(Exp([PauliY], rotAngle * 0.5, _));
                     let signalOracle = ObliviousOracle(NoOp<(Qubit[], Qubit[])>(_, _));
-                    (AmpAmpObliviousByOraclePhases(phases, ancillaOracle, signalOracle, idxFlag))(ancillaRegister, systemRegister);
+                    (ObliviousAmplitudeAmplificationFromStatePreparation(phases, ancillaOracle, signalOracle, idxFlag))(ancillaRegister, systemRegister);
                     let successAmplitude = Sin((IntAsDouble(2 * nIterations + 1) * rotAngle) * 0.5);
                     let successProbability = successAmplitude * successAmplitude;
-                    AssertProb([PauliZ], [ancillaRegister[idxFlag]], One, successProbability, $"Error: Success probability does not match theory", 1E-10);
+                    AssertMeasurementProbability([PauliZ], [ancillaRegister[idxFlag]], One, successProbability, $"Error: Success probability does not match theory", 1E-10);
                     ResetAll(qubits);
                 }
             }
@@ -91,7 +92,7 @@ namespace Microsoft.Quantum.Tests {
                 let success = Cos(0.5 * rotangle) * Cos(0.5 * rotangle);
                 H(qubits[0]);
                 targetStateReflection!(rotangle, qubits);
-                AssertProb([PauliX], qubits, Zero, success, $"Error: Success probability does not match theory", 1E-10);
+                AssertMeasurementProbability([PauliX], qubits, Zero, success, $"Error: Success probability does not match theory", 1E-10);
                 ResetAll(qubits);
             }
         }
