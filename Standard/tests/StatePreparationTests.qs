@@ -6,7 +6,7 @@ namespace Microsoft.Quantum.Tests {
     open Microsoft.Quantum.Intrinsic;
     open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Convert;
-    open Microsoft.Quantum.Diagnostics;
+    open Microsoft.Quantum.Diagnostics as Diag;
     open Microsoft.Quantum.Math;
     open Microsoft.Quantum.Measurement;
     open Microsoft.Quantum.Preparation;
@@ -15,7 +15,7 @@ namespace Microsoft.Quantum.Tests {
     newtype StatePreparationTestCase = (Int, Double[], Double[]);
 
 
-    @Test("QuantumSimulator")
+    @Diag.Test("QuantumSimulator")
     operation TestStatePreparationPositiveCoefficients() : Unit {
 
         let tolerance = 1E-09;
@@ -65,7 +65,7 @@ namespace Microsoft.Quantum.Tests {
     
     
     // Test phase factor on 1-qubit uniform superposition.
-    @Test("QuantumSimulator")
+    @Diag.Test("QuantumSimulator")
     operation TestStatePreparationComplexCoefficientsQubitPhase() : Unit {
         
         let tolerance = 1E-09;
@@ -94,7 +94,7 @@ namespace Microsoft.Quantum.Tests {
                 op(qubitsLE);
                 AssertProbInt(0, prob, qubitsLE, tolerance);
                 AssertProbInt(1, prob, qubitsLE, tolerance);
-                Microsoft.Quantum.Diagnostics.AssertPhase(phase, (qubitsLE!)[0], tolerance);
+                Diag.AssertPhase(phase, (qubitsLE!)[0], tolerance);
                 ResetAll(qubits);
             }
         }
@@ -102,7 +102,7 @@ namespace Microsoft.Quantum.Tests {
     
     
     // Test probabilities and phases factor of multi-qubit uniform superposition.
-    @Test("QuantumSimulator")
+    @Diag.Test("QuantumSimulator")
     operation TestStatePreparationComplexCoefficientsMultiQubitPhase() : Unit {
         
         let tolerance = 1E-09;
@@ -155,7 +155,7 @@ namespace Microsoft.Quantum.Tests {
                         let indexMeasuredInteger = MeasureInteger(qubitsLE);
                         let phase = coefficientsPhase[indexMeasuredInteger];
                         Message($"StatePreparationComplexCoefficientsTest: expected phase = {phase}.");
-                        Microsoft.Quantum.Diagnostics.AssertPhase(-0.5 * phase, control[0], tolerance);
+                        Diag.AssertPhase(-0.5 * phase, control[0], tolerance);
                         ResetAll(control + qubits);
                     }
                 }
@@ -165,7 +165,7 @@ namespace Microsoft.Quantum.Tests {
     
     
     // Test probabilities and phases of arbitrary multi-qubit superposition.
-    @Test("QuantumSimulator")
+    @Diag.Test("QuantumSimulator")
     operation TestStatePreparationComplexCoefficientsArbitraryMultiQubitPhase() : Unit {
         
         let tolerance = 1E-09;
@@ -216,7 +216,7 @@ namespace Microsoft.Quantum.Tests {
                         let indexMeasuredInteger = MeasureInteger(qubitsLE);
                         let phase = coefficientsPhase[indexMeasuredInteger];
                         Message($"StatePreparationComplexCoefficientsTest: expected phase = {phase}.");
-                        Microsoft.Quantum.Diagnostics.AssertPhase(-0.5 * phase, control[0], tolerance);
+                        Diag.AssertPhase(-0.5 * phase, control[0], tolerance);
                         ResetAll(control + qubits);
                     }
                 }

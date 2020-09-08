@@ -79,7 +79,7 @@ namespace Microsoft.Quantum.Arithmetic {
     operation AssertMostSignificantBit(value : Result, number : LittleEndian) : Unit {
         body (...) {
             let mostSingificantQubit = Tail(number!);
-            Assert([PauliZ], [mostSingificantQubit], value, $"Most significant bit expected to be {value}");
+            AssertMeasurement([PauliZ], [mostSingificantQubit], value, $"Most significant bit expected to be {value}");
         }
 
         adjoint self;

@@ -1,4 +1,7 @@
-﻿using System;
+﻿// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
+using System;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Runtime.ExceptionServices;
@@ -70,7 +73,7 @@ namespace Microsoft.Quantum.Characterization
                 if (paulis.Length != count) throw new InvalidOperationException("The number of paulis must match the number of qubits.");
 
                 var qubits = this.Allocate.Apply(count);
-                Exception? innerException = null;
+                Exception innerException = null;
                 double result = 0.0;
                 try
                 {
