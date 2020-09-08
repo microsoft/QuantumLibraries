@@ -267,7 +267,7 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
     }
 
 
-    operation _ToJordanWignerSelectInput__ (idx : Int, optimizedBEGeneratorSystem : OptimizedBEGeneratorSystem, signQubit : Qubit, selectZControlRegisters : Qubit[], OptimizedBEControlRegisters : Qubit[], pauliBasesIdx : LittleEndian, indexRegisters : LittleEndian[]) : Unit {
+    operation _ToJordanWignerSelectInput (idx : Int, optimizedBEGeneratorSystem : OptimizedBEGeneratorSystem, signQubit : Qubit, selectZControlRegisters : Qubit[], OptimizedBEControlRegisters : Qubit[], pauliBasesIdx : LittleEndian, indexRegisters : LittleEndian[]) : Unit {
 
         body (...) {
             let (nTerms, oneNorm, intToGenIdx) = optimizedBEGeneratorSystem!;
@@ -331,11 +331,11 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
 
     function _ToJordanWignerSelectInput_ (idx : Int, optimizedBEGeneratorSystem : OptimizedBEGeneratorSystem) : ((Qubit, Qubit[], Qubit[], LittleEndian, LittleEndian[]) => Unit is Adj + Ctl) {
 
-        return _ToJordanWignerSelectInput__(idx, optimizedBEGeneratorSystem, _, _, _, _, _);
+        return _ToJordanWignerSelectInput(idx, optimizedBEGeneratorSystem, _, _, _, _, _);
     }
 
 
-    operation _ToPauliBases__ (idx : Int, pauliBases : Qubit[]) : Unit {
+    operation _ToPauliBases(idx : Int, pauliBases : Qubit[]) : Unit {
 
         body (...) {
             let pauliBasesSet = [[1, 1, 1, 1], [1, 1, 2, 2], [1, 2, 1, 2], [1, 2, 2, 1]];
@@ -362,12 +362,12 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
 
     function _ToPauliBases_ (idx : Int) : (Qubit[] => Unit is Adj + Ctl) {
 
-        return _ToPauliBases__(idx, _);
+        return _ToPauliBases(idx, _);
     }
 
 
     // This prepares the state that selects _JordanWignerSelect_;
-    operation _JordanWignerOptimizedBlockEncodingStatePrep__ (targetError : Double, optimizedBEGeneratorSystem : OptimizedBEGeneratorSystem, qROMIdxRegister : LittleEndian, qROMGarbage : Qubit[], signQubit : Qubit, selectZControlRegisters : Qubit[], OptimizedBEControlRegisters : Qubit[], pauliBases : Qubit[], pauliBasesIdx : LittleEndian, indexRegisters : LittleEndian[]) : Unit {
+    operation _JordanWignerOptimizedBlockEncodingStatePrep(targetError : Double, optimizedBEGeneratorSystem : OptimizedBEGeneratorSystem, qROMIdxRegister : LittleEndian, qROMGarbage : Qubit[], signQubit : Qubit, selectZControlRegisters : Qubit[], OptimizedBEControlRegisters : Qubit[], pauliBases : Qubit[], pauliBasesIdx : LittleEndian, indexRegisters : LittleEndian[]) : Unit {
 
         body (...) {
             let (nTerms, oneNorm0, intToGenIdx) = optimizedBEGeneratorSystem!;
@@ -410,7 +410,7 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
 
         body (...) {
             let (statePrepRegister, selectRegister, rest) = _JordanWignerOptimizedBlockEncodingQubitManager_(targetError, nCoeffs, nZ, nMaj, nIdxRegQubits, ctrlRegister);
-            let statePrepOp = _JordanWignerOptimizedBlockEncodingStatePrep__(targetError, optimizedBEGeneratorSystem, _, _, _, _, _, _, _, _);
+            let statePrepOp = _JordanWignerOptimizedBlockEncodingStatePrep(targetError, optimizedBEGeneratorSystem, _, _, _, _, _, _, _, _);
             statePrepOp(statePrepRegister);
         }
 
