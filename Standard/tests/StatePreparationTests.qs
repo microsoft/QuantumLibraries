@@ -15,7 +15,7 @@ namespace Microsoft.Quantum.Tests {
     newtype StatePreparationTestCase = (Int, Double[], Double[]);
 
 
-    @Test("QuantumSimulator")
+    @Diag.Test("QuantumSimulator")
     operation TestStatePreparationPositiveCoefficients() : Unit {
 
         let tolerance = 1E-09;
@@ -65,7 +65,7 @@ namespace Microsoft.Quantum.Tests {
     
     
     // Test phase factor on 1-qubit uniform superposition.
-    @Test("QuantumSimulator")
+    @Diag.Test("QuantumSimulator")
     operation TestStatePreparationComplexCoefficientsQubitPhase() : Unit {
         
         let tolerance = 1E-09;
@@ -102,7 +102,7 @@ namespace Microsoft.Quantum.Tests {
     
     
     // Test probabilities and phases factor of multi-qubit uniform superposition.
-    @Test("QuantumSimulator")
+    @Diag.Test("QuantumSimulator")
     operation TestStatePreparationComplexCoefficientsMultiQubitPhase() : Unit {
         
         let tolerance = 1E-09;
@@ -165,7 +165,7 @@ namespace Microsoft.Quantum.Tests {
     
     
     // Test probabilities and phases of arbitrary multi-qubit superposition.
-    @Test("QuantumSimulator")
+    @Diag.Test("QuantumSimulator")
     operation TestStatePreparationComplexCoefficientsArbitraryMultiQubitPhase() : Unit {
         
         let tolerance = 1E-09;
