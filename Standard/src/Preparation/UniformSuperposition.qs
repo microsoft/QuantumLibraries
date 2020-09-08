@@ -5,6 +5,7 @@ namespace Microsoft.Quantum.Preparation {
     open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Intrinsic;
     open Microsoft.Quantum.Convert;
+    open Microsoft.Quantum.Diagnostics;
     open Microsoft.Quantum.Arithmetic;
     open Microsoft.Quantum.AmplitudeAmplification;
     open Microsoft.Quantum.Oracles;
@@ -53,6 +54,7 @@ namespace Microsoft.Quantum.Preparation {
             }
 
             using (flagQubit = Qubit[3]) {
+                AssertAllZero(indexRegister!);
                 let targetQubits = indexRegister![0..nQubits - 1];
                 let qubits = flagQubit + targetQubits;
                 let stateOracle = StateOracle(PrepareUniformSuperposition_(nIndices, nQubits, _, _));
