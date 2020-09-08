@@ -32,7 +32,7 @@ namespace Microsoft.Quantum.Tests
 
             DumpS.Run(sim).Wait();
 
-            Assert.Equal(diagnostics.Count, 1);
+            Assert.Single(diagnostics);
             var diagnostic = diagnostics.Single();
 
             Assert.IsType<DisplayableUnitaryOperator>(diagnostic);
@@ -70,7 +70,7 @@ namespace Microsoft.Quantum.Tests
 
             DumpCnot.Run(sim).Wait();
 
-            Assert.Equal(diagnostics.Count, 1);
+            Assert.Single(diagnostics);
             var diagnostic = diagnostics.Single();
 
             Assert.IsType<DisplayableUnitaryOperator>(diagnostic);
