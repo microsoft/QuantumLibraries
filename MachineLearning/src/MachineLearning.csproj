@@ -30,7 +30,7 @@
     <PackageId>Microsoft.Quantum.MachineLearning</PackageId>
     <PackageReleaseNotes>See: https://docs.microsoft.com/quantum/relnotes/</PackageReleaseNotes>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <PackageProjectUrl>https://github.com/Microsoft/QuantumLibraries/tree/master/MachineLearning</PackageProjectUrl>
+    <PackageProjectUrl>https://github.com/microsoft/QuantumLibraries/tree/main/MachineLearning</PackageProjectUrl>
     <PackageIcon>qdk-nuget-icon.png</PackageIcon>
     <PackageTags>Quantum Q# Qsharp</PackageTags>
     <NoWarn>1591</NoWarn>

@@ -27,7 +27,7 @@ of samples on how to use these libraries to write quantum based programs.
 
 | branch | status    |
 |--------|-----------|
-| master | [![Build Status](https://dev.azure.com/ms-quantum-public/Microsoft%20Quantum%20(public)/_apis/build/status/Microsoft.QuantumLibraries?branchName=master)](https://dev.azure.com/ms-quantum-public/Microsoft%20Quantum%20(public)/_build/latest?definitionId=1&branchName=master) |
+| main | [![Build Status](https://dev.azure.com/ms-quantum-public/Microsoft%20Quantum%20(public)/_apis/build/status/Microsoft.QuantumLibraries?branchName=main)](https://dev.azure.com/ms-quantum-public/Microsoft%20Quantum%20(public)/_build/latest?definitionId=1&branchName=main) |
 
 ## Feedback ##
 
