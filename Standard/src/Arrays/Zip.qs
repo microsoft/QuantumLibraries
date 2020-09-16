@@ -36,6 +36,7 @@ namespace Microsoft.Quantum.Arrays {
     /// # See Also
     /// - Zip3
     /// - Zip4
+    /// - Unzipped
     function Zip<'T, 'U> (left : 'T[], right : 'U[]) : ('T, 'U)[] {
         let nElements = Length(left) < Length(right)
                         ? Length(left)
@@ -154,6 +155,9 @@ namespace Microsoft.Quantum.Arrays {
     /// // split is same as ([6, 5, 5, 3, 2, 1], [true, false, false, false, true, false])
     /// let split = Unzipped([(6, true), (5, false), (5, false), (3, false), (2, true), (1, false)]);
     /// ```
+    ///
+    /// # See Also
+    /// - Zip
     function Unzipped<'T, 'U>(arr : ('T, 'U)[]) : ('T[], 'U[]) {
         let nElements = Length(arr);
         mutable first = new 'T[nElements];
