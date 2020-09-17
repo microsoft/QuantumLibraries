@@ -1,7 +1,7 @@
 # Copyright (c) Microsoft Corporation.
 # Licensed under the MIT License.
 # H2 molecule using 6-31G basis, containing 2 electrons 4 orbitals
-$schema: https://raw.githubusercontent.com/Microsoft/Quantum/master/Chemistry/Schema/broombridge-0.2.schema.json
+$schema: https://raw.githubusercontent.com/Microsoft/Quantum/main/Chemistry/Schema/broombridge-0.2.schema.json
 format:
   version: '0.2'
 problem_description:

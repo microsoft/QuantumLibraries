@@ -5,7 +5,7 @@ on:
   pull_request:
     # Note that we only support automerge on branches that have required checks.
     branches: 
-      - master
+      - main
       - feature/*
     types:
       - labeled
@@ -19,7 +19,7 @@ on:
   pull_request_review:
     # Note that we only support automerge on branches that have required checks.
     branches: 
-      - master
+      - main
       - feature/*
     types:
       - submitted
