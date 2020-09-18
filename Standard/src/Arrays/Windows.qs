@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 namespace Microsoft.Quantum.Arrays {
+
     /// # Summary
     /// Returns all consecutive subarrays of length `size`.
     ///

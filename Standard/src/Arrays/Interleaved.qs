@@ -5,20 +5,22 @@ namespace Microsoft.Quantum.Arrays {
     open Microsoft.Quantum.Diagnostics;
 
     /// # Summary
-    /// Interleaves two arrays of (almost) same size
+    /// Interleaves two arrays of (almost) same size.
     ///
     /// # Description
-    /// This function returns the interleaving from two arrays, starting
-    /// to pick the first element from the first array, then the first
-    /// element from the second array, and so on.  The first array is either
+    /// This function returns the interleaving of two arrays, starting
+    /// with the first element from the first array, then the first
+    /// element from the second array, and so on.
+    ///
+    /// The first array must either be
     /// of the same length as the second one, or can have one more element.
     ///
     /// # Input
     /// ## first
-    /// First array
+    /// The first array to be interleaved.
     ///
     /// ## second
-    /// Second array
+    /// The second array to be interleaved.
     ///
     /// # Output
     /// Interleaved array

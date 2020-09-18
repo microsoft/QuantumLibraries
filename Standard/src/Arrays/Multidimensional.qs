@@ -7,11 +7,12 @@ namespace Microsoft.Quantum.Arrays {
     open Microsoft.Quantum.Diagnostics;
 
     /// # Summary
-    /// Returns the transpose of a matrix
+    /// Returns the transpose of a matrix represented as an array
+    /// of arrays.
     ///
     /// # Description
-    /// Input as an $r \times c$ matrix with $r$ rows and $$ columns.  The matrix
-    /// is row-based, i.e., `matrix[i][j]` access the element at row $i$ and column $j$.
+    /// Input as an $r \times c$ matrix with $r$ rows and $c$ columns.  The matrix
+    /// is row-based, i.e., `matrix[i][j]` accesses the element at row $i$ and column $j$.
     ///
     /// This function returns the $c \times r$ matrix that is the transpose of the
     /// input matrix.
@@ -38,13 +39,13 @@ namespace Microsoft.Quantum.Arrays {
     }
 
     /// # Summary
-    /// Returns the array's element at given index
+    /// Returns the at the given index of an array.
     ///
     /// # Input
     /// ## index
     /// Index of element
     /// ## array
-    /// Array
+    /// The array being indexed.
     ///
     /// # Remark
     /// This function is more general than `LookupFunction`, since
@@ -74,6 +75,7 @@ namespace Microsoft.Quantum.Arrays {
 
     /// # Summary
     /// Returns the array's elements at a given range
+    /// of indices.
     ///
     /// # Input
     /// ## range
@@ -101,7 +103,7 @@ namespace Microsoft.Quantum.Arrays {
     }
 
     /// # Summary
-    /// Extracts a column in a matrix
+    /// Extracts a column from a matrix.
     ///
     /// # Dimension
     /// This function extracts a column in a matrix in row-wise order.

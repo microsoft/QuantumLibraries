@@ -13,8 +13,8 @@ namespace Microsoft.Quantum.Arrays {
     ///
     /// # Type Parameters
     /// ## 'State
-    /// The type of states the `folder` function operates on, i.e., accepts as its first
-    /// argument and returns.
+    /// The type of states that the `folder` function operates on, i.e., accepts as its first
+    /// input and returns.
     /// ## 'T
     /// The type of `array` elements.
     ///
