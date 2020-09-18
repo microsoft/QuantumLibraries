@@ -69,7 +69,7 @@ namespace Microsoft.Quantum.Arrays {
     /// - Microsoft.Quantum.Arrays.LookupFunction
     /// - Microsoft.Quantum.Arrays.ElementsAt
     function ElementAt<'T>(index : Int, array : 'T[]) : 'T {
-        Fact(index < Length(array), "Index is out of bound");
+        Fact(index >= 0 and index < Length(array), "Index is out of bound");
         return array[index];
     }
 
@@ -105,7 +105,7 @@ namespace Microsoft.Quantum.Arrays {
     /// # Summary
     /// Extracts a column from a matrix.
     ///
-    /// # Dimension
+    /// # Description
     /// This function extracts a column in a matrix in row-wise order.
     /// Extracting a row corrsponds to element access of the first index
     /// and therefore requires no further treatment.

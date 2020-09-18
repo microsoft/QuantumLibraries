@@ -19,11 +19,11 @@ namespace Microsoft.Quantum.Arrays {
     /// The type of `array` elements.
     ///
     /// # Input
-    /// ## folder
+    /// ## fn
     /// A function to be folded over the array
     ///
     /// ## state
-    /// The initial state of the folder
+    /// The initial state to be folded
     ///
     /// ## array
     /// An array of values to be folded over
@@ -34,19 +34,19 @@ namespace Microsoft.Quantum.Arrays {
     ///
     /// # Remark
     /// This function generalizes `Fold` since
-    /// `Tail(CumulativeFolded(folder, state, array)) == Fold(folder, state, array)`.
+    /// `Tail(CumulativeFolded(fn, state, array)) == Fold(fn, state, array)`.
     ///
     /// # Example
     /// ```Q#
     /// // same as sums = [1, 3, 6, 10, 15]
     /// let sums = CumulativeFolded(PlusI, 0, SequenceI(1, 5));
     /// ```
-    function CumulativeFolded<'State, 'T>(folder : (('State, 'T) -> 'State), state : 'State, array : 'T[]) : 'State[] {
+    function CumulativeFolded<'State, 'T>(fn : (('State, 'T) -> 'State), state : 'State, array : 'T[]) : 'State[] {
         mutable current = state;
         mutable result = new 'State[Length(array)];
 
         for ((i, elem) in Enumerated(array)) {
-            set current = folder(current, elem);
+            set current = fn(current, elem);
             set result w/= i <- current;
         }
 
