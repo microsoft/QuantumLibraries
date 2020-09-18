@@ -39,7 +39,7 @@ namespace Microsoft.Quantum.Tests {
             fail $"Test for more than one control on MultiplexZ not implemented.";
         }
         
-        // Sample from control registers and check phase using AssertProb.
+        // Sample from control registers and check phase using AssertMeasurementProbability.
         let multiplexerControlInteger = MeasureInteger(multiplexerControl);
         let additionalControlResults = ForEach(MResetZ, additionalControl);
         
@@ -140,7 +140,7 @@ namespace Microsoft.Quantum.Tests {
                 // Apply MultiplexZ circuit
                 Controlled (ApplyDiagonalUnitary(coefficients, _))([control], qubits);
                 Message($"ApplyDiagonalUnitary test. Qubits: {nQubits}; coefficient {idxCoeff} of {nCoefficients-1}.");
-                AssertPhase(-0.5 * coefficients[idxCoeff], control, tolerance);
+                Diag.AssertPhase(-0.5 * coefficients[idxCoeff], control, tolerance);
                 Reset(control);
                 ResetAll(qubits!);
             }

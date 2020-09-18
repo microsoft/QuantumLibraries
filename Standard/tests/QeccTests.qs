@@ -261,7 +261,7 @@ namespace Microsoft.Quantum.Tests {
             //     qubit containing the magic state,
             //     so as to test whether the injection
             //     correctly reset for us.
-            Assert([PauliZ], [anc[1]], Zero, $"Magic state was not reset to |0〉.");
+            AssertMeasurement([PauliZ], [anc[1]], Zero, $"Magic state was not reset to |0〉.");
             Reset(anc[0]);
         }
     }
@@ -281,7 +281,7 @@ namespace Microsoft.Quantum.Tests {
             //     qubit containing the magic state,
             //     so as to test whether the injection
             //     correctly reset for us.
-            Assert([PauliZ], [anc[1]], Zero, $"Magic state was not reset to |0〉.");
+            AssertMeasurement([PauliZ], [anc[1]], Zero, $"Magic state was not reset to |0〉.");
             Reset(anc[0]);
         }
     }

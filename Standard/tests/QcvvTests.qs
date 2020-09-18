@@ -10,6 +10,7 @@ namespace Microsoft.Quantum.Tests {
     open Microsoft.Quantum.Diagnostics;
     open Microsoft.Quantum.Arrays;
     open Microsoft.Quantum.Math;
+    open Microsoft.Quantum.Measurement as Meas;
 
     operation ChoiStateTest () : Unit {
         using (register = Qubit[2]) {
@@ -17,8 +18,8 @@ namespace Microsoft.Quantum.Tests {
 
             // As usual, the same confusion about {+1, -1} and {0, 1}
             // labeling bites us here.
-            Assert([PauliX, PauliX], register, Zero, $"XX");
-            Assert([PauliZ, PauliZ], register, Zero, $"ZZ");
+            AssertMeasurement([PauliX, PauliX], register, Zero, $"XX");
+            AssertMeasurement([PauliZ, PauliZ], register, Zero, $"ZZ");
             ResetAll(register);
         }
     }
@@ -28,10 +29,10 @@ namespace Microsoft.Quantum.Tests {
     }
 
     operation EstimateFrequencyTest () : Unit {
-        let freq1 = EstimateFrequency(ApplyToEach(H, _), MeasureAllZ, 1, 1000);
+        let freq1 = EstimateFrequency(ApplyToEach(H, _), Meas.MeasureAllZ, 1, 1000);
         EqualityWithinToleranceFact(freq1, 0.5, 0.1);
 
-        let freq2 = EstimateFrequencyA(ApplyToEachA(H, _), MeasureAllZ, 3, 10000);
+        let freq2 = EstimateFrequencyA(ApplyToEachA(H, _), Meas.MeasureAllZ, 3, 10000);
         EqualityWithinToleranceFact(freq2, 0.5, 0.1);
     }
 
@@ -115,7 +116,7 @@ namespace Microsoft.Quantum.Tests {
 
             for (basis in bases) {
                 PrepareQubit(basis, qubit);
-                Assert([basis], [qubit], Zero, $"Did not prepare in {basis} correctly.");
+                AssertMeasurement([basis], [qubit], Zero, $"Did not prepare in {basis} correctly.");
                 Reset(qubit);
             }
         }
