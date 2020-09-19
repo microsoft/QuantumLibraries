@@ -63,10 +63,6 @@ namespace Microsoft.Quantum.Arrays {
         return array[0 .. Length(array) - 2];
     }
 
-    internal function Lookup<'T> (array : 'T[], index : Int) : 'T {
-        return array[index];
-    }
-
     /// # Summary
     /// Given an array, returns a function which returns elements of that
     /// array.
@@ -90,7 +86,7 @@ namespace Microsoft.Quantum.Arrays {
     /// where functions are used to avoid the need to record an entire array
     /// in memory.
     function LookupFunction<'T> (array : 'T[]) : (Int -> 'T) {
-        return Lookup(array, _);
+        return ElementAt(_, array);
     }
 
     /// # Summary
