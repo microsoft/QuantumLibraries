@@ -119,14 +119,14 @@ namespace Microsoft.Quantum.Arrays {
     /// # Summary
     /// Extracts a column from a matrix.
     ///
-    /// # Type Parameters
-    /// ## 'T
-    /// The type of each element of `matrix`.
-    ///
     /// # Description
     /// This function extracts a column in a matrix in row-wise order.
     /// Extracting a row corrsponds to element access of the first index
     /// and therefore requires no further treatment.
+    ///
+    /// # Type Parameters
+    /// ## 'T
+    /// The type of each element of `matrix`.
     ///
     /// # Input
     /// ## column
@@ -143,6 +143,7 @@ namespace Microsoft.Quantum.Arrays {
     ///
     /// # See Also
     /// - Microsoft.Quantum.Arrays.Transposed
+    /// - Microsoft.Quantum.Arrays.Diagonal
     function ColumnAt<'T>(column : Int, matrix : 'T[][]) : 'T[] {
         RectangularArrayFact(matrix, "Matrix is not a rectangular array");
         return ColumnAtUnchecked(column, matrix);
@@ -160,6 +161,36 @@ namespace Microsoft.Quantum.Arrays {
                     ElementAt<'T>(column, _),
                     LookupFunction(matrix)
                 ), RangeAsIntArray(IndexRange(matrix)));
+    }
+
+    /// # Summary
+    /// Returns an array of diagonal elements of an array in square shape
+    ///
+    /// # Type Parameters
+    /// ## 'T
+    /// The type of each element of `matrix`.
+    ///
+    /// # Input
+    /// ## matrix
+    /// 2-dimensional matrix in row-wise order
+    ///
+    /// # Example
+    /// ```Q#
+    /// let matrix = [[1, 2, 3], [4, 5, 6], [7, 8, 9]];
+    /// let diagonal = Diagonal(matrix);
+    /// // same as: column = [1, 5, 9]
+    /// ```
+    ///
+    /// # See Also
+    /// - Microsoft.Quantum.Arrays.Transposed
+    function Diagonal<'T>(matrix : 'T[][]) : 'T[] {
+        SquareArrayFact(matrix, "Matrix is not a rectangular array");
+
+        return Mapped(ElementAtDiagonal(_, matrix), SequenceI(0, Length(matrix) - 1));
+    }
+
+    internal function ElementAtDiagonal<'T>(index : Int, matrix : 'T[][]) : 'T {
+        return matrix[index][index];
     }
 
     /// # Summary
@@ -184,6 +215,9 @@ namespace Microsoft.Quantum.Arrays {
     /// RectangularArrayFact([[1, 2, 3], [4, 5, 6]], "Array is not rectangular"); // okay
     /// RectangularArrayFact([[1, 2], [3, 4, 5]], "Array is not rectangular");    // will fail
     /// ```
+    ///
+    /// # See Also
+    /// - Microsoft.Quantum.Arrays.SquareArrayFact
     function RectangularArrayFact<'T>(array : 'T[][], message : String) : Unit {
         if (Length(array) == 0) {
             return ();
@@ -218,6 +252,9 @@ namespace Microsoft.Quantum.Arrays {
     /// SquareArrayFact([[1, 2, 3], [4, 5, 6]], "Array is not a square"); // will fail
     /// SquareArrayFact([[1, 2], [3, 4, 5]], "Array is not a square");    // will fail
     /// ```
+    ///
+    /// # See Also
+    /// - Microsoft.Quantum.Arrays.RectangularArrayFact
     function SquareArrayFact<'T>(array : 'T[][], message : String) : Unit {
         if (Length(array) == 0) {
             return ();

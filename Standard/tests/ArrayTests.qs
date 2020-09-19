@@ -298,6 +298,11 @@ namespace Microsoft.Quantum.Tests {
     }
 
     @Test("QuantumSimulator")
+    operation TestDiagonal() : Unit {
+        AllEqualityFactI(Diagonal([[1, 2, 3], [4, 5, 6], [7, 8, 9]]), [1, 5, 9], "Diagonal failed");
+    }
+
+    @Test("QuantumSimulator")
     operation TestWindows() : Unit {
         let EqualIntA = EqualA<Int>(EqualI, _, _);
         let EqualIntAA = EqualA<Int[]>(EqualIntA, _, _);
