@@ -15,6 +15,10 @@ namespace Microsoft.Quantum.Arrays {
     /// The first array must either be
     /// of the same length as the second one, or can have one more element.
     ///
+    /// # Type Parameters
+    /// ## 'T
+    /// The type of each element of `first` and `second`.
+    ///
     /// # Input
     /// ## first
     /// The first array to be interleaved.
