@@ -140,7 +140,7 @@ namespace Microsoft.Quantum.Arrays {
     /// # Input
     /// ## mapper
     /// A function from `'TInput` to `'TOutput[]` that is used to map array elements.
-    /// ## range
+    /// ## array
     /// An array of elements.
     ///
     /// # Output

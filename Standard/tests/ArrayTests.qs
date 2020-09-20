@@ -322,6 +322,20 @@ namespace Microsoft.Quantum.Tests {
         Fact(EqualIntAA(Windows(3, [1, 2, 3]), [[1, 2, 3]]), "unexpected windows");
         Fact(EqualIntAA(Windows(4, [1, 2, 3]), new Int[][0]), "unexpected windows");
     }
+
+    @Test("QuantumSimulator")
+    operation TestPrefixes() : Unit {
+        let prefixes = Prefixes([0, 1, 1, 2, 3, 5]);
+
+        EqualityFactI(Length(prefixes), 7, "unexpected length for prefixes");
+        EqualityFactI(Length(prefixes[0]), 0, "unexpected prefix");
+        AllEqualityFactI(prefixes[1], [0], "unexpected prefix");
+        AllEqualityFactI(prefixes[2], [0, 1], "unexpected prefix");
+        AllEqualityFactI(prefixes[3], [0, 1, 1], "unexpected prefix");
+        AllEqualityFactI(prefixes[4], [0, 1, 1, 2], "unexpected prefix");
+        AllEqualityFactI(prefixes[5], [0, 1, 1, 2, 3], "unexpected prefix");
+        AllEqualityFactI(prefixes[6], [0, 1, 1, 2, 3, 5], "unexpected prefix");
+    }
 }
 
 
