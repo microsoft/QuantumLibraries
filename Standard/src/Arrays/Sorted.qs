@@ -83,7 +83,7 @@ namespace Microsoft.Quantum.Arrays {
     /// The following snippet sorts an array of integers to occur in ascending
     /// order:
     /// ```Q#
-    /// Sorted(LessThanOrEqualI, [3, 17, 11, -201, -11]);
+    /// let sortedArray = Sorted(LessThanOrEqualI, [3, 17, 11, -201, -11]);
     /// ```
     /// 
     /// # Remarks
