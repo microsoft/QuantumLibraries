@@ -74,6 +74,18 @@ namespace Microsoft.Quantum.Tests {
         AllEqualityFactI(MappedOverRange(TimesI(_, 2), 1..-1..2), new Int[0], "MappedOverRange failed.");
     }
 
+    @Test("QuantumSimulator")
+    function TestFlatMapped() : Unit {
+        let numbers = FlatMapped(SequenceI(1, _), SequenceI(1, 5));
+        AllEqualityFactI(numbers, [1, 1, 2, 1, 2, 3, 1, 2, 3, 4, 1, 2, 3, 4, 5], "FlatMapped failed");
+    }
+
+    @Test("QuantumSimulator")
+    function TestFlattened() : Unit {
+        let numbers = Flattened(ConstantArray(3, SequenceI(1, 3)));
+        AllEqualityFactI(numbers, [1, 2, 3, 1, 2, 3, 1, 2, 3], "Flattened failed");
+    }
+
     function ExtremaTest () : Unit {
         let array = [-10, 10, 7, 0];
         EqualityFactI(-10, Min(array), $"Min failed.");
