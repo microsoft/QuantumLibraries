@@ -5,16 +5,22 @@ namespace Microsoft.Quantum.Arrays {
     open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Convert;
     open Microsoft.Quantum.Diagnostics;
+    open Microsoft.Quantum.Logical;
 
     /// # Summary
-    /// Returns the transpose of a matrix
+    /// Returns the transpose of a matrix represented as an array
+    /// of arrays.
     ///
     /// # Description
-    /// Input as an $r \times c$ matrix with $r$ rows and $$ columns.  The matrix
-    /// is row-based, i.e., `matrix[i][j]` access the element at row $i$ and column $j$.
+    /// Input as an $r \times c$ matrix with $r$ rows and $c$ columns.  The matrix
+    /// is row-based, i.e., `matrix[i][j]` accesses the element at row $i$ and column $j$.
     ///
     /// This function returns the $c \times r$ matrix that is the transpose of the
     /// input matrix.
+    ///
+    /// # Type Parameters
+    /// ## 'T
+    /// The type of each element of `matrix`.
     ///
     /// # Input
     /// ## matrix
@@ -33,18 +39,23 @@ namespace Microsoft.Quantum.Arrays {
         Fact(numRows > 0, "Matrix must have at least 1 row");
         let numColumns = Length(Head(matrix));
         Fact(numColumns > 0, "Matrix must have at least 1 column");
+        RectangularArrayFact(matrix, "Matrix is not a rectangular array");
 
-        return Mapped(ColumnAt(_, matrix), SequenceI(0, numColumns - 1));
+        return Mapped(ColumnAtUnchecked(_, matrix), SequenceI(0, numColumns - 1));
     }
 
     /// # Summary
-    /// Returns the array's element at given index
+    /// Returns the at the given index of an array.
+    ///
+    /// # Type Parameters
+    /// ## 'T
+    /// The type of each element of `array`.
     ///
     /// # Input
     /// ## index
     /// Index of element
     /// ## array
-    /// Array
+    /// The array being indexed.
     ///
     /// # Remark
     /// This function is more general than `LookupFunction`, since
@@ -68,12 +79,17 @@ namespace Microsoft.Quantum.Arrays {
     /// - Microsoft.Quantum.Arrays.LookupFunction
     /// - Microsoft.Quantum.Arrays.ElementsAt
     function ElementAt<'T>(index : Int, array : 'T[]) : 'T {
-        Fact(index < Length(array), "Index is out of bound");
+        Fact(index >= 0 and index < Length(array), "Index is out of bound");
         return array[index];
     }
 
     /// # Summary
     /// Returns the array's elements at a given range
+    /// of indices.
+    ///
+    /// # Type Parameters
+    /// ## 'T
+    /// The type of each element of `array`.
     ///
     /// # Input
     /// ## range
@@ -101,12 +117,16 @@ namespace Microsoft.Quantum.Arrays {
     }
 
     /// # Summary
-    /// Extracts a column in a matrix
+    /// Extracts a column from a matrix.
     ///
-    /// # Dimension
+    /// # Description
     /// This function extracts a column in a matrix in row-wise order.
     /// Extracting a row corrsponds to element access of the first index
     /// and therefore requires no further treatment.
+    ///
+    /// # Type Parameters
+    /// ## 'T
+    /// The type of each element of `matrix`.
     ///
     /// # Input
     /// ## column
@@ -123,11 +143,126 @@ namespace Microsoft.Quantum.Arrays {
     ///
     /// # See Also
     /// - Microsoft.Quantum.Arrays.Transposed
+    /// - Microsoft.Quantum.Arrays.Diagonal
     function ColumnAt<'T>(column : Int, matrix : 'T[][]) : 'T[] {
+        RectangularArrayFact(matrix, "Matrix is not a rectangular array");
+        return ColumnAtUnchecked(column, matrix);
+    }
+
+    /// # Summary
+    /// This function does not check for matrix shape
+    ///
+    /// # Description
+    /// This function can be used in other multidimensional functions,
+    /// which already check the input matrix for a valid rectangular shape.
+    internal function ColumnAtUnchecked<'T>(column : Int, matrix : 'T[][]) : 'T[] {
         return Mapped(
                 Compose(
                     ElementAt<'T>(column, _),
                     LookupFunction(matrix)
                 ), RangeAsIntArray(IndexRange(matrix)));
+    }
+
+    /// # Summary
+    /// Returns an array of diagonal elements of an array in square shape
+    ///
+    /// # Type Parameters
+    /// ## 'T
+    /// The type of each element of `matrix`.
+    ///
+    /// # Input
+    /// ## matrix
+    /// 2-dimensional matrix in row-wise order
+    ///
+    /// # Example
+    /// ```Q#
+    /// let matrix = [[1, 2, 3], [4, 5, 6], [7, 8, 9]];
+    /// let diagonal = Diagonal(matrix);
+    /// // same as: column = [1, 5, 9]
+    /// ```
+    ///
+    /// # See Also
+    /// - Microsoft.Quantum.Arrays.Transposed
+    function Diagonal<'T>(matrix : 'T[][]) : 'T[] {
+        SquareArrayFact(matrix, "Matrix is not a rectangular array");
+
+        return Mapped(ElementAtDiagonal(_, matrix), SequenceI(0, Length(matrix) - 1));
+    }
+
+    internal function ElementAtDiagonal<'T>(index : Int, matrix : 'T[][]) : 'T {
+        return matrix[index][index];
+    }
+
+    /// # Summary
+    /// Asserts that a 2-dimensional array has a rectangular shape
+    ///
+    /// # Description
+    /// This function asserts that each row in an array has the same length.
+    ///
+    /// # Type Parameters
+    /// ## 'T
+    /// The type of each element of `array`.
+    ///
+    /// # Input
+    /// ## array
+    /// A 2-dimensional array of elements
+    /// ## message
+    /// A message to be printed if the array is not a rectangular array
+    ///
+    /// # Example
+    /// ```Q#
+    /// RectangularArrayFact([[1, 2], [3, 4]], "Array is not rectangular");       // okay
+    /// RectangularArrayFact([[1, 2, 3], [4, 5, 6]], "Array is not rectangular"); // okay
+    /// RectangularArrayFact([[1, 2], [3, 4, 5]], "Array is not rectangular");    // will fail
+    /// ```
+    ///
+    /// # See Also
+    /// - Microsoft.Quantum.Arrays.SquareArrayFact
+    function RectangularArrayFact<'T>(array : 'T[][], message : String) : Unit {
+        if (Length(array) == 0) {
+            return ();
+        } else {
+            let numColumns = Length(Head(array));
+            if (Any(Compose(NotEqualI(numColumns, _), Length<'T>), Rest(array))) {
+                fail message;
+            }
+        }
+    }
+
+    /// # Summary
+    /// Asserts that a 2-dimensional array has a square shape
+    ///
+    /// # Description
+    /// This function asserts that each row in an array has
+    /// as many elements as there are rows (elements) in the array.
+    ///
+    /// # Type Parameters
+    /// ## 'T
+    /// The type of each element of `array`.
+    ///
+    /// # Input
+    /// ## array
+    /// A 2-dimensional array of elements
+    /// ## message
+    /// A message to be printed if the array is not a square array
+    ///
+    /// # Example
+    /// ```Q#
+    /// SquareArrayFact([[1, 2], [3, 4]], "Array is not a square");       // okay
+    /// SquareArrayFact([[1, 2, 3], [4, 5, 6]], "Array is not a square"); // will fail
+    /// SquareArrayFact([[1, 2], [3, 4, 5]], "Array is not a square");    // will fail
+    /// ```
+    ///
+    /// # See Also
+    /// - Microsoft.Quantum.Arrays.RectangularArrayFact
+    function SquareArrayFact<'T>(array : 'T[][], message : String) : Unit {
+        if (Length(array) == 0) {
+            return ();
+        } else {
+            let numColumns = Length(array);
+            if (Any(Compose(NotEqualI(numColumns, _), Length<'T>), array)) {
+                fail message;
+            }
+        }
     }
 }

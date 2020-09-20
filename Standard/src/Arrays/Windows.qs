@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 namespace Microsoft.Quantum.Arrays {
+
     /// # Summary
     /// Returns all consecutive subarrays of length `size`.
     ///
@@ -13,20 +14,24 @@ namespace Microsoft.Quantum.Arrays {
     ///
     /// If `size <= 0` or `size > n`, an empty array is returned.
     ///
+    /// # Type Parameters
+    /// ## 'T
+    /// The type of `array` elements.
+    ///
     /// # Input
     /// ## size
-    /// Length of the subarrays
+    /// Length of the subarrays.
     ///
-    /// ## arr
-    /// Array
+    /// ## array
+    /// An array of elements.
     ///
     /// # Example
     /// ```Q#
     /// // same as [[1, 2, 3], [2, 3, 4], [3, 4, 5]]
     /// let windows = Windows(3, [1, 2, 3, 4, 5]);
     /// ```
-    function Windows<'T>(size : Int, arr : 'T[]) : 'T[][] {
-        let n = Length(arr);
+    function Windows<'T>(size : Int, array : 'T[]) : 'T[][] {
+        let n = Length(array);
 
         if (size <= 0 or size > n) {
             return new 'T[][0];
@@ -35,9 +40,37 @@ namespace Microsoft.Quantum.Arrays {
         mutable result = new 'T[][n + 1 - size];
 
         for (i in 0..n - size) {
-            set result w/= i <- arr[i..i + size - 1];
+            set result w/= i <- array[i..i + size - 1];
         }
 
         return result;
+    }
+
+    /// # Summary
+    /// Given an array, returns all its prefixes.
+    ///
+    /// # Description
+    /// Returns an array of all prefixes, starting with the empty
+    /// array until the complete array.
+    ///
+    /// # Type Parameters
+    /// ## 'T
+    /// The type of `array` elements.
+    ///
+    /// # Input
+    /// ## array
+    /// An array of elements.
+    ///
+    /// # Example
+    /// ```Q#
+    /// let prefixes = Prefixes([23, 42, 144]);
+    /// // prefixes = [EmptyArray<Int>(), [23], [23, 42], [23, 42, 144]]
+    /// ```
+    function Prefixes<'T>(array : 'T[]) : 'T[][] {
+        return MappedOverRange(Prefix(_, array), -1..Length(array) - 1);
+    }
+
+    internal function Prefix<'T>(to : Int, array : 'T[]) : 'T[] {
+        return array[0..to];
     }
 }

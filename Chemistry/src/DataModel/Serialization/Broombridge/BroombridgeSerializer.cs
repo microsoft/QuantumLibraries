@@ -92,7 +92,7 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
         /// </summary>
         internal static Dictionary<string, VersionNumber> VersionNumberDict = new Dictionary<string, VersionNumber>()
         {
-            // https://github.com/Microsoft/Quantum/blob/master/Chemistry/Schema/broombridge-0.1.schema.json
+            // https://github.com/microsoft/Quantum/blob/main/Chemistry/Schema/broombridge-0.1.schema.json
             ["0.1"] = VersionNumber.v0_1,
             ["broombridge-0.1.schema"] = VersionNumber.v0_1,
             // TODO: URL of 0.2 schema.

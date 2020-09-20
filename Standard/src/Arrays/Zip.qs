@@ -156,6 +156,9 @@ namespace Microsoft.Quantum.Arrays {
     /// let split = Unzipped([(6, true), (5, false), (5, false), (3, false), (2, true), (1, false)]);
     /// ```
     ///
+    /// # Remark
+    /// This function is equivalent to `(Mapped(Fst<'T, 'U>, arr), Mapped(Snd<'T, 'U>, arr))`.
+    ///
     /// # See Also
     /// - Zip
     function Unzipped<'T, 'U>(arr : ('T, 'U)[]) : ('T[], 'U[]) {
