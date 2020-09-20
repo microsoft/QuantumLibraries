@@ -126,6 +126,40 @@ namespace Microsoft.Quantum.Arrays {
     }
 
     /// # Summary
+    /// Returns tuple of first and all remaining elements of the array.
+    ///
+    /// # Type Parameters
+    /// ## 'A
+    /// The type of the array elements.
+    ///
+    /// # Input
+    /// ## array
+    /// An array with at least one element.
+    ///
+    /// # Output
+    /// A tuple of first and all remaining elements of the array.
+    function HeadAndRest<'A>(array : 'A[]) : ('A, 'A[]) {
+        return (Head(array), Rest(array));
+    }
+
+    /// # Summary
+    /// Returns tuple of all but one and the last element of the array.
+    ///
+    /// # Type Parameters
+    /// ## 'A
+    /// The type of the array elements.
+    ///
+    /// # Input
+    /// ## array
+    /// An array with at least one element.
+    ///
+    /// # Output
+    /// A tuple of all but one and the last element of the array.
+    function MostAndTail<'A>(array : 'A[]) : ('A[], 'A) {
+        return (Most(array), Tail(array));
+    }
+
+    /// # Summary
     /// Creates an array of given length with all elements equal to given value.
     ///
     /// # Input
