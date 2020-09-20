@@ -87,6 +87,46 @@ namespace Microsoft.Quantum.Arrays {
     }
 
     /// # Summary
+    /// Given a range and a function that takes an integer as input,
+    /// returns a new array that consists
+    /// of the images of the range values under the function.
+    ///
+    /// # Remarks
+    /// The function is defined for generic types, i.e., whenever we have
+    /// a function `mapper: Int -> 'T` we can map the values
+    /// of the range and produce an array of type `'T[]`.
+    ///
+    /// # Type Parameters
+    /// ## 'T
+    /// The result type of the `mapper` function.
+    ///
+    /// # Input
+    /// ## mapper
+    /// A function from `Int` to `'T` that is used to map range values.
+    /// ## range
+    /// A range of integers.
+    ///
+    /// # Output
+    /// An array `'T[]` of elements that are mapped by the `mapper` function.
+    function MappedOverRange<'T> (mapper : (Int -> 'T), range : Range) : 'T[] {
+        let start = RangeStart(range);
+        let step = RangeStep(range);
+        let end = RangeEnd(range);
+        if ((end - start) / step >= 0) {
+            let nTerms = (end - start) / step + 1;
+            mutable resultArray = new 'T[nTerms];
+            mutable idxElement = 0;
+            for (elem in range) {
+                set resultArray w/= idxElement <- mapper(elem);
+                set idxElement += 1;
+            }
+            return resultArray;
+        } else {
+            return new 'T[0];
+        }
+    }
+
+    /// # Summary
     /// Given an array and an operation that is defined
     /// for the elements of the array, returns a new array that consists
     /// of the images of the original array under the operation.
