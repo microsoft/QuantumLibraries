@@ -109,6 +109,16 @@ namespace Microsoft.Quantum.Arrays {
     ///
     /// # Output
     /// An array `'T[]` of elements that are mapped by the `mapper` function.
+    ///
+    /// # Example
+    /// This example adds 1 to a range of even numbers:
+    /// ```Q#
+    /// let numbers = MappedOverRange(PlusI(1, _), 0..2..10);
+    /// // numbers = [1, 3, 5, 7, 9, 11]
+    /// ```
+    ///
+    /// # See Also
+    /// - Microsoft.Quantum.Arrays.Mapped
     function MappedOverRange<'T> (mapper : (Int -> 'T), range : Range) : 'T[] {
         let start = RangeStart(range);
         let step = RangeStep(range);

@@ -6,6 +6,7 @@ namespace Microsoft.Quantum.Arrays {
     open Microsoft.Quantum.Convert;
     open Microsoft.Quantum.Diagnostics;
     open Microsoft.Quantum.Logical;
+    open Microsoft.Quantum.Math;
 
     /// # Summary
     /// Returns the transpose of a matrix represented as an array
@@ -164,7 +165,11 @@ namespace Microsoft.Quantum.Arrays {
     }
 
     /// # Summary
-    /// Returns an array of diagonal elements of an array in square shape
+    /// Returns an array of diagonal elements of a 2-dimensional array
+    ///
+    /// # Description
+    /// If the 2-dimensional array has not a square shape, the diagonal over
+    /// the minimum over the number of rows and columns will be returned.
     ///
     /// # Type Parameters
     /// ## 'T
@@ -184,9 +189,12 @@ namespace Microsoft.Quantum.Arrays {
     /// # See Also
     /// - Microsoft.Quantum.Arrays.Transposed
     function Diagonal<'T>(matrix : 'T[][]) : 'T[] {
-        SquareArrayFact(matrix, "Matrix is not a rectangular array");
+        RectangularArrayFact(matrix, "Matrix is not a rectangular array");
 
-        return Mapped(ElementAtDiagonal(_, matrix), SequenceI(0, Length(matrix) - 1));
+        let numRows = Length(matrix);
+        let numColumns = numRows == 0 ? 0 | Length(Head(matrix));
+
+        return MappedOverRange(ElementAtDiagonal(_, matrix), 0..(MinI(numRows, numColumns) - 1));
     }
 
     internal function ElementAtDiagonal<'T>(index : Int, matrix : 'T[][]) : 'T {
@@ -194,7 +202,7 @@ namespace Microsoft.Quantum.Arrays {
     }
 
     /// # Summary
-    /// Asserts that a 2-dimensional array has a rectangular shape
+    /// Represents a condition that a 2-dimensional array has a rectangular shape
     ///
     /// # Description
     /// This function asserts that each row in an array has the same length.
@@ -230,7 +238,7 @@ namespace Microsoft.Quantum.Arrays {
     }
 
     /// # Summary
-    /// Asserts that a 2-dimensional array has a square shape
+    /// Represents a condition that a 2-dimensional array has a square shape
     ///
     /// # Description
     /// This function asserts that each row in an array has

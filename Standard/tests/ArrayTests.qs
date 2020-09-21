@@ -308,6 +308,8 @@ namespace Microsoft.Quantum.Tests {
     @Test("QuantumSimulator")
     operation TestDiagonal() : Unit {
         AllEqualityFactI(Diagonal([[1, 2, 3], [4, 5, 6], [7, 8, 9]]), [1, 5, 9], "Diagonal failed");
+        AllEqualityFactI(Diagonal([[1, 2, 3], [4, 5, 6]]), [1, 5], "Diagonal failed");
+        AllEqualityFactI(Diagonal([[1, 2], [4, 5], [7, 8]]), [1, 5], "Diagonal failed");
     }
 
     @Test("QuantumSimulator")
@@ -325,16 +327,39 @@ namespace Microsoft.Quantum.Tests {
 
     @Test("QuantumSimulator")
     operation TestPrefixes() : Unit {
-        let prefixes = Prefixes([0, 1, 1, 2, 3, 5]);
+        let array = [0, 1, 1, 2, 3, 5];
+        let prefixes = Prefixes(array);
 
-        EqualityFactI(Length(prefixes), 7, "unexpected length for prefixes");
-        EqualityFactI(Length(prefixes[0]), 0, "unexpected prefix");
-        AllEqualityFactI(prefixes[1], [0], "unexpected prefix");
-        AllEqualityFactI(prefixes[2], [0, 1], "unexpected prefix");
-        AllEqualityFactI(prefixes[3], [0, 1, 1], "unexpected prefix");
-        AllEqualityFactI(prefixes[4], [0, 1, 1, 2], "unexpected prefix");
-        AllEqualityFactI(prefixes[5], [0, 1, 1, 2, 3], "unexpected prefix");
-        AllEqualityFactI(prefixes[6], [0, 1, 1, 2, 3, 5], "unexpected prefix");
+        EqualityFactI(Length(prefixes), Length(array), "unexpected length for prefixes");
+        AllEqualityFactI(prefixes[0], [0], "unexpected prefix");
+        AllEqualityFactI(prefixes[1], [0, 1], "unexpected prefix");
+        AllEqualityFactI(prefixes[2], [0, 1, 1], "unexpected prefix");
+        AllEqualityFactI(prefixes[3], [0, 1, 1, 2], "unexpected prefix");
+        AllEqualityFactI(prefixes[4], [0, 1, 1, 2, 3], "unexpected prefix");
+        AllEqualityFactI(prefixes[5], [0, 1, 1, 2, 3, 5], "unexpected prefix");
+    }
+
+    @Test("QuantumSimulator")
+    operation TestSuccessfulRectangularFact() : Unit {
+        RectangularArrayFact([[1, 2], [3, 4]], "Array is not rectangular");
+        RectangularArrayFact([[1, 2, 3], [4, 5, 6]], "Array is not rectangular");
+    }
+
+    operation RectangularFactTestShouldFail() : Unit {
+        RectangularArrayFact([[1, 2], [3, 4, 5]], "Array is not rectangular");
+    }
+
+    @Test("QuantumSimulator")
+    operation TestSuccessfulSquareFact() : Unit {
+        SquareArrayFact([[1, 2], [3, 4]], "Array is not a square");
+    }
+
+    operation SquareFact1TestShouldFail() : Unit {
+        SquareArrayFact([[1, 2, 3], [4, 5, 6]], "Array is not a square");
+    }
+
+    operation SquareFact2TestShouldFail() : Unit {
+        SquareArrayFact([[1, 2], [3, 4, 5]], "Array is not a square");
     }
 }
 
