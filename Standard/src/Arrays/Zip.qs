@@ -36,6 +36,7 @@ namespace Microsoft.Quantum.Arrays {
     /// # See Also
     /// - Zip3
     /// - Zip4
+    /// - Unzipped
     function Zip<'T, 'U> (left : 'T[], right : 'U[]) : ('T, 'U)[] {
         let nElements = Length(left) < Length(right)
                         ? Length(left)
@@ -131,6 +132,46 @@ namespace Microsoft.Quantum.Arrays {
         return output;
     }
 
+    /// # Summary
+    /// Given an array of 2-tuples, returns a tuple of two arrays, each containing
+    /// the elements of the tuples of the input array.
+    ///
+    /// # Type Parameters
+    /// ## 'T
+    /// The type of the first element in each tuple
+    /// ## 'U
+    /// The type of the second element in each tuple
+    ///
+    /// # Input
+    /// ## arr
+    /// An array containing 2-tuples
+    ///
+    /// # Output
+    /// Two arrays, the first one containing all first elements of the input
+    /// tuples, the second one containing all second elements of the input tuples.
+    ///
+    /// # Example
+    /// ```Q#
+    /// // split is same as ([6, 5, 5, 3, 2, 1], [true, false, false, false, true, false])
+    /// let split = Unzipped([(6, true), (5, false), (5, false), (3, false), (2, true), (1, false)]);
+    /// ```
+    ///
+    /// # Remark
+    /// This function is equivalent to `(Mapped(Fst<'T, 'U>, arr), Mapped(Snd<'T, 'U>, arr))`.
+    ///
+    /// # See Also
+    /// - Zip
+    function Unzipped<'T, 'U>(arr : ('T, 'U)[]) : ('T[], 'U[]) {
+        let nElements = Length(arr);
+        mutable first = new 'T[nElements];
+        mutable second = new 'U[nElements];
+        for (idxElement in 0 .. nElements - 1) {
+            let (left, right) = arr[idxElement];
+            set first w/= idxElement <- left;
+            set second w/= idxElement <- right;
+        }
+        return (first, second);
+    }
 }
 
 

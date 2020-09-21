@@ -63,10 +63,6 @@ namespace Microsoft.Quantum.Arrays {
         return array[0 .. Length(array) - 2];
     }
 
-    internal function Lookup<'T> (array : 'T[], index : Int) : 'T {
-        return array[index];
-    }
-
     /// # Summary
     /// Given an array, returns a function which returns elements of that
     /// array.
@@ -90,7 +86,7 @@ namespace Microsoft.Quantum.Arrays {
     /// where functions are used to avoid the need to record an entire array
     /// in memory.
     function LookupFunction<'T> (array : 'T[]) : (Int -> 'T) {
-        return Lookup(array, _);
+        return ElementAt(_, array);
     }
 
     /// # Summary
@@ -127,6 +123,40 @@ namespace Microsoft.Quantum.Arrays {
     function Head<'A> (array : 'A[]) : 'A {
         EqualityFactB(Length(array) > 0, true, $"Array must be of the length at least 1");
         return array[0];
+    }
+
+    /// # Summary
+    /// Returns a tuple of first and all remaining elements of the array.
+    ///
+    /// # Type Parameters
+    /// ## 'A
+    /// The type of the array elements.
+    ///
+    /// # Input
+    /// ## array
+    /// An array with at least one element.
+    ///
+    /// # Output
+    /// A tuple of first and all remaining elements of the array.
+    function HeadAndRest<'A>(array : 'A[]) : ('A, 'A[]) {
+        return (Head(array), Rest(array));
+    }
+
+    /// # Summary
+    /// Returns a tuple of all but one and the last element of the array.
+    ///
+    /// # Type Parameters
+    /// ## 'A
+    /// The type of the array elements.
+    ///
+    /// # Input
+    /// ## array
+    /// An array with at least one element.
+    ///
+    /// # Output
+    /// A tuple of all but one and the last element of the array.
+    function MostAndTail<'A>(array : 'A[]) : ('A[], 'A) {
+        return (Most(array), Tail(array));
     }
 
     /// # Summary
