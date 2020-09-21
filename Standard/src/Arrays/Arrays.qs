@@ -126,7 +126,7 @@ namespace Microsoft.Quantum.Arrays {
     }
 
     /// # Summary
-    /// Returns tuple of first and all remaining elements of the array.
+    /// Returns a tuple of first and all remaining elements of the array.
     ///
     /// # Type Parameters
     /// ## 'A
@@ -143,7 +143,7 @@ namespace Microsoft.Quantum.Arrays {
     }
 
     /// # Summary
-    /// Returns tuple of all but one and the last element of the array.
+    /// Returns a tuple of all but one and the last element of the array.
     ///
     /// # Type Parameters
     /// ## 'A

@@ -34,7 +34,7 @@ namespace Microsoft.Quantum.Arrays {
     ///
     /// # Remark
     /// This function generalizes `Fold` since
-    /// `Tail(CumulativeFolded(fn, state, array)) == Fold(fn, state, array)`.
+    /// `Tail(CumulativeFolded(fn, state, array))` is the same as `Fold(fn, state, array)`.
     ///
     /// # Example
     /// ```Q#
