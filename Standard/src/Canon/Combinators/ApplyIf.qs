@@ -34,7 +34,7 @@ namespace Microsoft.Quantum.Canon {
     /// ```Q#
     /// let bitstring = [true, false, true];
     /// using (register = Qubit(3)) {
-    ///     ApplyToEach(ApplyIf(X, _, _), Zip(bitstring, register));
+    ///     ApplyToEach(ApplyIf(X, _, _), Zipped(bitstring, register));
     ///     // register should now be in the state |101⟩.
     ///     ...
     /// }
@@ -77,7 +77,7 @@ namespace Microsoft.Quantum.Canon {
     /// ```Q#
     /// let bitstring = [true, false, true];
     /// using (register = Qubit(3)) {
-    ///     ApplyToEach(ApplyIf(X, _, _), Zip(bitstring, register));
+    ///     ApplyToEach(ApplyIf(X, _, _), Zipped(bitstring, register));
     ///     // register should now be in the state |101⟩.
     ///     ...
     /// }
@@ -120,7 +120,7 @@ namespace Microsoft.Quantum.Canon {
     /// ```Q#
     /// let bitstring = [true, false, true];
     /// using (register = Qubit(3)) {
-    ///     ApplyToEach(ApplyIf(X, _, _), Zip(bitstring, register));
+    ///     ApplyToEach(ApplyIf(X, _, _), Zipped(bitstring, register));
     ///     // register should now be in the state |101⟩.
     ///     ...
     /// }
@@ -164,7 +164,7 @@ namespace Microsoft.Quantum.Canon {
     /// ```Q#
     /// let bitstring = [true, false, true];
     /// using (register = Qubit(3)) {
-    ///     ApplyToEach(ApplyIf(X, _, _), Zip(bitstring, register));
+    ///     ApplyToEach(ApplyIf(X, _, _), Zipped(bitstring, register));
     ///     // register should now be in the state |101⟩.
     ///     ...
     /// }

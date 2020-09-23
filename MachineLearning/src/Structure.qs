@@ -63,7 +63,7 @@ namespace Microsoft.Quantum.MachineLearning {
     }
 
     function _UncontrolledSpanSequence(idxsQubits : Int[]) : (Int, Int[])[] {
-        return Zip(
+        return ped(
             idxsQubits,
             ConstantArray(Length(idxsQubits), new Int[0])
         );

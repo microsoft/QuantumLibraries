@@ -64,7 +64,7 @@ namespace Microsoft.Quantum.Logical {
     /// # Summary
     /// Used to implement `LexographicComparison`.
     internal function LessThanLexographic<'T>(comparison : (('T, 'T) -> Bool), left : 'T[], right : 'T[]) : Bool {
-        for ((l, r) in Zip(left, right)) {
+        for ((l, r) in Zipped(left, right)) {
             let lessThanOrEqual = comparison(l, r);
             let greaterThanOrEqual = comparison(r, l);
             let equal = lessThanOrEqual and greaterThanOrEqual;
