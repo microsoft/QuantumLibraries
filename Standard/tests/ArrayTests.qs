@@ -125,10 +125,9 @@ namespace Microsoft.Quantum.Tests {
     }
 
 
-    function ExcludeTest () : Unit {
-
+    function ExcludingTest () : Unit {
         let array = [10, 11, 12, 13, 14, 15];
-        Ignore(Mapped(EqualityFactI(_, _, $"Exclude failed."), Zipped([10, 11, 13, 14], Exclude([2, 5], array))));
+        Ignore(Mapped(EqualityFactI(_, _, $"Excluding failed."), Zipped([10, 11, 13, 14], Excluding([2, 5], array))));
     }
 
 

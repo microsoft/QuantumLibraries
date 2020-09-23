@@ -144,6 +144,8 @@ namespace Microsoft.Quantum.Arrays {
     /// // The following line returns [10, 12, 15].
     /// let subarray = Exclude([1, 3, 4], array);
     /// ```
-    // function Exclude<'T> (remove : Int[], array : 'T[]) : 'T[] {
+    function Exclude<'T>(remove : Int[], array : 'T[]) : 'T[] {
+        return Excluding(remove, array);
+    }
 
 }
