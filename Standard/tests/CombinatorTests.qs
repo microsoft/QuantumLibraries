@@ -134,14 +134,14 @@ namespace Microsoft.Quantum.Tests {
 
     operation CControlledActual (op : (Qubit => Unit), target : Qubit[]) : Unit {
 
-        ApplyToEach(CControlled(op), Zip([true, false, true], target));
+        ApplyToEach(CControlled(op), Zipped([true, false, true], target));
     }
 
 
     operation CControlledActualC (op : (Qubit => Unit is Ctl), target : Qubit[]) : Unit {
 
         body (...) {
-            ApplyToEachC(CControlledC(op), Zip([true, false, true], target));
+            ApplyToEachC(CControlledC(op), Zipped([true, false, true], target));
         }
 
         controlled distribute;
@@ -151,7 +151,7 @@ namespace Microsoft.Quantum.Tests {
     operation CControlledActualA (op : (Qubit => Unit is Adj), target : Qubit[]) : Unit {
 
         body (...) {
-            ApplyToEachA(CControlledA(op), Zip([true, false, true], target));
+            ApplyToEachA(CControlledA(op), Zipped([true, false, true], target));
         }
 
         adjoint invert;
@@ -161,7 +161,7 @@ namespace Microsoft.Quantum.Tests {
     operation CControlledActualCA (op : (Qubit => Unit is Adj + Ctl), target : Qubit[]) : Unit {
 
         body (...) {
-            ApplyToEachCA(CControlledCA(op), Zip([true, false, true], target));
+            ApplyToEachCA(CControlledCA(op), Zipped([true, false, true], target));
         }
 
         adjoint invert;

@@ -279,7 +279,7 @@ namespace Microsoft.Quantum.Synthesis {
         let register = qubits!;
 
         for ((func, target) in TruthTablesFromPermutation(perm, variableOrder)) {
-            ApplyXControlledOnTruthTable(func, Exclude([target], register), register[target]);
+            ApplyXControlledOnTruthTable(func, Excluding([target], register), register[target]);
         }
     }
 }

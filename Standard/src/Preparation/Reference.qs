@@ -22,7 +22,7 @@ namespace Microsoft.Quantum.Preparation {
             fail $"Left and right registers must be the same length.";
         }
 
-        for ((leftQubit, rightQubit) in Zip(left, right)) {
+        for ((leftQubit, rightQubit) in Zipped(left, right)) {
             H(leftQubit);
             Controlled X([leftQubit], rightQubit);
         }
