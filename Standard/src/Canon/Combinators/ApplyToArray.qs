@@ -25,6 +25,13 @@ namespace Microsoft.Quantum.Canon {
     /// - Microsoft.Quantum.Canon.ApplyToHeadA
     /// - Microsoft.Quantum.Canon.ApplyToHeadC
     /// - Microsoft.Quantum.Canon.ApplyToHeadCA
+    ///
+    /// # Example
+    /// The following Q# snippets are equivalent:
+    /// ```Q#
+    /// ApplyToHead(H, register);
+    /// H(Head(register));
+    /// ```
     operation ApplyToHead<'T>(op : ('T => Unit), targets : 'T[]) : Unit {
         op(Head(targets));
     }
