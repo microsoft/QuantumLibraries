@@ -39,7 +39,7 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner.VQE {
     
         mutable jwTermEnergy = 0.;
 
-	for ((coeff, op) in Zip(coeffs, ops)) {
+	for ((coeff, op) in Zipped(coeffs, ops)) {
             // Only perform computation if the coefficient is significant enough
             if (AbsD(coeff) >= 1e-10) {
                 // Compute expectation value using the fast frequency estimator, add contribution to Jordan-Wigner term energy
@@ -95,7 +95,7 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner.VQE {
                 mutable compactOp = compactOps[iOp];
 
                 mutable op = ConstantArray(nQubits, PauliI);
-                for ((idx, pauli) in Zip(indices, compactOp)) {
+                for ((idx, pauli) in Zipped(indices, compactOp)) {
                     set op w/= idx <- pauli;
                 }
                 for (i in indices[0]+1..indices[1]-1) {

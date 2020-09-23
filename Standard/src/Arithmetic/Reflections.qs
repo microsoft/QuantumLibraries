@@ -31,7 +31,7 @@ namespace Microsoft.Quantum.Arithmetic {
             // of X instructions that flip all the zeros in our index.
             ApplyToEachCA(
                 CControlledCA(X),
-                Zip(Mapped(Not, IntAsBoolArray(index, Length(reg!))), reg!)
+                Zipped(Mapped(Not, IntAsBoolArray(index, Length(reg!))), reg!)
             );
         } apply {
             Controlled Z(Most(reg!), Tail(reg!));
