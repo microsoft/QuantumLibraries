@@ -1,8 +1,9 @@
-// Copyright (c) Microsoft Corporation.
+// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
 namespace Microsoft.Quantum.Arrays {
-    open Microsoft.Quantum.Math;
+    open Microsoft.Quantum.Arithmetic;
+    open Microsoft.Quantum.Logical;
 
     /// # Summary
     /// Given two arrays, returns a new array of pairs such that each pair
@@ -30,24 +31,16 @@ namespace Microsoft.Quantum.Arrays {
     /// ```qsharp
     /// let left = [1, 3, 71];
     /// let right = [false, true];
-    /// let pairs = Zipped(left, right); // [(1, false), (3, true)]
+    /// let pairs = Zip(left, right); // [(1, false), (3, true)]
     /// ```
     ///
     /// # See Also
-    /// - Microsoft.Quantum.Arrays.Zipped3
-    /// - Microsoft.Quantum.Arrays.Zipped4
-    /// - Microsoft.Quantum.Arrays.Unzipped
-    function Zipped<'T, 'U>(left : 'T[], right : 'U[]) : ('T, 'U)[] {
-        let nElements = Length(left) < Length(right)
-                        ? Length(left)
-                        | Length(right);
-        mutable output = new ('T, 'U)[nElements];
-
-        for (idxElement in 0 .. nElements - 1) {
-            set output w/= idxElement <- (left[idxElement], right[idxElement]);
-        }
-
-        return output;
+    /// - Zip3
+    /// - Zip4
+    /// - Unzipped
+    @Deprecated("Microsoft.Quantum.Arrays.Zipped")
+    function Zip<'T, 'U> (left : 'T[], right : 'U[]) : ('T, 'U)[] {
+        return Zipped(left, right);
     }
 
     /// # Summary
@@ -76,19 +69,14 @@ namespace Microsoft.Quantum.Arrays {
     /// be as long as the shorter of the inputs.
     ///
     /// # See Also
-    /// - Microsoft.Quantum.Arrays.Zipped
-    /// - Microsoft.Quantum.Arrays.Zipped4
-    function Zipped3<'T1, 'T2, 'T3> (first : 'T1[], second : 'T2[], third : 'T3[]) : ('T1, 'T2, 'T3)[] {
-        let nElements = Min([Length(first), Length(second), Length(third)]);
-        mutable output = new ('T1, 'T2, 'T3)[nElements];
-
-        for (idxElement in 0 .. nElements - 1) {
-            set output w/= idxElement <- (first[idxElement], second[idxElement], third[idxElement]);
-        }
-
-        return output;
+    /// - Zip
+    /// - Zip4
+    @Deprecated("Microsoft.Quantum.Arrays.Zipped3")
+    function Zip3<'T1, 'T2, 'T3> (first : 'T1[], second : 'T2[], third : 'T3[]) : ('T1, 'T2, 'T3)[] {
+        return Zipped3(first, second, third);
     }
 
+    
     /// # Summary
     /// Given four arrays, returns a new array of 4-tuples such that each 4-tuple
     /// contains an element from each original array.
@@ -119,59 +107,45 @@ namespace Microsoft.Quantum.Arrays {
     /// be as long as the shorter of the inputs.
     ///
     /// # See Also
-    /// - Microsoft.Quantum.Arrays.Zipped
-    /// - Microsoft.Quantum.Arrays.Zipped3
-    function Zipped4<'T1, 'T2, 'T3, 'T4> (first : 'T1[], second : 'T2[], third : 'T3[], fourth : 'T4[]) : ('T1, 'T2, 'T3, 'T4)[] {
-        let nElements = Min([Length(first), Length(second), Length(third), Length(fourth)]);
-        mutable output = new ('T1, 'T2, 'T3, 'T4)[nElements];
-
-        for (idxElement in 0 .. nElements - 1) {
-            set output w/= idxElement <- (first[idxElement], second[idxElement], third[idxElement], fourth[idxElement]);
-        }
-
-        return output;
+    /// - Zip
+    /// - Zip3
+    @Deprecated("Microsoft.Quantum.Arrays.Zipped4")
+    function Zip4<'T1, 'T2, 'T3, 'T4> (first : 'T1[], second : 'T2[], third : 'T3[], fourth : 'T4[]) : ('T1, 'T2, 'T3, 'T4)[] {
+        return Zipped4(first, second, third, fourth);
     }
 
+    
+
     /// # Summary
-    /// Given an array of 2-tuples, returns a tuple of two arrays, each containing
-    /// the elements of the tuples of the input array.
+    /// Returns an array containing the elements of another array,
+    /// excluding elements at a given list of indices.
     ///
     /// # Type Parameters
     /// ## 'T
-    /// The type of the first element in each tuple
-    /// ## 'U
-    /// The type of the second element in each tuple
+    /// The type of the array elements.
     ///
     /// # Input
-    /// ## arr
-    /// An array containing 2-tuples
+    /// ## remove
+    /// An array of indices denoting which elements should be excluded
+    /// from the output.
+    /// ## array
+    /// Array of which the values in the output array are taken.
     ///
     /// # Output
-    /// Two arrays, the first one containing all first elements of the input
-    /// tuples, the second one containing all second elements of the input tuples.
+    /// An array `output` such that `output[0]` is the first element
+    /// of `array` whose index does not appear in `remove`,
+    /// such that `output[1]` is the second such element, and so
+    /// forth.
     ///
-    /// # Example
-    /// ```Q#
-    /// // split is same as ([6, 5, 5, 3, 2, 1], [true, false, false, false, true, false])
-    /// let split = Unzipped([(6, true), (5, false), (5, false), (3, false), (2, true), (1, false)]);
+    /// # Remarks
+    /// ## Example
+    /// ```qsharp
+    /// let array = [10, 11, 12, 13, 14, 15];
+    /// // The following line returns [10, 12, 15].
+    /// let subarray = Exclude([1, 3, 4], array);
     /// ```
-    ///
-    /// # Remark
-    /// This function is equivalent to `(Mapped(Fst<'T, 'U>, arr), Mapped(Snd<'T, 'U>, arr))`.
-    ///
-    /// # See Also
-    /// - Microsoft.Quantum.Arrays.Zipped
-    function Unzipped<'T, 'U>(arr : ('T, 'U)[]) : ('T[], 'U[]) {
-        let nElements = Length(arr);
-        mutable first = new 'T[nElements];
-        mutable second = new 'U[nElements];
-        for (idxElement in 0 .. nElements - 1) {
-            let (left, right) = arr[idxElement];
-            set first w/= idxElement <- left;
-            set second w/= idxElement <- right;
-        }
-        return (first, second);
+    function Exclude<'T>(remove : Int[], array : 'T[]) : 'T[] {
+        return Excluding(remove, array);
     }
+
 }
-
-

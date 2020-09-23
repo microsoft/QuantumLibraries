@@ -57,7 +57,7 @@ namespace Microsoft.Quantum.AmplitudeAmplification {
         systemRegister : Qubit[]
     )
     : Unit is Adj + Ctl {
-        for ((startPhase, targetPhase) in Zip(phases!)) {
+        for ((startPhase, targetPhase) in Zipped(phases!)) {
             if (startPhase != 0.0) {
                 startStateReflection::ApplyReflection(
                     startPhase, auxiliaryRegister

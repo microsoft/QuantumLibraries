@@ -55,7 +55,7 @@ namespace Microsoft.Quantum.Arrays {
     function IsSorted<'T>(comparison : (('T, 'T) -> Bool), array : 'T[]) : Bool {
         return All(
             comparison,
-            Zip(Most(array), Rest(array))
+            Zipped(Most(array), Rest(array))
         );
     }
 
