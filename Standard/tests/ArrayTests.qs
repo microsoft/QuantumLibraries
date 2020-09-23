@@ -76,13 +76,15 @@ namespace Microsoft.Quantum.Tests {
         return x * x;
     }
 
-
-    function ConstantArrayTest () : Unit {
-
+    @Test("QuantumSimulator")
+    function ConstantArrayOfDoublesIsCorrect() : Unit {
         let dblArray = ConstantArray(71, 2.17);
         EqualityFactI(Length(dblArray), 71, $"ConstantArray(Int, Double) had the wrong length.");
         let ignore = Mapped(NearEqualityFactD(_, 2.17), dblArray);
+    }
 
+    @Test("QuantumSimulator")
+    function ConstantArrayOfFunctionsIsCorrect() : Unit {
         // Stress test by making an array of Int -> Int.
         let fnArray = ConstantArray(7, Squared);
         EqualityFactI(Length(fnArray), 7, $"ConstantArray(Int, Int -> Int) had the wrong length.");
@@ -91,7 +93,6 @@ namespace Microsoft.Quantum.Tests {
 
 
     function SubarrayTest () : Unit {
-
         let array0 = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
         let subarrayOdd = Subarray([1, 3, 5, 7, 9], array0);
         let subarrayEven = Subarray([0, 2, 4, 6, 8, 10], array0);
@@ -101,17 +102,15 @@ namespace Microsoft.Quantum.Tests {
         Ignore(Mapped(EqualityFactI(_, _, $"Subarray failed: subpermutation case."), Zipped([12, 11], Subarray([2, 1], array1))));
     }
 
-
-    function FilterTest () : Unit {
-
+    @Test("QuantumSimulator")
+    function FilteredIsEvenHasNoOdds() : Unit {
         let array = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
         let evenArray = Filtered(IsEven, array);
-        EqualityFactB(All(IsEven, evenArray), true, $"the even elements of [1..10] were not correctly filtered.");
+        Fact(All(IsEven, evenArray), $"the even elements of [1..10] were not correctly filtered.");
     }
 
     @Test("QuantumSimulator")
-    function TestCount() : Unit {
-
+    function CountOfIsEvenIsCorrect() : Unit {
         let array = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
         let countEvens = Count(IsEven, array);
         EqualityFactI(countEvens, 5, $"the even elements of [1..10] were not correctly counted.");
@@ -361,5 +360,3 @@ namespace Microsoft.Quantum.Tests {
         SquareArrayFact([[1, 2], [3, 4, 5]], "Array is not a square");
     }
 }
-
-
