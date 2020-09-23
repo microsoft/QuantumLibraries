@@ -8,7 +8,7 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
     open Microsoft.Quantum.Chemistry;
     open Microsoft.Quantum.Arrays;
 
-    // This evolution set runs off data optimized for a Jordan�Wigner encoding.
+    // This evolution set runs off data optimized for a Jordan–Wigner encoding.
     // This collects terms Z, ZZ, PQandPQQR, hpqrs separately.
     // This only apples the needed hpqrs XXXX XXYY terms.
     // Operations here are expressed in terms of Exp([...])
@@ -279,5 +279,4 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
     }
     
 }
-
 
