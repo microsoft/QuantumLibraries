@@ -21,17 +21,17 @@ namespace Microsoft.Quantum.Canon {
     /// ## 'T
     /// The input type of the operation to be applied.
     ///
-    /// # See Also
-    /// - Microsoft.Quantum.Canon.ApplyToHeadA
-    /// - Microsoft.Quantum.Canon.ApplyToHeadC
-    /// - Microsoft.Quantum.Canon.ApplyToHeadCA
-    ///
     /// # Example
     /// The following Q# snippets are equivalent:
     /// ```Q#
     /// ApplyToHead(H, register);
     /// H(Head(register));
     /// ```
+    ///
+    /// # See Also
+    /// - Microsoft.Quantum.Canon.ApplyToHeadA
+    /// - Microsoft.Quantum.Canon.ApplyToHeadC
+    /// - Microsoft.Quantum.Canon.ApplyToHeadCA
     operation ApplyToHead<'T>(op : ('T => Unit), targets : 'T[]) : Unit {
         op(Head(targets));
     }
@@ -127,6 +127,13 @@ namespace Microsoft.Quantum.Canon {
     /// # Type Parameters
     /// ## 'T
     /// The input type of the operation to be applied.
+    ///
+    /// # Example
+    /// The following Q# snippets are equivalent:
+    /// ```Q#
+    /// ApplyToRest(ApplyCNOTChain, register);
+    /// ApplyCNOTChain(Rest(register));
+    /// ```
     ///
     /// # See Also
     /// - Microsoft.Quantum.Canon.ApplyToRestA
@@ -228,6 +235,13 @@ namespace Microsoft.Quantum.Canon {
     /// ## 'T
     /// The input type of the operation to be applied.
     ///
+    /// # Example
+    /// The following Q# snippets are equivalent:
+    /// ```Q#
+    /// ApplyToTail(H, register);
+    /// H(Tail(register));
+    /// ```
+    ///
     /// # See Also
     /// - Microsoft.Quantum.Canon.ApplyToTailA
     /// - Microsoft.Quantum.Canon.ApplyToTailC
@@ -327,6 +341,13 @@ namespace Microsoft.Quantum.Canon {
     /// # Type Parameters
     /// ## 'T
     /// The input type of the operation to be applied.
+    ///
+    /// # Example
+    /// The following Q# snippets are equivalent:
+    /// ```Q#
+    /// ApplyToMost(ApplyCNOTChain, register);
+    /// ApplyCNOTChain(Most(register));
+    /// ```
     ///
     /// # See Also
     /// - Microsoft.Quantum.Canon.ApplyToMostA
