@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.Quantum.Sdk/0.12.20082515-beta">
+<Project Sdk="Microsoft.Quantum.Sdk/0.12.2009112969-beta">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
@@ -30,13 +30,25 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Quantum.Simulators" Version="0.12.20082515-beta" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" />
     <PackageReference Include="NumSharp" Version="0.20.5" />
   </ItemGroup>
 
   <ItemGroup>
     <None Include="..\..\Build\assets\qdk-nuget-icon.png" Pack="true" Visible="false" PackagePath="" />
+  </ItemGroup>
+
+  <Import Project="..\..\..\qsharp-runtime\src\Simulation\Common\Simulators.Dev.props" />
+
+  <PropertyGroup>
+    <IncludeQsharpCorePackages>false</IncludeQsharpCorePackages> <!-- otherwise the standard library is included by the Sdk -->
+    <CsharpGeneration>false</CsharpGeneration>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\qsharp-runtime\src\Simulation\Simulators\Microsoft.Quantum.Simulators.csproj" />
+    <ProjectReference Include="..\..\..\qsharp-runtime\src\Simulation\CsharpGeneration\Microsoft.Quantum.CsharpGeneration.fsproj" PrivateAssets="All" IsQscReference="true" />
   </ItemGroup>
 
 </Project>
