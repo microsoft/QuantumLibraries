@@ -7,13 +7,13 @@ namespace Microsoft.Quantum.Arrays {
     /// Combines Mapped and Fold into a single function
     ///
     /// # Description
-    /// This function iterates the `folder` function through the array, starting from
+    /// This function iterates the `fn` function through the array, starting from
     /// an initial state `state` and returns all intermediate values, not including
     /// the inital state.
     ///
     /// # Type Parameters
     /// ## 'State
-    /// The type of states that the `folder` function operates on, i.e., accepts as its first
+    /// The type of states that the `fn` function operates on, i.e., accepts as its first
     /// input and returns.
     /// ## 'T
     /// The type of `array` elements.
@@ -34,7 +34,7 @@ namespace Microsoft.Quantum.Arrays {
     ///
     /// # Remark
     /// This function generalizes `Fold` since
-    /// `Tail(CumulativeFolded(fn, state, array)) == Fold(fn, state, array)`.
+    /// `Tail(CumulativeFolded(fn, state, array))` is the same as `Fold(fn, state, array)`.
     ///
     /// # Example
     /// ```Q#

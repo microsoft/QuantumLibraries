@@ -50,8 +50,8 @@ namespace Microsoft.Quantum.Arrays {
     /// Given an array, returns all its prefixes.
     ///
     /// # Description
-    /// Returns an array of all prefixes, starting with the empty
-    /// array until the complete array.
+    /// Returns an array of all prefixes, starting with an array that only
+    /// has the first element until the complete array.
     ///
     /// # Type Parameters
     /// ## 'T
@@ -64,10 +64,10 @@ namespace Microsoft.Quantum.Arrays {
     /// # Example
     /// ```Q#
     /// let prefixes = Prefixes([23, 42, 144]);
-    /// // prefixes = [EmptyArray<Int>(), [23], [23, 42], [23, 42, 144]]
+    /// // prefixes = [[23], [23, 42], [23, 42, 144]]
     /// ```
     function Prefixes<'T>(array : 'T[]) : 'T[][] {
-        return MappedOverRange(Prefix(_, array), -1..Length(array) - 1);
+        return MappedOverRange(Prefix(_, array), IndexRange(array));
     }
 
     internal function Prefix<'T>(to : Int, array : 'T[]) : 'T[] {

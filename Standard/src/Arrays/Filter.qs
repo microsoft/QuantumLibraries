@@ -115,7 +115,7 @@ namespace Microsoft.Quantum.Arrays {
 
         for (element in array) {
             if (predicate(element)) {
-                set totalFound = totalFound + 1;
+                set totalFound += 1;
             }
         }
 

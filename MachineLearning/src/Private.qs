@@ -6,7 +6,7 @@ namespace Microsoft.Quantum.MachineLearning {
     open Microsoft.Quantum.Math;
 
     function _AllNearlyEqualD(v1 : Double[], v2 : Double[]) : Bool {
-        return Length(v1) == Length(v2) and All(NearlyEqualD, Zip(v1, v2));
+        return Length(v1) == Length(v2) and All(NearlyEqualD, Zipped(v1, v2));
     }
 
     function _TailMeasurement(nQubits : Int) : (Qubit[] => Result) {

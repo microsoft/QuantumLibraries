@@ -126,7 +126,7 @@ namespace Microsoft.Quantum.Arrays {
     }
 
     /// # Summary
-    /// Returns tuple of first and all remaining elements of the array.
+    /// Returns a tuple of first and all remaining elements of the array.
     ///
     /// # Type Parameters
     /// ## 'A
@@ -143,7 +143,7 @@ namespace Microsoft.Quantum.Arrays {
     }
 
     /// # Summary
-    /// Returns tuple of all but one and the last element of the array.
+    /// Returns a tuple of all but one and the last element of the array.
     ///
     /// # Type Parameters
     /// ## 'A
@@ -212,9 +212,9 @@ namespace Microsoft.Quantum.Arrays {
     /// ```qsharp
     /// let array = [10, 11, 12, 13, 14, 15];
     /// // The following line returns [10, 12, 15].
-    /// let subarray = Exclude([1, 3, 4], array);
+    /// let subarray = Excluding([1, 3, 4], array);
     /// ```
-    function Exclude<'T> (remove : Int[], array : 'T[]) : 'T[] {
+    function Excluding<'T>(remove : Int[], array : 'T[]) : 'T[] {
         let nSliced = Length(remove);
         let nElements = Length(array);
 
