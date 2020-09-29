@@ -116,14 +116,6 @@ namespace Microsoft.Quantum.Tests {
         EqualityFactI(countEvens, 5, $"the even elements of [1..10] were not correctly counted.");
     }
 
-    @Test("QuantumSimulator")
-    function TestCount() : Unit {
-
-        let array = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-        let countEvens = Count(IsEven, array);
-        EqualityFactI(countEvens, 5, $"the even elements of [1..10] were not correctly counted.");
-    }
-
 
     function ReverseTest () : Unit {
 
