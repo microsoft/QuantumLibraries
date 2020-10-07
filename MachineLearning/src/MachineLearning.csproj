@@ -3,6 +3,7 @@
     <TargetFramework>netstandard2.1</TargetFramework>
     <AssemblyName>Microsoft.Quantum.MachineLearning</AssemblyName>
     <QsharpDocsGeneration>true</QsharpDocsGeneration>
+    <QsharpDocsPackageId>Microsoft.Quantum.MachineLearning</QsharpDocsPackageId>
     <!--
       Include core packages using project references instead, since they get
       built at the same time as this project.

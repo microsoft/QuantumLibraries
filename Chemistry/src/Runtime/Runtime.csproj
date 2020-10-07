@@ -6,6 +6,10 @@
     <QsharpDocsGeneration>true</QsharpDocsGeneration>
     <IncludeQsharpCorePackages>false</IncludeQsharpCorePackages>
     <RunQDocGen>True</RunQDocGen>
+    <!-- List the name of the metapackage that users can
+         use to take a dependency on these Q# APIs, rather
+         than the subpackage directly. -->
+    <QsharpDocsPackageId>Microsoft.Quantum.Chemistry</QsharpDocsPackageId>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -44,4 +48,3 @@
   </ItemGroup>
 
 </Project>
-

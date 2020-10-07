@@ -4,12 +4,13 @@
     <TargetFramework>netstandard2.1</TargetFramework>
     <AssemblyName>Microsoft.Quantum.Numerics</AssemblyName>
     <QsharpDocsGeneration>true</QsharpDocsGeneration>
+    <QsharpDocsPackageId>Microsoft.Quantum.Numerics</QsharpDocsPackageId>
     <IncludeQsharpCorePackages>false</IncludeQsharpCorePackages>
   </PropertyGroup>
 
   <PropertyGroup>
     <NoWarn>0162</NoWarn>
-    <RunQDocGen>True</RunQDocGen>
+    <RunQDocGen>True</RunQDocGen>https://github.com/microsoft/qsharp-runtime/pull/390
     <Authors>Microsoft</Authors>
     <Description>Microsoft's Quantum numerics libraries.</Description>
     <Copyright>© Microsoft Corporation. All rights reserved.</Copyright>
@@ -45,4 +46,3 @@
   </ItemGroup>
 
 </Project>
-
