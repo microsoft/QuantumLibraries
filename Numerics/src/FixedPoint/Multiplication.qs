@@ -43,7 +43,7 @@ namespace Microsoft.Quantum.Arithmetic {
                 MultiplySI(xsInt, ysInt, tmpResultInt);
                 (Controlled ApplyToEachCA)(controls,
                                            (CNOT,
-                                            Zip(tmpResult[n-px..2*n-px-1], zs)));
+                                            Zipped(tmpResult[n-px..2*n-px-1], zs)));
                 (Adjoint MultiplySI)(xsInt, ysInt, tmpResultInt);
             }
         }
@@ -77,7 +77,7 @@ namespace Microsoft.Quantum.Arithmetic {
                 SquareSI(xsInt, tmpResultInt);
                 (Controlled ApplyToEachCA)(controls,
                                            (CNOT,
-                                            Zip(tmpResult[n-px..2*n-px-1], ys)));
+                                            Zipped(tmpResult[n-px..2*n-px-1], ys)));
                 (Adjoint SquareSI)(xsInt, tmpResultInt);
             }
         }

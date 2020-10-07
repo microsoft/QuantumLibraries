@@ -27,7 +27,7 @@ namespace Microsoft.Quantum.MachineLearning {
     : Int[] {
         return Where(
             NotEqualI,
-            Zip(inferredLabels, actualLabels)
+            Zipped(inferredLabels, actualLabels)
         );
     }
 

@@ -28,7 +28,7 @@ namespace Microsoft.Quantum.Arithmetic {
     : Unit is Adj + Ctl {
         ApplyToEachCA(
             CControlledCA(X),
-            Zip(IntAsBoolArray(value, Length(target!)), target!)
+            Zipped(IntAsBoolArray(value, Length(target!)), target!)
         );
     }
 

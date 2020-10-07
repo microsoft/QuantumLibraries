@@ -51,7 +51,7 @@ namespace Microsoft.Quantum.Arrays {
         if (Length(array1) != Length(array2)) {
             return false;
         }
-        return All(equal, Zip(array1, array2));
+        return All(equal, Zipped(array1, array2));
     }
 
 }

@@ -64,7 +64,7 @@ namespace Microsoft.Quantum.Tests {
 
     operation VerifyFermionicSWAPPhaseHelper(phase : Result, qubit1 : Qubit, qubit2: Qubit) : Unit {
         ApplyFermionicSWAP(qubit1, qubit2);
-        Assert([PauliZ, PauliZ], [qubit1, qubit2], phase,
+        AssertMeasurement([PauliZ, PauliZ], [qubit1, qubit2], phase,
             "The Fermionic SWAP applies an incorrect phase");
     }
     

@@ -57,16 +57,16 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
     // Subroutine of OptimizedBEXY.
     function _OptimizedBEXY_ (targetIndex : Int) : ((Qubit, Qubit, Qubit[]) => Unit is Adj + Ctl) {
         //Message($"OptimizedBEXY {targetIndex}");
-        return _OptimizedBEXY__(targetIndex, _, _, _);
+        return _OptimizedBEXY(targetIndex, _, _, _);
     }
 
 
     // Subroutine of OptimizedBEXY.
-    operation _OptimizedBEXY__ (targetIndex : Int, pauliBasis : Qubit, accumulator : Qubit, targetRegister : Qubit[]) : Unit is Adj {
+    operation _OptimizedBEXY(targetIndex : Int, pauliBasis : Qubit, accumulator : Qubit, targetRegister : Qubit[]) : Unit is Adj {
 
         body (...) {
             // This should always be called as a controlled operation.
-            fail "_OptimizedBEXY__ should always be called as a controlled operation.";
+            fail "_OptimizedBEXY should always be called as a controlled operation.";
         }
 
         controlled (ctrl, ...) {
@@ -109,12 +109,12 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
 
     // Subroutine of SelectZ.
     function _SelectZ_ (targetIndex : Int) : (Qubit[] => Unit is Adj + Ctl) {
-        return _SelectZ__(targetIndex, _);
+        return _SelectZ(targetIndex, _);
     }
 
 
     // Subroutine of SelectZ
-    operation _SelectZ__ (targetIndex : Int, targetRegister : Qubit[]) : Unit is Adj + Ctl {
+    operation _SelectZ(targetIndex : Int, targetRegister : Qubit[]) : Unit is Adj + Ctl {
         if (Length(targetRegister) <= targetIndex) {
             fail "targetIndex out of range.";
         }
@@ -175,19 +175,4 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
         return ((signQubit[0], selectZControlRegisters, OptimizedBEControlRegisters, pauliBases, indexRegisters, targetRegister), rest);
     }
 
-
-    operation _JordanWignerSelect__ (nZ : Int, nMaj : Int, nIdxRegQubits : Int, ctrlRegister : Qubit[], targetRegister : Qubit[]) : Unit {
-
-        body (...) {
-            let (registers, rest) = _JordanWignerSelectQubitManager_(nZ, nMaj, nIdxRegQubits, ctrlRegister, targetRegister);
-            _JordanWignerSelect_(registers);
-        }
-
-        adjoint invert;
-        controlled distribute;
-        controlled adjoint distribute;
-    }
-
 }
-
-

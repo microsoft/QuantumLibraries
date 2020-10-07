@@ -54,11 +54,11 @@ namespace Microsoft.Quantum.Synthesis {
 
             within {
                 for (target in Most(diff)) {
-                    (BitControlledX(bbits[...target - 1] + abits[target + 1...]))(Exclude([target], qs), qs[target]);
+                    (BitControlledX(bbits[...target - 1] + abits[target + 1...]))(Excluding([target], qs), qs[target]);
                 }
             } apply {
                 let target = Tail(diff);
-                (BitControlledX(bbits[...target - 1] + abits[target + 1...]))(Exclude([target], qs), qs[target]);
+                (BitControlledX(bbits[...target - 1] + abits[target + 1...]))(Excluding([target], qs), qs[target]);
             }
         }
     }

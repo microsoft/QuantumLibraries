@@ -245,7 +245,7 @@ namespace Microsoft.Quantum.Arithmetic {
             MultiplyAndAddByModularInteger(constMultiplier, modulus, multiplier, summandLE);
 
             // now the joint state is |x⟩|x⋅a(mod N)⟩
-            ApplyToEachCA(SWAP, Zip(summandLE!, multiplier!));
+            ApplyToEachCA(SWAP, Zipped(summandLE!, multiplier!));
 
             // now the joint state is |x⋅a(mod N)⟩|x⟩
             let inverseMod = InverseModI(constMultiplier, modulus);

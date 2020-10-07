@@ -35,7 +35,7 @@ namespace Microsoft.Quantum.Canon {
         if (Length(listOfOps) != Length(targets)) {
             fail "The number of ops and number of targets do not match!";
         }
-        for ((op, targetIndices) in Zip(listOfOps, targets)) {
+        for ((op, targetIndices) in Zipped(listOfOps, targets)) {
             if (Length(targetIndices) > Length(register)) {
                 fail "There are too many targets!";
             }
@@ -69,7 +69,7 @@ namespace Microsoft.Quantum.Canon {
         if (Length(listOfOps) != Length(targets)) {
             fail "The number of ops and number of targets do not match!";
         }
-        for ((op, targetIndices) in Zip(listOfOps, targets)) {
+        for ((op, targetIndices) in Zipped(listOfOps, targets)) {
             if (Length(targetIndices) > Length(register)) {
                 fail "There are too many targets!";
             }
@@ -103,7 +103,7 @@ namespace Microsoft.Quantum.Canon {
         if (Length(listOfOps) != Length(targets)) {
             fail "The number of ops and number of targets do not match!";
         }
-        for ((op, targetIndices) in Zip(listOfOps, targets)) {
+        for ((op, targetIndices) in Zipped(listOfOps, targets)) {
             if (Length(targetIndices) > Length(register)) {
                 fail "There are too many targets!";
             }
@@ -137,7 +137,7 @@ namespace Microsoft.Quantum.Canon {
         if (Length(listOfOps) != Length(targets)) {
             fail "The number of ops and number of targets do not match!";
         }
-        for ((op, targetIndices) in Zip(listOfOps, targets)) {
+        for ((op, targetIndices) in Zipped(listOfOps, targets)) {
             if (Length(targetIndices) > Length(register)) {
                 fail "There are too many targets!";
             }
