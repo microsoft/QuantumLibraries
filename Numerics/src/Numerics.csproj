@@ -10,7 +10,7 @@
 
   <PropertyGroup>
     <NoWarn>0162</NoWarn>
-    <RunQDocGen>True</RunQDocGen>https://github.com/microsoft/qsharp-runtime/pull/390
+    <RunQDocGen>True</RunQDocGen>
     <Authors>Microsoft</Authors>
     <Description>Microsoft's Quantum numerics libraries.</Description>
     <Copyright>© Microsoft Corporation. All rights reserved.</Copyright>
