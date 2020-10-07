@@ -8,10 +8,10 @@ namespace Microsoft.Quantum.Math {
     ///
     /// The polar representation of a complex number is $c=r e^{i t}$.
     ///
-    /// # Input
-    /// ## First Parameter
+    /// # Named Items
+    /// ## Magnitude
     /// `Double` is absolute value $r \ge 0$.
-    /// ## Second Parameter
+    /// ## Argument
     /// `Double` is the phase $t \in \mathbb R$.
     newtype ComplexPolar = (Magnitude: Double, Argument: Double);
 

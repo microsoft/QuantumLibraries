@@ -4,6 +4,7 @@
     <TargetFramework>netstandard2.1</TargetFramework>
     <AssemblyName>Microsoft.Quantum.Numerics</AssemblyName>
     <QsharpDocsGeneration>true</QsharpDocsGeneration>
+    <QsharpDocsPackageId>Microsoft.Quantum.Numerics</QsharpDocsPackageId>
     <IncludeQsharpCorePackages>false</IncludeQsharpCorePackages>
   </PropertyGroup>
 
@@ -45,4 +46,3 @@
   </ItemGroup>
 
 </Project>
-
