@@ -67,7 +67,7 @@ namespace Microsoft.Quantum.Canon {
         }
         adjoint (...) {
             H(target);
-            AssertProb([PauliZ], [target], One, 0.5, "Probability of the measurement must be 0.5", 1e-10);
+            AssertMeasurementProbability([PauliZ], [target], One, 0.5, "Probability of the measurement must be 0.5", 1e-10);
             if (IsResultOne(MResetZ(target))) {
                 CZ(control1, control2);
             }
@@ -167,7 +167,7 @@ namespace Microsoft.Quantum.Canon {
             if (i % 2 == 0) {
                 set j = 0;
             } else {
-                let e = Zip(current, RangeAsIntArray(0..N - 1));
+                let e = Zipped(current, RangeAsIntArray(0..N - 1));
                 set j = Snd(Head(Filtered(Fst<Bool, Int>, e))) + 1;
             }
 
@@ -248,7 +248,7 @@ namespace Microsoft.Quantum.Canon {
             let vars = Length(controls);
 
             H(target);
-            AssertProb([PauliZ], [target], One, 0.5, "Probability of the measurement must be 0.5", 1e-10);
+            AssertMeasurementProbability([PauliZ], [target], One, 0.5, "Probability of the measurement must be 0.5", 1e-10);
             if (IsResultOne(MResetZ(target))) {
                 for (i in 0..vars - 1) {
                     let start = 1 <<< i;
@@ -339,7 +339,7 @@ namespace Microsoft.Quantum.Canon {
             let vars = Length(controls);
 
             H(target);
-            AssertProb([PauliZ], [target], One, 0.5, "Probability of the measurement must be 0.5", 1e-10);
+            AssertMeasurementProbability([PauliZ], [target], One, 0.5, "Probability of the measurement must be 0.5", 1e-10);
             if (IsResultOne(MResetZ(target))) {
                 using (helper = Qubit[2^vars - vars - 1]) {
                     let qs = ArrangedQubits(controls, target, helper);
