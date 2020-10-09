@@ -5,13 +5,14 @@ namespace Microsoft.Quantum.Preparation {
     open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Intrinsic;
     open Microsoft.Quantum.Convert;
+    open Microsoft.Quantum.Diagnostics;
     open Microsoft.Quantum.Arithmetic;
     open Microsoft.Quantum.AmplitudeAmplification;
     open Microsoft.Quantum.Oracles;
     open Microsoft.Quantum.Math;
 
     /// # Summary
-    /// Creates a uniform superposition over states that encode 0 through `nIndices`.
+    /// Creates a uniform superposition over states that encode 0 through `nIndices - 1`.
     ///
     /// That is, this unitary $U$ creates a uniform superposition over all number states
     /// $0$ to $M-1$, given an input state $\ket{0\cdots 0}$. In other words,
@@ -30,13 +31,17 @@ namespace Microsoft.Quantum.Preparation {
     /// initialized in the state $\ket{0\cdots 0}$.
     ///
     /// # Remarks
-    /// ## Example
+    /// The operation is adjointable, but requires that `indexRegister` is in a uniform
+    /// superposition over the first `nIndices` basis states in that case.
+    ///
+    /// # Example
     /// The following example prepares the state $\frac{1}{\sqrt{6}}\sum_{j=0}^{5}\ket{j}$
     /// on $3$ qubits.
     /// ``` Q#
     /// let nIndices = 6;
     /// using(indexRegister = Qubit[3]) {
     ///     PrepareUniformSuperposition(nIndices, LittleEndian(indexRegister));
+    ///     // ...
     /// }
     /// ```
     operation PrepareUniformSuperposition(nIndices: Int, indexRegister: LittleEndian) : Unit is Adj + Ctl {
@@ -53,6 +58,7 @@ namespace Microsoft.Quantum.Preparation {
             }
 
             using (flagQubit = Qubit[3]) {
+                AssertAllZero(indexRegister!);
                 let targetQubits = indexRegister![0..nQubits - 1];
                 let qubits = flagQubit + targetQubits;
                 let stateOracle = StateOracle(PrepareUniformSuperposition_(nIndices, nQubits, _, _));

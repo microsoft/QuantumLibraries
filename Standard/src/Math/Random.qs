@@ -3,6 +3,7 @@
 
 namespace Microsoft.Quantum.Math {
     open Microsoft.Quantum.Intrinsic;
+    open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Convert;
     open Microsoft.Quantum.Random;
 
@@ -92,9 +93,6 @@ namespace Microsoft.Quantum.Math {
     /// its randomness depends on the implementation of `Random`.
     @Deprecated("Microsoft.Quantum.Random.DrawRandomPauli")
     operation RandomSingleQubitPauli() : Pauli {
-        let probs = [0.5, 0.5, 0.5, 0.5];
-        let idxPauli = Random(probs);
-        let singleQubitPaulis = [PauliI, PauliX, PauliY, PauliZ];
-        return singleQubitPaulis[idxPauli];
+        return Snd(MaybeChooseElement([PauliI, PauliX, PauliY, PauliZ], DiscreteUniformDistribution(0, 3)));
     }
 }

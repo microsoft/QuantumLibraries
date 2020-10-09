@@ -45,7 +45,7 @@ namespace Microsoft.Quantum.Arithmetic {
 
         using (flag = Qubit()) {
             (ControlledOnBitString(bits, X))(qubits!, flag);
-            AssertProb([PauliZ], [flag], One, expected, $"AssertProbInt failed on stateIndex {stateIndex}, expected probability {expected}.", tolerance);
+            AssertMeasurementProbability([PauliZ], [flag], One, expected, $"AssertProbInt failed on stateIndex {stateIndex}, expected probability {expected}.", tolerance);
 
             // Uncompute flag qubit.
             (ControlledOnBitString(bits, X))(qubits!, flag);
@@ -71,7 +71,7 @@ namespace Microsoft.Quantum.Arithmetic {
     operation AssertMostSignificantBit(value : Result, number : LittleEndian) : Unit {
         body (...) {
             let mostSingificantQubit = Tail(number!);
-            Assert([PauliZ], [mostSingificantQubit], value, $"Most significant bit expected to be {value}");
+            AssertMeasurement([PauliZ], [mostSingificantQubit], value, $"Most significant bit expected to be {value}");
         }
 
         adjoint self;
