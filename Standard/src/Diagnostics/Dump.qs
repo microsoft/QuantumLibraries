@@ -69,7 +69,7 @@ namespace Microsoft.Quantum.Diagnostics {
     /// may vary with the conventions used by each simulator supporting this
     /// operation.
     operation DumpOperation(nQubits : Int, op : (Qubit[] => Unit is Adj))
-    : Unit {
+    : Unit is Adj+Ctl {
         using ((reference, target) = (Qubit[nQubits], Qubit[nQubits])) {
             // The operation provided could be a partial application of
             // another operation, such that there could be an observable
