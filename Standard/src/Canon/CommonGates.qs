@@ -13,9 +13,9 @@ namespace Microsoft.Quantum.Canon {
     /// $$
     /// \begin{align}
     ///     \left(\begin{matrix}
-    ///         1 & 0 & 0 & 0 \\\\
-    ///         0 & 1 & 0 & 0 \\\\
-    ///         0 & 0 & 0 & 1 \\\\
+    ///         1 & 0 & 0 & 0 \\
+    ///         0 & 1 & 0 & 0 \\
+    ///         0 & 0 & 0 & 1 \\
     ///         0 & 0 & 1 & 0
     ///      \end{matrix}\right)
     /// \end{align},
