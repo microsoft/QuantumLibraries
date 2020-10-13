@@ -21,7 +21,8 @@ namespace Microsoft.Quantum.Tests {
     //        this has no effect other than making unit test failures slightly
     //        harder to read.
 
-    function NegationTest() : Unit {
+    @Test("QuantumSimulator")
+    function NegationIsCorrect() : Unit {
         EqualityFactI(-42, NegationI(42), "NegationI returned wrong output.");
         NearEqualityFactD(-42.0, NegationD(42.0));
         EqualityFactL(-42L, NegationL(42L), "NegationI returned wrong output.");
@@ -32,7 +33,8 @@ namespace Microsoft.Quantum.Tests {
         );
     }
 
-    function PlusTest() : Unit {
+    @Test("QuantumSimulator")
+    function PlusIsCorrect() : Unit {
         EqualityFactI(-40, PlusI(-72, 32), "PlusI returned wrong output.");
         NearEqualityFactD(-40.0, PlusD(-72.0, 32.0));
         EqualityFactL(-40L, PlusL(-72L, 32L), "PlusL returned wrong output.");
@@ -40,7 +42,8 @@ namespace Microsoft.Quantum.Tests {
         NearEqualityFactCP(TWO_CP(), PlusCP(ONE_CP(), ONE_CP()));
     }
 
-    function MinusTest() : Unit {
+    @Test("QuantumSimulator")
+    function MinusIsCorrect() : Unit {
         EqualityFactI(40, MinusI(72, 32), "MinusI returned wrong output.");
         NearEqualityFactD(40.0, MinusD(72.0, 32.0));
         EqualityFactL(40L, MinusL(72L, 32L), "MinusL returned wrong output.");
@@ -48,7 +51,8 @@ namespace Microsoft.Quantum.Tests {
         NearEqualityFactCP(ONE_CP(), MinusCP(TWO_CP(), ONE_CP()));
     }
 
-    function TimesTest() : Unit {
+    @Test("QuantumSimulator")
+    function TimesIsCorrect() : Unit {
         EqualityFactI(40, TimesI(-10, -4), "TimesI returned wrong output.");
         NearEqualityFactD(40.0, TimesD(-10.0, -4.0));
         EqualityFactL(40L, TimesL(-10L, -4L), "TimesL returned wrong output.");
@@ -56,7 +60,8 @@ namespace Microsoft.Quantum.Tests {
         NearEqualityFactCP(TWO_CP(), TimesCP(TWO_CP(), ONE_CP()));
     }
 
-    function DivdedByTest() : Unit {
+    @Test("QuantumSimulator")
+    function DividedByIsCorrect() : Unit {
         EqualityFactI(10, DividedByI(-40, -4), "DividedByI returned wrong output.");
         NearEqualityFactD(10.0, DividedByD(-40.0, -4.0));
         EqualityFactL(10L, DividedByL(-40L, -4L), "DividedByL returned wrong output.");
@@ -64,12 +69,14 @@ namespace Microsoft.Quantum.Tests {
         NearEqualityFactCP(PI_4_CP(), DividedByCP(TWO_PI_4_CP(), TWO_CP()));
     }
 
-    function ModTest() : Unit {
+    @Test("QuantumSimulator")
+    function ModIsCorrect() : Unit {
         EqualityFactI(2, ModI(17, 5), "ModI returned wrong output.");
         EqualityFactL(2L, ModL(17L, 5L), "ModL returned wrong output.");
     }
 
-    function PowTest() : Unit {
+    @Test("QuantumSimulator")
+    function PowIsCorrect() : Unit {
         EqualityFactI(6561, PowI(3, 8), "PowI returned wrong output.");
         NearEqualityFactD(157.58648490814928441592231285347, PowD(2.0, 7.3));
         EqualityFactL(239072435685151324847153L, PowL(17L, 19), "PowL returned wrong output.");
