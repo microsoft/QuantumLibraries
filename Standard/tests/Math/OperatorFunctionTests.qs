@@ -25,7 +25,7 @@ namespace Microsoft.Quantum.Tests {
         NearEqualityFactC(NegationC(Complex(-1.0, -2.0)), Complex(1.0, 2.0));
         NearEqualityFactCP(
             NegationCP(ComplexPolar(1.0, 5.0 * PI() / 4.0)),
-            ComplexPolar(1.0, PI() / 4.0)            
+            ComplexPolar(1.0, PI() / 4.0)
         );
     }
 
