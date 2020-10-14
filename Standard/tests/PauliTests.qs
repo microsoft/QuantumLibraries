@@ -5,9 +5,10 @@ namespace Microsoft.Quantum.Tests {
     open Microsoft.Quantum.Intrinsic;
     open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Measurement;
-    
-    
-    operation MeasureWithScratchTest () : Unit {
+    open Microsoft.Quantum.Diagnostics;
+
+    @Test("QuantumSimulator")
+    operation TestMeasureWithScratch() : Unit {
         
         using (register = Qubit[2]) {
             PrepareEntangledState([register[0]], [register[1]]);

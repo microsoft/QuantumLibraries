@@ -12,7 +12,8 @@ namespace Microsoft.Quantum.Tests {
     open Microsoft.Quantum.Math;
     open Microsoft.Quantum.Measurement as Meas;
 
-    operation ChoiStateTest () : Unit {
+    @Test("QuantumSimulator")
+    operation TestChoiState() : Unit {
         using (register = Qubit[2]) {
             PrepareChoiStateCA(NoOp<Qubit[]>, [register[0]], [register[1]]);
 
@@ -28,7 +29,8 @@ namespace Microsoft.Quantum.Tests {
         Message("stage prepared");
     }
 
-    operation EstimateFrequencyTest () : Unit {
+    @Test("QuantumSimulator")
+    operation TestEstimateFrequency() : Unit {
         let freq1 = EstimateFrequency(ApplyToEach(H, _), Meas.MeasureAllZ, 1, 1000);
         EqualityWithinToleranceFact(freq1, 0.5, 0.1);
 
@@ -55,7 +57,8 @@ namespace Microsoft.Quantum.Tests {
         EqualityWithinToleranceFact(expectation, actualFreq, tolerance);
     }
 
-    operation EstimateFrequencyBinomialTest() : Unit {
+    @Test("QuantumSimulator")
+    operation TestEstimateFrequencyBinomial() : Unit {
         // If this is larger, tests fail less often, but more false negatives
         // slip through.
         let nStdDevs = 3.0;
@@ -98,7 +101,8 @@ namespace Microsoft.Quantum.Tests {
     }
 
     // Probabilistic test. Might fail occasionally
-    operation RobustPhaseEstimationTest () : Unit {
+    @Test("QuantumSimulator")
+    operation TestRobustPhaseEstimation() : Unit {
 
         let bitsPrecision = 10;
 
@@ -109,8 +113,8 @@ namespace Microsoft.Quantum.Tests {
         }
     }
 
-
-    operation PrepareQubitTest () : Unit {
+    @Test("QuantumSimulator")
+    operation TestPrepareQubit() : Unit {
         using (qubit = Qubit()) {
             let bases = [PauliI, PauliX, PauliY, PauliZ];
 
@@ -122,7 +126,8 @@ namespace Microsoft.Quantum.Tests {
         }
     }
 
-    operation SingleQubitProcessTomographyMeasurementTest () : Unit {
+    @Test("QuantumSimulator")
+    operation TestSingleQubitProcessTomographyMeasurement() : Unit {
         EqualityFactR(SingleQubitProcessTomographyMeasurement(PauliI, PauliI, H), Zero, $"Failed at ⟪I | H | I⟫.");
         EqualityFactR(SingleQubitProcessTomographyMeasurement(PauliX, PauliI, H), Zero, $"Failed at ⟪I | H | X⟫.");
         EqualityFactR(SingleQubitProcessTomographyMeasurement(PauliY, PauliI, H), Zero, $"Failed at ⟪I | H | Y⟫.");
