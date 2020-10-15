@@ -19,7 +19,7 @@ namespace Microsoft.Quantum.Diagnostics {
     /// target register. Written as separate operation to allow overriding and
     /// interpreting as separate registers, rather than as a single combined
     /// register.
-    internal operation DumpReferenceAndTarget(reference : Qubit[], target : Qubit[]) : Unit is Adj+Ctl {
+    internal operation DumpReferenceAndTarget(reference : Qubit[], target : Qubit[]) : Unit is Adj + Ctl {
         DumpRegister((), reference + target);
     }
 
