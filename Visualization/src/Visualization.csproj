@@ -32,9 +32,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Quantum.Simulators" Version="0.12.20082515-beta" />
+    <PackageReference Include="Microsoft.Quantum.Simulators" Version="0.12.201016171-beta" />
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" />
-    <PackageReference Include="Microsoft.Quantum.IQSharp.Jupyter" Version="0.12.20082515-beta" />
+    <PackageReference Include="Microsoft.Quantum.IQSharp.Jupyter" Version="0.12.201016171-beta" />
     <PackageReference Include="NumSharp" Version="0.20.5" />
   </ItemGroup>
 

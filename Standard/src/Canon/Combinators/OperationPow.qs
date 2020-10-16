@@ -55,9 +55,9 @@ namespace Microsoft.Quantum.Canon {
     /// The type of the operation to be powered.
     ///
     /// # See Also
-    /// - @"microsoft.quantum.canon.operationpowc"
-    /// - @"microsoft.quantum.canon.operationpowa"
-    /// - @"microsoft.quantum.canon.operationpowca"
+    /// - Microsoft.Quantum.Canon.OperationPowC
+    /// - Microsoft.Quantum.Canon.OperationPowA
+    /// - Microsoft.Quantum.Canon.OperationPowCA
     function OperationPow<'T> (op : ('T => Unit), power : Int) : ('T => Unit) {
         return ApplyOperationRepeatedly(op, power, _);
     }
@@ -84,7 +84,7 @@ namespace Microsoft.Quantum.Canon {
     /// The type of the operation to be powered.
     ///
     /// # See Also
-    /// - @"microsoft.quantum.canon.operationpow"
+    /// - Microsoft.Quantum.Canon.OperationPow
     function OperationPowC<'T> (op : ('T => Unit is Ctl), power : Int) : ('T => Unit is Ctl) {
         return ApplyOperationRepeatedlyC(op, power, _);
     }
@@ -111,7 +111,7 @@ namespace Microsoft.Quantum.Canon {
     /// The type of the operation to be powered.
     ///
     /// # See Also
-    /// - @"microsoft.quantum.canon.operationpow"
+    /// - Microsoft.Quantum.Canon.OperationPow
     function OperationPowA<'T> (op : ('T => Unit is Adj), power : Int) : ('T => Unit is Adj) {
         return ApplyOperationRepeatedlyA(op, power, _);
     }
@@ -138,7 +138,7 @@ namespace Microsoft.Quantum.Canon {
     /// The type of the operation to be powered.
     ///
     /// # See Also
-    /// - @"microsoft.quantum.canon.operationpow"
+    /// - Microsoft.Quantum.Canon.OperationPow
     function OperationPowCA<'T> (op : ('T => Unit is Ctl + Adj), power : Int) : ('T => Unit is Ctl + Adj) {
         return ApplyOperationRepeatedlyCA(op, power, _);
     }

@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft Corporation. All rights reserved.
+// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
 namespace Microsoft.Quantum.Canon {
@@ -43,7 +43,7 @@ namespace Microsoft.Quantum.Canon {
     /// fewer than $2^n$ are specified.
     ///
     /// # See Also
-    /// - ApproximatelyMultiplexPauli
+    /// - Microsoft.Quantum.Canon.ApproximatelyMultiplexPauli
     operation MultiplexPauli(coefficients : Double[], pauli : Pauli, control : LittleEndian, target : Qubit)
     : Unit is Adj + Ctl {
         ApproximatelyMultiplexPauli(0.0, coefficients, pauli, control, target);
@@ -89,7 +89,7 @@ namespace Microsoft.Quantum.Canon {
     /// fewer than $2^n$ are specified.
     ///
     /// # See Also
-    /// - MultiplexPauli
+    /// - Microsoft.Quantum.Canon.MultiplexPauli
     operation ApproximatelyMultiplexPauli(tolerance : Double, coefficients : Double[], pauli : Pauli, control : LittleEndian, target : Qubit)
     : Unit is Adj + Ctl {
         if (pauli == PauliZ) {
@@ -145,7 +145,7 @@ namespace Microsoft.Quantum.Canon {
     ///   https://arxiv.org/abs/quant-ph/0406176
     ///
     /// # See Also
-    /// - ApproximatelyMultiplexZ
+    /// - Microsoft.Quantum.Canon.ApproximatelyMultiplexZ
     operation MultiplexZ(coefficients : Double[], control : LittleEndian, target : Qubit)
     : Unit is Adj + Ctl {
         ApproximatelyMultiplexZ(0.0, coefficients, control, target);
@@ -212,7 +212,7 @@ namespace Microsoft.Quantum.Canon {
     ///   https://arxiv.org/abs/quant-ph/0406176
     ///
     /// # See Also
-    /// - MultiplexZ
+    /// - Microsoft.Quantum.Canon.MultiplexZ
     operation ApproximatelyMultiplexZ(tolerance : Double, coefficients : Double[], control : LittleEndian, target : Qubit) : Unit is Adj + Ctl {
         body (...) {
             // pad coefficients length at tail to a power of 2.
@@ -271,8 +271,7 @@ namespace Microsoft.Quantum.Canon {
     /// ## coefficients
     /// Array of up to $2^n$ coefficients $\theta_j$. The $j$th coefficient
     /// indexes the number state $\ket{j}$ encoded in little-endian format.
-    ///
-    /// ## control
+    /// ## qubits
     /// $n$-qubit control register that encodes number states $\ket{j}$ in
     /// little-endian format.
     ///
@@ -286,7 +285,7 @@ namespace Microsoft.Quantum.Canon {
     ///   https://arxiv.org/abs/quant-ph/0406176
     ///
     /// # See Also
-    /// - ApproximatelyApplyDiagonalUnitary
+    /// - Microsoft.Quantum.Canon.ApproximatelyApplyDiagonalUnitary
     operation ApplyDiagonalUnitary(coefficients : Double[], qubits : LittleEndian) : Unit is Adj + Ctl {
         ApproximatelyApplyDiagonalUnitary(0.0, coefficients, qubits);
     }
@@ -315,7 +314,7 @@ namespace Microsoft.Quantum.Canon {
     /// Array of up to $2^n$ coefficients $\theta_j$. The $j$th coefficient
     /// indexes the number state $\ket{j}$ encoded in little-endian format.
     ///
-    /// ## control
+    /// ## qubits
     /// $n$-qubit control register that encodes number states $\ket{j}$ in
     /// little-endian format.
     ///
@@ -329,7 +328,7 @@ namespace Microsoft.Quantum.Canon {
     ///   https://arxiv.org/abs/quant-ph/0406176
     ///
     /// # See Also
-    /// - ApplyDiagonalUnitary
+    /// - Microsoft.Quantum.Canon.ApplyDiagonalUnitary
     operation ApproximatelyApplyDiagonalUnitary(tolerance : Double, coefficients : Double[], qubits : LittleEndian)
     : Unit is Adj + Ctl {
         if (IsEmpty(qubits!)) {

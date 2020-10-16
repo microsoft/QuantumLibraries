@@ -256,16 +256,16 @@ namespace Microsoft.Quantum.Math {
     /// Returns a number raised to a given power.
     ///
     /// # Input
-    /// ## base
+    /// ## a
     /// The number $a$ that is to be raised.
     /// ## power
     /// The power $b$ to which $a$ should be raised.
     ///
     /// # Output
     /// The power $a^b$
-    function PowC(base_ : Complex, power : Complex) : Complex {
+    function PowC(a : Complex, power : Complex) : Complex {
         return ComplexPolarAsComplex(
-            PowCAsCP(base_, power)
+            PowCAsCP(a, power)
         );
     }
 
@@ -273,7 +273,7 @@ namespace Microsoft.Quantum.Math {
     /// Returns a number raised to a given power.
     ///
     /// # Input
-    /// ## base
+    /// ## a
     /// The number $a$ that is to be raised.
     /// ## power
     /// The power $b$ to which $a$ should be raised.

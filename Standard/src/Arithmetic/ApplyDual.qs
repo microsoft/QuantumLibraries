@@ -37,7 +37,7 @@ namespace Microsoft.Quantum.Arithmetic {
     }
 
     /// # See Also
-    /// - ApplyPhaseLEOperationOnLE
+    /// - Microsoft.Quantum.Canon.ApplyPhaseLEOperationOnLE
     operation ApplyPhaseLEOperationOnLEA (op : (PhaseLittleEndian => Unit is Adj), target : LittleEndian) : Unit
     {
         body (...)
@@ -53,7 +53,7 @@ namespace Microsoft.Quantum.Arithmetic {
 
 
     /// # See Also
-    /// - @"microsoft.quantum.canon.applyphaseleoperationonle"
+    /// - Microsoft.Quantum.Canon.ApplyPhaseLEOperationOnLE
     operation ApplyPhaseLEOperationOnLEC (op : (PhaseLittleEndian => Unit is Ctl), target : LittleEndian) : Unit
     {
         body (...)
@@ -75,7 +75,7 @@ namespace Microsoft.Quantum.Arithmetic {
 
 
     /// # See Also
-    /// - @"microsoft.quantum.canon.applyphaseleoperationonle"
+    /// - Microsoft.Quantum.Canon.ApplyPhaseLEOperationOnLE
     operation ApplyPhaseLEOperationOnLECA (op : (PhaseLittleEndian => Unit is Adj + Ctl), target : LittleEndian) : Unit
     {
         body (...)

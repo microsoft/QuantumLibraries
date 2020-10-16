@@ -52,8 +52,8 @@ namespace Microsoft.Quantum.ErrorCorrection {
     /// to be applied is the 3-bit encoding of the X, respectively, Z syndrome when considered an integer.
     ///
     /// # See Also
-    /// - SteaneCodeRecoveryX
-    /// - SteaneCodeRecoveryFns
+    /// - Microsoft.Quantum.ErrorCorrection.SteaneCodeRecoveryX
+    /// - Microsoft.Quantum.ErrorCorrection.SteaneCodeRecoveryFns
     ///
     /// # References
     /// - D. Gottesman, "Stabilizer Codes and Quantum Error Correction," Ph.D. Thesis, Caltech, 1997;
@@ -69,8 +69,8 @@ namespace Microsoft.Quantum.ErrorCorrection {
     /// Decoder for the Z-part of the stabilizer group of the ⟦7, 1, 3⟧ Steane quantum code.
     ///
     /// # See Also
-    /// - SteaneCodeRecoveryX
-    /// - SteaneCodeRecoveryFns
+    /// - Microsoft.Quantum.ErrorCorrection.SteaneCodeRecoveryX
+    /// - Microsoft.Quantum.ErrorCorrection.SteaneCodeRecoveryFns
     function SteaneCodeRecoveryZ (syndrome : Syndrome) : Pauli[] {
         let idxQubit = ResultArrayAsInt(syndrome!);
         return idxQubit == 0
@@ -88,8 +88,8 @@ namespace Microsoft.Quantum.ErrorCorrection {
     /// corrects the detected error.
     ///
     /// # See Also
-    /// - SteaneCodeRecoveryX
-    /// - SteaneCodeRecoveryZ
+    /// - Microsoft.Quantum.ErrorCorrection.SteaneCodeRecoveryX
+    /// - Microsoft.Quantum.ErrorCorrection.SteaneCodeRecoveryZ
     function SteaneCodeRecoveryFns () : (RecoveryFn, RecoveryFn)
     {
         return (RecoveryFn(SteaneCodeRecoveryX), RecoveryFn(SteaneCodeRecoveryZ));
@@ -111,8 +111,8 @@ namespace Microsoft.Quantum.ErrorCorrection {
     /// A quantum register holding the state after the Steane encoder has been applied
     ///
     /// # See Also
-    /// - LogicalRegister
-    /// - SteaneCodeDecoder
+    /// - Microsoft.Quantum.ErrorCorrection.LogicalRegister
+    /// - Microsoft.Quantum.ErrorCorrection.SteaneCodeDecoder
     operation EncodeIntoSteaneCode(physRegister : Qubit[], auxQubits : Qubit[]) : LogicalRegister
     {
         SteaneCodeEncoderImpl(physRegister, auxQubits);
@@ -139,9 +139,9 @@ namespace Microsoft.Quantum.ErrorCorrection {
     /// to be applied is the 3-bit encoding of the X, respectively, Z syndrome when considered an integer.
     ///
     /// # See Also
-    /// - SteaneCodeEncoder
-    /// - SteaneCodeDecoder
-    /// - LogicalRegister
+    /// - Microsoft.Quantum.ErrorCorrection.SteaneCodeEncoder
+    /// - Microsoft.Quantum.ErrorCorrection.SteaneCodeDecoder
+    /// - Microsoft.Quantum.ErrorCorrection.LogicalRegister
     ///
     /// # References
     /// - D. Gottesman, "Stabilizer Codes and Quantum Error Correction," Ph.D. Thesis, Caltech, 1997;
