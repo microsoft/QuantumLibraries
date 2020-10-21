@@ -19,7 +19,7 @@ class JsmolWidget(JsmolView):
             num_confs (int, optional): Number of conformers to generate. Defaults to 10.
 
         Returns:
-            JsmolWidet
+            JsmolWidget
         """
         xyz = mol_to_xyz(mol, num_confs=num_confs)
         return cls.from_str(xyz)
