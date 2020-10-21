@@ -1,8 +1,9 @@
-<Project Sdk="Microsoft.Quantum.Sdk/0.12.20082515-beta">
+<Project Sdk="Microsoft.Quantum.Sdk/0.12.20102008-beta">
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
     <AssemblyName>Microsoft.Quantum.MachineLearning</AssemblyName>
     <QsharpDocsGeneration>true</QsharpDocsGeneration>
+    <QsharpDocsPackageId>Microsoft.Quantum.MachineLearning</QsharpDocsPackageId>
     <!--
       Include core packages using project references instead, since they get
       built at the same time as this project.

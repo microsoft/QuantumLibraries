@@ -68,9 +68,9 @@ namespace Microsoft.Quantum.Canon {
     /// ## 'U
     /// The type of the second input to a curried operation.
     /// # See Also
-    /// - @"microsoft.quantum.canon.uncurryopc"
-    /// - @"microsoft.quantum.canon.uncurryopa"
-    /// - @"microsoft.quantum.canon.uncurryopca"
+    /// - Microsoft.Quantum.Canon.UncurriedOpC
+    /// - Microsoft.Quantum.Canon.UncurriedOpA
+    /// - Microsoft.Quantum.Canon.UncurriedOpCA
     function UncurriedOp<'T, 'U> (curriedOp : ('T -> ('U => Unit))) : (('T, 'U) => Unit) {
         return ApplyCurriedOp(curriedOp, _, _);
     }
@@ -104,7 +104,7 @@ namespace Microsoft.Quantum.Canon {
     /// The type of the second argument of a curried function.
     ///
     /// # See Also
-    /// - @"microsoft.quantum.canon.uncurryop"
+    /// - Microsoft.Quantum.Canon.UncurriedOp
     function UncurriedOpC<'T, 'U> (curriedOp : ('T -> ('U => Unit is Ctl)))
     : (('T, 'U) => Unit is Ctl) {
         return ApplyCurriedOpC(curriedOp, _, _);
@@ -139,7 +139,7 @@ namespace Microsoft.Quantum.Canon {
     /// The type of the second argument of a curried function.
     ///
     /// # See Also
-    /// - @"microsoft.quantum.canon.uncurryop"
+    /// - Microsoft.Quantum.Canon.UncurriedOp
     function UncurriedOpA<'T, 'U> (curriedOp : ('T -> ('U => Unit is Adj))) : (('T, 'U) => Unit is Adj) {
         return ApplyCurriedOpA(curriedOp, _, _);
     }
@@ -173,7 +173,7 @@ namespace Microsoft.Quantum.Canon {
     /// The type of the second argument of a curried function.
     ///
     /// # See Also
-    /// - @"microsoft.quantum.canon.uncurryop"
+    /// - Microsoft.Quantum.Canon.UncurriedOp
     function UncurriedOpCA<'T, 'U> (curriedOp : ('T -> ('U => Unit is Ctl + Adj))) : (('T, 'U) => Unit is Ctl + Adj) {
         return ApplyCurriedOpCA(curriedOp, _, _);
     }

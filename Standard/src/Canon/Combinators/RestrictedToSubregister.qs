@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft Corporation. All rights reserved.
+// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
 namespace Microsoft.Quantum.Canon {
@@ -26,9 +26,9 @@ namespace Microsoft.Quantum.Canon {
     /// ```
     ///
     /// # See Also
-    /// - ApplyToSubregisterA
-    /// - ApplyToSubregisterC
-    /// - ApplyToSubregisterCA
+    /// - Microsoft.Quantum.Canon.ApplyToSubregisterA
+    /// - Microsoft.Quantum.Canon.ApplyToSubregisterC
+    /// - Microsoft.Quantum.Canon.ApplyToSubregisterCA
     operation ApplyToSubregister (op : (Qubit[] => Unit), idxs : Int[], target : Qubit[]) : Unit {
         let subregister = Subarray(idxs, target);
         op(subregister);
@@ -49,7 +49,7 @@ namespace Microsoft.Quantum.Canon {
     /// Register on which the operation acts.
     ///
     /// # See Also
-    /// - @"microsoft.quantum.canon.applytosubregister"
+    /// - Microsoft.Quantum.Canon.ApplyToSubregister
     operation ApplyToSubregisterA (op : (Qubit[] => Unit is Adj), idxs : Int[], target : Qubit[]) : Unit
     {
         body (...)
@@ -78,7 +78,7 @@ namespace Microsoft.Quantum.Canon {
     /// Register on which the operation acts.
     ///
     /// # See Also
-    /// - @"microsoft.quantum.canon.applytosubregister"
+    /// - Microsoft.Quantum.Canon.ApplyToSubregister
     operation ApplyToSubregisterC (op : (Qubit[] => Unit is Ctl), idxs : Int[], target : Qubit[]) : Unit
     {
         body (...)
@@ -108,7 +108,7 @@ namespace Microsoft.Quantum.Canon {
     /// Register on which the operation acts.
     ///
     /// # See Also
-    /// - @"microsoft.quantum.canon.applytosubregister"
+    /// - Microsoft.Quantum.Canon.ApplyToSubregister
     operation ApplyToSubregisterCA (op : (Qubit[] => Unit is Ctl + Adj), idxs : Int[], target : Qubit[]) : Unit
     {
         body (...)
@@ -143,8 +143,6 @@ namespace Microsoft.Quantum.Canon {
     /// Operation to be restricted to a subregister.
     /// ## idxs
     /// Array of indices, indicating to which qubits the operation will be restricted.
-    /// ## target
-    /// Register on which the operation acts.
     ///
     /// # See Also
     /// - Microsoft.Quantum.Canon.RestrictedToSubregisterA
@@ -164,11 +162,9 @@ namespace Microsoft.Quantum.Canon {
     /// Operation to be restricted to a subregister.
     /// ## idxs
     /// Array of indices, indicating to which qubits the operation will be restricted.
-    /// ## target
-    /// Register on which the operation acts.
     ///
     /// # See Also
-    /// - RestrictedToSubregister
+    /// - Microsoft.Quantum.Canon.RestrictedToSubregister
     function RestrictedToSubregisterA (op : (Qubit[] => Unit is Adj), idxs : Int[]) : (Qubit[] => Unit is Adj)
     {
         return ApplyToSubregisterA(op, idxs, _);
@@ -184,8 +180,6 @@ namespace Microsoft.Quantum.Canon {
     /// Operation to be restricted to a subregister.
     /// ## idxs
     /// Array of indices, indicating to which qubits the operation will be restricted.
-    /// ## target
-    /// Register on which the operation acts.
     ///
     /// # See Also
     /// - Microsoft.Quantum.Canon.RestrictedToSubregister
@@ -204,8 +198,6 @@ namespace Microsoft.Quantum.Canon {
     /// Operation to be restricted to a subregister.
     /// ## idxs
     /// Array of indices, indicating to which qubits the operation will be restricted.
-    /// ## target
-    /// Register on which the operation acts.
     ///
     /// # See Also
     /// - Microsoft.Quantum.Canon.RestrictedToSubregister

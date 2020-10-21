@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft Corporation. All rights reserved.
+// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
 namespace Microsoft.Quantum.Canon {
@@ -18,10 +18,10 @@ namespace Microsoft.Quantum.Canon {
     /// given two operation.
     ///
     /// # See Also
-    /// - @"microsoft.quantum.canon.applytopartitiona"
-    /// - @"microsoft.quantum.canon.applytopartitionc"
-    /// - @"microsoft.quantum.canon.applytopartitionca"
-    operation ApplyToPartition (op : ((Qubit[], Qubit[]) => Unit), numberOfQubitsToFirstArgument : Int, target : Qubit[]) : Unit
+    /// - Microsoft.Quantum.Canon.ApplyToPartitionA
+    /// - Microsoft.Quantum.Canon.ApplyToPartitionC
+    /// - Microsoft.Quantum.Canon.ApplyToPartitionCA
+    operation ApplyToPartition(op : ((Qubit[], Qubit[]) => Unit), numberOfQubitsToFirstArgument : Int, target : Qubit[]) : Unit
     {
         EqualityFactB(numberOfQubitsToFirstArgument >= 0, true, $"numberOfQubitsToFirstArgument must be non-negative");
         EqualityFactB(Length(target) >= numberOfQubitsToFirstArgument, true, $"Length(target) must greater or equal to numberOfQubitsToFirstArgument");
@@ -44,7 +44,7 @@ namespace Microsoft.Quantum.Canon {
     /// given two operation.
     ///
     /// # See Also
-    /// - @"microsoft.quantum.canon.applytopartition"
+    /// - Microsoft.Quantum.Canon.ApplyToPartition
     operation ApplyToPartitionA (op : ((Qubit[], Qubit[]) => Unit is Adj), numberOfQubitsToFirstArgument : Int, target : Qubit[]) : Unit
     {
         body (...)
@@ -73,7 +73,7 @@ namespace Microsoft.Quantum.Canon {
     /// given two operation.
     ///
     /// # See Also
-    /// - @"microsoft.quantum.canon.applytopartition"
+    /// - Microsoft.Quantum.Canon.ApplyToPartition
     operation ApplyToPartitionC (op : ((Qubit[], Qubit[]) => Unit is Ctl), numberOfQubitsToFirstArgument : Int, target : Qubit[]) : Unit
     {
         body (...)
@@ -102,7 +102,7 @@ namespace Microsoft.Quantum.Canon {
     /// given two operation.
     ///
     /// # See Also
-    /// - @"microsoft.quantum.canon.applytopartition"
+    /// - Microsoft.Quantum.Canon.ApplyToPartition
     operation ApplyToPartitionCA (op : ((Qubit[], Qubit[]) => Unit is Ctl + Adj), numberOfQubitsToFirstArgument : Int, target : Qubit[]) : Unit
     {
         body (...)

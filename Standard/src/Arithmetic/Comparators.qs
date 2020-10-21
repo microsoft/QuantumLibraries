@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft Corporation. All rights reserved.
+// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
 namespace Microsoft.Quantum.Arithmetic {
@@ -48,7 +48,7 @@ namespace Microsoft.Quantum.Arithmetic {
                 ApplyToEachCA(X, x! + [auxiliary]);
 
                 ApplyMajorityInPlace(x![0], [y![0], auxiliary]);
-                ApplyToEachCA(MAJ, Zip3(Most(x!), Rest(y!), Rest(x!)));
+                ApplyToEachCA(MAJ, Zipped3(Most(x!), Rest(y!), Rest(x!)));
             } apply {
                 X(output);
                 CNOT(Tail(x!), output);

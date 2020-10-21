@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft Corporation. All rights reserved.
+// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
 namespace Microsoft.Quantum.Arrays {
@@ -373,7 +373,7 @@ namespace Microsoft.Quantum.Arrays {
     /// that `array` can be interpreted as a permutation on `n` elements.
     ///
     /// # Input
-    /// ## array
+    /// ## permuation
     /// An array that may or may not represent a permutation.
     ///
     /// # Ouput
