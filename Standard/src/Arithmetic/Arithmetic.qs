@@ -71,7 +71,7 @@ namespace Microsoft.Quantum.Arithmetic {
     /// in computational basis.
     ///
     /// # See Also
-    /// - LittleEndian
+    /// - Microsoft.Quantum.Arithmetic.LittleEndian
     operation CopyMostSignificantBit (from : LittleEndian, target : Qubit) : Unit {
         body (...) {
             let mostSingificantQubit = Tail(from!);

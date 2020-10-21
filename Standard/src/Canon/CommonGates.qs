@@ -146,7 +146,7 @@ namespace Microsoft.Quantum.Canon {
     ///
     ///
     /// # See Also
-    /// - @"microsoft.quantum.canon.qft"
+    /// - Microsoft.Quantum.Canon.QFT
     operation QFTLE(qs : LittleEndian) : Unit {
         body (...) {
             ApplyQuantumFourierTransform(qs);
@@ -223,6 +223,7 @@ namespace Microsoft.Quantum.Canon {
     /// Qubit to which the gate should be applied.
     ///
     /// # See Also
+    /// - Microsoft.Quantum.Intrinsic.H
     operation HY (target : Qubit) : Unit {
         body (...) {
             H(target);

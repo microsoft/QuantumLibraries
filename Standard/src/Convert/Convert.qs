@@ -185,8 +185,6 @@ namespace Microsoft.Quantum.Convert {
     /// apply Pauli if bit is this value.
     /// ## bits
     /// Boolean array.
-    /// ## qubits
-    /// Quantum register to which a Pauli operator is to be applied.
     ///
     /// # Remarks
     /// The Boolean array and the quantum register must be of equal length.
