@@ -28,7 +28,7 @@ namespace Microsoft.Quantum.Simulation {
     /// then this function returns an operation which performs adiabatic
     /// state preparation for the final dynamical generator.
     function InterpolatedEvolution(
-            inerpolationTime : Double,
+            interpolationTime : Double,
             evolutionGeneratorStart : EvolutionGenerator,
             evolutionGeneratorEnd : EvolutionGenerator,
             timeDependentSimulationAlgorithm : TimeDependentSimulationAlgorithm
@@ -38,7 +38,7 @@ namespace Microsoft.Quantum.Simulation {
         let (evolutionSetEnd, generatorSystemEnd) = evolutionGeneratorEnd!;
         let generatorSystemTimeDependent = InterpolateGeneratorSystems(generatorSystemStart, generatorSystemEnd);
         let evolutionSchedule = EvolutionSchedule(evolutionSetStart, generatorSystemTimeDependent!);
-        return timeDependentSimulationAlgorithm!(inerpolationTime, evolutionSchedule, _);
+        return timeDependentSimulationAlgorithm!(interpolationTime, evolutionSchedule, _);
     }
     
     
