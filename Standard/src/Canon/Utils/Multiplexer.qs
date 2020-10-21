@@ -21,7 +21,7 @@ namespace Microsoft.Quantum.Canon {
     /// \begin{align}
     ///     U = \sum^{2^n - 1}_{j=0} \ket{j}\bra{j} \otimes e^{i P \theta_j}.
     /// \end{align}
-    /// ##
+    /// $$
     ///
     /// # Input
     /// ## coefficients

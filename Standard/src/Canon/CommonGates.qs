@@ -12,10 +12,12 @@ namespace Microsoft.Quantum.Canon {
     ///
     /// $$
     /// \begin{align}
-    ///     1 & 0 & 0 & 0 \\\\
-    ///     0 & 1 & 0 & 0 \\\\
-    ///     0 & 0 & 0 & 1 \\\\
-    ///     0 & 0 & 1 & 0
+    ///     \left(\begin{matrix}
+    ///         1 & 0 & 0 & 0 \\\\
+    ///         0 & 1 & 0 & 0 \\\\
+    ///         0 & 0 & 0 & 1 \\\\
+    ///         0 & 0 & 1 & 0
+    ///      \end{matrix}\right)
     /// \end{align},
     /// $$
     /// where rows and columns are organized as in the quantum concepts guide.
