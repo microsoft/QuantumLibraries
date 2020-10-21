@@ -4,7 +4,7 @@ Prototype for chemistry library's Python application layer, contains tools for c
 
 ## How to install (development mode)
 
-```
+```bash
 jupyter nbextension install jupyter_jsme
 jupyter nbextension enable jupyter_jsme/extension
 ```
