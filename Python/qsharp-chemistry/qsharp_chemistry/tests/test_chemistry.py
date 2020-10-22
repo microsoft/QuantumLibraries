@@ -1,8 +1,9 @@
 import logging
 logging.basicConfig(level=logging.INFO)
 
-import qsharp.chemistry
-from qsharp.chemistry import load_broombridge, load_fermion_hamiltonian, load_input_state, encode, IndexConvention
+import qsharp
+import qsharp_chemistry
+from qsharp_chemistry.problem_description import IndexConvention
 
 print ( qsharp.component_versions() )
 
@@ -40,7 +41,7 @@ def test_load_input_state():
     """
     Checks that loading an input state from file or from broombridge gives the same result.
     """
-    broombridge = qsharp.chemistry.load_broombridge("broombridge.yaml")
+    broombridge = qsharp_chemistry.load_broombridge("broombridge.yaml")
 
     is1 = broombridge.problem_description[0].load_input_state("UCCSD |G>")
     is2 = load_input_state("broombridge.yaml", "UCCSD |G>")
@@ -60,7 +61,7 @@ def test_load_greedy_state():
     """
     Checks that not passing a wavefunction label generates the greedy input state.
     """
-    broombridge = qsharp.chemistry.load_broombridge("broombridge.yaml")
+    broombridge = qsharp_chemistry.load_broombridge("broombridge.yaml")
 
     is1 = broombridge.problem_description[0].load_input_state("", IndexConvention.HalfUp)
     is2 = load_input_state("broombridge.yaml", "", IndexConvention.HalfUp)
@@ -73,7 +74,7 @@ def test_jw_encode():
     """
     Checks that we can encode a hamiltonian + input state
     """
-    broombridge = qsharp.chemistry.load_broombridge("broombridge.yaml")
+    broombridge = qsharp_chemistry.load_broombridge("broombridge.yaml")
 
     fh1 = broombridge.problem_description[0].load_fermion_hamiltonian()
     is1 = broombridge.problem_description[0].load_input_state()

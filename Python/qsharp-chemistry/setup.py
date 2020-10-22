@@ -23,7 +23,7 @@ import os
 version = os.environ.get('PYTHON_VERSION', '0.0.0.1')
 is_conda = bool(os.environ.get('CONDA_BUILD', False))
 
-with open('./qsharp/chemistry/version.py', 'w') as f:
+with open('./qsharp_chemistry/version.py', 'w') as f:
     f.write(f'''# Auto-generated file, do not edit.
 ##
 # version.py: Specifies the version of the qsharp-chemistry package.
@@ -50,11 +50,11 @@ setuptools.setup(
     version=version,
     author="Microsoft",
     author_email="que-contacts@microsoft.com",
-    description="Python chemistry libraries for Q#.",
+    description="Tools for interacting with the Q# chemistry library",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/microsoft/QuantumLibraries",
-    packages=setuptools.find_namespace_packages(include=["qsharp.*"]),
+    packages=setuptools.find_namespace_packages(include=["qsharp_chemistry.*"]),
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",
