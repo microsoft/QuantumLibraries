@@ -9,7 +9,7 @@ namespace Microsoft.Quantum.Optimization {
     /// # Summary
     /// Represents the result of optimizing a univariate function.
     ///
-    /// # Input
+    /// # Named Items
     /// ## Coordinate
     /// Input at which an optimum was found.
     /// ## Value

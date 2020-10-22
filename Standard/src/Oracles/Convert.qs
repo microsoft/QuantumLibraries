@@ -26,8 +26,8 @@ namespace Microsoft.Quantum.Oracles {
     /// An oracle $O=UA$ of type `ObliviousOracle`.
     ///
     /// # See Also
-    /// - Microsoft.Quantum.Canon.DeterministicStateOracle
-    /// - Microsoft.Quantum.Canon.ObliviousOracle
+    /// - Microsoft.Quantum.Oracles.DeterministicStateOracle
+    /// - Microsoft.Quantum.Oracles.ObliviousOracle
     function ObliviousOracleFromDeterministicStateOracle(ancillaOracle : DeterministicStateOracle, signalOracle : ObliviousOracle)
     : ObliviousOracle {
         return ObliviousOracle(ApplyObliviousOracleFromDeterministicStateOracle(ancillaOracle, signalOracle, _, _));
@@ -59,8 +59,8 @@ namespace Microsoft.Quantum.Oracles {
     /// longer explicitly separate, e.g.  $A\ket{0\psi}\_{as}$.
     ///
     /// # See Also
-    /// - Microsoft.Quantum.Canon.StateOracle
-    /// - Microsoft.Quantum.Canon.DeterministicStateOracle
+    /// - Microsoft.Quantum.Oracles.StateOracle
+    /// - Microsoft.Quantum.Oracles.DeterministicStateOracle
     function DeterministicStateOracleFromStateOracle (idxFlagQubit : Int, stateOracle : StateOracle)
     : DeterministicStateOracle {
         return DeterministicStateOracle(ApplyDeterministicStateOracleFromStateOracle(idxFlagQubit, stateOracle, _));
@@ -88,8 +88,8 @@ namespace Microsoft.Quantum.Oracles {
     /// dummy variable and has no effect.
     ///
     /// # See Also
-    /// - Microsoft.Quantum.Canon.DeterministicStateOracle
-    /// - Microsoft.Quantum.Canon.StateOracle
+    /// - Microsoft.Quantum.Oracles.DeterministicStateOracle
+    /// - Microsoft.Quantum.Oracles.StateOracle
     function StateOracleFromDeterministicStateOracle (deterministicStateOracle : DeterministicStateOracle) : StateOracle
     {
         return StateOracle(ApplyStateOracleFromDeterministicStateOracle(_, deterministicStateOracle, _));

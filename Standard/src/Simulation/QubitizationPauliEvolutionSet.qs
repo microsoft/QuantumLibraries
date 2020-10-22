@@ -114,15 +114,16 @@ namespace Microsoft.Quantum.Simulation {
     /// # Summary
     /// Used in implementation of `PauliBlockEncoding`
     /// # See Also
-    /// - Microsoft.Quantum.Canon.PauliBlockEncoding
+    /// - Microsoft.Quantum.Simulation.PauliBlockEncoding
     internal function IdxToCoeff(idx: Int, genFun: (Int -> GeneratorIndex), genIdxToCoeff: (GeneratorIndex -> Double)) : Double {
         return Sqrt(AbsD(genIdxToCoeff(genFun(idx))));
     }
 
     /// # Summary
     /// Used in implementation of `PauliBlockEncoding`
+    ///
     /// # See Also
-    /// - Microsoft.Quantum.Canon.PauliBlockEncoding
+    /// - Microsoft.Quantum.Simulation.PauliBlockEncoding
     internal function IdxToUnitary(idx: Int, genFun: (Int -> GeneratorIndex), genIdxToUnitary: (GeneratorIndex -> (Qubit[] => Unit is Adj + Ctl))) : (Qubit[] => Unit is Adj + Ctl) {
         return genIdxToUnitary(genFun(idx));
     }
@@ -130,16 +131,18 @@ namespace Microsoft.Quantum.Simulation {
 
     /// # Summary
     /// Used in implementation of `PauliBlockEncoding`
+    ///
     /// # See Also
-    /// - Microsoft.Quantum.Canon.PauliBlockEncoding
+    /// - Microsoft.Quantum.Simulation.PauliBlockEncoding
     internal function PauliLCUUnitary(generatorIndex: GeneratorIndex) : (Qubit[] => Unit is Adj + Ctl) {
         return ApplyPauliLCUUnitary(generatorIndex,_);
     }
 
     /// # Summary
     /// Used in implementation of `PauliBlockEncoding`
+    ///
     /// # See Also
-    /// - Microsoft.Quantum.Canon.PauliBlockEncoding
+    /// - Microsoft.Quantum.Simulation.PauliBlockEncoding
     internal operation ApplyPauliLCUUnitary(generatorIndex: GeneratorIndex, qubits: Qubit[])
     : Unit is Adj + Ctl {
         let ((idxPaulis, coeff), idxQubits) = generatorIndex!;

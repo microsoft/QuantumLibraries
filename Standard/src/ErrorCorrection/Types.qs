@@ -63,8 +63,8 @@ namespace Microsoft.Quantum.ErrorCorrection {
     /// ```
     ///
     /// # See Also
-    /// - LogicalRegister
-    /// - Syndrome
+    /// - Microsoft.Quantum.ErrorCorrection.LogicalRegister
+    /// - Microsoft.Quantum.ErrorCorrection.Syndrome
     newtype SyndromeMeasOp = (LogicalRegister => Syndrome);
 
     /// # Summary
