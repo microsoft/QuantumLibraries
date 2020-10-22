@@ -4,6 +4,8 @@ import typing
 from typing import List, Tuple, Dict, Iterable
 from enum import Enum
 
+import qsharp
+
 from .broombridge import Broombridge
 from .fermion_hamiltonian import FermionHamiltonian, InputState
 from .problem_description import IndexConvention
@@ -11,11 +13,14 @@ from .problem_description import IndexConvention
 import logging
 logger = logging.getLogger(__name__)
 
+_CHEMISTRY_NAMESPACE = "Microsoft.Quantum.Chemistry.Jupyter"
+
 def enable_magic():
     """
-    Enable the magic command
+    Enable the %chemistry magic command.
     """
-    qsharp.packages.add("microsoft.quantum.chemistry.jupyter")
+    if _CHEMISTRY_NAMESPACE not in [name for name, _ in list(qsharp.packages)]:
+        qsharp.packages.add(_CHEMISTRY_NAMESPACE)
 
 
 def load_fermion_hamiltonian(file_name: str, index_convention : IndexConvention = IndexConvention.UpDown) -> FermionHamiltonian:
@@ -25,7 +30,7 @@ def load_fermion_hamiltonian(file_name: str, index_convention : IndexConvention 
     `index_convention` can be 'UpDown' or 'HalfUp'
     """
     logger.info(f"Loading fermion Hamiltonian from '{file_name}' using index_convention '{index_convention.name}'.")
-    import qsharp
+    enable_magic()
     data = qsharp.client._execute_magic(
         'chemistry.fh.load',
         raise_on_stderr=True,
@@ -44,7 +49,7 @@ def load_input_state(file_name: str, wavefunction_label : str = None, index_conv
     `index_convention` can be 'UpDown' or 'HalfUp'
     """
     logger.info(f"Loading input state '{wavefunction_label}' from '{file_name}' using index_convention '{index_convention.name}'.")
-    import qsharp
+    enable_magic()
     data = qsharp.client._execute_magic(
         'chemistry.inputstate.load',
         raise_on_stderr=True,
@@ -59,7 +64,7 @@ def load_broombridge(file_name: str) -> Broombridge:
     """
     Loads a Broombridge data file.
     """
-    import qsharp
+    enable_magic()
     logger.info(f"Loading broombridge data from '{file_name}'.")
     # NB: we don't use the execute_magic method here, since we don't need to
     #     JSON serialize any arguments in this case.
@@ -72,7 +77,7 @@ def encode(hamiltonian : FermionHamiltonian, input_state : InputState) -> Tuple:
     Encodes the given Hamiltonian and input state using the Jordan Wigner encoding
     that can be used to run chemistry simulations using Q#'s chemistry library.
     """
-    import qsharp
+    enable_magic()
     logger.info(f"Doing jw encoding.")
     data = qsharp.client._execute_magic(
         'chemistry.encode',

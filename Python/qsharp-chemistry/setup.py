@@ -46,7 +46,7 @@ with open("./README.md", "r") as fh:
 ## SETUPTOOLS INVOCATION ##
 
 setuptools.setup(
-    name="qsharp-chemistry",
+    name="qsharp_chemistry",
     version=version,
     author="Microsoft",
     author_email="que-contacts@microsoft.com",

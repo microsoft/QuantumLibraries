@@ -5,7 +5,7 @@ import typing
 from typing import List, Tuple, Dict, Iterable
 from enum import Enum
 
-from .fermion_hamiltonian import FermionHamiltonian
+from .fermion_hamiltonian import FermionHamiltonian, InputState
 
 import logging
 logger = logging.getLogger(__name__)

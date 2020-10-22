@@ -26,13 +26,21 @@ cd Python/qsharp-chemistry
 pip install -e .
 ```
 
-This requires an installation of `qsharp-core` and the IQ# kernel, which can be installed with
+This requires an installation of `qsharp` and the IQ# kernel, which can be installed with
 
 ```bash
-pip install qsharp-core
+pip install qsharp
 dotnet tool install -g Microsoft.Quantum.IQSharp
 dotnet iqsharp install
 ```
+
+or simply
+
+```bash
+conda install -c quantumengineering qsharp
+```
+
+However, important to note is that the latter should be run _before_ installing `qsharp-chemistry` in development mode.
 
 ## Building the `qsharp-chemistry` Package ##
 
