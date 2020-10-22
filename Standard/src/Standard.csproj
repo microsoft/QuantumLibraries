@@ -1,11 +1,18 @@
-<Project Sdk="Microsoft.Quantum.Sdk/0.12.20082515-beta">
+<Project Sdk="Microsoft.Quantum.Sdk/0.12.20102008-beta">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
     <AssemblyName>Microsoft.Quantum.Standard</AssemblyName>
-    <QsharpDocsGeneration>true</QsharpDocsGeneration>
     <IncludeQsharpCorePackages>false</IncludeQsharpCorePackages> <!-- otherwise the standard library is included by the Sdk -->
     <NoWarn>1591</NoWarn> <!-- warning regarding missing C# doc comments -->
+  </PropertyGroup>
+
+  <!-- Documentation generation options -->
+  <PropertyGroup>
+    <QsharpDocsGeneration>true</QsharpDocsGeneration>
+    <!-- Since Microsoft.Quantum.Standard is brought in by default,
+         suppress package ID display in this project only. -->
+    <QsharpDocsPackageId></QsharpDocsPackageId>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -30,7 +37,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Quantum.Simulators" Version="0.12.20082515-beta" />
+    <PackageReference Include="Microsoft.Quantum.Simulators" Version="0.12.20102008-beta" />
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" />
     <PackageReference Include="NumSharp" Version="0.20.5" />
   </ItemGroup>

@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft Corporation. All rights reserved.
+// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
 namespace Microsoft.Quantum.Arithmetic {
@@ -31,8 +31,8 @@ namespace Microsoft.Quantum.Arithmetic {
     /// We abbreviate `PhaseLittleEndian` as `PhaseLE` in the documentation.
     ///
     /// # See Also
-    /// - QFT
-    /// - QFTLE
+    /// - Microsoft.Quantum.Canon.QFT
+    /// - Microsoft.Quantum.Canon.QFTLE
     newtype PhaseLittleEndian = Qubit[];
 
 }

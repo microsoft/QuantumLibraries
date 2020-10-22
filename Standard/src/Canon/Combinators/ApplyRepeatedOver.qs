@@ -22,7 +22,7 @@ namespace Microsoft.Quantum.Canon {
     /// ## register
     /// Qubit register to be acted upon.
     ///
-    /// ## Example
+    /// # Example
     /// // The following applies Exp([PauliX, PauliY], 0.5) to qubits 0, 1
     /// // then X to qubit 2
     /// let ops = [Exp([PauliX, PauliY], 0.5, _), ApplyToFirstQubit(X, _)];
@@ -56,7 +56,7 @@ namespace Microsoft.Quantum.Canon {
     /// ## register
     /// Qubit register to be acted upon.
     ///
-    /// ## Example
+    /// # Example
     /// // The following applies Exp([PauliX, PauliY], 0.5) to qubits 0, 1
     /// // then X to qubit 2
     /// let ops = [Exp([PauliX, PauliY], 0.5, _), ApplyToFirstQubitA(X, _)];
@@ -90,7 +90,7 @@ namespace Microsoft.Quantum.Canon {
     /// ## register
     /// Qubit register to be acted upon.
     ///
-    /// ## Example
+    /// # Example
     /// // The following applies Exp([PauliX, PauliY], 0.5) to qubits 0, 1
     /// // then X to qubit 2
     /// let ops = [Exp([PauliX, PauliY], 0.5, _), ApplyToFirstQubitC(X, _)];
@@ -124,7 +124,7 @@ namespace Microsoft.Quantum.Canon {
     /// ## register
     /// Qubit register to be acted upon.
     ///
-    /// ## Example
+    /// # Example
     /// // The following applies Exp([PauliX, PauliY], 0.5) to qubits 0, 1
     /// // then X to qubit 2
     /// let ops = [Exp([PauliX, PauliY], 0.5, _), ApplyToFirstQubitCA(X, _)];

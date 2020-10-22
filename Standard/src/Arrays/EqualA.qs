@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft Corporation. All rights reserved.
+// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
 namespace Microsoft.Quantum.Arrays {
@@ -19,7 +19,7 @@ namespace Microsoft.Quantum.Arrays {
     /// The type of each array's elements.
     ///
     /// # Input
-    /// ## predicate
+    /// ## equal
     /// A function from tuple `('T, 'T)` to `Bool` that is used to check whether two elements of arrays are equal.
     /// ## array1
     /// The first array to be compared.

@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft Corporation. All rights reserved.
+// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
 namespace Microsoft.Quantum.ErrorCorrection {
@@ -18,8 +18,7 @@ namespace Microsoft.Quantum.ErrorCorrection {
     /// # Remarks
     /// The particular encoder chosen was taken from the paper V. Kliuchnikov and D. Maslov, "Optimization of Clifford Circuits,"
     /// Phys. Rev. Phys. Rev. A 88, 052307 (2013); https://arxiv.org/abs/1305.0810, Figure 4b) and requires a total of 11 gates.
-    operation FiveQubitCodeEncoderImpl (data : Qubit[], scratch : Qubit[]) : Unit
-    {
+    operation FiveQubitCodeEncoderImpl (data : Qubit[], scratch : Qubit[]) : Unit {
         body (...) {
             Controlled X(data, scratch[1]);
             H(data[0]);
@@ -61,9 +60,8 @@ namespace Microsoft.Quantum.ErrorCorrection {
     /// ordering in the table lookup recovery is given by converting the bitvectors to integers (using little endian).
     ///
     /// # See Also
-    /// - RecoveryFn
-    function FiveQubitCodeRecoveryFn () : RecoveryFn
-    {
+    /// - Microsoft.Quantum.ErrorCorrection.RecoveryFn
+    function FiveQubitCodeRecoveryFn () : RecoveryFn {
         return TableLookupRecovery(
             [
                 [PauliI, PauliI, PauliI, PauliI, PauliI],
@@ -102,7 +100,7 @@ namespace Microsoft.Quantum.ErrorCorrection {
     /// encoded state.
     ///
     /// # See Also
-    /// - LogicalRegister
+    /// - Microsoft.Quantum.ErrorCorrection.LogicalRegister
     operation EncodeIntoFiveQubitCode(physRegister : Qubit[], auxQubits : Qubit[]) : LogicalRegister {
         FiveQubitCodeEncoderImpl(physRegister, auxQubits);
         let logicalRegister = LogicalRegister(physRegister + auxQubits);
@@ -121,8 +119,8 @@ namespace Microsoft.Quantum.ErrorCorrection {
     /// first parameter, together with auxiliary qubits in the second parameter.
     ///
     /// # See Also
-    /// - FiveQubitCodeEncoder
-    /// - LogicalRegister
+    /// - Microsoft.Quantum.ErrorCorrection.FiveQubitCodeEncoder
+    /// - Microsoft.Quantum.ErrorCorrection.LogicalRegister
     operation DecodeFromFiveQubitCode(logicalRegister : LogicalRegister) : (Qubit[], Qubit[]) {
         let physRegister = [(logicalRegister!)[0]];
         let auxQubits = (logicalRegister!)[1 .. 4];

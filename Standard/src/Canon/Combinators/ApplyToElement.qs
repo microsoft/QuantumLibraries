@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft Corporation. All rights reserved.
+// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
 namespace Microsoft.Quantum.Canon {
@@ -15,7 +15,7 @@ namespace Microsoft.Quantum.Canon {
     /// An operation to be applied.
     /// ## index
     /// An index into the array of targets.
-    /// ## target
+    /// ## targets
     /// An array of possible targets for `op`.
     ///
     /// # Type Parameters
@@ -42,7 +42,7 @@ namespace Microsoft.Quantum.Canon {
     /// An operation to be applied.
     /// ## index
     /// An index into the array of targets.
-    /// ## target
+    /// ## targets
     /// An array of possible targets for `op`.
     ///
     /// # Type Parameters
@@ -69,7 +69,7 @@ namespace Microsoft.Quantum.Canon {
     /// An operation to be applied.
     /// ## index
     /// An index into the array of targets.
-    /// ## target
+    /// ## targets
     /// An array of possible targets for `op`.
     ///
     /// # Type Parameters
@@ -96,7 +96,7 @@ namespace Microsoft.Quantum.Canon {
     /// An operation to be applied.
     /// ## index
     /// An index into the array of targets.
-    /// ## target
+    /// ## targets
     /// An array of possible targets for `op`.
     ///
     /// # Type Parameters
