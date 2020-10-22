@@ -40,7 +40,6 @@ setuptools.setup(
     ],
     install_requires=[
         'qsharp',
-        'jupyter_jsmol',
-        'rdkit'
+        'jupyter_jsmol'
     ]
 )
