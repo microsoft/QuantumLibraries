@@ -17,12 +17,31 @@ conda install -c quantum-engineering qsharp
 ## Installing from Source ##
 
 If you'd like to contribute to or experiment with the Python interoperability feature, it may be useful to install from source rather than from the `qsharp` package on the Python Package Index (PyPI).
-To do so, make sure that you are in the `Python/qsharp` directory, and run `setup.py` with the `install` argument:
+
+This package uses [namespace packages](https://www.python.org/dev/peps/pep-0382/) that are hosted in two metapackages: `qsharp-core` (part of [iqsharp](http://www.github.com/microsoft/iqsharp)) and `qsharp-chemistry` (part of [QuantumLibraries](http://www.github.com/microsoft/QuantumLibraries)). This means that to work in development mode, we need to install both.
+
+To separately install `qsharp-chemistry` in development mode, run
+
+```bash
+cd Python/qsharp-chemistry
+pip install -e .
+```
+
+If you also want to install `qsharp-core` in development mode, make sure to clone the [iqsharp](http://www.github.com/microsoft/iqsharp) repo and run
+
+```bash
+cd src/Python/qsharp-core
+pip install -e .
+```
+
+To do so, make sure that you are in the `Python/qsharp` directory, and run `pip install -e .`.
 
 ```bash
 cd Python/qsharp
-python setup.py install
+pip install -e .
 ```
+
+This will install `qsharp-core` and `qsharp-chemistry` from the PyPI if they were not previously installed.
 
 ## Building the `qsharp` Package ##
 
