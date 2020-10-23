@@ -35,7 +35,7 @@ def conformer_to_xyz(number_of_atoms: int, charge: int, symbols: Iterable[str], 
 
     return "\n".join(result)
 
-def get_conformer(mol: "Mol", num_confs=10) -> "Conformer":
+def get_conformer(mol: "Mol", num_confs: int=10) -> "Conformer":
     """Get lowest-energy Conformer for molecular fragment.
     If conformers don't converge, get lowest energy conformer.
 
@@ -61,7 +61,7 @@ def get_conformer(mol: "Mol", num_confs=10) -> "Conformer":
             print(f"Solution did not converge. Lowest energy found: {energy}")
     return conformer
 
-def mol_to_xyz(mol: "Mol", num_confs=10) -> str:
+def mol_to_xyz(mol: "Mol", num_confs: int=10) -> str:
     """Convert molecule object to XYZ file formatted string.
 
     Args:
