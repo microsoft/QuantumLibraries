@@ -19,11 +19,15 @@ param(
 
 $artifacts = @{
     Packages = @(
-        "Microsoft.Quantum.Standard",
-        "Microsoft.Quantum.Standard.Visualization",
         "Microsoft.Quantum.Chemistry",
+        "Microsoft.Quantum.Chemistry.DataModel",
+        "Microsoft.Quantum.Chemistry.Jupyter",
+        "Microsoft.Quantum.Chemistry.Runtime",
+        "Microsoft.Quantum.Chemistry.Tools",
+        "Microsoft.Quantum.MachineLearning",
         "Microsoft.Quantum.Numerics",
-        "Microsoft.Quantum.MachineLearning"
+        "Microsoft.Quantum.Standard",
+        "Microsoft.Quantum.Standard.Visualization"
     ) | ForEach-Object { Join-Path $Env:NUGET_OUTDIR "$_.$Env:NUGET_VERSION.nupkg" };
 
     Assemblies = @(
