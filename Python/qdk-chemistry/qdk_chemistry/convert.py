@@ -1,3 +1,5 @@
+# Copyright (c) Microsoft Corporation.
+# Licensed under the MIT License.
 from typing import Iterable, TYPE_CHECKING
 
 from rdkit.Chem import AllChem as Chem

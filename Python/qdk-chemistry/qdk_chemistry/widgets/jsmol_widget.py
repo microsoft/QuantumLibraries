@@ -1,3 +1,5 @@
+# Copyright (c) Microsoft Corporation.
+# Licensed under the MIT License.
 from ..convert import mol_to_xyz
 
 from jupyter_jsmol import JsmolView

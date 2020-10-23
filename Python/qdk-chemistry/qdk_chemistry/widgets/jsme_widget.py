@@ -1,3 +1,5 @@
+# Copyright (c) Microsoft Corporation.
+# Licensed under the MIT License.
 from collections import namedtuple
 from typing import TYPE_CHECKING
 from notebook.nbextensions import check_nbextension
