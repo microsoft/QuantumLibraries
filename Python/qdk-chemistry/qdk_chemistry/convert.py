@@ -29,7 +29,7 @@ def conformer_to_xyz(number_of_atoms: int, charge: int, symbols: Iterable[str], 
     if charge != 0:
         result.extend([
             "$set",
-            f"chrg {str(charge)}",
+            f"chrg {charge}",
             "$end"
         ])
 

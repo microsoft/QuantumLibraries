@@ -110,7 +110,7 @@ class JsmeWidget:
     def _repr_html_(self):
         return self.html_str
 
-    def to_mol(self, add_hs: bool=False, num_confs: int = 10) -> "Mol":
+    def to_mol(self, add_hs: bool=False, num_confs: int=10) -> "Mol":
         """Convert widget value to RDKit molecule.
         If Hydrogen atoms are added, calculate the optimal conformer to get H coordinates.
 

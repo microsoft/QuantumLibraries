@@ -7,11 +7,11 @@ class JsmolWidget(JsmolView):
     """Jupyter widget for JSMol molecular geometry visualization
     """
     def __init__(self, *args, **kwargs):
-        self.default_info['color']='white'
+        self.default_info['color'] = 'white'
         super().__init__(*args, **kwargs)
 
     @classmethod
-    def from_mol(cls, mol: "Mol", num_confs: int = 10, *args, **kwargs):
+    def from_mol(cls, mol: "Mol", num_confs: int=10, *args, **kwargs):
         """Generate JsmolWidget object from RDKit molecule
 
         Args:
