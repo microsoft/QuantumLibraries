@@ -38,7 +38,7 @@ steps:
 
 - pwsh: .\manifest.ps1
   displayName: "List built packages & assemblies"
-  workingDirectory: '$(System.DefaultWorkingDirectory)/build'
+  workingDirectory: '$(System.DefaultWorkingDirectory)/Build'
   condition: succeededOrFailed()
 
 
