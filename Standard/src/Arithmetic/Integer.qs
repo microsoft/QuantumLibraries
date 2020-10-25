@@ -51,20 +51,20 @@ namespace Microsoft.Quantum.Arithmetic {
             CNOT(carryIn, summand1);
             ApplyAnd(summand1, summand2, carryOut);
             CNOT(carryIn, carryOut);
-		}
+        }
         controlled (controls, ...) {
             CNOT(carryIn, summand2);
             CNOT(carryIn, summand1);
             ApplyAnd(summand1, summand2, carryOut);
             CNOT(carryIn, carryOut);
-		}
+        }
         controlled adjoint (controls, ...) {
             CNOT (carryIn, carryOut);
             (Adjoint ApplyAnd) (summand1, summand2, carryOut);
             (Controlled CNOT) (controls, (summand1, summand2));
             CNOT(carryIn, summand1);
             CNOT(carryIn, summand2);
-		}
+        }
     }
 
     /// # Summary
@@ -131,19 +131,19 @@ namespace Microsoft.Quantum.Arithmetic {
 
             using (auxRegister = Qubit[nQubits-1]) {
                 within { 
-					ApplyAnd (xs![0], ys![0], auxRegister[0]);
-				}
+                    ApplyAnd (xs![0], ys![0], auxRegister[0]);
+                }
                 apply {
                     within {
                         for (idx in 1..(nQubits-2)) {
                             (Controlled AdderBlockUsingTemporaryLogicalAnd) (controls, (auxRegister[idx-1], xs![idx], ys![idx], auxRegister[idx]));
                         }
-				    }
+                    }
                     apply {
                         (Controlled Carry) (controls, (auxRegister[nQubits-2], xs![nQubits-1], ys![nQubits-1], carry));
                         (Controlled CNOT) (controls, (xs![nQubits-1], ys![nQubits-1]));
                         (Controlled Sum) (controls, (auxRegister[nQubits-2], xs![nQubits-1], ys![nQubits-1]));
-				    }
+                    }
                 }
                 (Controlled CNOT) (controls,(xs![0], ys![0]));
             }
