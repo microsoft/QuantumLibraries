@@ -72,7 +72,7 @@ namespace Microsoft.Quantum.Arithmetic {
             CNOT (summand1, summand2);
             CNOT(carryIn, summand1);
             CNOT(carryIn, summand2);
-		}
+        }
         controlled (controls, ...) {
             CNOT (carryIn, carryOut);
             (Adjoint ApplyAnd) (summand1, summand2, carryOut);
@@ -147,7 +147,7 @@ namespace Microsoft.Quantum.Arithmetic {
             using (auxRegister = Qubit[nQubits-1]) {
                 within {
                     ApplyAnd (xs![0], ys![0], auxRegister[0]);   
-				}
+                }
                 apply {
                     for (idx in 1..(nQubits-2)) {
                         ComputeTemporaryCarry(auxRegister[idx-1], xs![idx], ys![idx], auxRegister[idx]);
@@ -158,8 +158,8 @@ namespace Microsoft.Quantum.Arithmetic {
                     (Controlled Sum) (controls, (auxRegister[nQubits-2], xs![nQubits-1], ys![nQubits-1]));
                     for (idx in (nQubits-2)..-1..1) {
                         (Controlled EraseTemporaryCarry) (controls, (auxRegister[idx-1], xs![idx], ys![idx], auxRegister[idx]));
-                    }        
-				}
+                    }
+                }
                 // low bit output computation is simplified since CarryIn is always |0>
                 (Controlled CNOT) (controls, (xs![0], ys![0]));
             }
