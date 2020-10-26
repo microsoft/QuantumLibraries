@@ -31,6 +31,58 @@ namespace Microsoft.Quantum.Arithmetic {
     }
 
     /// # Summary
+    /// Implements a compute carry gate using a temporary logical-AND construction.
+    ///
+    /// # Input
+    /// ## carryIn
+    /// Carry-in qubit.
+    /// ## summand1
+    /// First summand qubit.
+    /// ## summand2
+    /// Second summand qubit.
+    /// `summand1` and `summand2`.
+    /// ## carryOut
+    /// Carry-out qubit, will be xored with the higher bit of the sum.
+    internal operation ComputeTemporaryCarry(carryIn: Qubit, summand1: Qubit, summand2: Qubit, carryOut: Qubit)
+    : Unit is Adj{
+        CNOT(carryIn, summand2);
+        CNOT(carryIn, summand1);
+        ApplyAnd(summand1, summand2, carryOut);
+        CNOT(carryIn, carryOut);
+    }
+
+    /// # Summary
+    /// Implements a erase carry gate by uncomputing the logical-AND.
+    ///
+    /// # Input
+    /// ## carryIn
+    /// Carry-in qubit.
+    /// ## summand1
+    /// First summand qubit.
+    /// ## summand2
+    /// Second summand qubit, is replaced with the lower bit of the sum of
+    /// `summand1` and `summand2`.
+    /// ## carryOut
+    /// Carry-out qubit, will be erased
+    internal operation EraseTemporaryCarry(carryIn: Qubit, summand1: Qubit, summand2: Qubit, carryOut: Qubit)
+    : Unit is Adj + Ctl{
+        body (...){
+            CNOT (carryIn, carryOut);
+            (Adjoint ApplyAnd) (summand1, summand2, carryOut);
+            CNOT (summand1, summand2);
+            CNOT(carryIn, summand1);
+            CNOT(carryIn, summand2);
+        }
+        controlled (controls, ...) {
+            CNOT (carryIn, carryOut);
+            (Adjoint ApplyAnd) (summand1, summand2, carryOut);
+            (Controlled CNOT) (controls, (summand1, summand2));
+            CNOT(carryIn, summand1);
+            CNOT(carryIn, summand2);
+        }
+    }
+
+    /// # Summary
     /// Implements a reversible sum gate. Given a carry-in bit encoded in
     /// qubit `carryIn` and two summand bits encoded in `summand1` and `summand2`,
     /// computes the bitwise xor of `carryIn`, `summand1` and `summand2` in the qubit
@@ -73,10 +125,12 @@ namespace Microsoft.Quantum.Arithmetic {
     /// - Thomas G. Draper: "Addition on a Quantum Computer", 2000.
     ///   https://arxiv.org/abs/quant-ph/0008033
     ///
+    /// - Craig Gidney: "Halving the cost of quantum addition", 2018.
+    ///   https://arxiv.org/abs/1709.06648
+    ///
     /// # Remarks
-    /// The specified controlled operation makes use of symmetry and mutual
-    /// cancellation of operations to improve on the default implementation
-    /// that adds a control to every operation.
+    /// The high-bit uses carry and sum blocks to compute the output carry bit
+    /// since adder block implementation erases the carry bit.
     operation RippleCarryAdderD(xs : LittleEndian, ys : LittleEndian, carry : Qubit)
     : Unit is Adj + Ctl  {
         body (...) {
@@ -90,17 +144,24 @@ namespace Microsoft.Quantum.Arithmetic {
                 "Input registers must have the same number of qubits."
             );
 
-            using (auxRegister = Qubit[nQubits]) {
-                for (idx in 0..(nQubits-2)) {
-                    Carry(auxRegister[idx], xs![idx], ys![idx], auxRegister[idx+1]);           // (1)
+            using (auxRegister = Qubit[nQubits-1]) {
+                within {
+                    ApplyAnd (xs![0], ys![0], auxRegister[0]);   
                 }
-                (Controlled Carry) (controls, (auxRegister[nQubits-1], xs![nQubits-1], ys![nQubits-1], carry));
-                (Controlled CNOT) (controls, (xs![nQubits-1], ys![nQubits-1]));
-                (Controlled Sum) (controls, (auxRegister[nQubits-1], xs![nQubits-1], ys![nQubits-1]));
-                for (idx in (nQubits-2)..(-1)..0 ) {
-                    (Adjoint Carry) (auxRegister[idx], xs![idx], ys![idx], auxRegister[idx+1]); // cancels with (1)
-                    (Controlled Sum) (controls, (auxRegister[idx], xs![idx], ys![idx]));
+                apply {
+                    for (idx in 1..(nQubits-2)) {
+                        ComputeTemporaryCarry(auxRegister[idx-1], xs![idx], ys![idx], auxRegister[idx]);
+                    }
+                    // carry out is computed using Carry and Sum since using temporary Logical-AND construction erases the carry bit
+                    (Controlled Carry) (controls, (auxRegister[nQubits-2], xs![nQubits-1], ys![nQubits-1], carry));
+                    (Controlled CNOT) (controls, (xs![nQubits-1], ys![nQubits-1]));
+                    (Controlled Sum) (controls, (auxRegister[nQubits-2], xs![nQubits-1], ys![nQubits-1]));
+                    for (idx in (nQubits-2)..-1..1) {
+                        (Controlled EraseTemporaryCarry) (controls, (auxRegister[idx-1], xs![idx], ys![idx], auxRegister[idx]));
+                    }
                 }
+                // low bit output computation is simplified since CarryIn is always |0>
+                (Controlled CNOT) (controls, (xs![0], ys![0]));
             }
         }
     }
