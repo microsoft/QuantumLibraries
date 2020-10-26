@@ -1,0 +1,9 @@
+Type: Jupyter Notebook Extension
+Compatibility: 3.x, 4.x, 5.x, 6.x
+Name: Jupyter JSME editor
+Main: extension.js
+Link: README.md
+Description: |
+  Jupyter notebook extension
+Parameters:
+- none
