@@ -25,9 +25,9 @@ namespace Microsoft.Quantum.Arithmetic {
     /// Carry-out qubit, will be xored with the higher bit of the sum.
     operation Carry(carryIn: Qubit, summand1: Qubit, summand2: Qubit, carryOut: Qubit)
     : Unit is Adj + Ctl {
-        CCNOT (summand1, summand2, carryOut);
-        CNOT (summand1, summand2);
-        CCNOT (carryIn, summand2, carryOut);
+        CCNOT(summand1, summand2, carryOut);
+        CNOT(summand1, summand2);
+        CCNOT(carryIn, summand2, carryOut);
     }
 
     /// # Summary
@@ -135,12 +135,20 @@ namespace Microsoft.Quantum.Arithmetic {
                     );
                 }
                 apply {
-                    // carry out is computed using Carry and Sum since using temporary Logical-AND construction erases the carry bit
-                    Controlled Carry(controls, (auxRegister[nQubits-2], xs![nQubits-1], ys![nQubits-1], carry));
-                    Controlled CNOT(controls, (xs![nQubits-1], ys![nQubits-1]));
-                    Controlled Sum(controls, (auxRegister[nQubits-2], xs![nQubits-1], ys![nQubits-1]));
+                    // carry out is computed using a majority-of-three operation
+                    within {
+                        CNOT(Tail(auxRegister), Tail(xs!));
+                        CNOT(Tail(auxRegister), Tail(ys!));
+                    } apply {
+                        Controlled ApplyAnd(controls, (Tail(xs!), Tail(ys!), carry));
+                        Controlled CNOT(controls, (Tail(auxRegister), carry));
+                    }
+
+                    // final sum
+                    Controlled CNOT(controls, (Tail(auxRegister), Tail(ys!)));
+                    Controlled CNOT(controls, (Tail(xs!), Tail(ys!)));
                 }
-                // low bit output computation is simplified since CarryIn is always |0>
+
                 Controlled CNOT(controls, (xs![0], ys![0]));
             }
         }
