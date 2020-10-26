@@ -76,7 +76,7 @@ namespace Microsoft.Quantum.Arrays {
     /// ```
     ///
     /// # See Also
-    /// - Mapped
+    /// - Microsoft.Quantum.Arrays.Mapped
     function MappedByIndex<'T, 'U> (mapper : ((Int, 'T) -> 'U), array : 'T[]) : 'U[] {
         mutable resultArray = new 'U[Length(array)];
 

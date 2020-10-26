@@ -51,7 +51,7 @@ namespace Microsoft.Quantum.Canon {
             "Target register must have one more qubit."
         );
 
-        ApplyToEachCA(CCNOT, Zip3(register, Most(targets), Rest(targets)));
+        ApplyToEachCA(CCNOT, Zipped3(register, Most(targets), Rest(targets)));
     }
 
 

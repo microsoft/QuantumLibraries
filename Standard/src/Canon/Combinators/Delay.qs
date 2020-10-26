@@ -1,8 +1,7 @@
-// Copyright (c) Microsoft Corporation. All rights reserved.
+// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-namespace Microsoft.Quantum.Canon
-{
+namespace Microsoft.Quantum.Canon {
 
     /// # Summary
     /// Applies a given operation with a delay.
@@ -34,7 +33,7 @@ namespace Microsoft.Quantum.Canon
     /// - Microsoft.Quantum.Canon.DelayA
     /// - Microsoft.Quantum.Canon.DelayCA
     /// - Microsoft.Quantum.Canon.Delayed
-    operation Delay<'T, 'U> ( op : ('T => 'U), arg : 'T, aux : Unit) : 'U {
+    operation Delay<'T, 'U> (op : ('T => 'U), arg : 'T, aux : Unit) : 'U {
         return op(arg);
     }
 
@@ -157,7 +156,7 @@ namespace Microsoft.Quantum.Canon
     /// # See Also
     /// - Microsoft.Quantum.Canon.DelayedC
     /// - Microsoft.Quantum.Canon.DelayedA
-    /// - Microsoft.Quantum.Canon.DelayedCA    
+    /// - Microsoft.Quantum.Canon.DelayedCA
     /// - Microsoft.Quantum.Canon.Delay
     function Delayed<'T, 'U> ( op : ('T => 'U), arg : 'T) : (Unit => 'U) {
         return Delay(op, arg, _);

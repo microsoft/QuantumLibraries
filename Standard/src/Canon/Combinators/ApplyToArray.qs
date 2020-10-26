@@ -14,7 +14,7 @@ namespace Microsoft.Quantum.Canon {
     /// # Input
     /// ## op
     /// An operation to be applied.
-    /// ## target
+    /// ## targets
     /// An array of targets, of which the first will be applied to `op`.
     ///
     /// # Type Parameters
@@ -46,7 +46,7 @@ namespace Microsoft.Quantum.Canon {
     /// # Input
     /// ## op
     /// An operation to be applied.
-    /// ## target
+    /// ## targets
     /// An array of targets, of which the first will be applied to `op`.
     ///
     /// # Type Parameters
@@ -71,7 +71,7 @@ namespace Microsoft.Quantum.Canon {
     /// # Input
     /// ## op
     /// An operation to be applied.
-    /// ## target
+    /// ## targets
     /// An array of targets, of which the first will be applied to `op`.
     ///
     /// # Type Parameters
@@ -96,7 +96,7 @@ namespace Microsoft.Quantum.Canon {
     /// # Input
     /// ## op
     /// An operation to be applied.
-    /// ## target
+    /// ## targets
     /// An array of targets, of which the first will be applied to `op`.
     ///
     /// # Type Parameters
@@ -121,7 +121,7 @@ namespace Microsoft.Quantum.Canon {
     /// # Input
     /// ## op
     /// An operation to be applied.
-    /// ## target
+    /// ## targets
     /// An array of targets, of which all but the first will be applied to `op`.
     ///
     /// # Type Parameters
@@ -153,7 +153,7 @@ namespace Microsoft.Quantum.Canon {
     /// # Input
     /// ## op
     /// An operation to be applied.
-    /// ## target
+    /// ## targets
     /// An array of targets, of which all but the first will be applied to `op`.
     ///
     /// # Type Parameters
@@ -178,7 +178,7 @@ namespace Microsoft.Quantum.Canon {
     /// # Input
     /// ## op
     /// An operation to be applied.
-    /// ## target
+    /// ## targets
     /// An array of targets, of which all but the first will be applied to `op`.
     ///
     /// # Type Parameters
@@ -203,7 +203,7 @@ namespace Microsoft.Quantum.Canon {
     /// # Input
     /// ## op
     /// An operation to be applied.
-    /// ## target
+    /// ## targets
     /// An array of targets, of which all but the first will be applied to `op`.
     ///
     /// # Type Parameters
@@ -228,7 +228,7 @@ namespace Microsoft.Quantum.Canon {
     /// # Input
     /// ## op
     /// An operation to be applied.
-    /// ## target
+    /// ## targets
     /// An array of targets, of which the last will be applied to `op`.
     ///
     /// # Type Parameters
@@ -260,7 +260,7 @@ namespace Microsoft.Quantum.Canon {
     /// # Input
     /// ## op
     /// An operation to be applied.
-    /// ## target
+    /// ## targets
     /// An array of targets, of which the last will be applied to `op`.
     ///
     /// # Type Parameters
@@ -285,7 +285,7 @@ namespace Microsoft.Quantum.Canon {
     /// # Input
     /// ## op
     /// An operation to be applied.
-    /// ## target
+    /// ## targets
     /// An array of targets, of which the last will be applied to `op`.
     ///
     /// # Type Parameters
@@ -310,7 +310,7 @@ namespace Microsoft.Quantum.Canon {
     /// # Input
     /// ## op
     /// An operation to be applied.
-    /// ## target
+    /// ## targets
     /// An array of targets, of which the last will be applied to `op`.
     ///
     /// # Type Parameters
@@ -335,7 +335,7 @@ namespace Microsoft.Quantum.Canon {
     /// # Input
     /// ## op
     /// An operation to be applied.
-    /// ## target
+    /// ## targets
     /// An array of targets, of which all but the last will be applied to `op`.
     ///
     /// # Type Parameters
@@ -367,7 +367,7 @@ namespace Microsoft.Quantum.Canon {
     /// # Input
     /// ## op
     /// An operation to be applied.
-    /// ## target
+    /// ## targets
     /// An array of targets, of which all but the last will be applied to `op`.
     ///
     /// # Type Parameters
@@ -392,7 +392,7 @@ namespace Microsoft.Quantum.Canon {
     /// # Input
     /// ## op
     /// An operation to be applied.
-    /// ## target
+    /// ## targets
     /// An array of targets, of which all but the last will be applied to `op`.
     ///
     /// # Type Parameters
@@ -417,7 +417,7 @@ namespace Microsoft.Quantum.Canon {
     /// # Input
     /// ## op
     /// An operation to be applied.
-    /// ## target
+    /// ## targets
     /// An array of targets, of which all but the last will be applied to `op`.
     ///
     /// # Type Parameters
