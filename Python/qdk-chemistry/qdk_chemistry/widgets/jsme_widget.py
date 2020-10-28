@@ -1,9 +1,13 @@
 # Copyright (c) Microsoft Corporation.
 # Licensed under the MIT License.
+import uuid
+import ipywidgets
+
 from collections import namedtuple
 from typing import TYPE_CHECKING
 from notebook.nbextensions import check_nbextension
 from varname import varname, VarnameRetrievingError
+from IPython.core.display import Javascript, display, HTML
 
 from rdkit.Chem import AllChem as Chem
 
@@ -29,24 +33,35 @@ _HTML_STR_FORMAT = '''
 <script type="text/javascript" src="{base_url}/{js_source}"></script>
 <script type="text/javascript">
 function jsmeOnLoad() {{
-    jsmeApp_ = new JSApplet.JSME("JSApp_{uid}", "{width}px", "{height}px", {{
+    jsmeApp_{uid} = new JSApplet.JSME("JSApp_{uid}", "{width}px", "{height}px", {{
         "options" : "{options}",
         "{data_type}": "{data}"
     }});
 }}
 
-function saveAs(var_name) {{
-    var molblock = jsmeApp_.molFile();
-    var smiles = jsmeApp_.smiles();
-    var jme = jsmeApp_.jmeFile();
+function saveAs_{uid}(var_name) {{
+    var molblock = jsmeApp_{uid}.molFile();
+    var smiles = jsmeApp_{uid}.smiles();
+    var jme = jsmeApp_{uid}.jmeFile();
     var command = var_name + '.set_value(jme="' + jme + '", smiles="' + smiles + '", molblock="""' + molblock + '""")';
     console.log(command);
     IPython.notebook.kernel.execute(command);
 }}
+
 </script>
 <div id="JSApp_{uid}"></div>
-<button onclick="saveAs('{var_name}')">save</button>
 '''
+
+class JsmeWidgetButton(ipywidgets.Button):
+    def __init__(self, uid: str, *args, **kwargs):
+        """Create "save" button for JsmeWidget
+
+        Args:
+            uid (str): Unique ID of widget
+        """
+        self.uid = uid
+        return super(JsmeWidgetButton, self).__init__(description="Save", *args, **kwargs)
+
 
 class JsmeWidget:
     """Jupyter widget for displaying JSME molecular editor.
@@ -75,6 +90,7 @@ class JsmeWidget:
         self.height = height
         self.value = JsmeValue(jme=jme, molblock=molblock, smiles=smiles)
         self.options = options
+        self._uids = []
 
     def set_value(self, jme: str, smiles: str, molblock: str):
         """Set JSME value (JME, SMILES and MolBlock)
@@ -86,9 +102,18 @@ class JsmeWidget:
         """
         self.value = JsmeValue(jme=jme, molblock=molblock, smiles=smiles)
 
-    @property
-    def html_str(self) -> str:
+    def _gen_uid(self):
+        """Generate unique identifier for javascript applet"""
+        uid = str(uuid.uuid1()).replace("-", "")
+        # Keep track of all UIDs
+        self._uids.append(uid)
+        return uid
+
+    def html_str(self, uid: str) -> str:
         """Returns an HTML string that contains the widget.
+
+        Args:
+            uid (str): Unique identifier of widget
 
         Returns:
             str: HTML string for displaying widget
@@ -101,7 +126,7 @@ class JsmeWidget:
             base_url=BASE_URL,
             js_source=JS_SOURCE,
             var_name=self.name,
-            uid=str(JsmeWidget.n),
+            uid=uid,
             width=self.width,
             height=self.height,
             options=self.options,
@@ -109,8 +134,22 @@ class JsmeWidget:
             data=data
         )
 
-    def _repr_html_(self):
-        return self.html_str
+    def _ipython_display_(self):
+        """Display the widget"""
+        uid = self._gen_uid()
+        jsme = HTML(self.html_str(uid=uid))
+        button = JsmeWidgetButton(uid=uid)
+        
+        def _save(button):
+            self.save(button.uid)
+        
+        button.on_click(_save)
+        display(jsme, button)
+
+    def save(self, uid):
+        """Save the value of the molecular diagram drawn in the widget to the Python namespace
+        """
+        display(Javascript(f"saveAs_{uid}('w')"))
 
     def to_mol(self, add_hs: bool=False, num_confs: int=10) -> "Mol":
         """Convert widget value to RDKit molecule.
@@ -130,7 +169,7 @@ class JsmeWidget:
         else:
             raise ValueError("Cannot create Mol object: JSME value is empty")
 
-        if add_hs is True:
+        if add_hs is True and mol is not None:
             mol = Chem.AddHs(mol)
             # Calculate conformers after adding hydrogens
             Chem.EmbedMultipleConfs(mol, numConfs=num_confs)
