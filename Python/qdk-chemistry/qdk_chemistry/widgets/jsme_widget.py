@@ -174,4 +174,9 @@ class JsmeWidget:
             # Calculate conformers after adding hydrogens
             Chem.EmbedMultipleConfs(mol, numConfs=num_confs)
 
+        if mol is None:
+            raise ValueError(f"Cannot convert JSME widget value to Mol object:\
+                \n{self.value}\
+                \nPlease try clicking 'Save' button on widget or remove H atoms from SMILES string and try again.")
+
         return mol
