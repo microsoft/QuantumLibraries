@@ -1,3 +1,6 @@
+# Copyright (c) Microsoft Corporation.
+# Licensed under the MIT License.
+
 from ..convert import num_electrons
 
 from typing import TYPE_CHECKING
