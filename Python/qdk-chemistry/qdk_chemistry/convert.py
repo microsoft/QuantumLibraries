@@ -1,5 +1,6 @@
 # Copyright (c) Microsoft Corporation.
 # Licensed under the MIT License.
+
 from typing import Iterable, TYPE_CHECKING
 
 from rdkit.Chem import AllChem as Chem
@@ -79,3 +80,15 @@ def mol_to_xyz(mol: "Mol", num_confs: int=10) -> str:
     conformer = get_conformer(mol=mol, num_confs=num_confs)
 
     return conformer_to_xyz(number_of_atoms, charge, symbols, conformer)
+
+
+def num_electrons(mol: "Mol") -> int:
+    """Calculate the number of electrons in the molecule
+
+    Args:
+        mol (Mol): RDKit molecule object
+
+    Returns:
+        int: Number of electrons or sum of atomic number of atoms in molecule
+    """
+    return sum([atom.GetAtomicNum() for atom in mol.GetAtoms()])
