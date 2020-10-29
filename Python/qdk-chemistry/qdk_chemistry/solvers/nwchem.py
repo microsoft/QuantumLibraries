@@ -3,6 +3,7 @@
 
 from ..convert import num_electrons
 
+import re
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
@@ -51,14 +52,17 @@ set tce:qelb {num_el_b}
 task tce {driver}
 """
 
+FLOAT_PATTERN = "([+-]?[0-9]*[.][0-9]+)"
+XYZ_PATTERN = f"(\w) {FLOAT_PATTERN} {FLOAT_PATTERN} {FLOAT_PATTERN}"
+
 def geometry_from_xyz(xyz: str):
     """Generate geometry portion of NW Chem file from XYZ data
 
     Args:
         xyz (str): XYZ file format
     """
-    lines = xyz.split("\n")
-    return "\n".join(lines[2:])
+    match = re.findall(XYZ_PATTERN, xyz)
+    return "\n".join(" ".join(item) for item in match)
 
 def create_input_deck(
         mol_name: str, 
