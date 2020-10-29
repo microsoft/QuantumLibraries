@@ -36,6 +36,7 @@ $artifacts = @{
         ".\Numerics\src\bin\$Env:BUILD_CONFIGURATION\netstandard2.1\Microsoft.Quantum.Numerics.dll",
         ".\MachineLearning\src\bin\$Env:BUILD_CONFIGURATION\netstandard2.1\Microsoft.Quantum.MachineLearning.dll",
         ".\Chemistry\src\DataModel\bin\$Env:BUILD_CONFIGURATION\netstandard2.1\Microsoft.Quantum.Chemistry.DataModel.dll",
+        ".\Chemistry\src\Jupyter\bin\$Env:BUILD_CONFIGURATION\netstandard2.1\Microsoft.Quantum.Chemistry.Jupyter.dll",
         ".\Chemistry\src\Runtime\bin\$Env:BUILD_CONFIGURATION\netstandard2.1\Microsoft.Quantum.Chemistry.Runtime.dll",
         ".\Chemistry\src\Tools\bin\$Env:BUILD_CONFIGURATION\netcoreapp3.1\qdk-chem.dll"
     ) | ForEach-Object { Join-Path $PSScriptRoot (Join-Path ".." $_) };
