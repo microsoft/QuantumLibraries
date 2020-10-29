@@ -162,9 +162,9 @@ class JsmeWidget:
         Returns:
             Mol: RDKit Mol object
         """
-        if self.value.smiles is not "":
+        if self.value.smiles != "":
             mol = Chem.MolFromSmiles(self.value.smiles)
-        elif self.value.molblock is not "":
+        elif self.value.molblock != "":
             mol = Chem.MolFromMolBlock(self.value.molblock)
         else:
             raise ValueError("Cannot create Mol object: JSME value is empty")
