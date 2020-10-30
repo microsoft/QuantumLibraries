@@ -31,7 +31,8 @@ namespace Microsoft.Quantum.Tests {
     /// In this minimal example, there are no system qubits, only a single flag qubit.
     /// ExampleStatePrep is already of type  StateOracle, so we call
     /// StandardAmplitudeAmplification(iterations: Int, stateOracle : StateOracle, idxFlagQubit : Int startQubits: Qubit[]) : ()
-    operation AmpAmpByOracleTest () : Unit {
+    @Test("QuantumSimulator")
+    operation CheckAmpAmpByOracle () : Unit {
         
         using (qubits = Qubit[1]) {
             ResetAll(qubits);
@@ -54,8 +55,8 @@ namespace Microsoft.Quantum.Tests {
         }
     }
     
-    
-    operation AmpAmpObliviousByOraclePhasesTest () : Unit {
+    @Test("QuantumSimulator")
+    operation CheckAmpAmpObliviousByOraclePhases () : Unit {
         
         using (qubits = Qubit[1]) {
             ResetAll(qubits);
@@ -80,8 +81,8 @@ namespace Microsoft.Quantum.Tests {
         }
     }
     
-    
-    operation AmpAmpTargetStateReflectionOracleTest () : Unit {
+    @Test("QuantumSimulator")
+    operation CheckAmpAmpTargetStateReflectionOracle () : Unit {
         
         using (qubits = Qubit[1]) {
             ResetAll(qubits);

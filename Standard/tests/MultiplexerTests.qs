@@ -147,8 +147,8 @@ namespace Microsoft.Quantum.Tests {
         }
     }
     
-    
-    operation ApplyDiagonalUnitaryTest () : Unit {
+    @Diag.Test("QuantumSimulator")
+    operation TestApplyDiagonalUnitary() : Unit {
         
         let maxQubits = 4;
         
@@ -331,8 +331,8 @@ namespace Microsoft.Quantum.Tests {
         return result;
     }
     
-    
-    operation MultiplexOperationsTest () : Unit {
+    @Diag.Test("QuantumSimulator")
+    operation TestMultiplexOperations() : Unit {
         
         mutable result = Zero;
         
@@ -505,7 +505,8 @@ namespace Microsoft.Quantum.Tests {
         }
     }
 
-    operation MultiplexOperationsFromGeneratorTest() : Unit{
+    @Diag.Test("QuantumSimulator")
+    operation TestMultiplexOperationsFromGenerator() : Unit{
         body (...) {
             mutable result = Zero;
 

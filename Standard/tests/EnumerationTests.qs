@@ -30,29 +30,29 @@ namespace Microsoft.Quantum.Tests {
         return a * a;
     }
     
-    
-    function ForAllTest () : Unit {
+    @Test("QuantumSimulator")
+    function ForAllIsCorrect() : Unit {
         
         EqualityFactB(All(IsSingleDigit, [3, 4, 7, 8]), true, $"the elements [3, 4, 7, 8] were not found to be single digit numbers.");
         EqualityFactB(All(IsSingleDigit, [3, 4, 7, 18]), false, $"the elements [3, 4, 7, 18] were found to be single digit numbers.");
     }
-    
-    
-    function ForAnyTest () : Unit {
+        
+    @Test("QuantumSimulator")
+    function ForAnyIsCorrect() : Unit {
         
         EqualityFactB(Any(IsEven, [3, 7, 99, -4]), true, $"the elements [3, 7, 99, -4] were not found to contain at least one even number.");
         EqualityFactB(Any(IsEven, [3, 7, 99, -41]), false, $"the elements [3, 7, 99, -4] were not found to contain at least one even number.");
     }
     
-    
-    function FoldTest () : Unit {
+    @Test("QuantumSimulator")
+    function FoldIsCorrect() : Unit {
         
         let array = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
         EqualityFactI(Fold(Add, 0, array), 55, $"folding the summation over [1..10] did not yield 55.");
     }
     
-    
-    function MapTest () : Unit {
+    @Test("QuantumSimulator")
+    function MapIsCorrect() : Unit {
         
         let array = [1, 2, 3, 4];
         let squaredArray = Mapped(Squarer, array);
@@ -86,13 +86,15 @@ namespace Microsoft.Quantum.Tests {
         AllEqualityFactI(numbers, [1, 2, 3, 1, 2, 3, 1, 2, 3], "Flattened failed");
     }
 
-    function ExtremaTest () : Unit {
+    @Test("QuantumSimulator")
+    function ExtremaIsCorrect() : Unit {
         let array = [-10, 10, 7, 0];
         EqualityFactI(-10, Min(array), $"Min failed.");
         EqualityFactI(10, Max(array), $"Max failed.");
     }
 
-    function IndexOfTest() : Unit {
+    @Test("QuantumSimulator")
+    function IndexOfIsCorrect() : Unit {
         let array = [1, 3, 21, -7, 2, 19];
         let actual = IndexOf(IsEven, array);
         EqualityFactI(4, actual, $"Expected 4, got {actual}.");
