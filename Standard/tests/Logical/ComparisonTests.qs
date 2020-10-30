@@ -7,6 +7,7 @@ namespace Microsoft.Quantum.Tests {
     open Microsoft.Quantum.Math;
     open Microsoft.Quantum.Arrays;
 
+    @Test("QuantumSimulator")
     function LexographicComparisonIsCorrect() : Unit {
         let lexographicComparison = LexographicComparison(LessThanOrEqualD);
         Fact(
