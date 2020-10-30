@@ -30,6 +30,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Include="..\..\Common\DelaySign.cs" Link="Properties\DelaySign.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Include="..\..\..\Build\assets\qdk-nuget-icon.png" Pack="true" Visible="false" PackagePath="" />
   </ItemGroup>
 
