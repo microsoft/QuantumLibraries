@@ -25,7 +25,8 @@ namespace Microsoft.Quantum.Tests {
     }
 
     // This checks that BlockEncodingByLCU encodes the correct Hamiltonian.
-    operation BlockEncodingByLCUTest() : Unit {
+    @Test("QuantumSimulator")
+    operation TestBlockEncodingByLCU() : Unit {
         body (...) {
             let (eigenvalues, prob, inverseAngle, statePreparation, selector) = LCUTestHelper();
             let LCU = BlockEncodingByLCU(statePreparation, selector);
@@ -48,7 +49,8 @@ namespace Microsoft.Quantum.Tests {
     }
 
     // This checks that BlockEncodingReflectionByLCU encodes the correct Hamiltonian.
-    operation BlockEncodingReflectionByLCUTest() : Unit {
+    @Test("QuantumSimulator")
+    operation TestBlockEncodingReflectionByLCU() : Unit {
         body (...) {
             let (eigenvalues, prob, inverseAngle, statePreparation, selector) = LCUTestHelper();
             let LCU = BlockEncodingReflectionByLCU(statePreparation, selector);
@@ -74,7 +76,8 @@ namespace Microsoft.Quantum.Tests {
     }
 
     // This checks that QuantumWalkByQubitization encodes the correct Hamiltonian.
-    operation QuantumWalkByQubitizationTest() : Unit {
+    @Test("QuantumSimulator")
+    operation TestQuantumWalkByQubitization() : Unit {
         body (...) {
             let (eigenvalues, prob, inverseAngle, statePreparation, selector) = LCUTestHelper();
             let LCU = QuantumWalkByQubitization(BlockEncodingReflectionByLCU(statePreparation, selector));
@@ -101,7 +104,8 @@ namespace Microsoft.Quantum.Tests {
     // QubitizationPauliEvolutionSet.qs tests
 
     // This encodes the Hamiltonian (cos^2(angle) I+sin^2(angle) X)/2.
-    operation PauliBlockEncodingLCUTest() : Unit {
+    @Test("QuantumSimulator")
+    operation TestPauliBlockEncodingLCU() : Unit {
         body (...) {
             let angle = 0.123;
             let cosSquared = Cos(angle) * Cos(angle);
@@ -135,7 +139,8 @@ namespace Microsoft.Quantum.Tests {
     }
 
     // Array.qs tests
-    function RangeAsIntArrayTest() : Unit {
+    @Test("QuantumSimulator")
+    function TestRangeAsIntArray() : Unit {
         mutable testCases = new (Int[], Range)[4];
         let e = new Int[0];
         set testCases w/= 0 <- ([1, 3, 5, 7], 1..2..8);
@@ -149,7 +154,8 @@ namespace Microsoft.Quantum.Tests {
         }
     }
 
-   operation InPlaceMajorityTest() : Unit {
+   @Test("QuantumSimulator")
+   operation TestInPlaceMajority() : Unit {
         body (...) {
             // Majority function truth table: x;y;z | output
             let testCases =         [[false, false, false, false],
@@ -183,7 +189,8 @@ namespace Microsoft.Quantum.Tests {
         }
    }
 
-   operation ApplyRippleCarryComparatorTest() : Unit{
+   @Test("QuantumSimulator")
+   operation TestApplyRippleCarryComparator() : Unit{
         body (...) {
             let nQubits = 4;
             let intMax = 2^nQubits-1;

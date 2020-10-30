@@ -5,14 +5,16 @@ namespace Microsoft.Quantum.Tests {
     open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Convert;
 
-    function ResultArrayAsIntTest () : Unit {
+    @Test("QuantumSimulator")
+    function ResultArrayAsIntIsCorrect() : Unit {
         EqualityFactI(ResultArrayAsInt([Zero, Zero]), 0, $"Expected [Zero, Zero] to be represented by 0.");
         EqualityFactI(ResultArrayAsInt([One, Zero]), 1, $"Expected [One, Zero] to be represented by 1.");
         EqualityFactI(ResultArrayAsInt([Zero, One]), 2, $"Expected [Zero, One] to be represented by 2.");
         EqualityFactI(ResultArrayAsInt([One, One]), 3, $"Expected [One, One] to be represented by 3.");
     }
 
-    function BoolArrFromPositiveIntTest () : Unit {
+    @Test("QuantumSimulator")
+    function BoolArrFromPositiveIntIsCorrect() : Unit {
         for (number in 0 .. 100) {
             let bits = IntAsBoolArray(number, 9);
             let inte = BoolArrayAsInt(bits);
