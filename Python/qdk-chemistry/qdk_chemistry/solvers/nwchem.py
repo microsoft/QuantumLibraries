@@ -9,7 +9,7 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from rdkit.Chem.AllChem import Mol
 
-# Template for generating an NW Chem input deck
+# Template for generating an NWChem input deck
 NW_CHEM_TEMPLATE = """
 start {name}
 
