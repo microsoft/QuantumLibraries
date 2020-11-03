@@ -4,10 +4,16 @@
 from ..convert import num_electrons
 
 import re
+import warnings
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from rdkit.Chem.AllChem import Mol
+
+__all__ = [
+    "geometry_from_xyz",
+    "create_input_deck"
+]
 
 # Template for generating an NWChem input deck
 NW_CHEM_TEMPLATE = """
@@ -56,7 +62,15 @@ FLOAT_PATTERN = "([+-]?[0-9]*[.][0-9]+)"
 XYZ_PATTERN = f"(\w) {FLOAT_PATTERN} {FLOAT_PATTERN} {FLOAT_PATTERN}"
 
 def geometry_from_xyz(xyz: str):
-    """Generate geometry portion of NW Chem file from XYZ data
+    """Generate geometry portion of NWChem file from XYZ data.
+    The formatting of the .xyz file format is as follows:
+
+        <number of atoms>
+        comment line
+        <element> <X> <Y> <Z>
+        ...
+
+    Source: https://en.wikipedia.org/wiki/XYZ_file_format.
 
     Args:
         xyz (str): XYZ file format
@@ -69,7 +83,7 @@ def create_input_deck(
         geometry: str, 
         num_active_orbitals: int,
         memory: str = "memory stack 1000 mb heap 100 mb global 1000 mb noverify",
-        geometry_units: str = "au", 
+        geometry_units: str = "au", # TODO: use Enum or Pint to deal with valid units
         basis: str = "sto-3g",
         charge: int = 0,
         scf_thresh: float = 1.0e-10,
@@ -84,7 +98,7 @@ def create_input_deck(
         mol: "Mol" = None,
         num_active_el: int = None,
     ):
-    """Generate an NW Chem input deck
+    """Generate an NWChem input deck
 
     Args:
         mol_name (str): Molecule name
@@ -111,12 +125,14 @@ def create_input_deck(
             calculated based on atomic numbers if mol is provided. Defaults to None.
 
     Returns:
-        str: NW Chem input deck formatted string
+        str: NWChem input deck formatted string
     """
     if mol is not None and num_active_el is None:
         num_active_el = num_electrons(mol)
     elif mol is None and num_active_el is None:
         raise ValueError("Cannot proceed: please provide either a Mol object or specify number of electrons")
+    else:
+        warnings.warn("Ignoring mol and using specified number of active electrons (num_active_el) instead.")
 
     nopen_str = f"nopen {nopen}" if nopen is not None else ""
 
