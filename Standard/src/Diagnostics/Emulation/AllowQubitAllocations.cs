@@ -51,17 +51,17 @@ namespace Microsoft.Quantum.Diagnostics
                                 );
                             }
                         },
-                        setup: handler => Simulator.OnAllocateQubits += handler,
-                        cleanup: handler => Simulator.OnAllocateQubits -= handler
+                        setup: handler => Simulator.BeforeAllocateQubits += handler,
+                        cleanup: handler => Simulator.BeforeAllocateQubits -= handler
                     ),
 
-                    new ActionDisposer<Action<IQArray<Qubit>>>(
-                        register =>
+                    new ActionDisposer<Action<long>>(
+                        nQubits =>
                         {
-                            nQubitsAllocated -= register.Length;
+                            nQubitsAllocated -= nQubits;
                         },
-                        setup: handler => Simulator.OnReleaseQubits += handler,
-                        cleanup: handler => Simulator.OnReleaseQubits -= handler
+                        setup: handler => Simulator.AfterReleaseQubits += handler,
+                        cleanup: handler => Simulator.AfterReleaseQubits -= handler
                     )
                 ));
 
