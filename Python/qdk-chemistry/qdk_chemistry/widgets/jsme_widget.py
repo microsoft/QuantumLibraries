@@ -1,5 +1,8 @@
 # Copyright (c) Microsoft Corporation.
 # Licensed under the MIT License.
+
+"""Module for Jupyter Widget that displays the JSME editor.
+"""
 import uuid
 import ipywidgets
 
@@ -56,8 +59,8 @@ class JsmeWidgetButton(ipywidgets.Button):
     def __init__(self, uid: str, *args, **kwargs):
         """Create "save" button for JsmeWidget
 
-        Args:
-            uid (str): Unique ID of widget
+        :param uid: Unique ID of widget
+        :type uid: str
         """
         self.uid = uid
         return super(JsmeWidgetButton, self).__init__(description="Save", *args, **kwargs)
@@ -73,13 +76,18 @@ class JsmeWidget:
     def __init__(self, width=400, height=350, jme="", smiles="", molblock="", options="query,hydrogens"):
         """Create JsmeWidget instance
 
-        Args:
-            width (int, optional): Widget width in pixels. Defaults to 400.
-            height (int, optional): Widget height in pixels. Defaults to 350.
-            jme (str, optional): JME value string. Defaults to "".
-            smiles (str, optional): SMILES value string. Defaults to "".
-            molblock (str, optional): MolBlock value string. Defaults to "".
-            options (str, optional): Options to pass to widget. Defaults to "query,hydrogens".
+        :param width: Widget width in pixels, defaults to 400
+        :type width: int, optional
+        :param height: Widget height in pixels, defaults to 350
+        :type height: int, optional
+        :param jme: JME value string, defaults to ""
+        :type jme: str, optional
+        :param smiles: SMILES value string, defaults to ""
+        :type smiles: str, optional
+        :param molblock: MolBlock value string, defaults to ""
+        :type molblock: str, optional
+        :param options: Options to pass to widget, defaults to "query,hydrogens"
+        :type options: str, optional
         """
         try:
             self.name = varname()
@@ -95,10 +103,12 @@ class JsmeWidget:
     def set_value(self, jme: str, smiles: str, molblock: str):
         """Set JSME value (JME, SMILES and MolBlock)
 
-        Args:
-            jme (str, optional): JME value string. Defaults to "".
-            smiles (str, optional): SMILES value string. Defaults to "".
-            molblock (str, optional): MolBlock value string. Defaults to "".
+        :param jme: JME value string
+        :type jme: str
+        :param smiles: SMILES value string
+        :type smiles: str
+        :param molblock: MolBlock value string
+        :type molblock: str
         """
         self.value = JsmeValue(jme=jme, molblock=molblock, smiles=smiles)
 
@@ -112,11 +122,10 @@ class JsmeWidget:
     def html_str(self, uid: str) -> str:
         """Returns an HTML string that contains the widget.
 
-        Args:
-            uid (str): Unique identifier of widget
-
-        Returns:
-            str: HTML string for displaying widget
+        :param uid: Unique identifier of widget
+        :type uid: str
+        :return: HTML string for displaying widget
+        :rtype: str
         """
         JsmeWidget.n += 1
         data_type = "jme" if self.value.jme else "smiles"
@@ -155,12 +164,12 @@ class JsmeWidget:
         """Convert widget value to RDKit molecule.
         If Hydrogen atoms are added, calculate the optimal conformer to get H coordinates.
 
-        Args:
-            add_hs (bool, optional): Add Hydrogen atoms
-            num_confs (int, optional): Number of conformers to generate
-
-        Returns:
-            Mol: RDKit Mol object
+        :param add_hs: Add Hydrogen atoms
+        :type add_hs: bool
+        :param num_confs: Number of conformers to generate
+        :type num_confs: int
+        :return: RDKit molecule object
+        :rtype: Mol
         """
         if self.value.smiles != "":
             mol = Chem.MolFromSmiles(self.value.smiles)

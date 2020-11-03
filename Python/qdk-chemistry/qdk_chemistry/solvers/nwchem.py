@@ -1,6 +1,9 @@
 # Copyright (c) Microsoft Corporation.
 # Licensed under the MIT License.
 
+"""Module for generating NWChem input deck format.
+"""
+
 from ..convert import num_electrons
 
 import re
@@ -72,8 +75,10 @@ def geometry_from_xyz(xyz: str):
 
     Source: https://en.wikipedia.org/wiki/XYZ_file_format.
 
-    Args:
-        xyz (str): XYZ file format
+    :param xyz: XYZ file format
+    :type xyz: str
+    :return: Geometry in NWChem format
+    :rtype: str
     """
     match = re.findall(XYZ_PATTERN, xyz)
     return "\n".join(" ".join(item) for item in match)
@@ -83,7 +88,7 @@ def create_input_deck(
         geometry: str, 
         num_active_orbitals: int,
         memory: str = "memory stack 1000 mb heap 100 mb global 1000 mb noverify",
-        geometry_units: str = "au", # TODO: use Enum or Pint to deal with valid units
+        geometry_units: str = "au",
         basis: str = "sto-3g",
         charge: int = 0,
         scf_thresh: float = 1.0e-10,
@@ -97,35 +102,48 @@ def create_input_deck(
         driver: str = "energy",
         mol: "Mol" = None,
         num_active_el: int = None,
-    ):
+    ) -> str:
     """Generate an NWChem input deck
 
-    Args:
-        mol_name (str): Molecule name
-        geometry (str): Molecule geometry in the following format (each atom on a new line):
-            [Atom] [X] [Y] [Z]
-        num_active_orbitals (int): Number of orbitals in molecular ground state to set active space
-        memory (str, optional): Memory specification. Defaults to "memory stack 1000 mb heap 
-            100 mb global 1000 mb noverify".
-        geometry_units (str, optional): Units used for geometry. Defaults to "au".
-        basis (str, optional): Basis to use for atoms. Defaults to "sto-3g".
-        charge (int, optional): Molecule charge. Defaults to 0.
-        scf_thresh (float, optional): Threshold for SCF solver with one-decimal precision. Defaults to 1.0e-10.
-        scf_tol2e (float, optional): 2-electron tolerance for SCF solver
-        rhf (str, optional): Restricted Hartree Fock method. Either "rhf" or "rohf". Defaults to "rhf".
-        spin (str, optional): Spin property. Defaults to "singlet".
-        nopen (int, optional): Number of singly occupied electron orbitals. Defaults to None.
-        method (str, optional): Calculation method, either "HF", "DFT" or "ccsd". Defaults to "ccsd".
-        num_tce_root (int, optional): Number of excited states. Defaults to 5.
-        tce_thresh (float, optional): Threshold for TCE solver with one-decimal precision. Defaults to 1.0e-6.
-        driver (str, optional): Driver method. Defaults to "energy".
-        mol (Mol, optional): RDKit Molecule object to use for calculating number of electrons if 
-            unspecified. Defaults to None.
-        num_active_el (int, optional): Number of active electrons in molecule. This value is 
-            calculated based on atomic numbers if mol is provided. Defaults to None.
-
-    Returns:
-        str: NWChem input deck formatted string
+    :param mol_name: Molecule name
+    :type mol_name: str
+    :param geometry: Molecule geometry in the following format (each atom on a new line) : [Atom] [X] [Y] [Z]
+    :type geometry: str
+    :param num_active_orbitals: Number of orbitals in molecular ground state to set active space
+    :type num_active_orbitals: int
+    :param memory: Memory specification, defaults to "memory stack 1000 mb heap 100 mb global 1000 mb noverify"
+    :type memory: str, optional
+    :param geometry_units: Units used for geometry, defaults to "au"
+    :type geometry_units: str, optional
+    :param basis: Basis to use for atoms, defaults to "sto-3g"
+    :type basis: str, optional
+    :param charge: Molecule charge, defaults to 0
+    :type charge: int, optional
+    :param scf_thresh: Threshold for SCF solver with one-decimal precision, defaults to 1.0e-10
+    :type scf_thresh: float, optional
+    :param scf_tol2e: 2-electron tolerance for SCF solver, defaults to 1.0e-10
+    :type scf_tol2e: float, optional
+    :param rhf: Restricted (Open-shell) Hartree Fock method. Either "rhf" or "rohf", defaults to "rhf"
+    :type rhf: str, optional
+    :param spin: Spin property, defaults to "singlet"
+    :type spin: str, optional
+    :param nopen: Number of singly occupied electron orbitals, defaults to None
+    :type nopen: int, optional
+    :param method: Calculation method, either "HF", "DFT" or "ccsd", defaults to "ccsd"
+    :type method: str, optional
+    :param num_tce_root: Number of excited states, defaults to 5
+    :type num_tce_root: int, optional
+    :param tce_thresh: Threshold for TCE solver with one-decimal precision, defaults to 1.0e-6
+    :type tce_thresh: float, optional
+    :param driver: Driver method, defaults to "energy"
+    :type driver: str, optional
+    :param mol: RDKit Molecule object to use for calculating number of electrons if unspecified, defaults to None
+    :type mol: Mol, optional
+    :param num_active_el: Number of active electrons in molecule. This value is calculated based on atomic numbers if mol is provided. Defaults to None, defaults to None
+    :type num_active_el: int, optional
+    :raises ValueError: If neither Mol or num_active_el are specified.
+    :return: NWChem input deck formatted string
+    :rtype: str
     """
     if mol is not None and num_active_el is None:
         num_active_el = num_electrons(mol)
