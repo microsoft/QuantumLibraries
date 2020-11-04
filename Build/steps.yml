@@ -36,4 +36,10 @@ steps:
   workingDirectory: $(System.DefaultWorkingDirectory)/Build
 
 
+- pwsh: .\manifest.ps1
+  displayName: "List built packages & assemblies"
+  workingDirectory: '$(System.DefaultWorkingDirectory)/Build'
+  condition: succeededOrFailed()
+
+
 - template: step-wrap-up.yml

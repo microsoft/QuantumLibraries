@@ -18,9 +18,9 @@ namespace Microsoft.Quantum.ArithmeticTests {
         }
     }
     
-    
-    operation ApplyXorInPlaceTest () : Unit {
-        
+    @Test("QuantumSimulator")
+    operation CheckApplyXorInPlace() : Unit {
+
         ApplyToEach(InPlaceXorTestHelper, [(63, 6), (42, 6)]);
     }
     
@@ -42,7 +42,7 @@ namespace Microsoft.Quantum.ArithmeticTests {
     /// Exhaustively tests Microsoft.Quantum.Artihmetic.IncrementByInteger
     /// on 4 qubits
     @Test("QuantumSimulator")
-    operation IncrementByIntegerTest () : Unit {
+    operation CheckIncrementByInteger() : Unit {
         
         let numberOfQubits = 4;
         
@@ -86,7 +86,7 @@ namespace Microsoft.Quantum.ArithmeticTests {
     /// Tests Microsoft.Quantum.Arithmetic.IncrementByModularInteger
     /// on 4 qubits with modulus 13
     @Test("QuantumSimulator")
-    operation IncrementByModularIntegerTest () : Unit {
+    operation CheckIncrementByModularInteger() : Unit {
         
         let numberOfQubits = 4;
         let modulus = 13;
@@ -122,7 +122,7 @@ namespace Microsoft.Quantum.ArithmeticTests {
     /// Tests Microsoft.Quantum.Canon.ModularAddProductLE
     /// on 4 qubits with modulus 13
     @Test("QuantumSimulator")
-    operation MultiplyAndAddByModularIntegerTest () : Unit {
+    operation CheckMultiplyAndAddByModularInteger() : Unit {
         
         let numberOfQubits = 4;
         let modulus = 13;
@@ -160,7 +160,7 @@ namespace Microsoft.Quantum.ArithmeticTests {
     /// Tests Microsoft.Quantum.Canon.ModularMultiplyByConstantLE
     /// on 4 qubits with modulus 13
     @Test("QuantumSimulator")
-    operation MultiplyByModularIntegerTest () : Unit {
+    operation CheckMultiplyByModularInteger() : Unit {
         
         let numberOfQubits = 4;
         let modulus = 13;
