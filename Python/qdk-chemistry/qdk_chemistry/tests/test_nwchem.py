@@ -69,14 +69,11 @@ def test_nwchem(geometry, h2o, test_deck):
 
 def test_nwchem_pass_geometry(geometry, h2o, test_deck):
     mol_name = "HHO_test"
-    with mock.patch("qdk_chemistry.geometry.Geometry.from_mol") as _m:
-        _m.return_value = geometry
-
-        nw_chem_input = create_input_deck(
-            mol_name=mol_name,
-            geometry=geometry,
-            num_active_orbitals=7,
-            mol=h2o
-        )
+    nw_chem_input = create_input_deck(
+        mol_name=mol_name,
+        geometry=geometry,
+        num_active_orbitals=7,
+        mol=h2o
+    )
 
     assert nw_chem_input == test_deck
