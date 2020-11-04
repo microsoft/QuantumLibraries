@@ -4,8 +4,6 @@
 """Module for generating NWChem input deck format.
 """
 
-from ..convert import num_electrons
-
 import re
 import warnings
 from typing import TYPE_CHECKING
@@ -82,6 +80,18 @@ def geometry_from_xyz(xyz: str):
     """
     match = re.findall(XYZ_PATTERN, xyz)
     return "\n".join(" ".join(item) for item in match)
+
+
+def num_electrons(mol: "Mol") -> int:
+    """Calculate the number of electrons in the molecule
+
+    :param mol: RDKit molecule object
+    :type mol: Mol
+    :return: Number of electrons or sum of atomic number of atoms in molecule
+    :rtype: int
+    """
+    return sum([atom.GetAtomicNum() for atom in mol.GetAtoms()])
+
 
 def create_input_deck(
         mol_name: str, 

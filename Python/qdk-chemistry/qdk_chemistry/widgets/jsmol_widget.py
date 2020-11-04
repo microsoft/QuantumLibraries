@@ -3,7 +3,7 @@
 
 """Module for Jupyter widget that displays JSMol editor
 """
-from ..convert import mol_to_xyz
+from ..geometry import mol_to_xyz
 
 from jupyter_jsmol import JsmolView
 
