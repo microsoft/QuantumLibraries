@@ -101,8 +101,6 @@ def mol_to_coordinates(mol: "Mol", num_confs: int=10) -> List[Tuple[str, float, 
     :return: List of tuples of element name and x, y, z coordinates
     :rtype: List[Tuple[str, float, float, float]]
     """
-    number_of_atoms = mol.GetNumAtoms()
-    charge = Chem.GetFormalCharge(mol)
     symbols = [a.GetSymbol() for a in mol.GetAtoms()]
     conformer = get_conformer(mol=mol, num_confs=num_confs)
 
@@ -120,4 +118,10 @@ def mol_to_xyz(mol: "Mol", num_confs: int=10) -> str:
     :rtype: str
     """
     coordinates = mol_to_coordinates(mol=mol, num_confs=num_confs)
-    return coordinates_to_xyz(number_of_atoms, charge, symbols, coordinates)
+    number_of_atoms = mol.GetNumAtoms()
+    charge = Chem.GetFormalCharge(mol)
+    return coordinates_to_xyz(
+        number_of_atoms=number_of_atoms,
+        charge=charge,
+        coordinates=coordinates
+    )
