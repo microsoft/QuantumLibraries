@@ -21,7 +21,7 @@ def test_Element():
     assert g[1] == c2
 
 
-def test_geometry():
+def test_geometry_from_mol():
     mol = Chem.MolFromSmiles("O")
     mol = Chem.AddHs(mol)
     g = Geometry.from_mol(mol)
@@ -29,7 +29,7 @@ def test_geometry():
     assert len(g) == 3
     assert [el.name for el in g] == ["O", "H", "H"]
 
-def test_geometry2():
+def test_geometry_from_xyz():
     mol = Chem.MolFromSmiles("O")
     mol = Chem.AddHs(mol)
     g = Geometry.from_mol(mol)

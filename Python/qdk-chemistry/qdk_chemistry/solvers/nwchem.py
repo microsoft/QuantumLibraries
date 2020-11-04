@@ -4,9 +4,11 @@
 """Module for generating NWChem input deck format.
 """
 
-import re
 import warnings
-from typing import TYPE_CHECKING
+from typing import Union, TYPE_CHECKING
+
+from qdk_chemistry.geometry import Geometry
+from qdk_chemistry.geometry.xyz import element_to_xyz
 
 if TYPE_CHECKING:
     from rdkit.Chem.AllChem import Mol
@@ -15,6 +17,8 @@ __all__ = [
     "geometry_from_xyz",
     "create_input_deck"
 ]
+
+_GEOMETRY_UNITS = ["au", "angstrom"]
 
 # Template for generating an NWChem input deck
 NW_CHEM_TEMPLATE = """
@@ -59,10 +63,29 @@ set tce:qelb {num_el_b}
 task tce {driver}
 """
 
-FLOAT_PATTERN = "([+-]?[0-9]*[.][0-9]+)"
-XYZ_PATTERN = f"(\w) {FLOAT_PATTERN} {FLOAT_PATTERN} {FLOAT_PATTERN}"
 
-def geometry_from_xyz(xyz: str):
+def format_geometry(geometry: Geometry):
+    """Format geometry into NWChem format
+
+    :param geometry: Molecular geometry
+    :type geometry: Geometry
+    :return: NWChem geometry format
+    :rtype: str
+    """
+    return "\n".join(el.to_xyz() for el in geometry)
+
+
+def format_geometry_from_mol(mol: "Mol"):
+    """Get geometry in NWChem format from RDKit molecule object
+
+    :param mol: RDKit molecule
+    :type mol: Mol
+    """
+    g = Geometry.from_mol(mol)
+    return format_geometry(g)
+
+
+def format_geometry_from_xyz(xyz: str):
     """Generate geometry portion of NWChem file from XYZ data.
     The formatting of the .xyz file format is as follows:
 
@@ -78,8 +101,8 @@ def geometry_from_xyz(xyz: str):
     :return: Geometry in NWChem format
     :rtype: str
     """
-    match = re.findall(XYZ_PATTERN, xyz)
-    return "\n".join(" ".join(item) for item in match)
+    g = Geometry.from_xyz(xyz)
+    return format_geometry(g)
 
 
 def num_electrons(mol: "Mol") -> int:
@@ -95,8 +118,8 @@ def num_electrons(mol: "Mol") -> int:
 
 def create_input_deck(
         mol_name: str, 
-        geometry: str, 
         num_active_orbitals: int,
+        geometry: Union[str, Geometry] = None,
         memory: str = "memory stack 1000 mb heap 100 mb global 1000 mb noverify",
         geometry_units: str = "au",
         basis: str = "sto-3g",
@@ -123,7 +146,7 @@ def create_input_deck(
     :type num_active_orbitals: int
     :param memory: Memory specification, defaults to "memory stack 1000 mb heap 100 mb global 1000 mb noverify"
     :type memory: str, optional
-    :param geometry_units: Units used for geometry, defaults to "au"
+    :param geometry_units: Units used for geometry ("au"|"angstrom"), defaults to "au"
     :type geometry_units: str, optional
     :param basis: Basis to use for atoms, defaults to "sto-3g"
     :type basis: str, optional
@@ -151,10 +174,12 @@ def create_input_deck(
     :type mol: Mol, optional
     :param num_active_el: Number of active electrons in molecule. This value is calculated based on atomic numbers if mol is provided. Defaults to None, defaults to None
     :type num_active_el: int, optional
-    :raises ValueError: If neither Mol or num_active_el are specified.
+    :raises ValueError: If neither Mol or num_active_el|geometry are specified.
     :return: NWChem input deck formatted string
     :rtype: str
     """
+    assert geometry_units in _GEOMETRY_UNITS, f"Unknown geometry unit: {geometry_units}"
+
     if mol is not None and num_active_el is None:
         num_active_el = num_electrons(mol)
     elif mol is None and num_active_el is None:
@@ -162,10 +187,20 @@ def create_input_deck(
     else:
         warnings.warn("Ignoring mol and using specified number of active electrons (num_active_el) instead.")
 
+    if mol is not None and geometry is None:
+        geometry = format_geometry_from_mol(mol)
+    elif mol is None and geometry is None:
+        raise ValueError("Cannot proceed: please provide either a Mol object or specify geometry in NWChem syntax")
+    else:
+        warnings.warn("Ignoring mol and using specified geometry string instead.")
+    
+    if isinstance(geometry, Geometry):
+        geometry = format_geometry(geometry)
+
     nopen_str = f"nopen {nopen}" if nopen is not None else ""
 
     nw_chem = NW_CHEM_TEMPLATE.format(
-        name=f"{mol_name}_test",
+        name=f"{mol_name}",
         memory=memory,
         geometry_units=geometry_units,
         geometry=geometry,

@@ -3,7 +3,7 @@ from dataclasses import dataclass
 from typing import List, Tuple, Union, TYPE_CHECKING
 
 from qdk_chemistry.geometry.rdkit_convert import mol_to_coordinates
-from qdk_chemistry.geometry.xyz import coordinates_to_xyz
+from qdk_chemistry.geometry.xyz import coordinates_to_xyz, element_to_xyz
 
 from rdkit.Chem import AllChem as Chem
 
@@ -28,6 +28,13 @@ class Element:
         name, x, y, z = value
         return cls(name=name, x=float(x), y=float(y), z=float(z))
 
+    def to_xyz(self):
+        return element_to_xyz(
+            name=self.name,
+            x=self.x,
+            y=self.y,
+            z=self.z
+        )
 
 class Geometry(List[Element]):
     """Molecular geometry consisting of list of elements with
@@ -44,7 +51,8 @@ class Geometry(List[Element]):
         :return: List of coordinate tuples
         :rtype: Tuple[str, float, float, float]
         """
-        return [(e.name, e.x, e.y, e.z) for e in self]
+        for element in self:
+            yield ( element.name, element.x, element.y, element.z )
 
     @classmethod
     def from_mol(cls, mol: "Mol", num_confs: int = 10):
