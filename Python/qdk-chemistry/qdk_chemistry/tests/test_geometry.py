@@ -21,19 +21,14 @@ def test_Element():
     assert g[1] == c2
 
 
-def test_geometry_from_mol():
-    mol = Chem.MolFromSmiles("O")
-    mol = Chem.AddHs(mol)
-    g = Geometry.from_mol(mol)
+def test_geometry_from_mol(h2o):
+    g = Geometry.from_mol(h2o)
     assert g.charge == 0
     assert len(g) == 3
     assert [el.name for el in g] == ["O", "H", "H"]
 
-def test_geometry_from_xyz():
-    mol = Chem.MolFromSmiles("O")
-    mol = Chem.AddHs(mol)
-    g = Geometry.from_mol(mol)
-    xyz = g.to_xyz()
+def test_geometry_from_xyz(geometry):
+    xyz = geometry.to_xyz()
     gprime = Geometry.from_xyz(xyz)
 
-    assert g == gprime
+    assert geometry == gprime
