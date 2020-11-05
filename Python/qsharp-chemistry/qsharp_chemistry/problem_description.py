@@ -9,6 +9,7 @@ import json
 import typing
 
 from typing import List, Tuple, Dict, Iterable
+from dataclasses import dataclass, field
 from enum import Enum
 
 from .fermion_hamiltonian import FermionHamiltonian
@@ -35,10 +36,24 @@ class InputState(object):
         return self.__dict__ == other.__dict__
 
 
+@dataclass
 class ProblemDescription(object):
     """
     Represents an electronic structure problem.
     """
+    metadata: dict
+    initial_state_suggestions: list
+    basis_set: dict = field(default_factory=dict)
+    geometry: dict = field(default_factory=dict)
+    coulomb_repulsion: dict = field(default_factory=dict)
+    scf_energy: dict = field(default_factory=dict)
+    scf_energy_offset: dict = field(default_factory=dict)
+    fci_energy: dict = field(default_factory=dict)
+    n_orbitals: int = 0
+    n_electrons: int = 0
+    energy_offset: dict = field(default_factory=dict)
+    hamiltonian: dict = field(default_factory=dict)
+
     def __init__ (self, data: Dict):
         self.__dict__ = data
 

@@ -93,3 +93,41 @@ def encode(hamiltonian: FermionHamiltonian, input_state: InputState) -> Tuple:
         input_state=input_state.__dict__
     )
     return data
+
+
+def load_and_encode(
+    file_name: str,
+    problem_description_index: int = 0,
+    initial_state_label: str = None
+) -> Tuple[
+        int, 
+        Tuple[List[Tuple[List[int], List[float]]]], 
+        Tuple[int, List[Tuple[Tuple[float, float], List[int]]]], 
+        float
+    ]:
+    """Wrapper function for loading and encoding Broombridge file into
+    JWEncodedData-compatible format.
+
+    :param file_name: [description]
+    :type file_name: str
+    :param problem_description_index: [description], defaults to 0
+    :type problem_description_index: int, optional
+    :param initial_state_label: [description], defaults to None
+    :type initial_state_label: str, optional
+    """
+    # TODO: This function accesses a file multiple times, find a way to cache 
+    # or pass data explicitly
+    # TODO: Make these tuples of lists etc. a bit more insightful data types
+    broombridge_data =  load_broombridge(file_name)
+    problem = broombridge_data.problem_description[problem_description_index]
+
+    if initial_state_label is None:
+        # Pick first in list
+        initial_state_label = problem.initial_state_suggestions[0].get("Label")
+        logger.info(f"Using inital state label: {initial_state_label}")
+
+    input_state = load_input_state(file_name, initial_state_label)
+    ferm_hamiltonian = problem.load_fermion_hamiltonian()
+    num_qubits, hamiltonian_term_list, input_state_terms, energy_offset = encode(ferm_hamiltonian, input_state)
+
+    return (num_qubits, hamiltonian_term_list, input_state_terms, energy_offset)
