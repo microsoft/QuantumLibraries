@@ -19,7 +19,7 @@ class ProblemDescription(object):
     """
     Represents an electronic structure problem.
     """
-    def __init__ (self, data : Dict):
+    def __init__ (self, data: Dict):
         self.__dict__ = data
 
     def __eq__(self, other):
@@ -28,11 +28,11 @@ class ProblemDescription(object):
             return NotImplemented
         return self.__dict__ == other.__dict__
 
-    def load_fermion_hamiltonian(self, index_convention : IndexConvention = IndexConvention.UpDown) -> FermionHamiltonian:
+    def load_fermion_hamiltonian(self, index_convention: IndexConvention = IndexConvention.UpDown) -> FermionHamiltonian:
         """
         Loads the fermion Hamiltonian associated with this electronic structure problem.
 
-        `index_convention` can be 'UpDown' or 'HalfUp'
+        `index_convention` can be `UpDown` or `HalfUp`
         """
         logger.info(f"Loading fermion Hamiltonian from problem description using index_convention '{index_convention.name}'.")
         data = qsharp.client._execute_magic(
@@ -43,7 +43,7 @@ class ProblemDescription(object):
         )
         return FermionHamiltonian(data)
 
-    def load_input_state(self, wavefunction_label : str = '', index_convention : IndexConvention = IndexConvention.UpDown) -> FermionHamiltonian:
+    def load_input_state(self, wavefunction_label: str = '', index_convention: IndexConvention = IndexConvention.UpDown) -> FermionHamiltonian:
         """
         Loads the input state associated from this electronic structure problem with the corresponding label.
 

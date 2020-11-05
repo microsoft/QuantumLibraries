@@ -23,7 +23,7 @@ def enable_magic():
         qsharp.packages.add(_CHEMISTRY_NAMESPACE)
 
 
-def load_fermion_hamiltonian(file_name: str, index_convention : IndexConvention = IndexConvention.UpDown) -> FermionHamiltonian:
+def load_fermion_hamiltonian(file_name: str, index_convention: IndexConvention = IndexConvention.UpDown) -> FermionHamiltonian:
     """
     Loads the fermion Hamiltonian from the given file that contains broombridge data.
 
@@ -40,9 +40,9 @@ def load_fermion_hamiltonian(file_name: str, index_convention : IndexConvention 
     return FermionHamiltonian(data)
 
 
-def load_input_state(file_name: str, wavefunction_label : str = None, index_convention : IndexConvention = IndexConvention.UpDown) -> FermionHamiltonian:
+def load_input_state(file_name: str, wavefunction_label: str = None, index_convention: IndexConvention = IndexConvention.UpDown) -> FermionHamiltonian:
     """
-    Loads the input state associated with the given labe from the given file that contains broombridge data..
+    Loads the input state associated with the given label from the given file that contains Broombridge data.
 
     If `wavefunction_label` is not specified, it loads the greedy (Hartree–Fock) state.
 
@@ -65,14 +65,14 @@ def load_broombridge(file_name: str) -> Broombridge:
     Loads a Broombridge data file.
     """
     enable_magic()
-    logger.info(f"Loading broombridge data from '{file_name}'.")
+    logger.info(f"Loading Broombridge data from '{file_name}'.")
     # NB: we don't use the execute_magic method here, since we don't need to
     #     JSON serialize any arguments in this case.
     data = qsharp.client._execute(f'%chemistry.broombridge {file_name}', raise_on_stderr=True)
     return Broombridge(data)
 
 
-def encode(hamiltonian : FermionHamiltonian, input_state : InputState) -> Tuple:
+def encode(hamiltonian: FermionHamiltonian, input_state: InputState) -> Tuple:
     """
     Encodes the given Hamiltonian and input state using the Jordan Wigner encoding
     that can be used to run chemistry simulations using Q#'s chemistry library.

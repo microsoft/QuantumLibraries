@@ -31,7 +31,7 @@ dotnet iqsharp install
 or simply
 
 ```bash
-conda install -c quantumengineering qsharp
+conda install -c quantum-engineering qsharp
 ```
 
 To install `qsharp-chemistry` in development mode, make sure that you are in the `Python/qsharp-chemistry` directory, and install the package using `pip`:

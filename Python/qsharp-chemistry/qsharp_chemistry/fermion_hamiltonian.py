@@ -16,7 +16,7 @@ class FermionHamiltonian(object):
             return NotImplemented
         return self.__dict__ == other.__dict__
 
-    def add_terms(self, fermion_terms : Iterable[Tuple[List[int], float]]) -> None:
+    def add_terms(self, fermion_terms: Iterable[Tuple[List[int], float]]) -> None:
         """
         Adds terms to the fermion Hamiltonian.
         """
