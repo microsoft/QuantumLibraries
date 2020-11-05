@@ -32,6 +32,8 @@ namespace Microsoft.Quantum.Arithmetic {
 
     /// # Summary
     /// Implements a compute carry gate using a temporary logical-AND construction.
+    /// The input parameters `(carryIn, summand1, summand2, carryOut)` are passed together as a tuple
+    /// to have a more natural call to `ApplyToEachA` in the calling function.
     ///
     /// # Input
     /// ## controls
@@ -45,7 +47,7 @@ namespace Microsoft.Quantum.Arithmetic {
     /// `summand1` and `summand2`.
     /// ## carryOut
     /// Carry-out qubit, will be xored with the higher bit of the sum.
-    internal operation ApplyRippleCarryAddeDBlock(controls : Qubit[], (carryIn : Qubit, summand1 : Qubit, summand2 : Qubit, carryOut : Qubit))
+    internal operation ApplyRippleCarryAdderDBlock(controls : Qubit[], (carryIn : Qubit, summand1 : Qubit, summand2 : Qubit, carryOut : Qubit))
     : Unit is Adj
     {
         body (...) {
@@ -130,7 +132,7 @@ namespace Microsoft.Quantum.Arithmetic {
                 within {
                     ApplyAnd(xs![0], ys![0], auxRegister[0]);
                     ApplyToEachA(
-                        ApplyRippleCarryAddeDBlock(controls, _),
+                        ApplyRippleCarryAdderDBlock(controls, _),
                         Zipped4(Most(auxRegister), xs![1..nQubits - 2], ys![1..nQubits - 2], Rest(auxRegister))
                     );
                 }
