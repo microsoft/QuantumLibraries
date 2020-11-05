@@ -19,12 +19,6 @@ conda install -c quantum-engineering qsharp
 ## Installing from Source ##
 
 If you'd like to contribute to or experiment with the Python interoperability feature, it may be useful to install from source rather than from the `qsharp-chemistry` package on the Python Package Index (PyPI).
-To do so, make sure that you are in the `Python/qsharp-chemistry` directory, and install the package using `pip` in development mode:
-
-```bash
-cd Python/qsharp-chemistry
-pip install -e .
-```
 
 This requires an installation of `qsharp` and the IQ# kernel, which can be installed with
 
@@ -40,7 +34,12 @@ or simply
 conda install -c quantumengineering qsharp
 ```
 
-However, important to note is that the latter should be run _before_ installing `qsharp-chemistry` in development mode.
+To install `qsharp-chemistry` in development mode, make sure that you are in the `Python/qsharp-chemistry` directory, and install the package using `pip`:
+
+```bash
+cd Python/qsharp-chemistry
+pip install -e .
+```
 
 ## Building the `qsharp-chemistry` Package ##
 
