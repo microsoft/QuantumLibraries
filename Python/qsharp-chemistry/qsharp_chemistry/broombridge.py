@@ -1,3 +1,9 @@
+# ---------------------------------------------------------
+# Copyright (c) Microsoft Corporation. All rights reserved.
+# ---------------------------------------------------------
+"""This module specifies a class for representing a Boombridge data structure.
+"""
+
 from typing import Dict
 from .problem_description import ProblemDescription
 from .fermion_hamiltonian import FermionHamiltonian

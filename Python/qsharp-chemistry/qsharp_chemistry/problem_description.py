@@ -1,3 +1,10 @@
+# ---------------------------------------------------------
+# Copyright (c) Microsoft Corporation. All rights reserved.
+# ---------------------------------------------------------
+"""This module contains the data structures for a quantum chemistry problem description.
+This includes the fermion Hamiltonian and input state.
+"""
+
 import qsharp
 import json
 import typing

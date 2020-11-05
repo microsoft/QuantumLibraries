@@ -1,3 +1,10 @@
+# ---------------------------------------------------------
+# Copyright (c) Microsoft Corporation. All rights reserved.
+# ---------------------------------------------------------
+"""This module contains the data structure for a fermion Hamiltonian as input to 
+quantum chemistry algortihms.
+"""
+
 from typing import List, Tuple, Dict, Iterable
 
 import logging

@@ -1,3 +1,11 @@
+# ---------------------------------------------------------
+# Copyright (c) Microsoft Corporation. All rights reserved.
+# ---------------------------------------------------------
+"""This module contains shims for C#-defined functions for loading and encoding data via 
+Broombridge-formatted files to solve quantum chemistry problems using quantum algorithms 
+and are called via IQ# magics.
+"""
+
 import json
 import typing
 
