@@ -7,20 +7,20 @@ from enum import Enum
 import qsharp
 
 from .broombridge import Broombridge
-from .fermion_hamiltonian import FermionHamiltonian, InputState
-from .problem_description import IndexConvention
+from .fermion_hamiltonian import FermionHamiltonian
+from .problem_description import IndexConvention, InputState
 
 import logging
 logger = logging.getLogger(__name__)
 
-_CHEMISTRY_NAMESPACE = "Microsoft.Quantum.Chemistry.Jupyter"
+_CHEMISTRY_PACKAGE_NAME = "Microsoft.Quantum.Chemistry.Jupyter"
 
 def enable_magic():
     """
     Enable the %chemistry magic command.
     """
-    if _CHEMISTRY_NAMESPACE not in [name for name, _ in list(qsharp.packages)]:
-        qsharp.packages.add(_CHEMISTRY_NAMESPACE)
+    if _CHEMISTRY_PACKAGE_NAME not in [name for name, _ in list(qsharp.packages)]:
+        qsharp.packages.add(_CHEMISTRY_PACKAGE_NAME)
 
 
 def load_fermion_hamiltonian(file_name: str, index_convention: IndexConvention = IndexConvention.UpDown) -> FermionHamiltonian:

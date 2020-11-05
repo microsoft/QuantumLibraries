@@ -29,17 +29,3 @@ class FermionHamiltonian(object):
             fermion_terms=fermion_terms
         )
         self.__dict__ = result
-
-
-class InputState(object):
-    """
-    Represents an input state.
-    """
-    def __init__(self, data: Dict):
-        self.__dict__ = data
-
-    def __eq__(self, other):
-        if not isinstance(other, InputState):
-            # don't attempt to compare against unrelated types
-            return NotImplemented
-        return self.__dict__ == other.__dict__

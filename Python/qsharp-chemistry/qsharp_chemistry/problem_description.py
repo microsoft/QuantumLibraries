@@ -5,7 +5,7 @@ import typing
 from typing import List, Tuple, Dict, Iterable
 from enum import Enum
 
-from .fermion_hamiltonian import FermionHamiltonian, InputState
+from .fermion_hamiltonian import FermionHamiltonian
 
 import logging
 logger = logging.getLogger(__name__)
@@ -13,6 +13,20 @@ logger = logging.getLogger(__name__)
 class IndexConvention(Enum):
     UpDown = 1
     HalfUp = 2
+
+
+class InputState(object):
+    """
+    Represents an input state.
+    """
+    def __init__(self, data: Dict):
+        self.__dict__ = data
+
+    def __eq__(self, other):
+        if not isinstance(other, InputState):
+            # don't attempt to compare against unrelated types
+            return NotImplemented
+        return self.__dict__ == other.__dict__
 
 
 class ProblemDescription(object):
