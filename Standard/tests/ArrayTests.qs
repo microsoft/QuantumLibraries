@@ -91,8 +91,8 @@ namespace Microsoft.Quantum.Tests {
         EqualityFactI(fnArray[3](7), 49, $"ConstantArray(Int, Int -> Int) had the wrong value.");
     }
 
-
-    function SubarrayTest () : Unit {
+    @Test("QuantumSimulator")
+    function SubarrayIsCorrect () : Unit {
         let array0 = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
         let subarrayOdd = Subarray([1, 3, 5, 7, 9], array0);
         let subarrayEven = Subarray([0, 2, 4, 6, 8, 10], array0);
@@ -116,21 +116,20 @@ namespace Microsoft.Quantum.Tests {
         EqualityFactI(countEvens, 5, $"the even elements of [1..10] were not correctly counted.");
     }
 
-
-    function ReverseTest () : Unit {
-
+    @Test("QuantumSimulator")
+    function ReversedIsCorrect() : Unit {
         let array = [1, 2, 3];
         Ignore(Mapped(EqualityFactI(_, _, $"Reversed failed."), Zipped([3, 2, 1], Reversed(array))));
     }
 
-
-    function ExcludingTest () : Unit {
+    @Test("QuantumSimulator")
+    function ExcludingIsCorrect() : Unit {
         let array = [10, 11, 12, 13, 14, 15];
         Ignore(Mapped(EqualityFactI(_, _, $"Excluding failed."), Zipped([10, 11, 13, 14], Excluding([2, 5], array))));
     }
 
-
-    function PadTest () : Unit {
+    @Test("QuantumSimulator")
+    function PaddedIsCorrect() : Unit {
 
         mutable arrayTestCase = [(-5, 2, [10, 11, 12], [10, 11, 12, 2, 2]), (5, 2, [10, 11, 12], [2, 2, 10, 11, 12]), (-3, -2, [10, 11, 12], [10, 11, 12])];
 
@@ -141,7 +140,8 @@ namespace Microsoft.Quantum.Tests {
         }
     }
 
-    function EnumeratedTest() : Unit  {
+    @Test("QuantumSimulator")
+    function EnumeratedIsCorrect() : Unit  {
         let example = [37, 12];
         let expected = [(0, 37), (1, 12)];
         let actual = Enumerated(example);
@@ -152,7 +152,8 @@ namespace Microsoft.Quantum.Tests {
         }
     }
 
-    function SequenceITest() : Unit {
+    @Test("QuantumSimulator")
+    function SequenceIIsCorrect() : Unit {
         let example = [(0, 3), (23, 29), (-5, -2)];
         let expected = [[0, 1, 2, 3], [23, 24, 25, 26, 27, 28, 29], [-5, -4, -3, -2]];
         let actual = Mapped(SequenceI, example);
@@ -165,7 +166,8 @@ namespace Microsoft.Quantum.Tests {
         }
     }
 
-    function SequenceLTest() : Unit {
+    @Test("QuantumSimulator")
+    function SequenceLIsCorrect() : Unit {
         let example = [(0L, 3L), (23L, 29L), (-5L, -2L)];
         let expected = [[0L, 1L, 2L, 3L], [23L, 24L, 25L, 26L, 27L, 28L, 29L], [-5L, -4L, -3L, -2L]];
         let actual = Mapped(SequenceL, example);
@@ -177,8 +179,8 @@ namespace Microsoft.Quantum.Tests {
             }
         }
     }
-
-    function SequenceForNumbersTest() : Unit {
+    @Test("QuantumSimulator")
+    function SequenceForNumbersIsCorrect() : Unit {
         let example = [3, 5, 0];
         let expected = [[0, 1, 2, 3], [0, 1, 2, 3, 4, 5], [0]];
         let actual = Mapped(SequenceI(0, _), example);
@@ -191,7 +193,8 @@ namespace Microsoft.Quantum.Tests {
         }
     }
 
-    function IsEmptyTest() : Unit {
+    @Test("QuantumSimulator")
+    function IsEmptyIsCorrect() : Unit {
         Fact(IsEmpty(new Int[0]), "Empty array marked as non-empty.");
         Fact(IsEmpty(new Qubit[0]), "Empty array marked as non-empty.");
         Fact(IsEmpty(new (Double, (Int -> String))[0]), "Empty array marked as non-empty.");
@@ -199,7 +202,8 @@ namespace Microsoft.Quantum.Tests {
         Fact(not IsEmpty([""]), "Non-empty array marked as empty.");
     }
 
-    function SwapOrderToPermuteArrayTest() : Unit {
+    @Test("QuantumSimulator")
+    function SwapOrderToPermuteArrayIsCorrect() : Unit {
         let newOrder = [0, 4, 2, 1, 3];
         let expected = [(1, 4), (1, 3)];
         let actual = _SwapOrderToPermuteArray(newOrder);
@@ -214,7 +218,8 @@ namespace Microsoft.Quantum.Tests {
         }
     }
 
-    function SwappedTest() : Unit {
+    @Test("QuantumSimulator")
+    function SwappedIsCorrect() : Unit {
         let example = [2, 4, 6, 8, 10];
         let expected = [2, 8, 6, 4, 10];
         let leftIndex = 1;
@@ -227,7 +232,8 @@ namespace Microsoft.Quantum.Tests {
         }
     }
 
-    function TupleArrayAsNestedArrayTest() : Unit {
+    @Test("QuantumSimulator")
+    function TupleArrayAsNestedArrayIsCorrect() : Unit {
         let example = [(0, 1), (2, 3), (4, 5), (6, 7)];
         let expected = [[0, 1], [2, 3], [4, 5], [6, 7]];
 
@@ -240,8 +246,8 @@ namespace Microsoft.Quantum.Tests {
         }
     }
 
-
-    function EqualATest() : Unit {
+    @Test("QuantumSimulator")
+    function EqualAIsCorrect() : Unit {
         // arrays of integers
         let equalArrays = EqualA(EqualI, [2, 3, 4], [2, 3, 4]);
         Fact(equalArrays, "Equal arrays were not reported as equal");

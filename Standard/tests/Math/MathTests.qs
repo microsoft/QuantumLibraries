@@ -6,7 +6,8 @@ namespace Microsoft.Quantum.Canon {
     open Microsoft.Quantum.Diagnostics;
     open Microsoft.Quantum.Arrays;
 
-    function NativeFnsAreCallableTest () : Unit {
+    @Test("QuantumSimulator")
+    function NativeFnsAreCallable () : Unit {
         
         let arg = PI() / 2.0;
         NearEqualityFactD(Sin(arg), 1.0);
@@ -16,15 +17,15 @@ namespace Microsoft.Quantum.Canon {
         NearEqualityFactD(ArcSin(arcArg), arg);
     }
     
-    
-    function RealModTest () : Unit {
+    @Test("QuantumSimulator")
+    function RealModIsCorrect () : Unit {
         
         NearEqualityFactD(RealMod(5.5 * PI(), 2.0 * PI(), 0.0), 1.5 * PI());
         NearEqualityFactD(RealMod(0.5 * PI(), 2.0 * PI(), -PI() / 2.0), 0.5 * PI());
     }
     
-    
-    function ArcHyperbolicFnsTest () : Unit {
+    @Test("QuantumSimulator")
+    function ArcHyperbolicFnsAreCorrect () : Unit {
         
         // These tests were generated using NumPy's implementations
         // of the inverse hyperbolic functions.
@@ -32,7 +33,6 @@ namespace Microsoft.Quantum.Canon {
         NearEqualityFactD(ArcCosh(1.3), 0.75643291085695963);
         NearEqualityFactD(ArcSinh(-0.7), -0.65266656608235574);
     }
-    
     
     function ExtendedGreatestCommonDivisorITestHelper (a : Int, b : Int, gcd : Int) : Unit {
         
@@ -43,14 +43,15 @@ namespace Microsoft.Quantum.Canon {
         EqualityFactI(expected, actual, $"Expected absolute value of gcd to be {expected}, got {actual}");
     }
     
-    
-    function ExtendedGreatestCommonDivisorITest () : Unit {
+    @Test("QuantumSimulator")
+    function ExtendedGreatestCommonDivisorIIsCorrect () : Unit {
         
         let testTuples = [(1, 1, 1), (1, -1, 1), (-1, 1, 1), (-1, -1, 1), (5, 7, 1), (-5, 7, 1), (3, 15, 3)];
         Ignore(Mapped(ExtendedGreatestCommonDivisorITestHelper, testTuples));
     }
 
-    function GreatestCommonDivisorLTest() : Unit {
+    @Test("QuantumSimulator")
+    function GreatestCommonDivisorLIsCorrect() : Unit {
         EqualityFactL(
             GreatestCommonDivisorL(
                 44958225298979240833230460209285719018635426448048959524915L,
@@ -60,24 +61,22 @@ namespace Microsoft.Quantum.Canon {
             "GCD returned wrong result for BigInt inputs."
         );
     }
-
     
-    
-    function BitSizeTest () : Unit {
+    @Test("QuantumSimulator")
+    function BitSizeIsCorrect () : Unit {
         
         EqualityFactI(BitSizeI(3), 2, $"BitSizeI(3) must be 2");
         EqualityFactI(BitSizeI(7), 3, $"BitSizeI(7) must be 2");
     }
     
-    
-    function ExpModTest () : Unit {
+    @Test("QuantumSimulator")
+    function ExpModIsCorrect () : Unit {
         
         // this test is generated using Mathematica PowerMod function
         let result = ExpModI(5, 4611686018427387903, 7);
         EqualityFactI(result, 6, $"The result must be 6, got {result}");
     }
-    
-    
+     
     function ContinuedFractionConvergentTestHelper (numerator : Int, denominator : Int) : Unit {
         
         let bitSize = 2 * BitSizeI(denominator);
@@ -86,15 +85,14 @@ namespace Microsoft.Quantum.Canon {
         EqualityFactB(AbsI(u) == numerator and AbsI(v) == denominator, true, $"The result must be ±{numerator}/±{denominator} got {u}/{v}");
     }
     
-    
     function ContinuedFractionConvergentEdgeCaseTestHelper (numerator : Int, denominator : Int, bound : Int) : Unit {
         
         let (num, denom) = (ContinuedFractionConvergentI(Fraction(numerator, denominator), bound))!;
         EqualityFactB(AbsI(num) == numerator and AbsI(denom) == denominator, true, $"The result must be ±{numerator}/±{denominator} got {num}/{denom}");
     }
     
-    
-    function ContinuedFractionConvergentTest () : Unit {
+    @Test("QuantumSimulator")
+    function ContinuedFractionConvergentIsCorrect () : Unit {
         
         let testTuples = [(29, 47), (17, 37), (15, 67)];
         Ignore(Mapped(ContinuedFractionConvergentTestHelper, testTuples));
@@ -102,8 +100,8 @@ namespace Microsoft.Quantum.Canon {
         Ignore(Mapped(ContinuedFractionConvergentEdgeCaseTestHelper, edgeCaseTestTuples));
     }
     
-    
-    function ComplexMathTest () : Unit {
+    @Test("QuantumSimulator")
+    function ComplexMathIsCorrect () : Unit {
         
         mutable complexCases = [(0.123, 0.321), (0.123, -0.321), (-0.123, 0.321), (-0.123, -0.321)];
         
@@ -128,8 +126,8 @@ namespace Microsoft.Quantum.Canon {
         }
     }
     
-    
-    function PNormTest () : Unit {
+    @Test("QuantumSimulator")
+    function PNormIsCorrect () : Unit {
         
         mutable testCases = [
             (1.0, [-0.1, 0.2, 0.3], 0.6), 
@@ -151,12 +149,10 @@ namespace Microsoft.Quantum.Canon {
         }
     }
 
-    function SquaredNormTest() : Unit {
+    @Test("QuantumSimulator")
+    function SquaredNormIsCorrect() : Unit {
         NearEqualityFactD(SquaredNorm([2.0]), 4.0);
         NearEqualityFactD(SquaredNorm([1.0, 1.0]), 2.0);
         NearEqualityFactD(SquaredNorm([3.0, 4.0]), 25.0);
     }
-    
 }
-
-

@@ -3,9 +3,10 @@
 namespace Microsoft.Quantum.Tests {
     
     open Microsoft.Quantum.Canon;
+    open Microsoft.Quantum.Diagnostics;
     
-    
-    function PairTest () : Unit {
+    @Test("QuantumSimulator")
+    function PairIsCorrect() : Unit {
         
         let pair = (12, PauliZ);
         

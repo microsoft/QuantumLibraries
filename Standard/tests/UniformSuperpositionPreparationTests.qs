@@ -11,8 +11,8 @@ namespace Microsoft.Quantum.Tests {
     open Microsoft.Quantum.Measurement;
     open Microsoft.Quantum.Arrays;
 
-
-    operation PrepareUniformSuperpositionTest() : Unit {
+    @Test("QuantumSimulator")
+    operation TestPrepareUniformSuperposition() : Unit {
         body (...) {
             let nQubits = 5;
             using(qubits = Qubit[nQubits]) {

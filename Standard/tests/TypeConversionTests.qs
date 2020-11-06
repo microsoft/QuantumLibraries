@@ -14,11 +14,13 @@ namespace Microsoft.Quantum.Tests {
         return op(input);
     }
 
-    operation CallTest() : Unit {
+    @Test("ToffoliSimulator")
+    operation TestCall() : Unit {
         EqualityFactI(Call(Square, 4), 16, "Call failed with Square.");
     }
 
-    operation ToOperationTest() : Unit {
+    @Test("ToffoliSimulator")
+    operation TestToOperation() : Unit {
         let op = FunctionAsOperation(Square);
         EqualityFactI(ApplyOp(op, 3), 9, "ToOperation failed with Square.");
     }
