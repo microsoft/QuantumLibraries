@@ -1,6 +1,5 @@
-# ---------------------------------------------------------
-# Copyright (c) Microsoft Corporation. All rights reserved.
-# ---------------------------------------------------------
+# Copyright (c) Microsoft Corporation.
+# Licensed under the MIT License.
 """This module contains the data structures for a quantum chemistry problem description.
 This includes the fermion Hamiltonian and input state.
 """
