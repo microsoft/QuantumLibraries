@@ -1,11 +1,9 @@
-# Copyright (c) Microsoft Corporation.
-# Licensed under the MIT License.
 #!/bin/env python
 # -*- coding: utf-8 -*-
 ##
 # setup.py: Installs Python host functionality for Q# chemistry library.
 ##
-# Copyright (c) Microsoft Corporation. All rights reserved.
+# Copyright (c) Microsoft Corporation.
 # Licensed under the MIT License.
 ##
 
