@@ -108,8 +108,13 @@ class Geometry(List[Element]):
         :param xyz: XYZ file format
         :type xyz: str
         """
+        if "\n" not in xyz:
+            return cls([])
+
+        num_atoms = re.match("\s*(?P<num_atoms>\d+)\s*\n", xyz)
         match = re.findall(XYZ_PATTERN, xyz)
-        assert len(match)
+        assert num_atoms is not None and len(match) == int(num_atoms.group("num_atoms")), f"Invalid XYZ file: \
+            number of atoms {num_atoms} does not match number of elements found {len(match)}"
         return cls([Element.from_tuple(item) for item in match])
 
     def to_xyz(self, title: str = "unnamed"):
