@@ -9,7 +9,7 @@ import re
 from dataclasses import dataclass
 from typing import List, Tuple, Union, TYPE_CHECKING
 
-from qdk_chemistry.geometry.rdkit_convert import mol_to_coordinates
+from qdk_chemistry.geometry.rdkit_convert import _mol_to_coordinates
 from qdk_chemistry.geometry.xyz import coordinates_to_xyz, element_coords_to_xyz
 
 from rdkit.Chem import AllChem as Chem
@@ -79,7 +79,7 @@ class Geometry(List[Element]):
         :type num_confs: int, optional
         """
         # This returns a plain list of tuples (element name, x, y, z)
-        coordinates = mol_to_coordinates(
+        coordinates = _mol_to_coordinates(
             mol=mol,
             num_confs=num_confs
         )

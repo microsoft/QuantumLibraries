@@ -65,7 +65,7 @@ def _conformer_to_coordinates(
     return result
 
 
-def mol_to_coordinates(mol: "Mol", num_confs: int=10) -> List[Tuple[str, float, float, float]]:
+def _mol_to_coordinates(mol: "Mol", num_confs: int=10) -> List[Tuple[str, float, float, float]]:
     """Convert molecule object to list of coordinates
 
     :param mol: RDKit molecule object
@@ -91,7 +91,7 @@ def mol_to_xyz(mol: "Mol", num_confs: int=10) -> str:
     :return: XYZ file formatted string
     :rtype: str
     """
-    coordinates = mol_to_coordinates(mol=mol, num_confs=num_confs)
+    coordinates = _mol_to_coordinates(mol=mol, num_confs=num_confs)
     number_of_atoms = mol.GetNumAtoms()
     charge = Chem.GetFormalCharge(mol)
     return coordinates_to_xyz(
