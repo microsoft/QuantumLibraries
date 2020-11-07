@@ -1,3 +1,18 @@
+# Copyright (c) Microsoft Corporation.
+# Licensed under the MIT License.
+
+"""Module for converting coordinates to XYZ-formatted data
+
+The formatting of the .xyz file format is as follows:
+
+    <number of atoms>
+    comment line
+    <element> <X> <Y> <Z>
+    ...
+
+Source: https://en.wikipedia.org/wiki/XYZ_file_format.
+"""
+
 from typing import Iterable, Tuple
 
 def element_coords_to_xyz(name: str, x: float, y: float, z: float) -> str:

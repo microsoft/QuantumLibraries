@@ -1,5 +1,10 @@
 # Copyright (c) Microsoft Corporation.
 # Licensed under the MIT License.
+
+"""Module that defines the Geometry and Element classes for keeping track of XYZ data 
+for molecules
+"""
+
 import re
 from dataclasses import dataclass
 from typing import List, Tuple, Union, TYPE_CHECKING
