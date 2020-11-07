@@ -1,3 +1,5 @@
+# Copyright (c) Microsoft Corporation.
+# Licensed under the MIT License.
 from rdkit.Chem import AllChem as Chem
 from qdk_chemistry.geometry import Element, Geometry
 

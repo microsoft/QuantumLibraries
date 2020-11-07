@@ -43,7 +43,7 @@ def get_conformer(mol: "Mol", num_confs: int=10) -> "Conformer":
     return conformer
 
 
-def conformer_to_coordinates(
+def _conformer_to_coordinates(
         symbols: Iterable[str], 
         conformer: "Conformer"
     ) -> List[Tuple[str, float, float, float]]:
@@ -65,32 +65,6 @@ def conformer_to_coordinates(
     return result
 
 
-def conformer_to_xyz(number_of_atoms: int, charge: int, symbols: Iterable[str], conformer: "Conformer") -> str:
-    """Convert conformer to XYZ file formatted string.
-
-    :param number_of_atoms: Number of atoms in the conformer
-    :type number_of_atoms: int
-    :param charge: Charge of the conformer
-    :type charge: int
-    :param symbols: Iterable of the symbols in the conformer
-    :type symbols: Iterable[str]
-    :param conformer: Conformer object
-    :type conformer: Conformer
-    :return: XYZ file format
-    :rtype: str
-    """
-    coordinates = conformer_to_coordinates(
-        symbols=symbols,
-        conformer=conformer
-    )
-
-    return coordinates_to_xyz(
-        number_of_atoms=number_of_atoms,
-        charge=charge,
-        coordinates=coordinates
-    )
-
-
 def mol_to_coordinates(mol: "Mol", num_confs: int=10) -> List[Tuple[str, float, float, float]]:
     """Convert molecule object to list of coordinates
 
@@ -104,7 +78,7 @@ def mol_to_coordinates(mol: "Mol", num_confs: int=10) -> List[Tuple[str, float, 
     symbols = [a.GetSymbol() for a in mol.GetAtoms()]
     conformer = get_conformer(mol=mol, num_confs=num_confs)
 
-    return conformer_to_coordinates(symbols=symbols, conformer=conformer)
+    return _conformer_to_coordinates(symbols=symbols, conformer=conformer)
 
 
 def mol_to_xyz(mol: "Mol", num_confs: int=10) -> str:

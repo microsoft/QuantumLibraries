@@ -8,7 +8,6 @@ import warnings
 from typing import Union, TYPE_CHECKING
 
 from qdk_chemistry.geometry import Geometry
-from qdk_chemistry.geometry.xyz import element_to_xyz
 
 if TYPE_CHECKING:
     from rdkit.Chem.AllChem import Mol

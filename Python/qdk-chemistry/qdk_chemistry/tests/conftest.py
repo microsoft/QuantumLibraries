@@ -1,3 +1,5 @@
+# Copyright (c) Microsoft Corporation.
+# Licensed under the MIT License.
 import pytest
 
 from rdkit.Chem import AllChem as Chem
