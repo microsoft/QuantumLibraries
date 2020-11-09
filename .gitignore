@@ -330,3 +330,7 @@ __pycache__/
 *.odx.cs
 *.xsd.cs
 
+# Output files
+*.tar.gz
+*.yaml
+*.nw
