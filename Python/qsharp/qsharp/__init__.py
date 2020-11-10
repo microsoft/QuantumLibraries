@@ -19,7 +19,7 @@ from qsharp.types import Result, Pauli
 
 # For debugging purposes only: set the environment variable 
 # INIT_QSHARP=False to skip autoloading the qsharp client
-if bool(strtobool(os.environ.get("INIT_QSHARP"))):
+if bool(strtobool(os.environ.get("INIT_QSHARP", "True"))):
     client, config, packages, projects = init_qsharp()
     init_meta_path()
 
