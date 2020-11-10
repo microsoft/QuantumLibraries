@@ -15,7 +15,7 @@ Attendees (in order by username): @bettinaheim, @cgranade, @efratshabtai, @guenp
 
 **Discussion**:
 
-- Modify QInt → QSignedInt? ControlledOnInt could be confusing otherwise.
+- Modify `QInt` → `QSignedInt`? `ControlledOnInt` could be confusing otherwise.
 - Add https://github.com/microsoft/qsharp-language/pull/41 as related issue.
 - What are the disadvantages to making parallel Microsoft.Quantum.Numerics namespace? Mainly about explaining change to user.
 - How much work to remove BigEndian? Probably not much, since most BE support already removed.
