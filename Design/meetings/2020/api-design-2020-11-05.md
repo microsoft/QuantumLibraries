@@ -18,7 +18,7 @@ Attendees (in order by username): @bettinaheim, @cgranade, @efratshabtai, @guenp
 - Modify `QInt` → `QSignedInt`? `ControlledOnInt` could be confusing otherwise.
 - Add https://github.com/microsoft/qsharp-language/pull/41 as related issue.
 - What are the disadvantages to making parallel Microsoft.Quantum.Numerics namespace? Mainly about explaining change to user.
-- How much work to remove BigEndian? Probably not much, since most BE support already removed.
+- How much work to remove `BigEndian`? Probably not much, since most BE support already removed.
 - **Action item**: Add detail to proposal about existing split between numerics package and arithmetic namespace.
 - **Action item**: Explain more about what existing code is broken by this proposal.
 - Fold into Q# standard library instead of Microsoft.Quantum.Numerics package? Probably not, lots of changes to tutorials, docs, etc. needed to support that.
