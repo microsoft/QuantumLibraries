@@ -3,7 +3,8 @@
 import pytest
 from unittest import mock
 
-from qdk_chemistry.solvers.nwchem import create_input_deck, format_geometry_from_mol
+from qdk_chemistry.solvers.nwchem import create_input_deck
+from qdk_chemistry.geometry import format_geometry_from_mol
 
 from rdkit.Chem import AllChem as Chem
 
@@ -61,9 +62,9 @@ def test_nwchem(geometry, h2o, test_deck):
         _m.return_value = geometry
 
         nw_chem_input = create_input_deck(
+            mol=h2o,
             mol_name=mol_name,
-            num_active_orbitals=7,
-            mol=h2o
+            num_active_orbitals=7
         )
 
     assert nw_chem_input == test_deck
