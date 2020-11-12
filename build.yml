@@ -2,9 +2,14 @@
 # Build configuration file to run build on azure-pipelines
 #
 name: $(Build.Major).$(Build.Minor).$(date:yyMM).$(DayOfMonth)$(rev:rr)
-trigger:
-- master
+
+trigger: none
+
+pr:
+- main
 - feature/*
+- features/*
+- release/*
 
 variables:
   Build.Major: 0

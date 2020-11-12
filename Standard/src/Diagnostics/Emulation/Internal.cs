@@ -33,7 +33,7 @@ namespace Microsoft.Quantum.Diagnostics
 
         public override bool Dump(IQArray<Qubit>? qubits = null)
         {
-            var count = qubits?.Length ?? Simulator.QubitManager!.GetAllocatedQubitsCount();
+            var count = qubits?.Length ?? Simulator.QubitManager!.AllocatedQubitsCount;
             var nQubitsPerRegister = ((int)count / 2);
             Data = np.empty(new Shape(1 << ((int)count), 2));
             var result = base.Dump(qubits);

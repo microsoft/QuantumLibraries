@@ -11,7 +11,8 @@ namespace Microsoft.Quantum.Tests {
     /// Tests multiply controlled not implementation that uses
     /// ApplyMultiControlledCA against multiply controlled version of
     /// the Microsoft.Quantum.Intrinsic.X
-    operation ApplyMultiControlledTest () : Unit {
+    @Test("QuantumSimulator")
+    operation CheckApplyMultiControlled() : Unit {
         
         let twoQubitOp = CNOT;
         

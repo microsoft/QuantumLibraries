@@ -22,7 +22,7 @@ namespace Microsoft.Quantum.Canon {
     /// ## register
     /// Qubit register to be acted upon.
     ///
-    /// ## Example
+    /// # Example
     /// // The following applies Exp([PauliX, PauliY], 0.5) to qubits 0, 1
     /// // then X to qubit 2
     /// let ops = [Exp([PauliX, PauliY], 0.5, _), ApplyToFirstQubit(X, _)];
@@ -35,7 +35,7 @@ namespace Microsoft.Quantum.Canon {
         if (Length(listOfOps) != Length(targets)) {
             fail "The number of ops and number of targets do not match!";
         }
-        for ((op, targetIndices) in Zip(listOfOps, targets)) {
+        for ((op, targetIndices) in Zipped(listOfOps, targets)) {
             if (Length(targetIndices) > Length(register)) {
                 fail "There are too many targets!";
             }
@@ -56,7 +56,7 @@ namespace Microsoft.Quantum.Canon {
     /// ## register
     /// Qubit register to be acted upon.
     ///
-    /// ## Example
+    /// # Example
     /// // The following applies Exp([PauliX, PauliY], 0.5) to qubits 0, 1
     /// // then X to qubit 2
     /// let ops = [Exp([PauliX, PauliY], 0.5, _), ApplyToFirstQubitA(X, _)];
@@ -69,7 +69,7 @@ namespace Microsoft.Quantum.Canon {
         if (Length(listOfOps) != Length(targets)) {
             fail "The number of ops and number of targets do not match!";
         }
-        for ((op, targetIndices) in Zip(listOfOps, targets)) {
+        for ((op, targetIndices) in Zipped(listOfOps, targets)) {
             if (Length(targetIndices) > Length(register)) {
                 fail "There are too many targets!";
             }
@@ -90,7 +90,7 @@ namespace Microsoft.Quantum.Canon {
     /// ## register
     /// Qubit register to be acted upon.
     ///
-    /// ## Example
+    /// # Example
     /// // The following applies Exp([PauliX, PauliY], 0.5) to qubits 0, 1
     /// // then X to qubit 2
     /// let ops = [Exp([PauliX, PauliY], 0.5, _), ApplyToFirstQubitC(X, _)];
@@ -103,7 +103,7 @@ namespace Microsoft.Quantum.Canon {
         if (Length(listOfOps) != Length(targets)) {
             fail "The number of ops and number of targets do not match!";
         }
-        for ((op, targetIndices) in Zip(listOfOps, targets)) {
+        for ((op, targetIndices) in Zipped(listOfOps, targets)) {
             if (Length(targetIndices) > Length(register)) {
                 fail "There are too many targets!";
             }
@@ -124,7 +124,7 @@ namespace Microsoft.Quantum.Canon {
     /// ## register
     /// Qubit register to be acted upon.
     ///
-    /// ## Example
+    /// # Example
     /// // The following applies Exp([PauliX, PauliY], 0.5) to qubits 0, 1
     /// // then X to qubit 2
     /// let ops = [Exp([PauliX, PauliY], 0.5, _), ApplyToFirstQubitCA(X, _)];
@@ -137,7 +137,7 @@ namespace Microsoft.Quantum.Canon {
         if (Length(listOfOps) != Length(targets)) {
             fail "The number of ops and number of targets do not match!";
         }
-        for ((op, targetIndices) in Zip(listOfOps, targets)) {
+        for ((op, targetIndices) in Zipped(listOfOps, targets)) {
             if (Length(targetIndices) > Length(register)) {
                 fail "There are too many targets!";
             }

@@ -43,7 +43,7 @@ namespace Microsoft.Quantum.ErrorCorrection {
     /// logical register.
     ///
     /// # See Also
-    /// - LogicalRegister
+    /// - Microsoft.Quantum.ErrorCorrection.LogicalRegister
     operation EncodeIntoBitFlipCode(physRegister : Qubit[], auxQubits : Qubit[])
     : LogicalRegister {
         ApplyBitFlipEncoder(false, physRegister, auxQubits);
@@ -64,8 +64,8 @@ namespace Microsoft.Quantum.ErrorCorrection {
     /// qubits used to represent the syndrome.
     ///
     /// # See Also
-    /// - LogicalRegister
-    /// - EncodeIntoBitFlipCode
+    /// - Microsoft.Quantum.ErrorCorrection.LogicalRegister
+    /// - Microsoft.Quantum.ErrorCorrection.EncodeIntoBitFlipCode
     operation DecodeFromBitFlipCode(logicalRegister : LogicalRegister)
     : (Qubit[], Qubit[]) {
         let physRegister = [(logicalRegister!)[0]];
@@ -99,7 +99,7 @@ namespace Microsoft.Quantum.ErrorCorrection {
     /// detected error.
     ///
     /// # See Also
-    /// - Microsoft.Quantum.Canon.RecoveryFn
+    /// - Microsoft.Quantum.ErrorCorrection.RecoveryFn
     function BitFlipRecoveryFn () : RecoveryFn {
         return TableLookupRecovery([
             [PauliI, PauliI, PauliI],

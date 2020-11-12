@@ -14,7 +14,6 @@ namespace Microsoft.Quantum.Tests {
     // number of qubits, abs(amplitude), phase
     newtype StatePreparationTestCase = (Int, Double[], Double[]);
 
-
     @Diag.Test("QuantumSimulator")
     operation TestStatePreparationPositiveCoefficients() : Unit {
 
@@ -39,35 +38,35 @@ namespace Microsoft.Quantum.Tests {
             // Test missing coefficients
             StatePreparationTestCase(3, [1.0986553, 0.359005, 0.465689, -0.467395, 0.419893, 0.118445], new Double[0])
         ];
-        
+
         // Loop over multiple qubit tests
         for (testCase in testCases) {
             let (nQubits, coefficientsAmplitude, coefficientsPhase) = testCase!;
             let nCoefficients = Length(coefficientsAmplitude);
-            
+
             // Test negative coefficients. Should give same results as positive coefficients
             using (qubits = Qubit[nQubits]) {
                 let qubitsLE = LittleEndian(qubits);
                 let op = StatePreparationPositiveCoefficients(coefficientsAmplitude);
                 op(qubitsLE);
                 let normalizedCoefficients = PNormalized(2.0, coefficientsAmplitude);
-                
+
                 for (idxCoeff in IndexRange(coefficientsAmplitude)) {
                     let amp = normalizedCoefficients[idxCoeff];
                     let prob = amp * amp;
                     AssertProbInt(idxCoeff, prob, qubitsLE, tolerance);
                 }
-                
+
                 ResetAll(qubits);
             }
         }
     }
-    
-    
+
+
     // Test phase factor on 1-qubit uniform superposition.
     @Diag.Test("QuantumSimulator")
     operation TestStatePreparationComplexCoefficientsQubitPhase() : Unit {
-        
+
         let tolerance = 1E-09;
 
         let testCases = [
@@ -75,17 +74,17 @@ namespace Microsoft.Quantum.Tests {
             StatePreparationTestCase(1, [1.0, 1.0], [0.01, -0.01]),
             StatePreparationTestCase(1, [1.0, 1.0], [0.01, -0.05])
         ];
-        
+
         // Loop over tests
         for (testCase in testCases) {
             let (nQubits, coefficientsAmplitude, coefficientsPhase) = testCase!;
             let nCoefficients = Length(coefficientsAmplitude);
-            
+
             using (qubits = Qubit[nQubits]) {
                 let qubitsLE = LittleEndian(qubits);
                 let coefficients = Mapped(ComplexPolar, Zip(coefficientsAmplitude, coefficientsPhase));
                 let normalizedCoefficients = PNormalized(2.0, coefficientsAmplitude);
-                
+
                 // Test phase factor on uniform superposition
                 let phase = 0.5 * (coefficientsPhase[0] - coefficientsPhase[1]);
                 let amp = normalizedCoefficients[0];
@@ -99,12 +98,12 @@ namespace Microsoft.Quantum.Tests {
             }
         }
     }
-    
-    
+
+
     // Test probabilities and phases factor of multi-qubit uniform superposition.
     @Diag.Test("QuantumSimulator")
     operation TestStatePreparationComplexCoefficientsMultiQubitPhase() : Unit {
-        
+
         let tolerance = 1E-09;
 
         let testCases = [
@@ -115,36 +114,36 @@ namespace Microsoft.Quantum.Tests {
             StatePreparationTestCase(3, [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.01]),
             StatePreparationTestCase(3, [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0], [1.0986553, 0.359005, 0.465689, -0.467395, 0.419893, 0.118445, 0.461883, 0.149609])
         ];
-        
+
         // Loop over tests
         for (testCase in testCases) {
             let (nQubits, coefficientsAmplitude, coefficientsPhase) = testCase!;
             let nCoefficients = Length(coefficientsAmplitude);
-            
+
             using (qubits = Qubit[nQubits]) {
                 let qubitsLE = LittleEndian(qubits);
                 let coefficients = Mapped(ComplexPolar, Zip(coefficientsAmplitude, coefficientsPhase));
                 let normalizedCoefficients = PNormalized(2.0, coefficientsAmplitude);
-                
+
                 // Test probability and phases of uniform superposition
                 let op = StatePreparationComplexCoefficients(coefficients);
-                
+
                 using (control = Qubit[1]) {
-                    
+
                     // Test probability
                     H(control[0]);
                     Controlled op(control, qubitsLE);
                     X(control[0]);
                     Controlled (ApplyToEachCA(H, _))(control, qubitsLE!);
                     X(control[0]);
-                    
+
                     for ((idxCoeff, amp) in Enumerated(normalizedCoefficients)) {
                         let prob = amp * amp;
                         AssertProbInt(idxCoeff, prob, qubitsLE, tolerance);
                     }
-                    
+
                     ResetAll(control + qubits);
-                    
+
                     //Test phase
                     for (repeats in 0 .. nCoefficients / 2) {
                         H(control[0]);
@@ -162,12 +161,12 @@ namespace Microsoft.Quantum.Tests {
             }
         }
     }
-    
-    
+
+
     // Test probabilities and phases of arbitrary multi-qubit superposition.
     @Diag.Test("QuantumSimulator")
     operation TestStatePreparationComplexCoefficientsArbitraryMultiQubitPhase() : Unit {
-        
+
         let tolerance = 1E-09;
 
         let testCases = [
@@ -175,37 +174,37 @@ namespace Microsoft.Quantum.Tests {
             StatePreparationTestCase(2, [1.0986553, 0.359005, -0.123, 9.238], [0.419893, 0.118445, -0.467395, 0.419893]),
             StatePreparationTestCase(3, [1.0986553, 0.359005, 0.465689, 0.467395, 0.419893, 0.118445, 0.123, 9.238], [1.0986553, 0.359005, 0.465689, -0.467395, 0.419893, 0.118445, 0.461883, 0.149609])
         ];
-        
+
         // Loop over tests
         for (testCase in testCases) {
             let (nQubits, coefficientsAmplitude, coefficientsPhase) = testCase!;
             let nCoefficients = Length(coefficientsAmplitude);
-            
+
             using (qubits = Qubit[nQubits]) {
                 let qubitsLE = LittleEndian(qubits);
                 let coefficients = Mapped(ComplexPolar, Zip(coefficientsAmplitude, coefficientsPhase));
                 let normalizedCoefficients = PNormalized(2.0, coefficientsAmplitude);
-                
+
                 // Test probability and phases of arbitrary superposition
                 let opComplex = StatePreparationComplexCoefficients(coefficients);
                 let opReal = StatePreparationPositiveCoefficients(coefficientsAmplitude);
-                
+
                 using (control = Qubit[1]) {
-                    
+
                     // Test probability
                     H(control[0]);
                     Controlled opComplex(control, qubitsLE);
                     X(control[0]);
                     Controlled opReal(control, qubitsLE);
                     X(control[0]);
-                    
+
                     for ((idxCoeff, amp) in Enumerated(normalizedCoefficients)) {
                         let prob = amp * amp;
                         AssertProbInt(idxCoeff, prob, qubitsLE, tolerance);
                     }
-                    
+
                     ResetAll(control + qubits);
-                    
+
                     // Test phase
                     for (repeats in 0 .. nCoefficients / 2) {
                         H(control[0]);

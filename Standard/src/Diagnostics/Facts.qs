@@ -207,7 +207,7 @@ namespace Microsoft.Quantum.Diagnostics {
             FormattedFailure(actual, expected, message);
         }
 
-        Ignore(Mapped(EqualityFactB(_, _, message), Zip(actual, expected)));
+        Ignore(Mapped(EqualityFactB(_, _, message), Zipped(actual, expected)));
     }
 
     /// # Summary
@@ -229,7 +229,7 @@ namespace Microsoft.Quantum.Diagnostics {
             FormattedFailure(actual, expected, message);
         }
 
-        Ignore(Mapped(EqualityFactI(_, _, message), Zip(actual, expected)));
+        Ignore(Mapped(EqualityFactI(_, _, message), Zipped(actual, expected)));
     }
 
 }
