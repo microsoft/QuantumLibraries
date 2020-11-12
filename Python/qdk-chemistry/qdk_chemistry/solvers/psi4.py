@@ -42,17 +42,11 @@ def create_input_deck(
     spin: str = 1,
     basis: str = "ANO-RCC-MB",
     symmetry: str = "C1",
-    integral_keyword: str = "",
     method: str = "SCF",
     driver: str = "energy",
     scf_type: str = "pk",
     memory_in_gb: int = 1,
     reference: str = "rhf",
-    num_active_el: int = None,
-    num_active_orbitals: int = 0,
-    ci_root: int = 1,
-    nsweeps: int = 5,
-    max_bond_dimension: int = 500,
     d_convergence: float = 1e-8,
     e_convergence: float = 1e-8
 ) -> str:
