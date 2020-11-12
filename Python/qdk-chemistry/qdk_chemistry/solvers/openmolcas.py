@@ -4,7 +4,7 @@
 """Module for generating OpenMolcas input deck format.
 """
 
-from typing import Union
+from typing import Union, TYPE_CHECKING
 
 from qdk_chemistry.geometry import Geometry
 from qdk_chemistry.solvers.util import (
@@ -14,6 +14,9 @@ from qdk_chemistry.solvers.util import (
 )
 
 from rdkit.Chem.rdmolops import GetFormalCharge
+
+if TYPE_CHECKING:
+    from rdkit.Chem.AllChem import Mol
 
 
 GEOMETRY_LINE_SEP = "\n  "

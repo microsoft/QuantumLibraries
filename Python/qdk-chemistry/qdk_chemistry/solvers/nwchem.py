@@ -65,25 +65,25 @@ task tce {driver}
 
 
 def create_input_deck(
-        mol: "Mol",
-        mol_name: str, 
-        num_active_orbitals: int,
-        geometry: Union[str, Geometry] = None,
-        memory: str = "memory stack 1000 mb heap 100 mb global 1000 mb noverify",
-        geometry_units: str = "au",
-        basis: str = "sto-3g",
-        charge: int = 0,
-        scf_thresh: float = 1.0e-10,
-        scf_tol2e: float = 1.0e-10,
-        rhf: str = "rhf",
-        spin: str = "singlet",
-        nopen: int = None,
-        method: str = "ccsd",
-        num_tce_root: int = 5,
-        tce_thresh: float = 1.0e-6,
-        driver: str = "energy",
-        num_active_el: int = None,
-    ) -> str:
+    mol: "Mol",
+    mol_name: str, 
+    num_active_orbitals: int,
+    geometry: Union[str, Geometry] = None,
+    memory: str = "memory stack 1000 mb heap 100 mb global 1000 mb noverify",
+    geometry_units: str = "au",
+    basis: str = "sto-3g",
+    charge: int = 0,
+    scf_thresh: float = 1.0e-10,
+    scf_tol2e: float = 1.0e-10,
+    rhf: str = "rhf",
+    spin: str = "singlet",
+    nopen: int = None,
+    method: str = "ccsd",
+    num_tce_root: int = 5,
+    tce_thresh: float = 1.0e-6,
+    driver: str = "energy",
+    num_active_el: int = None,
+) -> str:
     """Generate an NWChem input deck
 
     :param mol: RDKit Molecule object to use for calculating number of electrons if unspecified, defaults to None
