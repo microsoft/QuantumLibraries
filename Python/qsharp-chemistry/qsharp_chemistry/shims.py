@@ -124,7 +124,7 @@ def load_and_encode(
     if initial_state_label is None:
         # Pick first in list
         initial_state_label = problem.initial_state_suggestions[0].get("Label")
-        logger.info(f"Using inital state label: {initial_state_label}")
+        logger.info(f"Using initial state label: {initial_state_label}")
 
     input_state = load_input_state(file_name, initial_state_label)
     ferm_hamiltonian = problem.load_fermion_hamiltonian()
