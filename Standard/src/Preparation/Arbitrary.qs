@@ -162,6 +162,21 @@ namespace Microsoft.Quantum.Preparation {
     }
 
     /// # Summary
+    /// Given a set of coefficients and a little-endian encoded quantum register
+    /// of unentangled qubits, all of which are in zero state, prepares a state
+    /// on that register described by the given coefficients. Uses state emulation
+    /// if supported by the target.
+    ///
+    /// # Notes
+    /// If the register isn't in zero state, the emulation will fail and fallback
+    /// to quantum state preparation.
+    /// This operation doesn't provide Adj/Ctr variants, because, in general, there
+    /// are no efficient emulation algorithms for those.
+    operation _PrepareAmplitudesFromZeroState(coefficients : ComplexPolar[], qubits : LittleEndian) : Unit {
+        ApproximatelyPrepareArbitraryState(0.0, coefficients, qubits);
+    }
+
+    /// # Summary
     /// Given a set of coefficients and a little-endian encoded quantum register,
     /// prepares an state on that register described by the given coefficients,
     /// up to a given approximation tolerance.

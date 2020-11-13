@@ -12,17 +12,17 @@ using Microsoft.Quantum.Simulation.Simulators;
 
 namespace Microsoft.Quantum.Preparation
 {
-    public partial class ApproximatelyPrepareArbitraryState
+    public partial class _PrepareAmplitudesFromZeroState
     {
         /// <summary>
         ///  Provides a native emulation of the ApproximatelyPrepareArbitraryState operation when
         ///  the operation is executed using the full-state QuantumSimulator.
         /// </summary>
-        public class Native : ApproximatelyPrepareArbitraryState
+        public class Native : _PrepareAmplitudesFromZeroState
         {
             [DllImport(QuantumSimulator.QSIM_DLL_NAME, ExactSpelling = true,
                 CallingConvention = CallingConvention.Cdecl, EntryPoint = "InjectState")]
-            private static extern double InjectState(uint sid, uint n, uint[] q, double[] re, double[] im);
+            private static extern bool InjectState(uint sid, uint n, uint[] q, double[] re, double[] im);
 
             private QuantumSimulator? Simulator { get; }
 
@@ -35,9 +35,9 @@ namespace Microsoft.Quantum.Preparation
             /// Overrides the body to do the emulation when possible. If emulation is not possible, then
             /// it just invokes the default Q# implementation.
             /// </summary>
-            public override Func<(double, IQArray<Math.ComplexPolar>, Arithmetic.LittleEndian), QVoid>__Body__ => (_args) =>
+            public override Func<(IQArray<Math.ComplexPolar>, Arithmetic.LittleEndian), QVoid>__Body__ => (_args) =>
             {
-                var (tolerance, polarAmplitudes, qubits) = _args;
+                var (polarAmplitudes, qubits) = _args;
 
                 // TODO: benchmark for small `qubits` arrays to find out in which cases emulation is actually
                 // benefitial.
@@ -46,28 +46,32 @@ namespace Microsoft.Quantum.Preparation
                     return base.__Body__(_args);
                 }
 
-                // calculate the norm as we might need to normalize the state
+                // Calculate the norm as we might need to normalize the requsted state.
                 var norm = 0.0;
                 foreach (var pa in polarAmplitudes) { norm += pa.Magnitude * pa.Magnitude; }
                 norm = System.Math.Sqrt(norm);
 
-                var state_size = polarAmplitudes.Length;
-                var re = new double[state_size];
-                var im = new double[state_size];
-                for (int i = 0; i < state_size; i++)
+                // Setup the amplitudes arrays for the call to native (it needs to translate from polar to cartesian and
+                // might need to pad the tail of an incomplete amplitudes' array with zeros).
+                var stateSize = (long)1 << (int)qubits.Data.Length;
+                var re = new double[stateSize];
+                var im = new double[stateSize];
+                for (long i = 0; i < polarAmplitudes.Length; i++)
                 {
                     var pa = polarAmplitudes[i];
                     re[i] = (System.Math.Abs(pa.Magnitude) * System.Math.Cos(pa.Argument))/norm;
                     im[i] = (System.Math.Abs(pa.Magnitude) * System.Math.Sin(pa.Argument))/norm;
                 }
-
-                // Replace implementation in the library to stop throwing and return success/failure result instead.
-                try
+                for (long i = polarAmplitudes.Length; i < stateSize; i++)
                 {
-                    // State injection is precise so tolerance isn't used.
-                    InjectState(Simulator.Id, (uint)qubits.Data.Length, qubits.Data.GetIds(), re, im);
+                    re[i] = 0.0;
+                    im[i] = 0.0;
                 }
-                catch
+
+                // Emulation might fail if the target qubits are entangled or not all in state |0>. In this case
+                // we should fallback to the quantum state preparation as it guarantees the operation to be a proper
+                // unitary no matter the state of the qubits.
+                if (!InjectState(Simulator.Id, (uint)qubits.Data.Length, qubits.Data.GetIds(), re, im))
                 {
                     return base.__Body__(_args);
                 }
