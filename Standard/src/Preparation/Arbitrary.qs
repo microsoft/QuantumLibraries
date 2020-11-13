@@ -335,7 +335,7 @@ namespace Microsoft.Quantum.Preparation {
     /// # Summary
     /// Implementation step of arbitrary state preparation procedure.
     /// # See Also
-    /// - Microsoft.Quantum.Canon.PrepareArbitraryState
+    /// - Microsoft.Quantum.Preparation.PrepareArbitraryState
     internal function StatePreparationSBMComputeCoefficients (coefficients : ComplexPolar[]) : (Double[], Double[], ComplexPolar[]) {
         mutable disentanglingZ = new Double[Length(coefficients) / 2];
         mutable disentanglingY = new Double[Length(coefficients) / 2];

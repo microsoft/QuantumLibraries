@@ -206,7 +206,7 @@ namespace Microsoft.Quantum.Characterization {
         } apply {
             preparation1(target1);
             preparation2(target2);
-            ApplyToEachCA(Controlled SWAP([control], _), Zip(target1, target2));
+            ApplyToEachCA(Controlled SWAP([control], _), Zipped(target1, target2));
         }
     }
 

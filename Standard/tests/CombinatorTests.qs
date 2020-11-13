@@ -8,14 +8,14 @@ namespace Microsoft.Quantum.Tests {
     open Microsoft.Quantum.Diagnostics;
     open Microsoft.Quantum.Arrays;
 
-
-    function ComposeTest () : Unit {
+    @Test("QuantumSimulator")
+    function ComposeIsCorrect() : Unit {
         let target = [3, 17, 2];
         EqualityFactI((Compose(ModulusI(_, 14), Max))(target), 3, $"Compose(ModulusI(_, 14), Max) did not return expected result.");
     }
 
-
-    operation WithTest () : Unit {
+    @Test("QuantumSimulator")
+    operation TestWith() : Unit {
 
         let actual = ApplyWith(H, X, _);
         let expected = Z;
@@ -25,22 +25,23 @@ namespace Microsoft.Quantum.Tests {
 
     // Make sure that if CurryTest fails, it's because of Curry and not
     // something else.
-    operation CurryPreTest () : Unit {
+    @Test("QuantumSimulator")
+    operation PreTestCurried() : Unit {
 
         AssertOperationsEqualInPlace(1, Exp([PauliZ], 1.7, _), Exp([PauliZ], 1.7, _));
         AssertOperationsEqualReferenced(1, Exp([PauliZ], 1.7, _), Exp([PauliZ], 1.7, _));
     }
 
-
-    operation CurryTest () : Unit {
+    @Test("QuantumSimulator")
+    operation TestCurried() : Unit {
 
         let curried = CurriedOp(Exp([PauliZ], _, _));
         AssertOperationsEqualInPlace(1, curried(1.7), Exp([PauliZ], 1.7, _));
         AssertOperationsEqualReferenced(1, curried(1.7), Exp([PauliZ], 1.7, _));
     }
 
-
-    operation BindTest () : Unit {
+    @Test("QuantumSimulator")
+    operation TestBind() : Unit {
 
         let bound = BoundCA([H, X, H]);
         AssertOperationsEqualReferenced(3, ApplyToEach(bound, _), ApplyToEachA(Z, _));
@@ -52,8 +53,8 @@ namespace Microsoft.Quantum.Tests {
         return op;
     }
 
-
-    operation BindATest () : Unit {
+    @Test("QuantumSimulator")
+    operation TestBindA() : Unit {
 
         let bound = BoundA(Mapped(StripControlled<Qubit>, [T, T]));
         AssertOperationsEqualReferenced(3, ApplyToEach(bound, _), ApplyToEachA(S, _));
@@ -80,8 +81,8 @@ namespace Microsoft.Quantum.Tests {
         return op;
     }
 
-
-    operation BindCTest () : Unit {
+    @Test("QuantumSimulator")
+    operation TestBindC() : Unit {
 
         let stripped = Mapped(StripAdjoint<Qubit>, [T, T]);
         let bound = BoundC(stripped);
@@ -91,8 +92,8 @@ namespace Microsoft.Quantum.Tests {
         AssertOperationsEqualReferenced(6, op, target);
     }
 
-
-    operation BindCATest () : Unit {
+    @Test("QuantumSimulator")
+    operation TestBindCA() : Unit {
         let bound = BoundCA([T, T]);
         AssertOperationsEqualReferenced(3, ApplyToEach(bound, _), ApplyToEachA(S, _));
         AssertOperationsEqualReferenced(3, ApplyToEach(Adjoint bound, _), ApplyToEachA(Adjoint S, _));
@@ -101,8 +102,8 @@ namespace Microsoft.Quantum.Tests {
         AssertOperationsEqualReferenced(4, op, target);
     }
 
-
-    operation OperationPowTest () : Unit {
+    @Test("QuantumSimulator")
+    operation TestOperationPow() : Unit {
 
         AssertOperationsEqualReferenced(3, ApplyToEach(OperationPow(H, 2), _), NoOp<Qubit[]>);
         AssertOperationsEqualReferenced(3, ApplyToEach(OperationPow(Z, 2), _), NoOp<Qubit[]>);
@@ -110,8 +111,8 @@ namespace Microsoft.Quantum.Tests {
         AssertOperationsEqualReferenced(3, ApplyToEach(OperationPow(T, 8), _), NoOp<Qubit[]>);
     }
 
-
-    operation ApplyToSubregisterTest () : Unit {
+    @Test("QuantumSimulator")
+    operation TestApplyToSubregister() : Unit {
 
         let bigOp = ApplyPauli([PauliI, PauliX, PauliY, PauliZ, PauliI], _);
         let smallOp = ApplyPauli([PauliX, PauliY, PauliZ], _);
@@ -134,14 +135,14 @@ namespace Microsoft.Quantum.Tests {
 
     operation CControlledActual (op : (Qubit => Unit), target : Qubit[]) : Unit {
 
-        ApplyToEach(CControlled(op), Zip([true, false, true], target));
+        ApplyToEach(CControlled(op), Zipped([true, false, true], target));
     }
 
 
     operation CControlledActualC (op : (Qubit => Unit is Ctl), target : Qubit[]) : Unit {
 
         body (...) {
-            ApplyToEachC(CControlledC(op), Zip([true, false, true], target));
+            ApplyToEachC(CControlledC(op), Zipped([true, false, true], target));
         }
 
         controlled distribute;
@@ -151,7 +152,7 @@ namespace Microsoft.Quantum.Tests {
     operation CControlledActualA (op : (Qubit => Unit is Adj), target : Qubit[]) : Unit {
 
         body (...) {
-            ApplyToEachA(CControlledA(op), Zip([true, false, true], target));
+            ApplyToEachA(CControlledA(op), Zipped([true, false, true], target));
         }
 
         adjoint invert;
@@ -161,7 +162,7 @@ namespace Microsoft.Quantum.Tests {
     operation CControlledActualCA (op : (Qubit => Unit is Adj + Ctl), target : Qubit[]) : Unit {
 
         body (...) {
-            ApplyToEachCA(CControlledCA(op), Zip([true, false, true], target));
+            ApplyToEachCA(CControlledCA(op), Zipped([true, false, true], target));
         }
 
         adjoint invert;
@@ -169,8 +170,8 @@ namespace Microsoft.Quantum.Tests {
         controlled adjoint distribute;
     }
 
-
-    operation CControlledTest () : Unit {
+    @Test("QuantumSimulator")
+    operation TestCControlled() : Unit {
 
         AssertOperationsEqualReferenced(3, CControlledActual(H, _), CControlledExpected(H, _));
         AssertOperationsEqualReferenced(3, CControlledActual(Z, _), CControlledExpected(Z, _));
@@ -178,7 +179,7 @@ namespace Microsoft.Quantum.Tests {
         AssertOperationsEqualReferenced(3, CControlledActual(T, _), CControlledExpected(T, _));
     }
 
-
+    @Test("QuantumSimulator")
     operation CControlledTestC () : Unit {
 
         AssertOperationsEqualReferenced(3, CControlledActualC(H, _), CControlledExpected(H, _));
@@ -187,7 +188,7 @@ namespace Microsoft.Quantum.Tests {
         AssertOperationsEqualReferenced(3, CControlledActualC(T, _), CControlledExpected(T, _));
     }
 
-
+    @Test("QuantumSimulator")
     operation CControlledTestA () : Unit {
 
         AssertOperationsEqualReferenced(3, CControlledActualA(H, _), CControlledExpected(H, _));
@@ -196,7 +197,7 @@ namespace Microsoft.Quantum.Tests {
         AssertOperationsEqualReferenced(3, CControlledActualA(T, _), CControlledExpected(T, _));
     }
 
-
+    @Test("QuantumSimulator")
     operation CControlledTestCA () : Unit {
 
         AssertOperationsEqualReferenced(3, CControlledActualCA(H, _), CControlledExpected(H, _));
@@ -205,43 +206,50 @@ namespace Microsoft.Quantum.Tests {
         AssertOperationsEqualReferenced(3, CControlledActualCA(T, _), CControlledExpected(T, _));
     }
 
-    operation ApplyIfZeroTest() : Unit {
+    @Test("QuantumSimulator")
+    operation TestApplyIfZero() : Unit {
         AssertOperationsEqualReferenced(2, ApplyIfZero(One, (ApplyToEach(H, _), _)), ApplyToEachA(I, _));
         AssertOperationsEqualReferenced(2, ApplyIfZero(Zero, (ApplyToEach(H, _), _)), ApplyToEachA(H, _));
     }
 
-    operation ApplyIfOneTest() : Unit {
+    @Test("QuantumSimulator")
+    operation TestApplyIfOne() : Unit {
         AssertOperationsEqualReferenced(2, ApplyIfOne(One, (ApplyToEach(H, _), _)), ApplyToEachA(H, _));
         AssertOperationsEqualReferenced(2, ApplyIfOne(Zero, (ApplyToEach(H, _), _)), ApplyToEachA(I, _));
     }
 
-
-    operation ApplyIfZeroCTest() : Unit {
+    @Test("QuantumSimulator")
+    operation TestApplyIfZeroC() : Unit {
         AssertOperationsEqualReferenced(2, ApplyIfZeroC(One, (ApplyToEachC(H, _), _)), ApplyToEachA(I, _));
         AssertOperationsEqualReferenced(2, ApplyIfZeroC(Zero, (ApplyToEachC(H, _), _)), ApplyToEachA(H, _));
     }
 
-    operation ApplyIfOneCTest() : Unit {
+    @Test("QuantumSimulator")
+    operation TestApplyIfOneC() : Unit {
         AssertOperationsEqualReferenced(2, ApplyIfOneC(One, (ApplyToEachC(H, _), _)), ApplyToEachA(H, _));
         AssertOperationsEqualReferenced(2, ApplyIfOneC(Zero, (ApplyToEachC(H, _), _)), ApplyToEachA(I, _));
     }
 
-    operation ApplyIfZeroCATest() : Unit {
+    @Test("QuantumSimulator")
+    operation TestApplyIfZeroCA() : Unit {
         AssertOperationsEqualReferenced(2, ApplyIfZeroCA(One, (ApplyToEachCA(H, _), _)), ApplyToEachA(I, _));
         AssertOperationsEqualReferenced(2, ApplyIfZeroCA(Zero, (ApplyToEachCA(H, _), _)), ApplyToEachA(H, _));
     }
 
-    operation ApplyIfOneCATest() : Unit {
+    @Test("QuantumSimulator")
+    operation TestApplyIfOneCA() : Unit {
         AssertOperationsEqualReferenced(2, ApplyIfOneCA(One, (ApplyToEachCA(H, _), _)), ApplyToEachA(H, _));
         AssertOperationsEqualReferenced(2, ApplyIfOneCA(Zero, (ApplyToEachCA(H, _), _)), ApplyToEachA(I, _));
     }
 
-    operation ApplyIfZeroATest() : Unit {
+    @Test("QuantumSimulator")
+    operation TestApplyIfZeroA() : Unit {
         AssertOperationsEqualReferenced(2, ApplyIfZeroA(One, (ApplyToEachA(H, _), _)), ApplyToEachA(I, _));
         AssertOperationsEqualReferenced(2, ApplyIfZeroA(Zero, (ApplyToEachA(H, _), _)), ApplyToEachA(H, _));
     }
 
-    operation ApplyIfOneATest() : Unit {
+    @Test("QuantumSimulator")
+    operation TestApplyIfOneA() : Unit {
         AssertOperationsEqualReferenced(2, ApplyIfOneA(One, (ApplyToEachA(H, _), _)), ApplyToEachA(H, _));
         AssertOperationsEqualReferenced(2, ApplyIfOneA(Zero, (ApplyToEachA(H, _), _)), ApplyToEachA(I, _));
     }
@@ -254,7 +262,8 @@ namespace Microsoft.Quantum.Tests {
         );
     }
 
-    operation ApplyIfElseRTest() : Unit {
+    @Test("QuantumSimulator")
+    operation TestApplyIfElseR() : Unit {
         AssertOperationsEqualReferenced(2, ApplyIfElseRCase(Zero, _), ApplyToEachA(H, _));
         AssertOperationsEqualReferenced(2, ApplyIfElseRCase(One, _), ApplyToEachA(X, _));
     }
@@ -267,7 +276,8 @@ namespace Microsoft.Quantum.Tests {
         );
     }
 
-    operation ApplyIfElseRATest() : Unit {
+    @Test("QuantumSimulator")
+    operation TestApplyIfElseRA() : Unit {
         AssertOperationsEqualReferenced(2, ApplyIfElseRACase(Zero, _), ApplyToEachA(H, _));
         AssertOperationsEqualReferenced(2, ApplyIfElseRACase(One, _), ApplyToEachA(X, _));
     }
@@ -280,7 +290,8 @@ namespace Microsoft.Quantum.Tests {
         );
     }
 
-    operation ApplyIfElseRCTest() : Unit {
+    @Test("QuantumSimulator")
+    operation TestApplyIfElseRC() : Unit {
         AssertOperationsEqualReferenced(2, ApplyIfElseRCCase(Zero, _), ApplyToEachA(H, _));
         AssertOperationsEqualReferenced(2, ApplyIfElseRCCase(One, _), ApplyToEachA(X, _));
     }
@@ -293,7 +304,8 @@ namespace Microsoft.Quantum.Tests {
         );
     }
 
-    operation ApplyIfElseRCATest() : Unit {
+    @Test("QuantumSimulator")
+    operation TestApplyIfElseRCA() : Unit {
         AssertOperationsEqualReferenced(2, ApplyIfElseRCACase(Zero, _), ApplyToEachA(H, _));
         AssertOperationsEqualReferenced(2, ApplyIfElseRCACase(One, _), ApplyToEachA(X, _));
     }
@@ -306,7 +318,8 @@ namespace Microsoft.Quantum.Tests {
         );
     }
 
-    operation ApplyIfElseBTest() : Unit {
+    @Test("QuantumSimulator")
+    operation TestApplyIfElseB() : Unit {
         AssertOperationsEqualReferenced(2, ApplyIfElseBCase(true, _), ApplyToEachA(H, _));
         AssertOperationsEqualReferenced(2, ApplyIfElseBCase(false, _), ApplyToEachA(X, _));
     }
@@ -319,7 +332,8 @@ namespace Microsoft.Quantum.Tests {
         );
     }
 
-    operation ApplyIfElseBATest() : Unit {
+    @Test("QuantumSimulator")
+    operation TestApplyIfElseBA() : Unit {
         AssertOperationsEqualReferenced(2, ApplyIfElseBACase(true, _), ApplyToEachA(H, _));
         AssertOperationsEqualReferenced(2, ApplyIfElseBACase(false, _), ApplyToEachA(X, _));
     }
@@ -332,7 +346,8 @@ namespace Microsoft.Quantum.Tests {
         );
     }
 
-    operation ApplyIfElseBCTest() : Unit {
+    @Test("QuantumSimulator")
+    operation TestApplyIfElseBC() : Unit {
         AssertOperationsEqualReferenced(2, ApplyIfElseBCCase(true, _), ApplyToEachA(H, _));
         AssertOperationsEqualReferenced(2, ApplyIfElseBCCase(false, _), ApplyToEachA(X, _));
     }
@@ -345,7 +360,8 @@ namespace Microsoft.Quantum.Tests {
         );
     }
 
-    operation ApplyIfElseBCATest() : Unit {
+    @Test("QuantumSimulator")
+    operation TestApplyIfElseBCA() : Unit {
         AssertOperationsEqualReferenced(2, ApplyIfElseBCACase(true, _), ApplyToEachA(H, _));
         AssertOperationsEqualReferenced(2, ApplyIfElseBCACase(false, _), ApplyToEachA(X, _));
     }
@@ -354,7 +370,8 @@ namespace Microsoft.Quantum.Tests {
         X(qubits[1]);
     }
 
-    operation ApplyToElementTest() : Unit {
+    @Test("QuantumSimulator")
+    operation TestApplyToElement() : Unit {
         AssertOperationsEqualReferenced(3,
             ApplyToElement(X, 1, _),
             ApplyXToSecondQubit

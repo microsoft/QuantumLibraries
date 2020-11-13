@@ -8,7 +8,7 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
     open Microsoft.Quantum.Chemistry;
     open Microsoft.Quantum.Arrays;
 
-    // This evolution set runs off data optimized for a Jordan–Wigner encoding.
+    // This evolution set runs off data optimized for a Jordanâ€“Wigner encoding.
     // This collects terms Z, ZZ, PQandPQQR, hpqrs separately.
     // This only apples the needed hpqrs XXXX XXYY terms.
     // Operations here are expressed in terms of Exp([...])
@@ -134,7 +134,7 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
                 
                 if (idxFermions[0] < qubitQidx and qubitQidx < idxFermions[3]) {
                     let termPR1 = GeneratorIndex((idxTermType, [1.0]), [idxFermions[0], idxFermions[3] - 1]);
-                    _ApplyJordanWignerPQTerm_(termPR1, angle, new Qubit[0], Exclude([qubitQidx], qubits));
+                    _ApplyJordanWignerPQTerm_(termPR1, angle, new Qubit[0], Excluding([qubitQidx], qubits));
                 }
                 else {
                     let termPR1 = GeneratorIndex((idxTermType, [1.0]), [0, idxFermions[3] - idxFermions[0]]);
@@ -279,5 +279,4 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
     }
     
 }
-
 

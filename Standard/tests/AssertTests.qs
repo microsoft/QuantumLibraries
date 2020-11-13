@@ -12,7 +12,7 @@ namespace Microsoft.Quantum.Tests {
     // with the intent of testing the assert and testing harness mechanisms themselves.
     operation EmptyTest() : Unit { }
 
-    operation PreparationTest() : Unit {
+    operation TestPreparation() : Unit {
         using (qubit = Qubit()) {
             Diag.AssertMeasurementProbability([PauliZ], [qubit], Zero, 1.0, $"Freshly prepared qubit was not in |0〉 state.", 1E-10);
         }
@@ -56,7 +56,8 @@ namespace Microsoft.Quantum.Tests {
     /// These tests are already performed in Solid itself, such that
     /// this operation tests whether we can reproduce that using our
     /// operation equality assertions.
-    operation SelfAdjointOperationsTest() : Unit {
+    @Diag.Test("QuantumSimulator")
+    operation TestSelfAdjointOperations() : Unit {
         for (op in [I, X, Y, Z, H]) {
             Diag.AssertOperationsEqualReferenced(3, ApplyToEach(op, _), ApplyToEachA(op, _));
         }
@@ -77,8 +78,8 @@ namespace Microsoft.Quantum.Tests {
         }
     }
     
-    
-    operation AssertProbIntTest() : Unit {        
+    @Diag.Test("QuantumSimulator")
+    operation TestAssertProbInt() : Unit {        
         let theta = 0.123;
         let prob = 0.015052858190174602;
         let tolerance = 1E-09;
@@ -93,8 +94,8 @@ namespace Microsoft.Quantum.Tests {
         }
     }
     
-    
-    operation AssertPhaseTest() : Unit {        
+    @Diag.Test("QuantumSimulator")
+    operation TestAssertPhase() : Unit {        
         let phase = 0.456;
         let tolerance = 1E-09;
         

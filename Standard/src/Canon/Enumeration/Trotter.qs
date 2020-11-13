@@ -14,9 +14,9 @@ namespace Microsoft.Quantum.Canon {
     /// `Qubit[]` or `Qubit`.
     ///
     /// # Input
-    /// ### nSteps
+    /// ## nSteps
     /// The number of operations to be decomposed into time steps.
-    /// ### op
+    /// ## op
     /// An operation which accepts an index input (type `Int`) and a time
     /// input (type `Double`) and a quantum register (type `'T`) for decomposition.
     /// ## stepSize
@@ -51,9 +51,9 @@ namespace Microsoft.Quantum.Canon {
     /// `Qubit[]` or `Qubit`.
     ///
     /// # Input
-    /// ### nSteps
+    /// ## nSteps
     /// The number of operations to be decomposed into time steps.
-    /// ### op
+    /// ## op
     /// An operation which accepts an index input (type `Int`) and a time
     /// input (type `Double`) and a quantum register (type `'T`) for decomposition.
     /// ## stepSize
@@ -97,11 +97,11 @@ namespace Microsoft.Quantum.Canon {
     /// `Qubit[]` or `Qubit`.
     ///
     /// # Input
-    /// ### Order
+    /// ## order
     /// Order of Trotter-Suzuki integrator.
-    /// ### nSteps
+    /// ## nSteps
     /// The number of operations to be decomposed into time steps.
-    /// ### op
+    /// ## op
     /// An operation which accepts an index input (type `Int`) and a time
     /// input (type `Double`) and a quantum register (type `'T`) for decomposition.
     /// ## stepSize

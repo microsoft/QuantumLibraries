@@ -57,7 +57,7 @@ namespace Microsoft.Quantum.AmplitudeAmplification {
         systemRegister : Qubit[]
     )
     : Unit is Adj + Ctl {
-        for ((startPhase, targetPhase) in Zip(phases!)) {
+        for ((startPhase, targetPhase) in Zipped(phases!)) {
             if (startPhase != 0.0) {
                 startStateReflection::ApplyReflection(
                     startPhase, auxiliaryRegister
@@ -185,8 +185,6 @@ namespace Microsoft.Quantum.AmplitudeAmplification {
     /// Reflection operator about start state
     /// ## targetStateReflection
     /// Reflection operator about target state
-    /// ## startQubits
-    /// Qubit register
     ///
     /// # Output
     /// An operation that implements amplitude amplification by partial reflections.
@@ -223,8 +221,6 @@ namespace Microsoft.Quantum.AmplitudeAmplification {
     /// Unitary oracle $A$ that prepares start state
     /// ## idxFlagQubit
     /// Index to flag qubit
-    /// ## qubits
-    /// Start state register
     ///
     /// # Output
     /// An operation that implements amplitude amplification by oracles that are
@@ -259,12 +255,10 @@ namespace Microsoft.Quantum.AmplitudeAmplification {
     /// # Input
     /// ## nIterations
     /// Number of iterations $n$ of amplitude amplification
-    /// ## statePrepOracle
+    /// ## stateOracle
     /// Unitary oracle $A$ that prepares start state
     /// ## idxFlagQubit
     /// Index to flag qubit
-    /// ## qubits
-    /// Start state register
     ///
     /// # Output
     /// An operation that implements the standard amplitude amplification quantum algorithm
