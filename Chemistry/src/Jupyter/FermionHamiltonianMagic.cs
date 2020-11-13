@@ -26,7 +26,7 @@ namespace Microsoft.Quantum.Chemistry.Magic
         public FermionHamiltonianLoadMagic()
         {
             this.Name = $"%chemistry.fh.load";
-            this.Documentation = new Documentation() { Summary = "Loads the fermion Hamiltonian for an electronic structure problem. The problem is loaded from a file or passed as an argument." };
+            this.Documentation = new Microsoft.Jupyter.Core.Documentation() { Summary = "Loads the fermion Hamiltonian for an electronic structure problem. The problem is loaded from a file or passed as an argument." };
             this.Kind = SymbolKind.Magic;
             this.Execute = this.Run;
         }
@@ -113,7 +113,10 @@ namespace Microsoft.Quantum.Chemistry.Magic
         public FermionHamiltonianAddTermsMagic()
         {
             this.Name = $"%chemistry.fh.add_terms";
-            this.Documentation = new Documentation() { Summary = "Adds terms to a fermion Hamiltonian." };
+            this.Documentation = new Microsoft.Jupyter.Core.Documentation
+            {
+                Summary = "Adds terms to a fermion Hamiltonian."
+            };
             this.Kind = SymbolKind.Magic;
             this.Execute = this.Run;
         }

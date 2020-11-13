@@ -49,7 +49,7 @@ namespace Microsoft.Quantum.Preparation {
     /// described above.
     ///
     /// # See Also
-    /// - @"microsoft.quantum.canon.preparesinglequbitidentity"
+    /// - Microsoft.Quantum.Preparation.PrepareSingleQubitIdentity
     operation PrepareIdentity(register : Qubit[]) : Unit {
         ApplyToEach(PrepareSingleQubitIdentity, register);
     }

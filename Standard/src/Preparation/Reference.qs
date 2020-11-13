@@ -22,7 +22,7 @@ namespace Microsoft.Quantum.Preparation {
             fail $"Left and right registers must be the same length.";
         }
 
-        for ((leftQubit, rightQubit) in Zip(left, right)) {
+        for ((leftQubit, rightQubit) in Zipped(left, right)) {
             H(leftQubit);
             CNOT(leftQubit, rightQubit);
         }
@@ -60,9 +60,9 @@ namespace Microsoft.Quantum.Preparation {
     /// *quantum process tomography*.
     ///
     /// # See Also
-    /// - PrepareChoiStateA
-    /// - PrepareChoiStateC
-    /// - PrepareChoiStateCA
+    /// - Microsoft.Quantum.Preparation.PrepareChoiStateA
+    /// - Microsoft.Quantum.Preparation.PrepareChoiStateC
+    /// - Microsoft.Quantum.Preparation.PrepareChoiStateCA
     operation PrepareChoiState (op : (Qubit[] => Unit), reference : Qubit[], target : Qubit[]) : Unit {
         PrepareEntangledState(reference, target);
         op(target);
@@ -74,7 +74,7 @@ namespace Microsoft.Quantum.Preparation {
     /// and target registers.
     ///
     /// # See Also
-    /// - PrepareChoiState
+    /// - Microsoft.Quantum.Preparation.PrepareChoiState
     operation PrepareChoiStateC(op : (Qubit[] => Unit is Ctl), reference : Qubit[], target : Qubit[]) : Unit is Ctl {
         PrepareEntangledState(reference, target);
         op(target);
@@ -86,7 +86,7 @@ namespace Microsoft.Quantum.Preparation {
     /// and target registers.
     ///
     /// # See Also
-    /// - PrepareChoiState
+    /// - Microsoft.Quantum.Preparation.PrepareChoiState
     operation PrepareChoiStateA (op : (Qubit[] => Unit is Adj), reference : Qubit[], target : Qubit[]) : Unit is Adj {
         PrepareEntangledState(reference, target);
         op(target);
@@ -98,7 +98,7 @@ namespace Microsoft.Quantum.Preparation {
     /// and target registers.
     ///
     /// # See Also
-    /// - PrepareChoiState
+    /// - Microsoft.Quantum.Preparation.PrepareChoiState
     operation PrepareChoiStateCA(op : (Qubit[] => Unit is Adj + Ctl), reference : Qubit[], target : Qubit[]) : Unit is Adj + Ctl {
         PrepareEntangledState(reference, target);
         op(target);

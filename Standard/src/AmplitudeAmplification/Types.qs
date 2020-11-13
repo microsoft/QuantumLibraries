@@ -6,10 +6,15 @@ namespace Microsoft.Quantum.AmplitudeAmplification {
     /// # Summary
     /// Phases for a sequence of partial reflections in amplitude amplification.
     ///
-    /// # Remarks
-    /// The first parameter is an array of phases for reflection about the
-    /// start state. The second parameter is an array of phases for reflection
+    /// # Named Items
+    /// ## AboutStart
+    /// An array of phases for reflection about the
+    /// start state.
+    /// ## AboutTarget
+    /// An array of phases for reflection
     /// about the target state.
+    ///
+    /// # Remarks
     /// Both arrays must be of equal length. Note that in many cases, the first phase about the start state and last phase about the target state introduces a global phase shift and may be set to $0$.
     newtype ReflectionPhases = (
         AboutStart: Double[],

@@ -20,7 +20,7 @@ namespace Microsoft.Quantum.Chemistry.Magic
         public WavefunctionMagic()
         {
             this.Name = $"%chemistry.inputstate.load";
-            this.Documentation = new Documentation() { Summary = "Loads Broombridge electronic structure problem and returns selected input state." };
+            this.Documentation = new Microsoft.Jupyter.Core.Documentation() { Summary = "Loads Broombridge electronic structure problem and returns selected input state." };
             this.Kind = SymbolKind.Magic;
             this.Execute = this.Run;
         }

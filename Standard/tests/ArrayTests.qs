@@ -1,18 +1,19 @@
-// Copyright (c) Microsoft Corporation. All rights reserved.
+// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 namespace Microsoft.Quantum.Tests {
-    open Microsoft.Quantum.Logical;
-    open Microsoft.Quantum.Diagnostics;
-    open Microsoft.Quantum.Canon;
-    open Microsoft.Quantum.Intrinsic;
     open Microsoft.Quantum.Arrays;
+    open Microsoft.Quantum.Canon;
+    open Microsoft.Quantum.Diagnostics;
+    open Microsoft.Quantum.Intrinsic;
+    open Microsoft.Quantum.Logical;
+    open Microsoft.Quantum.Math;
 
     @Test("QuantumSimulator")
-    function ZipTest() : Unit {
+    function TestZipped() : Unit {
 
         let left = [1, 2, 101];
         let right = [PauliY, PauliI];
-        let zipped = Zip(left, right);
+        let zipped = Zipped(left, right);
         let (leftActual1, rightActual1) = zipped[0];
 
         if (leftActual1 != 1 or rightActual1 != PauliY) {
@@ -31,14 +32,14 @@ namespace Microsoft.Quantum.Tests {
         let first = [6, 5, 5, 3, 2, 1];
         let second = [true, false, false, false, true, false];
 
-        let (first2, second2) = Unzipped(Zip(first, second));
+        let (first2, second2) = Unzipped(Zipped(first, second));
         AllEqualityFactI(first2, first, "Unexpected array of integers");
         AllEqualityFactB(second2, second, "Unexpected array of Booleans");
     }
 
 
     @Test("QuantumSimulator")
-    function LookupTest () : Unit {
+    function TestLookup() : Unit {
 
         let array = [1, 12, 71, 103];
         let fn = LookupFunction(array);
@@ -51,21 +52,21 @@ namespace Microsoft.Quantum.Tests {
     }
 
     internal function AllEqualI(expected : Int[], actual : Int[]) : Bool {
-        return All(EqualI, Zip(expected, actual));
+        return All(EqualI, Zipped(expected, actual));
     }
 
     @Test("QuantumSimulator")
-    function ChunksTest() : Unit {
+    function TestChunks() : Unit {
         let data = [10, 11, 12, 13, 14, 15];
 
         // 2 × 3 case.
-        Fact(All(AllEqualI, Zip(
+        Fact(All(AllEqualI, Zipped(
             [[10, 11], [12, 13], [14, 15]],
             Chunks(2, data)
         )), "Wrong chunks in 2x3 case.");
 
         // Case with some leftovers.
-        Fact(All(AllEqualI, Zip(
+        Fact(All(AllEqualI, Zipped(
             [[10, 11, 12, 13], [14, 15]],
             Chunks(4, data)
         )), "Wrong chunks in case with leftover elements.");
@@ -75,116 +76,125 @@ namespace Microsoft.Quantum.Tests {
         return x * x;
     }
 
-
-    function ConstantArrayTest () : Unit {
-
+    @Test("QuantumSimulator")
+    function ConstantArrayOfDoublesIsCorrect() : Unit {
         let dblArray = ConstantArray(71, 2.17);
         EqualityFactI(Length(dblArray), 71, $"ConstantArray(Int, Double) had the wrong length.");
         let ignore = Mapped(NearEqualityFactD(_, 2.17), dblArray);
+    }
 
+    @Test("QuantumSimulator")
+    function ConstantArrayOfFunctionsIsCorrect() : Unit {
         // Stress test by making an array of Int -> Int.
         let fnArray = ConstantArray(7, Squared);
         EqualityFactI(Length(fnArray), 7, $"ConstantArray(Int, Int -> Int) had the wrong length.");
         EqualityFactI(fnArray[3](7), 49, $"ConstantArray(Int, Int -> Int) had the wrong value.");
     }
 
-
-    function SubarrayTest () : Unit {
-
+    @Test("QuantumSimulator")
+    function SubarrayIsCorrect () : Unit {
         let array0 = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
         let subarrayOdd = Subarray([1, 3, 5, 7, 9], array0);
         let subarrayEven = Subarray([0, 2, 4, 6, 8, 10], array0);
         Fact(All(IsEven, subarrayEven), $"the even elements of [1..10] were not correctly sliced.");
         Fact(not Any(IsEven, subarrayOdd), $"the odd elements of [1..10] were not correctly sliced.");
         let array1 = [10, 11, 12, 13];
-        Ignore(Mapped(EqualityFactI(_, _, $"Subarray failed: subpermutation case."), Zip([12, 11], Subarray([2, 1], array1))));
+        Ignore(Mapped(EqualityFactI(_, _, $"Subarray failed: subpermutation case."), Zipped([12, 11], Subarray([2, 1], array1))));
     }
 
-
-    function FilterTest () : Unit {
-
+    @Test("QuantumSimulator")
+    function FilteredIsEvenHasNoOdds() : Unit {
         let array = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
         let evenArray = Filtered(IsEven, array);
-        EqualityFactB(All(IsEven, evenArray), true, $"the even elements of [1..10] were not correctly filtered.");
+        Fact(All(IsEven, evenArray), $"the even elements of [1..10] were not correctly filtered.");
     }
 
+    @Test("QuantumSimulator")
+    function CountOfIsEvenIsCorrect() : Unit {
+        let array = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+        let countEvens = Count(IsEven, array);
+        EqualityFactI(countEvens, 5, $"the even elements of [1..10] were not correctly counted.");
+    }
 
-    function ReverseTest () : Unit {
-
+    @Test("QuantumSimulator")
+    function ReversedIsCorrect() : Unit {
         let array = [1, 2, 3];
-        Ignore(Mapped(EqualityFactI(_, _, $"Reversed failed."), Zip([3, 2, 1], Reversed(array))));
+        Ignore(Mapped(EqualityFactI(_, _, $"Reversed failed."), Zipped([3, 2, 1], Reversed(array))));
     }
 
-
-    function ExcludeTest () : Unit {
-
+    @Test("QuantumSimulator")
+    function ExcludingIsCorrect() : Unit {
         let array = [10, 11, 12, 13, 14, 15];
-        Ignore(Mapped(EqualityFactI(_, _, $"Exclude failed."), Zip([10, 11, 13, 14], Exclude([2, 5], array))));
+        Ignore(Mapped(EqualityFactI(_, _, $"Excluding failed."), Zipped([10, 11, 13, 14], Excluding([2, 5], array))));
     }
 
-
-    function PadTest () : Unit {
+    @Test("QuantumSimulator")
+    function PaddedIsCorrect() : Unit {
 
         mutable arrayTestCase = [(-5, 2, [10, 11, 12], [10, 11, 12, 2, 2]), (5, 2, [10, 11, 12], [2, 2, 10, 11, 12]), (-3, -2, [10, 11, 12], [10, 11, 12])];
 
         for (idxTest in IndexRange(arrayTestCase)) {
             let (nElementsTotal, defaultElement, inputArray, outputArray) = arrayTestCase[idxTest];
             let paddedArray = Padded(nElementsTotal, defaultElement, inputArray);
-            Ignore(Mapped(EqualityFactI(_, _, $"Padded failed."), Zip(outputArray, paddedArray)));
+            Ignore(Mapped(EqualityFactI(_, _, $"Padded failed."), Zipped(outputArray, paddedArray)));
         }
     }
 
-    function EnumeratedTest() : Unit  {
+    @Test("QuantumSimulator")
+    function EnumeratedIsCorrect() : Unit  {
         let example = [37, 12];
         let expected = [(0, 37), (1, 12)];
         let actual = Enumerated(example);
 
-        for ((actualElement, expectedElement) in Zip(actual, expected)) {
+        for ((actualElement, expectedElement) in Zipped(actual, expected)) {
             EqualityFactI(Fst(actualElement), Fst(expectedElement), "Indices did not match.");
             EqualityFactI(Snd(actualElement), Snd(expectedElement), "Elements did not match.");
         }
     }
 
-    function SequenceITest() : Unit {
+    @Test("QuantumSimulator")
+    function SequenceIIsCorrect() : Unit {
         let example = [(0, 3), (23, 29), (-5, -2)];
         let expected = [[0, 1, 2, 3], [23, 24, 25, 26, 27, 28, 29], [-5, -4, -3, -2]];
         let actual = Mapped(SequenceI, example);
 
-        for ((exp, act) in Zip(expected, actual)) {
+        for ((exp, act) in Zipped(expected, actual)) {
             EqualityFactI(Length(exp), Length(act), "Lengths of arrays did not match.");
-            for ((i, j) in Zip(exp, act)) {
+            for ((i, j) in Zipped(exp, act)) {
                 EqualityFactI(i, j, "Elements did not match.");
             }
         }
     }
 
-    function SequenceLTest() : Unit {
+    @Test("QuantumSimulator")
+    function SequenceLIsCorrect() : Unit {
         let example = [(0L, 3L), (23L, 29L), (-5L, -2L)];
         let expected = [[0L, 1L, 2L, 3L], [23L, 24L, 25L, 26L, 27L, 28L, 29L], [-5L, -4L, -3L, -2L]];
         let actual = Mapped(SequenceL, example);
 
-        for ((exp, act) in Zip(expected, actual)) {
+        for ((exp, act) in Zipped(expected, actual)) {
             EqualityFactI(Length(exp), Length(act), "Lengths of arrays did not match.");
-            for ((i, j) in Zip(exp, act)) {
+            for ((i, j) in Zipped(exp, act)) {
                 EqualityFactL(i, j, "Elements did not match.");
             }
         }
     }
-
-    function SequenceForNumbersTest() : Unit {
+    @Test("QuantumSimulator")
+    function SequenceForNumbersIsCorrect() : Unit {
         let example = [3, 5, 0];
         let expected = [[0, 1, 2, 3], [0, 1, 2, 3, 4, 5], [0]];
         let actual = Mapped(SequenceI(0, _), example);
 
-        for ((exp, act) in Zip(expected, actual)) {
+        for ((exp, act) in Zipped(expected, actual)) {
             EqualityFactI(Length(exp), Length(act), "Lengths of arrays did not match.");
-            for ((i, j) in Zip(exp, act)) {
+            for ((i, j) in Zipped(exp, act)) {
                 EqualityFactI(i, j, "Elements did not match.");
             }
         }
     }
 
-    function IsEmptyTest() : Unit {
+    @Test("QuantumSimulator")
+    function IsEmptyIsCorrect() : Unit {
         Fact(IsEmpty(new Int[0]), "Empty array marked as non-empty.");
         Fact(IsEmpty(new Qubit[0]), "Empty array marked as non-empty.");
         Fact(IsEmpty(new (Double, (Int -> String))[0]), "Empty array marked as non-empty.");
@@ -192,13 +202,14 @@ namespace Microsoft.Quantum.Tests {
         Fact(not IsEmpty([""]), "Non-empty array marked as empty.");
     }
 
-    function SwapOrderToPermuteArrayTest() : Unit {
+    @Test("QuantumSimulator")
+    function SwapOrderToPermuteArrayIsCorrect() : Unit {
         let newOrder = [0, 4, 2, 1, 3];
         let expected = [(1, 4), (1, 3)];
         let actual = _SwapOrderToPermuteArray(newOrder);
 
         EqualityFactI(Length(expected), Length(actual), "Number of swaps does not match");
-        for ((exp, act) in Zip(expected, actual)) {
+        for ((exp, act) in Zipped(expected, actual)) {
             let (leftExp, rightExp) = exp;
             let (leftAct, rightAct) = act;
 
@@ -207,7 +218,8 @@ namespace Microsoft.Quantum.Tests {
         }
     }
 
-    function SwappedTest() : Unit {
+    @Test("QuantumSimulator")
+    function SwappedIsCorrect() : Unit {
         let example = [2, 4, 6, 8, 10];
         let expected = [2, 8, 6, 4, 10];
         let leftIndex = 1;
@@ -215,26 +227,27 @@ namespace Microsoft.Quantum.Tests {
         let newArray = Swapped(leftIndex, rightIndex, example);
 
         EqualityFactI(Length(expected), Length(newArray), "Swapped array is a different size than original");
-        for ((exp, act) in Zip(expected, newArray)) {
+        for ((exp, act) in Zipped(expected, newArray)) {
             EqualityFactI(exp, act, "Elements did not match");
         }
     }
 
-    function TupleArrayAsNestedArrayTest() : Unit {
+    @Test("QuantumSimulator")
+    function TupleArrayAsNestedArrayIsCorrect() : Unit {
         let example = [(0, 1), (2, 3), (4, 5), (6, 7)];
         let expected = [[0, 1], [2, 3], [4, 5], [6, 7]];
 
         let actual = TupleArrayAsNestedArray(example);
         EqualityFactI(Length(expected), Length(actual), "Arrays are of different sizes");
-        for ((exp, act) in Zip(expected, actual)) {
-            for ((elementExp, elementAct) in Zip(exp, act)) {
+        for ((exp, act) in Zipped(expected, actual)) {
+            for ((elementExp, elementAct) in Zipped(exp, act)) {
                 EqualityFactI(elementExp, elementAct, "Elements did not match");
             }
         }
     }
 
-
-    function EqualATest() : Unit {
+    @Test("QuantumSimulator")
+    function EqualAIsCorrect() : Unit {
         // arrays of integers
         let equalArrays = EqualA(EqualI, [2, 3, 4], [2, 3, 4]);
         Fact(equalArrays, "Equal arrays were not reported as equal");
@@ -247,6 +260,109 @@ namespace Microsoft.Quantum.Tests {
         let differentElements = EqualA(EqualR, [One, Zero], [One, One]);
         Fact(not differentElements, "Arrays with different elements were reported as equal");
     }
+
+    @Test("QuantumSimulator")
+    operation TestInterleaved() : Unit {
+        AllEqualityFactI(Interleaved([1, 2, 3], [-1, -2, -3]), [1, -1, 2, -2, 3, -3], "Interleaving failed");
+        AllEqualityFactB(Interleaved(ConstantArray(3, false), ConstantArray(2, true)), [false, true, false, true, false], "Interleaving failed");
+    }
+
+    @Test("QuantumSimulator")
+    operation TestCumulativeFolded() : Unit {
+        AllEqualityFactI(CumulativeFolded(PlusI, 0, SequenceI(1, 5)), [1, 3, 6, 10, 15], "CumulativeFolded failed");
+    }
+
+    @Test("QuantumSimulator")
+    operation TestTransposed() : Unit {
+        for ((actual, expected) in Zipped(Transposed([[1, 2, 3], [4, 5, 6]]), [[1, 4], [2, 5], [3, 6]])) {
+            AllEqualityFactI(actual, expected, "Transposed failed");
+        }
+    }
+
+    @Test("QuantumSimulator")
+    operation TestColumnAt() : Unit {
+        let matrix = [[1, 2, 3], [4, 5, 6], [7, 8, 9]];
+        AllEqualityFactI(ColumnAt(0, matrix), [1, 4, 7], "ColumnAt failed");
+        AllEqualityFactI(ColumnAt(1, matrix), [2, 5, 8], "ColumnAt failed");
+        AllEqualityFactI(ColumnAt(2, matrix), [3, 6, 9], "ColumnAt failed");
+    }
+
+    @Test("QuantumSimulator")
+    operation TestElementAt() : Unit {
+        let lucas = [2, 1, 3, 4, 7, 11, 18, 29, 47, 76];
+        let prime = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29];
+        let fibonacci = [0, 1, 1, 2, 3, 5, 8, 13, 21, 34];
+        let catalan = [1, 1, 2, 5, 14, 42, 132, 429, 1430, 4862];
+        let famous2 = Mapped(ElementAt<Int>(2, _), [lucas, prime, fibonacci, catalan]);
+        AllEqualityFactI(famous2, [3, 5, 1, 2], "ElementAt failed");
+    }
+
+    @Test("QuantumSimulator")
+    operation TestElementsAt() : Unit {
+        let lucas = [2, 1, 3, 4, 7, 11, 18, 29, 47, 76];
+        let prime = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29];
+        let fibonacci = [0, 1, 1, 2, 3, 5, 8, 13, 21, 34];
+        let catalan = [1, 1, 2, 5, 14, 42, 132, 429, 1430, 4862];
+        let famousOdd = Mapped(ElementsAt<Int>(0..2..9, _), [lucas, prime, fibonacci, catalan]);
+        for ((actual, expected) in Zipped(famousOdd, [[2, 3, 7, 18, 47], [2, 5, 11, 17, 23], [0, 1, 3, 8, 21], [1, 2, 14, 132, 1430]])) {
+            AllEqualityFactI(actual, expected, "ElementsAt failed");
+        }
+    }
+
+    @Test("QuantumSimulator")
+    operation TestDiagonal() : Unit {
+        AllEqualityFactI(Diagonal([[1, 2, 3], [4, 5, 6], [7, 8, 9]]), [1, 5, 9], "Diagonal failed");
+        AllEqualityFactI(Diagonal([[1, 2, 3], [4, 5, 6]]), [1, 5], "Diagonal failed");
+        AllEqualityFactI(Diagonal([[1, 2], [4, 5], [7, 8]]), [1, 5], "Diagonal failed");
+    }
+
+    @Test("QuantumSimulator")
+    operation TestWindows() : Unit {
+        let EqualIntA = EqualA<Int>(EqualI, _, _);
+        let EqualIntAA = EqualA<Int[]>(EqualIntA, _, _);
+
+        Fact(EqualIntAA(Windows(-1, [1, 2, 3]), new Int[][0]), "unexpected windows");
+        Fact(EqualIntAA(Windows(0, [1, 2, 3]), new Int[][0]), "unexpected windows");
+        Fact(EqualIntAA(Windows(1, [1, 2, 3]), [[1], [2], [3]]), "unexpected windows");
+        Fact(EqualIntAA(Windows(2, [1, 2, 3]), [[1, 2], [2, 3]]), "unexpected windows");
+        Fact(EqualIntAA(Windows(3, [1, 2, 3]), [[1, 2, 3]]), "unexpected windows");
+        Fact(EqualIntAA(Windows(4, [1, 2, 3]), new Int[][0]), "unexpected windows");
+    }
+
+    @Test("QuantumSimulator")
+    operation TestPrefixes() : Unit {
+        let array = [0, 1, 1, 2, 3, 5];
+        let prefixes = Prefixes(array);
+
+        EqualityFactI(Length(prefixes), Length(array), "unexpected length for prefixes");
+        AllEqualityFactI(prefixes[0], [0], "unexpected prefix");
+        AllEqualityFactI(prefixes[1], [0, 1], "unexpected prefix");
+        AllEqualityFactI(prefixes[2], [0, 1, 1], "unexpected prefix");
+        AllEqualityFactI(prefixes[3], [0, 1, 1, 2], "unexpected prefix");
+        AllEqualityFactI(prefixes[4], [0, 1, 1, 2, 3], "unexpected prefix");
+        AllEqualityFactI(prefixes[5], [0, 1, 1, 2, 3, 5], "unexpected prefix");
+    }
+
+    @Test("QuantumSimulator")
+    operation TestSuccessfulRectangularFact() : Unit {
+        RectangularArrayFact([[1, 2], [3, 4]], "Array is not rectangular");
+        RectangularArrayFact([[1, 2, 3], [4, 5, 6]], "Array is not rectangular");
+    }
+
+    operation RectangularFactTestShouldFail() : Unit {
+        RectangularArrayFact([[1, 2], [3, 4, 5]], "Array is not rectangular");
+    }
+
+    @Test("QuantumSimulator")
+    operation TestSuccessfulSquareFact() : Unit {
+        SquareArrayFact([[1, 2], [3, 4]], "Array is not a square");
+    }
+
+    operation SquareFact1TestShouldFail() : Unit {
+        SquareArrayFact([[1, 2, 3], [4, 5, 6]], "Array is not a square");
+    }
+
+    operation SquareFact2TestShouldFail() : Unit {
+        SquareArrayFact([[1, 2], [3, 4, 5]], "Array is not a square");
+    }
 }
-
-

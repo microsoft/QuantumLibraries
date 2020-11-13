@@ -13,7 +13,7 @@
     <PackageId>Microsoft.Quantum.Chemistry</PackageId>
     <PackageReleaseNotes>See: https://docs.microsoft.com/en-us/quantum/relnotes/</PackageReleaseNotes>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <PackageProjectUrl>https://github.com/Microsoft/QuantumLibraries/tree/master/Chemistry</PackageProjectUrl>
+    <PackageProjectUrl>https://github.com/microsoft/QuantumLibraries/tree/main/Chemistry</PackageProjectUrl>
     <PackageIcon>qdk-nuget-icon.png</PackageIcon>
     <PackageTags>Quantum Q# Qsharp</PackageTags>
     <NoWarn>1591</NoWarn>

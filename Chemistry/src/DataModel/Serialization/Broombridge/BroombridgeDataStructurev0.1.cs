@@ -128,7 +128,7 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
     #region Broombridge v0.1 format
     public static class V0_1
     {
-        public static string SchemaUrl = "https://raw.githubusercontent.com/microsoft/Quantum/master/Chemistry/Schema/broombridge-0.1.schema.json";
+        public static string SchemaUrl = "https://raw.githubusercontent.com/microsoft/Quantum/main/Chemistry/Schema/broombridge-0.1.schema.json";
 
         public struct Data
         {

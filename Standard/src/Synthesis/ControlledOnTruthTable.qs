@@ -139,7 +139,7 @@ namespace Microsoft.Quantum.Synthesis {
     /// and the least significant bit `0` corresponds to the input assignment `(0, 0, 0)`.
     /// It can be represented by the big integer `0xE8L` in hexadecimal notation or as `232L`
     /// in decimal notation.  The `L` suffix indicates that the constant is of type `BigInt`.
-    /// More details on this representation can also be found in the [truth tables kata](https://github.com/microsoft/QuantumKatas/tree/master/TruthTables).
+    /// More details on this representation can also be found in the [truth tables kata](https://github.com/microsoft/QuantumKatas/tree/main/TruthTables).
     ///
     /// The implementation makes use of @"microsoft.quantum.intrinsic.cnot"
     /// and @"microsoft.quantum.intrinsic.r1" gates.

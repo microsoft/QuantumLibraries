@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft Corporation. All rights reserved.
+// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
 namespace Microsoft.Quantum.Simulation {
@@ -24,7 +24,7 @@ namespace Microsoft.Quantum.Simulation {
     /// # Output
     /// Unitary evolution by generator for time `Double`.
     newtype SimulationAlgorithm = ((Double, EvolutionGenerator, Qubit[]) => Unit is Adj + Ctl);
-    
+
     /// # Summary
 	/// Represents a time-dependent simulation algorithm.
 	/// 

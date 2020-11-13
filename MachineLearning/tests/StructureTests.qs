@@ -53,14 +53,14 @@ namespace Microsoft.Quantum.MachineLearning.Tests {
 
     function EqualCR(x : ML.ControlledRotation, y : ML.ControlledRotation) : Bool {
         return x::Axis == y::Axis and
-               All(EqualI, Zip(x::ControlIndices, y::ControlIndices)) and
+               All(EqualI, Zipped(x::ControlIndices, y::ControlIndices)) and
                x::TargetIndex == y::TargetIndex and
                x::ParameterIndex == y::ParameterIndex;
     }
 
     @Test("QuantumSimulator")
     function LocalRotationsLayerFact() : Unit {
-        Fact(All(EqualCR, Zip(
+        Fact(All(EqualCR, Zipped(
             ML.LocalRotationsLayer(3, PauliY),
             [
                 Default<ML.ControlledRotation>()
@@ -86,7 +86,7 @@ namespace Microsoft.Quantum.MachineLearning.Tests {
 
     @Test("QuantumSimulator")
     function PartialRotationsLayerFact() : Unit {
-        Fact(All(EqualCR, Zip(
+        Fact(All(EqualCR, Zipped(
             ML.PartialRotationsLayer([4, 5, 6], PauliY),
             [
                 Default<ML.ControlledRotation>()
@@ -112,7 +112,7 @@ namespace Microsoft.Quantum.MachineLearning.Tests {
 
     @Test("QuantumSimulator")
     function CyclicEntanglingLayerFact() : Unit {
-        Fact(All(EqualCR, Zip(
+        Fact(All(EqualCR, Zipped(
             ML.CyclicEntanglingLayer(3, PauliX, 2),
             [
                 Default<ML.ControlledRotation>()
@@ -160,7 +160,7 @@ namespace Microsoft.Quantum.MachineLearning.Tests {
                     w/ ParameterIndex <- 0
             ]
         ]);
-        Fact(All(EqualCR, Zip(
+        Fact(All(EqualCR, Zipped(
             combined,
             [
                 Default<ML.ControlledRotation>()

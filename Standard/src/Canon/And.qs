@@ -167,7 +167,7 @@ namespace Microsoft.Quantum.Canon {
             if (i % 2 == 0) {
                 set j = 0;
             } else {
-                let e = Zip(current, RangeAsIntArray(0..N - 1));
+                let e = Zipped(current, RangeAsIntArray(0..N - 1));
                 set j = Snd(Head(Filtered(Fst<Bool, Int>, e))) + 1;
             }
 
