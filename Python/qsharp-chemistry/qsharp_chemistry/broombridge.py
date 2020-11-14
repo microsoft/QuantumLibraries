@@ -28,6 +28,13 @@ class Broombridge(object):
 
     @classmethod
     def from_dict(cls, data: Dict):
+        """Create Boombridge object from dictionary
+
+        :param data: Dict representation of Broombridge object
+        :type data: Dict
+        :return: Broombridge object
+        :rtype: Broombridge
+        """
         problem_description = [ProblemDescription.from_dict(p) for p in data["problem_description"]]
         kwargs = {k.lstrip("$"): v for k, v in data.items() if k != problem_description}
         kwargs["problem_description"] = problem_description

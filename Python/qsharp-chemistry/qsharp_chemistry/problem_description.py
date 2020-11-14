@@ -60,6 +60,8 @@ class ProblemDescription(object):
 
         :param data: Dictionary containing kwargs for constructor
         :type data: dict
+        :return: ProblemDescription object
+        :rtype: ProblemDescription
         """
         return cls(**data)
 

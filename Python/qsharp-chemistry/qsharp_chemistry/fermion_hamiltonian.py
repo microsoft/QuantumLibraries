@@ -21,7 +21,14 @@ class FermionHamiltonian(object):
     terms: List[HTerm]
 
     @classmethod
-    def from_dict(cls, data):
+    def from_dict(cls, data: dict):
+        """Create FermionHamiltonian object from dictionary
+
+        :param data: FermionHamiltonian dictionary
+        :type data: dict
+        :return: FermionHamiltonian object
+        :rtype: FermionHamiltonian
+        """
         return cls(**data)
 
     def __eq__(self, other):
