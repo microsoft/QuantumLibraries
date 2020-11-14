@@ -22,6 +22,17 @@ logger = logging.getLogger(__name__)
 
 _CHEMISTRY_PACKAGE_NAME = "Microsoft.Quantum.Chemistry.Jupyter"
 
+NumQubits = int
+HamiltonianTermList = Tuple[List[Tuple[List[int], List[float]]]]
+InputStateTerms = Tuple[int, List[Tuple[Tuple[float, float], List[int]]]]
+EnergyOffset = float
+JWEncodedData = Tuple[
+    NumQubits,
+    HamiltonianTermList,
+    InputStateTerms,
+    EnergyOffset
+]
+
 def enable_magic():
     """
     Enable the %chemistry magic command.
@@ -99,20 +110,15 @@ def load_and_encode(
     file_name: str,
     problem_description_index: int = 0,
     initial_state_label: str = None
-) -> Tuple[
-        int, 
-        Tuple[List[Tuple[List[int], List[float]]]], 
-        Tuple[int, List[Tuple[Tuple[float, float], List[int]]]], 
-        float
-    ]:
+) -> JWEncodedData:
     """Wrapper function for loading and encoding Broombridge file into
     JWEncodedData-compatible format.
 
-    :param file_name: [description]
+    :param file_name: Broombridge file name
     :type file_name: str
-    :param problem_description_index: [description], defaults to 0
+    :param problem_description_index: Index of problem description to use, defaults to 0
     :type problem_description_index: int, optional
-    :param initial_state_label: [description], defaults to None
+    :param initial_state_label: Label of initial state to use, defaults to first available label
     :type initial_state_label: str, optional
     """
     # TODO: This function accesses a file multiple times, find a way to cache 
