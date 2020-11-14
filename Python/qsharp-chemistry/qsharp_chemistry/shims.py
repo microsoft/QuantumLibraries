@@ -44,7 +44,7 @@ def load_fermion_hamiltonian(file_name: str, index_convention: IndexConvention =
         file_name=file_name,
         index_convention=index_convention.name
     )
-    return FermionHamiltonian(data)
+    return FermionHamiltonian.from_dict(data)
 
 
 def load_input_state(file_name: str, wavefunction_label: str = None, index_convention: IndexConvention = IndexConvention.UpDown) -> FermionHamiltonian:
@@ -76,7 +76,7 @@ def load_broombridge(file_name: str) -> Broombridge:
     # NB: we don't use the execute_magic method here, since we don't need to
     #     JSON serialize any arguments in this case.
     data = qsharp.client._execute(f'%chemistry.broombridge {file_name}', raise_on_stderr=True)
-    return Broombridge(data)
+    return Broombridge.from_dict(data)
 
 
 def encode(hamiltonian: FermionHamiltonian, input_state: InputState) -> Tuple:

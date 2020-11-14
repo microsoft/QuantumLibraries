@@ -4,7 +4,8 @@
 """
 
 import json
-from typing import Dict
+from typing import Dict, List
+from dataclasses import dataclass
 
 from .problem_description import ProblemDescription
 from .fermion_hamiltonian import FermionHamiltonian
@@ -14,14 +15,25 @@ def _truncate(value: str):
         return f"{value[:100]}..."
     return value
 
+@dataclass
 class Broombridge(object):
     """
     Represents an instance of a Broombridge data structure
     """
-    def __init__(self, data: Dict):
-        self.__dict__ = data
+    schema: str
+    format: dict
+    generator: dict
+    bibliography: list
+    problem_description: List[ProblemDescription]
+
+    @classmethod
+    def from_dict(cls, data: Dict):
+        problem_description = [ProblemDescription.from_dict(p) for p in data["problem_description"]]
+        kwargs = {k.lstrip("$"): v for k, v in data.items() if k != problem_description}
+        kwargs["problem_description"] = problem_description
+        obj = cls(**kwargs)
         # translate problem_descriptions into the actual datastructure:
-        self.problem_description = [ProblemDescription(p) for p in data["problem_description"]]
+        return obj
 
     def __eq__(self, other):
         if not isinstance(other, Broombridge):

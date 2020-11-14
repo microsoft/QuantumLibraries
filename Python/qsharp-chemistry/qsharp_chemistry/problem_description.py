@@ -54,8 +54,14 @@ class ProblemDescription(object):
     energy_offset: dict = field(default_factory=dict)
     hamiltonian: dict = field(default_factory=dict)
 
-    def __init__ (self, data: Dict):
-        self.__dict__ = data
+    @classmethod
+    def from_dict(cls, data: dict):
+        """Generate a ProblemDescription from a dictionary
+
+        :param data: Dictionary containing kwargs for constructor
+        :type data: dict
+        """
+        return cls(**data)
 
     def __eq__(self, other):
         if not isinstance(other, ProblemDescription):
@@ -76,7 +82,7 @@ class ProblemDescription(object):
             problem_description=self.__dict__,
             index_convention=index_convention.name
         )
-        return FermionHamiltonian(data)
+        return FermionHamiltonian.from_dict(data)
 
     def load_input_state(self, wavefunction_label: str = '', index_convention: IndexConvention = IndexConvention.UpDown) -> FermionHamiltonian:
         """
