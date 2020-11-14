@@ -21,8 +21,8 @@ symmetry C1
 }
 
 set {
-  basis ANO-RCC-MB
-  scf_type pk
+  basis 3-21G
+  scf_type PK
   reference rhf
   d_convergence 1.0e-08
   e_convergence 1.0e-08
@@ -30,6 +30,7 @@ set {
 
 
 e, wfn = energy('SCF', return_wfn=True)
+e = energy('HF')
 fcidump(wfn, fname='fcidump', oe_ints=['EIGENVALUES'])
 clean()
 
@@ -43,7 +44,7 @@ def test_psi4(geometry, h2o, test_deck):
 
         psi4_input = create_input_deck(
             mol=h2o,
-            method="SCF",
+            method="HF",
             driver="energy"
         )
 

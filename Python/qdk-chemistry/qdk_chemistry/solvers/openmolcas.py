@@ -36,7 +36,7 @@ Group={symmetry}
 &SCF
 Charge={charge}
 Spin={spin}
-{rasscf}
+{rasscf_section}
 """
 
 OPENMOLCAS_TEMPLATE_CASSCF = """
@@ -56,8 +56,8 @@ OPEN_MOLCAS_TEMPLATE_FCIDUMP = """
   Charge={charge}
 
   RGINPUT
-  nsweeps = {nsweeps}
-  max_bond_dimension = {max_bond_dimension}
+  nsweeps = 5
+  max_bond_dimension = 500
   ENDRG
 """
 
@@ -71,12 +71,11 @@ def create_input_deck(
     basis: str = "ANO-RCC-MB",
     symmetry: str = "C1",
     integral_keyword: str = "",
-    method: str = "",
+    method: str = "CASSCF",
+    get_broombridge: bool = False,
     num_active_el: int = None,
     num_active_orbitals: int = 0,
-    ci_root: int = 1,
-    nsweeps: int = 5,
-    max_bond_dimension: int = 500
+    ci_root: int = 1
 ) -> str:
     """Convenience function for creating an OpenMolcas input formatted string.
 
@@ -94,20 +93,18 @@ def create_input_deck(
     :type basis: str, optional
     :param symmetry: Molecule summetry, defaults to "C1"
     :type symmetry: str, optional
-    :param integral_keyword: Integral keyword, e.g. "Cholesky", defaults to ""
+    :param integral_keyword: Integral keyword, e.g. "Cholesky", "DIRECT", "1CCD", defaults to ""
     :type integral_keyword: str, optional
     :param method: Method to use, e.g. "FCIDUMP" or "CASSCF", defaults to ""
-    :type method: str, optional
+    :type method: str, defaults to "CASSCF"
+    :param get_broombridge: Get data for generating Broombridge file
+    :type get_broombridge: bool, defaults to False
     :param num_active_el: Number of active electrons, defaults to None (will be calculated from molecule if unspecified)
     :type num_active_el: int, optional
     :param num_active_orbitals: number of orbitals in each symmetry for the RAS2 orbital subspace, defaults to 0
     :type num_active_orbitals: int, optional
     :param ci_root: CI root(s), see https://molcas.gitlab.io/OpenMolcas/sphinx/users.guide/programs/rasscf.html#optional-keywords, defaults to 1 (ground state)
     :type ci_root: int, optional
-    :param nsweeps: Number of sweeps for FCIDUMP method, defaults to 5
-    :type nsweeps: int, optional
-    :param max_bond_dimension: Maximum bond dimension for FCIDUMP method, defaults to 500
-    :type max_bond_dimension: int, optional
     :return: OpenMolcas input string
     :rtype: str
     """
@@ -119,25 +116,23 @@ def create_input_deck(
     num_atoms = len(geometry) if isinstance(geometry, Geometry) else num_atoms_from_mol(mol)
     charge = charge if charge is not None else GetFormalCharge(mol)
 
-    if method.upper() == "CASSCF":
+    if method.upper() == "CASSCF" and get_broombridge is False:
         num_active_el = formatted_num_active_el(mol=mol, num_active_el=num_active_el)
-        rasscf = OPENMOLCAS_TEMPLATE_CASSCF.format(
+        rasscf_section = OPENMOLCAS_TEMPLATE_CASSCF.format(
             charge=charge,
             num_active_el=num_active_el,
             num_active_orbitals=num_active_orbitals,
             nroot=ci_root
         )
 
-    elif method.upper() == "FCIDUMP":
-        rasscf = OPEN_MOLCAS_TEMPLATE_FCIDUMP.format(
+    elif get_broombridge is True:
+        rasscf_section = OPEN_MOLCAS_TEMPLATE_FCIDUMP.format(
             spin=spin,
-            charge=charge,
-            nsweeps=nsweeps,
-            max_bond_dimension=max_bond_dimension
+            charge=charge
         )
 
     else:
-      rasscf = ""
+      rasscf_section = ""
 
     return OPENMOLCAS_TEMPLATE.format(
         num_atoms=num_atoms,
@@ -148,5 +143,5 @@ def create_input_deck(
         integral_keyword=integral_keyword,
         charge=charge,
         spin=spin,
-        rasscf=rasscf
+        rasscf_section=rasscf_section
     )

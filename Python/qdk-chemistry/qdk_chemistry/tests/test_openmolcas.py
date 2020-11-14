@@ -52,7 +52,7 @@ def test_openmolcas(geometry, h2o, test_deck):
         openmolcas_input = create_input_deck(
             charge=0,
             spin=1,
-            method="fcidump",
+            get_broombridge=True,
             mol=h2o
         )
 
