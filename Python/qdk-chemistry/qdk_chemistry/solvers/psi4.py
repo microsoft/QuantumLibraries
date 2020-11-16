@@ -51,7 +51,7 @@ def create_input_deck(
     symmetry: str = "C1",
     method: str = "SCF",
     driver: str = "energy", # "energy", "optimize"
-    scf_type: str = "PK", # "DIRECT", "DF", "PK", "OUT_OF_CORE", "PS"
+    scf_type: str = "PK",
     memory_in_gb: int = 1,
     reference: str = "rhf"
 ) -> str:
@@ -75,6 +75,10 @@ def create_input_deck(
     :type method: str, optional
     :param driver: Driver method ("energy" or "optimize"), defaults to "energy"
     :type driver: str, optional
+    :param scf_type: SCF solver type ("DIRECT", "DF", "PK", "OUT_OF_CORE" or "PS"), defaults to "PK"
+    :type scf_type: str, optional
+    :param memory_in_gb: Memory used in GB
+    :type memory_in_gb: int
     :param reference: Reference, defaults to "rhf"
     :type reference: str, optional
     :return: Psi4 input-formatted string
