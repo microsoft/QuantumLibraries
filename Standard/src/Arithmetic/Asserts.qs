@@ -7,6 +7,7 @@ namespace Microsoft.Quantum.Arithmetic {
     open Microsoft.Quantum.Convert;
     open Microsoft.Quantum.Arrays;
     open Microsoft.Quantum.Diagnostics;
+    open Microsoft.Quantum.Math;
 
     /// # Summary
     /// Asserts that the probability of a specific state of a quantum register has the
@@ -40,16 +41,23 @@ namespace Microsoft.Quantum.Arithmetic {
     /// - `AssertProbInt(0,0.125,qubits,10e-10);`
     /// - `AssertProbInt(6,0.875,qubits,10e-10);`
     operation AssertProbInt(stateIndex : Int, expected : Double, qubits : LittleEndian, tolerance : Double) : Unit {
-        let nQubits = Length(qubits!);
-        let bits = IntAsBoolArray(stateIndex, nQubits);
-
         using (flag = Qubit()) {
-            (ControlledOnBitString(bits, X))(qubits!, flag);
-            AssertMeasurementProbability([PauliZ], [flag], One, expected, $"AssertProbInt failed on stateIndex {stateIndex}, expected probability {expected}.", tolerance);
+            within {
+                (ControlledOnInt(stateIndex, X))(qubits!, flag);
+            } apply {
+                AssertMeasurementProbability([PauliZ], [flag], One, expected, $"AssertProbInt failed on stateIndex {stateIndex}, expected probability {expected}.", tolerance);
+            }
+        }
+    }
 
-            // Uncompute flag qubit.
-            (ControlledOnBitString(bits, X))(qubits!, flag);
-            Reset(flag);
+    operation AssertSignedProbInt(stateIndex : Int, expected : Double, sign : Qubit, qubits : LittleEndian, tolerance : Double) : Unit {
+        using (flag = Qubit()) {
+            let signOffset = expected < 0.0 ? 1 <<< Length(qubits!) | 0;
+            within {
+                (ControlledOnInt(stateIndex + signOffset, X))(qubits! + [sign], flag);
+            } apply {
+                AssertMeasurementProbability([PauliZ], [flag], One, AbsD(expected), $"AssertSignedProbInt failed on stateIndex {stateIndex}, expected probability {expected}.", tolerance);
+            }
         }
     }
 
