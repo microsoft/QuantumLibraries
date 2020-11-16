@@ -24,8 +24,8 @@ set {
   basis 3-21G
   scf_type PK
   reference rhf
-  d_convergence 1.0e-08
-  e_convergence 1.0e-08
+  d_convergence 1e-8
+  e_convergence 1e-8
 }
 
 

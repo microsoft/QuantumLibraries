@@ -1,10 +1,12 @@
+import enum
 from typing import Union
 
 from qdk_chemistry.geometry import Geometry
 
-class Basis():
+class Basis(enum.Enum):
+    gaussian = "3-21G"
     pople = "6-31G"
-    dunning = "cc-pVDZ",
+    dunning = "cc-pVDZ"
     karlsruhe = "def2-SVP"
 
 
@@ -21,8 +23,8 @@ set {{
   basis {basis}
   scf_type {scf_type}
   reference {reference}
-  d_convergence {d_convergence:.1e}
-  e_convergence {e_convergence:.1e}
+  d_convergence 1e-8
+  e_convergence 1e-8
 }}
 
 {method_section}
@@ -51,10 +53,34 @@ def create_input_deck(
     driver: str = "energy", # "energy", "optimize"
     scf_type: str = "PK", # "DIRECT", "DF", "PK", "OUT_OF_CORE", "PS"
     memory_in_gb: int = 1,
-    reference: str = "rhf",
-    d_convergence: float = 1e-8,
-    e_convergence: float = 1e-8
+    reference: str = "rhf"
 ) -> str:
+    """Create Psi4 input formatted string
+
+    :param mol: RDKit Molecule object
+    :type mol: Mol
+    :param mol_name: Molecule name, defaults to ""
+    :type mol_name: str, optional
+    :param geometry: Geometry object, defaults to None
+    :type geometry: Union[str, Geometry], optional
+    :param charge: Molecule charge, defaults to 0
+    :type charge: int, optional
+    :param spin: Molecule spin, defaults to 1
+    :type spin: str, optional
+    :param basis: Molecule basis, defaults to "3-21G"
+    :type basis: str, optional
+    :param symmetry: Molecule symmetry, defaults to "C1"
+    :type symmetry: str, optional
+    :param method: Molecule method, defaults to "SCF"
+    :type method: str, optional
+    :param driver: Driver method ("energy" or "optimize"), defaults to "energy"
+    :type driver: str, optional
+    :param reference: Reference, defaults to "rhf"
+    :type reference: str, optional
+    :return: Psi4 input-formatted string
+    :rtype: str
+    """
+    assert basis in Basis._value2member_map_, f"Unknown basis: {basis}. Please choose from the following: {Basis._value2member_map_.values()}"
     optional_energy = PSI4_TEMPLATE_ENERGY.format(driver=driver, method=method) if method.upper() != "SCF" else ""
     template = PSI4_TEMPLATE_FCIDUMP.format(driver=driver, optional_energy=optional_energy)
     method_section = template.format(driver=driver, method=method)
@@ -69,7 +95,5 @@ def create_input_deck(
         basis=basis,
         scf_type=scf_type,
         reference=reference,
-        d_convergence=d_convergence,
-        e_convergence=e_convergence,
         method_section=method_section
     )
