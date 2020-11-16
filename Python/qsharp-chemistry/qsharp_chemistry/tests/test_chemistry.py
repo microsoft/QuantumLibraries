@@ -2,9 +2,17 @@ import pytest
 import os
 import logging
 
+import numpy as np
+
 from pathlib import Path
 
-from qsharp_chemistry import load_broombridge, load_fermion_hamiltonian, load_input_state, encode
+from qsharp_chemistry import (
+    load_broombridge, 
+    load_fermion_hamiltonian, 
+    load_input_state, 
+    encode, 
+    load_and_encode
+)
 from qsharp_chemistry.problem_description import IndexConvention, InputState
 
 import qsharp
@@ -91,3 +99,16 @@ def test_jw_encode(base_path):
 
     jw = encode(fh1, is1)
     assert(len(jw) == 4)
+
+
+def test_load_and_encode(base_path):
+    jw = load_and_encode(
+        file_name=os.path.join(base_path, "broombridge.yaml"),
+        problem_description_index=0,
+        initial_state_label="UCCSD |G>"
+    )
+    (num_qubits, hamiltonian_term_list, input_state_terms, energy_offset) = jw
+    assert num_qubits == 12
+    assert np.isclose(energy_offset, -3.7893, 3)
+    assert len(hamiltonian_term_list) == 4
+    assert len(input_state_terms[1]) == 5

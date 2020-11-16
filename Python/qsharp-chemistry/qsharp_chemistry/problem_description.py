@@ -9,6 +9,7 @@ import json
 import typing
 
 from typing import List, Tuple, Dict, Iterable
+from dataclasses import dataclass, field
 from enum import Enum
 
 from .fermion_hamiltonian import FermionHamiltonian
@@ -35,12 +36,34 @@ class InputState(object):
         return self.__dict__ == other.__dict__
 
 
+@dataclass
 class ProblemDescription(object):
     """
     Represents an electronic structure problem.
     """
-    def __init__ (self, data: Dict):
-        self.__dict__ = data
+    metadata: dict
+    initial_state_suggestions: list
+    basis_set: dict = field(default_factory=dict)
+    geometry: dict = field(default_factory=dict)
+    coulomb_repulsion: dict = field(default_factory=dict)
+    scf_energy: dict = field(default_factory=dict)
+    scf_energy_offset: dict = field(default_factory=dict)
+    fci_energy: dict = field(default_factory=dict)
+    n_orbitals: int = 0
+    n_electrons: int = 0
+    energy_offset: dict = field(default_factory=dict)
+    hamiltonian: dict = field(default_factory=dict)
+
+    @classmethod
+    def from_dict(cls, data: dict):
+        """Generate a ProblemDescription from a dictionary
+
+        :param data: Dictionary containing kwargs for constructor
+        :type data: dict
+        :return: ProblemDescription object
+        :rtype: ProblemDescription
+        """
+        return cls(**data)
 
     def __eq__(self, other):
         if not isinstance(other, ProblemDescription):
@@ -61,7 +84,7 @@ class ProblemDescription(object):
             problem_description=self.__dict__,
             index_convention=index_convention.name
         )
-        return FermionHamiltonian(data)
+        return FermionHamiltonian.from_dict(data)
 
     def load_input_state(self, wavefunction_label: str = '', index_convention: IndexConvention = IndexConvention.UpDown) -> FermionHamiltonian:
         """
