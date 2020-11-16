@@ -62,6 +62,8 @@ def formatted_num_active_el(mol: "Mol", num_active_el: int = None):
 
     :param mol: Molecule object
     :type mol: Mol, optional
+    :param num_active_el: Number of active electrons
+    :type int, optional
     :raises ValueError: [description]
     """
     if num_active_el is None:
