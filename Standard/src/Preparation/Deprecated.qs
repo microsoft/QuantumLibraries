@@ -112,7 +112,7 @@ namespace Microsoft.Quantum.Preparation {
     /// ## qubit
     /// A qubit to be prepared.
     @Deprecated("Microsoft.Quantum.Preparation.PreparePauliEigenstate")
-    operation PrepareQubit (basis : Pauli, qubit : Qubit) : Unit {
+    operation PrepareQubit(basis : Pauli, qubit : Qubit) : Unit {
         PreparePauliEigenstate(basis, qubit);
     }
 
@@ -215,7 +215,7 @@ namespace Microsoft.Quantum.Preparation {
     /// }
     /// ```
     @Deprecated("Microsoft.Quantum.Preparation.PrepareArbitraryStateCP")
-    function StatePreparationComplexCoefficients (coefficients : ComplexPolar[]) : (LittleEndian => Unit is Adj + Ctl) {
+    function StatePreparationComplexCoefficients(coefficients : ComplexPolar[]) : (LittleEndian => Unit is Adj + Ctl) {
         return PrepareArbitraryStateCP(coefficients, _);
     }
 

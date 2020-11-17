@@ -38,8 +38,8 @@ namespace Microsoft.Quantum.Arithmetic {
     /// This means that the number states $\ket{0}\equiv\ket{0}\ket{0}\ket{0}$
     /// and $\ket{6}\equiv\ket{0}\ket{1}\ket{1}$. Then the following asserts succeed:
     /// ```qsharp
-    /// AssertProbInt(0,0.125,qubits,10e-10);
-    /// AssertProbInt(6,0.875,qubits,10e-10);
+    /// AssertProbInt(0, 0.125, qubits, 10e-10);
+    /// AssertProbInt(6, 0.875, qubits, 10e-10);
     /// ```
     operation AssertProbInt(stateIndex : Int, expected : Double, qubits : LittleEndian, tolerance : Double) : Unit {
         using (flag = Qubit()) {

@@ -71,7 +71,7 @@ namespace Microsoft.Quantum.Preparation {
     /// state $\ket{\psi}$ with complex coefficients $r_j e^{i t_j}$ from
     /// the $n$-qubit computational basis state $\ket{0 \cdots 0}$.
     /// In particular, the action of this operation can be simulated by the
-    /// a unitary transformation $U$ which acts on the all-zeros state as
+    /// a unitary transformation $U$ that acts on the all-zeros state as
     ///
     /// $$
     /// \begin{align}
@@ -363,5 +363,4 @@ namespace Microsoft.Quantum.Preparation {
     }
 
 }
-
 
