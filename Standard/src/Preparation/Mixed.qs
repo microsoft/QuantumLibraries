@@ -55,10 +55,11 @@ namespace Microsoft.Quantum.Preparation {
     }
 
     /// # Summary
-    /// Prepares a qubit in the +1 (`Zero`) eigenstate of the given Pauli operator.
+    /// Prepares a qubit in the positive eigenstate of a given Pauli operator.
     /// If the identity operator is given, then the qubit is prepared in the maximally
     /// mixed state.
     ///
+    /// # Description
     /// If the qubit was initially in the $\ket{0}$ state, this operation prepares the
     /// qubit in the $+1$ eigenstate of a given Pauli operator, or, for `PauliI`,
     /// in the maximally mixed state instead (see <xref:microsoft.quantum.preparation.preparesinglequbitidentity>).
@@ -72,7 +73,17 @@ namespace Microsoft.Quantum.Preparation {
     /// A Pauli operator $P$.
     /// ## qubit
     /// A qubit to be prepared.
-    operation PrepareQubit (basis : Pauli, qubit : Qubit) : Unit {
+    ///
+    /// # Example
+    /// To prepare a qubit in the $\ket{+}$ state:
+    ///
+    /// ```qsharp
+    /// using (q = Qubit()) {
+    ///     PreparePauliEigenstate(PauliX, qubit);
+    ///     // ...
+    /// }
+    /// ```
+    operation PreparePauliEigenstate(basis : Pauli, qubit : Qubit) : Unit {
         if (basis == PauliI) {
             PrepareSingleQubitIdentity(qubit);
         } elif (basis == PauliX) {
