@@ -40,7 +40,7 @@ namespace Microsoft.Quantum.Preparation
                 var (polarAmplitudes, qubits) = _args;
 
                 // TODO: benchmark for small `qubits` arrays to find out in which cases emulation is actually
-                // benefitial.
+                // beneficial.
                 if (this.Simulator == null)
                 {
                     return base.__Body__(_args);
