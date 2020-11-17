@@ -172,6 +172,9 @@ namespace Microsoft.Quantum.Preparation {
     /// to quantum state preparation.
     /// This operation doesn't provide Adj/Ctr variants, because, in general, there
     /// are no efficient emulation algorithms for those.
+    ///
+    /// For internal use only, until proposal https://github.com/microsoft/qsharp-language/pull/41
+    /// is finalized and implemented.
     operation _PrepareAmplitudesFromZeroState(coefficients : ComplexPolar[], qubits : LittleEndian) : Unit {
         ApproximatelyPrepareArbitraryState(0.0, coefficients, qubits);
     }
