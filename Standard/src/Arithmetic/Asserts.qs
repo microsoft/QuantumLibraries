@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft Corporation. All rights reserved.
+// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
 namespace Microsoft.Quantum.Arithmetic {
@@ -32,31 +32,21 @@ namespace Microsoft.Quantum.Arithmetic {
     /// ## tolerance
     /// Absolute tolerance on the difference between actual and expected.
     ///
-    /// # Remarks
-    /// ## Example
+    /// # Example
     /// Suppose that the `qubits` register encodes a 3-qubit quantum state
     /// $\ket{\psi}=\sqrt{1/8}\ket{0}+\sqrt{7/8}\ket{6}$ in little-endian format.
     /// This means that the number states $\ket{0}\equiv\ket{0}\ket{0}\ket{0}$
     /// and $\ket{6}\equiv\ket{0}\ket{1}\ket{1}$. Then the following asserts succeed:
-    /// - `AssertProbInt(0,0.125,qubits,10e-10);`
-    /// - `AssertProbInt(6,0.875,qubits,10e-10);`
+    /// ```qsharp
+    /// AssertProbInt(0,0.125,qubits,10e-10);
+    /// AssertProbInt(6,0.875,qubits,10e-10);
+    /// ```
     operation AssertProbInt(stateIndex : Int, expected : Double, qubits : LittleEndian, tolerance : Double) : Unit {
         using (flag = Qubit()) {
             within {
                 (ControlledOnInt(stateIndex, X))(qubits!, flag);
             } apply {
                 AssertMeasurementProbability([PauliZ], [flag], One, expected, $"AssertProbInt failed on stateIndex {stateIndex}, expected probability {expected}.", tolerance);
-            }
-        }
-    }
-
-    operation AssertSignedProbInt(stateIndex : Int, expected : Double, sign : Qubit, qubits : LittleEndian, tolerance : Double) : Unit {
-        using (flag = Qubit()) {
-            let signOffset = expected < 0.0 ? 1 <<< Length(qubits!) | 0;
-            within {
-                (ControlledOnInt(stateIndex + signOffset, X))(qubits! + [sign], flag);
-            } apply {
-                AssertMeasurementProbability([PauliZ], [flag], One, AbsD(expected), $"AssertSignedProbInt failed on stateIndex {stateIndex}, expected probability {expected}.", tolerance);
             }
         }
     }
