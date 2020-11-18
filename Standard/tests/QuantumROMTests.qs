@@ -16,7 +16,7 @@ namespace Microsoft.Quantum.Tests {
 
     // Tests the discretization algorithm
     @Test("QuantumSimulator")
-    operation TestQuantumROMDiscretization() : Unit {
+    operation TestPurifiedMixedStateDiscretization() : Unit {
         for(rep in 0..20){
             let coeffs = DrawRandomInt(2, 5002);
             let bitsPrecision = DrawRandomInt(1, 31);
@@ -64,7 +64,7 @@ namespace Microsoft.Quantum.Tests {
     }
 
     @Test("QuantumSimulator")
-    operation TestQuantumROM() : Unit {
+    operation TestPurifiedMixedState() : Unit {
         for(coeffs in 2..7){
             for(nBitsPrecision in -1..-1..-2){
                 let targetError = PowD(2.0, IntAsDouble(nBitsPrecision));
@@ -104,7 +104,7 @@ namespace Microsoft.Quantum.Tests {
     }
 
     @Test("QuantumSimulator")
-    operation TestQuantumROMWithData() : Unit {
+    operation TestPurifiedMixedStateWithData() : Unit {
         for(coeffs in 2..7){
             for(nBitsPrecision in -1..-1..-2){
                 let targetError = PowD(2.0, IntAsDouble(nBitsPrecision));

@@ -10,8 +10,12 @@ namespace Microsoft.Quantum.Preparation {
     open Microsoft.Quantum.Arrays;
 
     /// # Summary
-    /// Returns an operation that prepares a a purification of a given mixed
-    /// state.
+    /// Returns an operation that prepares a a purification of a given mixed state. 
+    /// A "purified mixed state" refers to states of the form |ψ⟩ = Σᵢ √𝑝ᵢ |𝑖⟩ |garbageᵢ⟩ specified by a vector of 
+    /// coefficients {𝑝ᵢ}. States of this form can be reduced to mixed states ρ ≔ 𝑝ᵢ |𝑖⟩⟨𝑖| by tracing over the "garbage" 
+    /// register (that is, a mixed state that is diagonal in the computational basis).
+    /// 
+    /// See https://arxiv.org/pdf/1805.03662.pdf?page=15 for further discussion.
     ///
     /// # Description
     /// Uses the Quantum ROM technique to represent a given density matrix,
@@ -109,8 +113,11 @@ namespace Microsoft.Quantum.Preparation {
 
     /// # Summary
     /// Returns an operation that prepares a a purification of a given mixed
-    /// state, entangled with a register representing a given collection of
-    /// data.
+    /// state, entangled with a register representing a given collection of data.
+    /// A "purified mixed state with data" refers to a state of the form Σᵢ √𝑝ᵢ |𝑖⟩ |𝑥ᵢ⟩ |garbageᵢ⟩, 
+    /// where each 𝑥ᵢ is a bitstring encoding additional data associated with the register |𝑖⟩.
+    ///
+    /// See https://arxiv.org/pdf/1805.03662.pdf?page=15 for further discussion.
     ///
     /// # Description
     /// Uses the Quantum ROM technique to represent a given density matrix,
