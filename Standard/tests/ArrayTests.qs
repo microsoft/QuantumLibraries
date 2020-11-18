@@ -28,7 +28,7 @@ namespace Microsoft.Quantum.Tests {
     }
 
     @Test("QuantumSimulator")
-    function TestUnzipped() : Unit {
+    function UnzippedTest() : Unit {
         let first = [6, 5, 5, 3, 2, 1];
         let second = [true, false, false, false, true, false];
 

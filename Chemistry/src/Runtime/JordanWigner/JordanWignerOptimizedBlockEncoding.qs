@@ -370,14 +370,14 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
     operation _JordanWignerOptimizedBlockEncodingStatePrep(targetError : Double, optimizedBEGeneratorSystem : OptimizedBEGeneratorSystem, qROMIdxRegister : LittleEndian, qROMGarbage : Qubit[], signQubit : Qubit, selectZControlRegisters : Qubit[], OptimizedBEControlRegisters : Qubit[], pauliBases : Qubit[], pauliBasesIdx : LittleEndian, indexRegisters : LittleEndian[]) : Unit {
 
         body (...) {
-            let (nTerms, oneNorm0, intToGenIdx) = optimizedBEGeneratorSystem!;
+            let (nTerms, _, _) = optimizedBEGeneratorSystem!;
             let coefficients = _OptimizedBEGeneratorSystemCoeff_(optimizedBEGeneratorSystem);
-            let (qROMQubitCount, oneNorm, qROMUnitary) = QuantumROM(targetError, coefficients);
+            let purifiedState = PurifiedMixedState(targetError, coefficients);
             let unitaryGenerator = (nTerms, _ToJordanWignerSelectInput_(_, optimizedBEGeneratorSystem));
             let pauliBasesUnitaryGenerator = (5, _ToPauliBases_);
 
             //let multiplexer = MultiplexerFromGenerator;
-            qROMUnitary(qROMIdxRegister, qROMGarbage);
+            purifiedState::Prepare(qROMIdxRegister, new Qubit[0], qROMGarbage);
             MultiplexOperationsFromGenerator(unitaryGenerator, qROMIdxRegister, (signQubit, selectZControlRegisters, OptimizedBEControlRegisters, pauliBasesIdx, indexRegisters));
             MultiplexOperationsFromGenerator(pauliBasesUnitaryGenerator, pauliBasesIdx, pauliBases);
         }
@@ -389,8 +389,9 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
 
 
     function _JordanWignerOptimizedBlockEncodingQubitManager_ (targetError : Double, nCoeffs : Int, nZ : Int, nMaj : Int, nIdxRegQubits : Int, ctrlRegister : Qubit[]) : ((LittleEndian, Qubit[], Qubit, Qubit[], Qubit[], Qubit[], LittleEndian, LittleEndian[]), (Qubit, Qubit[], Qubit[], Qubit[], LittleEndian[]), Qubit[]) {
-
-        let ((qROMIdx, qROMGarbage), rest0) = _QuantumROMQubitManager(targetError, nCoeffs, ctrlRegister);
+        let requirements = PurifiedMixedStateRequirements(targetError, nCoeffs);
+        let parts = Partitioned([requirements::NIndexQubits, requirements::NGarbageQubits], ctrlRegister);
+        let ((qROMIdx, qROMGarbage), rest0) = ((LittleEndian(parts[0]), parts[1]), parts[2]);
         let ((signQubit, selectZControlRegisters, optimizedBEControlRegisters, pauliBases, indexRegisters, tmp), rest1) = _JordanWignerSelectQubitManager_(nZ, nMaj, nIdxRegQubits, rest0, new Qubit[0]);
         let registers = Partitioned([3], rest1);
         let pauliBasesIdx = LittleEndian(registers[0]);
@@ -400,7 +401,7 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
     function _JordanWignerOptimizedBlockEncodingQubitCount_ (targetError : Double, nCoeffs : Int, nZ : Int, nMaj : Int, nIdxRegQubits : Int, nTarget : Int) : ((Int, Int), (Int, Int, Int, Int, Int, Int, Int, Int[], Int)) {
 
         let (nSelectTotal, (a0, a1, a2, a3, a4)) = _JordanWignerSelectQubitCount_(nZ, nMaj, nIdxRegQubits);
-        let (nQROMTotal, (b0, b1)) = QuantumROMQubitCount(targetError, nCoeffs);
+        let (nQROMTotal, (b0, b1)) = (PurifiedMixedStateRequirements(targetError, nCoeffs))!;
         let pauliBasesIdx = 3;
         return (((nSelectTotal + nQROMTotal) + pauliBasesIdx, nTarget), (b0, b1, a0, a1, a2, a3, pauliBasesIdx, a4, nTarget));
     }
