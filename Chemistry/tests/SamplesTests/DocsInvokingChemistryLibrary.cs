@@ -21,7 +21,7 @@ using Microsoft.Quantum.Chemistry.QSharpFormat;
 using System;
 using System.IO;
 
-// We use this for convnience functions for manipulation arrays.
+// We use this for convenience functions for manipulation arrays.
 using System.Linq;
 
 //

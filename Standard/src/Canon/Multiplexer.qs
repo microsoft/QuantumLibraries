@@ -85,7 +85,7 @@ namespace Microsoft.Quantum.Canon {
                         MultiplexOperationsFromGeneratorImpl(leftUnitaries, [newauxiliary], newControls, target);
                     }
                 } else {
-                    // Recursion that reduces nIndex by 1 & sets Length(auxiliary) to 1.
+                    // Recursion that reduces nIndex by 1 and sets Length(auxiliary) to 1.
                     let controls = [Tail(index!)] + auxiliary;
                     using ((newauxiliary, andauxiliary) = (Qubit(), Qubit[MaxI(0, Length(controls) - 2)])) {
                         within {
@@ -209,7 +209,7 @@ namespace Microsoft.Quantum.Canon {
             let controls1 = ctrlRegister[0..0] + auxRegister;
             let controls2 = Rest(ctrlRegister);
             let targets = auxRegister + [target];
-            ApplyToEachA(ApplyAnd, Zip3(controls1, controls2, targets));
+            ApplyToEachA(ApplyAnd, Zipped3(controls1, controls2, targets));
         }
     }
 }

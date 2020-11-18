@@ -74,7 +74,7 @@ namespace Microsoft.Quantum.Preparation {
     /// # Summary
     /// Implementation step of <xref:microsoft.quantum.canon.prepareuniformsuperposition>
     internal operation PrepareUniformSuperpositionOracle(nIndices: Int, nQubits: Int, idxFlag: Int, qubits: Qubit[])
-    : Unit is Adj+Ctl {
+    : Unit is Adj + Ctl {
         let targetQubits = qubits[3...];
         let flagQubit = qubits[0];
         let auxillaryQubits = qubits[1..2];
