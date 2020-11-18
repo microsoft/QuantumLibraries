@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.Quantum.Sdk/0.13.201118141-beta">
+<Project Sdk="Microsoft.Quantum.Sdk/0.13.2011119625-beta">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
@@ -37,7 +37,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Quantum.Simulators" Version="0.13.201118141-beta" />
+    <PackageReference Include="Microsoft.Quantum.Simulators" Version="0.13.2011119625-beta" />
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" />
     <PackageReference Include="NumSharp" Version="0.20.5" />
   </ItemGroup>
