@@ -50,7 +50,7 @@ def create_input_deck(
     basis: str = "3-21G",
     symmetry: str = "C1",
     method: str = "SCF",
-    driver: str = "energy", # "energy", "optimize"
+    driver: str = "energy",
     scf_type: str = "PK",
     memory_in_gb: int = 1,
     reference: str = "rhf"
@@ -69,9 +69,12 @@ def create_input_deck(
     :type spin: str, optional
     :param basis: Molecule basis, defaults to "3-21G"
     :type basis: str, optional
-    :param symmetry: Molecule symmetry, defaults to "C1"
+    :param symmetry: Molecule symmetry (example options: "C1", "C2v", "D6h", "Cs"),
+         defaults to "C1". When requesting Broombridge, make sure to set this to "C1"
+         because Broombridge does not support group symmetry
     :type symmetry: str, optional
-    :param method: Molecule method, defaults to "SCF"
+    :param method: Molecule method (options: "SCF", "HF", "DFT", "CC2", "CCSD", "CASSCF", 
+        "MP2"), defaults to "SCF"
     :type method: str, optional
     :param driver: Driver method ("energy" or "optimize"), defaults to "energy"
     :type driver: str, optional
