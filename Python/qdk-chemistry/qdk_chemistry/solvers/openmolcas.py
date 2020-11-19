@@ -116,7 +116,7 @@ def create_input_deck(
     num_atoms = len(geometry) if isinstance(geometry, Geometry) else num_atoms_from_mol(mol)
     charge = charge if charge is not None else GetFormalCharge(mol)
 
-    if method.upper() == "CASSCF" and get_broombridge is False:
+    if method.upper() == "CASSCF" and not get_broombridge:
         num_active_el = formatted_num_active_el(mol=mol, num_active_el=num_active_el)
         rasscf_section = OPENMOLCAS_TEMPLATE_CASSCF.format(
             charge=charge,
