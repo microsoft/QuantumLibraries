@@ -83,7 +83,7 @@ namespace Microsoft.Quantum.Chemistry.Paulis
         public override bool Equals(object obj) =>
             obj is IEquatable<PauliTerm> other && other.Equals(this);
 
-        public bool IEquatable<PauliTerm>.Equals(PauliTerm other) =>
+        bool IEquatable<PauliTerm>.Equals(PauliTerm other) =>
             other is { TermType: this.TermType, QubitIndices: var indices }
             && QubitIndices.SequenceEqual(indices);
 
@@ -167,7 +167,7 @@ namespace Microsoft.Quantum.Chemistry.Paulis
         public override bool Equals(object obj) =>
             obj is IEquatable<PauliTermValue> other && other.Equals(this);
 
-        public bool IEquatable<PauliTermValue>.Equals(PauliTermValue other) =>
+        bool IEquatable<PauliTermValue>.Equals(PauliTermValue other) =>
             other is { Value: this.Value };
 
         public override int GetHashCode() =>

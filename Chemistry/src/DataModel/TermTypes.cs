@@ -197,7 +197,7 @@ namespace Microsoft.Quantum.Chemistry
         public override bool Equals(object obj) =>
             obj is IEquatable<DoubleCoeff> other && other.Equals(this);
         
-        public bool IEquatable<DoubleCoeff>.Equals(DoubleCoeff other) =>
+        bool IEquatable<DoubleCoeff>.Equals(DoubleCoeff other) =>
             other is { Value: this.Value };
 
         public override int GetHashCode() => Value.GetHashCode();
