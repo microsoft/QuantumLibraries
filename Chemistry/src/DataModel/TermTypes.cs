@@ -1,4 +1,4 @@
-﻿// Copyright (c) Microsoft Corporation. All rights reserved.
+﻿// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
 namespace Microsoft.Quantum.Chemistry
@@ -194,30 +194,8 @@ namespace Microsoft.Quantum.Chemistry
 
         #region Equality Testing
 
-        public override bool Equals(object obj) => (obj is DoubleCoeff x) ? Equals(x) : false;
-
-        public bool Equals(DoubleCoeff x)
-        {
-            // If parameter is null, return false.
-            if (ReferenceEquals(x, null))
-            {
-                return false;
-            }
-
-            // Optimization for a common success case.
-            if (ReferenceEquals(this, x))
-            {
-                return true;
-            }
-
-            // If run-time types are not exactly the same, return false.
-            if (GetType() != x.GetType())
-            {
-                return false;
-            }
-            // Return true if the fields match.
-            return Value == x.Value;
-        }
+        public override bool Equals(object obj) =>
+            obj is DoubleCoeff { Value: this.Value };
 
         public override int GetHashCode() => Value.GetHashCode();
 

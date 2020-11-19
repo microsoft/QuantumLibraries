@@ -1,4 +1,4 @@
-﻿// Copyright (c) Microsoft Corporation. All rights reserved.
+﻿// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
 using System;
@@ -80,30 +80,9 @@ namespace Microsoft.Quantum.Chemistry.Paulis
 
         #region Equality Testing
 
-        public override bool Equals(object obj) => (obj is PauliTerm x) ? Equals(x) : false;
-
-        public bool Equals(PauliTerm x)
-        {
-            // If parameter is null, return false.
-            if (ReferenceEquals(x, null))
-            {
-                return false;
-            }
-
-            // Optimization for a common success case.
-            if (ReferenceEquals(this, x))
-            {
-                return true;
-            }
-
-            // If run-time types are not exactly the same, return false.
-            if (GetType() != x.GetType())
-            {
-                return false;
-            }
-            // Return true if the fields match.
-            return QubitIndices.SequenceEqual(x.QubitIndices) && TermType == x.TermType;
-        }
+        public override bool Equals(object obj) =>
+            obj is PauliTerm { TermType: this.TermType, QubitIndices: var indices }
+            && QubitIndices.SequenceEqual(indices);
 
         public override int GetHashCode()
         {
