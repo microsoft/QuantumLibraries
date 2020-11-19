@@ -195,7 +195,10 @@ namespace Microsoft.Quantum.Chemistry
         #region Equality Testing
 
         public override bool Equals(object obj) =>
-            obj is DoubleCoeff { Value: this.Value };
+            obj is IEquatable<DoubleCoeff> other && other.Equals(this);
+        
+        public bool IEquatable<DoubleCoeff>.Equals(DoubleCoeff other) =>
+            other is { Value: this.Value };
 
         public override int GetHashCode() => Value.GetHashCode();
 
