@@ -163,7 +163,6 @@ def test_smiles_from_xyz_files(filename, charge, answer):
     quick = True
 
     atoms, charge_read, coordinates = read_xyz_file(os.path.join(os.path.split(__file__)[0], filename))
-
     mols = xyz2mol(atoms, coordinates, charge=charge)
 
     smiles_list = []

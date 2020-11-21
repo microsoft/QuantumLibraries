@@ -7,26 +7,6 @@ Implementation by Jan H. Jensen, based on the paper
     Bull. Korean Chem. Soc. 2015, Vol. 36, 1769-1777
     DOI: 10.1002/bkcs.10334
 """
-
-import copy
-import itertools
-import sys
-
-from rdkit.Chem import rdmolops
-from rdkit.Chem import rdchem
-try:
-    from rdkit.Chem import rdEHTTools #requires RDKit 2019.9.1 or later
-except ImportError:
-    rdEHTTools = None
-
-from collections import defaultdict
-
-import numpy as np
-import networkx as nx
-
-from rdkit import Chem
-from rdkit.Chem import AllChem, rdmolops
-
 from qdk_chemistry.xyz2mol.ac import xyz2AC, AC2mol
 from qdk_chemistry.xyz2mol.util import chiral_stereo_check
 
