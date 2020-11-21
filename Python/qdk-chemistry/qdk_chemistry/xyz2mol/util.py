@@ -1,3 +1,7 @@
+# Copyright (c) Microsoft Corporation.
+# Copyright (c) 2018 Jensen Group
+# Licensed under the MIT License.
+
 """
 Module for generating rdkit molobj/smiles/molecular graph from free atoms
 Implementation by Jan H. Jensen, based on the paper

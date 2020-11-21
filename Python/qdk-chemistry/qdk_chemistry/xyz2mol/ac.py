@@ -1,3 +1,7 @@
+# Copyright (c) Microsoft Corporation.
+# Based on xyz2mol by Jensen group.
+# Licensed under the MIT License.
+
 """
 Module for generating rdkit molobj/smiles/molecular graph from free atoms
 Implementation by Jan H. Jensen, based on the paper
