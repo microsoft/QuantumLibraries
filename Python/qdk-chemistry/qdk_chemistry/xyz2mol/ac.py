@@ -1,5 +1,5 @@
 # Copyright (c) Microsoft Corporation.
-# Based on xyz2mol by Jensen group.
+# Copyright (c) 2018 Jensen Group
 # Licensed under the MIT License.
 
 """
