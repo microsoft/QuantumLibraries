@@ -73,7 +73,7 @@ class JsmeWidget:
     """
     n = 0
 
-    def __init__(self, width=400, height=350, jme="", smiles="", molblock="", options="query,hydrogens"):
+    def __init__(self, width=400, height=350, jme="", smiles="", molblock="", options="query,hydrogens", parent_varname: str = ""):
         """Create JsmeWidget instance
 
         :param width: Widget width in pixels, defaults to 400
@@ -90,7 +90,7 @@ class JsmeWidget:
         :type options: str, optional
         """
         try:
-            self.name = varname()
+            self.name = f"{parent_varname}.{varname()}"
         except VarnameRetrievingError:
             self.name = "_"
 
@@ -99,6 +99,7 @@ class JsmeWidget:
         self.value = JsmeValue(jme=jme, molblock=molblock, smiles=smiles)
         self.options = options
         self._uids = []
+        self._updated = False
 
     def set_value(self, jme: str, smiles: str, molblock: str):
         """Set JSME value (JME, SMILES and MolBlock)
@@ -110,7 +111,15 @@ class JsmeWidget:
         :param molblock: MolBlock value string
         :type molblock: str
         """
+        self._updated = True
         self.value = JsmeValue(jme=jme, molblock=molblock, smiles=smiles)
+
+    @property
+    def was_updated(self):
+        return self._updated
+
+    def reset_updated(self):
+        self._updated = False
 
     def _gen_uid(self):
         """Generate unique identifier for javascript applet"""
@@ -158,7 +167,7 @@ class JsmeWidget:
     def save(self, uid):
         """Save the value of the molecular diagram drawn in the widget to the Python namespace
         """
-        display(Javascript(f"saveAs_{uid}('w')"))
+        display(Javascript(f"saveAs_{uid}('{self.name}')"))
 
     def to_mol(self, add_hs: bool=False, num_confs: int=10) -> "Mol":
         """Convert widget value to RDKit molecule.
