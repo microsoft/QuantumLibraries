@@ -4,17 +4,32 @@
 quantum chemistry algortihms.
 """
 
+from dataclasses import dataclass
 from typing import List, Tuple, Dict, Iterable
 
 import logging
 logger = logging.getLogger(__name__)
 
+HTerm = Tuple[str, List[tuple]]
+
+@dataclass
 class FermionHamiltonian(object):
     """
     Represents a fermion Hamiltonian.
     """
-    def __init__(self, data):
-        self.__dict__ = data
+    system_indices: List[int]
+    terms: List[HTerm]
+
+    @classmethod
+    def from_dict(cls, data: dict):
+        """Create FermionHamiltonian object from dictionary
+
+        :param data: FermionHamiltonian dictionary
+        :type data: dict
+        :return: FermionHamiltonian object
+        :rtype: FermionHamiltonian
+        """
+        return cls(**data)
 
     def __eq__(self, other):
         if not isinstance(other, FermionHamiltonian):
