@@ -75,6 +75,9 @@ if ($Env:ENABLE_PYTHON -eq "false") {
     Pack-Wheel '../Python/qsharp'
 }
 
+Write-Host "##[info]Pack QAOA library"
+Pack-One '../QAOA/src/Qaoa.csproj'
+
 if (-not $all_ok) {
     throw "At least one test failed execution. Check the logs."
 }

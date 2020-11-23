@@ -9,7 +9,8 @@
         "Microsoft.Quantum.Standard.Visualization",
         "Microsoft.Quantum.Chemistry",
         "Microsoft.Quantum.Numerics",
-        "Microsoft.Quantum.MachineLearning"
+        "Microsoft.Quantum.MachineLearning",
+        "Microsoft.Quantum.Qaoa"
     );
     Assemblies = @(
         ".\Standard\src\bin\$Env:BUILD_CONFIGURATION\netstandard2.1\Microsoft.Quantum.Standard.dll",
@@ -18,6 +19,7 @@
         ".\MachineLearning\src\bin\$Env:BUILD_CONFIGURATION\netstandard2.1\Microsoft.Quantum.MachineLearning.dll",
         ".\Chemistry\src\DataModel\bin\$Env:BUILD_CONFIGURATION\netstandard2.1\Microsoft.Quantum.Chemistry.DataModel.dll",
         ".\Chemistry\src\Runtime\bin\$Env:BUILD_CONFIGURATION\netstandard2.1\Microsoft.Quantum.Chemistry.Runtime.dll",
-        ".\Chemistry\src\Tools\bin\$Env:BUILD_CONFIGURATION\netcoreapp3.1\qdk-chem.dll"
+        ".\Chemistry\src\Tools\bin\$Env:BUILD_CONFIGURATION\netcoreapp3.1\qdk-chem.dll",
+        ".\Qaoa\src\bin\$Env:BUILD_CONFIGURATION\netcoreapp3.1\Microsoft.Quantum.Qaoa.dll"
     ) | ForEach-Object { Get-Item (Join-Path $PSScriptRoot ".." $_) };
 } | Write-Output;

@@ -40,6 +40,9 @@ Build-One 'publish' '../MachineLearning.sln'
 Write-Host "##[info]Build Jupyter magic library"
 Build-One 'publish' '../Magic.sln'
 
+Write-Host "##[info]Build QAOA library"
+Build-One 'publish' '../Qaoa.sln'
+
 if (-not $all_ok) {
     throw "At least one test failed execution. Check the logs."
 }

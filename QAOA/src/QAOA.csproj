@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.Quantum.Sdk/0.12.20072031">
+
+  <PropertyGroup>
+    <OutputType>Library</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+	  <AssemblyName>Microsoft.Quantum.Qaoa</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Accord.Math" Version="3.8.0" />
+	<PackageReference Include="Microsoft.Jupyter.Core" Version="1.4.80531" />
+	<PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+  </ItemGroup>
+
+</Project>
