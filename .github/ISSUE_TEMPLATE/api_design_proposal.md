@@ -39,7 +39,7 @@ assignees: ''
 
 <!-- If your proposal includes breaking changes beyond @Deprecated attributes, please list those changes here and their expected impact on Q# users. -->
 
-## Example
+## Examples
 
 ### Current status
 
