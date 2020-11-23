@@ -7,7 +7,8 @@
 import warnings
 from typing import Union, TYPE_CHECKING
 
-from qdk_chemistry.geometry import Geometry
+from qdk_chemistry.geometry import Geometry, format_geometry, format_geometry_from_mol
+from qdk_chemistry.solvers.util import formatted_geometry_str, formatted_num_active_el
 
 if TYPE_CHECKING:
     from rdkit.Chem.AllChem import Mol
@@ -63,80 +64,30 @@ task tce {driver}
 """
 
 
-def format_geometry(geometry: Geometry):
-    """Format geometry into NWChem format
-
-    :param geometry: Molecular geometry
-    :type geometry: Geometry
-    :return: NWChem geometry format
-    :rtype: str
-    """
-    return "\n".join(el.to_xyz() for el in geometry)
-
-
-def format_geometry_from_mol(mol: "Mol"):
-    """Get geometry in NWChem format from RDKit molecule object
-
-    :param mol: RDKit molecule
-    :type mol: Mol
-    """
-    g = Geometry.from_mol(mol)
-    return format_geometry(g)
-
-
-def format_geometry_from_xyz(xyz: str):
-    """Generate geometry portion of NWChem file from XYZ data.
-    The formatting of the .xyz file format is as follows:
-
-        <number of atoms>
-        comment line
-        <element> <X> <Y> <Z>
-        ...
-
-    Source: https://en.wikipedia.org/wiki/XYZ_file_format.
-
-    :param xyz: XYZ file format
-    :type xyz: str
-    :return: Geometry in NWChem format
-    :rtype: str
-    """
-    g = Geometry.from_xyz(xyz)
-    return format_geometry(g)
-
-
-def num_electrons(mol: "Mol") -> int:
-    """Calculate the number of electrons in the molecule
-
-    :param mol: RDKit molecule object
-    :type mol: Mol
-    :return: Number of electrons or sum of atomic number of atoms in molecule
-    :rtype: int
-    """
-    return sum([atom.GetAtomicNum() for atom in mol.GetAtoms()])
-
-
 def create_input_deck(
-        mol_name: str, 
-        num_active_orbitals: int,
-        geometry: Union[str, Geometry] = None,
-        memory: str = "memory stack 1000 mb heap 100 mb global 1000 mb noverify",
-        geometry_units: str = "au",
-        basis: str = "sto-3g",
-        charge: int = 0,
-        scf_thresh: float = 1.0e-10,
-        scf_tol2e: float = 1.0e-10,
-        rhf: str = "rhf",
-        spin: str = "singlet",
-        nopen: int = None,
-        method: str = "ccsd",
-        num_tce_root: int = 5,
-        tce_thresh: float = 1.0e-6,
-        driver: str = "energy",
-        mol: "Mol" = None,
-        num_active_el: int = None,
-    ) -> str:
+    mol: "Mol",
+    mol_name: str, 
+    num_active_orbitals: int,
+    geometry: Union[str, Geometry] = None,
+    memory: str = "memory stack 1000 mb heap 100 mb global 1000 mb noverify",
+    geometry_units: str = "au",
+    basis: str = "sto-3g",
+    charge: int = 0,
+    scf_thresh: float = 1.0e-10,
+    scf_tol2e: float = 1.0e-10,
+    rhf: str = "rhf",
+    spin: str = "singlet",
+    nopen: int = None,
+    method: str = "ccsd",
+    num_tce_root: int = 5,
+    tce_thresh: float = 1.0e-6,
+    driver: str = "energy",
+    num_active_el: int = None,
+) -> str:
     """Generate an NWChem input deck
 
+    :param mol: RDKit Molecule object to use for calculating number of electrons if unspecified, defaults to None
+    :type mol: Mol, optional
     :param mol_name: Molecule name
     :type mol_name: str
     :param geometry: Molecule geometry in the following format (each atom on a new line) : [Atom] [X] [Y] [Z]
@@ -169,8 +120,6 @@ def create_input_deck(
     :type tce_thresh: float, optional
     :param driver: Driver method, defaults to "energy"
     :type driver: str, optional
-    :param mol: RDKit Molecule object to use for calculating number of electrons if unspecified, defaults to None
-    :type mol: Mol, optional
     :param num_active_el: Number of active electrons in molecule. This value is calculated based on atomic numbers if mol is provided. Defaults to None, defaults to None
     :type num_active_el: int, optional
     :raises ValueError: If neither Mol or num_active_el|geometry are specified.
@@ -179,23 +128,8 @@ def create_input_deck(
     """
     assert geometry_units in _GEOMETRY_UNITS, f"Unknown geometry unit: {geometry_units}"
 
-    if mol is not None and num_active_el is None:
-        num_active_el = num_electrons(mol)
-    elif mol is None and num_active_el is None:
-        raise ValueError("Cannot proceed: please provide either a Mol object or specify number of electrons")
-    else:
-        warnings.warn("Ignoring mol and using specified number of active electrons (num_active_el) instead.")
-
-    if mol is not None and geometry is None:
-        geometry = format_geometry_from_mol(mol)
-    elif mol is None and geometry is None:
-        raise ValueError("Cannot proceed: please provide either a Mol object or specify geometry in NWChem syntax")
-    else:
-        warnings.warn("Ignoring mol and using specified geometry string instead.")
-    
-    if isinstance(geometry, Geometry):
-        geometry = format_geometry(geometry)
-
+    num_active_el = formatted_num_active_el(mol=mol, num_active_el=num_active_el)
+    geometry = formatted_geometry_str(mol=mol, geometry=geometry)
     nopen_str = f"nopen {nopen}" if nopen is not None else ""
 
     nw_chem = NW_CHEM_TEMPLATE.format(

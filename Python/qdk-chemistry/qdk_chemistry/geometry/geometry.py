@@ -50,6 +50,7 @@ class Element:
             z=self.z
         )
 
+
 class Geometry(List[Element]):
     """Molecular geometry consisting of list of elements with
     XYZ coordinates
@@ -131,3 +132,53 @@ class Geometry(List[Element]):
             coordinates=self.coordinates,
             title=title
         )
+
+
+def format_geometry(geometry: Geometry, line_sep: str="\n") -> str:
+    """Format geometry into text format
+
+    Example:
+    <Element> <x> <y> <x>
+
+    :param geometry: Geometry object
+    :type geometry: Geometry
+    :param line_sep: Line separator, defaults to "\n"
+    :type line_sep: str
+    :return: Geometry in text format, each element separated by given separator
+    :rtype: str
+    """
+    return line_sep.join(el.to_xyz() for el in geometry)
+
+
+def format_geometry_from_mol(mol: "Mol", line_sep: str = "\n") -> str:
+    """Get geometry in text format from RDKit molecule object
+
+    :param mol: RDKit molecule
+    :type mol: Mol
+    :param line_sep: Line separator, defaults to "\n"
+    :type line_sep: str
+    """
+    g = Geometry.from_mol(mol)
+    return format_geometry(geometry=g, line_sep=line_sep)
+
+
+def format_geometry_from_xyz(xyz: str, line_sep: str = "\n") -> str:
+    """Generate geometry text format from XYZ data.
+    The formatting of the .xyz file format is as follows:
+
+        <number of atoms>
+        comment line
+        <element> <X> <Y> <Z>
+        ...
+
+    Source: https://en.wikipedia.org/wiki/XYZ_file_format.
+
+    :param xyz: XYZ file format
+    :type xyz: str
+    :param line_sep: Line separator, defaults to "\n"
+    :type line_sep: str
+    :return: Geometry in text format
+    :rtype: str
+    """
+    g = Geometry.from_xyz(xyz)
+    return format_geometry(geometry=g, line_sep=line_sep)
