@@ -46,6 +46,9 @@ function Pack-Wheel() {
 Write-Host "##[info]Pack Standard library"
 Pack-One '../Standard/src/Standard.csproj'
 
+Write-Host "##[info]Pack Standard visualization library"
+Pack-One '../Visualization/src/Visualization.csproj'
+
 Write-Host "##[info]Pack Chemistry library"
 Pack-One '../Chemistry/src/Runtime/Runtime.csproj'
 Pack-One '../Chemistry/src/DataModel/DataModel.csproj'

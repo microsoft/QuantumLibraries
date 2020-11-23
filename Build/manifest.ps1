@@ -6,6 +6,7 @@
 @{
     Packages = @(
         "Microsoft.Quantum.Standard",
+        "Microsoft.Quantum.Standard.Visualization",
         "Microsoft.Quantum.Chemistry",
         "Microsoft.Quantum.Numerics",
         "Microsoft.Quantum.MachineLearning",
@@ -13,6 +14,7 @@
     );
     Assemblies = @(
         ".\Standard\src\bin\$Env:BUILD_CONFIGURATION\netstandard2.1\Microsoft.Quantum.Standard.dll",
+        ".\Visualization\src\bin\$Env:BUILD_CONFIGURATION\netstandard2.1\Microsoft.Quantum.Standard.Visualization.dll",
         ".\Numerics\src\bin\$Env:BUILD_CONFIGURATION\netstandard2.1\Microsoft.Quantum.Numerics.dll",
         ".\MachineLearning\src\bin\$Env:BUILD_CONFIGURATION\netstandard2.1\Microsoft.Quantum.MachineLearning.dll",
         ".\Chemistry\src\DataModel\bin\$Env:BUILD_CONFIGURATION\netstandard2.1\Microsoft.Quantum.Chemistry.DataModel.dll",

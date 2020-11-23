@@ -22,7 +22,7 @@ namespace Microsoft.Quantum.Tests
             var op = new Microsoft.Quantum.Canon.ApplyToEach<Qubit>(new QuantumSimulator());
             var baseOp = new Microsoft.Quantum.Intrinsic.I(new QuantumSimulator());
             IQArray<Qubit> targets = new QArray<Qubit>(new Qubit[] { });
-            var args = op.__dataIn((baseOp, targets));
+            var args = op.__DataIn__((baseOp, targets));
             var expected = new RuntimeMetadata()
             {
                 Label = "ApplyToEach",
@@ -39,7 +39,7 @@ namespace Microsoft.Quantum.Tests
             var op = new Microsoft.Quantum.Canon.ApplyToEachC<Qubit>(new QuantumSimulator());
             var baseOp = new Microsoft.Quantum.Intrinsic.I(new QuantumSimulator());
             IQArray<Qubit> targets = new QArray<Qubit>(new Qubit[] { });
-            var args = op.__dataIn((baseOp, targets));
+            var args = op.__DataIn__((baseOp, targets));
             var expected = new RuntimeMetadata()
             {
                 Label = "ApplyToEachC",
@@ -56,7 +56,7 @@ namespace Microsoft.Quantum.Tests
             var op = new Microsoft.Quantum.Canon.ApplyToEachA<Qubit>(new QuantumSimulator());
             var baseOp = new Microsoft.Quantum.Intrinsic.I(new QuantumSimulator());
             IQArray<Qubit> targets = new QArray<Qubit>(new Qubit[] { });
-            var args = op.__dataIn((baseOp, targets));
+            var args = op.__DataIn__((baseOp, targets));
             var expected = new RuntimeMetadata()
             {
                 Label = "ApplyToEachA",
@@ -73,7 +73,7 @@ namespace Microsoft.Quantum.Tests
             var op = new Microsoft.Quantum.Canon.ApplyToEachCA<Qubit>(new QuantumSimulator());
             var baseOp = new Microsoft.Quantum.Intrinsic.I(new QuantumSimulator());
             IQArray<Qubit> targets = new QArray<Qubit>(new Qubit[] { });
-            var args = op.__dataIn((baseOp, targets));
+            var args = op.__DataIn__((baseOp, targets));
             var expected = new RuntimeMetadata()
             {
                 Label = "ApplyToEachCA",

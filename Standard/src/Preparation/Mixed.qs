@@ -5,6 +5,7 @@ namespace Microsoft.Quantum.Preparation {
     open Microsoft.Quantum.Intrinsic;
     open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Math;
+    open Microsoft.Quantum.Random;
 
     /// # Summary
 	/// Prepares a qubit in the maximally mixed state.
@@ -32,7 +33,7 @@ namespace Microsoft.Quantum.Preparation {
     /// In particular, this operation can be used in process tomography
     /// to measure the *non-unital* components of a channel.
     operation PrepareSingleQubitIdentity(qubit : Qubit) : Unit {
-        ApplyPauli([RandomSingleQubitPauli()], [qubit]);
+        ApplyPauli([DrawRandomPauli()], [qubit]);
     }
 
     /// # Summary
