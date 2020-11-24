@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.Quantum.Sdk/0.14.20111301-pull">
+<Project Sdk="Microsoft.Quantum.Sdk/0.14.2011120152-beta">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
@@ -41,7 +41,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Quantum.Simulators" Version="0.14.20111301-pull" />
+    <PackageReference Include="Microsoft.Quantum.Simulators" Version="0.14.2011120152-beta" />
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" />
   </ItemGroup>
 
