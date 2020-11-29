@@ -1,10 +1,23 @@
 steps:
 
 - task: UseDotNet@2
-  displayName: 'Use .NET Core SDK 3.1.100'
+  displayName: 'Use .NET Core SDK 3.1.300'
   inputs:
     packageType: sdk
-    version: '3.1.100'
+    version: '3.1.300'
+
+
+- task: UsePythonVersion@0
+  inputs:
+    versionSpec: '3.7'
+    architecture: 'x64'
+  displayName: 'Select Python version'
+  condition: and(succeeded(), ne(variables['Enable.Python'], 'false'))
+  continueOnError: true
+
+- script: pip install setuptools wheel pytest
+  displayName: 'Install Python tools'
+  condition: and(succeeded(), ne(variables['Enable.Python'], 'false'))
 
 
 - powershell: ./build.ps1
@@ -21,6 +34,12 @@ steps:
 - powershell: ./pack.ps1
   displayName: "Pack"
   workingDirectory: $(System.DefaultWorkingDirectory)/Build
+
+
+- pwsh: .\manifest.ps1
+  displayName: "List built packages & assemblies"
+  workingDirectory: '$(System.DefaultWorkingDirectory)/Build'
+  condition: succeededOrFailed()
 
 
 - template: step-wrap-up.yml

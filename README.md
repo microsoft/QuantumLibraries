@@ -5,7 +5,7 @@ Welcome to the Microsoft Quantum Development Kit!
 This repository contains open-source libraries for the [Quantum Development Kit](https://docs.microsoft.com/en-us/quantum/?view=qsharp-preview):
 
 - **[Docs/](./Docs)**: Additional documentation for developing on the libraries. Please see [QDK online documentation](https://docs.microsoft.com/quantum/) for online documentation.
-- **[Standard/](./Standard)**: Q# sources used to implement [the Q# standard libraries](https://docs.microsoft.com/quantum/libraries/intro).
+- **[Standard/](./Standard)**: Q# sources used to implement [the Q# standard libraries](https://docs.microsoft.com/quantum/libraries/standard).
 - **[Chemistry/](./Chemistry)**: Q# and C# sources used to implement a library for [quantum chemistry](https://docs.microsoft.com/quantum/libraries/chemistry) and Hamiltonian simulation.
 - **[Numerics/](./Numerics)**: Q# sources used to implement the [quantum numerics library](https://docs.microsoft.com/quantum/libraries/numerics).
 - **[LICENSE](./LICENSE.txt)**: Terms of use and license details for the Quantum Development Kit libraries.
@@ -27,13 +27,12 @@ of samples on how to use these libraries to write quantum based programs.
 
 | branch | status    |
 |--------|-----------|
-| master | [![Build Status](https://dev.azure.com/ms-quantum-public/Microsoft%20Quantum%20(public)/_apis/build/status/Microsoft.QuantumLibraries?branchName=master)](https://dev.azure.com/ms-quantum-public/Microsoft%20Quantum%20(public)/_build/latest?definitionId=1&branchName=master) |
+| main | [![Build Status](https://dev.azure.com/ms-quantum-public/Microsoft%20Quantum%20(public)/_apis/build/status/Microsoft.QuantumLibraries?branchName=main)](https://dev.azure.com/ms-quantum-public/Microsoft%20Quantum%20(public)/_build/latest?definitionId=1&branchName=main) |
 
 ## Feedback ##
 
-We are collecting feedback for the entire Microsoft Quantum Development Kit
-at [user voice](https://quantum.uservoice.com/). Please leave your suggestions,
-requests and bugs (or praises!) there.
+If you have feedback about the content in this repository, please let us know by filing a [new issue](https://github.com/microsoft/quantumlibraries/issues/new/choose)!
+If you have feedback about some other part of the Microsoft Quantum Development Kit, please see the [contribution guide](https://docs.microsoft.com/quantum/contributing/) for more information.
 
 ## Contributing ##
 

@@ -1,4 +1,7 @@
-﻿using System;
+﻿// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
+using System;
 using System.Linq;
 using System.Runtime.InteropServices;
 
@@ -22,6 +25,7 @@ namespace Microsoft.Quantum.Tests
             {
                 var count = 0;
                 sim.OnLog += (_) => count++;
+                sim.DisableLogToConsole();
 
                 EstimateFrequencyEmulationTest.Run(sim).Wait();
                 Assert.Equal(expected, count);

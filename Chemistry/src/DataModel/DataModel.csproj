@@ -14,8 +14,8 @@
     <PackageId>Microsoft.Quantum.Chemistry.DataModel</PackageId>
     <PackageReleaseNotes>See: https://docs.microsoft.com/en-us/quantum/relnotes/</PackageReleaseNotes>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <PackageProjectUrl>https://github.com/Microsoft/QuantumLibraries/tree/master/Chemistry</PackageProjectUrl>
-    <PackageIconUrl>https://secure.gravatar.com/avatar/bd1f02955b2853ba0a3b1cdc2434e8ec.png</PackageIconUrl>
+    <PackageProjectUrl>https://github.com/microsoft/QuantumLibraries/tree/main/Chemistry</PackageProjectUrl>
+    <PackageIcon>qdk-nuget-icon.png</PackageIcon>
     <PackageTags>Quantum Q# Qsharp</PackageTags>
     <NoWarn>1591</NoWarn>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
@@ -31,9 +31,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.Logging" Version="2.1.1" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="2.1.1" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="2.1.1" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="3.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="3.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="3.0.0" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
     <PackageReference Include="YamlDotNet" Version="8.1.2" />
     <PackageReference Include="Serilog.Extensions.Logging.File" Version="1.1.0" />
@@ -46,6 +46,10 @@
 
   <ItemGroup>
     <Content Include="Analysis\README.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\..\Build\assets\qdk-nuget-icon.png" Pack="true" Visible="false" PackagePath="" />
   </ItemGroup>
 
   <ItemGroup>

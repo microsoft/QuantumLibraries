@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.Quantum.Sdk/0.12.20062514-beta">
+<Project Sdk="Microsoft.Quantum.Sdk/0.14.20111301-pull">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
@@ -6,6 +6,10 @@
     <QsharpDocsGeneration>true</QsharpDocsGeneration>
     <IncludeQsharpCorePackages>false</IncludeQsharpCorePackages>
     <RunQDocGen>True</RunQDocGen>
+    <!-- List the name of the metapackage that users can
+         use to take a dependency on these Q# APIs, rather
+         than the subpackage directly. -->
+    <QsharpDocsPackageId>Microsoft.Quantum.Chemistry</QsharpDocsPackageId>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -15,8 +19,8 @@
     <PackageId>Microsoft.Quantum.Chemistry.Runtime</PackageId>
     <PackageReleaseNotes>See: https://docs.microsoft.com/en-us/quantum/relnotes/</PackageReleaseNotes>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <PackageProjectUrl>https://github.com/Microsoft/QuantumLibraries/tree/master/Chemistry</PackageProjectUrl>
-    <PackageIconUrl>https://secure.gravatar.com/avatar/bd1f02955b2853ba0a3b1cdc2434e8ec.png</PackageIconUrl>
+    <PackageProjectUrl>https://github.com/microsoft/QuantumLibraries/tree/main/Chemistry</PackageProjectUrl>
+    <PackageIcon>qdk-nuget-icon.png</PackageIcon>
     <PackageTags>Quantum Q# Qsharp</PackageTags>
     <NoWarn>1591</NoWarn>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
@@ -36,8 +40,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Quantum.Simulators" Version="0.12.20062514-beta" />
+    <PackageReference Include="Microsoft.Quantum.Simulators" Version="0.14.20111301-pull" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\..\Build\assets\qdk-nuget-icon.png" Pack="true" Visible="false" PackagePath="" />
   </ItemGroup>
 
 </Project>
-

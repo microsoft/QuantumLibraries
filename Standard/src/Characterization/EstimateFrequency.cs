@@ -1,4 +1,7 @@
-﻿using System;
+﻿// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
+using System;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Runtime.ExceptionServices;
@@ -43,26 +46,26 @@ namespace Microsoft.Quantum.Characterization
                 this.Simulator = m as QuantumSimulator;
             }
 
-            public override void Init()
+            public override void __Init__()
             {
-                base.Init();
+                base.__Init__();
 
-                this.Allocate = this.Factory.Get<Allocate>(typeof(Microsoft.Quantum.Intrinsic.Allocate));
-                this.Release = this.Factory.Get<Release>(typeof(Microsoft.Quantum.Intrinsic.Release));
-                this.ResetAll = this.Factory.Get<ResetAll>(typeof(Microsoft.Quantum.Intrinsic.ResetAll));
+                this.Allocate = this.__Factory__.Get<Allocate>(typeof(Microsoft.Quantum.Intrinsic.Allocate));
+                this.Release = this.__Factory__.Get<Release>(typeof(Microsoft.Quantum.Intrinsic.Release));
+                this.ResetAll = this.__Factory__.Get<ResetAll>(typeof(Microsoft.Quantum.Intrinsic.ResetAll));
             }
 
             /// <summary>
             /// Overrides the body to do the emulation when possible. If emulation is not possible, then
             /// it just invokes the default Q# implementation.
             /// </summary>
-            public override Func<(IAdjointable, ICallable, long, long), double> Body => (_args) =>
+            public override Func<(IAdjointable, ICallable, long, long), double> __Body__ => (_args) =>
             {
                 var (preparation, measure, count, samples) = _args;
 
                 if (!CanEmulate(preparation, measure))
                 {
-                    return base.Body(_args);
+                    return base.__Body__(_args);
                 }
 
                 // Find the basis used for measurement from the captured Paulis:
@@ -70,7 +73,7 @@ namespace Microsoft.Quantum.Characterization
                 if (paulis.Length != count) throw new InvalidOperationException("The number of paulis must match the number of qubits.");
 
                 var qubits = this.Allocate.Apply(count);
-                Exception? innerException = null;
+                Exception innerException = null;
                 double result = 0.0;
                 try
                 {

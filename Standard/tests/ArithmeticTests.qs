@@ -1,6 +1,6 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
-namespace Microsoft.Quantum.Tests {
+namespace Microsoft.Quantum.ArithmeticTests {
     open Microsoft.Quantum.Arithmetic;
     open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Math;
@@ -18,9 +18,9 @@ namespace Microsoft.Quantum.Tests {
         }
     }
     
-    
-    operation ApplyXorInPlaceTest () : Unit {
-        
+    @Test("QuantumSimulator")
+    operation CheckApplyXorInPlace() : Unit {
+
         ApplyToEach(InPlaceXorTestHelper, [(63, 6), (42, 6)]);
     }
     
@@ -41,13 +41,14 @@ namespace Microsoft.Quantum.Tests {
     /// # Summary
     /// Exhaustively tests Microsoft.Quantum.Artihmetic.IncrementByInteger
     /// on 4 qubits
-    operation IncrementByIntegerTest () : Unit {
+    @Test("QuantumSimulator")
+    operation CheckIncrementByInteger() : Unit {
         
         let numberOfQubits = 4;
         
-        for (summand1 in 0 .. 2 ^ numberOfQubits - 1) {
+        for (summand1 in [0, 3, 9, 2 ^ numberOfQubits - 1]) {
             
-            for (summand2 in -2 ^ numberOfQubits .. 2 ^ numberOfQubits) {
+            for (summand2 in [-2 ^ numberOfQubits, -1, 0, 15, 32, 2 ^ numberOfQubits]) {
                 IncrementByIntegerTestHelper(summand1, summand2, numberOfQubits);
             }
         }
@@ -82,16 +83,18 @@ namespace Microsoft.Quantum.Tests {
     
     
     /// # Summary
-    /// Exhaustively tests Microsoft.Quantum.Arithmetic.IncrementByModularInteger
+    /// Tests Microsoft.Quantum.Arithmetic.IncrementByModularInteger
     /// on 4 qubits with modulus 13
-    operation IncrementByModularIntegerTest () : Unit {
+    @Test("QuantumSimulator")
+    operation CheckIncrementByModularInteger() : Unit {
         
         let numberOfQubits = 4;
         let modulus = 13;
+        let scenarios = [0, 6, modulus - 2, modulus - 1];
         
-        for (summand1 in 0 .. modulus - 1) {
+        for (summand1 in scenarios) {
             
-            for (summand2 in 0 .. modulus - 1) {
+            for (summand2 in scenarios) {
                 IncrementByModularIntegerHelper(summand1, summand2, modulus, numberOfQubits);
             }
         }
@@ -116,18 +119,20 @@ namespace Microsoft.Quantum.Tests {
     
     
     /// # Summary
-    /// Exhaustively tests Microsoft.Quantum.Canon.ModularAddProductLE
+    /// Tests Microsoft.Quantum.Canon.ModularAddProductLE
     /// on 4 qubits with modulus 13
-    operation MultiplyAndAddByModularIntegerTest () : Unit {
+    @Test("QuantumSimulator")
+    operation CheckMultiplyAndAddByModularInteger() : Unit {
         
         let numberOfQubits = 4;
         let modulus = 13;
+        let scenarios = [0, 6, modulus - 2, modulus - 1];
         
-        for (summand in 0 .. modulus - 1) {
+        for (summand in scenarios) {
             
-            for (multiplier1 in 0 .. modulus - 1) {
+            for (multiplier1 in scenarios) {
                 
-                for (multiplier2 in 0 .. modulus - 1) {
+                for (multiplier2 in scenarios) {
                     MultiplyAndAddByModularIntegerTestHelper(summand, multiplier1, multiplier2, modulus, numberOfQubits);
                 }
             }
@@ -152,16 +157,18 @@ namespace Microsoft.Quantum.Tests {
     
     
     /// # Summary
-    /// Exhaustively tests Microsoft.Quantum.Canon.ModularMultiplyByConstantLE
+    /// Tests Microsoft.Quantum.Canon.ModularMultiplyByConstantLE
     /// on 4 qubits with modulus 13
-    operation MultiplyByModularIntegerTest () : Unit {
+    @Test("QuantumSimulator")
+    operation CheckMultiplyByModularInteger() : Unit {
         
         let numberOfQubits = 4;
         let modulus = 13;
+        let scenarios = [0, 6, modulus - 2, modulus - 1];
         
-        for (multiplier1 in 0 .. modulus - 1) {
+        for (multiplier1 in scenarios) {
             
-            for (multiplier2 in 0 .. modulus - 1) {
+            for (multiplier2 in scenarios) {
                 MultiplyByModularIntegerTestHelper(multiplier1, multiplier2, modulus, numberOfQubits);
             }
         }

@@ -17,26 +17,30 @@ namespace Microsoft.Quantum.Tests {
         adjoint auto;
     }
     
-    operation CXTest() : Unit {
+    @Test("QuantumSimulator")
+    operation TestCX() : Unit {
         let actual = ApplyCShorthandToRegister(CX, _);
         let expected = ApplyControlledOpToRegister(X, _);
         AssertOperationsEqualReferenced(2, actual, expected);
     }
 
-    operation CYTest() : Unit {
+    @Test("QuantumSimulator")
+    operation TestCY() : Unit {
         let actual = ApplyCShorthandToRegister(CY, _);
         let expected = ApplyControlledOpToRegister(Y, _);
         AssertOperationsEqualReferenced(2, actual, expected);
     }
 
-    operation CZTest() : Unit {
+    @Test("QuantumSimulator")
+    operation TestCZ() : Unit {
         let actual = ApplyCShorthandToRegister(CZ, _);
         let expected = ApplyControlledOpToRegister(Z, _);
         AssertOperationsEqualReferenced(2, actual, expected);
     }
 
     // Verify Fermionic SWAP gives the correct qubit values
-    operation ApplyFermionicSWAPValueTest() : Unit {
+    @Test("QuantumSimulator")
+    operation CheckApplyFermionicSWAPValue() : Unit {
         using ((left, right) = (Qubit(), Qubit())) {
             // 00
             ApplyFermionicSWAP(left, right);
@@ -64,12 +68,13 @@ namespace Microsoft.Quantum.Tests {
 
     operation VerifyFermionicSWAPPhaseHelper(phase : Result, qubit1 : Qubit, qubit2: Qubit) : Unit {
         ApplyFermionicSWAP(qubit1, qubit2);
-        Assert([PauliZ, PauliZ], [qubit1, qubit2], phase,
+        AssertMeasurement([PauliZ, PauliZ], [qubit1, qubit2], phase,
             "The Fermionic SWAP applies an incorrect phase");
     }
     
     // Verify Fermionic SWAP gives the correct phase change
-    operation ApplyFermionicSWAPPhaseTest() : Unit {
+    @Test("QuantumSimulator")
+    operation CheckApplyFermionicSWAPPhase() : Unit {
         using ((left, right) = (Qubit(), Qubit())) {
             // 00
             VerifyFermionicSWAPPhaseHelper(Zero, left, right);

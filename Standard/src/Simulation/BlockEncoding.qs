@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft Corporation. All rights reserved.
+// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
 namespace Microsoft.Quantum.Simulation {
@@ -54,7 +54,7 @@ namespace Microsoft.Quantum.Simulation {
     /// encodes $H$.
     ///
     /// # See Also
-    /// - Microsoft.Quantum.Canon.BlockEncoding
+    /// - Microsoft.Quantum.Simulation.BlockEncoding
     newtype BlockEncodingReflection = BlockEncoding;
 
     /// # Summary
@@ -110,8 +110,8 @@ namespace Microsoft.Quantum.Simulation {
     ///   https://arxiv.org/abs/1610.06546
     ///
     /// # See Also
-    /// - Microsoft.Quantum.Canon.BlockEncoding
-    /// - Microsoft.Quantum.Canon.BlockEncodingReflection
+    /// - Microsoft.Quantum.Simulation.BlockEncoding
+    /// - Microsoft.Quantum.Simulation.BlockEncodingReflection
     function BlockEncodingToReflection(blockEncoding: BlockEncoding)
     : BlockEncodingReflection {
         return BlockEncodingReflection(BlockEncoding(ApplyBlockEncodingAsReflection(blockEncoding, _, _)));
@@ -137,7 +137,7 @@ namespace Microsoft.Quantum.Simulation {
     /// walk $W$ containing the spectrum of $\pm e^{\pm i\sin^{-1}(H)}$.
     ///
     /// # Input
-    /// ## blockEncodingReflection
+    /// ## blockEncoding
     /// A `BlockEncodingReflection` unitary $U$ to be converted into a Quantum
     /// walk.
     ///
@@ -151,8 +151,8 @@ namespace Microsoft.Quantum.Simulation {
     ///   https://arxiv.org/abs/1610.06546
     ///
     /// # See Also
-    /// - Microsoft.Quantum.Canon.BlockEncoding
-    /// - Microsoft.Quantum.Canon.BlockEncodingReflection
+    /// - Microsoft.Quantum.Simulation.BlockEncoding
+    /// - Microsoft.Quantum.Simulation.BlockEncodingReflection
     function QuantumWalkByQubitization(blockEncoding: BlockEncodingReflection)
     : ((Qubit[], Qubit[]) => Unit is Adj + Ctl) {
         return ApplyQuantumWalkByQubitization(blockEncoding, _, _);
@@ -196,8 +196,8 @@ namespace Microsoft.Quantum.Simulation {
     /// `BlockEncodingReflection`.
     ///
     /// # See Also
-    /// - Microsoft.Quantum.Canon.BlockEncoding
-    /// - Microsoft.Quantum.Canon.BlockEncodingReflection
+    /// - Microsoft.Quantum.Simulation.BlockEncoding
+    /// - Microsoft.Quantum.Simulation.BlockEncodingReflection
     function BlockEncodingByLCU<'T,'S>(
         statePreparation: ('T => Unit is Adj + Ctl),
         selector: (('T, 'S) => Unit is Adj + Ctl)
@@ -242,8 +242,8 @@ namespace Microsoft.Quantum.Simulation {
     /// `BlockEncodingReflection`.
     ///
     /// # See Also
-    /// - Microsoft.Quantum.Canon.BlockEncoding
-    /// - Microsoft.Quantum.Canon.BlockEncodingReflection
+    /// - Microsoft.Quantum.Simulation.BlockEncoding
+    /// - Microsoft.Quantum.Simulation.BlockEncodingReflection
     function BlockEncodingReflectionByLCU(
         statePreparation : (Qubit[] => Unit is Adj + Ctl),
         selector : ((Qubit[], Qubit[]) => Unit is Adj + Ctl)

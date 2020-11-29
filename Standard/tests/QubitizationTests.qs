@@ -25,7 +25,8 @@ namespace Microsoft.Quantum.Tests {
     }
 
     // This checks that BlockEncodingByLCU encodes the correct Hamiltonian.
-    operation BlockEncodingByLCUTest() : Unit {
+    @Test("QuantumSimulator")
+    operation TestBlockEncodingByLCU() : Unit {
         body (...) {
             let (eigenvalues, prob, inverseAngle, statePreparation, selector) = LCUTestHelper();
             let LCU = BlockEncodingByLCU(statePreparation, selector);
@@ -35,11 +36,11 @@ namespace Microsoft.Quantum.Tests {
 
                 for (rep in 0..5) {
                     LCU(auxiliary, system);
-                    AssertProb([PauliZ], auxiliary, Zero, prob, "Error0: Z Success probability does not match theory", 1e-10);
+                    AssertMeasurementProbability([PauliZ], auxiliary, Zero, prob, "Error0: Z Success probability does not match theory", 1e-10);
                     let result = M(auxiliary[0]);
                     if(result == Zero) {
                         Exp([PauliY],1.0 * inverseAngle, system);
-                        AssertProb([PauliZ], system, Zero, 1.0, "Error1: Z Success probability does not match theory", 1e-10);
+                        AssertMeasurementProbability([PauliZ], system, Zero, 1.0, "Error1: Z Success probability does not match theory", 1e-10);
                     }
                     ResetAll(qubits);
                 }
@@ -48,7 +49,8 @@ namespace Microsoft.Quantum.Tests {
     }
 
     // This checks that BlockEncodingReflectionByLCU encodes the correct Hamiltonian.
-    operation BlockEncodingReflectionByLCUTest() : Unit {
+    @Test("QuantumSimulator")
+    operation TestBlockEncodingReflectionByLCU() : Unit {
         body (...) {
             let (eigenvalues, prob, inverseAngle, statePreparation, selector) = LCUTestHelper();
             let LCU = BlockEncodingReflectionByLCU(statePreparation, selector);
@@ -61,11 +63,11 @@ namespace Microsoft.Quantum.Tests {
                     LCU!!(auxiliary, system);
                     X(flag);
                     (ControlledOnInt(0, X))(auxiliary, flag);
-                    AssertProb([PauliZ],[flag], Zero, prob, "Error0: Z Success probability does not match theory", 1e-10);
+                    AssertMeasurementProbability([PauliZ],[flag], Zero, prob, "Error0: Z Success probability does not match theory", 1e-10);
                     let result = M(flag);
                     if(result == Zero) {
                         Exp([PauliY],1.0 * inverseAngle, system);
-                        AssertProb([PauliZ], system, Zero, 1.0, "Error1: Z Success probability does not match theory", 1e-10);
+                        AssertMeasurementProbability([PauliZ], system, Zero, 1.0, "Error1: Z Success probability does not match theory", 1e-10);
                     }
                     ResetAll(qubits);
                 }
@@ -74,7 +76,8 @@ namespace Microsoft.Quantum.Tests {
     }
 
     // This checks that QuantumWalkByQubitization encodes the correct Hamiltonian.
-    operation QuantumWalkByQubitizationTest() : Unit {
+    @Test("QuantumSimulator")
+    operation TestQuantumWalkByQubitization() : Unit {
         body (...) {
             let (eigenvalues, prob, inverseAngle, statePreparation, selector) = LCUTestHelper();
             let LCU = QuantumWalkByQubitization(BlockEncodingReflectionByLCU(statePreparation, selector));
@@ -84,11 +87,11 @@ namespace Microsoft.Quantum.Tests {
                     LCU(auxiliary, system);
                     X(flag);
                     (ControlledOnInt(0, X))(auxiliary, flag);
-                    AssertProb([PauliZ],[flag], Zero, prob, "Error0: Z Success probability does not match theory", 1e-10);
+                    AssertMeasurementProbability([PauliZ],[flag], Zero, prob, "Error0: Z Success probability does not match theory", 1e-10);
                     let result = M(flag);
                     if(result == Zero) {
                         Exp([PauliY],1.0 * inverseAngle, system);
-                        AssertProb([PauliZ], system, Zero, 1.0, "Error1: Z Success probability does not match theory", 1e-10);
+                        AssertMeasurementProbability([PauliZ], system, Zero, 1.0, "Error1: Z Success probability does not match theory", 1e-10);
                     }
                     ResetAll(system);
                     Reset(flag);
@@ -101,7 +104,8 @@ namespace Microsoft.Quantum.Tests {
     // QubitizationPauliEvolutionSet.qs tests
 
     // This encodes the Hamiltonian (cos^2(angle) I+sin^2(angle) X)/2.
-    operation PauliBlockEncodingLCUTest() : Unit {
+    @Test("QuantumSimulator")
+    operation TestPauliBlockEncodingLCU() : Unit {
         body (...) {
             let angle = 0.123;
             let cosSquared = Cos(angle) * Cos(angle);
@@ -122,11 +126,11 @@ namespace Microsoft.Quantum.Tests {
 
                 for (rep in 0..5) {
                     LCU!!(auxiliary, system);
-                    AssertProb([PauliZ], auxiliary, Zero, prob, "Error0: Z Success probability does not match theory", 1e-10);
+                    AssertMeasurementProbability([PauliZ], auxiliary, Zero, prob, "Error0: Z Success probability does not match theory", 1e-10);
                     let result = M(auxiliary[0]);
                     if(result == Zero) {
                         Exp([PauliY],1.0 * inverseAngle, system);
-                        AssertProb([PauliZ], system, Zero, 1.0, "Error1: Z Success probability does not match theory", 1e-10);
+                        AssertMeasurementProbability([PauliZ], system, Zero, 1.0, "Error1: Z Success probability does not match theory", 1e-10);
                     }
                     ResetAll(qubits);
                 }
@@ -135,7 +139,8 @@ namespace Microsoft.Quantum.Tests {
     }
 
     // Array.qs tests
-    function RangeAsIntArrayTest() : Unit {
+    @Test("QuantumSimulator")
+    function TestRangeAsIntArray() : Unit {
         mutable testCases = new (Int[], Range)[4];
         let e = new Int[0];
         set testCases w/= 0 <- ([1, 3, 5, 7], 1..2..8);
@@ -145,11 +150,12 @@ namespace Microsoft.Quantum.Tests {
         for (idxTest in IndexRange(testCases)) {
             let (expected, range) = testCases[idxTest];
             let output = RangeAsIntArray(range);
-            Ignore(Mapped(EqualityFactI(_, _, "Padded failed."), Zip(output, expected)));
+            Ignore(Mapped(EqualityFactI(_, _, "Padded failed."), Zipped(output, expected)));
         }
     }
 
-   operation InPlaceMajorityTest() : Unit {
+   @Test("QuantumSimulator")
+   operation TestInPlaceMajority() : Unit {
         body (...) {
             // Majority function truth table: x;y;z | output
             let testCases =         [[false, false, false, false],
@@ -169,13 +175,13 @@ namespace Microsoft.Quantum.Tests {
                             X(qubits[idxQubit]);
                         }
                     }
-                    InPlaceMajority(qubits[0], qubits[1..2]);
+                    ApplyMajorityInPlace(qubits[0], qubits[1..2]);
 
                     if (testCase[3] == false) {
-                        AssertProb([PauliZ], qubits[0..0], Zero, 1.0, "", 1e-10);
+                        AssertMeasurementProbability([PauliZ], qubits[0..0], Zero, 1.0, "", 1e-10);
                     }
                     else {
-                        AssertProb([PauliZ], qubits[0..0], One, 1.0, "", 1e-10);
+                        AssertMeasurementProbability([PauliZ], qubits[0..0], One, 1.0, "", 1e-10);
                     }
                     ResetAll(qubits);
                 }
@@ -183,7 +189,8 @@ namespace Microsoft.Quantum.Tests {
         }
    }
 
-   operation ApplyRippleCarryComparatorTest() : Unit{
+   @Test("QuantumSimulator")
+   operation TestApplyRippleCarryComparator() : Unit{
         body (...) {
             let nQubits = 4;
             let intMax = 2^nQubits-1;
@@ -204,7 +211,7 @@ namespace Microsoft.Quantum.Tests {
                         ApplyXorInPlace(y, yRegister);
                         CompareUsingRippleCarry(xRegister, yRegister, output);
 
-                        AssertProb([PauliZ], [output], result, 1.0, "", 1e-10);
+                        AssertMeasurementProbability([PauliZ], [output], result, 1.0, "", 1e-10);
                         if(result == One){
                             X(output);
                         }

@@ -57,7 +57,8 @@ namespace Microsoft.Quantum.Tests {
     /// # Summary
     /// Ensures that the bit flip code can correct a single arbitrary
     /// bit-flip ($X$) error.
-    operation BitFlipTest () : Unit {
+    @Test("QuantumSimulator")
+    operation TestBitFlip() : Unit {
         
         let code = BitFlipCode();
         let fn = BitFlipRecoveryFn();
@@ -71,7 +72,8 @@ namespace Microsoft.Quantum.Tests {
     /// # Summary
     /// Ensures that the 5-qubit perfect code can correct an arbitrary
     /// single-qubit error.
-    operation FiveQubitCodeTest () : Unit {
+    @Test("QuantumSimulator")
+    operation TestFiveQubitCode() : Unit {
         
         let code = FiveQubitCode();
         let fn = FiveQubitCodeRecoveryFn();
@@ -83,7 +85,8 @@ namespace Microsoft.Quantum.Tests {
     
     
     // TODO: split this test up into several smaller tests.
-    operation FiveQubitTediousTest () : Unit {
+    @Test("QuantumSimulator")
+    operation TestFiveQubitTedious() : Unit {
         
         let s = SyndromeMeasOp(MeasureStabilizerGenerators([[PauliX, PauliZ, PauliZ, PauliX, PauliI], [PauliI, PauliX, PauliZ, PauliZ, PauliX], [PauliX, PauliI, PauliX, PauliZ, PauliZ], [PauliZ, PauliX, PauliI, PauliX, PauliZ]], _, MeasureWithScratch));
         
@@ -164,8 +167,8 @@ namespace Microsoft.Quantum.Tests {
         }
     }
     
-    
-    operation FiveQubitTest () : Unit {
+    @Test("QuantumSimulator")
+    operation TestFiveQubit() : Unit {
         
         let s = SyndromeMeasOp(MeasureStabilizerGenerators([[PauliX, PauliZ, PauliZ, PauliX, PauliI], [PauliI, PauliX, PauliZ, PauliZ, PauliX], [PauliX, PauliI, PauliX, PauliZ, PauliZ], [PauliZ, PauliX, PauliI, PauliX, PauliZ]], _, MeasureWithScratch));
         
@@ -212,8 +215,8 @@ namespace Microsoft.Quantum.Tests {
         }
     }
     
-    
-    operation SteaneCodeEncoderTest () : Unit {
+    @Test("QuantumSimulator")
+    operation TestSteaneCodeEncoder() : Unit {
         
         using (aux = Qubit[7]) {
             SteaneCodeEncoderImpl(aux[0 .. 0], aux[1 .. 6]);
@@ -246,8 +249,8 @@ namespace Microsoft.Quantum.Tests {
         }
     }
     
-    
-    operation Pi4YInjectionTest () : Unit {
+    @Test("QuantumSimulator")
+    operation TestPi4YInjection() : Unit {
         
         using (anc = Qubit[2]) {
             
@@ -261,13 +264,13 @@ namespace Microsoft.Quantum.Tests {
             //     qubit containing the magic state,
             //     so as to test whether the injection
             //     correctly reset for us.
-            Assert([PauliZ], [anc[1]], Zero, $"Magic state was not reset to |0〉.");
+            AssertMeasurement([PauliZ], [anc[1]], Zero, $"Magic state was not reset to |0〉.");
             Reset(anc[0]);
         }
     }
     
-    
-    operation Pi4YInjectionAdjointTest () : Unit {
+    @Test("QuantumSimulator")
+    operation TestPi4YInjectionAdjoint() : Unit {
         
         using (anc = Qubit[2]) {
             
@@ -281,7 +284,7 @@ namespace Microsoft.Quantum.Tests {
             //     qubit containing the magic state,
             //     so as to test whether the injection
             //     correctly reset for us.
-            Assert([PauliZ], [anc[1]], Zero, $"Magic state was not reset to |0〉.");
+            AssertMeasurement([PauliZ], [anc[1]], Zero, $"Magic state was not reset to |0〉.");
             Reset(anc[0]);
         }
     }
@@ -290,7 +293,8 @@ namespace Microsoft.Quantum.Tests {
     /// # Summary
     /// Applies logical operators before and after the encoding circuit,
     /// that as a whole acts as identity.
-    operation KDLogicalOperatorTest () : Unit {
+    @Test("QuantumSimulator")
+    operation TestKDLogicalOperator() : Unit {
         
         using (anc = Qubit[7]) {
             X(anc[0]);
@@ -317,8 +321,8 @@ namespace Microsoft.Quantum.Tests {
         }
     }
     
-    
-    operation KDSyndromeTest () : Unit {
+    @Test("QuantumSimulator")
+    operation TestKDSyndrome() : Unit {
         
         using (anc = Qubit[7]) {
             
@@ -339,8 +343,8 @@ namespace Microsoft.Quantum.Tests {
         }
     }
     
-    
-    operation KnillDistillationNoErrorTest () : Unit {
+    @Test("QuantumSimulator")
+    operation TestKnillDistillationNoError() : Unit {
         
         using (register = Qubit[15]) {
             
@@ -363,8 +367,9 @@ namespace Microsoft.Quantum.Tests {
     /// Here we do not attempt to correct detected errors,
     /// since corrections would make the output magic state
     /// less accurate, compared to post-selection on zero syndrome.
-    operation KDTest () : Unit {
-        
+    @Test("QuantumSimulator")
+    operation TestKD() : Unit {
+
         using (rm = Qubit[15]) {
             ApplyToEach(Ry(PI() / 4.0, _), rm);
             let acc = KnillDistill(rm);
@@ -377,7 +382,7 @@ namespace Microsoft.Quantum.Tests {
             AssertQubit(Zero, rm[0]);
             
             // Cases where a single magic state is wrong
-            for (idx in 0 .. 14) {
+            for (idx in [0, 8, 14]) {
                 ResetAll(rm);
                 ApplyToEach(Ry(PI() / 4.0, _), rm);
                 Y(rm[idx]);
@@ -390,20 +395,18 @@ namespace Microsoft.Quantum.Tests {
             }
             
             // Cases where two magic states are wrong
-            for (idxFirst in 0 .. 13) {
+            for ((idxFirst, idxSecond) in [(0,1), (0, 3), (0,14), (4, 13), (13, 14)]) {
                 
-                for (idxSecond in idxFirst + 1 .. 14) {
-                    ResetAll(rm);
-                    ApplyToEach(Ry(PI() / 4.0, _), rm);
-                    Y(rm[idxFirst]);
-                    Y(rm[idxSecond]);
-                    let acc1 = KnillDistill(rm);
+                ResetAll(rm);
+                ApplyToEach(Ry(PI() / 4.0, _), rm);
+                Y(rm[idxFirst]);
+                Y(rm[idxSecond]);
+                let acc1 = KnillDistill(rm);
                     
-                    // Check that the rough magic states were
-                    // successfully reset to |0〉.
-                    ApplyToEach(AssertQubit(Zero, _), Rest(rm));
-                    EqualityFactB(false, acc1, $"Distillation missed a pair error");
-                }
+                // Check that the rough magic states were
+                // successfully reset to |0〉.
+                ApplyToEach(AssertQubit(Zero, _), Rest(rm));
+                EqualityFactB(false, acc1, $"Distillation missed a pair error");
             }
             
             ResetAll(rm);
@@ -448,7 +451,8 @@ namespace Microsoft.Quantum.Tests {
     /// # Summary
     /// Ensures that the 7-qubit Steane code can correct an arbitrary
     /// single-qubit error.
-    operation SteaneCodeTest () : Unit {
+    @Test("QuantumSimulator")
+    operation TestSteaneCode() : Unit {
         
         let code = SteaneCode();
         let (fnX, fnZ) = SteaneCodeRecoveryFns();

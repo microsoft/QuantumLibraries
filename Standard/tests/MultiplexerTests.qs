@@ -5,11 +5,12 @@ namespace Microsoft.Quantum.Tests {
     open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Intrinsic;
     open Microsoft.Quantum.Convert;
-    open Microsoft.Quantum.Diagnostics;
+    // Needed to avoid colliding with deprecation stubs in Canon.
+    open Microsoft.Quantum.Diagnostics as Diag;
     open Microsoft.Quantum.Measurement;
     open Microsoft.Quantum.Arrays;
 
-    operation MultiplexZTestHelper (coefficients : Double[], multiplexerControl : LittleEndian, additionalControl : Qubit[], target : Qubit, tolerance : Double) : Unit {
+    operation MultiplexZTestHelper(coefficients : Double[], multiplexerControl : LittleEndian, additionalControl : Qubit[], target : Qubit, tolerance : Double) : Unit {
         let nCoefficients = Length(coefficients);
         let nQubits = (Length(multiplexerControl!) + Length(additionalControl)) + 1;
 
@@ -38,7 +39,7 @@ namespace Microsoft.Quantum.Tests {
             fail $"Test for more than one control on MultiplexZ not implemented.";
         }
         
-        // Sample from control registers and check phase using AssertProb.
+        // Sample from control registers and check phase using AssertMeasurementProbability.
         let multiplexerControlInteger = MeasureInteger(multiplexerControl);
         let additionalControlResults = ForEach(MResetZ, additionalControl);
         
@@ -46,7 +47,7 @@ namespace Microsoft.Quantum.Tests {
             
             // Case where Identity operation is performed.
             Message($"Controlled MultiplexZ test. coefficient {multiplexerControlInteger} of {nCoefficients-1}.");
-            AssertPhase(0.0, target, tolerance);
+            Diag.AssertPhase(0.0, target, tolerance);
         }
         else {
             mutable coeff = 0.0;
@@ -57,13 +58,12 @@ namespace Microsoft.Quantum.Tests {
             
             if (Length(additionalControl) == 0) {
                 Message($"MultiplexZ test. Qubits: {nQubits}; coefficient {multiplexerControlInteger} of {nCoefficients-1}.");
-                AssertPhase(coeff, target, tolerance);
+                Diag.AssertPhase(coeff, target, tolerance);
             }
             else {
                 Message($"Controlled MultiplexZ test. Qubits: {nQubits}; coefficient {multiplexerControlInteger} of {nCoefficients-1}.");
-                AssertPhase(coeff, target, tolerance);
+                Diag.AssertPhase(coeff, target, tolerance);
             }
-            //AssertPhase(coeff, target, tolerance);
         }
         
         // Note that MeasureInteger has the effect of resetting its target, so
@@ -71,8 +71,8 @@ namespace Microsoft.Quantum.Tests {
         Reset(target);
     }
     
-    
-    operation MultiplexZTest () : Unit {
+    @Diag.Test("QuantumSimulator")
+    operation TestMultiplexZ() : Unit {
         
         let maxQubits = 6;
         
@@ -140,15 +140,15 @@ namespace Microsoft.Quantum.Tests {
                 // Apply MultiplexZ circuit
                 Controlled (ApplyDiagonalUnitary(coefficients, _))([control], qubits);
                 Message($"ApplyDiagonalUnitary test. Qubits: {nQubits}; coefficient {idxCoeff} of {nCoefficients-1}.");
-                AssertPhase(-0.5 * coefficients[idxCoeff], control, tolerance);
+                Diag.AssertPhase(-0.5 * coefficients[idxCoeff], control, tolerance);
                 Reset(control);
                 ResetAll(qubits!);
             }
         }
     }
     
-    
-    operation ApplyDiagonalUnitaryTest () : Unit {
+    @Diag.Test("QuantumSimulator")
+    operation TestApplyDiagonalUnitary() : Unit {
         
         let maxQubits = 4;
         
@@ -331,8 +331,8 @@ namespace Microsoft.Quantum.Tests {
         return result;
     }
     
-    
-    operation MultiplexOperationsTest () : Unit {
+    @Diag.Test("QuantumSimulator")
+    operation TestMultiplexOperations() : Unit {
         
         mutable result = Zero;
         
@@ -375,7 +375,7 @@ namespace Microsoft.Quantum.Tests {
                 
                 if (result == One) {
                     Message($"MultiplexOperations test. Qubits: {nQubits}; idxTest {idxTest} of idxTarget {idxTarget} result {result}.");
-                    EqualityFactI(idxTarget, idxTest, $"MultiplexOperations failed.");
+                    Diag.EqualityFactI(idxTarget, idxTest, $"MultiplexOperations failed.");
                 }
             }
         }
@@ -388,28 +388,28 @@ namespace Microsoft.Quantum.Tests {
                 
                 if (result == One) {
                     Message($"Controlled MultiplexOperations test. Qubits: {nQubits}; idxControl = 0; nControls = 1; idxTest {idxTest} of idxTarget {idxTarget} result {result}.");
-                    EqualityFactI(idxTarget, idxTest, $"MultiplexOperations failed.");
+                    Diag.EqualityFactI(idxTarget, idxTest, $"MultiplexOperations failed.");
                 }
                 
                 set result = MultiplexOperationsTestHelper(idxTest, idxTarget, nQubits, 1, 1);
                 
                 if (result == One) {
                     Message($"Controlled MultiplexOperations test. Qubits: {nQubits}; idxControl = 1; nControls = 1; idxTest {idxTest} of idxTarget {idxTarget} result {result}.");
-                    EqualityFactI(idxTarget, idxTest, $"MultiplexOperations failed.");
+                    Diag.EqualityFactI(idxTarget, idxTest, $"MultiplexOperations failed.");
                 }
                 
                 set result = MultiplexOperationsTestHelper(idxTest, idxTarget, nQubits, 1, 2);
                 
                 if (result == One) {
                     Message($"Controlled MultiplexOperations test. Qubits: {nQubits}; idxControl = 1; nControls = 2; idxTest {idxTest} of idxTarget {idxTarget} result {result}.");
-                    EqualityFactI(idxTarget, idxTest, $"MultiplexOperations failed.");
+                    Diag.EqualityFactI(idxTarget, idxTest, $"MultiplexOperations failed.");
                 }
                 
                 set result = MultiplexOperationsTestHelper(idxTest, idxTarget, nQubits, 3, 2);
                 
                 if (result == One) {
                     Message($"Controlled MultiplexOperations test. Qubits: {nQubits}; idxControl = 3; nControls = 2; idxTest {idxTest} of idxTarget {idxTarget} result {result}.");
-                    EqualityFactI(idxTarget, idxTest, $"MultiplexOperations failed.");
+                    Diag.EqualityFactI(idxTarget, idxTest, $"MultiplexOperations failed.");
                 }
             }
         }
@@ -505,7 +505,8 @@ namespace Microsoft.Quantum.Tests {
         }
     }
 
-    operation MultiplexOperationsFromGeneratorTest() : Unit{
+    @Diag.Test("QuantumSimulator")
+    operation TestMultiplexOperationsFromGenerator() : Unit{
         body (...) {
             mutable result = Zero;
 
@@ -518,7 +519,7 @@ namespace Microsoft.Quantum.Tests {
                     set result = MultiplexOperationsFromGeneratorTestHelper(idxTest, idxTarget, nQubits, 0, 0);
                     if(result == One){
                         Message($"MultiplexOperations test. Qubits: {nQubits}; idxTest {idxTest} of idxTarget {idxTarget} result {result}.");
-                        EqualityFactI(idxTarget, idxTest, "MultiplexOperations failed.");
+                        Diag.EqualityFactI(idxTarget, idxTest, "MultiplexOperations failed.");
                     }
                 }
             }
@@ -529,25 +530,25 @@ namespace Microsoft.Quantum.Tests {
                     set result = MultiplexOperationsFromGeneratorTestHelper(idxTest, idxTarget, nQubits, 0, 1);
                     if(result == One){
                         Message($"Controlled MultiplexOperations test. Qubits: {nQubits}; idxControl = 0; nControls = 1; idxTest {idxTest} of idxTarget {idxTarget} result {result}.");
-                        EqualityFactI(idxTarget, idxTest, "MultiplexOperations failed.");
+                        Diag.EqualityFactI(idxTarget, idxTest, "MultiplexOperations failed.");
                     }
 
                     set result = MultiplexOperationsFromGeneratorTestHelper(idxTest, idxTarget, nQubits, 1, 1);
                     if(result == One){
                         Message($"Controlled MultiplexOperations test. Qubits: {nQubits}; idxControl = 1; nControls = 1; idxTest {idxTest} of idxTarget {idxTarget} result {result}.");
-                        EqualityFactI(idxTarget, idxTest, "MultiplexOperations failed.");
+                        Diag.EqualityFactI(idxTarget, idxTest, "MultiplexOperations failed.");
                     }
 
                     set result = MultiplexOperationsFromGeneratorTestHelper(idxTest, idxTarget, nQubits, 1, 2);
                     if(result == One){
                         Message($"Controlled MultiplexOperations test. Qubits: {nQubits}; idxControl = 1; nControls = 2; idxTest {idxTest} of idxTarget {idxTarget} result {result}.");
-                        EqualityFactI(idxTarget, idxTest, "MultiplexOperations failed.");
+                        Diag.EqualityFactI(idxTarget, idxTest, "MultiplexOperations failed.");
                     }
 
                     set result = MultiplexOperationsFromGeneratorTestHelper(idxTest, idxTarget, nQubits, 3, 2);
                     if(result == One){
                         Message($"Controlled MultiplexOperations test. Qubits: {nQubits}; idxControl = 3; nControls = 2; idxTest {idxTest} of idxTarget {idxTarget} result {result}.");
-                        EqualityFactI(idxTarget, idxTest, "MultiplexOperations failed.");
+                        Diag.EqualityFactI(idxTarget, idxTest, "MultiplexOperations failed.");
                     }
                 }
             }

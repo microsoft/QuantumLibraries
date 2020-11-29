@@ -1,8 +1,9 @@
-<Project Sdk="Microsoft.Quantum.Sdk/0.12.20062514-beta">
+<Project Sdk="Microsoft.Quantum.Sdk/0.14.20111301-pull">
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
     <AssemblyName>Microsoft.Quantum.MachineLearning</AssemblyName>
     <QsharpDocsGeneration>true</QsharpDocsGeneration>
+    <QsharpDocsPackageId>Microsoft.Quantum.MachineLearning</QsharpDocsPackageId>
     <!--
       Include core packages using project references instead, since they get
       built at the same time as this project.
@@ -18,6 +19,10 @@
     <ProjectReference Include="..\..\Standard\src\Standard.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="..\..\Build\assets\qdk-nuget-icon.png" Pack="true" Visible="false" PackagePath="" />
+  </ItemGroup>
+
   <!-- Configure NuGet package metadata as well. -->
   <PropertyGroup>
     <Authors>Microsoft</Authors>
@@ -26,8 +31,8 @@
     <PackageId>Microsoft.Quantum.MachineLearning</PackageId>
     <PackageReleaseNotes>See: https://docs.microsoft.com/quantum/relnotes/</PackageReleaseNotes>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <PackageProjectUrl>https://github.com/Microsoft/QuantumLibraries/tree/master/MachineLearning</PackageProjectUrl>
-    <PackageIconUrl>https://secure.gravatar.com/avatar/bd1f02955b2853ba0a3b1cdc2434e8ec.png</PackageIconUrl>
+    <PackageProjectUrl>https://github.com/microsoft/QuantumLibraries/tree/main/MachineLearning</PackageProjectUrl>
+    <PackageIcon>qdk-nuget-icon.png</PackageIcon>
     <PackageTags>Quantum Q# Qsharp</PackageTags>
     <NoWarn>1591</NoWarn>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>

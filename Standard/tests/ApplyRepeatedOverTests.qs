@@ -8,8 +8,8 @@ namespace Microsoft.Quantum.Tests {
     open Microsoft.Quantum.Diagnostics;
     open Microsoft.Quantum.Arrays;
 
-
-    operation ApplySeriesOfOpsTest() : Unit {
+    @Test("QuantumSimulator")
+    operation CheckApplySeriesOfOps() : Unit {
         // create the sample ops + their targets here
         let op1 = ApplyToFirstQubit(X, _);
         let op2 = ApplyToFirstTwoQubits(CNOT, _);
@@ -34,7 +34,8 @@ namespace Microsoft.Quantum.Tests {
         ApplyToEachCA(H, Subarray([1, 2, 3, 4], register));
     }
 
-    operation ApplyRepeatedOpTest() : Unit {
+    @Test("QuantumSimulator")
+    operation CheckApplyRepeatedOp() : Unit {
         let op = ApplyToFirstThreeQubits(CCNOT, _);
         let targets = [[0, 1, 2], [2, 1, 0], [3, 4, 5], [2, 4, 0], [5, 3, 1]];
         AssertOperationsEqualReferenced(6, ApplyOpRepeatedlyOver(op, targets, _), SampleApplyRepeatedOp(_));
@@ -49,7 +50,8 @@ namespace Microsoft.Quantum.Tests {
         CCNOT(register[5], register[3], register[1]);
     }
 
-    operation PermuteQubitsTest() : Unit {
+    @Test("QuantumSimulator")
+    operation CheckPermuteQubits() : Unit {
         let sampleOrder = [5, 3, 2, 0, 1, 4];
         AssertOperationsEqualReferenced(6, PermuteQubits(sampleOrder, _) , SamplePermuteQubits);
     }

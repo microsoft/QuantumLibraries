@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft Corporation. All rights reserved.
+// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
 namespace Microsoft.Quantum.Canon {
@@ -33,14 +33,15 @@ namespace Microsoft.Quantum.Canon {
     /// controllable.
     ///
     /// # See Also
-    /// - ApplyWithA
-    /// - ApplyWithC
-    /// - ApplyWithCA
+    /// - Microsoft.Quantum.Canon.ApplyWithA
+    /// - Microsoft.Quantum.Canon.ApplyWithC
+    /// - Microsoft.Quantum.Canon.ApplyWithCA
     operation ApplyWith<'T>(outerOperation : ('T => Unit is Adj), innerOperation : ('T => Unit), target : 'T) : Unit {
         outerOperation(target);
         innerOperation(target);
         Adjoint outerOperation(target);
     }
+
     /// # Summary
     /// Given outer and inner operations, returns a new operation that
     /// conjugates the inner operation by the outer operation.
@@ -68,10 +69,10 @@ namespace Microsoft.Quantum.Canon {
     /// controllable.
     ///
     /// # See Also
-    /// - ConjugatedByA
-    /// - ConjugatedByC
-    /// - ConjugatedByCA
-    /// - ApplyWith
+    /// - Microsoft.Quantum.Canon.ConjugatedByA
+    /// - Microsoft.Quantum.Canon.ConjugatedByC
+    /// - Microsoft.Quantum.Canon.ConjugatedByCA
+    /// - Microsoft.Quantum.Canon.ApplyWith
     function ConjugatedBy<'T>(outerOperation : ('T => Unit is Adj), innerOperation : ('T => Unit)) : ('T => Unit) {
         return ApplyWith(outerOperation, innerOperation, _);
     }
@@ -105,9 +106,9 @@ namespace Microsoft.Quantum.Canon {
     /// controllable.
     ///
     /// # See Also
-    /// - ApplyWith
-    /// - ApplyWithC
-    /// - ApplyWithCA
+    /// - Microsoft.Quantum.Canon.ApplyWith
+    /// - Microsoft.Quantum.Canon.ApplyWithC
+    /// - Microsoft.Quantum.Canon.ApplyWithCA
     operation ApplyWithA<'T>(outerOperation : ('T => Unit is Adj), innerOperation : ('T => Unit is Adj), target : 'T) : Unit {
         body (...) {
             outerOperation(target);
@@ -145,10 +146,10 @@ namespace Microsoft.Quantum.Canon {
     /// controllable.
     ///
     /// # See Also
-    /// - ConjugatedByA
-    /// - ConjugatedByC
-    /// - ConjugatedByCA
-    /// - ApplyWith
+    /// - Microsoft.Quantum.Canon.ConjugatedByA
+    /// - Microsoft.Quantum.Canon.ConjugatedByC
+    /// - Microsoft.Quantum.Canon.ConjugatedByCA
+    /// - Microsoft.Quantum.Canon.ApplyWith
     function ConjugatedByA<'T>(outerOperation : ('T => Unit is Adj), innerOperation : ('T => Unit is Adj)) : ('T => Unit is Adj) {
         return ApplyWithA(outerOperation, innerOperation, _);
     }
@@ -182,9 +183,9 @@ namespace Microsoft.Quantum.Canon {
     /// controllable.
     ///
     /// # See Also
-    /// - ApplyWith
-    /// - ApplyWithA
-    /// - ApplyWithCA
+    /// - Microsoft.Quantum.Canon.ApplyWith
+    /// - Microsoft.Quantum.Canon.ApplyWithA
+    /// - Microsoft.Quantum.Canon.ApplyWithCA
     operation ApplyWithC<'T>(outerOperation : ('T => Unit is Adj), innerOperation : ('T => Unit is Ctl), target : 'T) : Unit {
         body (...) {
             outerOperation(target);
@@ -226,10 +227,10 @@ namespace Microsoft.Quantum.Canon {
     /// controllable.
     ///
     /// # See Also
-    /// - ConjugatedBy
-    /// - ConjugatedByA
-    /// - ConjugatedByCA
-    /// - ApplyWith
+    /// - Microsoft.Quantum.Canon.ConjugatedBy
+    /// - Microsoft.Quantum.Canon.ConjugatedByA
+    /// - Microsoft.Quantum.Canon.ConjugatedByCA
+    /// - Microsoft.Quantum.Canon.ApplyWith
     function ConjugatedByC<'T>(outerOperation : ('T => Unit is Adj), innerOperation : ('T => Unit is Ctl)) : ('T => Unit is Ctl) {
         return ApplyWithC(outerOperation, innerOperation, _);
     }
@@ -264,9 +265,9 @@ namespace Microsoft.Quantum.Canon {
     /// controllable.
     ///
     /// # See Also
-    /// - ApplyWith
-    /// - ApplyWithA
-    /// - ApplyWithC
+    /// - Microsoft.Quantum.Canon.ApplyWith
+    /// - Microsoft.Quantum.Canon.ApplyWithA
+    /// - Microsoft.Quantum.Canon.ApplyWithC
     operation ApplyWithCA<'T>(outerOperation : ('T => Unit is Adj), innerOperation : ('T => Unit is Adj + Ctl), target : 'T) : Unit {
         body (...) {
             outerOperation(target);
@@ -313,10 +314,10 @@ namespace Microsoft.Quantum.Canon {
     /// controllable.
     ///
     /// # See Also
-    /// - ConjugatedByA
-    /// - ConjugatedByC
-    /// - ConjugatedByCA
-    /// - ApplyWith
+    /// - Microsoft.Quantum.Canon.ConjugatedByA
+    /// - Microsoft.Quantum.Canon.ConjugatedByC
+    /// - Microsoft.Quantum.Canon.ConjugatedByCA
+    /// - Microsoft.Quantum.Canon.ApplyWith
     function ConjugatedByCA<'T>(outerOperation : ('T => Unit is Adj), innerOperation : ('T => Unit is Adj + Ctl)) : ('T => Unit is Adj + Ctl) {
         return ApplyWithCA(outerOperation, innerOperation, _);
     }

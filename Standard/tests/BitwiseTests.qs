@@ -5,7 +5,8 @@ namespace Microsoft.Quantum.Tests {
     open Microsoft.Quantum.Bitwise;
     open Microsoft.Quantum.Diagnostics;
 
-    function ShiftTest() : Unit {
+    @Test("QuantumSimulator")
+    function ShiftIsCorrect() : Unit {
         let smallValue = 5; // 0b101
         EqualityFactI(20, LeftShiftedI(smallValue, 2), "Shifted values incorrect.");
         EqualityFactI(2, RightShiftedI(smallValue, 1), "Shifted values incorrect.");

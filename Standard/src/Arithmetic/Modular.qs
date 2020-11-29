@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft Corporation. All rights reserved.
+// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
 namespace Microsoft.Quantum.Arithmetic {
@@ -130,7 +130,7 @@ namespace Microsoft.Quantum.Arithmetic {
     /// for a given modulus $N$, constant multiplier $a$, and summand $y$.
     ///
     /// # Input
-    /// ## constantMultiplier
+    /// ## constMultiplier
     /// An integer $a$ to be added to each basis state label.
     /// ## modulus
     /// The modulus $N$ which addition and multiplication is taken with respect to.
@@ -163,7 +163,7 @@ namespace Microsoft.Quantum.Arithmetic {
     /// integers in QFT basis.
     ///
     /// # Input
-    /// ## constantMultiplier
+    /// ## constMultiplier
     /// An integer $a$ to be added to each basis state label.
     /// ## modulus
     /// The modulus $N$ which addition and multiplication is taken with respect to.
@@ -245,7 +245,7 @@ namespace Microsoft.Quantum.Arithmetic {
             MultiplyAndAddByModularInteger(constMultiplier, modulus, multiplier, summandLE);
 
             // now the joint state is |x⟩|x⋅a(mod N)⟩
-            ApplyToEachCA(SWAP, Zip(summandLE!, multiplier!));
+            ApplyToEachCA(SWAP, Zipped(summandLE!, multiplier!));
 
             // now the joint state is |x⋅a(mod N)⟩|x⟩
             let inverseMod = InverseModI(constMultiplier, modulus);

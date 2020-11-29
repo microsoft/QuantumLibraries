@@ -12,6 +12,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Standard", "Standard\src\St
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Standard.Tests", "Standard\tests\Standard.Tests.csproj", "{DEDA9681-2C11-492F-B1C9-D772BB45730A}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Visualization", "Visualization", "{2C5BF171-7D32-4DEC-BD08-9667A55A36FF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Visualization", "Visualization\src\Visualization.csproj", "{AC5462CC-F249-48E4-BFBE-93FC5AAC0D4E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -26,6 +30,10 @@ Global
 		{DEDA9681-2C11-492F-B1C9-D772BB45730A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DEDA9681-2C11-492F-B1C9-D772BB45730A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DEDA9681-2C11-492F-B1C9-D772BB45730A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AC5462CC-F249-48E4-BFBE-93FC5AAC0D4E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AC5462CC-F249-48E4-BFBE-93FC5AAC0D4E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AC5462CC-F249-48E4-BFBE-93FC5AAC0D4E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AC5462CC-F249-48E4-BFBE-93FC5AAC0D4E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -38,5 +46,8 @@ Global
 	EndGlobalSection
 	GlobalSection(Performance) = preSolution
 		HasPerformanceSessions = true
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{AC5462CC-F249-48E4-BFBE-93FC5AAC0D4E} = {2C5BF171-7D32-4DEC-BD08-9667A55A36FF}
 	EndGlobalSection
 EndGlobal

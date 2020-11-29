@@ -19,7 +19,8 @@ namespace Microsoft.Quantum.Tests {
         ReflectAboutInteger(5, littleEndian);
     }
 
-    operation ReflectAboutIntegerTest() : Unit {
+    @Test("QuantumSimulator")
+    operation CheckReflectAboutInteger() : Unit {
         AssertOperationsEqualReferenced(3,
             ReflectAboutFiveUsingLibrary,
             ManuallyReflectAboutFive
