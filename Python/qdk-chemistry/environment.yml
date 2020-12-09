@@ -1,0 +1,14 @@
+name: pyqdk
+channels:
+  - rdkit
+  - quantum-engineering
+dependencies:
+  - python=3.7
+  - qsharp
+  - networkx
+  - rdkit
+  - pip
+  - pip:
+    - varname
+    - jupyter_jsmol
+    - pytest

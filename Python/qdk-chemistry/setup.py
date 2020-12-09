@@ -40,6 +40,8 @@ setuptools.setup(
     ],
     install_requires=[
         'qsharp',
-        'jupyter_jsmol'
+        'jupyter_jsmol',
+        'networkx',
+        'varname'
     ]
 )

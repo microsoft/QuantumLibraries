@@ -88,7 +88,7 @@ class Molecule(object):
 
     def create_input(
         self,
-        name: str,
+        molecule_name: str,
         file_name: str,
         solver: str,
         base_path: str = None,
@@ -96,8 +96,8 @@ class Molecule(object):
     ):
         """Create input deck and save to file
 
-        :param name: Name of the input deck
-        :type name: str
+        :param molecule_name: Name of the input deck
+        :type molecule_name: str
         :param file_name: Output file name
         :type file_name: str
         :param solver: Solver to use
@@ -117,17 +117,19 @@ class Molecule(object):
             if base_path is None:
                 base_path = DEFAULT_BASE_PATH
 
+            file_path = os.path.join(base_path, file_name)
+
             input_deck = solver_spec.module.create_input_deck(
                 mol=self.mol,
-                mol_name=name,
+                mol_name=molecule_name,
                 **parameters
             )
 
-            _log.info(f"Saving {solver_spec.name} input deck to file {file_name}")
-            with open(file_name, "w") as f:
+            _log.info(f"Saving {solver_spec.name} input deck to file {file_path}")
+            with open(file_path, "w") as f:
                 f.write(input_deck)
             
-            return file_name
+            return file_path
 
     def _ipython_display_(self):
         if self.design_widget and self.design_widget.was_updated:
