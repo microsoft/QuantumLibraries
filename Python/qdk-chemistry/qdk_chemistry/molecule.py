@@ -10,7 +10,7 @@ from IPython.display import display
 from qdk_chemistry.widgets.jsmol_widget import JsmolWidget
 from qdk_chemistry.widgets.jsme_widget import JsmeWidget
 from qdk_chemistry.geometry import Geometry, mol_to_xyz
-from qdk_chemistry.solvers import nwchem, openmolcas, psi4
+from qdk_chemistry.solvers import nwchem, openmolcas, psi4, arrows
 from qdk_chemistry.xyz2mol import xyz2mol, read_xyz_file
 
 from rdkit.Chem import AllChem as Chem
@@ -66,6 +66,12 @@ class Molecule(object):
     @property
     def geometry(self):
         return Geometry.from_mol(self.mol)
+
+    @property
+    def smiles(self):
+        """Convert RDKit molecule to canonical Smiles string"""
+        from rdkit.Chem import AllChem as Chem
+        return Chem.MolToSmiles(Chem.RemoveHs(self.mol))
     
     @classmethod
     def design(cls):
@@ -85,6 +91,10 @@ class Molecule(object):
         mol = self.design_widget.to_mol(add_hs=add_hs)
         self.mol = mol
         self.widget = JsmolWidget.from_mol(mol=mol, num_confs=num_confs)
+
+    def to_broombridge(self, file_path: str, url: str = "https://arrows.emsl.pnnl.gov/api/"):
+        """Convert to Broombridge using EMSL arrows API"""
+        arrows.save_broombridge(molecule=self.smiles, file_path=file_path, url=url)
 
     def create_input(
         self,
