@@ -8,7 +8,7 @@ import warnings
 from typing import Union, TYPE_CHECKING
 
 from qdk_chemistry.geometry import Geometry, format_geometry, format_geometry_from_mol
-from qdk_chemistry.solvers.util import formatted_geometry_str, formatted_num_active_el
+from qdk_chemistry.solvers.util import formatted_geometry_str
 
 if TYPE_CHECKING:
     from rdkit.Chem.AllChem import Mol
@@ -36,22 +36,23 @@ basis
 * library {basis}
 end
 
-charge {charge}
+{charge}
 
 scf
 thresh {scf_thresh:.1e}
 tol2e {scf_tol2e}
-{rhf}
 {spin}
+{rhf}
+maxiter 200
 {nopen}
 end
 
 tce
 {method}
-tilesize 1
 2eorb
 2emet 13
-nroots {num_tce_root}
+tilesize 10
+{nroots}
 thresh {tce_thresh:.1e}
 end
 
@@ -73,14 +74,14 @@ def create_input_deck(
     geometry_units: str = "au",
     basis: str = "sto-3g",
     charge: int = 0,
-    scf_thresh: float = 1.0e-10,
-    scf_tol2e: float = 1.0e-10,
+    scf_thresh: float = 1.0e-8,
+    scf_tol2e: float = 1.0e-9,
     rhf: str = "rhf",
     spin: str = "singlet",
     nopen: int = None,
     method: str = "ccsd",
-    num_tce_root: int = 5,
-    tce_thresh: float = 1.0e-6,
+    num_tce_root: int = None,
+    tce_thresh: float = 1.0e-8,
     driver: str = "energy",
     num_active_el: int = None,
 ) -> str:
@@ -128,9 +129,11 @@ def create_input_deck(
     """
     assert geometry_units in _GEOMETRY_UNITS, f"Unknown geometry unit: {geometry_units}"
 
-    num_active_el = formatted_num_active_el(mol=mol, num_active_el=num_active_el)
+    num_active_el = num_active_el or num_active_orbitals
     geometry = formatted_geometry_str(mol=mol, geometry=geometry)
     nopen_str = f"nopen {nopen}" if nopen is not None else ""
+    nroots = f"nroots {num_tce_root}" if num_tce_root else ""
+    charge_text = f"charge {charge}" if charge else ""
 
     nw_chem = NW_CHEM_TEMPLATE.format(
         name=f"{mol_name}",
@@ -138,14 +141,14 @@ def create_input_deck(
         geometry_units=geometry_units,
         geometry=geometry,
         basis=basis,
-        charge=charge,
+        charge=charge_text,
         scf_thresh=scf_thresh,
         scf_tol2e=scf_tol2e,
         rhf=rhf,
         spin=spin,
         nopen=nopen_str,
         method=method,
-        num_tce_root=num_tce_root,
+        nroots=nroots,
         tce_thresh=tce_thresh,
         num_orb=num_active_orbitals,
         num_el_a=num_active_el//2,

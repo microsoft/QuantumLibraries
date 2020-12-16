@@ -54,21 +54,3 @@ def formatted_geometry_str(
             geometry = format_geometry(geometry=geometry, line_sep=line_sep)
 
     return geometry
-
-
-def formatted_num_active_el(mol: "Mol", num_active_el: int = None):
-    """Get the number of active electrons either from the molecule object 
-    or input value.
-
-    :param mol: Molecule object
-    :type mol: Mol, optional
-    :param num_active_el: Number of active electrons
-    :type num_active_el: int, optional
-    :raises ValueError: [description]
-    """
-    if num_active_el is None:
-        num_active_el = num_electrons(mol)
-    else:
-        warnings.warn("Ignoring mol and using specified number of active electrons (num_active_el) instead.")
-
-    return num_active_el

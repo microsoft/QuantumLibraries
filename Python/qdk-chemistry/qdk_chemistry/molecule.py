@@ -6,12 +6,14 @@ import os
 
 from collections import namedtuple
 from IPython.display import display
+from typing import List, Dict
 
 from qdk_chemistry.widgets.jsmol_widget import JsmolWidget
 from qdk_chemistry.widgets.jsme_widget import JsmeWidget
 from qdk_chemistry.geometry import Geometry, mol_to_xyz
 from qdk_chemistry.solvers import nwchem, openmolcas, psi4, arrows
 from qdk_chemistry.xyz2mol import xyz2mol, read_xyz_file
+from qdk_chemistry.solvers.util import num_electrons
 
 from rdkit.Chem import AllChem as Chem
 
@@ -72,7 +74,27 @@ class Molecule(object):
         """Convert RDKit molecule to canonical Smiles string"""
         from rdkit.Chem import AllChem as Chem
         return Chem.MolToSmiles(Chem.RemoveHs(self.mol))
-    
+
+    @property
+    def num_electrons(self):
+        """Get the number of electrons for the molecule"""
+        return num_electrons(self.mol)
+
+    def all_atoms(self):
+        return [atom.GetAtomicNum() for atom in self.mol.GetAtoms()]
+
+    @property
+    def atoms(self) -> List[int]:
+        return sorted(set(self.all_atoms()))
+
+    @property
+    def atom_numbers(self) -> Dict[int, int]:
+        """Get a dictionary of the atomic numbers of atoms in the molecule mapped to the number of each"""
+        atoms = self.all_atoms()
+        return {
+            atomic_number: atoms.count(atomic_number) for atomic_number in set(atoms)
+        }
+
     @classmethod
     def design(cls):
         from varname import varname, VarnameRetrievingError
@@ -92,7 +114,7 @@ class Molecule(object):
         self.mol = mol
         self.widget = JsmolWidget.from_mol(mol=mol, num_confs=num_confs)
 
-    def to_broombridge(self, file_path: str, url: str = "https://arrows.emsl.pnnl.gov/api/"):
+    def to_broombridge(self, file_path: str, url: str = "https://arrows.emsl.pnnl.gov/api/broombridge/"):
         """Convert to Broombridge using EMSL arrows API"""
         arrows.save_broombridge(molecule=self.smiles, file_path=file_path, url=url)
 
