@@ -36,6 +36,14 @@ namespace Microsoft.Quantum.Synthesis {
         if(AbsD(phi) > 1e-9) {R1(phi, qubit);}
     }
 
+    function TwoLevelDecomposition(unitary: Complex[][]) : (Complex[][][], Int[][]) {
+        body intrinsic;
+    }
+
+    operation ApplyFlips(flipMask: Int, qubits : LittleEndian) : Unit is Adj + Ctl  {
+        // TODO: implement.
+    }
+
     // # Summary
     /// Applies gate defined by 2^n x 2^n unitary matrix.
     ///
@@ -46,6 +54,27 @@ namespace Microsoft.Quantum.Synthesis {
     /// ## qubit
     /// Qubits to which apply the operation - register of length n.
     operation ApplyUnitary(unitary: Complex[][], qubits : LittleEndian) : Unit is Adj + Ctl {
-        ApplySingleQubitUnitary(matrix, qubits![0]);
+        // TODO: check that matrix dimension is equal to 2^len(qubits).
+
+        let (matrices, idx) = TwoLevelDecomposition(unitary);
+        let n = Length(matrices);
+        
+        mutable prevFlipMask = 0;
+        for (i in 0..n-1) {
+            let matrix = matrices[i]; // Matrix of FC gate.
+            let index1 = idx[i][0];   // Indices of non-tivial 2x2 submatrix.
+            let index2 = idx[i][0];
+            // matrix.order_indices()  # Ensures that index2 > index1. TODO: this must be done in C# code....
+            let qubitIdMask = index1 ^ index2;
+            // assert is_power_of_two(qubit_id_mask) # do we need this?
+            let qubitId = 0; // Must be this: int(math.log2(qubit_id_mask))
+            let flipMask = 0; // must be (matrix.matrix_size - 1) - index2
+
+            ApplyFlips(flipMask ^ prevFlipMask, qubits);
+            // TODO: make controlled on all other qubits.
+            ApplySingleQubitUnitary(matrix, qubits![qubitId]);
+            // set prevFlipMask = flipMask;
+        }   
+        ApplyFlips(prevFlipMask, qubits);
     }    
 }

@@ -12,6 +12,8 @@ namespace Microsoft.Quantum.Tests {
     open Microsoft.Quantum.Measurement;
     open Microsoft.Quantum.Synthesis;
     open Microsoft.Quantum.Random;
+
+    // dotnet test tests --filter "Name~ApplyUnitary"
     
     operation ApplyUnitaryToRegister(matrix: Complex[][], qubits: Qubit[]) : Unit {
         ApplyUnitary(matrix, LittleEndian(qubits));
