@@ -5,20 +5,10 @@ namespace Microsoft.Quantum.Synthesis {
     open Microsoft.Quantum.Arithmetic;
     open Microsoft.Quantum.Arrays;
     open Microsoft.Quantum.Canon;
-    open Microsoft.Quantum.Diagnostics;
     open Microsoft.Quantum.Intrinsic;
     open Microsoft.Quantum.Math;
-    open Microsoft.Quantum.Logical;
 
-    // # Summary
-    /// Applies single-qubit gate defined by 2x2 unitary matrix.
-    ///
-    /// # Input
-    /// ## u
-    /// 2x2 unitary matrix describing the operation. 
-    /// Assumed to be unitary. If it's not unitary, behaviour is undefined.
-    /// ## qubit
-    /// Qubit to which apply the operation.
+    // Applies single-qubit gate defined by 2x2 unitary matrix.
     internal operation ApplySingleQubitUnitary(u: Complex[][], qubit : Qubit) : Unit is Adj + Ctl {  
         // ZYZ decomposition.
         let theta = ArcCos(AbsComplex(u[0][0]));
@@ -62,11 +52,13 @@ namespace Microsoft.Quantum.Synthesis {
     // # Summary
     /// Applies gate defined by 2^n x 2^n unitary matrix.
     ///
+    /// Fails if matrix is not unitary, or has wrong size. 
+    ///
     /// # Input
     /// ## unitary
     /// 2^n x 2^n unitary matrix describing the operation. 
     /// If matrix is not unitary or not of suitable size, throws an exception.
-    /// ## qubit
+    /// ## qubits
     /// Qubits to which apply the operation - register of length n.
     operation ApplyUnitary(unitary: Complex[][], qubits : LittleEndian) : Unit is Adj + Ctl {
         if (Length(unitary) != 1 <<< Length(qubits!)) {
@@ -76,24 +68,19 @@ namespace Microsoft.Quantum.Synthesis {
         let decomposition = TwoLevelDecomposition(unitary);
         let flipMasks = GetFlipMasks(decomposition, allQubitsMask);
         
-        Message($"START aqm={allQubitsMask}");
         for (i in 0..Length(decomposition)-1) {
             // i1, i2 - indices of non-trivial 2x2 submatrix of two-level unitary matrix being applied.
             // They differ in exactly one bit; i1 < i2.
             // matrix - 2x2 non-trivial unitary submatrix of said two-level unitary.
             let (matrix, i1, i2) = decomposition[i];
-            Message($"{matrix}, {i1}, {i2}");
 
             ApplyFlips(flipMasks[i+1] ^^^ flipMasks[i], qubits);
 
             let targetMask = i1 ^^^ i2;
             let controlMask = allQubitsMask - targetMask;
             let (controls, targets) = MaskToQubitsPair(qubits!, MCMTMask(controlMask, targetMask));
-            Message($"controls={controls}");
-            Message($"targets={targets}");
             Controlled ApplySingleQubitUnitary(controls, (matrix, targets[0])); 
         }   
         ApplyFlips(Tail(flipMasks), qubits);
-        Message($"END");
     }    
 }

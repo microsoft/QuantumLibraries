@@ -2,107 +2,18 @@
 // Licensed under the MIT License.
 
 using System;
-//using static System.Math;
-//using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Numerics;
-//using System.Diagnostics.CodeAnalysis;
-//using Microsoft.Quantum.Diagnostics.Emulation;
-//using Microsoft.Quantum.Simulation.Common;
 using Microsoft.Quantum.Simulation.Core;
-//using Microsoft.Quantum.Simulation.Simulators;
 
 namespace Microsoft.Quantum.Synthesis
 {
-
     internal partial class TwoLevelDecomposition
     {
         public class Native : TwoLevelDecomposition
         {
             public Native(IOperationFactory m) : base(m) { }
-
-            // Represents a square matrix which is an identity matrix with elements on positions
-            // (i1, i1), (i1, i2), (i2, i1), (i2, i2) replaced with elements from mx. 
-            internal class TwoLevelUnitary
-            {
-                private Complex[,] mx;   // 2x2 non-trivial principal submatrix.
-                private int i1, i2;      // Indices of non-trivial submatrix.
-
-                public TwoLevelUnitary(Complex[,] mx, int i1, int i2)
-                {
-                    // TODO: don't print matrix.
-                    Debug.Assert(isUnitary(mx), "Matrix is not unitary: " + mx[0,0] + " " + mx[0,1] + " " + mx[1,0] +" " + mx[1,1]);
-                    this.mx = mx;
-                    this.i1 = i1;
-                    this.i2 = i2;
-                }
-
-                public void applyPermutation(int[] perm)
-                {
-                    i1 = perm[i1];
-                    i2 = perm[i2];
-                }
-
-                // Ensures that index1 < index2.
-                public void orderIndices()
-                {
-                    if (this.i1 > this.i2)
-                    {
-                        (i1, i2) = (i2, i1);
-                        (mx[0, 0], mx[1, 1]) = (mx[1, 1], mx[0, 0]);
-                        (mx[0, 1], mx[1, 0]) = (mx[1, 0], mx[0, 1]);
-                    }
-                }
-
-                // Equivalent to inversion.
-                public void conjugateTranspose()
-                {
-                    mx[0, 0] = Complex.Conjugate(mx[0, 0]);
-                    mx[1, 1] = Complex.Conjugate(mx[1, 1]);
-                    (mx[0, 1], mx[1, 0]) = (Complex.Conjugate(mx[1, 0]), Complex.Conjugate(mx[0, 1]));
-                }
-
-                // Applies A = A * M, where M is this matrix.
-                public void multiplyRight(Complex[,] A)
-                {
-                    int n = A.GetLength(0);
-                    for (int i = 0; i < n; i++)
-                    {
-                        (A[i, i1], A[i, i2]) = (A[i, i1] * mx[0, 0] + A[i, i2] * mx[1, 0], A[i, i1] * mx[0, 1] + A[i, i2] * mx[1, 1]);
-                    }
-                }
-
-                public bool isIdentity()
-                {
-                    // TODO: implement.
-                    return false;
-                }
-
-                // Converts square matrix from C# to Q#.
-                // TODO: can inline in toQsharp() and get rid of loops.
-                private static QArray<QArray<Quantum.Math.Complex>> matrixToQs(Complex[,] b)
-                {
-                    long n = b.GetLength(0);
-                    var a = new QArray<Quantum.Math.Complex>[n];
-                    for (long i = 0; i < n; i++)
-                    {
-                        var row = new Quantum.Math.Complex[n];
-                        for (int j = 0; j < n; j++)
-                        {
-                            row[j] = new Quantum.Math.Complex((b[i, j].Real, b[i, j].Imaginary));
-                        }
-                        a[i] = new QArray<Quantum.Math.Complex>(row);
-                    }
-                    return new QArray<QArray<Quantum.Math.Complex>>(a);
-                }
-
-                // Converts to tuple to be passed to Q#.
-                public (IQArray<IQArray<Quantum.Math.Complex>>, long, long) toQsharp()
-                {
-                    return (matrixToQs(this.mx), this.i1, this.i2);
-                }
-            }
 
             // Returns special unitary 2x2 matrix U, s.t. [a, b] U = [c, 0].
             private static Complex[,] makeEliminatingMatrix(Complex a, Complex b)
@@ -120,17 +31,6 @@ namespace Microsoft.Quantum.Synthesis
                 }};
             }
 
-            // TODO: remove;
-            private static void printMatrix(Complex[,] A) {
-                for(int i=0;i<A.GetLength(0);i++) {
-                    for(int j=0;j<A.GetLength(1);j++) {
-                        Console.Write(A[i,j]);
-                        Console.Write(" ");   
-                    }
-                    Console.WriteLine();
-                }
-            }
-
             // Returns list of two-level unitary matrices, which multiply to A.
             //
             // Matrices are listed in application order.
@@ -138,9 +38,6 @@ namespace Microsoft.Quantum.Synthesis
             // A is modified as result of this function.
             private static List<TwoLevelUnitary> twoLevelDecompose(Complex[,] A)
             {
-                Console.WriteLine("twoLevelDecompose");
-                printMatrix(A);
-
                 int n = A.GetLength(0);
                 var result = new List<TwoLevelUnitary>();
 
@@ -172,7 +69,9 @@ namespace Microsoft.Quantum.Synthesis
                     }
                 }
 
-                var lastMatrix = new TwoLevelUnitary(new Complex[,] { { A[n - 2, n - 2], A[n - 2, n - 1] }, { A[n - 1, n - 2], A[n - 1, n - 1] } }, n - 2, n - 1);
+                var lastMatrix = new TwoLevelUnitary(new Complex[,] {
+                    { A[n - 2, n - 2], A[n - 2, n - 1] },
+                    { A[n - 1, n - 2], A[n - 1, n - 1] } }, n - 2, n - 1);
                 if (!lastMatrix.isIdentity())
                 {
                     result.Add(lastMatrix);
@@ -197,7 +96,7 @@ namespace Microsoft.Quantum.Synthesis
                 int n = perm.Length;
                 Debug.Assert(matrix.GetLength(0) == n);
                 Debug.Assert(matrix.GetLength(1) == n);
-                var result = new Complex[n,n];
+                var result = new Complex[n, n];
                 for (int i = 0; i < n; i++)
                 {
                     for (int j = 0; j < n; j++)
@@ -208,49 +107,14 @@ namespace Microsoft.Quantum.Synthesis
                 return result;
             }
 
-            private static bool isPowerOfTwo(int x)
-            {
-                // TODO: implement.
-                return true;
-            }
-
-            private static bool isUnitary(Complex[,] matrix)
-            {
-                int n = matrix.GetLength(0);
-                if (matrix.GetLength(1) != n) return false; // Unitary matrix must be square,
-
-                for (int i = 0; i < n; i++)
-                {
-                    for (int j = 0; j < n; j++)
-                    {
-                        Complex dotProduct = 0.0;
-                        for (int k = 0; k < n; k++)
-                        {
-                            dotProduct += matrix[i, k] * Complex.Conjugate(matrix[j, k]);
-                        }
-                        Complex expectedDotProduct = (i == j) ? 1.0 : 0.0;
-                        if ((dotProduct - expectedDotProduct).Magnitude > 1e-9)
-                        {
-                            return false;
-                        }
-                    }
-                }
-                return true;
-            }
-
-
             // Returns list of two-level unitary matrices, which multiply to A.
             //
             // Every matrix has indices differing in exactly 1 bit (this is achieved with Gray code).
             private static List<TwoLevelUnitary> twoLevelDecomposeGray(Complex[,] A)
             {
-                Console.WriteLine("twoLevelDecomposeGray");
-                printMatrix(A);
-
                 int n = A.GetLength(0);
-                Debug.Assert(isPowerOfTwo(n), "Matrix sizeis not power of two.");
                 Debug.Assert(A.GetLength(1) == n, "Matrix is not square.");
-                Debug.Assert(isUnitary(A), "Matrix is not unitary.");
+                Debug.Assert(MatrixUtils.isMatrixUnitary(A), "Matrix is not unitary.");
 
                 int[] perm = grayCode(n);
                 A = permuteMatrix(A, perm);
@@ -262,26 +126,10 @@ namespace Microsoft.Quantum.Synthesis
                 return result;
             }
 
-
-            // Converts square matrix from Q# to C#.
-            private static Complex[,] matrixFromQs(IQArray<IQArray<Quantum.Math.Complex>> a)
+            // Decomposes unitary matrix into product of 2-level unitary matrices.
+            private IQArray<(IQArray<IQArray<Quantum.Math.Complex>>, long, long)> Decompose(IQArray<IQArray<Quantum.Math.Complex>> unitary)
             {
-                long n = a.Length;
-                var b = new Complex[n, n];
-                for (long i = 0; i < n; i++)
-                {
-                    Debug.Assert(a[i].Length == n, "Matrix is not square");
-                    for (long j = 0; j < n; j++)
-                    {
-                        b[i, j] = new Complex(a[i][j].Real, a[i][j].Imag);
-                    }
-                }
-                return b;
-            }
-
-            private IQArray<(IQArray<IQArray<Quantum.Math.Complex>>, long, long)> DoThis(IQArray<IQArray<Quantum.Math.Complex>> unitary)
-            {
-                Complex[,] a = matrixFromQs(unitary);
+                Complex[,] a = MatrixUtils.squareMatrixFromQs(unitary);
                 List<TwoLevelUnitary> matrices = twoLevelDecomposeGray(a);
                 var result = new List<(IQArray<IQArray<Quantum.Math.Complex>>, long, long)>();
                 foreach (TwoLevelUnitary matrix in matrices)
@@ -292,8 +140,7 @@ namespace Microsoft.Quantum.Synthesis
                 return new QArray<(IQArray<IQArray<Quantum.Math.Complex>>, long, long)>(result);
             }
 
-            // Override __Body__ property to use C# function
-            public override Func<IQArray<IQArray<Quantum.Math.Complex>>, IQArray<(IQArray<IQArray<Quantum.Math.Complex>>, long, long)>> __Body__ => DoThis;
+            public override Func<IQArray<IQArray<Quantum.Math.Complex>>, IQArray<(IQArray<IQArray<Quantum.Math.Complex>>, long, long)>> __Body__ => Decompose;
         }
     }
 }

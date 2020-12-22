@@ -12,13 +12,12 @@ namespace Microsoft.Quantum.Tests {
     open Microsoft.Quantum.Measurement;
     open Microsoft.Quantum.Synthesis;
     open Microsoft.Quantum.Random;
-
-    // dotnet test tests --filter "Name~ApplyUnitary"
     
     internal operation ApplyUnitaryToRegister(matrix: Complex[][], qubits: Qubit[]) : Unit {
         ApplyUnitary(matrix, LittleEndian(qubits));
     }
 
+    // Checks that `ApplyUnitary(matrix)` is equvalent to `expected` operation.
     internal operation CheckOperation(matrix: Complex[][], expected: (Qubit[] => Unit is Adj)) : Unit {
         let nQubits = Floor(Lg(IntAsDouble(Length(matrix))));
         AssertOperationsEqualInPlace(nQubits, ApplyUnitaryToRegister(matrix, _), expected);
@@ -86,7 +85,7 @@ namespace Microsoft.Quantum.Tests {
     operation ApplyUnitary_CNOT () : Unit {
         let ZERO = Complex(0.0, 0.0);
         let ONE = Complex(1.0, 0.0);
-        // This is CNOT(q[0], q[1]).
+        // Matrix for CNOT(q[0], q[1]).
         let matrix = [[ONE, ZERO, ZERO, ZERO],
                       [ZERO, ZERO, ZERO, ONE],
                       [ZERO, ZERO, ONE, ZERO],
@@ -111,12 +110,26 @@ namespace Microsoft.Quantum.Tests {
 
     @Test("QuantumSimulator")
     operation ApplyUnitary_QFT () : Unit {
-        let ZERO = Complex(0.0, 0.0);
-        let ONE = Complex(1.0, 0.0);
         let matrix = [[Complex(0.5, 0.0), Complex(0.5, 0.0), Complex(0.5, 0.0), Complex(0.5, 0.0)],
                       [Complex(0.5, 0.0), Complex(0.0, 0.5), Complex(-0.5, 0.0), Complex(0.0, -0.5)],
                       [Complex(0.5, 0.0), Complex(-0.5, 0.0), Complex(0.5, 0.0), Complex(-0.5, 0.0)],
                       [Complex(0.5, 0.0), Complex(0.0, -0.5), Complex(-0.5, 0.0), Complex(0.0, 0.5)]];
         CheckOperation(matrix, ApplyQFT);
+    }
+    
+    @Test("QuantumSimulator")
+    operation ApplyUnitary_CCNOT () : Unit {
+        // Matrix for CCNOT(q[0], q[1], q[2]).
+        let ZERO = Complex(0.0, 0.0);
+        let ONE = Complex(1.0, 0.0);
+        let matrix = [[ONE, ZERO, ZERO, ZERO, ZERO, ZERO, ZERO, ZERO],
+                      [ZERO, ONE, ZERO, ZERO, ZERO, ZERO, ZERO, ZERO],
+                      [ZERO, ZERO, ONE, ZERO, ZERO, ZERO, ZERO, ZERO],
+                      [ZERO, ZERO, ZERO, ZERO, ZERO, ZERO, ZERO, ONE],
+                      [ZERO, ZERO, ZERO, ZERO, ONE, ZERO, ZERO, ZERO],
+                      [ZERO, ZERO, ZERO, ZERO, ZERO, ONE, ZERO, ZERO],
+                      [ZERO, ZERO, ZERO, ZERO, ZERO, ZERO, ONE, ZERO],
+                      [ZERO, ZERO, ZERO, ONE, ZERO, ZERO, ZERO, ZERO]];
+        CheckOperation(matrix, ApplyToFirstThreeQubitsA(CCNOT, _));
     }
 }
