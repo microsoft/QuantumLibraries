@@ -81,4 +81,26 @@ namespace Microsoft.Quantum.Tests {
                       [Complex(Sin(1.0), 0.0), Complex(Cos(1.0), 0.0)]];
         CheckOperation(matrix, ApplyToHeadA(Ry(2.0, _), _));
     }
+
+    @Test("QuantumSimulator")
+    operation ApplyUnitary_CNOT () : Unit {
+        let ZERO = Complex(0.0, 0.0);
+        let ONE = Complex(1.0, 0.0);
+        let matrix = [[ONE, ZERO, ZERO, ZERO],
+                      [ZERO, ONE, ZERO, ZERO],
+                      [ZERO, ZERO, ZERO, ONE],
+                      [ZERO, ZERO, ONE, ZERO]];
+        CheckOperation(matrix, ApplyToFirstTwoQubitsA(CNOT, _));
+    }
+
+    @Test("QuantumSimulator")
+    operation ApplyUnitary_SWAP () : Unit {
+        let ZERO = Complex(0.0, 0.0);
+        let ONE = Complex(1.0, 0.0);
+        let matrix = [[ONE, ZERO, ZERO, ZERO],
+                      [ZERO, ZERO, ONE, ZERO],
+                      [ZERO, ONE, ZERO, ZERO],
+                      [ZERO, ZERO, ZERO, ONE]];
+        CheckOperation(matrix, ApplyToFirstTwoQubitsA(SWAP, _));
+    }
 }
