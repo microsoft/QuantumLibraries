@@ -5,12 +5,10 @@ namespace Microsoft.Quantum.Synthesis {
     open Microsoft.Quantum.Arithmetic;
     open Microsoft.Quantum.Arrays;
     open Microsoft.Quantum.Canon;
-    open Microsoft.Quantum.Convert;
     open Microsoft.Quantum.Diagnostics;
     open Microsoft.Quantum.Intrinsic;
     open Microsoft.Quantum.Math;
     open Microsoft.Quantum.Logical;
-
 
     // # Summary
     /// Applies single-qubit gate defined by 2x2 unitary matrix.
@@ -40,8 +38,25 @@ namespace Microsoft.Quantum.Synthesis {
         body intrinsic;
     }
 
+    // For every 2-level unitary calculates "flip mask", which denotes qubit which should 
+    // be inverted before and after applying corresponding 1-qubit gate.
+    // For convenience prepends result with 0.
+    internal function GetFlipMasks(decomposition: (Complex[][], Int, Int)[], allQubitsMask: Int) : Int[] {
+        let n = Length(decomposition);
+        mutable flipMasks = new Int[n+1];
+        set flipMasks w/= 0 <- 0;
+        for (i in 0..n-1) {
+            let (matrix, i1, i2) = decomposition[i];
+            set flipMasks w/= (i+1) <- (allQubitsMask - i2); 
+        }
+        return flipMasks;
+    }
+
+    // Applies X gates to qubits speicifed by flipMask.
     internal operation ApplyFlips(flipMask: Int, qubits : LittleEndian) : Unit is Adj + Ctl  {
-        // TODO: implement.
+        for (qubitId in 0..Length(qubits!)-1) {
+            if ((flipMask &&& (1 <<< qubitId)) != 0) { X(qubits![qubitId]); }    
+        }
     }
 
     // # Summary
@@ -54,22 +69,26 @@ namespace Microsoft.Quantum.Synthesis {
     /// ## qubit
     /// Qubits to which apply the operation - register of length n.
     operation ApplyUnitary(unitary: Complex[][], qubits : LittleEndian) : Unit is Adj + Ctl {
-        // TODO: check that matrix dimension is equal to 2^len(qubits).
-
+        if (Length(unitary) != 1 <<< Length(qubits!)) {
+            fail "Matrix size is not consistent with register length.";
+        }
+        let allQubitsMask = (1 <<< Length(qubits!)) - 1;
+        let decomposition = TwoLevelDecomposition(unitary);
+        let flipMasks = GetFlipMasks(decomposition, allQubitsMask);
         
-        mutable prevFlipMask = 0;
-        for ((matrix, index1, index2) in TwoLevelDecomposition(unitary)) {
-            // matrix.order_indices()  # Ensures that index2 > index1. TODO: this must be done in C# code....
-            let qubitIdMask = index1 ^ index2;
-            // assert is_power_of_two(qubit_id_mask) # do we need this?
-            let qubitId = 0; // Must be this: int(math.log2(qubit_id_mask))
-            let flipMask = 0; // must be (matrix.matrix_size - 1) - index2
+        for (i in 0..Length(decomposition)-1) {
+            // i1, i2 - indices of non-trivial 2x2 submatrix of two-level unitary matrix being applied.
+            // They differ in exactly one bit; i1 < i2.
+            // matrix - 2x2 non-trivial unitary submatrix of said two-level unitary.
+            let (matrix, i1, i2) = decomposition[i];
 
-            ApplyFlips(flipMask ^ prevFlipMask, qubits);
-            // TODO: make controlled on all other qubits.
-            ApplySingleQubitUnitary(matrix, qubits![qubitId]);
-            // set prevFlipMask = flipMask;
+            ApplyFlips(flipMasks[i+1] ^^^ flipMasks[i], qubits);
+
+            let targetMask = i1 ^^^ i2;
+            let controlMask = allQubitsMask - targetMask;
+            let (controls, targets) = MaskToQubitsPair(qubits!, MCMTMask(controlMask, targetMask));
+            Controlled ApplySingleQubitUnitary(controls, (matrix, targets[0])); 
         }   
-        ApplyFlips(prevFlipMask, qubits);
+        ApplyFlips(Tail(flipMasks), qubits);
     }    
 }
