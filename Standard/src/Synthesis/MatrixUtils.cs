@@ -4,7 +4,8 @@ using Microsoft.Quantum.Simulation.Core;
 
 namespace Microsoft.Quantum.Synthesis
 {
-    internal class MatrixUtils {
+    internal class MatrixUtils
+    {
         // Checks whether given matrix is unitary.
         public static bool isMatrixUnitary(Complex[,] matrix)
         {

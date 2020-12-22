@@ -141,8 +141,8 @@ namespace Microsoft.Quantum.Synthesis
                 return new QArray<(IQArray<IQArray<Quantum.Math.Complex>>, long, long)>(result);
             }
 
-            public override Func<IQArray<IQArray<Quantum.Math.Complex>>, 
-                IQArray<(IQArray<IQArray<Quantum.Math.Complex>>, long, long)>> __Body__ => 
+            public override Func<IQArray<IQArray<Quantum.Math.Complex>>,
+                IQArray<(IQArray<IQArray<Quantum.Math.Complex>>, long, long)>> __Body__ =>
                 Decompose;
         }
     }
