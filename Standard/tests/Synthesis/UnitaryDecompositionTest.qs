@@ -15,11 +15,11 @@ namespace Microsoft.Quantum.Tests {
 
     // dotnet test tests --filter "Name~ApplyUnitary"
     
-    operation ApplyUnitaryToRegister(matrix: Complex[][], qubits: Qubit[]) : Unit {
+    internal operation ApplyUnitaryToRegister(matrix: Complex[][], qubits: Qubit[]) : Unit {
         ApplyUnitary(matrix, LittleEndian(qubits));
     }
 
-    operation CheckOperation(matrix: Complex[][], expected: (Qubit[] => Unit is Adj)) : Unit {
+    internal operation CheckOperation(matrix: Complex[][], expected: (Qubit[] => Unit is Adj)) : Unit {
         let nQubits = 1; // TODO: number of qubits is not always 1.
         AssertOperationsEqualInPlace(nQubits, ApplyUnitaryToRegister(matrix, _), expected);
     }

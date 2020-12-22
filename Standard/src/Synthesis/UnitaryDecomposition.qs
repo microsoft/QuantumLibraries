@@ -21,7 +21,7 @@ namespace Microsoft.Quantum.Synthesis {
     /// Assumed to be unitary. If it's not unitary, behaviour is undefined.
     /// ## qubit
     /// Qubit to which apply the operation.
-    operation ApplySingleQubitUnitary(u: Complex[][], qubit : Qubit) : Unit is Adj + Ctl {  
+    internal operation ApplySingleQubitUnitary(u: Complex[][], qubit : Qubit) : Unit is Adj + Ctl {  
         // ZYZ decomposition.
         let theta = ArcCos(AbsComplex(u[0][0]));
         let lmbda = ArgComplex(u[0][0]);
@@ -36,11 +36,11 @@ namespace Microsoft.Quantum.Synthesis {
         if(AbsD(phi) > 1e-9) {R1(phi, qubit);}
     }
 
-    function TwoLevelDecomposition(unitary: Complex[][]) : (Complex[][][], Int[][]) {
+    internal function TwoLevelDecomposition(unitary: Complex[][]) : (Complex[][], Int, Int)[] {
         body intrinsic;
     }
 
-    operation ApplyFlips(flipMask: Int, qubits : LittleEndian) : Unit is Adj + Ctl  {
+    internal operation ApplyFlips(flipMask: Int, qubits : LittleEndian) : Unit is Adj + Ctl  {
         // TODO: implement.
     }
 
@@ -56,14 +56,9 @@ namespace Microsoft.Quantum.Synthesis {
     operation ApplyUnitary(unitary: Complex[][], qubits : LittleEndian) : Unit is Adj + Ctl {
         // TODO: check that matrix dimension is equal to 2^len(qubits).
 
-        let (matrices, idx) = TwoLevelDecomposition(unitary);
-        let n = Length(matrices);
         
         mutable prevFlipMask = 0;
-        for (i in 0..n-1) {
-            let matrix = matrices[i]; // Matrix of FC gate.
-            let index1 = idx[i][0];   // Indices of non-tivial 2x2 submatrix.
-            let index2 = idx[i][0];
+        for ((matrix, index1, index2) in TwoLevelDecomposition(unitary)) {
             // matrix.order_indices()  # Ensures that index2 > index1. TODO: this must be done in C# code....
             let qubitIdMask = index1 ^ index2;
             // assert is_power_of_two(qubit_id_mask) # do we need this?

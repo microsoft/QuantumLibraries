@@ -15,15 +15,14 @@ using Microsoft.Quantum.Simulation.Simulators;
 using Microsoft.Quantum.Math;
 
 namespace Microsoft.Quantum.Synthesis {
-    public partial class TwoLevelDecomposition {
+    internal partial class TwoLevelDecomposition {
         public class Native : TwoLevelDecomposition {
             public Native(IOperationFactory m) : base(m) {}
 
 
-
             private Complex[,] matrixFromQs(IQArray<IQArray<Complex>> a) {
                 long n = a.Length;
-                Complex[,] b = new Complex[n, n];
+                var b = new Complex[n, n];
                 for(long i=0;i<n;i++) {
                     Debug.Assert(a[i].Length == n, "Matrix is not square");
                     for (long j=0;j<n;j++) {
@@ -35,9 +34,9 @@ namespace Microsoft.Quantum.Synthesis {
 
             private QArray<QArray<Complex>> matrixToQs(Complex[,] b) {
                 long n = b.GetLength(0);
-                QArray<Complex>[] a = new QArray<Complex>[n];
+                var a = new QArray<Complex>[n];
                 for(long i=0;i<n;i++) {
-                    Complex[] row = new Complex[n];
+                    var row = new Complex[n];
                     for(int j = 0;j<n;j++) {
                         row[j] = b[i,j];
                     }
@@ -47,29 +46,24 @@ namespace Microsoft.Quantum.Synthesis {
             }
 
             private QArray<QArray<QArray<Complex>>> matricesToQs(List<Complex[,]> matrices) {
-                int n = (int)matrices.Count;
-                QArray<QArray<Complex>>[] result = new QArray<QArray<Complex>>[n];
+                int n = matrices.Count;
+                var result = new QArray<QArray<Complex>>[n];
                 for(int i=0;i<n;i++) {
                     result[i] = matrixToQs(matrices[i]);
                 }
                 return new QArray<QArray<QArray<Complex>>>(result);
             }
 
-            private (IQArray<IQArray<IQArray<Complex>>>, IQArray<IQArray<long>>) TwoLevelDecomposeGray(IQArray<IQArray<Complex>> unitary) {
+            private IQArray<(IQArray<IQArray<Complex>>, long, long)> TwoLevelDecomposeGray(IQArray<IQArray<Complex>> unitary) {
                 Complex[,] a = matrixFromQs(unitary);
-                List<Complex[,]> r1 = new List<Complex[,]>();
-                r1.Add(a);
+                var result = new List<(IQArray<IQArray<Complex>>, long, long)>(); 
+                result.Add((matrixToQs(a), 0, 1));
                 
-                QArray<QArray<QArray<Complex>>> r2 = matricesToQs(r1);
-
-                QArray<long> r3 = new QArray<long> ( new long[] {0, 1});
-                QArray<QArray<long>> r4 = new QArray<QArray<long>>(new QArray<long>[] {r3});
-
-                return (r2, r4);
+                return new QArray<(IQArray<IQArray<Complex>>, long, long)>(result);
             }
 
             // Override __Body__ property to use C# function
-            public override Func<IQArray<IQArray<Complex>>, (IQArray<IQArray<IQArray<Complex>>>, IQArray<IQArray<long>>)> __Body__ => TwoLevelDecomposeGray;
+            public override Func<IQArray<IQArray<Complex>>, IQArray<(IQArray<IQArray<Complex>>, long, long)>> __Body__ => TwoLevelDecomposeGray;
         }
     }
 }
