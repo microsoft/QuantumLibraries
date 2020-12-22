@@ -81,6 +81,7 @@ namespace Microsoft.Quantum.Synthesis {
             // They differ in exactly one bit; i1 < i2.
             // matrix - 2x2 non-trivial unitary submatrix of said two-level unitary.
             let (matrix, i1, i2) = decomposition[i];
+            Message("${matrix}, {i1}, {i2}");
 
             ApplyFlips(flipMasks[i+1] ^^^ flipMasks[i], qubits);
 
