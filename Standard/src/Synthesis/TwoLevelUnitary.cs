@@ -51,13 +51,15 @@ namespace Microsoft.Quantum.Synthesis
             int n = A.GetLength(0);
             for (int i = 0; i < n; i++)
             {
-                (A[i, i1], A[i, i2]) = (A[i, i1] * mx[0, 0] + A[i, i2] * mx[1, 0], A[i, i1] * mx[0, 1] + A[i, i2] * mx[1, 1]);
+                (A[i, i1], A[i, i2]) = (A[i, i1] * mx[0, 0] + A[i, i2] * mx[1, 0],
+                                        A[i, i1] * mx[0, 1] + A[i, i2] * mx[1, 1]);
             }
         }
 
         public bool isIdentity()
         {
-            return (mx[0, 0] - 1).Magnitude < 1e-9 && mx[0, 1].Magnitude < 1e-9 && mx[1, 0].Magnitude < 1e-9 && (mx[1, 1] - 1).Magnitude < 1e-9;
+            return (mx[0, 0] - 1).Magnitude < 1e-9 && mx[0, 1].Magnitude < 1e-9 &&
+                    mx[1, 0].Magnitude < 1e-9 && (mx[1, 1] - 1).Magnitude < 1e-9;
         }
 
         // Converts to tuple to be passed to Q#.

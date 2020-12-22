@@ -79,7 +79,8 @@ namespace Microsoft.Quantum.Synthesis
                 return result;
             }
 
-            // Returns permutation of numbers from 0 to n-1 such as any two consequent number differ in exactly one bit.
+            // Returns permutation of numbers from 0 to n-1 such as any two consequent number 
+            // differ in exactly one bit.
             private static int[] grayCode(int n)
             {
                 var result = new int[n];
@@ -108,8 +109,7 @@ namespace Microsoft.Quantum.Synthesis
             }
 
             // Returns list of two-level unitary matrices, which multiply to A.
-            //
-            // Every matrix has indices differing in exactly 1 bit (this is achieved with Gray code).
+            // Every matrix has indices differing in exactly 1 bit.
             private static List<TwoLevelUnitary> twoLevelDecomposeGray(Complex[,] A)
             {
                 int n = A.GetLength(0);
@@ -127,7 +127,8 @@ namespace Microsoft.Quantum.Synthesis
             }
 
             // Decomposes unitary matrix into product of 2-level unitary matrices.
-            private IQArray<(IQArray<IQArray<Quantum.Math.Complex>>, long, long)> Decompose(IQArray<IQArray<Quantum.Math.Complex>> unitary)
+            private IQArray<(IQArray<IQArray<Quantum.Math.Complex>>, long, long)> Decompose(
+                IQArray<IQArray<Quantum.Math.Complex>> unitary)
             {
                 Complex[,] a = MatrixUtils.squareMatrixFromQs(unitary);
                 List<TwoLevelUnitary> matrices = twoLevelDecomposeGray(a);
@@ -140,7 +141,9 @@ namespace Microsoft.Quantum.Synthesis
                 return new QArray<(IQArray<IQArray<Quantum.Math.Complex>>, long, long)>(result);
             }
 
-            public override Func<IQArray<IQArray<Quantum.Math.Complex>>, IQArray<(IQArray<IQArray<Quantum.Math.Complex>>, long, long)>> __Body__ => Decompose;
+            public override Func<IQArray<IQArray<Quantum.Math.Complex>>, 
+                IQArray<(IQArray<IQArray<Quantum.Math.Complex>>, long, long)>> __Body__ => 
+                Decompose;
         }
     }
 }

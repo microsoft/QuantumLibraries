@@ -31,7 +31,8 @@ namespace Microsoft.Quantum.Synthesis {
     // For every 2-level unitary calculates "flip mask", which denotes qubit which should 
     // be inverted before and after applying corresponding 1-qubit gate.
     // For convenience prepends result with 0.
-    internal function GetFlipMasks(decomposition: (Complex[][], Int, Int)[], allQubitsMask: Int) : Int[] {
+    internal function GetFlipMasks(decomposition: (Complex[][], Int, Int)[], 
+                                   allQubitsMask: Int) : Int[] {
         let n = Length(decomposition);
         mutable flipMasks = new Int[n+1];
         set flipMasks w/= 0 <- 0;
@@ -69,8 +70,9 @@ namespace Microsoft.Quantum.Synthesis {
         let flipMasks = GetFlipMasks(decomposition, allQubitsMask);
         
         for (i in 0..Length(decomposition)-1) {
-            // i1, i2 - indices of non-trivial 2x2 submatrix of two-level unitary matrix being applied.
-            // They differ in exactly one bit; i1 < i2.
+            // i1, i2 - indices of non-trivial 2x2 submatrix of two-level unitary matrix being 
+            // applied. 
+            // i1 and i2 differ in exactly one bit; i1 < i2.
             // matrix - 2x2 non-trivial unitary submatrix of said two-level unitary.
             let (matrix, i1, i2) = decomposition[i];
 

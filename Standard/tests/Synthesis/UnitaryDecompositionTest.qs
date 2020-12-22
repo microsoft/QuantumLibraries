@@ -18,7 +18,8 @@ namespace Microsoft.Quantum.Tests {
     }
 
     // Checks that `ApplyUnitary(matrix)` is equvalent to `expected` operation.
-    internal operation CheckOperation(matrix: Complex[][], expected: (Qubit[] => Unit is Adj)) : Unit {
+    internal operation CheckOperation(matrix: Complex[][], 
+                                      expected: (Qubit[] => Unit is Adj)) : Unit {
         let nQubits = Floor(Lg(IntAsDouble(Length(matrix))));
         AssertOperationsEqualInPlace(nQubits, ApplyUnitaryToRegister(matrix, _), expected);
     }
@@ -110,10 +111,11 @@ namespace Microsoft.Quantum.Tests {
 
     @Test("QuantumSimulator")
     operation ApplyUnitary_QFT () : Unit {
-        let matrix = [[Complex(0.5, 0.0), Complex(0.5, 0.0), Complex(0.5, 0.0), Complex(0.5, 0.0)],
-                      [Complex(0.5, 0.0), Complex(0.0, 0.5), Complex(-0.5, 0.0), Complex(0.0, -0.5)],
-                      [Complex(0.5, 0.0), Complex(-0.5, 0.0), Complex(0.5, 0.0), Complex(-0.5, 0.0)],
-                      [Complex(0.5, 0.0), Complex(0.0, -0.5), Complex(-0.5, 0.0), Complex(0.0, 0.5)]];
+        let matrix = [
+            [Complex(0.5, 0.0), Complex(0.5, 0.0), Complex(0.5, 0.0), Complex(0.5, 0.0)],
+            [Complex(0.5, 0.0), Complex(0.0, 0.5), Complex(-0.5, 0.0), Complex(0.0, -0.5)],
+            [Complex(0.5, 0.0), Complex(-0.5, 0.0), Complex(0.5, 0.0), Complex(-0.5, 0.0)],
+            [Complex(0.5, 0.0), Complex(0.0, -0.5), Complex(-0.5, 0.0), Complex(0.0, 0.5)]];
         CheckOperation(matrix, ApplyQFT);
     }
     
