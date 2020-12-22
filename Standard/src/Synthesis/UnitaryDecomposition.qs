@@ -76,20 +76,24 @@ namespace Microsoft.Quantum.Synthesis {
         let decomposition = TwoLevelDecomposition(unitary);
         let flipMasks = GetFlipMasks(decomposition, allQubitsMask);
         
+        Message($"START aqm={allQubitsMask}");
         for (i in 0..Length(decomposition)-1) {
             // i1, i2 - indices of non-trivial 2x2 submatrix of two-level unitary matrix being applied.
             // They differ in exactly one bit; i1 < i2.
             // matrix - 2x2 non-trivial unitary submatrix of said two-level unitary.
             let (matrix, i1, i2) = decomposition[i];
-            Message("${matrix}, {i1}, {i2}");
+            Message($"{matrix}, {i1}, {i2}");
 
             ApplyFlips(flipMasks[i+1] ^^^ flipMasks[i], qubits);
 
             let targetMask = i1 ^^^ i2;
             let controlMask = allQubitsMask - targetMask;
             let (controls, targets) = MaskToQubitsPair(qubits!, MCMTMask(controlMask, targetMask));
+            Message($"controls={controls}");
+            Message($"targets={targets}");
             Controlled ApplySingleQubitUnitary(controls, (matrix, targets[0])); 
         }   
         ApplyFlips(Tail(flipMasks), qubits);
+        Message($"END");
     }    
 }

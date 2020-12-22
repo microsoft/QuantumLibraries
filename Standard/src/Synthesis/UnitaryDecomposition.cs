@@ -31,6 +31,8 @@ namespace Microsoft.Quantum.Synthesis
 
                 public TwoLevelUnitary(Complex[,] mx, int i1, int i2)
                 {
+                    // TODO: don't print matrix.
+                    Debug.Assert(isUnitary(mx), "Matrix is not unitary: " + mx[0,0] + " " + mx[0,1] + " " + mx[1,0] +" " + mx[1,1]);
                     this.mx = mx;
                     this.i1 = i1;
                     this.i2 = i2;
@@ -53,7 +55,7 @@ namespace Microsoft.Quantum.Synthesis
                     }
                 }
 
-                // Equivalent to inversion for unitary matrix.
+                // Equivalent to inversion.
                 public void conjugateTranspose()
                 {
                     mx[0, 0] = Complex.Conjugate(mx[0, 0]);
@@ -102,7 +104,7 @@ namespace Microsoft.Quantum.Synthesis
                 }
             }
 
-            // Returns unitary 2x2 matrix U, s.t. [a, b] U = [c, 0].
+            // Returns special unitary 2x2 matrix U, s.t. [a, b] U = [c, 0].
             private static Complex[,] makeEliminatingMatrix(Complex a, Complex b)
             {
                 Debug.Assert(a.Magnitude > 1e-9 && b.Magnitude > 1e-9);
@@ -118,6 +120,17 @@ namespace Microsoft.Quantum.Synthesis
                 }};
             }
 
+            // TODO: remove;
+            private static void printMatrix(Complex[,] A) {
+                for(int i=0;i<A.GetLength(0);i++) {
+                    for(int j=0;j<A.GetLength(1);j++) {
+                        Console.Write(A[i,j]);
+                        Console.Write(" ");   
+                    }
+                    Console.WriteLine();
+                }
+            }
+
             // Returns list of two-level unitary matrices, which multiply to A.
             //
             // Matrices are listed in application order.
@@ -125,6 +138,9 @@ namespace Microsoft.Quantum.Synthesis
             // A is modified as result of this function.
             private static List<TwoLevelUnitary> twoLevelDecompose(Complex[,] A)
             {
+                Console.WriteLine("twoLevelDecompose");
+                printMatrix(A);
+
                 int n = A.GetLength(0);
                 var result = new List<TwoLevelUnitary>();
 
@@ -164,9 +180,7 @@ namespace Microsoft.Quantum.Synthesis
                 return result;
             }
 
-            // Builds binary-reflected gray code.
             // Returns permutation of numbers from 0 to n-1 such as any two consequent number differ in exactly one bit.
-            // n must be power of 2.
             private static int[] grayCode(int n)
             {
                 var result = new int[n];
@@ -178,25 +192,20 @@ namespace Microsoft.Quantum.Synthesis
             }
 
             // Applies permutation to columns and rows of matrix.
-            private static void permuteMatrix(Complex[,] matrix, int[] perm)
+            private static Complex[,] permuteMatrix(Complex[,] matrix, int[] perm)
             {
                 int n = perm.Length;
                 Debug.Assert(matrix.GetLength(0) == n);
                 Debug.Assert(matrix.GetLength(1) == n);
+                var result = new Complex[n,n];
                 for (int i = 0; i < n; i++)
                 {
                     for (int j = 0; j < n; j++)
                     {
-                        matrix[i, j] = matrix[i, perm[j]];
+                        result[i, j] = matrix[perm[i], perm[j]];
                     }
                 }
-                for (int i = 0; i < n; i++)
-                {
-                    for (int j = 0; j < n; j++)
-                    {
-                        matrix[j, i] = matrix[perm[j], i];
-                    }
-                }
+                return result;
             }
 
             private static bool isPowerOfTwo(int x)
@@ -207,7 +216,25 @@ namespace Microsoft.Quantum.Synthesis
 
             private static bool isUnitary(Complex[,] matrix)
             {
-                // TODO: implement.
+                int n = matrix.GetLength(0);
+                if (matrix.GetLength(1) != n) return false; // Unitary matrix must be square,
+
+                for (int i = 0; i < n; i++)
+                {
+                    for (int j = 0; j < n; j++)
+                    {
+                        Complex dotProduct = 0.0;
+                        for (int k = 0; k < n; k++)
+                        {
+                            dotProduct += matrix[i, k] * Complex.Conjugate(matrix[j, k]);
+                        }
+                        Complex expectedDotProduct = (i == j) ? 1.0 : 0.0;
+                        if ((dotProduct - expectedDotProduct).Magnitude > 1e-9)
+                        {
+                            return false;
+                        }
+                    }
+                }
                 return true;
             }
 
@@ -217,13 +244,16 @@ namespace Microsoft.Quantum.Synthesis
             // Every matrix has indices differing in exactly 1 bit (this is achieved with Gray code).
             private static List<TwoLevelUnitary> twoLevelDecomposeGray(Complex[,] A)
             {
+                Console.WriteLine("twoLevelDecomposeGray");
+                printMatrix(A);
+
                 int n = A.GetLength(0);
                 Debug.Assert(isPowerOfTwo(n), "Matrix sizeis not power of two.");
                 Debug.Assert(A.GetLength(1) == n, "Matrix is not square.");
                 Debug.Assert(isUnitary(A), "Matrix is not unitary.");
 
                 int[] perm = grayCode(n);
-                permuteMatrix(A, perm);
+                A = permuteMatrix(A, perm);
                 List<TwoLevelUnitary> result = twoLevelDecompose(A);
                 foreach (TwoLevelUnitary matrix in result)
                 {

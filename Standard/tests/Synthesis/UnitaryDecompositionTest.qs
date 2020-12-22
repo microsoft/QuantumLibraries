@@ -20,7 +20,7 @@ namespace Microsoft.Quantum.Tests {
     }
 
     internal operation CheckOperation(matrix: Complex[][], expected: (Qubit[] => Unit is Adj)) : Unit {
-        let nQubits = 1; // TODO: number of qubits is not always 1.
+        let nQubits = Floor(Lg(IntAsDouble(Length(matrix))));
         AssertOperationsEqualInPlace(nQubits, ApplyUnitaryToRegister(matrix, _), expected);
     }
 
@@ -86,10 +86,11 @@ namespace Microsoft.Quantum.Tests {
     operation ApplyUnitary_CNOT () : Unit {
         let ZERO = Complex(0.0, 0.0);
         let ONE = Complex(1.0, 0.0);
+        // This is CNOT(q[0], q[1]).
         let matrix = [[ONE, ZERO, ZERO, ZERO],
-                      [ZERO, ONE, ZERO, ZERO],
                       [ZERO, ZERO, ZERO, ONE],
-                      [ZERO, ZERO, ONE, ZERO]];
+                      [ZERO, ZERO, ONE, ZERO],
+                      [ZERO, ONE, ZERO, ZERO]];
         CheckOperation(matrix, ApplyToFirstTwoQubitsA(CNOT, _));
     }
 
@@ -102,5 +103,20 @@ namespace Microsoft.Quantum.Tests {
                       [ZERO, ONE, ZERO, ZERO],
                       [ZERO, ZERO, ZERO, ONE]];
         CheckOperation(matrix, ApplyToFirstTwoQubitsA(SWAP, _));
+    }
+
+    internal operation ApplyQFT(qubits: Qubit[]) : Unit is Adj {
+        QFT(BigEndian(Reversed(qubits)));
+    }
+
+    @Test("QuantumSimulator")
+    operation ApplyUnitary_QFT () : Unit {
+        let ZERO = Complex(0.0, 0.0);
+        let ONE = Complex(1.0, 0.0);
+        let matrix = [[Complex(0.5, 0.0), Complex(0.5, 0.0), Complex(0.5, 0.0), Complex(0.5, 0.0)],
+                      [Complex(0.5, 0.0), Complex(0.0, 0.5), Complex(-0.5, 0.0), Complex(0.0, -0.5)],
+                      [Complex(0.5, 0.0), Complex(-0.5, 0.0), Complex(0.5, 0.0), Complex(-0.5, 0.0)],
+                      [Complex(0.5, 0.0), Complex(0.0, -0.5), Complex(-0.5, 0.0), Complex(0.0, 0.5)]];
+        CheckOperation(matrix, ApplyQFT);
     }
 }
