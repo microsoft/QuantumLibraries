@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 using System;
 using System.Diagnostics;
 using System.Numerics;
@@ -5,8 +8,11 @@ using Microsoft.Quantum.Simulation.Core;
 
 namespace Microsoft.Quantum.Synthesis
 {
-    // Represents a square matrix which is an identity matrix with elements on positions
-    // (i1, i1), (i1, i2), (i2, i1), (i2, i2) replaced with elements from unitary matrix `mx`. 
+
+    /// <summary>
+    /// Represents a square matrix which is an identity matrix with elements on positions
+    /// (i1, i1), (i1, i2), (i2, i1), (i2, i2) replaced with elements from unitary matrix <c>mx</c>. 
+    /// </summary>
     internal class TwoLevelUnitary
     {
         private Complex[,] mx;   // 2x2 non-trivial principal submatrix.
@@ -14,13 +20,13 @@ namespace Microsoft.Quantum.Synthesis
 
         public TwoLevelUnitary(Complex[,] mx, int i1, int i2)
         {
-            Debug.Assert(MatrixUtils.isMatrixUnitary(mx), "Matrix is not unitary");
+            Debug.Assert(MatrixUtils.IsMatrixUnitary(mx), "Matrix is not unitary");
             this.mx = mx;
             this.i1 = i1;
             this.i2 = i2;
         }
 
-        public void applyPermutation(int[] perm)
+        public void ApplyPermutation(int[] perm)
         {
             i1 = perm[i1];
             i2 = perm[i2];
@@ -56,16 +62,14 @@ namespace Microsoft.Quantum.Synthesis
             }
         }
 
-        public bool isIdentity()
-        {
-            return (mx[0, 0] - 1).Magnitude < 1e-9 && mx[0, 1].Magnitude < 1e-9 &&
-                    mx[1, 0].Magnitude < 1e-9 && (mx[1, 1] - 1).Magnitude < 1e-9;
-        }
+        public bool IsIdentity() =>
+            (mx[0, 0] - 1).Magnitude < 1e-9 && mx[0, 1].Magnitude < 1e-9 &&
+            mx[1, 0].Magnitude < 1e-9 && (mx[1, 1] - 1).Magnitude < 1e-9;
 
         // Converts to tuple to be passed to Q#.
         public (IQArray<IQArray<Quantum.Math.Complex>>, long, long) toQsharp()
         {
-            return (MatrixUtils.matrixToQs(this.mx), this.i1, this.i2);
+            return (MatrixUtils.MatrixToQs(this.mx), this.i1, this.i2);
         }
     }
 }

@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 using System.Diagnostics;
 using System.Numerics;
 using Microsoft.Quantum.Simulation.Core;
@@ -7,7 +10,7 @@ namespace Microsoft.Quantum.Synthesis
     internal class MatrixUtils
     {
         // Checks whether given matrix is unitary.
-        public static bool isMatrixUnitary(Complex[,] matrix)
+        public static bool IsMatrixUnitary(Complex[,] matrix)
         {
             int n = matrix.GetLength(0);
             if (matrix.GetLength(1) != n) return false; // Unitary matrix must be square.
@@ -32,7 +35,7 @@ namespace Microsoft.Quantum.Synthesis
         }
 
         // Converts matrix from C# array to Q# array.
-        public static QArray<QArray<Quantum.Math.Complex>> matrixToQs(Complex[,] b)
+        public static QArray<QArray<Quantum.Math.Complex>> MatrixToQs(Complex[,] b)
         {
             long n1 = b.GetLength(0);
             long n2 = b.GetLength(1);
@@ -50,7 +53,7 @@ namespace Microsoft.Quantum.Synthesis
         }
 
         // Converts square matrix from Q# array to C#.
-        public static Complex[,] squareMatrixFromQs(IQArray<IQArray<Quantum.Math.Complex>> a)
+        public static Complex[,] SquareMatrixFromQs(IQArray<IQArray<Quantum.Math.Complex>> a)
         {
             long n = a.Length;
             var b = new Complex[n, n];
