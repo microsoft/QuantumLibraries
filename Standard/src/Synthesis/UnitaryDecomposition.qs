@@ -36,8 +36,7 @@ namespace Microsoft.Quantum.Synthesis {
         let n = Length(decomposition);
         mutable flipMasks = new Int[n+1];
         set flipMasks w/= 0 <- 0;
-        for (i in 0..n-1) {
-            let (matrix, i1, i2) = decomposition[i];
+        for ((i, (_, _, i2)) in Enumerated(decomposition)) {
             set flipMasks w/= (i+1) <- (allQubitsMask - i2); 
         }
         return flipMasks;
@@ -45,9 +44,7 @@ namespace Microsoft.Quantum.Synthesis {
 
     // Applies X gates to qubits speicifed by flipMask.
     internal operation ApplyFlips(flipMask: Int, qubits : LittleEndian) : Unit is Adj + Ctl  {
-        for (qubitId in 0..Length(qubits!)-1) {
-            if ((flipMask &&& (1 <<< qubitId)) != 0) { X(qubits![qubitId]); }    
-        }
+        ApplyXorInPlace(flipMask, qubits);
     }
 
     // # Summary
@@ -69,12 +66,11 @@ namespace Microsoft.Quantum.Synthesis {
         let decomposition = TwoLevelDecomposition(unitary);
         let flipMasks = GetFlipMasks(decomposition, allQubitsMask);
         
-        for (i in 0..Length(decomposition)-1) {
-            // i1, i2 - indices of non-trivial 2x2 submatrix of two-level unitary matrix being 
-            // applied. 
-            // i1 and i2 differ in exactly one bit; i1 < i2.
-            // matrix - 2x2 non-trivial unitary submatrix of said two-level unitary.
-            let (matrix, i1, i2) = decomposition[i];
+        // i1, i2 - indices of non-trivial 2x2 submatrix of two-level unitary matrix being 
+        // applied. 
+        // i1 and i2 differ in exactly one bit; i1 < i2.
+        // matrix - 2x2 non-trivial unitary submatrix of said two-level unitary.
+        for ((i, (matrix, i1, i2)) in Enumerated(decomposition)) {
 
             ApplyFlips(flipMasks[i+1] ^^^ flipMasks[i], qubits);
 
