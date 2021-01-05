@@ -9,33 +9,33 @@ namespace Microsoft.Quantum.Synthesis {
     open Microsoft.Quantum.Math;
 
     // Applies single-qubit gate defined by 2x2 unitary matrix.
-    internal operation ApplySingleQubitUnitary(u: Complex[][], qubit : Qubit) : Unit is Adj + Ctl {  
+    internal operation ApplySingleQubitUnitary(u : Complex[][], qubit : Qubit) : Unit is Adj + Ctl {  
         // ZYZ decomposition.
         let theta = ArcCos(AbsComplex(u[0][0]));
         let lmbda = ArgComplex(u[0][0]);
         let mu = ArgComplex(u[0][1]);
-        if (AbsD(mu-lmbda) > 1e-9) { Rz(mu - lmbda, qubit); }
+        if (AbsD(mu - lmbda) > 1e-9) { Rz(mu - lmbda, qubit); }
         if (AbsD(theta) > 1e-9) { Ry(-2.0 * theta, qubit); }
         if (AbsD(lmbda + mu) > 1e-9) { Rz(- lmbda - mu, qubit); }
 
         // If this is not special unitary, apply R1 to correct global phase.
         let det = MinusC(TimesC(u[0][0], u[1][1]), TimesC(u[0][1], u[1][0]));
         let phi = ArgComplex(det);
-        if(AbsD(phi) > 1e-9) {R1(phi, qubit);}
+        if (AbsD(phi) > 1e-9) { R1(phi, qubit); }
     }
 
     internal function TwoLevelDecomposition(unitary: Complex[][]) : (Complex[][], Int, Int)[] {
         body intrinsic;
     }
 
-    // For every 2-level unitary calculates "flip mask", which denotes qubit which should 
-    // be inverted before and after applying corresponding 1-qubit gate.
-    // For convenience prepends result with 0.
-    internal function GetFlipMasks(decomposition: (Complex[][], Int, Int)[], 
+    /// # Summary
+    /// For every 2-level unitary calculates "flip mask", which denotes qubit which should 
+    /// be inverted before and after applying corresponding 1-qubit gate.
+    /// For convenience prepends result with 0.
+    internal function FlipMasks(decomposition: (Complex[][], Int, Int)[], 
                                    allQubitsMask: Int) : Int[] {
         let n = Length(decomposition);
-        mutable flipMasks = new Int[n+1];
-        set flipMasks w/= 0 <- 0;
+        mutable flipMasks = ConstantArray(n + 1, 0);
         for ((i, (_, _, i2)) in Enumerated(decomposition)) {
             set flipMasks w/= (i+1) <- (allQubitsMask - i2); 
         }
