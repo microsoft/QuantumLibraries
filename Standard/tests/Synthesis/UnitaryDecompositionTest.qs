@@ -25,14 +25,14 @@ namespace Microsoft.Quantum.Tests {
     }
 
     @Test("QuantumSimulator")
-    operation ApplyUnitary_Identity () : Unit {
+    operation CheckApplyUnitaryAppliesIdentity () : Unit {
         let matrix = [[Complex(1.0, 0.0), Complex(0.0, 0.0)],
                       [Complex(0.0, 0.0), Complex(1.0, 0.0)]];
         CheckOperation(matrix, ApplyToHeadA(I, _));
     }
 
     @Test("QuantumSimulator")
-    operation ApplyUnitary_PauliX () : Unit {
+    operation CheckApplyUnitaryAppliesPauliX () : Unit {
         let matrix = [[Complex(0.0, 0.0), Complex(1.0, 0.0)],
                       [Complex(1.0, 0.0), Complex(0.0, 0.0)]];
         CheckOperation(matrix, ApplyToHeadA(X, _));
@@ -40,7 +40,7 @@ namespace Microsoft.Quantum.Tests {
 
 
     @Test("QuantumSimulator")
-    operation ApplyUnitary_PauliY () : Unit {
+    operation CheckApplyUnitaryAppliesPauliY () : Unit {
         let matrix = [[Complex(0.0, 0.0), Complex(0.0, -1.0)],
                       [Complex(0.0, 1.0), Complex(0.0, 0.0)]];
         CheckOperation(matrix, ApplyToHeadA(Y, _));
@@ -48,42 +48,42 @@ namespace Microsoft.Quantum.Tests {
 
 
     @Test("QuantumSimulator")
-    operation ApplyUnitary_PauliZ () : Unit {
+    operation CheckApplyUnitaryAppliesPauliZ () : Unit {
         let matrix = [[Complex(1.0, 0.0), Complex(0.0, 0.0)],
                       [Complex(0.0, 0.0), Complex(-1.0, 0.0)]];
         CheckOperation(matrix, ApplyToHeadA(Z, _));
     }
 
     @Test("QuantumSimulator")
-    operation ApplyUnitary_Hadamard () : Unit {
+    operation CheckApplyUnitaryAppliesHadamard () : Unit {
         let matrix = [[Complex(Sqrt(0.5), 0.0), Complex(Sqrt(0.5), 0.0)],
                       [Complex(Sqrt(0.5), 0.0), Complex(-Sqrt(0.5), 0.0)]];
         CheckOperation(matrix, ApplyToHeadA(H, _));
     }
 
     @Test("QuantumSimulator")
-    operation ApplyUnitary_HadamardY () : Unit {
+    operation CheckApplyUnitaryAppliesHadamardY () : Unit {
         let matrix = [[Complex(Sqrt(0.5), 0.0), Complex(Sqrt(0.5), 0.0)],
                       [Complex(0.0, Sqrt(0.5)), Complex(0.0, -Sqrt(0.5))]];
         CheckOperation(matrix, ApplyToHeadA(HY, _));
     }
 
     @Test("QuantumSimulator")
-    operation ApplyUnitary_Rx () : Unit {
+    operation CheckApplyUnitaryAppliesRx () : Unit {
         let matrix = [[Complex(Cos(1.0), 0.0), Complex(0.0, -Sin(1.0))],
                       [Complex(0.0, -Sin(1.0)), Complex(Cos(1.0), 0.0)]];
         CheckOperation(matrix, ApplyToHeadA(Rx(2.0, _), _));
     }
 
     @Test("QuantumSimulator")
-    operation ApplyUnitary_Ry () : Unit {
+    operation CheckApplyUnitaryAppliesRy () : Unit {
         let matrix = [[Complex(Cos(1.0), 0.0), Complex(-Sin(1.0), 0.0)],
                       [Complex(Sin(1.0), 0.0), Complex(Cos(1.0), 0.0)]];
         CheckOperation(matrix, ApplyToHeadA(Ry(2.0, _), _));
     }
 
     @Test("QuantumSimulator")
-    operation ApplyUnitary_CNOT () : Unit {
+    operation CheckApplyUnitaryAppliesCnot () : Unit {
         let ZERO = Complex(0.0, 0.0);
         let ONE = Complex(1.0, 0.0);
         // Matrix for CNOT(q[0], q[1]).
@@ -95,7 +95,7 @@ namespace Microsoft.Quantum.Tests {
     }
 
     @Test("QuantumSimulator")
-    operation ApplyUnitary_SWAP () : Unit {
+    operation CheckApplyUnitaryAppliesSwap () : Unit {
         let ZERO = Complex(0.0, 0.0);
         let ONE = Complex(1.0, 0.0);
         let matrix = [[ONE, ZERO, ZERO, ZERO],
@@ -110,7 +110,7 @@ namespace Microsoft.Quantum.Tests {
     }
 
     @Test("QuantumSimulator")
-    operation ApplyUnitary_QFT () : Unit {
+    operation CheckApplyUnitaryAppliesQft () : Unit {
         let matrix = [
             [Complex(0.5, 0.0), Complex(0.5, 0.0), Complex(0.5, 0.0), Complex(0.5, 0.0)],
             [Complex(0.5, 0.0), Complex(0.0, 0.5), Complex(-0.5, 0.0), Complex(0.0, -0.5)],
@@ -120,7 +120,7 @@ namespace Microsoft.Quantum.Tests {
     }
     
     @Test("QuantumSimulator")
-    operation ApplyUnitary_CCNOT () : Unit {
+    operation CheckApplyUnitaryAppliesCcnot () : Unit {
         // Matrix for CCNOT(q[0], q[1], q[2]).
         let ZERO = Complex(0.0, 0.0);
         let ONE = Complex(1.0, 0.0);

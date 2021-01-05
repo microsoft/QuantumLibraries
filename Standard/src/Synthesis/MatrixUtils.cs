@@ -9,8 +9,10 @@ namespace Microsoft.Quantum.Synthesis
 {
     internal class MatrixUtils
     {
-        // Checks whether given matrix is unitary.
-        public static bool IsMatrixUnitary(Complex[,] matrix)
+        /// <summary>
+        /// Checks whether given matrix is unitary.
+        /// </summary>
+        public static bool IsMatrixUnitary(Complex[,] matrix, double tol = 1e-10)
         {
             int n = matrix.GetLength(0);
             if (matrix.GetLength(1) != n) return false; // Unitary matrix must be square.
@@ -25,7 +27,7 @@ namespace Microsoft.Quantum.Synthesis
                         dotProduct += matrix[i, k] * Complex.Conjugate(matrix[j, k]);
                     }
                     Complex expectedDotProduct = (i == j) ? 1.0 : 0.0;
-                    if ((dotProduct - expectedDotProduct).Magnitude > 1e-9)
+                    if ((dotProduct - expectedDotProduct).Magnitude > tol)
                     {
                         return false;
                     }
@@ -34,7 +36,9 @@ namespace Microsoft.Quantum.Synthesis
             return true;
         }
 
-        // Converts matrix from C# array to Q# array.
+        /// <summary>
+        /// Converts matrix from C# array to Q# array.
+        /// </summary>
         public static QArray<QArray<Quantum.Math.Complex>> MatrixToQs(Complex[,] b)
         {
             long n1 = b.GetLength(0);
@@ -52,15 +56,18 @@ namespace Microsoft.Quantum.Synthesis
             return new QArray<QArray<Quantum.Math.Complex>>(a);
         }
 
-        // Converts square matrix from Q# array to C#.
-        public static Complex[,] SquareMatrixFromQs(IQArray<IQArray<Quantum.Math.Complex>> a)
+        /// <summary>
+        /// Converts matrix from Q# array to C# array.
+        /// </summary>
+        public static Complex[,] MatrixFromQs(IQArray<IQArray<Quantum.Math.Complex>> a)
         {
-            long n = a.Length;
-            var b = new Complex[n, n];
-            for (long i = 0; i < n; i++)
+            long n1 = a.Length;
+            long n2 = a[0].Length;
+            var b = new Complex[n1, n2];
+            for (long i = 0; i < n1; i++)
             {
-                Debug.Assert(a[i].Length == n, "Matrix is not square");
-                for (long j = 0; j < n; j++)
+                Debug.Assert(a[i].Length == n2);
+                for (long j = 0; j < n2; j++)
                 {
                     b[i, j] = new Complex(a[i][j].Real, a[i][j].Imag);
                 }

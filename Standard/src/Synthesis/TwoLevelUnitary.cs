@@ -1,6 +1,5 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-
 using System;
 using System.Diagnostics;
 using System.Numerics;
@@ -8,7 +7,6 @@ using Microsoft.Quantum.Simulation.Core;
 
 namespace Microsoft.Quantum.Synthesis
 {
-
     /// <summary>
     /// Represents a square matrix which is an identity matrix with elements on positions
     /// (i1, i1), (i1, i2), (i2, i1), (i2, i2) replaced with elements from unitary matrix <c>mx</c>. 
@@ -33,9 +31,9 @@ namespace Microsoft.Quantum.Synthesis
         }
 
         // Ensures that index1 < index2.
-        public void orderIndices()
+        public void OrderIndices()
         {
-            if (this.i1 > this.i2)
+            if (i1 > i2)
             {
                 (i1, i2) = (i2, i1);
                 (mx[0, 0], mx[1, 1]) = (mx[1, 1], mx[0, 0]);
@@ -43,8 +41,8 @@ namespace Microsoft.Quantum.Synthesis
             }
         }
 
-        // Equivalent to inversion.
-        public void conjugateTranspose()
+        // Equivalent to inversion (because matrix is unitary).
+        public void ConjugateTranspose()
         {
             mx[0, 0] = Complex.Conjugate(mx[0, 0]);
             mx[1, 1] = Complex.Conjugate(mx[1, 1]);
@@ -52,7 +50,7 @@ namespace Microsoft.Quantum.Synthesis
         }
 
         // Applies A = A * M, where M is this matrix.
-        public void multiplyRight(Complex[,] A)
+        public void MultiplyRight(Complex[,] A)
         {
             int n = A.GetLength(0);
             for (int i = 0; i < n; i++)
@@ -62,14 +60,12 @@ namespace Microsoft.Quantum.Synthesis
             }
         }
 
-        public bool IsIdentity() =>
-            (mx[0, 0] - 1).Magnitude < 1e-9 && mx[0, 1].Magnitude < 1e-9 &&
-            mx[1, 0].Magnitude < 1e-9 && (mx[1, 1] - 1).Magnitude < 1e-9;
+        public bool IsIdentity(double tol = 1e-10) =>
+            (mx[0, 0] - 1).Magnitude < tol && mx[0, 1].Magnitude < tol &&
+            mx[1, 0].Magnitude < tol && (mx[1, 1] - 1).Magnitude < tol;
 
         // Converts to tuple to be passed to Q#.
-        public (IQArray<IQArray<Quantum.Math.Complex>>, long, long) toQsharp()
-        {
-            return (MatrixUtils.MatrixToQs(this.mx), this.i1, this.i2);
-        }
+        public (IQArray<IQArray<Quantum.Math.Complex>>, long, long) ToQsharp() =>
+            (MatrixUtils.MatrixToQs(this.mx), this.i1, this.i2);
     }
 }
