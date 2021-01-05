@@ -6,6 +6,22 @@ labels: Kind-Enhancement, Status-NeedsApiReview
 assignees: ''
 ---
 
+<!-- 
+    This template is used for suggesting or proposing modifications to the Q# standard or domain-specific
+    library APIs. Don't worry if there's a section that you're unsure about; we're happy to help
+    in issue comments and discussions!
+
+    If you're interested in making broad feature suggestions, the feature request template
+    may be of interest instead:
+
+        https://github.com/microsoft/QuantumLibraries/issues/new?assignees=&labels=enhancement&template=feature_request.md&title=
+
+    If you are interested in suggesting language improvements or modifications,
+    please see the qsharp-language repository at:
+
+        https://github.com/microsoft/qsharp-language
+-->
+
 # Proposal title
 
 ## Conceptual overview
