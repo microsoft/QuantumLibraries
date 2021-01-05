@@ -63,12 +63,12 @@ namespace Microsoft.Quantum.Convert {
     }
 
     /// # Summary
-    /// Produces a binary representation of a positive integer, using the
+    /// Produces a binary representation of a non-negative integer, using the
     /// little-endian representation for the returned array.
     ///
     /// # Input
     /// ## number
-    /// A positive integer to be converted to an array of boolean values.
+    /// A non-negative integer to be converted to an array of boolean values.
     /// ## bits
     /// The number of bits in the binary representation of `number`.
     ///
@@ -93,7 +93,7 @@ namespace Microsoft.Quantum.Convert {
     }
 
     /// # Summary
-    /// Produces a positive integer from a string of bits in little endian format.
+    /// Produces a non-negative integer from a string of bits in little endian format.
     ///
     /// # Input
     /// ## bits
@@ -113,7 +113,7 @@ namespace Microsoft.Quantum.Convert {
     }
 
     /// # Summary
-    /// Produces a positive integer from a string of Results in little endian format.
+    /// Produces a non-negative integer from a string of Results in little endian format.
     ///
     /// # Input
     /// ## results
