@@ -18,10 +18,11 @@ namespace Microsoft.Quantum.Synthesis
 
             public Native(IOperationFactory m) : base(m) { }
 
-            // Returns special unitary 2x2 matrix U, such that [a, b] U = [c, 0].
+            // Returns special unitary 2x2 matrix U, such that [a, b] U = [c, 0],
+            // where c is real and positive. 
             private static Complex[,] MakeEliminatingMatrix(Complex a, Complex b)
             {
-                Debug.Assert(a.Magnitude > tol && b.Magnitude > tol);
+                Debug.Assert(a.Magnitude >= tol && b.Magnitude >= tol);
                 double theta = System.Math.Atan((b / a).Magnitude);
                 double lmbda = -a.Phase;
                 double mu = System.Math.PI + b.Phase - a.Phase - lmbda;
@@ -48,28 +49,45 @@ namespace Microsoft.Quantum.Synthesis
                 {
                     for (int j = n - 1; j > i; j--)
                     {
-                        if (A[i, j].Magnitude < tol)
+                        // At this step we will multiply A (from the right) by such two-level 
+                        // unitary that A[i, j] becomes zero.
+                        var a = A[i, j - 1];
+                        var b = A[i, j];
+                        Complex[,] mx;
+                        if (A[i, j].Magnitude <= tol)
                         {
-                            // Element is already zero, skipping.
+                            // Element is already zero. We shouldn't do anything, which equivalent 
+                            // to multiplying by identity matrix.
+                            mx = new Complex[,] { { 1.0, 0.0 }, { 0.0, 1.0 } };
+                            // But if it's last in row, ensure that diagonal element will be 1.
+                            if (j == i + 1) {
+                                mx = new Complex[,] { { 1/a, 0.0 }, { 0.0, a } };
+                            }                            
+                        }
+                        else if (A[i, j - 1].Magnitude <= tol)
+                        {
+                            // Just swap columns with Pauli X matrix.
+                            mx = new Complex[,] { { 0.0, 1.0 }, { 1.0, 0.0 } };
+                            // But if it's last in row, ensure that diagonal element will be 1.
+                            if (j == i + 1) {
+                                mx = new Complex[,] { { 0.0, b }, { 1/b, 0.0 } };
+                            } 
                         }
                         else
                         {
-                            Complex[,] mx;
-                            if (A[i, j - 1].Magnitude < tol)
-                            {
-                                // Just swap columns with Pauli X matrix.
-                                mx = new Complex[,] { { 0.0, 1.0 }, { 1.0, 0.0 } };
-                            }
-                            else
-                            {
-                                mx = MakeEliminatingMatrix(A[i, j - 1], A[i, j]);
-                            }
-                            var u2x2 = new TwoLevelUnitary(mx, j - 1, j);
-                            u2x2.MultiplyRight(A);
-                            u2x2.ConjugateTranspose();
+                            mx = MakeEliminatingMatrix(A[i, j - 1], A[i, j]);
+                        }
+                        var u2x2 = new TwoLevelUnitary(mx, j - 1, j);
+                        u2x2.MultiplyRight(A);
+                        u2x2.ConjugateTranspose();    
+                        if (!u2x2.IsIdentity()) {
                             result.Add(u2x2);
                         }
                     }
+
+                    // At this point all elements in row i and in column i are zeros, with exception
+                    // of diagonal element A[i, i], which is equal to 1.
+                    Debug.Assert((A[i, i] - 1.0).Magnitude < tol);
                 }
 
                 var lastMatrix = new TwoLevelUnitary(new Complex[,] {
