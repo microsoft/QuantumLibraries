@@ -9,9 +9,7 @@ namespace Microsoft.Quantum.Tests {
     open Microsoft.Quantum.Diagnostics;
     open Microsoft.Quantum.Intrinsic;
     open Microsoft.Quantum.Math;
-    open Microsoft.Quantum.Measurement;
     open Microsoft.Quantum.Synthesis;
-    open Microsoft.Quantum.Random;
     
     internal operation ApplyUnitaryToRegister(matrix: Complex[][], qubits: Qubit[]) : Unit {
         ApplyUnitary(matrix, LittleEndian(qubits));
