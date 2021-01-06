@@ -153,7 +153,7 @@ namespace Microsoft.Quantum.Tests {
             [ZERO, ZERO, ZERO, ZERO, ZERO, ZERO, ZERO, Complex(0.0, -1.0)],
             [ZERO, ZERO, ZERO, ZERO, Complex(0.0, 1.0), ZERO, ZERO, ZERO],
             [ZERO, ZERO, Complex(Sqrt(0.5), 0.0), ZERO, ZERO, Complex(-0.5, 0.5), ZERO, ZERO],
-            [ZERO, Complex(Sqrt(0.5), 0.0), ZERO, ZERO, ZERO, ZERO, Complex(0.5, -0.5), ZERO],
+            [ZERO, Complex(Sqrt(0.5), 0.0), ZERO, ZERO, ZERO, ZERO, Complex(0.5, -0.5), ZERO]
         ];
         CheckOperation(matrix, ThreeControlledGates(_));
     }
