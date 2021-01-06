@@ -133,7 +133,7 @@ namespace Microsoft.Quantum.Tests {
         CheckOperation(matrix, ApplyToFirstThreeQubitsA(CCNOT, _));
     }
 
-    operation ThreeControlledGates(qs: Qubit[]) : Unit is Adj {
+    operation FourControlledGates(qs: Qubit[]) : Unit is Adj {
         Controlled X([qs[0]], qs[1]); 
         Controlled T([qs[1]], qs[2]); 
         Controlled Y([qs[2]], qs[0]);  
@@ -141,10 +141,11 @@ namespace Microsoft.Quantum.Tests {
     }   
 
     @Test("QuantumSimulator")
-    operation CheckApplyUnitaryAppliesThreeControlledGates () : Unit {
+    operation CheckApplyUnitaryAppliesFourControlledGates () : Unit {
         let ZERO = Complex(0.0, 0.0);
         let ONE = Complex(1.0, 0.0);
         let SQRT_HALF = Sqrt(0.5);
+        // This is unitary matrix of FourControlledGates operation above.
         let matrix = [
             [ONE, ZERO, ZERO, ZERO, ZERO, ZERO, ZERO, ZERO],
             [ZERO, ZERO, ZERO, ONE, ZERO, ZERO, ZERO, ZERO],
@@ -155,6 +156,6 @@ namespace Microsoft.Quantum.Tests {
             [ZERO, ZERO, Complex(Sqrt(0.5), 0.0), ZERO, ZERO, Complex(-0.5, 0.5), ZERO, ZERO],
             [ZERO, Complex(Sqrt(0.5), 0.0), ZERO, ZERO, ZERO, ZERO, Complex(0.5, -0.5), ZERO]
         ];
-        CheckOperation(matrix, ThreeControlledGates(_));
+        CheckOperation(matrix, FourControlledGates(_));
     }
 }
