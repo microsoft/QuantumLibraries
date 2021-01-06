@@ -59,7 +59,7 @@ namespace Microsoft.Quantum.Synthesis
                             // Element is already zero. We shouldn't do anything, which equivalent 
                             // to multiplying by identity matrix.
                             mx = new Complex[,] { { 1.0, 0.0 }, { 0.0, 1.0 } };
-                            // But if it's last in row, ensure that diagonal element will be 1.
+                            // But if it's last in a row, ensure that diagonal element will be 1.
                             if (j == i + 1) {
                                 mx = new Complex[,] { { 1/a, 0.0 }, { 0.0, a } };
                             }                            
@@ -68,7 +68,7 @@ namespace Microsoft.Quantum.Synthesis
                         {
                             // Just swap columns with Pauli X matrix.
                             mx = new Complex[,] { { 0.0, 1.0 }, { 1.0, 0.0 } };
-                            // But if it's last in row, ensure that diagonal element will be 1.
+                            // But if it's last in a row, ensure that diagonal element will be 1.
                             if (j == i + 1) {
                                 mx = new Complex[,] { { 0.0, b }, { 1/b, 0.0 } };
                             } 
@@ -100,8 +100,8 @@ namespace Microsoft.Quantum.Synthesis
                 return result;
             }
 
-            // Returns permutation of numbers from 0 to n-1 such as any two consequent number 
-            // differ in exactly one bit.
+            // Returns permutation of numbers from 0 to n-1 such that any two consequent numbers in
+            // it differ in exactly one bit.
             private static int[] GrayCode(int n)
             {
                 var result = new int[n];
@@ -150,7 +150,8 @@ namespace Microsoft.Quantum.Synthesis
 
             // Decomposes unitary matrix into product of 2-level unitary matrices.
             // Every resulting 2-level matrix is represnted by 2x2 non-trivial submatrix and indices
-            // of this submatrix. Indices are guaranteed to be sorted and differ in exactly one bit.
+            // of this submatrix. Indices are guaranteed to be sorted and to differ in exactly one 
+            // bit.
             private IQArray<(IQArray<IQArray<Quantum.Math.Complex>>, long, long)> Decompose(
                 IQArray<IQArray<Quantum.Math.Complex>> unitary)
             {
