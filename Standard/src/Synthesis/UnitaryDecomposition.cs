@@ -60,18 +60,20 @@ namespace Microsoft.Quantum.Synthesis
                             // to multiplying by identity matrix.
                             mx = new Complex[,] { { 1.0, 0.0 }, { 0.0, 1.0 } };
                             // But if it's last in a row, ensure that diagonal element will be 1.
-                            if (j == i + 1) {
-                                mx = new Complex[,] { { 1/a, 0.0 }, { 0.0, a } };
-                            }                            
+                            if (j == i + 1)
+                            {
+                                mx = new Complex[,] { { 1 / a, 0.0 }, { 0.0, a } };
+                            }
                         }
                         else if (A[i, j - 1].Magnitude <= tol)
                         {
                             // Just swap columns with Pauli X matrix.
                             mx = new Complex[,] { { 0.0, 1.0 }, { 1.0, 0.0 } };
                             // But if it's last in a row, ensure that diagonal element will be 1.
-                            if (j == i + 1) {
-                                mx = new Complex[,] { { 0.0, b }, { 1/b, 0.0 } };
-                            } 
+                            if (j == i + 1)
+                            {
+                                mx = new Complex[,] { { 0.0, b }, { 1 / b, 0.0 } };
+                            }
                         }
                         else
                         {
@@ -79,8 +81,9 @@ namespace Microsoft.Quantum.Synthesis
                         }
                         var u2x2 = new TwoLevelUnitary(mx, j - 1, j);
                         u2x2.MultiplyRight(A);
-                        u2x2.ConjugateTranspose();    
-                        if (!u2x2.IsIdentity()) {
+                        u2x2.ConjugateTranspose();
+                        if (!u2x2.IsIdentity())
+                        {
                             result.Add(u2x2);
                         }
                     }

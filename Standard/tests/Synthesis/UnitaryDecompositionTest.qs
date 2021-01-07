@@ -23,14 +23,14 @@ namespace Microsoft.Quantum.Tests {
     }
 
     @Test("QuantumSimulator")
-    operation CheckApplyUnitaryAppliesIdentity () : Unit {
+    operation CheckApplyUnitaryAppliesIdentity() : Unit {
         let matrix = [[Complex(1.0, 0.0), Complex(0.0, 0.0)],
                       [Complex(0.0, 0.0), Complex(1.0, 0.0)]];
         CheckOperation(matrix, ApplyToHeadA(I, _));
     }
 
     @Test("QuantumSimulator")
-    operation CheckApplyUnitaryAppliesPauliX () : Unit {
+    operation CheckApplyUnitaryAppliesPauliX() : Unit {
         let matrix = [[Complex(0.0, 0.0), Complex(1.0, 0.0)],
                       [Complex(1.0, 0.0), Complex(0.0, 0.0)]];
         CheckOperation(matrix, ApplyToHeadA(X, _));
@@ -38,7 +38,7 @@ namespace Microsoft.Quantum.Tests {
 
 
     @Test("QuantumSimulator")
-    operation CheckApplyUnitaryAppliesPauliY () : Unit {
+    operation CheckApplyUnitaryAppliesPauliY() : Unit {
         let matrix = [[Complex(0.0, 0.0), Complex(0.0, -1.0)],
                       [Complex(0.0, 1.0), Complex(0.0, 0.0)]];
         CheckOperation(matrix, ApplyToHeadA(Y, _));
@@ -46,42 +46,42 @@ namespace Microsoft.Quantum.Tests {
 
 
     @Test("QuantumSimulator")
-    operation CheckApplyUnitaryAppliesPauliZ () : Unit {
+    operation CheckApplyUnitaryAppliesPauliZ() : Unit {
         let matrix = [[Complex(1.0, 0.0), Complex(0.0, 0.0)],
                       [Complex(0.0, 0.0), Complex(-1.0, 0.0)]];
         CheckOperation(matrix, ApplyToHeadA(Z, _));
     }
 
     @Test("QuantumSimulator")
-    operation CheckApplyUnitaryAppliesHadamard () : Unit {
+    operation CheckApplyUnitaryAppliesHadamard() : Unit {
         let matrix = [[Complex(Sqrt(0.5), 0.0), Complex(Sqrt(0.5), 0.0)],
                       [Complex(Sqrt(0.5), 0.0), Complex(-Sqrt(0.5), 0.0)]];
         CheckOperation(matrix, ApplyToHeadA(H, _));
     }
 
     @Test("QuantumSimulator")
-    operation CheckApplyUnitaryAppliesHadamardY () : Unit {
+    operation CheckApplyUnitaryAppliesHadamardY() : Unit {
         let matrix = [[Complex(Sqrt(0.5), 0.0), Complex(Sqrt(0.5), 0.0)],
                       [Complex(0.0, Sqrt(0.5)), Complex(0.0, -Sqrt(0.5))]];
         CheckOperation(matrix, ApplyToHeadA(HY, _));
     }
 
     @Test("QuantumSimulator")
-    operation CheckApplyUnitaryAppliesRx () : Unit {
+    operation CheckApplyUnitaryAppliesRx() : Unit {
         let matrix = [[Complex(Cos(1.0), 0.0), Complex(0.0, -Sin(1.0))],
                       [Complex(0.0, -Sin(1.0)), Complex(Cos(1.0), 0.0)]];
         CheckOperation(matrix, ApplyToHeadA(Rx(2.0, _), _));
     }
 
     @Test("QuantumSimulator")
-    operation CheckApplyUnitaryAppliesRy () : Unit {
+    operation CheckApplyUnitaryAppliesRy() : Unit {
         let matrix = [[Complex(Cos(1.0), 0.0), Complex(-Sin(1.0), 0.0)],
                       [Complex(Sin(1.0), 0.0), Complex(Cos(1.0), 0.0)]];
         CheckOperation(matrix, ApplyToHeadA(Ry(2.0, _), _));
     }
 
     @Test("QuantumSimulator")
-    operation CheckApplyUnitaryAppliesCnot () : Unit {
+    operation CheckApplyUnitaryAppliesCnot() : Unit {
         let ZERO = Complex(0.0, 0.0);
         let ONE = Complex(1.0, 0.0);
         // Matrix for CNOT(q[0], q[1]).
@@ -93,7 +93,7 @@ namespace Microsoft.Quantum.Tests {
     }
 
     @Test("QuantumSimulator")
-    operation CheckApplyUnitaryAppliesSwap () : Unit {
+    operation CheckApplyUnitaryAppliesSwap() : Unit {
         let ZERO = Complex(0.0, 0.0);
         let ONE = Complex(1.0, 0.0);
         let matrix = [[ONE, ZERO, ZERO, ZERO],
@@ -108,7 +108,7 @@ namespace Microsoft.Quantum.Tests {
     }
 
     @Test("QuantumSimulator")
-    operation CheckApplyUnitaryAppliesQft () : Unit {
+    operation CheckApplyUnitaryAppliesQft() : Unit {
         let matrix = [
             [Complex(0.5, 0.0), Complex(0.5, 0.0), Complex(0.5, 0.0), Complex(0.5, 0.0)],
             [Complex(0.5, 0.0), Complex(0.0, 0.5), Complex(-0.5, 0.0), Complex(0.0, -0.5)],
@@ -118,7 +118,7 @@ namespace Microsoft.Quantum.Tests {
     }
     
     @Test("QuantumSimulator")
-    operation CheckApplyUnitaryAppliesCcnot () : Unit {
+    operation CheckApplyUnitaryAppliesCcnot() : Unit {
         // Matrix for CCNOT(q[0], q[1], q[2]).
         let ZERO = Complex(0.0, 0.0);
         let ONE = Complex(1.0, 0.0);
@@ -141,7 +141,7 @@ namespace Microsoft.Quantum.Tests {
     }   
 
     @Test("QuantumSimulator")
-    operation CheckApplyUnitaryAppliesFourControlledGates () : Unit {
+    operation CheckApplyUnitaryAppliesFourControlledGates() : Unit {
         let ZERO = Complex(0.0, 0.0);
         let ONE = Complex(1.0, 0.0);
         let SQRT_HALF = Sqrt(0.5);

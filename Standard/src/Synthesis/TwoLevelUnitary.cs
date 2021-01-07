@@ -64,7 +64,7 @@ namespace Microsoft.Quantum.Synthesis
             (mx[0, 0] - 1).Magnitude < tol && mx[0, 1].Magnitude < tol &&
             mx[1, 0].Magnitude < tol && (mx[1, 1] - 1).Magnitude < tol;
 
-        // Converts to tuple to be passed to Q#.
+        // Converts to a tuple to be passed to Q#.
         public (IQArray<IQArray<Quantum.Math.Complex>>, long, long) ToQsharp() =>
             (MatrixUtils.MatrixToQs(this.mx), this.i1, this.i2);
     }
