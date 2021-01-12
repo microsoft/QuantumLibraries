@@ -5,10 +5,12 @@ namespace Microsoft.Quantum.Synthesis {
     open Microsoft.Quantum.Arithmetic;
     open Microsoft.Quantum.Arrays;
     open Microsoft.Quantum.Canon;
+    open Microsoft.Quantum.Diagnostics;
     open Microsoft.Quantum.Intrinsic;
     open Microsoft.Quantum.Math;
 
-    // Applies single-qubit gate defined by 2x2 unitary matrix.
+    /// # Summary
+    /// Applies single-qubit gate defined by 2x2 unitary matrix.
     internal operation ApplySingleQubitUnitary(u : Complex[][], qubit : Qubit) : Unit is Adj + Ctl {  
         // ZYZ decomposition.
         let theta = ArcCos(AbsComplex(u[0][0]));
@@ -54,9 +56,10 @@ namespace Microsoft.Quantum.Synthesis {
     /// ## qubits
     /// Qubits to which apply the operation - register of length n.
     operation ApplyUnitary(unitary: Complex[][], qubits : LittleEndian) : Unit is Adj + Ctl {
-        if (Length(unitary) != 1 <<< Length(qubits!)) {
-            fail "Matrix size is not consistent with register length.";
-        }
+        SquareMatrixFact(unitary);
+        EqualityFactI(Length(unitary), 1 <<< Length(qubits!),
+            "Matrix size is not consistent with register length.");
+
         let allQubitsMask = (1 <<< Length(qubits!)) - 1;
         let decomposition = TwoLevelDecomposition(unitary);
         let flipMasks = FlipMasks(decomposition, allQubitsMask);
@@ -75,4 +78,13 @@ namespace Microsoft.Quantum.Synthesis {
         }   
         ApplyXorInPlace(Tail(flipMasks), qubits);
     }    
+
+    /// # Summary
+    /// Checks that given array represents a square matrix.
+    internal function SquareMatrixFact(matrix : Complex[][]) : Unit {
+        let n = Length(matrix);
+        for (row in matrix) {
+            EqualityFactI(Length(row), n, "Matrix is not square.");
+        }
+    } 
 }
