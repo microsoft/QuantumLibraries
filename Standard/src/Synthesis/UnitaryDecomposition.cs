@@ -134,14 +134,14 @@ namespace Microsoft.Quantum.Synthesis
 
             // Returns list of two-level unitary matrices, which multiply to A.
             // Every matrix has indices differing in exactly 1 bit.
-            private static IEnumerable<TwoLevelUnitary> twoLevelDecomposeGray(Complex[,] A)
+            private static IEnumerable<TwoLevelUnitary> TwoLevelDecomposeGray(Complex[,] A)
             {
                 int n = A.GetLength(0);
                 Debug.Assert(A.GetLength(1) == n, "Matrix is not square.");
                 Debug.Assert(MatrixUtils.IsMatrixUnitary(A), "Matrix is not unitary.");
                 int[] perm = GrayCode(n);
                 A = PermuteMatrix(A, perm);
-                foreach (TwoLevelUnitary matrix in  TwoLevelDecompose(A))
+                foreach (TwoLevelUnitary matrix in TwoLevelDecompose(A))
                 {
                     matrix.ApplyPermutation(perm);
                     matrix.OrderIndices();
@@ -158,7 +158,7 @@ namespace Microsoft.Quantum.Synthesis
             {
                 Complex[,] a = MatrixUtils.MatrixFromQs(unitary);
                 return new QArray<(IQArray<IQArray<Quantum.Math.Complex>>, long, long)>(
-                    twoLevelDecomposeGray(a).Select(matrix => matrix.ToQsharp())
+                    TwoLevelDecomposeGray(a).Select(matrix => matrix.ToQsharp())
                 );
             }
 
