@@ -65,8 +65,9 @@ namespace Microsoft.Quantum.Tests {
 
     @Test("QuantumSimulator")
     operation TestPurifiedMixedState() : Unit {
-        for(coeffs in 2..7){
-            for(nBitsPrecision in -1..-1..-2){
+        for (coeffs in 2..7) {
+            for (nBitsPrecision in -1..-1..-2) {
+                Message($"[TestPurifiedMixedState] Test case: coeffs = {coeffs}, nBitsPrecision = {nBitsPrecision}");
                 let targetError = PowD(2.0, IntAsDouble(nBitsPrecision));
                 let probtargetError = targetError / IntAsDouble(coeffs);
                 let coefficients = DrawMany(DrawRandomDouble, coeffs, (-1.0, 1.0));
