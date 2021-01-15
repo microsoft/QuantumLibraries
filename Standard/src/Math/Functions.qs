@@ -160,7 +160,7 @@ namespace Microsoft.Quantum.Math {
     ///
     /// # Remarks
     /// This function behaves different to how the operator `%` behaves in C# and Q# as in the result
-    /// is always a positive integer between 0 and `modulus - 1`, even if value is negative.
+    /// is always a non-negative integer between 0 and `modulus - 1`, even if value is negative.
     function ModulusI(value : Int, modulus : Int) : Int {
         Fact(modulus > 0, $"`modulus` must be positive");
         let r = value % modulus;
@@ -179,7 +179,7 @@ namespace Microsoft.Quantum.Math {
     ///
     /// # Remarks
     /// This function behaves different to how the operator `%` behaves in C# and Q# as in the result
-    /// is always a positive integer between 0 and `modulus - 1`, even if value is negative.
+    /// is always a non-negative integer between 0 and `modulus - 1`, even if value is negative.
     function ModulusL(value : BigInt, modulus : BigInt) : BigInt {
         Fact(modulus > 0L, $"`modulus` must be positive");
         let r = value % modulus;
