@@ -348,7 +348,9 @@ namespace Microsoft.Quantum.Preparation {
     // Used in QuantumROM implementation.
     internal operation WriteQuantumROMBitString(idx: Int, keepCoeff: Int[], altIndex: Int[], data : Bool[][], keepCoeffRegister: LittleEndian, altIndexRegister: LittleEndian, dataRegister : Qubit[], altDataRegister : Qubit[])
     : Unit is Adj + Ctl {
-        ApplyXorInPlace(keepCoeff[idx], keepCoeffRegister);
+        if (keepCoeff[idx] >= 0) {
+            ApplyXorInPlace(keepCoeff[idx], keepCoeffRegister);
+        }
         ApplyXorInPlace(altIndex[idx], altIndexRegister);
         if (Length(dataRegister) > 0) {
             ApplyToEachCA(CControlledCA(X), Zipped(data[idx], dataRegister));
