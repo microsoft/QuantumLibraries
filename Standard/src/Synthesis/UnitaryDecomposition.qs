@@ -26,7 +26,7 @@ namespace Microsoft.Quantum.Synthesis {
         if (AbsD(phi) > 1e-10) { R1(phi, qubit); }
     }
 
-    internal function TwoLevelDecomposition(unitary: Complex[][]) : (Complex[][], Int, Int)[] {
+    function TwoLevelDecomposition(unitary: Complex[][]) : (Complex[][], Int, Int)[] {
         body intrinsic;
     }
 

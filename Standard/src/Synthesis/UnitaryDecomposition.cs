@@ -10,7 +10,7 @@ using Microsoft.Quantum.Simulation.Core;
 
 namespace Microsoft.Quantum.Synthesis
 {
-    internal partial class TwoLevelDecomposition
+    public partial class TwoLevelDecomposition
     {
         public class Native : TwoLevelDecomposition
         {
