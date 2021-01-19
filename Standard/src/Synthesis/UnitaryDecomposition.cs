@@ -10,9 +10,9 @@ using Microsoft.Quantum.Simulation.Core;
 
 namespace Microsoft.Quantum.Synthesis
 {
-    public partial class TwoLevelDecomposition
+    public partial class _TwoLevelDecomposition
     {
-        public class Native : TwoLevelDecomposition
+        public class Native : _TwoLevelDecomposition
         {
             private const double tol = 1e-10;
 
