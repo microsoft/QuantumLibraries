@@ -27,7 +27,13 @@ namespace Microsoft.Quantum.Synthesis {
     }
 
     internal function TwoLevelDecomposition(unitary: Complex[][]) : (Complex[][], Int, Int)[] {
-        body intrinsic;
+        // This function should be "body intrinsic" but a bug in the current support for targeted
+        // executables means the internal intrinsic functions don't surface the way they are supposed
+        // to. To avoid that issue, this provides a default implementation that the C# overrides.
+        // This should be removed in favor of "body intrinsic" once the bug is resolved.
+
+        // body intrinsic;
+        return new (Complex[][], Int, Int)[0];
     }
 
     /// # Summary
