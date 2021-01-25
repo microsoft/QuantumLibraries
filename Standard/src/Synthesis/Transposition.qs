@@ -31,7 +31,7 @@ namespace Microsoft.Quantum.Synthesis {
     /// # Example
     /// Prepare a uniform superposition of number states $|1\rangle$, $|2\rangle$, and
     /// $|3\rangle$ on 2 qubits.
-    /// ```Q#
+    /// ```qsharp
     /// using (qubits = Qubit[2]) {
     ///   let register = LittleEndian(qubits);
     ///   PrepareUniformSuperposition(3, register);

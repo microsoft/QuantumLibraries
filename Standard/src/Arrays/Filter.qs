@@ -105,7 +105,7 @@ namespace Microsoft.Quantum.Arrays {
     /// # Example
     /// The following code demonstrates the "Count" function.
     /// A predicate is defined using the @"microsoft.quantum.logical.greaterthani" function:
-    /// ```Q#
+    /// ```qsharp
     ///  let predicate = GreaterThanI(_, 5);
     ///  let count = Count(predicate, [2, 5, 9, 1, 8]);
     ///  // count = 2
