@@ -31,7 +31,7 @@ namespace Microsoft.Quantum.Arrays {
     /// together with `Sorted` to get an array with overall unique elements.
     ///
     /// # Example
-    /// ```Q#
+    /// ```qsharp
     /// let unique1 = Unique(EqualI, [1, 1, 3, 3, 2, 5, 5, 5, 7]);
     /// // same as [1, 3, 2, 5, 7]
     /// let unique2 = Unique(EqualI, [2, 2, 1, 1, 2, 2, 1, 1]);
