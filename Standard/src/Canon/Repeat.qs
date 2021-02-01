@@ -20,7 +20,7 @@ namespace Microsoft.Quantum.Canon {
     ///
     /// # Example
     /// The following are equivalent:
-    /// ```Q#
+    /// ```qsharp
     /// Repeat(U, 17, target);
     /// (Bound(ConstantArray(17, U)))(target);
     /// ```
@@ -53,7 +53,7 @@ namespace Microsoft.Quantum.Canon {
     ///
     /// # Example
     /// The following are equivalent:
-    /// ```Q#
+    /// ```qsharp
     /// RepeatA(U, 17, target);
     /// (BoundA(ConstantArray(17, U)))(target);
     /// ```
@@ -86,7 +86,7 @@ namespace Microsoft.Quantum.Canon {
     ///
     /// # Example
     /// The following are equivalent:
-    /// ```Q#
+    /// ```qsharp
     /// RepeatC(U, 17, target);
     /// (BoundC(ConstantArray(17, U)))(target);
     /// ```
@@ -119,7 +119,7 @@ namespace Microsoft.Quantum.Canon {
     ///
     /// # Example
     /// The following are equivalent:
-    /// ```Q#
+    /// ```qsharp
     /// RepeatCA(U, 17, target);
     /// (BoundCA(ConstantArray(17, U)))(target);
     /// ```

@@ -82,7 +82,7 @@ namespace Microsoft.Quantum.Arrays {
     /// # Example
     /// The following snippet sorts an array of integers to occur in ascending
     /// order:
-    /// ```Q#
+    /// ```qsharp
     /// let sortedArray = Sorted(LessThanOrEqualI, [3, 17, 11, -201, -11]);
     /// ```
     /// 
@@ -101,7 +101,7 @@ namespace Microsoft.Quantum.Arrays {
     /// appear before `b` in the output.
     ///
     /// For example:
-    /// ```Q#
+    /// ```qsharp
     /// function LastDigitLessThanOrEqual(left : Int, right : Int) : Bool {
     ///     return LessThanOrEqualI(
     ///         left % 10, right % 10

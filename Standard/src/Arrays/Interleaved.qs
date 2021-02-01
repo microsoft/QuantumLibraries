@@ -30,7 +30,7 @@ namespace Microsoft.Quantum.Arrays {
     /// Interleaved array
     ///
     /// # Example
-    /// ```Q#
+    /// ```qsharp
     /// // same as int1 = [1, -1, 2, -2, 3, -3]
     /// let int1 = Interleaved([1, 2, 3], [-1, -2, -3])
     ///

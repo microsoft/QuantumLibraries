@@ -38,6 +38,7 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Quantum.Simulators" Version="0.14.20111301-pull" />
+    <PackageReference Include="Microsoft.Quantum.QSharp.Core" Version="0.14.20111301-pull" />
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" />
     <PackageReference Include="NumSharp" Version="0.20.5" />
   </ItemGroup>

@@ -21,7 +21,7 @@ namespace Microsoft.Quantum.Synthesis {
     /// Spectral coefficients of the function
     ///
     /// # Example
-    /// ```Q#
+    /// ```qsharp
     /// FastHadamardTransformed([1, 1, 1, -1]); // [2, 2, 2, -2]
     /// ```
     ///
@@ -58,7 +58,7 @@ namespace Microsoft.Quantum.Synthesis {
     /// Coefficients followed by inverted copy
     ///
     /// # Example
-    /// ```Q#
+    /// ```qsharp
     /// Extended([2, 2, 2, -2]); // [2, 2, 2, -2, -2, -2, -2, 2]
     /// ```
     internal function Extended(spectrum : Int[]) : Int[] {
@@ -89,7 +89,7 @@ namespace Microsoft.Quantum.Synthesis {
     /// Truth table as array of {1,-1} integers
     ///
     /// # Example
-    /// ```Q#
+    /// ```qsharp
     /// Encoded([false, false, false, true]); // [1, 1, 1, -1]
     /// ```
     internal function Encoded(table : Bool[]) : Int[] {

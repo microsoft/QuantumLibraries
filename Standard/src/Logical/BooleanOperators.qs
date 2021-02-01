@@ -17,7 +17,7 @@ namespace Microsoft.Quantum.Logical {
     ///
     /// # Remarks
     /// The following are equivalent:
-    /// ```Q#
+    /// ```qsharp
     /// let x = not value;
     /// let x = Not(value);
     /// ```
@@ -42,7 +42,7 @@ namespace Microsoft.Quantum.Logical {
     /// both inputs are fully evaluated.
     ///
     /// Up to short-circuiting behavior, the following are equivalent:
-    /// ```Q#
+    /// ```qsharp
     /// let x = a and b;
     /// let x = And(a, b);
     /// ```
@@ -67,7 +67,7 @@ namespace Microsoft.Quantum.Logical {
     /// both inputs are fully evaluated.
     ///
     /// Up to short-circuiting behavior, the following are equivalent:
-    /// ```Q#
+    /// ```qsharp
     /// let x = a or b;
     /// let x = Or(a, b);
     /// ```
@@ -109,7 +109,7 @@ namespace Microsoft.Quantum.Logical {
     /// both inputs are fully evaluated.
     ///
     /// Up to short-circuiting behavior, the following are equivalent:
-    /// ```Q#
+    /// ```qsharp
     /// let x = condition ? ifTrue | ifFalse;
     /// let x = Conditioned(condition, ifTrue, ifFalse);
     /// ```
