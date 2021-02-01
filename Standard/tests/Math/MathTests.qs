@@ -68,6 +68,14 @@ namespace Microsoft.Quantum.Canon {
         EqualityFactI(BitSizeI(3), 2, $"BitSizeI(3) must be 2");
         EqualityFactI(BitSizeI(7), 3, $"BitSizeI(7) must be 2");
     }
+
+    @Test("QuantumSimulator")
+    function CanComputeBitSizeFromLargeNumbers () : Unit {
+        for (k in 1 .. 100) {
+            let exp = 128 * k;
+            Fact(BitSizeL(1L <<< exp) == exp + 1, $"unexpected bitsize for exponent {exp} (k = {k})");
+        }
+    }
     
     @Test("QuantumSimulator")
     function ExpModIsCorrect () : Unit {
