@@ -76,7 +76,7 @@ namespace Microsoft.Quantum.Preparation {
     /// $\rho=\sum_{j=0}^{4}\frac{|alpha_j|}{\sum_k |\alpha_k|}\ket{j}\bra{j}$, where
     /// $\vec\alpha=(1.0, 2.0, 3.0, 4.0, 5.0)$, and the target error is
     /// $10^{-3}$:
-    /// ```Q#
+    /// ```qsharp
     /// let coefficients = [1.0, 2.0, 3.0, 4.0, 5.0];
     /// let targetError = 1e-3;
     /// let purifiedState = PurifiedMixedState(targetError, coefficients);

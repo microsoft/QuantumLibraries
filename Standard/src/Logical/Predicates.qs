@@ -18,7 +18,7 @@ namespace Microsoft.Quantum.Logical {
     ///
     /// # Remarks
     /// The following are equivalent:
-    /// ```Q#
+    /// ```qsharp
     /// let cond = a == b;
     /// let cond = EqualI(a, b);
     /// ```
@@ -40,7 +40,7 @@ namespace Microsoft.Quantum.Logical {
     ///
     /// # Remarks
     /// The following are equivalent:
-    /// ```Q#
+    /// ```qsharp
     /// let cond = a == b;
     /// let cond = EqualL(a, b);
     /// ```
@@ -62,7 +62,7 @@ namespace Microsoft.Quantum.Logical {
     ///
     /// # Remarks
     /// The following are equivalent:
-    /// ```Q#
+    /// ```qsharp
     /// let cond = a == b;
     /// let cond = EqualD(a, b);
     /// ```
@@ -85,7 +85,7 @@ namespace Microsoft.Quantum.Logical {
     ///
     /// # Remarks
     /// The following are equivalent:
-    /// ```Q#
+    /// ```qsharp
     /// let cond = Microsoft.Quantum.Math.AbsD(a - b) < 1e-12;
     /// let cond = NearlyEqualD(a, b);
     /// ```
@@ -107,7 +107,7 @@ namespace Microsoft.Quantum.Logical {
     ///
     /// # Remarks
     /// The following are equivalent:
-    /// ```Q#
+    /// ```qsharp
     /// let cond = a == b;
     /// let cond = EqualR(a, b);
     /// ```
@@ -129,7 +129,7 @@ namespace Microsoft.Quantum.Logical {
     ///
     /// # Remarks
     /// The following are equivalent:
-    /// ```Q#
+    /// ```qsharp
     /// let cond = a == b;
     /// let cond = EqualB(a, b);
     /// ```
@@ -182,7 +182,7 @@ namespace Microsoft.Quantum.Logical {
     ///
     /// # Remarks
     /// The following are equivalent:
-    /// ```Q#
+    /// ```qsharp
     /// let cond = a != b;
     /// let cond = NotEqualI(a, b);
     /// ```
@@ -204,7 +204,7 @@ namespace Microsoft.Quantum.Logical {
     ///
     /// # Remarks
     /// The following are equivalent:
-    /// ```Q#
+    /// ```qsharp
     /// let cond = a != b;
     /// let cond = NotEqualL(a, b);
     /// ```
@@ -226,7 +226,7 @@ namespace Microsoft.Quantum.Logical {
     ///
     /// # Remarks
     /// The following are equivalent:
-    /// ```Q#
+    /// ```qsharp
     /// let cond = a != b;
     /// let cond = NotEqualD(a, b);
     /// ```
@@ -249,7 +249,7 @@ namespace Microsoft.Quantum.Logical {
     ///
     /// # Remarks
     /// The following are equivalent:
-    /// ```Q#
+    /// ```qsharp
     /// let cond = Microsoft.Quantum.Math.AbsD(a - b) >= 1e-12;
     /// let cond = NotNearlyEqualD(a, b);
     /// ```
@@ -271,7 +271,7 @@ namespace Microsoft.Quantum.Logical {
     ///
     /// # Remarks
     /// The following are equivalent:
-    /// ```Q#
+    /// ```qsharp
     /// let cond = a != b;
     /// let cond = NotEqualR(a, b);
     /// ```
@@ -293,7 +293,7 @@ namespace Microsoft.Quantum.Logical {
     ///
     /// # Remarks
     /// The following are equivalent:
-    /// ```Q#
+    /// ```qsharp
     /// let cond = a != b;
     /// let cond = NotEqualB(a, b);
     /// ```
@@ -345,7 +345,7 @@ namespace Microsoft.Quantum.Logical {
     ///
     /// # Remarks
     /// The following are equivalent:
-    /// ```Q#
+    /// ```qsharp
     /// let cond = a > b;
     /// let cond = GreaterThanI(a, b);
     /// ```
@@ -367,7 +367,7 @@ namespace Microsoft.Quantum.Logical {
     ///
     /// # Remarks
     /// The following are equivalent:
-    /// ```Q#
+    /// ```qsharp
     /// let cond = a > b;
     /// let cond = GreaterThanL(a, b);
     /// ```
@@ -389,7 +389,7 @@ namespace Microsoft.Quantum.Logical {
     ///
     /// # Remarks
     /// The following are equivalent:
-    /// ```Q#
+    /// ```qsharp
     /// let cond = a > b;
     /// let cond = GreaterThanD(a, b);
     /// ```
@@ -412,7 +412,7 @@ namespace Microsoft.Quantum.Logical {
     ///
     /// # Remarks
     /// The following are equivalent:
-    /// ```Q#
+    /// ```qsharp
     /// let cond = a >= b;
     /// let cond = GreaterThanOrEqualI(a, b);
     /// ```
@@ -435,7 +435,7 @@ namespace Microsoft.Quantum.Logical {
     ///
     /// # Remarks
     /// The following are equivalent:
-    /// ```Q#
+    /// ```qsharp
     /// let cond = a >= b;
     /// let cond = GreaterThanOrEqualL(a, b);
     /// ```
@@ -458,7 +458,7 @@ namespace Microsoft.Quantum.Logical {
     ///
     /// # Remarks
     /// The following are equivalent:
-    /// ```Q#
+    /// ```qsharp
     /// let cond = a >= b;
     /// let cond = GreaterThanOrEqualD(a, b);
     /// ```
@@ -480,7 +480,7 @@ namespace Microsoft.Quantum.Logical {
     ///
     /// # Remarks
     /// The following are equivalent:
-    /// ```Q#
+    /// ```qsharp
     /// let cond = a < b;
     /// let cond = LessThanI(a, b);
     /// ```
@@ -502,7 +502,7 @@ namespace Microsoft.Quantum.Logical {
     ///
     /// # Remarks
     /// The following are equivalent:
-    /// ```Q#
+    /// ```qsharp
     /// let cond = a < b;
     /// let cond = LessThanL(a, b);
     /// ```
@@ -524,7 +524,7 @@ namespace Microsoft.Quantum.Logical {
     ///
     /// # Remarks
     /// The following are equivalent:
-    /// ```Q#
+    /// ```qsharp
     /// let cond = a < b;
     /// let cond = LessThanD(a, b);
     /// ```
@@ -547,7 +547,7 @@ namespace Microsoft.Quantum.Logical {
     ///
     /// # Remarks
     /// The following are equivalent:
-    /// ```Q#
+    /// ```qsharp
     /// let cond = a <= b;
     /// let cond = LessThanOrEqualI(a, b);
     /// ```
@@ -570,7 +570,7 @@ namespace Microsoft.Quantum.Logical {
     ///
     /// # Remarks
     /// The following are equivalent:
-    /// ```Q#
+    /// ```qsharp
     /// let cond = a <= b;
     /// let cond = LessThanOrEqualL(a, b);
     /// ```
@@ -593,7 +593,7 @@ namespace Microsoft.Quantum.Logical {
     ///
     /// # Remarks
     /// The following are equivalent:
-    /// ```Q#
+    /// ```qsharp
     /// let cond = a <= b;
     /// let cond = LessThanOrEqualD(a, b);
     /// ```

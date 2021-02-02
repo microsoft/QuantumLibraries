@@ -26,7 +26,7 @@ namespace Microsoft.Quantum.Synthesis {
         if (AbsD(phi) > 1e-10) { R1(phi, qubit); }
     }
 
-    internal function TwoLevelDecomposition(unitary: Complex[][]) : (Complex[][], Int, Int)[] {
+    function _TwoLevelDecomposition(unitary: Complex[][]) : (Complex[][], Int, Int)[] {
         body intrinsic;
     }
 
@@ -61,7 +61,7 @@ namespace Microsoft.Quantum.Synthesis {
             "Matrix size is not consistent with register length.");
 
         let allQubitsMask = (1 <<< Length(qubits!)) - 1;
-        let decomposition = TwoLevelDecomposition(unitary);
+        let decomposition = _TwoLevelDecomposition(unitary);
         let flipMasks = FlipMasks(decomposition, allQubitsMask);
         
         // i1, i2 - indices of non-trivial 2x2 submatrix of two-level unitary matrix being 
