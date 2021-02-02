@@ -73,7 +73,7 @@ namespace Microsoft.Quantum.Canon {
     function CanComputeBitSizeFromLargeNumbers () : Unit {
         for (k in 1 .. 100) {
             let exp = 128 * k;
-            Fact(BitSizeL(1L <<< exp) == exp + 1, $"unexpected bitsize for exponent {exp} (k = {k})");
+            EqualityFactI(BitSizeL(1L <<< exp), exp + 1, $"unexpected bitsize for exponent {exp} (k = {k})");
         }
     }
     
