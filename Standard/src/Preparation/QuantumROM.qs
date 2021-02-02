@@ -76,7 +76,7 @@ namespace Microsoft.Quantum.Preparation {
     /// $\rho=\sum_{j=0}^{4}\frac{|alpha_j|}{\sum_k |\alpha_k|}\ket{j}\bra{j}$, where
     /// $\vec\alpha=(1.0, 2.0, 3.0, 4.0, 5.0)$, and the target error is
     /// $10^{-3}$:
-    /// ```Q#
+    /// ```qsharp
     /// let coefficients = [1.0, 2.0, 3.0, 4.0, 5.0];
     /// let targetError = 1e-3;
     /// let purifiedState = PurifiedMixedState(targetError, coefficients);
@@ -348,7 +348,9 @@ namespace Microsoft.Quantum.Preparation {
     // Used in QuantumROM implementation.
     internal operation WriteQuantumROMBitString(idx: Int, keepCoeff: Int[], altIndex: Int[], data : Bool[][], keepCoeffRegister: LittleEndian, altIndexRegister: LittleEndian, dataRegister : Qubit[], altDataRegister : Qubit[])
     : Unit is Adj + Ctl {
-        ApplyXorInPlace(keepCoeff[idx], keepCoeffRegister);
+        if (keepCoeff[idx] >= 0) {
+            ApplyXorInPlace(keepCoeff[idx], keepCoeffRegister);
+        }
         ApplyXorInPlace(altIndex[idx], altIndexRegister);
         if (Length(dataRegister) > 0) {
             ApplyToEachCA(CControlledCA(X), Zipped(data[idx], dataRegister));

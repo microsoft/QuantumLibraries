@@ -153,7 +153,7 @@ namespace Microsoft.Quantum.Canon {
     /// next one.
     ///
     /// # Example
-    /// ```Q#
+    /// ```qsharp
     /// GrayCode(2); // [(0, 0),(1, 1),(3, 0),(2, 1)]
     /// ```
     internal function GrayCode(n : Int) : (Int, Int)[] {

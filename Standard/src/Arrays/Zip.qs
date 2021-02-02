@@ -151,7 +151,7 @@ namespace Microsoft.Quantum.Arrays {
     /// tuples, the second one containing all second elements of the input tuples.
     ///
     /// # Example
-    /// ```Q#
+    /// ```qsharp
     /// // split is same as ([6, 5, 5, 3, 2, 1], [true, false, false, false, true, false])
     /// let split = Unzipped([(6, true), (5, false), (5, false), (3, false), (2, true), (1, false)]);
     /// ```
