@@ -551,12 +551,6 @@ namespace Microsoft.Quantum.Math {
         return AccumulatedBitsizeI(a, 0);
     }
 
-    /// # Summary
-    /// Helper function used to recursively calculate the bitsize of a value.
-    internal function AccumulatedBitsizeL(val : BigInt, bitsize : Int) : Int {
-        return val == 0L ? bitsize | AccumulatedBitsizeL(val / 2L, bitsize + 1);
-    }
-
 
     /// # Summary
     /// For a non-negative integer `a`, returns the number of bits required to represent `a`.
@@ -572,7 +566,13 @@ namespace Microsoft.Quantum.Math {
     /// The bit-size of `a`.
     function BitSizeL(a : BigInt) : Int {
         Fact(a >= 0L, $"`a` must be non-negative");
-        return AccumulatedBitsizeL(a, 0);
+        mutable bitsize = 0;
+        mutable val = a;
+        while (val != 0L) {
+            set bitsize += 1;
+            set val /= 2L;
+        } 
+        return bitsize;
     }
 
 
