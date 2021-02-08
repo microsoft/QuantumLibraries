@@ -1,6 +1,6 @@
 # Q# API Design Meeting / 4 February 2021
 
-Attendees (in order by username): @bettinaheim, @cgranade, @efratshabtai, @guenp, @msoeken.
+Attendees (in order by username): @bettinaheim, @cgranade, @guenp, @msoeken.
 
 ## Agenda
 
