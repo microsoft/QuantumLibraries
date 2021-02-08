@@ -127,7 +127,7 @@ namespace Microsoft.Quantum.Arithmetic {
     ///     \ket{x} \ket{b} \mapsto \ket{x} \ket{(b + a \cdot x) \operatorname{mod} N}
     /// \end{align}
     /// $$
-    /// for a given modulus $N$, constant multiplier $a$, and summand $y$.
+    /// for a given modulus $N$, constant multiplier $a$, and summand $b$.
     ///
     /// # Input
     /// ## constMultiplier
@@ -136,10 +136,11 @@ namespace Microsoft.Quantum.Arithmetic {
     /// The modulus $N$ which addition and multiplication is taken with respect to.
     /// ## multiplier
     /// A quantum register representing an unsigned integer whose value is to
-    /// be added to each basis state label of `summand`.
+    /// be added to each basis state label of `summand`. Corresponds to the
+    /// register in state $\ket{x}$ above.
     /// ## summand
     /// A quantum register representing an unsigned integer to use as the target
-    /// for this operation.
+    /// for this operation. Corresponds to the register initially in $\ket{b}$ above.
     ///
     /// # See Also
     /// - Microsoft.Quantum.Arithmetic.MultiplyAndAddPhaseByModularInteger
