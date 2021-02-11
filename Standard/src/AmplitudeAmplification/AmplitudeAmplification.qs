@@ -65,9 +65,9 @@ namespace Microsoft.Quantum.AmplitudeAmplification {
             }
 
             if (targetPhase != 0.0) {
-            within {
-                signalOracle!(auxiliaryRegister, systemRegister);
-            } apply {
+                within {
+                    signalOracle!(auxiliaryRegister, systemRegister);
+                } apply {
                     targetStateReflection!(targetPhase, auxiliaryRegister);
                 }
             }
@@ -116,7 +116,7 @@ namespace Microsoft.Quantum.AmplitudeAmplification {
     /// An operation that implements oblivious amplitude amplification based on partial reflections.
     ///
     /// # Remarks
-    /// This imposes stricter conditions on form of the auxiliary start and target states than in `AmpAmpObliviousByReflectionPhases`.
+    /// This imposes stricter conditions on form of the auxiliary start and target states than in `ObliviousAmplitudeAmplificationFromPartialReflections`.
     /// It is assumed that $A\ket{0}\_f\ket{0}\_a= \ket{\text{start}}\_{fa}$ prepares the auxiliary start state $\ket{\text{start}}\_{fa}$ from the computational basis $\ket{0}\_f\ket{0}$.
     /// It is assumed that the target state is marked by $\ket{1}\_f$.
     /// It is assumed that
@@ -227,7 +227,7 @@ namespace Microsoft.Quantum.AmplitudeAmplification {
     /// implemented by partial reflections.
     ///
     /// # Remarks
-    /// This imposes stricter conditions on form of the start and target states than in `AmpAmpByReflectionPhases`.
+    /// This imposes stricter conditions on form of the start and target states than in `AmplitudeAmplificationFromPartialReflections`.
     /// It is assumed that the target state is marked by $\ket{1}\_f$.
     /// It is assumed that
     /// \begin{align}
@@ -264,14 +264,14 @@ namespace Microsoft.Quantum.AmplitudeAmplification {
     /// An operation that implements the standard amplitude amplification quantum algorithm
     ///
     /// # Remarks
-    /// This is the standard amplitude amplification algorithm obtained by a choice of reflection phases computed by `AmpAmpPhasesStandard`
+    /// This is the standard amplitude amplification algorithm obtained by a choice of reflection phases computed by `StandardReflectionPhases`
     /// Assuming that
     /// \begin{align}
     /// A\ket{0}\_{f}\ket{0}\_s= \lambda\ket{1}\_f\ket{\text{target}}\_s + \sqrt{1-|\lambda|^2}\ket{0}\_f\cdots,
     /// \end{align}
     /// this operation prepares the state
     /// \begin{align}
-    /// \operatorname{AmpAmpByOracle}\ket{0}\_{f}\ket{0}\_s= \sin((2n+1)\sin^{-1}(\lambda))\ket{1}\_f\ket{\text{target}}\_s + \cdots\ket{0}\_f
+    /// \operatorname{StandardAmplitudeAmplification}\ket{0}\_{f}\ket{0}\_s= \sin((2n+1)\sin^{-1}(\lambda))\ket{1}\_f\ket{\text{target}}\_s + \cdots\ket{0}\_f
     /// \end{align}
     /// In most cases, `flagQubit` and `auxiliaryRegister` is initialized in the state $\ket{0}\_f\ket{0}\_a$.
     ///
