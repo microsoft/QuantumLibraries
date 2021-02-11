@@ -112,7 +112,7 @@ namespace Microsoft.Quantum.Arrays {
     ///
     /// # Example
     /// This example adds 1 to a range of even numbers:
-    /// ```Q#
+    /// ```qsharp
     /// let numbers = MappedOverRange(PlusI(1, _), 0..2..10);
     /// // numbers = [1, 3, 5, 7, 9, 11]
     /// ```
@@ -158,7 +158,7 @@ namespace Microsoft.Quantum.Arrays {
     /// the mapping function.
     ///
     /// # Example
-    /// ```Q#
+    /// ```qsharp
     /// let Numbers = SequenceI(1, _); // generates numbers starting from 1
     /// let values = FlatMapped(Numbers, [1, 2, 3]);
     /// // values = [1, 1, 2, 1, 2, 3]
@@ -182,7 +182,7 @@ namespace Microsoft.Quantum.Arrays {
     /// Concatenation of all arrays.
     ///
     /// # Example
-    /// ```Q#
+    /// ```qsharp
     /// let flattened = Flattened([[1, 2], [3], [4, 5, 6]]);
     /// // flattened = [1, 2, 3, 4, 5, 6]
     /// ```

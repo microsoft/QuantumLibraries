@@ -19,7 +19,7 @@ namespace Microsoft.Quantum.Bitwise {
     ///
     /// # Remarks
     /// The following are equivalent:
-    /// ```Q#
+    /// ```qsharp
     /// let c = a <<< b;
     /// let c = LeftShiftedI(a, b);
     /// ```
@@ -43,7 +43,7 @@ namespace Microsoft.Quantum.Bitwise {
     ///
     /// # Remarks
     /// The following are equivalent:
-    /// ```Q#
+    /// ```qsharp
     /// let c = a <<< b;
     /// let c = LeftShiftedL(a, b);
     /// ```
@@ -67,7 +67,7 @@ namespace Microsoft.Quantum.Bitwise {
     ///
     /// # Remarks
     /// The following are equivalent:
-    /// ```Q#
+    /// ```qsharp
     /// let c = a >>> b;
     /// let c = RightShiftedI(a, b);
     /// ```
@@ -91,7 +91,7 @@ namespace Microsoft.Quantum.Bitwise {
     ///
     /// # Remarks
     /// The following are equivalent:
-    /// ```Q#
+    /// ```qsharp
     /// let c = a >>> b;
     /// let c = RightShiftedL(a, b);
     /// ```

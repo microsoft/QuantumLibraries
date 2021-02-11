@@ -37,7 +37,7 @@ namespace Microsoft.Quantum.Logical {
     ///   the other, the shorter array is said to occur first.
     ///
     /// # Examples
-    /// ```Q#
+    /// ```qsharp
     /// let arrayComparison = LexographicComparison(LessThanOrEqualD);
     /// let data = [
     ///     [1.1, 2.2, 3.3],

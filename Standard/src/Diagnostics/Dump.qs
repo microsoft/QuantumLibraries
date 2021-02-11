@@ -22,7 +22,7 @@ namespace Microsoft.Quantum.Diagnostics {
     /// will output the matrix
     /// $\left(\begin{matrix} 0.0 & 0.707 \\\\ 0.707 & 0.0\end{matrix}\right)$:
     ///
-    /// ```Q#
+    /// ```qsharp
     /// open Microsoft.Quantum.Arrays as Arrays;
     /// 
     /// operation ApplyH(register : Qubit[]) : Unit is Adj + Ctl {
@@ -48,7 +48,7 @@ namespace Microsoft.Quantum.Diagnostics {
     /// \end{aligned}.
     /// $$
     ///
-    /// ```Q#
+    /// ```qsharp
     /// operation DumpCnot() : Unit {
     ///     DumpOperation(2, ApplyToFirstTwoQubitsCA(CNOT, _));
     /// }

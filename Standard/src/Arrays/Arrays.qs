@@ -385,7 +385,7 @@ namespace Microsoft.Quantum.Arrays {
     /// # Example
     /// The following Q# code prints the message "All diagnostics completed
     /// successfully":
-    /// ```Q#
+    /// ```qsharp
     /// Fact(IsPermutation([2, 0, 1], "");
     /// Contradiction(IsPermutation([5, 0, 1], "[5, 0, 1] isn't a permutation");
     /// Message("All diagnostics completed successfully.");
