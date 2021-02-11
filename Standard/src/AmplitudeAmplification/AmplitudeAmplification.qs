@@ -64,10 +64,10 @@ namespace Microsoft.Quantum.AmplitudeAmplification {
                 );
             }
 
+            if (targetPhase != 0.0) {
             within {
                 signalOracle!(auxiliaryRegister, systemRegister);
             } apply {
-                if (targetPhase != 0.0) {
                     targetStateReflection!(targetPhase, auxiliaryRegister);
                 }
             }
