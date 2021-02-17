@@ -7,7 +7,13 @@ namespace Microsoft.Quantum.Random {
     open Microsoft.Quantum.Intrinsic;
     open Microsoft.Quantum.Canon;
 
-    // TODO
+    /// # Summary
+    /// Returns a single-qubit Clifford operator chosen uniformly at random
+    /// from the single-qubit Clifford group.
+    ///
+    /// # Output
+    /// A single-qubit Clifford operator, drawn at random from the 192 elements
+    /// of the single-qubit Clifford group.
     operation DrawRandomSingleQubitClifford() : SingleQubitClifford {
         return Identity1C()
             w/ E <- DrawRandomInt(0, 2)
