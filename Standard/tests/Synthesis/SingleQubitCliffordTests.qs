@@ -59,7 +59,6 @@ namespace Microsoft.Quantum.Tests {
     }
 
     operation AssertOpTimesInverseIsIdentity(e : Int, s : Int, x : Int, w : Int) : Unit {
-        Message($"{e} {s} {x} {w}");
         let c = SingleQubitClifford(e, s, x, w);
         let op = Apply1C(Times1C(c, Inverse1C(c)), _);
 
@@ -76,6 +75,37 @@ namespace Microsoft.Quantum.Tests {
                 for x in 0..1 {
                     for w in 0..7 {
                         AssertOpTimesInverseIsIdentity(e, s, x, w);
+                    }
+                }
+            }
+        }
+    }
+
+    operation AssertProductIsCorrect(e : Int, s : Int, x : Int, ep : Int, sp : Int, xp : Int)
+    : Unit {
+        let left = SingleQubitClifford(e, s, x, 0);
+        let right = SingleQubitClifford(ep, sp, xp, 0);
+        let product = Times1C(left, right);
+        let productAsOp = Apply1C(Times1C(left, right), _);
+        let bound = BoundCA(Mapped(SingleQubitCliffordAsOperation, [right, left]));
+
+        AssertOperationsEqualReferenced(1,
+            ApplyToFirstQubitCA(bound, _),
+            ApplyToFirstQubitCA(productAsOp, _)
+        );
+    }
+
+    @Test("QuantumSimulator")
+    operation AssertAllProductsWithoutPhasesAreCorrect() : Unit {
+        for e in 0..2 {
+            for s in 0..3 {
+                for x in 0..1 {
+                    for ep in 0..3 {
+                        for sp in 0..3 {
+                            for xp in 0..1 {
+                                AssertProductIsCorrect(e, s, x, ep, sp, xp);
+                            }
+                        }
                     }
                 }
             }
