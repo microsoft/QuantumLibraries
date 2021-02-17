@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 namespace Microsoft.Quantum.Synthesis {
+    open Microsoft.Quantum.Math;
 
     /// # Summary
     /// An element of the single-qubit Clifford group.
@@ -41,26 +42,79 @@ namespace Microsoft.Quantum.Synthesis {
     /// represent the same single-qubit Clifford operator.
     internal function CanonicalForm1C(op : SingleQubitClifford) : SingleQubitClifford {
         return SingleQubitClifford(
-            RingRepresentative(op::E, 3),
-            RingRepresentative(op::S, 4),
-            RingRepresentative(op::X, 2),
-            RingRepresentative(op::Omega, 8)
+            ModulusI(op::E, 3),
+            ModulusI(op::S, 4),
+            ModulusI(op::X, 2),
+            ModulusI(op::Omega, 8)
         );
     }
 
-    // TODO
+    /// # Summary
+    /// Returns a representation of the identity as a single-qubit Clifford
+    /// operator.
     function Identity1C() : SingleQubitClifford {
         return SingleQubitClifford(0, 0, 0, 0);
     }
 
-    // TODO
+    /// # Summary
+    /// Returns a representation of a single-qubit Clifford operator as an
+    /// operation acting on a single qubit.
+    ///
+    /// # Input
+    /// The operator to be represented as an operation.
+    ///
+    /// # Output
+    /// An operation that applies the given Clifford operator to a single
+    /// qubit.
+    ///
+    /// # Example
+    /// Suppose that `op` is a single-qubit Clifford operator, and that
+    /// `q` is a single qubit:
+    ///
+    /// ```qsharp
+    /// let op = DrawRandomSingleQubitClifford();
+    /// use q = Qubit();
+    /// ```
+    ///
+    /// Then, the following two lines are equivalent:
+    /// ```qsharp
+    /// Apply1C(op, q);
+    /// SingleQubitCliffordAsOperation(op)(q);
+    /// ```
+    ///
+    /// # See Also
+    /// - Microsoft.Quantum.Synthesis.Apply1C
     function SingleQubitCliffordAsOperation(clifford : SingleQubitClifford) : (Qubit => Unit is Adj + Ctl) {
         return Apply1C(clifford, _);
     }
 
-    // TODO
+    /// # Summary
+    /// Returns a representation of a single-qubit Pauli operator as
+    /// a single-qubit Clifford operator that acts by conjugation.
+    ///
+    /// # Description
+    /// Given a Pauli operator $P$, this function returns a Clifford operator
+    /// that represents the function $Q \mapsto PQP^{\dagger}$.
+    ///
+    /// # Input
+    /// ## pauli
+    /// The Pauli operator to be represented as a Clifford operator.
+    ///
+    /// # Ouput
+    /// A single-qubit Clifford operator representing the action of `pauli` by
+    /// conjugation.
+    ///
+    /// # Remarks
+    /// For a value `pauli` of type `Pauli`, `ApplyP(pauli, _)` and
+    /// `Apply1C(PauliAsSingleQubitClifford(pauli), _)` are the same operation.
     function PauliAsSingleQubitClifford(pauli : Pauli) : SingleQubitClifford {
-        fail "TODO";
+        if   pauli == PauliI { return Identity1C(); }
+        elif pauli == PauliX { return Identity1C() w/ X <- 1; }
+        elif pauli == PauliY { return Identity1C() w/ X <- 1 w/ Omega <- 6 w/ S <- 2; }
+        elif pauli == PauliZ { return Identity1C() w/ S <- 2; }
+        else {
+            fail "";
+        }
     }
 
 }

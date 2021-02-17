@@ -175,9 +175,44 @@ namespace Microsoft.Quantum.Synthesis {
         return CanonicalForm1C(inv w/ Omega <- inv::Omega - op::Omega);
     }
 
-    // TODO
+    /// # Summary
+    /// Returns the action by conjugation of a single-qubit Clifford operator
+    /// on a single-qubit Pauli operator.
+    ///
+    /// # Input
+    /// ## op
+    /// The single-qubit Clifford operator to conjugate by.
+    /// ## pauli
+    /// 
+    ///
+    /// # Example
+    /// Given `op` and `pauli`, the following are equivalent up to phase:
+    /// ```qsharp
+    /// PauliAsSingleQubitClifford(Action1C(op, pauli));
+    /// Times1C(op, Times1C(PauliAsSingleQubitClifford(pauli), Inverse1C(op)));
+    /// ```
     function Action1C(op : SingleQubitClifford, pauli : Pauli) : Pauli {
-        fail "TODO";
+        if pauli == PauliI { return PauliI; }
+
+        // Since we're ignoring phase, the X and Omega parts don't do anything.
+        // We focus instead on S and E.
+        //
+        //     𝑆𝑋𝑆⁺ =  𝑌     𝐸𝑋𝐸⁺ =  𝑌
+        //     𝑆𝑌𝑆⁺ = −𝑋     𝐸𝑌𝐸⁺ =  𝑍
+        //     𝑆𝑍𝑆⁺ =  𝑍     𝐸𝑋𝐸⁺ =  𝑋
+        //
+        mutable acc = pauli;
+        for _ in 0..op::S - 1 {
+            if   acc == PauliX { set acc = PauliY; }
+            elif acc == PauliY { set acc = PauliX; }
+        }
+        for _ in 0..op::E - 1 {
+            if   acc == PauliX { set acc = PauliY; }
+            elif acc == PauliY { set acc = PauliZ; }
+            elif acc == PauliZ { set acc = PauliX; }
+        }
+
+        return acc;
     }
 
 }

@@ -111,4 +111,48 @@ namespace Microsoft.Quantum.Tests {
             }
         }
     }
+
+    internal operation AssertPauliIsCorrectAsClifford(pauli : Pauli) : Unit {
+        AssertOperationsEqualReferenced(1,
+            ApplyToFirstQubitCA(ApplyP(pauli, _), _),
+            ApplyToFirstQubitCA(Apply1C(PauliAsSingleQubitClifford(pauli), _), _)
+        );
+    }
+
+    @Test("QuantumSimulator")
+    operation AssertAllPaulisAreCorrectAsCliffords() : Unit {
+        for pauli in [PauliI, PauliX, PauliY, PauliZ] {
+            AssertPauliIsCorrectAsClifford(pauli);
+        }
+    }
+
+    internal function Action1CIsCorrectFor(op : SingleQubitClifford, pauli : Pauli) : Unit {
+        // Since equality is only given up to a phase, we set Omega to zero in both
+        // Clifford operators being compared.
+        EqualityFact1C(
+            PauliAsSingleQubitClifford(Action1C(op, pauli))
+                w/ Omega <- 0,
+            Times1C(op, Times1C(PauliAsSingleQubitClifford(pauli), Inverse1C(op)))
+                w/ Omega <- 0,
+            $"Action1C was incorrect for {op} • {pauli}."
+        );
+    }
+
+    @Test("QuantumSimulator")
+    function AllAction1CAreCorrect() : Unit {
+        for e in 0..2 {
+            for s in 0..3 {
+                for x in 0..1 {
+                    for pauli in [PauliI, PauliX, PauliY, PauliZ] {
+                        Action1CIsCorrectFor(
+                            Identity1C() w/ E <- e
+                                         w/ S <- s
+                                         w/ X <- x,
+                            pauli
+                        );
+                    }
+                }
+            }
+        }
+    }
 }
