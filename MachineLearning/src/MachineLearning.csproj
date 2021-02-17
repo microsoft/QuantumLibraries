@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.Quantum.Sdk/0.14.20111301-pull">
+<Project Sdk="Microsoft.Quantum.Sdk/0.15.2101126940">
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
     <AssemblyName>Microsoft.Quantum.MachineLearning</AssemblyName>
