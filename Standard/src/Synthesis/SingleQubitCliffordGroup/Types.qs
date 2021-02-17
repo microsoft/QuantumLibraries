@@ -25,6 +25,9 @@ namespace Microsoft.Quantum.Synthesis {
     /// let identity = SingleQubitClifford((0, 0, 0, 0));
     /// let xClifford = SingleQubitClifford((0, 0, 1, 0));
     /// ```
+    ///
+    /// # References
+    /// - https://hackage.haskell.org/package/newsynth-0.4.0.0/docs/Quantum-Synthesis-Clifford.html
     newtype SingleQubitClifford = (
         E: Int,
         S: Int,

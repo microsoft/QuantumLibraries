@@ -62,9 +62,9 @@ namespace Microsoft.Quantum.Synthesis {
         // becomes local under the Controlled functor.
         // To do so, we also need to include the global phase we ignored above
         // when we applied the 𝐸 part of this operation.
-        let actualω = (cOp::Omega + 3 * cOp::E) % 8;
+        let actualOmega = (cOp::Omega + 3 * cOp::E) % 8;
 
-        R(PauliI, 2.0 * PI() * IntAsDouble(actualω) / 8.0, target);
+        R(PauliI, 2.0 * PI() * IntAsDouble(actualOmega) / 8.0, target);
 
     }
 
