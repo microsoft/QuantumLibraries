@@ -102,6 +102,7 @@ namespace Microsoft.Quantum.Synthesis {
         }
     }
 
+    // TODO
     function Times1C(left : SingleQubitClifford, right : SingleQubitClifford) : SingleQubitClifford {
         // Start by finding a new single-qubit Clifford operator
         // 𝑈 = 𝐸^{e''} 𝑆^{s''} 𝑋^{x''} ω^{w''} such that
@@ -122,9 +123,15 @@ namespace Microsoft.Quantum.Synthesis {
         ));
     }
 
+    // TODO
     function Inverse1C(op : SingleQubitClifford) : SingleQubitClifford {
         let inv = InverseWithoutPhase(op);
         return CanonicalForm1C(inv w/ Omega <- inv::Omega - op::Omega);
+    }
+
+    // TODO
+    function Action1C(op : SingleQubitClifford, pauli : Pauli) : Pauli {
+        fail "TODO";
     }
 
 }

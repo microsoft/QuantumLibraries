@@ -48,12 +48,19 @@ namespace Microsoft.Quantum.Synthesis {
         );
     }
 
+    // TODO
     function Identity1C() : SingleQubitClifford {
         return SingleQubitClifford(0, 0, 0, 0);
     }
 
+    // TODO
     function SingleQubitCliffordAsOperation(clifford : SingleQubitClifford) : (Qubit => Unit is Adj + Ctl) {
         return Apply1C(clifford, _);
+    }
+
+    // TODO
+    function PauliAsSingleQubitClifford(pauli : Pauli) : SingleQubitClifford {
+        fail "TODO";
     }
 
 }
