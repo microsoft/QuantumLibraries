@@ -8,7 +8,7 @@ namespace Microsoft.Quantum.Tests {
     open Microsoft.Quantum.Intrinsic;
     open Microsoft.Quantum.Synthesis;
 
-    operation AssertInverseIsCorrect(e : Int, s : Int, x : Int, w : Int) : Unit {
+    internal operation AssertInverseIsCorrect(e : Int, s : Int, x : Int, w : Int) : Unit {
         let c = SingleQubitClifford(e, s, x, w);
         let op = Apply1C(c, _);
         let inv = Inverse1C(c);
@@ -58,7 +58,7 @@ namespace Microsoft.Quantum.Tests {
         }
     }
 
-    operation AssertOpTimesInverseIsIdentity(e : Int, s : Int, x : Int, w : Int) : Unit {
+    internal operation AssertOpTimesInverseIsIdentity(e : Int, s : Int, x : Int, w : Int) : Unit {
         let c = SingleQubitClifford(e, s, x, w);
         let op = Apply1C(Times1C(c, Inverse1C(c)), _);
 
@@ -81,7 +81,7 @@ namespace Microsoft.Quantum.Tests {
         }
     }
 
-    operation AssertProductIsCorrect(e : Int, s : Int, x : Int, ep : Int, sp : Int, xp : Int)
+    internal operation AssertProductIsCorrect(e : Int, s : Int, x : Int, ep : Int, sp : Int, xp : Int)
     : Unit {
         let left = SingleQubitClifford(e, s, x, 0);
         let right = SingleQubitClifford(ep, sp, xp, 0);
