@@ -102,7 +102,34 @@ namespace Microsoft.Quantum.Synthesis {
         }
     }
 
-    // TODO
+    /// # Summary
+    /// Returns the product of two single-qubit Clifford operators.
+    ///
+    /// # Input
+    /// ## left
+    /// The first operator to be multiplied.
+    /// ## right
+    /// The second operator to be multiplied.
+    ///
+    /// # Output
+    /// The product of `left` and `right`.
+    ///
+    /// # Example
+    /// Suppose that `left` and `right` are both single-qubit Clifford
+    /// operators.
+    /// ```qsharp
+    /// let left = DrawRandomSingleQubitClifford();
+    /// let right = DrawRandomSingleQubitClifford();
+    /// ```
+    /// Then, the following two snippets are equivalent:
+    /// ```qsharp
+    /// Apply1C(right, q);
+    /// Apply1C(left, q);
+    /// ```
+    /// and:
+    /// ```qsharp
+    /// Apply1C(Times1C(left, right), q);
+    /// ```
     function Times1C(left : SingleQubitClifford, right : SingleQubitClifford) : SingleQubitClifford {
         // Start by finding a new single-qubit Clifford operator
         // 𝑈 = 𝐸^{e''} 𝑆^{s''} 𝑋^{x''} ω^{w''} such that
@@ -123,7 +150,26 @@ namespace Microsoft.Quantum.Synthesis {
         ));
     }
 
-    // TODO
+    /// # Summary
+    /// Returns the inverse of a single-qubit Clifford operators.
+    ///
+    /// # Input
+    /// ## op
+    /// The operator to be inverted.
+    ///
+    /// # Output
+    /// The inverse of `op`.
+    ///
+    /// # Example
+    /// Suppose that `op` is a single-qubit Clifford operator.
+    /// ```qsharp
+    /// let op = DrawRandomSingleQubitClifford();
+    /// ```
+    /// Then, the following snippet applies the identity (aka no-op) operation:
+    /// ```qsharp
+    /// Apply1C(op, q);
+    /// Apply1C(Inverse1C(op), q);
+    /// ```
     function Inverse1C(op : SingleQubitClifford) : SingleQubitClifford {
         let inv = InverseWithoutPhase(op);
         return CanonicalForm1C(inv w/ Omega <- inv::Omega - op::Omega);
