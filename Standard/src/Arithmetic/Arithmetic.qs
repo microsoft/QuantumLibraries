@@ -16,7 +16,7 @@ namespace Microsoft.Quantum.Arithmetic {
     /// 1 bits in an integer.
     ///
     /// Let us denote `value` by a and let y be an unsigned integer encoded in `target`,
-    /// then `InPlaceXorLE` performs an operation given by the following map:
+    /// then `ApplyXorInPlace` performs an operation given by the following map:
     /// $\ket{y}\rightarrow \ket{y\oplus a}$ , where $\oplus$ is the bitwise exclusive OR operator.
     ///
     /// # Input
