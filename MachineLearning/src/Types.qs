@@ -29,7 +29,7 @@ namespace Microsoft.Quantum.MachineLearning {
     /// The following represents a rotation about the $X$-axis of the first
     /// qubit in a register, controlled on the second qubit, and with an
     /// angle given by the fourth parameter in a sequential model:
-    /// ```Q#
+    /// ```qsharp
     /// let controlledRotation = ControlledRotation(
     ///     (0, [1]),
     ///     PauliX,
@@ -195,7 +195,7 @@ namespace Microsoft.Quantum.MachineLearning {
     ///
     /// For example, to use 100,000 measurements and at most 8 training
     /// epochs:
-    /// ```Q#
+    /// ```qsharp
     /// let options = DefaultTrainingOptions()
     ///               w/ NMeasurements <- 100000
     ///               w/ MaxEpochs <- 8;
@@ -225,7 +225,7 @@ namespace Microsoft.Quantum.MachineLearning {
     /// # Example
     /// To use the default options, but with additional measurements, use the
     /// `w/` operator:
-    /// ```Q#
+    /// ```qsharp
     /// let options = DefaultTrainingOptions()
     ///     w/ NMeasurements <- 1000000;
     /// ```

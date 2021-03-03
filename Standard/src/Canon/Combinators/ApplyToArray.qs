@@ -23,7 +23,7 @@ namespace Microsoft.Quantum.Canon {
     ///
     /// # Example
     /// The following Q# snippets are equivalent:
-    /// ```Q#
+    /// ```qsharp
     /// ApplyToHead(H, register);
     /// H(Head(register));
     /// ```
@@ -130,7 +130,7 @@ namespace Microsoft.Quantum.Canon {
     ///
     /// # Example
     /// The following Q# snippets are equivalent:
-    /// ```Q#
+    /// ```qsharp
     /// ApplyToRest(ApplyCNOTChain, register);
     /// ApplyCNOTChain(Rest(register));
     /// ```
@@ -237,7 +237,7 @@ namespace Microsoft.Quantum.Canon {
     ///
     /// # Example
     /// The following Q# snippets are equivalent:
-    /// ```Q#
+    /// ```qsharp
     /// ApplyToTail(H, register);
     /// H(Tail(register));
     /// ```
@@ -344,7 +344,7 @@ namespace Microsoft.Quantum.Canon {
     ///
     /// # Example
     /// The following Q# snippets are equivalent:
-    /// ```Q#
+    /// ```qsharp
     /// ApplyToMost(ApplyCNOTChain, register);
     /// ApplyCNOTChain(Most(register));
     /// ```
