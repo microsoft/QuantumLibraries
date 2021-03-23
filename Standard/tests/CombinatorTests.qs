@@ -34,8 +34,28 @@ namespace Microsoft.Quantum.Tests {
 
     @Test("QuantumSimulator")
     operation TestCurried() : Unit {
-
         let curried = CurriedOp(Exp([PauliZ], _, _));
+        AssertOperationsEqualInPlace(1, curried(1.7), Exp([PauliZ], 1.7, _));
+        AssertOperationsEqualReferenced(1, curried(1.7), Exp([PauliZ], 1.7, _));
+    }
+
+    @Test("QuantumSimulator")
+    operation TestCurriedA() : Unit {
+        let curried = CurriedOpA(Exp([PauliZ], _, _));
+        AssertOperationsEqualInPlace(1, curried(1.7), Exp([PauliZ], 1.7, _));
+        AssertOperationsEqualReferenced(1, curried(1.7), Exp([PauliZ], 1.7, _));
+    }
+
+    @Test("QuantumSimulator")
+    operation TestCurriedC() : Unit {
+        let curried = CurriedOpC(Exp([PauliZ], _, _));
+        AssertOperationsEqualInPlace(1, curried(1.7), Exp([PauliZ], 1.7, _));
+        AssertOperationsEqualReferenced(1, curried(1.7), Exp([PauliZ], 1.7, _));
+    }
+
+    @Test("QuantumSimulator")
+    operation TestCurriedCA() : Unit {
+        let curried = CurriedOpCA(Exp([PauliZ], _, _));
         AssertOperationsEqualInPlace(1, curried(1.7), Exp([PauliZ], 1.7, _));
         AssertOperationsEqualReferenced(1, curried(1.7), Exp([PauliZ], 1.7, _));
     }
