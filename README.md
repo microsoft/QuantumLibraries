@@ -2,23 +2,23 @@
 
 Welcome to the Microsoft Quantum Development Kit!
 
-This repository contains open-source libraries for the [Quantum Development Kit](https://docs.microsoft.com/en-us/quantum/?view=qsharp-preview):
+This repository contains open-source libraries for the [Quantum Development Kit](https://docs.microsoft.com/azure/quantum):
 
-- **[Docs/](./Docs)**: Additional documentation for developing on the libraries. Please see [QDK online documentation](https://docs.microsoft.com/quantum/) for online documentation.
-- **[Standard/](./Standard)**: Q# sources used to implement [the Q# standard libraries](https://docs.microsoft.com/quantum/libraries/standard).
-- **[Chemistry/](./Chemistry)**: Q# and C# sources used to implement a library for [quantum chemistry](https://docs.microsoft.com/quantum/libraries/chemistry) and Hamiltonian simulation.
-- **[Numerics/](./Numerics)**: Q# sources used to implement the [quantum numerics library](https://docs.microsoft.com/quantum/libraries/numerics).
+- **[Docs/](./Docs)**: Additional documentation for developing on the libraries. Please see [QDK online documentation](https://docs.microsoft.com/azure/quantum/) for online documentation.
+- **[Standard/](./Standard)**: Q# sources used to implement [the Q# standard libraries](https://docs.microsoft.com/azure/quantum/user-guide/libraries/standard).
+- **[Chemistry/](./Chemistry)**: Q# and C# sources used to implement a library for [quantum chemistry](https://docs.microsoft.com/azure/quantum/user-guide/libraries/chemistry) and Hamiltonian simulation.
+- **[Numerics/](./Numerics)**: Q# sources used to implement the [quantum numerics library](https://docs.microsoft.com/azure/quantum/user-guide/libraries/numerics).
 - **[LICENSE](./LICENSE.txt)**: Terms of use and license details for the Quantum Development Kit libraries.
 
 ## New to Quantum? ##
 
-See the [introduction to quantum computing](https://docs.microsoft.com/quantum/concepts/) provided with the Quantum Development Kit.
+See the [introduction to quantum computing](https://docs.microsoft.com/azure/quantum/concepts-overview/) provided with the Quantum Development Kit.
 
 ## Getting Started ##
 
 The libraries provided in this repository are built using [.NET Core](https://docs.microsoft.com/en-us/dotnet/core/) and the
-[Quantum Development Kit](https://docs.microsoft.com/en-us/quantum/?view=qsharp-preview).
-Please see the [installation guide](https://docs.microsoft.com/quantum/install-guide) for how to get up and running.
+[Quantum Development Kit](https://docs.microsoft.com/azure/quantum).
+Please see the [installation guide](https://docs.microsoft.com/azure/quantum/install-overview-qdk) for how to get up and running.
 
 You may also visit our [Quantum](https://github.com/Microsoft/Quantum) repository, which offers a wide variety
 of samples on how to use these libraries to write quantum based programs.
@@ -32,7 +32,7 @@ of samples on how to use these libraries to write quantum based programs.
 ## Feedback ##
 
 If you have feedback about the content in this repository, please let us know by filing a [new issue](https://github.com/microsoft/quantumlibraries/issues/new/choose)!
-If you have feedback about some other part of the Microsoft Quantum Development Kit, please see the [contribution guide](https://docs.microsoft.com/quantum/contributing/) for more information.
+If you have feedback about some other part of the Microsoft Quantum Development Kit, please see the [contribution guide](https://docs.microsoft.com/azure/quantum/contributing-overview/) for more information.
 
 ## Contributing ##
 

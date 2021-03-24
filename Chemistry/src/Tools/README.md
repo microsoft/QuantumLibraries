@@ -44,7 +44,7 @@ Note that the `--` argument is used to separate arguments recognized by the .NET
 
 The `qdk-chem convert` subcommand can be used to convert between the various chemistry data formats supported by the Quantum Development Kit.
 
-> We strongly recommend the use of [Broombridge](https://docs.microsoft.com/quantum/libraries/chemistry/schema/broombridge) to represent quantum chemistry problems, and provide `qdk-chem convert` to make it easier to work with and prepare Broombridge-formatted data.
+> We strongly recommend the use of [Broombridge](https://docs.microsoft.com/azure/quantum/user-guide/libraries/chemistry/schema/broombridge) to represent quantum chemistry problems, and provide `qdk-chem convert` to make it easier to work with and prepare Broombridge-formatted data.
 
 The source and destination formats can be specified by the `--from` and `--to` options, respectively.
 By default, `qdk-chem` will write its output to the console; use the `--out` option to write directly to an output file.
