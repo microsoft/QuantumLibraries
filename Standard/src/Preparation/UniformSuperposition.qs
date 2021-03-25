@@ -72,7 +72,7 @@ namespace Microsoft.Quantum.Preparation {
     }
 
     /// # Summary
-    /// Implementation step of <xref:microsoft.quantum.canon.prepareuniformsuperposition>
+    /// Implementation step of <xref:Microsoft.Quantum.Preparation.PrepareUniformSuperposition>
     internal operation PrepareUniformSuperpositionOracle(nIndices: Int, nQubits: Int, idxFlag: Int, qubits: Qubit[])
     : Unit is Adj + Ctl {
         let targetQubits = qubits[3...];
@@ -81,7 +81,7 @@ namespace Microsoft.Quantum.Preparation {
         let theta = ArcSin(Sqrt(IntAsDouble(2^nQubits) / IntAsDouble(nIndices)) * Sin(PI() / 6.0));
 
         ApplyToEachCA(H, targetQubits);
-        using (compareQubits = Qubit[nQubits]) {
+        use compareQubits = Qubit[nQubits] {
             within {
                 ApplyXorInPlace(nIndices - 1, LittleEndian(compareQubits));
             } apply {

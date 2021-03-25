@@ -1,21 +1,21 @@
-// Copyright (c) Microsoft Corporation. All rights reserved.
+// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
 namespace Microsoft.Quantum.Simulation {
-    open Microsoft.Quantum.Canon;    
+    open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Intrinsic;
-    
-    
+
+
     // Convention for GeneratorIndex = ((Int[],Double[]), Int[])
     // We index single Paulis as 0 for I, 1 for X, 2 for Y, 3 for Z.
     // We index Pauli strings with arrays of integers e.g. a = [3,1,1,2] for ZXXY.
     // We assume the zeroth element of Double[] is the angle of rotation
     // We index the qubits that Pauli strings act on with arrays of integers e.g. q = [2,4,5,8] for Z_2 X_4 X_5, Y_8
     // An example of a Pauli string GeneratorIndex is thus ((a,b), q)
-    
+
     // Consider the Hamiltonian H = 0.1 XI + 0.2 IX + 0.3 ZY
     // Its GeneratorTerms are (([1],b),[0]), 0.1),  (([1],b),[1]), 0.2),  (([3,2],b),[0,1]), 0.3).
-    
+
     /// # Summary
     /// Converts a integer to a single-qubit Pauli operator.
     ///
@@ -25,13 +25,12 @@ namespace Microsoft.Quantum.Simulation {
     ///
     /// # Output
     /// A `Pauli` operator given by `[PauliI, PauliX, PauliY, PauliZ][idx]`.
-    function IntToPauli (idx : Int) : Pauli
-    {
+    function IntToPauli (idx : Int) : Pauli {
         let paulis = [PauliI, PauliX, PauliY, PauliZ];
         return paulis[idx];
     }
-    
-    
+
+
     /// # Summary
     /// Converts an array of integers to an array of single-qubit Pauli
     /// operators.
@@ -45,20 +44,18 @@ namespace Microsoft.Quantum.Simulation {
     /// An array `paulis` of Pauli operators `Pauli[]` the same length as
     /// `ints` such that `paulis[idxPauli]` is equal to the element of
     /// `[PauliI, PauliX, PauliY, PauliZ]` given by `ints[idxPauli]`.
-    function IntsToPaulis (ints : Int[]) : Pauli[]
-    {
+    function IntsToPaulis (ints : Int[]) : Pauli[] {
         let nInts = Length(ints);
         mutable paulis = new Pauli[nInts];
-        
-        for (idxInt in 0 .. nInts - 1)
-        {
+
+        for idxInt in 0 .. nInts - 1 {
             set paulis w/= idxInt <- IntToPauli(ints[idxInt]);
         }
-        
+
         return paulis;
     }
-    
-    
+
+
     /// # Summary
     /// Represents a dynamical generator as a set of simulatable gates and an
     /// expansion in the Pauli basis.
@@ -75,22 +72,14 @@ namespace Microsoft.Quantum.Simulation {
     /// in `generatorIndex`.
     /// ## qubits
     /// Register acted upon by time-evolution operator.
-    operation PauliEvolutionImpl (generatorIndex : GeneratorIndex, delta : Double, qubits : Qubit[]) : Unit
-    {
-        body (...)
-        {
-            let ((idxPaulis, idxDoubles), idxQubits) = generatorIndex!;
-            let pauliString = IntsToPaulis(idxPaulis);
-            let op = Exp(pauliString, delta * idxDoubles[0], _);
-            (RestrictedToSubregisterCA(op, idxQubits))(qubits);
-        }
-        
-        adjoint invert;
-        controlled distribute;
-        controlled adjoint distribute;
+    internal operation PauliEvolutionImpl (generatorIndex : GeneratorIndex, delta : Double, qubits : Qubit[]) : Unit is Adj + Ctl {
+        let ((idxPaulis, idxDoubles), idxQubits) = generatorIndex!;
+        let pauliString = IntsToPaulis(idxPaulis);
+        let op = Exp(pauliString, delta * idxDoubles[0], _);
+        (RestrictedToSubregisterCA(op, idxQubits))(qubits);
     }
-    
-    
+
+
     /// # Summary
     /// Represents a dynamical generator as a set of simulatable gates and an
     /// expansion in the Pauli basis.
@@ -106,8 +95,8 @@ namespace Microsoft.Quantum.Simulation {
     function PauliEvolutionFunction (generatorIndex : GeneratorIndex) : EvolutionUnitary {
         return EvolutionUnitary(PauliEvolutionImpl(generatorIndex, _, _));
     }
-    
-    
+
+
     /// # Summary
     /// Represents a dynamical generator as a set of simulatable gates and an
     /// expansion in the Pauli basis.
@@ -118,11 +107,11 @@ namespace Microsoft.Quantum.Simulation {
     ///
     /// # Remarks
     /// This is obtained by partial application of
-    /// <xref:microsoft.quantum.simulation.paulievolutionfunction>.
+    /// <xref:Microsoft.Quantum.Simulation.PauliEvolutionFunction>.
     function PauliEvolutionSet () : EvolutionSet {
         return EvolutionSet(PauliEvolutionFunction);
     }
-    
+
 }
 
 

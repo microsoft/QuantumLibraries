@@ -1,4 +1,4 @@
-﻿// Copyright (c) Microsoft Corporation. All rights reserved.
+﻿// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
 namespace Microsoft.Quantum.Simulation {
@@ -60,10 +60,10 @@ namespace Microsoft.Quantum.Simulation {
     /// # Remarks
     /// This is obtained by preparing and unpreparing the state $\sum_{j}\sqrt{\alpha_j/\alpha}\ket{j}$,
     /// and constructing a multiply-controlled unitary
-    /// <xref:microsoft.quantum.preparation.statepreparationpositivecoefficients> and
-    /// <xref:microsoft.quantum.canon.multiplexoperationsfromgenerator>.
+    /// <xref:Microsoft.Quantum.Preparation.PrepareArbitraryStateD> and
+    /// <xref:Microsoft.Quantum.Canon.MultiplexOperationsFromGenerator>.
     function PauliBlockEncoding(generatorSystem: GeneratorSystem) : (Double, BlockEncodingReflection) {
-        let statePrepUnitary = StatePreparationPositiveCoefficients;
+        let statePrepUnitary = CurriedOpCA(PrepareArbitraryStateD);
         let multiplexer = MultiplexerFromGenerator;
         return _PauliBlockEncoding(generatorSystem, statePrepUnitary, multiplexer);
     }
@@ -94,9 +94,9 @@ namespace Microsoft.Quantum.Simulation {
     /// # Remarks
     /// Example operations the prepare and unpreparing the state $\sum_{j}\sqrt{\alpha_j/\alpha}\ket{j}$,
     /// and construct a multiply-controlled unitary are
-    /// <xref:microsoft.quantum.canon.statepreparationpositivecoefficients> and
-    /// <xref:microsoft.quantum.canon.multiplexoperationsfromgenerator>.
-    function _PauliBlockEncoding(
+    /// <xref:Microsoft.Quantum.Preparation.PrepareArbitraryStateD> and
+    /// <xref:Microsoft.Quantum.Canon.MultiplexOperationsFromGenerator>.
+    internal function _PauliBlockEncoding(
         generatorSystem: GeneratorSystem,
         statePrepUnitary: (Double[] -> (LittleEndian => Unit is Adj + Ctl)),
         multiplexer: ((Int, (Int -> (Qubit[] => Unit is Adj + Ctl))) -> ((LittleEndian, Qubit[]) => Unit is Adj + Ctl))) : (Double, BlockEncodingReflection) {
