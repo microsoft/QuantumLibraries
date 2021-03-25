@@ -56,7 +56,7 @@ namespace Microsoft.Quantum.Chemistry
         /// <summary>
         ///      Loads a Hamiltonian from integral data represented
         ///      in Broombridge format.
-        ///      Please see the <a href="https://docs.microsoft.com/quantum/libraries/chemistry/schema/spec">
+        ///      Please see the <a href="https://docs.microsoft.com/azure/quantum/user-guide/libraries/chemistry/schema/broombridge">
         ///      for further details about the
         ///      format parsed by this method.
         /// </summary>

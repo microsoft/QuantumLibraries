@@ -1,6 +1,6 @@
 # Microsoft Quantum Chemistry Library #
 
-This folder contains the C# and Q# sources used to implement the [Microsoft Quantum Chemistry library](https://docs.microsoft.com/en-us/quantum/libraries/chemistry/).
+This folder contains the C# and Q# sources used to implement the [Microsoft Quantum Chemistry library](https://docs.microsoft.com/azure/quantum/user-guide/libraries/chemistry).
 Samples of how to use the library can be found in the Chemistry folder of the [Microsoft/Quantum repository](https://github.com/microsoft/Quantum/tree/main/Chemistry).
 
 ## Building and testing ##
@@ -17,5 +17,5 @@ dotnet test tests
 ```
 
 For more details about creating and running tests in Q#,
-see the [Testing and debugging](https://docs.microsoft.com/quantum/quantum-techniques-testinganddebugging)
-section of the [developer's guide](https://docs.microsoft.com/quantum).
+see the [Testing and debugging](https://docs.microsoft.com/azure/quantum/user-guide/testing-debugging)
+section of the [developer's guide](https://docs.microsoft.com/azure/quantum).

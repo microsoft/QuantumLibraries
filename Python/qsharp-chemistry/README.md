@@ -2,9 +2,9 @@
 
 The `qsharp-chemistry` package for Python provides interoperability with Microsoft Quantum Development Kit's Chemistry Library.
 
-For details on how to get started with Python and Q#, please see the [Getting Started with Python guide](https://docs.microsoft.com/quantum/install-guide/python).
+For details on how to get started with Python and Q#, please see the [Getting Started with Python guide](https://docs.microsoft.com/azure/quantum/install-python-qdk).
 
-For details about the Quantum Chemistry Library, please see the [Introduction to the Quantum Chemistry Library article](https://docs.microsoft.com/quantum/user-guide/libraries/chemistry/) in our online documentation.
+For details about the Quantum Chemistry Library, please see the [Introduction to the Quantum Chemistry Library article](https://docs.microsoft.com/azure/quantum/user-guide/libraries/chemistry/) in our online documentation.
 
 You can also try our [Quantum Computing Fundamentals](https://aka.ms/learnqc) learning path to get familiar with the basic concepts of quantum computing, build quantum programs, and identify the kind of problems that can be solved.
 

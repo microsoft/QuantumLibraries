@@ -29,7 +29,7 @@
     <Description>Microsoft's Quantum ML Libraries.</Description>
     <Copyright>© Microsoft Corporation. All rights reserved.</Copyright>
     <PackageId>Microsoft.Quantum.MachineLearning</PackageId>
-    <PackageReleaseNotes>See: https://docs.microsoft.com/quantum/relnotes/</PackageReleaseNotes>
+    <PackageReleaseNotes>See: https://docs.microsoft.com/azure/quantum/qdk-relnotes/</PackageReleaseNotes>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/microsoft/QuantumLibraries/tree/main/MachineLearning</PackageProjectUrl>
     <PackageIcon>qdk-nuget-icon.png</PackageIcon>
