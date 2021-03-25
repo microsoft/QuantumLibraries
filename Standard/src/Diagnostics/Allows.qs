@@ -34,7 +34,7 @@ namespace Microsoft.Quantum.Diagnostics {
     /// This operation may be replaced by a no-op on targets which do not
     /// support it.
     operation AllowAtMostNCallsCA<'TInput, 'TOutput>(
-        nTimes : Int, op : ('TInput => 'TOutput is Adj + Ctl),
+        nTimes : Int, op : ('TInput => 'TOutput),
         message : String
     )
     : Unit is Adj {
