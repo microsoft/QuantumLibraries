@@ -19,7 +19,7 @@ namespace Microsoft.Quantum.AmplitudeAmplification {
     }
 
     /// # Summary
-    /// Implementation of <xref:Microsoft.Quantum.AmplitudeAmplification.Targetstatereflectionoracle>.
+    /// Implementation of <xref:Microsoft.Quantum.AmplitudeAmplification.TargetStateReflectionOracle>.
     internal operation ApplyTargetStateReflectionOracle(phase : Double, idxFlagQubit : Int, qubits : Qubit[])
     : Unit is Adj + Ctl {
         R1(phase, qubits[idxFlagQubit]);
@@ -44,5 +44,4 @@ namespace Microsoft.Quantum.AmplitudeAmplification {
     }
 
 }
-
 
