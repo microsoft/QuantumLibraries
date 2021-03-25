@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 namespace Microsoft.Quantum.Tests {
+    open Microsoft.Quantum.Measurement;
     open Microsoft.Quantum.Intrinsic;
     open Microsoft.Quantum.Diagnostics as Diag;
 
@@ -34,10 +35,43 @@ namespace Microsoft.Quantum.Tests {
         }
     }
 
+    operation CheckAllowNCallsMeasurementsTestShouldFail() : Unit {
+        within {
+            Diag.AllowAtMostNCallsCA(3, Measure, "Too many calls to Measure.");
+        } apply {
+            using (q = Qubit()) {
+                // Should use four measurements, one more
+                // than the three allowed.
+                // M should be expressed via Measure, so all calls should add up.
+                let resM = M(q);
+                let resMResetX = MResetX(q);
+                let resMResetY = MResetY(q);
+                let resMeasure = Measure([PauliZ], [q]);
+            }
+        }
+    }
+
+    @Diag.Test("QuantumSimulator")
+    operation CheckAllowNCallsMeasurements() : Unit {
+        within {
+            Diag.AllowAtMostNCallsCA(4, Measure, "Too many calls to Measure.");
+        } apply {
+            using (q = Qubit()) {
+                // Should use four measurements, exactly as
+                // many times as allowed.
+                // M should be expressed via Measure, so all calls should add up.
+                let resM = M(q);
+                let resMResetX = MResetX(q);
+                let resMResetY = MResetY(q);
+                let resMeasure = Measure([PauliZ], [q]);
+            }
+        }
+    }
+
     @Diag.Test("ToffoliSimulator")
     operation CheckAllowNQubitsWithNestedCalls() : Unit {
         // Here, the total number of allocated qubits exceeds our policy,
-        // but the number of thosse qubits allocated inside the policy
+        // but the number of those qubits allocated inside the policy
         // condition is still OK such that this should pass.
         using (outer = Qubit[4]) {
             within {
