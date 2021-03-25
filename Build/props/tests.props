@@ -3,6 +3,7 @@
 
   <PropertyGroup>
     <IsPackable>false</IsPackable>
+    <QSharpDocsGeneration>false</QSharpDocsGeneration>
   </PropertyGroup>
 
   <ItemGroup>

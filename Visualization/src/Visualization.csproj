@@ -10,7 +10,7 @@
     <Authors>Microsoft</Authors>
     <Description>Provides IQ# visualization support for Microsoft's Q# standard libraries.</Description>
     <Copyright>© Microsoft Corporation. All rights reserved.</Copyright>
-    <PackageReleaseNotes>See: https://docs.microsoft.com/en-us/quantum/relnotes/</PackageReleaseNotes>
+    <PackageReleaseNotes>See: https://docs.microsoft.com/azure/quantum/qdk-relnotes/</PackageReleaseNotes>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/Microsoft/Quantum</PackageProjectUrl>
     <PackageIcon>qdk-nuget-icon.png</PackageIcon>

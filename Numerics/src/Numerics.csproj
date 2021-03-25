@@ -14,7 +14,7 @@
     <Authors>Microsoft</Authors>
     <Description>Microsoft's Quantum numerics libraries.</Description>
     <Copyright>© Microsoft Corporation. All rights reserved.</Copyright>
-    <PackageReleaseNotes>See: https://docs.microsoft.com/en-us/quantum/relnotes/</PackageReleaseNotes>
+    <PackageReleaseNotes>See: https://docs.microsoft.com/azure/quantum/qdk-relnotes/</PackageReleaseNotes>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/Microsoft/QuantumLibraries</PackageProjectUrl>
     <PackageIcon>qdk-nuget-icon.png</PackageIcon>
