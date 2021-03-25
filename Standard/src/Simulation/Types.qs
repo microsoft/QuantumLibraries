@@ -10,7 +10,7 @@ namespace Microsoft.Quantum.Simulation {
 	/// Represents a time-independent simulation algorithm.
 	/// 
     /// A time-independent simulation technique converts an
-    ///  <xref:microsoft.quantum.simulation.evolutiongenerator>
+    /// <xref:Microsoft.Quantum.Simulation.EvolutionGenerator>
     /// to unitary time evolution for some time-interval.
     ///
     /// # Input
@@ -29,7 +29,7 @@ namespace Microsoft.Quantum.Simulation {
 	/// Represents a time-dependent simulation algorithm.
 	/// 
     /// A time-dependent simulation technique converts an
-    /// <xref:microsoft.quantum.simulation.evolutionschedule>
+    /// <xref:Microsoft.Quantum.Simulation.EvolutionSchedule>
     /// to unitary time-evolution for some time-interval.
     ///
     /// # Input

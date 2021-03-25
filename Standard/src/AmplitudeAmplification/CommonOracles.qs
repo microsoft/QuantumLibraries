@@ -13,13 +13,13 @@ namespace Microsoft.Quantum.AmplitudeAmplification {
     /// A `ReflectionOracle` that reflects about the state $\ket{0\cdots 0}$.
     ///
     /// # See Also
-    /// - Microsoft.Quantum.Canon.ReflectionOracle
+    /// - Microsoft.Quantum.AmplitudeAmplification.ReflectionOracle
     function ReflectionStart() : ReflectionOracle {
         return ReflectionOracle(RAll0);
     }
 
     /// # Summary
-    /// Implementation of <xref:microsoft.quantum.canon.targetstatereflectionoracle>.
+    /// Implementation of <xref:Microsoft.Quantum.AmplitudeAmplification.Targetstatereflectionoracle>.
     internal operation ApplyTargetStateReflectionOracle(phase : Double, idxFlagQubit : Int, qubits : Qubit[])
     : Unit is Adj + Ctl {
         R1(phase, qubits[idxFlagQubit]);

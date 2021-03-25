@@ -1,11 +1,11 @@
-// Copyright (c) Microsoft Corporation. All rights reserved.
+// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
 namespace Microsoft.Quantum.Oracles {
     open Microsoft.Quantum.Canon;
 
     /// # Summary
-    /// Implementation of <xref:microsoft.quantum.canon.obliviousoraclefromdeterministicstateoracle>.
+    /// Implementation of <xref:Microsoft.Quantum.Oracles.ObliviousOracleFromDeterministicStateOracle>.
     internal operation ApplyObliviousOracleFromDeterministicStateOracle(ancillaOracle : DeterministicStateOracle, signalOracle : ObliviousOracle, ancillaRegister : Qubit[], systemRegister : Qubit[])
     : Unit is Adj + Ctl {
         ancillaOracle!(ancillaRegister);
@@ -35,7 +35,7 @@ namespace Microsoft.Quantum.Oracles {
 
 
     /// # Summary
-    /// Implementation of <xref:microsoft.quantum.canon.deterministicstateoraclefromstateoracle>.
+    /// Implementation of <xref:Microsoft.Quantum.Oracles.DeterministicStateoracleFromStateOracle>.
     internal operation ApplyDeterministicStateOracleFromStateOracle (idxFlagQubit : Int, stateOracle : StateOracle, startQubits : Qubit[])
     : Unit is Adj + Ctl {
         stateOracle!(idxFlagQubit, startQubits);
@@ -68,7 +68,7 @@ namespace Microsoft.Quantum.Oracles {
 
 
     /// # Summary
-    /// Implementation of <xref:microsoft.quantum.canon.stateoraclefromdeterministicstateoracle>.
+    /// Implementation of <xref:Microsoft.Quantum.Canon.StateOracleFromDeterministicStateOracle>.
     internal operation ApplyStateOracleFromDeterministicStateOracle(idxFlagQubit : Int, oracleStateDeterministic : DeterministicStateOracle, qubits : Qubit[])
     : Unit is Adj + Ctl {
         oracleStateDeterministic!(qubits);
@@ -97,7 +97,7 @@ namespace Microsoft.Quantum.Oracles {
 
 
     /// # Summary
-    /// Implementation of <xref:microsoft.quantum.canon.reflectionoraclefromdeterministicstateoracle>.
+    /// Implementation of <xref:Microsoft.Quantum.Canon.ReflectionOracleFromDeterministicStateOracle>.
     operation _ReflectionOracleFromDeterministicStateOracle(phase : Double, oracle : DeterministicStateOracle, systemRegister : Qubit[])
     : Unit is Adj + Ctl {
         ApplyWithCA(Adjoint oracle!, RAll0(phase, _), systemRegister);
