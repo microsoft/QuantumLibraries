@@ -44,7 +44,12 @@ assignees: ''
 
 ### New and modified functions, operations, and UDTs
 
-<!-- This is the core of your actual proposal, and should consist of a bulleted list of changes to the Q# API surface included in your proposal, grouped by namespace. -->
+<!--
+    This is the core of your actual proposal, and should consist of a bulleted list of changes to the Q# API surface included in your proposal, grouped by namespace.
+
+    In writing this section, it can be helpful to draft out what API documentation would look like for your proposal, especially the /// # Example sections for each function and operation.
+    For more information about writing API documentation, check out https://aka.ms/qdk/contrib/api-docs.
+-->
 
 
 ### Modifications to style guide
