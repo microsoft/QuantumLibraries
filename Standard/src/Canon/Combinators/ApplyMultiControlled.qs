@@ -165,8 +165,8 @@ namespace Microsoft.Quantum.Canon {
     ///     Quantum Computation and Quantum Information ](http://doi.org/10.1017/CBO9780511976667)
     ///
     /// # Remarks
-    /// - Used as a part of <xref:microsoft.quantum.canon.applymulticontrolledc>
-    ///   and <xref:microsoft.quantum.canon.applymulticontrolledca>.
+    /// - Used as a part of <xref:Microsoft.Quantum.Canon.ApplyMultiControlledC>
+    ///   and <xref:Microsoft.Quantum.Canon.ApplyMultiControlledCA>.
     /// - For the explanation and circuit diagram see Figure 4.10, Section 4.3 in Nielsen & Chuang.
     operation AndLadder (ccnot : CCNOTop, controls : Qubit[], targets : Qubit[]) : Unit is Adj {
         EqualityFactI(Length(controls), Length(targets) + 1, $"Length(controls) must be equal to Length(target) + 1");

@@ -212,7 +212,7 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
     /// Represents a dynamical generator as a set of simulatable gates and an
     /// expansion in the JordanWigner basis.
     ///
-    /// See [Dynamical Generator Modeling](../libraries/data-structures#dynamical-generator-modeling)
+    /// See [Dynamical Generator Modeling](xref:microsoft.quantum.libraries.overview.data-structures#dynamical-generator-modeling)
     /// for more details.
     ///
     /// # Input
