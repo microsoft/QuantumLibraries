@@ -677,7 +677,7 @@ namespace Microsoft.Quantum.Math {
     {
         mutable an = 1;
         mutable x = 1;
-        if (n < 0 ){
+        if n < 0 {
             set an = AbsI(n);
             set x = -1;
         }
