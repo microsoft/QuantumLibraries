@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27130.2024
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30804.86
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentation", "Documentation", "{561759D2-4D2D-4EE3-9565-9AAEC4A7D64B}"
 	ProjectSection(SolutionItems) = preProject
@@ -14,7 +14,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Standard.Tests", "Standard\
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Visualization", "Visualization", "{2C5BF171-7D32-4DEC-BD08-9667A55A36FF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Visualization", "Visualization\src\Visualization.csproj", "{AC5462CC-F249-48E4-BFBE-93FC5AAC0D4E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Visualization", "Visualization\src\Visualization.csproj", "{AC5462CC-F249-48E4-BFBE-93FC5AAC0D4E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ionqSandbox", "ionqSandbox\ionqSandbox.csproj", "{46396916-A107-412D-90EB-E679AD65C553}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -34,9 +36,16 @@ Global
 		{AC5462CC-F249-48E4-BFBE-93FC5AAC0D4E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AC5462CC-F249-48E4-BFBE-93FC5AAC0D4E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AC5462CC-F249-48E4-BFBE-93FC5AAC0D4E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{46396916-A107-412D-90EB-E679AD65C553}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{46396916-A107-412D-90EB-E679AD65C553}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{46396916-A107-412D-90EB-E679AD65C553}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{46396916-A107-412D-90EB-E679AD65C553}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{AC5462CC-F249-48E4-BFBE-93FC5AAC0D4E} = {2C5BF171-7D32-4DEC-BD08-9667A55A36FF}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {6869E5BF-551A-40F1-9B6B-D1B27A5676CB}
@@ -46,8 +55,5 @@ Global
 	EndGlobalSection
 	GlobalSection(Performance) = preSolution
 		HasPerformanceSessions = true
-	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{AC5462CC-F249-48E4-BFBE-93FC5AAC0D4E} = {2C5BF171-7D32-4DEC-BD08-9667A55A36FF}
 	EndGlobalSection
 EndGlobal

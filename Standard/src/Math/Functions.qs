@@ -657,6 +657,42 @@ namespace Microsoft.Quantum.Math {
         }
     }
 
+    /// # Summary
+    /// Returns a factorial as an int.
+    ///
+    /// # Description
+    /// Returns the factorial as Integer, given an input of $n$ as an Integer.
+    /// Maximum input is |20| to return as Int. For inputs greater than 20, use FactorialB(n).
+    ///
+    /// # Input
+    /// ## $n$
+    /// An Int between -20, 20.
+    ///
+    /// # Output
+    /// The factorial of the provided input with the datatype Int.
+    function FactorialI (n : Int) : Int
+    {
+        mutable an = 1;
+        mutable x = 1;
+        if (n < 0 ){
+            set an = AbsI(n);
+            set x = -1;
+        }
+        elif(n == 0){
+            return x;
+        }
+        elif(n >= 21){
+            fail "Largest factorial an Int can hold is |20|. Use Factorial BigInt.  \n \n >FactorialB(n) .";
+        }
+        else{
+            set an = n;
+        }
+        for i in  1 .. an {
+            set x = x * i;
+        }
+       return x;
+    }
+
 }
 
 
