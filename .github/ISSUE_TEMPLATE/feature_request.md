@@ -2,7 +2,7 @@
 name: Feature request
 about: Suggest an idea for the Quantum Development Kit libraries
 title: ''
-labels: enhancement
+labels: Kind-Enhancement
 assignees: ''
 
 ---
