@@ -658,7 +658,7 @@ namespace Microsoft.Quantum.Math {
     }
     
     /// # Summary
-    /// Returns a factorial as an int.
+    /// Returns a factorial of a given number.
     ///
     /// # Description
     /// Returns the factorial as Integer, given an input of $n$ as an Integer.
@@ -729,4 +729,3 @@ namespace Microsoft.Quantum.Math {
     }
 
 }
-
