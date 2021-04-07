@@ -708,7 +708,7 @@ namespace Microsoft.Quantum.Math {
     ///
     /// # Output
     /// The factorial of the provided input with the type BigInt.
-    function FactorialB (n : Int) : BigInt
+    function FactorialL(n : Int) : BigInt
     {
         mutable an = 1;
         mutable x = IntAsBigInt(1);
