@@ -681,13 +681,11 @@ namespace Microsoft.Quantum.Math {
             set an = AbsI(n);
             set x = -1;
         }
-        elif(n == 0){
+        elif n == 0 {
             return x;
-        }
-        elif(n >= 21){
-            fail "Largest factorial an Int can hold is |20|. Use Factorial BigInt.  \n \n >FactorialB(n) .";
-        }
-        else{
+        } elif n >= 21 {
+            fail "Largest factorial an Int can hold is 20!. Use Factorial BigInt.  \n \n >FactorialB(n).";
+        } else {
             set an = n;
         }
         for i in  1 .. an {
