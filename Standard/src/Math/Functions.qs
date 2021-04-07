@@ -670,6 +670,9 @@ namespace Microsoft.Quantum.Math {
     ///
     /// # Output
     /// The factorial of the provided input with the datatype Int.
+    ///
+    /// # See Also
+    /// - Microsoft.Quantum.Math.FactorialL
     function FactorialI (n : Int) : Int
     {
         mutable an = 1;
@@ -726,5 +729,4 @@ namespace Microsoft.Quantum.Math {
     }
 
 }
-
 
