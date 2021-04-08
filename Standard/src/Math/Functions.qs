@@ -672,7 +672,7 @@ namespace Microsoft.Quantum.Math {
     /// The factorial of the provided input with the datatype Int.
     ///
     /// # See Also
-    /// - Microsoft.Quantum.Math.FactorialL
+    /// - Microsoft.Quantum.Math.FactorialD
     function FactorialI (n : Int) : Int
     {
         mutable an = 1;
@@ -695,35 +695,31 @@ namespace Microsoft.Quantum.Math {
     }
 
     /// # Summary
-    /// Returns a factorial as a BigInt.
+    /// Returns a factorial of the given number as a 'Double'.
     ///
     /// # Description
-    /// Returns the factorial as Big Integer, given an input of $n$ as an Integer.
+    /// Returns the factorial as 'Double', given an input of $n$ as a 'Double'.
+    /// Large numbers are returned in scientific notation. Example: '8.320987112732955E+81'
+    /// Function uses the Ramanujan Approxomation with a relative error to the order of 1/n^5 
     ///
     /// # Input
     /// ## $n$
-    /// A whole number of any size, positive or negative.
+    /// A Double.
     ///
     /// # Output
-    /// The factorial of the provided input with the type BigInt.
-    function FactorialL(n : Int) : BigInt
+    /// The Factorial of the provided Number
+    ///
+    /// # See Also
+    /// - Microsoft.Quantum.Math.FactorialI
+    function FactorialD(n : Double) : Double
     {
-        mutable an = 1;
-        mutable x = IntAsBigInt(1);
-        if (n < 0 ){
-            set an = AbsI(n);
-            set x = IntAsBigInt(-1);
-        }
-        elif(n == 0){
-            return x;
-        }
-        else{
-            set an = n;
-        }
-        for i in  1 .. an {
-            set x = x * IntAsBigInt(i);
-        }
-       return x;
-    }
+        let x = AbsD(n);
+
+        let a = Sqrt(2.0*PI()*x);
+        let b = ((x /E())^x);
+        let c = (E()^((1.0/(12.0*x)) - (1.0 /(360.0*(x^3.0)))));
+
+        return a*b*c;
+   }
 
 }

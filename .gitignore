@@ -330,3 +330,5 @@ __pycache__/
 *.odx.cs
 *.xsd.cs
 
+/ionqTest
+/qsharpTest
