@@ -711,9 +711,14 @@ namespace Microsoft.Quantum.Math {
     ///
     /// # See Also
     /// - Microsoft.Quantum.Math.FactorialI
-    function FactorialD(n : Double) : Double
+        function FactorialD(n : Double) : Double
     {
+        
         let x = AbsD(n);
+
+        if n == 0.0 {
+        return 1.0;
+        }
 
         let a = Sqrt(2.0*PI()*x);
         let b = ((x /E())^x);
