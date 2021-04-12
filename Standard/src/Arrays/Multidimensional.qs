@@ -231,9 +231,16 @@ namespace Microsoft.Quantum.Arrays {
             return ();
         } else {
             let numColumns = Length(Head(array));
-            if (Any(Compose(NotEqualI(numColumns, _), Length<'T>), Rest(array))) {
-                fail message;
+            for i in IndexRange(Rest(array)) {
+                if Length(array[i+1]) != numColumns {
+                    fail message;
+                }
             }
+            // qsharp-compiler Issue #964: QIR generation fails when passing a generic callable as a
+            // parameter with an inherited type specifier. https://github.com/microsoft/qsharp-compiler/issues/964
+            // if (Any(Compose(NotEqualI(numColumns, _), Length<'T>), Rest(array))) {
+            //     fail message;
+            // }
         }
     }
 
@@ -268,9 +275,16 @@ namespace Microsoft.Quantum.Arrays {
             return ();
         } else {
             let numColumns = Length(array);
-            if (Any(Compose(NotEqualI(numColumns, _), Length<'T>), array)) {
-                fail message;
+            for i in IndexRange(Rest(array)) {
+                if Length(array[i+1]) != numColumns {
+                    fail message;
+                }
             }
+            // qsharp-compiler Issue #964: QIR generation fails when passing a generic callable as a
+            // parameter with an inherited type specifier. https://github.com/microsoft/qsharp-compiler/issues/964
+            // if (Any(Compose(NotEqualI(numColumns, _), Length<'T>), array)) {
+            //     fail message;
+            // }
         }
     }
 }
