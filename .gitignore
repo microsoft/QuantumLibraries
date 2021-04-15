@@ -16,6 +16,9 @@ packages/
 *.exe
 *.chm
 
+# Pipeline drops dir
+drops/
+
 # test outputs
 TestResults/
 *.qxe
