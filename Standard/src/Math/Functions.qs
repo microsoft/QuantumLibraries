@@ -628,6 +628,7 @@ namespace Microsoft.Quantum.Math {
     /// # Summary
     /// Normalizes a vector of `Double`s in the `L(p)` norm.
     ///
+    /// # Description
     /// That is, given an array $x$ of type `Double[]`, this returns an array where
     /// all elements are divided by the $p$-norm $\|x\|_p$.
     ///
@@ -656,13 +657,14 @@ namespace Microsoft.Quantum.Math {
             return output;
         }
     }
-    
+ 
+ 
     /// # Summary
     /// Returns a factorial of a given number.
     ///
     /// # Description
     /// Returns the factorial as Integer, given an input of $n$ as an Integer.
-    /// Maximum input is |20| to return as Int. For inputs greater than 20, use FactorialB(n).
+    /// Maximum input is |20| to return as Int. For inputs greater than 20, use FactorialL(n).
     ///
     /// # Input
     /// ## $n$
@@ -672,7 +674,7 @@ namespace Microsoft.Quantum.Math {
     /// The factorial of the provided input with the datatype Int.
     ///
     /// # See Also
-    /// - Microsoft.Quantum.Math.FactorialD
+    /// - Microsoft.Quantum.Math.FactorialL
     function FactorialI (n : Int) : Int
     {
         mutable an = 1;
@@ -684,7 +686,7 @@ namespace Microsoft.Quantum.Math {
         elif n == 0 {
             return x;
         } elif n >= 21 {
-            fail "Largest factorial an Int can hold is 20!. Use Factorial BigInt.  \n \n >FactorialB(n).";
+            fail "Largest factorial an Int can hold is 20!. Use FactorialL or FactorialD";
         } else {
             set an = n;
         }
@@ -694,37 +696,110 @@ namespace Microsoft.Quantum.Math {
        return x;
     }
 
+
     /// # Summary
-    /// Returns a factorial of the given number as a 'Double'.
+    /// Returns a factorial of a given number.
     ///
     /// # Description
     /// Returns the factorial as 'Double', given an input of $n$ as a 'Double'.
-    /// Large numbers are returned in scientific notation. Example: '8.320987112732955E+81'
-    /// Function uses the Ramanujan Approxomation with a relative error to the order of 1/n^5 
+    /// The domain of inputs for this function is 20.0 < n < 170.0.
+    /// Function uses the Ramanujan Approxomation with a relative error to the order of 1/n^5
     ///
     /// # Input
     /// ## $n$
-    /// A Double.
+    /// A 'Double' between 20.0 < n < 170.0.
+    /// Negatives are accepted.
     ///
     /// # Output
-    /// The Factorial of the provided Number
+    /// The factorial of the provided input with the datatype 'Double'.
+    /// Large numbers are returned in scientific notation. Example: '8.320987112732955E+81'
     ///
     /// # See Also
-    /// - Microsoft.Quantum.Math.FactorialI
-        function FactorialD(n : Double) : Double
+    /// - Microsoft.Quantum.Math.FactorialL
+    function FactorialD(n : Double) : Double
     {
+        let GivenInt = AbsD(n);
+        mutable Direction = 1.0;
+        mutable TradLoop = 1.0;
+        mutable ans = 1.0;
         
-        let x = AbsD(n);
-
-        if n == 0.0 {
-        return 1.0;
+        if n < 0.0 {
+            set Direction = -1.0;
         }
-
-        let a = Sqrt(2.0*PI()*x);
-        let b = ((x /E())^x);
-        let c = (E()^((1.0/(12.0*x)) - (1.0 /(360.0*(x^3.0)))));
-
-        return a*b*c;
+        if GivenInt <= 30.0{
+            fail "FactorialD uses aproxomation. It is recommended to use FactorialI for factorials less than 20";
+        }
+        elif GivenInt >= 170.0{
+            fail "FactorialD will return infinity for numbers larger than 170! Recommend using FactorialL";
+        }
+        else{
+        let a = Sqrt(2.0*PI()*GivenInt);
+        let b = ((GivenInt /E())^GivenInt);
+        let c = (E()^((1.0/(12.0*GivenInt)) - (1.0 /(360.0*(GivenInt^3.0)))));
+        set ans = a*b*c*Direction;
+        }
+       return ans;
    }
+
+
+   
+    /// # Summary
+    /// Given an 'Int', this function returns a factorial as a 'BigInt'.
+    ///
+    /// # Description
+    /// Returns the factorial as Big Integer, given an input of $n$ as an Integer.
+    /// This function does not use approximation. If speed is required, use 'FactorialD'
+    ///
+    /// # Input
+    /// ## $n$
+    /// A whole number of any size, positive or negative.
+    ///
+    /// # Output
+    /// The factorial of the provided input with the type BigInt
+    ///
+    /// # See Also
+    /// - Microsoft.Quantum.Math.FactorialD
+    function FactorialL(n : Int) : BigInt
+    { 
+        mutable Direction = 1L;
+        mutable Ans = 1L;
+        let GivenValue = AbsI(n);
+
+        if n < 0{
+            set Direction = -1L;
+        }
+        if GivenValue == 0{
+            return 1L;
+        }
+        elif GivenValue == 1{
+            return 1L;
+        }
+        else{
+            let Eve = EveFactorialL(GivenValue);
+            let Odd = OddFactorialL(GivenValue);
+            set Ans = Eve * Odd * Direction;
+        }
+        return Ans;
+    }
+
+    internal function OddFactorialL(n : Int) : BigInt
+    {
+     mutable acc = 1L;
+     for i in 1..2..n {
+          set acc *= IntAsBigInt(i);
+    }
+     return acc;
+    }
+
+    internal function EveFactorialL(n : Int) : BigInt
+    {
+     mutable acc = 1L;
+     for i in 2..2..n {
+        set acc *= IntAsBigInt(i);
+    }
+     return acc;
+    }
+
+
 
 }
