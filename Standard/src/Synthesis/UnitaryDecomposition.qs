@@ -45,16 +45,31 @@ namespace Microsoft.Quantum.Synthesis {
     }
 
     /// # Summary
-    /// Applies gate defined by 2^n x 2^n unitary matrix.
+    /// Applies gate defined by a $2^n \times 2^n$ unitary matrix.
     ///
     /// Fails if matrix is not unitary, or has wrong size. 
     ///
     /// # Input
     /// ## unitary
-    /// 2^n x 2^n unitary matrix describing the operation. 
-    /// If matrix is not unitary or not of suitable size, throws an exception.
+    /// A $2^n \times 2^n$ unitary matrix describing the operation. 
+    /// If the matrix is not unitary or not of suitable size, throws an exception.
     /// ## qubits
-    /// Qubits to which apply the operation - register of length n.
+    /// Qubits to which apply the operation - a little-endian register of length n.
+    /// 
+    /// # Example
+    /// The following operation will be equivalent to applying the Hadamard gate to the given qubit:
+    ///
+    /// ```qsharp
+    /// open Microsoft.Quantum.Arithmetic;
+    /// open Microsoft.Quantum.Math;
+    /// open Microsoft.Quantum.Synthesis;
+    /// 
+    /// operation ApplyH (register : LittleEndian) : Unit is Adj + Ctl {
+    ///     let matrix = [[Complex(Sqrt(0.5), 0.0), Complex(Sqrt(0.5), 0.0)],
+    ///                   [Complex(Sqrt(0.5), 0.0), Complex(-Sqrt(0.5), 0.0)]];
+    ///     ApplyUnitary(matrix, register);
+    /// }
+    /// ```
     operation ApplyUnitary(unitary: Complex[][], qubits : LittleEndian) : Unit is Adj + Ctl {
         SquareMatrixFact(unitary);
         EqualityFactI(Length(unitary), 1 <<< Length(qubits!),
