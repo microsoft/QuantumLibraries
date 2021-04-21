@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft Corporation.
+﻿// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
 namespace Microsoft.Quantum.Synthesis {
@@ -45,7 +45,7 @@ namespace Microsoft.Quantum.Synthesis {
     }
 
     /// # Summary
-    /// Applies gate defined by a $2^n \times 2^n$ unitary matrix.
+    /// Applies gate defined by a 2ⁿ × 2ⁿ unitary matrix.
     ///
     /// Fails if matrix is not unitary, or has wrong size. 
     ///
@@ -70,6 +70,9 @@ namespace Microsoft.Quantum.Synthesis {
     ///     ApplyUnitary(matrix, register);
     /// }
     /// ```
+    ///
+    /// Note that this way of applying the Hadamard gate is more expensive than calling the gate directly.
+    /// We recommend to use this operation only for unitaries that are not implemented as primitive gates.
     operation ApplyUnitary(unitary: Complex[][], qubits : LittleEndian) : Unit is Adj + Ctl {
         SquareMatrixFact(unitary);
         EqualityFactI(Length(unitary), 1 <<< Length(qubits!),
