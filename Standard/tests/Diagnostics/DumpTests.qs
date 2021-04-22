@@ -10,7 +10,7 @@ namespace Microsoft.Quantum.Tests {
         Diag.DumpOperation(1, ApplyToEachCA(S, _));
     }
 
-    operation DumpCnot() : Unit {
+    operation DumpCnot() : Unit is Adj + Ctl {
         Diag.DumpOperation(2, ApplyToFirstTwoQubitsCA(CNOT, _));
     }
 
