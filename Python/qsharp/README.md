@@ -2,7 +2,7 @@
 
 The `qsharp` package for Python provides interoperability with the Quantum Development Kit and with the Q# language, making it easy to simulate Q# operations and functions from within Python.
 
-For details on how to get started with Python and Q#, please see the [Getting Started with Python guide](https://docs.microsoft.com/quantum/install-guide/python).
+For details on how to get started with Python and Q#, please see the [Getting Started with Python guide](https://docs.microsoft.com/azure/quantum/install-python-qdk).
 
 You can also try our [Quantum Computing Fundamentals](https://aka.ms/learnqc) learning path to get familiar with the basic concepts of quantum computing, build quantum programs, and identify the kind of problems that can be solved.
 

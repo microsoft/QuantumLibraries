@@ -34,15 +34,14 @@ namespace Microsoft.Quantum.Arithmetic {
     /// Assumes that the initial value of target is less than $N$
     /// and that the increment $a$ is less than $N$.
     /// Note that
-    /// <xref:microsoft.quantum.arithmetic.incrementphasebymodularinteger> implements
+    /// <xref:Microsoft.Quantum.Arithmetic.IncrementPhaseByModularInteger> implements
     /// the same operation in the `PhaseLittleEndian` basis.
     operation IncrementByModularInteger(increment : Int, modulus : Int, target : LittleEndian)
     : Unit is Adj + Ctl {
         let inner = IncrementPhaseByModularInteger(increment, modulus, _);
 
-        using (extraZeroBit = Qubit()) {
-            ApplyPhaseLEOperationOnLECA(inner, LittleEndian(target! + [extraZeroBit]));
-        }
+        use extraZeroBit = Qubit();
+        ApplyPhaseLEOperationOnLECA(inner, LittleEndian(target! + [extraZeroBit]));
     }
 
     /// # Summary
@@ -92,28 +91,27 @@ namespace Microsoft.Quantum.Arithmetic {
 
             // note that controlled version is correct only under the assumption
             // that the value of target is less than modulus
-            using (lessThanModulusFlag = Qubit()) {
-                let copyMostSignificantBitPhaseLE = ApplyLEOperationOnPhaseLEA(CopyMostSignificantBit(_, lessThanModulusFlag), _);
+            use lessThanModulusFlag = Qubit();
+            let copyMostSignificantBitPhaseLE = ApplyLEOperationOnPhaseLEA(CopyMostSignificantBit(_, lessThanModulusFlag), _);
 
-                // lets track the state of target register through the computation
-                Controlled IncrementPhaseByInteger(controls, (increment, target));
+            // lets track the state of target register through the computation
+            Controlled IncrementPhaseByInteger(controls, (increment, target));
 
-                // the state is |x+a⟩ in QFT basis
-                Adjoint IncrementPhaseByInteger(modulus, target);
+            // the state is |x+a⟩ in QFT basis
+            Adjoint IncrementPhaseByInteger(modulus, target);
 
-                // the state is |x+a-N⟩ in QFT basis
-                copyMostSignificantBitPhaseLE(target);
+            // the state is |x+a-N⟩ in QFT basis
+            copyMostSignificantBitPhaseLE(target);
 
-                // lessThanModulusFlag is set to 1 if x+a < N
-                Controlled IncrementPhaseByInteger([lessThanModulusFlag], (modulus, target));
+            // lessThanModulusFlag is set to 1 if x+a < N
+            Controlled IncrementPhaseByInteger([lessThanModulusFlag], (modulus, target));
 
-                // the state is |x+a (mod N)⟩ in QFT basis
-                // Now let us restore the lessThanModulusFlag qubit back to zero
-                Controlled (Adjoint IncrementPhaseByInteger)(controls, (increment, target));
-                X(lessThanModulusFlag);
-                copyMostSignificantBitPhaseLE(target);
-                Controlled IncrementPhaseByInteger(controls, (increment, target));
-            }
+            // the state is |x+a (mod N)⟩ in QFT basis
+            // Now let us restore the lessThanModulusFlag qubit back to zero
+            Controlled (Adjoint IncrementPhaseByInteger)(controls, (increment, target));
+            X(lessThanModulusFlag);
+            copyMostSignificantBitPhaseLE(target);
+            Controlled IncrementPhaseByInteger(controls, (increment, target));
         }
     }
 
