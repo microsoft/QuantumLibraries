@@ -332,8 +332,3 @@ __pycache__/
 *.btm.cs
 *.odx.cs
 *.xsd.cs
-
-/ionqTest
-/qsharpTest
-/ionQTest-2
-/ionQTest-2.csproj
