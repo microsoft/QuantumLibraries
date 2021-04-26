@@ -10,4 +10,4 @@ jobs:
     - uses: yogevbd/enforce-label-action@2.1.0
       with:
         BANNED_LABELS: "Status-NeedsAPIReview"
-        BANNED_LABELS_DESCRIPTION: "PR blocked until required API review is completed."
+        BANNED_LABELS_DESCRIPTION: "PR blocked until required API review is completed. Please see https://aka.ms/qsharp-api-process."
