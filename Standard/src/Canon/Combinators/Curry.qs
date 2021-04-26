@@ -7,6 +7,18 @@ namespace Microsoft.Quantum.Canon {
         return op(arg1, _);
     }
 
+    internal function WithFirstInputAppliedA<'T, 'U> (op : (('T, 'U) => Unit is Adj), arg1 : 'T) : ('U => Unit is Adj) {
+        return op(arg1, _);
+    }
+
+    internal function WithFirstInputAppliedC<'T, 'U> (op : (('T, 'U) => Unit is Ctl), arg1 : 'T) : ('U => Unit is Ctl) {
+        return op(arg1, _);
+    }
+
+    internal function WithFirstInputAppliedCA<'T, 'U> (op : (('T, 'U) => Unit is Adj + Ctl), arg1 : 'T) : ('U => Unit is Adj + Ctl) {
+        return op(arg1, _);
+    }
+
 
     /// # Summary
     /// Returns a curried version of an operation on two inputs.
@@ -39,8 +51,133 @@ namespace Microsoft.Quantum.Canon {
     /// let partial = curried(x);
     /// partial(y);
     /// ```
+    ///
+    /// # See Also
+    /// - Microsoft.Quantum.Canon.CurriedOpC
+    /// - Microsoft.Quantum.Canon.CurriedOpA
+    /// - Microsoft.Quantum.Canon.CurriedOpCA
     function CurriedOp<'T, 'U> (op : (('T, 'U) => Unit)) : ('T -> ('U => Unit)) {
         return WithFirstInputApplied(op, _);
+    }
+
+    /// # Summary
+    /// Returns a curried version of an operation on two inputs.
+    ///
+    /// That is, given an operation with two inputs, this function applies Curry's isomorphism
+    /// $f(x, y) \equiv f(x)(y)$ to return an operation of one input which
+    /// returns an operation of one input.
+    ///
+    /// # Input
+    /// ## op
+    /// An operation whose input is a pair.
+    ///
+    /// # Output
+    /// An operation which accepts the first element of a pair and returns
+    /// an operation which accepts as its input the second element of the
+    /// original operation's input.
+    ///
+    /// # Type Parameters
+    /// ## 'T
+    /// The type of the first component of a function defined on pairs.
+    /// ## 'U
+    /// The type of the second component of a function defined on pairs.
+    ///
+    /// # Remarks
+    /// The following are equivalent:
+    /// ```qsharp
+    /// op(x, y);
+    ///
+    /// let curried = CurriedOp(op);
+    /// let partial = curried(x);
+    /// partial(y);
+    /// ```
+    ///
+    /// # See Also
+    /// - Microsoft.Quantum.Canon.CurriedOp
+    /// - Microsoft.Quantum.Canon.CurriedOpC
+    /// - Microsoft.Quantum.Canon.CurriedOpCA
+    function CurriedOpA<'T, 'U> (op : (('T, 'U) => Unit is Adj)) : ('T -> ('U => Unit is Adj)) {
+        return WithFirstInputAppliedA(op, _);
+    }
+
+    /// # Summary
+    /// Returns a curried version of an operation on two inputs.
+    ///
+    /// That is, given an operation with two inputs, this function applies Curry's isomorphism
+    /// $f(x, y) \equiv f(x)(y)$ to return an operation of one input which
+    /// returns an operation of one input.
+    ///
+    /// # Input
+    /// ## op
+    /// An operation whose input is a pair.
+    ///
+    /// # Output
+    /// An operation which accepts the first element of a pair and returns
+    /// an operation which accepts as its input the second element of the
+    /// original operation's input.
+    ///
+    /// # Type Parameters
+    /// ## 'T
+    /// The type of the first component of a function defined on pairs.
+    /// ## 'U
+    /// The type of the second component of a function defined on pairs.
+    ///
+    /// # Remarks
+    /// The following are equivalent:
+    /// ```qsharp
+    /// op(x, y);
+    ///
+    /// let curried = CurriedOp(op);
+    /// let partial = curried(x);
+    /// partial(y);
+    /// ```
+    ///
+    /// # See Also
+    /// - Microsoft.Quantum.Canon.CurriedOp
+    /// - Microsoft.Quantum.Canon.CurriedOpA
+    /// - Microsoft.Quantum.Canon.CurriedOpCA
+    function CurriedOpC<'T, 'U> (op : (('T, 'U) => Unit is Ctl)) : ('T -> ('U => Unit is Ctl)) {
+        return WithFirstInputAppliedC(op, _);
+    }
+
+    /// # Summary
+    /// Returns a curried version of an operation on two inputs.
+    ///
+    /// That is, given an operation with two inputs, this function applies Curry's isomorphism
+    /// $f(x, y) \equiv f(x)(y)$ to return an operation of one input which
+    /// returns an operation of one input.
+    ///
+    /// # Input
+    /// ## op
+    /// An operation whose input is a pair.
+    ///
+    /// # Output
+    /// An operation which accepts the first element of a pair and returns
+    /// an operation which accepts as its input the second element of the
+    /// original operation's input.
+    ///
+    /// # Type Parameters
+    /// ## 'T
+    /// The type of the first component of a function defined on pairs.
+    /// ## 'U
+    /// The type of the second component of a function defined on pairs.
+    ///
+    /// # Remarks
+    /// The following are equivalent:
+    /// ```qsharp
+    /// op(x, y);
+    ///
+    /// let curried = CurriedOp(op);
+    /// let partial = curried(x);
+    /// partial(y);
+    /// ```
+    ///
+    /// # See Also
+    /// - Microsoft.Quantum.Canon.CurriedOp
+    /// - Microsoft.Quantum.Canon.CurriedOpC
+    /// - Microsoft.Quantum.Canon.CurriedOpA
+    function CurriedOpCA<'T, 'U> (op : (('T, 'U) => Unit is Adj + Ctl)) : ('T -> ('U => Unit is Adj + Ctl)) {
+        return WithFirstInputAppliedCA(op, _);
     }
 
     internal operation ApplyCurriedOp<'T, 'U> (curriedOp : ('T -> ('U => Unit)), first : 'T, second : 'U) : Unit {
@@ -68,9 +205,9 @@ namespace Microsoft.Quantum.Canon {
     /// ## 'U
     /// The type of the second input to a curried operation.
     /// # See Also
-    /// - @"microsoft.quantum.canon.uncurryopc"
-    /// - @"microsoft.quantum.canon.uncurryopa"
-    /// - @"microsoft.quantum.canon.uncurryopca"
+    /// - Microsoft.Quantum.Canon.UncurriedOpC
+    /// - Microsoft.Quantum.Canon.UncurriedOpA
+    /// - Microsoft.Quantum.Canon.UncurriedOpCA
     function UncurriedOp<'T, 'U> (curriedOp : ('T -> ('U => Unit))) : (('T, 'U) => Unit) {
         return ApplyCurriedOp(curriedOp, _, _);
     }
@@ -104,7 +241,7 @@ namespace Microsoft.Quantum.Canon {
     /// The type of the second argument of a curried function.
     ///
     /// # See Also
-    /// - @"microsoft.quantum.canon.uncurryop"
+    /// - Microsoft.Quantum.Canon.UncurriedOp
     function UncurriedOpC<'T, 'U> (curriedOp : ('T -> ('U => Unit is Ctl)))
     : (('T, 'U) => Unit is Ctl) {
         return ApplyCurriedOpC(curriedOp, _, _);
@@ -139,7 +276,7 @@ namespace Microsoft.Quantum.Canon {
     /// The type of the second argument of a curried function.
     ///
     /// # See Also
-    /// - @"microsoft.quantum.canon.uncurryop"
+    /// - Microsoft.Quantum.Canon.UncurriedOp
     function UncurriedOpA<'T, 'U> (curriedOp : ('T -> ('U => Unit is Adj))) : (('T, 'U) => Unit is Adj) {
         return ApplyCurriedOpA(curriedOp, _, _);
     }
@@ -173,7 +310,7 @@ namespace Microsoft.Quantum.Canon {
     /// The type of the second argument of a curried function.
     ///
     /// # See Also
-    /// - @"microsoft.quantum.canon.uncurryop"
+    /// - Microsoft.Quantum.Canon.UncurriedOp
     function UncurriedOpCA<'T, 'U> (curriedOp : ('T -> ('U => Unit is Ctl + Adj))) : (('T, 'U) => Unit is Ctl + Adj) {
         return ApplyCurriedOpCA(curriedOp, _, _);
     }

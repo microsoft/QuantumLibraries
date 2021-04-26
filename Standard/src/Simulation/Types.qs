@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft Corporation. All rights reserved.
+// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
 namespace Microsoft.Quantum.Simulation {
@@ -10,7 +10,7 @@ namespace Microsoft.Quantum.Simulation {
 	/// Represents a time-independent simulation algorithm.
 	/// 
     /// A time-independent simulation technique converts an
-    ///  <xref:microsoft.quantum.simulation.evolutiongenerator>
+    /// <xref:Microsoft.Quantum.Simulation.EvolutionGenerator>
     /// to unitary time evolution for some time-interval.
     ///
     /// # Input
@@ -24,12 +24,12 @@ namespace Microsoft.Quantum.Simulation {
     /// # Output
     /// Unitary evolution by generator for time `Double`.
     newtype SimulationAlgorithm = ((Double, EvolutionGenerator, Qubit[]) => Unit is Adj + Ctl);
-    
+
     /// # Summary
 	/// Represents a time-dependent simulation algorithm.
 	/// 
     /// A time-dependent simulation technique converts an
-    /// <xref:microsoft.quantum.simulation.evolutionschedule>
+    /// <xref:Microsoft.Quantum.Simulation.EvolutionSchedule>
     /// to unitary time-evolution for some time-interval.
     ///
     /// # Input

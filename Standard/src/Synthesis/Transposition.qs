@@ -31,7 +31,7 @@ namespace Microsoft.Quantum.Synthesis {
     /// # Example
     /// Prepare a uniform superposition of number states $|1\rangle$, $|2\rangle$, and
     /// $|3\rangle$ on 2 qubits.
-    /// ```Q#
+    /// ```qsharp
     /// using (qubits = Qubit[2]) {
     ///   let register = LittleEndian(qubits);
     ///   PrepareUniformSuperposition(3, register);
@@ -54,11 +54,11 @@ namespace Microsoft.Quantum.Synthesis {
 
             within {
                 for (target in Most(diff)) {
-                    (BitControlledX(bbits[...target - 1] + abits[target + 1...]))(Exclude([target], qs), qs[target]);
+                    (BitControlledX(bbits[...target - 1] + abits[target + 1...]))(Excluding([target], qs), qs[target]);
                 }
             } apply {
                 let target = Tail(diff);
-                (BitControlledX(bbits[...target - 1] + abits[target + 1...]))(Exclude([target], qs), qs[target]);
+                (BitControlledX(bbits[...target - 1] + abits[target + 1...]))(Excluding([target], qs), qs[target]);
             }
         }
     }

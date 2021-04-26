@@ -9,14 +9,17 @@ namespace Microsoft.Quantum.Optimization {
     /// # Summary
     /// Represents the result of optimizing a univariate function.
     ///
-    /// # Input
+    /// # Named Items
     /// ## Coordinate
     /// Input at which an optimum was found.
     /// ## Value
     /// Value returned by the function at its optimum.
+    /// ## NQueries
+    /// The amount of times the function was called.
     newtype UnivariateOptimizationResult = (
         Coordinate : Double,
-        Value : Double
+        Value : Double,
+        NQueries : Int
     );
 
     /// # Summary
@@ -26,9 +29,9 @@ namespace Microsoft.Quantum.Optimization {
     }
 
     /// # Summary
-    /// Given an interval, returns a probe interval that contracts the given
+    /// Given an interval, returns two probes that contract the given
     /// interval by a factor of the golden ratio.
-    internal function Probe(left : Double, right : Double) : (Double, Double) {
+    internal function NextProbes(left : Double, right : Double) : (Double, Double) {
         let goldenRatio = (Sqrt(5.0) + 1.0) / 2.0;
         let delta = (Width(left, right)) / goldenRatio;
         return (
@@ -37,13 +40,17 @@ namespace Microsoft.Quantum.Optimization {
     }
 
     /// # Summary
-    /// Returns the midpoint for an interval.
-    internal function Midpoint(left : Double, right : Double) : (Double) {
-        return (left + right) / 2.0;
+    /// Evaluates the given function at a coordinate, and returns the
+    /// corresponding point.
+    internal function ProbeValue(
+        fn : (Double -> Double),
+        coord : Double
+    ) : (Double, Double) {
+        return (coord, fn(coord));
     }
 
     /// # Summary
-    /// Returns the local minimum for a univariate function over a bounded interval,
+    /// Returns some local minimum for a univariate function over a bounded interval,
     /// using a golden interval search.
     ///
     /// # Input
@@ -63,22 +70,28 @@ namespace Microsoft.Quantum.Optimization {
         bounds : (Double, Double),
         tolerance : Double
     ) : UnivariateOptimizationResult {
-
         mutable interval = bounds;
-        mutable probe = Probe(interval);
-        while (Width(probe) > tolerance) {
-            set interval =
-                fn(Fst(probe)) < fn(Snd(probe))
-                ? (Fst(interval), Snd(probe))
-                | (Fst(probe), Snd(interval));
-            set probe = Probe(interval);
+        mutable leftProbe = ProbeValue(fn, Fst(NextProbes(interval)));
+        mutable rightProbe = ProbeValue(fn, Snd(NextProbes(interval)));
+        mutable queryAmount = 2;
+        while (Width(interval) > tolerance) {
+            if (Snd(leftProbe) < Snd(rightProbe)) {
+                set interval = (Fst(interval), Fst(rightProbe));
+                set rightProbe = leftProbe;
+                set leftProbe = ProbeValue(fn, Fst(NextProbes(interval)));
+            } else {
+                set interval = (Fst(leftProbe), Snd(interval));
+                set leftProbe = rightProbe;
+                set rightProbe = ProbeValue(fn, Snd(NextProbes(interval)));
+            }
+            set queryAmount += 1;
         }
 
-        let mid = Midpoint(interval);
+        // Return from the existing probes to avoid extra call to fn
+        let result = Snd(leftProbe) < Snd(rightProbe) ? leftProbe | rightProbe;
         return UnivariateOptimizationResult(
-            mid, fn(mid)
+            Fst(result), Snd(result), queryAmount
         );
-
     }
 
 }

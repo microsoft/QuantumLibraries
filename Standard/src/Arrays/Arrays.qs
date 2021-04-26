@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft Corporation. All rights reserved.
+// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
 namespace Microsoft.Quantum.Arrays {
@@ -63,10 +63,6 @@ namespace Microsoft.Quantum.Arrays {
         return array[0 .. Length(array) - 2];
     }
 
-    internal function Lookup<'T> (array : 'T[], index : Int) : 'T {
-        return array[index];
-    }
-
     /// # Summary
     /// Given an array, returns a function which returns elements of that
     /// array.
@@ -90,7 +86,7 @@ namespace Microsoft.Quantum.Arrays {
     /// where functions are used to avoid the need to record an entire array
     /// in memory.
     function LookupFunction<'T> (array : 'T[]) : (Int -> 'T) {
-        return Lookup(array, _);
+        return ElementAt(_, array);
     }
 
     /// # Summary
@@ -127,6 +123,40 @@ namespace Microsoft.Quantum.Arrays {
     function Head<'A> (array : 'A[]) : 'A {
         EqualityFactB(Length(array) > 0, true, $"Array must be of the length at least 1");
         return array[0];
+    }
+
+    /// # Summary
+    /// Returns a tuple of first and all remaining elements of the array.
+    ///
+    /// # Type Parameters
+    /// ## 'A
+    /// The type of the array elements.
+    ///
+    /// # Input
+    /// ## array
+    /// An array with at least one element.
+    ///
+    /// # Output
+    /// A tuple of first and all remaining elements of the array.
+    function HeadAndRest<'A>(array : 'A[]) : ('A, 'A[]) {
+        return (Head(array), Rest(array));
+    }
+
+    /// # Summary
+    /// Returns a tuple of all but one and the last element of the array.
+    ///
+    /// # Type Parameters
+    /// ## 'A
+    /// The type of the array elements.
+    ///
+    /// # Input
+    /// ## array
+    /// An array with at least one element.
+    ///
+    /// # Output
+    /// A tuple of all but one and the last element of the array.
+    function MostAndTail<'A>(array : 'A[]) : ('A[], 'A) {
+        return (Most(array), Tail(array));
     }
 
     /// # Summary
@@ -182,9 +212,9 @@ namespace Microsoft.Quantum.Arrays {
     /// ```qsharp
     /// let array = [10, 11, 12, 13, 14, 15];
     /// // The following line returns [10, 12, 15].
-    /// let subarray = Exclude([1, 3, 4], array);
+    /// let subarray = Excluding([1, 3, 4], array);
     /// ```
-    function Exclude<'T> (remove : Int[], array : 'T[]) : 'T[] {
+    function Excluding<'T>(remove : Int[], array : 'T[]) : 'T[] {
         let nSliced = Length(remove);
         let nElements = Length(array);
 
@@ -343,7 +373,7 @@ namespace Microsoft.Quantum.Arrays {
     /// that `array` can be interpreted as a permutation on `n` elements.
     ///
     /// # Input
-    /// ## array
+    /// ## permuation
     /// An array that may or may not represent a permutation.
     ///
     /// # Ouput
@@ -355,7 +385,7 @@ namespace Microsoft.Quantum.Arrays {
     /// # Example
     /// The following Q# code prints the message "All diagnostics completed
     /// successfully":
-    /// ```Q#
+    /// ```qsharp
     /// Fact(IsPermutation([2, 0, 1], "");
     /// Contradiction(IsPermutation([5, 0, 1], "[5, 0, 1] isn't a permutation");
     /// Message("All diagnostics completed successfully.");

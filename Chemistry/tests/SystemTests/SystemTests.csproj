@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.Quantum.Sdk/0.12.20082515-beta">
+<Project Sdk="Microsoft.Quantum.Sdk/0.15.2102128881-beta">
 
   <Import Project="..\..\..\Build\props\tests.props" />
 
@@ -39,4 +39,3 @@
   </ItemGroup>
 
 </Project>
-

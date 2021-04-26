@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft Corporation. All rights reserved.
+// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
 namespace Microsoft.Quantum.Math {
@@ -8,11 +8,11 @@ namespace Microsoft.Quantum.Math {
     ///
     /// The polar representation of a complex number is $c=r e^{i t}$.
     ///
-    /// # Input
-    /// ## First Parameter
-    /// `Double` is absolute value $r \ge 0$.
-    /// ## Second Parameter
-    /// `Double` is the phase $t \in \mathbb R$.
+    /// # Named Items
+    /// ## Magnitude
+    /// The absolute value $r \ge 0$ of $c$.
+    /// ## Argument
+    /// The phase $t \in \mathbb R$ of $c$.
     newtype ComplexPolar = (Magnitude: Double, Argument: Double);
 
     /// # Summary
@@ -25,7 +25,7 @@ namespace Microsoft.Quantum.Math {
     ///
     /// # Output
     /// Squared absolute value $|c|^2 = x^2 + y^2$.
-    function AbsSquaredComplex (input : Complex) : Double {
+    function AbsSquaredComplex(input : Complex) : Double {
         let (real, imaginary) = input!;
         return real * real + imaginary * imaginary;
     }
@@ -40,7 +40,7 @@ namespace Microsoft.Quantum.Math {
     ///
     /// # Output
     /// Absolute value $|c| = \sqrt{x^2 + y^2}$.
-    function AbsComplex (input : Complex) : Double {
+    function AbsComplex(input : Complex) : Double {
         return Sqrt(AbsSquaredComplex(input));
     }
 
@@ -54,7 +54,7 @@ namespace Microsoft.Quantum.Math {
     ///
     /// # Output
     /// Phase $\text{Arg}[c] = \text{ArcTan}(y,x) \in (-\pi,\pi]$.
-    function ArgComplex (input : Complex) : Double {
+    function ArgComplex(input : Complex) : Double {
         let (real, imaginary) = input!;
         return ArcTan2(imaginary, real);
     }
@@ -69,7 +69,7 @@ namespace Microsoft.Quantum.Math {
     ///
     /// # Output
     /// Squared absolute value $|c|^2 = r^2$.
-    function AbsSquaredComplexPolar (input : ComplexPolar) : Double {
+    function AbsSquaredComplexPolar(input : ComplexPolar) : Double {
         let (abs, arg) = input!;
         return abs * abs;
     }
@@ -85,7 +85,7 @@ namespace Microsoft.Quantum.Math {
     ///
     /// # Output
     /// Absolute value $|c| = r$.
-    function AbsComplexPolar (input : ComplexPolar) : Double {
+    function AbsComplexPolar(input : ComplexPolar) : Double {
         return input::Magnitude;
     }
 
@@ -256,16 +256,16 @@ namespace Microsoft.Quantum.Math {
     /// Returns a number raised to a given power.
     ///
     /// # Input
-    /// ## base
+    /// ## a
     /// The number $a$ that is to be raised.
     /// ## power
     /// The power $b$ to which $a$ should be raised.
     ///
     /// # Output
     /// The power $a^b$
-    function PowC(base_ : Complex, power : Complex) : Complex {
+    function PowC(a : Complex, power : Complex) : Complex {
         return ComplexPolarAsComplex(
-            PowCAsCP(base_, power)
+            PowCAsCP(a, power)
         );
     }
 
@@ -273,7 +273,7 @@ namespace Microsoft.Quantum.Math {
     /// Returns a number raised to a given power.
     ///
     /// # Input
-    /// ## base
+    /// ## a
     /// The number $a$ that is to be raised.
     /// ## power
     /// The power $b$ to which $a$ should be raised.

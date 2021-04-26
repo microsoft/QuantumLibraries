@@ -21,10 +21,10 @@ namespace Microsoft.Quantum.Canon {
     ///
     /// # Example
     /// Given an operation `op`, the following two snippets are equivalent:
-    /// ```Q#
+    /// ```qsharp
     /// IterateThroughCartesianProduct([3, 4, 5], op);
     /// ```
-    /// ```Q#
+    /// ```qsharp
     /// op([0, 0, 0]);
     /// op([1, 0, 0]);
     /// op([2, 0, 0]);
@@ -86,10 +86,10 @@ namespace Microsoft.Quantum.Canon {
     ///
     /// # Example
     /// Given an operation `op`, the following two snippets are equivalent:
-    /// ```Q#
+    /// ```qsharp
     /// IterateThroughCartesianPower(2, 3, op);
     /// ```
-    /// ```Q#
+    /// ```qsharp
     /// op([0, 0]);
     /// op([1, 0]);
     /// op([2, 0]);

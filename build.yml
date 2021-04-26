@@ -2,9 +2,22 @@
 # Build configuration file to run build on azure-pipelines
 #
 name: $(Build.Major).$(Build.Minor).$(date:yyMM).$(DayOfMonth)$(rev:rr)
-trigger:
-- master
+
+trigger: none
+
+pr:
+- main
 - feature/*
+- features/*
+- release/*
+
+schedules:
+- cron: "0 9 * * Sat"
+  displayName: 'Build for Component Governance'
+  branches:
+    include:
+    - main
+  always: true
 
 variables:
   Build.Major: 0

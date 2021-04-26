@@ -93,7 +93,8 @@ namespace Microsoft.Quantum.Tests {
     
     /// # Summary
     /// Compares QFT to the hard-coded implementations
-    operation QFTTest () : Unit {
+    @Test("QuantumSimulator")
+    operation TestQFT() : Unit {
         let testFunctions = [QFT1, QFT2, QFT3, QFT4];
 
         for (i in IndexRange(testFunctions)) {

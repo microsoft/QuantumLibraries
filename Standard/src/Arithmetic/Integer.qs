@@ -182,7 +182,7 @@ namespace Microsoft.Quantum.Arithmetic {
         CCNOT(xs![nQubits - 2], ys![nQubits - 1], carry);
         ApplyToEachCA(X, Most(Rest(ys!)));   // X on ys[1..(nQubits-2)]
         CNOT(ancilla, ys![1]) ;
-        ApplyToEachCA(CNOT, Zip(Rest(Most(xs!)), Rest(Rest(ys!))));
+        ApplyToEachCA(CNOT, Zipped(Rest(Most(xs!)), Rest(Rest(ys!))));
     }
 
     /// # Summary
@@ -222,7 +222,7 @@ namespace Microsoft.Quantum.Arithmetic {
 
         using (auxiliary = Qubit()) {
             within {
-                ApplyToEachCA(CNOT, Zip(Rest(xs!), Rest(ys!)));
+                ApplyToEachCA(CNOT, Zipped(Rest(xs!), Rest(ys!)));
                 CNOT(xs![1], auxiliary);
                 CCNOT(xs![0], ys![0], auxiliary);
                 ApplyOuterCDKMAdder(xs, ys, auxiliary);
@@ -309,7 +309,7 @@ namespace Microsoft.Quantum.Arithmetic {
             "Input registers must have the same number of qubits."
         );
 
-        ApplyToEachCA(CNOT, Zip(Rest(xs!), Rest(ys!)));
+        ApplyToEachCA(CNOT, Zipped(Rest(xs!), Rest(ys!)));
         Adjoint ApplyCNOTChain(Rest(xs!));
     }
 
@@ -492,7 +492,7 @@ namespace Microsoft.Quantum.Arithmetic {
             else {
                 within {
                     ApplyToEachCA(X, ys!);
-                    ApplyToEachCA(CNOT, Zip(Rest(xs!), Rest(ys!)));
+                    ApplyToEachCA(CNOT, Zipped(Rest(xs!), Rest(ys!)));
                 } apply {
                     within {
                         (Adjoint ApplyCNOTChain) (Rest(xs!));

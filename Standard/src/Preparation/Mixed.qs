@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft Corporation. All rights reserved.
+// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
 namespace Microsoft.Quantum.Preparation {
@@ -8,8 +8,8 @@ namespace Microsoft.Quantum.Preparation {
     open Microsoft.Quantum.Random;
 
     /// # Summary
-	/// Prepares a qubit in the maximally mixed state.
-	///
+    /// Prepares a qubit in the maximally mixed state.
+    ///
     /// It prepares the given qubit in the $\boldone / 2$ state by applying the depolarizing channel
     /// $$
     /// \begin{align}
@@ -38,9 +38,9 @@ namespace Microsoft.Quantum.Preparation {
 
     /// # Summary
     /// Given a register, prepares that register in the maximally mixed state.
-	///
+    ///
     /// The register is prepared in the $\boldone / 2^N$ state by applying the 
-	/// complete depolarizing
+    /// complete depolarizing
     /// channel to each qubit, where $N$ is the length of the register.
     ///
     /// # Input
@@ -49,40 +49,46 @@ namespace Microsoft.Quantum.Preparation {
     /// described above.
     ///
     /// # See Also
-    /// - @"microsoft.quantum.canon.preparesinglequbitidentity"
+    /// - Microsoft.Quantum.Preparation.PrepareSingleQubitIdentity
     operation PrepareIdentity(register : Qubit[]) : Unit {
         ApplyToEach(PrepareSingleQubitIdentity, register);
     }
 
     /// # Summary
-	/// Prepares a qubit in the +1 (`Zero`) eigenstate of the given Pauli operator.
-	/// If the identity operator is given, then the qubit is prepared in the maximally
-	/// mixed state.
-	///
+    /// Prepares a qubit in the positive eigenstate of a given Pauli operator.
+    /// If the identity operator is given, then the qubit is prepared in the maximally
+    /// mixed state.
+    ///
+    /// # Description
     /// If the qubit was initially in the $\ket{0}$ state, this operation prepares the
     /// qubit in the $+1$ eigenstate of a given Pauli operator, or, for `PauliI`,
-    /// in the maximally mixed state instead (see <xref:microsoft.quantum.preparation.preparesinglequbitidentity>).
+    /// in the maximally mixed state instead (see <xref:Microsoft.Quantum.Preparation.PrepareSingleQubitIdentity>).
     ///
     /// If the qubit was in a state other than $\ket{0}$, this operation applies the following gates:
     /// $H$ for `PauliX`, $HS$ for `PauliY`, $I$ for `PauliZ` and
-    /// <xref:microsoft.quantum.preparation.preparesinglequbitidentity> for `PauliI`.
+    /// <xref:Microsoft.Quantum.Preparation.PrepareSingleQubitIdentity> for `PauliI`.
     ///
     /// # Input
     /// ## basis
     /// A Pauli operator $P$.
     /// ## qubit
     /// A qubit to be prepared.
-    operation PrepareQubit (basis : Pauli, qubit : Qubit) : Unit {
-        if (basis == PauliI)
-        {
+    ///
+    /// # Example
+    /// To prepare a qubit in the $\ket{+}$ state:
+    ///
+    /// ```qsharp
+    /// using (q = Qubit()) {
+    ///     PreparePauliEigenstate(PauliX, qubit);
+    ///     // ...
+    /// }
+    /// ```
+    operation PreparePauliEigenstate(basis : Pauli, qubit : Qubit) : Unit {
+        if (basis == PauliI) {
             PrepareSingleQubitIdentity(qubit);
-        }
-        elif (basis == PauliX)
-        {
+        } elif (basis == PauliX) {
             H(qubit);
-        }
-        elif (basis == PauliY)
-        {
+        } elif (basis == PauliY) {
             H(qubit);
             S(qubit);
         }

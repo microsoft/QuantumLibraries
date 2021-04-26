@@ -28,7 +28,7 @@ namespace Microsoft.Quantum.Simulation {
     /// then this function returns an operation which performs adiabatic
     /// state preparation for the final dynamical generator.
     function InterpolatedEvolution(
-            inerpolationTime : Double,
+            interpolationTime : Double,
             evolutionGeneratorStart : EvolutionGenerator,
             evolutionGeneratorEnd : EvolutionGenerator,
             timeDependentSimulationAlgorithm : TimeDependentSimulationAlgorithm
@@ -38,7 +38,7 @@ namespace Microsoft.Quantum.Simulation {
         let (evolutionSetEnd, generatorSystemEnd) = evolutionGeneratorEnd!;
         let generatorSystemTimeDependent = InterpolateGeneratorSystems(generatorSystemStart, generatorSystemEnd);
         let evolutionSchedule = EvolutionSchedule(evolutionSetStart, generatorSystemTimeDependent!);
-        return timeDependentSimulationAlgorithm!(inerpolationTime, evolutionSchedule, _);
+        return timeDependentSimulationAlgorithm!(interpolationTime, evolutionSchedule, _);
     }
     
     
@@ -62,7 +62,7 @@ namespace Microsoft.Quantum.Simulation {
     /// $\ket{\phi}$ and ground state energy $E = \phi\\,\delta t$.
     /// ## phaseEstAlgorithm
     /// An operation that performs phase estimation on a given unitary operation.
-    /// See [iterative phase estimation](/quantum/libraries/characterization#iterative-phase-estimation)
+    /// See [iterative phase estimation](xref:microsoft.quantum.libraries.overview.characterization#iterative-phase-estimation)
     /// for more details.
     /// ## qubits
     /// A register of qubits to be used to perform the simulation.
@@ -100,7 +100,7 @@ namespace Microsoft.Quantum.Simulation {
     /// $\ket{\phi}$ and ground state energy $E = \phi\\,\delta t$.
     /// ## phaseEstAlgorithm
     /// An operation that performs phase estimation on a given unitary operation.
-    /// See [iterative phase estimation](/quantum/libraries/characterization#iterative-phase-estimation)
+    /// See [iterative phase estimation](xref:microsoft.quantum.libraries.overview.characterization#iterative-phase-estimation)
     /// for more details.
     ///
     /// # Output
@@ -133,7 +133,7 @@ namespace Microsoft.Quantum.Simulation {
     /// $\ket{\phi}$ and ground state energy $E = \phi\\,\delta t$.
     /// ## phaseEstAlgorithm
     /// An operation that performs phase estimation on a given unitary operation.
-    /// See [iterative phase estimation](/quantum/libraries/characterization#iterative-phase-estimation)
+    /// See [iterative phase estimation](xref:microsoft.quantum.libraries.overview.characterization#iterative-phase-estimation)
     /// for more details.
     ///
     /// # Output

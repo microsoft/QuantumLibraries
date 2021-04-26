@@ -160,9 +160,9 @@ namespace Microsoft.Quantum.MachineLearning {
             //     size of the step taken during the move. We can find this size
             //     as the squared norm of the gradient.
             SquaredNorm(batchGradient),
-            // To actually apply the step, we can use Mapped(PlusD, Zip(...))
+            // To actually apply the step, we can use Mapped(PlusD, Zipped(...))
             // to represent element-wise vector summation.
-            model w/ Parameters <- Mapped(PlusD, Zip(model::Parameters, batchGradient))
+            model w/ Parameters <- Mapped(PlusD, Zipped(model::Parameters, batchGradient))
         );
 
     }
@@ -239,7 +239,7 @@ namespace Microsoft.Quantum.MachineLearning {
                     features, options::NMeasurements
                 );
                 let updatedBias = _UpdatedBias(
-                    Zip(probabilities, actualLabels), model::Bias, options::Tolerance
+                    Zipped(probabilities, actualLabels), model::Bias, options::Tolerance
                 );
                 let updatedLabels = InferredLabels(
                     updatedBias, probabilities
@@ -330,7 +330,7 @@ namespace Microsoft.Quantum.MachineLearning {
         );
         // Find the best bias for the new classification parameters.
         let localBias = _UpdatedBias(
-            Zip(probabilities, Sampled(validationSchedule, labels)),
+            Zipped(probabilities, Sampled(validationSchedule, labels)),
             0.0,
             options::Tolerance
         );
@@ -359,7 +359,7 @@ namespace Microsoft.Quantum.MachineLearning {
         );
         mutable bestSoFar = model
             w/ Bias <- _UpdatedBias(
-                Zip(probabilities, actualLabels),
+                Zipped(probabilities, actualLabels),
                 model::Bias, options::Tolerance
             );
         let inferredLabels = InferredLabels(

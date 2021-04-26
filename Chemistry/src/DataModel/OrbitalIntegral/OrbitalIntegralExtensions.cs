@@ -126,7 +126,6 @@ namespace Microsoft.Quantum.Chemistry.OrbitalIntegrals
             int nOrbitals,
             IndexConvention indexConvention)
         {
-            List<(HermitianFermionTerm, double)> fermionTerms = new List<(HermitianFermionTerm, double)>();
             // Two-electron orbital integral symmetries
             // ijkl = lkji = jilk = klij = ikjl = ljki = kilj = jlik.
             var pqrsSpinOrbitals = orbitalIntegral.EnumerateOrbitalSymmetries().EnumerateSpinOrbitals();

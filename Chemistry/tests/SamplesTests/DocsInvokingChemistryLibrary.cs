@@ -19,8 +19,9 @@ using Microsoft.Quantum.Chemistry.QSharpFormat;
 // The System namespace provides a number of useful built-in
 // types and methods that we'll use throughout this sample.
 using System;
+using System.IO;
 
-// We use this for convnience functions for manipulation arrays.
+// We use this for convenience functions for manipulation arrays.
 using System.Linq;
 
 //
@@ -84,7 +85,7 @@ namespace Microsoft.Quantum.Chemistry.Tests.Docs
             var root = @"Molecules";
 
             // This deserializes Broombridge.
-            var broombridge = Broombridge.Deserializers.DeserializeBroombridge($@"{root}\{filename}");
+            var broombridge = Broombridge.Deserializers.DeserializeBroombridge(Path.Combine(root, filename));
 
             // Note that the deserializer returns a list of `ProblemDescriptions` instances 
             // as the file might describe multiple Hamiltonians. In this example, there is 
@@ -122,7 +123,7 @@ namespace Microsoft.Quantum.Chemistry.Tests.Docs
             var root = @"Molecules";
 
             // Deserialize the LiQuiD format.
-            var problem = LiQuiD.Deserialize($@"{root}\{filename}").First();
+            var problem = LiQuiD.Deserialize(Path.Combine(root, filename)).First();
 
             // This extracts the `OrbitalIntegralHamiltonian` from problem
             // description format.
@@ -135,7 +136,7 @@ namespace Microsoft.Quantum.Chemistry.Tests.Docs
         static void ResourceEstimate()
         {
             // Filename of Hamiltonian to be loaded.
-            var filename = "Molecules/LiH_0.2.yaml";
+            var filename = Path.Combine("Molecules", "LiH_0.2.yaml");
 
             // This deserializes Broombridge.
             var problem = Broombridge.Deserializers.DeserializeBroombridge(filename).ProblemDescriptions.First();

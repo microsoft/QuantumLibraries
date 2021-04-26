@@ -25,15 +25,15 @@ namespace Microsoft.Quantum.Diagnostics
 
         public override bool Callback(uint idx, double real, double img)
         {
-            if (Data as object == null) throw new Exception("Expected data buffer to be initialized before callback, but it was null.");
-            Data[(int)idx, 0] = real;
-            Data[(int)idx, 1] = img;
+            if (Data == null) throw new Exception("Expected data buffer to be initialized before callback, but it was null.");
+            Data![(int)idx, 0] = real;
+            Data![(int)idx, 1] = img;
             return true;
         }
 
         public override bool Dump(IQArray<Qubit>? qubits = null)
         {
-            var count = qubits?.Length ?? Simulator.QubitManager!.GetAllocatedQubitsCount();
+            var count = qubits?.Length ?? Simulator.QubitManager!.AllocatedQubitsCount;
             var nQubitsPerRegister = ((int)count / 2);
             Data = np.empty(new Shape(1 << ((int)count), 2));
             var result = base.Dump(qubits);

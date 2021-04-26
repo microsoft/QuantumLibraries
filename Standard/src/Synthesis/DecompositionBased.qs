@@ -219,7 +219,7 @@ namespace Microsoft.Quantum.Synthesis {
     ///
     /// # Example
     /// To synthesize a `SWAP` operation:
-    /// ```Q#
+    /// ```qsharp
     /// using (qubits = Qubit[2]) {
     ///   ApplyPermutationUsingDecomposition([0, 2, 1, 3], LittleEndian(qubits));
     /// }
@@ -260,7 +260,7 @@ namespace Microsoft.Quantum.Synthesis {
     ///
     /// # Example
     /// To synthesize a `SWAP` operation:
-    /// ```Q#
+    /// ```qsharp
     /// using (qubits = Qubit[2]) {
     ///   ApplyPermutationUsingDecompositionWithVariableOrder([0, 2, 1, 3], [1, 0], LittleEndian(qubits));
     /// }
@@ -279,7 +279,7 @@ namespace Microsoft.Quantum.Synthesis {
         let register = qubits!;
 
         for ((func, target) in TruthTablesFromPermutation(perm, variableOrder)) {
-            ApplyXControlledOnTruthTable(func, Exclude([target], register), register[target]);
+            ApplyXControlledOnTruthTable(func, Excluding([target], register), register[target]);
         }
     }
 }

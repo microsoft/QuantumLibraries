@@ -24,7 +24,7 @@ namespace Microsoft.Quantum.Arrays {
     /// # Example
     /// The following samples an integer, given an operation
     /// that samples a single bit at a time.
-    /// ```Q#
+    /// ```qsharp
     /// let randomInteger = BoolArrayAsInt(DrawMany(SampleRandomBit, 16, ()));
     /// ```
     ///
