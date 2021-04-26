@@ -46,9 +46,9 @@ namespace Microsoft.Quantum.ErrorCorrection {
     /// An array of qubits where the stabilizer code is defined.
     ///
     /// # See Also
-    /// - Microsoft.Quantum.Canon.QECC
-    /// - Microsoft.Quantum.Canon.RecoveryFn
-    /// - Microsoft.Quantum.Canon.LogicalRegister
+    /// - Microsoft.Quantum.ErrorCorrection.QECC
+    /// - Microsoft.Quantum.ErrorCorrection.RecoveryFn
+    /// - Microsoft.Quantum.ErrorCorrection.LogicalRegister
     operation Recover (code : QECC, fn : RecoveryFn, logicalRegister : LogicalRegister) : Unit
     {
         let (encode, decode, syndMeas) = code!;
@@ -77,9 +77,9 @@ namespace Microsoft.Quantum.ErrorCorrection {
     /// An array of qubits where the stabilizer code is defined.
     ///
     /// # See Also
-    /// - Microsoft.Quantum.Canon.CSS
-    /// - Microsoft.Quantum.Canon.RecoveryFn
-    /// - Microsoft.Quantum.Canon.LogicalRegister
+    /// - Microsoft.Quantum.ErrorCorrection.CSS
+    /// - Microsoft.Quantum.ErrorCorrection.RecoveryFn
+    /// - Microsoft.Quantum.ErrorCorrection.LogicalRegister
     operation RecoverCSS (code : CSS, fnX : RecoveryFn, fnZ : RecoveryFn, logicalRegister : LogicalRegister) : Unit
     {
         let (encode, decode, syndMeasX, syndMeasZ) = code!;

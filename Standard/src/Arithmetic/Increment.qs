@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft Corporation. All rights reserved.
+// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
 namespace Microsoft.Quantum.Arithmetic {
@@ -24,8 +24,7 @@ namespace Microsoft.Quantum.Arithmetic {
     /// The integer by which the `target` is incremented by.
     ///
     /// # See Also
-    /// - IncrementByIntegerBE
-    /// - IncrementByIntegerLE
+    /// - Microsoft.Quantum.Arithmetic.IncrementByInteger
     ///
     /// # References
     /// - [ *Thomas G. Draper*,

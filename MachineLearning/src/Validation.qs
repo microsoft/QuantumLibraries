@@ -19,7 +19,7 @@ namespace Microsoft.Quantum.MachineLearning {
     /// `inferredLabels[idx] != actualLabels[idx]`.
     ///
     /// # Example
-    /// ```Q#
+    /// ```qsharp
     /// let misclassifications = Misclassifications([0, 1, 0, 0], [0, 1, 1, 0]);
     /// Message($"{misclassifications}"); // Will print [2].
     /// ```
@@ -27,7 +27,7 @@ namespace Microsoft.Quantum.MachineLearning {
     : Int[] {
         return Where(
             NotEqualI,
-            Zip(inferredLabels, actualLabels)
+            Zipped(inferredLabels, actualLabels)
         );
     }
 
@@ -46,7 +46,7 @@ namespace Microsoft.Quantum.MachineLearning {
     /// `inferredLabels[idx] != actualLabels[idx]`.
     ///
     /// # Example
-    /// ```Q#
+    /// ```qsharp
     /// let nMisclassifications = NMisclassifications([1, 1, 0, 0], [0, 1, 1, 0]);
     /// Message($"{nMisclassifications}"); // Will print 2.
     /// ```

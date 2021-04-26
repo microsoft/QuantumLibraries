@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft Corporation. All rights reserved.
+// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
 namespace Microsoft.Quantum.Canon {
@@ -21,10 +21,10 @@ namespace Microsoft.Quantum.Canon {
     /// An input to the function.
     ///
     /// # See Also
-    /// - ApplyWithInputTransformationA
-    /// - ApplyWithInputTransformationC
-    /// - ApplyWithInputTransformationCA
-    /// - TransformedOperation
+    /// - Microsoft.Quantum.Canon.ApplyWithInputTransformationA
+    /// - Microsoft.Quantum.Canon.ApplyWithInputTransformationC
+    /// - Microsoft.Quantum.Canon.ApplyWithInputTransformationCA
+    /// - Microsoft.Quantum.Canon.TransformedOperation
     ///
     /// # Example
     /// The following call uses
@@ -55,11 +55,11 @@ namespace Microsoft.Quantum.Canon {
     /// resulting output to `op`.
     ///
     /// # See Also
-    /// - TransformedOperationA
-    /// - TransformedOperationC
-    /// - TransformedOperationCA
-    /// - ApplyWithInputTransformation
-    /// - Compose
+    /// - Microsoft.Quantum.Canon.TransformedOperationA
+    /// - Microsoft.Quantum.Canon.TransformedOperationC
+    /// - Microsoft.Quantum.Canon.TransformedOperationCA
+    /// - Microsoft.Quantum.Canon.ApplyWithInputTransformation
+    /// - Microsoft.Quantum.Canon.Composed
     ///
     /// # Example
     /// The following call uses
@@ -96,10 +96,10 @@ namespace Microsoft.Quantum.Canon {
     /// An input to the function.
     ///
     /// # See Also
-    /// - ApplyWithInputTransformation
-    /// - ApplyWithInputTransformationC
-    /// - ApplyWithInputTransformationCA
-    /// - TransformedOperation
+    /// - Microsoft.Quantum.Canon.ApplyWithInputTransformation
+    /// - Microsoft.Quantum.Canon.ApplyWithInputTransformationC
+    /// - Microsoft.Quantum.Canon.ApplyWithInputTransformationCA
+    /// - Microsoft.Quantum.Canon.TransformedOperation
     ///
     /// # Example
     /// The following call uses
@@ -131,11 +131,11 @@ namespace Microsoft.Quantum.Canon {
     /// resulting output to `op`.
     ///
     /// # See Also
-    /// - TransformedOperation
-    /// - TransformedOperationC
-    /// - TransformedOperationCA
-    /// - ApplyWithInputTransformation
-    /// - Compose
+    /// - Microsoft.Quantum.Canon.TransformedOperation
+    /// - Microsoft.Quantum.Canon.TransformedOperationC
+    /// - Microsoft.Quantum.Canon.TransformedOperationCA
+    /// - Microsoft.Quantum.Canon.ApplyWithInputTransformation
+    /// - Microsoft.Quantum.Canon.Composed
     ///
     /// # Example
     /// The following call uses
@@ -173,10 +173,10 @@ namespace Microsoft.Quantum.Canon {
     /// An input to the function.
     ///
     /// # See Also
-    /// - ApplyWithInputTransformation
-    /// - ApplyWithInputTransformationA
-    /// - ApplyWithInputTransformationCA
-    /// - TransformedOperation
+    /// - Microsoft.Quantum.Canon.ApplyWithInputTransformation
+    /// - Microsoft.Quantum.Canon.ApplyWithInputTransformationA
+    /// - Microsoft.Quantum.Canon.ApplyWithInputTransformationCA
+    /// - Microsoft.Quantum.Canon.TransformedOperation
     ///
     /// # Example
     /// The following call uses
@@ -208,11 +208,11 @@ namespace Microsoft.Quantum.Canon {
     /// resulting output to `op`.
     ///
     /// # See Also
-    /// - TransformedOperation
-    /// - TransformedOperationA
-    /// - TransformedOperationCA
-    /// - ApplyWithInputTransformation
-    /// - Compose
+    /// - Microsoft.Quantum.Canon.TransformedOperation
+    /// - Microsoft.Quantum.Canon.TransformedOperationA
+    /// - Microsoft.Quantum.Canon.TransformedOperationCA
+    /// - Microsoft.Quantum.Canon.ApplyWithInputTransformation
+    /// - Microsoft.Quantum.Canon.Composed
     ///
     /// # Example
     /// The following call uses
@@ -249,10 +249,10 @@ namespace Microsoft.Quantum.Canon {
     /// An input to the function.
     ///
     /// # See Also
-    /// - ApplyWithInputTransformation
-    /// - ApplyWithInputTransformationA
-    /// - ApplyWithInputTransformationC
-    /// - TransformedOperation
+    /// - Microsoft.Quantum.Canon.ApplyWithInputTransformation
+    /// - Microsoft.Quantum.Canon.ApplyWithInputTransformationA
+    /// - Microsoft.Quantum.Canon.ApplyWithInputTransformationC
+    /// - Microsoft.Quantum.Canon.TransformedOperation
     ///
     /// # Example
     /// The following call uses
@@ -286,11 +286,11 @@ namespace Microsoft.Quantum.Canon {
     /// resulting output to `op`.
     ///
     /// # See Also
-    /// - TransformedOperation
-    /// - TransformedOperationA
-    /// - TransformedOperationCA
-    /// - ApplyWithInputTransformation
-    /// - Compose
+    /// - Microsoft.Quantum.Canon.TransformedOperation
+    /// - Microsoft.Quantum.Canon.TransformedOperationA
+    /// - Microsoft.Quantum.Canon.TransformedOperationCA
+    /// - Microsoft.Quantum.Canon.ApplyWithInputTransformation
+    /// - Microsoft.Quantum.Canon.Composed
     ///
     /// # Example
     /// The following call uses

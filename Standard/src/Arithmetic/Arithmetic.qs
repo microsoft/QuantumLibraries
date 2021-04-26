@@ -16,7 +16,7 @@ namespace Microsoft.Quantum.Arithmetic {
     /// 1 bits in an integer.
     ///
     /// Let us denote `value` by a and let y be an unsigned integer encoded in `target`,
-    /// then `InPlaceXorLE` performs an operation given by the following map:
+    /// then `ApplyXorInPlace` performs an operation given by the following map:
     /// $\ket{y}\rightarrow \ket{y\oplus a}$ , where $\oplus$ is the bitwise exclusive OR operator.
     ///
     /// # Input
@@ -28,7 +28,7 @@ namespace Microsoft.Quantum.Arithmetic {
     : Unit is Adj + Ctl {
         ApplyToEachCA(
             CControlledCA(X),
-            Zip(IntAsBoolArray(value, Length(target!)), target!)
+            Zipped(IntAsBoolArray(value, Length(target!)), target!)
         );
     }
 
@@ -71,7 +71,7 @@ namespace Microsoft.Quantum.Arithmetic {
     /// in computational basis.
     ///
     /// # See Also
-    /// - LittleEndian
+    /// - Microsoft.Quantum.Arithmetic.LittleEndian
     operation CopyMostSignificantBit (from : LittleEndian, target : Qubit) : Unit {
         body (...) {
             let mostSingificantQubit = Tail(from!);

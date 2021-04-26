@@ -17,13 +17,13 @@ namespace Microsoft.Quantum.Chemistry.QSharpFormat
     /// </summary>
     public static partial class Convert
     {
-        
+
         public static HTerm FromPauliTerm(PauliTerm term, PauliTermValue value)
         {
             return new HTerm((new QArray<Int64>(term.QubitIndices.Select(o=>(Int64)o)), new QArray<double>(value.Value)));
         }
 
-        internal static List<HTerm> CreateHTermList(PauliHamiltonian pauliHamiltonian, TermType.PauliTerm term) 
+        internal static List<HTerm> CreateHTermList(PauliHamiltonian pauliHamiltonian, TermType.PauliTerm term)
         {
             if (pauliHamiltonian.Terms.ContainsKey(term))
             {
@@ -31,27 +31,25 @@ namespace Microsoft.Quantum.Chemistry.QSharpFormat
             }
             else
             {
-                return new List<HTerm>(); 
+                return new List<HTerm>();
             }
         }
 
         public static (Double, Int64, JWOptimizedHTerms) ToQSharpFormat(this PauliHamiltonian pauliHamiltonian)
         {
-            List<HTerm> DefaultHTerm = new List<HTerm>();
-
             var energyOffset = 0.0;
             if (pauliHamiltonian.Terms.ContainsKey(TermType.PauliTerm.Identity))
             {
                 energyOffset = pauliHamiltonian.Terms[TermType.PauliTerm.Identity].Values.First().Value.First();
             }
-            
+
             var nSpinOrbitals = pauliHamiltonian.SystemIndices.Max() + 1;
             var hZ = CreateHTermList(pauliHamiltonian,TermType.PauliTerm.Z);
             var hZZ = CreateHTermList(pauliHamiltonian,TermType.PauliTerm.ZZ);
             var hPQ = CreateHTermList(pauliHamiltonian,TermType.PauliTerm.PQ);
             var hPQQR = CreateHTermList(pauliHamiltonian,TermType.PauliTerm.PQQR);
             var hv0123 = CreateHTermList(pauliHamiltonian,TermType.PauliTerm.v01234);
-                     
+
 
             var hPQandPQQR = hPQ.Concat(hPQQR).ToList();
 
@@ -132,6 +130,6 @@ namespace Microsoft.Quantum.Chemistry.QSharpFormat
 
 
     }
-    
+
 
 }

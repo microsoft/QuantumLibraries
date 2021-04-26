@@ -10,7 +10,7 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
     open Microsoft.Quantum.Arrays;
 
     /// # Summary
-    /// Computes Z component of Jordan–Wigner string between
+    /// Computes Z component of Jordanâ€“Wigner string between
     /// fermion indices in a fermionic operator with an even
     /// number of creation / annihilation operators.
     ///
@@ -89,7 +89,7 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
         let ops = [[PauliX, PauliY], [PauliY, PauliX]];
         let signs = [+1.0, -1.0];
 
-        for ((op, sign) in Zip(ops, signs)) {
+        for ((op, sign) in Zipped(ops, signs)) {
             let pauliString = _ComputeJordanWignerPauliString(Length(qubits), idxFermions, op);
             Exp(pauliString, sign * angle, qubits);
         }
@@ -124,7 +124,7 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
         let ops = [[y,y,x,y],[x,x,x,y],[x,y,y,y],[y,x,y,y],[x,y,x,x],[y,x,x,x],[y,y,y,x],[x,x,y,x]];
         let (sortedIndices, signs, globalSign) = _JordanWignerClusterOperatorPQRSTermSigns([p,q,r,s]);
 
-        for ((op, sign) in Zip(ops, signs)) {
+        for ((op, sign) in Zipped(ops, signs)) {
             let pauliString = _ComputeJordanWignerPauliString(Length(qubits), sortedIndices, op);
             Exp(pauliString, globalSign * sign * angle, qubits);
         }
@@ -218,7 +218,7 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
     /// Represents a dynamical generator as a set of simulatable gates and an
     /// expansion in the JordanWigner basis.
     ///
-    /// See [Dynamical Generator Modeling](../libraries/data-structures#dynamical-generator-modeling)
+    /// See [Dynamical Generator Modeling](xref:microsoft.quantum.libraries.overview.data-structures#dynamical-generator-modeling)
     /// for more details.
     ///
     /// # Input
@@ -271,5 +271,4 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
     }
     
 }
-
 

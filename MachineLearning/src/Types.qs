@@ -10,7 +10,7 @@ namespace Microsoft.Quantum.MachineLearning {
     /// Describes a controlled rotation in terms of its target and control
     /// indices, rotation axis, and index into a model parameter vector.
     ///
-    /// # Input
+    /// # Named Items
     /// ## TargetIndex
     /// Index of the target qubit for this controlled rotation.
     /// ## ControlIndices
@@ -29,7 +29,7 @@ namespace Microsoft.Quantum.MachineLearning {
     /// The following represents a rotation about the $X$-axis of the first
     /// qubit in a register, controlled on the second qubit, and with an
     /// angle given by the fourth parameter in a sequential model:
-    /// ```Q#
+    /// ```qsharp
     /// let controlledRotation = ControlledRotation(
     ///     (0, [1]),
     ///     PauliX,
@@ -50,7 +50,7 @@ namespace Microsoft.Quantum.MachineLearning {
     /// parameterized and controlled rotations, an assignment of rotation
     /// angles, and a bias between the two classes recognized by the model.
     ///
-    /// # Input
+    /// # Named Items
     /// ## Structure
     /// The sequence of controlled rotations used to classify inputs.
     /// ## Parameters
@@ -70,7 +70,7 @@ namespace Microsoft.Quantum.MachineLearning {
     /// Describes an operation that prepares a given input to a sequential
     /// classifier.
     ///
-    /// # Input
+    /// # Named Items
     /// ## NQubits
     /// The number of qubits on which the encoded input is defined.
     /// ## Prepare
@@ -84,7 +84,7 @@ namespace Microsoft.Quantum.MachineLearning {
     /// # Summary
     /// A sample, labeled with a class to which that sample belongs.
     ///
-    /// # Input
+    /// # Named Items
     /// ## Features
     /// A vector of features for the given sample.
     /// ## Label
@@ -152,7 +152,7 @@ namespace Microsoft.Quantum.MachineLearning {
     /// The results from having validated a classifier against a set of
     /// samples.
     ///
-    /// # Input
+    /// # Named Items
     /// ## NMisclassifications
     /// The number of misclassifications observed during validation.
     newtype ValidationResults = (
@@ -163,7 +163,7 @@ namespace Microsoft.Quantum.MachineLearning {
     /// # Summary
     /// A collection of options to be used in training quantum classifiers.
     ///
-    /// # Input
+    /// # Named Items
     /// ## LearningRate
     /// The learning rate by which gradients should be rescaled when updating
     /// model parameters during training steps.
@@ -195,7 +195,7 @@ namespace Microsoft.Quantum.MachineLearning {
     ///
     /// For example, to use 100,000 measurements and at most 8 training
     /// epochs:
-    /// ```Q#
+    /// ```qsharp
     /// let options = DefaultTrainingOptions()
     ///               w/ NMeasurements <- 100000
     ///               w/ MaxEpochs <- 8;
@@ -225,7 +225,7 @@ namespace Microsoft.Quantum.MachineLearning {
     /// # Example
     /// To use the default options, but with additional measurements, use the
     /// `w/` operator:
-    /// ```Q#
+    /// ```qsharp
     /// let options = DefaultTrainingOptions()
     ///     w/ NMeasurements <- 1000000;
     /// ```

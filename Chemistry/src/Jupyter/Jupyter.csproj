@@ -9,9 +9,9 @@
     <Authors>Microsoft</Authors>
     <Description>Microsoft's Quantum Chemistry Libraries Jupyter integration.</Description>
     <Copyright>© Microsoft Corporation. All rights reserved.</Copyright>
-    <PackageReleaseNotes>See: https://docs.microsoft.com/en-us/quantum/relnotes/</PackageReleaseNotes>
-    <PackageLicenseUrl>https://github.com/Microsoft/QuantumLibraries/raw/master/LICENSE.txt</PackageLicenseUrl>
-    <PackageProjectUrl>https://github.com/Microsoft/QuantumLibraries/tree/master/Chemistry</PackageProjectUrl>
+    <PackageReleaseNotes>See: https://docs.microsoft.com/azure/quantum/qdk-relnotes/</PackageReleaseNotes>
+    <PackageLicenseUrl>https://github.com/microsoft/QuantumLibraries/raw/main/LICENSE.txt</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/microsoft/QuantumLibraries/tree/main/Chemistry</PackageProjectUrl>
     <PackageIcon>qdk-nuget-icon.png</PackageIcon>
     <PackageTags>Quantum Q# Qsharp Jupyter</PackageTags>
     <NoWarn>1591</NoWarn>
@@ -27,6 +27,10 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.Jupyter.Core" Version="1.4.80531" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="..\..\Common\DelaySign.cs" Link="Properties\DelaySign.cs" />
   </ItemGroup>
 
   <ItemGroup>

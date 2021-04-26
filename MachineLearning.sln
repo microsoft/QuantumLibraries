@@ -1,13 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.26124.0
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30413.136
 MinimumVisualStudioVersion = 15.0.26124.0
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MachineLearning", "MachineLearning", "{D067C787-94C3-4DB8-9012-1F22AE784BEF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MachineLearningTests", "MachineLearning\tests\MachineLearningTests.csproj", "{94EBDF5F-0A9D-4CE5-9D16-3FF323B8792C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MachineLearningTests", "MachineLearning\tests\MachineLearningTests.csproj", "{94EBDF5F-0A9D-4CE5-9D16-3FF323B8792C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MachineLearning", "MachineLearning\src\MachineLearning.csproj", "{B045BF35-6BE6-4982-9618-8725C70D3F91}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MachineLearning", "MachineLearning\src\MachineLearning.csproj", "{B045BF35-6BE6-4982-9618-8725C70D3F91}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Standard", "Standard\src\Standard.csproj", "{9907AAA7-10DA-470B-A154-5A19D1A831E6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,9 +19,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 		Release|x64 = Release|x64
 		Release|x86 = Release|x86
-	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{94EBDF5F-0A9D-4CE5-9D16-3FF323B8792C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -46,9 +45,27 @@ Global
 		{B045BF35-6BE6-4982-9618-8725C70D3F91}.Release|x64.Build.0 = Release|Any CPU
 		{B045BF35-6BE6-4982-9618-8725C70D3F91}.Release|x86.ActiveCfg = Release|Any CPU
 		{B045BF35-6BE6-4982-9618-8725C70D3F91}.Release|x86.Build.0 = Release|Any CPU
+		{9907AAA7-10DA-470B-A154-5A19D1A831E6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9907AAA7-10DA-470B-A154-5A19D1A831E6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9907AAA7-10DA-470B-A154-5A19D1A831E6}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{9907AAA7-10DA-470B-A154-5A19D1A831E6}.Debug|x64.Build.0 = Debug|Any CPU
+		{9907AAA7-10DA-470B-A154-5A19D1A831E6}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{9907AAA7-10DA-470B-A154-5A19D1A831E6}.Debug|x86.Build.0 = Debug|Any CPU
+		{9907AAA7-10DA-470B-A154-5A19D1A831E6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9907AAA7-10DA-470B-A154-5A19D1A831E6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9907AAA7-10DA-470B-A154-5A19D1A831E6}.Release|x64.ActiveCfg = Release|Any CPU
+		{9907AAA7-10DA-470B-A154-5A19D1A831E6}.Release|x64.Build.0 = Release|Any CPU
+		{9907AAA7-10DA-470B-A154-5A19D1A831E6}.Release|x86.ActiveCfg = Release|Any CPU
+		{9907AAA7-10DA-470B-A154-5A19D1A831E6}.Release|x86.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{94EBDF5F-0A9D-4CE5-9D16-3FF323B8792C} = {D067C787-94C3-4DB8-9012-1F22AE784BEF}
 		{B045BF35-6BE6-4982-9618-8725C70D3F91} = {D067C787-94C3-4DB8-9012-1F22AE784BEF}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {08B056E4-F7DA-4802-B23C-BB11D6616F5E}
 	EndGlobalSection
 EndGlobal

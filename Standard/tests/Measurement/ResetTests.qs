@@ -6,7 +6,7 @@ namespace Microsoft.Quantum.Tests {
     open Microsoft.Quantum.Intrinsic;
     open Microsoft.Quantum.Diagnostics;
 
-    operation CheckSetToBasisState(desired : Result) : Unit {
+    operation CheckSetToBasisStateHelper(desired : Result) : Unit {
         using (q = Qubit()) {
             Ry(0.1234, q);
             SetToBasisState(desired, q);
@@ -15,9 +15,10 @@ namespace Microsoft.Quantum.Tests {
         }
     }
 
-    operation SetToBasisStateTest() : Unit {
+    @Test("QuantumSimulator")
+    operation CheckSetToBasisState() : Unit {
         for (desired in [Zero, One]) {
-            CheckSetToBasisState(desired);
+            CheckSetToBasisStateHelper(desired);
         }
     }
 

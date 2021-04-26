@@ -21,7 +21,7 @@ namespace Microsoft.Quantum.Synthesis {
     /// Spectral coefficients of the function
     ///
     /// # Example
-    /// ```Q#
+    /// ```qsharp
     /// FastHadamardTransformed([1, 1, 1, -1]); // [2, 2, 2, -2]
     /// ```
     ///
@@ -58,7 +58,7 @@ namespace Microsoft.Quantum.Synthesis {
     /// Coefficients followed by inverted copy
     ///
     /// # Example
-    /// ```Q#
+    /// ```qsharp
     /// Extended([2, 2, 2, -2]); // [2, 2, 2, -2, -2, -2, -2, 2]
     /// ```
     internal function Extended(spectrum : Int[]) : Int[] {
@@ -89,7 +89,7 @@ namespace Microsoft.Quantum.Synthesis {
     /// Truth table as array of {1,-1} integers
     ///
     /// # Example
-    /// ```Q#
+    /// ```qsharp
     /// Encoded([false, false, false, true]); // [1, 1, 1, -1]
     /// ```
     internal function Encoded(table : Bool[]) : Int[] {
@@ -139,7 +139,7 @@ namespace Microsoft.Quantum.Synthesis {
     /// and the least significant bit `0` corresponds to the input assignment `(0, 0, 0)`.
     /// It can be represented by the big integer `0xE8L` in hexadecimal notation or as `232L`
     /// in decimal notation.  The `L` suffix indicates that the constant is of type `BigInt`.
-    /// More details on this representation can also be found in the [truth tables kata](https://github.com/microsoft/QuantumKatas/tree/master/TruthTables).
+    /// More details on this representation can also be found in the [truth tables kata](https://github.com/microsoft/QuantumKatas/tree/main/TruthTables).
     ///
     /// The implementation makes use of @"microsoft.quantum.intrinsic.cnot"
     /// and @"microsoft.quantum.intrinsic.r1" gates.
@@ -252,7 +252,7 @@ namespace Microsoft.Quantum.Synthesis {
             let spectrum = FastHadamardTransformed(table);
 
             H(target);
-            AssertProb([PauliZ], [target], One, 0.5, "Probability of the measurement must be 0.5", 1e-10);
+            AssertMeasurementProbability([PauliZ], [target], One, 0.5, "Probability of the measurement must be 0.5", 1e-10);
 
             if (IsResultOne(M(target))) {
                 for (i in 0..vars - 1) {

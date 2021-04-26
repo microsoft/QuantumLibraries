@@ -114,6 +114,8 @@ namespace Microsoft.Quantum.Standard.Emulation
 
         private long SampleUsingBTPE()
         {
+            // The following code is ported from NumPy's binomial
+            // sampling implementation.
             double r,q,fm,p1,xm,xl,xr,c,laml,lamr,p2,p3,p4;
             double a,u,v,s,F,rho,t,A,nrq,x1,x2,f1,f2,z,z2,w,w2,x;
             long m,y,k,i;
@@ -192,9 +194,9 @@ namespace Microsoft.Quantum.Standard.Emulation
             if (v > F) goto Step10;
             goto Step60;
 
-            Step52:
+        Step52:
             rho = (k/(nrq))*((k*(k/3.0 + 0.625) + 0.16666666666666666)/nrq + 0.5);
-            t = -k*k/(2*nrq);
+            t = -k*k/(2*nrq); // lgtm [cs/loss-of-precision]
             A = Log(v);
             if (A < (t - rho)) goto Step60;
             if (A > (t + rho)) goto Step10;

@@ -18,7 +18,7 @@ namespace Microsoft.Quantum.Diagnostics {
     /// # Example
     /// The following snippet will fail when executed on machines which
     /// support this diagnostic:
-    /// ```Q#
+    /// ```qsharp
     /// using (register = Qubit[4]) {
     ///     within {
     ///         AllowAtMostNCallsCA(3, H, "Too many calls to H.");
@@ -34,7 +34,7 @@ namespace Microsoft.Quantum.Diagnostics {
     /// This operation may be replaced by a no-op on targets which do not
     /// support it.
     operation AllowAtMostNCallsCA<'TInput, 'TOutput>(
-        nTimes : Int, op : ('TInput => 'TOutput is Adj + Ctl),
+        nTimes : Int, op : ('TInput => 'TOutput),
         message : String
     )
     : Unit is Adj {
@@ -54,7 +54,7 @@ namespace Microsoft.Quantum.Diagnostics {
     /// # Example
     /// The following snippet will fail when executed on machines which
     /// support this diagnostic:
-    /// ```Q#
+    /// ```qsharp
     /// within {
     ///     AllowAtMostNQubits(3, "Too many qubits allocated.");
     /// } apply {

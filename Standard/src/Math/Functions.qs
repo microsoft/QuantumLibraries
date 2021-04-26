@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft Corporation. All rights reserved.
+// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
 namespace Microsoft.Quantum.Math {
@@ -51,16 +51,13 @@ namespace Microsoft.Quantum.Math {
     ///
     /// # Output
     /// The smallest element of `values`.
-    function Min (value : Int[]) : Int
-    {
-        mutable min = value[0];
-        let nTerms = Length(value);
+    function Min (values : Int[]) : Int {
+        mutable min = values[0];
+        let nTerms = Length(values);
 
-        for (idx in 0 .. nTerms - 1)
-        {
-            if (value[idx] < min)
-            {
-                set min = value[idx];
+        for (idx in 0 .. nTerms - 1) {
+            if (values[idx] < min) {
+                set min = values[idx];
             }
         }
 
@@ -163,7 +160,7 @@ namespace Microsoft.Quantum.Math {
     ///
     /// # Remarks
     /// This function behaves different to how the operator `%` behaves in C# and Q# as in the result
-    /// is always a positive integer between 0 and `modulus - 1`, even if value is negative.
+    /// is always a non-negative integer between 0 and `modulus - 1`, even if value is negative.
     function ModulusI(value : Int, modulus : Int) : Int {
         Fact(modulus > 0, $"`modulus` must be positive");
         let r = value % modulus;
@@ -182,7 +179,7 @@ namespace Microsoft.Quantum.Math {
     ///
     /// # Remarks
     /// This function behaves different to how the operator `%` behaves in C# and Q# as in the result
-    /// is always a positive integer between 0 and `modulus - 1`, even if value is negative.
+    /// is always a non-negative integer between 0 and `modulus - 1`, even if value is negative.
     function ModulusL(value : BigInt, modulus : BigInt) : BigInt {
         Fact(modulus > 0L, $"`modulus` must be positive");
         let r = value % modulus;
@@ -554,12 +551,6 @@ namespace Microsoft.Quantum.Math {
         return AccumulatedBitsizeI(a, 0);
     }
 
-    /// # Summary
-    /// Helper function used to recursively calculate the bitsize of a value.
-    internal function AccumulatedBitsizeL(val : BigInt, bitsize : Int) : Int {
-        return val == 0L ? bitsize | AccumulatedBitsizeL(val / 2L, bitsize + 1);
-    }
-
 
     /// # Summary
     /// For a non-negative integer `a`, returns the number of bits required to represent `a`.
@@ -575,7 +566,13 @@ namespace Microsoft.Quantum.Math {
     /// The bit-size of `a`.
     function BitSizeL(a : BigInt) : Int {
         Fact(a >= 0L, $"`a` must be non-negative");
-        return AccumulatedBitsizeL(a, 0);
+        mutable bitsize = 0;
+        mutable val = a;
+        while (val != 0L) {
+            set bitsize += 1;
+            set val /= 2L;
+        } 
+        return bitsize;
     }
 
 
@@ -642,7 +639,7 @@ namespace Microsoft.Quantum.Math {
     /// The array $x$ normalized by the $p$-norm $\|x\|_p$.
     ///
     /// # See Also
-    /// - PNorm
+    /// - Microsoft.Quantum.Math.PNorm
     function PNormalized(p : Double, array : Double[]) : Double[] {
         let nElements = Length(array);
         let norm = PNorm(p, array);

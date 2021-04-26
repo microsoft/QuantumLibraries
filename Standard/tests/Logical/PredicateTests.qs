@@ -6,7 +6,8 @@ namespace Microsoft.Quantum.Tests {
     open Microsoft.Quantum.Diagnostics;
     open Microsoft.Quantum.Math;
 
-    function EqualTest() : Unit {
+    @Test("QuantumSimulator")
+    function EqualIsCorrect() : Unit {
         Fact(EqualI(42, 42), "EqualI returned wrong output.");
         Fact(not EqualI(42, 73), "EqualI returned wrong output.");
 
@@ -29,7 +30,8 @@ namespace Microsoft.Quantum.Tests {
         Fact(not EqualCP(ComplexPolar(1.0, 2.0), ComplexPolar(1.0, 73.0)), "EqualCP returned wrong output.");
     }
 
-    function NotEqualTest() : Unit {
+    @Test("QuantumSimulator")
+    function NotEqualIsCorrect() : Unit {
         Fact(not NotEqualI(42, 42), "NotEqualI returned wrong output.");
         Fact(NotEqualI(42, 73), "NotEqualI returned wrong output.");
 
@@ -52,7 +54,8 @@ namespace Microsoft.Quantum.Tests {
         Fact(NotEqualCP(ComplexPolar(1.0, 2.0), ComplexPolar(1.0, 73.0)), "NotEqualCP returned wrong output.");
     }
 
-    function GreaterThanTest() : Unit {
+    @Test("QuantumSimulator")
+    function GreaterThanIsCorrect() : Unit {
         Fact(GreaterThanI(75, 32), "GreaterThanI returned wrong output.");
         Fact(not GreaterThanI(-13, 32), "GreaterThanI returned wrong output.");
 
@@ -63,7 +66,8 @@ namespace Microsoft.Quantum.Tests {
         Fact(not GreaterThanL(-13L, 32L), "GreaterThanL returned wrong output.");
     }
 
-    function LessThanTest() : Unit {
+    @Test("QuantumSimulator")
+    function LessThanIsCorrect() : Unit {
         Fact(not LessThanI(75, 32), "LessThanI returned wrong output.");
         Fact(LessThanI(-13, 32), "LessThanI returned wrong output.");
 
@@ -74,7 +78,8 @@ namespace Microsoft.Quantum.Tests {
         Fact(LessThanL(-13L, 32L), "LessThanL returned wrong output.");
     }
 
-    function GreaterThanOrEqualTest() : Unit {
+    @Test("QuantumSimulator")
+    function GreaterThanOrEqualIsCorrect() : Unit {
         Fact(GreaterThanOrEqualI(75, 75), "GreaterThanOrEqualI returned wrong output.");
         Fact(not GreaterThanOrEqualI(-13, 32), "GreaterThanOrEqualI returned wrong output.");
 
@@ -85,7 +90,8 @@ namespace Microsoft.Quantum.Tests {
         Fact(not GreaterThanOrEqualL(-13L, 32L), "GreaterThanOrEqualL returned wrong output.");
     }
 
-    function LessThanOrEqualTest() : Unit {
+    @Test("QuantumSimulator")
+    function LessThanOrEqualIsCorrect() : Unit {
         Fact(LessThanOrEqualI(75, 75), "LessThanOrEqualI returned wrong output.");
         Fact(not LessThanOrEqualI(32, -13), "LessThanOrEqualI returned wrong output.");
 
@@ -96,10 +102,10 @@ namespace Microsoft.Quantum.Tests {
         Fact(not LessThanOrEqualL(32L, -13L), "LessThanOrEqualL returned wrong output.");
     }
 
-    function NearlyEqualDTest() : Unit {
+    @Test("QuantumSimulator")
+    function NearlyEqualDIsCorrect() : Unit {
         Fact(NearlyEqualD(1.0, 1.0), "Exactly equal numbers marked as not nearly equal.");
         Fact(NearlyEqualD(1.0, 1.0 + 1e-15), "Nearly equal numbers marked as not nearly equal.");
         Fact(not NearlyEqualD(1.0, 1000.0), "Not nearly equal numbers marked as nearly equal.");
     }
-
 }

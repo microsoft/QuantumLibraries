@@ -1,0 +1,8 @@
+name: qdk-libraries-notes
+channels:
+  - conda-forge
+dependencies:
+  - qutip
+  - notebook
+  - numpy
+  - scipy
