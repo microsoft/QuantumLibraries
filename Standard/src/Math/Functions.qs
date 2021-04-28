@@ -571,7 +571,7 @@ namespace Microsoft.Quantum.Math {
         while (val != 0L) {
             set bitsize += 1;
             set val /= 2L;
-        } 
+        }
         return bitsize;
     }
 
@@ -657,149 +657,157 @@ namespace Microsoft.Quantum.Math {
             return output;
         }
     }
- 
- 
+
+
     /// # Summary
-    /// Returns a factorial of a given number.
+    /// Returns the factorial of a given number.
     ///
     /// # Description
-    /// Returns the factorial as Integer, given an input of $n$ as an Integer.
-    /// Maximum input is |20| to return as Int. For inputs greater than 20, use FactorialL(n).
+    /// Returns the factorial of a given integer $n$, where $|n| <= 20$.
     ///
     /// # Input
-    /// ## $n$
-    /// An Int between -20, 20.
+    /// ## n
+    /// The number to take the factorial of.
     ///
     /// # Output
-    /// The factorial of the provided input with the datatype Int.
+    /// The factorial of `n`.
+    ///
+    /// # Remarks
+    /// For inputs greater than 20, please use @"Microsoft.Quantum.Math.FactorialL".
     ///
     /// # See Also
     /// - Microsoft.Quantum.Math.FactorialL
-    function FactorialI (n : Int) : Int
-    {
+    function FactorialI(n : Int) : Int {
         mutable an = 1;
         mutable x = 1;
+
         if n < 0 {
             set an = AbsI(n);
             set x = -1;
-        }
-        elif n == 0 {
+        } elif n == 0 {
             return x;
         } elif n >= 21 {
-            fail "Largest factorial an Int can hold is 20!. Use FactorialL or FactorialD";
+            fail "Largest factorial an Int can hold is 20!. Use FactorialL or FactorialD.";
         } else {
             set an = n;
         }
+
         for i in  1 .. an {
-            set x = x * i;
+            set x *= i;
         }
+
        return x;
     }
 
 
     /// # Summary
-    /// Returns a factorial of a given number.
+    /// Returns an approximate factorial of a given number.
     ///
     /// # Description
     /// Returns the factorial as 'Double', given an input of $n$ as a 'Double'.
-    /// The domain of inputs for this function is 20.0 < n < 170.0.
-    /// Function uses the Ramanujan Approxomation with a relative error to the order of 1/n^5
+    /// The domain of inputs for this function is `AbsD(n) < 170.0`.
+    ///
+    /// # Remarks
+    /// This function uses the Ramanujan approxomation with a relative error
+    /// to the order of $1 / n^5$.
     ///
     /// # Input
-    /// ## $n$
-    /// A 'Double' between 20.0 < n < 170.0.
-    /// Negatives are accepted.
+    /// ## n
+    /// The number to take the approximate factorial of.
     ///
     /// # Output
-    /// The factorial of the provided input with the datatype 'Double'.
-    /// Large numbers are returned in scientific notation. Example: '8.320987112732955E+81'
+    /// The approximate factorial of `n`.
     ///
     /// # See Also
+    /// - Microsoft.Quantum.Math.FactorialI
     /// - Microsoft.Quantum.Math.FactorialL
-    function FactorialD(n : Double) : Double
-    {
-        let GivenInt = AbsD(n);
-        mutable Direction = 1.0;
-        mutable TradLoop = 1.0;
-        mutable ans = 1.0;
-        
-        if n < 0.0 {
-            set Direction = -1.0;
-        }
-        if GivenInt <= 30.0{
-            fail "FactorialD uses aproxomation. It is recommended to use FactorialI for factorials less than 20";
-        }
-        elif GivenInt >= 170.0{
-            fail "FactorialD will return infinity for numbers larger than 170! Recommend using FactorialL";
-        }
-        else{
-        let a = Sqrt(2.0*PI()*GivenInt);
-        let b = ((GivenInt /E())^GivenInt);
-        let c = (E()^((1.0/(12.0*GivenInt)) - (1.0 /(360.0*(GivenInt^3.0)))));
-        set ans = a*b*c*Direction;
-        }
-       return ans;
-   }
+    function FactorialD(n : Double) : Double {
+        let absN = AbsD(n);
 
+        if absN >= 170.0 {
+            fail "FactorialD is only fininte for |n| < 170.0. Please use FactorialL.";
+        }
 
-   
+        let sign = n < 0.0 ? -1.0 | 0.0;
+        let a = Sqrt(2.0 * PI() * absN);
+        let b = (absN / E()) ^ absN;
+        let c = E() ^ (1.0 / (12.0 * absN) - (1.0 / (360.0 * (absN ^ 3.0))));
+        return a * b * c * sign;
+    }
+
     /// # Summary
-    /// Given an 'Int', this function returns a factorial as a 'BigInt'.
-    ///
-    /// # Description
-    /// Returns the factorial as Big Integer, given an input of $n$ as an Integer.
-    /// This function does not use approximation. If speed is required, use 'FactorialD'
+    /// Returns the double factorial of a given integer.
     ///
     /// # Input
-    /// ## $n$
-    /// A whole number of any size, positive or negative.
+    /// ## n
+    /// The number to take the double factorial of.
     ///
     /// # Output
-    /// The factorial of the provided input with the type BigInt
+    /// The double factorial of the provided input.
+    ///
+    /// # Remarks
+    /// The double factorial $n!!$ of $n$ is defined as
+    /// $n \times (n - 2) \times \cdots \times k$, where $k \in {1, 2}$. For example,
+    /// $7!! = 7 \times 5 \times 3 \times 1$.
     ///
     /// # See Also
     /// - Microsoft.Quantum.Math.FactorialD
-    function FactorialL(n : Int) : BigInt
-    { 
-        mutable Direction = 1L;
-        mutable Ans = 1L;
-        let GivenValue = AbsI(n);
+    /// - Microsoft.Quantum.Math.FactorialI
+    /// - Microsoft.Quantum.Math.FactorialL
+    function DoubleFactorialL(n : Int) : BigInt {
+        mutable acc = n < 0 ? -1L | 1L;
 
-        if n < 0{
-            set Direction = -1L;
+        for i in 1..2..AbsI(n) {
+            set acc *= IntAsBigInt(i);
         }
-        if GivenValue == 0{
+
+        return acc;
+    }
+
+
+    /// # Summary
+    /// Returns the factorial of a given integer.
+    ///
+    /// # Input
+    /// ## n
+    /// The number to take the factorial of.
+    ///
+    /// # Output
+    /// The factorial of the provided input.
+    ///
+    /// # Remarks
+    /// This function returns exact factorials for arbitrary-size integers,
+    /// using a recursive decomposition into double-factorials ($n!!$).
+    /// In particular, if $n = 2k + 1$ for $k \in \mathbb{N}$, then:
+    /// $$
+    ///     n! = n!! \times k! \times 2^k,
+    /// $$
+    /// where $k!$ can be computed recursively. If $n$ is even, then we can
+    /// begin the recursion by computing $n! = n \times (n - 1)!$.
+    ///
+    ///
+    /// # See Also
+    /// - Microsoft.Quantum.Math.FactorialD
+    /// - Microsoft.Quantum.Math.FactorialI
+    function FactorialL(n : Int) : BigInt {
+        let sign = n < 0 ? -1L | 1L;
+        let absN = AbsI(n);
+
+        if absN == 0 or absN == 1 {
             return 1L;
         }
-        elif GivenValue == 1{
-            return 1L;
+
+        // If n is even, recurse on n - 1 so that we know we're starting at
+        // an odd number.
+        if n % 2 == 0 {
+            return IntAsBigInt(n) * FactorialL(n - 1);
         }
-        else{
-            let Eve = EveFactorialL(GivenValue);
-            let Odd = OddFactorialL(GivenValue);
-            set Ans = Eve * Odd * Direction;
-        }
-        return Ans;
-    }
 
-    internal function OddFactorialL(n : Int) : BigInt
-    {
-     mutable acc = 1L;
-     for i in 1..2..n {
-          set acc *= IntAsBigInt(i);
+        // At this point, we know that 𝑛 is an odd number >= 3.
+        // Our approach will be to use that for 𝑛 = 2𝑘 + 1,
+        // 𝑛! = 𝑛!! * 𝑘! * 2^𝑘.
+        let k = absN / 2;
+        return sign * DoubleFactorialL(absN) * FactorialL(k) * (1L <<< k);
     }
-     return acc;
-    }
-
-    internal function EveFactorialL(n : Int) : BigInt
-    {
-     mutable acc = 1L;
-     for i in 2..2..n {
-        set acc *= IntAsBigInt(i);
-    }
-     return acc;
-    }
-
-
 
 }
