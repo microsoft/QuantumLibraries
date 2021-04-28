@@ -337,12 +337,11 @@ namespace Microsoft.Quantum.AmplitudeAmplification {
             set exponentCurrent = 0;
             set exponentMax = exponentMax + 1;
         }
-        until (finished == One)
+        until finished == One
         fixup {
             ResetAll(startQubits);
         }
     }
 
 }
-
 
