@@ -7,13 +7,46 @@ namespace Microsoft.Quantum.Canon {
     open Microsoft.Quantum.Diagnostics;
     open Microsoft.Quantum.Arrays;
 
-    // TODO:
-    // - FactorialI
-    // - FactorialD
-    // - DoubleFactorialL
-    // - LogFactorialD
-    // - LogGammaD
-    // - Binom
+    @Test("QuantumSimulator")
+    function LogFactorialDIsCorrect() : Unit {
+        NearEqualityFactD(LogFactorialD(2000), 13214.125752848390489718783420129890003192522187540577445368882076);
+        NearEqualityFactD(LogFactorialD(4321), 31856.241848248713008413364405861276737565269737465573546318165371);
+    }
+
+    @Test("QuantumSimulator")
+    function DoubleFactorialLIsCorrect() : Unit {
+        EqualityFactL(DoubleFactorialL(120), 9593444981835986954891939947669322185182489942608389896364094195294295395488811817369600000000000000L, "120!! was incorrect.");
+        EqualityFactL(DoubleFactorialL(71), 2395415678676082004163677716234578672981800778515625L, "71!! was incorrect.");
+    }
+
+    @Test("QuantumSimulator")
+    function LogGammaDIsCorrect() : Unit {
+        NearEqualityFactD(LogGammaD(3.14), 0.8261387047770284764910316081071750904374173003906590856150708884);
+        NearEqualityFactD(LogGammaD(0.782), 0.1698067219140444477017554445169821679365849471502663300627878103);
+        NearEqualityFactD(LogGammaD(1234.567), 7551.0278099842760398085493506933061185258592164059260052791257174);
+    }
+
+    @Test("QuantumSimulator")
+    function FactorialIIsCorrect() : Unit {
+        EqualityFactI(FactorialI(10), 3628800, "10! was incorrect.");
+        EqualityFactI(FactorialI(6), 720, "6! was incorrect.");
+        EqualityFactI(FactorialI(-7), 5040, "-7! was incorrect.");
+    }
+
+    @Test("QuantumSimulator")
+    function FactorialDIsCorrect() : Unit {
+        NearEqualityFactD(FactorialD(10), 3628800.0);
+        NearEqualityFactD(FactorialD(6), 720.0);
+        NearEqualityFactD(FactorialD(-7), 5040.0);
+        NearEqualityFactD(FactorialD(72), 6.12344584e103);
+    }
+
+    @Test("QuantumSimulator")
+    function BinomIsCorrect() : Unit {
+        EqualityFactI(Binom(31, 7), 2629575, "(31 7) was incorrect.");
+        EqualityFactI(Binom(23, 9), 817190, "(23 9) was incorrect.");
+        EqualityFactI(Binom(13, 5), 1287, "(13 5) was incorrect.");
+    }
 
     @Test("QuantumSimulator")
     function FactorialLIsCorrectForPositiveInputs() : Unit {

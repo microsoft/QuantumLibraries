@@ -721,14 +721,14 @@ namespace Microsoft.Quantum.Math {
     /// # See Also
     /// - Microsoft.Quantum.Math.FactorialI
     /// - Microsoft.Quantum.Math.FactorialL
-    function FactorialD(n : Double) : Double {
-        let absN = AbsD(n);
+    function FactorialD(n : Int) : Double {
+        let absN = AbsD(IntAsDouble(n));
 
         if absN >= 170.0 {
             fail "FactorialD is only fininte for |n| < 170.0. Please use FactorialL.";
         }
 
-        let sign = n < 0.0 ? -1.0 | 0.0;
+        let sign = n < 0 ? -1.0 | 0.0;
         let a = Sqrt(2.0 * PI() * absN);
         let b = (absN / E()) ^ absN;
         let c = E() ^ (1.0 / (12.0 * absN) - (1.0 / (360.0 * (absN ^ 3.0))));
@@ -897,9 +897,9 @@ namespace Microsoft.Quantum.Math {
     function Binom(n : Int, k : Int) : Int {
         // Here, we use the approximation described in Numerical Recipes in C.
         if n < 171 {
-            return Floor(0.5 + Factorial(n) / (Factorial(k) * Factorial(n - k)));
+            return Floor(0.5 + FactorialD(n) / (FactorialD(k) * FactorialD(n - k)));
         } else {
-            return Floor(0.5 + ExpD(LogFactorial(n) - LogFactorial(k) - LogFactorial(n - k)));
+            return Floor(0.5 + ExpD(LogFactorialD(n) - LogFactorialD(k) - LogFactorialD(n - k)));
         }
     }
 
