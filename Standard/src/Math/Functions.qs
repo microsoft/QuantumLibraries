@@ -810,4 +810,97 @@ namespace Microsoft.Quantum.Math {
         return sign * DoubleFactorialL(absN) * FactorialL(k) * (1L <<< k);
     }
 
+
+    /// # Summary
+    /// Returns the natural logarithm of the gamma function (aka the log-gamma
+    /// function).
+    ///
+    /// # Description
+    /// The gamma function $\Gamma(x)$ generalizes the factorial function
+    /// to the positive real numbers and is defined as
+    /// $$
+    /// \begin{align}
+    ///     \Gamma(x) \mathrel{:=} \int_0^{\infty} t^{x - 1} e^{-t} dt.
+    /// \end{align}
+    /// $$
+    ///
+    /// The gamma function has the property that for all positive real numbers
+    /// $x$, $\Gamma(x + 1) = x \Gamma(x)$, such that the factorial function
+    /// is a special case of $\Gamma$,
+    /// $n! = \Gamma(n + 1)$ for all natural numbers $n$.
+    ///
+    /// # Input
+    /// ## x
+    /// The point $x$ at which the log-gamma function is to be evaluated.
+    ///
+    /// # Output
+    /// The value $\ln \Gamma(x)$.
+    function LogGammaD(x : Double) : Double {
+        // Here, we use the approximation described in Numerical Recipes in C.
+        let coefficients = [
+            57.1562356658629235, -59.5979603554754912,
+            14.1360979747417471, -0.491913816097620199, .339946499848118887e-4,
+            .465236289270485756e-4, -.983744753048795646e-4, .158088703224912494e-3,
+            -.210264441724104883e-3, .217439618115212643e-3, -.164318106536763890e-3,
+            .844182239838527433e-4, -.261908384015814087e-4, .368991826595316234e-5
+        ];
+
+        if x <= 0.0 { fail "Γ(x) not defined for x <= 0."; }
+
+        mutable y = x;
+        let tmp = x + 5.2421875000000000;
+
+        mutable acc = 0.99999999999999709;
+        for coeff in coefficients {
+            set y += 1.0;
+            set acc += coeff / y;
+        }
+
+
+        return Log(2.506628274631000 * acc / x) + ((x + 0.5) * Log(tmp) - tmp);
+    }
+
+    /// # Summary
+    /// Returns the approximate natural logarithm of the factorial of a given
+    /// integer.
+    ///
+    /// # Input
+    /// ## n
+    /// The number to take the log-factorial of.
+    ///
+    /// # Output
+    /// The natural logarithm of the factorial of the provided input.
+    ///
+    /// # See Also
+    /// - Microsoft.Quantum.Math.FactorialD
+    /// - Microsoft.Quantum.Math.FactorialI
+    /// - Microsoft.Quantum.Math.FactorialL
+    function LogFactorialD(n : Int) : Double {
+        return LogGammaD(IntAsDouble(n) + 1.0);
+    }
+
+    /// # Summary
+    /// Returns the binomial coefficient of two integers.
+    ///
+    /// # Description
+    /// Given two integers $n$ and $k$, returns the binomial coefficient
+    /// $(n k)$, also known as $n$-choose-$k$.
+    ///
+    /// # Input
+    /// ## n
+    /// The first of the two integers to compute the binomial coefficient of.
+    /// ## k
+    /// The second of the two integers to compute the binomial coefficient of.
+    ///
+    /// # Output
+    /// The binomial coefficient $(n k)$.
+    function Binom(n : Int, k : Int) : Int {
+        // Here, we use the approximation described in Numerical Recipes in C.
+        if n < 171 {
+            return Floor(0.5 + Factorial(n) / (Factorial(k) * Factorial(n - k)));
+        } else {
+            return Floor(0.5 + ExpD(LogFactorial(n) - LogFactorial(k) - LogFactorial(n - k)));
+        }
+    }
+
 }

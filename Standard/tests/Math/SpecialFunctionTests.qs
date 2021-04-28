@@ -11,6 +11,9 @@ namespace Microsoft.Quantum.Canon {
     // - FactorialI
     // - FactorialD
     // - DoubleFactorialL
+    // - LogFactorialD
+    // - LogGammaD
+    // - Binom
 
     @Test("QuantumSimulator")
     function FactorialLIsCorrectForPositiveInputs() : Unit {
