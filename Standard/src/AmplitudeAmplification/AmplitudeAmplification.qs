@@ -328,7 +328,7 @@ namespace Microsoft.Quantum.AmplitudeAmplification {
                 set finished = M(flagQubit[0]);
                 set exponentCurrent = exponentCurrent + 1;
             }
-            until (finished == One or exponentCurrent > exponentMax)
+            until finished == One or exponentCurrent > exponentMax
             fixup {
                 // flagQubit is already in Zero for fixup to apply
                 ResetAll(startQubits);
@@ -344,4 +344,3 @@ namespace Microsoft.Quantum.AmplitudeAmplification {
     }
 
 }
-
