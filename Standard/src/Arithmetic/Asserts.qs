@@ -44,7 +44,7 @@ namespace Microsoft.Quantum.Arithmetic {
     operation AssertProbInt(stateIndex : Int, expected : Double, qubits : LittleEndian, tolerance : Double) : Unit {
         use flag = Qubit();
         within {
-            (ControlledOnInt(stateIndex, X))(qubits!, flag);
+            ControlledOnInt(stateIndex, X)(qubits!, flag);
         } apply {
             AssertMeasurementProbability([PauliZ], [flag], One, expected, $"AssertProbInt failed on stateIndex {stateIndex}, expected probability {expected}.", tolerance);
         }
