@@ -152,9 +152,8 @@ namespace Microsoft.Quantum.Arithmetic {
     : Unit is Adj + Ctl {
         let inner = MultiplyAndAddPhaseByModularInteger(constMultiplier, modulus, multiplier, _);
 
-        using (extraZeroBit = Qubit()) {
-            ApplyPhaseLEOperationOnLECA(inner, LittleEndian(summand! + [extraZeroBit]));
-        }
+        use extraZeroBit = Qubit();
+        ApplyPhaseLEOperationOnLECA(inner, LittleEndian(summand! + [extraZeroBit]));
     }
 
     /// # Summary
@@ -192,7 +191,7 @@ namespace Microsoft.Quantum.Arithmetic {
             AssertPhaseLessThan(modulus, phaseSummand);
         }
 
-        for (i in IndexRange(multiplier!)) {
+        for i in IndexRange(multiplier!) {
             let summand = (ExpModI(2, i, modulus) * constMultiplier) % modulus;
             Controlled IncrementPhaseByModularInteger([(multiplier!)[i]], (summand, modulus, phaseSummand));
         }
@@ -232,28 +231,27 @@ namespace Microsoft.Quantum.Arithmetic {
         EqualityFactB(modulus <= 2 ^ Length(multiplier!), true, $"`multiplier` must be big enough to fit integers modulo `modulus`");
         EqualityFactB(IsCoprimeI(constMultiplier, modulus), true, $"`constMultiplier` and `modulus` must be co-prime");
 
-        using (summand = Qubit[Length(multiplier!)]) {
-            // recall that newly allocated qubits are all in 0 state
-            // and therefore summandLE encodes 0.
-            let summandLE = LittleEndian(summand);
+        use summand = Qubit[Length(multiplier!)];
+        // recall that newly allocated qubits are all in 0 state
+        // and therefore summandLE encodes 0.
+        let summandLE = LittleEndian(summand);
 
-            // Let us look at what is the result of operations below assuming
-            // multiplier is in computational basis and encodes x
-            // Currently the joint state of multiplier and summandLE is
-            // |x⟩|0⟩
-            MultiplyAndAddByModularInteger(constMultiplier, modulus, multiplier, summandLE);
+        // Let us look at what is the result of operations below assuming
+        // multiplier is in computational basis and encodes x
+        // Currently the joint state of multiplier and summandLE is
+        // |x⟩|0⟩
+        MultiplyAndAddByModularInteger(constMultiplier, modulus, multiplier, summandLE);
 
-            // now the joint state is |x⟩|x⋅a(mod N)⟩
-            ApplyToEachCA(SWAP, Zipped(summandLE!, multiplier!));
+        // now the joint state is |x⟩|x⋅a(mod N)⟩
+        ApplyToEachCA(SWAP, Zipped(summandLE!, multiplier!));
 
-            // now the joint state is |x⋅a(mod N)⟩|x⟩
-            let inverseMod = InverseModI(constMultiplier, modulus);
+        // now the joint state is |x⋅a(mod N)⟩|x⟩
+        let inverseMod = InverseModI(constMultiplier, modulus);
 
-            // note that the operation below implements the following map:
-            // |x⟩|y⟩ ↦ |x⟩|y - a⁻¹⋅x (mod N)⟩
-            Adjoint MultiplyAndAddByModularInteger(inverseMod, modulus, multiplier, summandLE);
-            // now the joint state is |x⋅a(mod N)⟩|x - a⁻¹⋅x⋅a (mod N)⟩ = |x⋅a(mod N)⟩|0⟩
-        }
+        // note that the operation below implements the following map:
+        // |x⟩|y⟩ ↦ |x⟩|y - a⁻¹⋅x (mod N)⟩
+        Adjoint MultiplyAndAddByModularInteger(inverseMod, modulus, multiplier, summandLE);
+        // now the joint state is |x⋅a(mod N)⟩|x - a⁻¹⋅x⋅a (mod N)⟩ = |x⋅a(mod N)⟩|0⟩
     }
 
 }

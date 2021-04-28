@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft Corporation. All rights reserved.
+// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
 namespace Microsoft.Quantum.Tests {
@@ -7,17 +7,16 @@ namespace Microsoft.Quantum.Tests {
     open Microsoft.Quantum.Diagnostics;
 
     operation CheckSetToBasisStateHelper(desired : Result) : Unit {
-        using (q = Qubit()) {
-            Ry(0.1234, q);
-            SetToBasisState(desired, q);
-            AssertQubit(desired, q);
-            Reset(q);
-        }
+        use q = Qubit();
+        Ry(0.1234, q);
+        SetToBasisState(desired, q);
+        AssertQubit(desired, q);
+        Reset(q);
     }
 
     @Test("QuantumSimulator")
     operation CheckSetToBasisState() : Unit {
-        for (desired in [Zero, One]) {
+        for desired in [Zero, One] {
             CheckSetToBasisStateHelper(desired);
         }
     }

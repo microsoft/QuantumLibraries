@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft Corporation. All rights reserved.
+// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
 namespace Microsoft.Quantum.Canon {
@@ -296,7 +296,7 @@ namespace Microsoft.Quantum.Canon {
     operation PermuteQubits(ordering : Int[], register : Qubit[]) : Unit is Adj+Ctl {
         EqualityFactI(Length(ordering), Length(register), "The new ordering has an incorrect number of elements");
 
-        for ((left, right) in _SwapOrderToPermuteArray(ordering)) {
+        for (left, right) in _SwapOrderToPermuteArray(ordering) {
             SWAP(register[left], register[right]);
         }
     }

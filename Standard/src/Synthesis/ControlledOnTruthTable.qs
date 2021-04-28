@@ -32,11 +32,11 @@ namespace Microsoft.Quantum.Synthesis {
     internal function FastHadamardTransformed(func : Int[]) : Int[] {
         let bits = BitSizeI(Length(func) - 1);
         mutable res = func;
-        for (m in 0..bits - 1) {
+        for m in 0..bits - 1 {
             mutable s = 1 <<< m;
-            for (i in 0..(2 * s)..Length(func) - 1) {
+            for i in 0..(2 * s)..Length(func) - 1 {
                 mutable k = i + s;
-                for (j in i..i + s - 1) {
+                for j in i..i + s - 1 {
                     mutable t = res[j];
                     set res w/= j <- res[j] + res[k];
                     set res w/= k <- t - res[k];
@@ -173,9 +173,9 @@ namespace Microsoft.Quantum.Synthesis {
 
             HY(target);
 
-            for (i in 0..vars) {
+            for i in 0..vars {
                 let start = 1 <<< i;
-                for ((offset, ctrl) in GrayCode(i)) {
+                for (offset, ctrl) in GrayCode(i) {
                     R1Frac(spectrum[start + offset], vars + 1, qubits[i]);
                     if (i != 0) {
                         CNOT(qubits[ctrl], qubits[i]);
@@ -187,12 +187,11 @@ namespace Microsoft.Quantum.Synthesis {
         }
         adjoint self;
         controlled (controls, ...) {
-            using (q = Qubit()) {
-                within {
-                    ApplyXControlledOnTruthTableWithCleanTarget(func, controlRegister, q);
-                } apply {
-                    Controlled X(controls + [q], target);
-                }
+            use q = Qubit();
+            within {
+                ApplyXControlledOnTruthTableWithCleanTarget(func, controlRegister, q);
+            } apply {
+                Controlled X(controls + [q], target);
             }
         }
         controlled adjoint self;
@@ -234,7 +233,7 @@ namespace Microsoft.Quantum.Synthesis {
 
             HY(target);
 
-            for ((offset, ctrl) in GrayCode(vars)) {
+            for (offset, ctrl) in GrayCode(vars) {
                 R1Frac(-spectrum[offset], vars + 1, target);
                 CNOT(controlRegister[ctrl], target);
             }
@@ -254,10 +253,10 @@ namespace Microsoft.Quantum.Synthesis {
             H(target);
             AssertMeasurementProbability([PauliZ], [target], One, 0.5, "Probability of the measurement must be 0.5", 1e-10);
 
-            if (IsResultOne(M(target))) {
-                for (i in 0..vars - 1) {
+            if IsResultOne(M(target)) {
+                for i in 0..vars - 1 {
                     let start = 1 <<< i;
-                    for ((offset, ctrl) in GrayCode(i)) {
+                    for (offset, ctrl) in GrayCode(i) {
                         R1Frac(spectrum[start + offset], vars, controlRegister[i]);
                         if (i != 0) {
                             CNOT(controlRegister[ctrl], controlRegister[i]);

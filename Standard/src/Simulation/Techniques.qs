@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft Corporation. All rights reserved.
+// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
 namespace Microsoft.Quantum.Simulation {
@@ -107,11 +107,10 @@ namespace Microsoft.Quantum.Simulation {
     /// An estimate $\hat{\phi}$ of the ground state energy $\phi$
     /// of the generator represented by $U$.
     operation EstimateEnergyWithAdiabaticEvolution(nQubits : Int, statePrepUnitary : (Qubit[] => Unit), adiabaticUnitary : (Qubit[] => Unit), qpeUnitary : (Qubit[] => Unit is Adj + Ctl), phaseEstAlgorithm : ((DiscreteOracle, Qubit[]) => Double)) : Double {
-        using (qubits = Qubit[nQubits]) {
-            let phaseEst = AdiabaticStateEnergyUnitary(statePrepUnitary, adiabaticUnitary, qpeUnitary, phaseEstAlgorithm, qubits);
-            ResetAll(qubits);
-            return phaseEst;
-        }
+        use qubits = Qubit[nQubits];
+        let phaseEst = AdiabaticStateEnergyUnitary(statePrepUnitary, adiabaticUnitary, qpeUnitary, phaseEstAlgorithm, qubits);
+        ResetAll(qubits);
+        return phaseEst;
     }
 
 

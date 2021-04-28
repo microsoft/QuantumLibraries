@@ -1,5 +1,6 @@
-// Copyright (c) Microsoft Corporation. All rights reserved.
+// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
+
 namespace Microsoft.Quantum.Tests {
     open Microsoft.Quantum.Arithmetic;
     open Microsoft.Quantum.Intrinsic;
@@ -13,94 +14,71 @@ namespace Microsoft.Quantum.Tests {
 
     /// # Summary
     /// Hard-code 1 qubit QFT
-    operation QFT1 (target : BigEndian) : Unit {
-        body (...) {
-            EqualityFactI(Length(target!), 1, $"`Length(target!)` must be 1");
-            H((target!)[0]);
-        }
-
-        adjoint invert;
+    operation QFT1 (target : BigEndian) : Unit is Adj {
+        EqualityFactI(Length(target!), 1, $"`Length(target!)` must be 1");
+        H((target!)[0]);
     }
 
     /// # Summary
     /// Hard-code 2 qubit QFT
-    operation QFT2 (target : BigEndian) : Unit {
-        body (...) {
-            EqualityFactI(Length(target!), 2, $"`Length(target!)` must be 2");
-            let (q1, q2) = ((target!)[0], (target!)[1]);
-            H(q1);
-            Controlled R1Frac([q2], (2, 2, q1));
-            H(q2);
-            SWAP(q1, q2);
-        }
-
-        adjoint invert;
+    operation QFT2 (target : BigEndian) : Unit is Adj {
+        EqualityFactI(Length(target!), 2, $"`Length(target!)` must be 2");
+        let (q1, q2) = ((target!)[0], (target!)[1]);
+        H(q1);
+        Controlled R1Frac([q2], (2, 2, q1));
+        H(q2);
+        SWAP(q1, q2);
     }
 
     /// # Summary
     /// Hard-code 3 qubit QFT
-    operation QFT3 (target : BigEndian) : Unit {
-        body (...) {
-            EqualityFactI(Length(target!), 3, $"`Length(target)` must be 3");
-            let (q1, q2, q3) = ((target!)[0], (target!)[1], (target!)[2]);
-            H(q1);
-            Controlled R1Frac([q2], (2, 2, q1));
-            Controlled R1Frac([q3], (2, 3, q1));
-            H(q2);
-            Controlled R1Frac([q3], (2, 2, q2));
-            H(q3);
-            SWAP(q1, q3);
-        }
-        
-        adjoint invert;
+    operation QFT3 (target : BigEndian) : Unit is Adj {
+        EqualityFactI(Length(target!), 3, $"`Length(target)` must be 3");
+        let (q1, q2, q3) = ((target!)[0], (target!)[1], (target!)[2]);
+        H(q1);
+        Controlled R1Frac([q2], (2, 2, q1));
+        Controlled R1Frac([q3], (2, 3, q1));
+        H(q2);
+        Controlled R1Frac([q3], (2, 2, q2));
+        H(q3);
+        SWAP(q1, q3);
     }
-    
-    
+
+
     /// # Summary
     /// Hard-code 4 qubit QFT
-    operation QFT4 (target : BigEndian) : Unit {
-        
-        body (...) {
-            EqualityFactI(Length(target!), 4, $"`Length(target!)` must be 4");
-            let (q1, q2, q3, q4) = ((target!)[0], (target!)[1], (target!)[2], (target!)[3]);
-            H(q1);
-            Controlled R1Frac([q2], (2, 2, q1));
-            Controlled R1Frac([q3], (2, 3, q1));
-            Controlled R1Frac([q4], (2, 4, q1));
-            H(q2);
-            Controlled R1Frac([q3], (2, 2, q2));
-            Controlled R1Frac([q4], (2, 3, q2));
-            H(q3);
-            Controlled R1Frac([q4], (2, 2, q3));
-            H(q4);
-            SWAP(q1, q4);
-            SWAP(q2, q3);
-        }
-        
-        adjoint invert;
+    operation QFT4 (target : BigEndian) : Unit is Adj {
+        EqualityFactI(Length(target!), 4, $"`Length(target!)` must be 4");
+        let (q1, q2, q3, q4) = ((target!)[0], (target!)[1], (target!)[2], (target!)[3]);
+        H(q1);
+        Controlled R1Frac([q2], (2, 2, q1));
+        Controlled R1Frac([q3], (2, 3, q1));
+        Controlled R1Frac([q4], (2, 4, q1));
+        H(q2);
+        Controlled R1Frac([q3], (2, 2, q2));
+        Controlled R1Frac([q4], (2, 3, q2));
+        H(q3);
+        Controlled R1Frac([q4], (2, 2, q3));
+        H(q4);
+        SWAP(q1, q4);
+        SWAP(q2, q3);
     }
-    
-    
-    operation ApplyBEToRegisterA (op : (BigEndian => Unit is Adj), target : Qubit[]) : Unit {
-        
-        body (...) {
-            op(BigEndian(target));
-        }
-        
-        adjoint invert;
+
+
+    operation ApplyBEToRegisterA (op : (BigEndian => Unit is Adj), target : Qubit[]) : Unit is Adj {
+        op(BigEndian(target));
     }
-    
-    
+
+
     /// # Summary
     /// Compares QFT to the hard-coded implementations
     @Test("QuantumSimulator")
     operation TestQFT() : Unit {
-        let testFunctions = [QFT1, QFT2, QFT3, QFT4];
+        let testOperations = [QFT1, QFT2, QFT3, QFT4];
 
-        for (i in IndexRange(testFunctions)) {
-            AssertOperationsEqualReferenced(i + 1, ApplyBEToRegisterA(testFunctions[i], _), ApplyBEToRegisterA(QFT, _));
+        for (i, op) in Enumerated(testOperations) {
+            AssertOperationsEqualReferenced(i + 1, ApplyBEToRegisterA(testOperations[i], _), ApplyBEToRegisterA(QFT, _));
         }
     }
 
 }
-

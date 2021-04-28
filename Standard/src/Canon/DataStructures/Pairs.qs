@@ -3,7 +3,7 @@
 
 namespace Microsoft.Quantum.Canon
 {
-    
+
     /// # Summary
     /// Given a pair, returns its first element.
     ///
@@ -19,13 +19,12 @@ namespace Microsoft.Quantum.Canon
     ///
     /// # Output
     /// The first element of `pair`.
-    function Fst<'T, 'U> (pair : ('T, 'U)) : 'T
-    {
+    function Fst<'T, 'U> (pair : ('T, 'U)) : 'T {
         let (fst, snd) = pair;
         return fst;
     }
-    
-    
+
+
     /// # Summary
     /// Given a pair, returns its second element.
     ///
@@ -41,12 +40,11 @@ namespace Microsoft.Quantum.Canon
     ///
     /// # Output
     /// The second element of `pair`.
-    function Snd<'T, 'U> (pair : ('T, 'U)) : 'U
-    {
+    function Snd<'T, 'U> (pair : ('T, 'U)) : 'U {
         let (fst, snd) = pair;
         return snd;
     }
-    
+
 }
 
 

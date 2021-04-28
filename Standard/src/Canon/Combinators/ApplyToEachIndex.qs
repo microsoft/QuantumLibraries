@@ -1,9 +1,9 @@
-// Copyright (c) Microsoft Corporation. All rights reserved.
+// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
 namespace Microsoft.Quantum.Canon {
     open Microsoft.Quantum.Arrays;
-    
+
     /// # Summary
     /// Applies a single-qubit operation to each indexed element in a register.
     ///
@@ -22,15 +22,14 @@ namespace Microsoft.Quantum.Canon {
     /// - Microsoft.Quantum.Canon.ApplyToEachIndexA
     /// - Microsoft.Quantum.Canon.ApplyToEachIndexC
     /// - Microsoft.Quantum.Canon.ApplyToEachIndexCA
-    operation ApplyToEachIndex<'T> (singleElementOperation : ((Int, 'T) => Unit), register : 'T[]) : Unit
-    {
-        for (idxQubit in IndexRange(register))
-        {
+    operation ApplyToEachIndex<'T> (singleElementOperation : ((Int, 'T) => Unit), register : 'T[])
+    : Unit {
+        for idxQubit in IndexRange(register) {
             singleElementOperation(idxQubit, register[idxQubit]);
         }
     }
-    
-    
+
+
     /// # Summary
     /// Applies a single-qubit operation to each indexed element in a register.
     /// The modifier `C` indicates that the single-qubit operation is controllable.
@@ -47,20 +46,14 @@ namespace Microsoft.Quantum.Canon {
     ///
     /// # See Also
     /// - Microsoft.Quantum.Canon.ApplyToEachIndex
-    operation ApplyToEachIndexC<'T> (singleElementOperation : ((Int, 'T) => Unit is Ctl), register : 'T[]) : Unit
-    {
-        body (...)
-        {
-            for (idxQubit in IndexRange(register))
-            {
-                singleElementOperation(idxQubit, register[idxQubit]);
-            }
+    operation ApplyToEachIndexC<'T> (singleElementOperation : ((Int, 'T) => Unit is Ctl), register : 'T[])
+    : Unit is Ctl {
+        for idxQubit in IndexRange(register) {
+            singleElementOperation(idxQubit, register[idxQubit]);
         }
-        
-        controlled distribute;
     }
-    
-    
+
+
     /// # Summary
     /// Applies a single-qubit operation to each indexed element in a register.
     /// The modifier `A` indicates that the single-qubit operation is adjointable.
@@ -77,20 +70,14 @@ namespace Microsoft.Quantum.Canon {
     ///
     /// # See Also
     /// - Microsoft.Quantum.Canon.ApplyToEachIndex
-    operation ApplyToEachIndexA<'T> (singleElementOperation : ((Int, 'T) => Unit is Adj), register : 'T[]) : Unit
-    {
-        body (...)
-        {
-            for (idxQubit in IndexRange(register))
-            {
-                singleElementOperation(idxQubit, register[idxQubit]);
-            }
+    operation ApplyToEachIndexA<'T> (singleElementOperation : ((Int, 'T) => Unit is Adj), register : 'T[])
+    : Unit is Adj {
+        for idxQubit in IndexRange(register) {
+            singleElementOperation(idxQubit, register[idxQubit]);
         }
-        
-        adjoint invert;
     }
-    
-    
+
+
     /// # Summary
     /// Applies a single-qubit operation to each indexed element in a register.
     /// The modifier `CA` indicates that the single-qubit operation is adjointable
@@ -108,21 +95,13 @@ namespace Microsoft.Quantum.Canon {
     ///
     /// # See Also
     /// - Microsoft.Quantum.Canon.ApplyToEachIndex
-    operation ApplyToEachIndexCA<'T> (singleElementOperation : ((Int, 'T) => Unit is Adj + Ctl), register : 'T[]) : Unit
-    {
-        body (...)
-        {
-            for (idxQubit in IndexRange(register))
-            {
-                singleElementOperation(idxQubit, register[idxQubit]);
-            }
+    operation ApplyToEachIndexCA<'T> (singleElementOperation : ((Int, 'T) => Unit is Adj + Ctl), register : 'T[])
+    : Unit is Adj + Ctl {
+        for idxQubit in IndexRange(register) {
+            singleElementOperation(idxQubit, register[idxQubit]);
         }
-        
-        adjoint invert;
-        controlled distribute;
-        controlled adjoint distribute;
     }
-    
+
 }
 
 

@@ -18,28 +18,24 @@ namespace Microsoft.Quantum.ErrorCorrection {
     /// # Remarks
     /// The particular encoder chosen was taken from the paper V. Kliuchnikov and D. Maslov, "Optimization of Clifford Circuits,"
     /// Phys. Rev. Phys. Rev. A 88, 052307 (2013); https://arxiv.org/abs/1305.0810, Figure 4b) and requires a total of 11 gates.
-    operation FiveQubitCodeEncoderImpl (data : Qubit[], scratch : Qubit[]) : Unit {
-        body (...) {
-            Controlled X(data, scratch[1]);
-            H(data[0]);
-            H(scratch[0]);
-            Controlled X(data, scratch[2]);
-            Controlled X([scratch[0]], data[0]);
-            Controlled X(data, scratch[1]);
-            Controlled X([scratch[0]], scratch[3]);
-            H(scratch[0]);
-            H(data[0]);
-            Controlled X([scratch[0]], scratch[2]);
-            Controlled X(data, scratch[3]);
+    operation FiveQubitCodeEncoderImpl (data : Qubit[], scratch : Qubit[]) : Unit is Adj {
+        Controlled X(data, scratch[1]);
+        H(data[0]);
+        H(scratch[0]);
+        Controlled X(data, scratch[2]);
+        Controlled X([scratch[0]], data[0]);
+        Controlled X(data, scratch[1]);
+        Controlled X([scratch[0]], scratch[3]);
+        H(scratch[0]);
+        H(data[0]);
+        Controlled X([scratch[0]], scratch[2]);
+        Controlled X(data, scratch[3]);
 
-            // The last X below is to correct the signs of stabilizers.
-            // The 5-qubit code is non-CSS, so even if the circuit implements
-            // the correct symplectic matrix,
-            // it may differ from the desired one by a Pauli correction.
-            X(scratch[2]);
-        }
-
-        adjoint invert;
+        // The last X below is to correct the signs of stabilizers.
+        // The 5-qubit code is non-CSS, so even if the circuit implements
+        // the correct symplectic matrix,
+        // it may differ from the desired one by a Pauli correction.
+        X(scratch[2]);
     }
 
     /// # Summary

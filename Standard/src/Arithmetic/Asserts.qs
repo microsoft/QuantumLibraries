@@ -42,12 +42,11 @@ namespace Microsoft.Quantum.Arithmetic {
     /// AssertProbInt(6, 0.875, qubits, 10e-10);
     /// ```
     operation AssertProbInt(stateIndex : Int, expected : Double, qubits : LittleEndian, tolerance : Double) : Unit {
-        using (flag = Qubit()) {
-            within {
-                (ControlledOnInt(stateIndex, X))(qubits!, flag);
-            } apply {
-                AssertMeasurementProbability([PauliZ], [flag], One, expected, $"AssertProbInt failed on stateIndex {stateIndex}, expected probability {expected}.", tolerance);
-            }
+        use flag = Qubit();
+        within {
+            (ControlledOnInt(stateIndex, X))(qubits!, flag);
+        } apply {
+            AssertMeasurementProbability([PauliZ], [flag], One, expected, $"AssertProbInt failed on stateIndex {stateIndex}, expected probability {expected}.", tolerance);
         }
     }
 

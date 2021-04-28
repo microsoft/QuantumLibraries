@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft Corporation. All rights reserved.
+// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
 namespace Microsoft.Quantum.Characterization {
@@ -71,22 +71,16 @@ namespace Microsoft.Quantum.Characterization {
     /// $$
     /// where $M = 2 (\boldone + P)^\mathrm{T} / 2 \cdot (\boldone + Q) / 2$
     /// is the effective measurement corresponding to $P$ and $Q$.
-    operation SingleQubitProcessTomographyMeasurement (preparation : Pauli, measurement : Pauli, channel : (Qubit => Unit)) : Result
-    {
+    operation SingleQubitProcessTomographyMeasurement (preparation : Pauli, measurement : Pauli, channel : (Qubit => Unit)) : Result     {
         mutable result = Zero;
-        
-        using (register = Qubit[1])
-        {
-            let qubit = register[0];
-            PrepareQubit(preparation, qubit);
-            channel(qubit);
-            set result = Measure([measurement], [qubit]);
-            Reset(qubit);
-        }
-        
+
+        use qubit = Qubit();
+        PreparePauliEigenstate(preparation, qubit);
+        channel(qubit);
+        set result = Measure([measurement], [qubit]);
+        Reset(qubit);
+
         return result;
     }
-    
+
 }
-
-

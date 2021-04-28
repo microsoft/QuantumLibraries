@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft Corporation. All rights reserved.
+// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
 namespace Microsoft.Quantum.ErrorCorrection {
@@ -15,7 +15,8 @@ namespace Microsoft.Quantum.ErrorCorrection {
     /// One could measure the syndrome by measuring multi-qubit Pauli operator
     /// directly on the code state, but for the distillation purpose
     /// the logical qubit is returned into a single qubit,
-    /// in course of which the syndrome measurements can be done without further ancillas.
+    /// in course of which the syndrome measurements can be done without further
+    /// auxillary qubits.
     ///
     /// # Output
     /// The logical qubit and a pair of integers for $X$-syndrome and $Z$-syndrome.
@@ -41,15 +42,15 @@ namespace Microsoft.Quantum.ErrorCorrection {
         let x2 = M((code!)[3]);
         mutable xsyn = 0;
 
-        if (x0 == One) {
+        if x0 == One {
             set xsyn = xsyn ^^^ 1;
         }
 
-        if (x1 == One) {
+        if x1 == One {
             set xsyn = xsyn ^^^ 2;
         }
 
-        if (x2 == One) {
+        if x2 == One {
             set xsyn = xsyn ^^^ 4;
         }
 
@@ -62,15 +63,15 @@ namespace Microsoft.Quantum.ErrorCorrection {
         let z2 = M((code!)[4]);
         mutable zsyn = 0;
 
-        if (z0 == One) {
+        if z0 == One {
             set zsyn = zsyn ^^^ 1;
         }
 
-        if (z1 == One) {
+        if z1 == One {
             set zsyn = zsyn ^^^ 2;
         }
 
-        if (z2 == One) {
+        if z2 == One {
             set zsyn = zsyn ^^^ 5;
         }
 
@@ -129,7 +130,7 @@ namespace Microsoft.Quantum.ErrorCorrection {
             S(data);
             let r = MResetY(magic);
 
-            if (r == One) {
+            if r == One {
                 // The following five operations are equivalent to
                 // Ry( Pi()/2.0, data), up to global phase.
                 // Since this operation does not support Controlled, we need
@@ -148,7 +149,7 @@ namespace Microsoft.Quantum.ErrorCorrection {
             S(data);
             let r = MResetY(magic);
 
-            if (r == Zero) {
+            if r == Zero {
                 S(data);
                 H(data);
                 S(data);
@@ -196,30 +197,29 @@ namespace Microsoft.Quantum.ErrorCorrection {
     operation KnillDistill (roughMagic : Qubit[]) : Bool {
         mutable accept = false;
 
-        using (scratch = Qubit[8]) {
-            let anc = scratch[7];
-            let code = scratch[0 .. 6];
-            InjectPi4YRotation(code[0], roughMagic[14]);
-            SteaneCodeEncoderImpl(code[0 .. 0], code[1 .. 6]);
+        use scratch = Qubit[8];
+        let aux = scratch[7];
+        let code = scratch[0 .. 6];
+        InjectPi4YRotation(code[0], roughMagic[14]);
+        SteaneCodeEncoderImpl(code[0 .. 0], code[1 .. 6]);
 
-            for (idx in 0 .. 6) {
-                Adjoint InjectPi4YRotation(code[idx], roughMagic[idx]);
-                CNOT(code[idx], anc);
-                InjectPi4YRotation(code[idx], roughMagic[idx + 7]);
-            }
-
-            let (logicalQubit, xsyn, zsyn) = _ExtractLogicalQubitFromSteaneCode(LogicalRegister(code));
-            let m = M(anc);
-
-            if ((xsyn == -1 and zsyn == -1) and m == Zero) {
-                SWAP(logicalQubit, roughMagic[0]);
-                set accept = true;
-            }
-
-            ResetAll(scratch);
+        for idx in 0 .. 6 {
+            Adjoint InjectPi4YRotation(code[idx], roughMagic[idx]);
+            CNOT(code[idx], aux);
+            InjectPi4YRotation(code[idx], roughMagic[idx + 7]);
         }
 
-        return accept;
+        let (logicalQubit, xsyn, zsyn) = _ExtractLogicalQubitFromSteaneCode(LogicalRegister(code));
+        let m = M(aux);
+
+        if (xsyn == -1 and zsyn == -1) and m == Zero {
+            SWAP(logicalQubit, roughMagic[0]);
+            set accept = true;
+        }
+
+        ResetAll(scratch);
+
+    return accept;
     }
 
 }

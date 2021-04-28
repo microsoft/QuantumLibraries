@@ -11,7 +11,7 @@ namespace Microsoft.Quantum.Arrays {
         let samples = DrawMany(DrawRandomInt, 20, (0, 29));
         EqualityFactI(20, Length(samples), "Wrong number of samples returned.");
 
-        for (sample in samples) {
+        for sample in samples {
             Fact(0 <= sample and sample < 30, "Sample returned by DrawMany was out of range.");
         }
     }

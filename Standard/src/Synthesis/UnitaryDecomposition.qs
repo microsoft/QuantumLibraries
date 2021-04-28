@@ -38,7 +38,7 @@ namespace Microsoft.Quantum.Synthesis {
                                 allQubitsMask: Int) : Int[] {
         let n = Length(decomposition);
         mutable flipMasks = ConstantArray(n + 1, 0);
-        for ((i, (_, i1, i2)) in Enumerated(decomposition)) {
+        for (i, (_, i1, i2)) in Enumerated(decomposition) {
             set flipMasks w/= (i + 1) <- (allQubitsMask - i2); 
         }
         return flipMasks;
@@ -86,7 +86,7 @@ namespace Microsoft.Quantum.Synthesis {
         // applied. 
         // i1 and i2 differ in exactly one bit; i1 < i2.
         // matrix - 2x2 non-trivial unitary submatrix of said two-level unitary.
-        for ((i, (matrix, i1, i2)) in Enumerated(decomposition)) {
+        for (i, (matrix, i1, i2)) in Enumerated(decomposition) {
             ApplyXorInPlace(flipMasks[i + 1] ^^^ flipMasks[i], qubits);
 
             let targetMask = i1 ^^^ i2;
@@ -101,7 +101,7 @@ namespace Microsoft.Quantum.Synthesis {
     /// Checks that given array represents a square matrix.
     internal function SquareMatrixFact(matrix : Complex[][]) : Unit {
         let n = Length(matrix);
-        for (row in matrix) {
+        for row in matrix {
             EqualityFactI(Length(row), n, "Matrix is not square.");
         }
     } 

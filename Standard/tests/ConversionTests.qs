@@ -1,5 +1,6 @@
-// Copyright (c) Microsoft Corporation. All rights reserved.
+// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
+
 namespace Microsoft.Quantum.Tests {
     open Microsoft.Quantum.Diagnostics;
     open Microsoft.Quantum.Canon;
@@ -15,7 +16,7 @@ namespace Microsoft.Quantum.Tests {
 
     @Test("QuantumSimulator")
     function BoolArrFromPositiveIntIsCorrect() : Unit {
-        for (number in 0 .. 100) {
+        for number in 0 .. 100 {
             let bits = IntAsBoolArray(number, 9);
             let inte = BoolArrayAsInt(bits);
             EqualityFactI(inte, number, $"Integer converted to bit string and back should be identical");

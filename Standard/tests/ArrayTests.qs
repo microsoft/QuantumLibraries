@@ -10,19 +10,18 @@ namespace Microsoft.Quantum.Tests {
 
     @Test("QuantumSimulator")
     function TestZipped() : Unit {
-
         let left = [1, 2, 101];
         let right = [PauliY, PauliI];
         let zipped = Zipped(left, right);
         let (leftActual1, rightActual1) = zipped[0];
 
-        if (leftActual1 != 1 or rightActual1 != PauliY) {
+        if leftActual1 != 1 or rightActual1 != PauliY {
             fail $"Expected (1, PauliY), got ({leftActual1}, {rightActual1}).";
         }
 
         let (leftActual2, rightActual2) = zipped[1];
 
-        if (leftActual2 != 2 or rightActual2 != PauliI) {
+        if leftActual2 != 2 or rightActual2 != PauliI {
             fail $"Expected (2, PauliI), got ({leftActual2}, {rightActual2}).";
         }
     }
@@ -130,11 +129,9 @@ namespace Microsoft.Quantum.Tests {
 
     @Test("QuantumSimulator")
     function PaddedIsCorrect() : Unit {
+        let arrayTestCases = [(-5, 2, [10, 11, 12], [10, 11, 12, 2, 2]), (5, 2, [10, 11, 12], [2, 2, 10, 11, 12]), (-3, -2, [10, 11, 12], [10, 11, 12])];
 
-        mutable arrayTestCase = [(-5, 2, [10, 11, 12], [10, 11, 12, 2, 2]), (5, 2, [10, 11, 12], [2, 2, 10, 11, 12]), (-3, -2, [10, 11, 12], [10, 11, 12])];
-
-        for (idxTest in IndexRange(arrayTestCase)) {
-            let (nElementsTotal, defaultElement, inputArray, outputArray) = arrayTestCase[idxTest];
+        for (nElementsTotal, defaultElement, inputArray, outputArray) in arrayTestCases {
             let paddedArray = Padded(nElementsTotal, defaultElement, inputArray);
             Ignore(Mapped(EqualityFactI(_, _, $"Padded failed."), Zipped(outputArray, paddedArray)));
         }
@@ -146,7 +143,7 @@ namespace Microsoft.Quantum.Tests {
         let expected = [(0, 37), (1, 12)];
         let actual = Enumerated(example);
 
-        for ((actualElement, expectedElement) in Zipped(actual, expected)) {
+        for (actualElement, expectedElement) in Zipped(actual, expected) {
             EqualityFactI(Fst(actualElement), Fst(expectedElement), "Indices did not match.");
             EqualityFactI(Snd(actualElement), Snd(expectedElement), "Elements did not match.");
         }
@@ -158,9 +155,9 @@ namespace Microsoft.Quantum.Tests {
         let expected = [[0, 1, 2, 3], [23, 24, 25, 26, 27, 28, 29], [-5, -4, -3, -2]];
         let actual = Mapped(SequenceI, example);
 
-        for ((exp, act) in Zipped(expected, actual)) {
+        for (exp, act) in Zipped(expected, actual) {
             EqualityFactI(Length(exp), Length(act), "Lengths of arrays did not match.");
-            for ((i, j) in Zipped(exp, act)) {
+            for (i, j) in Zipped(exp, act) {
                 EqualityFactI(i, j, "Elements did not match.");
             }
         }
@@ -172,9 +169,9 @@ namespace Microsoft.Quantum.Tests {
         let expected = [[0L, 1L, 2L, 3L], [23L, 24L, 25L, 26L, 27L, 28L, 29L], [-5L, -4L, -3L, -2L]];
         let actual = Mapped(SequenceL, example);
 
-        for ((exp, act) in Zipped(expected, actual)) {
+        for (exp, act) in Zipped(expected, actual) {
             EqualityFactI(Length(exp), Length(act), "Lengths of arrays did not match.");
-            for ((i, j) in Zipped(exp, act)) {
+            for (i, j) in Zipped(exp, act) {
                 EqualityFactL(i, j, "Elements did not match.");
             }
         }
@@ -185,9 +182,9 @@ namespace Microsoft.Quantum.Tests {
         let expected = [[0, 1, 2, 3], [0, 1, 2, 3, 4, 5], [0]];
         let actual = Mapped(SequenceI(0, _), example);
 
-        for ((exp, act) in Zipped(expected, actual)) {
+        for (exp, act) in Zipped(expected, actual) {
             EqualityFactI(Length(exp), Length(act), "Lengths of arrays did not match.");
-            for ((i, j) in Zipped(exp, act)) {
+            for (i, j) in Zipped(exp, act) {
                 EqualityFactI(i, j, "Elements did not match.");
             }
         }
@@ -195,9 +192,9 @@ namespace Microsoft.Quantum.Tests {
 
     @Test("QuantumSimulator")
     function IsEmptyIsCorrect() : Unit {
-        Fact(IsEmpty(new Int[0]), "Empty array marked as non-empty.");
-        Fact(IsEmpty(new Qubit[0]), "Empty array marked as non-empty.");
-        Fact(IsEmpty(new (Double, (Int -> String))[0]), "Empty array marked as non-empty.");
+        Fact(IsEmpty<Int>([]), "Empty array marked as non-empty.");
+        Fact(IsEmpty<Qubit>([]), "Empty array marked as non-empty.");
+        Fact(IsEmpty<(Double, (Int -> String))>([]), "Empty array marked as non-empty.");
         Fact(not IsEmpty([PauliX, PauliZ]), "Non-empty array marked as empty.");
         Fact(not IsEmpty([""]), "Non-empty array marked as empty.");
     }
@@ -209,7 +206,7 @@ namespace Microsoft.Quantum.Tests {
         let actual = _SwapOrderToPermuteArray(newOrder);
 
         EqualityFactI(Length(expected), Length(actual), "Number of swaps does not match");
-        for ((exp, act) in Zipped(expected, actual)) {
+        for (exp, act) in Zipped(expected, actual) {
             let (leftExp, rightExp) = exp;
             let (leftAct, rightAct) = act;
 
@@ -227,7 +224,7 @@ namespace Microsoft.Quantum.Tests {
         let newArray = Swapped(leftIndex, rightIndex, example);
 
         EqualityFactI(Length(expected), Length(newArray), "Swapped array is a different size than original");
-        for ((exp, act) in Zipped(expected, newArray)) {
+        for (exp, act) in Zipped(expected, newArray) {
             EqualityFactI(exp, act, "Elements did not match");
         }
     }
@@ -239,8 +236,8 @@ namespace Microsoft.Quantum.Tests {
 
         let actual = TupleArrayAsNestedArray(example);
         EqualityFactI(Length(expected), Length(actual), "Arrays are of different sizes");
-        for ((exp, act) in Zipped(expected, actual)) {
-            for ((elementExp, elementAct) in Zipped(exp, act)) {
+        for (exp, act) in Zipped(expected, actual) {
+            for (elementExp, elementAct) in Zipped(exp, act) {
                 EqualityFactI(elementExp, elementAct, "Elements did not match");
             }
         }
@@ -274,7 +271,7 @@ namespace Microsoft.Quantum.Tests {
 
     @Test("QuantumSimulator")
     operation TestTransposed() : Unit {
-        for ((actual, expected) in Zipped(Transposed([[1, 2, 3], [4, 5, 6]]), [[1, 4], [2, 5], [3, 6]])) {
+        for (actual, expected) in Zipped(Transposed([[1, 2, 3], [4, 5, 6]]), [[1, 4], [2, 5], [3, 6]]) {
             AllEqualityFactI(actual, expected, "Transposed failed");
         }
     }
@@ -293,7 +290,7 @@ namespace Microsoft.Quantum.Tests {
         let prime = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29];
         let fibonacci = [0, 1, 1, 2, 3, 5, 8, 13, 21, 34];
         let catalan = [1, 1, 2, 5, 14, 42, 132, 429, 1430, 4862];
-        let famous2 = Mapped(ElementAt<Int>(2, _), [lucas, prime, fibonacci, catalan]);
+        let famous2 = Mapped(ElementAt(2, _), [lucas, prime, fibonacci, catalan]);
         AllEqualityFactI(famous2, [3, 5, 1, 2], "ElementAt failed");
     }
 
@@ -304,7 +301,7 @@ namespace Microsoft.Quantum.Tests {
         let fibonacci = [0, 1, 1, 2, 3, 5, 8, 13, 21, 34];
         let catalan = [1, 1, 2, 5, 14, 42, 132, 429, 1430, 4862];
         let famousOdd = Mapped(ElementsAt<Int>(0..2..9, _), [lucas, prime, fibonacci, catalan]);
-        for ((actual, expected) in Zipped(famousOdd, [[2, 3, 7, 18, 47], [2, 5, 11, 17, 23], [0, 1, 3, 8, 21], [1, 2, 14, 132, 1430]])) {
+        for (actual, expected) in Zipped(famousOdd, [[2, 3, 7, 18, 47], [2, 5, 11, 17, 23], [0, 1, 3, 8, 21], [1, 2, 14, 132, 1430]]) {
             AllEqualityFactI(actual, expected, "ElementsAt failed");
         }
     }
@@ -318,15 +315,15 @@ namespace Microsoft.Quantum.Tests {
 
     @Test("QuantumSimulator")
     operation TestWindows() : Unit {
-        let EqualIntA = EqualA<Int>(EqualI, _, _);
-        let EqualIntAA = EqualA<Int[]>(EqualIntA, _, _);
+        let EqualIntA = EqualA(EqualI, _, _);
+        let EqualIntAA = EqualA(EqualIntA, _, _);
 
-        Fact(EqualIntAA(Windows(-1, [1, 2, 3]), new Int[][0]), "unexpected windows");
-        Fact(EqualIntAA(Windows(0, [1, 2, 3]), new Int[][0]), "unexpected windows");
+        Fact(EqualIntAA(Windows(-1, [1, 2, 3]), []), "unexpected windows");
+        Fact(EqualIntAA(Windows(0, [1, 2, 3]), []), "unexpected windows");
         Fact(EqualIntAA(Windows(1, [1, 2, 3]), [[1], [2], [3]]), "unexpected windows");
         Fact(EqualIntAA(Windows(2, [1, 2, 3]), [[1, 2], [2, 3]]), "unexpected windows");
         Fact(EqualIntAA(Windows(3, [1, 2, 3]), [[1, 2, 3]]), "unexpected windows");
-        Fact(EqualIntAA(Windows(4, [1, 2, 3]), new Int[][0]), "unexpected windows");
+        Fact(EqualIntAA(Windows(4, [1, 2, 3]), []), "unexpected windows");
     }
 
     @Test("QuantumSimulator")

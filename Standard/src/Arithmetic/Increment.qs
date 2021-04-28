@@ -37,19 +37,13 @@ namespace Microsoft.Quantum.Arithmetic {
     /// See the figure on
     /// [ Page 6 of arXiv:quant-ph/0008033v1 ](https://arxiv.org/pdf/quant-ph/0008033.pdf#page=6)
     /// for the circuit diagram and explanation.
-    operation IncrementPhaseByInteger(increment : Int, target : PhaseLittleEndian) : Unit {
-        body (...) {
-            let d = Length(target!);
+    operation IncrementPhaseByInteger(increment : Int, target : PhaseLittleEndian) : Unit is Adj + Ctl {
+        let d = Length(target!);
 
-            for (j in 0 .. d - 1) {
-                //  Use Microsoft.Quantum.Intrinsic.R1Frac
-                R1Frac(increment, (d - 1) - j, (target!)[j]);
-            }
+        for j in 0 .. d - 1 {
+            //  Use Microsoft.Quantum.Intrinsic.R1Frac
+            R1Frac(increment, (d - 1) - j, (target!)[j]);
         }
-
-        adjoint invert;
-        controlled distribute;
-        controlled adjoint distribute;
     }
 
     /// # Summary
@@ -74,5 +68,3 @@ namespace Microsoft.Quantum.Arithmetic {
     }
 
 }
-
-
