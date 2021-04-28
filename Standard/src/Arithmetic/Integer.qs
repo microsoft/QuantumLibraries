@@ -94,12 +94,12 @@ namespace Microsoft.Quantum.Arithmetic {
             for idx in 0..(nQubits-2) {
                 Carry(auxRegister[idx], xs![idx], ys![idx], auxRegister[idx+1]);           // (1)
             }
-            (Controlled Carry) (controls, (auxRegister[nQubits-1], xs![nQubits-1], ys![nQubits-1], carry));
-            (Controlled CNOT) (controls, (xs![nQubits-1], ys![nQubits-1]));
-            (Controlled Sum) (controls, (auxRegister[nQubits-1], xs![nQubits-1], ys![nQubits-1]));
+            Controlled Carry(controls, (auxRegister[nQubits-1], xs![nQubits-1], ys![nQubits-1], carry));
+            Controlled CNOT(controls, (xs![nQubits-1], ys![nQubits-1]));
+            Controlled Sum(controls, (auxRegister[nQubits-1], xs![nQubits-1], ys![nQubits-1]));
             for idx in (nQubits-2)..(-1)..0  {
-                (Adjoint Carry) (auxRegister[idx], xs![idx], ys![idx], auxRegister[idx+1]); // cancels with (1)
-                (Controlled Sum) (controls, (auxRegister[idx], xs![idx], ys![idx]));
+                Adjoint Carry(auxRegister[idx], xs![idx], ys![idx], auxRegister[idx+1]); // cancels with (1)
+                Controlled Sum(controls, (auxRegister[idx], xs![idx], ys![idx]));
             }
         }
     }
@@ -139,7 +139,7 @@ namespace Microsoft.Quantum.Arithmetic {
 
         CNOT(xs![2], xs![1]);
         CCNOT(ancilla, ys![1], xs![1]);
-        for idx in 2..(nQubits - 2) {
+        for idx in 2..nQubits - 2 {
             CNOT(xs![idx+1], xs![idx]);
             CCNOT(xs![idx-1], ys![idx], xs![idx]);
         }
@@ -270,12 +270,12 @@ namespace Microsoft.Quantum.Arithmetic {
                 "Input registers must have the same number of qubits."
             );
 
-            for idx in 0..(nQubits - 2) {
+            for idx in 0..nQubits - 2 {
                 CCNOT(xs![idx], ys![idx], xs![idx+1]);
             }
             (Controlled CCNOT)(controls, (xs![nQubits-1], ys![nQubits-1], carry));
-            for idx in (nQubits - 1)..(-1)..1 {
-                (Controlled CNOT) (controls, (xs![idx], ys![idx]));
+            for idx in nQubits - 1..-1..1 {
+                Controlled CNOT(controls, (xs![idx], ys![idx]));
                 CCNOT(xs![idx-1], ys![idx-1], xs![idx]);
             }
         }
@@ -391,11 +391,11 @@ namespace Microsoft.Quantum.Arithmetic {
                 "Input registers must have the same number of qubits."
             );
 
-            for idx in 0..(nQubits - 2) {
+            for idx in 0..nQubits - 2 {
                 CCNOT (xs![idx], ys![idx], xs![idx + 1]);
             }
-            for idx in (nQubits - 1)..(-1)..1 {
-                (Controlled CNOT) (controls, (xs![idx], ys![idx]));
+            for idx in nQubits - 1..-1..1 {
+                Controlled CNOT(controls, (xs![idx], ys![idx]));
                 CCNOT(xs![idx - 1], ys![idx - 1], xs![idx]);
             }
         }

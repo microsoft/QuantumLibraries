@@ -150,7 +150,7 @@ namespace Microsoft.Quantum.MachineLearning {
                 model, stateGenerator,
                 options::NMeasurements
             );
-            for ip in 0..(Length(model::Parameters) - 1) {
+            for ip in 0..Length(model::Parameters) - 1 {
                 // GradientClassicalSample actually computes antigradient, but err*grad corrects it back to gradient
                 set batchGradient w/= ip <- (batchGradient[ip] + options::LearningRate * err * grad[ip]);
             }
@@ -396,7 +396,7 @@ namespace Microsoft.Quantum.MachineLearning {
             if nMisses < nBestMisses {
                 set nBestMisses = nMisses;
                 set bestSoFar = proposedUpdate;
-                if IntAsDouble(nMisses) / IntAsDouble(nSamples) < options::Tolerance { //Terminate based on tolerance.
+                if IntAsDouble(nMisses) / IntAsDouble(nSamples) < options::Tolerance { // Terminate based on tolerance.
                     return bestSoFar;
                 }
                 set nStalls = 0; //Reset the counter of consecutive noops
