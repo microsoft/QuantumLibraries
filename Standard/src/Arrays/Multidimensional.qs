@@ -159,7 +159,7 @@ namespace Microsoft.Quantum.Arrays {
     internal function ColumnAtUnchecked<'T>(column : Int, matrix : 'T[][]) : 'T[] {
         return Mapped(
                 Compose(
-                    ElementAt<'T>(column, _),
+                    ElementAt(column, _),
                     LookupFunction(matrix)
                 ), RangeAsIntArray(IndexRange(matrix)));
     }

@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft Corporation. All rights reserved.
+// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
 namespace Microsoft.Quantum.Measurement {
@@ -21,25 +21,24 @@ namespace Microsoft.Quantum.Measurement {
     /// The result of measuring the given Pauli operator on
     /// the `target` register.
     operation MeasureWithScratch (pauli : Pauli[], target : Qubit[]) : Result {
-        using (scratch = Qubit()) {
-            H(scratch);
+        use scratch = Qubit();
+        H(scratch);
 
-            for (idxPauli in IndexRange(pauli)) {
-                let P = pauli[idxPauli];
-                let src = target[idxPauli];
+        for idxPauli in IndexRange(pauli) {
+            let P = pauli[idxPauli];
+            let src = target[idxPauli];
 
-                if (P == PauliX) {
-                    Controlled X([scratch], src);
-                } elif (P == PauliY) {
-                    Controlled Y([scratch], src);
-                } elif (P == PauliZ) {
-                    Controlled Z([scratch], src);
-                }
+            if (P == PauliX) {
+                Controlled X([scratch], src);
+            } elif (P == PauliY) {
+                Controlled Y([scratch], src);
+            } elif (P == PauliZ) {
+                Controlled Z([scratch], src);
             }
-
-            H(scratch);
-            return MResetZ(scratch);
         }
+
+        H(scratch);
+        return MResetZ(scratch);
     }
 
     /// # Summary

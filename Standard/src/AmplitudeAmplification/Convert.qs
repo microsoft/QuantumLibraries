@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft Corporation. All rights reserved.
+// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
 namespace Microsoft.Quantum.AmplitudeAmplification {
@@ -34,7 +34,7 @@ namespace Microsoft.Quantum.AmplitudeAmplification {
         set phasesTarget w/= 0 <- ((rotPhases!)[0] - (rotPhases!)[1]) - PI();
         set phasesStart w/= 0 <- -(rotPhases!)[0] + 0.5 * PI();
 
-        for (idxPhases in 1 .. nPhasesRef - 2) {
+        for idxPhases in 1 .. nPhasesRef - 2 {
             set phasesTarget w/= idxPhases <- ((rotPhases!)[2 * idxPhases] - (rotPhases!)[2 * idxPhases + 1]) - PI();
             set phasesStart w/= idxPhases <- ((rotPhases!)[2 * idxPhases - 1] - (rotPhases!)[2 * idxPhases]) + PI();
         }

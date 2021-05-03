@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft Corporation. All rights reserved.
+// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
 namespace Microsoft.Quantum.Canon {
@@ -38,9 +38,9 @@ namespace Microsoft.Quantum.Canon {
         Fact(nQubits > 0, $"`Length(qs)` must be least 1");
         Fact(a > 0 and a <= nQubits, $"`a` must be positive and less than `Length(qs)`");
 
-        for (i in 0 .. nQubits - 1) {
-            for (j in 0 .. i - 1) {
-                if (i - j < a) {
+        for i in 0 .. nQubits - 1 {
+            for j in 0 .. i - 1 {
+                if i - j < a {
                     Controlled R1Frac([(qs!)[i]], (1, i - j, (qs!)[j]));
                 }
             }

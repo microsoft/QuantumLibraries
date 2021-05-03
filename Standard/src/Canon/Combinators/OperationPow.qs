@@ -5,7 +5,7 @@ namespace Microsoft.Quantum.Canon {
 
     internal operation ApplyOperationRepeatedly<'T> (op : ('T => Unit), power : Int, target : 'T)
     : Unit {
-        for (idxApplication in 0 .. power - 1) {
+        for idxApplication in 0 .. power - 1 {
             op(target);
         }
     }
@@ -13,7 +13,7 @@ namespace Microsoft.Quantum.Canon {
 
     internal operation ApplyOperationRepeatedlyC<'T> (op : ('T => Unit is Ctl), power : Int, target : 'T)
     : Unit is Ctl {
-        for (idxApplication in 0 .. power - 1) {
+        for idxApplication in 0 .. power - 1 {
             op(target);
         }
     }
@@ -21,7 +21,7 @@ namespace Microsoft.Quantum.Canon {
 
     internal operation ApplyOperationRepeatedlyA<'T> (op : ('T => Unit is Adj), power : Int, target : 'T)
     : Unit is Adj {
-        for (idxApplication in 0 .. power - 1) {
+        for idxApplication in 0 .. power - 1 {
             op(target);
         }
     }
@@ -29,7 +29,7 @@ namespace Microsoft.Quantum.Canon {
 
     internal operation ApplyOperationRepeatedlyCA<'T> (op : ('T => Unit is Adj + Ctl), power : Int, target : 'T)
     : Unit is Adj + Ctl {
-        for (idxApplication in 0 .. power - 1) {
+        for idxApplication in 0 .. power - 1 {
             op(target);
         }
     }

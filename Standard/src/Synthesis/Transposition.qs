@@ -53,7 +53,7 @@ namespace Microsoft.Quantum.Synthesis {
             let BitControlledX = ControlledOnBitString(_, X);
 
             within {
-                for (target in Most(diff)) {
+                for target in Most(diff) {
                     (BitControlledX(bbits[...target - 1] + abits[target + 1...]))(Excluding([target], qs), qs[target]);
                 }
             } apply {

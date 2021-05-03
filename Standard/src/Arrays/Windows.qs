@@ -39,7 +39,7 @@ namespace Microsoft.Quantum.Arrays {
 
         mutable result = new 'T[][n + 1 - size];
 
-        for (i in 0..n - size) {
+        for i in 0..n - size {
             set result w/= i <- array[i..i + size - 1];
         }
 

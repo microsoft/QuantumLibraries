@@ -187,7 +187,7 @@ namespace Microsoft.Quantum.Preparation {
     /// For internal use only, until proposal https://github.com/microsoft/qsharp-language/pull/41
     /// is finalized and implemented.
     operation _PrepareAmplitudesFromZeroState(coefficients : ComplexPolar[], qubits : LittleEndian) : Unit {
-        ApproximatelyPrepareArbitraryState(0.0, coefficients, qubits);
+        ApproximatelyPrepareArbitraryStateCP(0.0, coefficients, qubits);
     }
 
     /// # Summary
@@ -373,7 +373,7 @@ namespace Microsoft.Quantum.Preparation {
         mutable disentanglingY = new Double[Length(coefficients) / 2];
         mutable newCoefficients = new ComplexPolar[Length(coefficients) / 2];
 
-        for (idxCoeff in 0 .. 2 .. Length(coefficients) - 1) {
+        for idxCoeff in 0 .. 2 .. Length(coefficients) - 1 {
             let (rt, phi, theta) = BlochSphereCoordinates(coefficients[idxCoeff], coefficients[idxCoeff + 1]);
             set disentanglingZ w/= idxCoeff / 2 <- 0.5 * phi;
             set disentanglingY w/= idxCoeff / 2 <- 0.5 * theta;

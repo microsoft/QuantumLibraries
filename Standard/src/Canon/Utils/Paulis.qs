@@ -77,7 +77,7 @@ namespace Microsoft.Quantum.Canon {
     operation ApplyPauliFromBitString(pauli : Pauli, bitApply : Bool, bits : Bool[], qubits : Qubit[])
     : Unit is Adj + Ctl {
         let nBits = Length(bits);
-        
+
         //FailOn (nbits != Length(qubits), "Number of control bits must be equal to number of control qubits")
         for (bit, qubit) in Zipped(bits, qubits) {
             if bit == bitApply {
@@ -129,16 +129,14 @@ namespace Microsoft.Quantum.Canon {
     function WeightOnePaulis (nQubits : Int) : Pauli[][] {
         mutable paulis = new Pauli[][3 * nQubits];
         let pauliGroup = [PauliX, PauliY, PauliZ];
-        
-        for (idxQubit in 0 .. nQubits - 1) {
-            for (idxPauli in IndexRange(pauliGroup)) {
+
+        for idxQubit in 0 .. nQubits - 1 {
+            for idxPauli in IndexRange(pauliGroup) {
                 set paulis w/= idxQubit * Length(pauliGroup) + idxPauli <- EmbedPauli(pauliGroup[idxPauli], idxQubit, nQubits);
             }
         }
-        
+
         return paulis;
     }
 
 }
-
-

@@ -1,4 +1,4 @@
-﻿// Copyright (c) Microsoft Corporation. All rights reserved.
+﻿// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
 namespace Microsoft.Quantum.Canon {
@@ -39,10 +39,10 @@ namespace Microsoft.Quantum.Canon {
     operation MultiplexOperationsFromGenerator<'T>(unitaryGenerator : (Int, (Int -> ('T => Unit is Adj + Ctl))), index: LittleEndian, target: 'T) : Unit is Ctl + Adj {
         let (nUnitaries, unitaryFunction) = unitaryGenerator;
         let unitaryGeneratorWithOffset = (nUnitaries, 0, unitaryFunction);
-        if (Length(index!) == 0) {
+        if Length(index!) == 0 {
             fail "MultiplexOperations failed. Number of index qubits must be greater than 0.";
         }
-        if (nUnitaries > 0) {
+        if nUnitaries > 0 {
             let auxiliary = new Qubit[0];
             Adjoint MultiplexOperationsFromGeneratorImpl(unitaryGeneratorWithOffset, auxiliary, index, target);
         }
@@ -68,15 +68,15 @@ namespace Microsoft.Quantum.Canon {
 
             let newControls = LittleEndian(Most(index!));
 
-            if (nUnitaries > 0) {
-                if (Length(auxiliary) == 1 and nIndex == 0) {
+            if nUnitaries > 0 {
+                if Length(auxiliary) == 1 and nIndex == 0 {
                     // Termination case
 
                     (Controlled Adjoint (unitaryFunction(unitaryOffset)))(auxiliary, target);
-                } elif (Length(auxiliary) == 0 and nIndex >= 1) {
+                } elif Length(auxiliary) == 0 and nIndex >= 1 {
                     // Start case
                     let newauxiliary = Tail(index!);
-                    if (nUnitariesRight > 0) {
+                    if nUnitariesRight > 0 {
                         MultiplexOperationsFromGeneratorImpl(rightUnitaries, [newauxiliary], newControls, target);
                     }
                     within {
@@ -87,18 +87,18 @@ namespace Microsoft.Quantum.Canon {
                 } else {
                     // Recursion that reduces nIndex by 1 and sets Length(auxiliary) to 1.
                     let controls = [Tail(index!)] + auxiliary;
-                    using ((newauxiliary, andauxiliary) = (Qubit(), Qubit[MaxI(0, Length(controls) - 2)])) {
+                    use newauxiliary = Qubit();
+                    use andauxiliary = Qubit[MaxI(0, Length(controls) - 2)];
+                    within {
+                        ApplyAndChain(andauxiliary, controls, newauxiliary);
+                    } apply {
+                        if nUnitariesRight > 0 {
+                            MultiplexOperationsFromGeneratorImpl(rightUnitaries, [newauxiliary], newControls, target);
+                        }
                         within {
-                            ApplyAndChain(andauxiliary, controls, newauxiliary);
+                            (Controlled X)(auxiliary, newauxiliary);
                         } apply {
-                            if (nUnitariesRight > 0) {
-                                MultiplexOperationsFromGeneratorImpl(rightUnitaries, [newauxiliary], newControls, target);
-                            }
-                            within {
-                                (Controlled X)(auxiliary, newauxiliary);
-                            } apply {
-                                MultiplexOperationsFromGeneratorImpl(leftUnitaries, [newauxiliary], newControls, target);
-                            }
+                            MultiplexOperationsFromGeneratorImpl(leftUnitaries, [newauxiliary], newControls, target);
                         }
                     }
                 }
@@ -140,7 +140,7 @@ namespace Microsoft.Quantum.Canon {
         let nIndex = Length(index!);
         let nStates = 2^nIndex;
         let (nUnitaries, unitaryFunction) = unitaryGenerator;
-        for (idxOp in 0..MinI(nStates,nUnitaries) - 1) {
+        for idxOp in 0..MinI(nStates,nUnitaries) - 1 {
             (ControlledOnInt(idxOp, unitaryFunction(idxOp)))(index!, target);
         }
     }
@@ -200,9 +200,9 @@ namespace Microsoft.Quantum.Canon {
     /// two controls, otherwise the length is 0.
     internal operation ApplyAndChain(auxRegister : Qubit[], ctrlRegister : Qubit[], target : Qubit)
     : Unit is Adj {
-        if (Length(ctrlRegister) == 0) {
+        if Length(ctrlRegister) == 0 {
             X(target);
-        } elif (Length(ctrlRegister) == 1) {
+        } elif Length(ctrlRegister) == 1 {
             CNOT(Head(ctrlRegister), target);
         } else {
             EqualityFactI(Length(auxRegister), Length(ctrlRegister) - 2, "Unexpected number of auxiliary qubits");

@@ -33,8 +33,8 @@ namespace Microsoft.Quantum.Math {
         mutable max = values[0];
         let nTerms = Length(values);
 
-        for (idx in 0 .. nTerms - 1) {
-            if (values[idx] > max) {
+        for idx in 0 .. nTerms - 1 {
+            if values[idx] > max {
                 set max = values[idx];
             }
         }
@@ -55,8 +55,8 @@ namespace Microsoft.Quantum.Math {
         mutable min = values[0];
         let nTerms = Length(values);
 
-        for (idx in 0 .. nTerms - 1) {
-            if (values[idx] < min) {
+        for idx in 0 .. nTerms - 1 {
+            if values[idx] < min {
                 set min = values[idx];
             }
         }
@@ -210,10 +210,8 @@ namespace Microsoft.Quantum.Math {
         let powerBitExpansion = IntAsBoolArray(power, BitSizeI(power));
         let expBaseMod = expBase % modulus;
 
-        for (k in IndexRange(powerBitExpansion))
-        {
-            if (powerBitExpansion[k])
-            {
+        for bit in powerBitExpansion {
+            if bit {
                 // if bit pₖ is 1, multiply res by expBase^(2ᵏ) (mod `modulus`)
                 set res = (res * expPow2mod) % modulus;
             }
@@ -248,8 +246,8 @@ namespace Microsoft.Quantum.Math {
         let powerBitExpansion = BigIntAsBoolArray(power);
         let expBaseMod = expBase % modulus;
 
-        for (k in IndexRange(powerBitExpansion)) {
-            if (powerBitExpansion[k]) {
+        for bit in powerBitExpansion {
+            if bit {
                 // if bit pₖ is 1, multiply res by expBase^(2ᵏ) (mod `modulus`)
                 set res = (res * expPow2mod) % modulus;
             }
@@ -264,7 +262,7 @@ namespace Microsoft.Quantum.Math {
     /// # Summary
     /// Internal recursive call to calculate the GCD.
     function _ExtendedGreatestCommonDivisorI(signA : Int, signB : Int, r : (Int, Int), s : (Int, Int), t : (Int, Int)) : (Int, Int) {
-        if (Snd(r) == 0) {
+        if Snd(r) == 0 {
             return (Fst(s) * signA, Fst(t) * signB);
         }
 
@@ -304,7 +302,7 @@ namespace Microsoft.Quantum.Math {
     /// # Summary
     /// Internal recursive call to calculate the GCD.
     function _ExtendedGreatestCommonDivisorL(signA : Int, signB : Int, r : (BigInt, BigInt), s : (BigInt, BigInt), t : (BigInt, BigInt)) : (BigInt, BigInt) {
-        if (Snd(r) == 0L) {
+        if Snd(r) == 0L {
             return (Fst(s) * IntAsBigInt(signA), Fst(t) * IntAsBigInt(signB));
         }
 
@@ -379,7 +377,7 @@ namespace Microsoft.Quantum.Math {
     /// Internal recursive call to calculate the GCD with a bound
     function _ContinuedFractionConvergentI(signA : Int, signB : Int, r : (Int, Int), s : (Int, Int), t : (Int, Int), denominatorBound : Int) : Fraction
     {
-        if (Snd(r) == 0 or AbsI(Snd(s)) > denominatorBound) {
+        if Snd(r) == 0 or AbsI(Snd(s)) > denominatorBound {
             return (Snd(r) == 0 and AbsI(Snd(s)) <= denominatorBound)
                    ? Fraction(-Snd(t) * signB, Snd(s) * signA)
                    | Fraction(-Fst(t) * signB, Fst(s) * signA);
@@ -419,7 +417,7 @@ namespace Microsoft.Quantum.Math {
     /// Internal recursive call to calculate the GCD with a bound
     function _ContinuedFractionConvergentL(signA : Int, signB : Int, r : (BigInt, BigInt), s : (BigInt, BigInt), t : (BigInt, BigInt), denominatorBound : BigInt) : BigFraction
     {
-        if (Snd(r) == 0L or AbsL(Snd(s)) > denominatorBound) {
+        if Snd(r) == 0L or AbsL(Snd(s)) > denominatorBound {
             return (Snd(r) == 0L and AbsL(Snd(s)) <= denominatorBound)
                    ? BigFraction(-Snd(t) * IntAsBigInt(signB), Snd(s) * IntAsBigInt(signA))
                    | BigFraction(-Fst(t) * IntAsBigInt(signB), Fst(s) * IntAsBigInt(signA));
@@ -589,13 +587,13 @@ namespace Microsoft.Quantum.Math {
     /// # Output
     /// The $p$-norm $\|x\|_p$.
     function PNorm (p : Double, array : Double[]) : Double {
-        if (p < 1.0) {
+        if p < 1.0 {
             fail $"PNorm failed. `p` must be >= 1.0";
         }
 
         mutable norm = 0.0;
 
-        for (element in array) {
+        for element in array {
             set norm = norm + PowD(AbsD(element), p);
         }
 
@@ -618,7 +616,7 @@ namespace Microsoft.Quantum.Math {
     /// The squared 2-norm of `array`.
     function SquaredNorm(array : Double[]) : Double {
         mutable ret = 0.0;
-        for (element in array) {
+        for element in array {
             set ret += element * element;
         }
         return ret;
@@ -644,12 +642,12 @@ namespace Microsoft.Quantum.Math {
         let nElements = Length(array);
         let norm = PNorm(p, array);
 
-        if (norm == 0.0) {
+        if norm == 0.0 {
             return array;
         } else {
             mutable output = new Double[nElements];
 
-            for (idx in 0 .. nElements - 1) {
+            for idx in 0 .. nElements - 1 {
                 set output w/= idx <- array[idx] / norm;
             }
 

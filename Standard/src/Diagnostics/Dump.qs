@@ -70,16 +70,16 @@ namespace Microsoft.Quantum.Diagnostics {
     /// operation.
     operation DumpOperation(nQubits : Int, op : (Qubit[] => Unit is Adj))
     : Unit is Adj + Ctl {
-        using ((reference, target) = (Qubit[nQubits], Qubit[nQubits])) {
-            // The operation provided could be a partial application of
-            // another operation, such that there could be an observable
-            // effect of dumping this operation unless we undo preparing the
-            // Choi state.
-            within {
-                PrepareChoiStateA(op, reference, target);
-            } apply {
-                DumpReferenceAndTarget(reference, target);
-            }
+        use reference = Qubit[nQubits];
+        use target = Qubit[nQubits];
+        // The operation provided could be a partial application of
+        // another operation, such that there could be an observable
+        // effect of dumping this operation unless we undo preparing the
+        // Choi state.
+        within {
+            PrepareChoiStateA(op, reference, target);
+        } apply {
+            DumpReferenceAndTarget(reference, target);
         }
     }
 

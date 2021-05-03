@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft Corporation. All rights reserved.
+// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
 namespace Microsoft.Quantum.Canon {
@@ -35,8 +35,8 @@ namespace Microsoft.Quantum.Canon {
         if (Length(listOfOps) != Length(targets)) {
             fail "The number of ops and number of targets do not match!";
         }
-        for ((op, targetIndices) in Zipped(listOfOps, targets)) {
-            if (Length(targetIndices) > Length(register)) {
+        for (op, targetIndices) in Zipped(listOfOps, targets) {
+            if Length(targetIndices) > Length(register) {
                 fail "There are too many targets!";
             }
             op(Subarray(targetIndices, register));
@@ -69,7 +69,7 @@ namespace Microsoft.Quantum.Canon {
         if (Length(listOfOps) != Length(targets)) {
             fail "The number of ops and number of targets do not match!";
         }
-        for ((op, targetIndices) in Zipped(listOfOps, targets)) {
+        for (op, targetIndices) in Zipped(listOfOps, targets) {
             if (Length(targetIndices) > Length(register)) {
                 fail "There are too many targets!";
             }
@@ -103,7 +103,7 @@ namespace Microsoft.Quantum.Canon {
         if (Length(listOfOps) != Length(targets)) {
             fail "The number of ops and number of targets do not match!";
         }
-        for ((op, targetIndices) in Zipped(listOfOps, targets)) {
+        for (op, targetIndices) in Zipped(listOfOps, targets) {
             if (Length(targetIndices) > Length(register)) {
                 fail "There are too many targets!";
             }
@@ -137,7 +137,7 @@ namespace Microsoft.Quantum.Canon {
         if (Length(listOfOps) != Length(targets)) {
             fail "The number of ops and number of targets do not match!";
         }
-        for ((op, targetIndices) in Zipped(listOfOps, targets)) {
+        for (op, targetIndices) in Zipped(listOfOps, targets) {
             if (Length(targetIndices) > Length(register)) {
                 fail "There are too many targets!";
             }
@@ -161,10 +161,8 @@ namespace Microsoft.Quantum.Canon {
     /// - Microsoft.Quantum.Canon.ApplySeriesOfOps
     operation ApplyOpRepeatedlyOver(op : (Qubit[] => Unit), targets : Int[][], register : Qubit[]) : Unit 
     {
-        for (target in targets) 
-        {
-            if (Length(target) > Length(register)) 
-            {
+        for target in targets {
+            if (Length(target) > Length(register)) {
                 fail "Too many targets!";
             }
             let opTargets = Subarray(target, register);
@@ -188,8 +186,7 @@ namespace Microsoft.Quantum.Canon {
     /// - Microsoft.Quantum.Canon.ApplySeriesOfOps
     operation ApplyOpRepeatedlyOverA(op : (Qubit[] => Unit is Adj), targets : Int[][], register : Qubit[]) : Unit is Adj
     {
-        for (target in targets) 
-        {
+        for target in targets {
             if (Length(target) > Length(register)) 
             {
                 fail "Too many targets!";
@@ -215,10 +212,8 @@ namespace Microsoft.Quantum.Canon {
     /// - Microsoft.Quantum.Canon.ApplySeriesOfOps
     operation ApplyOpRepeatedlyOverC(op : (Qubit[] => Unit is Ctl), targets : Int[][], register : Qubit[]) : Unit is Ctl
     {
-        for (target in targets) 
-        {
-            if (Length(target) > Length(register)) 
-            {
+        for target in targets {
+            if Length(target) > Length(register) {
                 fail "Too many targets!";
             }
             let opTargets = Subarray(target, register);
@@ -242,10 +237,8 @@ namespace Microsoft.Quantum.Canon {
     /// - Microsoft.Quantum.Canon.ApplySeriesOfOps
     operation ApplyOpRepeatedlyOverCA(op : (Qubit[] => Unit is Adj+Ctl), targets : Int[][], register : Qubit[]) : Unit is Adj+Ctl
     {
-        for (target in targets) 
-        {
-            if (Length(target) > Length(register)) 
-            {
+        for target in targets {
+            if Length(target) > Length(register) {
                 fail "Too many targets!";
             }
             let opTargets = Subarray(target, register);

@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft Corporation. All rights reserved.
+// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
 namespace Microsoft.Quantum.Canon {
@@ -52,14 +52,14 @@ namespace Microsoft.Quantum.Canon {
             //computes the next element in the Cartesian product
             set arr w/= 0 <- arr[0] + 1;
 
-            for (i in 0 .. Length(arr) - 2) {
-                if (arr[i] == bounds[i]) {
+            for i in 0 .. Length(arr) - 2 {
+                if arr[i] == bounds[i] {
                     set arr w/= i + 1 <- arr[i + 1] + 1;
                     set arr w/= i <- 0;
                 }
             }
 
-            if (arr[Length(arr) - 1] == bounds[Length(arr) - 1]) {
+            if arr[Length(arr) - 1] == bounds[Length(arr) - 1] {
                 set finished = true;
             }
         }
