@@ -179,7 +179,7 @@ namespace Microsoft.Quantum.Arrays {
     function ConstantArray<'T> (length : Int, value : 'T) : 'T[] {
         mutable arr = new 'T[length];
 
-        for (i in 0 .. length - 1) {
+        for i in 0 .. length - 1 {
             set arr w/= i <- value;
         }
 
@@ -224,18 +224,18 @@ namespace Microsoft.Quantum.Arrays {
         mutable sliced = new 'T[nElements - nSliced];
         mutable counter = 0;
 
-        for (idx in 0 .. nElements - 1) {
+        for idx in 0 .. nElements - 1 {
             set arrayKeep w/= idx <- idx;
         }
 
-        for (idx in 0 .. nSliced - 1) {
+        for idx in 0 .. nSliced - 1 {
             set arrayKeep w/= remove[idx] <- -1;
         }
 
-        for (idx in 0 .. nElements - 1) {
+        for idx in 0 .. nElements - 1 {
             if (arrayKeep[idx] >= 0) {
                 set sliced w/= counter <- array[arrayKeep[idx]];
-                set counter = counter + 1;
+                set counter += 1;
             }
         }
 
@@ -333,9 +333,9 @@ namespace Microsoft.Quantum.Arrays {
     /// let split = Partitioned([2,1], [1,5,3,7]);
     /// ```
     function Partitioned<'T>(nElements: Int[], arr: 'T[]) : 'T[][] {
-        mutable output = new 'T[][Length(nElements)+1];
+        mutable output = new 'T[][Length(nElements) + 1];
         mutable currIdx = 0;
-        for (idx in IndexRange(nElements)) {
+        for idx in IndexRange(nElements) {
             if(currIdx + nElements[idx] > Length(arr)) {
                 fail "Partitioned argument out of bounds.";
             }
@@ -385,7 +385,7 @@ namespace Microsoft.Quantum.Arrays {
     /// # Example
     /// The following Q# code prints the message "All diagnostics completed
     /// successfully":
-    /// ```Q#
+    /// ```qsharp
     /// Fact(IsPermutation([2, 0, 1], "");
     /// Contradiction(IsPermutation([5, 0, 1], "[5, 0, 1] isn't a permutation");
     /// Message("All diagnostics completed successfully.");
@@ -417,7 +417,7 @@ namespace Microsoft.Quantum.Arrays {
     /// ```
     ///
     /// ## Psuedocode
-    /// for (index in 0..Length(newOrder) - 1) {
+    /// for index in 0..Length(newOrder) - 1 {
     ///     while newOrder[index] != index {
     ///         Switch newOrder[index] with newOrder[newOrder[index]]
     ///     }
@@ -426,11 +426,11 @@ namespace Microsoft.Quantum.Arrays {
         // Check to verify the new ordering actually is a permutation of the indices
         Fact(IsPermutation(newOrder), $"The new ordering is not a permutation");
 
-        mutable swaps = new (Int, Int)[0];
+        mutable swaps = [];
         mutable order = newOrder;
 
         // for each value, whenever the index and value don't match, swap until it does
-        for (index in IndexRange(order)) {
+        for index in IndexRange(order) {
             while (not EqualI(order[index], index)) {
                 set swaps += [(index, order[index])];
                 set order = Swapped(order[index], index, order);
@@ -483,7 +483,7 @@ namespace Microsoft.Quantum.Arrays {
     /// ```
     function TupleArrayAsNestedArray<'T>(tupleList : ('T, 'T)[]) : 'T[][] {
         mutable newArray = new 'T[][Length(tupleList)];
-        for (idx in IndexRange(tupleList)) {
+        for idx in IndexRange(tupleList) {
             let (tupleLeft, tupleRight) = tupleList[idx];
             set newArray w/= idx <- [tupleLeft, tupleRight];
         }

@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft Corporation. All rights reserved.
+// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
 namespace Microsoft.Quantum.Arrays {
@@ -31,7 +31,7 @@ namespace Microsoft.Quantum.Arrays {
     function Mapped<'T, 'U> (mapper : ('T -> 'U), array : 'T[]) : 'U[] {
         mutable resultArray = new 'U[Length(array)];
 
-        for (idxElement in IndexRange(array)) {
+        for idxElement in IndexRange(array) {
             set resultArray w/= idxElement <- mapper(array[idxElement]);
         }
 
@@ -80,7 +80,7 @@ namespace Microsoft.Quantum.Arrays {
     function MappedByIndex<'T, 'U> (mapper : ((Int, 'T) -> 'U), array : 'T[]) : 'U[] {
         mutable resultArray = new 'U[Length(array)];
 
-        for (idxElement in IndexRange(array)) {
+        for idxElement in IndexRange(array) {
             set resultArray w/= idxElement <- mapper(idxElement, array[idxElement]);
         }
 
@@ -112,7 +112,7 @@ namespace Microsoft.Quantum.Arrays {
     ///
     /// # Example
     /// This example adds 1 to a range of even numbers:
-    /// ```Q#
+    /// ```qsharp
     /// let numbers = MappedOverRange(PlusI(1, _), 0..2..10);
     /// // numbers = [1, 3, 5, 7, 9, 11]
     /// ```
@@ -127,7 +127,7 @@ namespace Microsoft.Quantum.Arrays {
             let nTerms = (end - start) / step + 1;
             mutable resultArray = new 'T[nTerms];
             mutable idxElement = 0;
-            for (elem in range) {
+            for elem in range {
                 set resultArray w/= idxElement <- mapper(elem);
                 set idxElement += 1;
             }
@@ -158,7 +158,7 @@ namespace Microsoft.Quantum.Arrays {
     /// the mapping function.
     ///
     /// # Example
-    /// ```Q#
+    /// ```qsharp
     /// let Numbers = SequenceI(1, _); // generates numbers starting from 1
     /// let values = FlatMapped(Numbers, [1, 2, 3]);
     /// // values = [1, 1, 2, 1, 2, 3]
@@ -182,7 +182,7 @@ namespace Microsoft.Quantum.Arrays {
     /// Concatenation of all arrays.
     ///
     /// # Example
-    /// ```Q#
+    /// ```qsharp
     /// let flattened = Flattened([[1, 2], [3], [4, 5, 6]]);
     /// // flattened = [1, 2, 3, 4, 5, 6]
     /// ```
@@ -217,7 +217,7 @@ namespace Microsoft.Quantum.Arrays {
     operation ForEach<'T, 'U> (action : ('T => 'U), array : 'T[]) : 'U[] {
         mutable resultArray = new 'U[Length(array)];
 
-        for (idxElement in IndexRange(array)) {
+        for idxElement in IndexRange(array) {
             set resultArray w/= idxElement <- action(array[idxElement]);
         }
 

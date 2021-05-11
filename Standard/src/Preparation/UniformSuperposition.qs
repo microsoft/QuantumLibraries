@@ -46,33 +46,32 @@ namespace Microsoft.Quantum.Preparation {
     /// ```
     operation PrepareUniformSuperposition(nIndices: Int, indexRegister: LittleEndian)
     : Unit is Adj+Ctl {
-        if (nIndices == 0) {
+        if nIndices == 0 {
             fail "Cannot prepare uniform superposition over 0 basis states.";
-        } elif (nIndices == 1) {
+        } elif nIndices == 1 {
             // Superposition over one state, so do nothing.
-        } elif (nIndices == 2) {
+        } elif nIndices == 2 {
             H(indexRegister![0]);
         } else {
             let nQubits = BitSizeI(nIndices - 1);
-            if (nQubits > Length(indexRegister!)) {
+            if nQubits > Length(indexRegister!) {
                 fail $"Cannot prepare uniform superposition over {nIndices} states as it is larger than the qubit register.";
             }
 
-            using (flagQubit = Qubit[3]) {
-                AssertAllZero(indexRegister!);
-                let targetQubits = indexRegister![0..nQubits - 1];
-                let qubits = flagQubit + targetQubits;
-                let stateOracle = StateOracle(PrepareUniformSuperpositionOracle(nIndices, nQubits, _, _));
+            use flagQubit = Qubit[3];
+            AssertAllZero(indexRegister!);
+            let targetQubits = indexRegister![0..nQubits - 1];
+            let qubits = flagQubit + targetQubits;
+            let stateOracle = StateOracle(PrepareUniformSuperpositionOracle(nIndices, nQubits, _, _));
 
-                (StandardAmplitudeAmplification(1, stateOracle, 0))(qubits);
+            (StandardAmplitudeAmplification(1, stateOracle, 0))(qubits);
 
-                ApplyToEachCA(X, flagQubit);
-            }
+            ApplyToEachCA(X, flagQubit);
         }
     }
 
     /// # Summary
-    /// Implementation step of <xref:microsoft.quantum.canon.prepareuniformsuperposition>
+    /// Implementation step of <xref:Microsoft.Quantum.Preparation.PrepareUniformSuperposition>
     internal operation PrepareUniformSuperpositionOracle(nIndices: Int, nQubits: Int, idxFlag: Int, qubits: Qubit[])
     : Unit is Adj + Ctl {
         let targetQubits = qubits[3...];
@@ -81,7 +80,7 @@ namespace Microsoft.Quantum.Preparation {
         let theta = ArcSin(Sqrt(IntAsDouble(2^nQubits) / IntAsDouble(nIndices)) * Sin(PI() / 6.0));
 
         ApplyToEachCA(H, targetQubits);
-        using (compareQubits = Qubit[nQubits]) {
+        use compareQubits = Qubit[nQubits] {
             within {
                 ApplyXorInPlace(nIndices - 1, LittleEndian(compareQubits));
             } apply {

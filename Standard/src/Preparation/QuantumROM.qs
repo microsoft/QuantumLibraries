@@ -76,7 +76,7 @@ namespace Microsoft.Quantum.Preparation {
     /// $\rho=\sum_{j=0}^{4}\frac{|alpha_j|}{\sum_k |\alpha_k|}\ket{j}\bra{j}$, where
     /// $\vec\alpha=(1.0, 2.0, 3.0, 4.0, 5.0)$, and the target error is
     /// $10^{-3}$:
-    /// ```Q#
+    /// ```qsharp
     /// let coefficients = [1.0, 2.0, 3.0, 4.0, 5.0];
     /// let targetError = 1e-3;
     /// let purifiedState = PurifiedMixedState(targetError, coefficients);
@@ -102,7 +102,7 @@ namespace Microsoft.Quantum.Preparation {
         let nCoeffs = Length(positiveCoefficients);
         let nBitsIndices = Ceiling(Lg(IntAsDouble(nCoeffs)));
 
-        let op = PrepareQuantumROMState(nBitsPrecision, nCoeffs, nBitsIndices, keepCoeff, altIndex, EmptyArray<Bool[]>(), _, _, _);
+        let op = PrepareQuantumROMState(nBitsPrecision, nCoeffs, nBitsIndices, keepCoeff, altIndex, [], _, _, _);
         let qubitCounts = PurifiedMixedStateRequirements(targetError, nCoeffs);
         return MixedStatePreparation(qubitCounts, oneNorm, op);
     }
@@ -183,10 +183,9 @@ namespace Microsoft.Quantum.Preparation {
     /// # See Also
     /// - Microsoft.Quantum.Preparation.PurifiedMixedState
     function PurifiedMixedStateWithData(targetError : Double, coefficients : (Double, Bool[])[]) : MixedStatePreparation {
-        
         let nBitsPrecision = -Ceiling(Lg(0.5 * targetError)) + 1;
-        let positiveCoefficients = Mapped(AbsD, Mapped(Fst<Double, Bool[]>, coefficients));
-        let data = Mapped(Snd<Double, Bool[]>, coefficients);
+        let positiveCoefficients = Mapped(AbsD, Mapped(Fst, coefficients));
+        let data = Mapped(Snd, coefficients);
         let (oneNorm, keepCoeff, altIndex) = _QuantumROMDiscretization(nBitsPrecision, positiveCoefficients);
         let nCoeffs = Length(positiveCoefficients);
         let nBitsIndices = Ceiling(Lg(IntAsDouble(nCoeffs)));
@@ -250,19 +249,19 @@ namespace Microsoft.Quantum.Preparation {
 
         // Calculate difference between number of discretized bars vs. maximum
         mutable bars = 0;
-        for (idxCoeff in IndexRange(keepCoeff)) {
+        for idxCoeff in IndexRange(keepCoeff) {
             set bars += keepCoeff[idxCoeff] - barHeight;
         }
 
         // Uniformly distribute excess bars across coefficients.
-        for (idx in 0..AbsI(bars) - 1) {
+        for idx in 0..AbsI(bars) - 1 {
             set keepCoeff w/= idx <- keepCoeff[idx] + (bars > 0 ? -1 | +1);
         }
 
-        mutable barSink = new Int[0];
-        mutable barSource = new Int[0];
+        mutable barSink = [];
+        mutable barSource = [];
 
-        for (idxCoeff in IndexRange(keepCoeff)) {
+        for idxCoeff in IndexRange(keepCoeff) {
             if (keepCoeff[idxCoeff] > barHeight) {
                 set barSource += [idxCoeff];
             } elif (keepCoeff[idxCoeff] < barHeight) {
@@ -270,7 +269,7 @@ namespace Microsoft.Quantum.Preparation {
             }
         }
 
-        for (rep in 0..nCoefficients * 10) {
+        for rep in 0..nCoefficients * 10 {
             if (Length(barSink) > 0 and Length(barSource) > 0) {
                 let idxSink = Tail(barSink);
                 let idxSource = Tail(barSource);
@@ -348,7 +347,9 @@ namespace Microsoft.Quantum.Preparation {
     // Used in QuantumROM implementation.
     internal operation WriteQuantumROMBitString(idx: Int, keepCoeff: Int[], altIndex: Int[], data : Bool[][], keepCoeffRegister: LittleEndian, altIndexRegister: LittleEndian, dataRegister : Qubit[], altDataRegister : Qubit[])
     : Unit is Adj + Ctl {
-        ApplyXorInPlace(keepCoeff[idx], keepCoeffRegister);
+        if (keepCoeff[idx] >= 0) {
+            ApplyXorInPlace(keepCoeff[idx], keepCoeffRegister);
+        }
         ApplyXorInPlace(altIndex[idx], altIndexRegister);
         if (Length(dataRegister) > 0) {
             ApplyToEachCA(CControlledCA(X), Zipped(data[idx], dataRegister));

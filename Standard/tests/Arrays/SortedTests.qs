@@ -42,7 +42,7 @@ namespace Microsoft.Quantum.Arrays {
         let nItems = 100;
         let nTrials = 10;
         let maxItem = 1000;
-        for (_ in 0..nTrials - 1) {
+        for _ in 0..nTrials - 1 {
             let data = DrawMany((DiscreteUniformDistribution(0, maxItem))::Sample, nItems, ());
             Fact(IsSorted(LessThanOrEqualI, Sorted(LessThanOrEqualI, data)), $"{data} was not sorted after running Sorted.");
         }

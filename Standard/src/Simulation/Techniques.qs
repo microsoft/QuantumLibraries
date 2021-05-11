@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft Corporation. All rights reserved.
+// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
 namespace Microsoft.Quantum.Simulation {
@@ -62,7 +62,7 @@ namespace Microsoft.Quantum.Simulation {
     /// $\ket{\phi}$ and ground state energy $E = \phi\\,\delta t$.
     /// ## phaseEstAlgorithm
     /// An operation that performs phase estimation on a given unitary operation.
-    /// See [iterative phase estimation](/quantum/libraries/characterization#iterative-phase-estimation)
+    /// See [iterative phase estimation](xref:microsoft.quantum.libraries.overview.characterization#iterative-phase-estimation)
     /// for more details.
     /// ## qubits
     /// A register of qubits to be used to perform the simulation.
@@ -100,18 +100,17 @@ namespace Microsoft.Quantum.Simulation {
     /// $\ket{\phi}$ and ground state energy $E = \phi\\,\delta t$.
     /// ## phaseEstAlgorithm
     /// An operation that performs phase estimation on a given unitary operation.
-    /// See [iterative phase estimation](/quantum/libraries/characterization#iterative-phase-estimation)
+    /// See [iterative phase estimation](xref:microsoft.quantum.libraries.overview.characterization#iterative-phase-estimation)
     /// for more details.
     ///
     /// # Output
     /// An estimate $\hat{\phi}$ of the ground state energy $\phi$
     /// of the generator represented by $U$.
     operation EstimateEnergyWithAdiabaticEvolution(nQubits : Int, statePrepUnitary : (Qubit[] => Unit), adiabaticUnitary : (Qubit[] => Unit), qpeUnitary : (Qubit[] => Unit is Adj + Ctl), phaseEstAlgorithm : ((DiscreteOracle, Qubit[]) => Double)) : Double {
-        using (qubits = Qubit[nQubits]) {
-            let phaseEst = AdiabaticStateEnergyUnitary(statePrepUnitary, adiabaticUnitary, qpeUnitary, phaseEstAlgorithm, qubits);
-            ResetAll(qubits);
-            return phaseEst;
-        }
+        use qubits = Qubit[nQubits];
+        let phaseEst = AdiabaticStateEnergyUnitary(statePrepUnitary, adiabaticUnitary, qpeUnitary, phaseEstAlgorithm, qubits);
+        ResetAll(qubits);
+        return phaseEst;
     }
 
 
@@ -133,7 +132,7 @@ namespace Microsoft.Quantum.Simulation {
     /// $\ket{\phi}$ and ground state energy $E = \phi\\,\delta t$.
     /// ## phaseEstAlgorithm
     /// An operation that performs phase estimation on a given unitary operation.
-    /// See [iterative phase estimation](/quantum/libraries/characterization#iterative-phase-estimation)
+    /// See [iterative phase estimation](xref:microsoft.quantum.libraries.overview.characterization#iterative-phase-estimation)
     /// for more details.
     ///
     /// # Output

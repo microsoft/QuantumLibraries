@@ -20,7 +20,7 @@ namespace Microsoft.Quantum.Canon {
     ///
     /// # Example
     /// The following are equivalent:
-    /// ```Q#
+    /// ```qsharp
     /// Repeat(U, 17, target);
     /// (Bound(ConstantArray(17, U)))(target);
     /// ```
@@ -31,7 +31,7 @@ namespace Microsoft.Quantum.Canon {
     /// - Microsoft.Quantum.Canon.RepeatC
     /// - Microsoft.Quantum.Canon.RepeatCA
     operation Repeat<'TInput>(op : ('TInput => Unit), nTimes : Int, input : 'TInput) : Unit {
-        for (idx in 0..nTimes - 1) {
+        for idx in 0..nTimes - 1 {
             op(input);
         }
     }
@@ -53,7 +53,7 @@ namespace Microsoft.Quantum.Canon {
     ///
     /// # Example
     /// The following are equivalent:
-    /// ```Q#
+    /// ```qsharp
     /// RepeatA(U, 17, target);
     /// (BoundA(ConstantArray(17, U)))(target);
     /// ```
@@ -64,7 +64,7 @@ namespace Microsoft.Quantum.Canon {
     /// - Microsoft.Quantum.Canon.RepeatC
     /// - Microsoft.Quantum.Canon.RepeatCA
     operation RepeatA<'TInput>(op : ('TInput => Unit is Adj), nTimes : Int, input : 'TInput) : Unit is Adj {
-        for (idx in 0..nTimes - 1) {
+        for idx in 0..nTimes - 1 {
             op(input);
         }
     }
@@ -86,7 +86,7 @@ namespace Microsoft.Quantum.Canon {
     ///
     /// # Example
     /// The following are equivalent:
-    /// ```Q#
+    /// ```qsharp
     /// RepeatC(U, 17, target);
     /// (BoundC(ConstantArray(17, U)))(target);
     /// ```
@@ -97,7 +97,7 @@ namespace Microsoft.Quantum.Canon {
     /// - Microsoft.Quantum.Canon.RepeatA
     /// - Microsoft.Quantum.Canon.RepeatCA
     operation RepeatC<'TInput>(op : ('TInput => Unit is Ctl), nTimes : Int, input : 'TInput) : Unit is Ctl {
-        for (idx in 0..nTimes - 1) {
+        for idx in 0..nTimes - 1 {
             op(input);
         }
     }
@@ -119,7 +119,7 @@ namespace Microsoft.Quantum.Canon {
     ///
     /// # Example
     /// The following are equivalent:
-    /// ```Q#
+    /// ```qsharp
     /// RepeatCA(U, 17, target);
     /// (BoundCA(ConstantArray(17, U)))(target);
     /// ```
@@ -130,7 +130,7 @@ namespace Microsoft.Quantum.Canon {
     /// - Microsoft.Quantum.Canon.RepeatA
     /// - Microsoft.Quantum.Canon.RepeatC
     operation RepeatCA<'TInput>(op : ('TInput => Unit is Adj + Ctl), nTimes : Int, input : 'TInput) : Unit is Adj + Ctl { 
-        for (idx in 0..nTimes - 1) {
+        for idx in 0..nTimes - 1 {
             op(input);
         }
     }

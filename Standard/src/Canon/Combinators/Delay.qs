@@ -140,9 +140,6 @@ namespace Microsoft.Quantum.Canon {
     /// An operation to be applied.
     /// ## arg
     /// The input to which the operation is applied.
-    /// ## aux
-    /// Argument used to delay the application of operation by using 
-    /// partial application.
     ///
     /// # Output
     /// A new operation which applies `op` with input `arg`

@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft Corporation. All rights reserved.
+// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
 namespace Microsoft.Quantum.Canon {
@@ -36,7 +36,7 @@ namespace Microsoft.Quantum.Canon {
     /// Trotter1ImplCA((2, op), deltaT, target);
     /// ```
     internal operation Trotter1ImplCA<'T> ((nSteps : Int, op : ((Int, Double, 'T) => Unit is Adj + Ctl)), stepSize : Double, target : 'T) : Unit is Adj + Ctl {
-        for (idx in 0 .. nSteps - 1) {
+        for idx in 0 .. nSteps - 1 {
             op(idx, stepSize, target);
         }
     }
@@ -79,11 +79,11 @@ namespace Microsoft.Quantum.Canon {
         stepSize : Double, target : 'T
     )
     : Unit is Adj + Ctl {
-        for (idx in 0 .. nSteps - 1) {
+        for idx in 0 .. nSteps - 1 {
             op(idx, stepSize * 0.5, target);
         }
 
-        for (idx in nSteps - 1 .. -1 .. 0) {
+        for idx in nSteps - 1 .. -1 .. 0 {
             op(idx, stepSize * 0.5, target);
         }
     }

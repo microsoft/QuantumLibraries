@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft Corporation. All rights reserved.
+// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
 namespace Microsoft.Quantum.Canon {
@@ -21,10 +21,10 @@ namespace Microsoft.Quantum.Canon {
     ///
     /// # Example
     /// Given an operation `op`, the following two snippets are equivalent:
-    /// ```Q#
+    /// ```qsharp
     /// IterateThroughCartesianProduct([3, 4, 5], op);
     /// ```
-    /// ```Q#
+    /// ```qsharp
     /// op([0, 0, 0]);
     /// op([1, 0, 0]);
     /// op([2, 0, 0]);
@@ -52,14 +52,14 @@ namespace Microsoft.Quantum.Canon {
             //computes the next element in the Cartesian product
             set arr w/= 0 <- arr[0] + 1;
 
-            for (i in 0 .. Length(arr) - 2) {
-                if (arr[i] == bounds[i]) {
+            for i in 0 .. Length(arr) - 2 {
+                if arr[i] == bounds[i] {
                     set arr w/= i + 1 <- arr[i + 1] + 1;
                     set arr w/= i <- 0;
                 }
             }
 
-            if (arr[Length(arr) - 1] == bounds[Length(arr) - 1]) {
+            if arr[Length(arr) - 1] == bounds[Length(arr) - 1] {
                 set finished = true;
             }
         }
@@ -86,10 +86,10 @@ namespace Microsoft.Quantum.Canon {
     ///
     /// # Example
     /// Given an operation `op`, the following two snippets are equivalent:
-    /// ```Q#
+    /// ```qsharp
     /// IterateThroughCartesianPower(2, 3, op);
     /// ```
-    /// ```Q#
+    /// ```qsharp
     /// op([0, 0]);
     /// op([1, 0]);
     /// op([2, 0]);

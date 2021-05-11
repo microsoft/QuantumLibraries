@@ -46,7 +46,7 @@ namespace Microsoft.Quantum.Synthesis {
     /// increasing order.
     ///
     /// # Example
-    /// ```Q#
+    /// ```qsharp
     /// IntegerBits(23, 5); // [0, 1, 2, 4]
     /// IntegerBits(10, 4); // [1, 3]
     /// ```
@@ -150,7 +150,7 @@ namespace Microsoft.Quantum.Synthesis {
     ///
     /// # Example
     /// To synthesize a `SWAP` operation:
-    /// ```Q#
+    /// ```qsharp
     /// using (qubits = Qubit[2]) {
     ///   ApplyPermutationUsingTransformation([0, 2, 1, 3], LittleEndian(qubits));
     /// }
@@ -173,7 +173,7 @@ namespace Microsoft.Quantum.Synthesis {
         Fact(IsPermutation(perm), "perm must be a permutation");
         EqualityFactI(Length(perm), 2^Length(qubits!), $"Length of perm must be {2^Length(qubits!)}");
 
-        for (gate in gates) {
+        for gate in gates {
             let (controls, target) = gate;
             let MultiX = ApplyToEachCA(X, _);
             Controlled MultiX(controls, target);

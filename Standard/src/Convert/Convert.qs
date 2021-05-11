@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft Corporation. All rights reserved.
+// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
 namespace Microsoft.Quantum.Convert {
@@ -63,12 +63,12 @@ namespace Microsoft.Quantum.Convert {
     }
 
     /// # Summary
-    /// Produces a binary representation of a positive integer, using the
+    /// Produces a binary representation of a non-negative integer, using the
     /// little-endian representation for the returned array.
     ///
     /// # Input
     /// ## number
-    /// A positive integer to be converted to an array of boolean values.
+    /// A non-negative integer to be converted to an array of boolean values.
     /// ## bits
     /// The number of bits in the binary representation of `number`.
     ///
@@ -80,11 +80,11 @@ namespace Microsoft.Quantum.Convert {
     /// The input `number` must be between 0 and $2^{\texttt{bits}} - 1$.
     function IntAsBoolArray(number : Int, bits : Int) : Bool[] {
         Fact(bits >= 0 and bits <= 63, $"`bits` must be between 0 and 63 {2^bits}");
-        EqualityFactB(number >= 0 and number < 2 ^ bits, true, $"`number` must be between 0 and 2^`bits` - 1");
+        Fact(number >= 0 and number < 2 ^ bits, $"`number` must be between 0 and 2^{bits} - 1, but was {number}.");
         mutable outputBits = new Bool[bits];
         mutable tempInt = number;
 
-        for (idxBit in 0 .. bits - 1) {
+        for idxBit in 0 .. bits - 1 {
             set outputBits w/= idxBit <- tempInt % 2 == 0 ? false | true;
             set tempInt = tempInt / 2;
         }
@@ -93,17 +93,17 @@ namespace Microsoft.Quantum.Convert {
     }
 
     /// # Summary
-    /// Produces a positive integer from a string of bits in little endian format.
+    /// Produces a non-negative integer from a string of bits in little endian format.
     ///
     /// # Input
     /// ## bits
     /// Bits in binary representation of number.
     function BoolArrayAsInt(bits : Bool[]) : Int {
-        EqualityFactB(Length(bits) < 64, true, $"`Length(bits)` must be less than 64");
+        Fact(Length(bits) < 64, $"`Length(bits)` must be less than 64, but was {Length(bits)}.");
         mutable number = 0;
         let nBits = Length(bits);
 
-        for (idxBit in 0 .. nBits - 1) {
+        for idxBit in 0 .. nBits - 1 {
             if (bits[idxBit]) {
                 set number = number + 2 ^ idxBit;
             }
@@ -113,7 +113,7 @@ namespace Microsoft.Quantum.Convert {
     }
 
     /// # Summary
-    /// Produces a positive integer from a string of Results in little endian format.
+    /// Produces a non-negative integer from a string of Results in little endian format.
     ///
     /// # Input
     /// ## results
@@ -192,7 +192,7 @@ namespace Microsoft.Quantum.Convert {
         let nBits = Length(bits);
         mutable paulis = new Pauli[nBits];
 
-        for (idxBit in 0 .. nBits - 1) {
+        for idxBit in 0 .. nBits - 1 {
             set paulis w/= idxBit <- bits[idxBit] == bitApply ? pauli | PauliI;
         }
 
@@ -215,14 +215,14 @@ namespace Microsoft.Quantum.Convert {
     /// // The following returns [1,3,5,7];
     /// let array = RangeAsIntArray(1..2..8);
     /// ```
-    function RangeAsIntArray(range: Range) : Int[] {
+    function RangeAsIntArray(range : Range) : Int[] {
         let start = RangeStart(range);
         let step = RangeStep(range);
         let end = RangeEnd(range);
         if ((end - start) / step >= 0){
             let nTerms = (end - start) / step + 1;
             mutable array = new Int[nTerms];
-            for(idx in 0..nTerms - 1){
+            for idx in 0..nTerms - 1 {
                set array w/= idx <- start + idx * step;
             }
             return array;

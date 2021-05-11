@@ -82,7 +82,7 @@ namespace Microsoft.Quantum.Arrays {
     /// # Example
     /// The following snippet sorts an array of integers to occur in ascending
     /// order:
-    /// ```Q#
+    /// ```qsharp
     /// let sortedArray = Sorted(LessThanOrEqualI, [3, 17, 11, -201, -11]);
     /// ```
     /// 
@@ -101,7 +101,7 @@ namespace Microsoft.Quantum.Arrays {
     /// appear before `b` in the output.
     ///
     /// For example:
-    /// ```Q#
+    /// ```qsharp
     /// function LastDigitLessThanOrEqual(left : Int, right : Int) : Bool {
     ///     return LessThanOrEqualI(
     ///         left % 10, right % 10
@@ -114,7 +114,7 @@ namespace Microsoft.Quantum.Arrays {
     /// // returns [11, 3, 37, 17].
     /// ```
     function Sorted<'T>(comparison : (('T, 'T) -> Bool), array : 'T[]) : 'T[] {
-        if (Length(array) <= 1) {
+        if Length(array) <= 1 {
             return array;
         } else {
             let idxPivot = Length(array) / 2;
@@ -123,7 +123,7 @@ namespace Microsoft.Quantum.Arrays {
 
             // Sort each sublist, then merge them back into a single combined
             // list and return.
-            return Merged<'T>(
+            return Merged(
                 comparison, 
                 Sorted(comparison, left),
                 Sorted(comparison, right)

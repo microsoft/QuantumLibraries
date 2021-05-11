@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft Corporation. All rights reserved.
+// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
 namespace Microsoft.Quantum.Characterization {
@@ -28,7 +28,7 @@ namespace Microsoft.Quantum.Characterization {
         AssertAllZeroWithinTolerance(controlRegister!, 1E-10);
         ApplyToEachCA(H, controlRegister!);
 
-        for (idxControlQubit in 0 .. nQubits - 1) {
+        for idxControlQubit in 0 .. nQubits - 1 {
             let control = (controlRegister!)[idxControlQubit];
             let power = 2 ^ ((nQubits - idxControlQubit) - 1);
             Controlled oracle!([control], (power, targetState));

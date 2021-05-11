@@ -37,7 +37,7 @@ namespace Microsoft.Quantum.Arrays {
     /// `Tail(CumulativeFolded(fn, state, array))` is the same as `Fold(fn, state, array)`.
     ///
     /// # Example
-    /// ```Q#
+    /// ```qsharp
     /// // same as sums = [1, 3, 6, 10, 15]
     /// let sums = CumulativeFolded(PlusI, 0, SequenceI(1, 5));
     /// ```
@@ -45,7 +45,7 @@ namespace Microsoft.Quantum.Arrays {
         mutable current = state;
         mutable result = new 'State[Length(array)];
 
-        for ((i, elem) in Enumerated(array)) {
+        for (i, elem) in Enumerated(array) {
             set current = fn(current, elem);
             set result w/= i <- current;
         }

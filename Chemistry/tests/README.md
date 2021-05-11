@@ -1,6 +1,6 @@
 # Quantum Chemistry Library Tests #
 
-Unit tests for the [Microsoft Quantum Chemistry library](https://docs.microsoft.com/en-us/quantum/libraries/chemistry/).
+Unit tests for the [Microsoft Quantum Chemistry library](https://docs.microsoft.com/azure/quantum/user-guide/libraries/chemistry).
 
 ## Structure of the tests ##
 

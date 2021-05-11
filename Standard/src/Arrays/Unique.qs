@@ -31,7 +31,7 @@ namespace Microsoft.Quantum.Arrays {
     /// together with `Sorted` to get an array with overall unique elements.
     ///
     /// # Example
-    /// ```Q#
+    /// ```qsharp
     /// let unique1 = Unique(EqualI, [1, 1, 3, 3, 2, 5, 5, 5, 7]);
     /// // same as [1, 3, 2, 5, 7]
     /// let unique2 = Unique(EqualI, [2, 2, 1, 1, 2, 2, 1, 1]);
@@ -40,14 +40,14 @@ namespace Microsoft.Quantum.Arrays {
     /// // same as [1, 2];
     /// ```
     function Unique<'T>(equal : (('T, 'T) -> Bool), array : 'T[]) : 'T[] {
-        if (Length(array) == 0) {
-            return new 'T[0];
+        if Length(array) == 0 {
+            return [];
         }
 
         mutable unique = ConstantArray(Length(array), Head(array));
         mutable count = 1;
 
-        for (elem in Rest(array)) {
+        for elem in Rest(array) {
             if (not equal(elem, unique[count - 1])) {
                 set unique w/= count <- elem;
                 set count += 1;

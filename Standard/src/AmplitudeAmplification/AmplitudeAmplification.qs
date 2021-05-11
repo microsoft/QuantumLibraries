@@ -57,17 +57,17 @@ namespace Microsoft.Quantum.AmplitudeAmplification {
         systemRegister : Qubit[]
     )
     : Unit is Adj + Ctl {
-        for ((startPhase, targetPhase) in Zipped(phases!)) {
-            if (startPhase != 0.0) {
+        for (startPhase, targetPhase) in Zipped(phases!) {
+            if startPhase != 0.0 {
                 startStateReflection::ApplyReflection(
                     startPhase, auxiliaryRegister
                 );
             }
 
-            within {
-                signalOracle!(auxiliaryRegister, systemRegister);
-            } apply {
-                if (targetPhase != 0.0) {
+            if targetPhase != 0.0 {
+                within {
+                    signalOracle!(auxiliaryRegister, systemRegister);
+                } apply {
                     targetStateReflection!(targetPhase, auxiliaryRegister);
                 }
             }
@@ -116,7 +116,7 @@ namespace Microsoft.Quantum.AmplitudeAmplification {
     /// An operation that implements oblivious amplitude amplification based on partial reflections.
     ///
     /// # Remarks
-    /// This imposes stricter conditions on form of the auxiliary start and target states than in `AmpAmpObliviousByReflectionPhases`.
+    /// This imposes stricter conditions on form of the auxiliary start and target states than in `ObliviousAmplitudeAmplificationFromPartialReflections`.
     /// It is assumed that $A\ket{0}\_f\ket{0}\_a= \ket{\text{start}}\_{fa}$ prepares the auxiliary start state $\ket{\text{start}}\_{fa}$ from the computational basis $\ket{0}\_f\ket{0}$.
     /// It is assumed that the target state is marked by $\ket{1}\_f$.
     /// It is assumed that
@@ -227,7 +227,7 @@ namespace Microsoft.Quantum.AmplitudeAmplification {
     /// implemented by partial reflections.
     ///
     /// # Remarks
-    /// This imposes stricter conditions on form of the start and target states than in `AmpAmpByReflectionPhases`.
+    /// This imposes stricter conditions on form of the start and target states than in `AmplitudeAmplificationFromPartialReflections`.
     /// It is assumed that the target state is marked by $\ket{1}\_f$.
     /// It is assumed that
     /// \begin{align}
@@ -264,14 +264,14 @@ namespace Microsoft.Quantum.AmplitudeAmplification {
     /// An operation that implements the standard amplitude amplification quantum algorithm
     ///
     /// # Remarks
-    /// This is the standard amplitude amplification algorithm obtained by a choice of reflection phases computed by `AmpAmpPhasesStandard`
+    /// This is the standard amplitude amplification algorithm obtained by a choice of reflection phases computed by `StandardReflectionPhases`
     /// Assuming that
     /// \begin{align}
     /// A\ket{0}\_{f}\ket{0}\_s= \lambda\ket{1}\_f\ket{\text{target}}\_s + \sqrt{1-|\lambda|^2}\ket{0}\_f\cdots,
     /// \end{align}
     /// this operation prepares the state
     /// \begin{align}
-    /// \operatorname{AmpAmpByOracle}\ket{0}\_{f}\ket{0}\_s= \sin((2n+1)\sin^{-1}(\lambda))\ket{1}\_f\ket{\text{target}}\_s + \cdots\ket{0}\_f
+    /// \operatorname{StandardAmplitudeAmplification}\ket{0}\_{f}\ket{0}\_s= \sin((2n+1)\sin^{-1}(\lambda))\ket{1}\_f\ket{\text{target}}\_s + \cdots\ket{0}\_f
     /// \end{align}
     /// In most cases, `flagQubit` and `auxiliaryRegister` is initialized in the state $\ket{0}\_f\ket{0}\_a$.
     ///
@@ -312,38 +312,35 @@ namespace Microsoft.Quantum.AmplitudeAmplification {
         //Complexity: Let \theta = \mathcal{O}(\sqrt{lambda})
         // Number of Measurements = O( Log^2(1/\theta) )
         // Number of Queries = O(1/\theta)
-        using (flagQubit = Qubit[1]) {
-            let qubits = flagQubit + startQubits;
-            let idxFlagQubit = 0;
+        use flagQubit = Qubit[1];
+        let qubits = flagQubit + startQubits;
+        let idxFlagQubit = 0;
+
+        repeat {
+            if (2 ^ exponentMax > queriesMax) {
+                fail $"Target state not found. Maximum number of queries exceeded.";
+            }
 
             repeat {
-                if (2 ^ exponentMax > queriesMax) {
-                    fail $"Target state not found. Maximum number of queries exceeded.";
-                }
-
-                repeat {
-                    let queries = 2 ^ exponentCurrent;
-                    let phases = FixedPointReflectionPhases(queries, successMin);
-                    (AmplitudeAmplificationFromStatePreparation(phases, statePrepOracle, idxFlagQubit))(qubits);
-                    set finished = M(flagQubit[0]);
-                    set exponentCurrent = exponentCurrent + 1;
-                }
-                until (finished == One or exponentCurrent > exponentMax)
-                fixup {
-                    // flagQubit is already in Zero for fixup to apply
-                    ResetAll(startQubits);
-                }
-
-                set exponentCurrent = 0;
-                set exponentMax = exponentMax + 1;
+                let queries = 2 ^ exponentCurrent;
+                let phases = FixedPointReflectionPhases(queries, successMin);
+                (AmplitudeAmplificationFromStatePreparation(phases, statePrepOracle, idxFlagQubit))(qubits);
+                set finished = M(flagQubit[0]);
+                set exponentCurrent = exponentCurrent + 1;
             }
-            until (finished == One)
+            until finished == One or exponentCurrent > exponentMax
             fixup {
+                // flagQubit is already in Zero for fixup to apply
                 ResetAll(startQubits);
             }
+
+            set exponentCurrent = 0;
+            set exponentMax = exponentMax + 1;
+        }
+        until finished == One
+        fixup {
+            ResetAll(startQubits);
         }
     }
 
 }
-
-

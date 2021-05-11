@@ -11,8 +11,8 @@ namespace Microsoft.Quantum.Arithmetic {
 
     /// # Summary
     /// Applies an operation that takes a
-    /// <xref:microsoft.quantum.arithmetic.littleendian> register as input
-    /// on a target register of type <xref:microsoft.quantum.arithmetic.phaselittleendian>.
+    /// <xref:Microsoft.Quantum.Arithmetic.LittleEndian> register as input
+    /// on a target register of type <xref:Microsoft.Quantum.Arithmetic.PhaseLittleEndian>.
     ///
     /// # Input
     /// ## op
@@ -22,88 +22,65 @@ namespace Microsoft.Quantum.Arithmetic {
     ///
     /// # Remarks
     /// The register is transformed to `PhaseLittleEndian` by the use of
-    /// <xref:microsoft.quantum.canon.qftle> and is then returned to
+    /// <xref:Microsoft.Quantum.Canon.QFTLE> and is then returned to
     /// its original representation after application of `op`.
     ///
     /// # See Also
-    /// - Microsoft.Quantum.Canon.ApplyPhaseLEOperationonLEA
-    /// - Microsoft.Quantum.Canon.ApplyPhaseLEOperationonLEA
-    /// - Microsoft.Quantum.Canon.ApplyPhaseLEOperationonLECA
+    /// - Microsoft.Quantum.Arithmetic.ApplyPhaseLEOperationonLEA
+    /// - Microsoft.Quantum.Arithmetic.ApplyPhaseLEOperationonLEA
+    /// - Microsoft.Quantum.Arithmetic.ApplyPhaseLEOperationonLECA
     operation ApplyPhaseLEOperationOnLE (op : (PhaseLittleEndian => Unit), target : LittleEndian) : Unit {
-        QFTLE(target);
-        let phaseLE = PhaseLittleEndian(target!);
-        op(phaseLE);
-        Adjoint QFTLE(target);
+        within {
+            QFTLE(target);
+        } apply {
+            let phaseLE = PhaseLittleEndian(target!);
+            op(phaseLE);
+        }
     }
 
     /// # See Also
-    /// - Microsoft.Quantum.Canon.ApplyPhaseLEOperationOnLE
-    operation ApplyPhaseLEOperationOnLEA (op : (PhaseLittleEndian => Unit is Adj), target : LittleEndian) : Unit
-    {
-        body (...)
-        {
+    /// - Microsoft.Quantum.Arithmetic.ApplyPhaseLEOperationOnLE
+    operation ApplyPhaseLEOperationOnLEA (op : (PhaseLittleEndian => Unit is Adj), target : LittleEndian)
+    : Unit is Adj {
+        within {
             QFTLE(target);
+        } apply {
             let phaseLE = PhaseLittleEndian(target!);
             op(phaseLE);
-            Adjoint QFTLE(target);
-        }
-
-        adjoint invert;
-    }
-
-
-    /// # See Also
-    /// - Microsoft.Quantum.Canon.ApplyPhaseLEOperationOnLE
-    operation ApplyPhaseLEOperationOnLEC (op : (PhaseLittleEndian => Unit is Ctl), target : LittleEndian) : Unit
-    {
-        body (...)
-        {
-            QFTLE(target);
-            let phaseLE = PhaseLittleEndian(target!);
-            op(phaseLE);
-            Adjoint QFTLE(target);
-        }
-
-        controlled (controls, ...)
-        {
-            QFTLE(target);
-            let phaseLE = PhaseLittleEndian(target!);
-            Controlled op(controls, phaseLE);
-            Adjoint QFTLE(target);
         }
     }
 
 
     /// # See Also
-    /// - Microsoft.Quantum.Canon.ApplyPhaseLEOperationOnLE
-    operation ApplyPhaseLEOperationOnLECA (op : (PhaseLittleEndian => Unit is Adj + Ctl), target : LittleEndian) : Unit
-    {
-        body (...)
-        {
+    /// - Microsoft.Quantum.Arithmetic.ApplyPhaseLEOperationOnLE
+    operation ApplyPhaseLEOperationOnLEC (op : (PhaseLittleEndian => Unit is Ctl), target : LittleEndian)
+    : Unit is Ctl {
+        within {
             QFTLE(target);
+        } apply {
             let phaseLE = PhaseLittleEndian(target!);
             op(phaseLE);
-            Adjoint QFTLE(target);
         }
+    }
 
-        adjoint invert;
 
-        controlled (controls, ...)
-        {
+    /// # See Also
+    /// - Microsoft.Quantum.Arithmetic.ApplyPhaseLEOperationOnLE
+    operation ApplyPhaseLEOperationOnLECA (op : (PhaseLittleEndian => Unit is Adj + Ctl), target : LittleEndian)
+    : Unit is Adj + Ctl {
+        within {
             QFTLE(target);
+        } apply {
             let phaseLE = PhaseLittleEndian(target!);
-            Controlled op(controls, phaseLE);
-            Adjoint QFTLE(target);
+            op(phaseLE);
         }
-
-        controlled adjoint invert;
     }
 
 
     /// # Summary
     /// Applies an operation that takes a
-    /// <xref:microsoft.quantum.arithmetic.phaselittleendian> register as input
-    /// on a target register of type <xref:microsoft.quantum.arithmetic.littleendian>.
+    /// <xref:Microsoft.Quantum.Arithmetic.PhaseLittleEndian> register as input
+    /// on a target register of type <xref:Microsoft.Quantum.Arithmetic.LittleEndian>.
     ///
     /// # Input
     /// ## op
@@ -113,15 +90,15 @@ namespace Microsoft.Quantum.Arithmetic {
     ///
     /// # Remarks
     /// The register is transformed to `LittleEndian` by the use of
-    /// <xref:microsoft.quantum.canon.qftle> and is then returned to
+    /// <xref:Microsoft.Quantum.Canon.QFTLE> and is then returned to
     /// its original representation after application of `op`.
     ///
     /// # See Also
     /// - Microsoft.Quantum.Canon.ApplyLEOperationonPhaseLEA
     /// - Microsoft.Quantum.Canon.ApplyLEOperationonPhaseLEC
     /// - Microsoft.Quantum.Canon.ApplyLEOperationonPhaseLECA
-    operation ApplyLEOperationOnPhaseLE (op : (LittleEndian => Unit), target : PhaseLittleEndian) : Unit
-    {
+    operation ApplyLEOperationOnPhaseLE (op : (LittleEndian => Unit), target : PhaseLittleEndian)
+    : Unit {
         let targetLE = LittleEndian(target!);
         ApplyWith(Adjoint QFTLE, op, targetLE);
     }
@@ -130,8 +107,8 @@ namespace Microsoft.Quantum.Arithmetic {
 
     /// # Summary
     /// Applies an operation that takes a
-    /// <xref:microsoft.quantum.arithmetic.phaselittleendian> register as input
-    /// on a target register of type <xref:microsoft.quantum.arithmetic.littleendian>.
+    /// <xref:Microsoft.Quantum.Arithmetic.PhaseLittleEndian> register as input
+    /// on a target register of type <xref:Microsoft.Quantum.Arithmetic.LittleEndian>.
     ///
     /// # Input
     /// ## op
@@ -141,13 +118,13 @@ namespace Microsoft.Quantum.Arithmetic {
     ///
     /// # Remarks
     /// The register is transformed to `LittleEndian` by the use of
-    /// <xref:microsoft.quantum.canon.qftle> and is then returned to
+    /// <xref:Microsoft.Quantum.Canon.QFTLE> and is then returned to
     /// its original representation after application of `op`.
     ///
     /// # See Also
-    /// - Microsoft.Quantum.Canon.ApplyLEOperationonPhaseLE
-    /// - Microsoft.Quantum.Canon.ApplyLEOperationonPhaseLEC
-    /// - Microsoft.Quantum.Canon.ApplyLEOperationonPhaseLECA
+    /// - Microsoft.Quantum.Arithmetic.ApplyLEOperationonPhaseLE
+    /// - Microsoft.Quantum.Arithmetic.ApplyLEOperationonPhaseLEC
+    /// - Microsoft.Quantum.Arithmetic.ApplyLEOperationonPhaseLECA
     operation ApplyLEOperationOnPhaseLEA (op : (LittleEndian => Unit is Adj), target : PhaseLittleEndian)
     : Unit is Adj {
         let targetLE = LittleEndian(target!);
@@ -157,8 +134,8 @@ namespace Microsoft.Quantum.Arithmetic {
 
     /// # Summary
     /// Applies an operation that takes a
-    /// <xref:microsoft.quantum.arithmetic.phaselittleendian> register as input
-    /// on a target register of type <xref:microsoft.quantum.arithmetic.littleendian>.
+    /// <xref:Microsoft.Quantum.Arithmetic.PhaseLittleEndian> register as input
+    /// on a target register of type <xref:Microsoft.Quantum.Arithmetic.LittleEndian>.
     ///
     /// # Input
     /// ## op
@@ -168,13 +145,13 @@ namespace Microsoft.Quantum.Arithmetic {
     ///
     /// # Remarks
     /// The register is transformed to `LittleEndian` by the use of
-    /// <xref:microsoft.quantum.canon.qftle> and is then returned to
+    /// <xref:Microsoft.Quantum.Canon.QFTLE> and is then returned to
     /// its original representation after application of `op`.
     ///
     /// # See Also
-    /// - Microsoft.Quantum.Canon.ApplyLEOperationonPhaseLE
-    /// - Microsoft.Quantum.Canon.ApplyLEOperationonPhaseLEA
-    /// - Microsoft.Quantum.Canon.ApplyLEOperationonPhaseLECA
+    /// - Microsoft.Quantum.Arithmetic.ApplyLEOperationonPhaseLE
+    /// - Microsoft.Quantum.Arithmetic.ApplyLEOperationonPhaseLEA
+    /// - Microsoft.Quantum.Arithmetic.ApplyLEOperationonPhaseLECA
     operation ApplyLEOperationOnPhaseLEC (op : (LittleEndian => Unit is Ctl), target : PhaseLittleEndian)
     : Unit is Ctl {
         let targetLE = LittleEndian(target!);
@@ -184,8 +161,8 @@ namespace Microsoft.Quantum.Arithmetic {
 
     /// # Summary
     /// Applies an operation that takes a
-    /// <xref:microsoft.quantum.arithmetic.phaselittleendian> register as input
-    /// on a target register of type <xref:microsoft.quantum.arithmetic.littleendian>.
+    /// <xref:Microsoft.Quantum.Arithmetic.PhaseLittleEndian> register as input
+    /// on a target register of type <xref:Microsoft.Quantum.Arithmetic.LittleEndian>.
     ///
     /// # Input
     /// ## op
@@ -195,13 +172,13 @@ namespace Microsoft.Quantum.Arithmetic {
     ///
     /// # Remarks
     /// The register is transformed to `LittleEndian` by the use of
-    /// <xref:microsoft.quantum.canon.qftle> and is then returned to
+    /// <xref:Microsoft.Quantum.Canon.QFTLE> and is then returned to
     /// its original representation after application of `op`.
     ///
     /// # See Also
-    /// - Microsoft.Quantum.Canon.ApplyLEOperationonPhaseLE
-    /// - Microsoft.Quantum.Canon.ApplyLEOperationonPhaseLEA
-    /// - Microsoft.Quantum.Canon.ApplyLEOperationonPhaseLEC
+    /// - Microsoft.Quantum.Arithmetic.ApplyLEOperationonPhaseLE
+    /// - Microsoft.Quantum.Arithmetic.ApplyLEOperationonPhaseLEA
+    /// - Microsoft.Quantum.Arithmetic.ApplyLEOperationonPhaseLEC
     operation ApplyLEOperationOnPhaseLECA(op : (LittleEndian => Unit is Adj + Ctl), target : PhaseLittleEndian)
     : Unit is Adj + Ctl {
         let targetLE = LittleEndian(target!);

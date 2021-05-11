@@ -11,9 +11,17 @@ pr:
 - features/*
 - release/*
 
+schedules:
+- cron: "0 9 * * Sat"
+  displayName: 'Build for Component Governance'
+  branches:
+    include:
+    - main
+  always: true
+
 variables:
   Build.Major: 0
-  Build.Minor: 10
+  Build.Minor: 16
   Drops.Dir: $(Build.ArtifactStagingDirectory)/drops
 
 jobs:

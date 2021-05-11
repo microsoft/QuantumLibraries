@@ -31,7 +31,7 @@ namespace Microsoft.Quantum.Arrays {
     /// Transposed $c \times r$ matrix
     ///
     /// # Example
-    /// ```Q#
+    /// ```qsharp
     /// // same as [[1, 4], [2, 5], [3, 6]]
     /// let transposed = Transposed([[1, 2, 3], [4, 5, 6]]);
     /// ```
@@ -67,7 +67,7 @@ namespace Microsoft.Quantum.Arrays {
     /// # Example
     /// Get the third number in four famous integer sequences. (note
     /// that the 0 index corresponds to the _first_ value of the sequence.)
-    /// ```Q#
+    /// ```qsharp
     /// let lucas = [2, 1, 3, 4, 7, 11, 18, 29, 47, 76];
     /// let prime = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29];
     /// let fibonacci = [0, 1, 1, 2, 3, 5, 8, 13, 21, 34];
@@ -101,7 +101,7 @@ namespace Microsoft.Quantum.Arrays {
     /// # Example
     /// Get the odd indexes in famous integer sequences. (note
     /// that the 0 index corresponds to the _first_ value of the sequence.)
-    /// ```Q#
+    /// ```qsharp
     /// let lucas = [2, 1, 3, 4, 7, 11, 18, 29, 47, 76];
     /// let prime = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29];
     /// let fibonacci = [0, 1, 1, 2, 3, 5, 8, 13, 21, 34];
@@ -136,7 +136,7 @@ namespace Microsoft.Quantum.Arrays {
     /// 2-dimensional matrix in row-wise order
     ///
     /// # Example
-    /// ```Q#
+    /// ```qsharp
     /// let matrix = [[1, 2, 3], [4, 5, 6], [7, 8, 9]];
     /// let column = ColumnAt(0, matrix);
     /// // same as: column = [1, 4, 7]
@@ -159,7 +159,7 @@ namespace Microsoft.Quantum.Arrays {
     internal function ColumnAtUnchecked<'T>(column : Int, matrix : 'T[][]) : 'T[] {
         return Mapped(
                 Compose(
-                    ElementAt<'T>(column, _),
+                    ElementAt(column, _),
                     LookupFunction(matrix)
                 ), RangeAsIntArray(IndexRange(matrix)));
     }
@@ -180,7 +180,7 @@ namespace Microsoft.Quantum.Arrays {
     /// 2-dimensional matrix in row-wise order
     ///
     /// # Example
-    /// ```Q#
+    /// ```qsharp
     /// let matrix = [[1, 2, 3], [4, 5, 6], [7, 8, 9]];
     /// let diagonal = Diagonal(matrix);
     /// // same as: column = [1, 5, 9]
@@ -218,7 +218,7 @@ namespace Microsoft.Quantum.Arrays {
     /// A message to be printed if the array is not a rectangular array
     ///
     /// # Example
-    /// ```Q#
+    /// ```qsharp
     /// RectangularArrayFact([[1, 2], [3, 4]], "Array is not rectangular");       // okay
     /// RectangularArrayFact([[1, 2, 3], [4, 5, 6]], "Array is not rectangular"); // okay
     /// RectangularArrayFact([[1, 2], [3, 4, 5]], "Array is not rectangular");    // will fail
@@ -231,9 +231,16 @@ namespace Microsoft.Quantum.Arrays {
             return ();
         } else {
             let numColumns = Length(Head(array));
-            if (Any(Compose(NotEqualI(numColumns, _), Length<'T>), Rest(array))) {
-                fail message;
+            for i in IndexRange(Rest(array)) {
+                if Length(array[i+1]) != numColumns {
+                    fail message;
+                }
             }
+            // qsharp-compiler Issue #964: QIR generation fails when passing a generic callable as a
+            // parameter with an inherited type specifier. https://github.com/microsoft/qsharp-compiler/issues/964
+            // if (Any(Compose(NotEqualI(numColumns, _), Length<'T>), Rest(array))) {
+            //     fail message;
+            // }
         }
     }
 
@@ -255,7 +262,7 @@ namespace Microsoft.Quantum.Arrays {
     /// A message to be printed if the array is not a square array
     ///
     /// # Example
-    /// ```Q#
+    /// ```qsharp
     /// SquareArrayFact([[1, 2], [3, 4]], "Array is not a square");       // okay
     /// SquareArrayFact([[1, 2, 3], [4, 5, 6]], "Array is not a square"); // will fail
     /// SquareArrayFact([[1, 2], [3, 4, 5]], "Array is not a square");    // will fail
@@ -268,9 +275,16 @@ namespace Microsoft.Quantum.Arrays {
             return ();
         } else {
             let numColumns = Length(array);
-            if (Any(Compose(NotEqualI(numColumns, _), Length<'T>), array)) {
-                fail message;
+            for i in IndexRange(Rest(array)) {
+                if Length(array[i+1]) != numColumns {
+                    fail message;
+                }
             }
+            // qsharp-compiler Issue #964: QIR generation fails when passing a generic callable as a
+            // parameter with an inherited type specifier. https://github.com/microsoft/qsharp-compiler/issues/964
+            // if (Any(Compose(NotEqualI(numColumns, _), Length<'T>), array)) {
+            //     fail message;
+            // }
         }
     }
 }

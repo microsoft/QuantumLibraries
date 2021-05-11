@@ -68,20 +68,13 @@ namespace Microsoft.Quantum.Preparation {
     ///
     /// # Description
     /// This operation prepares an arbitrary quantum
-    /// state $\ket{\psi}$ with complex coefficients $r_j e^{i t_j}$ from
-    /// the $n$-qubit computational basis state $\ket{0 \cdots 0}$.
-    /// In particular, the action of this operation can be simulated by the
-    /// a unitary transformation $U$ that acts on the all-zeros state as
+    /// state $\ket{\psi}$ with positive coefficients $\alpha_j\ge 0$ from
+    /// the $n$-qubit computational basis state $\ket{0...0}$.
     ///
+    /// The action of U on the all-zeros state is given by
     /// $$
     /// \begin{align}
-    ///     U\ket{0...0}
-    ///         & = \ket{\psi} \\\\
-    ///         & = \frac{
-    ///                 \sum_{j=0}^{2^n-1} r_j e^{i t_j} \ket{j}
-    ///             }{
-    ///                 \sqrt{\sum_{j=0}^{2^n-1} |r_j|^2}
-    ///             }.
+    ///     U \ket{0\cdots 0} = \ket{\psi} = \frac{\sum_{j=0}^{2^n-1}\alpha_j \ket{j}}{\sqrt{\sum_{j=0}^{2^n-1}|\alpha_j|^2}}.
     /// \end{align}
     /// $$
     ///
@@ -96,10 +89,20 @@ namespace Microsoft.Quantum.Preparation {
     /// $\ket{0...0}$.
     ///
     /// # Remarks
-    /// Negative input coefficients $r_j < 0$ will be treated as though
-    /// positive with value $|r_j|$. `coefficients` will be padded with
-    /// elements $(r_j, t_j) = (0.0, 0.0)$ if fewer than $2^n$ are
-    /// specified.
+    /// Negative input coefficients $\alpha_j < 0$ will be treated as though
+    /// positive with value $|\alpha_j|$. `coefficients` will be padded with
+    /// elements $\alpha_j = 0.0$ if fewer than $2^n$ are specified.
+    ///
+    /// ## Example
+    /// The following snippet prepares the quantum state $\ket{\psi}=\sqrt{1/8}\ket{0}+\sqrt{7/8}\ket{2}$
+    /// in the qubit register `qubitsLE`.
+    /// ```qsharp
+    /// let amplitudes = [Sqrt(0.125), 0.0, Sqrt(0.875), 0.0];
+    /// let op = StatePreparationPositiveCoefficients(amplitudes);
+    /// use qubits = Qubit[2];
+    /// let qubitsLE = LittleEndian(qubits);
+    /// PrepareArbitraryStateD(amplitudes, qubitsLE);
+    /// ```
     ///
     /// # References
     /// - Synthesis of Quantum Logic Circuits
@@ -184,7 +187,7 @@ namespace Microsoft.Quantum.Preparation {
     /// For internal use only, until proposal https://github.com/microsoft/qsharp-language/pull/41
     /// is finalized and implemented.
     operation _PrepareAmplitudesFromZeroState(coefficients : ComplexPolar[], qubits : LittleEndian) : Unit {
-        ApproximatelyPrepareArbitraryState(0.0, coefficients, qubits);
+        ApproximatelyPrepareArbitraryStateCP(0.0, coefficients, qubits);
     }
 
     /// # Summary
@@ -370,7 +373,7 @@ namespace Microsoft.Quantum.Preparation {
         mutable disentanglingY = new Double[Length(coefficients) / 2];
         mutable newCoefficients = new ComplexPolar[Length(coefficients) / 2];
 
-        for (idxCoeff in 0 .. 2 .. Length(coefficients) - 1) {
+        for idxCoeff in 0 .. 2 .. Length(coefficients) - 1 {
             let (rt, phi, theta) = BlochSphereCoordinates(coefficients[idxCoeff], coefficients[idxCoeff + 1]);
             set disentanglingZ w/= idxCoeff / 2 <- 0.5 * phi;
             set disentanglingY w/= idxCoeff / 2 <- 0.5 * theta;

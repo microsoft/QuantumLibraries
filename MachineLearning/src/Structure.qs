@@ -145,7 +145,7 @@ namespace Microsoft.Quantum.MachineLearning {
     ///
     /// # Example
     /// The following are equivalent:
-    /// ```Q#
+    /// ```qsharp
     /// let layer = CyclicEntanglingLayer(3, PauliX, 2);
     /// let layer = [
     ///     ControlledRotation((0, [2]), PauliX, 0),
@@ -182,7 +182,7 @@ namespace Microsoft.Quantum.MachineLearning {
     ///
     /// # Example
     /// The following are equivalent:
-    /// ```Q#
+    /// ```qsharp
     /// let structure = CombinedStructure([
     ///     LocalRotationLayer(2, PauliY),
     ///     CyclicEntanglingLayer(3, PauliX, 2)

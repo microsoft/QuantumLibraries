@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft Corporation. All rights reserved.
+// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
 namespace Microsoft.Quantum.Canon {
@@ -16,7 +16,7 @@ namespace Microsoft.Quantum.Canon {
             let totalQubits = Length(register);
             let halfTotal = totalQubits / 2;
 
-            for (i in 0 .. halfTotal - 1) {
+            for i in 0 .. halfTotal - 1 {
                 SWAP(register[i], register[(totalQubits - i) - 1]);
             }
         }

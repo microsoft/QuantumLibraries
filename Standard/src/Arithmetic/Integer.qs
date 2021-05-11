@@ -90,17 +90,16 @@ namespace Microsoft.Quantum.Arithmetic {
                 "Input registers must have the same number of qubits."
             );
 
-            using (auxRegister = Qubit[nQubits]) {
-                for (idx in 0..(nQubits-2)) {
-                    Carry(auxRegister[idx], xs![idx], ys![idx], auxRegister[idx+1]);           // (1)
-                }
-                (Controlled Carry) (controls, (auxRegister[nQubits-1], xs![nQubits-1], ys![nQubits-1], carry));
-                (Controlled CNOT) (controls, (xs![nQubits-1], ys![nQubits-1]));
-                (Controlled Sum) (controls, (auxRegister[nQubits-1], xs![nQubits-1], ys![nQubits-1]));
-                for (idx in (nQubits-2)..(-1)..0 ) {
-                    (Adjoint Carry) (auxRegister[idx], xs![idx], ys![idx], auxRegister[idx+1]); // cancels with (1)
-                    (Controlled Sum) (controls, (auxRegister[idx], xs![idx], ys![idx]));
-                }
+            use auxRegister = Qubit[nQubits];
+            for idx in 0..(nQubits-2) {
+                Carry(auxRegister[idx], xs![idx], ys![idx], auxRegister[idx+1]);           // (1)
+            }
+            Controlled Carry(controls, (auxRegister[nQubits-1], xs![nQubits-1], ys![nQubits-1], carry));
+            Controlled CNOT(controls, (xs![nQubits-1], ys![nQubits-1]));
+            Controlled Sum(controls, (auxRegister[nQubits-1], xs![nQubits-1], ys![nQubits-1]));
+            for idx in (nQubits-2)..(-1)..0  {
+                Adjoint Carry(auxRegister[idx], xs![idx], ys![idx], auxRegister[idx+1]); // cancels with (1)
+                Controlled Sum(controls, (auxRegister[idx], xs![idx], ys![idx]));
             }
         }
     }
@@ -140,7 +139,7 @@ namespace Microsoft.Quantum.Arithmetic {
 
         CNOT(xs![2], xs![1]);
         CCNOT(ancilla, ys![1], xs![1]);
-        for (idx in 2..(nQubits - 2)) {
+        for idx in 2..nQubits - 2 {
             CNOT(xs![idx+1], xs![idx]);
             CCNOT(xs![idx-1], ys![idx], xs![idx]);
         }
@@ -220,18 +219,17 @@ namespace Microsoft.Quantum.Arithmetic {
             "Input registers must have the same number of qubits."
         );
 
-        using (auxiliary = Qubit()) {
-            within {
-                ApplyToEachCA(CNOT, Zipped(Rest(xs!), Rest(ys!)));
-                CNOT(xs![1], auxiliary);
-                CCNOT(xs![0], ys![0], auxiliary);
-                ApplyOuterCDKMAdder(xs, ys, auxiliary);
-            } apply {
-                CarryOutCoreCDKM(xs, ys, auxiliary, carry);
-            }
-            ApplyToEachCA(X, Most(Rest(ys!)));
-            CNOT(xs![0], ys![0]);
+        use auxiliary = Qubit();
+        within {
+            ApplyToEachCA(CNOT, Zipped(Rest(xs!), Rest(ys!)));
+            CNOT(xs![1], auxiliary);
+            CCNOT(xs![0], ys![0], auxiliary);
+            ApplyOuterCDKMAdder(xs, ys, auxiliary);
+        } apply {
+            CarryOutCoreCDKM(xs, ys, auxiliary, carry);
         }
+        ApplyToEachCA(X, Most(Rest(ys!)));
+        CNOT(xs![0], ys![0]);
     }
 
     /// # Summary
@@ -272,12 +270,12 @@ namespace Microsoft.Quantum.Arithmetic {
                 "Input registers must have the same number of qubits."
             );
 
-            for (idx in 0..(nQubits - 2)) {
+            for idx in 0..nQubits - 2 {
                 CCNOT(xs![idx], ys![idx], xs![idx+1]);
             }
             (Controlled CCNOT)(controls, (xs![nQubits-1], ys![nQubits-1], carry));
-            for (idx in (nQubits - 1)..(-1)..1) {
-                (Controlled CNOT) (controls, (xs![idx], ys![idx]));
+            for idx in nQubits - 1..-1..1 {
+                Controlled CNOT(controls, (xs![idx], ys![idx]));
                 CCNOT(xs![idx-1], ys![idx-1], xs![idx]);
             }
         }
@@ -393,11 +391,11 @@ namespace Microsoft.Quantum.Arithmetic {
                 "Input registers must have the same number of qubits."
             );
 
-            for (idx in 0..(nQubits - 2)) {
+            for idx in 0..nQubits - 2 {
                 CCNOT (xs![idx], ys![idx], xs![idx + 1]);
             }
-            for (idx in (nQubits - 1)..(-1)..1) {
-                (Controlled CNOT) (controls, (xs![idx], ys![idx]));
+            for idx in nQubits - 1..-1..1 {
+                Controlled CNOT(controls, (xs![idx], ys![idx]));
                 CCNOT(xs![idx - 1], ys![idx - 1], xs![idx]);
             }
         }

@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft Corporation. All rights reserved.
+// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
 namespace Microsoft.Quantum.Characterization {
@@ -31,51 +31,49 @@ namespace Microsoft.Quantum.Characterization {
     /// - Robust Calibration of a Universal Single-Qubit Gate-Set via Robust Phase Estimation
     ///   Shelby Kimmel, Guang Hao Low, Theodore J. Yoder
     ///   https://arxiv.org/abs/1502.02677
-    operation RobustPhaseEstimation (bitsPrecision : Int, oracle : DiscreteOracle, targetState : Qubit[]) : Double
-    {
+    operation RobustPhaseEstimation (bitsPrecision : Int, oracle : DiscreteOracle, targetState : Qubit[]) : Double {
         let alpha = 2.5;
         let beta = 0.5;
         mutable thetaEst = 0.0;
 
-        using (controlQubit = Qubit()) {
+        use controlQubit = Qubit();
 
-            for (exponent in 0 .. bitsPrecision - 1) {
-                let power = 2 ^ exponent;
-                mutable nRepeats = Ceiling(alpha * IntAsDouble(bitsPrecision - exponent) + beta);
+        for exponent in 0 .. bitsPrecision - 1 {
+            let power = 2 ^ exponent;
+            mutable nRepeats = Ceiling(alpha * IntAsDouble(bitsPrecision - exponent) + beta);
 
-                if (nRepeats % 2 == 1) {
-                    // Ensures that nRepeats is even.
-                    set nRepeats = nRepeats + 1;
-                }
-
-                mutable (pZero, pPlus) = (0.0, 0.0);
-
-                for (idxRep in 0 .. nRepeats - 1) {
-                    for (idxExperiment in 0 .. 1) {
-                        // Divide rotation by power to cancel the multiplication by power in DiscretePhaseEstimationIteration
-                        let rotation = ((PI() * IntAsDouble(idxExperiment)) / 2.0) / IntAsDouble(power);
-                        DiscretePhaseEstimationIteration(oracle, power, rotation, targetState, controlQubit);
-                        let result = M(controlQubit);
-
-                        if (result == Zero) {
-                            if (idxExperiment == 0) {
-                                set pZero += 1.0;
-                            } elif (idxExperiment == 1) {
-                                set pPlus += 1.0;
-                            }
-                        }
-
-                        Reset(controlQubit);
-                    }
-                }
-
-                let deltaTheta = ArcTan2(pPlus - IntAsDouble(nRepeats) / 2.0, pZero - IntAsDouble(nRepeats) / 2.0);
-                let delta = RealMod(deltaTheta - thetaEst * IntAsDouble(power), 2.0 * PI(), -PI());
-                set thetaEst = thetaEst + delta / IntAsDouble(power);
+            if (nRepeats % 2 == 1) {
+                // Ensures that nRepeats is even.
+                set nRepeats = nRepeats + 1;
             }
 
-            Reset(controlQubit);
+            mutable (pZero, pPlus) = (0.0, 0.0);
+
+            for idxRep in 0 .. nRepeats - 1 {
+                for idxExperiment in 0 .. 1 {
+                    // Divide rotation by power to cancel the multiplication by power in DiscretePhaseEstimationIteration
+                    let rotation = ((PI() * IntAsDouble(idxExperiment)) / 2.0) / IntAsDouble(power);
+                    DiscretePhaseEstimationIteration(oracle, power, rotation, targetState, controlQubit);
+                    let result = M(controlQubit);
+
+                    if (result == Zero) {
+                        if (idxExperiment == 0) {
+                            set pZero += 1.0;
+                        } elif (idxExperiment == 1) {
+                            set pPlus += 1.0;
+                        }
+                    }
+
+                    Reset(controlQubit);
+                }
+            }
+
+            let deltaTheta = ArcTan2(pPlus - IntAsDouble(nRepeats) / 2.0, pZero - IntAsDouble(nRepeats) / 2.0);
+            let delta = RealMod(deltaTheta - thetaEst * IntAsDouble(power), 2.0 * PI(), -PI());
+            set thetaEst = thetaEst + delta / IntAsDouble(power);
         }
+
+        Reset(controlQubit);
 
         return thetaEst;
     }

@@ -37,7 +37,7 @@ namespace Microsoft.Quantum.Logical {
     ///   the other, the shorter array is said to occur first.
     ///
     /// # Examples
-    /// ```Q#
+    /// ```qsharp
     /// let arrayComparison = LexographicComparison(LessThanOrEqualD);
     /// let data = [
     ///     [1.1, 2.2, 3.3],
@@ -64,13 +64,13 @@ namespace Microsoft.Quantum.Logical {
     /// # Summary
     /// Used to implement `LexographicComparison`.
     internal function LessThanLexographic<'T>(comparison : (('T, 'T) -> Bool), left : 'T[], right : 'T[]) : Bool {
-        for ((l, r) in Zipped(left, right)) {
+        for (l, r) in Zipped(left, right) {
             let lessThanOrEqual = comparison(l, r);
             let greaterThanOrEqual = comparison(r, l);
             let equal = lessThanOrEqual and greaterThanOrEqual;
-            if (lessThanOrEqual and not equal) {
+            if lessThanOrEqual and not equal {
                 return true;
-            } elif (greaterThanOrEqual and not equal) {
+            } elif greaterThanOrEqual and not equal {
                 return false;
             }
         }

@@ -10,7 +10,7 @@
     <Authors>Microsoft</Authors>
     <Description>Provides IQ# visualization support for Microsoft's Q# standard libraries.</Description>
     <Copyright>© Microsoft Corporation. All rights reserved.</Copyright>
-    <PackageReleaseNotes>See: https://docs.microsoft.com/en-us/quantum/relnotes/</PackageReleaseNotes>
+    <PackageReleaseNotes>See: https://docs.microsoft.com/azure/quantum/qdk-relnotes/</PackageReleaseNotes>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/Microsoft/Quantum</PackageProjectUrl>
     <PackageIcon>qdk-nuget-icon.png</PackageIcon>
@@ -32,9 +32,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Quantum.Simulators" Version="0.14.20111301-pull" />
+    <PackageReference Include="Microsoft.Quantum.Simulators" Version="0.16.2104138035" />
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" />
-    <PackageReference Include="Microsoft.Quantum.IQSharp.Jupyter" Version="0.14.20111301-pull" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.Quantum.IQSharp.Jupyter" Version="0.16.2104138035" PrivateAssets="All" />
     <PackageReference Include="NumSharp" Version="0.20.5" />
   </ItemGroup>
 

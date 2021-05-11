@@ -26,7 +26,7 @@ namespace Microsoft.Quantum.Arrays {
     /// An array of elements.
     ///
     /// # Example
-    /// ```Q#
+    /// ```qsharp
     /// // same as [[1, 2, 3], [2, 3, 4], [3, 4, 5]]
     /// let windows = Windows(3, [1, 2, 3, 4, 5]);
     /// ```
@@ -39,7 +39,7 @@ namespace Microsoft.Quantum.Arrays {
 
         mutable result = new 'T[][n + 1 - size];
 
-        for (i in 0..n - size) {
+        for i in 0..n - size {
             set result w/= i <- array[i..i + size - 1];
         }
 
@@ -62,7 +62,7 @@ namespace Microsoft.Quantum.Arrays {
     /// An array of elements.
     ///
     /// # Example
-    /// ```Q#
+    /// ```qsharp
     /// let prefixes = Prefixes([23, 42, 144]);
     /// // prefixes = [[23], [23, 42], [23, 42, 144]]
     /// ```

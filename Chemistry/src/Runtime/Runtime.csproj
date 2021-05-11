@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.Quantum.Sdk/0.14.20111301-pull">
+<Project Sdk="Microsoft.Quantum.Sdk/0.16.2104138035">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
@@ -17,7 +17,7 @@
     <Description>Microsoft's Quantum Chemistry Libraries.</Description>
     <Copyright>© Microsoft Corporation. All rights reserved.</Copyright>
     <PackageId>Microsoft.Quantum.Chemistry.Runtime</PackageId>
-    <PackageReleaseNotes>See: https://docs.microsoft.com/en-us/quantum/relnotes/</PackageReleaseNotes>
+    <PackageReleaseNotes>See: https://docs.microsoft.com/azure/quantum/qdk-relnotes/</PackageReleaseNotes>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/microsoft/QuantumLibraries/tree/main/Chemistry</PackageProjectUrl>
     <PackageIcon>qdk-nuget-icon.png</PackageIcon>
@@ -40,7 +40,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Quantum.Simulators" Version="0.14.20111301-pull" />
+    <PackageReference Include="Microsoft.Quantum.Simulators" Version="0.16.2104138035" />
   </ItemGroup>
 
   <ItemGroup>

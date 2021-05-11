@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.Quantum.Sdk/0.14.20111301-pull">
+<Project Sdk="Microsoft.Quantum.Sdk/0.16.2104138035">
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
     <AssemblyName>Microsoft.Quantum.MachineLearning</AssemblyName>
@@ -29,7 +29,7 @@
     <Description>Microsoft's Quantum ML Libraries.</Description>
     <Copyright>© Microsoft Corporation. All rights reserved.</Copyright>
     <PackageId>Microsoft.Quantum.MachineLearning</PackageId>
-    <PackageReleaseNotes>See: https://docs.microsoft.com/quantum/relnotes/</PackageReleaseNotes>
+    <PackageReleaseNotes>See: https://docs.microsoft.com/azure/quantum/qdk-relnotes/</PackageReleaseNotes>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/microsoft/QuantumLibraries/tree/main/MachineLearning</PackageProjectUrl>
     <PackageIcon>qdk-nuget-icon.png</PackageIcon>

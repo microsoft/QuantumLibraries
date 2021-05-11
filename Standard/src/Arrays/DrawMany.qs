@@ -24,7 +24,7 @@ namespace Microsoft.Quantum.Arrays {
     /// # Example
     /// The following samples an integer, given an operation
     /// that samples a single bit at a time.
-    /// ```Q#
+    /// ```qsharp
     /// let randomInteger = BoolArrayAsInt(DrawMany(SampleRandomBit, 16, ()));
     /// ```
     ///
@@ -33,7 +33,7 @@ namespace Microsoft.Quantum.Arrays {
     operation DrawMany<'TInput, 'TOutput>(op : ('TInput => 'TOutput), nSamples : Int, input : 'TInput)
     : 'TOutput[] {
         mutable outputs = new 'TOutput[nSamples];
-        for (idx in 0..nSamples - 1) {
+        for idx in 0..nSamples - 1 {
             set outputs w/= idx <- op(input);
         }
         return outputs;
