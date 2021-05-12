@@ -61,7 +61,7 @@ namespace Microsoft.Quantum.Canon {
     @Test("QuantumSimulator")
     function HalfIntegerBinomIsCorrect() : Unit {
         NearEqualityFactD(HalfIntegerBinom(7), 0.01611328125);
-        NearEqualityFactD(HalfIntegerBinom(97), 0.000296430053333897955906699959203086560633705277210650462989645265221306538444010725352);
+        NearEqualityFactD(HalfIntegerBinom(51), 0.0007802866410507721715502651984526515823816817688699345231112536);
     }
 
 }
