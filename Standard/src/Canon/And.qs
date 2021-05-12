@@ -111,23 +111,22 @@ namespace Microsoft.Quantum.Canon {
     ///   doi:10.1103/PhysRevA.87.042302
     operation ApplyLowDepthAnd(control1 : Qubit, control2 : Qubit, target : Qubit) : Unit {
         body (...) {
-            using (helper = Qubit()) {
-                AssertAllZero([target]);
-                H(target);
-                within {
-                    CNOT(target, control1);
-                    CNOT(control1, helper);
-                    CNOT(control2, helper);
-                    CNOT(target, control2);
-                }
-                apply {
-                    Adjoint T(control1);
-                    Adjoint T(control2);
-                    T(target);
-                    T(helper);
-                }
-                HY(target);
+            use helper = Qubit();
+            AssertAllZero([target]);
+            H(target);
+            within {
+                CNOT(target, control1);
+                CNOT(control1, helper);
+                CNOT(control2, helper);
+                CNOT(target, control2);
             }
+            apply {
+                Adjoint T(control1);
+                Adjoint T(control2);
+                T(target);
+                T(helper);
+            }
+            HY(target);
         }
         adjoint (...) {
             Adjoint ApplyAnd(control1, control2, target);
@@ -163,12 +162,12 @@ namespace Microsoft.Quantum.Canon {
         mutable j = 0;
         mutable current = IntAsBoolArray(0, n);
 
-        for (i in 0..N - 1) {
+        for i in 0..N - 1 {
             if (i % 2 == 0) {
                 set j = 0;
             } else {
                 let e = Zipped(current, RangeAsIntArray(0..N - 1));
-                set j = Snd(Head(Filtered(Fst<Bool, Int>, e))) + 1;
+                set j = Snd(Head(Filtered(Fst, e))) + 1;
             }
 
             set j = MaxI(0, Min([j, n - 1]));
@@ -236,7 +235,7 @@ namespace Microsoft.Quantum.Canon {
             H(target);
 
             let code = GrayCode(vars);
-            for (j in 0..Length(code) - 1) {
+            for j in 0..Length(code) - 1 {
                 let (offset, ctrl) = code[j];
                 RFrac(PauliZ, Angle(offset), vars + 1, target);
                 CNOT(controls[ctrl], target);
@@ -250,10 +249,10 @@ namespace Microsoft.Quantum.Canon {
             H(target);
             AssertMeasurementProbability([PauliZ], [target], One, 0.5, "Probability of the measurement must be 0.5", 1e-10);
             if (IsResultOne(MResetZ(target))) {
-                for (i in 0..vars - 1) {
+                for i in 0..vars - 1 {
                     let start = 1 <<< i;
                     let code = GrayCode(i);
-                    for (j in 0..Length(code) - 1) {
+                    for j in 0..Length(code) - 1 {
                         let (offset, ctrl) = code[j];
                         RFrac(PauliZ, -Angle(start + offset), vars, controls[i]);
                         if (i != 0) {
@@ -277,8 +276,8 @@ namespace Microsoft.Quantum.Canon {
         mutable qs = new Qubit[2^numControls] w/ 0 <- target;
         mutable cntC = 0;
         mutable cntH = 0;
-        for (i in 1..2^numControls - 1) {
-            if (i == (i &&& -i)) {
+        for i in 1..2^numControls - 1 {
+            if i == (i &&& -i) {
                 set qs w/= i <- controls[cntC];
                 set cntC += 1;
             } else {
@@ -303,37 +302,36 @@ namespace Microsoft.Quantum.Canon {
     internal operation ApplyMultiplyControlledLowDepthAnd(controls : Qubit[], target : Qubit) : Unit {
         body (...) {
             let vars = Length(controls);
-            using (helper = Qubit[2^vars - vars - 1]) {
-                let qs = ArrangedQubits(controls, target, helper);
+            use helper = Qubit[2^vars - vars - 1];
+            let qs = ArrangedQubits(controls, target, helper);
 
-                AssertAllZero([target]);
-                H(target);
+            AssertAllZero([target]);
+            H(target);
 
-                within {
-                    // initialize helper lines with control lines based on LSB
-                    for (i in 3..2^vars - 1) {
-                        let lsb = i &&& -i;
-                        if (i != lsb) { // i is power of 2
-                            CNOT(qs[lsb], qs[i]);
-                        }
-                    }
-                    // target to control
-                    ApplyToEachA(CNOT(target, _), controls);
-                    // copy remainder (without LSB)
-                    for (i in 3..2^vars - 1) {
-                        let lsb = i &&& -i;
-                        if (i != lsb) {
-                            CNOT(qs[i - lsb], qs[i]);
-                        }
-                    }
-                } apply {
-                    for (i in IndexRange(qs)) {
-                        RFrac(PauliZ, Angle(i), vars + 1, qs[i]);
+            within {
+                // initialize helper lines with control lines based on LSB
+                for i in 3..2^vars - 1 {
+                    let lsb = i &&& -i;
+                    if (i != lsb) { // i is power of 2
+                        CNOT(qs[lsb], qs[i]);
                     }
                 }
-
-                HY(target);
+                // target to control
+                ApplyToEachA(CNOT(target, _), controls);
+                // copy remainder (without LSB)
+                for i in 3..2^vars - 1 {
+                    let lsb = i &&& -i;
+                    if (i != lsb) {
+                        CNOT(qs[i - lsb], qs[i]);
+                    }
+                }
+            } apply {
+                for i in IndexRange(qs) {
+                    RFrac(PauliZ, Angle(i), vars + 1, qs[i]);
+                }
             }
+
+            HY(target);
         }
         adjoint (...) {
             let vars = Length(controls);
@@ -341,24 +339,23 @@ namespace Microsoft.Quantum.Canon {
             H(target);
             AssertMeasurementProbability([PauliZ], [target], One, 0.5, "Probability of the measurement must be 0.5", 1e-10);
             if (IsResultOne(MResetZ(target))) {
-                using (helper = Qubit[2^vars - vars - 1]) {
-                    let qs = ArrangedQubits(controls, target, helper);
-                    within {
-                        // this is a bit easier than in the compute part, since
-                        // the target qubit does not have to be copied over to
-                        // the control lines.  Therefore, the two LSB CNOT parts
-                        // can be merged into a single loop.
-                        for (i in 3..2^vars - 1) {
-                            let lsb = i &&& -i;
-                            if (i != lsb) {
-                                CNOT(qs[lsb], qs[i]);
-                                CNOT(qs[i - lsb], qs[i]);
-                            }
+                use helper = Qubit[2^vars - vars - 1];
+                let qs = ArrangedQubits(controls, target, helper);
+                within {
+                    // this is a bit easier than in the compute part, since
+                    // the target qubit does not have to be copied over to
+                    // the control lines.  Therefore, the two LSB CNOT parts
+                    // can be merged into a single loop.
+                    for i in 3..2^vars - 1 {
+                        let lsb = i &&& -i;
+                        if (i != lsb) {
+                            CNOT(qs[lsb], qs[i]);
+                            CNOT(qs[i - lsb], qs[i]);
                         }
-                    } apply {
-                        for (i in 1..2^vars - 1) {
-                            RFrac(PauliZ, -Angle(i), vars, qs[i]);
-                        }
+                    }
+                } apply {
+                    for i in 1..2^vars - 1 {
+                        RFrac(PauliZ, -Angle(i), vars, qs[i]);
                     }
                 }
             }

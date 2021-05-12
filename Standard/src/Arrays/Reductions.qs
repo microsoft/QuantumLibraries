@@ -45,7 +45,7 @@ namespace Microsoft.Quantum.Arrays {
         mutable current = state;
         mutable result = new 'State[Length(array)];
 
-        for ((i, elem) in Enumerated(array)) {
+        for (i, elem) in Enumerated(array) {
             set current = fn(current, elem);
             set result w/= i <- current;
         }

@@ -24,16 +24,15 @@ namespace Microsoft.Quantum.Tests {
             [0, 2, 3, 5, 7, 11, 13, 1, 4, 6, 8, 9, 10, 12, 14, 15]
         ];
 
-        for (perm in permutations) {
+        for perm in permutations {
             let numQubits = BitSizeI(Length(perm) - 1);
 
-            using (qs = Qubit[numQubits]) {
-                let register = LittleEndian(qs);
-                for (i in 0..Length(perm) - 1) {
-                    ApplyXorInPlace(i, register);
-                    synthesisOperation(perm, register);
-                    EqualityFactI(MeasureInteger(register), perm[i], $"ApplyPermutation failed for permutation {perm} at index {i}");
-                }
+            use qs = Qubit[numQubits];
+            let register = LittleEndian(qs);
+            for i in 0..Length(perm) - 1 {
+                ApplyXorInPlace(i, register);
+                synthesisOperation(perm, register);
+                EqualityFactI(MeasureInteger(register), perm[i], $"ApplyPermutation failed for permutation {perm} at index {i}");
             }
         }
     }
@@ -56,23 +55,22 @@ namespace Microsoft.Quantum.Tests {
 
     @Test("ToffoliSimulator")
     operation CheckApplyTransposition () : Unit {
-        for (numQubits in 2..6) {
-            for (_ in 1..10) {
+        for numQubits in 2..6 {
+            for _ in 1..10 {
                 let a = DrawRandomInt(0, 2^numQubits - 1);
                 let b = DrawRandomInt(0, 2^numQubits - 1);
 
-                using (qs = Qubit[numQubits]) {
-                    let register = LittleEndian(qs);
+                use qs = Qubit[numQubits];
+                let register = LittleEndian(qs);
 
-                    for (i in 0..2^numQubits - 1) {
-                        ApplyXorInPlace(i, register);
-                        ApplyTransposition(a, b, register);
-                        EqualityFactI(
-                            MeasureInteger(register),
-                            i == a ? b | (i == b ? a | i),
-                            $"ApplyTransposition failed for {numQubits} qubits when a = {a} and b = {b}"
-                        );
-                    }
+                for i in 0..2^numQubits - 1 {
+                    ApplyXorInPlace(i, register);
+                    ApplyTransposition(a, b, register);
+                    EqualityFactI(
+                        MeasureInteger(register),
+                        i == a ? b | (i == b ? a | i),
+                        $"ApplyTransposition failed for {numQubits} qubits when a = {a} and b = {b}"
+                    );
                 }
             }
         }
@@ -96,26 +94,26 @@ namespace Microsoft.Quantum.Tests {
 
     @Test("QuantumSimulator")
     operation CheckApplyXControlledOnTruthTable () : Unit {
-        for (numQubits in 2..5) {
-            for (round in 1..5) {
+        for numQubits in 2..5 {
+            for round in 1..5 {
                 // TODO: replace with BigUniform.
                 let func = IntAsBigInt(DrawRandomInt(0, 2^(2^numQubits) - 1));
                 let truthValues = SizeAdjustedTruthTable(BigIntAsBoolArray(func), numQubits);
 
-                using ((controls, target) = (Qubit[numQubits], Qubit())) {
-                    for (i in 0..(2^numQubits - 1)) {
-                        let targetInit = RandomBool();
-                        ApplyIf(X, targetInit, target);
-                        within {
-                            ApplyXorInPlace(i, LittleEndian(controls));
-                        } apply {
-                            ApplyXControlledOnTruthTable(func, controls, target);
-                        }
-                        EqualityFactB(
-                            IsResultOne(MResetZ(target)) != targetInit,
-                            truthValues[i],
-                            $"Measured value does not correspond to truth table bit in truth table {func} and bit {i}");
+                use controls = Qubit[numQubits];
+                use target = Qubit();
+                for i in 0..(2^numQubits - 1) {
+                    let targetInit = RandomBool();
+                    ApplyIf(X, targetInit, target);
+                    within {
+                        ApplyXorInPlace(i, LittleEndian(controls));
+                    } apply {
+                        ApplyXControlledOnTruthTable(func, controls, target);
                     }
+                    EqualityFactB(
+                        IsResultOne(MResetZ(target)) != targetInit,
+                        truthValues[i],
+                        $"Measured value does not correspond to truth table bit in truth table {func} and bit {i}");
                 }
             }
         }
@@ -123,33 +121,34 @@ namespace Microsoft.Quantum.Tests {
 
     @Test("QuantumSimulator")
     operation CheckControlledApplyXControlledOnTruthTable () : Unit {
-        for (numQubits in 2..5) {
-            for (round in 1..5) {
+        for numQubits in 2..5 {
+            for round in 1..5 {
                 // TODO: replace with BigUniform.
                 let func = IntAsBigInt(DrawRandomInt(0, 2^(2^numQubits) - 1));
                 let truthValues = SizeAdjustedTruthTable(BigIntAsBoolArray(func), numQubits);
 
-                using ((controls, control, target) = (Qubit[numQubits], Qubit(), Qubit())) {
-                    for (i in 0..(2^numQubits - 1)) {
-                        let controlInit = RandomBool();
-                        let targetInit = RandomBool();
-                        ApplyIf(X, targetInit, target);
-                        within {
-                            ApplyIfA(X, controlInit, control);
-                            ApplyXorInPlace(i, LittleEndian(controls));
-                        } apply {
-                            Controlled ApplyXControlledOnTruthTable([control], (func, controls, target));
-                        }
+                use controls = Qubit[numQubits];
+                use control = Qubit();
+                use target = Qubit();
+                for i in 0..(2^numQubits - 1) {
+                    let controlInit = RandomBool();
+                    let targetInit = RandomBool();
+                    ApplyIf(X, targetInit, target);
+                    within {
+                        ApplyIfA(X, controlInit, control);
+                        ApplyXorInPlace(i, LittleEndian(controls));
+                    } apply {
+                        Controlled ApplyXControlledOnTruthTable([control], (func, controls, target));
+                    }
 
-                        let result = IsResultOne(MResetZ(target));
-                        if (controlInit) {
-                            EqualityFactB(
-                                result != targetInit,
-                                truthValues[i],
-                                $"Measured value does not correspond to truth table bit in truth table {func} and bit {i}");
-                        } else {
-                            EqualityFactB(result, targetInit, $"Target should not have been changed from its initial value {targetInit}");
-                        }
+                    let result = IsResultOne(MResetZ(target));
+                    if (controlInit) {
+                        EqualityFactB(
+                            result != targetInit,
+                            truthValues[i],
+                            $"Measured value does not correspond to truth table bit in truth table {func} and bit {i}");
+                    } else {
+                        EqualityFactB(result, targetInit, $"Target should not have been changed from its initial value {targetInit}");
                     }
                 }
             }
@@ -158,25 +157,26 @@ namespace Microsoft.Quantum.Tests {
 
     @Test("QuantumSimulator")
     operation CheckApplyXControlledOnTruthTableWithCleanTarget () : Unit {
-        for (numQubits in 2..5) {
-            for (round in 1..5) {
+        for numQubits in 2..5 {
+            for round in 1..5 {
                 // TODO: replace with BigUniform.
                 let func = IntAsBigInt(DrawRandomInt(0, 2^(2^numQubits) - 1));
                 let truthValues = SizeAdjustedTruthTable(BigIntAsBoolArray(func), numQubits);
 
-                using ((controls, target, copy) = (Qubit[numQubits], Qubit(), Qubit())) {
-                    for (i in 0..(2^numQubits - 1)) {
-                        within {
-                            ApplyXorInPlace(i, LittleEndian(controls));
-                            ApplyXControlledOnTruthTableWithCleanTarget(func, controls, target);
-                        } apply {
-                            CNOT(target, copy);
-                        }
-                        EqualityFactB(
-                            IsResultOne(MResetZ(copy)),
-                            truthValues[i],
-                            $"Measured value does not correspond to truth table bit in truth table {func} and bit {i}");
+                use controls = Qubit[numQubits];
+                use target = Qubit();
+                use copy = Qubit();
+                for i in 0..(2^numQubits - 1) {
+                    within {
+                        ApplyXorInPlace(i, LittleEndian(controls));
+                        ApplyXControlledOnTruthTableWithCleanTarget(func, controls, target);
+                    } apply {
+                        CNOT(target, copy);
                     }
+                    EqualityFactB(
+                        IsResultOne(MResetZ(copy)),
+                        truthValues[i],
+                        $"Measured value does not correspond to truth table bit in truth table {func} and bit {i}");
                 }
             }
         }

@@ -40,19 +40,18 @@ namespace Microsoft.Quantum.Arithmetic {
             fail "Size of integer registers must be equal.";
         }
 
-        using (auxiliary = Qubit()) {
-            within {
-                let nQubitsX = Length(x!);
+        use auxiliary = Qubit();
+        within {
+            let nQubitsX = Length(x!);
 
-                // Take 2's complement
-                ApplyToEachCA(X, x! + [auxiliary]);
+            // Take 2's complement
+            ApplyToEachCA(X, x! + [auxiliary]);
 
-                ApplyMajorityInPlace(x![0], [y![0], auxiliary]);
-                ApplyToEachCA(MAJ, Zipped3(Most(x!), Rest(y!), Rest(x!)));
-            } apply {
-                X(output);
-                CNOT(Tail(x!), output);
-            }
+            ApplyMajorityInPlace(x![0], [y![0], auxiliary]);
+            ApplyToEachCA(MAJ, Zipped3(Most(x!), Rest(y!), Rest(x!)));
+        } apply {
+            X(output);
+            CNOT(Tail(x!), output);
         }
     }
 

@@ -59,7 +59,7 @@ namespace Microsoft.Quantum.AmplitudeAmplification {
         let beta = Cosh((1.0 / nQueriesDouble) * ArcCosh(Sqrt(successMin)));
         let alpha = Sqrt(1.0 - beta * beta);
 
-        for (idxPhases in 1 .. nQueries - 1) {
+        for idxPhases in 1 .. nQueries - 1 {
             set phasesRot w/= idxPhases <-
                 phasesRot[idxPhases - 1] +
                 2.0 * ArcTan(

@@ -115,7 +115,7 @@ namespace Microsoft.Quantum.Synthesis {
         }
 
         mutable remainder = new Int[n];
-        for ((i, p) in Enumerated(perm)) {
+        for (i, p) in Enumerated(perm) {
             set remainder w/= left[i] <- right[p];
         }
 
@@ -269,7 +269,8 @@ namespace Microsoft.Quantum.Synthesis {
     /// # See Also
     /// - Microsoft.Quantum.Synthesis.ApplyPermutationUsingDecomposition
     /// - Microsoft.Quantum.Synthesis.ApplyPermutationUsingTransformation
-    operation ApplyPermutationUsingDecompositionWithVariableOrder(perm : Int[], variableOrder : Int[], qubits : LittleEndian) : Unit is Adj + Ctl {
+    operation ApplyPermutationUsingDecompositionWithVariableOrder(perm : Int[], variableOrder : Int[], qubits : LittleEndian)
+    : Unit is Adj + Ctl {
         Fact(IsPermutation(perm), "perm must be a permutation");
         EqualityFactI(Length(perm), 2^Length(qubits!), $"Length of perm must be {2^Length(qubits!)}");
 
@@ -278,7 +279,7 @@ namespace Microsoft.Quantum.Synthesis {
 
         let register = qubits!;
 
-        for ((func, target) in TruthTablesFromPermutation(perm, variableOrder)) {
+        for (func, target) in TruthTablesFromPermutation(perm, variableOrder) {
             ApplyXControlledOnTruthTable(func, Excluding([target], register), register[target]);
         }
     }

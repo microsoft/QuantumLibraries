@@ -17,7 +17,7 @@ namespace Microsoft.Quantum.Canon {
     /// This function needs to check at most one range index
     /// to determine whether the range is empty.
     function IsRangeEmpty(rng : Range) : Bool {
-        for (idx in rng) {
+        for idx in rng {
             return false;
         }
         return true;

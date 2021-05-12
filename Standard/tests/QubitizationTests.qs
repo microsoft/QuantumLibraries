@@ -27,24 +27,21 @@ namespace Microsoft.Quantum.Tests {
     // This checks that BlockEncodingByLCU encodes the correct Hamiltonian.
     @Test("QuantumSimulator")
     operation TestBlockEncodingByLCU() : Unit {
-        body (...) {
-            let (eigenvalues, prob, inverseAngle, statePreparation, selector) = LCUTestHelper();
-            let LCU = BlockEncodingByLCU(statePreparation, selector);
-            using (qubits = Qubit[2]) {
-                let auxiliary = [qubits[0]];
-                let system = [qubits[1]];
+        let (eigenvalues, prob, inverseAngle, statePreparation, selector) = LCUTestHelper();
+        let LCU = BlockEncodingByLCU(statePreparation, selector);
+        use qubits = Qubit[2];
+        let auxiliary = [qubits[0]];
+        let system = [qubits[1]];
 
-                for (rep in 0..5) {
-                    LCU(auxiliary, system);
-                    AssertMeasurementProbability([PauliZ], auxiliary, Zero, prob, "Error0: Z Success probability does not match theory", 1e-10);
-                    let result = M(auxiliary[0]);
-                    if(result == Zero) {
-                        Exp([PauliY],1.0 * inverseAngle, system);
-                        AssertMeasurementProbability([PauliZ], system, Zero, 1.0, "Error1: Z Success probability does not match theory", 1e-10);
-                    }
-                    ResetAll(qubits);
-                }
+        for rep in 0..5 {
+            LCU(auxiliary, system);
+            AssertMeasurementProbability([PauliZ], auxiliary, Zero, prob, "Error0: Z Success probability does not match theory", 1e-10);
+            let result = M(auxiliary[0]);
+            if(result == Zero) {
+                Exp([PauliY],1.0 * inverseAngle, system);
+                AssertMeasurementProbability([PauliZ], system, Zero, 1.0, "Error1: Z Success probability does not match theory", 1e-10);
             }
+            ResetAll(qubits);
         }
     }
 
@@ -54,23 +51,21 @@ namespace Microsoft.Quantum.Tests {
         body (...) {
             let (eigenvalues, prob, inverseAngle, statePreparation, selector) = LCUTestHelper();
             let LCU = BlockEncodingReflectionByLCU(statePreparation, selector);
-            using(qubits = Qubit[4]){
-                let auxiliary = qubits[2..3];
-                let system = [qubits[0]];
-                let flag = qubits[1];
+            use flag = Qubit();
+            use system = Qubit[1];
+            use auxiliary = Qubit[2];
 
-                for (rep in 0..5) {
-                    LCU!!(auxiliary, system);
-                    X(flag);
-                    (ControlledOnInt(0, X))(auxiliary, flag);
-                    AssertMeasurementProbability([PauliZ],[flag], Zero, prob, "Error0: Z Success probability does not match theory", 1e-10);
-                    let result = M(flag);
-                    if(result == Zero) {
-                        Exp([PauliY],1.0 * inverseAngle, system);
-                        AssertMeasurementProbability([PauliZ], system, Zero, 1.0, "Error1: Z Success probability does not match theory", 1e-10);
-                    }
-                    ResetAll(qubits);
+            for rep in 0..5 {
+                LCU!!(auxiliary, system);
+                X(flag);
+                (ControlledOnInt(0, X))(auxiliary, flag);
+                AssertMeasurementProbability([PauliZ],[flag], Zero, prob, "Error0: Z Success probability does not match theory", 1e-10);
+                let result = M(flag);
+                if result == Zero {
+                    Exp([PauliY], 1.0 * inverseAngle, system);
+                    AssertMeasurementProbability([PauliZ], system, Zero, 1.0, "Error1: Z Success probability does not match theory", 1e-10);
                 }
+                ResetAll([flag] + system + auxiliary);
             }
         }
     }
@@ -81,22 +76,23 @@ namespace Microsoft.Quantum.Tests {
         body (...) {
             let (eigenvalues, prob, inverseAngle, statePreparation, selector) = LCUTestHelper();
             let LCU = QuantumWalkByQubitization(BlockEncodingReflectionByLCU(statePreparation, selector));
-            using ((system, flag, auxiliary) = (Qubit[1], Qubit(), Qubit[2])) {
+            use flag = Qubit();
+            use system = Qubit[1];
+            use auxiliary = Qubit[2];
 
-                for(rep in 0..5){
-                    LCU(auxiliary, system);
-                    X(flag);
-                    (ControlledOnInt(0, X))(auxiliary, flag);
-                    AssertMeasurementProbability([PauliZ],[flag], Zero, prob, "Error0: Z Success probability does not match theory", 1e-10);
-                    let result = M(flag);
-                    if(result == Zero) {
-                        Exp([PauliY],1.0 * inverseAngle, system);
-                        AssertMeasurementProbability([PauliZ], system, Zero, 1.0, "Error1: Z Success probability does not match theory", 1e-10);
-                    }
-                    ResetAll(system);
-                    Reset(flag);
-                    ResetAll(auxiliary);
+            for rep in 0..5 {
+                LCU(auxiliary, system);
+                X(flag);
+                (ControlledOnInt(0, X))(auxiliary, flag);
+                AssertMeasurementProbability([PauliZ],[flag], Zero, prob, "Error0: Z Success probability does not match theory", 1e-10);
+                let result = M(flag);
+                if(result == Zero) {
+                    Exp([PauliY],1.0 * inverseAngle, system);
+                    AssertMeasurementProbability([PauliZ], system, Zero, 1.0, "Error1: Z Success probability does not match theory", 1e-10);
                 }
+                ResetAll(system);
+                Reset(flag);
+                ResetAll(auxiliary);
             }
         }
     }
@@ -120,20 +116,19 @@ namespace Microsoft.Quantum.Tests {
             let generatorSystem = GeneratorSystem(2, LookupFunction(genIndices));
 
             let (norm, LCU) = PauliBlockEncoding(generatorSystem);
-            using (qubits = Qubit[2]) {
-                let auxiliary = [qubits[0]];
-                let system = [qubits[1]];
+            use qubits = Qubit[2];
+            let auxiliary = [qubits[0]];
+            let system = [qubits[1]];
 
-                for (rep in 0..5) {
-                    LCU!!(auxiliary, system);
-                    AssertMeasurementProbability([PauliZ], auxiliary, Zero, prob, "Error0: Z Success probability does not match theory", 1e-10);
-                    let result = M(auxiliary[0]);
-                    if(result == Zero) {
-                        Exp([PauliY],1.0 * inverseAngle, system);
-                        AssertMeasurementProbability([PauliZ], system, Zero, 1.0, "Error1: Z Success probability does not match theory", 1e-10);
-                    }
-                    ResetAll(qubits);
+            for rep in 0..5 {
+                LCU!!(auxiliary, system);
+                AssertMeasurementProbability([PauliZ], auxiliary, Zero, prob, "Error0: Z Success probability does not match theory", 1e-10);
+                let result = M(auxiliary[0]);
+                if(result == Zero) {
+                    Exp([PauliY],1.0 * inverseAngle, system);
+                    AssertMeasurementProbability([PauliZ], system, Zero, 1.0, "Error1: Z Success probability does not match theory", 1e-10);
                 }
+                ResetAll(qubits);
             }
         }
     }
@@ -147,7 +142,7 @@ namespace Microsoft.Quantum.Tests {
         set testCases w/= 1 <- ([9, 6, 3, 0, -3], 9..-3..-3);
         set testCases w/= 2 <- (e, 0..2..-1);
         set testCases w/= 3 <- ([0], 0..4..3);
-        for (idxTest in IndexRange(testCases)) {
+        for idxTest in IndexRange(testCases) {
             let (expected, range) = testCases[idxTest];
             let output = RangeAsIntArray(range);
             Ignore(Mapped(EqualityFactI(_, _, "Padded failed."), Zipped(output, expected)));
@@ -156,73 +151,62 @@ namespace Microsoft.Quantum.Tests {
 
    @Test("QuantumSimulator")
    operation TestInPlaceMajority() : Unit {
-        body (...) {
-            // Majority function truth table: x;y;z | output
-            let testCases =         [[false, false, false, false],
-                                     [false, false,  true, false],
-                                     [false,  true, false, false],
-                                     [false,  true,  true,  true],
-                                     [ true, false, false, false],
-                                     [ true, false,  true,  true],
-                                     [ true,  true, false,  true],
-                                     [ true,  true,  true,  true]];
-            using (qubits = Qubit[3]) {
-                for(idxTest in IndexRange(testCases)){
-                    let testCase = testCases[idxTest];
-                    Message($"Test case {idxTest}.");
-                    for(idxQubit in 0..2){
-                        if(testCase[idxQubit]){
-                            X(qubits[idxQubit]);
-                        }
-                    }
-                    ApplyMajorityInPlace(qubits[0], qubits[1..2]);
-
-                    if (testCase[3] == false) {
-                        AssertMeasurementProbability([PauliZ], qubits[0..0], Zero, 1.0, "", 1e-10);
-                    }
-                    else {
-                        AssertMeasurementProbability([PauliZ], qubits[0..0], One, 1.0, "", 1e-10);
-                    }
-                    ResetAll(qubits);
+        // Majority function truth table: x;y;z | output
+        let testCases =         [[false, false, false, false],
+                                    [false, false,  true, false],
+                                    [false,  true, false, false],
+                                    [false,  true,  true,  true],
+                                    [ true, false, false, false],
+                                    [ true, false,  true,  true],
+                                    [ true,  true, false,  true],
+                                    [ true,  true,  true,  true]];
+        use qubits = Qubit[3];
+        for idxTest in IndexRange(testCases) {
+            let testCase = testCases[idxTest];
+            Message($"Test case {idxTest}.");
+            for idxQubit in 0..2 {
+                if(testCase[idxQubit]){
+                    X(qubits[idxQubit]);
                 }
             }
+            ApplyMajorityInPlace(qubits[0], qubits[1..2]);
+
+            if (testCase[3] == false) {
+                AssertMeasurementProbability([PauliZ], qubits[0..0], Zero, 1.0, "", 1e-10);
+            }
+            else {
+                AssertMeasurementProbability([PauliZ], qubits[0..0], One, 1.0, "", 1e-10);
+            }
+            ResetAll(qubits);
         }
    }
 
-   @Test("QuantumSimulator")
-   operation TestApplyRippleCarryComparator() : Unit{
-        body (...) {
-            let nQubits = 4;
-            let intMax = 2^nQubits-1;
-            for(x in 0..intMax){
-                for(y in 0..intMax){
-                    mutable result = Zero;
-                    if(x > y){
-                        set result = One;
-                    }
-                
-                    Message($"Test case. {x} > {y} = {result}");
-                    using(qubits = Qubit[nQubits*2 + 1]){
-                        let xRegister = LittleEndian(qubits[0..nQubits-1]);
-                        let yRegister = LittleEndian(qubits[nQubits..2*nQubits-1]);
-                        let output = qubits[2*nQubits];
+    @Test("QuantumSimulator")
+    operation TestApplyRippleCarryComparator() : Unit {
+        let nQubits = 4;
+        let intMax = 2 ^ nQubits - 1;
+        for x in 0..intMax {
+            for y in 0..intMax {
+                let result = x > y ? One | Zero;
 
-                        ApplyXorInPlace(x, xRegister);
-                        ApplyXorInPlace(y, yRegister);
-                        CompareUsingRippleCarry(xRegister, yRegister, output);
+                Message($"Test case. {x} > {y} = {result}");
+                use qubits = Qubit[nQubits * 2 + 1];
+                let xRegister = LittleEndian(qubits[0..nQubits-1]);
+                let yRegister = LittleEndian(qubits[nQubits..2*nQubits-1]);
+                let output = qubits[2*nQubits];
 
-                        AssertMeasurementProbability([PauliZ], [output], result, 1.0, "", 1e-10);
-                        if(result == One){
-                            X(output);
-                        }
+                ApplyXorInPlace(x, xRegister);
+                ApplyXorInPlace(y, yRegister);
+                CompareUsingRippleCarry(xRegister, yRegister, output);
 
-                        (Adjoint ApplyXorInPlace)(y, yRegister);
-                        (Adjoint ApplyXorInPlace)(x, xRegister);
-
-                    
-                    }
+                AssertMeasurementProbability([PauliZ], [output], result, 1.0, "", 1e-10);
+                if result == One {
+                    X(output);
                 }
+
+                (Adjoint ApplyXorInPlace)(y, yRegister);
+                (Adjoint ApplyXorInPlace)(x, xRegister);
             }
         }
-   }
+    }
 }

@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft Corporation. All rights reserved.
+// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
 namespace Microsoft.Quantum.Arrays {
@@ -38,7 +38,7 @@ namespace Microsoft.Quantum.Arrays {
         let nSliced = Length(indices);
         mutable sliced = new 'T[nSliced];
 
-        for (idx in 0 .. nSliced - 1) {
+        for idx in 0 .. nSliced - 1 {
             set sliced w/= idx <- array[indices[idx]];
         }
 
@@ -46,5 +46,3 @@ namespace Microsoft.Quantum.Arrays {
     }
 
 }
-
-
