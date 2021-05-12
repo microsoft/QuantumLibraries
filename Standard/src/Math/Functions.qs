@@ -680,12 +680,11 @@ namespace Microsoft.Quantum.Math {
         mutable x = 1;
 
         if n < 0 {
-            set an = AbsI(n);
-            set x = -1;
+            fail "The factorial is not defined for negative inputs.";
         } elif n == 0 {
             return x;
         } elif n >= 21 {
-            fail "Largest factorial an Int can hold is 20!. Use FactorialL or FactorialD.";
+            fail "Largest factorial an Int can hold is 20!. Use FactorialL or ApproximateFactorial.";
         } else {
             set an = n;
         }
@@ -719,18 +718,20 @@ namespace Microsoft.Quantum.Math {
     /// # See Also
     /// - Microsoft.Quantum.Math.FactorialI
     /// - Microsoft.Quantum.Math.FactorialL
-    function FactorialD(n : Int) : Double {
-        let absN = AbsD(IntAsDouble(n));
+    function ApproximateFactorial(n : Int) : Double {
+        if n < 0 {
+            fail "The factorial is not defined for negative inputs.";
+        }
+        let absN = IntAsDouble(n);
 
         if absN >= 170.0 {
-            fail "FactorialD is only fininte for |n| < 170.0. Please use FactorialL.";
+            fail "ApproximateFactorial is only fininte for |n| < 170.0. Please use FactorialL.";
         }
 
-        let sign = n < 0 ? -1.0 | 0.0;
         let a = Sqrt(2.0 * PI() * absN);
         let b = (absN / E()) ^ absN;
         let c = E() ^ (1.0 / (12.0 * absN) - (1.0 / (360.0 * (absN ^ 3.0))));
-        return a * b * c * sign;
+        return a * b * c;
     }
 
     /// # Summary
@@ -749,13 +750,16 @@ namespace Microsoft.Quantum.Math {
     /// $7!! = 7 \times 5 \times 3 \times 1$.
     ///
     /// # See Also
-    /// - Microsoft.Quantum.Math.FactorialD
+    /// - Microsoft.Quantum.Math.ApproximateFactorial
     /// - Microsoft.Quantum.Math.FactorialI
     /// - Microsoft.Quantum.Math.FactorialL
     function DoubleFactorialL(n : Int) : BigInt {
-        mutable acc = n < 0 ? -1L | 1L;
+        if n < 0 {
+            fail "The double factorial is not defined for negative inputs.";
+        }
+        mutable acc = 1L;
 
-        for i in 1..2..AbsI(n) {
+        for i in (n % 2 == 0 ? 2 | 1)..2..AbsI(n) {
             set acc *= IntAsBigInt(i);
         }
 
@@ -785,10 +789,13 @@ namespace Microsoft.Quantum.Math {
     ///
     ///
     /// # See Also
-    /// - Microsoft.Quantum.Math.FactorialD
+    /// - Microsoft.Quantum.Math.ApproximateFactorial
     /// - Microsoft.Quantum.Math.FactorialI
     function FactorialL(n : Int) : BigInt {
-        let sign = n < 0 ? -1L | 1L;
+        if n < 0 {
+            fail "The factorial is not defined for negative inputs.";
+        }
+
         let absN = AbsI(n);
 
         if absN == 0 or absN == 1 {
@@ -805,7 +812,7 @@ namespace Microsoft.Quantum.Math {
         // Our approach will be to use that for 𝑛 = 2𝑘 + 1,
         // 𝑛! = 𝑛!! * 𝑘! * 2^𝑘.
         let k = absN / 2;
-        return sign * DoubleFactorialL(absN) * FactorialL(k) * (1L <<< k);
+        return DoubleFactorialL(absN) * FactorialL(k) * (1L <<< k);
     }
 
 
@@ -870,7 +877,7 @@ namespace Microsoft.Quantum.Math {
     /// The natural logarithm of the factorial of the provided input.
     ///
     /// # See Also
-    /// - Microsoft.Quantum.Math.FactorialD
+    /// - Microsoft.Quantum.Math.ApproximateFactorial
     /// - Microsoft.Quantum.Math.FactorialI
     /// - Microsoft.Quantum.Math.FactorialL
     function LogFactorialD(n : Int) : Double {
@@ -895,7 +902,7 @@ namespace Microsoft.Quantum.Math {
     function Binom(n : Int, k : Int) : Int {
         // Here, we use the approximation described in Numerical Recipes in C.
         if n < 171 {
-            return Floor(0.5 + FactorialD(n) / (FactorialD(k) * FactorialD(n - k)));
+            return Floor(0.5 + ApproximateFactorial(n) / (ApproximateFactorial(k) * ApproximateFactorial(n - k)));
         } else {
             return Floor(0.5 + ExpD(LogFactorialD(n) - LogFactorialD(k) - LogFactorialD(n - k)));
         }
