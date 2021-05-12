@@ -908,4 +908,22 @@ namespace Microsoft.Quantum.Math {
         }
     }
 
+    /// # Summary
+    /// Returns a binomial coefficient of the form "½-choose-k."
+    ///
+    /// # Description
+    /// Given an integer $k$, returns the binomial coefficient
+    /// $(\frac{1}{2} k)$, also known as $\frac{1}{2}$-choose-$k$.
+    ///
+    /// # Input
+    /// ## k
+    /// The integer to compute the half-integer binomial coefficient of.
+    ///
+    /// # Output
+    /// The binomial coefficient $(\frac{1}{2} k)$.
+    function HalfIntegerBinom(k : Int) : Double {
+        let numerator = IntAsDouble(Binom(2 * k, k)) * IntAsDouble(k % 2 == 0 ? -1 | +1);
+        return numerator / (2.0 ^ IntAsDouble(2 * k) * IntAsDouble(2 * k - 1));
+    }
+
 }
