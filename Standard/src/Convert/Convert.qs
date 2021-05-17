@@ -232,4 +232,21 @@ namespace Microsoft.Quantum.Convert {
         }
     }
 
+    /// # Summary
+    /// Converts a given integer number to an equivalent string representation.
+    ///
+    /// # Description
+    /// Returns a string given a BigInt.
+    ///
+    /// # Input
+    /// ## $n$
+    /// BigInt
+    ///
+    /// # Output
+    /// String
+    function BigIntAsString(a : BigInt) : String
+    {
+         return $"{a}";
+    }
+
 }
