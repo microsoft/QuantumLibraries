@@ -13,11 +13,12 @@ namespace Microsoft.Quantum.Canon {
         NearEqualityFactD(LogFactorialD(4321), 31856.241848248713008413364405861276737565269737465573546318165371);
     }
 
-    @Test("QuantumSimulator")
-    function DoubleFactorialLIsCorrect() : Unit {
-        EqualityFactL(DoubleFactorialL(120), 9593444981835986954891939947669322185182489942608389896364094195294295395488811817369600000000000000L, "120!! was incorrect.");
-        EqualityFactL(DoubleFactorialL(71), 2395415678676082004163677716234578672981800778515625L, "71!! was incorrect.");
-    }
+    // TODO: enable these tests when DoubleFactorialL goes public.
+    // @Test("QuantumSimulator")
+    // function DoubleFactorialLIsCorrect() : Unit {
+    //     EqualityFactL(DoubleFactorialL(120), 9593444981835986954891939947669322185182489942608389896364094195294295395488811817369600000000000000L, "120!! was incorrect.");
+    //     EqualityFactL(DoubleFactorialL(71), 2395415678676082004163677716234578672981800778515625L, "71!! was incorrect.");
+    // }
 
     @Test("QuantumSimulator")
     function LogGammaDIsCorrect() : Unit {
