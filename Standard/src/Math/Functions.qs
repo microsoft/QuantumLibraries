@@ -679,12 +679,11 @@ namespace Microsoft.Quantum.Math {
         mutable an = 1;
         mutable x = 1;
 
-        if n < 0 {
-            fail "The factorial is not defined for negative inputs.";
-        } elif n == 0 {
+        Fact(n >= 0, "The factorial is not defined for negative inputs.");
+        Fact(n < 21, "The largest factorial that be stored as an Int is 20!. Use FactorialL or ApproximateFactorial.");
+
+        if n == 0 {
             return x;
-        } elif n >= 21 {
-            fail "Largest factorial an Int can hold is 20!. Use FactorialL or ApproximateFactorial.";
         } else {
             set an = n;
         }
@@ -719,14 +718,10 @@ namespace Microsoft.Quantum.Math {
     /// - Microsoft.Quantum.Math.FactorialI
     /// - Microsoft.Quantum.Math.FactorialL
     function ApproximateFactorial(n : Int) : Double {
-        if n < 0 {
-            fail "The factorial is not defined for negative inputs.";
-        }
-        let absN = IntAsDouble(n);
+        Fact(n >= 0, "The factorial is not defined for negative inputs.");
+        Fact(n < 170, "The largest approximate factorial that be stored as an Double is 169!. Use FactorialL.");
 
-        if absN >= 170.0 {
-            fail "ApproximateFactorial is only fininte for |n| < 170.0. Please use FactorialL.";
-        }
+        let absN = IntAsDouble(n);
 
         let a = Sqrt(2.0 * PI() * absN);
         let b = (absN / E()) ^ absN;
@@ -753,7 +748,7 @@ namespace Microsoft.Quantum.Math {
     /// - Microsoft.Quantum.Math.ApproximateFactorial
     /// - Microsoft.Quantum.Math.FactorialI
     /// - Microsoft.Quantum.Math.FactorialL
-    function DoubleFactorialL(n : Int) : BigInt {
+    internal function DoubleFactorialL(n : Int) : BigInt {
         Fact(n >= 0, "The double factorial is not defined for negative inputs.");
         mutable acc = 1L;
 
@@ -848,7 +843,7 @@ namespace Microsoft.Quantum.Math {
             .844182239838527433e-4, -.261908384015814087e-4, .368991826595316234e-5
         ];
 
-        if x <= 0.0 { fail "Γ(x) not defined for x <= 0."; }
+        Fact(x > 0.0, "Γ(x) not defined for x <= 0.");
 
         mutable y = x;
         let tmp = x + 5.2421875000000000;
