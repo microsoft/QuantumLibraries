@@ -661,7 +661,7 @@ namespace Microsoft.Quantum.Math {
     /// Returns the factorial of a given number.
     ///
     /// # Description
-    /// Returns the factorial of a given integer $n$, where $|n| <= 20$.
+    /// Returns the factorial of a given nonnegative integer $n$, where $n \le 20$.
     ///
     /// # Input
     /// ## n
@@ -693,7 +693,7 @@ namespace Microsoft.Quantum.Math {
             set x *= i;
         }
 
-       return x;
+        return x;
     }
 
 
@@ -701,7 +701,7 @@ namespace Microsoft.Quantum.Math {
     /// Returns an approximate factorial of a given number.
     ///
     /// # Description
-    /// Returns the factorial as 'Double', given an input of $n$ as a 'Double'.
+    /// Returns the factorial as `Double`, given an input of $n$ as a `Double`.
     /// The domain of inputs for this function is `AbsD(n) < 170.0`.
     ///
     /// # Remarks
@@ -754,9 +754,7 @@ namespace Microsoft.Quantum.Math {
     /// - Microsoft.Quantum.Math.FactorialI
     /// - Microsoft.Quantum.Math.FactorialL
     function DoubleFactorialL(n : Int) : BigInt {
-        if n < 0 {
-            fail "The double factorial is not defined for negative inputs.";
-        }
+        Fact(n >= 0, "The double factorial is not defined for negative inputs.");
         mutable acc = 1L;
 
         for i in (n % 2 == 0 ? 2 | 1)..2..AbsI(n) {
