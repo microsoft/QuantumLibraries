@@ -60,12 +60,12 @@ namespace Microsoft.Quantum.Chemistry.Magic
         /// or from a ProblemDescription.
         /// If the fileName is specified, that will be used and the problemDescription will be ignored.
         /// </summary>
-        public async Task<ExecutionResult> Run(string input, IChannel channel)
+        public Task<ExecutionResult> Run(string input, IChannel channel)
         {
             if (string.IsNullOrWhiteSpace(input))
             {
                 channel.Stderr("Please provide the name of a Broombridge file or a problem description to load the fermion Hamiltonian from.");
-                return ExecuteStatus.Error.ToExecutionResult();
+                return Task.FromResult(ExecuteStatus.Error.ToExecutionResult());
             }
 
             // Identify the ProblemDescription with the hamiltonian from the arguments.
@@ -81,7 +81,7 @@ namespace Microsoft.Quantum.Chemistry.Magic
             // Let us pick one according to the formula `integer = 2 * orbitalIndex + spinIndex`.
             FermionHamiltonian fermionHamiltonian = orbitalIntegralHamiltonian.ToFermionHamiltonian(args.IndexConvention);
 
-            return fermionHamiltonian.ToExecutionResult();
+            return Task.FromResult(fermionHamiltonian.ToExecutionResult());
         }
 
         /// <summary>
@@ -142,12 +142,12 @@ namespace Microsoft.Quantum.Chemistry.Magic
         /// <summary>
         /// Simply calls AddRange on the hamiltonian to add each term from the list of fermionTerms
         /// </summary>
-        public async Task<ExecutionResult> Run(string input, IChannel channel)
+        public Task<ExecutionResult> Run(string input, IChannel channel)
         {
             if (string.IsNullOrWhiteSpace(input))
             {
                 channel.Stderr("Please provide the hamiltonian and fermion terms as input.");
-                return ExecuteStatus.Error.ToExecutionResult();
+                return Task.FromResult(ExecuteStatus.Error.ToExecutionResult());
             }
 
             var args = JsonConvert.DeserializeObject<Arguments>(input);
@@ -158,7 +158,7 @@ namespace Microsoft.Quantum.Chemistry.Magic
             var hamiltonian = args.Hamiltonian;
             hamiltonian.AddRange(args.FermionTerms.Select(t => (new HermitianFermionTerm(t.Item1.ToLadderSequence()), t.Item2.ToDoubleCoeff())));
 
-            return hamiltonian.ToExecutionResult();
+            return Task.FromResult(hamiltonian.ToExecutionResult());
         }
     }
 }

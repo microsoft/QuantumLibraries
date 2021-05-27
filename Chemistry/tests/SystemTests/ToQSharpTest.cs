@@ -30,10 +30,6 @@ namespace Microsoft.Quantum.Chemistry.Tests
         public FermionHamiltonian GenerateTestHamiltonian()
         {
             var hamiltonian = new FermionHamiltonian();
-            
-
-            var nOrbitals = 6;
-            var nElectrons = 2;
 
             hamiltonian.Add(new HermitianFermionTerm( new [] { 0, 0 }.ToLadderSequence()), 1.0);
             hamiltonian.Add(new HermitianFermionTerm( new [] { 1, 1 }.ToLadderSequence()), 1.0);

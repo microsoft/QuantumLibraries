@@ -74,7 +74,7 @@ namespace Microsoft.Quantum.MachineLearning {
         mutable grad = ConstantArray(Length(model::Parameters), 0.0);
         let nQubits = MaxI(NQubitsRequired(model), encodedInput::NQubits);
 
-        for (gate in model::Structure) {
+        for gate in model::Structure {
             let paramShift = (model::Parameters + [0.0])
                 // Shift the corresponding parameter.
                 w/ gate::ParameterIndex <- (model::Parameters[gate::ParameterIndex] + PI());
