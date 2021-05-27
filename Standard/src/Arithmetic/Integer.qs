@@ -55,6 +55,8 @@ namespace Microsoft.Quantum.Arithmetic {
 
     /// # Summary
     /// Reversible, in-place ripple-carry addition of two integers.
+    ///
+    /// # Description
     /// Given two $n$-bit integers encoded in LittleEndian registers `xs` and `ys`,
     /// and a qubit carry, the operation computes the sum of the two integers
     /// where the $n$ least significant bits of the result are held in `ys` and
@@ -80,7 +82,7 @@ namespace Microsoft.Quantum.Arithmetic {
     operation RippleCarryAdderD(xs : LittleEndian, ys : LittleEndian, carry : Qubit)
     : Unit is Adj + Ctl  {
         body (...) {
-            Controlled RippleCarryAdderD(new Qubit[0], (xs, ys, carry));
+            Controlled RippleCarryAdderD([], (xs, ys, carry));
         }
         controlled ( controls, ... ) {
             let nQubits = Length(xs!);
@@ -260,7 +262,7 @@ namespace Microsoft.Quantum.Arithmetic {
     internal operation ApplyInnerTTKAdder(xs : LittleEndian, ys : LittleEndian, carry : Qubit)
     : Unit is Adj + Ctl {
         body (...) {
-            (Controlled ApplyInnerTTKAdder)(new Qubit[0], (xs, ys, carry));
+            (Controlled ApplyInnerTTKAdder)([], (xs, ys, carry));
         }
         controlled ( controls, ... ) {
             let nQubits = Length(xs!);
@@ -381,7 +383,7 @@ namespace Microsoft.Quantum.Arithmetic {
     internal operation ApplyInnerTTKAdderWithoutCarry(xs : LittleEndian, ys : LittleEndian)
     : Unit is Adj + Ctl {
         body (...) {
-            (Controlled ApplyInnerTTKAdderWithoutCarry) (new Qubit[0], (xs, ys));
+            (Controlled ApplyInnerTTKAdderWithoutCarry) ([], (xs, ys));
         }
         controlled ( controls, ... ) {
             let nQubits = Length(xs!);
@@ -472,7 +474,7 @@ namespace Microsoft.Quantum.Arithmetic {
     operation GreaterThan(xs : LittleEndian, ys : LittleEndian, result : Qubit)
     : Unit is Adj + Ctl {
         body (...) {
-            (Controlled GreaterThan) (new Qubit[0], (xs, ys, result));
+            (Controlled GreaterThan) ([], (xs, ys, result));
         }
         controlled (controls, ...) {
             let nQubits = Length(xs!);

@@ -28,7 +28,9 @@ namespace Microsoft.Quantum.AmplitudeAmplification {
     /// # Summary
     /// Constructs a `ReflectionOracle` about the target state uniquely marked by the flag qubit.
     ///
-    /// The target state has a single qubit set to 1, and all others 0: $\ket{1}_f$.
+    /// # Description
+    /// The oracle returned by this function reflects about the $\ket{1}$ state
+    /// of a flag qubit (given by the index `idxFlagQubit`).
     ///
     /// # Input
     /// ## idxFlagQubit

@@ -6,7 +6,9 @@ namespace Microsoft.Quantum.Oracles {
     /// # Summary
     /// Represents a reflection oracle.
     ///
-    /// A reflection oracle, $O$, has inputs:
+    /// # Named Items
+    /// ## ApplyReflection
+    /// A reflection oracle, $O$, implemented by an operation with inputs:
     /// - The phase $\phi$ by which to rotate the reflected subspace.
     /// - The qubit register on which to perform the given reflection.
     ///
@@ -23,6 +25,7 @@ namespace Microsoft.Quantum.Oracles {
     /// # Summary
     /// Represents an oracle for oblivious amplitude amplification.
     ///
+    /// # Description
     /// The inputs to the oracle $O$ are:
     /// - The ancilla register $a$ that $O$ acts on.
     /// - The system register $s$ on which the desired unitary $U$ is applied, post-selected on register $a$ being in state $\ket{t}\_a$.
@@ -39,6 +42,7 @@ namespace Microsoft.Quantum.Oracles {
     /// # Summary
     /// Represents an oracle for state preparation.
     ///
+    /// # Description
     /// The inputs to the oracle $O$ are:
     /// - An integer indexing the flag qubit $f$.
     /// - The system register $s$ that will store the desired quantum state $\ket{\psi}\_s$.
@@ -55,6 +59,7 @@ namespace Microsoft.Quantum.Oracles {
     /// # Summary
     /// Represents an oracle for deterministic state preparation.
     ///
+    /// # Description
     /// The input to the oracle $O$ is:
     /// - The register that will store the desired quantum state $\ket{\psi}\_s$.
     ///
@@ -67,6 +72,7 @@ namespace Microsoft.Quantum.Oracles {
     /// # Summary
     /// Represents a discrete-time oracle.
     ///
+    /// # Description
     /// This is an oracle that implements $U^m$ for a fixed operation $U$
     /// and a non-negative integer $m$.
     newtype DiscreteOracle = ((Int, Qubit[]) => Unit is Adj + Ctl);
@@ -74,6 +80,7 @@ namespace Microsoft.Quantum.Oracles {
     /// # Summary
     /// Represents a continuous-time oracle.
     ///
+    /// # Description
     /// This is an oracle that implements
     /// $U(\delta t) : \ket{\psi(t)} \mapsto \ket{\psi(t + \delta t)}$
     /// for all times $t$, where $U$ is a fixed operation, and where

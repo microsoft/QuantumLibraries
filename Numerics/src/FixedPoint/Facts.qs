@@ -6,8 +6,12 @@ namespace Microsoft.Quantum.Arithmetic {
     open Microsoft.Quantum.Arrays;
 
     /// # Summary
-    /// Helper function to assert that a quantum fixed-point number is
-    /// initialized to zero, i.e., all qubits are in state $\ket{0}$.
+    /// Asserts that a quantum fixed-point number is
+    /// initialized to zero.
+    ///
+    /// # Description
+    /// This assertion succeeds when all qubits are in state $\ket{0}$,
+    /// representing that the register encodes the fixed-point number $0.0$.
     operation AssertAllZeroFxP(fp : FixedPoint) : Unit is Adj + Ctl {
         let (p, xs) = fp!;
         AssertAllZero(xs);
@@ -28,7 +32,7 @@ namespace Microsoft.Quantum.Arithmetic {
         let (position, register) = fixedPoints[0]!;
         Fact(position > 0, "Point position must be greater than zero.");
         let n = Length(register);
-        for (fp in Most(fixedPoints)) {
+        for fp in Most(fixedPoints) {
             let (pos, reg) = fp!;
             EqualityFactI(pos, position,
                 "FixedPoint numbers must have identical binary point position.");
@@ -54,7 +58,7 @@ namespace Microsoft.Quantum.Arithmetic {
         let (position, register) = fixedPoints[0]!;
         Fact(position > 0, "Point position must be greater than zero.");
         let n = Length(register);
-        for (fp in Most(fixedPoints)) {
+        for fp in Most(fixedPoints) {
             let (pos, reg) = fp!;
             EqualityFactI(Length(reg) - pos, n - position,
                 "FixedPoint numbers must have identical point alignment.");

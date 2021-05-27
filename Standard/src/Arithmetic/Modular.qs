@@ -75,13 +75,13 @@ namespace Microsoft.Quantum.Arithmetic {
     operation IncrementPhaseByModularInteger(increment : Int, modulus : Int, target : PhaseLittleEndian)
     : Unit is Adj + Ctl {
         body (...) {
-            Controlled IncrementPhaseByModularInteger(new Qubit[0], (increment, modulus, target));
+            Controlled IncrementPhaseByModularInteger([], (increment, modulus, target));
         }
 
         controlled (controls, ...) {
             Fact(modulus <= 2 ^ (Length(target!) - 1), $"`multiplier` must be big enough to fit integers modulo `modulus`" + $"with highest bit set to 0");
 
-            if (ExtraArithmeticAssertionsEnabled()) {
+            if ExtraArithmeticAssertionsEnabled() {
                 // assert that the highest bit is zero, by switching to computational basis
                 ApplyLEOperationOnPhaseLEA(AssertMostSignificantBit(Zero, _), target);
 

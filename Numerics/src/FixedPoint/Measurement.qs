@@ -19,9 +19,9 @@ namespace Microsoft.Quantum.Arithmetic {
         let sign = MResetZ(xs[n-1]) == One;
         mutable keepAdding = sign;
         mutable fpAsDouble = 0.;
-        for (i in 0..n-2) {
+        for i in 0..n - 2 {
             mutable currentRes = MResetZ(xs[i]) == (sign ? Zero | One);
-            if (keepAdding) {
+            if keepAdding {
                 set keepAdding = currentRes;
                 set currentRes = not currentRes;
             }

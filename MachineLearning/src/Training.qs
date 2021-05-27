@@ -115,22 +115,13 @@ namespace Microsoft.Quantum.MachineLearning {
     /// # Input
     /// ## miniBatch
     /// container of labeled samples in the mini batch
-    ///
-    /// ## param
-    /// circuit parameters
-    ///
-    /// ## gates
-    /// sequence of gates in the circuits
-    ///
-    /// ## lrate
-    /// the learning rate
-    ///
-    /// ## measCount
-    /// number of true quantum measurements to estimate probabilities.
+    /// ## options
+    /// Training options to be used when running the given training step.
+    /// ## model
+    /// The sequential model to be trained.
     ///
     /// # Output
     /// (utility, (new)parameters) pair
-    ///
     operation _RunSingleTrainingStep(
         miniBatch : (LabeledSample, StateGenerator)[],
         options : TrainingOptions,
@@ -173,16 +164,10 @@ namespace Microsoft.Quantum.MachineLearning {
     /// data samples.
     ///
     /// # Input
-    /// ## samples
+    /// ## encodedSamples
     /// The samples to be trained on.
-    /// ## sched
+    /// ## schedule
     /// A sampling schedule defining a subset of samples to be included in training.
-    /// ## schedScore
-    /// A sampling schedule defining a subset of samples to be used in
-    /// accuracy scoring.
-    /// ## periodScore
-    /// The number of gradient steps to be taken between scoring points.
-    /// For best accuracy, set to 1.
     /// ## options
     /// Options to be used in training.
     /// ## model
@@ -283,8 +268,6 @@ namespace Microsoft.Quantum.MachineLearning {
     /// on a given labeled training set, starting from a particular model.
     ///
     /// # Input
-    /// ## structure
-    /// Structure of the sequential classifier to be trained.
     /// ## model
     /// The sequential model to be used as a starting point for training.
     /// ## samples

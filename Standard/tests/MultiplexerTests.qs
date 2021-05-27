@@ -94,7 +94,7 @@ namespace Microsoft.Quantum.Tests {
                     mutable additionalControl = new Qubit[1];
 
                     if (nAdditionalControl == 0) {
-                        set additionalControl = new Qubit[0];
+                        set additionalControl = [];
                     }
                     elif (nAdditionalControl == 1) {
                         set additionalControl = [qubits[Length(qubits) - 1]];

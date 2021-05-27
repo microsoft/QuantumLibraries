@@ -275,6 +275,9 @@ namespace Microsoft.Quantum.Math {
 
 
     /// # Summary
+    /// Returns the GCD of two integers, decomposed into a linear combination.
+    ///
+    /// # Description
     /// Computes a tuple $(u,v)$ such that $u \cdot a + v \cdot b = \operatorname{GCD}(a, b)$,
     /// where $\operatorname{GCD}$ is $a$
     /// greatest common divisor of $a$ and $b$. The GCD is always positive.
@@ -315,6 +318,9 @@ namespace Microsoft.Quantum.Math {
 
 
     /// # Summary
+    /// Returns the GCD of two integers, decomposed into a linear combination.
+    ///
+    /// # Description
     /// Computes a tuple $(u,v)$ such that $u \cdot a + v \cdot b = \operatorname{GCD}(a, b)$,
     /// where $\operatorname{GCD}$ is $a$
     /// greatest common divisor of $a$ and $b$. The GCD is always positive.
@@ -341,7 +347,11 @@ namespace Microsoft.Quantum.Math {
 
 
     /// # Summary
-    /// Computes the greatest common divisor of $a$ and $b$. The GCD is always positive.
+    /// Computes the greatest common divisor of two integers.
+    ///
+    /// # Description
+    /// Computes the greatest common divisor of two integers $a$ and $b$.
+    /// The GCD is always positive.
     ///
     /// # Input
     /// ## a
@@ -357,7 +367,11 @@ namespace Microsoft.Quantum.Math {
     }
 
     /// # Summary
-    /// Computes the greatest common divisor of $a$ and $b$. The GCD is always positive.
+    /// Computes the greatest common divisor of two integers.
+    ///
+    /// # Description
+    /// Computes the greatest common divisor of two integers $a$ and $b$.
+    /// The GCD is always positive.
     ///
     /// # Input
     /// ## a
@@ -375,8 +389,8 @@ namespace Microsoft.Quantum.Math {
 
     /// # Summary
     /// Internal recursive call to calculate the GCD with a bound
-    function _ContinuedFractionConvergentI(signA : Int, signB : Int, r : (Int, Int), s : (Int, Int), t : (Int, Int), denominatorBound : Int) : Fraction
-    {
+    function _ContinuedFractionConvergentI(signA : Int, signB : Int, r : (Int, Int), s : (Int, Int), t : (Int, Int), denominatorBound : Int)
+    : Fraction {
         if Snd(r) == 0 or AbsI(Snd(s)) > denominatorBound {
             return (Snd(r) == 0 and AbsI(Snd(s)) <= denominatorBound)
                    ? Fraction(-Snd(t) * signB, Snd(s) * signA)
@@ -454,6 +468,9 @@ namespace Microsoft.Quantum.Math {
     }
 
     /// # Summary
+    /// Returns if two integers are co-prime.
+    ///
+    /// # Description
     /// Returns true if $a$ and $b$ are co-prime and false otherwise.
     ///
     /// # Input
@@ -471,6 +488,9 @@ namespace Microsoft.Quantum.Math {
     }
 
     /// # Summary
+    /// Returns if two integers are co-prime.
+    ///
+    /// # Description
     /// Returns true if $a$ and $b$ are co-prime and false otherwise.
     ///
     /// # Input
@@ -488,6 +508,9 @@ namespace Microsoft.Quantum.Math {
     }
 
     /// # Summary
+    /// Returns the multiplicative inverse of a modular integer.
+    ///
+    /// # Description
     /// Returns $b$ such that $a \cdot b = 1 (\operatorname{mod} \texttt{modulus})$.
     ///
     /// # Input
@@ -498,8 +521,7 @@ namespace Microsoft.Quantum.Math {
     ///
     /// # Output
     /// Integer $b$ such that $a \cdot b = 1 (\operatorname{mod} \texttt{modulus})$.
-    function InverseModI(a : Int, modulus : Int) : Int
-    {
+    function InverseModI(a : Int, modulus : Int) : Int {
         let (u, v) = ExtendedGreatestCommonDivisorI(a, modulus);
         let gcd = u * a + v * modulus;
         EqualityFactI(gcd, 1, $"`a` and `modulus` must be co-prime");
@@ -535,8 +557,8 @@ namespace Microsoft.Quantum.Math {
     /// # Summary
     /// For a non-negative integer `a`, returns the number of bits required to represent `a`.
     ///
-    /// That is, returns the smallest $n$ such
-    /// that $a < 2^n$.
+    /// # Remarks
+    /// This function returns returns the smallest $n$ such that $a < 2^n$.
     ///
     /// # Input
     /// ## a
@@ -553,8 +575,8 @@ namespace Microsoft.Quantum.Math {
     /// # Summary
     /// For a non-negative integer `a`, returns the number of bits required to represent `a`.
     ///
-    /// That is, returns the smallest $n$ such
-    /// that $a < 2^n$.
+    /// # Remarks
+    /// This function returns returns the smallest $n$ such that $a < 2^n$.
     ///
     /// # Input
     /// ## a
@@ -566,7 +588,7 @@ namespace Microsoft.Quantum.Math {
         Fact(a >= 0L, $"`a` must be non-negative");
         mutable bitsize = 0;
         mutable val = a;
-        while (val != 0L) {
+        while val != 0L {
             set bitsize += 1;
             set val /= 2L;
         }
@@ -577,7 +599,8 @@ namespace Microsoft.Quantum.Math {
     /// # Summary
     /// Returns the `L(p)` norm of a vector of `Double`s.
     ///
-    /// That is, given an array $x$ of type `Double[]`, this returns the $p$-norm
+    /// # Description
+    /// Given an array $x$ of type `Double[]`, this returns the $p$-norm
     /// $\|x\|\_p= (\sum_{j}|x_j|^{p})^{1/p}$.
     ///
     /// # Input

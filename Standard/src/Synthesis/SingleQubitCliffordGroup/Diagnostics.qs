@@ -11,8 +11,8 @@ namespace Microsoft.Quantum.Synthesis {
     /// The value to be checked.
     /// ## message
     /// Failure message string to be used when `actual` is not equal to the identity.
-    function IdentityFact1C(op : SingleQubitClifford, message : String) : Unit {
-        EqualityFact1C(op, Identity1C(), message);
+    function IdentityFact1C(actual : SingleQubitClifford, message : String) : Unit {
+        EqualityFact1C(actual, Identity1C(), message);
     }
 
     /// # Summary

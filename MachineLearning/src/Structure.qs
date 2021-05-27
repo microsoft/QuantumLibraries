@@ -12,8 +12,8 @@ namespace Microsoft.Quantum.MachineLearning {
     /// classifier.
     ///
     /// # Input
-    /// ## structure
-    /// The structure of a given sequential classifier.
+    /// ## model
+    /// The model for a given sequential classifier.
     ///
     /// # Output
     /// The minimum size of a register on which the sequential classifier
@@ -21,7 +21,7 @@ namespace Microsoft.Quantum.MachineLearning {
     function NQubitsRequired(model : SequentialModel)
     : Int {
         mutable nQubitsRequired = 0;
-        for (gate in model::Structure) {
+        for gate in model::Structure {
             set nQubitsRequired = 1 + Fold(
                 MaxI, 0,
                 gate::ControlIndices + [
@@ -38,10 +38,9 @@ namespace Microsoft.Quantum.MachineLearning {
     /// applies the classifier to a register of qubits.
     ///
     /// # Input
-    /// ## structure
-    /// Structure of the given sequential classifier.
-    /// ## parameters
-    /// A parameterization at which the given structure is applied.
+    /// ## model
+    /// The sequential model describing the parameters and structure of the
+    /// classifier to be applied.
     /// ## qubits
     /// A target register to which the classifier should be applied.
     operation ApplySequentialClassifier(
@@ -49,10 +48,10 @@ namespace Microsoft.Quantum.MachineLearning {
         qubits : Qubit[]
     )
     : (Unit) is Adj + Ctl {
-        for (gate in model::Structure) {
-            if (gate::ParameterIndex < Length(model::Parameters)) {
+        for gate in model::Structure {
+            if gate::ParameterIndex < Length(model::Parameters) {
                 let input = (gate::Axis, model::Parameters[gate::ParameterIndex], qubits[gate::TargetIndex]);
-                if (IsEmpty(gate::ControlIndices)) {
+                if IsEmpty(gate::ControlIndices) {
                     // Uncontrolled rotation of target
                     R(input);
                 } else {
@@ -158,7 +157,7 @@ namespace Microsoft.Quantum.MachineLearning {
     /// ```
     function CyclicEntanglingLayer(nQubits : Int, axis : Pauli, stride : Int) : ControlledRotation[] {
         mutable rotations = new ControlledRotation[0];
-        for (idxTarget in 0..nQubits - 1) {
+        for idxTarget in 0..nQubits - 1 {
             set rotations += [ControlledRotation(
                 (
                     idxTarget,
@@ -201,8 +200,8 @@ namespace Microsoft.Quantum.MachineLearning {
     function CombinedStructure(layers : ControlledRotation[][]) : ControlledRotation[] {
         mutable combined = Head(layers);
         mutable offset = Length(combined);
-        for (layer in Rest(layers)) {
-            for (gate in layer) {
+        for layer in Rest(layers) {
+            for gate in layer {
                 set combined += [gate w/ ParameterIndex <- gate::ParameterIndex + offset];
             }
             set offset += Length(layer);

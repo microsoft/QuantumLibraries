@@ -239,13 +239,19 @@ namespace Microsoft.Quantum.Convert {
     /// Returns a string given a BigInt.
     ///
     /// # Input
-    /// ## $n$
-    /// BigInt
+    /// ## a
+    /// The big integer to be represented as a string.
     ///
     /// # Output
-    /// String
-    function BigIntAsString(a : BigInt) : String
-    {
+    /// The value of `a` formatted as a string.
+    ///
+    /// # Example
+    /// ```qsharp
+    /// let nAsString = BigIntAsString(12345678901234567890L);
+    /// // Displays 12345678901234567890.
+    /// Message(nAsString);
+    /// ```
+    function BigIntAsString(a : BigInt) : String {
          return $"{a}";
     }
 
