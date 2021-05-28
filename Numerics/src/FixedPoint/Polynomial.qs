@@ -47,16 +47,16 @@ namespace Microsoft.Quantum.Arithmetic {
                 }
                 let finalIterate = FixedPoint(p, qubits[0..n-1]);
                 // final multiplication into the result register
-                (Controlled MultiplyFxP)(controls, (finalIterate, fpx, result));
+                Controlled MultiplyFxP(controls, (finalIterate, fpx, result));
                 // add a_0 to complete polynomial evaluation and
-                (Controlled AddConstantFxP)(controls,
+                Controlled AddConstantFxP(controls,
                     (coefficients[0], result));
                 // uncompute intermediate results
                 for d in 2..degree {
                     let currentIterate = FixedPoint(p, qubits[(d-1)*n..d*n-1]);
                     let nextIterate = FixedPoint(p, qubits[(d-2)*n..(d-1)*n-1]);
-                    (Adjoint AddConstantFxP)(coefficients[d-1], nextIterate);
-                    (Adjoint MultiplyFxP)(currentIterate, fpx,
+                    Adjoint AddConstantFxP(coefficients[d-1], nextIterate);
+                    Adjoint MultiplyFxP(currentIterate, fpx,
                                             nextIterate);
                 }
                 PrepareFxP(coefficients[degree], firstIterate);
@@ -98,7 +98,7 @@ namespace Microsoft.Quantum.Arithmetic {
                 use xsSquared = Qubit[n];
                 let fpxSquared = FixedPoint(p, xsSquared);
                 ApplyWithCA(SquareFxP(fpx, _),
-                    (Controlled EvaluatePolynomialFxP)(controls,
+                    Controlled EvaluatePolynomialFxP(controls,
                         (coefficients, _, result)),
                     fpxSquared);
             }
@@ -133,7 +133,7 @@ namespace Microsoft.Quantum.Arithmetic {
                 use tmpResult = Qubit[n];
                 let tmpResultFp = FixedPoint(p, tmpResult);
                 ApplyWithCA(EvaluateEvenPolynomialFxP(coefficients, _, _),
-                        (Controlled MultiplyFxP)(controls,
+                        Controlled MultiplyFxP(controls,
                                                 (_, _, result)),
                         (fpx, tmpResultFp));
             }

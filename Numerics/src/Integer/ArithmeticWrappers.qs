@@ -60,7 +60,7 @@ namespace Microsoft.Quantum.Arithmetic {
         CNOT(Tail(xs!!), tmp);
         CNOT(Tail(ys!!), tmp);
         X(tmp);
-        (Controlled CompareGTI)([tmp], (xs!, ys!, result));
+        Controlled CompareGTI([tmp], (xs!, ys!, result));
         X(tmp);
         CCNOT(tmp, Tail(ys!!), result);
         CNOT(Tail(xs!!), tmp);
