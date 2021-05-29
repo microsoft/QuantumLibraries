@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft Corporation. All rights reserved.
+// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
 namespace Microsoft.Quantum.Arithmetic {
@@ -15,14 +15,13 @@ namespace Microsoft.Quantum.Arithmetic {
     /// ## ys
     /// Addend with at least $n$ qubits. Will hold the result.
     operation AddI (xs: LittleEndian, ys: LittleEndian) : Unit is Adj + Ctl {
-        if (Length(xs!) == Length(ys!)) {
+        if Length(xs!) == Length(ys!) {
             RippleCarryAdderNoCarryTTK(xs, ys);
         }
-        elif (Length(ys!) > Length(xs!)) {
-            using (qs = Qubit[Length(ys!) - Length(xs!) - 1]){
-                RippleCarryAdderTTK(LittleEndian(xs! + qs),
-                                    LittleEndian(Most(ys!)), Tail(ys!));
-            }
+        elif Length(ys!) > Length(xs!) {
+            use qs = Qubit[Length(ys!) - Length(xs!) - 1];
+            RippleCarryAdderTTK(LittleEndian(xs! + qs),
+                                LittleEndian(Most(ys!)), Tail(ys!));
         }
         else {
             fail "xs must not contain more qubits than ys!";
@@ -57,15 +56,14 @@ namespace Microsoft.Quantum.Arithmetic {
     operation CompareGTSI (xs: SignedLittleEndian,
                            ys: SignedLittleEndian,
                            result: Qubit) : Unit is Adj + Ctl {
-        using (tmp = Qubit()) {
-            CNOT(Tail(xs!!), tmp);
-            CNOT(Tail(ys!!), tmp);
-            X(tmp);
-            (Controlled CompareGTI)([tmp], (xs!, ys!, result));
-            X(tmp);
-            CCNOT(tmp, Tail(ys!!), result);
-            CNOT(Tail(xs!!), tmp);
-            CNOT(Tail(ys!!), tmp);
-        }
+        use tmp = Qubit();
+        CNOT(Tail(xs!!), tmp);
+        CNOT(Tail(ys!!), tmp);
+        X(tmp);
+        Controlled CompareGTI([tmp], (xs!, ys!, result));
+        X(tmp);
+        CCNOT(tmp, Tail(ys!!), result);
+        CNOT(Tail(xs!!), tmp);
+        CNOT(Tail(ys!!), tmp);
     }
 }

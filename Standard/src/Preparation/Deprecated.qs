@@ -69,7 +69,7 @@ namespace Microsoft.Quantum.Preparation {
     }
 
     internal operation IgnoreDataRegister(op : ((LittleEndian, Qubit[], Qubit[]) => Unit is Adj + Ctl), indexRegister : LittleEndian, garbageRegister : Qubit[]) : Unit is Adj + Ctl {
-        op(indexRegister, new Qubit[0], garbageRegister);
+        op(indexRegister, [], garbageRegister);
     }
 
     /// # Summary

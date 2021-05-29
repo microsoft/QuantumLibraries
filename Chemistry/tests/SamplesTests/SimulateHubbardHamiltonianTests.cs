@@ -100,20 +100,7 @@ namespace Microsoft.Quantum.Chemistry.Tests.Samples.Hubbard
             var qSharpData = jordanWignerEncoding.ToQSharpFormat().Pad();
 
             Console.WriteLine($"Estimate Hubbard Hamiltonian energy:");
-            // Bits of precision in phase estimation.
-            var bits = 7;
 
-            // Repetitions to find minimum energy.
-            var reps = 5;
-
-            // Trotter step size
-            var trotterStep = 0.5;
-
-            Console.WriteLine("Press Enter to continue...");
-            if (System.Diagnostics.Debugger.IsAttached)
-            {
-                Console.ReadLine();
-            }
             #endregion
         }
     }

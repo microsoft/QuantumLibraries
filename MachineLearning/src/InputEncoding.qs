@@ -26,8 +26,8 @@ namespace Microsoft.Quantum.MachineLearning {
 
     function _Unnegate(negLocs: Int[], coefficients : ComplexPolar[]) : ComplexPolar[] {
         mutable ret = coefficients;
-        for (idxNegative in negLocs) {
-            if (idxNegative >= Length(coefficients)) {
+        for idxNegative in negLocs {
+            if idxNegative >= Length(coefficients) {
                 fail $"Cannot set the phase at index {idxNegative}, only {Length(coefficients)} coefficients were provided.";
             }
             let coefficient = coefficients[idxNegative];
@@ -38,7 +38,7 @@ namespace Microsoft.Quantum.MachineLearning {
 
     function _NegativeLocations(cNegative: Int, coefficients : ComplexPolar[]) : Int[] {
         mutable negLocs = new Int[0];
-        for ((idx, coefficient) in Enumerated(coefficients)) {
+        for (idx, coefficient) in Enumerated(coefficients) {
             if (AbsD(coefficient::Argument - PI()) < 1E-9) {
                 set negLocs += [idx];
             }
@@ -53,7 +53,7 @@ namespace Microsoft.Quantum.MachineLearning {
         reg: LittleEndian
     )
     : Unit is Adj + Ctl {
-        for (idxNegative in negLocs) {
+        for idxNegative in negLocs {
             ReflectAboutInteger(idxNegative, reg);
         }
     }
@@ -94,7 +94,7 @@ namespace Microsoft.Quantum.MachineLearning {
         let nCoefficients = Length(coefficients);
         mutable complexCoefficients = new ComplexPolar[Length(coefficients)];
         mutable cNegative = 0;
-        for ((idx, coef) in Enumerated(coefficients)) {
+        for (idx, coef) in Enumerated(coefficients) {
             mutable magnitude = coef;
             if (tolerance > 1E-9) {
                 set magnitude = tolerance * IntAsDouble(Round(coefficients[idx] / tolerance)); //quantization
@@ -158,7 +158,7 @@ namespace Microsoft.Quantum.MachineLearning {
     : StateGenerator {
         //default implementation, does not respect sparsity
         mutable complexCoefficients = new ComplexPolar[Length(coefficients)];
-        for ((idx, coefficient) in Enumerated(coefficients)) {
+        for (idx, coefficient) in Enumerated(coefficients) {
             set complexCoefficients w/= idx <- ComplexPolar(
                 coefficient >= 0.0
                 ? (coefficient, 0.0)
@@ -171,7 +171,7 @@ namespace Microsoft.Quantum.MachineLearning {
         //this is preparing the state almost exactly so far
         return StateGenerator(
             FeatureRegisterSize(coefficients),
-            ApproximatelyPrepareArbitraryState(1E-12, complexCoefficients, _)
+            ApproximatelyPrepareArbitraryStateCP(1E-12, complexCoefficients, _)
         );
     }
 

@@ -26,6 +26,7 @@ using System.Linq;
 
 //
 using Xunit;
+using Microsoft.Quantum.Chemistry.Broombridge;
 #endregion
 
 namespace Microsoft.Quantum.Chemistry.Tests.Docs
@@ -85,12 +86,13 @@ namespace Microsoft.Quantum.Chemistry.Tests.Docs
             var root = @"Molecules";
 
             // This deserializes Broombridge.
-            var broombridge = Broombridge.Deserializers.DeserializeBroombridge(Path.Combine(root, filename));
+            using var reader = File.OpenText(Path.Combine(root, filename));
+            var broombridge = BroombridgeSerializer.Deserialize(reader);
 
-            // Note that the deserializer returns a list of `ProblemDescriptions` instances 
+            // Note that the deserializer returns a list of electronic structure problem instances 
             // as the file might describe multiple Hamiltonians. In this example, there is 
             // only one Hamiltonian. So we use `.Single()`, which selects the only element of the list.
-            var problem = broombridge.ProblemDescriptions.Single();
+            var problem = broombridge.Single();
 
             // This extracts the `OrbitalIntegralHamiltonian` from Broombridge format,
             // then converts it to a fermion Hamiltonian, then to a Jordan–Wigner
@@ -102,7 +104,7 @@ namespace Microsoft.Quantum.Chemistry.Tests.Docs
             // The desired initial state, assuming that a description of it is present in the
             // Broombridge schema.
             var state = "|E1>";
-            var wavefunction = problem.Wavefunctions[state].ToIndexing(IndexConvention.UpDown);
+            var wavefunction = problem.InitialStates[state].ToIndexing(IndexConvention.UpDown);
 
             // This creates the qSharpData consumable by the Q# chemistry library algorithms.
             var qSharpHamiltonianData = jordanWignerEncoding.ToQSharpFormat();
@@ -123,7 +125,8 @@ namespace Microsoft.Quantum.Chemistry.Tests.Docs
             var root = @"Molecules";
 
             // Deserialize the LiQuiD format.
-            var problem = LiQuiD.Deserialize(Path.Combine(root, filename)).First();
+            using var reader = File.OpenText(Path.Combine(root, filename));
+            var problem = LiQuiDSerializer.Deserialize(reader).First();
 
             // This extracts the `OrbitalIntegralHamiltonian` from problem
             // description format.
@@ -139,6 +142,7 @@ namespace Microsoft.Quantum.Chemistry.Tests.Docs
             var filename = Path.Combine("Molecules", "LiH_0.2.yaml");
 
             // This deserializes Broombridge.
+            using var reader = File.OpenText(filename);
             var problem = Broombridge.Deserializers.DeserializeBroombridge(filename).ProblemDescriptions.First();
 
             // This is a data structure representing the Jordan–Wigner encoding 

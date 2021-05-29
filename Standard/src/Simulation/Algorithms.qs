@@ -81,7 +81,7 @@ namespace Microsoft.Quantum.Simulation {
     /// A complete description of the system to be simulated.
     /// ## qubits
     /// Qubits acted on by simulation.
-    operation TrotterSimulationAlgorithmImpl (trotterStepSize : Double, trotterOrder : Int, maxTime : Double, evolutionGenerator : EvolutionGenerator, qubits : Qubit[])
+    internal operation TrotterSimulationAlgorithmImpl (trotterStepSize : Double, trotterOrder : Int, maxTime : Double, evolutionGenerator : EvolutionGenerator, qubits : Qubit[])
     : Unit is Adj + Ctl {
         let nTimeSlices = Ceiling(maxTime / trotterStepSize);
         let resizedTrotterStepSize = maxTime / IntAsDouble(nTimeSlices);

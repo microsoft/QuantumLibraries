@@ -14,11 +14,14 @@ namespace Microsoft.Quantum.Preparation {
     /// # Summary
     /// Creates a uniform superposition over states that encode 0 through `nIndices - 1`.
     ///
-    /// That is, this unitary $U$ creates a uniform superposition over all number states
+    /// # Description
+    ///
+    /// This operation can be described by a unitary matrix $U$ that creates
+    /// a uniform superposition over all number states
     /// $0$ to $M-1$, given an input state $\ket{0\cdots 0}$. In other words,
     /// $$
     /// \begin{align}
-    /// U\ket{0}=\frac{1}{\sqrt{M}}\sum_{j=0}^{M-1}\ket{j}.
+    ///     U \ket{0} = \frac{1}{\sqrt{M}} \sum_{j=0}^{M - 1} \ket{j}.
     /// \end{align}
     /// $$.
     ///

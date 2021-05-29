@@ -23,7 +23,8 @@ namespace Microsoft.Quantum.Canon {
     /// # Summary
     /// Returns a curried version of an operation on two inputs.
     ///
-    /// That is, given an operation with two inputs, this function applies Curry's isomorphism
+    /// # Description
+    /// Given an operation with two inputs, this function applies Curry's isomorphism
     /// $f(x, y) \equiv f(x)(y)$ to return an operation of one input which
     /// returns an operation of one input.
     ///
@@ -63,7 +64,8 @@ namespace Microsoft.Quantum.Canon {
     /// # Summary
     /// Returns a curried version of an operation on two inputs.
     ///
-    /// That is, given an operation with two inputs, this function applies Curry's isomorphism
+    /// # Describes
+    /// Given an operation with two inputs, this function applies Curry's isomorphism
     /// $f(x, y) \equiv f(x)(y)$ to return an operation of one input which
     /// returns an operation of one input.
     ///
@@ -103,7 +105,8 @@ namespace Microsoft.Quantum.Canon {
     /// # Summary
     /// Returns a curried version of an operation on two inputs.
     ///
-    /// That is, given an operation with two inputs, this function applies Curry's isomorphism
+    /// # Description
+    /// Given an operation with two inputs, this function applies Curry's isomorphism
     /// $f(x, y) \equiv f(x)(y)$ to return an operation of one input which
     /// returns an operation of one input.
     ///
@@ -143,7 +146,8 @@ namespace Microsoft.Quantum.Canon {
     /// # Summary
     /// Returns a curried version of an operation on two inputs.
     ///
-    /// That is, given an operation with two inputs, this function applies Curry's isomorphism
+    /// # Description
+    /// Given an operation with two inputs, this function applies Curry's isomorphism
     /// $f(x, y) \equiv f(x)(y)$ to return an operation of one input which
     /// returns an operation of one input.
     ///

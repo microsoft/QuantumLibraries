@@ -37,12 +37,12 @@ namespace Microsoft.Quantum.Chemistry.OrbitalIntegrals
         internal const int maxSpin = int.MaxValue - 1;
 
         /// <summary>
-        /// <c>orbital</c> is the orbital index. This integer must satisfy '0 &lt;= orbital &lt Int32.ManValue'.
+        /// <c>orbital</c> is the orbital index. This integer must satisfy '0 &lt;= orbital &lt; Int32.ManValue'.
         /// </summary>
         public int Orbital;
         /// <summary>
         /// <c>spin</c> is the spin index. For electrons, spin=0 is spin up, and spin=1 is spin down. 
-        /// This integer must satisfy '0 &lt;= orbital &lt Int16.MaxValue'.
+        /// This integer must satisfy '0 &lt;= orbital &lt; Int16.MaxValue'.
         /// </summary>
         public int Spin;
 

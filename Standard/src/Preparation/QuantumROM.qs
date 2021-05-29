@@ -82,7 +82,7 @@ namespace Microsoft.Quantum.Preparation {
     /// let purifiedState = PurifiedMixedState(targetError, coefficients);
     /// using (indexRegister = Qubit[purifiedState::Requirements::NIndexQubits]) {
     ///     using (garbageRegister = Qubit[purifiedState::Requirements::NGarbageQubits]) {
-    ///         purifiedState::Prepare(LittleEndian(indexRegister), new Qubit[0], garbageRegister);
+    ///         purifiedState::Prepare(LittleEndian(indexRegister), [], garbageRegister);
     ///     }
     /// }
     /// ```

@@ -43,7 +43,7 @@ namespace Microsoft.Quantum.Canon {
             fail "MultiplexOperations failed. Number of index qubits must be greater than 0.";
         }
         if nUnitaries > 0 {
-            let auxiliary = new Qubit[0];
+            let auxiliary = [];
             Adjoint MultiplexOperationsFromGeneratorImpl(unitaryGeneratorWithOffset, auxiliary, index, target);
         }
     }

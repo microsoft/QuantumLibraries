@@ -65,14 +65,14 @@ namespace Microsoft.Quantum.Tests {
             for idx in 0 .. 20 {
                 let rotAngle = (IntAsDouble(idx) * PI()) / 20.0;
                 let idxFlag = 0;
-                let ancillaRegister = qubits;
-                let systemRegister = new Qubit[0];
+                let auxRegister = qubits;
+                let systemRegister = [];
                 let ancillaOracle = DeterministicStateOracle(Exp([PauliY], rotAngle * 0.5, _));
-                let signalOracle = ObliviousOracle(NoOp<(Qubit[], Qubit[])>(_, _));
-                (ObliviousAmplitudeAmplificationFromStatePreparation(phases, ancillaOracle, signalOracle, idxFlag))(ancillaRegister, systemRegister);
+                let signalOracle = ObliviousOracle(NoOp);
+                (ObliviousAmplitudeAmplificationFromStatePreparation(phases, ancillaOracle, signalOracle, idxFlag))(auxRegister, systemRegister);
                 let successAmplitude = Sin((IntAsDouble(2 * nIterations + 1) * rotAngle) * 0.5);
                 let successProbability = successAmplitude * successAmplitude;
-                AssertMeasurementProbability([PauliZ], [ancillaRegister[idxFlag]], One, successProbability, $"Error: Success probability does not match theory", 1E-10);
+                AssertMeasurementProbability([PauliZ], [auxRegister[idxFlag]], One, successProbability, $"Error: Success probability does not match theory", 1E-10);
                 ResetAll(qubits);
             }
         }

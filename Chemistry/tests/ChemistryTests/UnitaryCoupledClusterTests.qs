@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft Corporation. All rights reserved.
+// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
 namespace Microsoft.Quantum.Chemistry.Tests {
@@ -36,7 +36,7 @@ namespace Microsoft.Quantum.Chemistry.Tests {
         
         mutable product = new Bool[nFermions];
         mutable expected = new Bool[nFermions];
-        for(idx in 0..nFermions - 1){
+        for idx in 0..nFermions - 1 {
             set product w/= idx <- expectedBitString[idx] == bitString[idx] ? true | false;
             set expected w/= idx <- true;
         }
@@ -59,7 +59,7 @@ namespace Microsoft.Quantum.Chemistry.Tests {
     }
 
     function _JordanWignerClusterOperatorPQRSTermSignsTest() : Unit{
-        for (idx in 0..7) {
+        for idx in 0..7 {
             let (testCase, expectedSigns, expectedGlobalSign) = _JordanWignerClusterOperatorPQRSTermSignsTestHelper(idx);
             let (sortedIndices, signs, globalSign) = _JordanWignerClusterOperatorPQRSTermSigns(testCase);
 
@@ -68,33 +68,32 @@ namespace Microsoft.Quantum.Chemistry.Tests {
             let r = sortedIndices[2];
             let s = sortedIndices[3];
 
-            Fact(p<q and q<r and r<s, "Expected p<q<r<s");
+            Fact(p < q and q < r and r < s, "Expected p < q < r < s.");
             NearEqualityFactD(globalSign, expectedGlobalSign);
-            for (signIdx in 0..Length(signs)-1) {
-                NearEqualityFactD(signs[signIdx], expectedSigns[signIdx]);
+            for (actual, expected) in Zipped(signs, expectedSigns)  {
+                NearEqualityFactD(actual, expected);
             }
         }
     }
 
     function _DoublesToComplexPolar(input: Double[]) : ComplexPolar[]{
         mutable arr = new ComplexPolar[Length(input)];
-        for(idx in 0..Length(input)-1){
-            set arr w/= idx <- ComplexAsComplexPolar(Complex((input[idx],0.)));
+        for idx in 0..Length(input)-1 {
+            set arr w/= idx <- ComplexAsComplexPolar(Complex(input[idx], 0.));
         }
         return arr;
     }
 
     operation _JordanWignerUCCTermTestHelper(nQubits: Int, excitations: Int[], term: JordanWignerInputState[], result: Double[]) : Unit{
-        using(qubits = Qubit[nQubits]){
-            for(idx in excitations){
-                X(qubits[idx]);
-            }
-            PrepareUnitaryCoupledClusterState (NoOp<Qubit[]>, term, 1.0, qubits);
-            DumpRegister ((), qubits);
-            (Adjoint PrepareArbitraryState)(_DoublesToComplexPolar(result), LittleEndian(qubits));
-            AssertAllZeroWithinTolerance (qubits, 1e-5);
-            ResetAll(qubits);
+        use qubits = Qubit[nQubits];
+        for idx in excitations {
+            X(qubits[idx]);
         }
+        PrepareUnitaryCoupledClusterState(NoOp, term, 1.0, qubits);
+        DumpRegister((), qubits);
+        Adjoint PrepareArbitraryStateCP(_DoublesToComplexPolar(result), LittleEndian(qubits));
+        AssertAllZeroWithinTolerance(qubits, 1e-5);
+        ResetAll(qubits);
     }
 
     operation JordanWignerUCCSTermTest() : Unit{

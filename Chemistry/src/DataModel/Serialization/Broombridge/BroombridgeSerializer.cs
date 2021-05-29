@@ -213,8 +213,8 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
         /// <summary>
         /// Broombridge serializer
         /// </summary>
-        /// <param name="filename">Broombridge filename to serialize</param>
-        /// <returns>Serialized Broombridge</returns>
+        /// <param name="data">Broombridge v0.2 data to be serialized.</param>
+        /// <param name="filename">Name of the file to write serialized data to.</param>
         internal static void SerializeBroombridgev0_2(V0_2.Data data, string filename)
         {
             using var writer = new StreamWriter(File.OpenWrite(filename));
@@ -223,11 +223,11 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
             stringBuilder.AppendLine(serializer.Serialize(data));
         }
 
-        // <summary>
+        /// <summary>
         /// Broombridge serializer
         /// </summary>
-        /// <param name="filename">Broombridge filename to serialize</param>
-        /// <returns>Serialized Broombridge</returns>
+        /// <param name="data">Broombridge v0.2 data to be serialized.</param>
+        /// <param name="writer">Text writer to write serialized Broombridge data to.</param>
         internal static void SerializeBroombridgev0_2(V0_2.Data data, TextWriter writer)
         {
             var stringBuilder = new StringBuilder();

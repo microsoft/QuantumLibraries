@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft Corporation. All rights reserved.
+// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
 namespace Microsoft.Quantum.Chemistry.JordanWigner.VQE {
@@ -36,15 +36,14 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner.VQE {
     /// # Output
     /// The energy associated to the Jordan-Wigner term.
     operation EstimateTermExpectation(inputStateUnitary : (Qubit[] => Unit is Adj), ops : Pauli[][], coeffs : Double[], nQubits : Int,  nSamples : Int) : Double {
-    
         mutable jwTermEnergy = 0.;
 
-	for ((coeff, op) in Zipped(coeffs, ops)) {
+        for (coeff, op) in Zipped(coeffs, ops) {
             // Only perform computation if the coefficient is significant enough
             if (AbsD(coeff) >= 1e-10) {
                 // Compute expectation value using the fast frequency estimator, add contribution to Jordan-Wigner term energy
                 let termExpectation = EstimateFrequencyA(inputStateUnitary, Measure(op, _), nQubits, nSamples);
-                set jwTermEnergy += (2.*termExpectation - 1.) * coeff;
+                set jwTermEnergy += (2. * termExpectation - 1.) * coeff;
             }
         }
 
@@ -76,43 +75,43 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner.VQE {
         mutable ops = new Pauli[][nOps];
 
         // Z and ZZ terms
-        if ((termType == 0) or (termType == 1)) {
+        if (termType == 0) or (termType == 1) {
             mutable op = ConstantArray(nQubits, PauliI);
-            for (idx in indices) {
+            for idx in indices {
                 set op w/= idx <- PauliZ;
             }
             set ops w/= 0 <- op;
         }
 
         // PQRS terms set operators between indices P and Q (resp R and S) to PauliZ
-        elif(termType == 3) {
+        elif termType == 3 {
             let compactOps = [[PauliX, PauliX, PauliX, PauliX], [PauliY, PauliY, PauliY, PauliY],
                               [PauliX, PauliX, PauliY, PauliY], [PauliY, PauliY, PauliX, PauliX],
                               [PauliX, PauliY, PauliX, PauliY], [PauliY, PauliX, PauliY, PauliX],
                               [PauliY, PauliX, PauliX, PauliY], [PauliX, PauliY, PauliY, PauliX]];
-			      
-            for (iOp in 0..7) {
+
+            for iOp in 0..7 {
                 mutable compactOp = compactOps[iOp];
 
                 mutable op = ConstantArray(nQubits, PauliI);
-                for ((idx, pauli) in Zipped(indices, compactOp)) {
+                for (idx, pauli) in Zipped(indices, compactOp) {
                     set op w/= idx <- pauli;
                 }
-                for (i in indices[0]+1..indices[1]-1) {
+                for i in indices[0] + 1..indices[1] - 1 {
                     set op w/= i <- PauliZ;
                 }
-                for (i in indices[2]+1..indices[3]-1) {
+                for i in indices[2] + 1..indices[3] - 1 {
                     set op w/= i <- PauliZ;
                 }
-		set ops w/= iOp <- op; 
+                set ops w/= iOp <- op; 
             }
-	}
+        }
 
         // Case of PQ and PQQR terms
-        elif(termType == 2) {
+        elif termType == 2 {
             let compactOps = [[PauliX, PauliX], [PauliY, PauliY]];
 
-            for (iOp in 0..1) {
+            for iOp in 0..1 {
                 mutable compactOp = compactOps[iOp];
 
                 mutable op = ConstantArray(nQubits, PauliI);
@@ -120,12 +119,12 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner.VQE {
                 let nIndices = Length(indices);
                 set op w/= indices[0] <- compactOp[0];
                 set op w/= indices[nIndices-1] <- compactOp[1];
-                for (i in indices[0]+1..indices[nIndices-1]-1) {
+                for i in indices[0] + 1..indices[nIndices - 1] - 1 {
                     set op w/= i <- PauliZ;
                 }
 
                 // Case of PQQR term
-                if (nIndices == 4) {
+                if nIndices == 4 {
                      set op w/= indices[1] <- ((indices[0] < indices[1]) and (indices[1] < indices[3])) ? PauliI | PauliZ;
                 }
                 set ops w/= iOp <- op;
@@ -148,8 +147,7 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner.VQE {
     ///
     /// # Output
     /// Expanded arrays of coefficients, one per Pauli term.
-    function ExpandedCoefficients(coeff : Double[], termType : Int) : Double[]{
-    
+    function ExpandedCoefficients(coeff : Double[], termType : Int) : Double[] {
         // Compute the numbers of coefficients to return
         mutable nCoeffs = 0;
         if (termType == 2) {set nCoeffs = 2;}
@@ -159,14 +157,14 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner.VQE {
         mutable coeffs = new Double[nCoeffs];
 
         // Return the expanded array of coefficients
-        if ((termType == 0) or (termType == 1)) {
-	    set coeffs w/= 0 <- coeff[0];
-	}
-        elif ((termType == 2) or (termType == 3)) {
-            for (i in 0..nCoeffs-1) {
-                set coeffs w/= i <- coeff[i/2];
+        if (termType == 0) or (termType == 1) {
+            set coeffs w/= 0 <- coeff[0];
+        }
+        elif (termType == 2) or (termType == 3) {
+            for i in 0..nCoeffs - 1 {
+                set coeffs w/= i <- coeff[i / 2];
             }
-	}
+        }
 
         return coeffs;
     }

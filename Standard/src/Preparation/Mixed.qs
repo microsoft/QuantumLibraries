@@ -10,7 +10,8 @@ namespace Microsoft.Quantum.Preparation {
     /// # Summary
     /// Prepares a qubit in the maximally mixed state.
     ///
-    /// It prepares the given qubit in the $\boldone / 2$ state by applying the depolarizing channel
+    /// # Description
+    /// Prepares the given qubit in the $\boldone / 2$ state by applying the depolarizing channel
     /// $$
     /// \begin{align}
     ///     \Omega(\rho) \mathrel{:=} \frac{1}{4} \sum_{\mu \in \{0, 1, 2, 3\}} \sigma\_{\mu} \rho \sigma\_{\mu}^{\dagger},

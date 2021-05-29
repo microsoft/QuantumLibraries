@@ -57,10 +57,15 @@ namespace Microsoft.Quantum.Chemistry
         ///      Loads a Hamiltonian from integral data represented
         ///      in Broombridge format.
         ///      Please see the <a href="https://docs.microsoft.com/azure/quantum/user-guide/libraries/chemistry/schema/broombridge">
+        ///      Broombridge documentation</a>
         ///      for further details about the
         ///      format parsed by this method.
         /// </summary>
         /// <param name="filename">The name of the file to be loaded.</param>
+        /// <param name="indexConvention">
+        ///     The index convention to be used in converting the loaded
+        ///     electronic structure problem into a fermionic Hamiltonian.
+        /// </param>
         /// <returns>
         ///      An instance of <see cref="FermionHamiltonian"/> representing the
         ///      data contained in <paramref name="filename"/>.

@@ -16,10 +16,9 @@ namespace Microsoft.Quantum.Arithmetic {
     operation AddConstantFxP(constant : Double, fp : FixedPoint) : Unit is Adj + Ctl {
         let (px, xs) = fp!;
         let n = Length(xs);
-        using (ys = Qubit[n]){
-            let tmpFp = FixedPoint(px, ys);
-            ApplyWithCA(PrepareFxP(constant, _), AddFxP(_, fp), tmpFp);
-        }
+        use ys = Qubit[n];
+        let tmpFp = FixedPoint(px, ys);
+        ApplyWithCA(PrepareFxP(constant, _), AddFxP(_, fp), tmpFp);
     }
 
     /// # Summary

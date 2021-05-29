@@ -63,12 +63,12 @@ namespace Microsoft.Quantum.Chemistry.Magic
         /// ProblemDescription; if the wavefunctionLabel is not specified, then it returns
         /// the Hartree--Fock state.
         /// </summary>
-        public async Task<ExecutionResult> Run(string input, IChannel channel)
+        public Task<ExecutionResult> Run(string input, IChannel channel)
         {
             if (string.IsNullOrWhiteSpace(input))
             {
                 channel.Stderr("Please provide the name of a Broombridge file or a problem description to load the fermion Hamiltonian from.");
-                return ExecuteStatus.Error.ToExecutionResult();
+                return Task.FromResult(ExecuteStatus.Error.ToExecutionResult());
             }
 
             // Identify the ProblemDescription with the hamiltonian from the arguments.
@@ -80,7 +80,7 @@ namespace Microsoft.Quantum.Chemistry.Magic
                 ? problemData.OrbitalIntegralHamiltonian.ToFermionHamiltonian(args.IndexConvention).CreateHartreeFockState(problemData.NElectrons)
                 : problemData.Wavefunctions[args.WavefunctionLabel].ToIndexing(args.IndexConvention);
 
-            return wavefunction.ToExecutionResult();
+            return Task.FromResult(wavefunction.ToExecutionResult());
         }
 
         /// <summary>

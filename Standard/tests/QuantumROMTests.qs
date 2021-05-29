@@ -78,7 +78,7 @@ namespace Microsoft.Quantum.Tests {
 
                 // Check that probability of each number state in nCoeffQubits is as expected.
                 within {
-                    purifiedState::Prepare(coeffQubits, new Qubit[0], garbageQubits);
+                    purifiedState::Prepare(coeffQubits, [], garbageQubits);
                 } apply {
                     for stateIndex in 0..coeffs - 1 {
                         let prob = AbsD(coefficients[stateIndex]) / purifiedState::Norm;

@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft Corporation. All rights reserved.
+// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
 namespace Microsoft.Quantum.ErrorCorrection {
@@ -9,6 +9,7 @@ namespace Microsoft.Quantum.ErrorCorrection {
     /// # Summary
     /// Private operation used to implement both the bit flip encoder and decoder.
     ///
+    /// # Remarks
     /// Note that this encoder can make use of in-place coherent recovery,
     /// in which case it will "cause" the error described
     /// by the initial state of `auxQubits`.
@@ -19,7 +20,7 @@ namespace Microsoft.Quantum.ErrorCorrection {
     /// - doi:10.1103/PhysRevA.85.044302
     internal operation ApplyBitFlipEncoder(coherentRecovery : Bool, data : Qubit[], scratch : Qubit[])
     : Unit is Adj {
-        if (coherentRecovery) {
+        if coherentRecovery {
             Controlled X(scratch, data[0]);
         }
 
