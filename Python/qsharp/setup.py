@@ -48,7 +48,7 @@ setuptools.setup(
         "Operating System :: OS Independent",
     ],
     install_requires=[
-        'qsharp-core',
-        'qsharp-chemistry'
+        f'qsharp-core={version}',
+        f'qsharp-chemistry={version}'
     ]
 )
