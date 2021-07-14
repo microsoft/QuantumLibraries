@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 namespace Microsoft.Quantum.MachineLearning {
     open Microsoft.Quantum.Arrays;
     open Microsoft.Quantum.Intrinsic;
