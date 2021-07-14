@@ -1,5 +1,6 @@
-// Copyright (c) Microsoft Corporation. All rights reserved.
+// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
+
 namespace Microsoft.Quantum.Tests {
     open Microsoft.Quantum.Intrinsic;
     open Microsoft.Quantum.Canon;
@@ -14,15 +15,14 @@ namespace Microsoft.Quantum.Tests {
 
     @Test("QuantumSimulator")
     operation TestChoiState() : Unit {
-        using (register = Qubit[2]) {
-            PrepareChoiStateCA(NoOp<Qubit[]>, [register[0]], [register[1]]);
+        use register = Qubit[2];
+        PrepareChoiStateCA(NoOp, [register[0]], [register[1]]);
 
-            // As usual, the same confusion about {+1, -1} and {0, 1}
-            // labeling bites us here.
-            AssertMeasurement([PauliX, PauliX], register, Zero, $"XX");
-            AssertMeasurement([PauliZ, PauliZ], register, Zero, $"ZZ");
-            ResetAll(register);
-        }
+        // As usual, the same confusion about {+1, -1} and {0, 1}
+        // labeling bites us here.
+        AssertMeasurement([PauliX, PauliX], register, Zero, $"XX");
+        AssertMeasurement([PauliZ, PauliZ], register, Zero, $"ZZ");
+        ResetAll(register);
     }
 
     internal operation PrepareTrivialState(qubits : Qubit[]) : Unit is Adj {
@@ -62,7 +62,7 @@ namespace Microsoft.Quantum.Tests {
         // If this is larger, tests fail less often, but more false negatives
         // slip through.
         let nStdDevs = 3.0;
-        for (testCase in [
+        for testCase in [
             // 𝑛𝑝 <= 30
             (45, 0.5, nStdDevs),
             (100, 0.2, nStdDevs),
@@ -72,7 +72,7 @@ namespace Microsoft.Quantum.Tests {
             (100000, 0.5, nStdDevs),
             (100000, 0.3, nStdDevs),
             (100000, 0.95, nStdDevs)
-        ]) {
+        ] {
             EstimateFrequencyBinomialCase(testCase);
         }
     }
@@ -93,20 +93,18 @@ namespace Microsoft.Quantum.Tests {
     operation RobustPhaseEstimationDemoImpl (phaseSet : Double, bitsPrecision : Int) : Double {
         let op = DiscreteOracle(RobustPhaseEstimationTestOp(phaseSet, _, _));
 
-        using (q = Qubit()) {
-            let phaseEst = RobustPhaseEstimation(bitsPrecision, op, [q]);
-            Reset(q);
-            return phaseEst;
-        }
+        use q = Qubit();
+        let phaseEst = RobustPhaseEstimation(bitsPrecision, op, [q]);
+        Reset(q);
+        return phaseEst;
     }
 
     // Probabilistic test. Might fail occasionally
     @Test("QuantumSimulator")
     operation TestRobustPhaseEstimation() : Unit {
-
         let bitsPrecision = 10;
 
-        for (idxTest in 0 .. 9) {
+        for idxTest in 0 .. 9 {
             let phaseSet = ((2.0 * PI()) * IntAsDouble(idxTest - 5)) / 12.0;
             let phaseEst = RobustPhaseEstimationDemoImpl(phaseSet, bitsPrecision);
             EqualityWithinToleranceFact(phaseEst, phaseSet, 0.01);
@@ -115,14 +113,13 @@ namespace Microsoft.Quantum.Tests {
 
     @Test("QuantumSimulator")
     operation TestPrepareQubit() : Unit {
-        using (qubit = Qubit()) {
-            let bases = [PauliI, PauliX, PauliY, PauliZ];
+        use qubit = Qubit();
+        let bases = [PauliI, PauliX, PauliY, PauliZ];
 
-            for (basis in bases) {
-                PrepareQubit(basis, qubit);
-                AssertMeasurement([basis], [qubit], Zero, $"Did not prepare in {basis} correctly.");
-                Reset(qubit);
-            }
+        for basis in bases {
+            PreparePauliEigenstate(basis, qubit);
+            AssertMeasurement([basis], [qubit], Zero, $"Did not prepare in {basis} correctly.");
+            Reset(qubit);
         }
     }
 

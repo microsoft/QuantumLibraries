@@ -1,4 +1,4 @@
-﻿// Copyright (c) Microsoft Corporation. All rights reserved.
+﻿// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
 namespace Microsoft.Quantum.Arrays {
@@ -34,7 +34,7 @@ namespace Microsoft.Quantum.Arrays {
         let n = (to - from) + 1;
         mutable array = new Int[n];
 
-        for (i in 0 .. n - 1) {
+        for i in 0 .. n - 1 {
             set array w/= i <- from + i;
         }
 
@@ -70,7 +70,7 @@ namespace Microsoft.Quantum.Arrays {
         let length = BoolArrayAsInt(BigIntAsBoolArray(to - from)) + 1;
         mutable array = new BigInt[length];
         
-        for (i in 0 .. length - 1) {
+        for i in 0 .. length - 1 {
             set array w/= i <- from + IntAsBigInt(i);
         }
 

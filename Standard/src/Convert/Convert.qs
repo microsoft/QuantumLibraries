@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft Corporation. All rights reserved.
+// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
 namespace Microsoft.Quantum.Convert {
@@ -84,7 +84,7 @@ namespace Microsoft.Quantum.Convert {
         mutable outputBits = new Bool[bits];
         mutable tempInt = number;
 
-        for (idxBit in 0 .. bits - 1) {
+        for idxBit in 0 .. bits - 1 {
             set outputBits w/= idxBit <- tempInt % 2 == 0 ? false | true;
             set tempInt = tempInt / 2;
         }
@@ -103,7 +103,7 @@ namespace Microsoft.Quantum.Convert {
         mutable number = 0;
         let nBits = Length(bits);
 
-        for (idxBit in 0 .. nBits - 1) {
+        for idxBit in 0 .. nBits - 1 {
             if (bits[idxBit]) {
                 set number = number + 2 ^ idxBit;
             }
@@ -192,7 +192,7 @@ namespace Microsoft.Quantum.Convert {
         let nBits = Length(bits);
         mutable paulis = new Pauli[nBits];
 
-        for (idxBit in 0 .. nBits - 1) {
+        for idxBit in 0 .. nBits - 1 {
             set paulis w/= idxBit <- bits[idxBit] == bitApply ? pauli | PauliI;
         }
 
@@ -222,7 +222,7 @@ namespace Microsoft.Quantum.Convert {
         if ((end - start) / step >= 0){
             let nTerms = (end - start) / step + 1;
             mutable array = new Int[nTerms];
-            for (idx in 0..nTerms - 1) {
+            for idx in 0..nTerms - 1 {
                set array w/= idx <- start + idx * step;
             }
             return array;
@@ -230,6 +230,29 @@ namespace Microsoft.Quantum.Convert {
         else {
             return new Int[0];
         }
+    }
+
+    /// # Summary
+    /// Converts a given integer number to an equivalent string representation.
+    ///
+    /// # Description
+    /// Returns a string given a BigInt.
+    ///
+    /// # Input
+    /// ## a
+    /// The big integer to be represented as a string.
+    ///
+    /// # Output
+    /// The value of `a` formatted as a string.
+    ///
+    /// # Example
+    /// ```qsharp
+    /// let nAsString = BigIntAsString(12345678901234567890L);
+    /// // Displays 12345678901234567890.
+    /// Message(nAsString);
+    /// ```
+    function BigIntAsString(a : BigInt) : String {
+         return $"{a}";
     }
 
 }

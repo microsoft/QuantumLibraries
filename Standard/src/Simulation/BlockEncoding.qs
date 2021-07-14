@@ -17,7 +17,9 @@ namespace Microsoft.Quantum.Simulation {
     /// Represents a unitary where an arbitrary operator of
     /// interest is encoded in the top-left block.
     ///
-    /// That is, a `BlockEncoding` is a unitary $U$ where an arbitrary operator $H$ of
+    /// # Description
+    /// A unitary operation that can be represented by a unitary matrix $U$
+    /// where an arbitrary operator $H$ of
     /// interest that acts on the system register `s` is encoded in the top-
     /// left block corresponding to auxiliary state $\ket{0}_a$. That is,
     ///
@@ -27,31 +29,38 @@ namespace Microsoft.Quantum.Simulation {
     /// \end{align}
     /// $$.
     ///
-    /// # Input
-    /// ## First Parameter
-    /// An array of qubits representing the auxiliary register acted on by $U$.
-    /// The action of $U$ is only defined when this is $\ket{0}_a$.
-    /// ## Second Parameter
-    /// An array of qubits representing the system register acted on by $H$.
+    /// The inputs to this callable are:
+    /// - An array of qubits representing the auxiliary register acted on by $U$.
+    ///   Note that the action of $U$ is only defined when this register is
+    ///   in the state $\ket{0}_a$.
+    /// - An array of qubits representing the system register acted on by $H$.
     ///
-    /// # Output
-    /// A unitary $U$ acting jointly on registers `a` and `s` that block-
-    /// encodes $H$.
+    /// # See Also
+    /// - Microsoft.Quantum.Simulation.BlockEncodingReflection
+    /// - Microsoft.Quantum.Simulation.TimeDependentBlockEncoding
     newtype BlockEncoding = ((Qubit[], Qubit[]) => Unit is Adj + Ctl);
 
     /// # Summary
     /// Represents a `BlockEncoding` that is also a reflection.
     ///
-    /// # Input
-    /// ## First Parameter
-    /// An array of qubits representing the auxiliary register acted on by $U$.
-    /// The action of $U$ is only defined when this is $\ket{0}_a$.
-    /// ## Second Parameter
-    /// An array of qubits representing the system register acted on by $H$.
+    /// # Description
+    /// A unitary operation that can be represented by a unitary matrix $U$
+    /// where an arbitrary operator $H$ of
+    /// interest that acts on the system register `s` is encoded in the top-
+    /// left block corresponding to auxiliary state $\ket{0}_a$. That is,
     ///
-    /// # Output
-    /// A unitary $U$ acting jointly on registers `a` and `s` that block-
-    /// encodes $H$.
+    /// $$
+    /// \begin{align}
+    /// (\bra{0}_a\otimes I_s)U(\ket{0}_a\otimes I_s) = H
+    /// \end{align}
+    /// $$.
+    ///
+    /// The inputs to this callable are:
+    /// - An array of qubits representing the auxiliary register acted on by $U$.
+    ///   Note that the action of $U$ is only defined when this register is
+    ///   in the state $\ket{0}_a$.
+    /// - An array of qubits representing the system register acted on by $H$.
+    ///
     ///
     /// # See Also
     /// - Microsoft.Quantum.Simulation.BlockEncoding
@@ -60,7 +69,9 @@ namespace Microsoft.Quantum.Simulation {
     /// # Summary
     /// Represents a `BlockEncoding` that is controlled by a clock register.
     ///
-    /// That is, a `TimeDependentBlockEncoding` is a unitary $U$ controlled by a state
+    /// # Description
+    /// An operation marked as a `TimeDependentBlockEncoding` can be
+    /// represented by a unitary matrix $U$ controlled by a state
     /// $\ket{k}_d$ in clock register `d` such that an arbitrary operator $H_k$ of
     /// interest that acts on the system register `s` is encoded in the top-
     /// left block corresponding to auxiliary state $\ket{0}_a$. That is,
@@ -71,18 +82,11 @@ namespace Microsoft.Quantum.Simulation {
     /// \end{align}
     /// $$.
     ///
-    /// # Input
-    /// ## First Parameter
-    /// An array of qubits representing the time register that controls $H_k$.
-    /// ## Second Parameter
-    /// An array of qubits representing the auxiliary register acted on by $U$.
-    /// The action of $U$ is only defined when this is $\ket{0}_a$.
-    /// ## Third Parameter
-    /// An array of qubits representing the system register acted on by $H$.
-    ///
-    /// # Output
-    /// A unitary $U$ acting jointly on registers `d`, `a`, and `s` that block-
-    /// encodes $H_k$.
+    /// The inputs to the operation wrapped by this user-defined type are:
+    /// - An array of qubits representing the time register that controls $H_k$.
+    /// - An array of qubits representing the auxiliary register acted on by $U$.
+    ///   The action of $U$ is only defined when this is $\ket{0}_a$.
+    /// - An array of qubits representing the system register acted on by $H$.
     newtype TimeDependentBlockEncoding = ((Qubit[], Qubit[], Qubit[]) => Unit is Adj + Ctl);
 
     /// # Summary
@@ -95,11 +99,13 @@ namespace Microsoft.Quantum.Simulation {
     ///
     /// # Input
     /// ## blockEncoding
-    /// A `BlockEncoding` unitary $U$ to be converted into a reflection.
+    /// An operation to be converted into a reflection, and that is represented
+    /// by a unitary matrix $U$.
     ///
     /// # Output
-    /// A unitary $U'$ acting jointly on registers `a` and `s` that block-
-    /// encodes $H$, and satisfies $U'^\dagger = U'$.
+    /// A operation represented by a unitary matrix $U'$ acting jointly on
+    /// registers `a` and `s` that block-encodes $H$, and
+    /// satisfies $U'^\dagger = U'$.
     ///
     /// # Remarks
     /// This increases the size of the auxiliary register of $U$ by one qubit.
@@ -112,7 +118,7 @@ namespace Microsoft.Quantum.Simulation {
     /// # See Also
     /// - Microsoft.Quantum.Simulation.BlockEncoding
     /// - Microsoft.Quantum.Simulation.BlockEncodingReflection
-    function BlockEncodingToReflection(blockEncoding: BlockEncoding)
+    function BlockEncodingToReflection(blockEncoding : BlockEncoding)
     : BlockEncodingReflection {
         return BlockEncodingReflection(BlockEncoding(ApplyBlockEncodingAsReflection(blockEncoding, _, _)));
     }
@@ -153,7 +159,7 @@ namespace Microsoft.Quantum.Simulation {
     /// # See Also
     /// - Microsoft.Quantum.Simulation.BlockEncoding
     /// - Microsoft.Quantum.Simulation.BlockEncodingReflection
-    function QuantumWalkByQubitization(blockEncoding: BlockEncodingReflection)
+    function QuantumWalkByQubitization(blockEncoding : BlockEncodingReflection)
     : ((Qubit[], Qubit[]) => Unit is Adj + Ctl) {
         return ApplyQuantumWalkByQubitization(blockEncoding, _, _);
     }
@@ -176,7 +182,7 @@ namespace Microsoft.Quantum.Simulation {
     /// Encodes an operator of interest into a `BlockEncoding`.
     ///
     /// This constructs a `BlockEncoding` unitary $U=P\cdot V\cdot P^\dagger$ that encodes some
-    /// operator $H=\sum_{j}|\alpha_j|U_j$ of interest that is a linear combination of
+    /// operator $H = \sum_{j}|\alpha_j|U_j$ of interest that is a linear combination of
     /// unitaries. Typically, $P$ is a state preparation unitary such that
     /// $P\ket{0}\_a=\sum_j\sqrt{\alpha_j/\|\vec\alpha\|\_2}\ket{j}\_a$,
     /// and $V=\sum_{j}\ket{j}\bra{j}\_a\otimes U_j$.

@@ -21,8 +21,7 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner.VQE {
     /// The Jordan-Wigner input required for PrepareTrialState to run.
     /// ## qubits
     /// A qubit register.
-    operation _prepareTrialStateWrapper(inputState : (Int, JordanWignerInputState[]), qubits : Qubit[]) : Unit is Adj {
-
+    internal operation _PrepareTrialState(inputState : (Int, JordanWignerInputState[]), qubits : Qubit[]) : Unit is Adj {
         body (...) {
             Microsoft.Quantum.Diagnostics.AssertAllZero(qubits);
             PrepareTrialState(inputState, qubits);
@@ -50,7 +49,6 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner.VQE {
     /// # Output
     /// The estimated energy of the molecule
     operation EstimateEnergy(jwHamiltonian : JordanWignerEncodingData, nSamples : Int) : Double {
-
         // Initialize return value
         mutable energy = 0.;
 
@@ -58,10 +56,9 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner.VQE {
         let (nQubits, jwTerms, inputState, energyOffset) = jwHamiltonian!;
 
         // Loop over all qubit Hamiltonian terms
-	let (nTerms, indexFunction) = (JordanWignerGeneratorSystem(jwTerms))!;
+        let (nTerms, indexFunction) = (JordanWignerGeneratorSystem(jwTerms))!;
 
-        for (idxTerm in 0..nTerms-1) {
-        
+        for idxTerm in 0..nTerms - 1 {
             let term = indexFunction(idxTerm);
             let ((idxTermType, coeff), idxFermions) = term!;
             let termType = idxTermType[0];
@@ -69,8 +66,8 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner.VQE {
             let ops = MeasurementOperators(nQubits, idxFermions, termType);
             let coeffs = ExpandedCoefficients(coeff, termType);
 
-	    // The private wrapper enables fast emulation during expectation estimation
-            let inputStateUnitary = _prepareTrialStateWrapper(inputState, _);
+            // The private wrapper enables fast emulation during expectation estimation
+            let inputStateUnitary = _PrepareTrialState(inputState, _);
 
             let jwTermEnergy = EstimateTermExpectation(inputStateUnitary, ops, coeffs, nQubits, nSamples);
             set energy += jwTermEnergy;

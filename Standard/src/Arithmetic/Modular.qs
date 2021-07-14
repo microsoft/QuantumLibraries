@@ -75,13 +75,13 @@ namespace Microsoft.Quantum.Arithmetic {
     operation IncrementPhaseByModularInteger(increment : Int, modulus : Int, target : PhaseLittleEndian)
     : Unit is Adj + Ctl {
         body (...) {
-            Controlled IncrementPhaseByModularInteger(new Qubit[0], (increment, modulus, target));
+            Controlled IncrementPhaseByModularInteger([], (increment, modulus, target));
         }
 
         controlled (controls, ...) {
             Fact(modulus <= 2 ^ (Length(target!) - 1), $"`multiplier` must be big enough to fit integers modulo `modulus`" + $"with highest bit set to 0");
 
-            if (ExtraArithmeticAssertionsEnabled()) {
+            if ExtraArithmeticAssertionsEnabled() {
                 // assert that the highest bit is zero, by switching to computational basis
                 ApplyLEOperationOnPhaseLEA(AssertMostSignificantBit(Zero, _), target);
 
@@ -129,11 +129,12 @@ namespace Microsoft.Quantum.Arithmetic {
     ///
     /// # Input
     /// ## constMultiplier
-    /// An integer $a$ to be added to each basis state label.
+    /// An integer $a$ by which `multiplier` is being multiplied.
+    /// Must be between 0 and `modulus`-1, inclusive.
     /// ## modulus
     /// The modulus $N$ which addition and multiplication is taken with respect to.
     /// ## multiplier
-    /// A quantum register representing an unsigned integer whose value is to
+    /// A quantum register representing an unsigned integer whose value, multiplied by `constMultiplier`, is to
     /// be added to each basis state label of `summand`. Corresponds to the
     /// register in state $\ket{x}$ above.
     /// ## summand
@@ -152,9 +153,8 @@ namespace Microsoft.Quantum.Arithmetic {
     : Unit is Adj + Ctl {
         let inner = MultiplyAndAddPhaseByModularInteger(constMultiplier, modulus, multiplier, _);
 
-        using (extraZeroBit = Qubit()) {
-            ApplyPhaseLEOperationOnLECA(inner, LittleEndian(summand! + [extraZeroBit]));
-        }
+        use extraZeroBit = Qubit();
+        ApplyPhaseLEOperationOnLECA(inner, LittleEndian(summand! + [extraZeroBit]));
     }
 
     /// # Summary
@@ -163,11 +163,12 @@ namespace Microsoft.Quantum.Arithmetic {
     ///
     /// # Input
     /// ## constMultiplier
-    /// An integer $a$ to be added to each basis state label.
+    /// An integer $a$ by which `multiplier` is being multiplied.
+    /// Must be between 0 and `modulus`-1, inclusive.
     /// ## modulus
     /// The modulus $N$ which addition and multiplication is taken with respect to.
     /// ## multiplier
-    /// A quantum register representing an unsigned integer whose value is to
+    /// A quantum register representing an unsigned integer whose value, multiplied by `constMultiplier`, is to
     /// be added to each basis state label of `summand`.
     /// ## phaseSummand
     /// A quantum register representing an unsigned integer to use as the target
@@ -192,7 +193,7 @@ namespace Microsoft.Quantum.Arithmetic {
             AssertPhaseLessThan(modulus, phaseSummand);
         }
 
-        for (i in IndexRange(multiplier!)) {
+        for i in IndexRange(multiplier!) {
             let summand = (ExpModI(2, i, modulus) * constMultiplier) % modulus;
             Controlled IncrementPhaseByModularInteger([(multiplier!)[i]], (summand, modulus, phaseSummand));
         }
@@ -232,28 +233,27 @@ namespace Microsoft.Quantum.Arithmetic {
         EqualityFactB(modulus <= 2 ^ Length(multiplier!), true, $"`multiplier` must be big enough to fit integers modulo `modulus`");
         EqualityFactB(IsCoprimeI(constMultiplier, modulus), true, $"`constMultiplier` and `modulus` must be co-prime");
 
-        using (summand = Qubit[Length(multiplier!)]) {
-            // recall that newly allocated qubits are all in 0 state
-            // and therefore summandLE encodes 0.
-            let summandLE = LittleEndian(summand);
+        use summand = Qubit[Length(multiplier!)];
+        // recall that newly allocated qubits are all in 0 state
+        // and therefore summandLE encodes 0.
+        let summandLE = LittleEndian(summand);
 
-            // Let us look at what is the result of operations below assuming
-            // multiplier is in computational basis and encodes x
-            // Currently the joint state of multiplier and summandLE is
-            // |x⟩|0⟩
-            MultiplyAndAddByModularInteger(constMultiplier, modulus, multiplier, summandLE);
+        // Let us look at what is the result of operations below assuming
+        // multiplier is in computational basis and encodes x
+        // Currently the joint state of multiplier and summandLE is
+        // |x⟩|0⟩
+        MultiplyAndAddByModularInteger(constMultiplier, modulus, multiplier, summandLE);
 
-            // now the joint state is |x⟩|x⋅a(mod N)⟩
-            ApplyToEachCA(SWAP, Zipped(summandLE!, multiplier!));
+        // now the joint state is |x⟩|x⋅a(mod N)⟩
+        ApplyToEachCA(SWAP, Zipped(summandLE!, multiplier!));
 
-            // now the joint state is |x⋅a(mod N)⟩|x⟩
-            let inverseMod = InverseModI(constMultiplier, modulus);
+        // now the joint state is |x⋅a(mod N)⟩|x⟩
+        let inverseMod = InverseModI(constMultiplier, modulus);
 
-            // note that the operation below implements the following map:
-            // |x⟩|y⟩ ↦ |x⟩|y - a⁻¹⋅x (mod N)⟩
-            Adjoint MultiplyAndAddByModularInteger(inverseMod, modulus, multiplier, summandLE);
-            // now the joint state is |x⋅a(mod N)⟩|x - a⁻¹⋅x⋅a (mod N)⟩ = |x⋅a(mod N)⟩|0⟩
-        }
+        // note that the operation below implements the following map:
+        // |x⟩|y⟩ ↦ |x⟩|y - a⁻¹⋅x (mod N)⟩
+        Adjoint MultiplyAndAddByModularInteger(inverseMod, modulus, multiplier, summandLE);
+        // now the joint state is |x⋅a(mod N)⟩|x - a⁻¹⋅x⋅a (mod N)⟩ = |x⋅a(mod N)⟩|0⟩
     }
 
 }

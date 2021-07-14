@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft Corporation. All rights reserved.
+// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
 namespace Microsoft.Quantum.Canon {
@@ -49,20 +49,17 @@ namespace Microsoft.Quantum.Canon {
     {
         body (...)
         {
-            EqualityFactB(Length(controls) >= 1, true, $"Length of controls must be at least 1");
+            Fact(Length(controls) >= 1, $"Length of controls must be at least 1");
 
-            if (Length(controls) == 1)
-            {
+            if (Length(controls) == 1) {
                 singlyControlledOp(controls + targets);
             }
             else
             {
-                using (ancillas = Qubit[Length(controls) - 1])
-                {
-                    AndLadder(ccnot, controls, ancillas);
-                    singlyControlledOp([Tail(ancillas)] + targets);
-                    Adjoint AndLadder(ccnot, controls, ancillas);
-                }
+                use aux = Qubit[Length(controls) - 1];
+                AndLadder(ccnot, controls, aux);
+                singlyControlledOp([Tail(aux)] + targets);
+                Adjoint AndLadder(ccnot, controls, aux);
             }
         }
 
@@ -109,14 +106,13 @@ namespace Microsoft.Quantum.Canon {
         body (...) {
             Fact(Length(controls) >= 1, $"Length of controls must be at least 1");
 
-            if (Length(controls) == 1) {
+            if Length(controls) == 1 {
                 singlyControlledOp(controls + targets);
             } else {
-                using (ladderRegister = Qubit[Length(controls) - 1]) {
-                    AndLadder(ccnot, controls, ladderRegister);
-                    singlyControlledOp([Tail(ladderRegister)] + targets);
-                    Adjoint AndLadder(ccnot, controls, ladderRegister);
-                }
+                use ladderRegister = Qubit[Length(controls) - 1];
+                AndLadder(ccnot, controls, ladderRegister);
+                singlyControlledOp([Tail(ladderRegister)] + targets);
+                Adjoint AndLadder(ccnot, controls, ladderRegister);
             }
         }
 
@@ -173,11 +169,9 @@ namespace Microsoft.Quantum.Canon {
         Fact(Length(controls) >= 2, $"The operation is not defined for less than 2 controls");
         ccnot::Apply(controls[0], controls[1], targets[0]);
 
-        for (k in 1 .. Length(targets) - 1) {
+        for k in 1 .. Length(targets) - 1 {
             ccnot::Apply(controls[k + 1], targets[k - 1], targets[k]);
         }
     }
 
 }
-
-

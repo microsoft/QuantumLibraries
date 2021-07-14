@@ -44,10 +44,10 @@ namespace Microsoft.Quantum.Arrays {
         mutable totalFound = 0;
         mutable idxArray = new Int[Length(array)];
 
-        for (idxElement in IndexRange(array)) {
-            if (predicate(array[idxElement])) {
+        for idxElement in IndexRange(array) {
+            if predicate(array[idxElement]) {
                 set idxArray w/= totalFound <- idxElement;
-                set totalFound = totalFound + 1;
+                set totalFound += 1;
             }
         }
 
@@ -72,9 +72,9 @@ namespace Microsoft.Quantum.Arrays {
     /// An array of indices where `predicate` is true.
     function Where<'T>(predicate : ('T -> Bool), array : 'T[]) : Int[] {
         return Mapped(
-            Fst<Int, Bool>,
+            Fst,
             Filtered(
-                Snd<Int, Bool>,
+                Snd,
                 Enumerated(Mapped(predicate, array))
             )
         );
@@ -113,8 +113,8 @@ namespace Microsoft.Quantum.Arrays {
     function Count<'T>(predicate : ('T -> Bool), array : 'T[]) : Int {
         mutable totalFound = 0;
 
-        for (element in array) {
-            if (predicate(element)) {
+        for element in array {
+            if predicate(element) {
                 set totalFound += 1;
             }
         }

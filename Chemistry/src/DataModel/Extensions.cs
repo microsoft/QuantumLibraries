@@ -163,14 +163,14 @@ namespace Microsoft.Quantum.Chemistry
 
         public class ArrayLexicographicComparer<TElement> : IComparer<IEnumerable<TElement>>
         {
-            IComparer<TElement> useComparer;
-            public ArrayLexicographicComparer(IComparer<TElement> comparer = null)
+            private readonly IComparer<TElement> useComparer;
+            public ArrayLexicographicComparer(IComparer<TElement>? comparer = null)
             {
-                var useComparer = comparer == null ? Comparer<TElement>.Default : comparer;
+                this.useComparer = comparer == null ? Comparer<TElement>.Default : comparer;
             }
             public int Compare(IEnumerable<TElement> x, IEnumerable<TElement> y)
             {
-                return CompareArray(x, y);
+                return CompareArray(x, y, this.useComparer);
             }
         }
 

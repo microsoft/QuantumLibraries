@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft Corporation. All rights reserved.
+// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
 namespace Microsoft.Quantum.Arrays {
@@ -28,8 +28,8 @@ namespace Microsoft.Quantum.Arrays {
     /// let idx = IndexOf(IsEven, items); // returns 3
     /// ```
     function IndexOf<'T>(predicate : ('T -> Bool), arr : 'T[]) : Int {
-        for (idx in IndexRange(arr)) {
-            if (predicate(arr[idx])) {
+        for idx in IndexRange(arr) {
+            if predicate(arr[idx]) {
                 return idx;
             }
         }

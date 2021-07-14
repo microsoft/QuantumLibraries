@@ -20,7 +20,7 @@ namespace Microsoft.Quantum.MachineLearning.Tests {
         let coefficients = [0.1, 0.2, 0.3, 0.4];
         let encoder = InputEncoder(coefficients);
         AssertOperationsEqualReferenced(2,
-            _ApplyToBareRegister(PrepareArbitraryState(Mapped(ComplexPolar(_, 0.0), coefficients), _), _),
+            _ApplyToBareRegister(PrepareArbitraryStateCP(Mapped(ComplexPolar(_, 0.0), coefficients), _), _),
             _ApplyToBareRegister(encoder::Prepare, _)
         );
     }

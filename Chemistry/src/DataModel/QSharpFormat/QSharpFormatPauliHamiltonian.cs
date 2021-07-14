@@ -86,7 +86,7 @@ namespace Microsoft.Quantum.Chemistry.QSharpFormat
         }
 
         /// <summary>
-        /// IComparer for <c>(QArray<Int64>, QArray<Double>)</c>. This compares only
+        /// IComparer for <c>(QArray&lt;Int64&gt;, QArray&lt;Double&gt;)</c>. This compares only
         /// the integer sequence, and ignores the double sequence.
         /// </summary>
         public class HTermIndexIComparer : IComparer<HTerm>

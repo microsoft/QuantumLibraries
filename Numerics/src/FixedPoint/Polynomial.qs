@@ -20,8 +20,7 @@ namespace Microsoft.Quantum.Arithmetic {
     operation EvaluatePolynomialFxP(coefficients : Double[], fpx : FixedPoint,
                                    result : FixedPoint) : Unit is Adj {
         body (...) {
-            (Controlled EvaluatePolynomialFxP) (new Qubit[0],
-                (coefficients, fpx, result));
+            Controlled EvaluatePolynomialFxP([], (coefficients, fpx, result));
         }
         controlled (controls, ...) {
             IdenticalFormatFactFxP([fpx, result]);
@@ -35,33 +34,32 @@ namespace Microsoft.Quantum.Arithmetic {
             }
             elif (degree > 0) {
                 // initialize ancillary register to a_d
-                using (qubits = Qubit[n * degree]){
-                    let firstIterate = FixedPoint(p,
-                        qubits[(degree-1)*n..degree*n-1]);
-                    PrepareFxP(coefficients[degree], firstIterate);
-                    for (d in degree..(-1)..2) {
-                        let currentIterate = FixedPoint(p, qubits[(d-1)*n..d*n-1]);
-                        let nextIterate = FixedPoint(p, qubits[(d-2)*n..(d-1)*n-1]);
-                        // multiply by x and then add current coefficient
-                        MultiplyFxP(currentIterate, fpx, nextIterate);
-                        AddConstantFxP(coefficients[d-1], nextIterate);
-                    }
-                    let finalIterate = FixedPoint(p, qubits[0..n-1]);
-                    // final multiplication into the result register
-                    (Controlled MultiplyFxP)(controls, (finalIterate, fpx, result));
-                    // add a_0 to complete polynomial evaluation and
-                    (Controlled AddConstantFxP)(controls,
-                        (coefficients[0], result));
-                    // uncompute intermediate results
-                    for (d in 2..degree) {
-                        let currentIterate = FixedPoint(p, qubits[(d-1)*n..d*n-1]);
-                        let nextIterate = FixedPoint(p, qubits[(d-2)*n..(d-1)*n-1]);
-                        (Adjoint AddConstantFxP)(coefficients[d-1], nextIterate);
-                        (Adjoint MultiplyFxP)(currentIterate, fpx,
-                                              nextIterate);
-                    }
-                    PrepareFxP(coefficients[degree], firstIterate);
+                use qubits = Qubit[n * degree];
+                let firstIterate = FixedPoint(p,
+                    qubits[(degree-1)*n..degree*n-1]);
+                PrepareFxP(coefficients[degree], firstIterate);
+                for d in degree..(-1)..2 {
+                    let currentIterate = FixedPoint(p, qubits[(d-1)*n..d*n-1]);
+                    let nextIterate = FixedPoint(p, qubits[(d-2)*n..(d-1)*n-1]);
+                    // multiply by x and then add current coefficient
+                    MultiplyFxP(currentIterate, fpx, nextIterate);
+                    AddConstantFxP(coefficients[d-1], nextIterate);
                 }
+                let finalIterate = FixedPoint(p, qubits[0..n-1]);
+                // final multiplication into the result register
+                Controlled MultiplyFxP(controls, (finalIterate, fpx, result));
+                // add a_0 to complete polynomial evaluation and
+                Controlled AddConstantFxP(controls,
+                    (coefficients[0], result));
+                // uncompute intermediate results
+                for d in 2..degree {
+                    let currentIterate = FixedPoint(p, qubits[(d-1)*n..d*n-1]);
+                    let nextIterate = FixedPoint(p, qubits[(d-2)*n..(d-1)*n-1]);
+                    Adjoint AddConstantFxP(coefficients[d-1], nextIterate);
+                    Adjoint MultiplyFxP(currentIterate, fpx,
+                                            nextIterate);
+                }
+                PrepareFxP(coefficients[degree], firstIterate);
             }
         }
     }
@@ -82,8 +80,7 @@ namespace Microsoft.Quantum.Arithmetic {
     operation EvaluateEvenPolynomialFxP(coefficients : Double[], fpx : FixedPoint,
                                        result : FixedPoint) : Unit is Adj {
         body (...) {
-            (Controlled EvaluateEvenPolynomialFxP) (new Qubit[0],
-                (coefficients, fpx, result));
+            Controlled EvaluateEvenPolynomialFxP([], (coefficients, fpx, result));
         }
         controlled (controls, ...) {
             IdenticalFormatFactFxP([fpx, result]);
@@ -97,14 +94,13 @@ namespace Microsoft.Quantum.Arithmetic {
                     (coefficients[0], result));
             }
             elif (halfDegree > 0) {
-                // initialize ancillary register to a_d
-                using (xsSquared = Qubit[n]){
-                    let fpxSquared = FixedPoint(p, xsSquared);
-                    ApplyWithCA(SquareFxP(fpx, _),
-                        (Controlled EvaluatePolynomialFxP)(controls,
-                            (coefficients, _, result)),
-                        fpxSquared);
-                }
+                // initialize auxilliary register to a_d
+                use xsSquared = Qubit[n];
+                let fpxSquared = FixedPoint(p, xsSquared);
+                ApplyWithCA(SquareFxP(fpx, _),
+                    Controlled EvaluatePolynomialFxP(controls,
+                        (coefficients, _, result)),
+                    fpxSquared);
             }
         }
     }
@@ -125,8 +121,7 @@ namespace Microsoft.Quantum.Arithmetic {
     operation EvaluateOddPolynomialFxP(coefficients : Double[], fpx : FixedPoint,
                                       result : FixedPoint) : Unit is Adj {
         body (...) {
-            (Controlled EvaluateOddPolynomialFxP) (new Qubit[0],
-                (coefficients, fpx, result));
+            Controlled EvaluateOddPolynomialFxP([], (coefficients, fpx, result));
         }
         controlled (controls, ...) {
             IdenticalFormatFactFxP([fpx, result]);
@@ -134,14 +129,13 @@ namespace Microsoft.Quantum.Arithmetic {
             let halfDegree = Length(coefficients) - 1;
             let (p, q) = fpx!;
             let n = Length(q);
-            if (halfDegree >= 0) {
-                using (tmpResult = Qubit[n]) {
-                    let tmpResultFp = FixedPoint(p, tmpResult);
-                    ApplyWithCA(EvaluateEvenPolynomialFxP(coefficients, _, _),
-                           (Controlled MultiplyFxP)(controls,
-                                                    (_, _, result)),
-                           (fpx, tmpResultFp));
-                }
+            if halfDegree >= 0 {
+                use tmpResult = Qubit[n];
+                let tmpResultFp = FixedPoint(p, tmpResult);
+                ApplyWithCA(EvaluateEvenPolynomialFxP(coefficients, _, _),
+                        Controlled MultiplyFxP(controls,
+                                                (_, _, result)),
+                        (fpx, tmpResultFp));
             }
         }
     }

@@ -65,10 +65,6 @@ namespace Microsoft.Quantum.Chemistry.Tests.Samples.Hydrogen
 
             #region Building the Hydrogen Hamiltonian through orbital integrals
 
-            // One of the simplest representations of Hydrogen uses only two 
-            // molecular orbitals indexed by `0` and `1`.
-            var nOrbitals = 2;
-
             // This representation also has two occupied spin-orbitals.
             var nElectrons = 2;
 

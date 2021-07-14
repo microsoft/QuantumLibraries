@@ -114,7 +114,7 @@ namespace Microsoft.Quantum.Arrays {
     /// // returns [11, 3, 37, 17].
     /// ```
     function Sorted<'T>(comparison : (('T, 'T) -> Bool), array : 'T[]) : 'T[] {
-        if (Length(array) <= 1) {
+        if Length(array) <= 1 {
             return array;
         } else {
             let idxPivot = Length(array) / 2;
@@ -123,7 +123,7 @@ namespace Microsoft.Quantum.Arrays {
 
             // Sort each sublist, then merge them back into a single combined
             // list and return.
-            return Merged<'T>(
+            return Merged(
                 comparison, 
                 Sorted(comparison, left),
                 Sorted(comparison, right)

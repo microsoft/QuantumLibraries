@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft Corporation. All rights reserved.
+// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
 namespace Microsoft.Quantum.Simulation {
@@ -22,7 +22,7 @@ namespace Microsoft.Quantum.Simulation {
     /// Multiplier on duration of time-evolution by term indexed by `idx`.
     /// ## qubits
     /// Qubits acted on by simulation.
-    operation TrotterStepImpl (evolutionGenerator : EvolutionGenerator, idx : Int, stepsize : Double, qubits : Qubit[]) : Unit is Adj + Ctl {
+    internal operation TrotterStepImpl(evolutionGenerator : EvolutionGenerator, idx : Int, stepsize : Double, qubits : Qubit[]) : Unit is Adj + Ctl {
         let (evolutionSet, generatorSystem) = evolutionGenerator!;
         let (nTerms, generatorSystemFunction) = generatorSystem!;
         let generatorIndex = generatorSystemFunction(idx);
@@ -50,8 +50,7 @@ namespace Microsoft.Quantum.Simulation {
     /// # Remarks
     /// For more on the Trotter–Suzuki decomposition, see
     /// [Time-Ordered Composition](xref:microsoft.quantum.libraries.overview-standard.control-flow#time-ordered-composition).
-    function TrotterStep (evolutionGenerator : EvolutionGenerator, trotterOrder : Int, trotterStepSize : Double) : (Qubit[] => Unit is Adj + Ctl)
-    {
+    function TrotterStep (evolutionGenerator : EvolutionGenerator, trotterOrder : Int, trotterStepSize : Double) : (Qubit[] => Unit is Adj + Ctl) {
         let (evolutionSet, generatorSystem) = evolutionGenerator!;
         let (nTerms, generatorSystemFunction) = generatorSystem!;
 
@@ -82,22 +81,14 @@ namespace Microsoft.Quantum.Simulation {
     /// A complete description of the system to be simulated.
     /// ## qubits
     /// Qubits acted on by simulation.
-    operation TrotterSimulationAlgorithmImpl (trotterStepSize : Double, trotterOrder : Int, maxTime : Double, evolutionGenerator : EvolutionGenerator, qubits : Qubit[]) : Unit
-    {
-        body (...)
-        {
-            let nTimeSlices = Ceiling(maxTime / trotterStepSize);
-            let resizedTrotterStepSize = maxTime / IntAsDouble(nTimeSlices);
+    internal operation TrotterSimulationAlgorithmImpl (trotterStepSize : Double, trotterOrder : Int, maxTime : Double, evolutionGenerator : EvolutionGenerator, qubits : Qubit[])
+    : Unit is Adj + Ctl {
+        let nTimeSlices = Ceiling(maxTime / trotterStepSize);
+        let resizedTrotterStepSize = maxTime / IntAsDouble(nTimeSlices);
 
-            for (idxTimeSlice in 0 .. nTimeSlices - 1)
-            {
-                (TrotterStep(evolutionGenerator, trotterOrder, resizedTrotterStepSize))(qubits);
-            }
+        for idxTimeSlice in 0 .. nTimeSlices - 1 {
+            (TrotterStep(evolutionGenerator, trotterOrder, resizedTrotterStepSize))(qubits);
         }
-
-        adjoint invert;
-        controlled distribute;
-        controlled adjoint distribute;
     }
 
 
@@ -137,26 +128,18 @@ namespace Microsoft.Quantum.Simulation {
     /// A complete description of the time-dependent system to be simulated.
     /// ## qubits
     /// Qubits acted on by simulation.
-    operation TimeDependentTrotterSimulationAlgorithmImpl (trotterStepSize : Double, trotterOrder : Int, maxTime : Double, evolutionSchedule : EvolutionSchedule, qubits : Qubit[]) : Unit
-    {
-        body (...)
-        {
-            let nTimeSlices = Ceiling(maxTime / trotterStepSize);
-            let resizedTrotterStepSize = maxTime / IntAsDouble(nTimeSlices);
+    internal operation TimeDependentTrotterSimulationAlgorithmImpl (trotterStepSize : Double, trotterOrder : Int, maxTime : Double, evolutionSchedule : EvolutionSchedule, qubits : Qubit[])
+    : Unit is Adj + Ctl {
+        let nTimeSlices = Ceiling(maxTime / trotterStepSize);
+        let resizedTrotterStepSize = maxTime / IntAsDouble(nTimeSlices);
 
-            for (idxTimeSlice in 0 .. nTimeSlices - 1)
-            {
-                let schedule = IntAsDouble(idxTimeSlice) / IntAsDouble(nTimeSlices);
-                let (evolutionSet, generatorSystemTimeDependent) = evolutionSchedule!;
-                let generatorSystem = generatorSystemTimeDependent(schedule);
-                let evolutionGenerator = EvolutionGenerator(evolutionSet, generatorSystem);
-                (TrotterSimulationAlgorithm(resizedTrotterStepSize, trotterOrder))!(resizedTrotterStepSize, evolutionGenerator, qubits);
-            }
+        for idxTimeSlice in 0 .. nTimeSlices - 1 {
+            let schedule = IntAsDouble(idxTimeSlice) / IntAsDouble(nTimeSlices);
+            let (evolutionSet, generatorSystemTimeDependent) = evolutionSchedule!;
+            let generatorSystem = generatorSystemTimeDependent(schedule);
+            let evolutionGenerator = EvolutionGenerator(evolutionSet, generatorSystem);
+            (TrotterSimulationAlgorithm(resizedTrotterStepSize, trotterOrder))!(resizedTrotterStepSize, evolutionGenerator, qubits);
         }
-
-        adjoint invert;
-        controlled distribute;
-        controlled adjoint distribute;
     }
 
 
@@ -173,8 +156,7 @@ namespace Microsoft.Quantum.Simulation {
     ///
     /// # Output
     /// A `TimeDependentSimulationAlgorithm` type.
-    function TimeDependentTrotterSimulationAlgorithm (trotterStepSize : Double, trotterOrder : Int) : TimeDependentSimulationAlgorithm
-    {
+    function TimeDependentTrotterSimulationAlgorithm (trotterStepSize : Double, trotterOrder : Int) : TimeDependentSimulationAlgorithm {
         return TimeDependentSimulationAlgorithm(TimeDependentTrotterSimulationAlgorithmImpl(trotterStepSize, trotterOrder, _, _, _));
     }
 

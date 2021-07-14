@@ -1,11 +1,11 @@
-﻿// Copyright (c) Microsoft Corporation. All rights reserved.
+﻿// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
 namespace Microsoft.Quantum.Characterization {
     open Microsoft.Quantum.Convert;
     open Microsoft.Quantum.Intrinsic;
     open Microsoft.Quantum.Canon;
-    
+
 
     /// # Summary
     /// Given a preparation and measurement, estimates the frequency
@@ -38,22 +38,21 @@ namespace Microsoft.Quantum.Characterization {
     {
         mutable nUp = 0;
 
-        for (idxMeasurement in 0 .. nMeasurements - 1) {
-            using (register = Qubit[nQubits]) {
-                preparation(register);
-                let result = measurement(register);
+        for idxMeasurement in 0 .. nMeasurements - 1 {
+            use register = Qubit[nQubits];
+            preparation(register);
+            let result = measurement(register);
 
-                if (result == Zero) {
-                    // NB!!!!! This reverses Zero and One to use conventions
-                    //         common in the QCVV community. That is confusing
-                    //         but is confusing with an actual purpose.
-                    set nUp = nUp + 1;
-                }
-
-                // NB: We absolutely must reset here, since preparation()
-                //     and measurement() can each use randomness internally.
-                ApplyToEach(Reset, register);
+            if (result == Zero) {
+                // NB!!!!! This reverses Zero and One to use conventions
+                //         common in the QCVV community. That is confusing
+                //         but is confusing with an actual purpose.
+                set nUp = nUp + 1;
             }
+
+            // NB: We absolutely must reset here, since preparation()
+            //     and measurement() can each use randomness internally.
+            ApplyToEach(Reset, register);
         }
 
         return IntAsDouble(nUp) / IntAsDouble(nMeasurements);

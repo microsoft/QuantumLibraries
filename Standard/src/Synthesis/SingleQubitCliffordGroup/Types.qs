@@ -64,6 +64,7 @@ namespace Microsoft.Quantum.Synthesis {
     /// operation acting on a single qubit.
     ///
     /// # Input
+    /// ## clifford
     /// The operator to be represented as an operation.
     ///
     /// # Output

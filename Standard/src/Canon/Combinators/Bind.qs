@@ -7,7 +7,7 @@ namespace Microsoft.Quantum.Canon {
     /// # See Also
     /// - Microsoft.Quantum.Canon.Bound
     internal operation ApplyBound<'T> (operations : ('T => Unit)[], target : 'T) : Unit {
-        for (op in operations) {
+        for op in operations {
             op(target);
         }
     }
@@ -54,7 +54,7 @@ namespace Microsoft.Quantum.Canon {
     /// - Microsoft.Quantum.Canon.BoundA
     internal operation ApplyBoundA<'T> (operations : ('T => Unit is Adj)[], target : 'T)
     : Unit is Adj {
-        for (op in operations) {
+        for op in operations {
             op(target);
         }
     }
@@ -102,7 +102,7 @@ namespace Microsoft.Quantum.Canon {
     /// - Microsoft.Quantum.Canon.BoundC
     internal operation ApplyBoundC<'T> (operations : ('T => Unit is Ctl)[], target : 'T)
     : Unit is Ctl {
-        for (op in operations) {
+        for op in operations {
             op(target);
         }
     }
@@ -149,7 +149,7 @@ namespace Microsoft.Quantum.Canon {
     /// - Microsoft.Quantum.Canon.BoundCA
     internal operation ApplyBoundCA<'T> (operations : ('T => Unit is Adj + Ctl)[], target : 'T)
     : Unit is Adj + Ctl {
-        for (op in operations) {
+        for op in operations {
             op(target);
         }
     }
@@ -193,5 +193,3 @@ namespace Microsoft.Quantum.Canon {
     }
 
 }
-
-

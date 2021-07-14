@@ -21,8 +21,9 @@ namespace Microsoft.Quantum.Arithmetic {
 
     /// # Summary
     /// Little-endian unsigned integers in QFT basis.
-	///
-    /// For example, if $\ket{x}$ is the little-endian encoding of the integer
+    ///
+    /// # Description
+    /// If $\ket{x}$ is the little-endian encoding of the integer
     /// $x$ in the computational basis,
     /// then $\operatorname{QFTLE} \ket{x}$ is the encoding of $x$ in the QFT
     /// basis.

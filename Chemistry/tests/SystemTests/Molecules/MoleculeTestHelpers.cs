@@ -25,8 +25,7 @@ using Microsoft.Quantum.Chemistry.Generic;
 using Microsoft.Quantum.Chemistry.JordanWigner;
 using SystemTests;
 using Xunit;
-
-
+using System.IO;
 
 namespace SystemTests.Molecules
 {
@@ -54,7 +53,8 @@ namespace SystemTests.Molecules
 
         public static JordanWignerEncodingData GetQSharpData(string filename, string wavefunctionLabel, Config configuration)
         {
-            var broombridge = Deserializers.DeserializeBroombridge(filename).ProblemDescriptions.First();
+            using var reader = File.OpenText(filename);
+            var broombridge = BroombridgeSerializer.Deserialize(reader).First();
 
             var orbHam = broombridge.OrbitalIntegralHamiltonian;
 
@@ -64,8 +64,8 @@ namespace SystemTests.Molecules
 
             var hamiltonian = pauHam.ToQSharpFormat();
 
-            Dictionary<string, FermionWavefunction<SpinOrbital>> inputStates = broombridge.Wavefunctions ?? new Dictionary<string, FermionWavefunction<SpinOrbital>>();
-            
+            var inputStates = broombridge.InitialStates ?? new Dictionary<string, FermionWavefunction<SpinOrbital>>();
+
             // If no states are provided, use the Hartree--Fock state.
             // As fermion operators the fermion Hamiltonian are already indexed by, we now apply the desired
             // spin-orbital -> integer indexing convention.

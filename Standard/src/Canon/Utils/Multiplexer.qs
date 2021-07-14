@@ -154,7 +154,7 @@ namespace Microsoft.Quantum.Canon {
     internal function AnyOutsideToleranceD(tolerance : Double, coefficients : Double[]) : Bool {
         // NB: We don't currently use Any / Mapped for this, as we want to be
         //     able to short-circuit.
-        for (coefficient in coefficients) {
+        for coefficient in coefficients {
             if (AbsD(coefficient) >= tolerance) {
                 return true;
             }
@@ -163,7 +163,7 @@ namespace Microsoft.Quantum.Canon {
     }
 
     internal function AnyOutsideToleranceCP(tolerance : Double, coefficients : ComplexPolar[]) : Bool {
-        for (coefficient in coefficients) {
+        for coefficient in coefficients {
             if (AbsComplexPolar(coefficient) > tolerance) {
                 return true;
             }
@@ -361,7 +361,7 @@ namespace Microsoft.Quantum.Canon {
         mutable coefficients0 = new Double[newCoefficientsLength];
         mutable coefficients1 = new Double[newCoefficientsLength];
 
-        for (idxCoeff in 0 .. newCoefficientsLength - 1) {
+        for idxCoeff in 0 .. newCoefficientsLength - 1 {
             set coefficients0 w/= idxCoeff <- 0.5 * (coefficients[idxCoeff] + coefficients[idxCoeff + newCoefficientsLength]);
             set coefficients1 w/= idxCoeff <- 0.5 * (coefficients[idxCoeff] - coefficients[idxCoeff + newCoefficientsLength]);
         }
@@ -405,7 +405,7 @@ namespace Microsoft.Quantum.Canon {
         }
 
         if (Length(unitaries) > 0) {
-            let auxillaryRegister = new Qubit[0];
+            let auxillaryRegister = [];
             MultiplexOperationsWithAuxRegister(unitaries, auxillaryRegister, index, target);
         }
     }
@@ -450,19 +450,18 @@ namespace Microsoft.Quantum.Canon {
                     }
                 } else {
                     // Recursion that reduces nIndex by 1 & sets Length(auxillaryRegister) to 1.
-                    using (newAuxQubit = Qubit()) {
-                        within {
-                            Controlled X(auxillaryRegister + [(index!)[Length(index!) - 1]], newAuxQubit);
-                        } apply {
-                            if (nUnitariesLeft > 0) {
-                                MultiplexOperationsWithAuxRegister(leftUnitaries, [newAuxQubit], newControls, target);
-                            }
+                    use newAuxQubit = Qubit();
+                    within {
+                        Controlled X(auxillaryRegister + [(index!)[Length(index!) - 1]], newAuxQubit);
+                    } apply {
+                        if (nUnitariesLeft > 0) {
+                            MultiplexOperationsWithAuxRegister(leftUnitaries, [newAuxQubit], newControls, target);
+                        }
 
-                            within {
-                                Controlled X(auxillaryRegister, newAuxQubit);
-                            } apply {
-                                MultiplexOperationsWithAuxRegister(rightUnitaries, [newAuxQubit], newControls, target);
-                            }
+                        within {
+                            Controlled X(auxillaryRegister, newAuxQubit);
+                        } apply {
+                            MultiplexOperationsWithAuxRegister(rightUnitaries, [newAuxQubit], newControls, target);
                         }
                     }
                 }

@@ -24,16 +24,16 @@ namespace Microsoft.Quantum.Chemistry.Magic
         /// <summary>
         /// Loads the broombridge data from the given .yaml file and returns it.
         /// </summary>
-        public async Task<ExecutionResult> Run(string input, IChannel channel)
+        public Task<ExecutionResult> Run(string input, IChannel channel)
         {
             if (string.IsNullOrWhiteSpace(input))
             {
                 channel.Stderr("Please provide the name of a broombridge file to load\n");
-                return ExecuteStatus.Error.ToExecutionResult();
+                return Task.FromResult(ExecuteStatus.Error.ToExecutionResult());
             }
 
             var yamlData = Deserializers.DeserializeBroombridge(input).Raw;
-            return yamlData.ToExecutionResult();
+            return Task.FromResult(yamlData.ToExecutionResult());
         }
     }
 }

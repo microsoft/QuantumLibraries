@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 namespace Microsoft.Quantum.MachineLearning {
+    open Microsoft.Quantum.Random;
     open Microsoft.Quantum.Math;
     open Microsoft.Quantum.Logical;
     open Microsoft.Quantum.Arrays;
@@ -21,27 +22,27 @@ namespace Microsoft.Quantum.MachineLearning {
         mutable (min1, max0) = (1.0, 0.0);
 
         // Find the range of classification probabilities for each class.
-        for ((probability, label) in labeledProbabilities) {
-            if (label == 1) {
-                if (min1 > probability) {
+        for (probability, label) in labeledProbabilities {
+            if label == 1 {
+                if min1 > probability {
                     set min1 = probability;
                 }
             } else {
-                if (max0 < probability) {
+                if max0 < probability {
                     set max0 = probability;
                 }
             }
         }
 
         // Exit early if we can find a perfect classification.
-        if (max0 <= min1) {
+        if max0 <= min1 {
             return 0.5 * (1.0 - max0 - min1);
         }
 
         // If we can't find a perfect classification, minimize to find
         // the best feasible bias.
         let optimum = LocalUnivariateMinimum(
-            _MisclassificationRate(Mapped(Fst<Double, Int>, labeledProbabilities), Mapped(Snd<Double, Int>, labeledProbabilities), _),
+            _MisclassificationRate(Mapped(Fst, labeledProbabilities), Mapped(Snd, labeledProbabilities), _),
             (0.5 - max0, 0.5 - min1),
             tolerance
         );
@@ -93,13 +94,13 @@ namespace Microsoft.Quantum.MachineLearning {
         let features = Mapped(_Features, samples);
         let labels = Mapped(_Label, samples);
 
-        for ((idxModel, model) in Enumerated(models)) {
+        for (idxModel, model) in Enumerated(models) {
             options::VerboseMessage($"  Beginning training at start point #{idxModel}...");
             let (proposedUpdate, localMisses) = TrainSequentialClassifierAtModel(
                 model,
                 samples, options, trainingSchedule, validationSchedule
             );
-            if (bestValidation > localMisses) {
+            if bestValidation > localMisses {
                 set bestValidation = localMisses;
                 set bestSoFar = proposedUpdate;
             }
@@ -114,22 +115,13 @@ namespace Microsoft.Quantum.MachineLearning {
     /// # Input
     /// ## miniBatch
     /// container of labeled samples in the mini batch
-    ///
-    /// ## param
-    /// circuit parameters
-    ///
-    /// ## gates
-    /// sequence of gates in the circuits
-    ///
-    /// ## lrate
-    /// the learning rate
-    ///
-    /// ## measCount
-    /// number of true quantum measurements to estimate probabilities.
+    /// ## options
+    /// Training options to be used when running the given training step.
+    /// ## model
+    /// The sequential model to be trained.
     ///
     /// # Output
     /// (utility, (new)parameters) pair
-    ///
     operation _RunSingleTrainingStep(
         miniBatch : (LabeledSample, StateGenerator)[],
         options : TrainingOptions,
@@ -138,9 +130,9 @@ namespace Microsoft.Quantum.MachineLearning {
     : (Double, SequentialModel) {
         mutable batchGradient = ConstantArray(Length(model::Parameters), 0.0);
 
-        for ((idxSample, (sample, stateGenerator)) in Enumerated(miniBatch)) {
+        for (idxSample, (sample, stateGenerator)) in Enumerated(miniBatch) {
             mutable err = IntAsDouble(sample::Label);
-            if (err < 1.0) {
+            if err < 1.0 {
                 // Class 0 misclassified to class 1; strive to reduce the probability.
                 set err = -1.0;
             }
@@ -149,7 +141,7 @@ namespace Microsoft.Quantum.MachineLearning {
                 model, stateGenerator,
                 options::NMeasurements
             );
-            for (ip in 0..(Length(model::Parameters) - 1)) {
+            for ip in 0..Length(model::Parameters) - 1 {
                 // GradientClassicalSample actually computes antigradient, but err*grad corrects it back to gradient
                 set batchGradient w/= ip <- (batchGradient[ip] + options::LearningRate * err * grad[ip]);
             }
@@ -172,16 +164,10 @@ namespace Microsoft.Quantum.MachineLearning {
     /// data samples.
     ///
     /// # Input
-    /// ## samples
+    /// ## encodedSamples
     /// The samples to be trained on.
-    /// ## sched
+    /// ## schedule
     /// A sampling schedule defining a subset of samples to be included in training.
-    /// ## schedScore
-    /// A sampling schedule defining a subset of samples to be used in
-    /// accuracy scoring.
-    /// ## periodScore
-    /// The number of gradient steps to be taken between scoring points.
-    /// For best accuracy, set to 1.
     /// ## options
     /// Options to be used in training.
     /// ## model
@@ -203,8 +189,8 @@ namespace Microsoft.Quantum.MachineLearning {
     : (Int, SequentialModel) {
         mutable nBestMisses = nPreviousBestMisses;
         mutable bestSoFar = model;
-        let samples = Mapped(Fst<LabeledSample, StateGenerator>, encodedSamples);
-        let stateGenerators = Mapped(Snd<LabeledSample, StateGenerator>, encodedSamples);
+        let samples = Mapped(Fst, encodedSamples);
+        let stateGenerators = Mapped(Snd, encodedSamples);
         let features = Mapped(_Features, samples);
         let actualLabels = Mapped(_Label, samples);
 
@@ -224,12 +210,12 @@ namespace Microsoft.Quantum.MachineLearning {
                 Misclassifications(inferredLabels, actualLabels)
             )
         );
-        for ((idxMinibatch, minibatch) in Enumerated(minibatches)) {
+        for (idxMinibatch, minibatch) in Enumerated(minibatches) {
             options::VerboseMessage($"        Beginning minibatch {idxMinibatch} of {Length(minibatches)}.");
             let (utility, updatedModel) = _RunSingleTrainingStep(
                 minibatch, options, bestSoFar
             );
-            if (utility > 1e-7) {
+            if utility > 1e-7 {
                 options::VerboseMessage($"            Observed good parameter update... estimating and possibly committing.");
                 // There has been some good parameter update.
                 // Check if it actually improves things, and if so,
@@ -247,7 +233,7 @@ namespace Microsoft.Quantum.MachineLearning {
                 let nMisses = Length(Misclassifications(
                     updatedLabels, actualLabels
                 ));
-                if (nMisses < nBestMisses) {
+                if nMisses < nBestMisses {
                     set nBestMisses = nMisses;
                     set bestSoFar = updatedModel;
                 }
@@ -262,7 +248,7 @@ namespace Microsoft.Quantum.MachineLearning {
     /// Randomly rescales an input to either grow or shrink by a given factor.
     operation _RandomlyRescale(scale : Double, value : Double) : Double {
         return value * (
-            1.0 + scale * (Random([0.5, 0.5]) > 0 ? 1.0 | -1.0)
+            1.0 + scale * (DrawRandomBool(0.5) ? 1.0 | -1.0)
         );
     }
 
@@ -282,8 +268,6 @@ namespace Microsoft.Quantum.MachineLearning {
     /// on a given labeled training set, starting from a particular model.
     ///
     /// # Input
-    /// ## structure
-    /// Structure of the sequential classifier to be trained.
     /// ## model
     /// The sequential model to be used as a starting point for training.
     /// ## samples
@@ -383,7 +367,7 @@ namespace Microsoft.Quantum.MachineLearning {
         // Keep track of how many times a bias update has stalled out.
         mutable nStalls = 0;
 
-        for (ep in 1..options::MaxEpochs) {
+        for ep in 1..options::MaxEpochs {
             options::VerboseMessage($"    Beginning epoch {ep}.");
             let (nMisses, proposedUpdate) = _RunSingleTrainingEpoch(
                 encodedSamples, schedule, options::ScoringPeriod,
@@ -392,10 +376,10 @@ namespace Microsoft.Quantum.MachineLearning {
                 current,
                 nBestMisses
             );
-            if (nMisses < nBestMisses) {
+            if nMisses < nBestMisses {
                 set nBestMisses = nMisses;
                 set bestSoFar = proposedUpdate;
-                if (IntAsDouble(nMisses) / IntAsDouble(nSamples) < options::Tolerance) { //Terminate based on tolerance
+                if IntAsDouble(nMisses) / IntAsDouble(nSamples) < options::Tolerance { // Terminate based on tolerance.
                     return bestSoFar;
                 }
                 set nStalls = 0; //Reset the counter of consecutive noops
@@ -403,14 +387,14 @@ namespace Microsoft.Quantum.MachineLearning {
                 set batchSize = options::MinibatchSize;
             }
 
-            if (
+            if
                     NearlyEqualD(current::Bias, proposedUpdate::Bias) and
                     _AllNearlyEqualD(current::Parameters, proposedUpdate::Parameters)
-            ) {
+            {
                 set nStalls += 1;
                 // If we're more than halfway through our maximum allowed number of stalls,
                 // exit early with the best we actually found.
-                if (nStalls > options::MaxStalls) {
+                if nStalls > options::MaxStalls {
                     return bestSoFar; //Too many non-steps. Continuation makes no sense
                 }
 
@@ -421,7 +405,7 @@ namespace Microsoft.Quantum.MachineLearning {
 
                 // If we stalled out, we'll also randomly rescale our parameters
                 // and bias before updating.
-                if (nStalls > options::MaxStalls / 2) {
+                if nStalls > options::MaxStalls / 2 {
                     set current = SequentialModel(
                         model::Structure,
                         ForEach(_RandomlyRescale(options::StochasticRescaleFactor, _), proposedUpdate::Parameters),
