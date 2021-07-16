@@ -94,7 +94,7 @@ namespace Microsoft.Quantum.Arithmetic {
                     (coefficients[0], result));
             }
             elif (halfDegree > 0) {
-                // initialize auxilliary register to a_d
+                // initialize auxiliary register to a_d
                 use xsSquared = Qubit[n];
                 let fpxSquared = FixedPoint(p, xsSquared);
                 ApplyWithCA(SquareFxP(fpx, _),
