@@ -609,6 +609,9 @@ namespace Microsoft.Quantum.Math {
     ///
     /// # Output
     /// The $p$-norm $\|x\|_p$.
+    ///
+    /// # See Also
+    /// - Microsoft.Quantum.Math.PNormalized
     function PNorm (p : Double, array : Double[]) : Double {
         if p < 1.0 {
             fail $"PNorm failed. `p` must be >= 1.0";
