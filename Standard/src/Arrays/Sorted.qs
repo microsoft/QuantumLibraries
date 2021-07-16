@@ -45,7 +45,7 @@ namespace Microsoft.Quantum.Arrays {
     ///
     /// # Output
     /// `true` if and only if for each pair of elements `a` and `b` of
-    /// `array` occuring in that order, `comparison(a, b)` is `true`.
+    /// `array` occurring in that order, `comparison(a, b)` is `true`.
     ///
     /// # Remarks
     /// The function `comparison` is assumed to be transitive, such that
@@ -74,9 +74,9 @@ namespace Microsoft.Quantum.Arrays {
     /// ## array
     /// The array to be sorted.
     ///
-    /// # Ouput
+    /// # Output
     /// An array containing the same elements as `array`, such that for all
-    /// elements `a` occuring earlier than elements `b`, `comparison(a, b)`
+    /// elements `a` occurring earlier than elements `b`, `comparison(a, b)`
     /// is `true`.
     ///
     /// # Example
@@ -92,7 +92,7 @@ namespace Microsoft.Quantum.Arrays {
     /// is assumed. If this property does not hold, then the output of this
     /// function may be incorrect.
     ///
-    /// As this is a function, the results are completely determinstic, even
+    /// As this is a function, the results are completely deterministic, even
     /// when two elements are considered equal under `comparison`;
     /// that is, when `comparison(a, b)` and `comparison(b, a)` are both `true`.
     /// In particular, the sort performed by this function is guaranteed to be

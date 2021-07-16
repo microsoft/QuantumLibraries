@@ -122,7 +122,7 @@ namespace Microsoft.Quantum.Arrays {
     ///
     /// # Description
     /// This function extracts a column in a matrix in row-wise order.
-    /// Extracting a row corrsponds to element access of the first index
+    /// Extracting a row corresponds to element access of the first index
     /// and therefore requires no further treatment.
     ///
     /// # Type Parameters
