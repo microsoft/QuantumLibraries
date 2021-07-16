@@ -64,7 +64,7 @@ problem_description:
     
     #     h(i,j)=f(i,j)-\sum_{m=1}^{N/2} [2*(ij|mm)-(im|mj)]
     
-    #     where N corresponds to the number of electrons and N/2 desigantes the total 
+    #     where N corresponds to the number of electrons and N/2 designates the total 
     #     number of occupied molecular orbitals (for h2o N/2=5)
     
     # 2.) Two electron  integrals are stored using Mullikan convention (ij|kl)

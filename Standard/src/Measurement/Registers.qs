@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft Corporation.
+﻿// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
 namespace Microsoft.Quantum.Measurement {
@@ -67,6 +67,10 @@ namespace Microsoft.Quantum.Measurement {
     /// An array of qubits to be measured.
     /// # Output
     /// An array of measurement results.
+    ///
+    /// # Remarks
+    /// This operation does not reset the measured qubits to the |0⟩ state, 
+    /// leaving them in the state that corresponds to the measurement results.
     operation MultiM (targets : Qubit[]) : Result[] {
         return ForEach(M, targets);
     }
@@ -84,6 +88,10 @@ namespace Microsoft.Quantum.Measurement {
     ///
     /// # Output
     /// The result of measuring $Z \otimes Z \otimes \cdots \otimes Z$.
+    ///
+    /// # Remarks
+    /// This operation does not reset the measured qubits to the |0⟩ state, 
+    /// leaving them in the state that corresponds to the measurement result.
     operation MeasureAllZ (register : Qubit[]) : Result {
         return Measure(ConstantArray(Length(register), PauliZ), register);
     }
