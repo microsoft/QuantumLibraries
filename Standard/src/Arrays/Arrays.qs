@@ -324,13 +324,19 @@ namespace Microsoft.Quantum.Arrays {
     /// # Output
     /// Multiple arrays where the first array is the first `nElements[0]` of `arr`
     /// and the second array are the next `nElements[1]` of `arr` etc. The last array
-    /// will contain all remaining elements.
+    /// will contain all remaining elements. If the partition is split exactly, the
+    /// last array will be the empty array, indicating there are no remaining elements.
+    /// The thought is that `Tail(Partitioned(...))` should always return the remaining
+    /// elements, while ```Most(Partitioned(...))` should always return the complete
+    /// partitions of the array.
     ///
     /// # Remarks
     /// ## Example
     /// ```qsharp
     /// // The following returns [[1, 5], [3], [7]];
     /// let split = Partitioned([2,1], [1,5,3,7]);
+    /// // The following returns [[1, 5], [3, 7], []];
+    /// let split = Partitioned([2,2], [1,5,3,7]);
     /// ```
     function Partitioned<'T>(nElements: Int[], arr: 'T[]) : 'T[][] {
         mutable output = new 'T[][Length(nElements) + 1];
