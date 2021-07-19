@@ -324,7 +324,7 @@ namespace Microsoft.Quantum.Arrays {
     /// # Output
     /// Multiple arrays where the first array is the first `nElements[0]` of `arr`
     /// and the second array are the next `nElements[1]` of `arr` etc. The last array
-    /// will contain all remaining elements. If the partition is split exactly, the
+    /// will contain all remaining elements. If the array is split exactly, the
     /// last array will be the empty array, indicating there are no remaining elements.
     /// The thought is that `Tail(Partitioned(...))` should always return the remaining
     /// elements, while ```Most(Partitioned(...))` should always return the complete
