@@ -7,7 +7,7 @@
 ///
 /// # Description
 /// To learn more about this quantum machine learning library, see
-/// [Introduction to the Quantum Machine Learning Library](microsoft.quantum.libraries-machine-learning.overview)
+/// [Introduction to the Quantum Machine Learning Library](xref:microsoft.quantum.libraries-machine-learning.overview)
 /// in Q# documentation.
 ///
 /// # References
