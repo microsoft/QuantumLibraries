@@ -29,7 +29,7 @@ namespace Microsoft.Quantum.Synthesis {
     // }
     //
     // Taking that concept as inspiration, we can design the signature here
-    // to match, up to the use of a type suffix to denote the particlar
+    // to match, up to the use of a type suffix to denote the particular
     // instance of the ApplicableToCA concept.
     //
     // We will use the "1C" suffix for now.

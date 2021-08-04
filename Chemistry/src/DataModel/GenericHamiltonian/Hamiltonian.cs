@@ -181,7 +181,7 @@ namespace Microsoft.Quantum.Chemistry.Generic
         public int CountUniqueSystemIndices() =>SystemIndices.Count();
 
         /// <summary>
-        /// Computes the L_p norm of coefficicients of all terms in a Hamiltonian.
+        /// Computes the L_p norm of coefficients of all terms in a Hamiltonian.
         /// </summary>
         /// <param name="power">Selects type of norm.</param>
         /// <returns>L_p norm of Hamiltonian coefficients.</returns>
@@ -195,7 +195,7 @@ namespace Microsoft.Quantum.Chemistry.Generic
         }
 
         /// <summary>
-        /// Computes the L_p norm of coefficicients of categories of terms in a Hamiltonian.
+        /// Computes the L_p norm of coefficients of categories of terms in a Hamiltonian.
         /// </summary>
         /// <param name="termTypes">Selects the categories of Hamiltonian terms.</param>
         /// <param name="power">Selects type of norm.</param>

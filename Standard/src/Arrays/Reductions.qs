@@ -9,7 +9,7 @@ namespace Microsoft.Quantum.Arrays {
     /// # Description
     /// This function iterates the `fn` function through the array, starting from
     /// an initial state `state` and returns all intermediate values, not including
-    /// the inital state.
+    /// the initial state.
     ///
     /// # Type Parameters
     /// ## 'State

@@ -38,7 +38,7 @@ namespace Microsoft.Quantum.Synthesis
             // Returns list of two-level unitary matrices, which multiply to A.
             //
             // Matrices are listed in application order.
-            // Every matrix has indices differring in 1.
+            // Every matrix has indices differing in 1.
             // A is modified as result of this function.
             private static List<TwoLevelUnitary> TwoLevelDecompose(Complex[,] A)
             {
@@ -150,7 +150,7 @@ namespace Microsoft.Quantum.Synthesis
             }
 
             // Decomposes unitary matrix into product of 2-level unitary matrices.
-            // Every resulting 2-level matrix is represnted by 2x2 non-trivial submatrix and indices
+            // Every resulting 2-level matrix is represented by 2x2 non-trivial submatrix and indices
             // of this submatrix. Indices are guaranteed to be sorted and to differ in exactly one 
             // bit.
             private IQArray<(IQArray<IQArray<Quantum.Math.Complex>>, long, long)> Decompose(

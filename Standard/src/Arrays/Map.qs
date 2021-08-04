@@ -28,6 +28,9 @@ namespace Microsoft.Quantum.Arrays {
     ///
     /// # Output
     /// An array `'U[]` of elements that are mapped by the `mapper` function.
+    ///
+    /// # See Also
+    /// - Microsoft.Quantum.Arrays.ForEach
     function Mapped<'T, 'U> (mapper : ('T -> 'U), array : 'T[]) : 'U[] {
         mutable resultArray = new 'U[Length(array)];
 
@@ -214,6 +217,9 @@ namespace Microsoft.Quantum.Arrays {
     ///
     /// # Output
     /// An array `'U[]` of elements that are mapped by the `action` operation.
+    ///
+    /// # See Also
+    /// - Microsoft.Quantum.Arrays.Mapped
     operation ForEach<'T, 'U> (action : ('T => 'U), array : 'T[]) : 'U[] {
         mutable resultArray = new 'U[Length(array)];
 

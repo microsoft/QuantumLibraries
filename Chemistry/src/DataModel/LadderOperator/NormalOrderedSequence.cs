@@ -60,7 +60,7 @@ namespace Microsoft.Quantum.Chemistry.LadderOperators
         ///  canonical order. This means
         ///  1) <c>SpinOrbital</c> is sorted in ascending order for the creation operators.
         /// </summary>
-        /// <returns><c>true</c> if the creation opeartor sequence of a <c>LadderSequence</c> is in 
+        /// <returns><c>true</c> if the creation operator sequence of a <c>LadderSequence</c> is in 
         /// canonical order. <c>false</c> otherwise</returns>
         public bool IsInIndexCreationCanonicalOrder() => Sequence.Where(o => o.Type == RaisingLowering.u).Select(o => o.Index).IsInAscendingOrder();
 
@@ -69,7 +69,7 @@ namespace Microsoft.Quantum.Chemistry.LadderOperators
         ///  canonical order. This means
         ///  1) <c>SpinOrbital</c> is sorted in descending order for the annihilation operators.
         /// </summary>
-        /// <returns><c>true</c> if the annihilation opeartor sequence of a <c>LadderSequence</c> is in 
+        /// <returns><c>true</c> if the annihilation operator sequence of a <c>LadderSequence</c> is in 
         /// canonical order. <c>false</c> otherwise</returns>
         public bool IsInIndexAnnihilationCanonicalOrder() => Sequence.Where(o => o.Type == RaisingLowering.d).Select(o => o.Index).Reverse().IsInAscendingOrder();
         #endregion
@@ -81,7 +81,7 @@ namespace Microsoft.Quantum.Chemistry.LadderOperators
         {
             if (!base.IsInNormalOrder())
             {
-                throw new ArgumentException("NormalOrderedLadderSequence must contatin normal-ordered LadderSequence");
+                throw new ArgumentException("NormalOrderedLadderSequence must contain normal-ordered LadderSequence");
             }
         }
     }
