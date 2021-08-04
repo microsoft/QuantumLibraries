@@ -558,7 +558,7 @@ namespace Microsoft.Quantum.Math {
     /// For a non-negative integer `a`, returns the number of bits required to represent `a`.
     ///
     /// # Remarks
-    /// This function returns returns the smallest $n$ such that $a < 2^n$.
+    /// This function returns the smallest $n$ such that $a < 2^n$.
     ///
     /// # Input
     /// ## a
@@ -576,7 +576,7 @@ namespace Microsoft.Quantum.Math {
     /// For a non-negative integer `a`, returns the number of bits required to represent `a`.
     ///
     /// # Remarks
-    /// This function returns returns the smallest $n$ such that $a < 2^n$.
+    /// This function returns the smallest $n$ such that $a < 2^n$.
     ///
     /// # Input
     /// ## a
@@ -609,6 +609,9 @@ namespace Microsoft.Quantum.Math {
     ///
     /// # Output
     /// The $p$-norm $\|x\|_p$.
+    ///
+    /// # See Also
+    /// - Microsoft.Quantum.Math.PNormalized
     function PNorm (p : Double, array : Double[]) : Double {
         if p < 1.0 {
             fail $"PNorm failed. `p` must be >= 1.0";
@@ -727,7 +730,7 @@ namespace Microsoft.Quantum.Math {
     /// The domain of inputs for this function is `AbsD(n) < 170.0`.
     ///
     /// # Remarks
-    /// This function uses the Ramanujan approxomation with a relative error
+    /// This function uses the Ramanujan approximation with a relative error
     /// to the order of $1 / n^5$.
     ///
     /// # Input

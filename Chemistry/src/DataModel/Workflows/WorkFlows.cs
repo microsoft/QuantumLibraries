@@ -110,7 +110,7 @@ namespace Microsoft.Quantum.Chemistry
         public double UseTruncationThreshold;
 
         /// <summary>
-        /// Chose mapping from fermions operators to Pauli operatos.
+        /// Chose mapping from fermions operators to Pauli operators.
         /// </summary>
         public QubitEncoding UseQubitEncoding;
         

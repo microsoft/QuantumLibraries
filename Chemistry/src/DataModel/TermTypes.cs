@@ -98,7 +98,7 @@ namespace Microsoft.Quantum.Chemistry
     }
 
     /// <summary>
-    /// Spin index up/dpwn enumeration type.
+    /// Spin index up/down enumeration type.
     /// </summary>
     [JsonConverter(typeof(StringEnumConverter))]
     public enum Spin : byte

@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft Corporation. All rights reserved.
+// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
 namespace Microsoft.Quantum.MachineLearning {
@@ -13,11 +13,11 @@ namespace Microsoft.Quantum.MachineLearning {
     open Microsoft.Quantum.Characterization;
 
     // NOTE: the last qubit of 'reg' in this context is the auxiliary qubit used in the Hadamard test.
-    operation _ApplyLEOperationToRawRegister(op : (LittleEndian => Unit is Adj), target : Qubit[]) : Unit is Adj {
+    internal operation _ApplyLEOperationToRawRegister(op : (LittleEndian => Unit is Adj), target : Qubit[]) : Unit is Adj {
         op(LittleEndian(target));
     }
 
-    operation _EstimateDerivativeWithParameterShift(
+    internal operation _EstimateDerivativeWithParameterShift(
         inputEncoder : StateGenerator,
         model : SequentialModel,
         parameters : (Double[], Double[]),

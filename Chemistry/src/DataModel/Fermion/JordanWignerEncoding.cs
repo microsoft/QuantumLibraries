@@ -117,7 +117,7 @@ namespace Microsoft.Quantum.Chemistry.Fermion
         /// <summary>
         /// Function for classifying PQRS terms that have the same set of
         /// spin-orbital indices, modulo the standard symmetries
-        /// arrising from
+        /// arising from
         /// <list type="bullet">
         /// <description>
         /// <item>

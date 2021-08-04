@@ -49,7 +49,7 @@ namespace Microsoft.Quantum.Chemistry.Magic
             public IndexConvention IndexConvention { get; set; } = IndexConvention.UpDown;
 
             /// <summary>
-            /// The label of the wavefunctio within the ProblemDescription to use.
+            /// The label of the wavefunction within the ProblemDescription to use.
             /// If no label specified, it will return the Hartree-Fock state.
             /// </summary>
             [JsonProperty(PropertyName = "wavefunction_label")]

@@ -15,7 +15,7 @@ namespace Microsoft.Quantum.Tests {
         ApplyUnitary(matrix, LittleEndian(qubits));
     }
 
-    // Checks that `ApplyUnitary(matrix)` is equvalent to `expected` operation.
+    // Checks that `ApplyUnitary(matrix)` is equivalent to `expected` operation.
     internal operation CheckOperation(matrix: Complex[][], 
                                       expected: (Qubit[] => Unit is Adj)) : Unit {
         let nQubits = Floor(Lg(IntAsDouble(Length(matrix))));
