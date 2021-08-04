@@ -4,7 +4,7 @@
 /// # Summary
 /// This namespace contains operations for performing measurements beyond
 /// the basic measurement operations available in the
-/// [`Microsoft.Quantum.Intrinsic namespace](xref:Microsoft.Quantum.Intrinsic).
+/// [`Microsoft.Quantum.Intrinsic` namespace](xref:Microsoft.Quantum.Intrinsic).
 ///
 /// # Description
 /// To learn more about the different types of measurements, see the
