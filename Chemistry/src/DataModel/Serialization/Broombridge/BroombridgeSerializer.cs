@@ -243,7 +243,7 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
 
     /// <summary>
     ///     YAML type converter used to ensure that the double value <c>0</c>
-    ///     in <c>"G17"</c> converts to <c>0.0</c> to help assist compatability
+    ///     in <c>"G17"</c> converts to <c>0.0</c> to help assist compatibility
     ///     with dynamically typed languages.
     /// </summary>
     internal class DoubleYamlConverter : IYamlTypeConverter

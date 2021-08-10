@@ -324,13 +324,19 @@ namespace Microsoft.Quantum.Arrays {
     /// # Output
     /// Multiple arrays where the first array is the first `nElements[0]` of `arr`
     /// and the second array are the next `nElements[1]` of `arr` etc. The last array
-    /// will contain all remaining elements.
+    /// will contain all remaining elements. If the array is split exactly, the
+    /// last array will be the empty array, indicating there are no remaining elements.
+    /// In other words, `Tail(Partitioned(...))` will always return the remaining
+    /// elements, while `Most(Partitioned(...))` will always return the complete
+    /// partitions of the array.
     ///
     /// # Remarks
     /// ## Example
     /// ```qsharp
     /// // The following returns [[1, 5], [3], [7]];
     /// let split = Partitioned([2,1], [1,5,3,7]);
+    /// // The following returns [[1, 5], [3, 7], []];
+    /// let split = Partitioned([2,2], [1,5,3,7]);
     /// ```
     function Partitioned<'T>(nElements: Int[], arr: 'T[]) : 'T[][] {
         mutable output = new 'T[][Length(nElements) + 1];
@@ -373,10 +379,10 @@ namespace Microsoft.Quantum.Arrays {
     /// that `array` can be interpreted as a permutation on `n` elements.
     ///
     /// # Input
-    /// ## permuation
+    /// ## permutation
     /// An array that may or may not represent a permutation.
     ///
-    /// # Ouput
+    /// # Output
     /// `true` if and only if the array is a permutation.
     ///
     /// # Remarks
@@ -390,12 +396,12 @@ namespace Microsoft.Quantum.Arrays {
     /// Contradiction(IsPermutation([5, 0, 1], "[5, 0, 1] isn't a permutation");
     /// Message("All diagnostics completed successfully.");
     /// ```
-    function IsPermutation(permuation : Int[]) : Bool {
-        return All(IsValuePresent(permuation, _), RangeAsIntArray(IndexRange(permuation)));
+    function IsPermutation(permutation : Int[]) : Bool {
+        return All(IsValuePresent(permutation, _), RangeAsIntArray(IndexRange(permutation)));
     }
 
     // NB: This function is internal, but not marked as internal so as to allow
-    //     unit tests to check its behaviour. In the future, tests should be
+    //     unit tests to check its behavior. In the future, tests should be
     //     redesigned to check only publicly accessible behavior.
     /// # Summary
     /// Returns the order elements in an array need to be swapped to produce an ordered array.
@@ -416,7 +422,7 @@ namespace Microsoft.Quantum.Arrays {
     /// let swapOrder = _SwapOrderToPermuteArray([5, 3, 2, 0, 1, 4]);
     /// ```
     ///
-    /// ## Psuedocode
+    /// ## Pseudocode
     /// for index in 0..Length(newOrder) - 1 {
     ///     while newOrder[index] != index {
     ///         Switch newOrder[index] with newOrder[newOrder[index]]

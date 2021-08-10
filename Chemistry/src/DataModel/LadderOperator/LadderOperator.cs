@@ -10,7 +10,7 @@ namespace Microsoft.Quantum.Chemistry.LadderOperators
 
 
     /// <summary>
-    /// Data strcture for raising and lowering operators.
+    /// Data structure for raising and lowering operators.
     /// </summary>
     [JsonConverter(typeof(Json.LadderOperatorJsonConverter))]
     public class LadderOperator<TIndex> :

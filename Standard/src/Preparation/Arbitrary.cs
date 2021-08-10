@@ -46,7 +46,7 @@ namespace Microsoft.Quantum.Preparation
                     return base.__Body__(_args);
                 }
 
-                // Calculate the norm as we might need to normalize the requsted state.
+                // Calculate the norm as we might need to normalize the requested state.
                 var norm = 0.0;
                 foreach (var pa in polarAmplitudes) { norm += pa.Magnitude * pa.Magnitude; }
                 norm = System.Math.Sqrt(norm);

@@ -76,7 +76,7 @@ namespace Microsoft.Quantum.Chemistry.LadderOperators
         public LadderSequence() : base() { }
 
         /// <summary>
-        /// Constructor for an identitcal ladder operator sequence.
+        /// Constructor for an identical ladder operator sequence.
         /// </summary>
         public LadderSequence(LadderSequence<TIndex> setSequence)
         {
@@ -179,7 +179,7 @@ namespace Microsoft.Quantum.Chemistry.LadderOperators
         /// <param name="right">Right <see cref="LadderSequence{TIndex}"/> <c>y</c>.</param>
         /// <returns>
         ///     Returns new <see cref="LadderSequence{TIndex}"/> <c>xy</c> where coefficients and 
-        ///     LadderOperatorSequences are multipled together.
+        ///     LadderOperatorSequences are multiplied together.
         /// </returns>
         // TODO: May decide to overload the * operator.
         public LadderSequence<TIndex> Multiply(

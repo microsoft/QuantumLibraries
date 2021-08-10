@@ -116,7 +116,7 @@ namespace Microsoft.Quantum.Chemistry
         /// <param name="enumerable">Sequence of elements to be checked.</param>
         /// <param name="comparer">Comparer used to define ordering of elements.</param>
         /// <returns>
-        /// <c>true</c> if the sequenceis sorted in ascending order, and <c>false</c> otherwise.
+        /// <c>true</c> if the sequence is sorted in ascending order, and <c>false</c> otherwise.
         /// </returns>
         public static bool IsInAscendingOrder<TElement>(this IEnumerable<TElement> enumerable, IComparer<TElement> comparer = null)
         {

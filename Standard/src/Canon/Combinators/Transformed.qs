@@ -51,7 +51,7 @@ namespace Microsoft.Quantum.Canon {
     /// The operation to be transformed.
     ///
     /// # Output
-    /// A new operation tbat calls `fn` with its input, then passes the
+    /// A new operation that calls `fn` with its input, then passes the
     /// resulting output to `op`.
     ///
     /// # See Also
@@ -127,7 +127,7 @@ namespace Microsoft.Quantum.Canon {
     /// The operation to be transformed.
     ///
     /// # Output
-    /// A new operation tbat calls `fn` with its input, then passes the
+    /// A new operation that calls `fn` with its input, then passes the
     /// resulting output to `op`.
     ///
     /// # See Also
@@ -204,7 +204,7 @@ namespace Microsoft.Quantum.Canon {
     /// The operation to be transformed.
     ///
     /// # Output
-    /// A new operation tbat calls `fn` with its input, then passes the
+    /// A new operation that calls `fn` with its input, then passes the
     /// resulting output to `op`.
     ///
     /// # See Also
@@ -282,7 +282,7 @@ namespace Microsoft.Quantum.Canon {
     /// The operation to be transformed.
     ///
     /// # Output
-    /// A new operation tbat calls `fn` with its input, then passes the
+    /// A new operation that calls `fn` with its input, then passes the
     /// resulting output to `op`.
     ///
     /// # See Also
