@@ -17,7 +17,7 @@ namespace Microsoft.Quantum.ErrorCorrection {
     /// directly on the code state, but for the distillation purpose
     /// the logical qubit is returned into a single qubit,
     /// in course of which the syndrome measurements can be done without further
-    /// auxillary qubits.
+    /// auxiliary qubits.
     ///
     /// Note that this operation is not marked as `internal`, as unit tests
     /// directly depend on this operation. As a future improvement, unit tests

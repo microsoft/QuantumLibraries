@@ -5,6 +5,11 @@
 /// This namespace provides functions and operations used in
 /// quantum machine learning applications.
 ///
+/// # Description
+/// To learn more about this quantum machine learning library, see
+/// [Introduction to the Quantum Machine Learning Library](xref:microsoft.quantum.libraries-machine-learning.overview)
+/// in Q# documentation.
+///
 /// # References
 /// - Maria Schuld, Alex Bocharov, Krysta Svore, Nathan Wiebe,
 ///   "Circuit-centric quantum classifiers",

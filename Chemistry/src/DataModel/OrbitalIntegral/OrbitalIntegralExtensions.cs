@@ -22,7 +22,7 @@ namespace Microsoft.Quantum.Chemistry.OrbitalIntegrals
     {
 
         /// <summary>
-        /// Method for constructing a fermion Hamiltonian from an orbital integral Hamiltonina.
+        /// Method for constructing a fermion Hamiltonian from an orbital integral Hamiltonian.
         /// </summary>
         /// <param name="sourceHamiltonian">Input orbital integral Hamiltonian.</param>
         /// <param name="indexConvention">Indexing scheme from spin-orbitals to integers.</param>

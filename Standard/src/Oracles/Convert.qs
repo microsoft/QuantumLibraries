@@ -98,7 +98,7 @@ namespace Microsoft.Quantum.Oracles {
 
     /// # Summary
     /// Implementation of <xref:Microsoft.Quantum.Canon.ReflectionOracleFromDeterministicStateOracle>.
-    operation _ReflectionOracleFromDeterministicStateOracle(phase : Double, oracle : DeterministicStateOracle, systemRegister : Qubit[])
+    internal operation _ReflectionOracleFromDeterministicStateOracle(phase : Double, oracle : DeterministicStateOracle, systemRegister : Qubit[])
     : Unit is Adj + Ctl {
         ApplyWithCA(Adjoint oracle!, RAll0(phase, _), systemRegister);
     }

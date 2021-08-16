@@ -186,7 +186,7 @@ namespace Microsoft.Quantum.Canon {
     /// described by `unitaryGenerator`.
     ///
     /// # See Also
-    /// - Microsoft.Quantum.Canon.MultiplexerBruteForceFromGenerator
+    /// - Microsoft.Quantum.Canon.MultiplexOperationsBruteForceFromGenerator
     function MultiplexerBruteForceFromGenerator(unitaryGenerator : (Int, (Int -> (Qubit[] => Unit is Adj + Ctl)))) : ((LittleEndian, Qubit[]) => Unit is Adj + Ctl) {
         return MultiplexOperationsBruteForceFromGenerator(unitaryGenerator, _, _);
     }
