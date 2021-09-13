@@ -6,6 +6,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Collections.Concurrent;
 using System.Diagnostics.CodeAnalysis;
 using Microsoft.Quantum.Diagnostics.Emulation;
 using Microsoft.Quantum.Simulation.Common;
@@ -24,14 +25,18 @@ namespace Microsoft.Quantum.Diagnostics
         {
             private SimulatorBase? Simulator;
             
-            private static Dictionary<(Type, Type), Stack<IDisposable>> Handlers =
-                new Dictionary<(Type, Type), Stack<IDisposable>>();
+            // NB: This is static rather than an instance field, as the
+            //     simulation runtime does not guarantee that exactly one
+            //     operation object will be constructed for each simulator.
+            private static ConcurrentDictionary<IOperationFactory, Stack<IDisposable>> Handlers =
+                new ConcurrentDictionary<IOperationFactory, Stack<IDisposable>>();
 
-            private static readonly (Type, Type) Key = (typeof(__TInput__), typeof(__TOutput__));
+            private readonly IOperationFactory Key;
 
             public Native(IOperationFactory m) : base(m)
             {
                 Simulator = m as SimulatorBase;
+                Key = m;
             }
 
             public override Func<(long, ICallable, string), QVoid> __Body__ => _args =>
