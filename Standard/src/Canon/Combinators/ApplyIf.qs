@@ -7,14 +7,14 @@ namespace Microsoft.Quantum.Canon {
     /// Applies an operation conditioned on a classical bit.
     ///
     /// # Description
-    /// Given an operation `op` and a bit value `bit`, applies `op` to the `target`
+    /// Given a bit value `bit` and an operation `op`, applies `op` to the `target`
     /// if `bit` is `true`. If `false`, nothing happens to the `target`.
     ///
     /// # Input
-    /// ## op
-    /// An operation to be conditionally applied.
     /// ## bit
     /// a boolean that controls whether op is applied or not.
+    /// ## op
+    /// An operation to be conditionally applied.
     /// ## target
     /// The input to which the operation is applied.
     ///
@@ -34,12 +34,12 @@ namespace Microsoft.Quantum.Canon {
     /// ```qsharp
     /// let bitstring = [true, false, true];
     /// using (register = Qubit(3)) {
-    ///     ApplyToEach(ApplyIf(X, _, _), Zipped(bitstring, register));
+    ///     ApplyToEach(ApplyIf(_, X, _), Zipped(bitstring, register));
     ///     // register should now be in the state |101⟩.
     ///     ...
     /// }
     /// ```
-    operation ApplyIf<'T> (op : ('T => Unit), bit : Bool, target : 'T) : Unit {
+    operation ApplyIf<'T> (bit : Bool, op : ('T => Unit), target : 'T) : Unit {
         if (bit) {
             op(target);
         }
@@ -49,15 +49,15 @@ namespace Microsoft.Quantum.Canon {
     /// Applies a controllable operation conditioned on a classical bit.
     ///
     /// # Description
-    /// Given an operation `op` and a bit value `bit`, applies `op` to the `target`
+    /// Given a bit value `bit` and an operation `op`, applies `op` to the `target`
     /// if `bit` is `true`. If `false`, nothing happens to the `target`.
     /// The suffix `C` indicates that the operation to be applied is controllable.
     ///
     /// # Input
-    /// ## op
-    /// An operation to be conditionally applied.
     /// ## bit
     /// a boolean that controls whether op is applied or not.
+    /// ## op
+    /// An operation to be conditionally applied.
     /// ## target
     /// The input to which the operation is applied.
     ///
@@ -77,12 +77,12 @@ namespace Microsoft.Quantum.Canon {
     /// ```qsharp
     /// let bitstring = [true, false, true];
     /// using (register = Qubit(3)) {
-    ///     ApplyToEach(ApplyIf(X, _, _), Zipped(bitstring, register));
+    ///     ApplyToEach(ApplyIf(_, X, _), Zipped(bitstring, register));
     ///     // register should now be in the state |101⟩.
     ///     ...
     /// }
     /// ```
-    operation ApplyIfC<'T> (op : ('T => Unit is Ctl), bit : Bool, target : 'T) : Unit is Ctl {
+    operation ApplyIfC<'T> (bit : Bool, op : ('T => Unit is Ctl), target : 'T) : Unit is Ctl {
         if (bit) {
             op(target);
         }
@@ -92,15 +92,15 @@ namespace Microsoft.Quantum.Canon {
     /// Applies a adjointable operation conditioned on a classical bit.
     ///
     /// # Description
-    /// Given an operation `op` and a bit value `bit`, applies `op` to the `target`
+    /// Given a bit value `bit` and an operation `op`, applies `op` to the `target`
     /// if `bit` is `true`. If `false`, nothing happens to the `target`.
     /// The suffix `A` indicates that the operation to be applied is adjointable.
     ///
     /// # Input
-    /// ## op
-    /// An operation to be conditionally applied.
     /// ## bit
     /// a boolean that controls whether op is applied or not.
+    /// ## op
+    /// An operation to be conditionally applied.
     /// ## target
     /// The input to which the operation is applied.
     ///
@@ -120,12 +120,12 @@ namespace Microsoft.Quantum.Canon {
     /// ```qsharp
     /// let bitstring = [true, false, true];
     /// using (register = Qubit(3)) {
-    ///     ApplyToEach(ApplyIf(X, _, _), Zipped(bitstring, register));
+    ///     ApplyToEach(ApplyIf(_, X, _), Zipped(bitstring, register));
     ///     // register should now be in the state |101⟩.
     ///     ...
     /// }
     /// ```
-    operation ApplyIfA<'T> (op : ('T => Unit is Adj), bit : Bool, target : 'T) : Unit is Adj {
+    operation ApplyIfA<'T> (bit : Bool, op : ('T => Unit is Adj), target : 'T) : Unit is Adj {
         if (bit) {
             op(target);
         }
@@ -135,16 +135,16 @@ namespace Microsoft.Quantum.Canon {
     /// Applies a unitary operation conditioned on a classical bit.
     ///
     /// # Description
-    /// Given an operation `op` and a bit value `bit`, applies `op` to the `target`
+    /// Given a bit value `bit` and an operation `op`, applies `op` to the `target`
     /// if `bit` is `true`. If `false`, nothing happens to the `target`.
     /// The suffix `CA` indicates that the operation to be applied is unitary
     /// (controllable and adjointable).
     ///
     /// # Input
-    /// ## op
-    /// An operation to be conditionally applied.
     /// ## bit
     /// a boolean that controls whether op is applied or not.
+    /// ## op
+    /// An operation to be conditionally applied.
     /// ## target
     /// The input to which the operation is applied.
     ///
@@ -164,12 +164,12 @@ namespace Microsoft.Quantum.Canon {
     /// ```qsharp
     /// let bitstring = [true, false, true];
     /// using (register = Qubit(3)) {
-    ///     ApplyToEach(ApplyIf(X, _, _), Zipped(bitstring, register));
+    ///     ApplyToEach(ApplyIf(_, X, _), Zipped(bitstring, register));
     ///     // register should now be in the state |101⟩.
     ///     ...
     /// }
     /// ```
-    operation ApplyIfCA<'T> (op : ('T => Unit is Ctl + Adj), bit : Bool, target : 'T) : Unit is Ctl + Adj {
+    operation ApplyIfCA<'T> (bit : Bool, op : ('T => Unit is Ctl + Adj), target : 'T) : Unit is Ctl + Adj {
         if (bit) {
             op(target);
         }

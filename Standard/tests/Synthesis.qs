@@ -104,7 +104,7 @@ namespace Microsoft.Quantum.Tests {
                 use target = Qubit();
                 for i in 0..(2^numQubits - 1) {
                     let targetInit = RandomBool();
-                    ApplyIf(X, targetInit, target);
+                    ApplyIf(targetInit, X, target);
                     within {
                         ApplyXorInPlace(i, LittleEndian(controls));
                     } apply {
@@ -133,9 +133,9 @@ namespace Microsoft.Quantum.Tests {
                 for i in 0..(2^numQubits - 1) {
                     let controlInit = RandomBool();
                     let targetInit = RandomBool();
-                    ApplyIf(X, targetInit, target);
+                    ApplyIf(targetInit, X, target);
                     within {
-                        ApplyIfA(X, controlInit, control);
+                        ApplyIfA(controlInit, X, control);
                         ApplyXorInPlace(i, LittleEndian(controls));
                     } apply {
                         Controlled ApplyXControlledOnTruthTable([control], (func, controls, target));
