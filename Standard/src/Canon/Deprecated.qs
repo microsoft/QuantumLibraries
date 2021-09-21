@@ -6,7 +6,7 @@ namespace Microsoft.Quantum.Canon {
     open Microsoft.Quantum.Logical;
 
     /// # Deprecated
-    /// Please use @"microsoft.quantum.logical.xor".
+    /// Please use @"Microsoft.Quantum.Logical.Xor".
     @Deprecated("Microsoft.Quantum.Logical.Xor")
     function XOR(bit1 : Bool, bit2 : Bool) : Bool {
         return Xor(bit1, bit2);

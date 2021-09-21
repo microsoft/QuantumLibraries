@@ -28,7 +28,7 @@ namespace Microsoft.Quantum.Arrays {
     ///
     /// # Example
     /// The following code demonstrates the "Filtered" function.
-    /// A predicate is defined using the @"microsoft.quantum.logical.greaterthani" function:
+    /// A predicate is defined using the @"Microsoft.Quantum.Logical.GreaterThanI" function:
     /// ```qsharp
     /// open Microsoft.Quantum.Arrays;
     /// open Microsoft.Quantum.Logical;
@@ -104,7 +104,7 @@ namespace Microsoft.Quantum.Arrays {
     ///
     /// # Example
     /// The following code demonstrates the "Count" function.
-    /// A predicate is defined using the @"microsoft.quantum.logical.greaterthani" function:
+    /// A predicate is defined using the @"Microsoft.Quantum.Logical.GreaterThanI" function:
     /// ```qsharp
     ///  let predicate = GreaterThanI(_, 5);
     ///  let count = Count(predicate, [2, 5, 9, 1, 8]);
