@@ -149,7 +149,7 @@ namespace Microsoft.Quantum.AmplitudeAmplification {
     /// ## phases
     /// A set of phases describing the partial reflections at each step of the
     /// amplitude amplification algorithm. See
-    /// @"microsoft.quantum.amplitudeamplification.standardreflectionphases"
+    /// @"Microsoft.Quantum.AmplitudeAmplification.StandardReflectionPhases"
     /// for an example.
     /// ## startStateReflection
     /// An oracle that reflects about the initial state.

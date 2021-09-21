@@ -146,14 +146,14 @@ namespace Microsoft.Quantum.Canon {
     }
 
     /// # Deprecated
-    /// Please use @"microsoft.quantum.canon.applycnotchain".
+    /// Please use @"Microsoft.Quantum.Canon.ApplyCNOTChain".
     @Deprecated("Microsoft.Quantum.Canon.ApplyCNOTChain")
     operation CascadeCNOT (register : Qubit[]) : Unit is Adj + Ctl {
         Microsoft.Quantum.Canon.ApplyCNOTChain(register);
     }
 
     /// # Deprecated
-    /// Please use @"microsoft.quantum.arithmetic.applymajorityinplace".
+    /// Please use @"Microsoft.Quantum.Arithmetic.ApplyMajorityInPlace".
     @Deprecated("Microsoft.Quantum.Arithmetic.ApplyMajorityInPlace")
     operation InPlaceMajority(output: Qubit, input: Qubit[])
     : Unit is Adj + Ctl {
