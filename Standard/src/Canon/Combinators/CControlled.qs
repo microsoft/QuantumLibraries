@@ -23,7 +23,7 @@ namespace Microsoft.Quantum.Canon {
     /// - Microsoft.Quantum.Canon.CControlledA
     /// - Microsoft.Quantum.Canon.CControlledCA
     function CControlled<'T> (op : ('T => Unit)) : ((Bool, 'T) => Unit) {
-        return ApplyIf(op, _, _);
+        return ApplyIf(_, op, _);
     }
 
 
@@ -46,7 +46,7 @@ namespace Microsoft.Quantum.Canon {
     /// # See Also
     /// - Microsoft.Quantum.Canon.CControlled
     function CControlledC<'T> (op : ('T => Unit is Ctl)) : ((Bool, 'T) => Unit is Ctl) {
-        return ApplyIfC(op, _, _);
+        return ApplyIfC(_, op, _);
     }
 
 
@@ -69,7 +69,7 @@ namespace Microsoft.Quantum.Canon {
     /// # See Also
     /// - Microsoft.Quantum.Canon.CControlled
     function CControlledA<'T> (op : ('T => Unit is Adj)) : ((Bool, 'T) => Unit is Adj) {
-        return ApplyIfA(op, _, _);
+        return ApplyIfA(_, op, _);
     }
 
 
@@ -92,7 +92,7 @@ namespace Microsoft.Quantum.Canon {
     /// # See Also
     /// - Microsoft.Quantum.Canon.CControlled
     function CControlledCA<'T> (op : ('T => Unit is Ctl + Adj)) : ((Bool, 'T) => Unit is Ctl + Adj) {
-        return ApplyIfCA(op, _, _);
+        return ApplyIfCA(_, op, _);
     }
 
 }
