@@ -32,20 +32,20 @@ namespace Microsoft.Quantum.Preparation {
     /// of the mixed state
     /// $$
     /// \begin{align}
-    ///     \rho = \sum_{j = 0}^{N-1}\ frac{|alpha_j|}{\sum_k |\alpha_k|} \ket{j}\bra{j},
+    ///     \rho = \sum_{j = 0}^{N-1} \frac{|alpha_j|}{\sum_k |\alpha_k|} \ket{j}\bra{j},
     /// \end{align}
     /// $$
     /// where each $p_j$ is an approximation to the given coefficient $\alpha_j$
     /// such that
     /// $$
     /// \begin{align}
-    ///     \left| p_j - \frac{ |\alpha_j| }{ \sum_k |\alpha_k| } \le \frac{\epsilon}{N}
+    ///     \left| p_j - \frac{ |\alpha_j| }{ \sum_k |\alpha_k| } \right| \le \frac{\epsilon}{N}
     /// \end{align}
     /// $$
     /// for each $j$.
     ///
     /// When passed an index register and a register of garbage qubits,
-    /// initially in the state $\ket{0} \ket{00\cdots 0}, the returned operation
+    /// initially in the state $\ket{0} \ket{00\cdots 0}$, the returned operation
     /// prepares both registers into the purification of $\tilde \rho$,
     /// $$
     /// \begin{align}
@@ -142,13 +142,13 @@ namespace Microsoft.Quantum.Preparation {
     /// such that
     /// $$
     /// \begin{align}
-    ///     \left| p_j - \frac{ |\alpha_j| }{ \sum_k |\alpha_k| } \le \frac{\epsilon}{N}
+    ///     \left| p_j - \frac{ |\alpha_j| }{ \sum_k |\alpha_k| } \right| \le \frac{\epsilon}{N}
     /// \end{align}
     /// $$
     /// for each $j$.
     ///
     /// When passed an index register and a register of garbage qubits,
-    /// initially in the state $\ket{0} \ket{00\cdots 0}, the returned operation
+    /// initially in the state $\ket{0} \ket{00\cdots 0}$, the returned operation
     /// prepares both registers into the purification of $\tilde \rho$,
     /// $$
     /// \begin{align}
@@ -198,7 +198,7 @@ namespace Microsoft.Quantum.Preparation {
     /// # Summary
     /// Returns the total number of qubits that must be allocated
     /// in order to apply the operation returned by
-    /// @"microsoft.quantum.preparation.purifiedmixedstate".
+    /// @"Microsoft.Quantum.Preparation.PurifiedMixedState".
     ///
     /// # Input
     /// ## targetError
@@ -209,7 +209,7 @@ namespace Microsoft.Quantum.Preparation {
     /// # Output
     /// A description of how many qubits are required in total, and for each of
     /// the index and garbage registers used by the
-    /// @"microsoft.quantum.preparation.purifiedmixedstate" function.
+    /// @"Microsoft.Quantum.Preparation.PurifiedMixedState" function.
     ///
     /// # See Also
     /// - Microsoft.Quantum.Preparation.PurifiedMixedState
