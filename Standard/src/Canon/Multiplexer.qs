@@ -105,7 +105,7 @@ namespace Microsoft.Quantum.Canon {
             }
         }
         adjoint auto;
-        controlled (controlRegister, (...)) {
+        controlled (controlRegister, ...) {
             MultiplexOperationsFromGeneratorImpl(unitaryGenerator, auxiliary + controlRegister, index, target);
         }
         adjoint controlled auto;
