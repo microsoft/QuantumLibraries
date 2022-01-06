@@ -597,30 +597,37 @@ namespace Microsoft.Quantum.Math {
 
 
     /// # Summary
-    /// Returns the `L(p)` norm of a vector of `Double`s.
+    /// Returns the p-norm of a vector of real numbers.
     ///
     /// # Description
-    /// Given an array $x$ of type `Double[]`, this returns the $p$-norm
+    /// Given an array $x$, this returns the $p$-norm
     /// $\|x\|\_p= (\sum_{j}|x_j|^{p})^{1/p}$.
     ///
     /// # Input
     /// ## p
-    /// The exponent $p$ in the $p$-norm.
+    /// A positive number representing the exponent $p$ in the $p$-norm.
+    /// ## array
+    /// The vector $x$ of real numbers whose $p$-norm is to be returned.
     ///
     /// # Output
     /// The $p$-norm $\|x\|_p$.
     ///
+    /// # Remarks
+    /// This function defines a norm only when `p >= 1.0` or `Length(array)` is
+    /// either 0 or 1. In the more general case, this function fails the
+    /// triangle inequality.
+    ///
     /// # See Also
     /// - Microsoft.Quantum.Math.PNormalized
-    function PNorm (p : Double, array : Double[]) : Double {
-        if p < 1.0 {
-            fail $"PNorm failed. `p` must be >= 1.0";
+    function PNorm(p : Double, array : Double[]) : Double {
+        if p <= 0.0 {
+            fail $"PNorm failed. `p` must be a positive real number, but was {p}.";
         }
 
         mutable norm = 0.0;
 
         for element in array {
-            set norm = norm + PowD(AbsD(element), p);
+            set norm += PowD(AbsD(element), p);
         }
 
         return PowD(norm, 1.0 / p);
@@ -650,7 +657,8 @@ namespace Microsoft.Quantum.Math {
 
 
     /// # Summary
-    /// Normalizes a vector of `Double`s in the `L(p)` norm.
+    /// Normalizes a vector of real numbers according to the p-norm for a given
+    /// p.
     ///
     /// # Description
     /// That is, given an array $x$ of type `Double[]`, this returns an array where
@@ -659,9 +667,16 @@ namespace Microsoft.Quantum.Math {
     /// # Input
     /// ## p
     /// The exponent $p$ in the $p$-norm.
+    /// ## array
+    /// The vector $x$ to be normalized.
     ///
     /// # Output
     /// The array $x$ normalized by the $p$-norm $\|x\|_p$.
+    ///
+    /// # Remarks
+    /// This function defines a norm only when `p >= 1.0` or `Length(array)` is
+    /// either 0 or 1. In the more general case, this function fails the
+    /// triangle inequality.
     ///
     /// # See Also
     /// - Microsoft.Quantum.Math.PNorm
@@ -672,7 +687,7 @@ namespace Microsoft.Quantum.Math {
         if norm == 0.0 {
             return array;
         } else {
-            mutable output = new Double[nElements];
+            mutable output = [0.0, size=nElements];
 
             for idx in 0 .. nElements - 1 {
                 set output w/= idx <- array[idx] / norm;
@@ -730,8 +745,8 @@ namespace Microsoft.Quantum.Math {
     /// The domain of inputs for this function is `AbsD(n) < 170.0`.
     ///
     /// # Remarks
-    /// This function uses the Ramanujan approximation with a relative error
-    /// to the order of $1 / n^5$.
+    /// For $n \ge 10$, this function uses the Ramanujan approximation with a
+    /// relative error to the order of $1 / n^5$.
     ///
     /// # Input
     /// ## n
@@ -746,6 +761,11 @@ namespace Microsoft.Quantum.Math {
     function ApproximateFactorial(n : Int) : Double {
         Fact(n >= 0, "The factorial is not defined for negative inputs.");
         Fact(n < 170, "The largest approximate factorial that be stored as an Double is 169!. Use FactorialL.");
+
+        // For small enough n, use the exact factorial instead.
+        if n < 10 {
+            return IntAsDouble(FactorialI(n));
+        }
 
         let absN = IntAsDouble(n);
 

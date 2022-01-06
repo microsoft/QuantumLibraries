@@ -34,15 +34,22 @@ namespace Microsoft.Quantum.Canon {
         EqualityFactI(FactorialI(7), 5040, "7! was incorrect.");
     }
 
+    function ApproximateFactorialCase(param : Int, expected : Double, multTolerance : Double) : Unit {
+        let actual = ApproximateFactorial(param);
+        EqualityWithinToleranceFact(actual / expected, 1.0, multTolerance);
+    }
+
     @Test("QuantumSimulator")
     function ApproximateFactorialIsCorrect() : Unit {
-        EqualityWithinToleranceFact(ApproximateFactorial(10), 3628800.0, 5e-2);
+        EqualityWithinToleranceFact(ApproximateFactorial(0), 1.0, 5e-2);
+        EqualityWithinToleranceFact(ApproximateFactorial(1), 1.0, 5e-2);
         EqualityWithinToleranceFact(ApproximateFactorial(6), 720.0, 5e-2);
         EqualityWithinToleranceFact(ApproximateFactorial(7), 5040.0, 5e-2);
-        // For really big cases, check multiplicative tolerance.
-        let actual = ApproximateFactorial(72);
-        let expected = 6.12344584e103;
-        EqualityWithinToleranceFact(actual / expected, 1.0, 0.001);
+        EqualityWithinToleranceFact(ApproximateFactorial(10), 3628800.0, 5e-2);
+
+        // For bigger cases, check multiplicative tolerance.
+        ApproximateFactorialCase(12, 479001600.0, 0.001);
+        ApproximateFactorialCase(72, 6.12344584e103, 0.001);
     }
 
     @Test("QuantumSimulator")
@@ -50,6 +57,8 @@ namespace Microsoft.Quantum.Canon {
         EqualityFactI(Binom(31, 7), 2629575, "(31 7) was incorrect.");
         EqualityFactI(Binom(23, 9), 817190, "(23 9) was incorrect.");
         EqualityFactI(Binom(13, 5), 1287, "(13 5) was incorrect.");
+        EqualityFactI(Binom(4, 0), 1, "(4 0) was incorrect.");
+        EqualityFactI(Binom(4, 4), 1, "(4 4) was incorrect.");
     }
 
     @Test("QuantumSimulator")
