@@ -568,7 +568,7 @@ namespace Microsoft.Quantum.Math {
     /// The bit-size of `a`.
     function BitSizeI(a : Int) : Int {
         Fact(a >= 0, $"`a` must be non-negative");
-        return AccumulatedBitsizeI(a, 0);
+        return a == 0 ? 1 | AccumulatedBitsizeI(a, 0);
     }
 
 
@@ -586,6 +586,9 @@ namespace Microsoft.Quantum.Math {
     /// The bit-size of `a`.
     function BitSizeL(a : BigInt) : Int {
         Fact(a >= 0L, $"`a` must be non-negative");
+        if a == 0L {
+            return 1;
+        }
         mutable bitsize = 0;
         mutable val = a;
         while val != 0L {
