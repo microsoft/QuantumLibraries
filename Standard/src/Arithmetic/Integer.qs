@@ -428,7 +428,7 @@ namespace Microsoft.Quantum.Arithmetic {
     /// # Remarks
     /// This operation has the same functionality as RippleCarryAdderTTK but does
     /// not return the carry bit.
-    operation RippleCarryAdderNoCarryTTK (xs : LittleEndian, ys : LittleEndian)
+    operation RippleCarryAdderNoCarryTTK(xs : LittleEndian, ys : LittleEndian)
     : Unit is Adj + Ctl {
         let nQubits = Length(xs!);
 
