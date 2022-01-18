@@ -203,6 +203,12 @@ namespace Microsoft.Quantum.Math {
         Fact(power >= 0, $"`power` must be non-negative");
         Fact(modulus > 0, $"`modulus` must be positive");
         Fact(expBase > 0, $"`expBase` must be positive");
+
+        // shortcut when modulus is 1
+        if modulus == 1 {
+            return 0;
+        }
+
         mutable res = 1;
         mutable expPow2mod = expBase;
 
