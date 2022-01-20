@@ -75,8 +75,12 @@ namespace Microsoft.Quantum.Canon {
     @Test("QuantumSimulator")
     function ExpModIsCorrect () : Unit {
         // this test is generated using Mathematica PowerMod function
-        let result = ExpModI(5, 4611686018427387903, 7);
+        mutable result = ExpModI(5, 4611686018427387903, 7);
         EqualityFactI(result, 6, $"The result must be 6, got {result}");
+
+        // test case from https://github.com/microsoft/QuantumLibraries/issues/512
+        set result = ExpModI(2, 0, 1);
+        EqualityFactI(result, 0, $"The result must be 0, got {result}");
     }
 
     function ContinuedFractionConvergentTestHelper (numerator : Int, denominator : Int) : Unit {
