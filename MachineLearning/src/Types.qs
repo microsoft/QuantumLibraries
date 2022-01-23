@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft Corporation. All rights reserved.
+// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
 namespace Microsoft.Quantum.MachineLearning {
@@ -119,8 +119,8 @@ namespace Microsoft.Quantum.MachineLearning {
     /// The number of elements in the given sampling schedule.
     function ScheduleLength(schedule : SamplingSchedule) : Int {
         mutable length = 0;
-        for (range in schedule!) {
-            for (index in range) {
+        for range in schedule! {
+            for index in range {
                 set length += 1;
             }
         }
@@ -140,8 +140,8 @@ namespace Microsoft.Quantum.MachineLearning {
     /// An array of elements from values, following the given schedule.
     function Sampled<'T>(schedule : SamplingSchedule, values : 'T[]) : 'T[] {
         mutable sampled = new 'T[0];
-        for (range in schedule!) {
-            for (index in range) {
+        for range in schedule! {
+            for index in range {
                 set sampled += [values[index]];
             }
         }

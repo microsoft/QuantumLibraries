@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 namespace Microsoft.Quantum.MachineLearning {
     open Microsoft.Quantum.Math;
     open Microsoft.Quantum.Characterization;
@@ -7,8 +10,7 @@ namespace Microsoft.Quantum.MachineLearning {
     open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Convert;
 
-
-    operation _PrepareClassification(
+    internal operation _PrepareClassification(
         encoder : (LittleEndian => Unit is Adj + Ctl),
         model : SequentialModel,
         target : Qubit[]

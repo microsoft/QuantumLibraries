@@ -75,13 +75,13 @@ namespace Microsoft.Quantum.Arithmetic {
     operation IncrementPhaseByModularInteger(increment : Int, modulus : Int, target : PhaseLittleEndian)
     : Unit is Adj + Ctl {
         body (...) {
-            Controlled IncrementPhaseByModularInteger(new Qubit[0], (increment, modulus, target));
+            Controlled IncrementPhaseByModularInteger([], (increment, modulus, target));
         }
 
         controlled (controls, ...) {
             Fact(modulus <= 2 ^ (Length(target!) - 1), $"`multiplier` must be big enough to fit integers modulo `modulus`" + $"with highest bit set to 0");
 
-            if (ExtraArithmeticAssertionsEnabled()) {
+            if ExtraArithmeticAssertionsEnabled() {
                 // assert that the highest bit is zero, by switching to computational basis
                 ApplyLEOperationOnPhaseLEA(AssertMostSignificantBit(Zero, _), target);
 
@@ -129,11 +129,12 @@ namespace Microsoft.Quantum.Arithmetic {
     ///
     /// # Input
     /// ## constMultiplier
-    /// An integer $a$ to be added to each basis state label.
+    /// An integer $a$ by which `multiplier` is being multiplied.
+    /// Must be between 0 and `modulus`-1, inclusive.
     /// ## modulus
     /// The modulus $N$ which addition and multiplication is taken with respect to.
     /// ## multiplier
-    /// A quantum register representing an unsigned integer whose value is to
+    /// A quantum register representing an unsigned integer whose value, multiplied by `constMultiplier`, is to
     /// be added to each basis state label of `summand`. Corresponds to the
     /// register in state $\ket{x}$ above.
     /// ## summand
@@ -162,11 +163,12 @@ namespace Microsoft.Quantum.Arithmetic {
     ///
     /// # Input
     /// ## constMultiplier
-    /// An integer $a$ to be added to each basis state label.
+    /// An integer $a$ by which `multiplier` is being multiplied.
+    /// Must be between 0 and `modulus`-1, inclusive.
     /// ## modulus
     /// The modulus $N$ which addition and multiplication is taken with respect to.
     /// ## multiplier
-    /// A quantum register representing an unsigned integer whose value is to
+    /// A quantum register representing an unsigned integer whose value, multiplied by `constMultiplier`, is to
     /// be added to each basis state label of `summand`.
     /// ## phaseSummand
     /// A quantum register representing an unsigned integer to use as the target

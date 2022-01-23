@@ -20,9 +20,6 @@ namespace Microsoft.Quantum.Arithmetic {
     /// # Remarks
     /// This operation resets its input register to the $\ket{00\cdots 0}$ state,
     /// suitable for releasing back to a target machine.
-    ///
-    /// # See Also
-    /// - Microsoft.Quantum.Canon.MeasureIntegerBE
     operation MeasureInteger(target : LittleEndian) : Int {
         mutable results = new Result[Length(target!)];
 

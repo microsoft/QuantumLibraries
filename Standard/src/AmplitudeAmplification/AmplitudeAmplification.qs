@@ -149,7 +149,7 @@ namespace Microsoft.Quantum.AmplitudeAmplification {
     /// ## phases
     /// A set of phases describing the partial reflections at each step of the
     /// amplitude amplification algorithm. See
-    /// @"microsoft.quantum.amplitudeamplification.standardreflectionphases"
+    /// @"Microsoft.Quantum.AmplitudeAmplification.StandardReflectionPhases"
     /// for an example.
     /// ## startStateReflection
     /// An oracle that reflects about the initial state.
@@ -165,8 +165,8 @@ namespace Microsoft.Quantum.AmplitudeAmplification {
     )
     : Unit is Adj + Ctl {
         // Pass empty qubit array using fact that NoOp does nothing.
-        let systemRegister = new Qubit[0];
-        let signalOracle = ObliviousOracle(NoOp<(Qubit[], Qubit[])>);
+        let systemRegister = [];
+        let signalOracle = ObliviousOracle(NoOp);
         let op = ObliviousAmplitudeAmplificationFromPartialReflections(
             phases, startStateReflection, targetStateReflection, signalOracle
         );
@@ -199,8 +199,8 @@ namespace Microsoft.Quantum.AmplitudeAmplification {
     )
     : (Qubit[] => Unit is Adj + Ctl) {
         // Pass empty qubit array using fact that NoOp does nothing.
-        let qubitEmpty = new Qubit[0];
-        let signalOracle = ObliviousOracle(NoOp<(Qubit[], Qubit[])>);
+        let qubitEmpty = [];
+        let signalOracle = ObliviousOracle(NoOp);
         return (ObliviousAmplitudeAmplificationFromPartialReflections(
             phases, startStateReflection, targetStateReflection, signalOracle
         ))(_, qubitEmpty);
@@ -240,8 +240,8 @@ namespace Microsoft.Quantum.AmplitudeAmplification {
         idxFlagQubit : Int
     )
     : (Qubit[] => Unit is Adj + Ctl) {
-        let systemRegister = new Qubit[0];
-        let signalOracle = ObliviousOracle(NoOp<(Qubit[], Qubit[])>);
+        let systemRegister = [];
+        let signalOracle = ObliviousOracle(NoOp);
         let startStateOracle = DeterministicStateOracleFromStateOracle(idxFlagQubit, stateOracle);
         return (ObliviousAmplitudeAmplificationFromStatePreparation(
             phases, startStateOracle, signalOracle, idxFlagQubit
@@ -312,12 +312,12 @@ namespace Microsoft.Quantum.AmplitudeAmplification {
         //Complexity: Let \theta = \mathcal{O}(\sqrt{lambda})
         // Number of Measurements = O( Log^2(1/\theta) )
         // Number of Queries = O(1/\theta)
-        use flagQubit = Qubit[1];
-        let qubits = flagQubit + startQubits;
+        use flagQubit = Qubit();
+        let qubits = [flagQubit] + startQubits;
         let idxFlagQubit = 0;
 
         repeat {
-            if (2 ^ exponentMax > queriesMax) {
+            if 2 ^ exponentMax > queriesMax {
                 fail $"Target state not found. Maximum number of queries exceeded.";
             }
 
@@ -325,7 +325,7 @@ namespace Microsoft.Quantum.AmplitudeAmplification {
                 let queries = 2 ^ exponentCurrent;
                 let phases = FixedPointReflectionPhases(queries, successMin);
                 (AmplitudeAmplificationFromStatePreparation(phases, statePrepOracle, idxFlagQubit))(qubits);
-                set finished = M(flagQubit[0]);
+                set finished = M(flagQubit);
                 set exponentCurrent = exponentCurrent + 1;
             }
             until finished == One or exponentCurrent > exponentMax
@@ -335,7 +335,7 @@ namespace Microsoft.Quantum.AmplitudeAmplification {
             }
 
             set exponentCurrent = 0;
-            set exponentMax = exponentMax + 1;
+            set exponentMax += 1;
         }
         until finished == One
         fixup {

@@ -84,7 +84,7 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
     public struct ProblemDescription
     {
         /// <summary>
-        /// Identity term of the Hamilonian.
+        /// Identity term of the Hamiltonian.
         /// </summary>
         public double EnergyOffset { get; set; }
 
@@ -94,7 +94,7 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
         public int NOrbitals { get; set; }
 
         /// <summary>
-        /// Number of electroncs.
+        /// Number of electrons.
         /// </summary>
         public int NElectrons { get; set; }
 

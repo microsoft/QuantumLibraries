@@ -11,14 +11,14 @@ namespace Microsoft.Quantum.MachineLearning {
     open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Optimization;
 
-    function _MisclassificationRate(probabilities : Double[], labels : Int[], bias : Double) : Double {
+    internal function _MisclassificationRate(probabilities : Double[], labels : Int[], bias : Double) : Double {
         let proposedLabels = InferredLabels(bias, probabilities);
         return IntAsDouble(NMisclassifications(proposedLabels, labels)) / IntAsDouble(Length(probabilities));
     }
 
     /// # Summary
     /// Returns a bias value that leads to near-minimum misclassification score.
-    function _UpdatedBias(labeledProbabilities: (Double, Int)[], bias: Double, tolerance: Double) : Double {
+    internal function _UpdatedBias(labeledProbabilities: (Double, Int)[], bias: Double, tolerance: Double) : Double {
         mutable (min1, max0) = (1.0, 0.0);
 
         // Find the range of classification probabilities for each class.
@@ -115,23 +115,14 @@ namespace Microsoft.Quantum.MachineLearning {
     /// # Input
     /// ## miniBatch
     /// container of labeled samples in the mini batch
-    ///
-    /// ## param
-    /// circuit parameters
-    ///
-    /// ## gates
-    /// sequence of gates in the circuits
-    ///
-    /// ## lrate
-    /// the learning rate
-    ///
-    /// ## measCount
-    /// number of true quantum measurements to estimate probabilities.
+    /// ## options
+    /// Training options to be used when running the given training step.
+    /// ## model
+    /// The sequential model to be trained.
     ///
     /// # Output
     /// (utility, (new)parameters) pair
-    ///
-    operation _RunSingleTrainingStep(
+    internal operation _RunSingleTrainingStep(
         miniBatch : (LabeledSample, StateGenerator)[],
         options : TrainingOptions,
         model : SequentialModel
@@ -173,16 +164,10 @@ namespace Microsoft.Quantum.MachineLearning {
     /// data samples.
     ///
     /// # Input
-    /// ## samples
+    /// ## encodedSamples
     /// The samples to be trained on.
-    /// ## sched
+    /// ## schedule
     /// A sampling schedule defining a subset of samples to be included in training.
-    /// ## schedScore
-    /// A sampling schedule defining a subset of samples to be used in
-    /// accuracy scoring.
-    /// ## periodScore
-    /// The number of gradient steps to be taken between scoring points.
-    /// For best accuracy, set to 1.
     /// ## options
     /// Options to be used in training.
     /// ## model
@@ -194,7 +179,7 @@ namespace Microsoft.Quantum.MachineLearning {
     /// - The smallest number of misclassifications observed through to this
     ///   epoch.
     /// - The new best sequential model found.
-    operation _RunSingleTrainingEpoch(
+    internal operation _RunSingleTrainingEpoch(
         encodedSamples : (LabeledSample, StateGenerator)[],
         schedule : SamplingSchedule, periodScore: Int,
         options : TrainingOptions,
@@ -261,13 +246,13 @@ namespace Microsoft.Quantum.MachineLearning {
 
     /// # Summary
     /// Randomly rescales an input to either grow or shrink by a given factor.
-    operation _RandomlyRescale(scale : Double, value : Double) : Double {
+    internal operation _RandomlyRescale(scale : Double, value : Double) : Double {
         return value * (
             1.0 + scale * (DrawRandomBool(0.5) ? 1.0 | -1.0)
         );
     }
 
-    function _EncodeSample(effectiveTolerance : Double, nQubits : Int, sample : LabeledSample)
+    internal function _EncodeSample(effectiveTolerance : Double, nQubits : Int, sample : LabeledSample)
     : (LabeledSample, StateGenerator) {
         return (
             sample,
@@ -283,8 +268,6 @@ namespace Microsoft.Quantum.MachineLearning {
     /// on a given labeled training set, starting from a particular model.
     ///
     /// # Input
-    /// ## structure
-    /// Structure of the sequential classifier to be trained.
     /// ## model
     /// The sequential model to be used as a starting point for training.
     /// ## samples
@@ -344,7 +327,7 @@ namespace Microsoft.Quantum.MachineLearning {
     // Private operation used for the bulk of the implementation of
     // TrainSequentialClassifierAtModel, omitting the updating of the final
     // bias.
-    operation _TrainSequentialClassifierAtModel(
+    internal operation _TrainSequentialClassifierAtModel(
         model : SequentialModel,
         samples : LabeledSample[],
         options : TrainingOptions,

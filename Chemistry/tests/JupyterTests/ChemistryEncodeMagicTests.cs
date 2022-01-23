@@ -30,8 +30,9 @@ namespace Microsoft.Quantum.Chemistry.Tests
 
             Assert.Equal("%chemistry.encode", magic.Name);
 
-            var broombridge = Deserializers.DeserializeBroombridge(fileName);
-            var problemData = broombridge.ProblemDescriptions.First();
+            using var reader = File.OpenText(fileName);
+            var broombridge = BroombridgeSerializer.Deserialize(reader);
+            var problemData = broombridge.First();
             var orbitalIntegralHamiltonian = problemData.OrbitalIntegralHamiltonian;
             var fermionHamiltonian = orbitalIntegralHamiltonian.ToFermionHamiltonian(IndexConvention.UpDown);
 

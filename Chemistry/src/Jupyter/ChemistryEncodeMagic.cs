@@ -37,7 +37,7 @@ namespace Microsoft.Quantum.Chemistry.Magic
             public FermionWavefunction<int> Wavefunction { get; set; }
         }
 
-        public async Task<ExecutionResult> Run(string input, IChannel channel)
+        public Task<ExecutionResult> Run(string input, IChannel channel)
         {
             var args = JsonConvert.DeserializeObject<Arguments>(input);
 
@@ -51,7 +51,7 @@ namespace Microsoft.Quantum.Chemistry.Magic
             var qSharpWavefunction = args.Wavefunction.ToQSharpFormat();
             var qSharpData = Microsoft.Quantum.Chemistry.QSharpFormat.Convert.ToQSharpFormat(qSharpHamiltonian, qSharpWavefunction);
 
-            return qSharpData.ToExecutionResult();
+            return Task.FromResult(qSharpData.ToExecutionResult());
         }
     }
 }

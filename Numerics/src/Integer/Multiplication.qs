@@ -24,7 +24,7 @@ namespace Microsoft.Quantum.Arithmetic {
     /// qubit conditioned on the control qubits, and then controlling the
     /// addition on the ancilla qubit.
     operation MultiplyI (xs: LittleEndian, ys: LittleEndian,
-                         result: LittleEndian) : Unit {
+                         result: LittleEndian) : Unit is Adj + Ctl {
         body (...) {
             let n = Length(xs!);
 
@@ -34,8 +34,8 @@ namespace Microsoft.Quantum.Arithmetic {
                             requires a 2n-bit result registers.");
             AssertAllZero(result!);
 
-            for (i in 0..n-1) {
-                (Controlled AddI) ([xs![i]], (ys, LittleEndian(result![i..i+n])));
+            for i in 0..n-1 {
+                Controlled AddI([xs![i]], (ys, LittleEndian(result![i..i+n])));
             }
         }
         controlled (controls, ...) {
@@ -47,16 +47,13 @@ namespace Microsoft.Quantum.Arithmetic {
                             requires a 2n-bit result registers.");
             AssertAllZero(result!);
 
-            using (anc = Qubit()) {
-                for (i in 0..n-1) {
-                    (Controlled CNOT) (controls, (xs![i], anc));
-                    (Controlled AddI) ([anc], (ys, LittleEndian(result![i..i+n])));
-                    (Controlled CNOT) (controls, (xs![i], anc));
-                }
+            use aux = Qubit();
+            for i in 0..n - 1 {
+                (Controlled CNOT) (controls, (xs![i], aux));
+                (Controlled AddI) ([aux], (ys, LittleEndian(result![i..i+n])));
+                (Controlled CNOT) (controls, (xs![i], aux));
             }
         }
-        adjoint auto;
-        adjoint controlled auto;
     }
 
     /// # Summary
@@ -76,7 +73,7 @@ namespace Microsoft.Quantum.Arithmetic {
     /// the copy operation.
     operation SquareI (xs: LittleEndian, result: LittleEndian) : Unit {
         body (...) {
-            (Controlled SquareI) (new Qubit[0], (xs, result));
+            Controlled SquareI([], (xs, result));
         }
         controlled (controls, ...) {
             let n = Length(xs!);
@@ -85,13 +82,12 @@ namespace Microsoft.Quantum.Arithmetic {
                             requires a 2n-bit result registers.");
             AssertAllZero(result!);
 
-            using (anc = Qubit()) {
-                for (i in 0..n-1) {
-                    (Controlled CNOT) (controls, (xs![i], anc));
-                    (Controlled AddI) ([anc], (xs,
-                        LittleEndian(result![i..i+n])));
-                    (Controlled CNOT) (controls, (xs![i], anc));
-                }
+            use aux = Qubit();
+            for i in 0..n - 1 {
+                (Controlled CNOT) (controls, (xs![i], aux));
+                (Controlled AddI) ([aux], (xs,
+                    LittleEndian(result![i..i+n])));
+                (Controlled CNOT) (controls, (xs![i], aux));
             }
         }
         adjoint auto;
@@ -114,28 +110,29 @@ namespace Microsoft.Quantum.Arithmetic {
                           ys: SignedLittleEndian,
                           result: SignedLittleEndian): Unit {
         body (...) {
-            (Controlled MultiplySI) (new Qubit[0], (xs, ys, result));
+            Controlled MultiplySI([], (xs, ys, result));
         }
         controlled (controls, ...) {
             let n = Length(xs!!);
-            using ((signx, signy) = (Qubit(), Qubit())) {
-                CNOT(Tail(xs!!), signx);
-                CNOT(Tail(ys!!), signy);
-                (Controlled Invert2sSI)([signx], xs);
-                (Controlled Invert2sSI)([signy], ys);
+            use signx = Qubit();
+            use signy = Qubit();
 
-                (Controlled MultiplyI) (controls, (xs!, ys!, result!));
-                CNOT(signx, signy);
-                // No controls required since `result` will still be zero
-                // if we did not perform the multiplication above.
-                (Controlled Invert2sSI)([signy], result);
-                CNOT(signx, signy);
+            CNOT(Tail(xs!!), signx);
+            CNOT(Tail(ys!!), signy);
+            (Controlled Invert2sSI)([signx], xs);
+            (Controlled Invert2sSI)([signy], ys);
 
-                (Controlled Adjoint Invert2sSI)([signx], xs);
-                (Controlled Adjoint Invert2sSI)([signy], ys);
-                CNOT(Tail(xs!!), signx);
-                CNOT(Tail(ys!!), signy);
-            }
+            (Controlled MultiplyI) (controls, (xs!, ys!, result!));
+            CNOT(signx, signy);
+            // No controls required since `result` will still be zero
+            // if we did not perform the multiplication above.
+            (Controlled Invert2sSI)([signy], result);
+            CNOT(signx, signy);
+
+            (Controlled Adjoint Invert2sSI)([signx], xs);
+            (Controlled Adjoint Invert2sSI)([signy], ys);
+            CNOT(Tail(xs!!), signx);
+            CNOT(Tail(ys!!), signy);
         }
         adjoint auto;
         adjoint controlled auto;
@@ -155,23 +152,21 @@ namespace Microsoft.Quantum.Arithmetic {
     /// # Remarks
     /// The implementation relies on IntegerSquare.
     operation SquareSI (xs: SignedLittleEndian,
-                        result: SignedLittleEndian): Unit {
+                        result: SignedLittleEndian): Unit is Adj + Ctl {
         body (...) {
-            (Controlled SquareSI) (new Qubit[0], (xs, result));
+            Controlled SquareSI([], (xs, result));
         }
         controlled (controls, ...) {
             let n = Length(xs!!);
-            using ((signx, signy) = (Qubit(), Qubit())) {
-                CNOT(Tail(xs!!), signx);
-                (Controlled Invert2sSI)([signx], xs);
+            use signx = Qubit();
+            use signy = Qubit();
+            CNOT(Tail(xs!!), signx);
+            (Controlled Invert2sSI)([signx], xs);
 
-                (Controlled SquareI) (controls, (xs!, result!));
+            (Controlled SquareI) (controls, (xs!, result!));
 
-                (Controlled Adjoint Invert2sSI)([signx], xs);
-                CNOT(Tail(xs!!), signx);
-            }
+            (Controlled Adjoint Invert2sSI)([signx], xs);
+            CNOT(Tail(xs!!), signx);
         }
-        adjoint auto;
-        adjoint controlled auto;
     }
 }

@@ -205,11 +205,11 @@ namespace Microsoft.Quantum.Synthesis {
     ///
     /// After applying these steps for all variable indexes, the remaining
     /// permutation $\pi$ will be the identity, and based on the collected truth
-    /// tables and indexes, one can apply truth-table controlled @"microsoft.quantum.intrinsic.x"
-    /// operations using the @"microsoft.quantum.synthesis.applyxcontrolledontruthtable" operation.
+    /// tables and indexes, one can apply truth-table controlled @"Microsoft.Quantum.Intrinsic.X"
+    /// operations using the @"Microsoft.Quantum.Synthesis.ApplyXControlledOnTruthTable" operation.
     ///
     /// The variable order is $0, \dots, n - 1$.  A custom variable order can be specified
-    /// in the operation @"microsoft.quantum.synthesis.applypermutationusingdecompositionwithvariableorder".
+    /// in the operation @"Microsoft.Quantum.Synthesis.ApplyPermutationUsingDecompositionWithVariableOrder".
     ///
     /// # Input
     /// ## perm
@@ -243,10 +243,10 @@ namespace Microsoft.Quantum.Synthesis {
     /// using decomposition-based synthesis.
     ///
     /// # Description
-    /// This operation is a more general version of @"microsoft.quantum.synthesis.applypermutationusingdecomposition"
+    /// This operation is a more general version of @"Microsoft.Quantum.Synthesis.ApplyPermutationUsingDecomposition"
     /// in which the variable order can be specified. A different variable order
     /// changes the decomposition sequence and the truth tables used for the
-    /// controlled @"microsoft.quantum.intrinsic.x" gates.  Therefore, changing the
+    /// controlled @"Microsoft.Quantum.Intrinsic.X" gates.  Therefore, changing the
     /// variable order changes the number of overall gates used to realize the
     /// permutation.
     ///

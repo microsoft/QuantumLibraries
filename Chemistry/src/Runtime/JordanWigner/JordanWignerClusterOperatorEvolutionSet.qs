@@ -27,21 +27,21 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
     /// let bitString = _ComputeJordanWignerBitString(6, [0,1,2,6]) ;
     /// // bitString is [false, false, false ,true, true, true, false].
     function _ComputeJordanWignerBitString(nFermions: Int,  idxFermions: Int[]) : Bool[] {
-        if (Length(idxFermions) % 2 != 0) {
+        if Length(idxFermions) % 2 != 0 {
             fail $"ComputeJordanWignerString failed. `idxFermions` must contain an even number of terms.";
         }
 
         mutable zString = new Bool[nFermions];
-        for (fermionIdx in idxFermions) {
-            if (fermionIdx >= nFermions) {
+        for fermionIdx in idxFermions {
+            if fermionIdx >= nFermions {
                 fail $"ComputeJordanWignerString failed. fermionIdx {fermionIdx} out of range.";
             }
-            for (idx in 0..fermionIdx) {
+            for idx in 0..fermionIdx {
                 set zString w/= idx <- not zString[idx];
             }
         }
 
-        for (fermionIdx in idxFermions){
+        for fermionIdx in idxFermions {
             set zString w/= fermionIdx <- false;
         }
         return zString;
@@ -59,7 +59,7 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
     function _ComputeJordanWignerPauliString(nFermions: Int,  idxFermions: Int[], pauliReplacements : Pauli[]) : Pauli[] {
         mutable pauliString = _ComputeJordanWignerPauliZString(nFermions, idxFermions);
 
-        for (idx in IndexRange(idxFermions)) {
+        for idx in IndexRange(idxFermions) {
             let idxFermion = idxFermions[idx];
             let op = pauliReplacements[idx];
             set pauliString w/= idxFermion <- op;
@@ -78,18 +78,18 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
     /// Duration of time-evolution.
     /// ## qubits
     /// Qubits of Hamiltonian.
-    operation _ApplyJordanWignerClusterOperatorPQTerm (term : GeneratorIndex, stepSize: Double, qubits : Qubit[]) : Unit is Adj + Ctl {
+    internal operation _ApplyJordanWignerClusterOperatorPQTerm (term : GeneratorIndex, stepSize: Double, qubits : Qubit[]) : Unit is Adj + Ctl {
         let ((idxTermType, coeff), idxFermions) = term!;
         let p = idxFermions[0];
         let q = idxFermions[1];
-        if(p == q){
-            fail($"Unitary coupled-cluster PQ failed: indices {p}, {q} must be distinct");
+        if p == q {
+            fail $"Unitary coupled-cluster PQ failed: indices {p}, {q} must be distinct";
         }
         let angle = 0.5 * coeff[0] * stepSize;
         let ops = [[PauliX, PauliY], [PauliY, PauliX]];
         let signs = [+1.0, -1.0];
 
-        for ((op, sign) in Zipped(ops, signs)) {
+        for (op, sign) in Zipped(ops, signs) {
             let pauliString = _ComputeJordanWignerPauliString(Length(qubits), idxFermions, op);
             Exp(pauliString, sign * angle, qubits);
         }
@@ -106,15 +106,15 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
     /// Duration of time-evolution.
     /// ## qubits
     /// Qubits of Hamiltonian.
-    operation _ApplyJordanWignerClusterOperatorPQRSTerm (term : GeneratorIndex, stepSize: Double, qubits : Qubit[]) : Unit is Adj + Ctl {
+    internal operation _ApplyJordanWignerClusterOperatorPQRSTerm (term : GeneratorIndex, stepSize: Double, qubits : Qubit[]) : Unit is Adj + Ctl {
         let ((idxTermType, coeff), idxFermions) = term!;
         let p = idxFermions[0];
         let q = idxFermions[1];
         let r = idxFermions[2];
         let s = idxFermions[3];
         let angle = 0.125 * coeff[0] * stepSize;
-        
-        if(p == q or p==r or p==s or q==r or q==s or r==s){
+
+        if p == q or p==r or p==s or q==r or q==s or r==s {
             fail($"Unitary coupled-cluster PQRS failed: indices {p}, {q}, {r}, {s} must be distinct");
         }
 
@@ -124,7 +124,7 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
         let ops = [[y,y,x,y],[x,x,x,y],[x,y,y,y],[y,x,y,y],[x,y,x,x],[y,x,x,x],[y,y,y,x],[x,x,y,x]];
         let (sortedIndices, signs, globalSign) = _JordanWignerClusterOperatorPQRSTermSigns([p,q,r,s]);
 
-        for ((op, sign) in Zipped(ops, signs)) {
+        for (op, sign) in Zipped(ops, signs) {
             let pauliString = _ComputeJordanWignerPauliString(Length(qubits), sortedIndices, op);
             Exp(pauliString, globalSign * sign * angle, qubits);
         }
@@ -191,26 +191,21 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
     /// # Output
     /// Representation of Hamiltonian as `GeneratorSystem`.
     function JordanWignerClusterOperatorGeneratorSystem (data : JordanWignerInputState[]) : GeneratorSystem {
-        return GeneratorSystem(Length(data), _JordanWignerClusterOperatorGeneratorSystemImpl(data, _));
+        return GeneratorSystem(Length(data), JordanWignerStateAsGeneratorIndex(data, _));
     }
 
-    function _JordanWignerClusterOperatorGeneratorSystemImpl(data : JordanWignerInputState[], idx: Int) : GeneratorIndex {
-        return _JordanWignerClusterOperatorGeneratorIndex(data[idx]);
-    }
+    internal function JordanWignerStateAsGeneratorIndex(data : JordanWignerInputState[], idx : Int) : GeneratorIndex {
+        let ((real, imaginary), idxFermions) = data[idx]!;
 
-    function _JordanWignerClusterOperatorGeneratorIndex(data: JordanWignerInputState): GeneratorIndex {
-        let ((real, imaginary), idxFermions) = data!;
-        if (Length(idxFermions) == 2) {
+        if Length(idxFermions) == 2 {
             // PQ term
-            return GeneratorIndex(([0],[real]),idxFermions);
-        }
-        elif(Length(idxFermions) == 4){
+            return GeneratorIndex(([0], [real]), idxFermions);
+        } elif Length(idxFermions) == 4 {
             // PQRS term
-            return GeneratorIndex(([2],[real]),idxFermions);
-        }
-        else{
+            return GeneratorIndex(([2], [real]), idxFermions);
+        } else {
             // Any other term in invalid
-            return GeneratorIndex(([-1],[0.0]),[0]);
+            return GeneratorIndex(([-1], [0.0]), [0]);
         }
     }
 
@@ -228,19 +223,19 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
     /// Dummy variable to match signature of simulation algorithms.
     /// ## qubits
     /// Register acted upon by time-evolution operator.
-    operation _JordanWignerClusterOperatorImpl(generatorIndex : GeneratorIndex, stepSize : Double, qubits : Qubit[]) : Unit is Adj + Ctl {
+    internal operation _JordanWignerClusterOperatorImpl(generatorIndex : GeneratorIndex, stepSize : Double, qubits : Qubit[]) : Unit is Adj + Ctl {
         let ((idxTermType, idxDoubles), idxFermions) = generatorIndex!;
         let termType = idxTermType[0];
-            
-        if (termType == 0) {
+
+        if termType == 0 {
             _ApplyJordanWignerClusterOperatorPQTerm (generatorIndex, stepSize, qubits);
         }
-        elif (termType == 2) {
+        elif termType == 2 {
             _ApplyJordanWignerClusterOperatorPQRSTerm (generatorIndex, stepSize, qubits);
         }
     }
-    
-    
+
+
     /// # Summary
     /// Represents a dynamical generator as a set of simulatable gates and an
     /// expansion in the JordanWigner basis.
@@ -252,12 +247,11 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
     /// # Output
     /// An `EvolutionUnitary` representing time-evolution by the term
     /// referenced in `generatorIndex.
-    function _JordanWignerClusterOperatorFunction (generatorIndex : GeneratorIndex) : EvolutionUnitary {
-        
+    internal function _JordanWignerClusterOperatorFunction(generatorIndex : GeneratorIndex) : EvolutionUnitary {
         return EvolutionUnitary(_JordanWignerClusterOperatorImpl(generatorIndex, _, _));
     }
-    
-    
+
+
     /// # Summary
     /// Represents a dynamical generator as a set of simulatable gates and an
     /// expansion in the JordanWigner basis.
@@ -265,9 +259,8 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
     /// # Output
     /// An `EvolutionSet` that maps a `GeneratorIndex` for the JordanWigner basis to
     /// an `EvolutionUnitary.
-    function JordanWignerClusterOperatorEvolutionSet () : EvolutionSet {
-        
-        return EvolutionSet(_JordanWignerClusterOperatorFunction(_));
+    function JordanWignerClusterOperatorEvolutionSet() : EvolutionSet {
+        return EvolutionSet(_JordanWignerClusterOperatorFunction);
     }
     
 }

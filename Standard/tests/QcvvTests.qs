@@ -107,7 +107,7 @@ namespace Microsoft.Quantum.Tests {
         for idxTest in 0 .. 9 {
             let phaseSet = ((2.0 * PI()) * IntAsDouble(idxTest - 5)) / 12.0;
             let phaseEst = RobustPhaseEstimationDemoImpl(phaseSet, bitsPrecision);
-            EqualityWithinToleranceFact(phaseEst, phaseSet, 0.01);
+            EqualityWithinToleranceFact(phaseEst, phaseSet, 0.02);
         }
     }
 

@@ -47,7 +47,7 @@ namespace Microsoft.Quantum.Chemistry.Fermion
         /// <summary>
         /// Construct <see cref="WavefunctionFermionSCF"/> from a sequence of integers.
         /// </summary>
-        /// <param name="setSequence">Squence of integers.</param>
+        /// <param name="setSequence">Sequence of integers.</param>
         /// <returns>
         /// Sequence of ladder operators with only creation terms in ascending order.
         /// that are normal-ordered.
@@ -77,7 +77,7 @@ namespace Microsoft.Quantum.Chemistry.Fermion
         {
             if (Sequence.Where(o => o.Type == RaisingLowering.d).Count() > 0)
             {
-                throw new ArgumentException("WavefunctionFermionSCF must contatin only raising operators.");
+                throw new ArgumentException("WavefunctionFermionSCF must contain only raising operators.");
             }
         }
     }

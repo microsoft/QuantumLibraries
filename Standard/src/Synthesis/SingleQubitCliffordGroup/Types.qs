@@ -64,6 +64,7 @@ namespace Microsoft.Quantum.Synthesis {
     /// operation acting on a single qubit.
     ///
     /// # Input
+    /// ## clifford
     /// The operator to be represented as an operation.
     ///
     /// # Output
@@ -103,7 +104,7 @@ namespace Microsoft.Quantum.Synthesis {
     /// ## pauli
     /// The Pauli operator to be represented as a Clifford operator.
     ///
-    /// # Ouput
+    /// # Output
     /// A single-qubit Clifford operator representing the action of `pauli` by
     /// conjugation.
     ///

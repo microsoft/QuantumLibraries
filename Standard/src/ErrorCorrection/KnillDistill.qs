@@ -9,6 +9,7 @@ namespace Microsoft.Quantum.ErrorCorrection {
     /// # Summary
     /// Syndrome measurement and the inverse of embedding.
     ///
+    /// # Remarks
     /// $X$- and $Z$-stabilizers are not treated equally,
     /// which is due to the particular choice of the encoding circuit.
     /// This asymmetry leads to a different syndrome extraction routine.
@@ -16,14 +17,8 @@ namespace Microsoft.Quantum.ErrorCorrection {
     /// directly on the code state, but for the distillation purpose
     /// the logical qubit is returned into a single qubit,
     /// in course of which the syndrome measurements can be done without further
-    /// auxillary qubits.
+    /// auxiliary qubits.
     ///
-    /// # Output
-    /// The logical qubit and a pair of integers for $X$-syndrome and $Z$-syndrome.
-    /// They represent the index of the code qubit on which a single $X$- or $Z$-error
-    /// would have caused the measured syndrome.
-    ///
-    /// # Remarks
     /// Note that this operation is not marked as `internal`, as unit tests
     /// directly depend on this operation. As a future improvement, unit tests
     /// should be refactored to depend only on public callables directly.
@@ -34,6 +29,10 @@ namespace Microsoft.Quantum.ErrorCorrection {
     /// > if the encoding circuit is modified then the syndrome outcome
     /// > might have to be interpreted differently.
     ///
+    /// # Output
+    /// The logical qubit and a pair of integers for $X$-syndrome and $Z$-syndrome.
+    /// They represent the index of the code qubit on which a single $X$- or $Z$-error
+    /// would have caused the measured syndrome.
     operation _ExtractLogicalQubitFromSteaneCode(code : LogicalRegister)
     : (Qubit, Int, Int) {
         Adjoint SteaneCodeEncoderImpl((code!)[0 .. 0], (code!)[1 .. 6]);

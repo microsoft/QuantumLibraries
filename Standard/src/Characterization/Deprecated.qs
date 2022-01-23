@@ -7,7 +7,7 @@ namespace Microsoft.Quantum.Characterization {
     open Microsoft.Quantum.Arrays;
 
     /// # Deprecated
-    /// Please use @"microsoft.quantum.measurement.measureAllZ".
+    /// Please use @"Microsoft.Quantum.Measurement.MeasureAllZ".
     @Deprecated("Microsoft.Quantum.Measurement.MeasureAllZ")
     operation MeasureAllZ(register : Qubit[]) : Result {
         return Measure(ConstantArray(Length(register), PauliZ), register);

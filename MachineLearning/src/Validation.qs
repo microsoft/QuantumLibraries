@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 namespace Microsoft.Quantum.MachineLearning {
     open Microsoft.Quantum.Arrays;
     open Microsoft.Quantum.Intrinsic;
@@ -36,9 +39,9 @@ namespace Microsoft.Quantum.MachineLearning {
     /// the number of indices at which each set of labels differ.
     ///
     /// # Input
-    /// ## inferredLabels
+    /// ## proposed
     /// The labels inferred for a given training or validation set.
-    /// ## actualLabels
+    /// ## actual
     /// The true labels for a given training or validation set.
     ///
     /// # Output
@@ -50,7 +53,7 @@ namespace Microsoft.Quantum.MachineLearning {
     /// let nMisclassifications = NMisclassifications([1, 1, 0, 0], [0, 1, 1, 0]);
     /// Message($"{nMisclassifications}"); // Will print 2.
     /// ```
-    function NMisclassifications(proposed: Int[], actual: Int[]): Int {
+    function NMisclassifications(proposed : Int[], actual : Int[]): Int {
         return Length(Misclassifications(proposed, actual));
     }
 

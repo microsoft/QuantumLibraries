@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using Microsoft.Quantum.Chemistry.OrbitalIntegrals;
 using System.IO;
 using System;
+using Microsoft.Quantum.Chemistry.Fermion;
 
 namespace Microsoft.Quantum.Chemistry
 {

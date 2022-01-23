@@ -14,13 +14,13 @@ namespace Microsoft.Quantum.Tests {
             lexographicComparison(
                 [1.1, 2.2], [1.1, 2.2, 3.3]
             ),
-            "Shorter array should have occured first."
+            "Shorter array should have occurred first."
         );
         Fact(
             lexographicComparison(
                 [0.7, 2.2], [1.1, 2.2]
             ),
-            "Array with smaller first element should have occured first."
+            "Array with smaller first element should have occurred first."
         );
         Fact(
             lexographicComparison(
@@ -32,7 +32,7 @@ namespace Microsoft.Quantum.Tests {
             lexographicComparison(
                 [1.1, 2.7], [1.1, 2.2, 3.3]
             ),
-            "Array with larger second element should have occured second."
+            "Array with larger second element should have occurred second."
         );
     }
 

@@ -10,6 +10,8 @@ namespace Microsoft.Quantum.Canon {
     /// # Summary
     /// Applies the controlled-X (CX) gate to a pair of qubits.
     ///
+    /// # Description
+    /// This operation can be simulated by the unitary matrix
     /// $$
     /// \begin{align}
     ///     \left(\begin{matrix}
@@ -49,6 +51,8 @@ namespace Microsoft.Quantum.Canon {
     /// # Summary
     /// Applies the controlled-Y (CY) gate to a pair of qubits.
     ///
+    /// # Description
+    /// This operation can be simulated by the unitary matrix
     /// $$
     /// \begin{align}
     ///     1 & 0 & 0 & 0 \\\\
@@ -82,6 +86,8 @@ namespace Microsoft.Quantum.Canon {
     /// # Summary
     /// Applies the controlled-Z (CZ) gate to a pair of qubits.
     ///
+    /// # Description
+    /// This operation can be simulated by the unitary matrix
     /// $$
     /// \begin{align}
     ///     1 & 0 & 0 & 0 \\\\
@@ -160,13 +166,15 @@ namespace Microsoft.Quantum.Canon {
     }
 
     /// # Summary
-    /// Performs a phase shift operation.
+    /// Rotates the all-ones state by a given phase.
     ///
-    /// $R=\boldone-(1-e^{i \phi})\ket{1\cdots 1}\bra{1\cdots 1}$.
+    /// # Description
+    /// This operation can be simulated by the unitary matrix
+    /// $R=\boldone - (1 - e^{i \phi})\ket{1\cdots 1}\bra{1\cdots 1}$.
     ///
     /// # Input
     /// ## phase
-    /// The phase $\phi$ applied to state $\ket{1\cdots 1}\bra{1\cdots 1}$.
+    /// The phase $\phi$ applied to the all-ones state $\ket{1\cdots 1}$.
     /// ## qubits
     /// The register whose state is to be rotated by $R$.
     operation RAll1 (phase : Double, qubits : Qubit[]) : Unit {
@@ -183,18 +191,17 @@ namespace Microsoft.Quantum.Canon {
     }
 
     /// # Summary
-    /// Performs a phase shift operation.
+    /// Rotates the all-zeros state by a given phase.
     ///
-    /// $R=\boldone-(1-e^{i \phi})\ket{0\cdots 0}\bra{0\cdots 0}$.
+    /// # Description
+    /// This operation can be simulated by the unitary matrix
+    /// $R=\boldone - (1 - e^{i \phi})\ket{0\cdots 0}\bra{0\cdots 0}$.
     ///
     /// # Input
     /// ## phase
-    /// The phase $\phi$ applied to state $\ket{0\cdots 0}\bra{0\cdots 0}$.
+    /// The phase $\phi$ applied to the all-zeros state $\ket{0\cdots 0}$.
     /// ## qubits
     /// The register whose state is to be rotated by $R$.
-    ///
-    /// # See Also
-    /// - Microsoft.Quantum.Canon.RAll1
     operation RAll0 (phase : Double, qubits : Qubit[]) : Unit {
         body (...) {
             ApplyWithCA(ApplyToEachCA(X, _), RAll1(phase, _), qubits);
@@ -209,15 +216,16 @@ namespace Microsoft.Quantum.Canon {
     /// Applies the Y-basis analog to the Hadamard transformation
     /// that interchanges the Z and Y axes.
     ///
-    /// The Y Hadamard transformation $H_Y = S H$ on a single qubit is:
-    ///
+    /// # Description
+    /// This operation can be simulated by the unitary matrix
     /// \begin{align}
     ///     H_Y \mathrel{:=}
-    ///     \frac{1}{\sqrt{2}}
-    ///     \begin{bmatrix}
-    ///         1 & 1 \\\\
-    ///         i & -i
-    ///     \end{bmatrix}.
+    ///         S H =
+    ///         \frac{1}{\sqrt{2}}
+    ///         \begin{bmatrix}
+    ///             1 & 1 \\\\
+    ///             i & -i
+    ///         \end{bmatrix}.
     /// \end{align}
     ///
     /// # Input

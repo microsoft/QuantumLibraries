@@ -61,6 +61,6 @@ setuptools.setup(
         "Operating System :: OS Independent",
     ],
     install_requires=[
-        'qsharp-core'
+        f'qsharp-core=={version}'
     ]
 )

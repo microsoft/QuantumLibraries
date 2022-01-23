@@ -7,7 +7,7 @@ namespace Microsoft.Quantum.AmplitudeAmplification {
 
     /// # Deprecated
     /// Please use
-    /// @"microsoft.quantum.amplitudeamplification.rotationphasesasreflectionphases".
+    /// @"Microsoft.Quantum.AmplitudeAmplification.RotationPhasesAsReflectionPhases".
     @Deprecated("Microsoft.Quantum.AmplitudeAmplification.RotationPhasesAsReflectionPhases")
     function AmpAmpRotationToReflectionPhases (rotPhases : RotationPhases)
     : ReflectionPhases {
@@ -16,7 +16,7 @@ namespace Microsoft.Quantum.AmplitudeAmplification {
 
     /// # Deprecated
     /// Please use
-    /// @"microsoft.quantum.amplitudeamplification.standardreflectionphases".
+    /// @"Microsoft.Quantum.AmplitudeAmplification.StandardReflectionPhases".
     @Deprecated("Microsoft.Quantum.AmplitudeAmplification.StandardReflectionPhases")
     function AmpAmpPhasesStandard(nIterations : Int) : ReflectionPhases {
         return StandardReflectionPhases(nIterations);
@@ -24,14 +24,14 @@ namespace Microsoft.Quantum.AmplitudeAmplification {
 
     /// # Deprecated
     /// Please use
-    /// @"microsoft.quantum.amplitudeamplification.fixedpointreflectionphases".
+    /// @"Microsoft.Quantum.AmplitudeAmplification.FixedPointReflectionPhases".
     @Deprecated("Microsoft.Quantum.AmplitudeAmplification.FixedPointReflectionPhases")
     function AmpAmpPhasesFixedPoint(nQueries : Int, successMin : Double) : ReflectionPhases {
         return FixedPointReflectionPhases(nQueries, successMin);
     }
 
     /// # Deprecated
-    /// Please use @"microsoft.quantum.amplitudeamplification.obliviousamplitudeamplificationfrompartialreflections".
+    /// Please use @"Microsoft.Quantum.AmplitudeAmplification.ObliviousAmplitudeAmplificationFromPartialReflections".
     @Deprecated("Microsoft.Quantum.AmplitudeAmplification.ObliviousAmplitudeAmplificationFromPartialReflections")
     function AmpAmpObliviousByReflectionPhases(
         phases : ReflectionPhases,
@@ -46,7 +46,7 @@ namespace Microsoft.Quantum.AmplitudeAmplification {
     }
 
     /// # Deprecated
-    /// Please use @"microsoft.quantum.amplitudeamplification.obliviousamplitudeamplificationfromstatepreparation".
+    /// Please use @"Microsoft.Quantum.AmplitudeAmplification.ObliviousAmplitudeAmplificationFromStatePreparation".
     @Deprecated("Microsoft.Quantum.AmplitudeAmplification.ObliviousAmplitudeAmplificationFromStatePreparation")
     function AmpAmpObliviousByOraclePhases(
         phases : ReflectionPhases,
@@ -61,7 +61,7 @@ namespace Microsoft.Quantum.AmplitudeAmplification {
     }
 
     /// # Deprecated
-    /// Please use @"microsoft.quantum.amplitudeamplification.amplitudeamplificationfrompartialreflections".
+    /// Please use @"Microsoft.Quantum.AmplitudeAmplification.AmplitudeAmplificationFromPartialReflections".
     @Deprecated("Microsoft.Quantum.AmplitudeAmplification.AmplitudeAmplificationFromPartialReflections")
     function AmpAmpByReflectionPhases(
         phases : ReflectionPhases,
@@ -75,7 +75,7 @@ namespace Microsoft.Quantum.AmplitudeAmplification {
     }
 
     /// # Deprecated
-    /// Please use @"microsoft.quantum.amplitudeamplification.amplitudeamplificationfromstatepreparation".
+    /// Please use @"Microsoft.Quantum.AmplitudeAmplification.AmplitudeAmplificationFromStatePreparation".
     @Deprecated("Microsoft.Quantum.AmplitudeAmplification.AmplitudeAmplificationFromStatePreparation")
     function AmpAmpByOraclePhases(
         phases : ReflectionPhases,
@@ -89,7 +89,7 @@ namespace Microsoft.Quantum.AmplitudeAmplification {
     }
 
     /// # Deprecated
-    /// Please use @"microsoft.quantum.amplitudeamplification.standardamplitudeamplification".
+    /// Please use @"Microsoft.Quantum.AmplitudeAmplification.StandardAmplitudeAmplification".
     @Deprecated("Microsoft.Quantum.AmplitudeAmplification.StandardAmplitudeAmplification")
     function AmpAmpByOracle(
         nIterations : Int,
@@ -102,7 +102,7 @@ namespace Microsoft.Quantum.AmplitudeAmplification {
 
 
     /// # Deprecated
-    /// Please use @"microsoft.quantum.amplitudeamplification.applyfixedpointamplification".
+    /// Please use @"Microsoft.Quantum.AmplitudeAmplification.ApplyFixedPointAmplification".
     @Deprecated("Microsoft.Quantum.AmplitudeAmplification.ApplyFixedPointAmplification")
     operation AmpAmpRUSByOracle(statePrepOracle : StateOracle, startQubits : Qubit[])
     : Unit {

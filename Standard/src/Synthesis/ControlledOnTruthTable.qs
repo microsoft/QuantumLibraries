@@ -123,7 +123,7 @@ namespace Microsoft.Quantum.Synthesis {
     }
 
     /// # Summary
-    /// Applies the @"microsoft.quantum.intrinsic.x" operation on `target`, if the Boolean function `func` evaluates
+    /// Applies the @"Microsoft.Quantum.Intrinsic.X" operation on `target`, if the Boolean function `func` evaluates
     /// to true for the classical assignment in `controlRegister`.
     ///
     /// # Description
@@ -141,8 +141,8 @@ namespace Microsoft.Quantum.Synthesis {
     /// in decimal notation.  The `L` suffix indicates that the constant is of type `BigInt`.
     /// More details on this representation can also be found in the [truth tables kata](https://github.com/microsoft/QuantumKatas/tree/main/TruthTables).
     ///
-    /// The implementation makes use of @"microsoft.quantum.intrinsic.cnot"
-    /// and @"microsoft.quantum.intrinsic.r1" gates.
+    /// The implementation makes use of @"Microsoft.Quantum.Intrinsic.Cnot"
+    /// and @"Microsoft.Quantum.Intrinsic.R1" gates.
     ///
     /// # Input
     /// ## func
@@ -198,15 +198,15 @@ namespace Microsoft.Quantum.Synthesis {
     }
 
     /// # Summary
-    /// Applies the @"microsoft.quantum.intrinsic.x" operation on `target`, if the Boolean function `func` evaluates
+    /// Applies the @"Microsoft.Quantum.Intrinsic.X" operation on `target`, if the Boolean function `func` evaluates
     /// to true for the classical assignment in `controlRegister`.
     ///
     /// # Description
-    /// This operation implements a special case of @"microsoft.quantum.synthesis.applyxcontrolledontruthtable",
+    /// This operation implements a special case of @"Microsoft.Quantum.Synthesis.ApplyXControlledOnTruthTable",
     /// in which the target qubit is known to be in the $\ket{0}$ state.
     ///
-    /// The implementation makes use of @"microsoft.quantum.intrinsic.cnot"
-    /// and @"microsoft.quantum.intrinsic.r1" gates.  The implementation of the
+    /// The implementation makes use of @"Microsoft.Quantum.Intrinsic.Cnot"
+    /// and @"Microsoft.Quantum.Intrinsic.R1" gates.  The implementation of the
     /// adjoint operation is optimized and uses measurement-based uncomputation.
     ///
     /// # Input

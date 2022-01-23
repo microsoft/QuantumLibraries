@@ -405,7 +405,7 @@ namespace Microsoft.Quantum.Canon {
         }
 
         if (Length(unitaries) > 0) {
-            let auxillaryRegister = new Qubit[0];
+            let auxillaryRegister = [];
             MultiplexOperationsWithAuxRegister(unitaries, auxillaryRegister, index, target);
         }
     }

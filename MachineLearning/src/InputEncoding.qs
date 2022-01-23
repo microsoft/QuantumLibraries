@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft Corporation. All rights reserved.
+// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
 namespace Microsoft.Quantum.MachineLearning {
@@ -10,11 +10,11 @@ namespace Microsoft.Quantum.MachineLearning {
     open Microsoft.Quantum.Intrinsic;
     open Microsoft.Quantum.Canon;
 
-    function _CanApplyTwoQubitCase(datum: Double[]) : Bool {
+    internal function _CanApplyTwoQubitCase(datum: Double[]) : Bool {
         return((Length(datum)==4) and (Microsoft.Quantum.Math.AbsD(datum[0]*datum[3]-datum[1]*datum[2])< 1E-12) and (Microsoft.Quantum.Math.AbsD(datum[0])> 1E-4));
     }
 
-    operation _ApplyTwoQubitCase(datum: Double[], reg: LittleEndian) : Unit is Adj + Ctl {
+    internal operation _ApplyTwoQubitCase(datum: Double[], reg: LittleEndian) : Unit is Adj + Ctl {
         let x = datum[1]/datum[0];
         let y = datum[2]/datum[0];
         // we now encoding [1,x,y,x*y]
@@ -24,10 +24,10 @@ namespace Microsoft.Quantum.MachineLearning {
         R(PauliY, ax, (reg!)[0]);
     }
 
-    function _Unnegate(negLocs: Int[], coefficients : ComplexPolar[]) : ComplexPolar[] {
+    internal function _Unnegate(negLocs: Int[], coefficients : ComplexPolar[]) : ComplexPolar[] {
         mutable ret = coefficients;
-        for (idxNegative in negLocs) {
-            if (idxNegative >= Length(coefficients)) {
+        for idxNegative in negLocs {
+            if idxNegative >= Length(coefficients) {
                 fail $"Cannot set the phase at index {idxNegative}, only {Length(coefficients)} coefficients were provided.";
             }
             let coefficient = coefficients[idxNegative];
@@ -36,9 +36,9 @@ namespace Microsoft.Quantum.MachineLearning {
         return ret;
     }
 
-    function _NegativeLocations(cNegative: Int, coefficients : ComplexPolar[]) : Int[] {
+    internal function _NegativeLocations(cNegative: Int, coefficients : ComplexPolar[]) : Int[] {
         mutable negLocs = new Int[0];
-        for ((idx, coefficient) in Enumerated(coefficients)) {
+        for (idx, coefficient) in Enumerated(coefficients) {
             if (AbsD(coefficient::Argument - PI()) < 1E-9) {
                 set negLocs += [idx];
             }
@@ -47,13 +47,13 @@ namespace Microsoft.Quantum.MachineLearning {
     }
 
     /// Do special processing on the first cNegative entries
-    operation _ReflectAboutNegativeCoefficients(
+    internal operation _ReflectAboutNegativeCoefficients(
         negLocs : Int[],
         coefficients : ComplexPolar[],
         reg: LittleEndian
     )
     : Unit is Adj + Ctl {
-        for (idxNegative in negLocs) {
+        for idxNegative in negLocs {
             ReflectAboutInteger(idxNegative, reg);
         }
     }
@@ -94,7 +94,7 @@ namespace Microsoft.Quantum.MachineLearning {
         let nCoefficients = Length(coefficients);
         mutable complexCoefficients = new ComplexPolar[Length(coefficients)];
         mutable cNegative = 0;
-        for ((idx, coef) in Enumerated(coefficients)) {
+        for (idx, coef) in Enumerated(coefficients) {
             mutable magnitude = coef;
             if (tolerance > 1E-9) {
                 set magnitude = tolerance * IntAsDouble(Round(coefficients[idx] / tolerance)); //quantization
@@ -158,7 +158,7 @@ namespace Microsoft.Quantum.MachineLearning {
     : StateGenerator {
         //default implementation, does not respect sparsity
         mutable complexCoefficients = new ComplexPolar[Length(coefficients)];
-        for ((idx, coefficient) in Enumerated(coefficients)) {
+        for (idx, coefficient) in Enumerated(coefficients) {
             set complexCoefficients w/= idx <- ComplexPolar(
                 coefficient >= 0.0
                 ? (coefficient, 0.0)
@@ -171,7 +171,7 @@ namespace Microsoft.Quantum.MachineLearning {
         //this is preparing the state almost exactly so far
         return StateGenerator(
             FeatureRegisterSize(coefficients),
-            ApproximatelyPrepareArbitraryState(1E-12, complexCoefficients, _)
+            ApproximatelyPrepareArbitraryStateCP(1E-12, complexCoefficients, _)
         );
     }
 
