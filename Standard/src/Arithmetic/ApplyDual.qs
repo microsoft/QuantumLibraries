@@ -69,7 +69,7 @@ namespace Microsoft.Quantum.Arithmetic {
     }
 
 
-      /// # Summary
+    /// # Summary
     /// Applies an operation that takes a
     /// <xref:Microsoft.Quantum.Arithmetic.LittleEndian> register as input
     /// on a target register of type <xref:Microsoft.Quantum.Arithmetic.PhaseLittleEndian>.
@@ -81,7 +81,7 @@ namespace Microsoft.Quantum.Arithmetic {
     /// The register to which the operation is applied.
     ///
     /// # Remarks
-    /// The register is transformed to `PhaseLittleEndian` by the use of
+    /// The register is transformed to <xref:Microsoft.Quantum.Arithmetic.PhaseLittleEndian> by the use of
     /// <xref:Microsoft.Quantum.Canon.QFTLE> and is then returned to
     /// its original representation after application of `op`.
     ///
