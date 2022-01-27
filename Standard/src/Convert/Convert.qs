@@ -80,7 +80,8 @@ namespace Microsoft.Quantum.Convert {
     /// The input `number` must be between 0 and $2^{\texttt{bits}} - 1$.
     function IntAsBoolArray(number : Int, bits : Int) : Bool[] {
         Fact(bits >= 0 and bits <= 63, $"`bits` must be between 0 and 63 {2^bits}");
-        Fact(number >= 0 and number < 2 ^ bits, $"`number` must be between 0 and 2^{bits} - 1, but was {number}.");
+        let max = bits < 63 ? 1 <<< bits | 0x7FFFFFFFFFFFFFFF;
+        Fact(number >= 0 and number <= max, $"`number` must be between 0 and 2^{bits} - 1, but was {number}.");
         mutable outputBits = new Bool[bits];
         mutable tempInt = number;
 

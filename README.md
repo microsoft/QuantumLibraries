@@ -7,7 +7,7 @@ This repository contains open-source libraries for the [Quantum Development Kit]
 - **[Docs/](./Docs)**: Additional documentation for developing on the libraries. Please see [QDK online documentation](https://docs.microsoft.com/azure/quantum/) for online documentation.
 - **[Standard/](./Standard)**: Q# sources used to implement [the Q# standard libraries](https://docs.microsoft.com/azure/quantum/user-guide/libraries/standard).
 - **[Chemistry/](./Chemistry)**: Q# and C# sources used to implement a library for [quantum chemistry](https://docs.microsoft.com/azure/quantum/user-guide/libraries/chemistry) and Hamiltonian simulation.
-- **[Numerics/](./Numerics)**: Q# sources used to implement the [quantum numerics library](https://docs.microsoft.com/azure/quantum/user-guide/libraries/numerics).
+- **[Numerics/](./Numerics)**: Q# sources used to implement the [quantum numerics library](https://docs.microsoft.com/azure/quantum/user-guide/libraries/numerics/numerics).
 - **[LICENSE](./LICENSE.txt)**: Terms of use and license details for the Quantum Development Kit libraries.
 
 ## New to Quantum? ##
