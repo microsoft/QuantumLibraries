@@ -72,7 +72,7 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner.VQE {
         elif (termType == 3) {set nOps = 8;}
         else {set nOps = 1;}
 
-        mutable ops = new Pauli[][nOps];
+        mutable ops = [[], size = nOps];
 
         // Z and ZZ terms
         if (termType == 0) or (termType == 1) {
@@ -154,7 +154,7 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner.VQE {
         elif (termType == 3) {set nCoeffs = 8;}
         else {set nCoeffs = 1;}
 
-        mutable coeffs = new Double[nCoeffs];
+        mutable coeffs = [0.0, size = nCoeffs];
 
         // Return the expanded array of coefficients
         if (termType == 0) or (termType == 1) {

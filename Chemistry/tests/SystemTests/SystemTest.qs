@@ -43,9 +43,9 @@ namespace SystemTests {
     operation PQTermABFromGeneralHamiltonianTestOp (data : JWOptimizedHTerms) : Unit {
         // Test probability
         let time = 0.5 * PI();
-        mutable arrPrep = new Int[4];
+        mutable arrPrep = [0, size = 4];
         set arrPrep = [0, 1, 2, 3];
-        mutable arrMeasure = new Int[4];
+        mutable arrMeasure = [0, size = 4];
         set arrMeasure = [1, 0, 2, 3];
 
         use qubits = Qubit[4] {
@@ -84,9 +84,9 @@ namespace SystemTests {
     operation PQTermACFromGeneralHamiltonianTestOp (data : JWOptimizedHTerms) : Unit {
         // Test probability
         let time = 0.5 * PI();
-        mutable arrPrep = new Int[4];
+        mutable arrPrep = [0, size = 4];
         set arrPrep = [0, 2, 3, 5];
-        mutable arrMeasure = new Int[4];
+        mutable arrMeasure = [0, size = 4];
         set arrMeasure = [2, 0, 3, 5];
 
         use qubits = Qubit[6] {
@@ -183,9 +183,9 @@ namespace SystemTests {
     operation PQQRTermFromGeneralHamiltonianTestOp (data : JWOptimizedHTerms) : Unit {
         // Test probability
         mutable time = (4.0 * 0.5) * PI();
-        mutable arrPrep = new Int[4];
+        mutable arrPrep = [0, size = 4];
         set arrPrep = [0, 2, 1, 3];
-        mutable arrMeasure = new Int[4];
+        mutable arrMeasure = [0, size = 4];
         set arrMeasure = [2, 0, 3, 1];
 
         use qubits = Qubit[4];
@@ -266,9 +266,9 @@ namespace SystemTests {
 
         // Test probability
         let time = 0.5 * PI();
-        mutable arrPrep = new Int[4];
+        mutable arrPrep = [0, size = 4];
         set arrPrep = [0, 1, 2, 3];
-        mutable arrMeasure = new Int[4];
+        mutable arrMeasure = [0, size = 4];
         set arrMeasure = [1, 0, 3, 2];
 
         use qubits = Qubit[4] {
@@ -309,9 +309,9 @@ namespace SystemTests {
 
         // Test probability
         let time = 0.5 * PI();
-        mutable arrPrep = new Int[4];
+        mutable arrPrep = [0, size = 4];
         set arrPrep = [0, 2, 3, 5];
-        mutable arrMeasure = new Int[4];
+        mutable arrMeasure = [0, size = 4];
         set arrMeasure = [2, 0, 5, 3];
 
         use qubits = Qubit[6] {
@@ -411,9 +411,9 @@ namespace SystemTests {
     operation PQQRTermFromLiquidOrbitalTestOp (data : JWOptimizedHTerms) : Unit {
         // Test probability
         mutable time = (4.0 * 0.5) * PI();
-        mutable arrPrep = new Int[4];
+        mutable arrPrep = [0, size = 4];
         set arrPrep = [0, 1, 2, 3];
-        mutable arrMeasure = new Int[4];
+        mutable arrMeasure = [0, size = 4];
         set arrMeasure = [1, 0, 3, 2];
 
         use qubits = Qubit[4];
