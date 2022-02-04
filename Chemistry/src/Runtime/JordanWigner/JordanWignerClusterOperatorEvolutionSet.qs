@@ -31,7 +31,7 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
             fail $"ComputeJordanWignerString failed. `idxFermions` must contain an even number of terms.";
         }
 
-        mutable zString = new Bool[nFermions];
+        mutable zString = [false, size = nFermions];
         for fermionIdx in idxFermions {
             if fermionIdx >= nFermions {
                 fail $"ComputeJordanWignerString failed. fermionIdx {fermionIdx} out of range.";
@@ -135,8 +135,8 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
         let q = indices[1];
         let r = indices[2];
         let s = indices[3];
-        mutable sorted = new Int[4];
-        mutable signs = new Double[8];
+        mutable sorted = [0, size = 4];
+        mutable signs = [0.0, size = 8];
         mutable sign = 1.0;
 
         if(p>q){

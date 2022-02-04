@@ -34,7 +34,7 @@ namespace Microsoft.Quantum.Arrays {
         let n = Length(array);
 
         if (size <= 0 or size > n) {
-            return new 'T[][0];
+            return [];
         }
 
         mutable result = new 'T[][n + 1 - size];

@@ -81,7 +81,7 @@ namespace Microsoft.Quantum.Tests {
                     // Generate some coefficients
                     let maxCoefficients = 2 ^ nMultiplexerControl;
                     let nCoefficients = maxCoefficients - missingCoefficients;
-                    mutable coefficients = new Double[nCoefficients];
+                    mutable coefficients = [0.0, size = nCoefficients];
 
                     for idx in IndexRange(coefficients) {
                         set coefficients w/= idx <- (1.0 * IntAsDouble(idx + 1)) * 0.2;
@@ -91,15 +91,7 @@ namespace Microsoft.Quantum.Tests {
                     use qubits = Qubit[(nMultiplexerControl + 1) + nAdditionalControl];
                     let multiplexerControl = LittleEndian(qubits[0 .. nMultiplexerControl - 1]);
                     let target = qubits[nMultiplexerControl];
-                    mutable additionalControl = new Qubit[1];
-
-                    if (nAdditionalControl == 0) {
-                        set additionalControl = [];
-                    }
-                    elif (nAdditionalControl == 1) {
-                        set additionalControl = [qubits[Length(qubits) - 1]];
-                    }
-
+                    mutable additionalControl = nAdditionalControl == 0 ? [] | [qubits[Length(qubits) - 1]];
                     let tolerance = 1E-09;
 
                     // Repeat test some number of times
@@ -149,7 +141,7 @@ namespace Microsoft.Quantum.Tests {
             let maxCoefficients = 2 ^ nqubits;
 
             //let nCoefficients = maxCoefficients - missingCoefficients;
-            mutable coefficients = new Double[maxCoefficients];
+            mutable coefficients = [0.0, size = maxCoefficients];
 
             for idx in IndexRange(coefficients) {
                 set coefficients w/= idx <- (1.0 * IntAsDouble(idx + 1)) * 0.3;
@@ -164,15 +156,7 @@ namespace Microsoft.Quantum.Tests {
 
 
     function MultiplexOperationsTestUnitary (nStates : Int, idx : Int) : (Qubit => Unit is Adj + Ctl)[] {
-
-        mutable unitaries = new (Qubit => Unit is Adj + Ctl)[nStates];
-
-        for idxUnitary in 0 .. nStates - 1 {
-            set unitaries w/= idxUnitary <- I;
-        }
-
-        set unitaries w/= idx <- X;
-        return unitaries;
+        return [I, size = nStates] w/ idx <- X;
     }
 
 
@@ -250,18 +234,7 @@ namespace Microsoft.Quantum.Tests {
 
 
     function MultiplexOperationsTestMissingUnitary (nStates : Int, nUnitaries : Int) : (Qubit => Unit is Adj + Ctl)[] {
-
-        mutable unitaries = new (Qubit => Unit is Adj + Ctl)[nStates];
-
-        for idxUnitary in 0 .. nUnitaries - 1 {
-            set unitaries w/= idxUnitary <- X;
-        }
-
-        for idxUnitary in nUnitaries .. nStates - 1 {
-            set unitaries w/= idxUnitary <- I;
-        }
-
-        return unitaries;
+        return [X, size = nUnitaries] + [I, size = nStates - nUnitaries];
     }
 
 

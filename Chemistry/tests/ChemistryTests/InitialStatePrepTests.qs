@@ -106,7 +106,7 @@ namespace Microsoft.Quantum.Chemistry.Tests {
         let nQubits = 1;
         let intTest = [39, 21, 10];
         let phase = 2.453;
-        let excitations = [JordanWignerInputState((0.1, 0.0), new Int[0]), JordanWignerInputState((0.1 * Cos(phase), 0.1 * Sin(phase)), [0])];
+        let excitations = [JordanWignerInputState((0.1, 0.0), []), JordanWignerInputState((0.1 * Cos(phase), 0.1 * Sin(phase)), [0])];
 
         use qubits = Qubit[nQubits];
         PrepareSparseMultiConfigurationalState(NoOp, excitations, qubits);

@@ -39,7 +39,7 @@ namespace Microsoft.Quantum.Canon {
     /// # See Also
     /// - Microsoft.Quantum.Canon.IterateThroughCartesianPower
     operation IterateThroughCartesianProduct(bounds : Int[], op : (Int[] => Unit)) : Unit {
-        mutable arr = new Int[Length(bounds)];
+        mutable arr = [0, size = Length(bounds)];
         mutable finished = false;
 
         repeat {

@@ -92,9 +92,9 @@ namespace Microsoft.Quantum.Synthesis {
     internal function DecomposedOn(perm : Int[], index : Int) : ((Int[], Int[]), Int[]) {
         let n = Length(perm);
 
-        mutable visited = new Bool[n];
-        mutable left = new Int[n];
-        mutable right = new Int[n];
+        mutable visited = [false, size = n];
+        mutable left = [0, size = n];
+        mutable right = [0, size = n];
 
         mutable row = 0;
 
@@ -114,7 +114,7 @@ namespace Microsoft.Quantum.Synthesis {
             }
         }
 
-        mutable remainder = new Int[n];
+        mutable remainder = [0, size = n];
         for (i, p) in Enumerated(perm) {
             set remainder w/= left[i] <- right[p];
         }
@@ -176,7 +176,7 @@ namespace Microsoft.Quantum.Synthesis {
     internal function TruthTablesFromPermutation (perm : Int[], variableOrder : Int[]) : (BigInt, Int)[] {
         let numVars = Length(variableOrder);
 
-        let initialState = DecompositionState(perm, new (BigInt, Int)[0], new (BigInt, Int)[0]);
+        let initialState = DecompositionState(perm, [], []);
         let (_, lfunctions, rfunctions) = (Fold(TruthTablesFromPermutationFolder(numVars, _, _), initialState, variableOrder))!;
 
         return lfunctions + rfunctions;
