@@ -34,8 +34,8 @@ namespace Microsoft.Quantum.Chemistry.Tests {
         let expectedBitString = [PauliI, PauliZ, PauliI, PauliI, PauliI, PauliZ, PauliI];
         let bitString = _ComputeJordanWignerPauliZString(nFermions, fermionIndices);
         
-        mutable product = new Bool[nFermions];
-        mutable expected = new Bool[nFermions];
+        mutable product = [false, size = nFermions];
+        mutable expected = [false, size = nFermions];
         for idx in 0..nFermions - 1 {
             set product w/= idx <- expectedBitString[idx] == bitString[idx] ? true | false;
             set expected w/= idx <- true;
@@ -77,7 +77,7 @@ namespace Microsoft.Quantum.Chemistry.Tests {
     }
 
     function _DoublesToComplexPolar(input: Double[]) : ComplexPolar[]{
-        mutable arr = new ComplexPolar[Length(input)];
+        mutable arr = [ComplexPolar(0.0, 0.0), size = Length(input)];
         for idx in 0..Length(input)-1 {
             set arr w/= idx <- ComplexAsComplexPolar(Complex(input[idx], 0.));
         }

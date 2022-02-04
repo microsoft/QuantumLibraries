@@ -61,7 +61,7 @@ namespace Microsoft.Quantum.Synthesis {
     internal function GateMask (controls : Int, targets : Int) : MCMTMask[] {
         return targets != 0
                ? [MCMTMask(controls, targets)]
-               | new MCMTMask[0];
+               | [];
     }
 
 
@@ -106,7 +106,7 @@ namespace Microsoft.Quantum.Synthesis {
     /// Compute gate masks to synthesize permutation.
     internal function TBSMain (perm : Int[]) : MCMTMask[] {
         let xs = RangeAsIntArray(0..Length(perm) - 1);
-        let gates = new MCMTMask[0];
+        let gates = [];
         return Reversed(Snd(Fold(TBSStep, (perm, gates), xs)));
     }
 

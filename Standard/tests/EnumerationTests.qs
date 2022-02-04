@@ -71,7 +71,7 @@ namespace Microsoft.Quantum.Tests {
 
     @Test("QuantumSimulator")
     function TestMappedOverEmpty() : Unit {
-        AllEqualityFactI(MappedOverRange(TimesI(_, 2), 1..-1..2), new Int[0], "MappedOverRange failed.");
+        AllEqualityFactI(MappedOverRange(TimesI(_, 2), 1..-1..2), [], "MappedOverRange failed.");
     }
 
     @Test("QuantumSimulator")

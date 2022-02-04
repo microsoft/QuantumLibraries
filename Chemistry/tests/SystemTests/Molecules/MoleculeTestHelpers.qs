@@ -14,7 +14,7 @@ namespace SystemTests.Molecules {
     // - Trotter simulation algorithm
     // - Qubitization simulation algorithm
     
-    // These operations are invoked as orcales in the quantum phase estimation
+    // These operations are invoked as oracles in the quantum phase estimation
     // algorithm to extract energy estimates of various eigenstate of the
     // Hamiltonian.
     
