@@ -1,4 +1,4 @@
-﻿// Copyright (c) Microsoft Corporation.
+// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
 namespace Microsoft.Quantum.Arrays {
@@ -32,7 +32,7 @@ namespace Microsoft.Quantum.Arrays {
         Fact(to >= from, $"`to` must be larger than `from`");
 
         let n = (to - from) + 1;
-        mutable array = new Int[n];
+        mutable array = [0, size = n];
 
         for i in 0 .. n - 1 {
             set array w/= i <- from + i;
@@ -68,7 +68,7 @@ namespace Microsoft.Quantum.Arrays {
         Fact(to - from <= 0x07FFFFFFFFFFFFFFEL, $"different between `to` and `from` is too large");
 
         let length = BoolArrayAsInt(BigIntAsBoolArray(to - from)) + 1;
-        mutable array = new BigInt[length];
+        mutable array = [0L, size = length];
         
         for i in 0 .. length - 1 {
             set array w/= i <- from + IntAsBigInt(i);

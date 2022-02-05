@@ -46,7 +46,7 @@ namespace Microsoft.Quantum.Simulation {
     /// `[PauliI, PauliX, PauliY, PauliZ]` given by `ints[idxPauli]`.
     function IntsToPaulis (ints : Int[]) : Pauli[] {
         let nInts = Length(ints);
-        mutable paulis = new Pauli[nInts];
+        mutable paulis = [PauliI, size = nInts];
 
         for idxInt in 0 .. nInts - 1 {
             set paulis w/= idxInt <- IntToPauli(ints[idxInt]);

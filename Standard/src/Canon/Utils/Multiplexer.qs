@@ -358,8 +358,8 @@ namespace Microsoft.Quantum.Canon {
     /// - Microsoft.Quantum.Canon.MultiplexZ
     internal function MultiplexZCoefficients(coefficients : Double[]) : (Double[], Double[]) {
         let newCoefficientsLength = Length(coefficients) / 2;
-        mutable coefficients0 = new Double[newCoefficientsLength];
-        mutable coefficients1 = new Double[newCoefficientsLength];
+        mutable coefficients0 = [0.0, size = newCoefficientsLength];
+        mutable coefficients1 = [0.0, size = newCoefficientsLength];
 
         for idxCoeff in 0 .. newCoefficientsLength - 1 {
             set coefficients0 w/= idxCoeff <- 0.5 * (coefficients[idxCoeff] + coefficients[idxCoeff + newCoefficientsLength]);

@@ -158,7 +158,7 @@ namespace Microsoft.Quantum.Canon {
     internal function GrayCode(n : Int) : (Int, Int)[] {
         let N = 1 <<< n;
 
-        mutable res = new (Int, Int)[N];
+        mutable res = [(0, 0), size = N];
         mutable j = 0;
         mutable current = IntAsBoolArray(0, n);
 

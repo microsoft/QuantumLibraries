@@ -136,7 +136,7 @@ namespace Microsoft.Quantum.Arrays {
             }
             return resultArray;
         } else {
-            return new 'T[0];
+            return [];
         }
     }
 
@@ -167,7 +167,7 @@ namespace Microsoft.Quantum.Arrays {
     /// // values = [1, 1, 2, 1, 2, 3]
     /// ```
     function FlatMapped<'TInput, 'TOutput>(mapper : ('TInput -> 'TOutput[]), array : 'TInput[]) : 'TOutput[] {
-        return Fold(PlusA<'TOutput>, new 'TOutput[0], Mapped(mapper, array));
+        return Fold(PlusA<'TOutput>, [], Mapped(mapper, array));
     }
 
     /// # Summary
@@ -190,7 +190,7 @@ namespace Microsoft.Quantum.Arrays {
     /// // flattened = [1, 2, 3, 4, 5, 6]
     /// ```
     function Flattened<'T>(arrays : 'T[][]): 'T[] {
-        return Fold(PlusA<'T>, new 'T[0], arrays);
+        return Fold(PlusA<'T>, [], arrays);
     }
 
     /// # Summary

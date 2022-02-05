@@ -29,8 +29,8 @@ namespace Microsoft.Quantum.AmplitudeAmplification {
             fail $"Number of rotations must be odd.";
         }
 
-        mutable phasesTarget = new Double[nPhasesRef];
-        mutable phasesStart = new Double[nPhasesRef];
+        mutable phasesTarget = [0.0, size = nPhasesRef];
+        mutable phasesStart = [0.0, size = nPhasesRef];
         set phasesTarget w/= 0 <- ((rotPhases!)[0] - (rotPhases!)[1]) - PI();
         set phasesStart w/= 0 <- -(rotPhases!)[0] + 0.5 * PI();
 

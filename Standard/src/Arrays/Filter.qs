@@ -42,7 +42,7 @@ namespace Microsoft.Quantum.Arrays {
     /// The outcome one should expect from this example will be an array of numbers greater than 5.
     function Filtered<'T>(predicate : ('T -> Bool), array : 'T[]) : 'T[] {
         mutable totalFound = 0;
-        mutable idxArray = new Int[Length(array)];
+        mutable idxArray = [0, size = Length(array)];
 
         for idxElement in IndexRange(array) {
             if predicate(array[idxElement]) {
