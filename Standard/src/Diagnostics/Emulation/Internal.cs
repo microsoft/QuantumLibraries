@@ -26,11 +26,18 @@ namespace Microsoft.Quantum.Diagnostics
 
         public override bool Callback([MarshalAs(UnmanagedType.LPStr)] string idx, double real, double img)
         {
+            string Reverse(string s)
+            {
+                char[] charArray = s.ToCharArray();
+                Array.Reverse( charArray );
+                return new string( charArray );
+            }
+
             if (Data == null) throw new Exception("Expected data buffer to be initialized before callback, but it was null.");
             int idxInt;
             try
             {
-                idxInt = System.Convert.ToInt32(idx,2);
+                idxInt = System.Convert.ToInt32(Reverse(idx), 2);
             }
             catch(SystemException)
             {
