@@ -47,8 +47,8 @@ namespace Microsoft.Quantum.Diagnostics
             
             // Data![idxInt, 0] = real;
             // Data![idxInt, 1] = img;
-            Data![(int)(BigIntegerExtensions.ParseUnsignedBitString(idx)), 0] = real;
-            Data![(int)(BigIntegerExtensions.ParseUnsignedBitString(idx)), 1] = img;
+            Data![(int)(BigIntegerExtensions.ParseUnsignedLEBitString(idx)), 0] = real;
+            Data![(int)(BigIntegerExtensions.ParseUnsignedLEBitString(idx)), 1] = img;
 
             return true;
         }
