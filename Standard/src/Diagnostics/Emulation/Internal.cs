@@ -28,8 +28,8 @@ namespace Microsoft.Quantum.Diagnostics
         public override bool Callback([MarshalAs(UnmanagedType.LPStr)] string idx, double real, double img)
         {
             if (Data == null) throw new Exception("Expected data buffer to be initialized before callback, but it was null.");
-            Data![(int)(DisplayableState.BasisStateLabelToBigInt(idx)), 0] = real;
-            Data![(int)(DisplayableState.BasisStateLabelToBigInt(idx)), 1] = img;
+            Data![(int)(CommonNativeSimulator.DisplayableState.BasisStateLabelToBigInt(idx)), 0] = real;
+            Data![(int)(CommonNativeSimulator.DisplayableState.BasisStateLabelToBigInt(idx)), 1] = img;
 
             return true;
         }
