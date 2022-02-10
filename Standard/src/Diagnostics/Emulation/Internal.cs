@@ -27,28 +27,9 @@ namespace Microsoft.Quantum.Diagnostics
 
         public override bool Callback([MarshalAs(UnmanagedType.LPStr)] string idx, double real, double img)
         {
-            // string Reverse(string s)
-            // {
-            //     char[] charArray = s.ToCharArray();
-            //     Array.Reverse( charArray );
-            //     return new string( charArray );
-            // }
-
             if (Data == null) throw new Exception("Expected data buffer to be initialized before callback, but it was null.");
-            // int idxInt;
-            // try
-            // {
-            //     idxInt = System.Convert.ToInt32(Reverse(idx), 2);
-            // }
-            // catch(SystemException)
-            // {
-            //     throw new Exception($"Failed to convert bitstring {idx} to 32-bit signed integer.");
-            // }
-            
-            // Data![idxInt, 0] = real;
-            // Data![idxInt, 1] = img;
-            Data![(int)(BigIntegerExtensions.ParseUnsignedLEBitString(idx)), 0] = real;
-            Data![(int)(BigIntegerExtensions.ParseUnsignedLEBitString(idx)), 1] = img;
+            Data![(int)(DisplayableState.BasisStateLabelToBigInt(idx)), 0] = real;
+            Data![(int)(DisplayableState.BasisStateLabelToBigInt(idx)), 1] = img;
 
             return true;
         }
