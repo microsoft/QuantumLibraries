@@ -38,7 +38,7 @@ namespace Microsoft.Quantum.AmplitudeAmplification {
     /// for some unitary $U$.
     /// By a sequence of reflections about the start and target states on the
     /// auxiliary register interleaved by applications of `signalOracle` and its
-    /// adjoint, the success probability of applying U$$ may be altered.
+    /// adjoint, the success probability of applying $U$ may be altered.
     ///
     /// In most cases, `auxiliaryRegister` is initialized in the state $\ket{\text{start}}\_a$.
     ///
