@@ -5,6 +5,7 @@ namespace Microsoft.Quantum.AmplitudeAmplification {
     open Microsoft.Quantum.Arrays;
     open Microsoft.Quantum.Intrinsic;
     open Microsoft.Quantum.Convert;
+    open Microsoft.Quantum.Diagnostics;
     open Microsoft.Quantum.Math;
     open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Oracles;
@@ -37,16 +38,14 @@ namespace Microsoft.Quantum.AmplitudeAmplification {
     /// for some unitary $U$.
     /// By a sequence of reflections about the start and target states on the
     /// auxiliary register interleaved by applications of `signalOracle` and its
-    /// adjoint, the success probability of applying U may be altered.
+    /// adjoint, the success probability of applying $U$ may be altered.
     ///
     /// In most cases, `auxiliaryRegister` is initialized in the state $\ket{\text{start}}\_a$.
     ///
     /// # References
-    /// See
-    /// - [ *D.W. Berry, A.M. Childs, R. Cleve, R. Kothari, R.D. Somma* ](https://arxiv.org/abs/1312.1414)
+    /// - See [*D.W. Berry, A.M. Childs, R. Cleve, R. Kothari, R.D. Somma*](https://arxiv.org/abs/1312.1414)
     /// for the standard version.
-    /// See
-    /// - [ *G.H. Low, I.L. Chuang* ](https://arxiv.org/abs/1610.06546)
+    /// - See [*G.H. Low, I.L. Chuang*](https://arxiv.org/abs/1610.06546)
     /// for a generalization to partial reflections.
     operation ApplyObliviousAmplitudeAmplification(
         phases : ReflectionPhases,
@@ -57,24 +56,33 @@ namespace Microsoft.Quantum.AmplitudeAmplification {
         systemRegister : Qubit[]
     )
     : Unit is Adj + Ctl {
-        for (startPhase, targetPhase) in Zipped(phases!) {
+        EqualityFactI(Length(phases::AboutStart), Length(phases::AboutTarget), "number of phases about start and target state must be equal");
+        let numPhases = Length(phases::AboutStart);
+
+        for (idx, (startPhase, targetPhase)) in Enumerated(Zipped(phases!)) {
             if startPhase != 0.0 {
-                startStateReflection::ApplyReflection(
-                    startPhase, auxiliaryRegister
-                );
+                startStateReflection::ApplyReflection(startPhase, auxiliaryRegister);
             }
 
             if targetPhase != 0.0 {
-                within {
+                // In the last iteration we do not need to apply `Adjoint signalOracle`
+                if idx == numPhases - 1 {
                     signalOracle!(auxiliaryRegister, systemRegister);
-                } apply {
-                    targetStateReflection!(targetPhase, auxiliaryRegister);
+                    targetStateReflection::ApplyReflection(targetPhase, auxiliaryRegister);
+                } else {
+                    within {
+                        signalOracle!(auxiliaryRegister, systemRegister);
+                    } apply {
+                        targetStateReflection::ApplyReflection(targetPhase, auxiliaryRegister);
+                    }
                 }
             }
         }
-        // This gives us one extra application of Adjoint signalOracle!, so we
-        // apply the forward direction at the end.
-        signalOracle!(auxiliaryRegister, systemRegister);
+
+        // We do need one more `signalOracle` call, if the last phase about the target state was 0.0
+        if numPhases == 0 or phases::AboutTarget[numPhases - 1] == 0.0 {
+            signalOracle!(auxiliaryRegister, systemRegister);
+        }
     }
 
 
@@ -90,7 +98,7 @@ namespace Microsoft.Quantum.AmplitudeAmplification {
         targetStateReflection : ReflectionOracle,
         signalOracle : ObliviousOracle
     )
-    : ((Qubit[], Qubit[]) => Unit is Adj + Ctl) {
+    : (Qubit[], Qubit[]) => Unit is Adj + Ctl {
         return ApplyObliviousAmplitudeAmplification(
             phases, startStateReflection, targetStateReflection, signalOracle,
             _, _
@@ -243,9 +251,9 @@ namespace Microsoft.Quantum.AmplitudeAmplification {
         let systemRegister = [];
         let signalOracle = ObliviousOracle(NoOp);
         let startStateOracle = DeterministicStateOracleFromStateOracle(idxFlagQubit, stateOracle);
-        return (ObliviousAmplitudeAmplificationFromStatePreparation(
+        return ObliviousAmplitudeAmplificationFromStatePreparation(
             phases, startStateOracle, signalOracle, idxFlagQubit
-        ))(_, systemRegister);
+        )(_, systemRegister);
     }
 
 
@@ -324,9 +332,9 @@ namespace Microsoft.Quantum.AmplitudeAmplification {
             repeat {
                 let queries = 2 ^ exponentCurrent;
                 let phases = FixedPointReflectionPhases(queries, successMin);
-                (AmplitudeAmplificationFromStatePreparation(phases, statePrepOracle, idxFlagQubit))(qubits);
+                AmplitudeAmplificationFromStatePreparation(phases, statePrepOracle, idxFlagQubit)(qubits);
                 set finished = M(flagQubit);
-                set exponentCurrent = exponentCurrent + 1;
+                set exponentCurrent += 1;
             }
             until finished == One or exponentCurrent > exponentMax
             fixup {
