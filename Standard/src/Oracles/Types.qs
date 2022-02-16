@@ -17,7 +17,7 @@ namespace Microsoft.Quantum.Oracles {
     /// performs a partial reflection by a phase $\phi$ about a single pure state
     /// $\ket{\psi}$.
     newtype ReflectionOracle = (
-        ApplyReflection: ((Double, Qubit[]) => Unit is Adj + Ctl)
+        ApplyReflection: (Double, Qubit[]) => Unit is Adj + Ctl
     );
 
     // This oracle O|s>_a|ψ>_s = λ |t>_a U |ψ>_s + ... acts on the ancilla state |s>_a to implement the unitary U on any system state |ψ>_s with amplitude λ in the |t>_a basis.
@@ -37,7 +37,7 @@ namespace Microsoft.Quantum.Oracles {
     /// $$
     /// acts on the ancilla state $\ket{s}\_a$ to implement the unitary $U$ on any system state $\ket{\psi}\_s$ with amplitude $\lambda$ in the basis flagged by $\ket{t}\_a$.
     /// The first parameter is the qubit register of $\ket{s}\_a$. The second parameter is the qubit register of $\ket{\psi}\_s$.
-    newtype ObliviousOracle = ((Qubit[], Qubit[]) => Unit is Adj + Ctl);
+    newtype ObliviousOracle = (Qubit[], Qubit[]) => Unit is Adj + Ctl;
 
     /// # Summary
     /// Represents an oracle for state preparation.
@@ -54,7 +54,7 @@ namespace Microsoft.Quantum.Oracles {
     /// $$
     /// acts on the on computational basis state $\ket{0}\_{f}\ket{0}\_s$ to create the target state $\ket{\psi}\_s$ with amplitude $\lambda$ in the basis flagged by $\ket{1}\_f$.
     /// The first parameter is an index to the qubit register of $\ket{0}\_f$. The second parameter encompassed both registers.
-    newtype StateOracle = ((Int, Qubit[]) => Unit is Adj + Ctl);
+    newtype StateOracle = (Int, Qubit[]) => Unit is Adj + Ctl;
 
     /// # Summary
     /// Represents an oracle for deterministic state preparation.
@@ -66,7 +66,7 @@ namespace Microsoft.Quantum.Oracles {
     /// # Remarks
     /// This oracle defined by $O\ket{0}=\ket{\psi}$ acts on the on computational basis state $\ket{0}$ to create the state $\ket{\psi}$.
     /// The first parameter is the qubit register of $\ket{\psi}$.
-    newtype DeterministicStateOracle = (Qubit[] => Unit is Adj + Ctl);
+    newtype DeterministicStateOracle = Qubit[] => Unit is Adj + Ctl;
 
 
     /// # Summary
@@ -75,7 +75,7 @@ namespace Microsoft.Quantum.Oracles {
     /// # Description
     /// This is an oracle that implements $U^m$ for a fixed operation $U$
     /// and a non-negative integer $m$.
-    newtype DiscreteOracle = ((Int, Qubit[]) => Unit is Adj + Ctl);
+    newtype DiscreteOracle = (Int, Qubit[]) => Unit is Adj + Ctl;
 
     /// # Summary
     /// Represents a continuous-time oracle.
@@ -85,7 +85,7 @@ namespace Microsoft.Quantum.Oracles {
     /// $U(\delta t) : \ket{\psi(t)} \mapsto \ket{\psi(t + \delta t)}$
     /// for all times $t$, where $U$ is a fixed operation, and where
     /// $\delta t$ is a non-negative real number.
-    newtype ContinuousOracle = ((Double, Qubit[]) => Unit is Adj + Ctl);
+    newtype ContinuousOracle = (Double, Qubit[]) => Unit is Adj + Ctl;
 
 }
 

@@ -8,6 +8,7 @@
 *.g.cs
 bin/
 obj/
+docs/
 Documentation/Help/
 packages/
 *.obj
