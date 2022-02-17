@@ -220,7 +220,7 @@ namespace Microsoft.Quantum.Convert {
         let start = RangeStart(range);
         let step = RangeStep(range);
         let end = RangeEnd(range);
-        if (IntAsDouble(end - start) / IntAsDouble(step) >= 0.0){
+        if (IntAsDouble(end - start) / IntAsDouble(step) >= 0.0) {
             let nTerms = (end - start) / step + 1;
             mutable array = [0, size = nTerms];
             for idx in 0..nTerms - 1 {
