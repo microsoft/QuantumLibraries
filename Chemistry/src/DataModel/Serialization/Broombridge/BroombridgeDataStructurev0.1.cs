@@ -6,8 +6,6 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
-using System.Text;
 using System.Linq;
 using System.Text.RegularExpressions;
 using YamlDotNet.Core;
@@ -106,16 +104,20 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
                          )).ToList()
             };
 
-        internal static V0_1.HamiltonianData ToBroombridgeV0_1(this OrbitalIntegralHamiltonian hamiltonian) =>
-            new V0_1.HamiltonianData
+        internal static V0_1.HamiltonianData ToBroombridgeV0_1(this OrbitalIntegralHamiltonian hamiltonian)
+        {
+            var twoElectronIntegrals = hamiltonian
+                    .Terms[TermType.OrbitalIntegral.TwoBody]
+                    .ToBroombridgeV0_1();
+            twoElectronIntegrals.IndexConvention = OrbitalIntegral.Convention.Mulliken;
+            return new V0_1.HamiltonianData
             {
                 OneElectronIntegrals = hamiltonian
                     .Terms[TermType.OrbitalIntegral.OneBody]
                     .ToBroombridgeV0_1(),
-                TwoElectronIntegrals = hamiltonian
-                    .Terms[TermType.OrbitalIntegral.TwoBody]
-                    .ToBroombridgeV0_1()
+                TwoElectronIntegrals = twoElectronIntegrals
             };
+        }
 
         internal static V0_1.IntegralSet ToBroombridgeV0_1(this ElectronicStructureProblem problem) =>
             throw new NotImplementedException("Not yet implemented.");
@@ -213,7 +215,7 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
 
         public struct Format
         {
-            [YamlMember(Alias = "version", ApplyNamingConventions = false)]
+            [YamlMember(Alias = "version", ApplyNamingConventions = false, ScalarStyle = ScalarStyle.DoubleQuoted)]
             public string Version { get; set; }
         }
 
@@ -222,7 +224,7 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
             [YamlMember(Alias = "source", ApplyNamingConventions = false)]
             public string Source { get; set; }
 
-            [YamlMember(Alias = "version", ApplyNamingConventions = false)]
+            [YamlMember(Alias = "version", ApplyNamingConventions = false, ScalarStyle = ScalarStyle.DoubleQuoted)]
             public string Version { get; set; }
         }
 
@@ -334,6 +336,7 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
             // TODO: make this an enum.
             public string Format { get; set; }
             public List<(TIndex[], TValue)> Values { get; set; }
+            public OrbitalIntegral.Convention? IndexConvention { get; set; } = null;
 
             public void Read(IParser parser, Type expectedType, ObjectDeserializer nestedObjectDeserializer)
             {
@@ -353,7 +356,7 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
 
             public void Write(IEmitter emitter, ObjectSerializer nestedObjectSerializer)
             {
-                nestedObjectSerializer(new Dictionary<string, object>
+                var dictionary = new Dictionary<string, object>
                 {
                     ["units"] = Units,
                     ["format"] = Format,
@@ -362,7 +365,11 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
                             entry.Item1.Select((idx) => (object)idx).Concat(new object[] { entry.Item2 })
                         )
                         .ToList()
-                });
+                };
+                if (IndexConvention != null) {
+                    dictionary["index_convention"] = IndexConvention.ToString().ToLower();
+                }
+                nestedObjectSerializer(dictionary);
             }
         }
 
