@@ -215,7 +215,7 @@ namespace Microsoft.Quantum.Arrays {
         //Would be better with sort function
         //Or way to add elements to array
         mutable arrayKeep = [0, size = nElements];
-        mutable sliced = new 'T[nElements - nSliced];
+        mutable sliced = [Default<'T>(), size = nElements - nSliced];
         mutable counter = 0;
 
         for idx in 0 .. nElements - 1 {
@@ -333,7 +333,7 @@ namespace Microsoft.Quantum.Arrays {
     /// let split = Partitioned([2,2], [1,5,3,7]);
     /// ```
     function Partitioned<'T>(nElements: Int[], arr: 'T[]) : 'T[][] {
-        mutable output = new 'T[][Length(nElements) + 1];
+        mutable output = [Default<'T[]>(), size = Length(nElements) + 1];
         mutable currIdx = 0;
         for idx in IndexRange(nElements) {
             if(currIdx + nElements[idx] > Length(arr)) {
@@ -482,7 +482,7 @@ namespace Microsoft.Quantum.Arrays {
     /// TupleArrayAsNestedArray([(2, 3), (4, 5)]);
     /// ```
     function TupleArrayAsNestedArray<'T>(tupleList : ('T, 'T)[]) : 'T[][] {
-        mutable newArray = new 'T[][Length(tupleList)];
+        mutable newArray = [Default<'T[]>(), size = Length(tupleList)];
         for idx in IndexRange(tupleList) {
             let (tupleLeft, tupleRight) = tupleList[idx];
             set newArray w/= idx <- [tupleLeft, tupleRight];
