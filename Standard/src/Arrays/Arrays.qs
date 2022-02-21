@@ -42,7 +42,7 @@ namespace Microsoft.Quantum.Arrays {
     /// # Output
     /// An array containing the elements `array[1..Length(array) - 1]`.
     function Rest<'T> (array : 'T[]) : 'T[] {
-        return array[1 .. Length(array) - 1];
+        return array[1 ...];
     }
 
     /// # Summary
@@ -60,7 +60,7 @@ namespace Microsoft.Quantum.Arrays {
     /// # Output
     /// An array containing the elements `array[0..Length(array) - 2]`.
     function Most<'T> (array : 'T[]) : 'T[] {
-        return array[0 .. Length(array) - 2];
+        return array[... Length(array) - 2];
     }
 
     /// # Summary
@@ -177,13 +177,7 @@ namespace Microsoft.Quantum.Arrays {
     /// let array = ConstantArray(3, true);
     /// ```
     function ConstantArray<'T> (length : Int, value : 'T) : 'T[] {
-        mutable arr = new 'T[length];
-
-        for i in 0 .. length - 1 {
-            set arr w/= i <- value;
-        }
-
-        return arr;
+        return [value, size = length];
     }
 
     /// # Summary
@@ -220,8 +214,8 @@ namespace Microsoft.Quantum.Arrays {
 
         //Would be better with sort function
         //Or way to add elements to array
-        mutable arrayKeep = new Int[nElements];
-        mutable sliced = new 'T[nElements - nSliced];
+        mutable arrayKeep = [0, size = nElements];
+        mutable sliced = [Default<'T>(), size = nElements - nSliced];
         mutable counter = 0;
 
         for idx in 0 .. nElements - 1 {
@@ -302,7 +296,7 @@ namespace Microsoft.Quantum.Arrays {
     /// Note that the last element of the output may be shorter
     /// than `nElements` if `Length(arr)` is not divisible by `nElements`.
     function Chunks<'T>(nElements : Int, arr : 'T[]) : 'T[][] {
-        mutable output = new 'T[][0];
+        mutable output = [];
         mutable remaining = arr;
         while (not IsEmpty(remaining)) {
             let nElementsToTake = MinI(Length(remaining), nElements);
@@ -339,7 +333,7 @@ namespace Microsoft.Quantum.Arrays {
     /// let split = Partitioned([2,2], [1,5,3,7]);
     /// ```
     function Partitioned<'T>(nElements: Int[], arr: 'T[]) : 'T[][] {
-        mutable output = new 'T[][Length(nElements) + 1];
+        mutable output = [Default<'T[]>(), size = Length(nElements) + 1];
         mutable currIdx = 0;
         for idx in IndexRange(nElements) {
             if(currIdx + nElements[idx] > Length(arr)) {
@@ -488,7 +482,7 @@ namespace Microsoft.Quantum.Arrays {
     /// TupleArrayAsNestedArray([(2, 3), (4, 5)]);
     /// ```
     function TupleArrayAsNestedArray<'T>(tupleList : ('T, 'T)[]) : 'T[][] {
-        mutable newArray = new 'T[][Length(tupleList)];
+        mutable newArray = [Default<'T[]>(), size = Length(tupleList)];
         for idx in IndexRange(tupleList) {
             let (tupleLeft, tupleRight) = tupleList[idx];
             set newArray w/= idx <- [tupleLeft, tupleRight];

@@ -32,7 +32,7 @@ namespace Microsoft.Quantum.Arrays {
     /// # See Also
     /// - Microsoft.Quantum.Arrays.ForEach
     function Mapped<'T, 'U> (mapper : ('T -> 'U), array : 'T[]) : 'U[] {
-        mutable resultArray = new 'U[Length(array)];
+        mutable resultArray = [Default<'U>(), size = Length(array)];
 
         for idxElement in IndexRange(array) {
             set resultArray w/= idxElement <- mapper(array[idxElement]);
@@ -81,7 +81,7 @@ namespace Microsoft.Quantum.Arrays {
     /// # See Also
     /// - Microsoft.Quantum.Arrays.Mapped
     function MappedByIndex<'T, 'U> (mapper : ((Int, 'T) -> 'U), array : 'T[]) : 'U[] {
-        mutable resultArray = new 'U[Length(array)];
+        mutable resultArray = [Default<'U>(), size = Length(array)];
 
         for idxElement in IndexRange(array) {
             set resultArray w/= idxElement <- mapper(idxElement, array[idxElement]);
@@ -128,7 +128,7 @@ namespace Microsoft.Quantum.Arrays {
         let end = RangeEnd(range);
         if ((end - start) / step >= 0) {
             let nTerms = (end - start) / step + 1;
-            mutable resultArray = new 'T[nTerms];
+            mutable resultArray = [Default<'T>(), size = nTerms];
             mutable idxElement = 0;
             for elem in range {
                 set resultArray w/= idxElement <- mapper(elem);
@@ -136,7 +136,7 @@ namespace Microsoft.Quantum.Arrays {
             }
             return resultArray;
         } else {
-            return new 'T[0];
+            return [];
         }
     }
 
@@ -167,7 +167,7 @@ namespace Microsoft.Quantum.Arrays {
     /// // values = [1, 1, 2, 1, 2, 3]
     /// ```
     function FlatMapped<'TInput, 'TOutput>(mapper : ('TInput -> 'TOutput[]), array : 'TInput[]) : 'TOutput[] {
-        return Fold(PlusA<'TOutput>, new 'TOutput[0], Mapped(mapper, array));
+        return Fold(PlusA<'TOutput>, [], Mapped(mapper, array));
     }
 
     /// # Summary
@@ -190,7 +190,7 @@ namespace Microsoft.Quantum.Arrays {
     /// // flattened = [1, 2, 3, 4, 5, 6]
     /// ```
     function Flattened<'T>(arrays : 'T[][]): 'T[] {
-        return Fold(PlusA<'T>, new 'T[0], arrays);
+        return Fold(PlusA<'T>, [], arrays);
     }
 
     /// # Summary
@@ -221,7 +221,7 @@ namespace Microsoft.Quantum.Arrays {
     /// # See Also
     /// - Microsoft.Quantum.Arrays.Mapped
     operation ForEach<'T, 'U> (action : ('T => 'U), array : 'T[]) : 'U[] {
-        mutable resultArray = new 'U[Length(array)];
+        mutable resultArray = [Default<'U>(), size = Length(array)];
 
         for idxElement in IndexRange(array) {
             set resultArray w/= idxElement <- action(array[idxElement]);

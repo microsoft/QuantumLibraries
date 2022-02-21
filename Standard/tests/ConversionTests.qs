@@ -27,4 +27,12 @@ namespace Microsoft.Quantum.Tests {
         EqualityFactI(70, number70, $"Integer from 01000110 in little Endian should be 70");
     }
 
+    @Test("QuantumSimulator")
+    function IntAsBoolArrayIsCorrectForLargeInputs() : Unit {
+        // Checks for regression of https://github.com/microsoft/QuantumLibraries/issues/503.
+        let bits = IntAsBoolArray(1, 63);
+        EqualityFactI(Length(bits), 63, $"IntAsBoolArray(1, 63) returned an array of the wrong length.");
+        EqualityFactI(BoolArrayAsInt(bits), 1, $"IntAsBoolArray(1, 63) returned an array that did not represent 1: {bits}.");
+    }
+
 }

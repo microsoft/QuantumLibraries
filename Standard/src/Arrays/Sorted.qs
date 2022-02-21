@@ -9,7 +9,7 @@ namespace Microsoft.Quantum.Arrays {
     /// Given two sorted arrays, returns a single array containing the
     /// elements of both in sorted order. Used internally by merge sort.
     internal function Merged<'T>(comparison : (('T, 'T) -> Bool), left : 'T[], right : 'T[]) : 'T[] {
-        mutable result = new 'T[0];
+        mutable result = [];
         mutable l = left;
         mutable r = right;
         while ((not IsEmpty(l)) and (not IsEmpty(r))) {

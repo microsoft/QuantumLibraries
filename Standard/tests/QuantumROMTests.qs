@@ -32,7 +32,7 @@ namespace Microsoft.Quantum.Tests {
             Message($"One-norm {oneNorm}");
 
             // Reconstruct coefficients
-            mutable coefficientsOutInt = new Int[coeffs];
+            mutable coefficientsOutInt = [0, size = coeffs];
             for idx in 0..coeffs - 1 {
                 set coefficientsOutInt w/= idx <- coefficientsOutInt[idx] + keepCoeff[idx];
                 if (altIndex[idx] >= 0) {
@@ -41,8 +41,8 @@ namespace Microsoft.Quantum.Tests {
             }
 
             // Reconstruct coefficients
-            mutable coefficientsOut = new Double[coeffs];
-            mutable errors = new Double[coeffs];
+            mutable coefficientsOut = [0.0, size = coeffs];
+            mutable errors = [0.0, size = coeffs];
             mutable maxError = 0.0;
             for i in 0..coeffs - 1 {
                 set coefficientsOut w/= i <- oneNorm * IntAsDouble(coefficientsOutInt[i]) / IntAsDouble(barHeight * coeffs);

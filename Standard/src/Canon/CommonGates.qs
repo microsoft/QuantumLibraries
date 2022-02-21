@@ -179,9 +179,7 @@ namespace Microsoft.Quantum.Canon {
     /// The register whose state is to be rotated by $R$.
     operation RAll1 (phase : Double, qubits : Qubit[]) : Unit {
         body (...) {
-            let nQubits = Length(qubits);
-            let flagQubit = qubits[0];
-            let systemRegister = qubits[1 .. nQubits - 1];
+            let (flagQubit, systemRegister) = HeadAndRest(qubits);
             Controlled (R1(phase, _))(systemRegister, flagQubit);
         }
 

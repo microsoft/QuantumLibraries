@@ -92,9 +92,9 @@ namespace Microsoft.Quantum.Synthesis {
     internal function DecomposedOn(perm : Int[], index : Int) : ((Int[], Int[]), Int[]) {
         let n = Length(perm);
 
-        mutable visited = new Bool[n];
-        mutable left = new Int[n];
-        mutable right = new Int[n];
+        mutable visited = [false, size = n];
+        mutable left = [0, size = n];
+        mutable right = [0, size = n];
 
         mutable row = 0;
 
@@ -114,7 +114,7 @@ namespace Microsoft.Quantum.Synthesis {
             }
         }
 
-        mutable remainder = new Int[n];
+        mutable remainder = [0, size = n];
         for (i, p) in Enumerated(perm) {
             set remainder w/= left[i] <- right[p];
         }
@@ -176,7 +176,7 @@ namespace Microsoft.Quantum.Synthesis {
     internal function TruthTablesFromPermutation (perm : Int[], variableOrder : Int[]) : (BigInt, Int)[] {
         let numVars = Length(variableOrder);
 
-        let initialState = DecompositionState(perm, new (BigInt, Int)[0], new (BigInt, Int)[0]);
+        let initialState = DecompositionState(perm, [], []);
         let (_, lfunctions, rfunctions) = (Fold(TruthTablesFromPermutationFolder(numVars, _, _), initialState, variableOrder))!;
 
         return lfunctions + rfunctions;
@@ -205,11 +205,11 @@ namespace Microsoft.Quantum.Synthesis {
     ///
     /// After applying these steps for all variable indexes, the remaining
     /// permutation $\pi$ will be the identity, and based on the collected truth
-    /// tables and indexes, one can apply truth-table controlled @"microsoft.quantum.intrinsic.x"
-    /// operations using the @"microsoft.quantum.synthesis.applyxcontrolledontruthtable" operation.
+    /// tables and indexes, one can apply truth-table controlled @"Microsoft.Quantum.Intrinsic.X"
+    /// operations using the @"Microsoft.Quantum.Synthesis.ApplyXControlledOnTruthTable" operation.
     ///
     /// The variable order is $0, \dots, n - 1$.  A custom variable order can be specified
-    /// in the operation @"microsoft.quantum.synthesis.applypermutationusingdecompositionwithvariableorder".
+    /// in the operation @"Microsoft.Quantum.Synthesis.ApplyPermutationUsingDecompositionWithVariableOrder".
     ///
     /// # Input
     /// ## perm
@@ -243,10 +243,10 @@ namespace Microsoft.Quantum.Synthesis {
     /// using decomposition-based synthesis.
     ///
     /// # Description
-    /// This operation is a more general version of @"microsoft.quantum.synthesis.applypermutationusingdecomposition"
+    /// This operation is a more general version of @"Microsoft.Quantum.Synthesis.ApplyPermutationUsingDecomposition"
     /// in which the variable order can be specified. A different variable order
     /// changes the decomposition sequence and the truth tables used for the
-    /// controlled @"microsoft.quantum.intrinsic.x" gates.  Therefore, changing the
+    /// controlled @"Microsoft.Quantum.Intrinsic.X" gates.  Therefore, changing the
     /// variable order changes the number of overall gates used to realize the
     /// permutation.
     ///

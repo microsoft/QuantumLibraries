@@ -53,7 +53,7 @@ namespace Microsoft.Quantum.AmplitudeAmplification {
     function FixedPointReflectionPhases(nQueries : Int, successMin : Double)
     : ReflectionPhases {
         let twoPi = 2.0 * PI();
-        mutable phasesRot = new Double[nQueries];
+        mutable phasesRot = [0.0, size = nQueries];
         let nQueriesDouble = IntAsDouble(nQueries);
         set phasesRot w/= 0 <- 0.0;
         let beta = Cosh((1.0 / nQueriesDouble) * ArcCosh(Sqrt(successMin)));

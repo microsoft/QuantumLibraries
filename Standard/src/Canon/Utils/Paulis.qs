@@ -127,7 +127,7 @@ namespace Microsoft.Quantum.Canon {
     /// An array of multi-qubit Pauli operators, each of which is
     /// represented as an array with length `nQubits`.
     function WeightOnePaulis (nQubits : Int) : Pauli[][] {
-        mutable paulis = new Pauli[][3 * nQubits];
+        mutable paulis = [[], size = 3 * nQubits];
         let pauliGroup = [PauliX, PauliY, PauliZ];
 
         for idxQubit in 0 .. nQubits - 1 {

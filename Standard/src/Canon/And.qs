@@ -158,12 +158,12 @@ namespace Microsoft.Quantum.Canon {
     internal function GrayCode(n : Int) : (Int, Int)[] {
         let N = 1 <<< n;
 
-        mutable res = new (Int, Int)[N];
+        mutable res = [(0, 0), size = N];
         mutable j = 0;
         mutable current = IntAsBoolArray(0, n);
 
         for i in 0..N - 1 {
-            if (i % 2 == 0) {
+            if i % 2 == 0 {
                 set j = 0;
             } else {
                 let e = Zipped(current, RangeAsIntArray(0..N - 1));
@@ -172,7 +172,7 @@ namespace Microsoft.Quantum.Canon {
 
             set j = MaxI(0, Min([j, n - 1]));
             set res w/= i <- (BoolArrayAsInt(current), j);
-            if (j < n) {
+            if j < n {
                 set current w/= j <- not current[j];
             }
         }
@@ -248,14 +248,14 @@ namespace Microsoft.Quantum.Canon {
 
             H(target);
             AssertMeasurementProbability([PauliZ], [target], One, 0.5, "Probability of the measurement must be 0.5", 1e-10);
-            if (IsResultOne(MResetZ(target))) {
+            if IsResultOne(MResetZ(target)) {
                 for i in 0..vars - 1 {
                     let start = 1 <<< i;
                     let code = GrayCode(i);
                     for j in 0..Length(code) - 1 {
                         let (offset, ctrl) = code[j];
                         RFrac(PauliZ, -Angle(start + offset), vars, controls[i]);
-                        if (i != 0) {
+                        if i != 0 {
                             CNOT(controls[ctrl], controls[i]);
                         }
                     }
@@ -273,7 +273,7 @@ namespace Microsoft.Quantum.Canon {
     /// array.
     internal function ArrangedQubits(controls : Qubit[], target : Qubit, helper : Qubit[]) : Qubit[] {
         let numControls = Length(controls);
-        mutable qs = new Qubit[2^numControls] w/ 0 <- target;
+        mutable qs = [target, size = 2^numControls];
         mutable cntC = 0;
         mutable cntH = 0;
         for i in 1..2^numControls - 1 {
@@ -312,7 +312,7 @@ namespace Microsoft.Quantum.Canon {
                 // initialize helper lines with control lines based on LSB
                 for i in 3..2^vars - 1 {
                     let lsb = i &&& -i;
-                    if (i != lsb) { // i is power of 2
+                    if i != lsb { // i is power of 2
                         CNOT(qs[lsb], qs[i]);
                     }
                 }
@@ -321,7 +321,7 @@ namespace Microsoft.Quantum.Canon {
                 // copy remainder (without LSB)
                 for i in 3..2^vars - 1 {
                     let lsb = i &&& -i;
-                    if (i != lsb) {
+                    if i != lsb {
                         CNOT(qs[i - lsb], qs[i]);
                     }
                 }
@@ -338,7 +338,7 @@ namespace Microsoft.Quantum.Canon {
 
             H(target);
             AssertMeasurementProbability([PauliZ], [target], One, 0.5, "Probability of the measurement must be 0.5", 1e-10);
-            if (IsResultOne(MResetZ(target))) {
+            if IsResultOne(MResetZ(target)) {
                 use helper = Qubit[2^vars - vars - 1];
                 let qs = ArrangedQubits(controls, target, helper);
                 within {
@@ -348,7 +348,7 @@ namespace Microsoft.Quantum.Canon {
                     // can be merged into a single loop.
                     for i in 3..2^vars - 1 {
                         let lsb = i &&& -i;
-                        if (i != lsb) {
+                        if i != lsb {
                             CNOT(qs[lsb], qs[i]);
                             CNOT(qs[i - lsb], qs[i]);
                         }

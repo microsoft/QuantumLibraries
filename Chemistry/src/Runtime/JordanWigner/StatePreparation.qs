@@ -83,9 +83,9 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
         let nExcitations = Length(excitations);
 
         //FIXME compile error let coefficientsSqrtAbs = Mapped(Compose(Compose(Sqrt, Fst),Fst), excitations);
-        mutable coefficientsSqrtAbs = new Double[nExcitations];
-        mutable coefficientsNewComplexPolar = new ComplexPolar[nExcitations];
-        mutable applyFlips = new Int[][nExcitations];
+        mutable coefficientsSqrtAbs = [0.0, size = nExcitations];
+        mutable coefficientsNewComplexPolar = [ComplexPolar(0.0, 0.0), size = nExcitations];
+        mutable applyFlips = [[], size = nExcitations];
 
         for idx in 0 .. nExcitations - 1 {
             let (x, excitation) = excitations[idx]!;

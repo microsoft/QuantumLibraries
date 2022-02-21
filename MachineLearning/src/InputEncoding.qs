@@ -37,7 +37,7 @@ namespace Microsoft.Quantum.MachineLearning {
     }
 
     internal function _NegativeLocations(cNegative: Int, coefficients : ComplexPolar[]) : Int[] {
-        mutable negLocs = new Int[0];
+        mutable negLocs = [];
         for (idx, coefficient) in Enumerated(coefficients) {
             if (AbsD(coefficient::Argument - PI()) < 1E-9) {
                 set negLocs += [idx];
@@ -92,7 +92,7 @@ namespace Microsoft.Quantum.MachineLearning {
     : StateGenerator {
         //First quantize the coefficients: for a coef x find such y*tolerance, where y is integer and |x-y*tolerance| \neq tolerance/2
         let nCoefficients = Length(coefficients);
-        mutable complexCoefficients = new ComplexPolar[Length(coefficients)];
+        mutable complexCoefficients = [ComplexPolar(0., 0.), size = Length(coefficients)];
         mutable cNegative = 0;
         for (idx, coef) in Enumerated(coefficients) {
             mutable magnitude = coef;
@@ -157,7 +157,7 @@ namespace Microsoft.Quantum.MachineLearning {
     function InputEncoder(coefficients : Double[])
     : StateGenerator {
         //default implementation, does not respect sparsity
-        mutable complexCoefficients = new ComplexPolar[Length(coefficients)];
+        mutable complexCoefficients = [ComplexPolar(0., 0.), size = Length(coefficients)];
         for (idx, coefficient) in Enumerated(coefficients) {
             set complexCoefficients w/= idx <- ComplexPolar(
                 coefficient >= 0.0

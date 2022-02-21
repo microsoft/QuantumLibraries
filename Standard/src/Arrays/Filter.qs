@@ -28,7 +28,7 @@ namespace Microsoft.Quantum.Arrays {
     ///
     /// # Example
     /// The following code demonstrates the "Filtered" function.
-    /// A predicate is defined using the @"microsoft.quantum.logical.greaterthani" function:
+    /// A predicate is defined using the @"Microsoft.Quantum.Logical.GreaterThanI" function:
     /// ```qsharp
     /// open Microsoft.Quantum.Arrays;
     /// open Microsoft.Quantum.Logical;
@@ -42,7 +42,7 @@ namespace Microsoft.Quantum.Arrays {
     /// The outcome one should expect from this example will be an array of numbers greater than 5.
     function Filtered<'T>(predicate : ('T -> Bool), array : 'T[]) : 'T[] {
         mutable totalFound = 0;
-        mutable idxArray = new Int[Length(array)];
+        mutable idxArray = [0, size = Length(array)];
 
         for idxElement in IndexRange(array) {
             if predicate(array[idxElement]) {
@@ -104,7 +104,7 @@ namespace Microsoft.Quantum.Arrays {
     ///
     /// # Example
     /// The following code demonstrates the "Count" function.
-    /// A predicate is defined using the @"microsoft.quantum.logical.greaterthani" function:
+    /// A predicate is defined using the @"Microsoft.Quantum.Logical.GreaterThanI" function:
     /// ```qsharp
     ///  let predicate = GreaterThanI(_, 5);
     ///  let count = Count(predicate, [2, 5, 9, 1, 8]);
