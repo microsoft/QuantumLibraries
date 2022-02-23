@@ -41,8 +41,7 @@ namespace Microsoft.Quantum.Canon {
     /// ## target
     /// Register to apply the given Pauli operation on.
     ///
-    /// # Remarks
-    /// ## Example
+    /// # Example
     /// The following are equivalent:
     /// ```qsharp
     /// ApplyPauli([PauliY, PauliZ, PauliX], target);
@@ -74,6 +73,17 @@ namespace Microsoft.Quantum.Canon {
     ///
     /// # Remarks
     /// The Boolean array and the quantum register must be of equal length.
+    ///
+    /// # Example
+    /// The following applies an X operation on qubits 0 and 2, and a Z operation on qubits 1 and 3.
+    /// ```qsharp
+    /// use qubits = Qubit[4];
+    /// let bits = [true, false, true, false];
+    /// // Apply when index in `bits` is `true`.
+    /// ApplyPauliFromBitString(PauliX, true, bits, qubits);
+    /// // Apply when index in `bits` is `false`.
+    /// ApplyPauliFromBitString(PauliZ, false, bits, qubits);
+    /// ```
     operation ApplyPauliFromBitString(pauli : Pauli, bitApply : Bool, bits : Bool[], qubits : Qubit[])
     : Unit is Adj + Ctl {
         let nBits = Length(bits);
@@ -101,8 +111,7 @@ namespace Microsoft.Quantum.Canon {
     /// ## n
     /// Length of the array to be returned.
     ///
-    /// # Remarks
-    /// ## Example
+    /// # Example
     /// To obtain the array `[PauliI, PauliI, PauliX, PauliI]`:
     /// ```qsharp
     /// EmbedPauli(PauliX, 2, 3);
