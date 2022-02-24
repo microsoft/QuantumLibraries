@@ -366,7 +366,8 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
                         )
                         .ToList()
                 };
-                if (IndexConvention != null) {
+                if (IndexConvention != null)
+                {
                     dictionary["index_convention"] = IndexConvention.ToString().ToLower();
                 }
                 nestedObjectSerializer(dictionary);
