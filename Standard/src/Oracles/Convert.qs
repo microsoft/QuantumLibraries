@@ -139,8 +139,7 @@ namespace Microsoft.Quantum.Oracles {
     /// # Output
     /// An operation partially applied over the "black-box" oracle representing the discrete-time oracle
     ///
-    /// # Remarks
-    /// ## Example
+    /// # Example
     /// `OracleToDiscrete(U)(3, target)` is equivalent to `U(target)` repeated three times.
     function OracleToDiscrete (blackBoxOracle : (Qubit[] => Unit is Adj + Ctl)) : DiscreteOracle {
         return DiscreteOracle(ApplyOperationRepeatedlyCA(blackBoxOracle, _, _));

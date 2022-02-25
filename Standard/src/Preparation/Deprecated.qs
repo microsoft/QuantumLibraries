@@ -37,8 +37,7 @@ namespace Microsoft.Quantum.Preparation {
     /// ## Third parameter
     /// The unitary $U$.
     ///
-    /// # Remarks
-    /// ## Example
+    /// # Example
     /// The following code snippet prepares an purification of the $3$-qubit state
     /// $\rho=\sum_{j=0}^{4}\frac{|alpha_j|}{\sum_k |\alpha_k|}\ket{j}\bra{j}$, where
     /// $\vec\alpha=(1.0,2.0,3.0,4.0,5.0)$, and the error is `1e-3`;
@@ -198,7 +197,7 @@ namespace Microsoft.Quantum.Preparation {
     /// elements $(r_j, t_j) = (0.0, 0.0)$ if fewer than $2^n$ are
     /// specified.
     ///
-    /// ## Example
+    /// # Example
     /// The following snippet prepares the quantum state $\ket{\psi}=e^{i 0.1}\sqrt{1/8}\ket{0}+\sqrt{7/8}\ket{2}$
     /// in the qubit register `qubitsLE`.
     /// ```qsharp
@@ -247,7 +246,7 @@ namespace Microsoft.Quantum.Preparation {
     /// positive with value $|\alpha_j|$. `coefficients` will be padded with
     /// elements $\alpha_j = 0.0$ if fewer than $2^n$ are specified.
     ///
-    /// ## Example
+    /// # Example
     /// The following snippet prepares the quantum state $\ket{\psi}=\sqrt{1/8}\ket{0}+\sqrt{7/8}\ket{2}$
     /// in the qubit register `qubitsLE`.
     /// ```qsharp

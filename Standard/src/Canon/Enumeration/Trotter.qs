@@ -24,8 +24,7 @@ namespace Microsoft.Quantum.Canon {
     /// ## target
     /// A quantum register on which the operations act.
     ///
-    /// # Remarks
-    /// ## Example
+    /// # Example
     /// The following are equivalent:
     /// ```qsharp
     /// op(0, deltaT, target);
@@ -61,8 +60,7 @@ namespace Microsoft.Quantum.Canon {
     /// ## target
     /// A quantum register on which the operations act.
     ///
-    /// # Remarks
-    /// ## Example
+    /// # Example
     /// The following are equivalent:
     /// ```qsharp
     /// op(0, deltaT / 2.0, target);

@@ -25,8 +25,7 @@ namespace Microsoft.Quantum.Arrays {
     /// each `idx`. If the two arrays are not of equal length, the output will
     /// be as long as the shorter of the inputs.
     ///
-    /// # Remarks
-    /// ## Example
+    /// # Example
     /// ```qsharp
     /// let left = [1, 3, 71];
     /// let right = [false, true];
