@@ -1,6 +1,6 @@
 ﻿
 
-// Copyright (c) Microsoft Corporation. All rights reserved.
+// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
 // This test ensures that any chemistry library syntax changes

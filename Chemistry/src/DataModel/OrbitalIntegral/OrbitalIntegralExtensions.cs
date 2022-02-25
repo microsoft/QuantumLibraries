@@ -20,6 +20,15 @@ namespace Microsoft.Quantum.Chemistry.OrbitalIntegrals
     /// </summary>
     public static partial class Extensions
     {
+        internal static OrbitalIntegral.PermutationSymmetry FromBroombridgeV0_3(this Broombridge.V0_3.PermutationSymmetry symmetry) =>
+            symmetry switch
+            {
+                Broombridge.V0_3.PermutationSymmetry.Eightfold => OrbitalIntegral.PermutationSymmetry.Eightfold,
+                Broombridge.V0_3.PermutationSymmetry.Fourfold => OrbitalIntegral.PermutationSymmetry.Fourfold,
+                Broombridge.V0_3.PermutationSymmetry.Trivial => OrbitalIntegral.PermutationSymmetry.Trivial,
+                _ => throw new Exception($"Broombridge v0.3 permutation symmetry kind {symmetry} is not supported.")
+            };
+
 
         /// <summary>
         /// Method for constructing a fermion Hamiltonian from an orbital integral Hamiltonian.
@@ -60,7 +69,8 @@ namespace Microsoft.Quantum.Chemistry.OrbitalIntegrals
         public static IEnumerable<(HermitianFermionTerm, double)> ToHermitianFermionTerms(
             this OrbitalIntegral orbitalIntegral,
             int nOrbitals,
-            IndexConvention indexConvention = IndexConvention.UpDown)
+            IndexConvention indexConvention = IndexConvention.UpDown,
+            OrbitalIntegral.PermutationSymmetry symmetry = OrbitalIntegral.PermutationSymmetry.Eightfold)
         {
             var termType = orbitalIntegral.TermType;
             if (termType == TermType.OrbitalIntegral.OneBody)
@@ -69,7 +79,7 @@ namespace Microsoft.Quantum.Chemistry.OrbitalIntegrals
             }
             else if (termType == TermType.OrbitalIntegral.TwoBody)
             {
-                return orbitalIntegral.ToTwoBodySpinOrbitalTerms(nOrbitals, indexConvention);
+                return orbitalIntegral.ToTwoBodySpinOrbitalTerms(nOrbitals, indexConvention, symmetry);
             }
             else if(termType == TermType.OrbitalIntegral.Identity)
             {
@@ -95,7 +105,9 @@ namespace Microsoft.Quantum.Chemistry.OrbitalIntegrals
         {
             // One-electron orbital integral symmetries
             // ij = ji
-            var pqSpinOrbitals = orbitalIntegral.EnumerateOrbitalSymmetries().EnumerateSpinOrbitals();
+            var pqSpinOrbitals = orbitalIntegral
+                .EnumerateOrbitalSymmetries(OrbitalIntegral.PermutationSymmetry.Eightfold)
+                .EnumerateSpinOrbitals();
 
             var coefficient = orbitalIntegral.Coefficient;
 
@@ -124,11 +136,12 @@ namespace Microsoft.Quantum.Chemistry.OrbitalIntegrals
         private static IEnumerable<(HermitianFermionTerm, double)> ToTwoBodySpinOrbitalTerms(
             this OrbitalIntegral orbitalIntegral,
             int nOrbitals,
-            IndexConvention indexConvention)
+            IndexConvention indexConvention,
+            OrbitalIntegral.PermutationSymmetry symmetry)
         {
             // Two-electron orbital integral symmetries
             // ijkl = lkji = jilk = klij = ikjl = ljki = kilj = jlik.
-            var pqrsSpinOrbitals = orbitalIntegral.EnumerateOrbitalSymmetries().EnumerateSpinOrbitals();
+            var pqrsSpinOrbitals = orbitalIntegral.EnumerateOrbitalSymmetries(symmetry).EnumerateSpinOrbitals();
             var coefficient = orbitalIntegral.Coefficient;
 
 

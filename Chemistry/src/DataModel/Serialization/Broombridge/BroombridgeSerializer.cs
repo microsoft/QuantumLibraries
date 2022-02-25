@@ -11,6 +11,8 @@ using System.Text.RegularExpressions;
 using YamlDotNet.Core;
 using YamlDotNet.Serialization;
 using YamlDotNet.Core.Events;
+using System.Reflection;
+using System.Runtime.Serialization;
 
 namespace Microsoft.Quantum.Chemistry.Broombridge
 {
@@ -19,7 +21,35 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
     /// </summary>
     public enum VersionNumber
     {
-        NotRecognized = -1, v0_1 = 0, v0_2 = 1
+        NotRecognized = -1, v0_1 = 0, v0_2 = 1, v0_3
+    }
+
+    internal class YamlStringEnumConverter : IYamlTypeConverter
+    {
+        public bool Accepts(Type type) => type.IsEnum;
+
+        public object ReadYaml(IParser parser, Type type)
+        {
+            var parsedEnum = parser.Consume<Scalar>();
+            var serializableValues = type.GetMembers()
+                .Select(m => new KeyValuePair<string, MemberInfo>(m.GetCustomAttributes<EnumMemberAttribute>(true).Select(ema => ema.Value).FirstOrDefault(), m))
+                .Where(pa => !string.IsNullOrEmpty(pa.Key))
+                .ToDictionary(pa => pa.Key, pa => pa.Value);
+
+            if (!serializableValues.ContainsKey(parsedEnum.Value))
+            {
+                throw new YamlException(parsedEnum.Start, parsedEnum.End, $"Value '{parsedEnum.Value}' not found in enum '{type.Name}'");
+            }
+
+            return Enum.Parse(type, serializableValues[parsedEnum.Value].Name);
+        }
+
+        public void WriteYaml(IEmitter emitter, object value, Type type)
+        {
+            var enumMember = type.GetMember(value.ToString()).FirstOrDefault();
+            var yamlValue = enumMember?.GetCustomAttributes<EnumMemberAttribute>(true).Select(ema => ema.Value).FirstOrDefault() ?? value.ToString();
+            emitter.Emit(new Scalar(yamlValue));
+        }
     }
 
     public static class BroombridgeSerializer
@@ -42,7 +72,7 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
                         Metadata = problem.Metadata,
                         NElectrons = problem.NElectrons,
                         NOrbitals = problem.NOrbitals,
-                        OrbitalIntegralHamiltonian = V0_2.ToOrbitalIntegralHamiltonian(problem),
+                        OrbitalIntegralHamiltonian = V0_3.ToOrbitalIntegralHamiltonian(problem),
                         ScfEnergy = problem.ScfEnergy?.FromBroombridgeV0_1(),
                         ScfEnergyOffset = problem.ScfEnergyOffset?.FromBroombridgeV0_1()
                     }
@@ -51,8 +81,8 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
 
         public static void Serialize(TextWriter writer, IEnumerable<ElectronicStructureProblem> problems)
         {
-            Serializers.SerializeBroombridgev0_2(
-                new Broombridge.V0_2.Data
+            Serializers.SerializeData(
+                new Broombridge.V0_3.Data
                 {
                     // TODO: fix additional properties by converting IEnumerable<ESP> to
                     //       new problem collection class. See https://github.com/microsoft/QuantumLibraries/issues/287.
@@ -69,7 +99,7 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
                     Schema = V0_2.SchemaUrl,
                     ProblemDescriptions = problems
                         .Select(
-                            problem => problem.ToBroombridgeV0_2()
+                            problem => problem.ToBroombridgeV0_3()
                         )
                         .ToList()
                 },
@@ -97,7 +127,10 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
             ["broombridge-0.1.schema"] = VersionNumber.v0_1,
             // TODO: URL of 0.2 schema.
             ["0.2"] = VersionNumber.v0_2,
-            ["broombridge-0.2.schema"] = VersionNumber.v0_2
+            ["broombridge-0.2.schema"] = VersionNumber.v0_2,
+            // TODO: Update actual schema for 0.3.
+            ["0.3"] = VersionNumber.v0_3,
+            ["broombridge-0.3.schema"] = VersionNumber.v0_3
         };
 
         
@@ -122,8 +155,8 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
             var deserializer = new DeserializerBuilder().Build();
             var data = deserializer.Deserialize<Dictionary<string, object>>(reader);
             var schema = data["$schema"] as string;
-            VersionNumber versionNumber = VersionNumber.NotRecognized;
-            if(schema != null)
+            var versionNumber = VersionNumber.NotRecognized;
+            if (schema != null)
             {
                 foreach (var kv in VersionNumberDict)
                 {
@@ -161,10 +194,14 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
                     VersionNumber.v0_1 => DataStructures.Update(
                         Deserialize<V0_1.Data>(stringReader)
                     ),
-                    VersionNumber.v0_2 => Deserialize<V0_2.Data>(stringReader),
-                    _ => throw new System.InvalidOperationException(
+                    VersionNumber.v0_2 => DataStructures.Update(
+                        Deserialize<V0_2.Data>(stringReader)
+                    ),
+                    VersionNumber.v0_3 => Deserialize<V0_3.Data>(stringReader),
+                    VersionNumber.NotRecognized => throw new System.InvalidOperationException(
                         "Unrecognized Broombridge version number."
-                    )
+                    ),
+                    _ => throw new System.Exception($"Internal error occurred; version {versionNumber} is valid but was not deserialized.")
                 }
             );
         }
@@ -189,6 +226,7 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
         /// <returns></returns>
         public static TData Deserialize<TData>(TextReader reader) =>
             new DeserializerBuilder()
+                .WithTypeConverter(new YamlStringEnumConverter())
                 .Build()
                 .Deserialize<TData>(reader);
 
@@ -215,7 +253,7 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
         /// </summary>
         /// <param name="data">Broombridge v0.2 data to be serialized.</param>
         /// <param name="filename">Name of the file to write serialized data to.</param>
-        internal static void SerializeBroombridgev0_2(V0_2.Data data, string filename)
+        internal static void SerializeData<TData>(TData data, string filename)
         {
             using var writer = new StreamWriter(File.OpenWrite(filename));
             var stringBuilder = new StringBuilder();
@@ -228,7 +266,7 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
         /// </summary>
         /// <param name="data">Broombridge v0.2 data to be serialized.</param>
         /// <param name="writer">Text writer to write serialized Broombridge data to.</param>
-        internal static void SerializeBroombridgev0_2(V0_2.Data data, TextWriter writer)
+        internal static void SerializeData<TData>(TData data, TextWriter writer)
         {
             var stringBuilder = new StringBuilder();
             var serializer =

@@ -92,7 +92,7 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
                              ConvertIndices(
                                  term
                                 .Key
-                                .ToCanonicalForm()
+                                .ToCanonicalForm(OrbitalIntegral.PermutationSymmetry.Eightfold)
                                 .OrbitalIndices,
                                 OrbitalIntegral.Convention.Dirac,
                                 OrbitalIntegral.Convention.Mulliken
