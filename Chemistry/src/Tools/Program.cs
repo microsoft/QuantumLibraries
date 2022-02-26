@@ -23,7 +23,8 @@ namespace Microsoft.Quantum.Chemistry.Tools
             new RootCommand
             {
                 Convert.CreateCommand(),
-                Normalize.CreateCommand()
+                Normalize.CreateCommand(),
+                ExportJW.CreateCommand()
             }
             .WithDescription("Tools for working with quantum chemistry data.");
 

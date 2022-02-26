@@ -26,7 +26,10 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
 
     internal class YamlStringEnumConverter : IYamlTypeConverter
     {
-        public bool Accepts(Type type) => type.IsEnum;
+        public bool Accepts(Type type)
+        {
+            return type.IsEnum;
+        }
 
         public object ReadYaml(IParser parser, Type type)
         {
@@ -89,14 +92,14 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
                     Bibliography = null,
                     Format = new V0_1.Format
                     {
-                        Version = "0.2"
+                        Version = "0.3"
                     },
                     Generator = new V0_1.Generator
                     {
                         Source = "qdk-chem",
                         Version = typeof(BroombridgeSerializer).Assembly.GetName().Version.ToString()
                     },
-                    Schema = V0_2.SchemaUrl,
+                    Schema = V0_3.SchemaUrl,
                     ProblemDescriptions = problems
                         .Select(
                             problem => problem.ToBroombridgeV0_3()

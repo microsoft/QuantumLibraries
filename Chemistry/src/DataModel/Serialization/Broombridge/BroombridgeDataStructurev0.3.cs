@@ -21,6 +21,9 @@ using Newtonsoft.Json;
 using System.Runtime.Serialization;
 
 using static Microsoft.Quantum.Chemistry.OrbitalIntegrals.IndexConventionConversions;
+using YamlDotNet.Core.Events;
+using System.Reflection;
+using System.Collections.Immutable;
 
 namespace Microsoft.Quantum.Chemistry.Broombridge
 {
@@ -133,7 +136,7 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
                     var idxs = ConvertIndices(
                                     term
                                     .Key
-                                    .ToCanonicalForm(symmetry.Permutation.FromBroombridgeV0_3())
+                                    .ToCanonicalForm(symmetry.Permutation.Value.FromBroombridgeV0_3())
                                     .OrbitalIndices,
                                     OrbitalIntegral.Convention.Dirac,
                                     OrbitalIntegral.Convention.Mulliken
@@ -175,7 +178,7 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
         internal static V0_3.ArrayQuantity<TKey[], TValue> ToBroombridgeV0_3<TKey, TValue>(this V0_1.ArrayQuantity<TKey, TValue> array) =>
             new V0_3.ArrayQuantity<TKey[], TValue>
             {
-                Format = Enum.TryParse<V0_3.ArrayFormat>(array.Format, out var format)
+                Format = Enum.TryParse<V0_3.ArrayFormat>(array.Format, true, out var format)
                          ? format
                          : throw new Exception($"Invalid array format {array.Format} when converting 0.1 array quantity to 0.3 array quantity."),
                 IndexConvention = array.IndexConvention,
@@ -310,12 +313,60 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
             //     from in 0.1.
             public ArrayQuantity<object[], object>? ParticleHoleRepresentation { get; set; }
 
-            [YamlMember(Alias = "one_electron_integrals", ApplyNamingConventions = false)]
+            [YamlMember(
+                Alias = "one_electron_integrals",
+                ApplyNamingConventions = false,
+                // Don't allow subclasses here.
+                SerializeAs = typeof(ArrayQuantity<(long, long), double>)
+            )]
             public ArrayQuantity<(long, long), double> OneElectronIntegrals { get; set; }
 
             [YamlMember(Alias = "two_electron_integrals", ApplyNamingConventions = false)]
             public ArrayQuantityWithSymmetry<(long, long, long, long), double> TwoElectronIntegrals { get; set; }
 
+        }
+
+        // TODO: move out of v0.3.
+        // TODO: finish.
+        public struct StringEnum<T> : IYamlConvertible
+        where T: struct, Enum
+        {
+            public T Value;
+            public StringEnum(T value)
+            {
+                Value = value;
+            }
+            private static ImmutableDictionary<string, T> EnumValues;
+
+            static StringEnum()
+            {
+                EnumValues = typeof(T).GetMembers()
+                    .Select(m => new KeyValuePair<string, MemberInfo>(
+                        m
+                            .GetCustomAttributes<EnumMemberAttribute>(true)
+                            .Select(ema => ema.Value)
+                            .FirstOrDefault(),
+                        m
+                    ))
+                    .Where(pa => !string.IsNullOrEmpty(pa.Key))
+                    .ToImmutableDictionary(pa => pa.Key, pa => Enum.Parse<T>(pa.Value.Name));
+            }
+
+            public void Read(IParser parser, Type expectedType, ObjectDeserializer nestedObjectDeserializer)
+            {
+                var field = (string)nestedObjectDeserializer(typeof(string));
+                Value = EnumValues[field];
+            }
+
+            public void Write(IEmitter emitter, ObjectSerializer nestedObjectSerializer)
+            {
+                var value = Value;
+                var name = EnumValues.Where(pair => pair.Value.Equals(value)).Single().Key;
+                nestedObjectSerializer(name);
+            }
+
+            public static implicit operator T(StringEnum<T> e) => e.Value;
+            public static implicit operator StringEnum<T>(T e) => new StringEnum<T>(e);
         }
 
         public enum ArrayFormat
@@ -326,18 +377,93 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
 
         public class ArrayQuantity<TIndex, TValue> : HasUnits
         {
-            public struct Item
+            public struct Item : IYamlConvertible
             {
                 [YamlMember(Alias = "key", ApplyNamingConventions = false)]
                 public TIndex Key { get; set; }
 
                 [YamlMember(Alias = "value", ApplyNamingConventions = false)]
                 public TValue Value { get; set; }
+
+                public void Read(IParser parser, Type expectedType, ObjectDeserializer nestedObjectDeserializer)
+                {
+                    parser.Consume<MappingStart>();
+                    var readKey = false;
+                    var readValue = false;
+                    while (!readKey || !readValue)
+                    {
+                        var name = nestedObjectDeserializer(typeof(string));
+                        switch (name)
+                        {
+                            case "key":
+                                this.Key = ReadKey(parser, nestedObjectDeserializer);
+                                readKey = true;
+                                break;
+
+                            case "value":
+                                this.Value = (TValue)nestedObjectDeserializer(typeof(TValue));
+                                readValue = true;
+                                break;
+                        };
+                    }
+                    parser.Consume<MappingEnd>();
+                }
+
+                private TIndex ReadKey(IParser parser, ObjectDeserializer nestedObjectDeserializer)
+                {
+                    if (typeof(TIndex).FullName.StartsWith("System.ValueTuple`"))
+                    {
+                        // TODO [perf]: Cache the create method.
+                        var createMethod = typeof(ValueTuple).GetMethods(
+                                BindingFlags.Static | BindingFlags.Public
+                            )
+                            .Where(meth => meth.Name == "Create")
+                            .Where(meth => meth.GetParameters().Length == typeof(TIndex).GenericTypeArguments.Length)
+                            .Single();
+                        var args = new List<object>();
+                        parser.Consume<SequenceStart>();
+                        foreach (var elementType in typeof(TIndex).GenericTypeArguments)
+                        {
+                            var element = nestedObjectDeserializer(elementType);
+                            args.Add(element);
+                        }
+                        parser.Consume<SequenceEnd>();
+                        return (TIndex)createMethod.MakeGenericMethod(typeof(TIndex).GenericTypeArguments).Invoke(null, args.ToArray());
+                    }
+                    else return (TIndex)nestedObjectDeserializer(typeof(TIndex));
+                }
+
+                public void Write(IEmitter emitter, ObjectSerializer nestedObjectSerializer)
+                {
+                    emitter.Emit(new MappingStart(null, null, true, MappingStyle.Flow));
+                    nestedObjectSerializer("key");
+                    if (typeof(TIndex).FullName.StartsWith("System.ValueTuple`"))
+                    {
+                        emitter.Emit(new SequenceStart(null, null, true, SequenceStyle.Flow));
+                        foreach (var (_, idx) in typeof(TIndex).GenericTypeArguments.Select((_, idx) => (_, idx)))
+                        {
+                            var field = typeof(TIndex).GetField($"Item{idx + 1}");
+                            nestedObjectSerializer(field.GetValue(Key));
+                        }
+                        emitter.Emit(new SequenceEnd());
+                    }
+                    else
+                    {
+                        nestedObjectSerializer(Key);
+                    }
+                    nestedObjectSerializer("value");
+                    nestedObjectSerializer(Value);
+                    emitter.Emit(new MappingEnd());
+                }
             }
 
-            // TODO: make this an enum.
-            public ArrayFormat Format { get; set; }
+            [YamlMember(Alias = "format")]
+            public StringEnum<ArrayFormat> Format { get; set; }
+            
+            [YamlMember(Alias = "values")]
             public List<Item> Values { get; set; }
+
+            [YamlMember(Alias = "index_convention")]
             public OrbitalIntegral.Convention? IndexConvention { get; set; } = null;
         }
 
@@ -354,7 +480,7 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
         public struct Symmetry
         {
             [YamlMember(Alias = "permutation")]
-            public PermutationSymmetry Permutation { get; set; }
+            public StringEnum<PermutationSymmetry> Permutation { get; set; }
         }
 
         public class ArrayQuantityWithSymmetry<TIndex, TValue> : ArrayQuantity<TIndex, TValue>
@@ -395,7 +521,7 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
                         o.Value,
                         OrbitalIntegral.Convention.Mulliken
                     )
-                .ToCanonicalForm(hamiltonianData.TwoElectronIntegrals.Symmetry.Permutation.FromBroombridgeV0_3()))
+                .ToCanonicalForm(hamiltonianData.TwoElectronIntegrals.Symmetry.Permutation.Value.FromBroombridgeV0_3()))
                 .Distinct());
 
             hamiltonian.Add(new OrbitalIntegral(), identityterm);
