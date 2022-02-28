@@ -29,7 +29,7 @@ namespace Microsoft.Quantum.Chemistry.Tools
                     "Input data to be loaded, or - to load from stdin."
                 ),
                 new Option<SerializationFormat>(
-                    "--from",
+                    "--format",
                     "Format to use in loading problem description data."
                 ),
                 new Option<FileInfo?>(
