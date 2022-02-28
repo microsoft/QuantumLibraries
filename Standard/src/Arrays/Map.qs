@@ -67,8 +67,7 @@ namespace Microsoft.Quantum.Arrays {
     /// # Output
     /// An array `'U[]` of elements that are mapped by the `mapper` function.
     ///
-    /// # Remarks
-    /// ## Example
+    /// # Example
     /// The following two lines are equivalent:
     /// ```qsharp
     /// let arr = MapIndex(f, [x0, x1, x2]);

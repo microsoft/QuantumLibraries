@@ -29,8 +29,7 @@ namespace Microsoft.Quantum.Canon {
     /// ## 'T
     /// The target on which each of the operations in the array act.
     ///
-    /// # Remarks
-    /// ## Example
+    /// # Example
     /// The following are equivalent:
     /// ```qsharp
     /// let bound = Bound([U, V]);
@@ -78,8 +77,7 @@ namespace Microsoft.Quantum.Canon {
     /// ## 'T
     /// The target on which each of the operations in the array act.
     ///
-    /// # Remarks
-    /// ## Example
+    /// # Example
     /// The following are equivalent:
     /// ```qsharp
     /// let bound = BoundA([U, V]);
@@ -126,8 +124,7 @@ namespace Microsoft.Quantum.Canon {
     /// ## 'T
     /// The target on which each of the operations in the array act.
     ///
-    /// # Remarks
-    /// ## Example
+    /// # Example
     /// The following are equivalent:
     /// ```qsharp
     /// let bound = BoundC([U, V]);
@@ -174,8 +171,7 @@ namespace Microsoft.Quantum.Canon {
     /// ## 'T
     /// The target on which each of the operations in the array act.
     ///
-    /// # Remarks
-    /// ## Example
+    /// # Example
     /// The following are equivalent:
     /// ```qsharp
     /// let bound = BoundCA([U, V]);

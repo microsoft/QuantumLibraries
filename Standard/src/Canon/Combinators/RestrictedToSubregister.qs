@@ -16,8 +16,7 @@ namespace Microsoft.Quantum.Canon {
     /// ## target
     /// Register on which the operation acts.
     ///
-    /// # Remarks
-    /// ## Example
+    /// # Example
     /// Create three qubit state $\frac{1}{\sqrt{2}}\ket{0}\_2(\ket{0}\_1\ket{0}_3+\ket{1}\_1\ket{1}_3)$:
     /// ```qsharp
     ///     using (register = Qubit[3]) {
