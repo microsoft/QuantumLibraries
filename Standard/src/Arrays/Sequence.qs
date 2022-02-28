@@ -18,8 +18,7 @@ namespace Microsoft.Quantum.Arrays {
     /// An array containing the sequence of numbers `from`, `from + 1`, ...,
     /// `to`.
     ///
-    /// # Remarks
-    /// ## Example
+    /// # Example
     /// ```qsharp
     /// let arr1 = SequenceI(0, 3); // [0, 1, 2, 3]
     /// let arr2 = SequenceI(23, 29); // [23, 24, 25, 26, 27, 28, 29]
@@ -57,7 +56,7 @@ namespace Microsoft.Quantum.Arrays {
     /// # Remarks
     /// The difference between `from` and `to` must fit into an `Int` value.
     ///
-    /// ## Example
+    /// # Example
     /// ```qsharp
     /// let arr1 = SequenceL(0L, 3L); // [0L, 1L, 2L, 3L]
     /// let arr2 = SequenceL(23L, 29L); // [23L, 24L, 25L, 26L, 27L, 28L, 29L]
