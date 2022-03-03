@@ -32,7 +32,7 @@ namespace Microsoft.Quantum.Preparation {
     /// of the mixed state
     /// $$
     /// \begin{align}
-    ///     \rho = \sum_{j = 0}^{N-1} \frac{|alpha_j|}{\sum_k |\alpha_k|} \ket{j}\bra{j},
+    ///     \rho = \sum_{j = 0}^{N-1} \frac{|\alpha_j|}{\sum_k |\alpha_k|} \ket{j}\bra{j},
     /// \end{align}
     /// $$
     /// where each $p_j$ is an approximation to the given coefficient $\alpha_j$
@@ -73,7 +73,7 @@ namespace Microsoft.Quantum.Preparation {
     ///
     /// # Example
     /// The following code snippet prepares an purification of the $3$-qubit state
-    /// $\rho=\sum_{j=0}^{4}\frac{|alpha_j|}{\sum_k |\alpha_k|}\ket{j}\bra{j}$, where
+    /// $\rho=\sum_{j=0}^{4}\frac{|\alpha_j|}{\sum_k |\alpha_k|}\ket{j}\bra{j}$, where
     /// $\vec\alpha=(1.0, 2.0, 3.0, 4.0, 5.0)$, and the target error is
     /// $10^{-3}$:
     /// ```qsharp
@@ -127,24 +127,30 @@ namespace Microsoft.Quantum.Preparation {
     /// bitstring $\vec{x}_j$ associated with each coefficient, this
     /// function returns an operation that uses the Quantum ROM technique to
     /// prepare an approximation
+    /// 
     /// $$
     /// \begin{align}
     ///     \tilde\rho = \sum_{j = 0}^{N - 1} p_j \ket{j}\bra{j} \otimes \ket{\vec{x}_j}\bra{\vec{x}_j}
     /// \end{align}
     /// $$
+    /// 
     /// of the mixed state
+    /// 
     /// $$
     /// \begin{align}
-    ///     \rho = \sum_{j = 0}^{N-1}\ frac{|alpha_j|}{\sum_k |\alpha_k|} \ket{j}\bra{j} \otimes \ket{\vec{x}_j}\bra{\vec{x}_j},
+    ///     \rho = \sum_{j = 0}^{N-1} \frac{|\alpha_j|}{\sum_k |\alpha_k|} \ket{j}\bra{j} \otimes \ket{\vec{x}_j}\bra{\vec{x}_j},
     /// \end{align}
     /// $$
+    /// 
     /// where each $p_j$ is an approximation to the given coefficient $\alpha_j$
     /// such that
+    /// 
     /// $$
     /// \begin{align}
     ///     \left| p_j - \frac{ |\alpha_j| }{ \sum_k |\alpha_k| } \right| \le \frac{\epsilon}{N}
     /// \end{align}
     /// $$
+    /// 
     /// for each $j$.
     ///
     /// When passed an index register and a register of garbage qubits,
