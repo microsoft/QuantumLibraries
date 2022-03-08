@@ -26,8 +26,7 @@ namespace Microsoft.Quantum.Arrays {
     /// The final state returned by the folder after iterating over
     /// all elements of `array`.
     ///
-    /// # Remarks
-    /// ## Example
+    /// # Example
     /// ```qsharp
     /// function Plus(a : Double, b : Double) {
     ///     return a + b;

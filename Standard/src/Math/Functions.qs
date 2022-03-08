@@ -83,7 +83,7 @@ namespace Microsoft.Quantum.Math {
     /// The `minValue` input then effectively specifies where to cut the
     /// unit circle.
     ///
-    /// ## Example
+    /// # Example
     /// ```qsharp
     ///     // Returns 3 π / 2.
     ///     let y = RealMod(5.5 * PI(), 2.0 * PI(), 0.0);

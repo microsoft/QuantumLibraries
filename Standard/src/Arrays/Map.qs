@@ -32,7 +32,7 @@ namespace Microsoft.Quantum.Arrays {
     /// # See Also
     /// - Microsoft.Quantum.Arrays.ForEach
     function Mapped<'T, 'U> (mapper : ('T -> 'U), array : 'T[]) : 'U[] {
-        mutable resultArray = new 'U[Length(array)];
+        mutable resultArray = [Default<'U>(), size = Length(array)];
 
         for idxElement in IndexRange(array) {
             set resultArray w/= idxElement <- mapper(array[idxElement]);
@@ -67,8 +67,7 @@ namespace Microsoft.Quantum.Arrays {
     /// # Output
     /// An array `'U[]` of elements that are mapped by the `mapper` function.
     ///
-    /// # Remarks
-    /// ## Example
+    /// # Example
     /// The following two lines are equivalent:
     /// ```qsharp
     /// let arr = MapIndex(f, [x0, x1, x2]);
@@ -81,7 +80,7 @@ namespace Microsoft.Quantum.Arrays {
     /// # See Also
     /// - Microsoft.Quantum.Arrays.Mapped
     function MappedByIndex<'T, 'U> (mapper : ((Int, 'T) -> 'U), array : 'T[]) : 'U[] {
-        mutable resultArray = new 'U[Length(array)];
+        mutable resultArray = [Default<'U>(), size = Length(array)];
 
         for idxElement in IndexRange(array) {
             set resultArray w/= idxElement <- mapper(idxElement, array[idxElement]);
@@ -128,7 +127,7 @@ namespace Microsoft.Quantum.Arrays {
         let end = RangeEnd(range);
         if ((end - start) / step >= 0) {
             let nTerms = (end - start) / step + 1;
-            mutable resultArray = new 'T[nTerms];
+            mutable resultArray = [Default<'T>(), size = nTerms];
             mutable idxElement = 0;
             for elem in range {
                 set resultArray w/= idxElement <- mapper(elem);
@@ -221,7 +220,7 @@ namespace Microsoft.Quantum.Arrays {
     /// # See Also
     /// - Microsoft.Quantum.Arrays.Mapped
     operation ForEach<'T, 'U> (action : ('T => 'U), array : 'T[]) : 'U[] {
-        mutable resultArray = new 'U[Length(array)];
+        mutable resultArray = [Default<'U>(), size = Length(array)];
 
         for idxElement in IndexRange(array) {
             set resultArray w/= idxElement <- action(array[idxElement]);

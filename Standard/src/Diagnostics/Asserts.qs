@@ -25,17 +25,16 @@ namespace Microsoft.Quantum.Diagnostics {
     /// ## tolerance
     /// Absolute tolerance on the difference between actual and expected.
     ///
-    /// # Remarks
-    /// ## Example
+    /// # Example
     /// The following assert succeeds:
     /// `qubit` is in state $\ket{\psi}=e^{i 0.5}\sqrt{1/2}\ket{0}+e^{i 0.5}\sqrt{1/2}\ket{1}$;
-    /// - `AssertPhase(0.0,qubit,10e-10);`
+    /// - `AssertPhase(0.0, qubit, 10e-10);`
     ///
     /// `qubit` is in state $\ket{\psi}=e^{i 0.5}\sqrt{1/2}\ket{0}+e^{-i 0.5}\sqrt{1/2}\ket{1}$;
-    /// - `AssertPhase(0.5,qubit,10e-10);`
+    /// - `AssertPhase(0.5, qubit, 10e-10);`
     ///
     /// `qubit` is in state $\ket{\psi}=e^{-i 2.2}\sqrt{1/2}\ket{0}+e^{i 0.2}\sqrt{1/2}\ket{1}$;
-    /// - `AssertPhase(-1.2,qubit,10e-10);`
+    /// - `AssertPhase(-1.2, qubit, 10e-10);`
     operation AssertPhase(expected : Double, qubit : Qubit, tolerance : Double) : Unit {
         let exptectedProbX = Cos(expected) * Cos(expected);
         let exptectedProbY = Sin(-1.0 * expected + PI() / 4.0) * Sin(-1.0 * expected + PI() / 4.0);

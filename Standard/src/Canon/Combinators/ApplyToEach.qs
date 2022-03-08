@@ -19,12 +19,11 @@ namespace Microsoft.Quantum.Canon {
     /// ## 'T
     /// The target on which the operation acts.
     ///
-    /// # Remarks
-    /// ## Example
+    /// # Example
     /// Prepare a three-qubit $\ket{+}$ state:
     /// ```qsharp
     /// using (register = Qubit[3]) {
-    ///     ApplyToEach(H, register);
+    ///     ApplyToEachCA(H, register);
     /// }
     /// ```
     ///
@@ -52,12 +51,11 @@ namespace Microsoft.Quantum.Canon {
     /// ## 'T
     /// The target on which the operation acts.
     ///
-    /// # Remarks
-    /// ## Example
+    /// # Example
     /// Prepare a three-qubit $\ket{+}$ state:
     /// ```qsharp
     /// using (register = Qubit[3]) {
-    ///     ApplyToEach(H, register);
+    ///     ApplyToEachA(H, register);
     /// }
     /// ```
     ///
@@ -85,12 +83,11 @@ namespace Microsoft.Quantum.Canon {
     /// ## 'T
     /// The target on which the operation acts.
     ///
-    /// # Remarks
-    /// ## Example
+    /// # Example
     /// Prepare a three-qubit $\ket{+}$ state:
     /// ```qsharp
     /// using (register = Qubit[3]) {
-    ///     ApplyToEach(H, register);
+    ///     ApplyToEachC(H, register);
     /// }
     /// ```
     ///
@@ -117,8 +114,7 @@ namespace Microsoft.Quantum.Canon {
     /// ## 'T
     /// The target on which the operation acts.
     ///
-    /// # Remarks
-    /// ## Example
+    /// # Example
     /// Prepare a three-qubit $\ket{+}$ state:
     /// ```qsharp
     /// using (register = Qubit[3]) {
