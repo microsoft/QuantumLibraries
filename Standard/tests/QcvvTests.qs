@@ -2,16 +2,16 @@
 // Licensed under the MIT License.
 
 namespace Microsoft.Quantum.Tests {
-    open Microsoft.Quantum.Intrinsic;
-    open Microsoft.Quantum.Canon;
-    open Microsoft.Quantum.Convert;
-    open Microsoft.Quantum.Oracles;
-    open Microsoft.Quantum.Characterization;
-    open Microsoft.Quantum.Preparation;
-    open Microsoft.Quantum.Diagnostics;
     open Microsoft.Quantum.Arrays;
+    open Microsoft.Quantum.Canon;
+    open Microsoft.Quantum.Characterization;
+    open Microsoft.Quantum.Convert;
+    open Microsoft.Quantum.Diagnostics;
+    open Microsoft.Quantum.Intrinsic;
     open Microsoft.Quantum.Math;
     open Microsoft.Quantum.Measurement as Meas;
+    open Microsoft.Quantum.Oracles;
+    open Microsoft.Quantum.Preparation;
 
     @Test("QuantumSimulator")
     operation TestChoiState() : Unit {
@@ -20,8 +20,8 @@ namespace Microsoft.Quantum.Tests {
 
         // As usual, the same confusion about {+1, -1} and {0, 1}
         // labeling bites us here.
-        AssertMeasurement([PauliX, PauliX], register, Zero, $"XX");
-        AssertMeasurement([PauliZ, PauliZ], register, Zero, $"ZZ");
+        AssertMeasurement([PauliX, PauliX], register, Zero, "XX");
+        AssertMeasurement([PauliZ, PauliZ], register, Zero, "ZZ");
         ResetAll(register);
     }
 
@@ -38,7 +38,7 @@ namespace Microsoft.Quantum.Tests {
         EqualityWithinToleranceFact(freq2, 0.5, 0.1);
     }
 
-    operation PrepareBiasedCoin(successProbability : Double, qubit : Qubit) : Unit is Adj {
+    internal operation PrepareBiasedCoin(successProbability : Double, qubit : Qubit) : Unit is Adj {
         let rotationAngle = 2.0 * ArcCos(Sqrt(successProbability));
         Ry(rotationAngle, qubit);
     }
@@ -90,7 +90,7 @@ namespace Microsoft.Quantum.Tests {
         Exp([PauliZ], phase * IntAsDouble(power), qubits);
     }
 
-    operation RobustPhaseEstimationDemoImpl (phaseSet : Double, bitsPrecision : Int) : Double {
+    internal operation RobustPhaseEstimationDemoImpl (phaseSet : Double, bitsPrecision : Int) : Double {
         let op = DiscreteOracle(RobustPhaseEstimationTestOp(phaseSet, _, _));
 
         use q = Qubit();
@@ -99,9 +99,7 @@ namespace Microsoft.Quantum.Tests {
         return phaseEst;
     }
 
-    // Probabilistic test. Might fail occasionally
-    @Test("QuantumSimulator")
-    operation TestRobustPhaseEstimation() : Unit {
+    operation TestRobustPhaseEstimationInner() : Unit {
         let bitsPrecision = 10;
 
         for idxTest in 0 .. 9 {
@@ -125,13 +123,13 @@ namespace Microsoft.Quantum.Tests {
 
     @Test("QuantumSimulator")
     operation TestSingleQubitProcessTomographyMeasurement() : Unit {
-        EqualityFactR(SingleQubitProcessTomographyMeasurement(PauliI, PauliI, H), Zero, $"Failed at ⟪I | H | I⟫.");
-        EqualityFactR(SingleQubitProcessTomographyMeasurement(PauliX, PauliI, H), Zero, $"Failed at ⟪I | H | X⟫.");
-        EqualityFactR(SingleQubitProcessTomographyMeasurement(PauliY, PauliI, H), Zero, $"Failed at ⟪I | H | Y⟫.");
-        EqualityFactR(SingleQubitProcessTomographyMeasurement(PauliZ, PauliI, H), Zero, $"Failed at ⟪I | H | Z⟫.");
-        EqualityFactR(SingleQubitProcessTomographyMeasurement(PauliX, PauliZ, H), Zero, $"Failed at ⟪Z | H | X⟫.");
-        EqualityFactR(SingleQubitProcessTomographyMeasurement(PauliY, PauliY, H), One, $"Failed at -⟪Y | H | Y⟫.");
-        EqualityFactR(SingleQubitProcessTomographyMeasurement(PauliX, PauliZ, H), Zero, $"Failed at ⟪Z | H | X⟫.");
+        EqualityFactR(SingleQubitProcessTomographyMeasurement(PauliI, PauliI, H), Zero, "Failed at ⟪I | H | I⟫.");
+        EqualityFactR(SingleQubitProcessTomographyMeasurement(PauliX, PauliI, H), Zero, "Failed at ⟪I | H | X⟫.");
+        EqualityFactR(SingleQubitProcessTomographyMeasurement(PauliY, PauliI, H), Zero, "Failed at ⟪I | H | Y⟫.");
+        EqualityFactR(SingleQubitProcessTomographyMeasurement(PauliZ, PauliI, H), Zero, "Failed at ⟪I | H | Z⟫.");
+        EqualityFactR(SingleQubitProcessTomographyMeasurement(PauliX, PauliZ, H), Zero, "Failed at ⟪Z | H | X⟫.");
+        EqualityFactR(SingleQubitProcessTomographyMeasurement(PauliY, PauliY, H), One, "Failed at -⟪Y | H | Y⟫.");
+        EqualityFactR(SingleQubitProcessTomographyMeasurement(PauliX, PauliZ, H), Zero, "Failed at ⟪Z | H | X⟫.");
     }
 
 }
