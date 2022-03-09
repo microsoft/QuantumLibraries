@@ -2,8 +2,9 @@
 // Licensed under the MIT License.
 
 namespace Microsoft.Quantum.AmplitudeAmplification {
-    open Microsoft.Quantum.Convert;
     open Microsoft.Quantum.Arrays;
+    open Microsoft.Quantum.Convert;
+    open Microsoft.Quantum.Diagnostics;
     open Microsoft.Quantum.Math;
 
     /// # Summary
@@ -52,13 +53,27 @@ namespace Microsoft.Quantum.AmplitudeAmplification {
     /// for phases in the `RotationPhases` format.
     function FixedPointReflectionPhases(nQueries : Int, successMin : Double)
     : ReflectionPhases {
-        let twoPi = 2.0 * PI();
-        mutable phasesRot = new Double[nQueries];
-        let nQueriesDouble = IntAsDouble(nQueries);
-        set phasesRot w/= 0 <- 0.0;
-        let beta = Cosh((1.0 / nQueriesDouble) * ArcCosh(Sqrt(successMin)));
-        let alpha = Sqrt(1.0 - beta * beta);
+        // In this implementation `nQueries` corresponds to $L$ in
+        // arXiv:1409.3305.
+        Fact(nQueries % 2 == 1, "nQueries must be odd");
 
+        // Initializes L rotation phases, this also initializes the first
+        // rotation phase with 0.0.
+        mutable phasesRot = [0.0, size = nQueries];
+        let nQueriesDouble = IntAsDouble(nQueries);
+
+        // The success probability `successMin` is $1 - \delta^2$ in
+        // arXiv:1409.3305. Variable `beta` corresponds to $\gamma^{-1}$ in
+        // arXiv:1409.3305, right below Eq. (11)
+        let beta = Cosh((1.0 / nQueriesDouble) * ArcCosh(Sqrt(1.0 / (1.0 - successMin))));
+
+        // `alpha` is $\sqrt(1 - \gamma^2)$ in Eq. (11) in arXiv:1409.3305,
+        // therefore it is $\sqrt(1 - (1 / \beta^2))$
+        let alpha = Sqrt(1.0 - 1.0 / (beta * beta));
+
+        // Iterative computation of rotation phases is described in Eq. (30) in
+        // arXiv:1603.03996.  In there, we can set $j = 1$.
+        let twoPi = 2.0 * PI();
         for idxPhases in 1 .. nQueries - 1 {
             set phasesRot w/= idxPhases <-
                 phasesRot[idxPhases - 1] +

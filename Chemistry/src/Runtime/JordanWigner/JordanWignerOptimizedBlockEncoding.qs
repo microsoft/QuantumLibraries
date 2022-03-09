@@ -34,7 +34,7 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
     internal function _OptimizedBEGeneratorSystemCoeff_ (optimizedBEGeneratorSystem : OptimizedBEGeneratorSystem) : Double[] {
 
         let (nTerms, oneNorm, intToGenIdx) = optimizedBEGeneratorSystem!;
-        mutable coefficients = new Double[nTerms];
+        mutable coefficients = [0.0, size = nTerms];
 
         for idx in 0 .. nTerms - 1 {
             set coefficients w/= idx <- _GetOptimizedBETermIndexCoeff_(intToGenIdx(idx));
@@ -64,8 +64,8 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
         }
 
         let selectZControlRegisters = [true];
-        let optimizedBEControlRegisters = new Bool[0];
-        let pauliBases = new Int[0];
+        let optimizedBEControlRegisters = [];
+        let pauliBases = [];
         let indexRegisters = idxFermions;
         return OptimizedBETermIndex(coeff[0], signQubit, selectZControlRegisters, optimizedBEControlRegisters, pauliBases, indexRegisters);
     }
@@ -91,8 +91,8 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
         }
 
         let selectZControlRegisters = [true, true];
-        let optimizedBEControlRegisters = new Bool[0];
-        let pauliBases = new Int[0];
+        let optimizedBEControlRegisters = [];
+        let pauliBases = [];
         let indexRegisters = idxFermions;
         return OptimizedBETermIndex(coeff[0], signQubit, selectZControlRegisters, optimizedBEControlRegisters, pauliBases, indexRegisters);
     }
@@ -113,7 +113,7 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
         let ((idxTermType, coeff), idxFermions) = term!;
         let sign = coeff[0] < 0.0;
 
-        let selectZControlRegisters = new Bool[0];
+        let selectZControlRegisters = [];
         let optimizedBEControlRegisters = [true, true];
         let pauliBases = [1, 2];
         let indexRegisters = idxFermions;
@@ -170,7 +170,7 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
         let ops = [[1, 1, 1, 1], [1, 1, 2, 2], [1, 2, 1, 2], [1, 2, 2, 1], [2, 2, 2, 2], [2, 2, 1, 1], [2, 1, 2, 1], [2, 1, 1, 2]];
         mutable majIdxes = new OptimizedBETermIndex[4];
         mutable nonZero = 0;
-        let selectZControlRegisters = new Bool[0];
+        let selectZControlRegisters = [];
         let optimizedBEControlRegisters = [true, true, true, true];
         let indexRegisters = idxFermions;
 

@@ -66,19 +66,19 @@ namespace Microsoft.Quantum.MachineLearning.Tests {
             [
                 Default<ML.ControlledRotation>()
                     w/ TargetIndex <- 0
-                    w/ ControlIndices <- new Int[0]
+                    w/ ControlIndices <- []
                     w/ Axis <- PauliY
                     w/ ParameterIndex <- 0,
 
                 Default<ML.ControlledRotation>()
                     w/ TargetIndex <- 1
-                    w/ ControlIndices <- new Int[0]
+                    w/ ControlIndices <- []
                     w/ Axis <- PauliY
                     w/ ParameterIndex <- 1,
 
                 Default<ML.ControlledRotation>()
                     w/ TargetIndex <- 2
-                    w/ ControlIndices <- new Int[0]
+                    w/ ControlIndices <- []
                     w/ Axis <- PauliY
                     w/ ParameterIndex <- 2
             ]
@@ -92,19 +92,19 @@ namespace Microsoft.Quantum.MachineLearning.Tests {
             [
                 Default<ML.ControlledRotation>()
                     w/ TargetIndex <- 4
-                    w/ ControlIndices <- new Int[0]
+                    w/ ControlIndices <- []
                     w/ Axis <- PauliY
                     w/ ParameterIndex <- 0,
 
                 Default<ML.ControlledRotation>()
                     w/ TargetIndex <- 5
-                    w/ ControlIndices <- new Int[0]
+                    w/ ControlIndices <- []
                     w/ Axis <- PauliY
                     w/ ParameterIndex <- 1,
 
                 Default<ML.ControlledRotation>()
                     w/ TargetIndex <- 6
-                    w/ ControlIndices <- new Int[0]
+                    w/ ControlIndices <- []
                     w/ Axis <- PauliY
                     w/ ParameterIndex <- 2
             ]

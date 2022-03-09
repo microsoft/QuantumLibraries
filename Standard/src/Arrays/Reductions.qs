@@ -43,7 +43,7 @@ namespace Microsoft.Quantum.Arrays {
     /// ```
     function CumulativeFolded<'State, 'T>(fn : (('State, 'T) -> 'State), state : 'State, array : 'T[]) : 'State[] {
         mutable current = state;
-        mutable result = new 'State[Length(array)];
+        mutable result = [Default<'State>(), size = Length(array)];
 
         for (i, elem) in Enumerated(array) {
             set current = fn(current, elem);

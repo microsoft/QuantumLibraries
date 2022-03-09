@@ -2,17 +2,12 @@
 // Licensed under the MIT License.
 #nullable enable
 
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using System.CommandLine;
-using System.CommandLine.Invocation;
 using System.IO;
 using System;
 
-using Broombridge = Microsoft.Quantum.Chemistry.Broombridge;
 using Microsoft.Quantum.Chemistry.Broombridge;
 
 namespace Microsoft.Quantum.Chemistry.Tools
@@ -72,6 +67,7 @@ namespace Microsoft.Quantum.Chemistry.Tools
             // to represent data between loading and saving.
             var data = Load(reader, from);
             Save(data, writer, to);
+            writer.Close();
         }
 
         internal static IEnumerable<ElectronicStructureProblem> Load(TextReader reader, SerializationFormat from) =>

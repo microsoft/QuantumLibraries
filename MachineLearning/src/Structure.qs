@@ -61,7 +61,7 @@ namespace Microsoft.Quantum.MachineLearning {
     function _UncontrolledSpanSequence(idxsQubits : Int[]) : (Int, Int[])[] {
         return Zipped(
             idxsQubits,
-            ConstantArray(Length(idxsQubits), new Int[0])
+            ConstantArray(Length(idxsQubits), [])
         );
     }
 
@@ -153,7 +153,7 @@ namespace Microsoft.Quantum.MachineLearning {
     /// ];
     /// ```
     function CyclicEntanglingLayer(nQubits : Int, axis : Pauli, stride : Int) : ControlledRotation[] {
-        mutable rotations = new ControlledRotation[0];
+        mutable rotations = [];
         for idxTarget in 0..nQubits - 1 {
             set rotations += [ControlledRotation(
                 (

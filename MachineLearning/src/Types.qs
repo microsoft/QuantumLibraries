@@ -139,7 +139,7 @@ namespace Microsoft.Quantum.MachineLearning {
     /// # Output
     /// An array of elements from values, following the given schedule.
     function Sampled<'T>(schedule : SamplingSchedule, values : 'T[]) : 'T[] {
-        mutable sampled = new 'T[0];
+        mutable sampled = [];
         for range in schedule! {
             for index in range {
                 set sampled += [values[index]];

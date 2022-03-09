@@ -1,4 +1,4 @@
-﻿// Copyright (c) Microsoft Corporation.
+// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
 namespace Microsoft.Quantum.Arrays {
@@ -18,8 +18,7 @@ namespace Microsoft.Quantum.Arrays {
     /// An array containing the sequence of numbers `from`, `from + 1`, ...,
     /// `to`.
     ///
-    /// # Remarks
-    /// ## Example
+    /// # Example
     /// ```qsharp
     /// let arr1 = SequenceI(0, 3); // [0, 1, 2, 3]
     /// let arr2 = SequenceI(23, 29); // [23, 24, 25, 26, 27, 28, 29]
@@ -32,7 +31,7 @@ namespace Microsoft.Quantum.Arrays {
         Fact(to >= from, $"`to` must be larger than `from`");
 
         let n = (to - from) + 1;
-        mutable array = new Int[n];
+        mutable array = [0, size = n];
 
         for i in 0 .. n - 1 {
             set array w/= i <- from + i;
@@ -57,7 +56,7 @@ namespace Microsoft.Quantum.Arrays {
     /// # Remarks
     /// The difference between `from` and `to` must fit into an `Int` value.
     ///
-    /// ## Example
+    /// # Example
     /// ```qsharp
     /// let arr1 = SequenceL(0L, 3L); // [0L, 1L, 2L, 3L]
     /// let arr2 = SequenceL(23L, 29L); // [23L, 24L, 25L, 26L, 27L, 28L, 29L]
@@ -68,7 +67,7 @@ namespace Microsoft.Quantum.Arrays {
         Fact(to - from <= 0x07FFFFFFFFFFFFFFEL, $"different between `to` and `from` is too large");
 
         let length = BoolArrayAsInt(BigIntAsBoolArray(to - from)) + 1;
-        mutable array = new BigInt[length];
+        mutable array = [0L, size = length];
         
         for i in 0 .. length - 1 {
             set array w/= i <- from + IntAsBigInt(i);

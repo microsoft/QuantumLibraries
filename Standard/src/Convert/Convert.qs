@@ -82,7 +82,7 @@ namespace Microsoft.Quantum.Convert {
         Fact(bits >= 0 and bits <= 63, $"`bits` must be between 0 and 63 {2^bits}");
         let max = bits < 63 ? 1 <<< bits | 0x7FFFFFFFFFFFFFFF;
         Fact(number >= 0 and number <= max, $"`number` must be between 0 and 2^{bits} - 1, but was {number}.");
-        mutable outputBits = new Bool[bits];
+        mutable outputBits = [false, size = bits];
         mutable tempInt = number;
 
         for idxBit in 0 .. bits - 1 {
@@ -191,7 +191,7 @@ namespace Microsoft.Quantum.Convert {
     /// The Boolean array and the quantum register must be of equal length.
     function BoolArrayAsPauli(pauli : Pauli, bitApply : Bool, bits : Bool[]) : Pauli[] {
         let nBits = Length(bits);
-        mutable paulis = new Pauli[nBits];
+        mutable paulis = [PauliI, size = nBits];
 
         for idxBit in 0 .. nBits - 1 {
             set paulis w/= idxBit <- bits[idxBit] == bitApply ? pauli | PauliI;
@@ -210,8 +210,7 @@ namespace Microsoft.Quantum.Convert {
     /// # Output
     /// A new array of integers corresponding to values iterated over by `range`.
     ///
-    /// # Remarks
-    /// ## Example
+    /// # Example
     /// ```qsharp
     /// // The following returns [1,3,5,7];
     /// let array = RangeAsIntArray(1..2..8);
@@ -220,16 +219,16 @@ namespace Microsoft.Quantum.Convert {
         let start = RangeStart(range);
         let step = RangeStep(range);
         let end = RangeEnd(range);
-        if ((end - start) / step >= 0){
+        if (IntAsDouble(end - start) / IntAsDouble(step) >= 0.0) {
             let nTerms = (end - start) / step + 1;
-            mutable array = new Int[nTerms];
+            mutable array = [0, size = nTerms];
             for idx in 0..nTerms - 1 {
                set array w/= idx <- start + idx * step;
             }
             return array;
         }
         else {
-            return new Int[0];
+            return [0, size = 0];
         }
     }
 

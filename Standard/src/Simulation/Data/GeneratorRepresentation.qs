@@ -23,7 +23,7 @@ namespace Microsoft.Quantum.Simulation {
     /// > The interpretation of an `GeneratorIndex` is not defined except
     /// > with reference to a particular set of generators.
     ///
-    /// ## Example
+    /// # Example
     /// Using <xref:Microsoft.Quantum.Simulation.PauliEvolutionSet>, the operator
     /// $\pi X_2 X_5 Y_9$ is represented as:
     /// ```qsharp
@@ -208,8 +208,7 @@ namespace Microsoft.Quantum.Simulation {
     /// A `GeneratorIndex` representing a term with coefficient a factor
     /// `multiplier` larger.
     ///
-    /// # Remarks
-    /// ## Example
+    /// # Example
     /// ```qsharp
     /// let gen = GeneratorIndex(([1,2,3],[coeff]),[1,2,3]);
     /// let ((idxPaulis, idxDoubles), idxQubits) = MultiplyGeneratorIndex(multiplier, gen);

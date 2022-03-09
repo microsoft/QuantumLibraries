@@ -61,7 +61,7 @@ namespace Microsoft.Quantum.Canon {
     @Test("QuantumSimulator")
     function BitSizeIsCorrect () : Unit {
         EqualityFactI(BitSizeI(3), 2, $"BitSizeI(3) must be 2");
-        EqualityFactI(BitSizeI(7), 3, $"BitSizeI(7) must be 2");
+        EqualityFactI(BitSizeI(7), 3, $"BitSizeI(7) must be 3");
     }
 
     @Test("QuantumSimulator")
