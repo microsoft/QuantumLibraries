@@ -283,7 +283,7 @@ namespace Microsoft.Quantum.Arrays {
     ///
     /// # Input
     /// ## nElements
-    /// The length of each chunk.
+    /// The length of each chunk. Must be positive.
     /// ## arr
     /// The array to be split.
     ///
@@ -294,6 +294,7 @@ namespace Microsoft.Quantum.Arrays {
     /// Note that the last element of the output may be shorter
     /// than `nElements` if `Length(arr)` is not divisible by `nElements`.
     function Chunks<'T>(nElements : Int, arr : 'T[]) : 'T[][] {
+        Fact(nElements > 0, "nElements must be positive");
         mutable output = [];
         mutable remaining = arr;
         while (not IsEmpty(remaining)) {
