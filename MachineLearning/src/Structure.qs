@@ -44,7 +44,7 @@ namespace Microsoft.Quantum.MachineLearning {
         model : SequentialModel,
         qubits : Qubit[]
     )
-    : (Unit) is Adj + Ctl {
+    : Unit is Adj + Ctl {
         for gate in model::Structure {
             if gate::ParameterIndex < Length(model::Parameters) {
                 let input = (gate::Axis, model::Parameters[gate::ParameterIndex], qubits[gate::TargetIndex]);
@@ -58,24 +58,11 @@ namespace Microsoft.Quantum.MachineLearning {
         }
     }
 
-    function _UncontrolledSpanSequence(idxsQubits : Int[]) : (Int, Int[])[] {
+    internal function UncontrolledSpanSequence(idxsQubits : Int[]) : (Int, Int[])[] {
         return Zipped(
             idxsQubits,
-            ConstantArray(Length(idxsQubits), [])
+            [[], size = Length(idxsQubits)]
         );
-    }
-
-    function _CallFlipped<'TInput1, 'TInput2, 'TOutput>(
-        fn : (('TInput1, 'TInput2) -> 'TOutput),
-        y : 'TInput2, x : 'TInput1
-    ) : 'TOutput {
-        return fn(x, y);
-    }
-
-    function _Flipped<'TInput1, 'TInput2, 'TOutput>(
-        fn : (('TInput1, 'TInput2) -> 'TOutput)
-    ) : (('TInput2, 'TInput1) -> 'TOutput) {
-        return _CallFlipped(fn, _, _);
     }
 
     /// # Summary
@@ -95,9 +82,9 @@ namespace Microsoft.Quantum.MachineLearning {
     function LocalRotationsLayer(nQubits : Int, axis : Pauli) : ControlledRotation[] {
         // [parameterIndex, pauliCode, targetQubit\,sequence of control qubits\]
         return Mapped(
-            _Flipped(ControlledRotation(_, axis, _)),
+            (idx, seq) -> ControlledRotation(seq, axis, idx),
             Enumerated(
-                _UncontrolledSpanSequence(SequenceI(0, nQubits - 1))
+                UncontrolledSpanSequence(SequenceI(0, nQubits - 1))
             )
         );
     }
@@ -118,9 +105,9 @@ namespace Microsoft.Quantum.MachineLearning {
     /// `nQubits` qubits.
     function PartialRotationsLayer(idxsQubits : Int[], axis : Pauli) : ControlledRotation[] {
         return Mapped(
-            _Flipped(ControlledRotation(_, axis, _)),
+            (idx, seq) -> ControlledRotation(seq, axis, idx),
             Enumerated(
-                _UncontrolledSpanSequence(idxsQubits)
+                UncontrolledSpanSequence(idxsQubits)
             )
         );
     }

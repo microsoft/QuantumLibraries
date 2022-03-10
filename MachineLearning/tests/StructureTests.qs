@@ -13,7 +13,7 @@ namespace Microsoft.Quantum.MachineLearning.Tests {
         let model = Default<ML.SequentialModel>()
             w/ Structure <- [
                 ML.ControlledRotation((3, [7, 9]), PauliX, 0),
-                ML.ControlledRotation((8, new Int[0]), PauliY, 1)
+                ML.ControlledRotation((8, [0]), PauliY, 1)
             ];
         let actual = ML.NQubitsRequired(model);
         EqualityFactI(actual, 10, "Wrong output from NQubitsRequired.");

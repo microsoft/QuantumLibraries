@@ -11,14 +11,14 @@ namespace Microsoft.Quantum.MachineLearning {
     open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Optimization;
 
-    internal function _MisclassificationRate(probabilities : Double[], labels : Int[], bias : Double) : Double {
+    internal function MisclassificationRate(probabilities : Double[], labels : Int[], bias : Double) : Double {
         let proposedLabels = InferredLabels(bias, probabilities);
         return IntAsDouble(NMisclassifications(proposedLabels, labels)) / IntAsDouble(Length(probabilities));
     }
 
     /// # Summary
     /// Returns a bias value that leads to near-minimum misclassification score.
-    internal function _UpdatedBias(labeledProbabilities: (Double, Int)[], bias: Double, tolerance: Double) : Double {
+    internal function UpdatedBias(labeledProbabilities: (Double, Int)[], bias: Double, tolerance: Double) : Double {
         mutable (min1, max0) = (1.0, 0.0);
 
         // Find the range of classification probabilities for each class.
@@ -42,7 +42,7 @@ namespace Microsoft.Quantum.MachineLearning {
         // If we can't find a perfect classification, minimize to find
         // the best feasible bias.
         let optimum = LocalUnivariateMinimum(
-            _MisclassificationRate(Mapped(Fst, labeledProbabilities), Mapped(Snd, labeledProbabilities), _),
+            MisclassificationRate(Mapped(Fst, labeledProbabilities), Mapped(Snd, labeledProbabilities), _),
             (0.5 - max0, 0.5 - min1),
             tolerance
         );
@@ -122,13 +122,13 @@ namespace Microsoft.Quantum.MachineLearning {
     ///
     /// # Output
     /// (utility, (new)parameters) pair
-    internal operation _RunSingleTrainingStep(
+    internal operation RunSingleTrainingStep(
         miniBatch : (LabeledSample, StateGenerator)[],
         options : TrainingOptions,
         model : SequentialModel
     )
     : (Double, SequentialModel) {
-        mutable batchGradient = ConstantArray(Length(model::Parameters), 0.0);
+        mutable batchGradient = [0.0, size = Length(model::Parameters)];
 
         for (idxSample, (sample, stateGenerator)) in Enumerated(miniBatch) {
             mutable err = IntAsDouble(sample::Label);
@@ -179,7 +179,7 @@ namespace Microsoft.Quantum.MachineLearning {
     /// - The smallest number of misclassifications observed through to this
     ///   epoch.
     /// - The new best sequential model found.
-    internal operation _RunSingleTrainingEpoch(
+    internal operation RunSingleTrainingEpoch(
         encodedSamples : (LabeledSample, StateGenerator)[],
         schedule : SamplingSchedule, periodScore: Int,
         options : TrainingOptions,
@@ -212,7 +212,7 @@ namespace Microsoft.Quantum.MachineLearning {
         );
         for (idxMinibatch, minibatch) in Enumerated(minibatches) {
             options::VerboseMessage($"        Beginning minibatch {idxMinibatch} of {Length(minibatches)}.");
-            let (utility, updatedModel) = _RunSingleTrainingStep(
+            let (utility, updatedModel) = RunSingleTrainingStep(
                 minibatch, options, bestSoFar
             );
             if utility > 1e-7 {
@@ -224,7 +224,7 @@ namespace Microsoft.Quantum.MachineLearning {
                     options::Tolerance, updatedModel,
                     features, options::NMeasurements
                 );
-                let updatedBias = _UpdatedBias(
+                let updatedBias = UpdatedBias(
                     Zipped(probabilities, actualLabels), model::Bias, options::Tolerance
                 );
                 let updatedLabels = InferredLabels(
@@ -246,13 +246,13 @@ namespace Microsoft.Quantum.MachineLearning {
 
     /// # Summary
     /// Randomly rescales an input to either grow or shrink by a given factor.
-    internal operation _RandomlyRescale(scale : Double, value : Double) : Double {
+    internal operation RandomlyRescale(scale : Double, value : Double) : Double {
         return value * (
             1.0 + scale * (DrawRandomBool(0.5) ? 1.0 | -1.0)
         );
     }
 
-    internal function _EncodeSample(effectiveTolerance : Double, nQubits : Int, sample : LabeledSample)
+    internal function EncodeSample(effectiveTolerance : Double, nQubits : Int, sample : LabeledSample)
     : (LabeledSample, StateGenerator) {
         return (
             sample,
@@ -313,7 +313,7 @@ namespace Microsoft.Quantum.MachineLearning {
             options::NMeasurements
         );
         // Find the best bias for the new classification parameters.
-        let localBias = _UpdatedBias(
+        let localBias = UpdatedBias(
             Zipped(probabilities, Sampled(validationSchedule, labels)),
             0.0,
             options::Tolerance
@@ -342,7 +342,7 @@ namespace Microsoft.Quantum.MachineLearning {
             features, options::NMeasurements
         );
         mutable bestSoFar = model
-            w/ Bias <- _UpdatedBias(
+            w/ Bias <- UpdatedBias(
                 Zipped(probabilities, actualLabels),
                 model::Bias, options::Tolerance
             );
@@ -358,7 +358,7 @@ namespace Microsoft.Quantum.MachineLearning {
         options::VerboseMessage("    Pre-encoding samples...");
         let effectiveTolerance = options::Tolerance / IntAsDouble(Length(model::Structure));
         let nQubits = MaxI(FeatureRegisterSize(samples[0]::Features), NQubitsRequired(model));
-        let encodedSamples = Mapped(_EncodeSample(effectiveTolerance, nQubits, _), samples);
+        let encodedSamples = Mapped(EncodeSample(effectiveTolerance, nQubits, _), samples);
 
         //reintroducing learning rate heuristics
         mutable lrate = options::LearningRate;
@@ -369,7 +369,7 @@ namespace Microsoft.Quantum.MachineLearning {
 
         for ep in 1..options::MaxEpochs {
             options::VerboseMessage($"    Beginning epoch {ep}.");
-            let (nMisses, proposedUpdate) = _RunSingleTrainingEpoch(
+            let (nMisses, proposedUpdate) = RunSingleTrainingEpoch(
                 encodedSamples, schedule, options::ScoringPeriod,
                 options w/ LearningRate <- lrate
                         w/ MinibatchSize <- batchSize,
@@ -389,7 +389,7 @@ namespace Microsoft.Quantum.MachineLearning {
 
             if
                     NearlyEqualD(current::Bias, proposedUpdate::Bias) and
-                    _AllNearlyEqualD(current::Parameters, proposedUpdate::Parameters)
+                    AllNearlyEqualD(current::Parameters, proposedUpdate::Parameters)
             {
                 set nStalls += 1;
                 // If we're more than halfway through our maximum allowed number of stalls,
@@ -408,8 +408,8 @@ namespace Microsoft.Quantum.MachineLearning {
                 if nStalls > options::MaxStalls / 2 {
                     set current = SequentialModel(
                         model::Structure,
-                        ForEach(_RandomlyRescale(options::StochasticRescaleFactor, _), proposedUpdate::Parameters),
-                        _RandomlyRescale(options::StochasticRescaleFactor, proposedUpdate::Bias)
+                        ForEach(RandomlyRescale(options::StochasticRescaleFactor, _), proposedUpdate::Parameters),
+                        RandomlyRescale(options::StochasticRescaleFactor, proposedUpdate::Bias)
                     );
                 }
             } else {
