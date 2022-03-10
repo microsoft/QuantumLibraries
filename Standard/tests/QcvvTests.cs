@@ -32,6 +32,13 @@ namespace Microsoft.Quantum.Tests
         }
 
         [Fact]
+        public void TestEstimateFrequencyBinomial()
+        {
+            using var sim = new QuantumSimulator(randomNumberGeneratorSeed: 655321);
+            TestEstimateFrequencyBinomialInner.Run(sim).Wait();
+        }
+
+        [Fact]
         public void TestRobustPhaseEstimation()
         {
             using var sim = new QuantumSimulator(randomNumberGeneratorSeed: 655321);

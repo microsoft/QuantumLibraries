@@ -58,7 +58,7 @@ namespace Microsoft.Quantum.Tests {
     }
 
     @Test("QuantumSimulator")
-    operation TestEstimateFrequencyBinomial() : Unit {
+    operation TestEstimateFrequencyBinomialInner() : Unit {
         // If this is larger, tests fail less often, but more false negatives
         // slip through.
         let nStdDevs = 3.0;
