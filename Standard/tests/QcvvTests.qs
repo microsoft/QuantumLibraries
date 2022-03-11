@@ -57,7 +57,6 @@ namespace Microsoft.Quantum.Tests {
         EqualityWithinToleranceFact(expectation, actualFreq, tolerance);
     }
 
-    @Test("QuantumSimulator")
     operation TestEstimateFrequencyBinomialInner() : Unit {
         // If this is larger, tests fail less often, but more false negatives
         // slip through.
