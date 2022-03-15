@@ -51,7 +51,7 @@ namespace Microsoft.Quantum.ErrorCorrection {
     /// qubits followed by a measurements of the auxiliary qubits to extract a
     /// `Syndrome` value representing the `Result[]` of these measurements.
     ///
-    /// ## Example
+    /// # Example
     /// Measure syndromes for the bit-flip code
     /// $S = \langle ZZI, IZZ \rangle$ using scratch qubits in a
     /// non–fault tolerant manner:

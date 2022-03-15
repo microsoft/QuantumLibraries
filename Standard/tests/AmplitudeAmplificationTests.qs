@@ -2,13 +2,15 @@
 // Licensed under the MIT License.
 
 namespace Microsoft.Quantum.Tests {
-    open Microsoft.Quantum.Intrinsic;
+    open Microsoft.Quantum.AmplitudeAmplification;
+    open Microsoft.Quantum.Arrays;
     open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Convert;
     open Microsoft.Quantum.Diagnostics;
-    open Microsoft.Quantum.AmplitudeAmplification;
-    open Microsoft.Quantum.Oracles;
+    open Microsoft.Quantum.Intrinsic;
+    open Microsoft.Quantum.Logical;
     open Microsoft.Quantum.Math;
+    open Microsoft.Quantum.Oracles;
 
     ///Here we consider the smallest example of amplitude amplification
     ///Suppose we have a single-qubit oracle that prepares the state
@@ -92,6 +94,18 @@ namespace Microsoft.Quantum.Tests {
             AssertMeasurementProbability([PauliX], qubits, Zero, success, $"Error: Success probability does not match theory", 1E-10);
             ResetAll(qubits);
         }
+    }
+
+    @Test("QuantumSimulator")
+    operation TestRotationPhasesAsReflectionPhases() : Unit {
+        let rotationPhases = RotationPhases([0.1, 0.2, 0.3, 0.4, 0.5]);
+        let reflectionPhases = RotationPhasesAsReflectionPhases(rotationPhases);
+
+        EqualityFactI(Length(reflectionPhases::AboutStart), 3, "Unexpected length of reflection phases");
+        EqualityFactI(Length(reflectionPhases::AboutTarget), 3, "Unexpected length of reflection phases");
+
+        Fact(All(NearlyEqualD, Zipped(reflectionPhases::AboutStart, [1.4707963267948965,3.041592653589793,3.041592653589793])), "Unexpected reflection phases");
+        Fact(All(NearlyEqualD, Zipped(reflectionPhases::AboutTarget, [-3.241592653589793,-3.241592653589793,-1.0707963267948966])), "Unexpected reflection phases");
     }
 
 }

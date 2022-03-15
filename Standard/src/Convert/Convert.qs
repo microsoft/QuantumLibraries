@@ -210,8 +210,7 @@ namespace Microsoft.Quantum.Convert {
     /// # Output
     /// A new array of integers corresponding to values iterated over by `range`.
     ///
-    /// # Remarks
-    /// ## Example
+    /// # Example
     /// ```qsharp
     /// // The following returns [1,3,5,7];
     /// let array = RangeAsIntArray(1..2..8);
@@ -220,7 +219,7 @@ namespace Microsoft.Quantum.Convert {
         let start = RangeStart(range);
         let step = RangeStep(range);
         let end = RangeEnd(range);
-        if ((end - start) / step >= 0){
+        if (IntAsDouble(end - start) / IntAsDouble(step) >= 0.0) {
             let nTerms = (end - start) / step + 1;
             mutable array = [0, size = nTerms];
             for idx in 0..nTerms - 1 {

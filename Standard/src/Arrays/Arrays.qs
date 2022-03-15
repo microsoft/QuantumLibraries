@@ -201,8 +201,7 @@ namespace Microsoft.Quantum.Arrays {
     /// such that `output[1]` is the second such element, and so
     /// forth.
     ///
-    /// # Remarks
-    /// ## Example
+    /// # Example
     /// ```qsharp
     /// let array = [10, 11, 12, 13, 14, 15];
     /// // The following line returns [10, 12, 15].
@@ -215,7 +214,7 @@ namespace Microsoft.Quantum.Arrays {
         //Would be better with sort function
         //Or way to add elements to array
         mutable arrayKeep = [0, size = nElements];
-        mutable sliced = new 'T[nElements - nSliced];
+        mutable sliced = [Default<'T>(), size = nElements - nSliced];
         mutable counter = 0;
 
         for idx in 0 .. nElements - 1 {
@@ -258,8 +257,7 @@ namespace Microsoft.Quantum.Arrays {
     /// An array `output` that is the `inputArray` padded at the head
     /// with `defaultElement`s until `output` has length `nElementsTotal`
     ///
-    /// # Remarks
-    /// ## Example
+    /// # Example
     /// ```qsharp
     /// let array = [10, 11, 12];
     /// // The following line returns [10, 12, 15, 2, 2, 2].
@@ -285,7 +283,7 @@ namespace Microsoft.Quantum.Arrays {
     ///
     /// # Input
     /// ## nElements
-    /// The length of each chunk.
+    /// The length of each chunk. Must be positive.
     /// ## arr
     /// The array to be split.
     ///
@@ -296,6 +294,7 @@ namespace Microsoft.Quantum.Arrays {
     /// Note that the last element of the output may be shorter
     /// than `nElements` if `Length(arr)` is not divisible by `nElements`.
     function Chunks<'T>(nElements : Int, arr : 'T[]) : 'T[][] {
+        Fact(nElements > 0, "nElements must be positive");
         mutable output = [];
         mutable remaining = arr;
         while (not IsEmpty(remaining)) {
@@ -324,8 +323,7 @@ namespace Microsoft.Quantum.Arrays {
     /// elements, while `Most(Partitioned(...))` will always return the complete
     /// partitions of the array.
     ///
-    /// # Remarks
-    /// ## Example
+    /// # Example
     /// ```qsharp
     /// // The following returns [[1, 5], [3], [7]];
     /// let split = Partitioned([2,1], [1,5,3,7]);
@@ -333,7 +331,7 @@ namespace Microsoft.Quantum.Arrays {
     /// let split = Partitioned([2,2], [1,5,3,7]);
     /// ```
     function Partitioned<'T>(nElements: Int[], arr: 'T[]) : 'T[][] {
-        mutable output = new 'T[][Length(nElements) + 1];
+        mutable output = [Default<'T[]>(), size = Length(nElements) + 1];
         mutable currIdx = 0;
         for idx in IndexRange(nElements) {
             if(currIdx + nElements[idx] > Length(arr)) {
@@ -409,19 +407,21 @@ namespace Microsoft.Quantum.Arrays {
     /// # Output
     /// The tuple represents the two indices to be swapped. The swaps begin at the lowest index.
     ///
-    /// # Remarks
-    /// ## Example
+    /// # Example
     /// ```qsharp
     /// // The following returns [(0, 5),(0, 4),(0, 1),(0, 3)];
     /// let swapOrder = _SwapOrderToPermuteArray([5, 3, 2, 0, 1, 4]);
     /// ```
     ///
+    /// # Remarks
     /// ## Pseudocode
+    /// ```
     /// for index in 0..Length(newOrder) - 1 {
     ///     while newOrder[index] != index {
     ///         Switch newOrder[index] with newOrder[newOrder[index]]
     ///     }
     /// }
+    /// ```
     function _SwapOrderToPermuteArray(newOrder : Int[]) : (Int, Int)[] {
         // Check to verify the new ordering actually is a permutation of the indices
         Fact(IsPermutation(newOrder), $"The new ordering is not a permutation");
@@ -456,10 +456,11 @@ namespace Microsoft.Quantum.Arrays {
     /// # Output
     /// The array with the in place swap applied.
     ///
-    /// ## Example
+    /// # Example
     /// ```qsharp
     /// // The following returns [0, 3, 2, 1, 4]
     /// Swapped(1, 3, [0, 1, 2, 3, 4]);
+    /// ```
     function Swapped<'T>(firstIndex : Int, secondIndex : Int, arr : 'T[]) : 'T[] {
         return arr
             w/ firstIndex <- arr[secondIndex]
@@ -476,13 +477,13 @@ namespace Microsoft.Quantum.Arrays {
     /// # Output
     /// A nested array with length matching the tupleList.
     ///
-    /// ## Example
+    /// # Example
     /// ```qsharp
     /// // The following returns [[2, 3], [4, 5]]
     /// TupleArrayAsNestedArray([(2, 3), (4, 5)]);
     /// ```
     function TupleArrayAsNestedArray<'T>(tupleList : ('T, 'T)[]) : 'T[][] {
-        mutable newArray = new 'T[][Length(tupleList)];
+        mutable newArray = [Default<'T[]>(), size = Length(tupleList)];
         for idx in IndexRange(tupleList) {
             let (tupleLeft, tupleRight) = tupleList[idx];
             set newArray w/= idx <- [tupleLeft, tupleRight];
