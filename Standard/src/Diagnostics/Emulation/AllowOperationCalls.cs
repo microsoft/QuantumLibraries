@@ -55,6 +55,15 @@ namespace Microsoft.Quantum.Diagnostics
                 bool IsSelf(ICallable callable) =>
                     callable.FullName == "Microsoft.Quantum.Diagnostics.AllowAtMostNCallsCA";
 
+                // Partial ordering on two variants; returns true, if `lhs` is included in `rhs`.
+                // For example, Body <= Body, and Body <= Adjoint, but Controlled is not less than or equal Adjoint.
+                bool LessThanOrEqual(OperationFunctor lhs, OperationFunctor rhs) => lhs switch {
+                        OperationFunctor.ControlledAdjoint => rhs == OperationFunctor.ControlledAdjoint,
+                        OperationFunctor.Controlled => rhs == OperationFunctor.ControlledAdjoint || rhs == OperationFunctor.Controlled,
+                        OperationFunctor.Adjoint => rhs == OperationFunctor.ControlledAdjoint || rhs == OperationFunctor.Adjoint,
+                        _ => true // OperationFunctor.Body
+                };
+
                 // Record whether or not the condition checked by this allow
                 // has failed, so that we can property unwind in the endOperation
                 // handler below.
@@ -65,7 +74,7 @@ namespace Microsoft.Quantum.Diagnostics
                     {
                         if (IsSelf(callable)) return;
                         callStack = callStack.Push(callable.FullName);
-                        if (callable.FullName == op.FullName)
+                        if (callable.FullName == op.FullName && LessThanOrEqual(op.Variant, callable.Variant))
                         {
                             callSites = callSites.Add(callStack);
                             if (callSites.Count > nTimes)

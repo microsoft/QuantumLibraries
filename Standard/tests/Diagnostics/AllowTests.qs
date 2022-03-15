@@ -64,6 +64,39 @@ namespace Microsoft.Quantum.Tests {
         }
     }
 
+    @Diag.Test("QuantumSimulator")
+    operation CheckAllowNCallsDistinguishControlled() : Unit {
+        within {
+            Diag.AllowAtMostNCallsCA(1, Controlled X, "Too many calls to Controlled X.");
+        } apply {
+            use (q1, q2) = (Qubit(), Qubit());
+            // Should use one Controlled X, exactly as many times as allowed.
+            // X will not be accounted for.
+            X(q2);
+            Controlled X([q1], q2);
+            X(q2);
+        }
+    }
+
+    @Diag.Test("QuantumSimulator")
+    operation CheckAllowNCallsDistinguishAdjoint() : Unit {
+        within {
+            Diag.AllowAtMostNCallsCA(2, Adjoint S, "Too many calls to Adjoint S.");
+            Diag.AllowAtMostNCallsCA(1, Adjoint Controlled S, "Too many calls to Adjoint Controlled S.");
+        } apply {
+            use (q1, q2) = (Qubit(), Qubit());
+            // Should use two Adjoint S (one via Adjoint Controlled S), but exactly
+            // one Adjoint Controlled S.
+            S(q1);
+            Controlled S([q1], q2);
+            Adjoint Controlled S([q2], q1);
+            Adjoint S(q1);
+
+            Reset(q1);
+            Reset(q2);
+        }
+    }
+
     @Diag.Test("ToffoliSimulator")
     operation CheckAllowNQubitsWithNestedCalls() : Unit {
         // Here, the total number of allocated qubits exceeds our policy,
