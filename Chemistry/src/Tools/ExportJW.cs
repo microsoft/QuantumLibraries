@@ -35,14 +35,19 @@ namespace Microsoft.Quantum.Chemistry.Tools
                 new Option<FileInfo?>(
                     "--out",
                     "Path to write output to. Data will be written to stdout by default."
+                ),
+                new Option<bool>(
+                    "--flatten",
+                    "If true, flattens resulting JSON (often easier for use in " +
+                    "native code)."
                 )
             }
             .WithDescription(
                 "Exports a JSON representation of the Jordan–Wigner transformation of " +
                 "the fermionic Hamiltonian for a particular electronic structure problem."
             )
-            .WithHandler<FileInfo, SerializationFormat, FileInfo?>(
-                (path, from, @out) =>
+            .WithHandler<FileInfo, SerializationFormat, FileInfo?, bool>(
+                (path, from, @out, flatten) =>
                 {
                     using var reader =
                         path.Name == "-"
@@ -52,14 +57,15 @@ namespace Microsoft.Quantum.Chemistry.Tools
                         @out == null
                         ? System.Console.Out
                         : new StreamWriter(File.OpenWrite(@out.FullName));
-                    ExportJwData(reader, from, writer);
+                    ExportJwData(reader, from, writer, flatten: flatten);
                 }
             );
 
         public static void ExportJwData(
             TextReader reader, SerializationFormat from,
             TextWriter writer,
-            IndexConvention indexConvention = IndexConvention.UpDown
+            IndexConvention indexConvention = IndexConvention.UpDown,
+            bool flatten = true
         )
         {
             var data = Load(reader, from).ToList();
@@ -91,7 +97,9 @@ namespace Microsoft.Quantum.Chemistry.Tools
             //     options
             // );
             var qsData = QSharpFormat.Convert.ToQSharpFormat(jwHamiltonian, wavefunction);
-            var encoded = JsonSerializer.Serialize(Flatten(qsData));
+            var encoded = flatten
+                          ? JsonSerializer.Serialize(Flatten(qsData))
+                          : JsonSerializer.Serialize(qsData);
 
             writer.Write(encoded);
             writer.Close();
