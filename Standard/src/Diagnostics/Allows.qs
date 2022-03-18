@@ -8,8 +8,8 @@ namespace Microsoft.Quantum.Diagnostics {
     /// a given operation is called at most a certain number of times.
     ///
     /// Operation calls are considered, if they contain the the specified
-    /// variant.  For example, if `op` is `X` also `Adjoint X` or `Controlled X`
-    /// are counted, but if `op` is `Controlled X`, only `Controlled X`
+    /// variant.  For example, if `op` is `X`, `Adjoint X` or `Controlled X`
+    /// are also counted, but if `op` is `Controlled X`, only `Controlled X`
     /// or `Controlled Adjoint X` are counted.
     ///
     /// # Input
