@@ -34,6 +34,20 @@ namespace Microsoft.Quantum.Diagnostics {
     /// }
     /// ```
     ///
+    /// Another example illustrates how restricted calls are handled.
+    /// ```qsharp
+    /// within {
+    ///     // Both tests will pass in this case
+    ///     AllowAtMostNCallsCA(1, Controlled H, "Too many calls to Controlled H.");
+    ///     AllowAtMostNCallsCA(2, H, "Too many calls to H or Controlled H.");
+    /// } apply {
+    ///     use (a, b) = (Qubit(), Qubit());
+    ///     H(a);
+    ///     Controlled H([a], b);
+    ///     ResetAll([a, b]);
+    /// }
+    /// ```
+    ///
     /// # Remarks
     /// This operation may be replaced by a no-op on targets which do not
     /// support it.

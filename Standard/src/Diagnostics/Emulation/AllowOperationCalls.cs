@@ -74,6 +74,10 @@ namespace Microsoft.Quantum.Diagnostics
                     {
                         if (IsSelf(callable)) return;
                         callStack = callStack.Push(callable.FullName);
+                        // `callable` is callable we just entered on the call stack, `op` is the callable
+                        // that we are monitoring with AllowAtMostNCallsCA.  We only increment the counter,
+                        // if both callables have the same fully qualified name and if the variant of `op`
+                        // is less restrictive than the one of `callable`.
                         if (callable.FullName == op.FullName && LessThanOrEqual(op.Variant, callable.Variant))
                         {
                             callSites = callSites.Add(callStack);

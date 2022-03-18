@@ -81,7 +81,9 @@ namespace Microsoft.Quantum.Tests {
     @Diag.Test("QuantumSimulator")
     operation CheckAllowNCallsDistinguishAdjoint() : Unit {
         within {
+            Diag.AllowAtMostNCallsCA(4, S, "Too many calls to S.");
             Diag.AllowAtMostNCallsCA(2, Adjoint S, "Too many calls to Adjoint S.");
+            Diag.AllowAtMostNCallsCA(2, Controlled S, "Too many calls to Controlled S.");
             Diag.AllowAtMostNCallsCA(1, Adjoint Controlled S, "Too many calls to Adjoint Controlled S.");
         } apply {
             use (q1, q2) = (Qubit(), Qubit());
