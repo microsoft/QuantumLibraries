@@ -16,7 +16,7 @@ Reviewers (in order by username): .
 **Proposal**: https://github.com/microsoft/QuantumLibraries/issues/471
 
 **Reviews**:
-
+* @msoeken, *approve*
 > Please add a bullet point including your alias, your review result (*approve*, *reject*, *comment*), and a comment (optional when result is *approve*).  Alternatively, add a line to the PR discussion incl. a reference to this issue.
 
 **Consensus**: *TBD*
@@ -29,6 +29,7 @@ Reviewers (in order by username): .
 
 **Reviews**:
 * @tcNickolas, *approve*, left a couple of small comments in the issue
+* @msoeken, *approve*
 > Please add a bullet point including your alias, your review result (*approve*, *reject*, *comment*), and a comment (optional when result is *approve*).  Alternatively, add a line to the PR discussion incl. a reference to this issue.
 
 **Consensus**: *TBD*
@@ -52,7 +53,7 @@ Reviewers (in order by username): .
 **Proposal**: https://github.com/microsoft/QuantumLibraries/issues/515
 
 **Reviews**:
-
+@msoeken, *approve*
 > Please add a bullet point including your alias, your review result (*approve*, *reject*, *comment*), and a comment (optional when result is *approve*).  Alternatively, add a line to the PR discussion incl. a reference to this issue.
 
 **Consensus**: *TBD*
