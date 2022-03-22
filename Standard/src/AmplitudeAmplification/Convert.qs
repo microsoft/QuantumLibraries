@@ -31,6 +31,11 @@ namespace Microsoft.Quantum.AmplitudeAmplification {
 
         mutable phasesTarget = [0.0, size = nPhasesRef];
         mutable phasesStart = [0.0, size = nPhasesRef];
+
+        if nPhasesRot == 1 {
+            return ReflectionPhases(phasesStart, phasesTarget);
+        }
+
         set phasesTarget w/= 0 <- ((rotPhases!)[0] - (rotPhases!)[1]) - PI();
         set phasesStart w/= 0 <- -(rotPhases!)[0] + 0.5 * PI();
 

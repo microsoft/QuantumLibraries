@@ -12,7 +12,8 @@ namespace Microsoft.Quantum.MachineLearning.Tests {
     function NQubitsRequiredFact() : Unit {
         let model = Default<ML.SequentialModel>()
             w/ Structure <- [
-                ML.ControlledRotation((3, [7, 9]), PauliX, 0)
+                ML.ControlledRotation((3, [7, 9]), PauliX, 0),
+                ML.ControlledRotation((8, []), PauliY, 1)
             ];
         let actual = ML.NQubitsRequired(model);
         EqualityFactI(actual, 10, "Wrong output from NQubitsRequired.");
