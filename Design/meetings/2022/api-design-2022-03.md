@@ -28,7 +28,7 @@ Reviewers (in order by username): .
 **Proposal**: https://github.com/microsoft/QuantumLibraries/issues/442
 
 **Reviews**:
-
+* @tcNickolas, *approve*, left a couple of small comments in the issue
 > Please add a bullet point including your alias, your review result (*approve*, *reject*, *comment*), and a comment (optional when result is *approve*).  Alternatively, add a line to the PR discussion incl. a reference to this issue.
 
 **Consensus**: *TBD*
