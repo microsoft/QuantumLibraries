@@ -7,6 +7,11 @@ namespace Microsoft.Quantum.Diagnostics {
     /// Between a call to this operation and its adjoint, asserts that
     /// a given operation is called at most a certain number of times.
     ///
+    /// Operation calls are considered, if they contain the the specified
+    /// variant.  For example, if `op` is `X`, `Adjoint X` or `Controlled X`
+    /// are also counted, but if `op` is `Controlled X`, only `Controlled X`
+    /// or `Controlled Adjoint X` are counted.
+    ///
     /// # Input
     /// ## nTimes
     /// The maximum number of times that `op` may be called.
@@ -19,14 +24,27 @@ namespace Microsoft.Quantum.Diagnostics {
     /// The following snippet will fail when executed on machines which
     /// support this diagnostic:
     /// ```qsharp
-    /// using (register = Qubit[4]) {
-    ///     within {
-    ///         AllowAtMostNCallsCA(3, H, "Too many calls to H.");
-    ///     } apply {
-    ///         // Fails since this calls H four times, rather than the
-    ///         // allowed maximum of three.
-    ///         ApplyToEach(H, register);
-    ///     }
+    /// within {
+    ///     AllowAtMostNCallsCA(3, H, "Too many calls to H.");
+    /// } apply {
+    ///     use register = Qubit[4];
+    ///     // Fails since this calls H four times, rather than the
+    ///     // allowed maximum of three.
+    ///     ApplyToEach(H, register);
+    /// }
+    /// ```
+    ///
+    /// Another example illustrates how restricted calls are handled.
+    /// ```qsharp
+    /// within {
+    ///     // Both tests will pass in this case
+    ///     AllowAtMostNCallsCA(1, Controlled H, "Too many calls to Controlled H.");
+    ///     AllowAtMostNCallsCA(2, H, "Too many calls to H or Controlled H.");
+    /// } apply {
+    ///     use (a, b) = (Qubit(), Qubit());
+    ///     H(a);
+    ///     Controlled H([a], b);
+    ///     ResetAll([a, b]);
     /// }
     /// ```
     ///
