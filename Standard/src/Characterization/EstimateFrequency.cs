@@ -10,7 +10,6 @@ using Microsoft.Quantum.Intrinsic;
 using Microsoft.Quantum.Simulation;
 using Microsoft.Quantum.Simulation.Core;
 using Microsoft.Quantum.Simulation.Simulators;
-using Microsoft.Quantum.Simulation.Simulators.Exceptions;
 using Microsoft.Quantum.Standard.Emulation;
 
 namespace Microsoft.Quantum.Characterization
@@ -31,7 +30,7 @@ namespace Microsoft.Quantum.Characterization
         public class Native : EstimateFrequencyA
         {
             [DllImport(QuantumSimulator.QSIM_DLL_NAME, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl, EntryPoint = "JointEnsembleProbability")]
-            private static extern double JointEnsembleProbability(uint id, uint n, Pauli[] b, uint[] q);
+            private static extern double JointEnsembleProbability(IntPtr id, uint n, Pauli[] b, uint[] q);
 
             private System.Random _random = new System.Random();
 

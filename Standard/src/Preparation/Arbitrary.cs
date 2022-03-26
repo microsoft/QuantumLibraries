@@ -22,7 +22,7 @@ namespace Microsoft.Quantum.Preparation
         {
             [DllImport(QuantumSimulator.QSIM_DLL_NAME, ExactSpelling = true,
                 CallingConvention = CallingConvention.Cdecl, EntryPoint = "InjectState")]
-            private static extern bool InjectState(uint sid, uint n, uint[] q, double[] re, double[] im);
+            private static extern bool InjectState(IntPtr sid, uint n, uint[] q, double[] re, double[] im);
 
             private QuantumSimulator? Simulator { get; }
 
