@@ -19,7 +19,7 @@ Reviewers (in order by username): .
 * @msoeken, *approve*
 > Please add a bullet point including your alias, your review result (*approve*, *reject*, *comment*), and a comment (optional when result is *approve*).  Alternatively, add a line to the PR discussion incl. a reference to this issue.
 
-**Consensus**: *TBD*
+**Consensus**: Approved (incl. implicit approval from proposal author)
 
 ---
 
@@ -32,7 +32,7 @@ Reviewers (in order by username): .
 * @msoeken, *approve*
 > Please add a bullet point including your alias, your review result (*approve*, *reject*, *comment*), and a comment (optional when result is *approve*).  Alternatively, add a line to the PR discussion incl. a reference to this issue.
 
-**Consensus**: *TBD*
+**Consensus**: Approved (incl. implicit approval from proposal author)
 
 ---
 
@@ -44,7 +44,7 @@ Reviewers (in order by username): .
 
 > Please add a bullet point including your alias, your review result (*approve*, *reject*, *comment*), and a comment (optional when result is *approve*).  Alternatively, add a line to the PR discussion incl. a reference to this issue.
 
-**Consensus**: *TBD*
+**Consensus**: Postponed (no additional review was provided)
 
 ---
 
@@ -56,4 +56,4 @@ Reviewers (in order by username): .
 @msoeken, *approve*
 > Please add a bullet point including your alias, your review result (*approve*, *reject*, *comment*), and a comment (optional when result is *approve*).  Alternatively, add a line to the PR discussion incl. a reference to this issue.
 
-**Consensus**: *TBD*
+**Consensus**: Approved (incl. implicit approval from proposal author)
