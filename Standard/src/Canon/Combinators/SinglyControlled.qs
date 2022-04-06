@@ -27,11 +27,7 @@ namespace Microsoft.Quantum.Canon {
     /// # See Also
     /// - Microsoft.Quantum.Canon.SinglyControlledA
     function SinglyControlled<'T>(op : 'T => Unit is Ctl) : (Qubit, 'T) => Unit is Ctl {
-        return ApplySinglyControlled(op, _, _);
-    }
-
-    internal operation ApplySinglyControlled<'T>(op : 'T => Unit is Ctl, ctl : Qubit, target : 'T) : Unit is Ctl {
-        Controlled op([ctl], target);
+        return (ctrl, originalInput) => Controlled op([ctrl], originalInput);
     }
 
     /// # Summary
@@ -58,11 +54,7 @@ namespace Microsoft.Quantum.Canon {
     /// # See Also
     /// - Microsoft.Quantum.Canon.SinglyControlled
     function SinglyControlledA<'T>(op : 'T => Unit is Adj + Ctl) : (Qubit, 'T) => Unit is Adj + Ctl {
-        return ApplySinglyControlledA(op, _, _);
-    }
-
-    internal operation ApplySinglyControlledA<'T>(op : 'T => Unit is Adj + Ctl, ctl : Qubit, target : 'T) : Unit is Adj + Ctl {
-        Controlled op([ctl], target);
+        return (ctrl, originalInput) => Controlled op([ctrl], originalInput);
     }
 
 }

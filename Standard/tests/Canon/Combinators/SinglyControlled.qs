@@ -8,7 +8,7 @@ namespace Microsoft.Quantum.Tests {
     open Microsoft.Quantum.Intrinsic;
 
     @Test("ToffoliSimulator")
-    operation TestSinglyControlled() : Unit {
+    operation TestSinglyControlledWithSimulation() : Unit {
         use ctl = Qubit();
         use target = Qubit[3];
         let targetLE = LittleEndian(target);
@@ -24,5 +24,13 @@ namespace Microsoft.Quantum.Tests {
                 }
             }
         }
+    }
+
+    @Test("QuantumSimulator")
+    operation TestSinglyControlledWithEquivalenceCheck() : Unit {
+        AssertOperationsEqualReferenced(2,
+            qs => SinglyControlled(H)(qs[0], qs[1]),
+            qs => Controlled H([qs[0]], qs[1])
+        );
     }
 }
