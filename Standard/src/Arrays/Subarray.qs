@@ -47,9 +47,14 @@ namespace Microsoft.Quantum.Arrays {
     /// ```
     function Subarray<'T> (indices : Int[], array : 'T[]) : 'T[] {
         let nSliced = Length(indices);
-        mutable sliced = [Default<'T>(), size = nSliced];
 
-        for idx in 0 .. nSliced - 1 {
+        if nSliced == 0 {
+            return [];
+        }
+
+        mutable sliced = [array[indices[0]], size = nSliced];
+
+        for idx in 1 .. nSliced - 1 {
             set sliced w/= idx <- array[indices[idx]];
         }
 

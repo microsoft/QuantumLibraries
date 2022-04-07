@@ -43,8 +43,12 @@ namespace Microsoft.Quantum.Arrays {
 
         Fact(lFirst >= lSecond and lFirst - lSecond <= 1, "Array `first` is either of same size as `second`, or has one more element");
 
-        return [Default<'T>(), size = lFirst + lSecond]
-            w/ 0..2..(lFirst + lSecond - 1) <- first
-            w/ 1..2..(lFirst + lSecond - 1) <- second;
+        if lFirst == 0 {
+            return [];
+        } else {
+            return [first[0], size = lFirst + lSecond]
+                w/ 0..2..(lFirst + lSecond - 1) <- first
+                w/ 1..2..(lFirst + lSecond - 1) <- second;
+        }
     }
 }
