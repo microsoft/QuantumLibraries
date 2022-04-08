@@ -87,8 +87,7 @@ namespace Microsoft.Quantum.MachineLearning {
         trainingSchedule : SamplingSchedule,
         validationSchedule : SamplingSchedule
     ) : (SequentialModel, Int) {
-        mutable bestSoFar = Default<SequentialModel>()
-                            w/ Structure <- (Head(models))::Structure;
+        mutable bestSoFar = SequentialModel((Head(models))::Structure, [], 0.0);
         mutable bestValidation = Length(samples) + 1;
 
         let features = Mapped(_Features, samples);

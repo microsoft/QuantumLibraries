@@ -32,7 +32,7 @@ namespace SystemTests.Molecules
     public static class Helper
     {
 
-        private static readonly SHA256Managed hashMethod = new SHA256Managed();
+        private static readonly SHA256 hashMethod = SHA256.Create();
 
         /// <summary>
         /// Returns a seed to use for the test run based on the class

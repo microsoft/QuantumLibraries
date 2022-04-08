@@ -214,6 +214,6 @@ namespace Microsoft.Quantum.Tests
             return seed;
         }
 
-        private static readonly SHA256Managed hashMethod = new SHA256Managed();
+        private static readonly SHA256 hashMethod = SHA256.Create();
     }
 }

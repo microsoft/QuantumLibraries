@@ -211,23 +211,23 @@ namespace Microsoft.Quantum.Arrays {
         let nSliced = Length(remove);
         let nElements = Length(array);
 
+        if nElements - nSliced <= 0 {
+            return [];
+        }
+
         //Would be better with sort function
         //Or way to add elements to array
-        mutable arrayKeep = [0, size = nElements];
-        mutable sliced = [Default<'T>(), size = nElements - nSliced];
+        mutable arrayKeep = SequenceI(0, nElements - 1);
+        mutable sliced = [array[0], size = nElements - nSliced];
         mutable counter = 0;
 
-        for idx in 0 .. nElements - 1 {
-            set arrayKeep w/= idx <- idx;
+        for idx in remove {
+            set arrayKeep w/= idx <- -1;
         }
 
-        for idx in 0 .. nSliced - 1 {
-            set arrayKeep w/= remove[idx] <- -1;
-        }
-
-        for idx in 0 .. nElements - 1 {
-            if (arrayKeep[idx] >= 0) {
-                set sliced w/= counter <- array[arrayKeep[idx]];
+        for idx in arrayKeep {
+            if idx >= 0 {
+                set sliced w/= counter <- array[idx];
                 set counter += 1;
             }
         }
@@ -331,16 +331,16 @@ namespace Microsoft.Quantum.Arrays {
     /// let split = Partitioned([2,2], [1,5,3,7]);
     /// ```
     function Partitioned<'T>(nElements: Int[], arr: 'T[]) : 'T[][] {
-        mutable output = [Default<'T[]>(), size = Length(nElements) + 1];
+        mutable output = [[], size = Length(nElements) + 1];
         mutable currIdx = 0;
         for idx in IndexRange(nElements) {
-            if(currIdx + nElements[idx] > Length(arr)) {
+            if currIdx + nElements[idx] > Length(arr) {
                 fail "Partitioned argument out of bounds.";
             }
-            set output w/= idx <- arr[currIdx..currIdx + nElements[idx]-1];
+            set output w/= idx <- arr[currIdx..currIdx + nElements[idx] - 1];
             set currIdx = currIdx + nElements[idx];
         }
-        set output w/= Length(nElements) <- arr[currIdx..Length(arr)-1];
+        set output w/= Length(nElements) <- arr[currIdx..Length(arr) - 1];
         return output;
     }
 
@@ -483,7 +483,7 @@ namespace Microsoft.Quantum.Arrays {
     /// TupleArrayAsNestedArray([(2, 3), (4, 5)]);
     /// ```
     function TupleArrayAsNestedArray<'T>(tupleList : ('T, 'T)[]) : 'T[][] {
-        mutable newArray = [Default<'T[]>(), size = Length(tupleList)];
+        mutable newArray = [[], size = Length(tupleList)];
         for idx in IndexRange(tupleList) {
             let (tupleLeft, tupleRight) = tupleList[idx];
             set newArray w/= idx <- [tupleLeft, tupleRight];
