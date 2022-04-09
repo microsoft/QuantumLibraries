@@ -261,9 +261,9 @@ namespace Microsoft.Quantum.Arrays {
     /// ```qsharp
     /// let array = [10, 11, 12];
     /// // The following line returns [10, 12, 15, 2, 2, 2].
-    /// let output = Padded(-6, array, 2);
+    /// let output = Padded(-6, 2, array);
     /// // The following line returns [2, 2, 2, 10, 12, 15].
-    /// let output = Padded(6, array, 2);
+    /// let output = Padded(6, 2, array);
     /// ```
     function Padded<'T> (nElementsTotal : Int, defaultElement : 'T, inputArray : 'T[]) : 'T[] {
         let nElementsInitial = Length(inputArray);
