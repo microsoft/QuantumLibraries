@@ -47,4 +47,46 @@ namespace Microsoft.Quantum.Arithmetic {
 
         AddI(LittleEndian(xs), LittleEndian(ys));
     }
+
+    /// # Summary
+    /// Computes the additive inverse of `fp`.
+    ///
+    /// # Input
+    /// ## fp
+    /// Fixed-point number to invert
+    ///
+    /// # Remarks
+    /// Numerical inaccuracies may occur depending on the
+    /// bit-precision of the fixed-point number.
+    ///
+    /// # See also
+    /// - Microsoft.Quantum.Arithmetic.SubtractFxP
+    operation InvertFxP(fp: FixedPoint) : Unit is Adj + Ctl {
+        let (_, reg) = fp!;
+        Invert2sSI(SignedLittleEndian(LittleEndian(reg)));
+    }
+
+    /// # Summary
+    /// Computes `minuend - subtrahend` and stores the difference in `minuend`.
+    ///
+    /// # Input
+    /// ## subtrahend
+    /// The subtrahend of the subtraction
+    /// ## minuend
+    /// The minuend of the subtraction
+    ///
+    /// # Remarks
+    /// Computes the difference by inverting `subtrahend` before and after adding
+    /// it to `minuend`.
+    ///
+    /// # See also
+    /// - Microsoft.Quantum.Arithmetic.AddFxP
+    /// - Microsoft.Quantum.Arithmetic.InvertFxP
+    operation SubtractFxP(subtrahend : FixedPoint, minuend : FixedPoint) : Unit is Adj + Ctl {
+        within {
+            InvertFxP(subtrahend);
+        } apply {
+            AddFxP(subtrahend, minuend);
+        }
+    }
 }
