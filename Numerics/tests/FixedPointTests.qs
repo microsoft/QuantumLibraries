@@ -3,6 +3,7 @@
 
 namespace Microsoft.Quantum.Numerics.ToffoliTests {
     open Microsoft.Quantum.Arrays;
+    open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Convert;
     open Microsoft.Quantum.Math;
     open Microsoft.Quantum.Intrinsic;
@@ -19,6 +20,33 @@ namespace Microsoft.Quantum.Numerics.ToffoliTests {
                 $"FixedPoint initialized to {a} but measured {measured}.");
             ResetAll(xs);
         }
+    }
+
+    internal operation PrepareAsSignedAndMeasure(value : Int, fxp : FixedPoint) : Double {
+        ApplyXorInPlace(value, LittleEndian(Snd(fxp!)));
+        return MeasureFxP(fxp);
+    }
+
+    operation MeasureFxPTest() : Unit {
+        use qs = Qubit[4];
+        let qsFxP = FixedPoint(2, qs);
+
+        NearEqualityFactD(PrepareAsSignedAndMeasure(0b0000, qsFxP), 0.0);
+        NearEqualityFactD(PrepareAsSignedAndMeasure(0b0001, qsFxP), 0.25);
+        NearEqualityFactD(PrepareAsSignedAndMeasure(0b0010, qsFxP), 0.5);
+        NearEqualityFactD(PrepareAsSignedAndMeasure(0b0011, qsFxP), 0.75);
+        NearEqualityFactD(PrepareAsSignedAndMeasure(0b0100, qsFxP), 1.0);
+        NearEqualityFactD(PrepareAsSignedAndMeasure(0b0101, qsFxP), 1.25);
+        NearEqualityFactD(PrepareAsSignedAndMeasure(0b0110, qsFxP), 1.5);
+        NearEqualityFactD(PrepareAsSignedAndMeasure(0b0111, qsFxP), 1.75);
+        NearEqualityFactD(PrepareAsSignedAndMeasure(0b1000, qsFxP), -2.0);
+        NearEqualityFactD(PrepareAsSignedAndMeasure(0b1001, qsFxP), -1.75);
+        NearEqualityFactD(PrepareAsSignedAndMeasure(0b1010, qsFxP), -1.5);
+        NearEqualityFactD(PrepareAsSignedAndMeasure(0b1011, qsFxP), -1.25);
+        NearEqualityFactD(PrepareAsSignedAndMeasure(0b1100, qsFxP), -1.00);
+        NearEqualityFactD(PrepareAsSignedAndMeasure(0b1101, qsFxP), -0.75);
+        NearEqualityFactD(PrepareAsSignedAndMeasure(0b1110, qsFxP), -0.5);
+        NearEqualityFactD(PrepareAsSignedAndMeasure(0b1111, qsFxP), -0.25);
     }
 
     operation CompareGreaterThanFxPTest() : Unit {
