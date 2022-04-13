@@ -17,7 +17,7 @@ namespace Microsoft.Quantum.Arithmetic {
     operation MeasureFxP(fp : FixedPoint) : Double {
         let (p, xs) = fp!;
 
-        let bits = Mapped(IsResultOne, ForEach(MResetZ, xs));
+        let bits = ForEach(q => MResetZ(q) == One, xs);
         return BoolArrayAsFixedPoint(p, bits);
     }
 }
