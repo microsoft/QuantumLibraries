@@ -1,42 +1,49 @@
 ﻿// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-namespace Microsoft.Quantum.Numerics.ToffoliTests {
+namespace Microsoft.Quantum.Tests {
     open Microsoft.Quantum.Diagnostics;
     open Microsoft.Quantum.Intrinsic;
     open Microsoft.Quantum.Arithmetic;
     open Microsoft.Quantum.Extensions.Math;
 
+    @Test("ToffoliSimulator")
     operation MultiplyIExhaustiveTest() : Unit {
         ExhaustiveTestHelper2Args(IntegerMultiplicationRun(false, _, _, _, _));
     }
 
+    @Test("ToffoliSimulator")
     operation SquareIExhaustiveTest() : Unit {
         ExhaustiveTestHelper1Arg(IntegerSquareRun(false, _, _, _));
     }
 
+    @Test("ToffoliSimulator")
     operation DivideIExhaustiveTest() : Unit {
         ExhaustiveTestHelper2Args(IntegerDivisionRun);
     }
 
+    @Test("ToffoliSimulator")
     operation SquareSIExhaustiveTest() : Unit {
         ExhaustiveTestHelper1Arg(IntegerSquareRun(true, _, _, _));
     }
 
+    @Test("ToffoliSimulator")
     operation CompareGTSIExhaustiveTest() : Unit {
         ExhaustiveTestHelper2Args(IntegerGreaterThanRun(true, _, _, _, _));
     }
 
+    @Test("ToffoliSimulator")
     operation MultiplySIExhaustiveTest() : Unit {
         ExhaustiveTestHelper2Args(IntegerMultiplicationRun(true, _, _, _, _));
     }
 
+    @Test("ToffoliSimulator")
     operation ComputeReciprocalIExhaustiveTest() : Unit {
         ExhaustiveTestHelper1Arg(IntegerReciprocalRun(false, _, _, _));
     }
 
-    operation IntegerGreaterThanRun(signed: Bool, a: Int, b: Int,
-                                    n: Int, numCtrl: Int) : Unit {
+    internal operation IntegerGreaterThanRun(signed: Bool, a: Int, b: Int,
+                                             n: Int, numCtrl: Int) : Unit {
         use aqs = Qubit[n];
         use bqs = Qubit[n];
         use result = Qubit();
@@ -94,8 +101,8 @@ namespace Microsoft.Quantum.Numerics.ToffoliTests {
         }
     }
 
-    operation IntegerMultiplicationRun(signed: Bool, a: Int, b: Int,
-                                             n: Int, numCtrl: Int) : Unit {
+    internal operation IntegerMultiplicationRun(signed: Bool, a: Int, b: Int,
+                                                n: Int, numCtrl: Int) : Unit {
         use aqs = Qubit[n];
         use bqs = Qubit[n];
         use cqs = Qubit[2 * n];
@@ -159,8 +166,8 @@ namespace Microsoft.Quantum.Numerics.ToffoliTests {
         }
     }
 
-    operation IntegerSquareRun(signed: Bool, a: Int,
-                               n: Int, numCtrl: Int) : Unit {
+    internal operation IntegerSquareRun(signed: Bool, a: Int,
+                                        n: Int, numCtrl: Int) : Unit {
         use aqs = Qubit[n];
         use cqs = Qubit[2 * n];
         use ctrlqs = Qubit[numCtrl];
@@ -209,8 +216,8 @@ namespace Microsoft.Quantum.Numerics.ToffoliTests {
         }
     }
 
-    operation IntegerReciprocalRun(signed: Bool, a: Int,
-                                   n: Int, numCtrl: Int) : Unit {
+    internal operation IntegerReciprocalRun(signed: Bool, a: Int,
+                                            n: Int, numCtrl: Int) : Unit {
         use aqs = Qubit[n];
         use cqs = Qubit[2 * n];
         use ctrlqs = Qubit[numCtrl];
@@ -245,7 +252,7 @@ namespace Microsoft.Quantum.Numerics.ToffoliTests {
         }
     }
 
-    operation IntegerDivisionRun(a: Int, b: Int, n: Int, numCtrl: Int): Unit {
+    internal operation IntegerDivisionRun(a: Int, b: Int, n: Int, numCtrl: Int): Unit {
         use aqs = Qubit[n];
         use bqs = Qubit[n];
         use cqs = Qubit[n];
@@ -296,7 +303,7 @@ namespace Microsoft.Quantum.Numerics.ToffoliTests {
         }
     }
 
-    operation ExhaustiveTestHelper1Arg(TestFunction: ((Int, Int, Int) => Unit)) : Unit {
+    internal operation ExhaustiveTestHelper1Arg(TestFunction: ((Int, Int, Int) => Unit)) : Unit {
         for numCtrlQubits in 0..2 {
             for numQubits in 1..5 {
                 for a in 0..2^numQubits - 1 {
@@ -306,7 +313,7 @@ namespace Microsoft.Quantum.Numerics.ToffoliTests {
         }
     }
 
-    operation ExhaustiveTestHelper2Args(TestFunction: ((Int, Int, Int, Int) => Unit)) : Unit {
+    internal operation ExhaustiveTestHelper2Args(TestFunction: ((Int, Int, Int, Int) => Unit)) : Unit {
         for numCtrlQubits in 0..2 {
             for numQubits in 1..5 {
                 for a in 0..2^numQubits - 1 {
