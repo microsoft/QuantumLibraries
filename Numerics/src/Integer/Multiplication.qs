@@ -13,11 +13,11 @@ namespace Microsoft.Quantum.Arithmetic {
     ///
     /// # Input
     /// ## xs
-    /// 𝑛₁-bit multiplicand (LittleEndian)
+    /// 𝑛₁-bit multiplicand (`LittleEndian`)
     /// ## ys
-    /// 𝑛₂-bit multiplier (LittleEndian)
+    /// 𝑛₂-bit multiplier (`LittleEndian`)
     /// ## result
-    /// (𝑛₁+𝑛₂)-bit result (LittleEndian), must be in state |0⟩ initially.
+    /// (𝑛₁+𝑛₂)-bit result (`LittleEndian`), must be in state |0⟩ initially.
     ///
     /// # Remarks
     /// Uses a standard shift-and-add approach to implement the multiplication.
@@ -98,32 +98,50 @@ namespace Microsoft.Quantum.Arithmetic {
     ///
     /// # Input
     /// ## xs
-    /// $n$-bit number to square (LittleEndian)
+    /// 𝑛-bit number to square (`LittleEndian`)
     /// ## result
-    /// $2n$-bit result (LittleEndian), must be in state $\ket{0}$ initially.
+    /// 2𝑛-bit result (`LittleEndian`), must be in state |0⟩ initially.
     ///
     /// # Remarks
     /// Uses a standard shift-and-add approach to compute the square. Saves
-    /// $n-1$ qubits compared to the straight-forward solution which first
-    /// copies out xs before applying a regular multiplier and then undoing
+    /// 𝑛-1 qubits compared to the straight-forward solution which first
+    /// copies out `xs` before applying a regular multiplier and then undoing
     /// the copy operation.
-    operation SquareI (xs: LittleEndian, result: LittleEndian) : Unit {
+    operation SquareI(xs: LittleEndian, result: LittleEndian) : Unit {
         body (...) {
             Controlled SquareI([], (xs, result));
         }
         controlled (controls, ...) {
             let n = Length(xs!);
 
-            EqualityFactI(2 * n, Length(result!), "Integer multiplication
-                            requires a 2n-bit result registers.");
+            EqualityFactI(2 * n, Length(result!), "Integer multiplication requires a 2n-bit result registers.");
             AssertAllZero(result!);
 
-            use aux = Qubit();
-            for i in 0..n - 1 {
-                (Controlled CNOT) (controls, (xs![i], aux));
-                (Controlled AddI) ([aux], (xs,
-                    LittleEndian(result![i..i+n])));
-                (Controlled CNOT) (controls, (xs![i], aux));
+            let numControls = Length(controls);
+            if numControls == 0 {
+                SquareI(xs, result);
+            } elif numControls == 1 {
+                use aux = Qubit();
+                for (idx, ctl) in Enumerated(xs!) {
+                    within {
+                        ApplyAnd(controls[0], ctl, aux);
+                    } apply {
+                        Controlled AddI([aux], (xs, LittleEndian(result![idx..idx + n])));
+                    }
+                }
+            } else {
+                use helper = Qubit[numControls];
+                within {
+                    ApplyAndLadder(controls, Most(helper));
+                } apply {
+                    for (idx, ctl) in Enumerated(xs!) {
+                        within {
+                            ApplyAnd(Tail(Most(helper)), ctl, Tail(helper));
+                        } apply {
+                            Controlled AddI([Tail(helper)], (xs, LittleEndian(result![idx..idx + n])));
+                        }
+                    }
+                }
             }
         }
         adjoint auto;
@@ -136,15 +154,13 @@ namespace Microsoft.Quantum.Arithmetic {
     ///
     /// # Input
     /// ## xs
-    /// n-bit multiplicand (SignedLittleEndian)
+    /// 𝑛₁-bit multiplicand (`SignedLittleEndian`)
     /// ## ys
-    /// n-bit multiplier (SignedLittleEndian)
+    /// 𝑛₂-bit multiplier (`SignedLittleEndian`)
     /// ## result
-    /// 2n-bit result (SignedLittleEndian), must be in state $\ket{0}$
+    /// (𝑛₁+𝑛₂)-bit result (`SignedLittleEndian`), must be in state |0⟩
     /// initially.
-    operation MultiplySI (xs: SignedLittleEndian,
-                          ys: SignedLittleEndian,
-                          result: SignedLittleEndian): Unit {
+    operation MultiplySI(xs: SignedLittleEndian, ys: SignedLittleEndian, result: SignedLittleEndian): Unit {
         body (...) {
             Controlled MultiplySI([], (xs, ys, result));
         }
@@ -152,22 +168,21 @@ namespace Microsoft.Quantum.Arithmetic {
             use signx = Qubit();
             use signy = Qubit();
 
-            CNOT(Tail(xs!!), signx);
-            CNOT(Tail(ys!!), signy);
-            (Controlled Invert2sSI)([signx], xs);
-            (Controlled Invert2sSI)([signy], ys);
-
-            (Controlled MultiplyI) (controls, (xs!, ys!, result!));
-            CNOT(signx, signy);
-            // No controls required since `result` will still be zero
-            // if we did not perform the multiplication above.
-            (Controlled Invert2sSI)([signy], result);
-            CNOT(signx, signy);
-
-            (Controlled Adjoint Invert2sSI)([signx], xs);
-            (Controlled Adjoint Invert2sSI)([signy], ys);
-            CNOT(Tail(xs!!), signx);
-            CNOT(Tail(ys!!), signy);
+            within {
+                CNOT(Tail(xs!!), signx);
+                CNOT(Tail(ys!!), signy);
+                Controlled Invert2sSI([signx], xs);
+                Controlled Invert2sSI([signy], ys);
+            } apply {
+                Controlled MultiplyI(controls, (xs!, ys!, result!));
+                within {
+                    CNOT(signx, signy);
+                } apply {
+                    // No controls required since `result` will still be zero
+                    // if we did not perform the multiplication above.
+                    Controlled Invert2sSI([signy], result);
+                }
+            }
         }
         adjoint auto;
         adjoint controlled auto;
@@ -179,15 +194,14 @@ namespace Microsoft.Quantum.Arithmetic {
     ///
     /// # Input
     /// ## xs
-    /// n-bit integer to square (SignedLittleEndian)
+    /// 𝑛-bit integer to square (`SignedLittleEndian`)
     /// ## result
-    /// 2n-bit result (SignedLittleEndian), must be in state $\ket{0}$
+    /// 2𝑛-bit result (`SignedLittleEndian`), must be in state |0⟩
     /// initially.
     ///
     /// # Remarks
-    /// The implementation relies on IntegerSquare.
-    operation SquareSI (xs: SignedLittleEndian,
-                        result: SignedLittleEndian): Unit is Adj + Ctl {
+    /// The implementation relies on `SquareI`.
+    operation SquareSI (xs: SignedLittleEndian, result: SignedLittleEndian): Unit is Adj + Ctl {
         body (...) {
             Controlled SquareSI([], (xs, result));
         }
@@ -195,13 +209,13 @@ namespace Microsoft.Quantum.Arithmetic {
             let n = Length(xs!!);
             use signx = Qubit();
             use signy = Qubit();
-            CNOT(Tail(xs!!), signx);
-            (Controlled Invert2sSI)([signx], xs);
 
-            (Controlled SquareI) (controls, (xs!, result!));
-
-            (Controlled Adjoint Invert2sSI)([signx], xs);
-            CNOT(Tail(xs!!), signx);
+            within {
+                CNOT(Tail(xs!!), signx);
+                Controlled Invert2sSI([signx], xs);
+            } apply {
+                Controlled SquareI(controls, (xs!, result!));
+            }
         }
     }
 }
