@@ -8,7 +8,7 @@ namespace Microsoft.Quantum.Numerics.ToffoliTests {
     open Microsoft.Quantum.Extensions.Math;
 
     operation MultiplyIExhaustiveTest() : Unit {
-        ExhaustiveTestHelper2Args(IntegerMultiplicationRun(false, _, _, _, _));
+        ExhaustiveTestHelper2NonRegularArgs(IntegerMultiplicationRun(false, _, _, _, _, _));
     }
 
     operation SquareIExhaustiveTest() : Unit {
@@ -16,7 +16,7 @@ namespace Microsoft.Quantum.Numerics.ToffoliTests {
     }
 
     operation DivideIExhaustiveTest() : Unit {
-        ExhaustiveTestHelper2Args(IntegerDivisionRun);
+        ExhaustiveTestHelper2RegularArgs(IntegerDivisionRun);
     }
 
     operation SquareSIExhaustiveTest() : Unit {
@@ -24,11 +24,11 @@ namespace Microsoft.Quantum.Numerics.ToffoliTests {
     }
 
     operation CompareGTSIExhaustiveTest() : Unit {
-        ExhaustiveTestHelper2Args(IntegerGreaterThanRun(true, _, _, _, _));
+        ExhaustiveTestHelper2RegularArgs(IntegerGreaterThanRun(true, _, _, _, _));
     }
 
     operation MultiplySIExhaustiveTest() : Unit {
-        ExhaustiveTestHelper2Args(IntegerMultiplicationRun(true, _, _, _, _));
+        ExhaustiveTestHelper2NonRegularArgs(IntegerMultiplicationRun(true, _, _, _, _, _));
     }
 
     operation ComputeReciprocalIExhaustiveTest() : Unit {
@@ -95,63 +95,57 @@ namespace Microsoft.Quantum.Numerics.ToffoliTests {
     }
 
     operation IntegerMultiplicationRun(signed: Bool, a: Int, b: Int,
-                                             n: Int, numCtrl: Int) : Unit {
-        use aqs = Qubit[n];
-        use bqs = Qubit[n];
-        use cqs = Qubit[2 * n];
+                                             na: Int, nb : Int, numCtrl: Int) : Unit {
+        let nc = na + nb;
+        use aqs = Qubit[na];
+        use bqs = Qubit[nb];
+        use cqs = Qubit[nc];
         use ctrlqs = Qubit[numCtrl];
-        ApplyXorInPlace(a, LittleEndian(aqs));
-        ApplyXorInPlace(b, LittleEndian(bqs));
-        if (signed) {
-            MultiplySI(
-                    SignedLittleEndian(LittleEndian(aqs)),
-                    SignedLittleEndian(LittleEndian(bqs)),
-                    SignedLittleEndian(LittleEndian(cqs)));
+
+        let aLE = LittleEndian(aqs);
+        let bLE = LittleEndian(bqs);
+        let cLE = LittleEndian(cqs);
+
+        ApplyXorInPlace(a, aLE);
+        ApplyXorInPlace(b, bLE);
+        if signed {
+            MultiplySI(SignedLittleEndian(aLE),
+                       SignedLittleEndian(bLE),
+                       SignedLittleEndian(cLE));
+        } else {
+            MultiplyI(aLE, bLE, cLE);
         }
-        else {
-            MultiplyI (LittleEndian(aqs),
-                    LittleEndian(bqs),
-                    LittleEndian(cqs));
-        }
-        mutable asigned = a;
-        mutable bsigned = b;
-        if (signed and a >= 2^(n-1)) {
-            set asigned = -2^n+a;
-        }
-        if (signed and b >= 2^(n-1)) {
-            set bsigned = -2^n+b;
-        }
+
+        let asigned = signed and a >= 2^(na - 1) ? -2^na + a | a;
+        let bsigned = signed and b >= 2^(nb - 1) ? -2^nb + b | b;
         mutable c = asigned * bsigned;
-        mutable cMeasured = MeasureInteger(LittleEndian(cqs));
-        if (signed and cMeasured >= 2^(2*n-1)){
-            set cMeasured = -2^(2*n) + cMeasured;
+        mutable cMeasured = MeasureInteger(cLE);
+        if signed and cMeasured >= 2^(nc-1) {
+            set cMeasured = -2^nc + cMeasured;
         }
         EqualityFactI(c, cMeasured,
             $"Multiplication did not yield the correct result:
-                {asigned} * {bsigned} = {c} != {cMeasured} [n={n}]");
+                {asigned} * {bsigned} = {c} != {cMeasured} [na={na}, nb={nb}]");
         ResetAll(aqs + bqs + cqs);
         for ctrlState in 0..2^numCtrl - 1 {
             ApplyXorInPlace(ctrlState, LittleEndian(ctrlqs));
-            ApplyXorInPlace(a, LittleEndian(aqs));
-            ApplyXorInPlace(b, LittleEndian(bqs));
+            ApplyXorInPlace(a, aLE);
+            ApplyXorInPlace(b, bLE);
             if signed {
-                (Controlled MultiplySI) (ctrlqs,
-                    (SignedLittleEndian(LittleEndian(aqs)),
-                        SignedLittleEndian(LittleEndian(bqs)),
-                        SignedLittleEndian(LittleEndian(cqs))));
+                Controlled MultiplySI(ctrlqs,
+                    (SignedLittleEndian(aLE),
+                        SignedLittleEndian(bLE),
+                        SignedLittleEndian(cLE)));
             } else {
-                (Controlled MultiplyI) (ctrlqs,
-                    (LittleEndian(aqs),
-                        LittleEndian(bqs),
-                        LittleEndian(cqs)));
+                Controlled MultiplyI(ctrlqs, (aLE, bLE, cLE));
             }
             set c = asigned * bsigned;
-            if ctrlState != 2^numCtrl-1 {
+            if ctrlState != 2^numCtrl - 1 {
                 set c = 0;
             }
-            set cMeasured = MeasureInteger(LittleEndian(cqs));
-            if signed and cMeasured >= 2^(2*n-1) {
-                set cMeasured = -2^(2*n) + cMeasured;
+            set cMeasured = MeasureInteger(cLE);
+            if signed and cMeasured >= 2^(nc - 1) {
+                set cMeasured = -2^nc + cMeasured;
             }
             EqualityFactI(c, cMeasured,
                 "Controlled multiplication did not yield the correct result.");
@@ -296,7 +290,7 @@ namespace Microsoft.Quantum.Numerics.ToffoliTests {
         }
     }
 
-    operation ExhaustiveTestHelper1Arg(TestFunction: ((Int, Int, Int) => Unit)) : Unit {
+    operation ExhaustiveTestHelper1Arg(TestFunction: (Int, Int, Int) => Unit) : Unit {
         for numCtrlQubits in 0..2 {
             for numQubits in 1..5 {
                 for a in 0..2^numQubits - 1 {
@@ -306,12 +300,26 @@ namespace Microsoft.Quantum.Numerics.ToffoliTests {
         }
     }
 
-    operation ExhaustiveTestHelper2Args(TestFunction: ((Int, Int, Int, Int) => Unit)) : Unit {
+    operation ExhaustiveTestHelper2RegularArgs(TestFunction: (Int, Int, Int, Int) => Unit) : Unit {
         for numCtrlQubits in 0..2 {
             for numQubits in 1..5 {
                 for a in 0..2^numQubits - 1 {
                     for b in 0..2^numQubits - 1 {
                         TestFunction(a, b, numQubits, numCtrlQubits);
+                    }
+                }
+            }
+        }
+    }
+
+    operation ExhaustiveTestHelper2NonRegularArgs(TestFunction: (Int, Int, Int, Int, Int) => Unit) : Unit {
+        for numCtrlQubits in 0..2 {
+            for numQubitsA in 1..4 {
+                for numQubitsB in 1..4 {
+                    for a in 0..2^numQubitsA - 1 {
+                        for b in 0..2^numQubitsB - 1 {
+                            TestFunction(a, b, numQubitsA, numQubitsB, numCtrlQubits);
+                        }
                     }
                 }
             }

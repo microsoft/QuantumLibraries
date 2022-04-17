@@ -3,6 +3,7 @@
 
 namespace Microsoft.Quantum.Arithmetic {
     open Microsoft.Quantum.Arrays;
+    open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Intrinsic;
     open Microsoft.Quantum.Diagnostics;
 
@@ -12,48 +13,83 @@ namespace Microsoft.Quantum.Arithmetic {
     ///
     /// # Input
     /// ## xs
-    /// $n$-bit multiplicand (LittleEndian)
+    /// 𝑛₁-bit multiplicand (LittleEndian)
     /// ## ys
-    /// $n$-bit multiplier (LittleEndian)
+    /// 𝑛₂-bit multiplier (LittleEndian)
     /// ## result
-    /// $2n$-bit result (LittleEndian), must be in state $\ket{0}$ initially.
+    /// (𝑛₁+𝑛₂)-bit result (LittleEndian), must be in state |0⟩ initially.
     ///
     /// # Remarks
     /// Uses a standard shift-and-add approach to implement the multiplication.
-    /// The controlled version was improved by copying out $x_i$ to an ancilla
+    /// The controlled version was improved by copying out 𝑥ᵢ to an ancilla
     /// qubit conditioned on the control qubits, and then controlling the
     /// addition on the ancilla qubit.
-    operation MultiplyI (xs: LittleEndian, ys: LittleEndian,
-                         result: LittleEndian) : Unit is Adj + Ctl {
+    operation MultiplyI(xs: LittleEndian, ys: LittleEndian, result: LittleEndian) : Unit is Adj + Ctl {
         body (...) {
-            let n = Length(xs!);
+            let na = Length(xs!);
+            let nb = Length(ys!);
 
-            EqualityFactI(n, Length(ys!), "Integer multiplication requires
-                           equally-sized registers xs and ys.");
-            EqualityFactI(2 * n, Length(result!), "Integer multiplication
-                            requires a 2n-bit result registers.");
+            EqualityFactI(na + nb, Length(result!), "Integer multiplication requires a register as long as both input registers added");
             AssertAllZero(result!);
 
-            for i in 0..n-1 {
-                Controlled AddI([xs![i]], (ys, LittleEndian(result![i..i+n])));
+            for (idx, actl) in Enumerated(xs!) {
+                Controlled AddI([actl], (ys, LittleEndian(result![idx..idx + nb])));
             }
         }
         controlled (controls, ...) {
-            let n = Length(xs!);
+            let na = Length(xs!);
+            let nb = Length(ys!);
 
-            EqualityFactI(n, Length(ys!), "Integer multiplication requires
-                           equally-sized registers xs and ys.");
-            EqualityFactI(2 * n, Length(result!), "Integer multiplication
-                            requires a 2n-bit result registers.");
+            EqualityFactI(na + nb, Length(result!), "Integer multiplication requires a register as long as both input registers added");
             AssertAllZero(result!);
 
-            use aux = Qubit();
-            for i in 0..n - 1 {
-                (Controlled CNOT) (controls, (xs![i], aux));
-                (Controlled AddI) ([aux], (ys, LittleEndian(result![i..i+n])));
-                (Controlled CNOT) (controls, (xs![i], aux));
+            // Perform various optimizations based on number of controls
+            let numControls = Length(controls);
+            if numControls == 0 {
+                MultiplyI(xs, ys, result);
+            } elif numControls == 1 {
+                use aux = Qubit();
+                for (idx, actl) in Enumerated(xs!) {
+                    within {
+                        ApplyAnd(controls[0], actl, aux);
+                    } apply {
+                        Controlled AddI([aux], (ys, LittleEndian(result![idx..idx + nb])));
+                    }
+                }
+            } else {
+                use helper = Qubit[numControls];
+                within {
+                    ApplyAndLadder(controls, Most(helper));
+                } apply {
+                    for (idx, actl) in Enumerated(xs!) {
+                        within {
+                            ApplyAnd(Tail(Most(helper)), actl, Tail(helper));
+                        } apply {
+                            Controlled AddI([Tail(helper)], (ys, LittleEndian(result![idx..idx + nb])));
+                        }
+                    }
+                }
             }
         }
+    }
+
+    /// # Summary
+    /// Applies AND of at least 2 inputs on a target in |0⟩ state.
+    ///
+    /// # Inputs
+    /// ## controls
+    /// At least two control qubits
+    /// ## targets
+    /// All intermediate targets and the final AND in the last qubit of that register.
+    /// The size of `targets` must be one less than the size of `controls`.
+    internal operation ApplyAndLadder(controls : Qubit[], targets : Qubit[]) : Unit is Adj {
+        // TODO: This operation should be moved to M.Q.Canon in Standard after API review
+        EqualityFactI(Length(controls), Length(targets) + 1, "there must be one more control qubit than target qubits");
+        Fact(Length(controls) >= 2, "there must be at least 2 control qubits");
+
+        let controls1 = [Head(controls)] + Most(targets);
+        let controls2 = Rest(controls);
+        ApplyToEachA(ApplyAnd, Zipped3(controls1, controls2, targets));
     }
 
     /// # Summary
@@ -113,7 +149,6 @@ namespace Microsoft.Quantum.Arithmetic {
             Controlled MultiplySI([], (xs, ys, result));
         }
         controlled (controls, ...) {
-            let n = Length(xs!!);
             use signx = Qubit();
             use signy = Qubit();
 
