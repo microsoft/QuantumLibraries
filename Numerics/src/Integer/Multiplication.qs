@@ -119,7 +119,14 @@ namespace Microsoft.Quantum.Arithmetic {
 
             let numControls = Length(controls);
             if numControls == 0 {
-                SquareI(xs, result);
+                use aux = Qubit();
+                for (idx, ctl) in Enumerated(xs!) {
+                    within {
+                        CNOT(ctl, aux);
+                    } apply {
+                        Controlled AddI([aux], (xs, LittleEndian(result![idx..idx + n])));
+                    }
+                }
             } elif numControls == 1 {
                 use aux = Qubit();
                 for (idx, ctl) in Enumerated(xs!) {
