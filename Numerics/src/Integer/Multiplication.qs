@@ -13,11 +13,11 @@ namespace Microsoft.Quantum.Arithmetic {
     ///
     /// # Input
     /// ## xs
-    /// 𝑛₁-bit multiplicand (`LittleEndian`)
+    /// 𝑛₁-bit multiplicand
     /// ## ys
-    /// 𝑛₂-bit multiplier (`LittleEndian`)
+    /// 𝑛₂-bit multiplier
     /// ## result
-    /// (𝑛₁+𝑛₂)-bit result (`LittleEndian`), must be in state |0⟩ initially.
+    /// (𝑛₁+𝑛₂)-bit result, must be in state |0⟩ initially.
     ///
     /// # Remarks
     /// Uses a standard shift-and-add approach to implement the multiplication.
@@ -98,9 +98,9 @@ namespace Microsoft.Quantum.Arithmetic {
     ///
     /// # Input
     /// ## xs
-    /// 𝑛-bit number to square (`LittleEndian`)
+    /// 𝑛-bit number to square
     /// ## result
-    /// 2𝑛-bit result (`LittleEndian`), must be in state |0⟩ initially.
+    /// 2𝑛-bit result, must be in state |0⟩ initially.
     ///
     /// # Remarks
     /// Uses a standard shift-and-add approach to compute the square. Saves
@@ -161,11 +161,11 @@ namespace Microsoft.Quantum.Arithmetic {
     ///
     /// # Input
     /// ## xs
-    /// 𝑛₁-bit multiplicand (`SignedLittleEndian`)
+    /// 𝑛₁-bit multiplicand
     /// ## ys
-    /// 𝑛₂-bit multiplier (`SignedLittleEndian`)
+    /// 𝑛₂-bit multiplier
     /// ## result
-    /// (𝑛₁+𝑛₂)-bit result (`SignedLittleEndian`), must be in state |0⟩
+    /// (𝑛₁+𝑛₂)-bit result, must be in state |0⟩
     /// initially.
     operation MultiplySI(xs: SignedLittleEndian, ys: SignedLittleEndian, result: SignedLittleEndian): Unit {
         body (...) {
@@ -201,9 +201,9 @@ namespace Microsoft.Quantum.Arithmetic {
     ///
     /// # Input
     /// ## xs
-    /// 𝑛-bit integer to square (`SignedLittleEndian`)
+    /// 𝑛-bit integer to square
     /// ## result
-    /// 2𝑛-bit result (`SignedLittleEndian`), must be in state |0⟩
+    /// 2𝑛-bit result, must be in state |0⟩
     /// initially.
     ///
     /// # Remarks
