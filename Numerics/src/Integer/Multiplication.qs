@@ -59,7 +59,7 @@ namespace Microsoft.Quantum.Arithmetic {
             } else {
                 use helper = Qubit[numControls];
                 within {
-                    ApplyAndLadder(controls, Most(helper));
+                    AndLadder(CCNOTop(ApplyAnd), controls, Most(helper));
                 } apply {
                     for (idx, actl) in Enumerated(xs!) {
                         within {
@@ -71,25 +71,6 @@ namespace Microsoft.Quantum.Arithmetic {
                 }
             }
         }
-    }
-
-    /// # Summary
-    /// Applies AND of at least 2 inputs on a target in |0⟩ state.
-    ///
-    /// # Inputs
-    /// ## controls
-    /// At least two control qubits
-    /// ## targets
-    /// All intermediate targets and the final AND in the last qubit of that register.
-    /// The size of `targets` must be one less than the size of `controls`.
-    internal operation ApplyAndLadder(controls : Qubit[], targets : Qubit[]) : Unit is Adj {
-        // TODO: This operation should be moved to M.Q.Canon in Standard after API review
-        EqualityFactI(Length(controls), Length(targets) + 1, "there must be one more control qubit than target qubits");
-        Fact(Length(controls) >= 2, "there must be at least 2 control qubits");
-
-        let controls1 = [Head(controls)] + Most(targets);
-        let controls2 = Rest(controls);
-        ApplyToEachA(ApplyAnd, Zipped3(controls1, controls2, targets));
     }
 
     /// # Summary
@@ -139,7 +120,7 @@ namespace Microsoft.Quantum.Arithmetic {
             } else {
                 use helper = Qubit[numControls];
                 within {
-                    ApplyAndLadder(controls, Most(helper));
+                    AndLadder(CCNOTop(ApplyAnd), controls, Most(helper));
                 } apply {
                     for (idx, ctl) in Enumerated(xs!) {
                         within {
