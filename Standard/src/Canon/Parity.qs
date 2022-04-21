@@ -73,7 +73,7 @@ namespace Microsoft.Quantum.Canon {
     /// # Remarks
     /// The following are equivalent:
     /// ```qsharp
-    /// ApplyCNOTChainWithTarget(Most(qs), Last(qs));
+    /// ApplyCNOTChainWithTarget(Most(qs), Tail(qs));
     /// ```
     /// and
     /// ```qsharp
