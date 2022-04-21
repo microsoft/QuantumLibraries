@@ -20,12 +20,9 @@ namespace Microsoft.Quantum.Arithmetic {
     /// to have the same point position and the same number of qubits.
     operation CompareGreaterThanFxP(fp1 : FixedPoint, fp2 : FixedPoint,
                                     result : Qubit) : Unit is Adj + Ctl {
-        let (px, xs) = fp1!;
-        let (py, ys) = fp2!;
-
         IdenticalFormatFactFxP([fp1, fp2]);
-        CompareGTSI(SignedLittleEndian(LittleEndian(xs)),
-                    SignedLittleEndian(LittleEndian(ys)),
+        CompareGTSI(SignedLittleEndian(LittleEndian(fp1::Register)),
+                    SignedLittleEndian(LittleEndian(fp2::Register)),
                     result);
     }
 }
