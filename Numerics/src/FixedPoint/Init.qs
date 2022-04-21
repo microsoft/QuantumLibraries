@@ -19,10 +19,9 @@ namespace Microsoft.Quantum.Arithmetic {
         // NB: We can't omit the body (...) declaration here, as the `set`
         //     statements below prevent automatic adjoint generation.
         body (...) {
-            let (p, q) = fp!;
-            let n = Length(q);
+            let n = Length(fp::Register);
             let sign = constant < 0.;
-            mutable rescaledConstant = PowD(2., IntAsDouble(n-p)) * AbsD(constant) + 0.5;
+            mutable rescaledConstant = PowD(2., IntAsDouble(n - fp::IntegerBits)) * AbsD(constant) + 0.5;
             mutable keepAdding = sign;
             for i in 0..n - 1 {
                 let intConstant = Floor(rescaledConstant);
@@ -33,7 +32,7 @@ namespace Microsoft.Quantum.Arithmetic {
                     set currentBit = not currentBit;
                 }
                 if currentBit {
-                    X(q[i]);
+                    X(fp::Register[i]);
                 }
             }
         }
