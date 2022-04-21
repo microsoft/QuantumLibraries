@@ -2,12 +2,13 @@
 // Licensed under the MIT License.
 
 namespace Microsoft.Quantum.Preparation {
-    open Microsoft.Quantum.Intrinsic;
-    open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Arithmetic;
-    open Microsoft.Quantum.Convert;
-    open Microsoft.Quantum.Math;
     open Microsoft.Quantum.Arrays;
+    open Microsoft.Quantum.Canon;
+    open Microsoft.Quantum.Convert;
+    open Microsoft.Quantum.Diagnostics;
+    open Microsoft.Quantum.Intrinsic;
+    open Microsoft.Quantum.Math;
 
     /// # Summary
     /// Returns an operation that prepares a a purification of a given mixed state. 
@@ -105,10 +106,6 @@ namespace Microsoft.Quantum.Preparation {
         let op = PrepareQuantumROMState(nBitsPrecision, nCoeffs, nBitsIndices, keepCoeff, altIndex, [], _, _, _);
         let qubitCounts = PurifiedMixedStateRequirements(targetError, nCoeffs);
         return MixedStatePreparation(qubitCounts, oneNorm, op);
-    }
-
-    internal function SplitSign(coefficient : Double) : (Double, Int) {
-        return (AbsD(coefficient), coefficient < 0.0 ? 1 | 0);
     }
 
     /// # Summary
@@ -221,6 +218,9 @@ namespace Microsoft.Quantum.Preparation {
     /// - Microsoft.Quantum.Preparation.PurifiedMixedState
     function PurifiedMixedStateRequirements(targetError : Double, nCoefficients : Int)
     : MixedStatePreparationRequirements {
+        Fact(targetError > 0.0, "targetError must be positive");
+        Fact(nCoefficients > 0, "nCoefficients must be positive");
+
         let nBitsPrecision = -Ceiling(Lg(0.5*targetError)) + 1;
         let nIndexQubits = Ceiling(Lg(IntAsDouble(nCoefficients)));
         let nGarbageQubits = nIndexQubits + 2 * nBitsPrecision + 1;
@@ -235,21 +235,15 @@ namespace Microsoft.Quantum.Preparation {
     : (Double, Int[], Int[]) {
         let oneNorm = PNorm(1.0, coefficients);
         let nCoefficients = Length(coefficients);
-        if (bitsPrecision > 31) {
-            fail $"Bits of precision {bitsPrecision} unsupported. Max is 31.";
-        }
-        if (nCoefficients <= 1) {
-            fail $"Cannot prepare state with less than 2 coefficients.";
-        }
-        if (oneNorm == 0.0) {
-            fail $"State must have at least one coefficient > 0";
-        }
+        Fact(bitsPrecision <= 31, $"Bits of precision {bitsPrecision} unsupported. Max is 31.");
+        Fact(nCoefficients > 1, "Cannot prepare state with less than 2 coefficients.");
+        Fact(oneNorm != 0.0, "State must have at least one coefficient > 0");
 
         let barHeight = 2 ^ bitsPrecision - 1;
 
         mutable altIndex = RangeAsIntArray(0..nCoefficients - 1);
         mutable keepCoeff = Mapped(
-            RoundedDiscretizationCoefficients(_, oneNorm, nCoefficients, barHeight),
+            coefficient -> Round((AbsD(coefficient) / oneNorm) * IntAsDouble(nCoefficients) * IntAsDouble(barHeight)),
             coefficients
         );
 
@@ -268,15 +262,15 @@ namespace Microsoft.Quantum.Preparation {
         mutable barSource = [];
 
         for idxCoeff in IndexRange(keepCoeff) {
-            if (keepCoeff[idxCoeff] > barHeight) {
+            if keepCoeff[idxCoeff] > barHeight {
                 set barSource += [idxCoeff];
-            } elif (keepCoeff[idxCoeff] < barHeight) {
+            } elif keepCoeff[idxCoeff] < barHeight {
                 set barSink += [idxCoeff];
             }
         }
 
         for rep in 0..nCoefficients * 10 {
-            if (Length(barSink) > 0 and Length(barSource) > 0) {
+            if Length(barSink) > 0 and Length(barSource) > 0 {
                 let idxSink = Tail(barSink);
                 let idxSource = Tail(barSource);
                 set barSink = Most(barSink);
@@ -285,12 +279,12 @@ namespace Microsoft.Quantum.Preparation {
                 set keepCoeff w/= idxSource <- keepCoeff[idxSource] - barHeight + keepCoeff[idxSink];
                 set altIndex w/= idxSink <- idxSource;
 
-                if (keepCoeff[idxSource] < barHeight) {
+                if keepCoeff[idxSource] < barHeight {
                     set barSink += [idxSource];
-                } elif (keepCoeff[idxSource] > barHeight) {
+                } elif keepCoeff[idxSource] > barHeight {
                     set barSource += [idxSource];
                 }
-            } elif (Length(barSource) > 0) {
+            } elif Length(barSource) > 0 {
                 let idxSource = Tail(barSource);
                 set barSource = Most(barSource);
                 set keepCoeff w/= idxSource <- barHeight;
@@ -300,12 +294,6 @@ namespace Microsoft.Quantum.Preparation {
         }
 
         return (oneNorm, keepCoeff, altIndex);
-    }
-
-    // Used in QuantumROM implementation.
-    internal function RoundedDiscretizationCoefficients(coefficient: Double, oneNorm: Double, nCoefficients: Int, barHeight: Int)
-    : Int {
-        return Round((AbsD(coefficient) / oneNorm) * IntAsDouble(nCoefficients) * IntAsDouble(barHeight));
     }
 
     // Used in QuantumROM implementation.
@@ -332,7 +320,7 @@ namespace Microsoft.Quantum.Preparation {
         ApplyToEachCA(H, uniformKeepCoeffRegister!);
 
         // Write bitstrings to altIndex and keepCoeff register.
-        let unitaryGenerator = (nCoeffs, QuantumROMBitStringWriterByIndex(_, keepCoeff, altIndex, data));
+        let unitaryGenerator = (nCoeffs, idx -> WriteQuantumROMBitString(idx, keepCoeff, altIndex, data, _, _, _, _));
         MultiplexOperationsFromGenerator(unitaryGenerator, indexRegister, (keepCoeffRegister, altIndexRegister, dataRegister, altDataRegister));
 
         // Perform comparison
@@ -341,23 +329,17 @@ namespace Microsoft.Quantum.Preparation {
         let indexRegisterSize = Length(indexRegister!);
 
         // Swap in register based on comparison
-        ApplyToEachCA((Controlled SWAP)([flagQubit], _), Zipped(indexRegister! + dataRegister, altIndexRegister! + altDataRegister));
-    }
-
-    // Used in QuantumROM implementation.
-    internal function QuantumROMBitStringWriterByIndex(idx : Int, keepCoeff : Int[], altIndex : Int[], data : Bool[][])
-    : ((LittleEndian, LittleEndian, Qubit[], Qubit[]) => Unit is Adj + Ctl) {
-        return WriteQuantumROMBitString(idx, keepCoeff, altIndex, data, _, _, _, _);
+        ApplyToEachCA(Controlled SWAP([flagQubit], _), Zipped(indexRegister! + dataRegister, altIndexRegister! + altDataRegister));
     }
 
     // Used in QuantumROM implementation.
     internal operation WriteQuantumROMBitString(idx: Int, keepCoeff: Int[], altIndex: Int[], data : Bool[][], keepCoeffRegister: LittleEndian, altIndexRegister: LittleEndian, dataRegister : Qubit[], altDataRegister : Qubit[])
     : Unit is Adj + Ctl {
-        if (keepCoeff[idx] >= 0) {
+        if keepCoeff[idx] >= 0 {
             ApplyXorInPlace(keepCoeff[idx], keepCoeffRegister);
         }
         ApplyXorInPlace(altIndex[idx], altIndexRegister);
-        if (Length(dataRegister) > 0) {
+        if Length(dataRegister) > 0 {
             ApplyToEachCA(CControlledCA(X), Zipped(data[idx], dataRegister));
             ApplyToEachCA(CControlledCA(X), Zipped(data[altIndex[idx]], altDataRegister));
         }
