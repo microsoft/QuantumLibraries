@@ -14,10 +14,9 @@ namespace Microsoft.Quantum.Arithmetic {
     /// Fixed-point number to which the constant will
     /// be added.
     operation AddConstantFxP(constant : Double, fp : FixedPoint) : Unit is Adj + Ctl {
-        let (px, xs) = fp!;
-        let n = Length(xs);
+        let n = Length(fp::Register);
         use ys = Qubit[n];
-        let tmpFp = FixedPoint(px, ys);
+        let tmpFp = FixedPoint(fp::IntegerBits, ys);
         ApplyWithCA(PrepareFxP(constant, _), AddFxP(_, fp), tmpFp);
     }
 
@@ -40,12 +39,9 @@ namespace Microsoft.Quantum.Arithmetic {
     /// to have the same point position counting from the least-significant
     /// bit, i.e., $n_i$ and $p_i$ must be equal.
     operation AddFxP(fp1 : FixedPoint, fp2 : FixedPoint) : Unit is Adj + Ctl {
-        let (px, xs) = fp1!;
-        let (py, ys) = fp2!;
-
         IdenticalPointPosFactFxP([fp1, fp2]);
 
-        AddI(LittleEndian(xs), LittleEndian(ys));
+        AddI(LittleEndian(fp1::Register), LittleEndian(fp2::Register));
     }
 
     /// # Summary
