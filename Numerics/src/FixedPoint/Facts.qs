@@ -13,8 +13,7 @@ namespace Microsoft.Quantum.Arithmetic {
     /// This assertion succeeds when all qubits are in state $\ket{0}$,
     /// representing that the register encodes the fixed-point number $0.0$.
     operation AssertAllZeroFxP(fp : FixedPoint) : Unit is Adj + Ctl {
-        let (p, xs) = fp!;
-        AssertAllZero(xs);
+        AssertAllZero(fp::Register);
     }
 
     /// # Summary
@@ -26,17 +25,16 @@ namespace Microsoft.Quantum.Arithmetic {
     /// Array of quantum fixed-point numbers that will be checked for
     /// compatibility (using assertions).
     function IdenticalFormatFactFxP(fixedPoints : FixedPoint[]) : Unit {
-        if (Length(fixedPoints) == 0) {
+        if IsEmpty(fixedPoints) {
             return ();
         }
         let (position, register) = fixedPoints[0]!;
         Fact(position > 0, "Point position must be greater than zero.");
         let n = Length(register);
         for fp in Most(fixedPoints) {
-            let (pos, reg) = fp!;
-            EqualityFactI(pos, position,
+            EqualityFactI(fp::IntegerBits, position,
                 "FixedPoint numbers must have identical binary point position.");
-            EqualityFactI(Length(reg), n,
+            EqualityFactI(Length(fp::Register), n,
                 "FixedPoint numbers must have identical number of qubits.");
         }
     }
@@ -52,15 +50,14 @@ namespace Microsoft.Quantum.Arithmetic {
     /// Array of quantum fixed-point numbers that will be checked for
     /// compatibility (using assertions).
     function IdenticalPointPosFactFxP(fixedPoints : FixedPoint[]) : Unit {
-        if (Length(fixedPoints) == 0) {
+        if IsEmpty(fixedPoints) {
             return ();
         }
         let (position, register) = fixedPoints[0]!;
         Fact(position > 0, "Point position must be greater than zero.");
         let n = Length(register);
         for fp in Most(fixedPoints) {
-            let (pos, reg) = fp!;
-            EqualityFactI(Length(reg) - pos, n - position,
+            EqualityFactI(Length(fp::Register) - fp::IntegerBits, n - position,
                 "FixedPoint numbers must have identical point alignment.");
         }
     }
