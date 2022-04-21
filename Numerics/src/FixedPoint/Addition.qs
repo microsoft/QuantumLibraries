@@ -53,7 +53,7 @@ namespace Microsoft.Quantum.Arithmetic {
     ///
     /// # Input
     /// ## fp
-    /// Fixed-point number to invert
+    /// Fixed-point number to invert.
     ///
     /// # Remarks
     /// Numerical inaccuracies may occur depending on the
@@ -71,9 +71,9 @@ namespace Microsoft.Quantum.Arithmetic {
     ///
     /// # Input
     /// ## subtrahend
-    /// The subtrahend of the subtraction
+    /// The subtrahend of the subtraction - the number to be subtracted.
     /// ## minuend
-    /// The minuend of the subtraction
+    /// The minuend of the subtraction - the number from which the other is subtracted.
     ///
     /// # Remarks
     /// Computes the difference by inverting `subtrahend` before and after adding
