@@ -77,12 +77,12 @@ namespace Microsoft.Quantum.Arithmetic {
     ///
     /// # Remarks
     /// Computes the difference by inverting `subtrahend` before and after adding
-    /// it to `minuend`.
+    /// it to `minuend`.  Notice that `minuend`, the first argument is updated.
     ///
     /// # See also
     /// - Microsoft.Quantum.Arithmetic.AddFxP
     /// - Microsoft.Quantum.Arithmetic.InvertFxP
-    operation SubtractFxP(subtrahend : FixedPoint, minuend : FixedPoint) : Unit is Adj + Ctl {
+    operation SubtractFxP(minuend : FixedPoint, subtrahend : FixedPoint) : Unit is Adj + Ctl {
         within {
             InvertFxP(subtrahend);
         } apply {
