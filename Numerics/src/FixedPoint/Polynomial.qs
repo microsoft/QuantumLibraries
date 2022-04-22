@@ -26,40 +26,30 @@ namespace Microsoft.Quantum.Arithmetic {
             IdenticalFormatFactFxP([fpx, result]);
             AssertAllZeroFxP(result);
             let degree = Length(coefficients) - 1;
-            let (p, q) = fpx!;
-            let n = Length(q);
-            if (degree == 0){
-                (Controlled PrepareFxP)(controls,
-                    (coefficients[0], result));
-            }
-            elif (degree > 0) {
+            let p = fpx::IntegerBits;
+            let n = Length(fpx::Register);
+            if degree == 0 {
+                Controlled PrepareFxP(controls, (coefficients[0], result));
+            } elif degree > 0 {
                 // initialize ancillary register to a_d
                 use qubits = Qubit[n * degree];
-                let firstIterate = FixedPoint(p,
-                    qubits[(degree-1)*n..degree*n-1]);
-                PrepareFxP(coefficients[degree], firstIterate);
-                for d in degree..(-1)..2 {
-                    let currentIterate = FixedPoint(p, qubits[(d-1)*n..d*n-1]);
-                    let nextIterate = FixedPoint(p, qubits[(d-2)*n..(d-1)*n-1]);
-                    // multiply by x and then add current coefficient
-                    MultiplyFxP(currentIterate, fpx, nextIterate);
-                    AddConstantFxP(coefficients[d-1], nextIterate);
+                within {
+                    let firstIterate = FixedPoint(p, qubits[(degree - 1) * n..degree * n - 1]);
+                    PrepareFxP(coefficients[degree], firstIterate);
+                    for d in degree..(-1)..2 {
+                        let currentIterate = FixedPoint(p, qubits[(d - 1) * n..d * n - 1]);
+                        let nextIterate = FixedPoint(p, qubits[(d - 2) * n..(d - 1) * n - 1]);
+                        // multiply by x and then add current coefficient
+                        MultiplyFxP(currentIterate, fpx, nextIterate);
+                        AddConstantFxP(coefficients[d-1], nextIterate);
+                    }
+                } apply {
+                    let finalIterate = FixedPoint(p, qubits[0..n-1]);
+                    // final multiplication into the result register
+                    Controlled MultiplyFxP(controls, (finalIterate, fpx, result));
+                    // add a_0 to complete polynomial evaluation and
+                    Controlled AddConstantFxP(controls, (coefficients[0], result));
                 }
-                let finalIterate = FixedPoint(p, qubits[0..n-1]);
-                // final multiplication into the result register
-                Controlled MultiplyFxP(controls, (finalIterate, fpx, result));
-                // add a_0 to complete polynomial evaluation and
-                Controlled AddConstantFxP(controls,
-                    (coefficients[0], result));
-                // uncompute intermediate results
-                for d in 2..degree {
-                    let currentIterate = FixedPoint(p, qubits[(d-1)*n..d*n-1]);
-                    let nextIterate = FixedPoint(p, qubits[(d-2)*n..(d-1)*n-1]);
-                    Adjoint AddConstantFxP(coefficients[d-1], nextIterate);
-                    Adjoint MultiplyFxP(currentIterate, fpx,
-                                            nextIterate);
-                }
-                PrepareFxP(coefficients[degree], firstIterate);
             }
         }
     }
@@ -86,21 +76,19 @@ namespace Microsoft.Quantum.Arithmetic {
             IdenticalFormatFactFxP([fpx, result]);
             AssertAllZeroFxP(result);
             let halfDegree = Length(coefficients) - 1;
-            let (p, q) = fpx!;
-            let n = Length(q);
+            let n = Length(fpx::Register);
 
-            if (halfDegree == 0){
-                (Controlled PrepareFxP)(controls,
-                    (coefficients[0], result));
-            }
-            elif (halfDegree > 0) {
+            if halfDegree == 0 {
+                Controlled PrepareFxP(controls, (coefficients[0], result));
+            } elif halfDegree > 0 {
                 // initialize auxiliary register to a_d
                 use xsSquared = Qubit[n];
-                let fpxSquared = FixedPoint(p, xsSquared);
-                ApplyWithCA(SquareFxP(fpx, _),
-                    Controlled EvaluatePolynomialFxP(controls,
-                        (coefficients, _, result)),
-                    fpxSquared);
+                let fpxSquared = FixedPoint(fpx::IntegerBits, xsSquared);
+                within {
+                    SquareFxP(fpx, fpxSquared);
+                } apply {
+                    Controlled EvaluatePolynomialFxP(controls, (coefficients, fpxSquared, result));
+                }
             }
         }
     }
@@ -127,15 +115,15 @@ namespace Microsoft.Quantum.Arithmetic {
             IdenticalFormatFactFxP([fpx, result]);
             AssertAllZeroFxP(result);
             let halfDegree = Length(coefficients) - 1;
-            let (p, q) = fpx!;
-            let n = Length(q);
+            let n = Length(fpx::Register);
             if halfDegree >= 0 {
                 use tmpResult = Qubit[n];
-                let tmpResultFp = FixedPoint(p, tmpResult);
-                ApplyWithCA(EvaluateEvenPolynomialFxP(coefficients, _, _),
-                        Controlled MultiplyFxP(controls,
-                                                (_, _, result)),
-                        (fpx, tmpResultFp));
+                let tmpResultFp = FixedPoint(fpx::IntegerBits, tmpResult);
+                within {
+                    EvaluateEvenPolynomialFxP(coefficients, fpx, tmpResultFp);
+                } apply {
+                    Controlled MultiplyFxP(controls, (fpx, tmpResultFp, result));
+                }
             }
         }
     }
