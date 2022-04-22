@@ -17,8 +17,7 @@ namespace Microsoft.Quantum.Arithmetic {
     /// Fixed-point number (of type FixedPoint) to initialize.
     operation PrepareFxP(constant : Double, fp : FixedPoint)
     : Unit is Adj + Ctl {
-        let (integerBits, register) = fp!;
-        let bits = FixedPointAsBoolArray(integerBits, Length(register) - integerBits, constant);
-        ApplyPauliFromBitString(PauliX, true, bits, register);
+        let bits = FixedPointAsBoolArray(fp::IntegerBits, Length(fp::Register) - fp::IntegerBits, constant);
+        ApplyPauliFromBitString(PauliX, true, bits, fp::Register);
     }
 }
