@@ -10,11 +10,11 @@ namespace Microsoft.Quantum.Convert {
     ///
     /// # Input
     /// ## integerBits
-    /// Assumed number of integerBits (including the sign big)
+    /// Assumed number of integer bits (including the sign bit).
     /// ## fractionalBits
-    /// Assumed number of fractionalBits
+    /// Assumed number of fractional bits.
     /// ## value
-    /// Value to be approximated
+    /// Value to be approximated.
     function FixedPointAsBoolArray(integerBits : Int, fractionalBits : Int, value : Double) : Bool[] {
         let numBits = integerBits + fractionalBits;
         let sign = value < 0.0;
@@ -44,9 +44,9 @@ namespace Microsoft.Quantum.Convert {
     ///
     /// # Input
     /// ## integerBits
-    /// Assumed number of integerBits (including the sign big)
+    /// Assumed number of integer bits (including the sign bit).
     /// ## bits
-    /// Bit-string representation of approximated number
+    /// Bit-string representation of approximated number.
     function BoolArrayAsFixedPoint(integerBits : Int, bits : Bool[]) : Double {
         let numBits = Length(bits);
         let intPart = (Tail(bits) ? -(1 <<< (numBits - 1)) | 0) + BoolArrayAsInt(Most(bits));
@@ -54,15 +54,15 @@ namespace Microsoft.Quantum.Convert {
     }
 
     /// # Summary
-    /// Discretizes a double value as a double and returns its approximated representation as a double.
+    /// Discretizes a double value as a fixed-point approximation and returns its value as a double.
     ///
     /// # Input
     /// ## integerBits
-    /// Assumed number of integerBits (including the sign big)
+    /// Assumed number of integer bits (including the sign bit).
     /// ## fractionalBits
-    /// Assumed number of fractionalBits
+    /// Assumed number of fractional bits.
     /// ## value
-    /// Value to be approximated
+    /// Value to be approximated.
     function DoubleAsFixedPoint(integerBits : Int, fractionalBits : Int, value : Double) : Double {
         return BoolArrayAsFixedPoint(integerBits, FixedPointAsBoolArray(integerBits, fractionalBits, value));
     }
