@@ -31,7 +31,7 @@ Reviewers (in order by username): .
 * @tcNickolas, *approve*
 > Please add a bullet point including your alias, your review result (*approve*, *reject*, *comment*), and a comment (optional when result is *approve*).  Alternatively, add a line to the PR discussion incl. a reference to this issue.
 
-**Consensus**: 
+**Consensus**: Approved (incl. implicit approval from proposal author)
 
 ---
 
@@ -43,7 +43,7 @@ Reviewers (in order by username): .
 * @tcNickoas, *approve* - I had a comment about the order of arguments for `SubtractFxP`, but I see you've already incorporated it in the proposal
 > Please add a bullet point including your alias, your review result (*approve*, *reject*, *comment*), and a comment (optional when result is *approve*).  Alternatively, add a line to the PR discussion incl. a reference to this issue.
 
-**Consensus**: 
+**Consensus**: Approved (incl. implicit approval from proposal author)
 
 ---
 
@@ -55,5 +55,5 @@ Reviewers (in order by username): .
 * @tcNickolas, *approve*, left a comment
 > Please add a bullet point including your alias, your review result (*approve*, *reject*, *comment*), and a comment (optional when result is *approve*).  Alternatively, add a line to the PR discussion incl. a reference to this issue.
 
-**Consensus**: 
+**Consensus**: Approved (incl. implicit approval from proposal author)
 
