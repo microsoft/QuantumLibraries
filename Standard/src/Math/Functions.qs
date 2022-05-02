@@ -751,7 +751,7 @@ namespace Microsoft.Quantum.Math {
     ///
     /// # Description
     /// Returns the factorial as `Double`, given an input of $n$ as a `Double`.
-    /// The domain of inputs for this function is `AbsD(n) < 170.0`.
+    /// The domain of inputs for this function is `n < 170`.
     ///
     /// # Remarks
     /// For $n \ge 10$, this function uses the Ramanujan approximation with a
@@ -759,7 +759,7 @@ namespace Microsoft.Quantum.Math {
     ///
     /// # Input
     /// ## n
-    /// The number to take the approximate factorial of.
+    /// The number to take the approximate factorial of. Must not be negative.
     ///
     /// # Output
     /// The approximate factorial of `n`.
