@@ -51,6 +51,18 @@ namespace Microsoft.Quantum.Tests {
         NearEqualityFactD(PrepareAsSignedAndMeasure(0b1111, qsFxP), -0.25);
     }
 
+    @Test("QuantumSimulator")
+    operation FixedPointConversionTest() : Unit {
+        AllEqualityFactB(FixedPointAsBoolArray(2, 2, 1.25), [true, false, true, false], "FixedPointAsBoolArray failed");
+        AllEqualityFactB(FixedPointAsBoolArray(2, 2, 0.75), [true, true, false, false], "FixedPointAsBoolArray failed");
+
+        NearEqualityFactD(BoolArrayAsFixedPoint(2, [true, false, true, false]), 1.25);
+        NearEqualityFactD(BoolArrayAsFixedPoint(2, [true, true, false, false]), 0.75);
+
+        NearEqualityFactD(DoubleAsFixedPoint(2, 2, 1.3), 1.25);
+        NearEqualityFactD(DoubleAsFixedPoint(2, 2, 0.8), 0.75);
+    }
+
     @Test("ToffoliSimulator")
     operation CompareGreaterThanFxPTest() : Unit {
         for a in [1.2, 3.9, 3.14159, -0.6, -4.5, -3.1931, 0.0] {

@@ -15,6 +15,13 @@ namespace Microsoft.Quantum.Convert {
     /// Assumed number of fractional bits.
     /// ## value
     /// Value to be approximated.
+    ///
+    /// # Example
+    /// Note that the first element in the Boolean array is the least-significant bit.
+    /// ```qsharp
+    /// let bits = FixedPointAsBoolArray(2, 2, 1.25); // bits = [true, false, true, false]
+    /// let bits = FixedPointAsBoolArray(2, 2, 0.75); // bits = [true, true, false, false]
+    /// ```
     function FixedPointAsBoolArray(integerBits : Int, fractionalBits : Int, value : Double) : Bool[] {
         let numBits = integerBits + fractionalBits;
         let sign = value < 0.0;
@@ -47,6 +54,13 @@ namespace Microsoft.Quantum.Convert {
     /// Assumed number of integer bits (including the sign bit).
     /// ## bits
     /// Bit-string representation of approximated number.
+    ///
+    /// # Example
+    /// Note that the first element in the Boolean array is the least-significant bit.
+    /// ```qsharp
+    /// let value = BoolArrayAsFixedPoint(2, [true, false, true, false]); // value = 1.25
+    /// let value = BoolArrayAsFixedPoint(2, [true, true, false, false]); // value = 0.75
+    /// ```
     function BoolArrayAsFixedPoint(integerBits : Int, bits : Bool[]) : Double {
         let numBits = Length(bits);
         let intPart = (Tail(bits) ? -(1 <<< (numBits - 1)) | 0) + BoolArrayAsInt(Most(bits));
@@ -63,6 +77,12 @@ namespace Microsoft.Quantum.Convert {
     /// Assumed number of fractional bits.
     /// ## value
     /// Value to be approximated.
+    ///
+    /// # Example
+    /// ```qsharp
+    /// let value = DoubleAsFixedPoint(2, 2, 1.3); // value = 1.25
+    /// let value = DoubleAsFixedPoint(2, 2, 0.8); // value = 0.75
+    /// ```
     function DoubleAsFixedPoint(integerBits : Int, fractionalBits : Int, value : Double) : Double {
         return BoolArrayAsFixedPoint(integerBits, FixedPointAsBoolArray(integerBits, fractionalBits, value));
     }
