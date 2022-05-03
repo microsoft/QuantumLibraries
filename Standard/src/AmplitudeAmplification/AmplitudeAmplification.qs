@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft Corporation. All rights reserved.
+// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
 namespace Microsoft.Quantum.AmplitudeAmplification {
@@ -129,16 +129,16 @@ namespace Microsoft.Quantum.AmplitudeAmplification {
     /// It is assumed that the target state is marked by $\ket{1}\_f$.
     /// It is assumed that
     /// \begin{align}
-    /// O\ket{\text{start}}\_{fa}\ket{\psi}\_s= \lambda\ket{1}\_f\ket{\text{anything}}\_a\ket{\text{target}}\_s U \ket{\psi}\_s + \sqrt{1-|\lambda|^2}\ket{0}\_f\cdots,
+    /// O\ket{\text{start}}\_{fa}\ket{\psi}\_s= \lambda\ket{1}\_f\ket{\text{anything}}\_a\ket{\text{target}}\_s + \sqrt{1-|\lambda|^2}\ket{0}\_f\cdots,
     /// \end{align}
-    /// for some unitary $U$.
+    /// where $\ket{\text{target}}\_s = U \ket{\psi}\_s$ for some unitary $U$.
     function ObliviousAmplitudeAmplificationFromStatePreparation(
         phases : ReflectionPhases,
         startStateOracle : DeterministicStateOracle,
         signalOracle : ObliviousOracle,
         idxFlagQubit : Int
     )
-    : ((Qubit[], Qubit[]) => Unit is Adj + Ctl) {
+    : (Qubit[], Qubit[]) => Unit is Adj + Ctl {
         let startStateReflection = ReflectionStart();
         let targetStateReflection = TargetStateReflectionOracle(idxFlagQubit);
         let obliviousSignalOracle = ObliviousOracleFromDeterministicStateOracle(
@@ -205,7 +205,7 @@ namespace Microsoft.Quantum.AmplitudeAmplification {
         startStateReflection : ReflectionOracle,
         targetStateReflection : ReflectionOracle
     )
-    : (Qubit[] => Unit is Adj + Ctl) {
+    : Qubit[] => Unit is Adj + Ctl {
         // Pass empty qubit array using fact that NoOp does nothing.
         let qubitEmpty = [];
         let signalOracle = ObliviousOracle(NoOp);
@@ -247,7 +247,7 @@ namespace Microsoft.Quantum.AmplitudeAmplification {
         stateOracle : StateOracle,
         idxFlagQubit : Int
     )
-    : (Qubit[] => Unit is Adj + Ctl) {
+    : Qubit[] => Unit is Adj + Ctl {
         let systemRegister = [];
         let signalOracle = ObliviousOracle(NoOp);
         let startStateOracle = DeterministicStateOracleFromStateOracle(idxFlagQubit, stateOracle);
@@ -290,7 +290,7 @@ namespace Microsoft.Quantum.AmplitudeAmplification {
         stateOracle : StateOracle,
         idxFlagQubit : Int
     )
-    : (Qubit[] => Unit is Adj + Ctl) {
+    : Qubit[] => Unit is Adj + Ctl {
         let phases = StandardReflectionPhases(nIterations);
         return AmplitudeAmplificationFromStatePreparation(phases, stateOracle, idxFlagQubit);
     }
@@ -317,7 +317,7 @@ namespace Microsoft.Quantum.AmplitudeAmplification {
         mutable exponentMax = 0;
         mutable exponentCurrent = 0;
 
-        //Complexity: Let \theta = \mathcal{O}(\sqrt{lambda})
+        // Complexity: Let \theta = \mathcal{O}(\sqrt{lambda})
         // Number of Measurements = O( Log^2(1/\theta) )
         // Number of Queries = O(1/\theta)
         use flagQubit = Qubit();
@@ -325,7 +325,7 @@ namespace Microsoft.Quantum.AmplitudeAmplification {
         let idxFlagQubit = 0;
 
         repeat {
-            if 2 ^ exponentMax > queriesMax {
+            if 2^exponentMax > queriesMax {
                 fail $"Target state not found. Maximum number of queries exceeded.";
             }
 
