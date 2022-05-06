@@ -53,11 +53,12 @@ namespace Microsoft.Quantum.Tests {
 
     @Test("QuantumSimulator")
     operation FixedPointConversionTest() : Unit {
-        AllEqualityFactB(FixedPointAsBoolArray(2, 2, 1.25), [true, false, true, false], "FixedPointAsBoolArray failed");
-        AllEqualityFactB(FixedPointAsBoolArray(2, 2, 0.75), [true, true, false, false], "FixedPointAsBoolArray failed");
+        AllEqualityFactB(FixedPointAsBoolArray(2, 2,  1.25), [true, false, true, false], "FixedPointAsBoolArray failed");
+        AllEqualityFactB(FixedPointAsBoolArray(2, 2,  1.3), [true, false, true, false], "FixedPointAsBoolArray failed");
+        AllEqualityFactB(FixedPointAsBoolArray(2, 2, -1.75), [true, false, false, true], "FixedPointAsBoolArray failed");
 
         NearEqualityFactD(BoolArrayAsFixedPoint(2, [true, false, true, false]), 1.25);
-        NearEqualityFactD(BoolArrayAsFixedPoint(2, [true, true, false, false]), 0.75);
+        NearEqualityFactD(BoolArrayAsFixedPoint(2, [true, false, false, true]), -1.75);
 
         NearEqualityFactD(DoubleAsFixedPoint(2, 2, 1.3), 1.25);
         NearEqualityFactD(DoubleAsFixedPoint(2, 2, 0.8), 0.75);

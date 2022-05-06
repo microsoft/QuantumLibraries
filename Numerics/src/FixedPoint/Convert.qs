@@ -19,8 +19,9 @@ namespace Microsoft.Quantum.Convert {
     /// # Example
     /// Note that the first element in the Boolean array is the least-significant bit.
     /// ```qsharp
-    /// let bits = FixedPointAsBoolArray(2, 2, 1.25); // bits = [true, false, true, false]
-    /// let bits = FixedPointAsBoolArray(2, 2, 0.75); // bits = [true, true, false, false]
+    /// let bits = FixedPointAsBoolArray(2, 2,  1.25); // bits = [true, false, true, false]
+    /// let bits = FixedPointAsBoolArray(2, 2,  1.3);  // bits = [true, false, true, false], approximated
+    /// let bits = FixedPointAsBoolArray(2, 2, -1.75); // bits = [true, false, false, true], two's complement
     /// ```
     function FixedPointAsBoolArray(integerBits : Int, fractionalBits : Int, value : Double) : Bool[] {
         let numBits = integerBits + fractionalBits;
@@ -58,8 +59,8 @@ namespace Microsoft.Quantum.Convert {
     /// # Example
     /// Note that the first element in the Boolean array is the least-significant bit.
     /// ```qsharp
-    /// let value = BoolArrayAsFixedPoint(2, [true, false, true, false]); // value = 1.25
-    /// let value = BoolArrayAsFixedPoint(2, [true, true, false, false]); // value = 0.75
+    /// let value = BoolArrayAsFixedPoint(2, [true, false, true, false]); // value =  1.25
+    /// let value = BoolArrayAsFixedPoint(2, [true, false, false, true]); // value = -1.75
     /// ```
     function BoolArrayAsFixedPoint(integerBits : Int, bits : Bool[]) : Double {
         let numBits = Length(bits);
