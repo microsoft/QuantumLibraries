@@ -20,7 +20,7 @@ Reviewers (in order by username): cgranade
 
 > Please add a bullet point including your alias, your review result (*approve*, *reject*, *comment*), and a comment (optional when result is *approve*).  Alternatively, add a line to the PR discussion incl. a reference to this issue.
 
-**Consensus**:
+**Consensus**: Approved with suggestions
 
 ---
 
@@ -32,7 +32,7 @@ Reviewers (in order by username): cgranade
 - **Approved.** I think this is a pretty straightforward one, and works great for replacing the old `MultiM` with something more maintainable and easier to use.
 > Please add a bullet point including your alias, your review result (*approve*, *reject*, *comment*), and a comment (optional when result is *approve*).  Alternatively, add a line to the PR discussion incl. a reference to this issue.
 
-**Consensus**:
+**Consensus**: Approved
 
 ---
 
@@ -49,4 +49,4 @@ Reviewers (in order by username): cgranade
 
 > Please add a bullet point including your alias, your review result (*approve*, *reject*, *comment*), and a comment (optional when result is *approve*).  Alternatively, add a line to the PR discussion incl. a reference to this issue.
 
-**Consensus**:
+**Consensus**: Re-schedule after addressing comments
