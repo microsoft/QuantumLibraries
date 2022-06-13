@@ -462,6 +462,8 @@ namespace Microsoft.Quantum.Arrays {
     /// Swapped(1, 3, [0, 1, 2, 3, 4]);
     /// ```
     function Swapped<'T>(firstIndex : Int, secondIndex : Int, arr : 'T[]) : 'T[] {
+        Fact(firstIndex >= 0 and firstIndex < Length(arr), "First index is out of bounds");
+        Fact(secondIndex >= 0 and secondIndex < Length(arr), "Second index is out of bounds");
         return arr
             w/ firstIndex <- arr[secondIndex]
             w/ secondIndex <- arr[firstIndex];
