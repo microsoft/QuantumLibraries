@@ -14,11 +14,11 @@ namespace Microsoft.Quantum.Tests
         {
             foreach (var (numControls, expectedTCount, expectedWidth) in new [] {
                     (1, 0, 6),
-                    (2, 28, 8),
-                    (3, 84, 10),
-                    (4, 196, 12),
-                    (5, 420, 14),
-                    (6, 868, 16)
+                    (2, 8, 8),
+                    (3, 24, 10),
+                    (4, 56, 12),
+                    (5, 120, 14),
+                    (6, 248, 16)
                 }) {
                 var estimator = new ResourcesEstimator();
                 EstimateMultiplexOperationsCosts.Run(estimator, numControls, 1 << numControls).Wait();

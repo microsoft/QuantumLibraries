@@ -3,8 +3,10 @@
 
 namespace Microsoft.Quantum.Canon {
     open Microsoft.Quantum.Arithmetic;
-    open Microsoft.Quantum.Intrinsic;
     open Microsoft.Quantum.Arrays;
+    open Microsoft.Quantum.Convert;
+    open Microsoft.Quantum.Diagnostics;
+    open Microsoft.Quantum.Intrinsic;
     open Microsoft.Quantum.Math;
 
     /// # Summary
@@ -389,88 +391,95 @@ namespace Microsoft.Quantum.Canon {
     /// ## target
     /// Generic qubit register that $V_j$ acts on.
     ///
-    /// # Remarks
-    /// `coefficients` will be padded with identity elements if
-    /// fewer than $2^n$ are specified. This implementation uses
-    /// $n - 1$ auxiliary qubits.
-    ///
     /// # References
-    /// - Toward the first quantum simulation with quantum speedup
-    ///   Andrew M. Childs, Dmitri Maslov, Yunseong Nam, Neil J. Ross, Yuan Su
-    ///   https://arxiv.org/abs/1711.10980
+    /// - Encoding Electronic Spectra in Quantum Circuits with Linear T Complexity
+    ///   Ryan Babbush, Craig Gidney, Dominic W. Berry, Nathan Wiebe, Jarrod McClean, Alexandru Paler, Austin Fowler, Hartmut Neven
+    ///   https://arxiv.org/abs/1805.03662
     operation MultiplexOperations<'T> (unitaries : ('T => Unit is Adj + Ctl)[], index : LittleEndian, target : 'T)
     : Unit is Adj + Ctl {
-        if (Length(index!) == 0) {
-            fail $"MultiplexOperations failed. Number of index qubits must be greater than 0.";
+        body (...) {
+            let (N, n) = DimensionsForMultiplexer(Length(unitaries), index);
+
+            if N == 1 { // base case
+                Head(unitaries)(target);
+            } else {
+                let (most, tail) = MostAndTail(index![...n - 1]);
+                let parts = Partitioned([2^(n - 1)], unitaries);
+
+                within {
+                    X(tail);
+                } apply {
+                    Controlled MultiplexOperations([tail], (parts[0], LittleEndian(most), target)); 
+                }
+
+                Controlled MultiplexOperations([tail], (parts[1], LittleEndian(most), target)); 
+            }
         }
 
-        if (Length(unitaries) > 0) {
-            let auxillaryRegister = [];
-            MultiplexOperationsWithAuxRegister(unitaries, auxillaryRegister, index, target);
+        controlled (ctls, ...) {
+            let nCtls = Length(ctls);
+
+            if nCtls == 0 {
+                MultiplexOperations(unitaries, index, target);
+            } elif nCtls == 1 {
+                let (N, n) = DimensionsForMultiplexer(Length(unitaries), index);
+
+                let ctl = Head(ctls);
+
+                if N == 1 { // base case
+                    Controlled (Head(unitaries))(ctls, target);
+                } else {
+                    use helper = Qubit();
+
+                    let (most, tail) = MostAndTail(index![...n - 1]);
+                    let parts = Partitioned([2^(n - 1)], unitaries);
+
+                    within {
+                        X(tail);
+                    } apply {
+                        ApplyAnd(ctl, tail, helper);
+                    }
+
+                    Controlled MultiplexOperations([helper], (parts[0], LittleEndian(most), target));
+
+                    CNOT(ctl, helper);
+
+                    Controlled MultiplexOperations([helper], (parts[1], LittleEndian(most), target));
+
+                    Adjoint ApplyAnd(ctl, tail, helper);
+                }
+            } else {
+                use helper = Qubit();
+                within {
+                    Controlled X(ctls, helper);
+                } apply {
+                    Controlled MultiplexOperations([helper], (unitaries, index, target));
+                }
+            }
         }
     }
 
     /// # Summary
-    /// Implementation step of MultiplexOperations.
-    /// # See Also
-    /// - Microsoft.Quantum.Canon.MultiplexOperations
-    internal operation MultiplexOperationsWithAuxRegister<'T>(
-        unitaries : ('T => Unit is Adj + Ctl)[],
-        auxillaryRegister : Qubit[],
-        index : LittleEndian,
-        target : 'T
-    )
-    : Unit is Adj + Ctl {
-        body (...) {
-            let nIndex = Length(index!);
-            let nStates = 2 ^ nIndex;
-            let nUnitaries = Length(unitaries);
-            let nUnitariesRight = MinI(nUnitaries, nStates / 2);
-            let nUnitariesLeft = MinI(nUnitaries, nStates);
-            let rightUnitaries = unitaries[0 .. nUnitariesRight - 1];
-            let leftUnitaries = unitaries[nUnitariesRight .. nUnitariesLeft - 1];
-            let newControls = LittleEndian((index!)[0 .. nIndex - 2]);
+    /// Validates and adjusts dimensions for address register
+    ///
+    /// # Description
+    /// Given $N$ unitaries in `numUnitaries` and an address register of length $n'$,
+    /// this function first checks whether $N \neq 0$ and $\lceil\log_2 N\rceil = n \le n'$,
+    /// and then returns the tuple $(N, n)$.
+    ///
+    /// # Input
+    /// ## numUnitaries
+    /// The number of unitaries to multiplex.
+    /// ## address
+    /// The address register.
+    internal function DimensionsForMultiplexer(numUnitaries : Int, address : LittleEndian) : (Int, Int) {
+        let N = numUnitaries;
+        Fact(N > 0, "data cannot be empty");
 
-            if (nUnitaries > 0) {
-                if (Length(auxillaryRegister) == 1 and nIndex == 0) {
-                    // Termination case
-                    Controlled unitaries[0](auxillaryRegister, target);
-                } elif (Length(auxillaryRegister) == 0 and nIndex >= 1) {
-                    // Start case
-                    let newAuxQubit = Tail(index!);
+        let n = Ceiling(Lg(IntAsDouble(N)));
+        Fact(Length(address!) >= n, $"address register is too small, requires at least {n} qubits");
 
-                    if (nUnitariesLeft > 0) {
-                        MultiplexOperationsWithAuxRegister(leftUnitaries, [newAuxQubit], newControls, target);
-                    }
-
-                    within {
-                        X(newAuxQubit);
-                    } apply {
-                        MultiplexOperationsWithAuxRegister(rightUnitaries, [newAuxQubit], newControls, target);
-                    }
-                } else {
-                    // Recursion that reduces nIndex by 1 & sets Length(auxillaryRegister) to 1.
-                    use newAuxQubit = Qubit();
-                    within {
-                        Controlled X(auxillaryRegister + [(index!)[Length(index!) - 1]], newAuxQubit);
-                    } apply {
-                        if (nUnitariesLeft > 0) {
-                            MultiplexOperationsWithAuxRegister(leftUnitaries, [newAuxQubit], newControls, target);
-                        }
-
-                        within {
-                            Controlled X(auxillaryRegister, newAuxQubit);
-                        } apply {
-                            MultiplexOperationsWithAuxRegister(rightUnitaries, [newAuxQubit], newControls, target);
-                        }
-                    }
-                }
-            }
-        }
-
-        controlled (controlRegister, ...) {
-            MultiplexOperationsWithAuxRegister(unitaries, controlRegister, index, target);
-        }
+        return (N, n);
     }
 
 }
