@@ -94,16 +94,16 @@ namespace Microsoft.Quantum.Canon {
     /// - Microsoft.Quantum.Canon.MultiplexPauli
     operation ApproximatelyMultiplexPauli(tolerance : Double, coefficients : Double[], pauli : Pauli, control : LittleEndian, target : Qubit)
     : Unit is Adj + Ctl {
-        if (pauli == PauliZ) {
+        if pauli == PauliZ {
             let op = ApproximatelyMultiplexZ(tolerance, coefficients, control, _);
             op(target);
-        } elif (pauli == PauliX) {
+        } elif pauli == PauliX {
             let op = ApproximatelyMultiplexPauli(tolerance, coefficients, PauliZ, control, _);
             ApplyWithCA(H, op, target);
-        } elif (pauli == PauliY) {
+        } elif pauli == PauliY {
             let op = ApproximatelyMultiplexPauli(tolerance, coefficients, PauliX, control, _);
             ApplyWithCA(Adjoint S, op, target);
-        } elif (pauli == PauliI) {
+        } elif pauli == PauliI {
             ApproximatelyApplyDiagonalUnitary(tolerance, coefficients, control);
         } else {
             fail $"MultiplexPauli failed. Invalid pauli {pauli}.";
@@ -157,7 +157,7 @@ namespace Microsoft.Quantum.Canon {
         // NB: We don't currently use Any / Mapped for this, as we want to be
         //     able to short-circuit.
         for coefficient in coefficients {
-            if (AbsD(coefficient) >= tolerance) {
+            if AbsD(coefficient) >= tolerance {
                 return true;
             }
         }
@@ -166,7 +166,7 @@ namespace Microsoft.Quantum.Canon {
 
     internal function AnyOutsideToleranceCP(tolerance : Double, coefficients : ComplexPolar[]) : Bool {
         for coefficient in coefficients {
-            if (AbsComplexPolar(coefficient) > tolerance) {
+            if AbsComplexPolar(coefficient) > tolerance {
                 return true;
             }
         }
@@ -220,20 +220,20 @@ namespace Microsoft.Quantum.Canon {
             // pad coefficients length at tail to a power of 2.
             let coefficientsPadded = Padded(-2 ^ Length(control!), 0.0, coefficients);
 
-            if (Length(coefficientsPadded) == 1) {
+            if Length(coefficientsPadded) == 1 {
                 // Termination case
-                if (AbsD(coefficientsPadded[0]) > tolerance) {
+                if AbsD(coefficientsPadded[0]) > tolerance {
                     Exp([PauliZ], coefficientsPadded[0], [target]);
                 }
             } else {
                 // Compute new coefficients.
                 let (coefficients0, coefficients1) = MultiplexZCoefficients(coefficientsPadded);
-                ApproximatelyMultiplexZ(tolerance,coefficients0, LittleEndian((control!)[0 .. Length(control!) - 2]), target);
-                if (AnyOutsideToleranceD(tolerance, coefficients1)) {
+                ApproximatelyMultiplexZ(tolerance, coefficients0, LittleEndian(Most(control!)), target);
+                if AnyOutsideToleranceD(tolerance, coefficients1) {
                     within {
-                        CNOT((control!)[Length(control!) - 1], target);
+                        CNOT(Tail(control!), target);
                     } apply {
-                        ApproximatelyMultiplexZ(tolerance,coefficients1, LittleEndian((control!)[0 .. Length(control!) - 2]), target);
+                        ApproximatelyMultiplexZ(tolerance,coefficients1, LittleEndian(Most(control!)), target);
                     }
                 }
             }
@@ -244,7 +244,7 @@ namespace Microsoft.Quantum.Canon {
             let coefficientsPadded = Padded(2 ^ (Length(control!) + 1), 0.0, Padded(-2 ^ Length(control!), 0.0, coefficients));
             let (coefficients0, coefficients1) = MultiplexZCoefficients(coefficientsPadded);
             ApproximatelyMultiplexZ(tolerance,coefficients0, control, target);
-            if (AnyOutsideToleranceD(tolerance,coefficients1)) {
+            if AnyOutsideToleranceD(tolerance,coefficients1) {
                 within {
                     Controlled X(controlRegister, target);
                 } apply {
@@ -333,7 +333,7 @@ namespace Microsoft.Quantum.Canon {
     /// - Microsoft.Quantum.Canon.ApplyDiagonalUnitary
     operation ApproximatelyApplyDiagonalUnitary(tolerance : Double, coefficients : Double[], qubits : LittleEndian)
     : Unit is Adj + Ctl {
-        if (IsEmpty(qubits!)) {
+        if IsEmpty(qubits!) {
             fail "operation ApplyDiagonalUnitary -- Number of qubits must be greater than 0.";
         }
 
@@ -342,11 +342,11 @@ namespace Microsoft.Quantum.Canon {
 
         // Compute new coefficients.
         let (coefficients0, coefficients1) = MultiplexZCoefficients(coefficientsPadded);
-        ApproximatelyMultiplexZ(tolerance,coefficients1, LittleEndian((qubits!)[0 .. Length(qubits!) - 2]), (qubits!)[Length(qubits!) - 1]);
+        ApproximatelyMultiplexZ(tolerance,coefficients1, LittleEndian(Most(qubits!)), Tail(qubits!));
 
-        if (Length(coefficientsPadded) == 2) {
+        if Length(coefficientsPadded) == 2 {
             // Termination case
-            if (AbsD(coefficients0[0]) > tolerance) {
+            if AbsD(coefficients0[0]) > tolerance {
                 Exp([PauliI], 1.0 * coefficients0[0], qubits!);
             }
         } else {
@@ -395,7 +395,7 @@ namespace Microsoft.Quantum.Canon {
     /// - Encoding Electronic Spectra in Quantum Circuits with Linear T Complexity
     ///   Ryan Babbush, Craig Gidney, Dominic W. Berry, Nathan Wiebe, Jarrod McClean, Alexandru Paler, Austin Fowler, Hartmut Neven
     ///   https://arxiv.org/abs/1805.03662
-    operation MultiplexOperations<'T> (unitaries : ('T => Unit is Adj + Ctl)[], index : LittleEndian, target : 'T)
+    operation MultiplexOperations<'T>(unitaries : ('T => Unit is Adj + Ctl)[], index : LittleEndian, target : 'T)
     : Unit is Adj + Ctl {
         body (...) {
             let (N, n) = DimensionsForMultiplexer(Length(unitaries), index);
