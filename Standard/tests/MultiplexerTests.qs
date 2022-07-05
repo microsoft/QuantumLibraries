@@ -497,6 +497,17 @@ namespace Microsoft.Quantum.Tests {
         }
     }
 
+    internal operation EstimateMultiplexOperationsCosts(numControls : Int, numData : Int) : Unit {
+        Diag.Fact(numData <= 2^numControls, "Too few address bits");
+
+        use address = Qubit[numControls];
+        use target = Qubit[5];
+
+        let unitaries = [ApplyPauliFromBitString(PauliX, true, [true, size = 5], _), size = numData];
+
+        MultiplexOperations(unitaries, LittleEndian(address), target);
+    }
+
 }
 
 
