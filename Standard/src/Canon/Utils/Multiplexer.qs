@@ -482,4 +482,24 @@ namespace Microsoft.Quantum.Canon {
         return (N, n);
     }
 
+    /// # Summary
+    /// Performs a table lookup operation
+    /// 
+    /// # Description
+    /// A table lookup uses an address to return classical data from quantum registers
+    /// See more details on table lookup in Craig Gidney's paper https://arxiv.org/abs/1905.07682
+    ///
+    /// # Input
+    /// ## data
+    /// The classical bit data that represents the table
+    /// ## address
+    /// The address used to lookup from the table
+    /// ## target
+    /// Qubits in which the result of the lookup will be stored
+    operation TableLookup(data : Bool[][], address : LittleEndian, target : Qubit[]) : Unit is Adj + Ctl {
+        let ApplyXFromBitString = ApplyPauliFromBitString(PauliX, true, _, _); // Applies X conditionally based on bitstring
+        let unitaries = Mapped(bitstring -> ApplyXFromBitString(bitstring, _), data); // Create unitaries based on data
+        MultiplexOperations(unitaries, address, target); // Multiplex over address onto target
+    }
+
 }
