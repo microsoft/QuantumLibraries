@@ -1,6 +1,6 @@
 # Q# API Design Discussions / June 2022
 
-Reviewers (in order by username):
+Reviewers (in order by username): @tcNickolas
 
 ## Agenda
 
@@ -15,6 +15,7 @@ Reviewers (in order by username):
 **Proposal**: https://github.com/microsoft/QuantumLibraries/issues/593
 
 **Reviews**:
+* @tcNickolas, *approve*, left a comment
 > Please add a bullet point including your alias, your review result (*approve*, *reject*, *comment*), and a comment (optional when result is *approve*).  Alternatively, add a line to the PR discussion incl. a reference to this issue.
 
 **Consensus**:
@@ -26,6 +27,7 @@ Reviewers (in order by username):
 **Proposal**: https://github.com/microsoft/QuantumLibraries/issues/594
 
 **Reviews**:
+* @tcNickolas, *approve*, left a comment
 > Please add a bullet point including your alias, your review result (*approve*, *reject*, *comment*), and a comment (optional when result is *approve*).  Alternatively, add a line to the PR discussion incl. a reference to this issue.
 
 **Consensus**:
@@ -37,6 +39,7 @@ Reviewers (in order by username):
 **Proposal**: https://github.com/microsoft/QuantumLibraries/issues/595
 
 **Reviews**:
+* @tcNickolas, *approve*, left a comment
 > Please add a bullet point including your alias, your review result (*approve*, *reject*, *comment*), and a comment (optional when result is *approve*).  Alternatively, add a line to the PR discussion incl. a reference to this issue.
 
 **Consensus**:
