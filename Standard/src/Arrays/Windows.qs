@@ -81,20 +81,15 @@ namespace Microsoft.Quantum.Arrays {
     /// ## windowLen
     /// The size of each window
     /// ## op
-    /// An operation with three arguments, one arbitrary, controls, and target. When applied it will be supplied with a windowed component of the `qubits` parameter, the `target` qubits (constant) and an arbitary parameter stemming from the `argumentTransform` mapping supplied.
-    /// ## argumentTransform
-    /// Transforms an integer into the arbitary argument for op. This function will be provide with the indices of the windows. This means the function need to work correctly for $[0, n[$, where $n$ is the number of windows.
+    /// An operation with three arguments, one index, controls, and target. When applied it will be supplied with a windowed component of the `qubits` parameter, the `target` qubits (constant) and an index of the current window
     /// ## qubits
     /// The qubits the operation windows over
     /// ## target
-    /// The targer provided to each windowed operation
-    /// # Type Parameters
-    /// ## 'T
-    /// Any type that the operation can use as parametrization
-    operation ApplyWindowed<'T>(windowLen : Int, op : ('T, Qubit[], Qubit[]) => Unit, argumentTransform : Int -> 'T, qubits : Qubit[], target : Qubit[]) : Unit {
+    /// The target provided to each windowed operation
+    operation ApplyWindowed(windowLen : Int, op : (Int, Qubit[], Qubit[]) => Unit,  qubits : Qubit[], target : Qubit[]) : Unit {
         let windows = Windows(windowLen, qubits); // Create windows of non-target qubits
         for (i, window) in Enumerated(windows) {
-            op(argumentTransform(i), window, target);
+            op(i, window, target);
         }
     }
 
