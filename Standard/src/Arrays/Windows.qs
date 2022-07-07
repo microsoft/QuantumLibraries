@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 namespace Microsoft.Quantum.Arrays {
+    open Microsoft.Quantum.Canon;
 
     /// # Summary
     /// Returns all consecutive subarrays of length `size`.
@@ -75,22 +76,74 @@ namespace Microsoft.Quantum.Arrays {
     }
 
     /// # Summary
-    /// Applies an operation windowing over input but with constant target qubits.
+    /// Applies an operation windowing over input registers.
     /// 
     /// # Input
     /// ## windowLen
     /// The size of each window
     /// ## op
-    /// An operation with three arguments, one index, controls, and target. When applied it will be supplied with a windowed component of the `qubits` parameter, the `target` qubits (constant) and an index of the current window
-    /// ## qubits
-    /// The qubits the operation windows over
-    /// ## target
-    /// The target provided to each windowed operation
-    operation ApplyWindowed(windowLen : Int, op : (Int, Qubit[], Qubit[]) => Unit,  qubits : Qubit[], target : Qubit[]) : Unit {
-        let windows = Windows(windowLen, qubits); // Create windows of non-target qubits
-        for (i, window) in Enumerated(windows) {
-            op(i, window, target);
-        }
+    /// An operation on registers that will be provided with the current window and its index
+    /// ## registers
+    /// The registers the operation windows over
+    ////
+    /// # Type Parameters
+    /// ## 'T
+    /// The type of registers
+    operation ApplyWindowed<'T>(windowLen : Int, op : (Int, 'T[]) => Unit, register : 'T[]) : Unit {
+        ApplyToEach(op, Enumerated(Windows(windowLen, register)));
     }
 
+    /// # Summary
+    /// Applies an operation windowing over input registers. The modifier `A` indicates that the single-qubit operation is adjointable.
+    /// 
+    /// # Input
+    /// ## windowLen
+    /// The size of each window
+    /// ## op
+    /// An operation on registers that will be provided with the current window and its index
+    /// ## registers
+    /// The registers the operation windows over
+    ////
+    /// # Type Parameters
+    /// ## 'T
+    /// The type of registers
+    operation ApplyWindowedA<'T>(windowLen : Int, op : (Int, 'T[]) => Unit is Adj, register : 'T[]) : Unit is Adj {
+        ApplyToEachA(op, Enumerated(Windows(windowLen, register)));
+    }
+
+    /// # Summary
+    /// Applies an operation windowing over input registers. The modifier `C` indicates that the single-qubit operation is controllable.
+    /// 
+    /// # Input
+    /// ## windowLen
+    /// The size of each window
+    /// ## op
+    /// An operation on registers that will be provided with the current window and its index
+    /// ## registers
+    /// The registers the operation windows over
+    ////
+    /// # Type Parameters
+    /// ## 'T
+    /// The type of registers
+    operation ApplyWindowedC<'T>(windowLen : Int, op : (Int, 'T[]) => Unit is Ctl, register : 'T[]) : Unit is Ctl {
+        ApplyToEachC(op, Enumerated(Windows(windowLen, register)));
+    }
+
+    /// # Summary
+    /// Applies an operation windowing over input registers. The modifier `CA` indicates that the single-qubit operation is controllable and adjointable.
+    /// 
+    /// # Input
+    /// ## windowLen
+    /// The size of each window
+    /// ## op
+    /// An operation on registers that will be provided with the current window and its index
+    /// ## registers
+    /// The registers the operation windows over
+    ////
+    /// # Type Parameters
+    /// ## 'T
+    /// The type of registers
+    operation ApplyWindowedCA<'T>(windowLen : Int, op : (Int, 'T[]) => Unit is Adj + Ctl, register : 'T[]) : Unit is Adj + Ctl {
+        ApplyToEachCA(op, Enumerated(Windows(windowLen, register)));
+    }
 }
