@@ -483,19 +483,36 @@ namespace Microsoft.Quantum.Canon {
     }
 
     /// # Summary
-    /// Performs a table lookup operation
+    /// Performs a table lookup operation.
     /// 
     /// # Description
-    /// A table lookup uses an address to return classical data from quantum registers
-    /// See more details on table lookup in Craig Gidney's paper https://arxiv.org/abs/1905.07682
+    /// A table lookup uses an address to return classical data from quantum registers.
+    /// Computes the following map:
+    /// $$\sum_{j=0}^{L-1}\ket{j}\ket{0} \rightarrow \sum_{j=0}^{L-1}\ket{j}\ket{T_j}$$
+    /// where L is the length of the table
     ///
     /// # Input
     /// ## data
-    /// The classical bit data that represents the table
+    /// The classical bit data that represents the table. 
+    /// The length of data has to be in the interval [0, 2^(number of qubits in address)[.
+    /// Each element of data has to be of length equal to the number of qubits in target.
     /// ## address
-    /// The address used to lookup from the table
+    /// The address used to lookup from the table.
     /// ## target
-    /// Qubits in which the result of the lookup will be stored
+    /// Qubits in which the result of the lookup will be stored.
+    ///
+    /// # Example
+    /// ```qsharp
+    /// operation InvertTwoBitNumber(address : LittleEndian, target : Qubit[]) : Unit {
+    ///     let data = [[true, true], [true, false], [false, true], [false, false]];
+    ///     TableLookup(data, address, target);
+    /// }
+    /// ```
+    ///
+    /// # References
+    /// - Windowed quantum arithmetic
+    ///   Craig Gidney
+    ///   https://arxiv.org/abs/1905.07682
     operation TableLookup(data : Bool[][], address : LittleEndian, target : Qubit[]) : Unit is Adj + Ctl {
         let ApplyXFromBitString = ApplyPauliFromBitString(PauliX, true, _, _); // Applies X conditionally based on bitstring
         let unitaries = Mapped(bitstring -> ApplyXFromBitString(bitstring, _), data); // Create unitaries based on data
