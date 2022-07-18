@@ -80,15 +80,15 @@ namespace Microsoft.Quantum.Arrays {
     /// 
     /// # Input
     /// ## windowLen
-    /// The size of each window
+    /// The size of each window.
     /// ## op
-    /// An operation on registers that will be provided with the current window and its index
+    /// An operation on registers that will be provided with the current window and its index.
     /// ## registers
-    /// The registers the operation windows over
+    /// The registers the operation windows over.
     ////
     /// # Type Parameters
     /// ## 'T
-    /// The type of registers
+    /// The type of registers.
     operation ApplyWindowed<'T>(windowLen : Int, op : (Int, 'T[]) => Unit, register : 'T[]) : Unit {
         ApplyToEach(op, Enumerated(Windows(windowLen, register)));
     }
@@ -98,15 +98,15 @@ namespace Microsoft.Quantum.Arrays {
     /// 
     /// # Input
     /// ## windowLen
-    /// The size of each window
+    /// The size of each window.
     /// ## op
-    /// An operation on registers that will be provided with the current window and its index
+    /// An operation on registers that will be provided with the current window and its index.
     /// ## registers
-    /// The registers the operation windows over
+    /// The registers the operation windows over.
     ////
     /// # Type Parameters
     /// ## 'T
-    /// The type of registers
+    /// The type of registers.
     operation ApplyWindowedA<'T>(windowLen : Int, op : (Int, 'T[]) => Unit is Adj, register : 'T[]) : Unit is Adj {
         ApplyToEachA(op, Enumerated(Windows(windowLen, register)));
     }
@@ -116,15 +116,15 @@ namespace Microsoft.Quantum.Arrays {
     /// 
     /// # Input
     /// ## windowLen
-    /// The size of each window
+    /// The size of each window.
     /// ## op
-    /// An operation on registers that will be provided with the current window and its index
+    /// An operation on registers that will be provided with the current window and its index.
     /// ## registers
-    /// The registers the operation windows over
+    /// The registers the operation windows over.
     ////
     /// # Type Parameters
     /// ## 'T
-    /// The type of registers
+    /// The type of registers.
     operation ApplyWindowedC<'T>(windowLen : Int, op : (Int, 'T[]) => Unit is Ctl, register : 'T[]) : Unit is Ctl {
         ApplyToEachC(op, Enumerated(Windows(windowLen, register)));
     }
@@ -134,15 +134,15 @@ namespace Microsoft.Quantum.Arrays {
     /// 
     /// # Input
     /// ## windowLen
-    /// The size of each window
+    /// The size of each window.
     /// ## op
-    /// An operation on registers that will be provided with the current window and its index
+    /// An operation on registers that will be provided with the current window and its index.
     /// ## registers
-    /// The registers the operation windows over
+    /// The registers the operation windows over.
     ////
     /// # Type Parameters
     /// ## 'T
-    /// The type of registers
+    /// The type of registers.
     operation ApplyWindowedCA<'T>(windowLen : Int, op : (Int, 'T[]) => Unit is Adj + Ctl, register : 'T[]) : Unit is Adj + Ctl {
         ApplyToEachCA(op, Enumerated(Windows(windowLen, register)));
     }
