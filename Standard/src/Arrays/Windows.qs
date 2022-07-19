@@ -87,15 +87,15 @@ namespace Microsoft.Quantum.Arrays {
     /// The register the operation windows over.
     ///
     /// # Example
-    /// The example below shows how to use `ApplyWindowed` to construct a parity function
+    /// The example below shows how to use `ApplyToEachWindow` to construct a parity function
     /// operation Parity(qubits : Qubit[], target : Qubit) : Unit {
-    ///     ApplyWindowed(1, (_, q) => CNOT(q[0], target), qubits);
+    ///     ApplyToEachWindow(1, (_, q) => CNOT(q[0], target), qubits);
     /// }
     ///
     /// # Type Parameters
     /// ## 'T
     /// The type of register elements.
-    operation ApplyWindowed<'T>(windowLen : Int, op : (Int, 'T[]) => Unit, register : 'T[]) : Unit {
+    operation ApplyToEachWindow<'T>(windowLen : Int, op : (Int, 'T[]) => Unit, register : 'T[]) : Unit {
         ApplyToEach(op, Enumerated(Windows(windowLen, register)));
     }
 
@@ -115,8 +115,8 @@ namespace Microsoft.Quantum.Arrays {
     /// The type of register elements.
     ///
     /// # See Also
-    /// - Microsoft.Quantum.Arrays.ApplyWindowed
-    operation ApplyWindowedA<'T>(windowLen : Int, op : (Int, 'T[]) => Unit is Adj, register : 'T[]) : Unit is Adj {
+    /// - Microsoft.Quantum.Arrays.ApplyToEachWindow
+    operation ApplyToEachWindowA<'T>(windowLen : Int, op : (Int, 'T[]) => Unit is Adj, register : 'T[]) : Unit is Adj {
         ApplyToEachA(op, Enumerated(Windows(windowLen, register)));
     }
 
@@ -136,8 +136,8 @@ namespace Microsoft.Quantum.Arrays {
     /// The type of register elements.
     ///
     /// # See Also
-    /// - Microsoft.Quantum.Arrays.ApplyWindowed
-    operation ApplyWindowedC<'T>(windowLen : Int, op : (Int, 'T[]) => Unit is Ctl, register : 'T[]) : Unit is Ctl {
+    /// - Microsoft.Quantum.Arrays.ApplyToEachWindow
+    operation ApplyToEachWindowC<'T>(windowLen : Int, op : (Int, 'T[]) => Unit is Ctl, register : 'T[]) : Unit is Ctl {
         ApplyToEachC(op, Enumerated(Windows(windowLen, register)));
     }
 
@@ -157,8 +157,8 @@ namespace Microsoft.Quantum.Arrays {
     /// The type of register elements.
     ///
     /// # See Also
-    /// - Microsoft.Quantum.Arrays.ApplyWindowed
-    operation ApplyWindowedCA<'T>(windowLen : Int, op : (Int, 'T[]) => Unit is Adj + Ctl, register : 'T[]) : Unit is Adj + Ctl {
+    /// - Microsoft.Quantum.Arrays.ApplyToEachWindow
+    operation ApplyToEachWindowCA<'T>(windowLen : Int, op : (Int, 'T[]) => Unit is Adj + Ctl, register : 'T[]) : Unit is Adj + Ctl {
         ApplyToEachCA(op, Enumerated(Windows(windowLen, register)));
     }
 }
