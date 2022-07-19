@@ -45,7 +45,7 @@ Reviewers (in order by username): @tcNickolas, @msoeken
 * @msoeken, *approve*, left comments
 > Please add a bullet point including your alias, your review result (*approve*, *reject*, *comment*), and a comment (optional when result is *approve*).  Alternatively, add a line to the PR discussion incl. a reference to this issue.
 
-**Consensus**:
+**Consensus**: Approved as `ApplyToEachWindow` without `argumentTransform`, without `target` argument, with type parameter for input array, and with all 4 functor variants.
 
 ---
 
