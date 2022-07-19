@@ -16,6 +16,7 @@ Reviewers (in order by username):
 **Proposal**: https://github.com/microsoft/QuantumLibraries/issues/598
 
 **Reviews**:
+* @tcNickolas, *approve*, left a comment
 > Please add a bullet point including your alias, your review result (*approve*, *reject*, *comment*), and a comment (optional when result is *approve*).  Alternatively, add a line to the PR discussion incl. a reference to this issue.
 
 **Consensus**:
@@ -27,6 +28,7 @@ Reviewers (in order by username):
 **Proposal**: https://github.com/microsoft/QuantumLibraries/issues/601
 
 **Reviews**:
+* @tcNickolas, *approve*, left comments
 > Please add a bullet point including your alias, your review result (*approve*, *reject*, *comment*), and a comment (optional when result is *approve*).  Alternatively, add a line to the PR discussion incl. a reference to this issue.
 
 **Consensus**:
@@ -38,6 +40,7 @@ Reviewers (in order by username):
 **Proposal**: https://github.com/microsoft/QuantumLibraries/issues/602
 
 **Reviews**:
+* @tcNickolas, *approve*
 > Please add a bullet point including your alias, your review result (*approve*, *reject*, *comment*), and a comment (optional when result is *approve*).  Alternatively, add a line to the PR discussion incl. a reference to this issue.
 
 **Consensus**:
