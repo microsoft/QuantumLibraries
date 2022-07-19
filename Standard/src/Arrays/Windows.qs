@@ -76,73 +76,88 @@ namespace Microsoft.Quantum.Arrays {
     }
 
     /// # Summary
-    /// Applies an operation windowing over input registers.
+    /// Applies an operation windowing over an input register.
     /// 
     /// # Input
     /// ## windowLen
     /// The size of each window.
     /// ## op
-    /// An operation on registers that will be provided with the current window and its index.
-    /// ## registers
-    /// The registers the operation windows over.
-    ////
+    /// An operation on a register that will be provided with the current window and its index.
+    /// ## register
+    /// The register the operation windows over.
+    ///
+    /// # Example
+    /// The example below shows how to use `ApplyWindowed` to construct a parity function
+    /// operation Parity(qubits : Qubit[], target : Qubit) : Unit {
+    ///     ApplyWindowed(1, (_, q) => CNOT(q[0], target), qubits);
+    /// }
+    ///
     /// # Type Parameters
     /// ## 'T
-    /// The type of registers.
+    /// The type of register elements.
     operation ApplyWindowed<'T>(windowLen : Int, op : (Int, 'T[]) => Unit, register : 'T[]) : Unit {
         ApplyToEach(op, Enumerated(Windows(windowLen, register)));
     }
 
     /// # Summary
-    /// Applies an operation windowing over input registers. The modifier `A` indicates that the single-qubit operation is adjointable.
+    /// Applies an operation windowing over an input register. The modifier `A` indicates that the single-qubit operation is adjointable.
     /// 
     /// # Input
     /// ## windowLen
     /// The size of each window.
     /// ## op
-    /// An operation on registers that will be provided with the current window and its index.
-    /// ## registers
-    /// The registers the operation windows over.
+    /// An operation on a register that will be provided with the current window and its index.
+    /// ## register
+    /// The register the operation windows over.
     ////
     /// # Type Parameters
     /// ## 'T
-    /// The type of registers.
+    /// The type of register elements.
+    ///
+    /// # See Also
+    /// - Microsoft.Quantum.Arrays.ApplyWindowed
     operation ApplyWindowedA<'T>(windowLen : Int, op : (Int, 'T[]) => Unit is Adj, register : 'T[]) : Unit is Adj {
         ApplyToEachA(op, Enumerated(Windows(windowLen, register)));
     }
 
     /// # Summary
-    /// Applies an operation windowing over input registers. The modifier `C` indicates that the single-qubit operation is controllable.
+    /// Applies an operation windowing over an input register. The modifier `C` indicates that the single-qubit operation is controllable.
     /// 
     /// # Input
     /// ## windowLen
     /// The size of each window.
     /// ## op
-    /// An operation on registers that will be provided with the current window and its index.
-    /// ## registers
-    /// The registers the operation windows over.
+    /// An operation on a register that will be provided with the current window and its index.
+    /// ## register
+    /// The register the operation windows over.
     ////
     /// # Type Parameters
     /// ## 'T
-    /// The type of registers.
+    /// The type of register elements.
+    ///
+    /// # See Also
+    /// - Microsoft.Quantum.Arrays.ApplyWindowed
     operation ApplyWindowedC<'T>(windowLen : Int, op : (Int, 'T[]) => Unit is Ctl, register : 'T[]) : Unit is Ctl {
         ApplyToEachC(op, Enumerated(Windows(windowLen, register)));
     }
 
     /// # Summary
-    /// Applies an operation windowing over input registers. The modifier `CA` indicates that the single-qubit operation is controllable and adjointable.
+    /// Applies an operation windowing over an input register. The modifier `CA` indicates that the single-qubit operation is controllable and adjointable.
     /// 
     /// # Input
     /// ## windowLen
     /// The size of each window.
     /// ## op
-    /// An operation on registers that will be provided with the current window and its index.
-    /// ## registers
-    /// The registers the operation windows over.
+    /// An operation on a register that will be provided with the current window and its index.
+    /// ## register
+    /// The register the operation windows over.
     ////
     /// # Type Parameters
     /// ## 'T
-    /// The type of registers.
+    /// The type of register elements.
+    ///
+    /// # See Also
+    /// - Microsoft.Quantum.Arrays.ApplyWindowed
     operation ApplyWindowedCA<'T>(windowLen : Int, op : (Int, 'T[]) => Unit is Adj + Ctl, register : 'T[]) : Unit is Adj + Ctl {
         ApplyToEachCA(op, Enumerated(Windows(windowLen, register)));
     }
