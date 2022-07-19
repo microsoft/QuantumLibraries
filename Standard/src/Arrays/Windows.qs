@@ -88,9 +88,11 @@ namespace Microsoft.Quantum.Arrays {
     ///
     /// # Example
     /// The example below shows how to use `ApplyToEachWindow` to construct a parity function
+    /// ```qsharp
     /// operation Parity(qubits : Qubit[], target : Qubit) : Unit {
     ///     ApplyToEachWindow(1, (_, q) => CNOT(q[0], target), qubits);
     /// }
+    /// ```
     ///
     /// # Type Parameters
     /// ## 'T
