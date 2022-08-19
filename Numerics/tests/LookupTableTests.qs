@@ -72,7 +72,7 @@ namespace Microsoft.Quantum.Tests {
         let epsIn = 0.125;
         let epsOut = 0.25;
  
-        let lookup = MakeLookup(func, (xMin, xMax), epsIn, epsOut, 0);
+        let lookup = FunctionWithLookupTable(func, (xMin, xMax), epsIn, epsOut, 0);
 
         use inputRegister = Qubit[lookup::IntegerBitsIn+lookup::FractionalBitsIn];
         use outputRegister = Qubit[lookup::IntegerBitsOut+lookup::FractionalBitsOut];
