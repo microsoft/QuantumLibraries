@@ -1,6 +1,6 @@
 # Q# API Design Discussions / July 2022
 
-Reviewers (in order by username): @tcNickolas, @msoeken
+Reviewers (in order by username): @tcNickolas, @msoeken, @cgranade
 
 ## Agenda
 
@@ -19,7 +19,7 @@ Reviewers (in order by username): @tcNickolas, @msoeken
 * @tcNickolas, *approve*, left a comment
 > Please add a bullet point including your alias, your review result (*approve*, *reject*, *comment*), and a comment (optional when result is *approve*).  Alternatively, add a line to the PR discussion incl. a reference to this issue.
 
-**Consensus**:
+**Consensus**: Approved
 
 ---
 
@@ -32,7 +32,7 @@ Reviewers (in order by username): @tcNickolas, @msoeken
 * @msoeken, *approve*, left comments
 > Please add a bullet point including your alias, your review result (*approve*, *reject*, *comment*), and a comment (optional when result is *approve*).  Alternatively, add a line to the PR discussion incl. a reference to this issue.
 
-**Consensus**:
+**Consensus**: Postponed, requires more discussion
 
 ---
 
