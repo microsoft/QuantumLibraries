@@ -45,7 +45,7 @@ namespace Microsoft.Quantum.Arithmetic {
     /// The number of bits of the input register that will be used in the SWAP section of the circuits. Another way of looking
     /// at this is that in step in the SELECT section of the circuit in Fig 1c of arXiv:1812.00954, we will encode 2^numSawpBits
     /// encoded 
-    function MakeLookup(func: Double -> Double, domain: (Double, Double), epsIn: Double, epsOut: Double, numSwapBits: Int): MakeLookupReturn {
+    function ApplyFunctionWithLookupTable(func: Double -> Double, domain: (Double, Double), epsIn: Double, epsOut: Double, numSwapBits: Int): FunctionWithLookupTable {
 
         // First step is to find the number of integer bits (pIn) and fractional bits (qIn) required for the input based on the
         // domain and error tolerance (espIn). To find the value of pIn, we have to check both the
