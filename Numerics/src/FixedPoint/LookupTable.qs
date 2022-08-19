@@ -43,7 +43,7 @@ namespace Microsoft.Quantum.Arithmetic {
     /// The maximum allowed error of the output without taking into account the error in input value (i.e. |f'(x')-f(x')|)
     /// ## numSwapBits
     /// The number of bits of the input register that will be used in the SWAP section of the circuits. Another way of looking
-    /// at this is that in step in the SELECT section of the circuit in Fig 1c of arXiv:1812.00954, we will encode 2^numSawpBits
+    /// at this is that in step in the SELECT section of the circuit in Fig 1c of arXiv:1812.00954, we will encode 2^numSwapBits
     /// encoded 
     function ApplyFunctionWithLookupTable(func: Double -> Double, domain: (Double, Double), epsIn: Double, epsOut: Double, numSwapBits: Int): FunctionWithLookupTable {
 
