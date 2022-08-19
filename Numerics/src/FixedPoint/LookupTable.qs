@@ -196,7 +196,6 @@ namespace Microsoft.Quantum.Arithmetic {
 
         let unitaries = Mapped(MakeWriteBitsUnitary, data);
         MultiplexOperations(unitaries, LittleEndian(addressRegister), outputRegister);
-        // MultiplexOperationsWithUnaryIteration(unitaries, LittleEndian(addressRegister), outputRegister);
     }
 
     /// # Summary
