@@ -112,7 +112,7 @@ namespace Microsoft.Quantum.Canon {
 
     /// # Summary
     /// Applies a unitary operation on the target register if the control
-    /// register state corresponds to a specified positive integer.
+    /// register state corresponds to a specified nonnegative integer.
     ///
     /// # Input
     /// ## numberState
@@ -140,11 +140,11 @@ namespace Microsoft.Quantum.Canon {
 
     /// # Summary
     /// Returns a unitary operator that applies an oracle on the target register
-    /// if the control register state corresponds to a specified positive integer.
+    /// if the control register state corresponds to a specified nonnegative integer.
     ///
     /// # Input
     /// ## numberState
-    /// Positive integer.
+    /// Nonnegative integer.
     /// ## oracle
     /// Unitary operator.
     ///
