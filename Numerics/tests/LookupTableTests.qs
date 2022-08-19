@@ -19,7 +19,7 @@ namespace Microsoft.Quantum.Tests {
         let epsIn = 1e-3;
         let epsOut = 1e-3;
 
-        let lookup = MakeLookup(ExpD, (xMin, xMax), epsIn, epsOut, numSwapBits);
+        let lookup = ApplyFunctionWithLookupTable(ExpD, (xMin, xMax), epsIn, epsOut, numSwapBits);
         // Check that input and output registers are the expected size
         EqualityFactI(lookup::IntegerBitsIn + lookup::FractionalBitsIn, 15, "Number of input bits is incorrect");
         EqualityFactI(lookup::IntegerBitsOut + lookup::FractionalBitsOut, 25, "Number of output bits is incorrect");
