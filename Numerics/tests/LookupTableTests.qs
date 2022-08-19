@@ -91,7 +91,6 @@ namespace Microsoft.Quantum.Tests {
             EqualityWithinToleranceFact(inputResult, x, epsIn);
             EqualityWithinToleranceFact(outputResult, func(inputResult), epsOut);
 
-            Message($"Input value: {inputResult}, Output value:{outputResult}");
         }
     }
 }
