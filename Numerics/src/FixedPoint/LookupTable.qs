@@ -13,7 +13,7 @@ namespace Microsoft.Quantum.Arithmetic {
     /// operator. The reason we have this structure is so that the operator is similar 
     /// to the other typical Q# arithmetic function implementations (a larger discussion
     /// can had as to whether that can be changed)
-    newtype MakeLookupReturn = ( 
+    newtype FunctionWithLookupTable = ( 
         IntegerBitsIn: Int,
         FractionalBitsIn: Int,
         IntegerBitsOut: Int,
