@@ -112,7 +112,7 @@ namespace Microsoft.Quantum.Arithmetic {
         let lookupOperation = LookupOperationWrapper(minInFxP, outBits, numSwapBits, _, _);
 
 
-        return MakeLookupReturn(
+        return FunctionWithLookupTable(
             pIn, qIn,
             pOut, qOut,
             lookupOperation
