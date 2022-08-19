@@ -435,4 +435,16 @@ namespace Microsoft.Quantum.Tests {
             }
         }
     }
+
+    @Test("QuantumSimulator")
+    operation TestFixedPointLimits() : Unit {
+        for numBits in 1..6 {
+            for integerBits in 0..numBits {
+                let fractionalBits = numBits - integerBits;
+
+                NearEqualityFactD(SmallestFixedPoint(integerBits, fractionalBits), BoolArrayAsFixedPoint(integerBits, [false, size = numBits] w/ numBits - 1 <- true));
+                NearEqualityFactD(LargestFixedPoint(integerBits, fractionalBits), BoolArrayAsFixedPoint(integerBits, [true, size = numBits] w/ numBits - 1 <- false));
+            }
+        }
+    }
 }
