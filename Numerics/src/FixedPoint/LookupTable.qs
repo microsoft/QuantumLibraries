@@ -225,7 +225,7 @@ namespace Microsoft.Quantum.Arithmetic {
     }
     
     /// # Summary   
-    /// Impelements an efficient control swap (with 2 CNOTs and one CCNOT)
+    /// Implements an efficient control swap (with 2 CNOTs and one CCNOT)
     internal operation ApplyLowDepthCSWAP(control : Qubit, target1 : Qubit, target2 : Qubit) : Unit is Adj {
         use helper = Qubit();
 
