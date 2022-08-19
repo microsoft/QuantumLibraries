@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 namespace Microsoft.Quantum.Arithmetic {
+    open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Convert;
     open Microsoft.Quantum.Intrinsic;
     open Microsoft.Quantum.Math;
@@ -16,29 +17,7 @@ namespace Microsoft.Quantum.Arithmetic {
     /// Fixed-point number (of type FixedPoint) to initialize.
     operation PrepareFxP(constant : Double, fp : FixedPoint)
     : Unit is Adj + Ctl {
-        // NB: We can't omit the body (...) declaration here, as the `set`
-        //     statements below prevent automatic adjoint generation.
-        body (...) {
-            let (p, q) = fp!;
-            let n = Length(q);
-            let sign = constant < 0.;
-            mutable rescaledConstant = PowD(2., IntAsDouble(n-p)) * AbsD(constant) + 0.5;
-            mutable keepAdding = sign;
-            for i in 0..n - 1 {
-                let intConstant = Floor(rescaledConstant);
-                set rescaledConstant = 0.5 * rescaledConstant;
-                mutable currentBit = (intConstant &&& 1) == (sign ? 0 | 1);
-                if keepAdding {
-                    set keepAdding = currentBit;
-                    set currentBit = not currentBit;
-                }
-                if currentBit {
-                    X(q[i]);
-                }
-            }
-        }
-        controlled auto;
-        adjoint self;
-        adjoint controlled auto;
+        let bits = FixedPointAsBoolArray(fp::IntegerBits, Length(fp::Register) - fp::IntegerBits, constant);
+        ApplyPauliFromBitString(PauliX, true, bits, fp::Register);
     }
 }

@@ -32,8 +32,13 @@ namespace Microsoft.Quantum.Arrays {
     /// - Microsoft.Quantum.Canon.Repeat
     operation DrawMany<'TInput, 'TOutput>(op : ('TInput => 'TOutput), nSamples : Int, input : 'TInput)
     : 'TOutput[] {
-        mutable outputs = [Default<'TOutput>(), size = nSamples];
-        for idx in 0..nSamples - 1 {
+        if nSamples == 0 {
+            return [];
+        }
+
+        let first = op(input);
+        mutable outputs = [first, size = nSamples];
+        for idx in 1..nSamples - 1 {
             set outputs w/= idx <- op(input);
         }
         return outputs;

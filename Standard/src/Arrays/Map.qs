@@ -32,13 +32,16 @@ namespace Microsoft.Quantum.Arrays {
     /// # See Also
     /// - Microsoft.Quantum.Arrays.ForEach
     function Mapped<'T, 'U> (mapper : ('T -> 'U), array : 'T[]) : 'U[] {
-        mutable resultArray = [Default<'U>(), size = Length(array)];
-
-        for idxElement in IndexRange(array) {
-            set resultArray w/= idxElement <- mapper(array[idxElement]);
+        let length = Length(array);
+        if length == 0 {
+            return [];
         }
-
-        return resultArray;
+        let first = mapper(array[0]);
+        mutable retval = [first, size = length];
+        for idx in 1..length - 1 {
+            set retval w/= idx <- mapper(array[idx]);
+        }
+        return retval;
     }
 
     /// # Summary
@@ -80,13 +83,16 @@ namespace Microsoft.Quantum.Arrays {
     /// # See Also
     /// - Microsoft.Quantum.Arrays.Mapped
     function MappedByIndex<'T, 'U> (mapper : ((Int, 'T) -> 'U), array : 'T[]) : 'U[] {
-        mutable resultArray = [Default<'U>(), size = Length(array)];
-
-        for idxElement in IndexRange(array) {
-            set resultArray w/= idxElement <- mapper(idxElement, array[idxElement]);
+        let length = Length(array);
+        if length == 0 {
+            return [];
         }
-
-        return resultArray;
+        let first = mapper(0, array[0]);
+        mutable retval = [first, size = length];
+        for idx in 1..length - 1 {
+            set retval w/= idx <- mapper(idx, array[idx]);
+        }
+        return retval;
     }
 
     /// # Summary
@@ -127,10 +133,13 @@ namespace Microsoft.Quantum.Arrays {
         let end = RangeEnd(range);
         if ((end - start) / step >= 0) {
             let nTerms = (end - start) / step + 1;
-            mutable resultArray = [Default<'T>(), size = nTerms];
+            let first = mapper(start);
+            mutable resultArray = [first, size = nTerms];
             mutable idxElement = 0;
             for elem in range {
-                set resultArray w/= idxElement <- mapper(elem);
+                if idxElement != 0 {
+                    set resultArray w/= idxElement <- mapper(elem);
+                }
                 set idxElement += 1;
             }
             return resultArray;
@@ -220,13 +229,16 @@ namespace Microsoft.Quantum.Arrays {
     /// # See Also
     /// - Microsoft.Quantum.Arrays.Mapped
     operation ForEach<'T, 'U> (action : ('T => 'U), array : 'T[]) : 'U[] {
-        mutable resultArray = [Default<'U>(), size = Length(array)];
-
-        for idxElement in IndexRange(array) {
-            set resultArray w/= idxElement <- action(array[idxElement]);
+        let length = Length(array);
+        if length == 0 {
+            return [];
         }
-
-        return resultArray;
+        let first = action(array[0]);
+        mutable retval = [first, size = length];
+        for idx in 1..length - 1 {
+            set retval w/= idx <- action(array[idx]);
+        }
+        return retval;
     }
 
 }

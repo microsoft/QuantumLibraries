@@ -2,8 +2,8 @@
 // Licensed under the MIT License.
 
 namespace Microsoft.Quantum.Canon {
-    open Microsoft.Quantum.Diagnostics;
     open Microsoft.Quantum.Arrays;
+    open Microsoft.Quantum.Diagnostics;
 
     ///////////////////////////////////////////////////////////////////////////////////////////////
     // Combinators for constructing multiply controlled versions of operations
@@ -11,7 +11,7 @@ namespace Microsoft.Quantum.Canon {
 
     /// # Summary
     /// The signature type of CCNOT gate.
-    newtype CCNOTop = (Apply : ((Qubit, Qubit, Qubit) => Unit is Adj));
+    newtype CCNOTop = (Apply : (Qubit, Qubit, Qubit) => Unit is Adj);
 
 
     /// # Summary
@@ -45,26 +45,25 @@ namespace Microsoft.Quantum.Canon {
     ///
     /// # See Also
     /// - Microsoft.Quantum.Canon.ApplyMultiControlledCA
-    operation ApplyMultiControlledC (singlyControlledOp : (Qubit[] => Unit), ccnot : CCNOTop, controls : Qubit[], targets : Qubit[]) : Unit
-    {
-        body (...)
-        {
-            Fact(Length(controls) >= 1, $"Length of controls must be at least 1");
+    operation ApplyMultiControlledC(singlyControlledOp : Qubit[] => Unit, ccnot : CCNOTop, controls : Qubit[], targets : Qubit[]) : Unit is Ctl {
+        body (...) {
+            let numControls = Length(controls);
 
-            if (Length(controls) == 1) {
+            Fact(numControls >= 1, "Length of controls must be at least 1");
+
+            if numControls == 1 {
                 singlyControlledOp(controls + targets);
-            }
-            else
-            {
-                use aux = Qubit[Length(controls) - 1];
-                AndLadder(ccnot, controls, aux);
-                singlyControlledOp([Tail(aux)] + targets);
-                Adjoint AndLadder(ccnot, controls, aux);
+            } else {
+                use aux = Qubit[numControls - 1];
+                within {
+                    AndLadder(ccnot, controls, aux);
+                } apply {
+                    singlyControlledOp([Tail(aux)] + targets);
+                }
             }
         }
 
-        controlled (extraControls, ...)
-        {
+        controlled (extraControls, ...) {
             ApplyMultiControlledC(singlyControlledOp, ccnot, extraControls + controls, targets);
         }
     }
@@ -102,17 +101,20 @@ namespace Microsoft.Quantum.Canon {
     ///
     /// # See Also
     /// - Microsoft.Quantum.Canon.ApplyMultiControlledC
-    operation ApplyMultiControlledCA (singlyControlledOp : (Qubit[] => Unit is Adj), ccnot : CCNOTop, controls : Qubit[], targets : Qubit[]) : Unit {
+    operation ApplyMultiControlledCA(singlyControlledOp : Qubit[] => Unit is Adj, ccnot : CCNOTop, controls : Qubit[], targets : Qubit[]) : Unit is Adj + Ctl {
         body (...) {
-            Fact(Length(controls) >= 1, $"Length of controls must be at least 1");
+            let numControls = Length(controls);
+            Fact(numControls >= 1, $"Length of controls must be at least 1");
 
-            if Length(controls) == 1 {
+            if numControls == 1 {
                 singlyControlledOp(controls + targets);
             } else {
-                use ladderRegister = Qubit[Length(controls) - 1];
-                AndLadder(ccnot, controls, ladderRegister);
-                singlyControlledOp([Tail(ladderRegister)] + targets);
-                Adjoint AndLadder(ccnot, controls, ladderRegister);
+                use ladderRegister = Qubit[numControls - 1];
+                within {
+                    AndLadder(ccnot, controls, ladderRegister);
+                } apply {
+                    singlyControlledOp([Tail(ladderRegister)] + targets);
+                }
             }
         }
 
@@ -164,14 +166,13 @@ namespace Microsoft.Quantum.Canon {
     /// - Used as a part of <xref:Microsoft.Quantum.Canon.ApplyMultiControlledC>
     ///   and <xref:Microsoft.Quantum.Canon.ApplyMultiControlledCA>.
     /// - For the explanation and circuit diagram see Figure 4.10, Section 4.3 in Nielsen & Chuang.
-    operation AndLadder (ccnot : CCNOTop, controls : Qubit[], targets : Qubit[]) : Unit is Adj {
+    operation AndLadder(ccnot : CCNOTop, controls : Qubit[], targets : Qubit[]) : Unit is Adj {
         EqualityFactI(Length(controls), Length(targets) + 1, $"Length(controls) must be equal to Length(target) + 1");
         Fact(Length(controls) >= 2, $"The operation is not defined for less than 2 controls");
-        ccnot::Apply(controls[0], controls[1], targets[0]);
 
-        for k in 1 .. Length(targets) - 1 {
-            ccnot::Apply(controls[k + 1], targets[k - 1], targets[k]);
-        }
+        let controls1 = [Head(controls)] + Most(targets);
+        let controls2 = Rest(controls);
+        ApplyToEachA(ccnot::Apply, Zipped3(controls1, controls2, targets));
     }
 
 }

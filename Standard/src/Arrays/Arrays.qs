@@ -211,23 +211,23 @@ namespace Microsoft.Quantum.Arrays {
         let nSliced = Length(remove);
         let nElements = Length(array);
 
+        if nElements - nSliced <= 0 {
+            return [];
+        }
+
         //Would be better with sort function
         //Or way to add elements to array
-        mutable arrayKeep = [0, size = nElements];
-        mutable sliced = [Default<'T>(), size = nElements - nSliced];
+        mutable arrayKeep = SequenceI(0, nElements - 1);
+        mutable sliced = [array[0], size = nElements - nSliced];
         mutable counter = 0;
 
-        for idx in 0 .. nElements - 1 {
-            set arrayKeep w/= idx <- idx;
+        for idx in remove {
+            set arrayKeep w/= idx <- -1;
         }
 
-        for idx in 0 .. nSliced - 1 {
-            set arrayKeep w/= remove[idx] <- -1;
-        }
-
-        for idx in 0 .. nElements - 1 {
-            if (arrayKeep[idx] >= 0) {
-                set sliced w/= counter <- array[arrayKeep[idx]];
+        for idx in arrayKeep {
+            if idx >= 0 {
+                set sliced w/= counter <- array[idx];
                 set counter += 1;
             }
         }
@@ -261,9 +261,9 @@ namespace Microsoft.Quantum.Arrays {
     /// ```qsharp
     /// let array = [10, 11, 12];
     /// // The following line returns [10, 12, 15, 2, 2, 2].
-    /// let output = Padded(-6, array, 2);
+    /// let output = Padded(-6, 2, array);
     /// // The following line returns [2, 2, 2, 10, 12, 15].
-    /// let output = Padded(6, array, 2);
+    /// let output = Padded(6, 2, array);
     /// ```
     function Padded<'T> (nElementsTotal : Int, defaultElement : 'T, inputArray : 'T[]) : 'T[] {
         let nElementsInitial = Length(inputArray);
@@ -283,7 +283,7 @@ namespace Microsoft.Quantum.Arrays {
     ///
     /// # Input
     /// ## nElements
-    /// The length of each chunk.
+    /// The length of each chunk. Must be positive.
     /// ## arr
     /// The array to be split.
     ///
@@ -294,6 +294,7 @@ namespace Microsoft.Quantum.Arrays {
     /// Note that the last element of the output may be shorter
     /// than `nElements` if `Length(arr)` is not divisible by `nElements`.
     function Chunks<'T>(nElements : Int, arr : 'T[]) : 'T[][] {
+        Fact(nElements > 0, "nElements must be positive");
         mutable output = [];
         mutable remaining = arr;
         while (not IsEmpty(remaining)) {
@@ -330,16 +331,16 @@ namespace Microsoft.Quantum.Arrays {
     /// let split = Partitioned([2,2], [1,5,3,7]);
     /// ```
     function Partitioned<'T>(nElements: Int[], arr: 'T[]) : 'T[][] {
-        mutable output = [Default<'T[]>(), size = Length(nElements) + 1];
+        mutable output = [[], size = Length(nElements) + 1];
         mutable currIdx = 0;
         for idx in IndexRange(nElements) {
-            if(currIdx + nElements[idx] > Length(arr)) {
+            if currIdx + nElements[idx] > Length(arr) {
                 fail "Partitioned argument out of bounds.";
             }
-            set output w/= idx <- arr[currIdx..currIdx + nElements[idx]-1];
+            set output w/= idx <- arr[currIdx..currIdx + nElements[idx] - 1];
             set currIdx = currIdx + nElements[idx];
         }
-        set output w/= Length(nElements) <- arr[currIdx..Length(arr)-1];
+        set output w/= Length(nElements) <- arr[currIdx..Length(arr) - 1];
         return output;
     }
 
@@ -461,6 +462,8 @@ namespace Microsoft.Quantum.Arrays {
     /// Swapped(1, 3, [0, 1, 2, 3, 4]);
     /// ```
     function Swapped<'T>(firstIndex : Int, secondIndex : Int, arr : 'T[]) : 'T[] {
+        Fact(firstIndex >= 0 and firstIndex < Length(arr), "First index is out of bounds");
+        Fact(secondIndex >= 0 and secondIndex < Length(arr), "Second index is out of bounds");
         return arr
             w/ firstIndex <- arr[secondIndex]
             w/ secondIndex <- arr[firstIndex];
@@ -482,7 +485,7 @@ namespace Microsoft.Quantum.Arrays {
     /// TupleArrayAsNestedArray([(2, 3), (4, 5)]);
     /// ```
     function TupleArrayAsNestedArray<'T>(tupleList : ('T, 'T)[]) : 'T[][] {
-        mutable newArray = [Default<'T[]>(), size = Length(tupleList)];
+        mutable newArray = [[], size = Length(tupleList)];
         for idx in IndexRange(tupleList) {
             let (tupleLeft, tupleRight) = tupleList[idx];
             set newArray w/= idx <- [tupleLeft, tupleRight];
