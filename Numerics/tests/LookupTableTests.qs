@@ -60,7 +60,6 @@ namespace Microsoft.Quantum.Tests {
             EqualityWithinToleranceFact(inResult, inputValue, 1e-3);
             EqualityWithinToleranceFact(outResult, expected, 1e-3);
 
-            Message($"{inResult} {outResult}");
         }
     }
 
