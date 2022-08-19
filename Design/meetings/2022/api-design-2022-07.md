@@ -49,11 +49,12 @@ Reviewers (in order by username): @tcNickolas, @msoeken, @cgranade
 
 ---
 
-### New operation - LookupTable
+### New operation: Apply arithmetic function via table lookup
 
 **Proposal**: https://github.com/microsoft/QuantumLibraries/issues/607
 
 **Reviews**:
 > Please add a bullet point including your alias, your review result (*approve*, *reject*, *comment*), and a comment (optional when result is *approve*).  Alternatively, add a line to the PR discussion incl. a reference to this issue.
+* @msoeken, *approve*, left comments
 
-**Consensus**:
+**Consensus**: Approved after comments
