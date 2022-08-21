@@ -139,10 +139,6 @@ namespace Microsoft.Quantum.Arithmetic {
     /// Qubit FixedPoint register containing input values
     /// ## output
     /// Qubit FixedPoint register containing where output values will be stored
-    ///
-    /// # Potential improvements TODO
-    /// fanout inner and outer controls
-    /// make version with garbage   
     internal operation LookupOperationWrapper(minInFxP: Double, outBits: Bool[][], numSwapBits : Int, input: FixedPoint, output: FixedPoint) : Unit is Adj {
 
         let integerBitsIn = input::IntegerBits;
@@ -154,7 +150,7 @@ namespace Microsoft.Quantum.Arithmetic {
         // it, because the lookup table always assumes that the miminum value is 00...0 and the maximum value is 11...1 in incrementing order,
         // so we are re-defining the minimum number as represented by 00...0 and hence subracting the minimum from our value.
         // (We add the minimum back after making the lookup table)
-        within {
+        within { // Currently we always uncompute the lookup table garbage qubits, but we can think of making an option to remove the uncomputation (and keep the garbage qubits)
             if minInFxP != 0.0 {
                 // Make a new fixed point register to store the minimum vlaue
                 use minRegister = Qubit[Length(registerIn)];
@@ -304,7 +300,7 @@ namespace Microsoft.Quantum.Arithmetic {
             // Now we split up the register in to chunks of m
             let chunkedDataRegister = Chunks(m, dataRegister); //Chunks(nElements, array): splits array into chunks, where each chunk has nElements, e.g. Chunks(2, [1, 2, 3, 4, 5, 6]) -> [[1, 2], [3, 4], [5, 6]]
 
-            // Perform select swap with the (1) dataArray for the select outputs and (2) chunkedDataRegister for the swap targets
+            // Perform select swap with the (1) dataArray for the select outputs and (2) chunkedDataRegister for the swap targets. We can think about improving the efficiency of these two steps by thinking of the fanout inner and outer controls more carefully.
             within {
                 Select(dataArray, addressRegisterParts[0], dataRegister); // apply select using first part of address registers
                 SwapDataOutputs(addressRegisterParts[1], chunkedDataRegister); // apply swap using second part of address registers
