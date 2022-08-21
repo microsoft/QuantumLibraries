@@ -10,7 +10,10 @@ namespace Microsoft.Quantum.Arithmetic {
     /// The return type when making a lookup table. This contains the operation that 
     /// makes the lookup table circuit, as well as all the parameters required to make 
     /// the two FixedPoint registers that need to be used as inputs and outputs to the 
-    /// operator. The reason we have this structure is so that the operator is similar 
+    /// operator. 
+    ///
+    /// # Remarks
+    /// The reason we have this return type structure is so that the operator is similar 
     /// to the other typical Q# arithmetic function implementations (a larger discussion
     /// can had as to whether that can be changed)
     newtype FunctionWithLookupTable = ( 
