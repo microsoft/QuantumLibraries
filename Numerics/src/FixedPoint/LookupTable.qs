@@ -29,10 +29,12 @@ namespace Microsoft.Quantum.Arithmetic {
     /// the parameters required to make the two FixedPoint registers that need to be used as inputs to the operator. 
     /// This is so that it is in similar to the other typical Q# arithmetic function (a larger discussion can be had 
     /// as to whether that can be changed). The circuit for the operator can be found in Fig. 1c in arXiv:1812.00954.
-    /// The operator guarantees that given an input value x and a function f(x), 
-    /// it will compute f'(x') where f' is an approximation of f with a maximum error of epsOut and x' is an
-    /// approximation of the input value x with a maximum error of epsIn. This is useful for most reasonably behaved 
-    /// functions, but not that it computes f'(x') and not f'(x) so if the domain function is very oscillatory and/or
+    /// 
+    /// # Remarks
+    /// The operator guarantees that given an input value $x$ and a function $f(x)$, 
+    /// it will compute $\hat{f}(\hat{x})$ where $\hat{f}$ is an approximation of $f$ with a maximum error of epsOut and $\hat{x}$ is an
+    /// approximation of the input value $\hat{x}$ with a maximum error of epsIn. This is useful for most reasonably behaved 
+    /// functions, but note that it computes $\hat{f}(\hat{x})$ and not $\hat{f}(x)$ so if the domain function is very oscillatory and/or
     /// has funky derivatives then it may have high errors.
     ///
     /// # Input
