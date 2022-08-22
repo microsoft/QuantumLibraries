@@ -50,6 +50,29 @@ namespace Microsoft.Quantum.Arithmetic {
     /// The number of bits of the input register that will be used in the SWAP section of the circuits. Another way of looking
     /// at this is that in step in the SELECT section of the circuit in Fig 1c of arXiv:1812.00954, we will encode 2^numSwapBits
     /// encoded 
+    ///
+    /// # Example
+    /// The following code creates a quantum operation based on `ExpD` in the (inclusive) range from `-5.0` to `5.0` with an input error of `1e-3` and an output error of `1e-4`. It uses `2` SWAP bits for the implementation.
+    ///
+    /// ```qsharp
+    /// // Create operation from lookup table
+    /// let domain = (-5.0, 5.0);
+    /// let epsIn = 1e-3;
+    /// let epsOut = 1e-4;
+    ///
+    /// let lookup = ApplyFunctionWithLookupTable(ExpD, domain, epsIn, epsOut, 2);
+    ///
+    /// // Allocate qubits
+    /// use input = Qubit[lookup::IntegerBitsIn + lookup::FractionalBitsIn];
+    /// use output = Qubit[lookup::IntegerBitsOut + lookup::FractionalBitsOut];
+    ///
+    /// // Represent qubit registers as fixed points
+    /// let inputFxP = FixedPoint(lookup::IntegerBitsIn, input);
+    /// let outputFxP = FixedPoint(lookup::IntegerBitsOut, output);
+    ///
+    /// // Apply operation
+    /// lookup::Apply(inputFxP, outputFxP);
+    /// ```
     function ApplyFunctionWithLookupTable(func: Double -> Double, domain: (Double, Double), epsIn: Double, epsOut: Double, numSwapBits: Int): FunctionWithLookupTable {
 
         // First step is to find the number of integer bits (pIn) and fractional bits (qIn) required for the input based on the
