@@ -98,7 +98,6 @@ namespace Microsoft.Quantum.Preparation {
     /// in the qubit register `qubitsLE`.
     /// ```qsharp
     /// let amplitudes = [Sqrt(0.125), 0.0, Sqrt(0.875), 0.0];
-    /// let op = StatePreparationPositiveCoefficients(amplitudes);
     /// use qubits = Qubit[2];
     /// let qubitsLE = LittleEndian(qubits);
     /// PrepareArbitraryStateD(amplitudes, qubitsLE);
