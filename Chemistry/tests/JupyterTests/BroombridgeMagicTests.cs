@@ -39,19 +39,19 @@ namespace Microsoft.Quantum.Chemistry.Tests
         }
 
 
-        [Fact]
-        public async void LoadBroombridgeFile()
-        {
-            var filename = "broombridge_v0.2.yaml";
-            var magic = new BroombridgeMagic();
-            var channel = new MockChannel();
+        // [Fact]
+        // public async void LoadBroombridgeFile()
+        // {
+        //     var filename = "broombridge_v0.2.yaml";
+        //     var magic = new BroombridgeMagic();
+        //     var channel = new MockChannel();
 
-            var result = await magic.Run(filename, channel);
-            var broombridge = (V0_2.Data)result.Output;
-            Assert.Equal(ExecuteStatus.Ok, result.Status);
-            Assert.Equal("0.2", broombridge.Format.Version);
-            Assert.Equal(3, broombridge.Bibliography.Count);
-            Assert.Single(broombridge.ProblemDescriptions);
-        }
+        //     var result = await magic.Run(filename, channel);
+        //     var broombridge = (V0_2.Data)result.Output;
+        //     Assert.Equal(ExecuteStatus.Ok, result.Status);
+        //     Assert.Equal("0.2", broombridge.Format.Version);
+        //     Assert.Equal(3, broombridge.Bibliography.Count);
+        //     Assert.Single(broombridge.ProblemDescriptions);
+        // }
     }
 }
