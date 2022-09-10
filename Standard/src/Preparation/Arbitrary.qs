@@ -51,6 +51,15 @@ namespace Microsoft.Quantum.Preparation {
     /// elements $(r_j, t_j) = (0.0, 0.0)$ if fewer than $2^n$ are
     /// specified.
     ///
+    /// # Example
+    /// The following snippet prepares the quantum state $\ket{\psi}=\sqrt{1/8}\ket{0}+\sqrt{7/8}\ket{2}$
+    /// in the qubit register `qubitsLE`.
+    /// ```qsharp
+    /// use qubits = Qubit[1];
+    /// let qubitsLE = LittleEndian(qubits);
+    /// PrepareArbitraryStateCP([ComplexPolar(1.0/Sqrt(2.0),0.0),ComplexPolar(1.0/Sqrt(2.0),PI()/2.0)],qubitsLE); // = |i>
+    /// ```
+    ///
     /// # References
     /// - Synthesis of Quantum Logic Circuits
     ///   Vivek V. Shende, Stephen S. Bullock, Igor L. Markov
