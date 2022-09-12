@@ -55,8 +55,8 @@ namespace Microsoft.Quantum.Preparation {
     /// The following snippet prepares the quantum state $\ket{\psi}=\sqrt{1/8}\ket{0}+\sqrt{7/8}\ket{2}$
     /// in the qubit register `qubitsLE`.
     /// ```qsharp
-    /// use qubits = Qubit[1];
-    /// let qubitsLE = LittleEndian(qubits);
+    /// use qubits = Qubit();
+    /// let qubitsLE = LittleEndian([qubits]);
     /// PrepareArbitraryStateCP([ComplexPolar(1.0/Sqrt(2.0),0.0),ComplexPolar(1.0/Sqrt(2.0),PI()/2.0)],qubitsLE); // = |i>
     /// ```
     ///
