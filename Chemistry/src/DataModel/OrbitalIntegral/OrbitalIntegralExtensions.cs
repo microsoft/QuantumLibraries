@@ -43,7 +43,10 @@ namespace Microsoft.Quantum.Chemistry.OrbitalIntegrals
             var nOrbitals = sourceHamiltonian.SystemIndices.Max() + 1;
             var hamiltonian = new FermionHamiltonian();
             Func<OrbitalIntegral, double, IEnumerable<(HermitianFermionTerm, DoubleCoeff)>> conversion = 
-                (orb, coeff) => new OrbitalIntegral(orb.OrbitalIndices, coeff).ToHermitianFermionTerms(nOrbitals, indexConvention)
+                // NB: We use a trivial symmetry here, as the symmetry is already resolved
+                //     when constructing the orbital integral Hamiltonian initially.
+                //     See https://github.com/microsoft/QuantumLibraries/blob/eecc1b6c100af0ceffbe2c25eda3a9b5158febdf/Chemistry/src/DataModel/Serialization/Broombridge/BroombridgeDataStructurev0.3.cs#L524.
+                (orb, coeff) => new OrbitalIntegral(orb.OrbitalIndices, coeff).ToHermitianFermionTerms(nOrbitals, OrbitalIntegral.PermutationSymmetry.Trivial, indexConvention)
                 .Select(o => (o.Item1, o.Item2.ToDoubleCoeff()));
 
             foreach (var termType in sourceHamiltonian.Terms)
@@ -69,8 +72,8 @@ namespace Microsoft.Quantum.Chemistry.OrbitalIntegrals
         public static IEnumerable<(HermitianFermionTerm, double)> ToHermitianFermionTerms(
             this OrbitalIntegral orbitalIntegral,
             int nOrbitals,
-            IndexConvention indexConvention = IndexConvention.UpDown,
-            OrbitalIntegral.PermutationSymmetry symmetry = OrbitalIntegral.PermutationSymmetry.Eightfold)
+            OrbitalIntegral.PermutationSymmetry symmetry,
+            IndexConvention indexConvention = IndexConvention.UpDown)
         {
             var termType = orbitalIntegral.TermType;
             if (termType == TermType.OrbitalIntegral.OneBody)
