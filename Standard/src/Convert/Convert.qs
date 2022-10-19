@@ -118,6 +118,7 @@ namespace Microsoft.Quantum.Convert {
     ///
     /// # Input
     /// ## results
+    /// Results in binary representation of number.
     ///
     /// # Output
     /// A non-negative integer
@@ -127,7 +128,6 @@ namespace Microsoft.Quantum.Convert {
     /// // The following returns 1
     /// let int1 = ResultArrayAsInt([One,Zero])
     /// ```
-    /// Results in binary representation of number.
     function ResultArrayAsInt(results : Result[]) : Int {
         return BoolArrayAsInt(ResultArrayAsBoolArray(results));
     }
