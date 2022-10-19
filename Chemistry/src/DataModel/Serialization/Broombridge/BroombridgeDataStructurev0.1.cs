@@ -92,7 +92,7 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
                              ConvertIndices(
                                  term
                                 .Key
-                                .ToCanonicalForm(OrbitalIntegral.PermutationSymmetry.Eightfold)
+                                .ToCanonicalForm()
                                 .OrbitalIndices,
                                 OrbitalIntegral.Convention.Dirac,
                                 OrbitalIntegral.Convention.Mulliken
@@ -386,7 +386,7 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
             hamiltonian.Add
                 (hamiltonianData.OneElectronIntegrals.Values
                 .Select(o => new OrbitalIntegral(o.Item1
-                .Select(k => (int)(k - 1)), o.Item2, OrbitalIntegral.Convention.Mulliken)
+                .Select(k => (int)(k - 1)), o.Item2, OrbitalIntegral.PermutationSymmetry.Eightfold, OrbitalIntegral.Convention.Mulliken)
                 .ToCanonicalForm())
                 .Distinct());
 
@@ -395,7 +395,7 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
             hamiltonian.Add
                 (hamiltonianData.TwoElectronIntegrals.Values
                 .Select(o => new OrbitalIntegral(o.Item1
-                .Select(k => (int)(k - 1)), o.Item2, OrbitalIntegral.Convention.Mulliken)
+                .Select(k => (int)(k - 1)), o.Item2, OrbitalIntegral.PermutationSymmetry.Eightfold, OrbitalIntegral.Convention.Mulliken)
                 .ToCanonicalForm())
                 .Distinct());
 

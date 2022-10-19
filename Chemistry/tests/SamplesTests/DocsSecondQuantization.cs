@@ -298,6 +298,22 @@ namespace Microsoft.Quantum.Chemistry.Tests.Docs
         }
 
         [Fact]
+        static void MakeOrbitalIntegralFourFoldSymmetry()
+        {
+            // We create a `OrbitalIntegral` object to store a two-electron molecular
+            //  orbital integral data with four-fold symmetry.
+            var twoElectronIntegral = new OrbitalIntegral(new[] { 0, 1, 2, 3 }, 0.123,OrbitalIntegral.PermutationSymmetry.Fourfold);
+
+            // This enumerates all two-electron integrals with the same coefficient -- 
+            // an array of equivalent `OrbitalIntegral` instances is generated. In 
+            // this case, there are 4 elements.
+            var twoElectronIntegrals = twoElectronIntegral.EnumerateSpinOrbitals();
+
+            Assert.Equal(8, twoElectronIntegrals.Count());
+
+        }
+
+        [Fact]
         static void MakeHamiltonian()
         {
             // We load the namespace containing fermion objects. This
@@ -325,7 +341,7 @@ namespace Microsoft.Quantum.Chemistry.Tests.Docs
             // orders the `HermitianFermionTerm` instances in canonical order. We will need to
             // choose an indexing convention as well.
             fermionHamiltonian.AddRange(orbitalIntegral
-                .ToHermitianFermionTerms(0, IndexConvention.UpDown)
+                .ToHermitianFermionTerms(0, indexConvention: IndexConvention.UpDown)
                 .Select(o => (o.Item1, o.Item2.ToDoubleCoeff())));
 
             Assert.Equal(8, fermionHamiltonian.CountTerms());
