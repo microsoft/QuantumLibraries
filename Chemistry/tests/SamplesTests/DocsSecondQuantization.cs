@@ -307,10 +307,15 @@ namespace Microsoft.Quantum.Chemistry.Tests.Docs
             // This enumerates all two-electron integrals with the same coefficient -- 
             // an array of equivalent `OrbitalIntegral` instances is generated. In 
             // this case, there are 4 elements.
-            var twoElectronIntegrals = twoElectronIntegral.EnumerateSpinOrbitals();
+            var twoElectronIntegrals = twoElectronIntegral.EnumerateOrbitalSymmetries();
 
-            Assert.Equal(8, twoElectronIntegrals.Count());
+            Assert.Equal(4, twoElectronIntegrals.Count());
 
+            // These orbital indices should all be equivalent
+            foreach (OrbitalIntegral integral in twoElectronIntegrals)
+            {
+                Assert.Equal(integral.ToCanonicalForm().OrbitalIndices, twoElectronIntegral.ToCanonicalForm().OrbitalIndices);
+            }
         }
 
         [Fact]
@@ -341,7 +346,7 @@ namespace Microsoft.Quantum.Chemistry.Tests.Docs
             // orders the `HermitianFermionTerm` instances in canonical order. We will need to
             // choose an indexing convention as well.
             fermionHamiltonian.AddRange(orbitalIntegral
-                .ToHermitianFermionTerms(0, indexConvention: IndexConvention.UpDown)
+                .ToHermitianFermionTerms(0, IndexConvention.UpDown)
                 .Select(o => (o.Item1, o.Item2.ToDoubleCoeff())));
 
             Assert.Equal(8, fermionHamiltonian.CountTerms());
