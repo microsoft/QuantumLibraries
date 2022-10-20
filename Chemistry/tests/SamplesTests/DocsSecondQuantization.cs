@@ -298,6 +298,27 @@ namespace Microsoft.Quantum.Chemistry.Tests.Docs
         }
 
         [Fact]
+        static void MakeOrbitalIntegralFourFoldSymmetry()
+        {
+            // We create a `OrbitalIntegral` object to store a two-electron molecular
+            //  orbital integral data with four-fold symmetry.
+            var twoElectronIntegral = new OrbitalIntegral(new[] { 0, 1, 2, 3 }, 0.123,OrbitalIntegral.PermutationSymmetry.Fourfold);
+
+            // This enumerates all two-electron integrals with the same coefficient -- 
+            // an array of equivalent `OrbitalIntegral` instances is generated. In 
+            // this case, there are 4 elements.
+            var twoElectronIntegrals = twoElectronIntegral.EnumerateOrbitalSymmetries();
+
+            Assert.Equal(4, twoElectronIntegrals.Count());
+
+            // These orbital indices should all be equivalent
+            foreach (OrbitalIntegral integral in twoElectronIntegrals)
+            {
+                Assert.Equal(integral.ToCanonicalForm().OrbitalIndices, twoElectronIntegral.ToCanonicalForm().OrbitalIndices);
+            }
+        }
+
+        [Fact]
         static void MakeHamiltonian()
         {
             // We load the namespace containing fermion objects. This

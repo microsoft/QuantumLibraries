@@ -104,8 +104,8 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
                     .Terms[TermType.OrbitalIntegral.TwoBody]
                 .ToBroombridgeV0_3(new V0_3.Symmetry
                 {
-                    // List terms explicitly with no compression.
-                    Permutation = V0_3.PermutationSymmetry.Trivial
+                    // Broombridge v0.2 and below assumes Eightfold symmetry.
+                    Permutation = V0_3.PermutationSymmetry.Eightfold
                 });
             twoElectronIntegrals.IndexConvention = OrbitalIntegral.Convention.Mulliken;
             return new V0_3.HamiltonianData
@@ -114,8 +114,9 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
                     .Terms[TermType.OrbitalIntegral.OneBody]
                     .ToBroombridgeV0_3(new V0_3.Symmetry
                     {
-                        // List terms explicitly with no compression.
-                        Permutation = V0_3.PermutationSymmetry.Trivial
+                        // Broombridge v0.2 and below assumes Eightfold symmetry,
+                        // which for one-body terms means h_{pq} = h_{qp}.
+                        Permutation = V0_3.PermutationSymmetry.Eightfold
                     })
                     .TransformKeys(idxs => (idxs[0], idxs[1])),
                 TwoElectronIntegrals = twoElectronIntegrals
@@ -136,7 +137,7 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
                     var idxs = ConvertIndices(
                                     term
                                     .Key
-                                    .ToCanonicalForm(symmetry.Permutation.Value.FromBroombridgeV0_3())
+                                    .ToCanonicalForm()
                                     .OrbitalIndices,
                                     OrbitalIntegral.Convention.Dirac,
                                     OrbitalIntegral.Convention.Mulliken
@@ -477,6 +478,15 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
             Trivial
         }
 
+        internal static OrbitalIntegral.PermutationSymmetry ParseOrbitalIntegralSymmetry(PermutationSymmetry symmetry) =>
+        symmetry switch
+        {
+            PermutationSymmetry.Eightfold => OrbitalIntegral.PermutationSymmetry.Eightfold,
+            PermutationSymmetry.Fourfold => OrbitalIntegral.PermutationSymmetry.Fourfold,
+            PermutationSymmetry.Trivial => OrbitalIntegral.PermutationSymmetry.Trivial,
+            _ => throw new Exception($"Broombridge v0.3 permutation symmetry kind {symmetry} is not supported.")
+        };
+
         public struct Symmetry
         {
             [YamlMember(Alias = "permutation")]
@@ -506,9 +516,10 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
                     new OrbitalIntegral(
                         o.Key.Select(k => (int)(k - 1)).ToArray(),
                         o.Value,
+                        OrbitalIntegral.PermutationSymmetry.Eightfold,
                         OrbitalIntegral.Convention.Mulliken
                     )
-                .ToCanonicalForm(PermutationSymmetry.Eightfold.FromBroombridgeV0_3()))
+                .ToCanonicalForm())
                 .Distinct());
 
             // This will convert from Broombridge 1-indexing to 0-indexing.
@@ -519,9 +530,10 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
                     new OrbitalIntegral(
                         o.Key.Select(k => (int)(k - 1)).ToArray(),
                         o.Value,
-                        OrbitalIntegral.Convention.Mulliken
+                        ParseOrbitalIntegralSymmetry(hamiltonianData.TwoElectronIntegrals.Symmetry.Permutation.Value),
+                        OrbitalIntegral.Convention.Mulliken                        
                     )
-                .ToCanonicalForm(hamiltonianData.TwoElectronIntegrals.Symmetry.Permutation.Value.FromBroombridgeV0_3()))
+                .ToCanonicalForm())
                 .Distinct());
 
             hamiltonian.Add(new OrbitalIntegral(), identityterm);
