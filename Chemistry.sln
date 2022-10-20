@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.28803.156
+# Visual Studio Version 17
+VisualStudioVersion = 17.3.32929.385
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentation", "Documentation", "{561759D2-4D2D-4EE3-9565-9AAEC4A7D64B}"
 	ProjectSection(SolutionItems) = preProject
@@ -24,23 +24,25 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Standard", "Standard\src\St
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BroombridgeExamples", "BroombridgeExamples", "{F25F3396-EDE5-4A9F-A428-643EB138F00F}"
 	ProjectSection(SolutionItems) = preProject
-		Chemistry\tests\BroombridgeExamples\broombridge_v0.1.yaml = Chemistry\tests\BroombridgeExamples\broombridge_v0.1.yaml
-		Chemistry\tests\BroombridgeExamples\broombridge_v0.2.yaml = Chemistry\tests\BroombridgeExamples\broombridge_v0.2.yaml
-		Chemistry\tests\BroombridgeExamples\hydrogen_0.1.yaml = Chemistry\tests\BroombridgeExamples\hydrogen_0.1.yaml
-		Chemistry\tests\BroombridgeExamples\hydrogen_0.2.yaml = Chemistry\tests\BroombridgeExamples\hydrogen_0.2.yaml
-		Chemistry\tests\BroombridgeExamples\LiH_0.1.yaml = Chemistry\tests\BroombridgeExamples\LiH_0.1.yaml
-		Chemistry\tests\BroombridgeExamples\LiH_0.2.yaml = Chemistry\tests\BroombridgeExamples\LiH_0.2.yaml
+		Chemistry\tests\TestData\Broombridge\broombridge_v0.1.yaml = Chemistry\tests\TestData\Broombridge\broombridge_v0.1.yaml
+		Chemistry\tests\TestData\Broombridge\broombridge_v0.2.yaml = Chemistry\tests\TestData\Broombridge\broombridge_v0.2.yaml
+		Chemistry\tests\TestData\Broombridge\hydrogen_0.1.yaml = Chemistry\tests\TestData\Broombridge\hydrogen_0.1.yaml
+		Chemistry\tests\TestData\Broombridge\hydrogen_0.2.yaml = Chemistry\tests\TestData\Broombridge\hydrogen_0.2.yaml
+		Chemistry\tests\TestData\Broombridge\LiH_0.1.yaml = Chemistry\tests\TestData\Broombridge\LiH_0.1.yaml
+		Chemistry\tests\TestData\Broombridge\LiH_0.2.yaml = Chemistry\tests\TestData\Broombridge\LiH_0.2.yaml
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SamplesTests", "Chemistry\tests\SamplesTests\SamplesTests.csproj", "{2A0E61DB-7187-4359-B5C7-C30FCB1D6800}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Metapackage", "Chemistry\src\Metapackage\Metapackage.csproj", "{E8268248-FC5B-4F4E-82FF-5C8CC40950BB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Metapackage", "Chemistry\src\Metapackage\Metapackage.csproj", "{E8268248-FC5B-4F4E-82FF-5C8CC40950BB}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Chemistry", "Chemistry", "{43A9F607-5884-4CB9-A455-01E98F5532E2}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{812F2D11-792D-4305-8427-01B632A92299}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tools", "Chemistry\src\Tools\Tools.csproj", "{3EF5845F-B348-4DC9-A905-23A6FB9AB421}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tools", "Chemistry\src\Tools\Tools.csproj", "{3EF5845F-B348-4DC9-A905-23A6FB9AB421}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataModelTests", "Chemistry\tests\DataModelTests\DataModelTests.csproj", "{B86DDA60-44F0-4C05-837E-CEA84DBCADF7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -80,6 +82,10 @@ Global
 		{3EF5845F-B348-4DC9-A905-23A6FB9AB421}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3EF5845F-B348-4DC9-A905-23A6FB9AB421}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3EF5845F-B348-4DC9-A905-23A6FB9AB421}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B86DDA60-44F0-4C05-837E-CEA84DBCADF7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B86DDA60-44F0-4C05-837E-CEA84DBCADF7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B86DDA60-44F0-4C05-837E-CEA84DBCADF7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B86DDA60-44F0-4C05-837E-CEA84DBCADF7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -93,6 +99,7 @@ Global
 		{E8268248-FC5B-4F4E-82FF-5C8CC40950BB} = {F561BE56-63D8-4C33-A3B3-CF2685BC7A5C}
 		{812F2D11-792D-4305-8427-01B632A92299} = {43A9F607-5884-4CB9-A455-01E98F5532E2}
 		{3EF5845F-B348-4DC9-A905-23A6FB9AB421} = {812F2D11-792D-4305-8427-01B632A92299}
+		{B86DDA60-44F0-4C05-837E-CEA84DBCADF7} = {595D5855-8820-48D7-B5E1-9C88215A866A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {6869E5BF-551A-40F1-9B6B-D1B27A5676CB}
