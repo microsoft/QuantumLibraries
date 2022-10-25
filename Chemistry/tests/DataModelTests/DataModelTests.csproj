@@ -42,7 +42,7 @@
 
   <!-- Serialization test data -->
   <ItemGroup>
-    <!-- Broombridge v0.1 and v0.2 examples -->
+    <!-- Broombridge v0.1, v0.2, and v0.3 examples -->
     <None Include="..\TestData\Broombridge\broombridge_v0.1.yaml" Link="Broombridge\broombridge_v0.1.yaml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -50,6 +50,12 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="..\TestData\Broombridge\LiH_0.1.yaml" Link="Broombridge\LiH_0.1.yaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\TestData\Broombridge\H2O-6_trivial_v0.3.yaml" Link="Broombridge\H2O-6_trivial_v0.3.yaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\TestData\Broombridge\H2O-6_fourfold_v0.3.yaml" Link="Broombridge\H2O-6_fourfold_v0.3.yaml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     

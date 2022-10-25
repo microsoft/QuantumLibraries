@@ -8,10 +8,13 @@ using System.IO;
 using System.Linq;
 
 using Microsoft.Quantum.Chemistry.Broombridge;
+using Microsoft.Quantum.Chemistry.Fermion;
+using Microsoft.Quantum.Chemistry.OrbitalIntegrals;
 
 using Newtonsoft.Json;
 
 using Xunit;
+using YamlDotNet.Core.Tokens;
 
 namespace Microsoft.Quantum.Chemistry.Tests
 {
@@ -137,6 +140,39 @@ namespace Microsoft.Quantum.Chemistry.Tests
             Assert.Equal(original.ProblemDescriptions.Count, serialized.ProblemDescriptions.Count);
             Assert.Equal(original.Generator.Source, serialized.Generator.Source);
             Assert.Equal(original.Schema, serialized.Schema);
+        }
+    }
+
+
+    public class Broombridgev0_3Tests
+    {
+        public string Filename_trivial_symmetry = "Broombridge/H2O-6_trivial_v0.3.yaml";
+        public string Filename_fourfold_symmetry = "Broombridge/H2O-6_fourfold_v0.3.yaml";
+
+       
+        // Check that fully expanded trivial and fourfold symmetries lead to the same Hamiltonian. 
+        [Fact]
+        public void DeserializeVersionNumbers()
+        {
+            var broombridge_trivial = Deserializers.Deserialize<V0_3.Data>(Filename_trivial_symmetry);
+            var broombridge_fourfold = Deserializers.Deserialize<V0_3.Data>(Filename_fourfold_symmetry);
+
+            var trivial_Hamiltonian = V0_3.ToOrbitalIntegralHamiltonian(broombridge_trivial.ProblemDescriptions.Single());
+            var fourfold_Hamiltonian = V0_3.ToOrbitalIntegralHamiltonian(broombridge_fourfold.ProblemDescriptions.Single());
+
+            FermionHamiltonian x = trivial_Hamiltonian.ToFermionHamiltonian();
+            FermionHamiltonian y = fourfold_Hamiltonian.ToFermionHamiltonian();
+            foreach(var termType in y.Terms)
+            {
+                foreach (var term in termType.Value)
+                {
+                    y.Terms[termType.Key][term.Key] = -term.Value;
+                }
+            }
+
+            x.AddHamiltonian(y);
+
+            Assert.Equal(x.Norm(), 0.0);
         }
     }
 }
