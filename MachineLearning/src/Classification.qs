@@ -10,7 +10,7 @@ namespace Microsoft.Quantum.MachineLearning {
     open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Convert;
 
-    internal operation _PrepareClassification(
+    internal operation PrepareClassification(
         encoder : (LittleEndian => Unit is Adj + Ctl),
         model : SequentialModel,
         target : Qubit[]
@@ -48,8 +48,8 @@ namespace Microsoft.Quantum.MachineLearning {
     : Double {
         let encodedSample = ApproximateInputEncoder(tolerance / IntAsDouble(Length(model::Structure)), sample);
         return 1.0 - EstimateFrequencyA(
-            _PrepareClassification(encodedSample::Prepare, model, _),
-            _TailMeasurement(encodedSample::NQubits),
+            PrepareClassification(encodedSample::Prepare, model, _),
+            TailMeasurement(encodedSample::NQubits),
             encodedSample::NQubits,
             nMeasurements
         );

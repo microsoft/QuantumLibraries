@@ -3,7 +3,7 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <PlatformTarget>x64</PlatformTarget>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <RootNamespace>Microsoft.Quantum.Chemistry.Tools</RootNamespace>
     <AssemblyName>qdk-chem</AssemblyName>
     <Nullable>enable</Nullable>

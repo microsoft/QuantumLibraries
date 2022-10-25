@@ -56,6 +56,6 @@ namespace Microsoft.Quantum.Chemistry.Tools
                     Convert.ConvertProblemDescription(reader, format, writer, format);
                 }
             );
-    }   
+    }
  
 }

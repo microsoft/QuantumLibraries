@@ -4,5 +4,6 @@
 namespace Microsoft.Quantum.Arithmetic {
     /// # Summary
     /// Type of a signed integer stored in little endian (see LittleEndian).
+    /// Negative numbers are stored using two's complement.
     newtype SignedLittleEndian = LittleEndian;
 }

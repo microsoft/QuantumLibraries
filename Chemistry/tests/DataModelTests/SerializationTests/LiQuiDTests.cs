@@ -19,6 +19,7 @@ namespace Microsoft.Quantum.Chemistry.Tests
 {
     using static TermType.OrbitalIntegral;
     using static OrbitalIntegral.Convention;
+    using static OrbitalIntegral.PermutationSymmetry;
 
 
     public class LoadFromLiquidTests
@@ -44,17 +45,17 @@ namespace Microsoft.Quantum.Chemistry.Tests
         public static IEnumerable<object[]> LiquidOrbitalsData =>
             new List<object[]>
             {
-                new object[] { "0,0=1.0", OneBody, new OrbitalIntegral(new[] {0,0},1.0, Dirac) },
-                new object[] { "0,1=1.0", OneBody, new OrbitalIntegral(new[] {0,1},1.0, Dirac) },
-                new object[] { "0,1,1,0=1.0", TwoBody, new OrbitalIntegral(new[] {0,1,1,0},1.0, Dirac) },
-                new object[] { "0,1,0,1=1.0", TwoBody, new OrbitalIntegral(new[] {0,1,0,1},1.0, Dirac) },
-                new object[] { "0,1,0,1=1.0", TwoBody, new OrbitalIntegral(new[] {0,1,0,1},1.0, Dirac) },
-                new object[] { "0,1,0,0=1.0", TwoBody, new OrbitalIntegral(new[] {0,1,0,0},1.0, Dirac) },
-                new object[] { "0,0,1,2=1.0", TwoBody, new OrbitalIntegral(new[] {0,0,1,2},1.0, Dirac) },
-                new object[] { "0,0,1,2=1.0", TwoBody, new OrbitalIntegral(new[] {0,0,1,2},1.0, Dirac) },
-                new object[] { "0,1,2,0=1.0", TwoBody, new OrbitalIntegral(new[] {0,1,2,0},1.0, Dirac) },
-                new object[] { "0,1,2,3=1.0", TwoBody, new OrbitalIntegral(new[] {0,1,2,3},1.0, Dirac) },
-                new object[] { "3,1,0,2=1.0", TwoBody, new OrbitalIntegral(new[] {3,1,0,2},1.0, Dirac) }
+                new object[] { "0,0=1.0", OneBody, new OrbitalIntegral(new[] {0,0},1.0, Eightfold, Dirac) },
+                new object[] { "0,1=1.0", OneBody, new OrbitalIntegral(new[] {0,1},1.0, Eightfold, Dirac) },
+                new object[] { "0,1,1,0=1.0", TwoBody, new OrbitalIntegral(new[] {0,1,1,0},1.0, Eightfold, Dirac) },
+                new object[] { "0,1,0,1=1.0", TwoBody, new OrbitalIntegral(new[] {0,1,0,1},1.0, Eightfold, Dirac) },
+                new object[] { "0,1,0,1=1.0", TwoBody, new OrbitalIntegral(new[] {0,1,0,1},1.0, Eightfold, Dirac) },
+                new object[] { "0,1,0,0=1.0", TwoBody, new OrbitalIntegral(new[] {0,1,0,0},1.0, Eightfold, Dirac) },
+                new object[] { "0,0,1,2=1.0", TwoBody, new OrbitalIntegral(new[] {0,0,1,2},1.0, Eightfold, Dirac) },
+                new object[] { "0,0,1,2=1.0", TwoBody, new OrbitalIntegral(new[] {0,0,1,2},1.0, Eightfold, Dirac) },
+                new object[] { "0,1,2,0=1.0", TwoBody, new OrbitalIntegral(new[] {0,1,2,0},1.0, Eightfold, Dirac) },
+                new object[] { "0,1,2,3=1.0", TwoBody, new OrbitalIntegral(new[] {0,1,2,3},1.0, Eightfold, Dirac) },
+                new object[] { "3,1,0,2=1.0", TwoBody, new OrbitalIntegral(new[] {3,1,0,2},1.0, Eightfold, Dirac) }
             };
 
 

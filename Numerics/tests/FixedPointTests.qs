@@ -1,14 +1,16 @@
 ﻿// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-namespace Microsoft.Quantum.Numerics.ToffoliTests {
+namespace Microsoft.Quantum.Tests {
     open Microsoft.Quantum.Arrays;
+    open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Convert;
     open Microsoft.Quantum.Math;
     open Microsoft.Quantum.Intrinsic;
     open Microsoft.Quantum.Arithmetic;
     open Microsoft.Quantum.Diagnostics;
 
+    @Test("ToffoliSimulator")
     operation PrepareFxPTest() : Unit {
         for a in [1.2, 3.9, 3.14159, -0.6, -4.5, -3.1931, 0.0] {
             use xs = Qubit[10];
@@ -21,6 +23,48 @@ namespace Microsoft.Quantum.Numerics.ToffoliTests {
         }
     }
 
+    internal operation PrepareAsSignedAndMeasure(value : Int, fxp : FixedPoint) : Double {
+        ApplyXorInPlace(value, LittleEndian(Snd(fxp!)));
+        return MeasureFxP(fxp);
+    }
+
+    @Test("ToffoliSimulator")
+    operation MeasureFxPTest() : Unit {
+        use qs = Qubit[4];
+        let qsFxP = FixedPoint(2, qs);
+
+        NearEqualityFactD(PrepareAsSignedAndMeasure(0b0000, qsFxP), 0.0);
+        NearEqualityFactD(PrepareAsSignedAndMeasure(0b0001, qsFxP), 0.25);
+        NearEqualityFactD(PrepareAsSignedAndMeasure(0b0010, qsFxP), 0.5);
+        NearEqualityFactD(PrepareAsSignedAndMeasure(0b0011, qsFxP), 0.75);
+        NearEqualityFactD(PrepareAsSignedAndMeasure(0b0100, qsFxP), 1.0);
+        NearEqualityFactD(PrepareAsSignedAndMeasure(0b0101, qsFxP), 1.25);
+        NearEqualityFactD(PrepareAsSignedAndMeasure(0b0110, qsFxP), 1.5);
+        NearEqualityFactD(PrepareAsSignedAndMeasure(0b0111, qsFxP), 1.75);
+        NearEqualityFactD(PrepareAsSignedAndMeasure(0b1000, qsFxP), -2.0);
+        NearEqualityFactD(PrepareAsSignedAndMeasure(0b1001, qsFxP), -1.75);
+        NearEqualityFactD(PrepareAsSignedAndMeasure(0b1010, qsFxP), -1.5);
+        NearEqualityFactD(PrepareAsSignedAndMeasure(0b1011, qsFxP), -1.25);
+        NearEqualityFactD(PrepareAsSignedAndMeasure(0b1100, qsFxP), -1.00);
+        NearEqualityFactD(PrepareAsSignedAndMeasure(0b1101, qsFxP), -0.75);
+        NearEqualityFactD(PrepareAsSignedAndMeasure(0b1110, qsFxP), -0.5);
+        NearEqualityFactD(PrepareAsSignedAndMeasure(0b1111, qsFxP), -0.25);
+    }
+
+    @Test("QuantumSimulator")
+    operation FixedPointConversionTest() : Unit {
+        AllEqualityFactB(FixedPointAsBoolArray(2, 2,  1.25), [true, false, true, false], "FixedPointAsBoolArray failed");
+        AllEqualityFactB(FixedPointAsBoolArray(2, 2,  1.3), [true, false, true, false], "FixedPointAsBoolArray failed");
+        AllEqualityFactB(FixedPointAsBoolArray(2, 2, -1.75), [true, false, false, true], "FixedPointAsBoolArray failed");
+
+        NearEqualityFactD(BoolArrayAsFixedPoint(2, [true, false, true, false]), 1.25);
+        NearEqualityFactD(BoolArrayAsFixedPoint(2, [true, false, false, true]), -1.75);
+
+        NearEqualityFactD(DoubleAsFixedPoint(2, 2, 1.3), 1.25);
+        NearEqualityFactD(DoubleAsFixedPoint(2, 2, 0.8), 0.75);
+    }
+
+    @Test("ToffoliSimulator")
     operation CompareGreaterThanFxPTest() : Unit {
         for a in [1.2, 3.9, 3.14159, -0.6, -4.5, -3.1931, 0.0] {
             for b in [1.1, 3.95, 3.14259, -0.4, -4.6, -3.931, 0.1] {
@@ -41,6 +85,7 @@ namespace Microsoft.Quantum.Numerics.ToffoliTests {
         }
     }
 
+    @Test("ToffoliSimulator")
     operation AddConstantFxPTest() : Unit {
         for a in [1.2, 3.9, 3.14159, -0.6, -4.5, -3.1931, 0.0] {
             for b in [1.2, 3.9, 3.14159, -0.6, -4.5, -3.1931, 0.0] {
@@ -54,6 +99,7 @@ namespace Microsoft.Quantum.Numerics.ToffoliTests {
         }
     }
 
+    @Test("ToffoliSimulator")
     operation AddFxPTest() : Unit {
         for a in [1.2, 3.9, 3.14159, -0.6, -4.5, -3.1931, 0.0] {
             for b in [1.2, 3.9, 3.14159, -0.6, -4.5, -3.1931, 0.0] {
@@ -71,6 +117,7 @@ namespace Microsoft.Quantum.Numerics.ToffoliTests {
         }
     }
 
+    @Test("ToffoliSimulator")
     operation MultiplyFxPTest() : Unit {
         for pos in 5..8 {
             for a in [1.2, 3.9, 3.14159, -0.6, -3.5, -3.1931, 0.0] {
@@ -95,6 +142,7 @@ namespace Microsoft.Quantum.Numerics.ToffoliTests {
         }
     }
 
+    @Test("ToffoliSimulator")
     operation SquareFxPTest() : Unit {
         for pos in 5..8 {
             for a in [1.2, 3.9, 3.14159, -0.6, -3.5, -3.1931, 0.0] {
@@ -113,7 +161,7 @@ namespace Microsoft.Quantum.Numerics.ToffoliTests {
         }
     }
 
-    function _computeReciprocal(a : Double, n : Int, pos : Int, pos2 : Int) : Double {
+    internal function ComputeReciprocal(a : Double, n : Int, pos : Int, pos2 : Int) : Double {
         let p = pos;
         let intA = a >= 0. ? Floor(AbsD(a) * IntAsDouble(2^(n-p)) + 0.5)
                            | Ceiling(AbsD(a) * IntAsDouble(2^(n-p)) - 0.5);
@@ -122,6 +170,7 @@ namespace Microsoft.Quantum.Numerics.ToffoliTests {
         return (a >= 0. ? 1. | -1.) * aReciprUnsigned;
     }
 
+    @Test("ToffoliSimulator")
     operation ComputeReciprocalFxPTest() : Unit {
         for pos in 5..8 {
             for pos2 in pos - 1..pos + 3 {
@@ -138,8 +187,8 @@ namespace Microsoft.Quantum.Numerics.ToffoliTests {
                     let eps2 = 1./IntAsDouble(2^(n-pos2));
                     let aEpsLarger = a + (a>=0. ? eps | -eps);
                     let aEpsSmaller = a - (a>=0. ? eps | -eps);
-                    let res1 = _computeReciprocal(a+eps,n,pos,pos2);
-                    let res2 = _computeReciprocal(a-eps,n,pos,pos2);
+                    let res1 = ComputeReciprocal(a+eps,n,pos,pos2);
+                    let res2 = ComputeReciprocal(a-eps,n,pos,pos2);
                     let minRes = MinD(res1, res2) - eps2;
                     let maxRes = MaxD(res1, res2) + eps2;
                     let isWithinTol = minRes <= measured and
@@ -152,6 +201,7 @@ namespace Microsoft.Quantum.Numerics.ToffoliTests {
         }
     }
 
+    @Test("ToffoliSimulator")
     operation SquareFxPCtrlTest() : Unit {
         for ctrl in 0..3 {
             for pos in 5..8 {
@@ -182,6 +232,7 @@ namespace Microsoft.Quantum.Numerics.ToffoliTests {
         }
     }
 
+    @Test("ToffoliSimulator")
     operation MultiplyFxPCtrlTest() : Unit {
         for ctrl in 0..3 {
             for pos in 5..8 {
@@ -216,6 +267,7 @@ namespace Microsoft.Quantum.Numerics.ToffoliTests {
         }
     }
 
+    @Test("ToffoliSimulator")
     operation EvaluatePolynomialFxPTest() : Unit {
         for pos in 4..5 {
             for coeffs in [[1.3, -2.4, 1.9],
@@ -250,6 +302,7 @@ namespace Microsoft.Quantum.Numerics.ToffoliTests {
         }
     }
 
+    @Test("ToffoliSimulator")
     operation EvaluatePolynomialFxPCtrlTest() : Unit {
         for ctrl in 0..3 {
             for pos in 4..5 {
@@ -295,6 +348,7 @@ namespace Microsoft.Quantum.Numerics.ToffoliTests {
         }
     }
 
+    @Test("ToffoliSimulator")
     operation EvaluateOddPolynomialFxPTest() : Unit {
         for pos in 4..5 {
             for coeffs in [[1.3, -2.4, 1.9],
@@ -332,6 +386,7 @@ namespace Microsoft.Quantum.Numerics.ToffoliTests {
         }
     }
 
+    @Test("ToffoliSimulator")
     operation EvaluateOddPolynomialFxPCtrlTest() : Unit {
         for ctrl in 0..3 {
             for pos in 4..5 {
@@ -377,6 +432,18 @@ namespace Microsoft.Quantum.Numerics.ToffoliTests {
                         ResetAll(xs + ys + ctrls);
                     }
                 }
+            }
+        }
+    }
+
+    @Test("QuantumSimulator")
+    operation TestFixedPointLimits() : Unit {
+        for numBits in 1..6 {
+            for integerBits in 0..numBits {
+                let fractionalBits = numBits - integerBits;
+
+                NearEqualityFactD(SmallestFixedPoint(integerBits, fractionalBits), BoolArrayAsFixedPoint(integerBits, [false, size = numBits] w/ numBits - 1 <- true));
+                NearEqualityFactD(LargestFixedPoint(integerBits, fractionalBits), BoolArrayAsFixedPoint(integerBits, [true, size = numBits] w/ numBits - 1 <- false));
             }
         }
     }

@@ -63,5 +63,43 @@ namespace Microsoft.Quantum.Chemistry.Tests
             Assert.True(orb0 == orb1);
             Assert.False(orb0 == orb2);
         }
+
+        // Test fourfold symmetry
+        [Theory]
+        [InlineData(0, 0, 0, 0, 1)]
+        [InlineData(0, 0, 0, 1, 4)]
+        [InlineData(0, 0, 1, 0, 4)]
+        [InlineData(0, 1, 0, 0, 4)]
+        [InlineData(1, 0, 0, 0, 4)]
+        [InlineData(1, 1, 0, 0, 2)]
+        [InlineData(0, 1, 1, 0, 2)]
+        [InlineData(0, 0, 1, 2, 4)]
+        [InlineData(0, 1, 2, 0, 4)]
+        [InlineData(0, 1, 2, 3, 4)]
+        public void OrbitalIntegralEnumerateOrbitalSymmetriesFourfoldTest(int i, int j, int k, int l, int elements)
+        {
+            OrbitalIntegral orbitalIntegral = new OrbitalIntegral(new int[] { i, j, k, l }, 0.0, OrbitalIntegral.PermutationSymmetry.Fourfold);
+            var orbitalIntegrals = orbitalIntegral.EnumerateOrbitalSymmetries();
+            Assert.Equal(elements, orbitalIntegrals.Length);
+        }
+
+        // Test trivial symmetry
+        [Theory]
+        [InlineData(0, 0, 0, 0, 1)]
+        [InlineData(0, 0, 0, 1, 1)]
+        [InlineData(0, 0, 1, 0, 1)]
+        [InlineData(0, 1, 0, 0, 1)]
+        [InlineData(1, 0, 0, 0, 1)]
+        [InlineData(1, 1, 0, 0, 1)]
+        [InlineData(0, 1, 1, 0, 1)]
+        [InlineData(0, 0, 1, 2, 1)]
+        [InlineData(0, 1, 2, 0, 1)]
+        [InlineData(0, 1, 2, 3, 1)]
+        public void OrbitalIntegralEnumerateOrbitalSymmetriesTrivialTest(int i, int j, int k, int l, int elements)
+        {
+            OrbitalIntegral orbitalIntegral = new OrbitalIntegral(new int[] { i, j, k, l }, 0.0, OrbitalIntegral.PermutationSymmetry.Trivial);
+            var orbitalIntegrals = orbitalIntegral.EnumerateOrbitalSymmetries();
+            Assert.Equal(elements, orbitalIntegrals.Length);
+        }
     }
 }

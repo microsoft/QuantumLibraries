@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 namespace Microsoft.Quantum.Arrays {
+    open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Math;
 
     /// # Summary
@@ -40,9 +41,14 @@ namespace Microsoft.Quantum.Arrays {
         let nElements = Length(left) < Length(right)
                         ? Length(left)
                         | Length(right);
-        mutable output = [Default<('T, 'U)>(), size = nElements];
 
-        for idxElement in 0 .. nElements - 1 {
+        if nElements == 0 {
+            return [];
+        }
+
+        mutable output = [(left[0], right[0]), size = nElements];
+
+        for idxElement in 1 .. nElements - 1 {
             set output w/= idxElement <- (left[idxElement], right[idxElement]);
         }
 
@@ -79,9 +85,14 @@ namespace Microsoft.Quantum.Arrays {
     /// - Microsoft.Quantum.Arrays.Zipped4
     function Zipped3<'T1, 'T2, 'T3> (first : 'T1[], second : 'T2[], third : 'T3[]) : ('T1, 'T2, 'T3)[] {
         let nElements = Min([Length(first), Length(second), Length(third)]);
-        mutable output = [Default<('T1, 'T2, 'T3)>(), size = nElements];
 
-        for idxElement in 0 .. nElements - 1 {
+        if nElements == 0 {
+            return [];
+        }
+
+        mutable output = [(first[0], second[0], third[0]), size = nElements];
+
+        for idxElement in 1 .. nElements - 1 {
             set output w/= idxElement <- (first[idxElement], second[idxElement], third[idxElement]);
         }
 
@@ -122,9 +133,14 @@ namespace Microsoft.Quantum.Arrays {
     /// - Microsoft.Quantum.Arrays.Zipped3
     function Zipped4<'T1, 'T2, 'T3, 'T4> (first : 'T1[], second : 'T2[], third : 'T3[], fourth : 'T4[]) : ('T1, 'T2, 'T3, 'T4)[] {
         let nElements = Min([Length(first), Length(second), Length(third), Length(fourth)]);
-        mutable output = [Default<('T1, 'T2, 'T3, 'T4)>(), size = nElements];
 
-        for idxElement in 0 .. nElements - 1 {
+        if nElements == 0 {
+            return [];
+        }
+
+        mutable output = [(first[0], second[0], third[0], fourth[0]), size = nElements];
+
+        for idxElement in 1 .. nElements - 1 {
             set output w/= idxElement <- (first[idxElement], second[idxElement], third[idxElement], fourth[idxElement]);
         }
 
@@ -162,9 +178,14 @@ namespace Microsoft.Quantum.Arrays {
     /// - Microsoft.Quantum.Arrays.Zipped
     function Unzipped<'T, 'U>(arr : ('T, 'U)[]) : ('T[], 'U[]) {
         let nElements = Length(arr);
-        mutable first = [Default<'T>(), size = nElements];
-        mutable second = [Default<'U>(), size = nElements];
-        for idxElement in 0 .. nElements - 1 {
+
+        if nElements == 0 {
+            return ([], []);
+        }
+
+        mutable first = [Fst(arr[0]), size = nElements];
+        mutable second = [Snd(arr[0]), size = nElements];
+        for idxElement in 1 .. nElements - 1 {
             let (left, right) = arr[idxElement];
             set first w/= idxElement <- left;
             set second w/= idxElement <- right;

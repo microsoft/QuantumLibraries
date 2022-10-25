@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <PlatformTarget>x64</PlatformTarget>
     <IsPackable>false</IsPackable>
     <AssemblyName>Microsoft.Quantum.Chemistry.Tests.CSharp</AssemblyName>
@@ -21,7 +21,7 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.4.0" />
-    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="xunit" Version="2.4.1" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.1">
       <PrivateAssets>all</PrivateAssets>
@@ -42,7 +42,7 @@
 
   <!-- Serialization test data -->
   <ItemGroup>
-    <!-- Broombridge v0.1 and v0.2 examples -->
+    <!-- Broombridge v0.1, v0.2, and v0.3 examples -->
     <None Include="..\TestData\Broombridge\broombridge_v0.1.yaml" Link="Broombridge\broombridge_v0.1.yaml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -50,6 +50,12 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="..\TestData\Broombridge\LiH_0.1.yaml" Link="Broombridge\LiH_0.1.yaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\TestData\Broombridge\H2O-6_trivial_v0.3.yaml" Link="Broombridge\H2O-6_trivial_v0.3.yaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\TestData\Broombridge\H2O-6_fourfold_v0.3.yaml" Link="Broombridge\H2O-6_fourfold_v0.3.yaml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     

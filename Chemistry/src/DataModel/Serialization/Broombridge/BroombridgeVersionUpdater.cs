@@ -16,26 +16,52 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
 
     internal static partial class DataStructures
     {
-        
+        public static V0_3.Data Update(V0_2.Data input) =>
+            new V0_3.Data
+            {
+                Bibliography = input.Bibliography,
+                Format = input.Format,
+                Generator = input.Generator,
+                Schema = V0_3.SchemaUrl,
+                ProblemDescriptions = input
+                    .ProblemDescriptions
+                    .Select(problem => new V0_3.ProblemDescription
+                    {
+                        BasisSet = problem.BasisSet,
+                        CoulombRepulsion = problem.CoulombRepulsion,
+                        EnergyOffset = problem.EnergyOffset,
+                        FciEnergy = problem.FciEnergy,
+                        Geometry = problem.Geometry,
+                        InitialStates = problem.InitialStates,
+                        Metadata = problem.Metadata,
+                        NElectrons = problem.NElectrons,
+                        NOrbitals = problem.NOrbitals,
+                        ScfEnergy = problem.ScfEnergy,
+                        ScfEnergyOffset = problem.ScfEnergyOffset,
+                        Hamiltonian = problem.Hamiltonian.ToBroombridgeV0_3()
+                    })
+                    .ToList()
+            };
+
         /// <summary>
         /// Converts v0.1 Broombridge to v0.2.
         /// </summary>
         /// <param name="input">Source Broombridge in v0.1 format.</param>
         /// <returns>Converted Broombridge in v0.2 format.</returns>
-        public static V0_2.Data Update(V0_1.Data input)
+        public static V0_3.Data Update(V0_1.Data input)
         {
-            var output = new V0_2.Data()
+            var output = new V0_3.Data()
             {
                 Schema = input.Schema,
                 Format = input.Format,
                 Generator = input.Generator,
                 Bibliography = input.Bibliography,
-                ProblemDescriptions = new List<V0_2.ProblemDescription>()
+                ProblemDescriptions = new List<V0_3.ProblemDescription>()
             };
 
             foreach (var integralSet in input.IntegralSets)
             {
-                var problemDescription = new V0_2.ProblemDescription()
+                var problemDescription = new V0_3.ProblemDescription()
                 {
                     Metadata = integralSet.Metadata,
                     BasisSet = integralSet.BasisSet,
@@ -47,7 +73,7 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
                     NOrbitals = integralSet.NOrbitals,
                     NElectrons = integralSet.NElectrons,
                     EnergyOffset = integralSet.EnergyOffset,
-                    Hamiltonian = integralSet.Hamiltonian,
+                    Hamiltonian = integralSet.Hamiltonian.ToBroombridgeV0_3(),
                     InitialStates = new List<V0_2.State>()
                 };
             

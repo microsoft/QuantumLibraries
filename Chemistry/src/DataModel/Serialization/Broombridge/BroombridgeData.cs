@@ -22,6 +22,8 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
     /// <summary>
     /// Latest Broombridge format.
     /// </summary>
+    // NB: When obsoleted, this should likely be made internal rather than
+    //     removed.
     [Obsolete(
         "Please use collections of ElectronicStructureProblem instead.",
         error: false
@@ -39,7 +41,7 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
         /// <summary>
         /// Raw deserialized Broombridge data.
         /// </summary>
-        public V0_2.Data Raw { get; set; }
+        public V0_3.Data Raw { get; set; }
 
         // Root of Broombridge data structure
 
@@ -62,12 +64,12 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
         /// <summary>
         /// Deserialized Broombridge data
         /// </summary>
-        /// <param name="broombridgeV0_2">Broombridge data structure.</param>
-        internal Data(Broombridge.V0_2.Data broombridgeV0_2)
+        /// <param name="broombridgeV0_3">Broombridge data structure.</param>
+        internal Data(Broombridge.V0_3.Data broombridgeV0_3)
         {
-            Raw = broombridgeV0_2;
-            Schema = broombridgeV0_2.Schema;
-            VersionNumber = VersionNumber.v0_2;
+            Raw = broombridgeV0_3;
+            Schema = broombridgeV0_3.Schema;
+            VersionNumber = VersionNumber.v0_3;
 
             ProblemDescriptions = Raw.ProblemDescriptions.Select(problem => ProblemDescription.ProcessRawProblemDescription(problem));
         }
@@ -114,14 +116,14 @@ namespace Microsoft.Quantum.Chemistry.Broombridge
         /// </summary>
         /// <param name="problem">Problem description to be converted</param>
         /// <returns>The internal problem description data structure.</returns>
-        public static ProblemDescription ProcessRawProblemDescription(Broombridge.V0_2.ProblemDescription problem)
+        public static ProblemDescription ProcessRawProblemDescription(Broombridge.V0_3.ProblemDescription problem)
         {
             var problemDescription = new ProblemDescription
             {
                 EnergyOffset = problem.EnergyOffset.Value + problem.CoulombRepulsion.Value,
                 NElectrons = problem.NElectrons,
                 NOrbitals = problem.NOrbitals,
-                OrbitalIntegralHamiltonian = V0_2.ToOrbitalIntegralHamiltonian(problem),
+                OrbitalIntegralHamiltonian = V0_3.ToOrbitalIntegralHamiltonian(problem),
                 Wavefunctions = problem.InitialStates?.FromBroombridgeV0_2() ?? new Dictionary<string, FermionWavefunction<SpinOrbital>>()
             };
             return problemDescription;

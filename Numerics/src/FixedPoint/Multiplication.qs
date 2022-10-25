@@ -29,21 +29,20 @@ namespace Microsoft.Quantum.Arithmetic {
         controlled (controls, ...) {
             IdenticalFormatFactFxP([fp1, fp2, result]);
             AssertAllZeroFxP(result);
-            let (px, xs) = fp1!;
-            let (py, ys) = fp2!;
-            let (pz, zs) = result!;
-            let n = Length(xs);
+            let n = Length(fp1::Register);
 
             use tmpResult = Qubit[2*n];
-            let xsInt = SignedLittleEndian(LittleEndian(xs));
-            let ysInt = SignedLittleEndian(LittleEndian(ys));
+            let xsInt = SignedLittleEndian(LittleEndian(fp1::Register));
+            let ysInt = SignedLittleEndian(LittleEndian(fp2::Register));
             let tmpResultInt = SignedLittleEndian(
                 LittleEndian(tmpResult));
-            MultiplySI(xsInt, ysInt, tmpResultInt);
-            (Controlled ApplyToEachCA)(controls,
-                                        (CNOT,
-                                        Zipped(tmpResult[n-px..2*n-px-1], zs)));
-            (Adjoint MultiplySI)(xsInt, ysInt, tmpResultInt);
+            within {
+                MultiplySI(xsInt, ysInt, tmpResultInt);
+            } apply {
+                Controlled ApplyToEachCA(controls,
+                                            (CNOT,
+                                            Zipped(tmpResult[n - fp1::IntegerBits..2 * n - fp1::IntegerBits - 1], result::Register)));
+            }
         }
     }
 
@@ -63,19 +62,19 @@ namespace Microsoft.Quantum.Arithmetic {
         controlled (controls, ...) {
             IdenticalFormatFactFxP([fp, result]);
             AssertAllZeroFxP(result);
-            let (px, xs) = fp!;
-            let (py, ys) = result!;
-            let n = Length(xs);
+            let n = Length(fp::Register);
 
             use tmpResult = Qubit[2*n];
-            let xsInt = SignedLittleEndian(LittleEndian(xs));
+            let xsInt = SignedLittleEndian(LittleEndian(fp::Register));
             let tmpResultInt = SignedLittleEndian(
                 LittleEndian(tmpResult));
-            SquareSI(xsInt, tmpResultInt);
-            (Controlled ApplyToEachCA)(controls,
-                                        (CNOT,
-                                        Zipped(tmpResult[n-px..2*n-px-1], ys)));
-            (Adjoint SquareSI)(xsInt, tmpResultInt);
+            within {
+                SquareSI(xsInt, tmpResultInt);
+            } apply {
+                Controlled ApplyToEachCA(controls,
+                                            (CNOT,
+                                            Zipped(tmpResult[n - fp::IntegerBits..2 * n - fp::IntegerBits - 1], result::Register)));
+            }
         }
     }
 }

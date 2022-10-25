@@ -40,7 +40,7 @@ namespace Microsoft.Quantum.Chemistry.Magic
             /// A Broombridge ProblemDescription to load the FermionHamiltonian from.
             /// </summary>
             [JsonProperty(PropertyName = "problem_description")]
-            public V0_2.ProblemDescription ProblemDescription { get; set; }
+            public V0_3.ProblemDescription ProblemDescription { get; set; }
 
             /// <summary>
             /// The IndexConvention to use to generate the Hamiltonian from the ProblemDescription.
