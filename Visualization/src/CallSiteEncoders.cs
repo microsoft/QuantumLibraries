@@ -3,11 +3,8 @@
 
 #nullable enable
 
-using System.Text;
 using Microsoft.Jupyter.Core;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
-using static NumSharp.Slice;
 using Microsoft.Quantum.IQSharp.Jupyter;
 using System.Linq;
 using System;

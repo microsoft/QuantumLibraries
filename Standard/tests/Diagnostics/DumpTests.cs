@@ -41,10 +41,7 @@ namespace Microsoft.Quantum.Tests
             Assert.NotNull(unitary);
             Assert.Equal(1, unitary.Qubits?.Count);
             Assert.NotNull(unitary.Data);
-            Assert.Equal(3, unitary.Data.ndim);
-            Assert.Equal(2, unitary.Data.shape[0]);
-            Assert.Equal(2, unitary.Data.shape[1]);
-            Assert.Equal(2, unitary.Data.shape[2]);
+            Assert.Equal(2, unitary.Data.Dimension);
             // Check that the matrix is [1 0; 0 𝑖].
             Assert.Equal(1.0, (double)unitary.Data[0, 0, 0], precision: 6);
             Assert.Equal(0.0, (double)unitary.Data[0, 1, 0], precision: 6);
@@ -54,6 +51,8 @@ namespace Microsoft.Quantum.Tests
             Assert.Equal(0.0, (double)unitary.Data[0, 1, 1], precision: 6);
             Assert.Equal(0.0, (double)unitary.Data[1, 0, 1], precision: 6);
             Assert.Equal(1.0, (double)unitary.Data[1, 1, 1], precision: 6);
+
+            Assert.Equal("Real:\n[[1.0000000000000002, 0], \n[0, 0]]\nImag:\n[[0, 0], \n[0, 1.0000000000000002]]", unitary.ToString());
         }
 
         
@@ -79,10 +78,7 @@ namespace Microsoft.Quantum.Tests
             Assert.NotNull(unitary);
             Assert.Equal(2, unitary.Qubits?.Count);
             Assert.NotNull(unitary.Data);
-            Assert.Equal(3, unitary.Data.ndim);
-            Assert.Equal(4, unitary.Data.shape[0]);
-            Assert.Equal(4, unitary.Data.shape[1]);
-            Assert.Equal(2, unitary.Data.shape[2]);
+            Assert.Equal(4, unitary.Data.Dimension);
             // Check that the matrix is [1 0 0 0; 0 0 0 1; 0 0 1 0; 0 1 0 0].
             // real
             Assert.Equal(1.0, (double)unitary.Data[0, 0, 0], precision: 6);
@@ -119,6 +115,8 @@ namespace Microsoft.Quantum.Tests
             Assert.Equal(0.0, (double)unitary.Data[3, 1, 1], precision: 6);
             Assert.Equal(0.0, (double)unitary.Data[3, 2, 1], precision: 6);
             Assert.Equal(0.0, (double)unitary.Data[3, 3, 1], precision: 6);
+
+            Assert.Equal("Real:\n[[1, 0, 0, 0], \n[0, 0, 0, 1], \n[0, 0, 1, 0], \n[0, 1, 0, 0]]\nImag:\n[[0, 0, 0, 0], \n[0, 0, 0, 0], \n[0, 0, 0, 0], \n[0, 0, 0, 0]]", unitary.ToString());
         }
     }
 }
