@@ -3,11 +3,8 @@
 
 #nullable enable
 
-using System.Text;
 using Microsoft.Jupyter.Core;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
-using static NumSharp.Slice;
 using Microsoft.Quantum.IQSharp.Jupyter;
 using System.Linq;
 using System;
@@ -33,7 +30,7 @@ namespace Microsoft.Quantum.Diagnostics.Emulation
                     logger.LogError("Asked to encode a displayable unitary operator, but its data was null. This should not happen.");
                     return null;
                 }
-                return $"Real:\n{op.Data[Ellipsis, 0]}\nImag:\n{op.Data[Ellipsis, 1]}".ToEncodedData();
+                return op.ToString().ToEncodedData();
             }
             else return null;
         }
@@ -73,40 +70,40 @@ namespace Microsoft.Quantum.Diagnostics.Emulation
                     3
                 );
 
-                var outputMatrix = String.Join(
-                    " \\\\\n",
-                    op.Data.EnumerateOverAxis().Cast<NumSharp.NDArray>().Select(
-                        row =>
-                            String.Join(" & ",
-                                row.EnumerateOverAxis()
-                                   .Cast<NumSharp.NDArray>()
-                                   .Select(element =>
-                                   {
-                                       var format = $"{{0:G{precision}}}";
-                                       var re = (double)element[0];
-                                       var im = (double)element[1];
-                                       var reFmt = String.Format(format, re);
-                                       var imFmt = String.Format(format, System.Math.Abs(im)) + "i";
-                                       if (IsNearZero(re) && IsNearZero(im))
-                                       {
-                                           return "0";
-                                       }
-                                       else if (IsNearZero(im))
-                                       { 
-                                           return reFmt;
-                                       }
-                                       else if (IsNearZero(re))
-                                       {
-                                           return im < 0.0 ? $"-{imFmt}" : imFmt;
-                                       }
-                                       else
-                                       {
-                                           return $"{reFmt} {(im < 0.0 ? "-" : "+")} {imFmt}";
-                                       }
-                                   })
-                            )
-                    )
-                );
+                var rows = new string[op.Data.Dimension];
+                var entries = new string[op.Data.Dimension];
+
+                for (var row = 0; row < op.Data.Dimension; ++row)
+                {
+                    for (var col = 0; col < op.Data.Dimension; ++col)
+                    {
+                        var format = $"{{0:G{precision}}}";
+                        var re = op.Data[row, col, 0];
+                        var im = op.Data[row, col, 1];
+                        var reFmt = String.Format(format, re);
+                        var imFmt = String.Format(format, System.Math.Abs(im)) + "i";
+                        if (IsNearZero(re) && IsNearZero(im))
+                        {
+                            entries[col] = "0";
+                        }
+                        else if (IsNearZero(im))
+                        { 
+                            entries[col] = reFmt;
+                        }
+                        else if (IsNearZero(re))
+                        {
+                            entries[col] = im < 0.0 ? $"-{imFmt}" : imFmt;
+                        }
+                        else
+                        {
+                            entries[col] = $"{reFmt} {(im < 0.0 ? "-" : "+")} {imFmt}";
+                        }
+                    }
+
+                    rows[row] = String.Join(" & ", entries);
+                }
+
+                var outputMatrix = String.Join(" \\\\\n", rows);
                 return $@"
                     <table>
                         <tr>
