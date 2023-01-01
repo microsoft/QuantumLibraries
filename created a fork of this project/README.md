@@ -65,7 +65,7 @@ The location of this file varies depending on your operating system:
 Note that this file may not already exist, depending on your configuration.
 
 For example, the following `NuGet.Config` file includes both the main NuGet package feed, and the Quantum Development Kit prerelease feed:
-
+## Site Policy on GitHub
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
 <configuration>
