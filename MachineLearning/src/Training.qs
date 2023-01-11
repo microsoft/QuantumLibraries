@@ -60,8 +60,8 @@ namespace Microsoft.Quantum.MachineLearning {
     /// A set of labeled training data that will be used to perform training.
     /// ## options
     /// Configuration to be used when training; see
-    /// @"microsoft.quantum.machinelearning.trainingoptions" and
-    /// @"microsoft.quantum.machinelearning.defaulttrainingoptions" for more
+    /// @"Microsoft.Quantum.MachineLearning.TrainingOptions" and
+    /// @"Microsoft.Quantum.MachineLearning.DefaultTrainingOptions" for more
     /// details.
     /// ## trainingSchedule
     /// A sampling schedule to use when selecting samples from the training
@@ -273,8 +273,8 @@ namespace Microsoft.Quantum.MachineLearning {
     /// A set of labeled training data that will be used to perform training.
     /// ## options
     /// Configuration to be used when training; see
-    /// @"microsoft.quantum.machinelearning.trainingoptions" and
-    /// @"microsoft.quantum.machinelearning.defaulttrainingoptions" for more
+    /// @"Microsoft.Quantum.MachineLearning.TrainingOptions" and
+    /// @"Microsoft.Quantum.MachineLearning.DefaultTrainingOptions" for more
     /// details.
     /// ## trainingSchedule
     /// A sampling schedule to use when selecting samples from the training

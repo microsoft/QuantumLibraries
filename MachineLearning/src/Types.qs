@@ -190,7 +190,7 @@ namespace Microsoft.Quantum.MachineLearning {
     ///
     /// # Remarks
     /// This UDT should not be created directly, but rather should be specified
-    /// by calling @"microsoft.quantum.machinelearning.defaulttrainingoptions"
+    /// by calling @"Microsoft.Quantum.MachineLearning.DefaultTrainingOptions"
     /// and then using the `w/` operator to override different defaults.
     ///
     /// For example, to use 100,000 measurements and at most 8 training
