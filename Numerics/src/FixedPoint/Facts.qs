@@ -31,7 +31,7 @@ namespace Microsoft.Quantum.Arithmetic {
         let (position, register) = fixedPoints[0]!;
         Fact(position > 0, "Point position must be greater than zero.");
         let n = Length(register);
-        for fp in Most(fixedPoints) {
+        for fp in Rest(fixedPoints) {
             EqualityFactI(fp::IntegerBits, position,
                 "FixedPoint numbers must have identical binary point position.");
             EqualityFactI(Length(fp::Register), n,
@@ -56,7 +56,7 @@ namespace Microsoft.Quantum.Arithmetic {
         let (position, register) = fixedPoints[0]!;
         Fact(position > 0, "Point position must be greater than zero.");
         let n = Length(register);
-        for fp in Most(fixedPoints) {
+        for fp in Rest(fixedPoints) {
             EqualityFactI(Length(fp::Register) - fp::IntegerBits, n - position,
                 "FixedPoint numbers must have identical point alignment.");
         }
