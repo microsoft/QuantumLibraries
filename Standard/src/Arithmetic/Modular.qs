@@ -91,7 +91,7 @@ namespace Microsoft.Quantum.Arithmetic {
 
             // note that controlled version is correct only under the assumption
             // that the value of target is less than modulus
-            use lessThanModulusFlag = Qubit();
+            borrow lessThanModulusFlag = Qubit(){
             let copyMostSignificantBitPhaseLE = ApplyLEOperationOnPhaseLEA(CopyMostSignificantBit(_, lessThanModulusFlag), _);
 
             // lets track the state of target register through the computation
@@ -112,6 +112,7 @@ namespace Microsoft.Quantum.Arithmetic {
             X(lessThanModulusFlag);
             copyMostSignificantBitPhaseLE(target);
             Controlled IncrementPhaseByInteger(controls, (increment, target));
+            }
         }
     }
 
