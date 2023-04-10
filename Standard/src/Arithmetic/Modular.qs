@@ -112,6 +112,8 @@ namespace Microsoft.Quantum.Arithmetic {
             X(lessThanModulusFlag);
             copyMostSignificantBitPhaseLE(target);
             Controlled IncrementPhaseByInteger(controls, (increment, target));
+
+            ResetAll(lessThanModulusFlag);
         }
     }
 
