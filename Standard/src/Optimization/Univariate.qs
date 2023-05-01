@@ -5,7 +5,7 @@ namespace Microsoft.Quantum.Optimization {
     open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Intrinsic;
     open Microsoft.Quantum.Math;
-
+    open Microsoft.Quantum.Diagnostics;
     /// # Summary
     /// Represents the result of optimizing a univariate function.
     ///
