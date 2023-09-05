@@ -141,7 +141,7 @@ namespace Microsoft.Quantum.Synthesis {
     /// in decimal notation.  The `L` suffix indicates that the constant is of type `BigInt`.
     /// More details on this representation can also be found in the [truth tables kata](https://github.com/microsoft/QuantumKatas/tree/main/TruthTables).
     ///
-    /// The implementation makes use of @"Microsoft.Quantum.Intrinsic.Cnot"
+    /// The implementation makes use of @"Microsoft.Quantum.Intrinsic.CNOT"
     /// and @"Microsoft.Quantum.Intrinsic.R1" gates.
     ///
     /// # Input
@@ -205,7 +205,7 @@ namespace Microsoft.Quantum.Synthesis {
     /// This operation implements a special case of @"Microsoft.Quantum.Synthesis.ApplyXControlledOnTruthTable",
     /// in which the target qubit is known to be in the $\ket{0}$ state.
     ///
-    /// The implementation makes use of @"Microsoft.Quantum.Intrinsic.Cnot"
+    /// The implementation makes use of @"Microsoft.Quantum.Intrinsic.CNOT"
     /// and @"Microsoft.Quantum.Intrinsic.R1" gates.  The implementation of the
     /// adjoint operation is optimized and uses measurement-based uncomputation.
     ///

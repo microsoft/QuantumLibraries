@@ -119,6 +119,15 @@ namespace Microsoft.Quantum.Convert {
     /// # Input
     /// ## results
     /// Results in binary representation of number.
+    ///
+    /// # Output
+    /// A non-negative integer
+    ///
+    /// # Example
+    /// ```qsharp
+    /// // The following returns 1
+    /// let int1 = ResultArrayAsInt([One,Zero])
+    /// ```
     function ResultArrayAsInt(results : Result[]) : Int {
         return BoolArrayAsInt(ResultArrayAsBoolArray(results));
     }

@@ -1,7 +1,7 @@
-<Project Sdk="Microsoft.Quantum.Sdk/0.26.233415">
+<Project Sdk="Microsoft.Quantum.Sdk/0.28.291394">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.1</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <AssemblyName>Microsoft.Quantum.Numerics</AssemblyName>
     <QsharpDocsGeneration>true</QsharpDocsGeneration>
     <QsharpDocsPackageId>Microsoft.Quantum.Numerics</QsharpDocsPackageId>
@@ -41,7 +41,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Quantum.Simulators" Version="0.26.233415" />
+    <PackageReference Include="Microsoft.Quantum.Simulators" Version="0.28.291394" />
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" />
   </ItemGroup>
 

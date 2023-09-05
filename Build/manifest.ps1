@@ -31,13 +31,13 @@ $artifacts = @{
     ) | ForEach-Object { Join-Path $Env:NUGET_OUTDIR "$_.$Env:NUGET_VERSION.nupkg" };
 
     Assemblies = @(
-        ".\Standard\src\bin\$Env:BUILD_CONFIGURATION\netstandard2.1\Microsoft.Quantum.Standard.dll",
-        ".\Visualization\src\bin\$Env:BUILD_CONFIGURATION\netstandard2.1\Microsoft.Quantum.Standard.Visualization.dll",
-        ".\Numerics\src\bin\$Env:BUILD_CONFIGURATION\netstandard2.1\Microsoft.Quantum.Numerics.dll",
-        ".\MachineLearning\src\bin\$Env:BUILD_CONFIGURATION\netstandard2.1\Microsoft.Quantum.MachineLearning.dll",
-        ".\Chemistry\src\DataModel\bin\$Env:BUILD_CONFIGURATION\netstandard2.1\Microsoft.Quantum.Chemistry.DataModel.dll",
-        ".\Chemistry\src\Jupyter\bin\$Env:BUILD_CONFIGURATION\netstandard2.1\Microsoft.Quantum.Chemistry.Jupyter.dll",
-        ".\Chemistry\src\Runtime\bin\$Env:BUILD_CONFIGURATION\netstandard2.1\Microsoft.Quantum.Chemistry.Runtime.dll",
+        ".\Standard\src\bin\$Env:BUILD_CONFIGURATION\net6.0\Microsoft.Quantum.Standard.dll",
+        ".\Visualization\src\bin\$Env:BUILD_CONFIGURATION\net6.0\Microsoft.Quantum.Standard.Visualization.dll",
+        ".\Numerics\src\bin\$Env:BUILD_CONFIGURATION\net6.0\Microsoft.Quantum.Numerics.dll",
+        ".\MachineLearning\src\bin\$Env:BUILD_CONFIGURATION\net6.0\Microsoft.Quantum.MachineLearning.dll",
+        ".\Chemistry\src\DataModel\bin\$Env:BUILD_CONFIGURATION\net6.0\Microsoft.Quantum.Chemistry.DataModel.dll",
+        ".\Chemistry\src\Jupyter\bin\$Env:BUILD_CONFIGURATION\net6.0\Microsoft.Quantum.Chemistry.Jupyter.dll",
+        ".\Chemistry\src\Runtime\bin\$Env:BUILD_CONFIGURATION\net6.0\Microsoft.Quantum.Chemistry.Runtime.dll",
         ".\Chemistry\src\Tools\bin\$Env:BUILD_CONFIGURATION\net6.0\qdk-chem.dll"
     ) | ForEach-Object { Join-Path $PSScriptRoot (Join-Path ".." $_) };
 } 
