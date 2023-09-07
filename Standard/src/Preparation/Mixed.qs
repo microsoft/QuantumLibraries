@@ -66,7 +66,7 @@ namespace Microsoft.Quantum.Preparation {
     /// in the maximally mixed state instead (see <xref:Microsoft.Quantum.Preparation.PrepareSingleQubitIdentity>).
     ///
     /// If the qubit was in a state other than $\ket{0}$, this operation applies the following gates:
-    /// $H$ for `PauliX`, $HS$ for `PauliY`, $I$ for `PauliZ` and
+    /// $H$ for `PauliX`, $SH$ for `PauliY`, $I$ for `PauliZ` and
     /// <xref:Microsoft.Quantum.Preparation.PrepareSingleQubitIdentity> for `PauliI`.
     ///
     /// # Input
