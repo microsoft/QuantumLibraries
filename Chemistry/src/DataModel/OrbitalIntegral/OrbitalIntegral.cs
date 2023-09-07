@@ -146,14 +146,14 @@ namespace Microsoft.Quantum.Chemistry.OrbitalIntegrals
                     new int[] { l, j, k, i }  // 3120
                 },
                 // In Mulliken notation,
-                // (ij|kl) = (ji|lk) = (kl|ij) = (lk|ji) 
+                // (ij|kl) = (ji|lk)* = (kl|ij) = (lk|ji)*, where * denotes complex conjugation 
                 // Orbital indices are in Dirac notation.
                 PermutationSymmetry.Fourfold => new int[][]
                 {
                     new int[] { i, j, k, l }, // Identity
                     new int[] { l, k, j, i }, // Complex conjugation
-                    new int[] { j, i, l, k }, // Change of variables
-                    new int[] { k, l, i, j }, // Complex conjugation & Change of variables
+                    new int[] { j, i, l, k }, // Complex conjugation & Change of variables
+                    new int[] { k, l, i, j }, // Change of variables
                 },
                 PermutationSymmetry.Trivial => new int[][]
                 {
