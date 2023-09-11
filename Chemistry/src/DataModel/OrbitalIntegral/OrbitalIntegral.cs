@@ -24,6 +24,17 @@ namespace Microsoft.Quantum.Chemistry.OrbitalIntegrals
             Dirac, Mulliken
         }
 
+        // NB [Design note]: this intentionally duplicates the corresponding
+        //                   enum in the V0_3 class, allowing forward versions
+        //                   to add or modify permutation symmetries without
+        //                   retroactively changing the definition of V0_3.
+        public enum PermutationSymmetry
+        {
+            Eightfold,
+            Fourfold,
+            Trivial
+        }
+
         /// <summary>
         /// Indices of orbitals in the overlap integral.
         /// </summary>
@@ -35,16 +46,21 @@ namespace Microsoft.Quantum.Chemistry.OrbitalIntegrals
         public double Coefficient;
 
         /// <summary>
+        /// Symmetry of the orbital overlap integral.
+        /// </summary>
+        public PermutationSymmetry Symmetry = PermutationSymmetry.Eightfold;
+
+        /// <summary>
         /// Parameterless constructors. Sets this as an empty OrbitalIntegral with coefficient 0.0
         /// </summary>
         public OrbitalIntegral() : this(0.0)
         {
         }
 
-        public OrbitalIntegral(double coefficient)
+        /// <param name="coefficient">coefficient of orbital integral.</param>
+        /// <param name="symmetry">Convention of symmetry of orbital indices.</param>
+        public OrbitalIntegral(double coefficient, PermutationSymmetry symmetry = PermutationSymmetry.Eightfold) : this(new int[] { }, coefficient, symmetry)
         {
-            OrbitalIndices = new int[] { };
-            Coefficient = coefficient;
         }
 
         /// <summary>
@@ -52,10 +68,12 @@ namespace Microsoft.Quantum.Chemistry.OrbitalIntegrals
         /// </summary>
         /// <param name="orbitalIndices">Array of orbital indices in Dirac notation.</param>
         /// <param name="coefficient">coefficient of orbital integral.</param>
-        public OrbitalIntegral(IEnumerable<int> orbitalIndices, double coefficient = 0.0) 
+        /// <param name="symmetry">Convention of symmetry of orbital indices.</param>
+        public OrbitalIntegral(IEnumerable<int> orbitalIndices, double coefficient = 0.0, PermutationSymmetry symmetry = PermutationSymmetry.Eightfold) 
         {
             OrbitalIndices = orbitalIndices.ToArray();
             Coefficient = coefficient;
+            Symmetry = symmetry;
         }
 
         /// <summary>
@@ -64,10 +82,12 @@ namespace Microsoft.Quantum.Chemistry.OrbitalIntegrals
         /// <param name="orbitalIndices">Array of orbital indices.</param>
         /// <param name="coefficient">coefficient of orbital integral.</param>
         /// <param name="convention">Convention for ordering of orbital indices.</param>
-        public OrbitalIntegral(IEnumerable<int> orbitalIndices, double coefficient, Convention convention = Convention.Mulliken)
+        /// <param name="symmetry">Convention of symmetry of orbital indices.</param>
+        public OrbitalIntegral(IEnumerable<int> orbitalIndices, double coefficient, PermutationSymmetry symmetry, Convention convention = Convention.Mulliken)
         {
             OrbitalIndices = ConvertIndices(orbitalIndices, convention, Convention.Dirac);
             Coefficient = coefficient;
+            Symmetry = symmetry;
         }
 
         public TermType.OrbitalIntegral TermType
@@ -107,6 +127,40 @@ namespace Microsoft.Quantum.Chemistry.OrbitalIntegrals
         /// <returns>Length of orbital indices.</returns>
         public int Length => OrbitalIndices.Length;
 
+        private static int[][] EnumerateTwoBodyPermutations(PermutationSymmetry symmetry, int i, int j, int k, int l) =>
+            symmetry switch
+            {
+                // In Mulliken notation,
+                // (ij|kl) = (ij|lk) = (ji|kl) = (ji|lk) =
+                // (kl|ij) = (lk|ij) = (kl|ji) = (lk|ji)
+                // Orbital indices are in Dirac notation.
+                PermutationSymmetry.Eightfold => new int[][]
+                {
+                    new int[] { i, j, k, l }, // 0123 
+                    new int[] { j, i, l, k }, // 1032
+                    new int[] { k, l, i, j }, // 2301
+                    new int[] { l, k, j, i }, // 3210
+                    new int[] { i, k, j, l }, // 0213
+                    new int[] { k, i, l, j }, // 2031
+                    new int[] { j, l, i, k }, // 1302
+                    new int[] { l, j, k, i }  // 3120
+                },
+                // In Mulliken notation,
+                // (ij|kl) = (ji|lk)* = (kl|ij) = (lk|ji)*, where * denotes complex conjugation 
+                // Orbital indices are in Dirac notation.
+                PermutationSymmetry.Fourfold => new int[][]
+                {
+                    new int[] { i, j, k, l }, // Identity
+                    new int[] { l, k, j, i }, // Complex conjugation
+                    new int[] { j, i, l, k }, // Complex conjugation & Change of variables
+                    new int[] { k, l, i, j }, // Change of variables
+                },
+                PermutationSymmetry.Trivial => new int[][]
+                {
+                    new int[] { i, j, k, l }
+                },
+                _ => throw new Exception($"Permutation symmetry {symmetry} is not valid for two-body permutations.")
+            };
 
         /// <summary>
         /// Enumerates over all orbital integrals with the same coefficient
@@ -128,25 +182,13 @@ namespace Microsoft.Quantum.Chemistry.OrbitalIntegrals
                     new int[] {i, j},
                     new int[] {j, i}
                 };
-                return symmetries.Distinct(new ArrayEqualityComparer<int>()).Select(o => new OrbitalIntegral(o, coefficient)).ToArray();
+                return symmetries.Distinct(new ArrayEqualityComparer<int>()).Select(o => new OrbitalIntegral(o, coefficient, Symmetry)).ToArray();
             }
             else if (OrbitalIndices.Length == 4)
             {
-                var i = OrbitalIndices[0];
-                var j = OrbitalIndices[1];
-                var k = OrbitalIndices[2];
-                var l = OrbitalIndices[3];
-                var symmetries = new int[][] {
-                    new int[] { i, j, k, l }, // 0123
-                    new int[] { j, i, l, k }, // 1032
-                    new int[] { k, l, i, j }, // 2301
-                    new int[] { l, k, j, i }, // 3210
-                    new int[] { i, k, j, l }, // 0213
-                    new int[] { k, i, l, j }, // 2031
-                    new int[] { j, l, i, k }, // 1302
-                    new int[] { l, j, k, i }  // 3120
-                };
-                return symmetries.Distinct(new ArrayEqualityComparer<int>()).Select(o => new OrbitalIntegral(o, coefficient)).ToArray();
+                return EnumerateTwoBodyPermutations(Symmetry, OrbitalIndices[0], OrbitalIndices[1], OrbitalIndices[2], OrbitalIndices[3])
+                    .Distinct(new ArrayEqualityComparer<int>())
+                    .Select(o => new OrbitalIntegral(o, coefficient, Symmetry)).ToArray();
             }
             else
             {
@@ -160,7 +202,7 @@ namespace Microsoft.Quantum.Chemistry.OrbitalIntegrals
         public OrbitalIntegral Clone()
         {
             var newArray = OrbitalIndices.Clone<int>();
-            return new OrbitalIntegral(newArray, Coefficient);
+            return new OrbitalIntegral(newArray, Coefficient, Symmetry);
         }
 
         /// <summary>
@@ -172,14 +214,14 @@ namespace Microsoft.Quantum.Chemistry.OrbitalIntegrals
         {
             var symmetries = EnumerateOrbitalSymmetries().Select(o => o.OrbitalIndices).ToList();
             symmetries.Sort(new ArrayLexicographicComparer<int>());
-            return new OrbitalIntegral(symmetries.First(), Coefficient);
+            return new OrbitalIntegral(symmetries.First(), Coefficient, Symmetry);
         }
 
         /// <summary>
         /// Checks of this orbital integral has indices sorted in canonical order.
         /// </summary>
         /// <returns>Returns <see cref="bool"/> if the orbital integral indices are canonically sorted
-        /// and <see cref="false"/> otherwise.
+        /// and <c>false</c> otherwise.
         /// </returns>
         public bool IsInCanonicalOrder()
         {

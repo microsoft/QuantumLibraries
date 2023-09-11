@@ -20,7 +20,6 @@ namespace Microsoft.Quantum.Chemistry.OrbitalIntegrals
     /// </summary>
     public static partial class Extensions
     {
-
         /// <summary>
         /// Method for constructing a fermion Hamiltonian from an orbital integral Hamiltonian.
         /// </summary>
@@ -34,7 +33,7 @@ namespace Microsoft.Quantum.Chemistry.OrbitalIntegrals
             var nOrbitals = sourceHamiltonian.SystemIndices.Max() + 1;
             var hamiltonian = new FermionHamiltonian();
             Func<OrbitalIntegral, double, IEnumerable<(HermitianFermionTerm, DoubleCoeff)>> conversion = 
-                (orb, coeff) => new OrbitalIntegral(orb.OrbitalIndices, coeff).ToHermitianFermionTerms(nOrbitals, indexConvention)
+                (orb, coeff) => new OrbitalIntegral(orb.OrbitalIndices, coeff, orb.Symmetry).ToHermitianFermionTerms(nOrbitals, indexConvention)
                 .Select(o => (o.Item1, o.Item2.ToDoubleCoeff()));
 
             foreach (var termType in sourceHamiltonian.Terms)
@@ -95,7 +94,9 @@ namespace Microsoft.Quantum.Chemistry.OrbitalIntegrals
         {
             // One-electron orbital integral symmetries
             // ij = ji
-            var pqSpinOrbitals = orbitalIntegral.EnumerateOrbitalSymmetries().EnumerateSpinOrbitals();
+            var pqSpinOrbitals = orbitalIntegral
+                .EnumerateOrbitalSymmetries()
+                .EnumerateSpinOrbitals();
 
             var coefficient = orbitalIntegral.Coefficient;
 

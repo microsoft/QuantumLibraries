@@ -79,7 +79,7 @@ namespace Microsoft.Quantum.Chemistry
                 .SelectMaybe(
                     row => row.Item2.Length % 2 == 0
                            ? new OrbitalIntegral(
-                                 row.Item2, row.Item1, OrbitalIntegral.Convention.Mulliken
+                                 row.Item2, row.Item1, OrbitalIntegral.PermutationSymmetry.Eightfold, OrbitalIntegral.Convention.Mulliken
                              ).ToCanonicalForm()
                            : null
                 )

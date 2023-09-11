@@ -127,8 +127,10 @@ namespace Microsoft.Quantum.Chemistry.Tests
             var json = JsonConvert.SerializeObject(original);
             File.WriteAllText("original.json", json);
 
-            var serialized = JsonConvert.DeserializeObject<V0_2.Data>(json);
-                File.WriteAllText("serialized.json", JsonConvert.SerializeObject(serialized));
+            // NB: Even though we loaded a 0.2 file, the export step above
+            //     normalizes to 0.3.
+            var serialized = JsonConvert.DeserializeObject<V0_3.Data>(json);
+            File.WriteAllText("serialized.json", JsonConvert.SerializeObject(serialized));
 
             Assert.Equal(original.Format, serialized.Format);
             Assert.Equal(original.Bibliography.Count, serialized.Bibliography.Count);

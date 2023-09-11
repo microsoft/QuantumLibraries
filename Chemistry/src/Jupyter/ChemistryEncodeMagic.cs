@@ -43,7 +43,7 @@ namespace Microsoft.Quantum.Chemistry.Magic
 
             // We target a qubit quantum computer, which requires a Pauli representation of the fermion Hamiltonian.
             // A number of mappings from fermions to qubits are possible. Let us choose the Jordan-Wigner encoding.
-            PauliHamiltonian pauliHamiltonian = args.Hamiltonian.ToPauliHamiltonian(QubitEncoding.JordanWigner);
+            var pauliHamiltonian = args.Hamiltonian.ToPauliHamiltonian(QubitEncoding.JordanWigner);
 
             // We now convert this Hamiltonian and a selected state to a format that than be passed onto the QSharp component
             // of the library that implements quantum simulation algorithms.
