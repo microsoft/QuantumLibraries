@@ -91,7 +91,7 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
     /// ## qSharpData
     /// Hamiltonian described by `JordanWignerEncodingData` format.
     /// ## targetError
-    /// Error of auxillary state preparation step.
+    /// Error of auxiliary state preparation step.
     ///
     /// # Output
     /// A tuple where: `Int` is the number of qubits allocated,
