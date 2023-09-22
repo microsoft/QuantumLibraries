@@ -482,4 +482,43 @@ namespace Microsoft.Quantum.Canon {
         return (N, n);
     }
 
+    /// # Summary
+    /// Performs a table lookup operation.
+    /// 
+    /// # Description
+    /// A table lookup uses an address to return classical data from quantum registers.
+    /// Computes the following map:
+    /// $$\sum_{j=0}^{L-1}\ket{j}\ket{0} \rightarrow \sum_{j=0}^{L-1}\ket{j}\ket{data_j}$$
+    /// where $L$ is the length of the table.
+    ///
+    /// # Input
+    /// ## data
+    /// The classical bit data that represents the table. 
+    /// The length of data has to be in the interval [0, 2^(number of qubits in address) - 1.
+    /// The length of each element of `data` has to be equal to the number of qubits in `target`.
+    /// ## address
+    /// The address used to lookup from the table.
+    /// ## target
+    /// Qubits in which the result of the lookup will be stored.
+    ///
+    /// # Example
+    /// Below is an example that flips each bit in a two bit register
+    /// ```qsharp
+    /// operation InvertTwoBitNumber(address : LittleEndian, target : Qubit[]) : Unit {
+    ///     let data = [[true, true], [true, false], [false, true], [false, false]];
+    ///     TableLookup(data, address, target);
+    /// }
+    /// ```
+    ///
+    /// # References
+    /// - Windowed quantum arithmetic
+    ///   Craig Gidney
+    ///   https://arxiv.org/abs/1905.07682
+    operation ApplyTableLookup(data : Bool[][], address : LittleEndian, target : Qubit[]) : Unit is Adj + Ctl {
+        let applyXFromBitString = ApplyPauliFromBitString(PauliX, true, _, _); // Applies X conditionally based on bitstring
+        // Create unitaries that encode elements of data as bit flips
+        let unitaries = Mapped(bitstring -> applyXFromBitString(bitstring, _), data); 
+        MultiplexOperations(unitaries, address, target); // Multiplex over address onto target
+    }
+
 }
