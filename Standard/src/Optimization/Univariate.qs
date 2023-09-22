@@ -5,7 +5,7 @@ namespace Microsoft.Quantum.Optimization {
     open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Intrinsic;
     open Microsoft.Quantum.Math;
-
+    open Microsoft.Quantum.Diagnostics;
     /// # Summary
     /// Represents the result of optimizing a univariate function.
     ///
@@ -25,6 +25,7 @@ namespace Microsoft.Quantum.Optimization {
     /// # Summary
     /// Returns the width of an interval.
     internal function Width(left : Double, right : Double) : Double {
+        Fact(left <= right, "Left endpoint of bounds must be less than or equal to right endpoint.");
         return right - left;
     }
 
@@ -70,6 +71,7 @@ namespace Microsoft.Quantum.Optimization {
         bounds : (Double, Double),
         tolerance : Double
     ) : UnivariateOptimizationResult {
+        Fact(tolerance > 0.0, "The tolerance value must be positive.");
         mutable interval = bounds;
         mutable leftProbe = ProbeValue(fn, Fst(NextProbes(interval)));
         mutable rightProbe = ProbeValue(fn, Snd(NextProbes(interval)));
