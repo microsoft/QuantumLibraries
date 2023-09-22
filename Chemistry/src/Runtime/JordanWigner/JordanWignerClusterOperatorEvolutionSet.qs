@@ -24,7 +24,7 @@ namespace Microsoft.Quantum.Chemistry.JordanWigner {
     /// Bitstring `Bool[]` that is `true` where a `PauliZ` should be applied.
     ///
     /// # Example
-    /// let bitString = _ComputeJordanWignerBitString(6, [0,1,2,6]) ;
+    /// let bitString = _ComputeJordanWignerBitString(7, [0,1,2,6]) ;
     /// // bitString is [false, false, false ,true, true, true, false].
     function _ComputeJordanWignerBitString(nFermions: Int,  idxFermions: Int[]) : Bool[] {
         if Length(idxFermions) % 2 != 0 {
